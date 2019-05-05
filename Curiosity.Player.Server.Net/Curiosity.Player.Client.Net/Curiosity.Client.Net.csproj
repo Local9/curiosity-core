@@ -7,8 +7,8 @@
     <ProjectGuid>{132046A7-08EC-4F6E-AFE1-08C264B1359D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.Player.Client.Net</RootNamespace>
-    <AssemblyName>Curiosity.Player.Client.net</AssemblyName>
+    <RootNamespace>Curiosity.Client.Net</RootNamespace>
+    <AssemblyName>Curiosity.Client.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

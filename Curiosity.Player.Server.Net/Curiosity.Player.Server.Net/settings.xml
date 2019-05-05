@@ -3,8 +3,8 @@
   <setting key="MySQL:UseConvars">false</setting>
   <setting key="MySQL:Server">localhost</setting>
   <setting key="MySQL:Port">3306</setting>
-  <setting key="MySQL:Database">NOTUSED</setting>
-  <setting key="MySQL:Username">NOTUSED</setting>
-  <setting key="MySQL:Password">NOTUSED</setting>
-  <setting key="MySQL:Debug">true</setting>
+  <setting key="MySQL:Database">curiosity</setting>
+  <setting key="MySQL:Username">fivemServer</setting>
+  <setting key="MySQL:Password">dPJ!9wHP!Ef9</setting>
+  <setting key="MySQL:Debug">false</setting>
 </configuration>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Player.Server.Net", "Curiosity.Player.Server.Net\Curiosity.Player.Server.Net.csproj", "{76BBCCE5-0E48-4AA0-9903-28474F2E5845}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Server.Net", "Curiosity.Player.Server.Net\Curiosity.Server.Net.csproj", "{76BBCCE5-0E48-4AA0-9903-28474F2E5845}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{A0D62F10-DBC9-4C31-B3AB-7058530A87C9}"
 EndProject
@@ -36,7 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GHMattiMySQL", "GHMattiMySQ
 		_Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll = _Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Player.Client.Net", "Curiosity.Player.Client.Net\Curiosity.Player.Client.Net.csproj", "{132046A7-08EC-4F6E-AFE1-08C264B1359D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Client.Net", "Curiosity.Player.Client.Net\Curiosity.Client.Net.csproj", "{132046A7-08EC-4F6E-AFE1-08C264B1359D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
