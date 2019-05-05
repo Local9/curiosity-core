@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GHMattiMySQL", "GHMattiMySQ
 		_Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll = _Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Player.Client.Net", "Curiosity.Player.Client.Net\Curiosity.Player.Client.Net.csproj", "{132046A7-08EC-4F6E-AFE1-08C264B1359D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,14 +48,20 @@ Global
 		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.Build.0 = Release|Any CPU
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845} = {A0D62F10-DBC9-4C31-B3AB-7058530A87C9}
 		{EF02F259-FF7B-41FB-8B0C-6A72DD1441E6} = {D9F07760-D804-47DE-98A7-BC5E47182A47}
 		{6CA7B9F3-882C-42D2-B81B-9D7AAA6C4B46} = {D9F07760-D804-47DE-98A7-BC5E47182A47}
 		{5AE38E6D-71AE-4964-AC70-D530AF1E97A5} = {6CA7B9F3-882C-42D2-B81B-9D7AAA6C4B46}
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
