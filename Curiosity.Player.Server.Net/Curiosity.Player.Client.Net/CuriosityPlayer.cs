@@ -14,6 +14,8 @@ namespace Curiosity.Player.Client.Net
 
         private void OnResourceStart(string resourceName)
         {
+            Screen.ShowNotification("~b~Info:~w~ Curiosity Server Started");
+
             if (API.GetCurrentResourceName() != resourceName) return;
 
             Debug.WriteLine("curiosity-server -> Started");
