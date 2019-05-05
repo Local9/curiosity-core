@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Player.Server.Net", "Curiosity.Player.Server.Net\Curiosity.Player.Server.Net.csproj", "{76BBCCE5-0E48-4AA0-9903-28474F2E5845}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{A0D62F10-DBC9-4C31-B3AB-7058530A87C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{1D33637F-66E3-4977-9B9E-5A524FAFE523}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Dependancies", "_Dependancies", "{D9F07760-D804-47DE-98A7-BC5E47182A47}"
+	ProjectSection(SolutionItems) = preProject
+		_Dependancies\Newtonsoft.Json.dll = _Dependancies\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{EF02F259-FF7B-41FB-8B0C-6A72DD1441E6}"
+	ProjectSection(SolutionItems) = preProject
+		_Dependancies\client\CitizenFX.Core.dll = _Dependancies\client\CitizenFX.Core.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{6CA7B9F3-882C-42D2-B81B-9D7AAA6C4B46}"
+	ProjectSection(SolutionItems) = preProject
+		_Dependancies\server\CitizenFX.Core.dll = _Dependancies\server\CitizenFX.Core.dll
+		_Dependancies\server\DiscordWebhook.net.dll = _Dependancies\server\DiscordWebhook.net.dll
+		_Dependancies\server\DiscordWebhook.net.dll.config = _Dependancies\server\DiscordWebhook.net.dll.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GHMattiMySQL", "GHMattiMySQL", "{5AE38E6D-71AE-4964-AC70-D530AF1E97A5}"
+	ProjectSection(SolutionItems) = preProject
+		_Dependancies\server\GHMattiMySQL\__resource.lua = _Dependancies\server\GHMattiMySQL\__resource.lua
+		_Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll = _Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll
+		_Dependancies\server\GHMattiMySQL\MySqlConnector.net.dll = _Dependancies\server\GHMattiMySQL\MySqlConnector.net.dll
+		_Dependancies\server\GHMattiMySQL\settings.xml = _Dependancies\server\GHMattiMySQL\settings.xml
+		_Dependancies\server\GHMattiMySQL\System.Buffers.net.dll = _Dependancies\server\GHMattiMySQL\System.Buffers.net.dll
+		_Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll = _Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EF02F259-FF7B-41FB-8B0C-6A72DD1441E6} = {D9F07760-D804-47DE-98A7-BC5E47182A47}
+		{6CA7B9F3-882C-42D2-B81B-9D7AAA6C4B46} = {D9F07760-D804-47DE-98A7-BC5E47182A47}
+		{5AE38E6D-71AE-4964-AC70-D530AF1E97A5} = {6CA7B9F3-882C-42D2-B81B-9D7AAA6C4B46}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
+	EndGlobalSection
+EndGlobal

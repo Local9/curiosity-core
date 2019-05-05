@@ -31,8 +31,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CitizenFX.Core">
+      <HintPath>..\..\..\Local FiveM\_dependencies\server\CitizenFX.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DiscordWebhook.net">
+      <HintPath>..\..\..\Local FiveM\_dependencies\server\DiscordWebhook.net.dll</HintPath>
+    </Reference>
+    <Reference Include="GHMattiMySQL.net">
+      <HintPath>..\_Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll</HintPath>
+    </Reference>
+    <Reference Include="MySqlConnector.net">
+      <HintPath>..\_Dependancies\server\GHMattiMySQL\MySqlConnector.net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers.net">
+      <HintPath>..\_Dependancies\server\GHMattiMySQL\System.Buffers.net.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Threading.Tasks.Extensions.net">
+      <HintPath>..\_Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +66,11 @@
     <None Include="__resource.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="settings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
