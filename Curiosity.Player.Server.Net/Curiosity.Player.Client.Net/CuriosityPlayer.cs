@@ -41,8 +41,20 @@ namespace Curiosity.Client.Net
 
         async void OnPlayerSetup(long userId)
         {
-            Screen.ShowNotification($"~b~Info:~w~ User {userId} Created");
+            this.userId = userId;
+
+            float left = (Screen.Width / 2) / 3.2f;
+
+            Text text = new Text($"NAME: {Game.Player.Name}\nPLAYERID: {userId}", new System.Drawing.PointF { X = left, Y = Screen.Height - 37 }, 0.3f, System.Drawing.Color.FromArgb(50, 255, 255, 255), Font.ChaletComprimeCologne, Alignment.Left, false, true);
+            text.WrapWidth = 300;
             await Delay(0);
+
+            while (true)
+            {
+                text.Draw();
+                await Delay(0);
+            }
+
         }
     }
 }
