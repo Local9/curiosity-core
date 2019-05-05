@@ -20,11 +20,7 @@ namespace Curiosity.Client.Net
 
         private void OnResourceStart(string resourceName)
         {
-            Screen.ShowNotification("~b~Info:~w~ Curiosity Server Started");
-
             if (API.GetCurrentResourceName() != resourceName) return;
-
-            Debug.WriteLine("curiosity-server -> Started");
 
             Screen.ShowNotification("~b~Info:~w~ Curiosity Server Started");
         }
@@ -33,6 +29,7 @@ namespace Curiosity.Client.Net
         {
             while (userId == 0)
             {
+                Screen.LoadingPrompt.Show("Loading Player");
                 await Delay(1000);
                 TriggerServerEvent("curiosity:Server:Player:Setup");
             }
@@ -48,6 +45,9 @@ namespace Curiosity.Client.Net
             Text text = new Text($"NAME: {Game.Player.Name}\nPLAYERID: {userId}", new System.Drawing.PointF { X = left, Y = Screen.Height - 37 }, 0.3f, System.Drawing.Color.FromArgb(50, 255, 255, 255), Font.ChaletComprimeCologne, Alignment.Left, false, true);
             text.WrapWidth = 300;
             await Delay(0);
+
+            if (Screen.LoadingPrompt.IsActive)
+                Screen.LoadingPrompt.Hide();
 
             while (true)
             {
