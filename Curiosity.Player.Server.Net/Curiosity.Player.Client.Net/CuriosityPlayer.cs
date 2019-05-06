@@ -107,7 +107,7 @@ namespace Curiosity.Client.Net
 
             await Delay(1000);
 
-            Game.PlayerPed.Position = new Vector3(x, y, z);
+            Game.PlayerPed.Position = new Vector3(x, y, z + 0.5f);
 
             await Delay(0);
 
