@@ -64,8 +64,7 @@ namespace Curiosity.Client.Net
             if (API.GetCurrentResourceName() != resourceName) return;
 
             await Delay(0);
-            Vector3 playerPosition = Game.PlayerPed.Position;
-            TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, playerPosition.Z);
+            SaveLocation();
         }
 
         async void OnPlayerSetup(long userId, float x, float y, float z)
@@ -160,10 +159,15 @@ namespace Curiosity.Client.Net
             await Delay(10000);
             while (true)
             {
-                Vector3 playerPosition = Game.PlayerPed.Position;
-                TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, playerPosition.Z);
+                SaveLocation();
                 await Delay(1000 * 30);
             }
+        }
+
+        void SaveLocation()
+        {
+            Vector3 playerPosition = Game.PlayerPed.Position;
+            TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, playerPosition.Z);
         }
     }
 }
