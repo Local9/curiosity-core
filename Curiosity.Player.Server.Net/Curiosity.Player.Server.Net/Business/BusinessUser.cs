@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CitizenFX.Core;
 
 namespace Curiosity.Server.Net.Business
@@ -25,9 +26,14 @@ namespace Curiosity.Server.Net.Business
             await databaseUser.TestQueryAsync();
         }
 
-        public async Task<long> GetUserIdAsync(string steamId)
+        public async Task<Entity.User> GetUserIdAsync(string steamId)
         {
             return await databaseUser.GetUserIdAsync(steamId);
+        }
+
+        public async Task<Vector3> GetUserPositionAsync(long locationId)
+        {
+            return await databaseUser.GetUserPositionAsync(locationId);
         }
     }
 }

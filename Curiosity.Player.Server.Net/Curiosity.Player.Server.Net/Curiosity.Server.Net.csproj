@@ -65,6 +65,7 @@
     <Compile Include="CuriosityPlayer.cs" />
     <Compile Include="Database\DatabaseSettings.cs" />
     <Compile Include="Database\DatabaseUser.cs" />
+    <Compile Include="Entity\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

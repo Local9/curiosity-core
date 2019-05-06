@@ -16,7 +16,8 @@ namespace Curiosity.Server.Net
         {
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
 
-            EventHandlers["curiosity:Server:Player:Setup"] += new Action<Player>(OnPlayerSetup);
+            EventHandlers["curiosity:Server:Player:Setup"] += new Action<Player>(OnSetupPlayer);
+            EventHandlers["playerConnecting"] += new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting);
 
             isLive = API.GetConvar("server_live", "false") == "true";
 
@@ -40,7 +41,17 @@ namespace Curiosity.Server.Net
             businessUser = Business.BusinessUser.GetInstance();
         }
 
-        async void OnPlayerSetup([FromSource]Player player)
+        async void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
+        {
+            await SetupPlayer(player);
+        }
+
+        async void OnSetupPlayer([FromSource]Player player)
+        {
+            await SetupPlayer(player);
+        }
+
+        async Task SetupPlayer(Player player)
         {
             try
             {
@@ -53,9 +64,11 @@ namespace Curiosity.Server.Net
                     throw new Exception("STEAMID MISSING");
                 }
 
-                long userId = await businessUser.GetUserIdAsync(steamId);
+                Entity.User user = await businessUser.GetUserIdAsync(steamId);
+                await Delay(0);
+                Vector3 vector3 = await businessUser.GetUserPositionAsync(user.LocationId);
 
-                player.TriggerEvent("curiosity:Client:Player:Setup", userId);
+                player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, vector3.X, vector3.Y, vector3.Z);
             }
             catch (Exception ex)
             {
