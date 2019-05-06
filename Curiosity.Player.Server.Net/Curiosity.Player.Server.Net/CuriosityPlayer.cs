@@ -15,9 +15,10 @@ namespace Curiosity.Server.Net
         public CuriosityPlayer()
         {
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
+            EventHandlers["playerConnecting"] += new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting);
 
             EventHandlers["curiosity:Server:Player:Setup"] += new Action<Player>(OnSetupPlayer);
-            EventHandlers["playerConnecting"] += new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting);
+            EventHandlers["curiosity:Server:Player:SaveLocation"] += new Action<Player, float, float, float>(OnSaveLocation);
 
             isLive = API.GetConvar("server_live", "false") == "true";
 
@@ -43,19 +44,19 @@ namespace Curiosity.Server.Net
 
         async void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
         {
-            await SetupPlayer(player);
+            await SetupPlayerAsync(player);
         }
 
         async void OnSetupPlayer([FromSource]Player player)
         {
-            await SetupPlayer(player);
+            await SetupPlayerAsync(player);
         }
 
-        async Task SetupPlayer(Player player)
+        async Task SetupPlayerAsync(Player player)
         {
             try
             {
-                await Delay(10);
+                await Delay(0);
 
                 string steamId = player.Identifiers[STEAM_IDENTIFIER];
 
@@ -66,13 +67,34 @@ namespace Curiosity.Server.Net
 
                 Entity.User user = await businessUser.GetUserIdAsync(steamId);
                 await Delay(0);
-                Vector3 vector3 = await businessUser.GetUserPositionAsync(user.LocationId);
+                Vector3 vector3 = await businessUser.GetUserLocationAsync(user.LocationId);
 
                 player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, vector3.X, vector3.Y, vector3.Z);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"OnPlayerSetup -> {ex.Message}");
+            }
+        }
+
+        async void OnSaveLocation([FromSource]Player player, float x, float y, float z)
+        {
+            try
+            {
+                await Delay(0);
+
+                string steamId = player.Identifiers[STEAM_IDENTIFIER];
+
+                if (string.IsNullOrEmpty(steamId))
+                {
+                    throw new Exception("STEAMID MISSING");
+                }
+
+                await businessUser.SavePlayerLocationAsync(steamId, x, y, z);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"OnSaveLocation -> {ex.Message}");
             }
         }
     }

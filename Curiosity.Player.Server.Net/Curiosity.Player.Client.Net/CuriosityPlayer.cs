@@ -14,7 +14,11 @@ namespace Curiosity.Client.Net
         public CuriosityPlayer()
         {
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
+            EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
+
             EventHandlers["curiosity:Client:Player:Setup"] += new Action<long, float, float, float>(OnPlayerSetup);
+
+            Tick += UpdatePlayerLocation;
         }
 
         void ToggleSound(bool state)
@@ -53,6 +57,15 @@ namespace Curiosity.Client.Net
             await Delay(0);
             TriggerServerEvent("curiosity:Server:Player:Setup");
             await Delay(0);
+        }
+
+        async void OnResourceStop(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            await Delay(0);
+            Vector3 playerPosition = Game.PlayerPed.Position;
+            TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, playerPosition.Z);
         }
 
         async void OnPlayerSetup(long userId, float x, float y, float z)
@@ -107,7 +120,7 @@ namespace Curiosity.Client.Net
 
             await Delay(1000);
 
-            Game.PlayerPed.Position = new Vector3(x, y, z + 0.5f);
+            Game.PlayerPed.Position = new Vector3(x, y, z);
 
             await Delay(0);
 
@@ -139,6 +152,17 @@ namespace Curiosity.Client.Net
             {
                 text.Draw();
                 await Delay(0);
+            }
+        }
+
+        async Task UpdatePlayerLocation()
+        {
+            await Delay(10000);
+            while (true)
+            {
+                Vector3 playerPosition = Game.PlayerPed.Position;
+                TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, playerPosition.Z);
+                await Delay(1000 * 30);
             }
         }
     }

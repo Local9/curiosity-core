@@ -31,9 +31,25 @@ namespace Curiosity.Server.Net.Business
             return await databaseUser.GetUserIdAsync(steamId);
         }
 
-        public async Task<Vector3> GetUserPositionAsync(long locationId)
+        public async Task<Vector3> GetUserLocationAsync(long locationId)
         {
-            return await databaseUser.GetUserPositionAsync(locationId);
+            return await databaseUser.GetUserLocationAsync(locationId);
+        }
+
+        public async Task SavePlayerLocationAsync(string steamId, float x, float y, float z)
+        {
+            Entity.User user = await databaseUser.GetUserIdAsync(steamId);
+
+            if (user.LocationId == 1)
+            {
+                user.LocationId = await databaseUser.SaveLocationAsync(2, x, y, z);
+                await Delay(0);
+                await databaseUser.UpdateUserLocationId(user.UserId, user.LocationId);
+            }
+            else
+            {
+                await databaseUser.UpdatePlayerLocation(user.LocationId, x, y, z);
+            }
         }
     }
 }
