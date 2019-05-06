@@ -69,7 +69,7 @@ namespace Curiosity.Server.Net
                 await Delay(0);
                 Vector3 vector3 = await businessUser.GetUserLocationAsync(user.LocationId);
 
-                player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, vector3.X, vector3.Y, vector3.Z);
+                player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, user.IsAdmin, vector3.X, vector3.Y, vector3.Z);
             }
             catch (Exception ex)
             {

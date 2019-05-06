@@ -33,7 +33,7 @@ namespace Curiosity.Server.Net.Database
 
                 Dictionary<string, object> myParams = new Dictionary<string, object>();
                 myParams.Add("@steamId", steamId);
-                string selectQuery = "select userId, locationId from users where steamId = @steamId";
+                string selectQuery = "select userId, locationId, isAdmin from users where steamId = @steamId";
                 using (var result = mySql.QueryResult(selectQuery, myParams))
                 {
                     ResultSet keyValuePairs = await result;
@@ -50,6 +50,7 @@ namespace Curiosity.Server.Net.Database
                     {
                         user.UserId = long.Parse($"{keyValues["userId"]}");
                         user.LocationId = long.Parse($"{keyValues["locationId"]}");
+                        user.IsAdmin = $"{keyValues["isAdmin"]}" == "1";
                     }
                     return user;
                 }
