@@ -21,18 +21,6 @@ namespace Curiosity.Server.Net
             EventHandlers["curiosity:Server:Player:SaveLocation"] += new Action<Player, float, float, float>(OnSaveLocation);
 
             isLive = API.GetConvar("server_live", "false") == "true";
-
-            // Tick += TestQuery;
-        }
-
-        async Task TestQuery()
-        {
-            while (!isLive)
-            {
-                await Delay(1000);
-                await businessUser.TestQueryAsync();
-            }
-            await Delay(60000);
         }
 
         private void OnResourceStart(string resourceName)
