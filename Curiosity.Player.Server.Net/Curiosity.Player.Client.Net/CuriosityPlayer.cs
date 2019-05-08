@@ -10,16 +10,19 @@ namespace Curiosity.Client.Net
     {
         long userId = 0;
         bool isLoading = false;
+        Text text;
 
         public CuriosityPlayer()
         {
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
 
-            EventHandlers["curiosity:Client:Player:Setup"] += new Action<long, bool, float, float, float>(OnPlayerSetup);
+            EventHandlers["curiosity:Client:Player:Setup"] += new Action<long, int, string, float, float, float>(OnPlayerSetup);
+            EventHandlers["curiosity:Client:Player:Role"] += new Action<string>(UpdatePlayerRole);
 
             Tick += UpdatePlayerLocation;
             Tick += PlayerSettings;
+            Tick += PlayerRole;
         }
 
         async Task PlayerSettings()
@@ -33,6 +36,21 @@ namespace Curiosity.Client.Net
                 API.SetPlayerWantedLevelNoDrop(Game.Player.Handle, 0, false);
                 await Delay(0);
             }
+        }
+
+        async Task PlayerRole()
+        {
+            while (true)
+            {
+                await Delay(10000);
+                TriggerServerEvent("curiosity:Server:Player:GetRole");
+            }
+        }
+
+        async void UpdatePlayerRole(string role)
+        {
+            text.Caption = $"ROLE: {role}\nNAME: {Game.Player.Name}\nPLAYERID: {userId}";
+            await Delay(0);
         }
 
         void ToggleSound(bool state)
@@ -81,7 +99,7 @@ namespace Curiosity.Client.Net
             SaveLocation();
         }
 
-        async void OnPlayerSetup(long userId, bool isAdmin, float x, float y, float z)
+        async void OnPlayerSetup(long userId, int roleId, string role, float x, float y, float z)
         {
             Setup();
             await Delay(0);
@@ -128,12 +146,7 @@ namespace Curiosity.Client.Net
 
             float left = (Screen.Width / 2) / 3f;
 
-            string role = "User";
-
-            if (isAdmin)
-                role = "Admin";
-
-            Text text = new Text($"ROLE: {role}\nNAME: {Game.Player.Name}\nPLAYERID: {userId}", new System.Drawing.PointF { X = left, Y = Screen.Height - 50 }, 0.3f, System.Drawing.Color.FromArgb(75, 255, 255, 255), Font.ChaletComprimeCologne, Alignment.Left, false, true);
+            text = new Text($"ROLE: {role}\nNAME: {Game.Player.Name}\nPLAYERID: {userId}", new System.Drawing.PointF { X = left, Y = Screen.Height - 50 }, 0.3f, System.Drawing.Color.FromArgb(75, 255, 255, 255), Font.ChaletComprimeCologne, Alignment.Left, false, true);
             text.WrapWidth = 300;
 
             await Delay(1000);

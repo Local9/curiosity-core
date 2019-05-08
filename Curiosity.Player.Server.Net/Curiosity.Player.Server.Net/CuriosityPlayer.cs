@@ -19,11 +19,11 @@ namespace Curiosity.Server.Net
             EventHandlers["playerConnecting"] += new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting);
             // Sends data to the client
             EventHandlers["curiosity:Server:Player:Setup"] += new Action<Player>(OnSetupPlayer);
-            EventHandlers["curiosity:Server:Player:IsAdmin"] += new Action<Player>(IsAdmin);
+            EventHandlers["curiosity:Server:Player:GetRole"] += new Action<Player>(GetUserRole);
             // Saves Data
             EventHandlers["curiosity:Server:Player:SaveLocation"] += new Action<Player, float, float, float>(OnSaveLocation);
             // Internal Events
-            EventHandlers["curiosity:Server:Player:IsAdminInternal"] += new Action<int>(IsAdminInternal);
+            EventHandlers["curiosity:Server:Player:GetRoleId"] += new Action<int>(GetUserRoleId);
 
             isLive = API.GetConvar("server_live", "false") == "true";
         }
@@ -68,8 +68,8 @@ namespace Curiosity.Server.Net
                 Entity.User user = await businessUser.GetUserAsync(steamId);
                 await Delay(0);
                 Vector3 vector3 = await businessUser.GetUserLocationAsync(user.LocationId);
-
-                player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, user.IsAdmin, vector3.X, vector3.Y, vector3.Z);
+                await Delay(0);
+                player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, user.RoleId, user.Role, vector3.X, vector3.Y, vector3.Z);
             }
             catch (Exception ex)
             {
@@ -98,7 +98,7 @@ namespace Curiosity.Server.Net
             }
         }
 
-        async void IsAdmin([FromSource]Player player)
+        async void GetUserRole([FromSource]Player player)
         {
             await Delay(0);
 
@@ -111,15 +111,15 @@ namespace Curiosity.Server.Net
 
             Entity.User user = await businessUser.GetUserAsync(steamId);
 
-            player.TriggerEvent("curiosity:Client:Player:IsAdmin", user.IsAdmin);
+            player.TriggerEvent("curiosity:Client:Player:Role", user.Role);
         }
 
-        async void IsAdminInternal(int playerHandle)
+        async void GetUserRoleId(int playerHandle)
         {
             Player player = new PlayerList()[playerHandle];
             string steamId = player.Identifiers[STEAM_IDENTIFIER];
             Entity.User user = await businessUser.GetUserAsync(steamId);
-            TriggerEvent("curiosity:Server:Player:IsAdminInternalResult", user.IsAdmin);
+            TriggerEvent("curiosity:Server:Player:RoleId", user.RoleId);
         }
     }
 }

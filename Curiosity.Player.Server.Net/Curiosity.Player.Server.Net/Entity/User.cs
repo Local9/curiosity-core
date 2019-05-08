@@ -6,6 +6,7 @@ namespace Curiosity.Server.Net.Entity
     {
         public long UserId;
         public long LocationId;
-        public bool IsAdmin;
+        public int RoleId;
+        public string Role;
     }
 }
