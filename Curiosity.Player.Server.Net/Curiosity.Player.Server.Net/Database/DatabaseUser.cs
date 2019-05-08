@@ -25,7 +25,7 @@ namespace Curiosity.Server.Net.Database
             databaseUser = this;
         }
 
-        public async Task<Entity.User> GetUserIdAsync(string steamId)
+        public async Task<Entity.User> GetUserAsync(string steamId)
         {
             try
             {

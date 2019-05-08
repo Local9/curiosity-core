@@ -14,11 +14,16 @@ namespace Curiosity.Server.Net
 
         public CuriosityPlayer()
         {
+            // FiveM Events
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["playerConnecting"] += new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting);
-
+            // Sends data to the client
             EventHandlers["curiosity:Server:Player:Setup"] += new Action<Player>(OnSetupPlayer);
+            EventHandlers["curiosity:Server:Player:IsAdmin"] += new Action<Player>(IsAdmin);
+            // Saves Data
             EventHandlers["curiosity:Server:Player:SaveLocation"] += new Action<Player, float, float, float>(OnSaveLocation);
+            // Internal Events
+            EventHandlers["curiosity:Server:Player:IsAdminInternal"] += new Action<int>(IsAdminInternal);
 
             isLive = API.GetConvar("server_live", "false") == "true";
         }
@@ -32,6 +37,13 @@ namespace Curiosity.Server.Net
 
         async void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
         {
+            string steamId = player.Identifiers[STEAM_IDENTIFIER];
+
+            if (string.IsNullOrEmpty(steamId))
+            {
+                deferrals.done("SteamID Not Found. Please have Steam running to connect.");
+            }
+
             await SetupPlayerAsync(player);
         }
 
@@ -53,7 +65,7 @@ namespace Curiosity.Server.Net
                     throw new Exception("STEAMID MISSING");
                 }
 
-                Entity.User user = await businessUser.GetUserIdAsync(steamId);
+                Entity.User user = await businessUser.GetUserAsync(steamId);
                 await Delay(0);
                 Vector3 vector3 = await businessUser.GetUserLocationAsync(user.LocationId);
 
@@ -84,6 +96,30 @@ namespace Curiosity.Server.Net
             {
                 Debug.WriteLine($"OnSaveLocation -> {ex.Message}");
             }
+        }
+
+        async void IsAdmin([FromSource]Player player)
+        {
+            await Delay(0);
+
+            string steamId = player.Identifiers[STEAM_IDENTIFIER];
+
+            if (string.IsNullOrEmpty(steamId))
+            {
+                throw new Exception("STEAMID MISSING");
+            }
+
+            Entity.User user = await businessUser.GetUserAsync(steamId);
+
+            player.TriggerEvent("curiosity:Client:Player:IsAdmin", user.IsAdmin);
+        }
+
+        async void IsAdminInternal(int playerHandle)
+        {
+            Player player = new PlayerList()[playerHandle];
+            string steamId = player.Identifiers[STEAM_IDENTIFIER];
+            Entity.User user = await businessUser.GetUserAsync(steamId);
+            TriggerEvent("curiosity:Server:Player:IsAdminInternalResult", user.IsAdmin);
         }
     }
 }
