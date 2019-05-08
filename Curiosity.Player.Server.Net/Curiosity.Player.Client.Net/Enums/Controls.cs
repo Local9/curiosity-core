@@ -1,0 +1,33 @@
+﻿using CitizenFX.Core;
+using System;
+
+namespace Curiosity.Client.Net.Enums
+{
+    public enum KeybindType
+    {
+        Pressed = 0,
+        JustPressed = 1,
+        JustReleased = 2,
+        DisabledPressed = 3,
+        DisabledJustPressed = 4,
+        DisabledReleased = 5,
+        DisabledJustReleased = 6
+    }
+
+    [Flags]
+    public enum ControlModifier
+    {
+        Any = -1,
+        None = 0,
+        Ctrl = 1 << 0,
+        Alt = 1 << 1,
+        Shift = 1 << 2
+    }
+
+    public class ControlSetting
+    {
+        public Control Control;
+        public bool KeyboardOnly;
+        public ControlModifier Modifier;
+    }
+}

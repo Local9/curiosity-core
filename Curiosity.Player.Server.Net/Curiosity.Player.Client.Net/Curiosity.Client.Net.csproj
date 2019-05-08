@@ -45,8 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CuriosityPed.cs" />
     <Compile Include="CuriosityPlayer.cs" />
+    <Compile Include="CuriosityTutorial.cs" />
+    <Compile Include="Enums\Controls.cs" />
+    <Compile Include="Helper\ControlHelper.cs" />
+    <Compile Include="Helper\NativeWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -19,6 +19,20 @@ namespace Curiosity.Client.Net
             EventHandlers["curiosity:Client:Player:Setup"] += new Action<long, bool, float, float, float>(OnPlayerSetup);
 
             Tick += UpdatePlayerLocation;
+            Tick += PlayerSettings;
+        }
+
+        async Task PlayerSettings()
+        {
+            while (true)
+            {
+                API.ClearPlayerWantedLevel(Game.Player.Handle);
+                API.SetMaxWantedLevel(0);
+                API.SetPlayerWantedLevel(Game.Player.Handle, 0, false);
+                API.SetPlayerWantedLevelNow(Game.Player.Handle, false);
+                API.SetPlayerWantedLevelNoDrop(Game.Player.Handle, 0, false);
+                await Delay(0);
+            }
         }
 
         void ToggleSound(bool state)
