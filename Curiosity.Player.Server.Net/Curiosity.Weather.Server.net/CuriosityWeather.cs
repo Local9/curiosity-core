@@ -77,6 +77,7 @@ namespace Curiosity.Server.Net
             } else
             {
                 player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
+
                 if (!isLive)
                     Debug.WriteLine($"WEATHER SYNC -> {weatherData}");
             }

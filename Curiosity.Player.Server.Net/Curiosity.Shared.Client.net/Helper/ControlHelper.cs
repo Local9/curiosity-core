@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Client.Net.Enums;
+using Curiosity.Shared.Client.Net.Enums;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Client.Net.Helper
+namespace Curiosity.Shared.Client.Net.Helper
 {
     /// <summary>
     /// Some control keycodes to get you started: https://wiki.fivem.net/wiki/Controls
@@ -11,7 +11,7 @@ namespace Curiosity.Client.Net.Helper
     /// Be way control codes can be bound to multiple keys as well
     /// (I.e. there are cross-binds in all directions)
     /// </summary>
-    static class ControlHelper
+    public static class ControlHelper
     {
         // To be moved to constants
         const int defaultControlGroup = 0;

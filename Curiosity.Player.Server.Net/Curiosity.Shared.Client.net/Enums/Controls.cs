@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using System;
 
-namespace Curiosity.Client.Net.Enums
+namespace Curiosity.Shared.Client.Net.Enums
 {
     public enum KeybindType
     {
