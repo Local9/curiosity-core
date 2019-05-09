@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Curiosity.Shared.Client.Net.Helper.ControlHelper;
+using static Curiosity.Shared.Client.net.Helper.ControlHelper;
 
 using CitizenFX.Core;
 using CitizenFX.Core.Native;

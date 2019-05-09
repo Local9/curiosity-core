@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Shared.Client.Net.Enums;
+using Curiosity.Shared.Client.net.Enums;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Shared.Client.Net.Helper
+namespace Curiosity.Shared.Client.net.Helper
 {
     /// <summary>
     /// Some control keycodes to get you started: https://wiki.fivem.net/wiki/Controls

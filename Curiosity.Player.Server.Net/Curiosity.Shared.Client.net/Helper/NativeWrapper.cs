@@ -3,7 +3,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Shared.Client.Net.Helper
+namespace Curiosity.Shared.Client.net.Helper
 {
     /// <summary>
     /// Sometimes you may want to use this, sometimes not

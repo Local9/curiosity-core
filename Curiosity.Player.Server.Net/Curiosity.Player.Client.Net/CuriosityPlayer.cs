@@ -49,6 +49,8 @@ namespace Curiosity.Client.Net
 
         async void UpdatePlayerRole(string role)
         {
+            if (text == null) return;
+
             text.Caption = $"ROLE: {role}\nNAME: {Game.Player.Name}\nPLAYERID: {userId}";
             await Delay(0);
         }

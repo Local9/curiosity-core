@@ -105,7 +105,7 @@ namespace Curiosity.Server.Net
             if (randomSelect.Next(0, 2) == 0)
             {
                 weatherData.Wind = windWeathers[weatherData.CurrentWeather];
-                weatherData.WindHeading = randomSelect.Next(0, 361);
+                weatherData.WindHeading = randomSelect.Next(0, 360);
             }
 
             TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
