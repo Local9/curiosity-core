@@ -19,7 +19,7 @@ namespace Curiosity.Chat.Client.net
         static bool isChatScrollEnabled = true;
         static bool isChatInputActivating = false;
 
-        const string chatMessageColor = "#0000FF";
+        const string chatMessageColor = "#e7bd42";
         const float localChatAoe = 25f;
 
         string role = "| ";
@@ -31,9 +31,10 @@ namespace Curiosity.Chat.Client.net
 
             RegisterEventHandler("curiosity:Client:Player:Role", new Action<string>(UpdatePlayerRole));
 
-            RegisterEventHandler("curiosity:Server:Chat:Message", new Action<string, string, string>(ChatMessage));
-            RegisterEventHandler("curiosity:Server:Chat:EnableScroll", new Action<bool>(EnableChatScroll));
-            RegisterEventHandler("curiosity:Server:Chat:EnableChatBox", new Action<bool>(EnableChatBox));
+            RegisterEventHandler("curiosity:Client:Chat:Message", new Action<string, string, string>(ChatMessage));
+
+            RegisterEventHandler("curiosity:Client:Chat:EnableScroll", new Action<bool>(EnableChatScroll));
+            RegisterEventHandler("curiosity:Client:Chat:EnableChatBox", new Action<bool>(EnableChatBox));
 
             RegisterNuiCallbackType("chatResult");
             RegisterEventHandler("__cfx_nui:chatResult", new Action<System.Dynamic.ExpandoObject>(HandleChatResult));
@@ -43,7 +44,8 @@ namespace Curiosity.Chat.Client.net
 
         async void UpdatePlayerRole(string role)
         {
-            this.role = role;
+            if (role != "User")
+                this.role = role;
             await Delay(0);
         }
 
@@ -106,7 +108,8 @@ namespace Curiosity.Chat.Client.net
                 }
                 else
                 {
-                    TriggerServerEvent("curiosity:Server:Chat:Message", $"{role} {Game.Player.Name}", chatMessageColor, Message);
+                    // async void ChatMessage([FromSource]Player player, string message, string color, string scope)
+                    TriggerServerEvent("curiosity:Server:Chat:Message", role, Message, chatMessageColor, "all");
                 }
             }
             catch (Exception ex)

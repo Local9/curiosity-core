@@ -23,6 +23,7 @@ $(function () {
             if (inputShown) return;
             $('#chat').animate({ opacity: 0 }, 300);
             $('#PgDnIndicator').animate({ opacity: 0 }, 300);
+            $('#PgUpIndicator').animate({ opacity: 0 }, 300);
         }, 7000);
     }
 
@@ -40,7 +41,7 @@ $(function () {
                 // (otherwise it should already be in history so no need to save it)
                 chatHistory[currentHistoryNum] = $(elem).val(); // set it to the current chat input value
         }
-        $.post('http://chat/chatResult', JSON.stringify(obj)); // pass chat message on regardless
+        $.post('http://curiosity-chat/chatResult', JSON.stringify(obj)); // pass chat message on regardless
         // (it is what resets controls etc.)
         $('#ftb').val(''); // set input to empty
         triggerChange(); // update input box
@@ -71,6 +72,7 @@ $(function () {
         {
             $('#PgDnIndicator').animate({ opacity: 0 }, 0); // hide new message indicator
             $('#PgDnIndicator').removeClass('animated'); // stop animation
+            $('#PgUpIndicator').stop().css('opacity', '1'); // make down arrow visible
         }
         else {
             $('#PgDnIndicator').stop().css('opacity', '1'); // make down arrow visible
@@ -82,6 +84,7 @@ $(function () {
         buf.scrollTop(buf[0].scrollHeight - buf.height()); // scrolls to bottom
         $('#PgDnIndicator').removeClass('animated'); // stops down arrow bounce
         $('#PgDnIndicator').animate({ opacity: 0 }, 0); // hides page down indicator
+        $('#PgUpIndicator').stop().css('opacity', '1'); // make down arrow visible
     }
 
     function previousLineEntered() {
@@ -176,6 +179,7 @@ $(function () {
             handleResult($('#chatInput')[0].getTextBox(), false); // clears chat box, starts hiding it etc.
             $('#chat').animate({ opacity: 0 }, 0);
             $('#PgDnIndicator').animate({ opacity: 0 }, 0);
+            $('#PgUpIndicator').animate({ opacity: 0 }, 0);
             chatBoxEnabled = false;
             return;
         }
@@ -201,16 +205,27 @@ $(function () {
             // add colors
             // disables colorization in /me and system messages
             if (name != '') {
-                name = colorize(name);
-                message = colorize(message);
+                if (name.indexOf('|') == -1) {
+                    name = colorize(name);
+                    message = colorize(message);
+                }
             }
 
             // add name
             var nameStr = '';
-            if (name !== '')
-                nameStr = '<strong style="color:' + color + ';">' + name + ': </strong>';
-            else
-                message = '<span style="color:' + color + ';">' + message + '</span>';
+            if (name !== '') {
+                if (name.indexOf('|') == -1) {
+                    nameStr = '<strong style="color:' + color + ';"><i class="fas fa-comment"></i> ' + name + ': </strong>';
+                } else {
+                    nameStr = '<strong><i class="fas fa-comment"></i> ' + name + ': </strong>';
+                }
+            } else {
+                if (name.indexOf('|') == -1) {
+                    message = '<span style="color:' + color + ';">' + message + '</span>';
+                } else {
+                    message = '<span>' + message + '</span>';
+                }
+            }
         }
         else {
             nameStr = '';

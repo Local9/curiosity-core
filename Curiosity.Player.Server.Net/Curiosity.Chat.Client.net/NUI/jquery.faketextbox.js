@@ -5,7 +5,7 @@
 
             var $me = $(this),
                 cursorTimer,
-                $tb = $('<input type="text" id="ftb" class="fake" />');
+                $tb = $('<input type="text" id="ftb" class="fake" maxlength="140" />');
 
             if ($me.data('ftbftw')) {
                 console.log('already initialized');

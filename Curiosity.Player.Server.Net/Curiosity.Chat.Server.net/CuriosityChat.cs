@@ -13,11 +13,11 @@ namespace Curiosity.Chat.Server.net
     {
         public CuriosityChat()
         {
-            EventHandlers["curiosity:Server:Chat:Message"] += new Action<Player, string, string, string>(ChatMessage);
+            EventHandlers["curiosity:Server:Chat:Message"] += new Action<Player, string, string, string, string>(ChatMessage);
             EventHandlers["curiosity:Server:Chat:RconCommand"] += new Action<Player, string, List<object>>(RconCommand);
         }
 
-        async void ChatMessage([FromSource]Player player, string message, string color, string scope)
+        async void ChatMessage([FromSource]Player player, string role, string message, string color, string scope)
         {
             if (string.IsNullOrWhiteSpace(color) || string.IsNullOrWhiteSpace(message))
             {
@@ -29,7 +29,7 @@ namespace Curiosity.Chat.Server.net
             switch (scope)
             {
                 default:
-                    TriggerClientEvent("curiosity:Client:Chat:Message", player.Name, color, message);
+                    TriggerClientEvent("curiosity:Client:Chat:Message", $"{role} {player.Name}", color, message);
                     break;
             }
             await Delay(0);

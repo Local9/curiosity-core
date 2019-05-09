@@ -2,6 +2,8 @@
     background-color: transparent;
     margin: 0px;
     font-family: "Segoe UI", "Segoe UI Symbol", "Segoe UI Emoji", Arial, sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.2rem;
 }
 
 ul {
@@ -10,18 +12,26 @@ ul {
     list-style-type: none;
 }
 
+ul li {
+    background-color: rgba(0,0,0,0.4);
+    margin-bottom: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: rgba(0,0,0,0.7) thin solid;
+    color: #fafafa;
+}
+
 #chat {
     position: absolute;
-    top: 40px;
-    left: 40px;
-    padding: 7px;
+    top: 10rem;
+    right: 1rem;
+    padding: 0.25rem;
     width: 30%;
-    font-size: 20px;
-    line-height: 24px;
     font-family: "Segoe UI", "Segoe UI Symbol", "Segoe UI Emoji", Arial, sans-serif;
-    color: #fff;
+    color: #fafafa;
     text-shadow: 1px 0 1px #000, 0 -1px 1px #000, 0 1px 1px #000, -1px 0 1px #000;
     overflow: hidden;
+    overflow-wrap: break-word;
 }
 
 input.fake {
@@ -32,20 +42,22 @@ input.fake {
 
 #chatInputHas {
     display: none;
-    height: 400px;
+    background-color: rgba(0,0,0,0.4);
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    border: rgba(0,0,0,0.7) thin solid;
 }
 
-    #chatInputHas strong {
-        display: inline-block;
-        vertical-align: middle;
-        text-transform: uppercase;
-        position: relative;
-        padding: 3px;
-        padding-left: 0px;
-        height: 200px;
-        margin-right: 4px;
-        line-height: 26px;
-    }
+#chatInputHas strong {
+    display: inline-block;
+    vertical-align: middle;
+    text-transform: uppercase;
+    position: relative;
+    padding: 0.25rem;
+    padding-left: 0px;
+    min-height: 5rem;
+    margin-right: 4px;
+}
 
 #chatInput {
     background-color: transparent;
@@ -54,7 +66,6 @@ input.fake {
     padding: 3px;
     position: absolute;
     display: inline;
-    line-height: 26px;
     margin: 0px;
     color: #fff;
     font: inherit;
@@ -62,44 +73,43 @@ input.fake {
     word-wrap: break-word;
 }
 
-    #chatInput * > div:first-child {
-        display: inline;
-        word-wrap: break-word;
-        line-height: 26px;
-    }
+#chatInput * > div:first-child {
+    display: inline;
+    word-wrap: break-word;
+    line-height: 18px;
+}
 
-    #chatInput .caret {
-        display: inline;
-        min-width: 1px;
-        height: 22px;
-        line-height: 26px;
-        word-wrap: break-word;
-        vertical-align: top;
-        background-color: #fff;
-        text-shadow: 1px 0 1px #000, 0 -1px 1px #000, 0 1px 1px #000, -1px 0 1px #000;
-        color: white;
-    }
+#chatInput .caret {
+    display: inline;
+    min-width: 1px;
+    height: 22px;
+    word-wrap: break-word;
+    vertical-align: top;
+    background-color: #fff;
+    text-shadow: 1px 0 1px #000, 0 -1px 1px #000, 0 1px 1px #000, -1px 0 1px #000;
+    color: white;
+}
 
-    #chatInput div {
-        display: inline;
-    }
+#chatInput div {
+    display: inline;
+}
 
 #chatBuffer {
-    height: 240px;
+    height: 400px;
     overflow: hidden;
 }
 
 #pageIndicators {
     position: absolute;
-    left: 10px;
-    top: 40px;
+    right: 10px;
+    top: 200px;
     color: #fff;
     text-shadow: 1px 0 1px #000, 0 -1px 1px #000, 0 1px 1px #000, -1px 0 1px #000;
 }
 
 #PgDnIndicator {
     position: relative;
-    top: 210px;
+    top: 400px;
     opacity: 0;
 }
 
@@ -108,35 +118,35 @@ input.fake {
 }
 
 .color-1 {
-    color: #ff4444;
+    color: #ff6961;
 }
 
 .color-2 {
-    color: #99cc00;
+    color: #77dd77;
 }
 
 .color-3 {
-    color: #ffbb33;
+    color: #ffb347;
 }
 
 .color-4 {
-    color: #0099cc;
+    color: #a9cee4;
 }
 
 .color-5 {
-    color: #33b5e5;
+    color: #71cced;
 }
 
 .color-6 {
-    color: #aa66cc;
+    color: #ca9fdf;
 }
 
 .color-8 {
-    color: #cc0000;
+    color: #ff9090;
 }
 
 .color-9 {
-    color: #cc0000;
+    color: #ff4040;
 }
 
 .bouncedown {
