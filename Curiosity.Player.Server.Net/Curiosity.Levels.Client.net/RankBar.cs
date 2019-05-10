@@ -24,7 +24,6 @@ namespace Curiosity.Levels.Client.net
         int maxPlayerLevel = 500;
         bool enableZKeyForRankbar = true;
 
-        int currentLevel = 0;
         int currentXP = 0;
 
         public RankBar()
