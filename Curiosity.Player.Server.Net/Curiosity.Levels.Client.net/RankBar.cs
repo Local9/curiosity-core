@@ -24,8 +24,6 @@ namespace Curiosity.Levels.Client.net
         int maxPlayerLevel = 500;
         bool enableZKeyForRankbar = true;
 
-        int initialXP = 0;
-
         int currentLevel = 0;
         int currentXP = 0;
 
@@ -33,7 +31,135 @@ namespace Curiosity.Levels.Client.net
         {
             SetupRanks();
 
+            EventHandlers["curiosity:Client:Rank:SetInitialXpLevels"] += new Action<int, bool, bool>(SetInitialXpLevels);
+            EventHandlers["curiosity:Client:Rank:AddPlayerXP"] += new Action<int>(AddPlayerXP);
+            EventHandlers["curiosity:Client:Rank:RemovePlayerXP"] += new Action<int>(RemovePlayerXP);
+
             Tick += CheckButton;
+        }
+
+        void AddPlayerXP(int xpAmount)
+        {
+            if (xpAmount < 0)
+                return;
+
+            int internalCurrentLevel = GetLevelFromXP(currentXP);
+            int currentXPWithAddedXP = currentXP + xpAmount;
+            int newLevel = GetLevelFromXP(currentXPWithAddedXP);
+            int levelDifference = 0;
+
+            if (newLevel > maxPlayerLevel - 1)
+            {
+                newLevel = maxPlayerLevel - 1;
+                currentXPWithAddedXP = GetXPCeilingForLevel(maxPlayerLevel - 1);
+            }
+
+            if (newLevel > internalCurrentLevel)
+            {
+                levelDifference = (newLevel - internalCurrentLevel);
+            }
+
+            if (levelDifference > 0)
+            {
+                int startAtLevel = internalCurrentLevel;
+                CreateRankBar(GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), currentXP, currentXPWithAddedXP, startAtLevel, false);
+
+                for (int i = 0; i <= levelDifference; i++)
+                {
+                    if (i == levelDifference)
+                    {
+                        CreateRankBar(GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), GetXPFloorForLevel(startAtLevel), currentXPWithAddedXP, startAtLevel, false);
+                    }
+                    else
+                    {
+                        CreateRankBar(GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), startAtLevel, false);
+                    }
+                    startAtLevel++;
+                }
+            }
+            else
+            {
+                CreateRankBar(GetXPFloorForLevel(newLevel), GetXPCeilingForLevel(newLevel), currentXP, currentXPWithAddedXP, newLevel, false);
+            }
+
+            currentXP = currentXPWithAddedXP;
+
+            if (levelDifference > 0)
+            {
+                // do something with a level up?
+            }
+        }
+
+        void RemovePlayerXP(int xpAmount)
+        {
+            if (xpAmount < 0)
+                return;
+
+            int internalCurrentLevel = GetLevelFromXP(currentXP);
+            int currentXPWithRemovedXP = currentXP - xpAmount;
+            int newLevel = GetLevelFromXP(currentXPWithRemovedXP);
+            int levelDifference = 0;
+
+            if (newLevel < 1)
+            {
+                newLevel = 1;
+            }
+
+            if (currentXPWithRemovedXP < 0)
+            {
+                currentXPWithRemovedXP = 0;
+            }
+
+            if (newLevel < internalCurrentLevel)
+            {
+                levelDifference = Math.Abs(newLevel - internalCurrentLevel);
+            }
+
+            if (levelDifference > 0)
+            {
+                int startAtLevel = internalCurrentLevel;
+                CreateRankBar(GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), currentXP, currentXPWithRemovedXP, startAtLevel, true);
+
+                for (int i = 0; i <= levelDifference; i++)
+                { 
+                    if (i == levelDifference)
+                    {
+                        CreateRankBar(GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), GetXPFloorForLevel(startAtLevel), currentXPWithRemovedXP, startAtLevel, true);
+                    }
+                    else
+                    {
+                        CreateRankBar(GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), startAtLevel, true);
+                    }
+                    startAtLevel++;
+                }
+            }
+            else
+            {
+                CreateRankBar(GetXPFloorForLevel(newLevel), GetXPCeilingForLevel(newLevel), currentXP, currentXPWithRemovedXP, newLevel, true);
+            }
+
+            currentXP = currentXPWithRemovedXP;
+
+            if (levelDifference > 0)
+            {
+                // do something with a level down?
+            }
+        }
+
+        void SetInitialXpLevels(int netCurrentXP, bool netShowRankbar, bool netShowRankbarAnimating)
+        {
+            currentXP = netCurrentXP;
+
+            if (netShowRankbar)
+            {
+                int currentLevel = GetLevelFromXP(currentXP);
+                int animateFrom = currentXP;
+                if (netShowRankbarAnimating)
+                {
+                    animateFrom = GetXPFloorForLevel(currentLevel);
+                }
+                CreateRankBar(GetXPFloorForLevel(currentLevel), GetXPCeilingForLevel(currentLevel), animateFrom, currentXP, currentLevel, false);
+            }
         }
 
         async Task CheckButton()
@@ -104,12 +230,12 @@ namespace Curiosity.Levels.Client.net
 
                 return baseXp + currentXpNeeded;
             }
-            return defaultRanks[currentLevel];
+            return defaultRanks[currentLevel - 1];
         }
 
         int GetLevelFromXP(int currentXP)
         {
-            int searchingFor = currentLevel;
+            int searchingFor = currentXP;
 
             if (searchingFor < 0)
                 return 1;
