@@ -44,9 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\Blips.cs" />
     <Compile Include="Enums\Controls.cs" />
-    <Compile Include="Helper\ControlHelper.cs" />
-    <Compile Include="Helper\NativeWrapper.cs" />
+    <Compile Include="Enums\ObjectHash.cs" />
+    <Compile Include="Enums\Police.cs" />
+    <Compile Include="Helpers\ControlHelper.cs" />
+    <Compile Include="Helpers\Game.cs" />
+    <Compile Include="Helpers\NativeWrapper.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Models\PointEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
