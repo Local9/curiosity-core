@@ -10,6 +10,7 @@ namespace Curiosity.Client.net
     {
         long userId = 0;
         bool isLoading = false;
+        bool displayInfo = true;
         Text text;
 
         public CuriosityPlayer()
@@ -19,10 +20,29 @@ namespace Curiosity.Client.net
 
             EventHandlers["curiosity:Client:Player:Setup"] += new Action<long, int, string, float, float, float>(OnPlayerSetup);
             EventHandlers["curiosity:Client:Player:Role"] += new Action<string>(UpdatePlayerRole);
+            EventHandlers["curiosity:Client:Player:DisplayInfo"] += new Action<bool>(DisplayInfo);
 
             Tick += UpdatePlayerLocation;
             Tick += PlayerSettings;
             Tick += PlayerRole;
+            Tick += DisplayInformation;
+        }
+
+        async void DisplayInfo(bool display)
+        {
+            displayInfo = display;
+            await Delay(0);
+        }
+
+        async Task DisplayInformation()
+        {
+            while (true)
+            {
+                if (text != null)
+                    text.Enabled = displayInfo;
+
+                await Delay(0);
+            }
         }
 
         async Task PlayerSettings()
