@@ -30,6 +30,8 @@ namespace Curiosity.Client.net
         {
             Log.LogMessage("Entering ClassLoader Init");
 
+            // https://github.com/GroovyGiantPanda/FiveMRpServerResources/tree/master/src/FiveM/RPClient/Classes
+
             // Emotes
             //EmotesManager.Init();
             //HandsUp.Init();
