@@ -63,7 +63,7 @@ namespace Curiosity.Client.net
                 {
                     Game.Player.WantedLevel = 0;
                 }
-                Game.Player.SetRunSpeedMultThisFrame(1.4999f);
+                Game.Player.SetRunSpeedMultThisFrame(DefaultPlayerSpeed);
 
                 CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.VehicleName);
                 CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.AreaName);
