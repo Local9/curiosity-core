@@ -35,8 +35,11 @@ namespace Curiosity.Server.net.Database
                 myParams.Add("@steamId", steamId);
 
                 string selectQuery = "select" +
-                    " users.userId, users.locationId, roles.roleId, roles.description" +
-                    " from users inner join roles on users.roleId = roles.roleId" +
+                    " users.userId, users.locationId, roles.roleId, roles.description, IFNULL(userskills.experience, 0) as experience" +
+                    " from" +
+                    " users" +
+                    " inner join roles on users.roleId = roles.roleId" +
+                    " left join userskills on users.userId = userskills.userId and userskills.skillId = 1" +
                     " where steamId = @steamId";
 
                 using (var result = mySql.QueryResult(selectQuery, myParams))
@@ -57,6 +60,7 @@ namespace Curiosity.Server.net.Database
                         user.LocationId = long.Parse($"{keyValues["locationId"]}");
                         user.RoleId = int.Parse($"{keyValues["roleId"]}");
                         user.Role = $"{keyValues["description"]}";
+                        user.WorldExperience = long.Parse($"{keyValues["experience"]}");
                     }
                     return user;
                 }

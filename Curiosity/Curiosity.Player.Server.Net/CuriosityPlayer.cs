@@ -85,6 +85,8 @@ namespace Curiosity.Server.net
                 session.LocationId = user.LocationId;
                 session.Activate();
                 Debug.WriteLine($"session.Activate() -> {session} <- #{player.Handle}");
+
+                player.TriggerEvent("curiosity:Client:Rank:SetInitialXpLevels", user.WorldExperience, true, true);
             }
             catch (Exception ex)
             {

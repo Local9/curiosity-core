@@ -8,5 +8,6 @@ namespace Curiosity.Server.net.Entity
         public long LocationId;
         public int RoleId;
         public string Role;
+        public long WorldExperience;
     }
 }
