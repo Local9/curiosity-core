@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Curiosity.Server.Net.Database
+namespace Curiosity.Server.net.Database
 {
     public class DatabaseSettings : BaseScript
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using CitizenFX.Core;
 
-namespace Curiosity.Server.Net.Database
+namespace Curiosity.Server.net.Database
 {
     public class DatabaseUser : BaseScript
     {

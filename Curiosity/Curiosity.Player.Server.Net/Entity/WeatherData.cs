@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Curiosity.Server.Net.Entity
+namespace Curiosity.Server.net.Entity
 {
     public class WeatherData
     {

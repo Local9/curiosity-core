@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using CitizenFX.Core;
 
-namespace Curiosity.Server.Net.Business
+namespace Curiosity.Server.net.Business
 {
     public class BusinessUser : BaseScript
     {

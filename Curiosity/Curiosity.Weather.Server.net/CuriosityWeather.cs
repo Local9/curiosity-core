@@ -20,7 +20,6 @@ namespace Curiosity.Server.Net
 
         DateTime now;
         TimeSpan timeNow;
-        int minutesPerDay;
         int hour = 0;
         int minute = 0;
 
@@ -31,7 +30,6 @@ namespace Curiosity.Server.Net
             isChristmas = API.GetConvar("christmas_weather", "false") == "true";
             isHalloween = API.GetConvar("halloween_weather", "false") == "true";
             isLive = API.GetConvar("server_live", "false") == "true";
-            minutesPerDay = int.Parse(API.GetConvar("minutes_per_day", "24"));
 
             SetupWindWeather();
             SetupWeathers();

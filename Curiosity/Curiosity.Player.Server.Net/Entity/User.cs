@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 
-namespace Curiosity.Server.Net.Entity
+namespace Curiosity.Server.net.Entity
 {
     public class User
     {

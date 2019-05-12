@@ -3,7 +3,7 @@ using CitizenFX.Core.Native;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Server.Net
+namespace Curiosity.Server.net
 {
     public class CuriosityPlayer : BaseScript
     {
