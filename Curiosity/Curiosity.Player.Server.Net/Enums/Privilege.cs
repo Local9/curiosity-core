@@ -8,10 +8,10 @@ namespace Curiosity.Server.net.Enums
 {
     public enum Privilege
     {
-        undefined = 0,
-        user = 1,
-        serverOwner = 2,
-        administrator = 3,
-        moderator = 4
+        UNDEFINED = 0,
+        USER = 1,
+        SERVEROWNER = 2,
+        ADMINISTRATOR = 3,
+        MODERATOR = 4
     }
 }
