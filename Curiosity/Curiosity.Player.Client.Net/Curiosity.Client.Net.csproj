@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Environment\AquaticSpawner.cs" />
     <Compile Include="Classes\Environment\DevCommands.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />

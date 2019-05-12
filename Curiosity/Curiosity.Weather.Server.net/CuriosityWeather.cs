@@ -15,13 +15,18 @@ namespace Curiosity.Server.Net
         Dictionary<string, bool> windWeathers = new Dictionary<string, bool>();
 
         bool isChristmas = true;
+        bool isHalloween = true;
         bool isLive = false;
+
+        int baseTime = 0;
+        int timeOffset = 0;
 
         Entity.WeatherData weatherData = new Entity.WeatherData();
 
         public CuriosityWeather()
         {
             isChristmas = API.GetConvar("christmas_weather", "false") == "true";
+            isHalloween = API.GetConvar("halloween_weather", "false") == "true";
             isLive = API.GetConvar("server_live", "false") == "true";
 
             SetupWindWeather();
@@ -65,6 +70,11 @@ namespace Curiosity.Server.Net
                 weathers.Add("SNOW", new List<string> { "BLIZZARD", "RAIN", "SNOWLIGHT" });
                 weathers.Add("BLIZZARD", new List<string> { "SNOW", "SNOWLIGHT", "THUNDER" });
                 weathers.Add("SNOWLIGHT", new List<string> { "SNOW", "RAIN", "CLEARING" });
+            }
+
+            if (isHalloween)
+            {
+                weathers.Add("HALLOWEEN", new List<string> { "CLOUDS", "RAIN", "CLEARING", "CLEAR" });
             }
         }
 
