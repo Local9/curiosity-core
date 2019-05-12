@@ -22,6 +22,12 @@ namespace Curiosity.Client.Net
 
         async void TimeSync(int hour, int minute)
         {
+            if (minute > 59)
+                minute = 0;
+
+            if (hour > 23)
+                hour = 0;
+
             API.NetworkOverrideClockTime(hour, minute, 0);
             await Delay(0);
         }
