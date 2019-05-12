@@ -16,12 +16,12 @@ namespace Curiosity.Server.net.Classes
             return PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(userId)).First().NetId;
         }
 
-        public static int GetUserId(string netId)
+        public static long GetUserId(string netId)
         {
             return PlayerList.Select(x => x.Value).Where(x => x.NetId.Equals(netId)).First().UserID;
         }
 
-        public static Player GetPlayer(int userId)
+        public static Player GetPlayer(long userId)
         {
             return PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(userId)).First().Player;
         }

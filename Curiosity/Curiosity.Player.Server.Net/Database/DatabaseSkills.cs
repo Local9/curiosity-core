@@ -51,7 +51,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public void IncreaseSkill(int userId, int skillId, int experience)
+        public void IncreaseSkill(long userId, int skillId, int experience)
         {
             string query = "INSERT INTO userskills (`userId`,`skillId`,`experience`)" +
                 " VALUES (@userId, @skillId, @experience)" +
@@ -65,7 +65,7 @@ namespace Curiosity.Server.net.Database
             mySql.Query(query);
         }
 
-        public void DecreaseSkill(int userId, int skillId, int experience)
+        public void DecreaseSkill(long userId, int skillId, int experience)
         {
             string query = "INSERT INTO userskills (`userId`,`skillId`,`experience`)" +
                 " VALUES (@userId, @skillId, @experience)" +

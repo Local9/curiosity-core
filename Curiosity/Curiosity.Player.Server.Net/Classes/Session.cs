@@ -17,8 +17,9 @@ namespace Curiosity.Server.net.Classes
         public string SteamId { get; private set; } = null;
 
         // Player data
-        public int UserID { get; set; }
+        public long UserID { get; set; }
         public Privilege Privilege { get; set; }
+        public long LocationId { get; set; }
 
         // Player states
         public bool HasSpawned { get; private set; }
@@ -61,7 +62,7 @@ namespace Curiosity.Server.net.Classes
             HasSpawned = false;
         }
 
-        private bool Activate()
+        public bool Activate()
         {
             if (SessionManager.PlayerList.ContainsKey(NetId))
             {
@@ -72,7 +73,7 @@ namespace Curiosity.Server.net.Classes
             return true;
         }
 
-        private void Deactivate()
+        public void Deactivate()
         {
             SessionManager.PlayerList.Remove(NetId);
         }

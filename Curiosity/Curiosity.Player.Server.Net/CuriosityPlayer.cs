@@ -70,6 +70,13 @@ namespace Curiosity.Server.net
                 Vector3 vector3 = await businessUser.GetUserLocationAsync(user.LocationId);
                 await Delay(0);
                 player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, user.RoleId, user.Role, vector3.X, vector3.Y, vector3.Z);
+                await Delay(0);
+
+                Classes.Session session = new Classes.Session(player);
+                session.UserID = user.UserId;
+                session.Privilege = (Enums.Privilege)user.RoleId;
+                session.LocationId = user.LocationId;
+                session.Activate();
             }
             catch (Exception ex)
             {

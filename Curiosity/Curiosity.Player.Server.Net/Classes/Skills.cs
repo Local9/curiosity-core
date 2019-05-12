@@ -20,24 +20,38 @@ namespace Curiosity.Server.net.Classes
         {
             EventHandlers["curiosity:Server:Skills:Increase"] += new Action<Player, string, int>(IncreasePlayerSkill);
             EventHandlers["curiosity:Server:Skills:Decrease"] += new Action<Player, string, int>(DecreasePlayerSkill);
-            EventHandlers["curiosity:Server:Skills:IncreaseInternal"] += new Action<int, string, int>(IncreaseSkill);
-            EventHandlers["curiosity:Server:Skills:DecreaseInternal"] += new Action<int, string, int>(DecreaseSkill);
+            EventHandlers["curiosity:Server:Skills:IncreaseInternal"] += new Action<long, string, int>(IncreaseSkill);
+            EventHandlers["curiosity:Server:Skills:DecreaseInternal"] += new Action<long, string, int>(DecreaseSkill);
 
             Tick += UpdateSkillsDictionary;
         }
 
         async void IncreasePlayerSkill([FromSource]Player player, string skill, int experience)
         {
-            await Delay(0);
-            int UserID = SessionManager.PlayerList[player.Handle].UserID;
-            IncreaseSkill(UserID, skill, experience);
+            try
+            {
+                await Delay(0);
+                long UserID = SessionManager.PlayerList[player.Handle].UserID;
+                IncreaseSkill(UserID, skill, experience);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"IncreasePlayerSkill -> {ex.Message}");
+            }
         }
 
         async void DecreasePlayerSkill([FromSource]Player player, string skill, int experience)
         {
-            await Delay(0);
-            int UserID = SessionManager.PlayerList[player.Handle].UserID;
-            DecreaseSkill(UserID, skill, experience);
+            try
+            { 
+                await Delay(0);
+                long UserID = SessionManager.PlayerList[player.Handle].UserID;
+                DecreaseSkill(UserID, skill, experience);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"DecreasePlayerSkill -> {ex.Message}");
+            }
         }
 
         async Task UpdateSkillsDictionary()
@@ -49,27 +63,43 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        void IncreaseSkill(int userId, string skill, int experience)
+        void IncreaseSkill(long userId, string skill, int experience)
         {
-            if (!skills.ContainsKey(skill))
+            try
             {
-                Debug.WriteLine($"IncreaseSkill: Unknown Skill -> {skill}");
-                return;
+                if (!skills.ContainsKey(skill))
+                {
+                    Debug.WriteLine($"IncreaseSkill: Unknown Skill -> {skill}");
+                    return;
+                }
+                databaseSkills.IncreaseSkill(userId, skills[skill], experience);
+                UpdateWorldSkill(userId, experience, false);
             }
-            databaseSkills.IncreaseSkill(userId, skills[skill], experience);
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"IncreaseSkill -> {ex.Message}");
+            }
         }
 
-        void DecreaseSkill(int userId, string skill, int experience)
+        void DecreaseSkill(long userId, string skill, int experience)
         {
-            if (!skills.ContainsKey(skill))
+            try
             {
-                Debug.WriteLine($"DecreaseSkill: Unknown Skill -> {skill}");
-                return;
+                if (!skills.ContainsKey(skill))
+                {
+                    Debug.WriteLine($"DecreaseSkill: Unknown Skill -> {skill}");
+                    return;
+                }
+                databaseSkills.DecreaseSkill(userId, skills[skill], experience);
+                UpdateWorldSkill(userId, experience, true);
             }
-            databaseSkills.DecreaseSkill(userId, skills[skill], experience);
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"DecreaseSkill -> {ex.Message}");
+            }
         }
 
-        void UpdateWorldSkill(int userId, int experience, bool removeXp)
+        void UpdateWorldSkill(long userId, int experience, bool removeXp)
         {
             string eventToTrigger;
             if (removeXp)
