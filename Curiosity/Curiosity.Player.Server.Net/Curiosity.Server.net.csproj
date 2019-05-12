@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Business\BusinessUser.cs" />
     <Compile Include="Classes\Session.cs" />
+    <Compile Include="Classes\SessionManager.cs" />
     <Compile Include="CuriosityPlayer.cs" />
     <Compile Include="Database\DatabaseSettings.cs" />
     <Compile Include="Database\DatabaseUser.cs" />

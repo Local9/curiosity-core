@@ -2,6 +2,7 @@
 using Curiosity.Server.net.Enums;
 using System.Collections.Generic;
 using System.Threading;
+using System;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Server.net.Classes
@@ -59,5 +60,35 @@ namespace Curiosity.Server.net.Classes
             Privilege = Privilege.USER;
             HasSpawned = false;
         }
+
+        private bool Activate()
+        {
+            if (SessionManager.PlayerList.ContainsKey(Convert.ToInt32(NetId)))
+            {
+                return false;
+            }
+
+            SessionManager.PlayerList[Convert.ToInt32(NetId)] = this;
+            return true;
+        }
+
+        private void Deactivate()
+        {
+            SessionManager.PlayerList.Remove(Convert.ToInt32(NetId));
+        }
+
+        public void Dropped(string reason)
+        {
+            try
+            {
+                SessionManager.PlayerList.Remove(Convert.ToInt32(NetId));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Disconnecting player couldn't clean up");
+            }
+        }
+
+
     }
 }
