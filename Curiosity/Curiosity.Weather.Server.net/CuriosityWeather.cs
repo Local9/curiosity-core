@@ -95,6 +95,9 @@ namespace Curiosity.Server.Net
             while (true)
             {
                 await Delay(5000);
+
+                minutesPerDay = (minutesPerDay < 0 || minutesPerDay > 30) ? 30 : minutesPerDay;
+
                 now = DateTime.Now;
                 timeNow = now.TimeOfDay;
                 double hourDouble = timeNow.TotalMinutes % minutesPerDay;
