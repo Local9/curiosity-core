@@ -68,6 +68,7 @@
     <Compile Include="Database\DatabaseUser.cs" />
     <Compile Include="Entity\User.cs" />
     <Compile Include="Entity\WeatherData.cs" />
+    <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\Privilege.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />

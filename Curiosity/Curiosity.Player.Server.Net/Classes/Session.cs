@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
+﻿using CitizenFX.Core;
 using Curiosity.Server.net.Enums;
+using System.Collections.Generic;
+using System.Threading;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Server.net.Classes
 {
