@@ -101,8 +101,7 @@ namespace Curiosity.Server.Net
                 now = DateTime.Now;
                 timeNow = now.TimeOfDay;
 
-                double hourDouble = timeNow.TotalMinutes % minutesPerDay;
-
+                double hourDouble = timeNow.TotalMinutes % 24;
                 double minuteDouble = (hourDouble % 1) * 60;
 
                 hour = (int)hourDouble;

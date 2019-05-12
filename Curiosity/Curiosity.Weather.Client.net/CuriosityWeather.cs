@@ -28,19 +28,8 @@ namespace Curiosity.Client.Net
         {
             if (hour > 23)
             {
-                Debug.WriteLine($"Invalid Time {hour:00}:{minute:00}");
+                hour = 0;
             }
-
-            if (minute > 59)
-                minute = latestMinute;
-
-            if (hour > 23)
-                hour = latestHour;
-
-            latestHour = hour;
-            latestMinute = minute;
-
-            // CitizenFX.Core.UI.Screen.ShowNotification($"Time {hour:00}:{minute:00}");
 
             API.NetworkOverrideClockTime(hour, minute, 0);
             await Delay(0);
