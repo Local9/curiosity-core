@@ -63,25 +63,25 @@ namespace Curiosity.Server.net.Classes
 
         private bool Activate()
         {
-            if (SessionManager.PlayerList.ContainsKey(Convert.ToInt32(NetId)))
+            if (SessionManager.PlayerList.ContainsKey(NetId))
             {
                 return false;
             }
 
-            SessionManager.PlayerList[Convert.ToInt32(NetId)] = this;
+            SessionManager.PlayerList[NetId] = this;
             return true;
         }
 
         private void Deactivate()
         {
-            SessionManager.PlayerList.Remove(Convert.ToInt32(NetId));
+            SessionManager.PlayerList.Remove(NetId);
         }
 
         public void Dropped(string reason)
         {
             try
             {
-                SessionManager.PlayerList.Remove(Convert.ToInt32(NetId));
+                SessionManager.PlayerList.Remove(NetId);
             }
             catch (Exception ex)
             {
