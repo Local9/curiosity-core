@@ -31,7 +31,7 @@ namespace Curiosity.Server.Net
             isChristmas = API.GetConvar("christmas_weather", "false") == "true";
             isHalloween = API.GetConvar("halloween_weather", "false") == "true";
             isLive = API.GetConvar("server_live", "false") == "true";
-            minutesPerDay = int.Parse(API.GetConvar("minutes_per_day", "24"));
+            minutesPerDay = int.Parse(API.GetConvar("minutes_per_day", "60"));
 
             SetupWindWeather();
             SetupWeathers();
@@ -69,7 +69,7 @@ namespace Curiosity.Server.Net
             weathers.Add("OVERCAST", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
             weathers.Add("RAIN", new List<string> { "THUNDER", "CLEARING", "OVERCAST" });
             weathers.Add("THUNDER", new List<string> { "RAIN", "CLEARING" });
-            weathers.Add("CLEARING", new List<string> { "CLEAR", "CLOUDS", "OVERCAST", "FOGGY", "SMOG", "RAIN" });
+            weathers.Add("CLEARING", new List<string> { "CLEAR", "CLOUDS", "OVERCAST", "FOGGY", "SMOG" });
 
             if (isChristmas)
             {
@@ -95,8 +95,6 @@ namespace Curiosity.Server.Net
             while (true)
             {
                 await Delay(5000);
-
-                minutesPerDay = (minutesPerDay < 0 || minutesPerDay > 30) ? 30 : minutesPerDay;
 
                 now = DateTime.Now;
                 timeNow = now.TimeOfDay;

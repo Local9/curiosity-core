@@ -6,6 +6,10 @@ namespace Curiosity.Client.Net
 {
     public class CuriosityWeather : BaseScript
     {
+
+        int latestHour = 0;
+        int latestMinute = 0;
+
         public CuriosityWeather()
         {
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
@@ -17,16 +21,24 @@ namespace Curiosity.Client.Net
         {
             if (API.GetCurrentResourceName() != resourceName) return;
             await Delay(0);
-            TriggerServerEvent("curiosity:Server:Weather:Sync");
+            TriggerServerEvent("curiosity:Server:Weather:Sync"); // Also syncs the time
         }
 
         async void TimeSync(int hour, int minute)
         {
+            if (hour > 23)
+            {
+                Debug.WriteLine($"Invalid Time {hour:00}:{minute:00}");
+            }
+
             if (minute > 59)
-                minute = 0;
+                minute = latestMinute;
 
             if (hour > 23)
-                hour = 0;
+                hour = latestHour;
+
+            latestHour = hour;
+            latestMinute = minute;
 
             API.NetworkOverrideClockTime(hour, minute, 0);
             await Delay(0);
