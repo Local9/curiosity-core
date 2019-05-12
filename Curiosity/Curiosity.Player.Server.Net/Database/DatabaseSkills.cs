@@ -62,7 +62,7 @@ namespace Curiosity.Server.net.Database
             myParams.Add("@skillId", skillId);
             myParams.Add("@experience", experience);
 
-            mySql.Query(query);
+            mySql.Query(query, myParams);
         }
 
         public void DecreaseSkill(long userId, int skillId, int experience)
@@ -76,7 +76,7 @@ namespace Curiosity.Server.net.Database
             myParams.Add("@skillId", skillId);
             myParams.Add("@experience", experience);
 
-            mySql.Query(query);
+            mySql.Query(query, myParams);
         }
     }
 }

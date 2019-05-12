@@ -42,6 +42,7 @@ namespace Curiosity.Server.net.Classes
             Mutex = new SemaphoreSlim(1, 1);
             Player = player;
             NetId = player.Handle;
+            Name = player.Name;
 
             int numIdents = GetNumPlayerIdentifiers(NetId);
             List<string> idents = new List<string>();
@@ -62,6 +63,11 @@ namespace Curiosity.Server.net.Classes
             HasSpawned = false;
         }
 
+        public override string ToString()
+        {
+            return $"Player: {Name} (#{UserID}) [{NetId}] -> Privilege: {Privilege}";
+        }
+
         public bool Activate()
         {
             if (SessionManager.PlayerList.ContainsKey(NetId))
@@ -70,6 +76,7 @@ namespace Curiosity.Server.net.Classes
             }
 
             SessionManager.PlayerList[NetId] = this;
+
             return true;
         }
 

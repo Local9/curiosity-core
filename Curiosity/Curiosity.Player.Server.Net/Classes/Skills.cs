@@ -36,7 +36,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"IncreasePlayerSkill -> {ex.Message}");
+                Debug.WriteLine($"IncreasePlayerSkill -> {ex.Message} <- Sessions: {SessionManager.PlayerList.Values.Count}");
             }
         }
 
@@ -56,7 +56,7 @@ namespace Curiosity.Server.net.Classes
 
         async Task UpdateSkillsDictionary()
         {
-            while (skills == null)
+            while (skills.Count == 0)
             {
                 await Delay(0);
                 skills = await databaseSkills.GetSkills();

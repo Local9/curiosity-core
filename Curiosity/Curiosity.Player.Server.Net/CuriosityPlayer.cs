@@ -17,6 +17,7 @@ namespace Curiosity.Server.net
             // FiveM Events
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["playerConnecting"] += new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting);
+            EventHandlers["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
             // Sends data to the client
             EventHandlers["curiosity:Server:Player:Setup"] += new Action<Player>(OnSetupPlayer);
             EventHandlers["curiosity:Server:Player:GetRole"] += new Action<Player>(GetUserRole);
@@ -35,7 +36,7 @@ namespace Curiosity.Server.net
             businessUser = Business.BusinessUser.GetInstance();
         }
 
-        async void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
+        void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
         {
             string steamId = player.Identifiers[STEAM_IDENTIFIER];
 
@@ -44,7 +45,13 @@ namespace Curiosity.Server.net
                 deferrals.done("SteamID Not Found. Please have Steam running to connect.");
             }
 
-            await SetupPlayerAsync(player);
+            // await SetupPlayerAsync(player);
+        }
+
+        async void OnPlayerDropped([FromSource]Player player, string reason)
+        {
+            Classes.SessionManager.PlayerList[player.Handle].Dropped(reason);
+            await Delay(0);
         }
 
         async void OnSetupPlayer([FromSource]Player player)
@@ -56,7 +63,7 @@ namespace Curiosity.Server.net
         {
             try
             {
-                await Delay(0);
+                await Delay(3000);
 
                 string steamId = player.Identifiers[STEAM_IDENTIFIER];
 
@@ -70,13 +77,14 @@ namespace Curiosity.Server.net
                 Vector3 vector3 = await businessUser.GetUserLocationAsync(user.LocationId);
                 await Delay(0);
                 player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, user.RoleId, user.Role, vector3.X, vector3.Y, vector3.Z);
-                await Delay(0);
+                await Delay(1000);
 
                 Classes.Session session = new Classes.Session(player);
                 session.UserID = user.UserId;
                 session.Privilege = (Enums.Privilege)user.RoleId;
                 session.LocationId = user.LocationId;
                 session.Activate();
+                Debug.WriteLine($"session.Activate() -> {session} <- #{player.Handle}");
             }
             catch (Exception ex)
             {

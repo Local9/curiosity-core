@@ -15,7 +15,7 @@ namespace Curiosity.Client.net
 
         public CuriosityPlayer()
         {
-            EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
+            EventHandlers["onClientResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
 
             EventHandlers["curiosity:Client:Player:Setup"] += new Action<long, int, string, float, float, float>(OnPlayerSetup);
