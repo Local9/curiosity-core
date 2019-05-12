@@ -48,6 +48,10 @@
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\Police.cs" />
+    <Compile Include="Extensions\ListExtension.cs" />
+    <Compile Include="Extensions\NumberExtension.cs" />
+    <Compile Include="Extensions\PointFExtension.cs" />
+    <Compile Include="Extensions\StringExtension.cs" />
     <Compile Include="Helpers\ControlHelper.cs" />
     <Compile Include="Helpers\Game.cs" />
     <Compile Include="Helpers\NativeWrapper.cs" />
