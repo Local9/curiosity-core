@@ -40,6 +40,8 @@ namespace Curiosity.Client.Net
             latestHour = hour;
             latestMinute = minute;
 
+            // CitizenFX.Core.UI.Screen.ShowNotification($"Time {hour:00}:{minute:00}");
+
             API.NetworkOverrideClockTime(hour, minute, 0);
             await Delay(0);
         }

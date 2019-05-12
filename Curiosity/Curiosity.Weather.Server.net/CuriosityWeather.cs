@@ -31,7 +31,7 @@ namespace Curiosity.Server.Net
             isChristmas = API.GetConvar("christmas_weather", "false") == "true";
             isHalloween = API.GetConvar("halloween_weather", "false") == "true";
             isLive = API.GetConvar("server_live", "false") == "true";
-            minutesPerDay = int.Parse(API.GetConvar("minutes_per_day", "60"));
+            minutesPerDay = int.Parse(API.GetConvar("minutes_per_day", "24"));
 
             SetupWindWeather();
             SetupWeathers();
@@ -92,16 +92,22 @@ namespace Curiosity.Server.Net
 
         async Task ServerTime()
         {
+            hour = 0;
+            minute = 0;
             while (true)
             {
                 await Delay(5000);
 
                 now = DateTime.Now;
                 timeNow = now.TimeOfDay;
+
                 double hourDouble = timeNow.TotalMinutes % minutesPerDay;
+
                 double minuteDouble = (hourDouble % 1) * 60;
+
                 hour = (int)hourDouble;
                 minute = (int)minuteDouble;
+
                 TriggerClientEvent("curiosity:Client:Time:Sync", hour, minute);
             }
         }
