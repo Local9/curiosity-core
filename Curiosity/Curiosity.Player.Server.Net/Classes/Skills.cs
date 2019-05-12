@@ -105,12 +105,12 @@ namespace Curiosity.Server.net.Classes
             if (removeXp)
             {
                 databaseSkills.DecreaseSkill(userId, skills[WORLD_SKILL], experience);
-                eventToTrigger = "curiosity:Client:Rank:AddPlayerXP";
+                eventToTrigger = "curiosity:Client:Rank:RemovePlayerXP";
             }
             else
             {
                 databaseSkills.IncreaseSkill(userId, skills[WORLD_SKILL], experience);
-                eventToTrigger = "curiosity:Client:Rank:RemovePlayerXP";
+                eventToTrigger = "curiosity:Client:Rank:AddPlayerXP";
             }
             Player player = SessionManager.GetPlayer(userId);
             player.TriggerEvent(eventToTrigger, experience);

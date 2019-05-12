@@ -34,6 +34,23 @@ namespace Curiosity.Server.net
             if (API.GetCurrentResourceName() != resourceName) return;
 
             businessUser = Business.BusinessUser.GetInstance();
+
+            WriteConsoleLine(string.Empty);
+            WriteConsoleLine("-----------------------------------------------------------------");
+            WriteConsoleLine("-> CURIOSITY PLAYER RESOURCE STARTED <---------------------------");
+            WriteConsoleLine("-> IF A [SESSION ID] IS OVER 65K THEY WILL ERROR <---------------");
+            WriteConsoleLine("-> IF THEY COMPLAIN ABOUT NOT GETTING EXPERIENCE, THIS IS WHY <--");
+            WriteConsoleLine("-> END OF WARNINGS <---------------------------------------------");
+            WriteConsoleLine("-----------------------------------------------------------------");
+            Console.WriteLine();
+        }
+
+        void WriteConsoleLine(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.WriteLine(message.PadRight(Console.WindowWidth));
+            Console.ResetColor();
         }
 
         void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
@@ -84,8 +101,8 @@ namespace Curiosity.Server.net
                 session.Privilege = (Enums.Privilege)user.RoleId;
                 session.LocationId = user.LocationId;
                 session.Activate();
-                Debug.WriteLine($"session.Activate() -> {session} <- #{player.Handle}");
-
+                Debug.WriteLine($"session.Activate() -> {session}");
+                await Delay(0);
                 player.TriggerEvent("curiosity:Client:Rank:SetInitialXpLevels", user.WorldExperience, true, true);
             }
             catch (Exception ex)
