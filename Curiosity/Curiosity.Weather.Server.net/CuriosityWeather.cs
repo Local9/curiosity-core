@@ -18,8 +18,11 @@ namespace Curiosity.Server.Net
         bool isHalloween = true;
         bool isLive = false;
 
-        int baseTime = 0;
-        int timeOffset = 0;
+        DateTime now;
+        TimeSpan timeNow;
+        int minutesPerDay;
+        int hour = 0;
+        int minute = 0;
 
         Entity.WeatherData weatherData = new Entity.WeatherData();
 
@@ -28,13 +31,16 @@ namespace Curiosity.Server.Net
             isChristmas = API.GetConvar("christmas_weather", "false") == "true";
             isHalloween = API.GetConvar("halloween_weather", "false") == "true";
             isLive = API.GetConvar("server_live", "false") == "true";
+            minutesPerDay = int.Parse(API.GetConvar("minutes_per_day", "24"));
 
             SetupWindWeather();
             SetupWeathers();
 
             EventHandlers["curiosity:Server:Weather:Sync"] += new Action<Player>(SyncWeather);
+            EventHandlers["curiosity:Server:Time:Sync"] += new Action<Player>(SyncTime);
 
             Tick += ChangeWeather;
+            Tick += ServerTime;
         }
 
         void SetupWindWeather()
@@ -78,6 +84,27 @@ namespace Curiosity.Server.Net
             }
         }
 
+        async void SyncTime([FromSource]Player player)
+        {
+            player.TriggerEvent("curiosity:Client:Time:Sync", hour, minute);
+            await Delay(0);
+        }
+
+        async Task ServerTime()
+        {
+            while (true)
+            {
+                await Delay(5000);
+                now = DateTime.Now;
+                timeNow = now.TimeOfDay;
+                double hourDouble = timeNow.TotalMinutes % minutesPerDay;
+                double minuteDouble = (hourDouble % 1) * 60;
+                hour = (int)hourDouble;
+                minute = (int)minuteDouble;
+                TriggerClientEvent("curiosity:Client:Time:Sync", hour, minute);
+            }
+        }
+
         async void SyncWeather([FromSource]Player player)
         {
             if (string.IsNullOrEmpty(weatherData.CurrentWeather))
@@ -91,6 +118,7 @@ namespace Curiosity.Server.Net
                 if (!isLive)
                     Debug.WriteLine($"WEATHER SYNC -> {weatherData}");
             }
+            player.TriggerEvent("curiosity:Client:Time:Sync", hour, minute);
             await Delay(0);
         }
 

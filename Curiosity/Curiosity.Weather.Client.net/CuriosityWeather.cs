@@ -10,6 +10,7 @@ namespace Curiosity.Client.Net
         {
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["curiosity:Client:Weather:Sync"] += new Action<string, bool, float>(WeatherSync);
+            EventHandlers["curiosity:Client:Time:Sync"] += new Action<int, int>(TimeSync);
         }
 
         async void OnResourceStart(string resourceName)
@@ -19,12 +20,22 @@ namespace Curiosity.Client.Net
             TriggerServerEvent("curiosity:Server:Weather:Sync");
         }
 
+        async void TimeSync(int hour, int minute)
+        {
+            API.NetworkOverrideClockTime(hour, minute, 0);
+            await Delay(0);
+        }
+
         async void WeatherSync(string weather, bool wind, float windHeading)
         {
             await Delay(0);
 
             API.ClearWeatherTypePersist();
             API.SetWeatherTypeOverTime(weather, 60.00f);
+
+            bool trails = (weather == "XMAS");
+            API.SetForceVehicleTrails(trails);
+            API.SetForcePedFootstepsTracks(trails);
 
             await Delay(0);
 
