@@ -17,6 +17,7 @@
 //using FamilyRP.Roleplay.Client.Classes.Vehicle;
 using Curiosity.Shared.Client.net;
 using Curiosity.Client.net.Classes.Environment.UI;
+using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Menus;
 
 namespace Curiosity.Client.net
@@ -64,7 +65,7 @@ namespace Curiosity.Client.net
             //Pvp.Init();
             //WarpPoints.Init();
             //Voip.Init();
-            //AquaticSpawner.Init();
+            AquaticSpawner.Init();
             //EmergencyServices.Init();
 
             // EMS
