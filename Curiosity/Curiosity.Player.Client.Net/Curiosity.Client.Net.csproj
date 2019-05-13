@@ -73,7 +73,10 @@
     <Compile Include="Classes\Vehicle\DoorManager.cs" />
     <Compile Include="Classes\Vehicle\EngineManager.cs" />
     <Compile Include="Classes\Vehicle\FuelManager.cs" />
+    <Compile Include="Classes\Vehicle\Stay.cs" />
     <Compile Include="Classes\Vehicle\VehicleDamage.cs" />
+    <Compile Include="Classes\Vehicle\VehiclePack.cs" />
+    <Compile Include="Classes\Vehicle\WindowManager.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
