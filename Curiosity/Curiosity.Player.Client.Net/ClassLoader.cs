@@ -19,7 +19,7 @@ using Curiosity.Shared.Client.net;
 using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Menus;
-using Curiosity.Client.net.Classes.Menus;
+using Curiosity.Client.net.Classes.Vehicle;
 
 namespace Curiosity.Client.net
 {
@@ -105,9 +105,9 @@ namespace Curiosity.Client.net
             //Vehicles.Init();
             //CarHud.Init();
             //BannedMilitaryVehicles.Init();
-            //BrakeSignals.Init();
+            BrakeSignals.Init();
             //CruiseControl.Init();
-            //VehicleDamage.Init();
+            VehicleDamage.Init();
             //EngineManager.Init();
             //VehicleWindowManager.Init();
             //DoorManager.Init();
@@ -117,7 +117,7 @@ namespace Curiosity.Client.net
             //RandomCarLocks.Init();
             //EmotesManager.Init();
             //Stay.Init();
-            //DisableAirControls.Init();
+            DisableAirControls.Init();
 
             //Log.Verbose("Leaving ClassLoader Init");
         }

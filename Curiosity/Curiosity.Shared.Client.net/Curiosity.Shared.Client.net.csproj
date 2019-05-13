@@ -48,6 +48,7 @@
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\Police.cs" />
+    <Compile Include="Extensions\BoolExtension.cs" />
     <Compile Include="Extensions\ListExtension.cs" />
     <Compile Include="Extensions\NumberExtension.cs" />
     <Compile Include="Extensions\PointFExtension.cs" />

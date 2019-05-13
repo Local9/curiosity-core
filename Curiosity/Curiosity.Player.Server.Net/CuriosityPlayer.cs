@@ -67,7 +67,10 @@ namespace Curiosity.Server.net
 
         async void OnPlayerDropped([FromSource]Player player, string reason)
         {
-            Classes.SessionManager.PlayerList[player.Handle].Dropped(reason);
+            if (Classes.SessionManager.PlayerList.ContainsKey(player.Handle))
+            {
+                Classes.SessionManager.PlayerList[player.Handle].Dropped(reason);
+            }
             await Delay(0);
         }
 
