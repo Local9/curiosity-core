@@ -141,7 +141,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
             {
                 if (Game.PlayerPed.IsInVehicle())
                 {
-                    BaseScript.TriggerEvent("Chat.Message", "", "#BB5555", $"You can't refuel while in your vehicle!");
+                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#BB5555", $"You can't refuel while in your vehicle!");
                     return;
                 }
 
@@ -150,7 +150,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                 var NearbyVehicles = new VehicleList().Select(v => (CitizenFX.Core.Vehicle)Entity.FromHandle(v)).Where(v => v.Bones["wheel_rr"].Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(PlayerToVehicleRefuelRange, 2)).OrderBy(v => v.Bones["wheel_rr"].Position.DistanceToSquared(Game.PlayerPed.Position));
                 if (!NearbyVehicles.Any())
                 {
-                    BaseScript.TriggerEvent("Chat.Message", "", "#AA5555", "You are not close enough to a vehicle.");
+                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#AA5555", "You are not close enough to a vehicle.");
                     return;
                 }
                 CitizenFX.Core.Vehicle vehicle = NearbyVehicles.First();
@@ -158,7 +158,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                 var NearbyPumps = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Where(o => o.Position.DistanceToSquared(vehicle.Position) < Math.Pow(FuelPumpRange, 2));
                 if (!NearbyPumps.Any())
                 {
-                    BaseScript.TriggerEvent("Chat.Message", "", "#AA5555", "You are not close enough to a pump.");
+                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#AA5555", "You are not close enough to a pump.");
                     return;
                 }
 
@@ -175,7 +175,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     {
                         if (startingPosition != vehicle.Position)
                         {
-                            BaseScript.TriggerEvent("Chat.Message", "", "#BB5555", $"Your vehicle moved while refuelling.");
+                            BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#BB5555", $"Your vehicle moved while refuelling.");
                             return;
                         }
 
@@ -187,7 +187,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                         Function.Call(Hash._DECOR_SET_FLOAT, vehicle.Handle, "Vehicle.Fuel", vehicleFuel);
                     }
 
-                    BaseScript.TriggerEvent("Chat.Message", "", "#55BB55", $"You have finished refuelling.");
+                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#55BB55", $"You have finished refuelling.");
                 }
             }
             catch (Exception ex)
@@ -218,7 +218,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
         //        }
         //        else
         //        {
-        //            BaseScript.TriggerEvent("Chat.Message", "", "#CC7777", "You need to specify either cash or debit, e.g. /refuel cash or refuel 30 debit.");
+        //            BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#CC7777", "You need to specify either cash or debit, e.g. /refuel cash or refuel 30 debit.");
         //            return;
         //        }
         //    }

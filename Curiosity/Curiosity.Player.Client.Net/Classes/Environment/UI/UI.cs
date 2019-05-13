@@ -49,7 +49,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             Function.Call(Hash._DRAW_TEXT, position.X, position.Y);
         }
 
-        public static void DrawText(string text, Vector2 position, System.Drawing.Color color, float scale = 0.25f, Font font = Font.ChaletLondon, bool center = false)
+        public static void DrawText(string text, Vector2 position, System.Drawing.Color color, float scale = 0.25f, Font font = Font.ChaletComprimeCologne, bool center = false)
         {
             DrawText(text, position, color, scale, font, center ? Alignment.Center : Alignment.Left);
         }
