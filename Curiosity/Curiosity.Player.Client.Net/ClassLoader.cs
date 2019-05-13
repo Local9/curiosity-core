@@ -19,6 +19,7 @@ using Curiosity.Shared.Client.net;
 using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Menus;
+using Curiosity.Client.net.Classes.Menus;
 
 namespace Curiosity.Client.net
 {
@@ -52,7 +53,7 @@ namespace Curiosity.Client.net
             //VehicleLoadoutPresets.Init();
             MenuGlobals.Init();
             //VehicleMenuTest.Init();
-            //CharacterMenuTest.Init();
+            CharacterMenuTest.Init();
             InteractionListMenu.Init();
 
             // Environment
