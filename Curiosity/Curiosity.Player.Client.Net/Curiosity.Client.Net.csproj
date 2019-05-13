@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Classes\Environment\AquaticSpawner.cs" />
     <Compile Include="Classes\Environment\DevCommands.cs" />
+    <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\CharacterEditorMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\CustomizeButton.cs" />
