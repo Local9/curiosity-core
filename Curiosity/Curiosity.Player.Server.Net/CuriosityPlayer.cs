@@ -25,7 +25,7 @@ namespace Curiosity.Server.net
             EventHandlers["curiosity:Server:Player:SaveLocation"] += new Action<Player, float, float, float>(OnSaveLocation);
             // Internal Events
             EventHandlers["curiosity:Server:Player:GetRoleId"] += new Action<int>(GetUserRoleId);
-            EventHandlers["curiosity:Server:Player:GetUserId"] += new Action<int>(GetUserId);
+            EventHandlers["curiosity:Server:Player:GetUserId"] += new Action<Player>(GetUserId);
 
             isLive = API.GetConvar("server_live", "false") == "true";
         }
@@ -160,10 +160,10 @@ namespace Curiosity.Server.net
             TriggerEvent("curiosity:Server:Player:RoleId", user.RoleId);
         }
 
-        async void GetUserId(int playerHandle)
+        async void GetUserId([FromSource]Player player)
         {
-            long userId = Classes.SessionManager.GetUserId($"{playerHandle}");
-            TriggerEvent("curiosity:Server:Player:UserId", userId);
+            long userId = Classes.SessionManager.GetUserId($"{player.Handle}");
+            player.TriggerEvent("curiosity:Client:Player:UserId", userId);
             await Delay(0);
         }
     }

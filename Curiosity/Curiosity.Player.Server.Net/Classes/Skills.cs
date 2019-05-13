@@ -18,40 +18,10 @@ namespace Curiosity.Server.net.Classes
 
         public Skills()
         {
-            EventHandlers["curiosity:Server:Skills:Increase"] += new Action<Player, string, int>(IncreasePlayerSkill);
-            EventHandlers["curiosity:Server:Skills:Decrease"] += new Action<Player, string, int>(DecreasePlayerSkill);
-            EventHandlers["curiosity:Server:Skills:IncreaseInternal"] += new Action<long, string, int>(IncreaseSkill);
-            EventHandlers["curiosity:Server:Skills:DecreaseInternal"] += new Action<long, string, int>(DecreaseSkill);
+            EventHandlers["curiosity:Server:Skills:Increase"] += new Action<long, string, int>(IncreaseSkill);
+            EventHandlers["curiosity:Server:Skills:Decrease"] += new Action<long, string, int>(DecreaseSkill);
 
             Tick += UpdateSkillsDictionary;
-        }
-
-        async void IncreasePlayerSkill([FromSource]Player player, string skill, int experience)
-        {
-            try
-            {
-                await Delay(0);
-                long UserID = SessionManager.PlayerList[player.Handle].UserID;
-                IncreaseSkill(UserID, skill, experience);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"IncreasePlayerSkill -> {ex.Message} <- Sessions: {SessionManager.PlayerList.Values.Count}");
-            }
-        }
-
-        async void DecreasePlayerSkill([FromSource]Player player, string skill, int experience)
-        {
-            try
-            { 
-                await Delay(0);
-                long UserID = SessionManager.PlayerList[player.Handle].UserID;
-                DecreaseSkill(UserID, skill, experience);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"DecreasePlayerSkill -> {ex.Message}");
-            }
         }
 
         async Task UpdateSkillsDictionary()
