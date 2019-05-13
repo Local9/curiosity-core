@@ -108,10 +108,10 @@ namespace Curiosity.Client.net
             BrakeSignals.Init();
             //CruiseControl.Init();
             VehicleDamage.Init();
-            //EngineManager.Init();
+            EngineManager.Init();
             //VehicleWindowManager.Init();
             //DoorManager.Init();
-            //FuelManager.Init();
+            FuelManager.Init();
             //LockManager.Init();
             //Lockpicking.Init();
             //RandomCarLocks.Init();

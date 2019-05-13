@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using Curiosity.Client.net.Helpers;
 using static Curiosity.Client.net.Helpers.WorldProbe;
-using Curiosity.Client.net.Enums;
+using Curiosity.Shared.Client.net.Enums;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
 {

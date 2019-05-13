@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Curiosity.Client.net.Enums
+﻿namespace Curiosity.Shared.Client.net.Enums
 {
     // Object hashes will need to be cast to uints for some spawning functions
     public enum ObjectHash : int
