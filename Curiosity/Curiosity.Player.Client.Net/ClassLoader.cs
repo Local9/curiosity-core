@@ -46,7 +46,7 @@ namespace Curiosity.Client.net
             //ButtonInstructions.Init(); // To be tested
             CinematicMode.Init();
             HideReticle.Init();
-            //Location.Init();
+            Location.Init();
             //PlayerOverheadMarkers.Init();
             //PlayerOverheadText.Init(); // Not needed an longer; may be removed in later patch by me
             Speedometer.Init();

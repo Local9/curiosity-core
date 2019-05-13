@@ -47,6 +47,9 @@
   <ItemGroup>
     <Compile Include="Classes\Environment\AquaticSpawner.cs" />
     <Compile Include="Classes\Environment\DevCommands.cs" />
+    <Compile Include="Classes\Environment\UI\Compass.cs" />
+    <Compile Include="Classes\Environment\UI\Location.cs" />
+    <Compile Include="Classes\Environment\UI\Speedometer.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\CharacterEditorMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\CustomizeButton.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\ExitButton.cs" />
@@ -65,8 +68,18 @@
     <Compile Include="Classes\Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPBodyMenu\Items\ItemSelector.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPBodyMenu\Items\ItemSlider.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPBodyMenu\MPBodyMenu.cs" />
+    <Compile Include="Classes\Menus\DevCharacterMenu.cs" />
     <Compile Include="Classes\Menus\InteractionListMenu.cs" />
     <Compile Include="Classes\Menus\Menu.cs" />
+    <Compile Include="Classes\Vehicle\BrakeSignals.cs" />
+    <Compile Include="Classes\Vehicle\DisableAirControls.cs" />
+    <Compile Include="Classes\Vehicle\DoorManager.cs" />
+    <Compile Include="Classes\Vehicle\EngineManager.cs" />
+    <Compile Include="Classes\Vehicle\FuelManager.cs" />
+    <Compile Include="Classes\Vehicle\Stay.cs" />
+    <Compile Include="Classes\Vehicle\VehicleDamage.cs" />
+    <Compile Include="Classes\Vehicle\VehiclePack.cs" />
+    <Compile Include="Classes\Vehicle\WindowManager.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
