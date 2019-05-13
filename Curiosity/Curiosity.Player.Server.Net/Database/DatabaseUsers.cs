@@ -8,18 +8,18 @@ using CitizenFX.Core;
 
 namespace Curiosity.Server.net.Database
 {
-    public class DatabaseUser : BaseScript
+    public class DatabaseUsers : BaseScript
     {
         MySQL mySql;
 
-        static DatabaseUser databaseUser;
+        static DatabaseUsers databaseUser;
 
-        public static DatabaseUser GetInstance()
+        public static DatabaseUsers GetInstance()
         {
             return databaseUser;
         }
 
-        public DatabaseUser()
+        public DatabaseUsers()
         {
             mySql = DatabaseSettings.GetInstance().mySQL;
             databaseUser = this;

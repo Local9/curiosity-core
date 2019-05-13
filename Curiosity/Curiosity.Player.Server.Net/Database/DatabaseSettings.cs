@@ -6,6 +6,8 @@ using GHMatti.Utilities;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Curiosity.Server.net.Database
 {
@@ -43,6 +45,35 @@ namespace Curiosity.Server.net.Database
             }
             mySQL = new MySQL(settings, taskScheduler);
             _database = this;
+        }
+
+        public async Task<int> GetServerId(int serverKey)
+        {
+            string query = "select serverId from servers where servers.key = @key;";
+
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@key", serverKey);
+
+            using (var result = mySQL.QueryResult(query, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                await Delay(0);
+
+                if (keyValuePairs.Count == 0)
+                {
+                    Debug.WriteLine("SERVER ID NOT FOUND!");
+                    return 0;
+                }
+
+                int serverId = 0;
+
+                foreach (Dictionary<string, object> keyValues in keyValuePairs)
+                {
+                    serverId = int.Parse($"{keyValues["serverId"]}");
+                }
+                return serverId;
+            }
         }
     }
 }

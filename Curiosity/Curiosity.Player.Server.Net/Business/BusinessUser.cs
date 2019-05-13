@@ -6,7 +6,7 @@ namespace Curiosity.Server.net.Business
 {
     public class BusinessUser : BaseScript
     {
-        Database.DatabaseUser databaseUser;
+        Database.DatabaseUsers databaseUser;
 
         static BusinessUser businessUser;
 
@@ -17,7 +17,7 @@ namespace Curiosity.Server.net.Business
 
         public BusinessUser()
         {
-            databaseUser = Database.DatabaseUser.GetInstance();
+            databaseUser = Database.DatabaseUsers.GetInstance();
             businessUser = this;
         }
 
