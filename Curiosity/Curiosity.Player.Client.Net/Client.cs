@@ -122,6 +122,7 @@ namespace Curiosity.Client.net
         {
             try
             {
+                Debug.WriteLine($"{action}");
                 Tick += action;
             }
             catch (Exception ex)

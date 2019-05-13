@@ -1,12 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.Client.net.Helpers;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
@@ -52,14 +51,25 @@ namespace Curiosity.Client.net.Classes.Menus
 
         public static void Init()
         {
-            Observer = new MenuObserver();
-            InteractionMenu = new MenuModel { numVisibleItems = 10 };
-            InteractionMenu.headerTitle = "Interaction Menu";
-            InteractionMenu.statusTitle = "";
-            InteractionMenu.menuItems = new List<MenuItem>() { new MenuItemStandard { Title = "Populating menu..." } }; // Currently we need at least one item in a menu; could make it work differently, but eh.
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            try
+            {
+                Observer = new MenuObserver();
+                InteractionMenu = new MenuModel { numVisibleItems = 10 };
+                InteractionMenu.headerTitle = "Interaction Menu";
+                InteractionMenu.statusTitle = "";
+                InteractionMenu.menuItems = new List<MenuItem>() { new MenuItemStandard { Title = "Populating menu..." } }; // Currently we need at least one item in a menu; could make it work differently, but eh.
 
-            RegisterInteractionMenuItem(WalkingStyleItem, () => true, 100);
+                Client.GetInstance().RegisterTickHandler(OnTick);
+
+                RegisterInteractionMenuItem(WalkingStyleItem, () => true, 100);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{ex}");
+                if (ex.InnerException != null)
+                    Debug.WriteLine($"{ex.InnerException}");
+
+            }
         }
 
         public static void RegisterInteractionMenuItem(MenuItem item, Func<bool> check, int priority = 100)

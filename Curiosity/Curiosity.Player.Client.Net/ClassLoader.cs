@@ -49,10 +49,10 @@ namespace Curiosity.Client.net
             //PlayerOverheadText.Init(); // Not needed an longer; may be removed in later patch by me
             //Speedometer.Init();
             //VehicleLoadoutPresets.Init();
-            //MenuGlobals.Init();
+            MenuGlobals.Init();
             //VehicleMenuTest.Init();
             //CharacterMenuTest.Init();
-            //InteractionListMenu.Init();
+            InteractionListMenu.Init();
 
             // Environment
             //Poi.Init();

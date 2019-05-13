@@ -18,7 +18,16 @@ namespace Curiosity.Client.net.Classes.Menus
 
         public static void Init()
         {
-            InteractionListMenu.RegisterInteractionMenuItem(menuItem, () => true);
+            try
+            {
+                InteractionListMenu.RegisterInteractionMenuItem(menuItem, () => true);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"EXCEPTION -> {ex}");
+                if (ex.InnerException != null)
+                    Debug.WriteLine($"INNER EXCEPTION -> {ex.InnerException}");
+            }
         }
     }
 
