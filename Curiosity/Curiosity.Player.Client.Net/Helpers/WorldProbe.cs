@@ -180,7 +180,9 @@ namespace Curiosity.Client.net.Helpers
         }
 
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public static async Task<float?> FindGroundZ(Vector2 position)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             float? result = null;
             try

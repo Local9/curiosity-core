@@ -93,7 +93,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Disconnecting player couldn't clean up");
+                Debug.WriteLine($"Disconnecting player couldn't clean up -> {ex.Message}");
             }
         }
 

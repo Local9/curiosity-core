@@ -6,10 +6,6 @@ namespace Curiosity.Client.Net
 {
     public class CuriosityWeather : BaseScript
     {
-
-        int latestHour = 0;
-        int latestMinute = 0;
-
         public CuriosityWeather()
         {
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);

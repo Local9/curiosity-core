@@ -17,6 +17,7 @@
 //using FamilyRP.Roleplay.Client.Classes.Vehicle;
 using Curiosity.Shared.Client.net;
 using Curiosity.Client.net.Classes.Environment.UI;
+using Curiosity.Client.net.Classes.Menus;
 
 namespace Curiosity.Client.net
 {
