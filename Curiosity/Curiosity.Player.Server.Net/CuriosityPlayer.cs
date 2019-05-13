@@ -162,6 +162,10 @@ namespace Curiosity.Server.net
 
         async void GetUserId([FromSource]Player player)
         {
+            if (!Classes.SessionManager.PlayerList.ContainsKey(player.Handle))
+            {
+                player.TriggerEvent("curiosity:Client:Player:UserId", null);
+            }
             long userId = Classes.SessionManager.GetUserId($"{player.Handle}");
             player.TriggerEvent("curiosity:Client:Player:UserId", userId);
             await Delay(0);

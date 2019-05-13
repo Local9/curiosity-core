@@ -89,49 +89,57 @@ namespace Curiosity.Client.net.Classes.Vehicle
         {
             while (true)
             {
-                if (Game.PlayerPed.IsInVehicle())
+                try
                 {
-                    if (!Function.Call<bool>(Hash.DECOR_EXIST_ON, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel"))
+                    if (Game.PlayerPed.IsInVehicle())
                     {
-                        // For very large random float numbers this method does not yield a uniform distribution
-                        // But for this magnitude it is perfectly fine
-                        float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (random.NextDouble()));
-                        Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", randomFuel);
-                    }
-                    vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel");
+                        if (!Function.Call<bool>(Hash.DECOR_EXIST_ON, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel"))
+                        {
+                            // For very large random float numbers this method does not yield a uniform distribution
+                            // But for this magnitude it is perfectly fine
+                            float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (random.NextDouble()));
+                            Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", randomFuel);
+                        }
+                        vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel");
 
-                    if (!Function.Call<bool>(Hash.DECOR_EXIST_ON, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier"))
-                    {
-                        fuelUsageMultiplier = startingMultiplier;
-                        //Log.ToChat($"{fuelUsageMultiplier:0.00000}");
-                        VehicleClass VehicleClass = (VehicleClass)Function.Call<int>(Hash.GET_VEHICLE_CLASS, Game.PlayerPed.CurrentVehicle.Handle);
-                        fuelUsageMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(VehicleClass) ? FuelConsumptionClassMultiplier[VehicleClass] : 1.0f);
-                        fuelUsageMultiplier *= FuelConsumptionModelMultiplier.ContainsKey((VehicleHash)(uint)Game.PlayerPed.CurrentVehicle.Model.Hash) ? FuelConsumptionModelMultiplier[(VehicleHash)(uint)Game.PlayerPed.CurrentVehicle.Model.Hash] : 1f;
-                        Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier", fuelUsageMultiplier);
+                        if (!Function.Call<bool>(Hash.DECOR_EXIST_ON, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier"))
+                        {
+                            fuelUsageMultiplier = startingMultiplier;
+                            //Log.ToChat($"{fuelUsageMultiplier:0.00000}");
+                            VehicleClass VehicleClass = (VehicleClass)Function.Call<int>(Hash.GET_VEHICLE_CLASS, Game.PlayerPed.CurrentVehicle.Handle);
+                            fuelUsageMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(VehicleClass) ? FuelConsumptionClassMultiplier[VehicleClass] : 1.0f);
+                            fuelUsageMultiplier *= FuelConsumptionModelMultiplier.ContainsKey((VehicleHash)(uint)Game.PlayerPed.CurrentVehicle.Model.Hash) ? FuelConsumptionModelMultiplier[(VehicleHash)(uint)Game.PlayerPed.CurrentVehicle.Model.Hash] : 1f;
+                            Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier", fuelUsageMultiplier);
+                        }
+                        if (lastUpdate == -1)
+                        {
+                            lastUpdate = Function.Call<int>(Hash.GET_GAME_TIMER);
+                        }
+                        if (fuelUsageMultiplier < 0)
+                        {
+                            fuelUsageMultiplier = Function.Call<float>(Hash._DECOR_GET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier");
+                        }
+                        currentUpdate = Function.Call<int>(Hash.GET_GAME_TIMER);
+                        double deltaTime = (currentUpdate - lastUpdate) / 1000f;
+                        float vehicleSpeed = Math.Abs(Game.PlayerPed.CurrentVehicle.Speed);
+                        vehicleFuel = Math.Max(0f, vehicleFuel - (float)(deltaTime * fuelUsageMultiplier * vehicleSpeed));
+                        Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", vehicleFuel);
+                        lastUpdate = currentUpdate;
                     }
-                    if (lastUpdate == -1)
+                    else
                     {
-                        lastUpdate = Function.Call<int>(Hash.GET_GAME_TIMER);
+                        fuelUsageMultiplier = -1;
+                        //vehicleFuel = -1;
+                        lastUpdate = -1;
                     }
-                    if (fuelUsageMultiplier < 0)
-                    {
-                        fuelUsageMultiplier = Function.Call<float>(Hash._DECOR_GET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier");
-                    }
-                    currentUpdate = Function.Call<int>(Hash.GET_GAME_TIMER);
-                    double deltaTime = (currentUpdate - lastUpdate) / 1000f;
-                    float vehicleSpeed = Math.Abs(Game.PlayerPed.CurrentVehicle.Speed);
-                    vehicleFuel = Math.Max(0f, vehicleFuel - (float)(deltaTime * fuelUsageMultiplier * vehicleSpeed));
-                    Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", vehicleFuel);
-                    lastUpdate = currentUpdate;
+                    isNearFuelPump = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                    await BaseScript.Delay(500);
                 }
-                else
+                catch (Exception ex)
                 {
-                    fuelUsageMultiplier = -1;
-                    //vehicleFuel = -1;
-                    lastUpdate = -1;
+                    Debug.WriteLine($"FuelManager Error: {ex.Message}");
+                    await BaseScript.Delay(500);
                 }
-                isNearFuelPump = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
-                await BaseScript.Delay(500);
             }
         }
 
