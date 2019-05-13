@@ -29,9 +29,12 @@ namespace Curiosity.Server.net.Database
         {
             Dictionary<string, int> skills = new Dictionary<string, int>();
 
-            string query = "select skillId, description from skills";
+            string query = "select skillId, description from skills where serverId = @serverId or serverId is null;";
 
-            using (var result = mySql.QueryResult(query))
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@serverId", Server.serverId);
+
+            using (var result = mySql.QueryResult(query, myParams))
             {
                 ResultSet keyValuePairs = await result;
 
@@ -47,6 +50,7 @@ namespace Curiosity.Server.net.Database
                 {
                     skills.Add($"{keyValues["description"]}", int.Parse($"{keyValues["skillId"]}"));
                 }
+
                 return skills;
             }
         }

@@ -28,8 +28,14 @@ namespace Curiosity.Server.net.Classes
         {
             while (skills.Count == 0)
             {
+                while (Server.serverId == 0)
+                {
+                    await Delay(0);
+                }
                 await Delay(0);
                 skills = await databaseSkills.GetSkills();
+                Server.WriteConsoleLine($"{skills.Count} SKILLS CONFIGURED", true);
+                Console.WriteLine();
             }
         }
 

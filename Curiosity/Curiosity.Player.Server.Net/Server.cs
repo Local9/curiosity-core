@@ -78,7 +78,7 @@ namespace Curiosity.Server.net
             EventHandlers[name] += action;
         }
 
-        static void WriteConsoleLine(string message, bool good = false)
+        public static void WriteConsoleLine(string message, bool good = false)
         {
             Console.ForegroundColor = good ? ConsoleColor.Green : ConsoleColor.Red;
             Console.WriteLine(message.PadRight(Console.WindowWidth));
