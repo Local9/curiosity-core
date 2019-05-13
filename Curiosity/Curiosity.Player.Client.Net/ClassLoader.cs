@@ -110,7 +110,7 @@ namespace Curiosity.Client.net
             VehicleDamage.Init();
             EngineManager.Init();
             //VehicleWindowManager.Init();
-            //DoorManager.Init();
+            DoorManager.Init();
             FuelManager.Init();
             //LockManager.Init();
             //Lockpicking.Init();

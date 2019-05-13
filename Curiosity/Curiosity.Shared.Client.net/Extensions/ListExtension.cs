@@ -10,8 +10,7 @@ namespace Curiosity.Shared.Client.net.Extensions
     {
         public static List<T> Slice<T>(this List<T> inputList, int startIndex, int endIndex)
         {
-            int elementCount = endIndex - startIndex + 1;
-            return inputList.Skip(startIndex).Take(elementCount).ToList();
+            return inputList.Skip(startIndex).Take(endIndex - startIndex + 1).ToList();
         }
     }
 }

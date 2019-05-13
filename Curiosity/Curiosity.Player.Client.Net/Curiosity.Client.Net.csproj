@@ -70,6 +70,7 @@
     <Compile Include="Classes\Menus\Menu.cs" />
     <Compile Include="Classes\Vehicle\BrakeSignals.cs" />
     <Compile Include="Classes\Vehicle\DisableAirControls.cs" />
+    <Compile Include="Classes\Vehicle\DoorManager.cs" />
     <Compile Include="Classes\Vehicle\EngineManager.cs" />
     <Compile Include="Classes\Vehicle\FuelManager.cs" />
     <Compile Include="Classes\Vehicle\VehicleDamage.cs" />
