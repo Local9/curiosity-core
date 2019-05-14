@@ -33,13 +33,13 @@ namespace Curiosity.Server.net.Classes
             Dictionary<string, int> skills = new Dictionary<string, int>();
             if (!SessionManager.PlayerList.ContainsKey(player.Handle))
             {
-                skills.Add("Loading...", 0);
+                skills.Add("Session Loading...", 0);
             }
             else
             {
-                skills = await databaseSkills.GetSkills();
+                skills = await databaseSkills.GetSkills(SessionManager.PlayerList[player.Handle].UserID);
             }
-            player.TriggerEvent("", skills);
+            player.TriggerEvent("curiosity:Player:Skills:Get", Newtonsoft.Json.JsonConvert.SerializeObject(skills));
         }
 
         async Task UpdateSkillsDictionary()

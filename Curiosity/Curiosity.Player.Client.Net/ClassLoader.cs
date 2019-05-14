@@ -103,6 +103,7 @@ namespace Curiosity.Client.net
             //PrisonSentence.Init();
             //DeathHandler.Init();
             //WeaponUnholsterHandler.Init();
+            Skills.Init();
 
             // Vehicles
             //Vehicles.Init();
