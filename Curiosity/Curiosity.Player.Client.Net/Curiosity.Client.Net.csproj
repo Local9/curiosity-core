@@ -72,6 +72,7 @@
     <Compile Include="Classes\Menus\DevCharacterMenu.cs" />
     <Compile Include="Classes\Menus\InteractionListMenu.cs" />
     <Compile Include="Classes\Menus\Menu.cs" />
+    <Compile Include="Classes\Menus\SkillsMenu.cs" />
     <Compile Include="Classes\Player\PedDamage.cs" />
     <Compile Include="Classes\Vehicle\BrakeSignals.cs" />
     <Compile Include="Classes\Vehicle\DisableAirControls.cs" />

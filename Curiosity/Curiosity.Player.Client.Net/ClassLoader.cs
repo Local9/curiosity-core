@@ -55,6 +55,7 @@ namespace Curiosity.Client.net
             //VehicleLoadoutPresets.Init();
             MenuGlobals.Init();
             //VehicleMenuTest.Init();
+            SkillsMenu.Init();
             CharacterMenuTest.Init();
             InteractionListMenu.Init();
 

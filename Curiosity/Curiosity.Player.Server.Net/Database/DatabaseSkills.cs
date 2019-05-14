@@ -55,6 +55,37 @@ namespace Curiosity.Server.net.Database
             }
         }
 
+        public async Task<Dictionary<string, int>> GetSkills(long userId)
+        {
+            Dictionary<string, int> skills = new Dictionary<string, int>();
+
+            string query = "select description, experience from userskills inner join skills on userskills.skillId = skills.skillId where (serverId = @serverId or serverId is null) and userskills.userId = @userId;";
+
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@serverId", Server.serverId);
+            myParams.Add("@userId", userId);
+
+            using (var result = mySql.QueryResult(query, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                await Delay(0);
+
+                if (keyValuePairs.Count == 0)
+                {
+                    Debug.WriteLine("SKILLS -> No skills found");
+                    return null;
+                }
+
+                foreach (Dictionary<string, object> keyValues in keyValuePairs)
+                {
+                    skills.Add($"{keyValues["description"]}", int.Parse($"{keyValues["experience"]}"));
+                }
+
+                return skills;
+            }
+        }
+
         public void IncreaseSkill(long userId, int skillId, int experience)
         {
             string query = "INSERT INTO userskills (`userId`,`skillId`,`experience`)" +

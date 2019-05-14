@@ -23,7 +23,23 @@ namespace Curiosity.Server.net.Classes
             EventHandlers["curiosity:Server:Skills:IncreaseByUserId"] += new Action<long, string, int>(IncreaseSkill);
             EventHandlers["curiosity:Server:Skills:DecreaseByUserId"] += new Action<long, string, int>(DecreaseSkill);
 
+            EventHandlers["curiosity:Server:Skills:Get"] += new Action<Player>(GetUserSkills);
+
             Tick += UpdateSkillsDictionary;
+        }
+
+        async void GetUserSkills([FromSource]Player player)
+        {
+            Dictionary<string, int> skills = new Dictionary<string, int>();
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle))
+            {
+                skills.Add("Loading...", 0);
+            }
+            else
+            {
+                skills = await databaseSkills.GetSkills();
+            }
+            player.TriggerEvent("", skills);
         }
 
         async Task UpdateSkillsDictionary()
