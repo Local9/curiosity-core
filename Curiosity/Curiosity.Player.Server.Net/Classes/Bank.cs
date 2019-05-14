@@ -15,9 +15,9 @@ namespace Curiosity.Server.net.Classes
         public Bank()
         {
             //Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseCash", new Action<Player>(IncreaseCash));
-            //Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseCash", new Action<Player>(IncreaseCash));
-            //Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseBank", new Action<Player>(IncreaseCash));
-            //Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseBank", new Action<Player>(IncreaseCash));
+            //Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseCash", new Action<Player>(DecreaseCash));
+            //Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseBank", new Action<Player>(IncreaseBank));
+            //Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseBank", new Action<Player>(DecreaseBank));
         }
     }
 }
