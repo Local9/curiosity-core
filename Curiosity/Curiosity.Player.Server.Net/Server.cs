@@ -22,6 +22,8 @@ namespace Curiosity.Server.net
         {
             WriteConsoleLine("Entering Curiosity Server cter");
 
+            // TODO: Move everything else to init from here.
+
             _server = this;
 
             Tick += GetServerId;

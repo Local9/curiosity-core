@@ -51,6 +51,7 @@ namespace Curiosity.Server.net.Database
                         string myInsertQuery = "insert into users (steamId) values (@steamId);";
                         user.UserId = await mySql.Query(myInsertQuery, myParams, true);
                         user.LocationId = 1;
+                        user.RoleId = 1;
                         await Delay(0);
                     }
 
