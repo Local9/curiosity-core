@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
+using Curiosity.Client.net.Helpers;
 //using FamilyRP.Roleplay.SharedClasses;
 //using FamilyRP.Roleplay.Client.Classes.Environment.Controls;
 //using FamilyRP.Roleplay.Client.Helpers;
@@ -20,7 +21,7 @@ using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
-    public class DevCommands // : CommandProcessor
+    public class DevCommands : CommandProcessor
     {
         public static bool IsDevUIEnabled = false;
         public static bool IsDevEntityUIEnabled = false;
@@ -98,7 +99,8 @@ namespace Curiosity.Client.net.Classes.Environment
 
         //private void SpawnProp(Command cmd)
         //{
-        //    Task.Factory.StartNew(async () => {
+        //    Task.Factory.StartNew(async () =>
+        //    {
         //        Model model = new Model(Function.Call<int>(Hash.GET_HASH_KEY, cmd.Args.Get(0)));
 
         //        Debug.WriteLine("Requesting model hash: {0}, cdimage: {1}, collision: {2}, valid: {3}, prop: {4}", model.Hash, model.IsInCdImage, model.IsCollisionLoaded, model.IsValid, model.IsProp);

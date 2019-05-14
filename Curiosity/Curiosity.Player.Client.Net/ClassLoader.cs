@@ -21,6 +21,7 @@ using Curiosity.Client.net.Classes.Menus;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Classes.Vehicle;
 using Curiosity.Shared.Client.net;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Client.net
 {
@@ -74,15 +75,15 @@ namespace Curiosity.Client.net
             //EMS.Init();
 
             // Police
-            //         Sirens.Init();
-            //         WeaponStash.Init();
-            //         Arrest.Init(); 
-            //         CivilianCarSirenLights.Init();
-            //         CustomizationCommands.Init();
-            //         Helicopter.Init();
-            //         SkinLoadoutPresets.Init();
+            //Sirens.Init();
+            //WeaponStash.Init();
+            //Arrest.Init(); 
+            //CivilianCarSirenLights.Init();
+            //CustomizationCommands.Init();
+            //Helicopter.Init();
+            //SkinLoadoutPresets.Init();
             //Slimjim.Init();
-            //         SpikeStrip.Init();
+            //SpikeStrip.Init();
             //CellDoors.Init();
             //Tackle.Init();
             //PoliceCharacterMenu.Init();
@@ -93,14 +94,14 @@ namespace Curiosity.Client.net
             //TrainManager.Init();
             //Fishing.Init();
             //Hunting.Init();
-            //         Garages.Init();
+            //Garages.Init();
 
             // Player
-            //         GunShotResidueManager.Init();
-            PedDamage.Init();
-            //         PrisonSentence.Init();
-            //         DeathHandler.Init();
-            //         WeaponUnholsterHandler.Init();
+            //GunShotResidueManager.Init();
+            //PedDamage.Init();
+            //PrisonSentence.Init();
+            //DeathHandler.Init();
+            //WeaponUnholsterHandler.Init();
 
             // Vehicles
             //Vehicles.Init();

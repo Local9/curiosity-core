@@ -50,6 +50,7 @@
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
+    <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\CharacterEditorMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\CustomizeButton.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\ExitButton.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
+    <Compile Include="Helpers\CommandProcessor.cs" />
     <Compile Include="Helpers\EntityEnumerators.cs" />
     <Compile Include="Helpers\Game.cs" />
     <Compile Include="Helpers\WorldProbe.cs" />
