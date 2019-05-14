@@ -84,7 +84,9 @@
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
     <Compile Include="Helpers\EntityEnumerators.cs" />
+    <Compile Include="Helpers\Game.cs" />
     <Compile Include="Helpers\WorldProbe.cs" />
+    <Compile Include="Models\Keybind.cs" />
     <Compile Include="Models\PedData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Environment\UI\CinematicMode.cs" />
