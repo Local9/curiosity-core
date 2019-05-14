@@ -83,9 +83,9 @@
     <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="settings.xml">
+    <None Include="settings.xml.example">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\Environment\" />
