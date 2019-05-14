@@ -24,5 +24,11 @@ namespace Curiosity.Shared.Client.net
         {
             Debug.WriteLine($"Debug -> {message}");
         }
+
+        public static void ToChat(string message)
+        {
+            BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#ffffff", message);
+        }
+
     }
 }

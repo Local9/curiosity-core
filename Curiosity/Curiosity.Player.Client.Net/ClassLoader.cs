@@ -15,11 +15,12 @@
 //using FamilyRP.Roleplay.Client.Classes.Jobs.Transportation.Trains;
 //using FamilyRP.Roleplay.Client.Classes.Player;
 //using FamilyRP.Roleplay.Client.Classes.Vehicle;
-using Curiosity.Shared.Client.net;
-using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Classes.Environment;
+using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Classes.Menus;
+using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Classes.Vehicle;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net
 {
@@ -96,7 +97,7 @@ namespace Curiosity.Client.net
 
             // Player
             //         GunShotResidueManager.Init();
-            //         PedDamage.Init();
+            PedDamage.Init();
             //         PrisonSentence.Init();
             //         DeathHandler.Init();
             //         WeaponUnholsterHandler.Init();
