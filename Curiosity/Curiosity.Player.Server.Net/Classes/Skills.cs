@@ -18,8 +18,10 @@ namespace Curiosity.Server.net.Classes
 
         public Skills()
         {
-            EventHandlers["curiosity:Server:Skills:Increase"] += new Action<long, string, int>(IncreaseSkill);
-            EventHandlers["curiosity:Server:Skills:Decrease"] += new Action<long, string, int>(DecreaseSkill);
+            EventHandlers["curiosity:Server:Skills:Increase"] += new Action<Player, string, int>(IncreaseSkillByPlayer);
+            EventHandlers["curiosity:Server:Skills:Decrease"] += new Action<Player, string, int>(DecreaseSkillByPlayer);
+            EventHandlers["curiosity:Server:Skills:IncreaseByUserId"] += new Action<long, string, int>(IncreaseSkill);
+            EventHandlers["curiosity:Server:Skills:DecreaseByUserId"] += new Action<long, string, int>(DecreaseSkill);
 
             Tick += UpdateSkillsDictionary;
         }
@@ -43,9 +45,51 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
+                if (!(userId > 0))
+                {
+                    Debug.WriteLine($"IncreaseSkill: UserID Missing");
+                    return;
+                }
+
                 if (!skills.ContainsKey(skill))
                 {
                     Debug.WriteLine($"IncreaseSkill: Unknown Skill -> {skill}");
+                    Debug.WriteLine($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    return;
+                }
+                databaseSkills.IncreaseSkill(userId, skills[skill], experience);
+                UpdateWorldSkill(userId, experience, false);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"IncreaseSkill -> {ex.Message}");
+            }
+        }
+
+        void IncreaseSkillByPlayer([FromSource]Player player, string skill, int experience)
+        {
+            try
+            {
+                long userId = 0;
+                
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle))
+                {
+                    Debug.WriteLine($"IncreaseSkill: Player session missing.");
+                    return;
+                }
+
+                userId = SessionManager.PlayerList[player.Handle].UserID;
+
+                if (!(userId > 0))
+                {
+                    Debug.WriteLine($"IncreaseSkill: UserID Missing");
+                    return;
+                }
+
+                if (!skills.ContainsKey(skill))
+                {
+                    Debug.WriteLine($"IncreaseSkill: Unknown Skill -> {skill}");
+                    Debug.WriteLine($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
                     return;
                 }
                 databaseSkills.IncreaseSkill(userId, skills[skill], experience);
@@ -61,9 +105,16 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
+                if (!(userId > 0))
+                {
+                    Debug.WriteLine($"DecreaseSkill: UserID Missing");
+                    return;
+                }
+
                 if (!skills.ContainsKey(skill))
                 {
                     Debug.WriteLine($"DecreaseSkill: Unknown Skill -> {skill}");
+                    Debug.WriteLine($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
                     return;
                 }
                 databaseSkills.DecreaseSkill(userId, skills[skill], experience);
@@ -72,6 +123,41 @@ namespace Curiosity.Server.net.Classes
             catch (Exception ex)
             {
                 Debug.WriteLine($"DecreaseSkill -> {ex.Message}");
+            }
+        }
+
+        void DecreaseSkillByPlayer([FromSource]Player player, string skill, int experience)
+        {
+            try
+            {
+                long userId = 0;
+
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle))
+                {
+                    Debug.WriteLine($"DecreaseSkill: Player session missing.");
+                    return;
+                }
+
+                userId = SessionManager.PlayerList[player.Handle].UserID;
+
+                if (!(userId > 0))
+                {
+                    Debug.WriteLine($"DecreaseSkill: UserID Missing");
+                    return;
+                }
+
+                if (!skills.ContainsKey(skill))
+                {
+                    Debug.WriteLine($"DecreaseSkill: Unknown Skill -> {skill}");
+                    Debug.WriteLine($"DecreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    return;
+                }
+                databaseSkills.DecreaseSkill(userId, skills[skill], experience);
+                UpdateWorldSkill(userId, experience, false);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"IncreaseSkill -> {ex.Message}");
             }
         }
 

@@ -108,6 +108,8 @@ namespace Curiosity.Server.net
                 Debug.WriteLine($"session.Activate() -> {session}");
                 await Delay(0);
                 player.TriggerEvent("curiosity:Client:Rank:SetInitialXpLevels", user.WorldExperience, true, true);
+                await Delay(0);
+                player.TriggerEvent("curiosity:Client:Player:SessionCreated", user.UserId);
             }
             catch (Exception ex)
             {
@@ -165,6 +167,7 @@ namespace Curiosity.Server.net
             if (!Classes.SessionManager.PlayerList.ContainsKey(player.Handle))
             {
                 player.TriggerEvent("curiosity:Client:Player:UserId", null);
+                return;
             }
             long userId = Classes.SessionManager.GetUserId($"{player.Handle}");
             player.TriggerEvent("curiosity:Client:Player:UserId", userId);
