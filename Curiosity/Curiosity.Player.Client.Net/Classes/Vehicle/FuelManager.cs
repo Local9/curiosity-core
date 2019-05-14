@@ -122,7 +122,19 @@ namespace Curiosity.Client.net.Classes.Vehicle
                         currentUpdate = Function.Call<int>(Hash.GET_GAME_TIMER);
                         double deltaTime = (currentUpdate - lastUpdate) / 1000f;
                         float vehicleSpeed = Math.Abs(Game.PlayerPed.CurrentVehicle.Speed);
+
+                        if (vehicleSpeed < 4f)
+                        {
+                            vehicleSpeed = 2f;
+                        }
+
+                        if (!Game.PlayerPed.CurrentVehicle.IsEngineRunning)
+                        {
+                            vehicleSpeed = 0f;
+                        }
+
                         vehicleFuel = Math.Max(0f, vehicleFuel - (float)(deltaTime * fuelUsageMultiplier * vehicleSpeed));
+
                         Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", vehicleFuel);
                         lastUpdate = currentUpdate;
                     }
