@@ -35,6 +35,9 @@
       <HintPath>..\_Dependancies\client\CitizenFX.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json.net">
+      <HintPath>..\_Dependancies\Newtonsoft.Json.net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,6 +53,7 @@
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
+    <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\CharacterEditorMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\CustomizeButton.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\ExitButton.cs" />
@@ -71,6 +75,9 @@
     <Compile Include="Classes\Menus\DevCharacterMenu.cs" />
     <Compile Include="Classes\Menus\InteractionListMenu.cs" />
     <Compile Include="Classes\Menus\Menu.cs" />
+    <Compile Include="Classes\Menus\SkillsMenu.cs" />
+    <Compile Include="Classes\Player\PedDamage.cs" />
+    <Compile Include="Classes\Player\Skills.cs" />
     <Compile Include="Classes\Vehicle\BrakeSignals.cs" />
     <Compile Include="Classes\Vehicle\DisableAirControls.cs" />
     <Compile Include="Classes\Vehicle\DoorManager.cs" />
@@ -83,6 +90,7 @@
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
+    <Compile Include="Helpers\CommandProcessor.cs" />
     <Compile Include="Helpers\EntityEnumerators.cs" />
     <Compile Include="Helpers\Game.cs" />
     <Compile Include="Helpers\WorldProbe.cs" />

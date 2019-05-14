@@ -46,6 +46,9 @@
     <Reference Include="MySqlConnector.net">
       <HintPath>..\_Dependancies\server\GHMattiMySQL\MySqlConnector.net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json.net">
+      <HintPath>..\_Dependancies\Newtonsoft.Json.net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers.net">
       <HintPath>..\_Dependancies\server\GHMattiMySQL\System.Buffers.net.dll</HintPath>

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
+﻿using Curiosity.Client.net.Helpers;
 using Curiosity.Shared.Client.net;
-using Curiosity.Client.net.Helpers;
+using System;
 //using FamilyRP.Roleplay.SharedClasses;
 //using FamilyRP.Roleplay.Client.Classes.Environment.Controls;
 //using FamilyRP.Roleplay.Client.Helpers;
