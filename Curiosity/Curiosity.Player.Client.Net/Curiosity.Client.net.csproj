@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Classes\Environment\AquaticSpawner.cs" />
     <Compile Include="Classes\Environment\DevCommands.cs" />
+    <Compile Include="Classes\Environment\UI\Cash.cs" />
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
@@ -100,9 +101,6 @@
     <Compile Include="Classes\Environment\UI\CinematicMode.cs" />
     <Compile Include="Classes\Environment\UI\HideReticle.cs" />
     <Compile Include="Classes\Environment\UI\UI.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Curiosity.Shared.Client.net\Curiosity.Shared.Client.net.csproj">
