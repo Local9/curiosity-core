@@ -17,14 +17,14 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static async Task<Entity.User> GetUserAsync(string steamId)
+        public static async Task<Entity.User> GetUserAsync(string license)
         {
             try
             {
                 Entity.User user = new Entity.User();
 
                 Dictionary<string, object> myParams = new Dictionary<string, object>();
-                myParams.Add("@steamId", steamId);
+                myParams.Add("@license", license);
                 myParams.Add("@serverId", Server.serverId);
 
                 string selectQuery = " select" +
@@ -36,7 +36,7 @@ namespace Curiosity.Server.net.Database
                     " left join userskills on users.userId = userskills.userId and userskills.skillId = @serverId" +
                     " left join skills on userskills.skillId = skills.skillId and (skills.serverId = @serverId or skills.serverId is null)" +
                     " left join usersbank on users.userId = usersbank.userId and usersbank.serverId = @serverId" +
-                    " where steamId = @steamId;";
+                    " where users.license = @license;";
 
                 using (var result = mySql.QueryResult(selectQuery, myParams))
                 {
@@ -44,7 +44,7 @@ namespace Curiosity.Server.net.Database
                     await Delay(0);
                     if (keyValuePairs.Count == 0)
                     {
-                        string myInsertQuery = "insert into users (steamId) values (@steamId);";
+                        string myInsertQuery = "insert into users (license) values (@license);";
                         user.UserId = await mySql.Query(myInsertQuery, myParams, true);
                         user.LocationId = 1;
                         user.RoleId = 1;

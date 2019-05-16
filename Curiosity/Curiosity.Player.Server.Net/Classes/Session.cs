@@ -9,12 +9,12 @@ namespace Curiosity.Server.net.Classes
 {
     public class Session
     {
-        const string STEAM_IDENTIFIER = "steam";
+        const string LICENSE_IDENTIFIER = "license";
         // Session data
         public string NetId { get; private set; }
         public string Name { get; private set; }
         public string[] Identities { get; private set; }
-        public string SteamId { get; private set; } = null;
+        public string License { get; private set; } = null;
 
         // Player data
         public long UserID { get; set; }
@@ -57,7 +57,7 @@ namespace Curiosity.Server.net.Classes
 
             Identities = idents.ToArray();
 
-            SteamId = player.Identifiers[STEAM_IDENTIFIER];
+            License = player.Identifiers[LICENSE_IDENTIFIER];
 
             // Set unknowns
             // Character = null;

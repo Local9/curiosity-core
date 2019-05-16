@@ -7,7 +7,7 @@ namespace Curiosity.Server.net
 {
     public class CuriosityPlayer : BaseScript
     {
-        const string STEAM_IDENTIFIER = "steam";
+        const string LICENSE_IDENTIFIER = "license";
         bool isLive = false;
 
         Business.BusinessUser businessUser;
@@ -56,11 +56,11 @@ namespace Curiosity.Server.net
 
         void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
         {
-            string steamId = player.Identifiers[STEAM_IDENTIFIER];
+            string license = player.Identifiers[LICENSE_IDENTIFIER];
 
-            if (string.IsNullOrEmpty(steamId))
+            if (string.IsNullOrEmpty(license))
             {
-                deferrals.done("SteamID Not Found. Please have Steam running to connect.");
+                deferrals.done("License Not Found.");
             }
 
             // await SetupPlayerAsync(player);
@@ -86,14 +86,14 @@ namespace Curiosity.Server.net
             {
                 await Delay(3000);
 
-                string steamId = player.Identifiers[STEAM_IDENTIFIER];
+                string license = player.Identifiers[LICENSE_IDENTIFIER];
 
-                if (string.IsNullOrEmpty(steamId))
+                if (string.IsNullOrEmpty(license))
                 {
-                    throw new Exception("STEAMID MISSING");
+                    throw new Exception("LICENSE MISSING");
                 }
 
-                Entity.User user = await businessUser.GetUserAsync(steamId);
+                Entity.User user = await businessUser.GetUserAsync(license);
                 await Delay(0);
                 Vector3 vector3 = await businessUser.GetUserLocationAsync(user.LocationId);
                 await Delay(0);
@@ -129,14 +129,14 @@ namespace Curiosity.Server.net
             {
                 await Delay(0);
 
-                string steamId = player.Identifiers[STEAM_IDENTIFIER];
+                string license = player.Identifiers[LICENSE_IDENTIFIER];
 
-                if (string.IsNullOrEmpty(steamId))
+                if (string.IsNullOrEmpty(license))
                 {
-                    throw new Exception("STEAMID MISSING");
+                    throw new Exception("LICENSE MISSING");
                 }
 
-                await businessUser.SavePlayerLocationAsync(steamId, x, y, z);
+                await businessUser.SavePlayerLocationAsync(license, x, y, z);
             }
             catch (Exception ex)
             {
@@ -148,14 +148,14 @@ namespace Curiosity.Server.net
         {
             await Delay(0);
 
-            string steamId = player.Identifiers[STEAM_IDENTIFIER];
+            string license = player.Identifiers[LICENSE_IDENTIFIER];
 
-            if (string.IsNullOrEmpty(steamId))
+            if (string.IsNullOrEmpty(license))
             {
-                throw new Exception("STEAMID MISSING");
+                throw new Exception("LICENSE MISSING");
             }
 
-            Entity.User user = await businessUser.GetUserAsync(steamId);
+            Entity.User user = await businessUser.GetUserAsync(license);
 
             player.TriggerEvent("curiosity:Client:Player:Role", user.Role);
         }
@@ -163,8 +163,8 @@ namespace Curiosity.Server.net
         async void GetUserRoleId(int playerHandle)
         {
             Player player = new PlayerList()[playerHandle];
-            string steamId = player.Identifiers[STEAM_IDENTIFIER];
-            Entity.User user = await businessUser.GetUserAsync(steamId);
+            string license = player.Identifiers[LICENSE_IDENTIFIER];
+            Entity.User user = await businessUser.GetUserAsync(license);
             TriggerEvent("curiosity:Server:Player:RoleId", user.RoleId);
         }
 
