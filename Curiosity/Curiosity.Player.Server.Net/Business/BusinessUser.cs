@@ -6,8 +6,6 @@ namespace Curiosity.Server.net.Business
 {
     public class BusinessUser : BaseScript
     {
-        Database.DatabaseUsers databaseUser;
-
         static BusinessUser businessUser;
 
         public static BusinessUser GetInstance()
@@ -17,38 +15,37 @@ namespace Curiosity.Server.net.Business
 
         public BusinessUser()
         {
-            databaseUser = Database.DatabaseUsers.GetInstance();
             businessUser = this;
         }
 
         public async Task TestQueryAsync()
         {
-            await databaseUser.TestQueryAsync();
+            await Database.DatabaseUsers.TestQueryAsync();
         }
 
         public async Task<Entity.User> GetUserAsync(string steamId)
         {
-            return await databaseUser.GetUserAsync(steamId);
+            return await Database.DatabaseUsers.GetUserAsync(steamId);
         }
 
         public async Task<Vector3> GetUserLocationAsync(long locationId)
         {
-            return await databaseUser.GetUserLocationAsync(locationId);
+            return await Database.DatabaseUsers.GetUserLocationAsync(locationId);
         }
 
         public async Task SavePlayerLocationAsync(string steamId, float x, float y, float z)
         {
-            Entity.User user = await databaseUser.GetUserAsync(steamId);
+            Entity.User user = await Database.DatabaseUsers.GetUserAsync(steamId);
 
             if (user.LocationId == 1)
             {
-                user.LocationId = await databaseUser.SaveLocationAsync(2, x, y, z);
+                user.LocationId = await Database.DatabaseUsers.SaveLocationAsync(2, x, y, z);
                 await Delay(0);
-                await databaseUser.UpdateUserLocationId(user.UserId, user.LocationId);
+                await Database.DatabaseUsers.UpdateUserLocationId(user.UserId, user.LocationId);
             }
             else
             {
-                await databaseUser.UpdatePlayerLocation(user.LocationId, x, y, z);
+                await Database.DatabaseUsers.UpdatePlayerLocation(user.LocationId, x, y, z);
             }
         }
     }

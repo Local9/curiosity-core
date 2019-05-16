@@ -11,23 +11,16 @@ using System.Collections.Generic;
 
 namespace Curiosity.Server.net.Database
 {
-    public class DatabaseSettings : BaseScript
+    public class Database : BaseScript
     {
         internal static string resourceName = API.GetCurrentResourceName();
         internal static string resourcePath = $"resources/{API.GetResourcePath(resourceName).Substring(API.GetResourcePath(resourceName).LastIndexOf("//") + 2)}";
 
-        public MySQL mySQL;
-        private GHMattiTaskScheduler taskScheduler;
-        private Settings settings;
+        public static MySQL mySQL;
+        private static GHMattiTaskScheduler taskScheduler;
+        private static Settings settings;
 
-        private static DatabaseSettings _database;
-
-        public static DatabaseSettings GetInstance()
-        {
-            return _database;
-        }
-
-        public DatabaseSettings()
+        public static void Init()
         {
             taskScheduler = new GHMattiTaskScheduler();
 
@@ -44,10 +37,9 @@ namespace Curiosity.Server.net.Database
                 );
             }
             mySQL = new MySQL(settings, taskScheduler);
-            _database = this;
         }
 
-        public async Task<int> GetServerId(int serverKey)
+        public static async Task<int> GetServerId(int serverKey)
         {
             string query = "select serverId from servers where servers.key = @key;";
 

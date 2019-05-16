@@ -15,11 +15,12 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 {
     static class Cash
     {
-        static int wallet = 100;
-        static int bank = 2000;
+        static Client client = Client.GetInstance();
 
-        static bool loaded = false;
-        const int HUD_SCALEFORM_ID = 3;
+        static int wallet = 0;
+        static int bank = 0;
+        
+        const int HUD_SCALEFORM_ID = 4;
         static bool showWallet = false;
 
         static int bankBalanceHashKey;
@@ -28,13 +29,28 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static public void Init()
         {
             BaseScript.Delay(5000);
-            Client.GetInstance().RegisterTickHandler(SetupBank);
-            Client.GetInstance().RegisterTickHandler(SetupWallet);
-            Client.GetInstance().RegisterTickHandler(TickCash);
-            Client.GetInstance().RegisterTickHandler(ShowWallet);
+            client.RegisterTickHandler(SetupBank);
+            client.RegisterTickHandler(SetupWallet);
+            client.RegisterTickHandler(TickCash);
+            client.RegisterTickHandler(ShowWallet);
+
+            client.RegisterEventHandler("curiosity:Player:Bank:UpdateWallet", new Action<int>(UpdateWallet));
+            client.RegisterEventHandler("curiosity:Player:Bank:UpdateBank", new Action<int>(UpdateBank));
 
             bankBalanceHashKey = GetHashKey("BANK_BALANCE");
             cashBalanceHashKey = GetHashKey("MP0_WALLET_BALANCE");
+        }
+
+        static async void UpdateWallet(int amount)
+        {
+            wallet = amount;
+            await BaseScript.Delay(0);
+        }
+
+        static async void UpdateBank(int amount)
+        {
+            bank = amount;
+            await BaseScript.Delay(0);
         }
 
         static async Task SetupBank()
@@ -66,8 +82,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             while (showWallet)
             {
                 await BaseScript.Delay(0);
-                if (!IsHudComponentActive(4))
-                    ShowHudComponentThisFrame(4);
+                if (!IsHudComponentActive(HUD_SCALEFORM_ID))
+                    ShowHudComponentThisFrame(HUD_SCALEFORM_ID);
             }
             await Task.FromResult(0);
         }

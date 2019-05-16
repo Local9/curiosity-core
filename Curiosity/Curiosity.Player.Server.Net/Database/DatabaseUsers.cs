@@ -10,22 +10,14 @@ namespace Curiosity.Server.net.Database
 {
     public class DatabaseUsers : BaseScript
     {
-        MySQL mySql;
+        static MySQL mySql;
 
-        static DatabaseUsers databaseUser;
-
-        public static DatabaseUsers GetInstance()
+        public static void Init()
         {
-            return databaseUser;
+            mySql = Database.mySQL;
         }
 
-        public DatabaseUsers()
-        {
-            mySql = DatabaseSettings.GetInstance().mySQL;
-            databaseUser = this;
-        }
-
-        public async Task<Entity.User> GetUserAsync(string steamId)
+        public static async Task<Entity.User> GetUserAsync(string steamId)
         {
             try
             {
@@ -33,14 +25,18 @@ namespace Curiosity.Server.net.Database
 
                 Dictionary<string, object> myParams = new Dictionary<string, object>();
                 myParams.Add("@steamId", steamId);
+                myParams.Add("@serverId", Server.serverId);
 
-                string selectQuery = "select" +
-                    " users.userId, users.locationId, roles.roleId, roles.description, IFNULL(userskills.experience, 0) as experience" +
+                string selectQuery = " select" +
+                    " users.userId, users.locationId, roles.roleId, roles.description, IFNULL(userskills.experience, 0) as experience," +
+                    " IFNULL(usersbank.cash, 0) as cash, IFNULL(usersbank.bank, 0) as bank" +
                     " from" +
                     " users" +
                     " inner join roles on users.roleId = roles.roleId" +
-                    " left join userskills on users.userId = userskills.userId and userskills.skillId = 1" +
-                    " where steamId = @steamId";
+                    " left join userskills on users.userId = userskills.userId and userskills.skillId = @serverId" +
+                    " left join skills on userskills.skillId = skills.skillId and (skills.serverId = @serverId or skills.serverId is null)" +
+                    " left join usersbank on users.userId = usersbank.userId and usersbank.serverId = @serverId" +
+                    " where steamId = @steamId;";
 
                 using (var result = mySql.QueryResult(selectQuery, myParams))
                 {
@@ -53,6 +49,17 @@ namespace Curiosity.Server.net.Database
                         user.LocationId = 1;
                         user.RoleId = 1;
                         await Delay(0);
+
+                        user.BankAccount = CitizenFX.Core.Native.API.GetConvarInt("starter_cash", 1000);
+
+                        string bankAccount = "insert into usersbank (userId, serverId, bank) values (@userId, @serverId, @bank);";
+                        Dictionary<string, object> bankParams = new Dictionary<string, object>();
+                        bankParams["@userId"] = user.UserId;
+                        bankParams["@serverId"] = Server.serverId;
+                        bankParams["@bank"] = user.BankAccount;
+                        await mySql.Query(bankAccount, bankParams, true);
+                        
+
                     }
 
                     foreach (Dictionary<string, object> keyValues in keyValuePairs)
@@ -62,6 +69,8 @@ namespace Curiosity.Server.net.Database
                         user.RoleId = int.Parse($"{keyValues["roleId"]}");
                         user.Role = $"{keyValues["description"]}";
                         user.WorldExperience = long.Parse($"{keyValues["experience"]}");
+                        user.Wallet = int.Parse($"{keyValues["cash"]}");
+                        user.BankAccount = int.Parse($"{keyValues["bank"]}");
                     }
                     return user;
                 }
@@ -73,7 +82,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public async Task UpdatePlayerLocation(long locationId, float x, float y, float z)
+        public static async Task UpdatePlayerLocation(long locationId, float x, float y, float z)
         {
             try
             {
@@ -92,7 +101,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public async Task UpdateUserLocationId(long userId, long locationId)
+        public static async Task UpdateUserLocationId(long userId, long locationId)
         {
             try
             {
@@ -109,7 +118,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public async Task<long> SaveLocationAsync(int locationType, float x, float y, float z)
+        public static async Task<long> SaveLocationAsync(int locationType, float x, float y, float z)
         {
             try
             {
@@ -129,7 +138,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public async Task<Vector3> GetUserLocationAsync(long locationId)
+        public static async Task<Vector3> GetUserLocationAsync(long locationId)
         {
             try
             {
@@ -159,7 +168,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public async Task TestQueryAsync()
+        public static async Task TestQueryAsync()
         {
             await mySql.Query("SELECT 1;");
         }

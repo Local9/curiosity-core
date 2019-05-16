@@ -1,31 +1,21 @@
-﻿using GHMatti.Data.MySQL;
+﻿using CitizenFX.Core;
+using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using CitizenFX.Core;
-
 namespace Curiosity.Server.net.Database
 {
-    public class DatabaseSkills : BaseScript
+    public class DatabaseUsersSkills : BaseScript
     {
-        MySQL mySql;
+        static MySQL mySql;
 
-        static DatabaseSkills databaseSkills;
-
-        public static DatabaseSkills GetInstance()
+        public static void Init()
         {
-            return databaseSkills;
+            mySql = Database.mySQL;
         }
 
-        public DatabaseSkills()
-        {
-            mySql = DatabaseSettings.GetInstance().mySQL;
-            databaseSkills = this;
-        }
-
-        public async Task<Dictionary<string, int>> GetSkills()
+        public static async Task<Dictionary<string, int>> GetSkills()
         {
             Dictionary<string, int> skills = new Dictionary<string, int>();
 
@@ -55,7 +45,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public async Task<Dictionary<string, int>> GetSkills(long userId)
+        public static async Task<Dictionary<string, int>> GetSkills(long userId)
         {
             Dictionary<string, int> skills = new Dictionary<string, int>();
 
@@ -86,7 +76,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public void IncreaseSkill(long userId, int skillId, int experience)
+        public static void IncreaseSkill(long userId, int skillId, int experience)
         {
             string query = "INSERT INTO userskills (`userId`,`skillId`,`experience`)" +
                 " VALUES (@userId, @skillId, @experience)" +
@@ -100,7 +90,7 @@ namespace Curiosity.Server.net.Database
             mySql.Query(query, myParams);
         }
 
-        public void DecreaseSkill(long userId, int skillId, int experience)
+        public static void DecreaseSkill(long userId, int skillId, int experience)
         {
             string query = "INSERT INTO userskills (`userId`,`skillId`,`experience`)" +
                 " VALUES (@userId, @skillId, @experience)" +

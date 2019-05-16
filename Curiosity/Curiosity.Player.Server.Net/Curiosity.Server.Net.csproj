@@ -71,9 +71,9 @@
     <Compile Include="Classes\SessionManager.cs" />
     <Compile Include="Classes\Skills.cs" />
     <Compile Include="CuriosityPlayer.cs" />
-    <Compile Include="Database\DatabaseBank.cs" />
-    <Compile Include="Database\DatabaseSettings.cs" />
-    <Compile Include="Database\DatabaseSkills.cs" />
+    <Compile Include="Database\DatabaseUsersBank.cs" />
+    <Compile Include="Database\Database.cs" />
+    <Compile Include="Database\DatabaseUsersSkills.cs" />
     <Compile Include="Database\DatabaseUsers.cs" />
     <Compile Include="Entity\User.cs" />
     <Compile Include="Entity\WeatherData.cs" />

@@ -22,11 +22,19 @@ namespace Curiosity.Server.net
         {
             WriteConsoleLine("Entering Curiosity Server cter");
 
-            // TODO: Move everything else to init from here.
-
             _server = this;
 
-            Tick += GetServerId;
+            // TODO: Move everything else to init from here.
+
+            Database.Database.Init();
+            Database.DatabaseUsers.Init();
+            Database.DatabaseUsersBank.Init();
+            Database.DatabaseUsersSkills.Init();
+
+            Classes.Skills.Init();
+            Classes.Bank.Init();
+
+            RegisterTickHandler(GetServerId);
 
             WriteConsoleLine("Leaving Curiosity Server cter");
         }
@@ -54,7 +62,7 @@ namespace Curiosity.Server.net
 
                     WriteConsoleLine($"SERVER KEY -> {serverKey}", true);
 
-                    serverId = await Database.DatabaseSettings.GetInstance().GetServerId(serverKey);
+                    serverId = await Database.Database.GetServerId(serverKey);
 
                     if (serverId == 0)
                     {
@@ -86,6 +94,23 @@ namespace Curiosity.Server.net
             Console.WriteLine(message.PadRight(Console.WindowWidth));
             Console.ResetColor();
         }
+        /// <summary>
+        /// Registers a tick function
+        /// </summary>
+        /// <param name="action"></param>
+        public void RegisterTickHandler(Func<Task> action)
+        {
+            try
+            {
+                Debug.WriteLine($"Added {action} Tick");
+                Tick += action;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"RegisterTickHandler -> {ex.Message}");
+            }
+        }
+
 
     }
 }

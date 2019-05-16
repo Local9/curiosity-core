@@ -9,5 +9,8 @@ namespace Curiosity.Server.net.Entity
         public int RoleId;
         public string Role;
         public long WorldExperience;
+
+        public int Wallet = 0;
+        public int BankAccount = 0;
     }
 }

@@ -104,12 +104,18 @@ namespace Curiosity.Server.net
                 session.UserID = user.UserId;
                 session.Privilege = (Enums.Privilege)user.RoleId;
                 session.LocationId = user.LocationId;
+                session.IncreaseWallet(user.Wallet);
+                session.IncreaseBankAccount(user.BankAccount);
                 session.Activate();
                 Debug.WriteLine($"session.Activate() -> {session}");
                 await Delay(0);
                 player.TriggerEvent("curiosity:Client:Rank:SetInitialXpLevels", user.WorldExperience, true, true);
                 await Delay(0);
                 player.TriggerEvent("curiosity:Client:Player:SessionCreated", user.UserId);
+                await Delay(0);
+                player.TriggerEvent("curiosity:Player:Bank:UpdateWallet", session.Wallet);
+                await Delay(0);
+                player.TriggerEvent("curiosity:Player:Bank:UpdateBank", session.BankAccount);
             }
             catch (Exception ex)
             {

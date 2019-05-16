@@ -37,6 +37,9 @@ namespace Curiosity.Server.net.Classes
         public Player Player { get; private set; }
         public SemaphoreSlim Mutex { get; private set; }
 
+        public int Wallet { get; private set; }
+        public int BankAccount { get; private set; }
+
         public Session(Player player)
         {
             Mutex = new SemaphoreSlim(1, 1);
@@ -61,6 +64,38 @@ namespace Curiosity.Server.net.Classes
             UserID = 0;
             Privilege = Privilege.USER;
             HasSpawned = false;
+            Wallet = 0;
+            BankAccount = 0;
+        }
+
+        public void IncreaseWallet(int amount)
+        {
+            this.Wallet = this.Wallet + amount;
+        }
+
+        public void DecreaseWallet(int amount)
+        {
+            int newAmount = this.Wallet - amount;
+
+            if (newAmount < 0)
+                newAmount = 0;
+
+            this.Wallet = newAmount;
+        }
+
+        public void IncreaseBankAccount(int amount)
+        {
+            this.BankAccount = this.BankAccount + amount;
+        }
+
+        public void DecreaseBankAccount(int amount)
+        {
+            int newAmount = this.BankAccount - amount;
+
+            if (newAmount < 0)
+                newAmount = 0;
+
+            this.BankAccount = newAmount;
         }
 
         public override string ToString()

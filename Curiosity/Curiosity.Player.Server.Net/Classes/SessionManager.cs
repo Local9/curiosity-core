@@ -10,7 +10,7 @@ namespace Curiosity.Server.net.Classes
 
         static SessionManager sessionManager;
 
-        public SessionManager GetInstance()
+        public static SessionManager GetInstance()
         {
             return sessionManager;
         }
@@ -34,5 +34,15 @@ namespace Curiosity.Server.net.Classes
         {
             return PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(userId)).First().Player;
         }
+
+        //public static bool SessionActive(string netId)
+        //{
+        //    return PlayerList.ContainsKey(netId);
+        //}
+
+        //public static Session GetSession(string netId)
+        //{
+        //    return PlayerList[netId];
+        //}
     }
 }
