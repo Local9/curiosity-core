@@ -105,6 +105,7 @@ namespace Curiosity.Client.net
             //WeaponUnholsterHandler.Init();
             Skills.Init();
             Cash.Init();
+            PlayerInformation.Init();
 
             // Vehicles
             //Vehicles.Init();

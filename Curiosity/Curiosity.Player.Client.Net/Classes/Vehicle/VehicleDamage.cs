@@ -22,7 +22,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         static public void Init()
         {
-            InteractionListMenu.RegisterInteractionMenuItem(menuItemFix, () => Game.PlayerPed.IsInVehicle() /* && isCop */, 999);
+            InteractionListMenu.RegisterInteractionMenuItem(menuItemFix, () => Game.PlayerPed.IsInVehicle() && Player.PlayerInformation.IsDeveloper(), 999);
             PeriodicUpdate();
         }
 
