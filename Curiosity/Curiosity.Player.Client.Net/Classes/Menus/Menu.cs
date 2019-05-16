@@ -45,7 +45,7 @@ namespace Curiosity.Client.net.Classes.Menus
         public Font ItemFont = Font.ChaletLondon;
         public PointF ItemPadding = new PointF(3, 3);
         public PointF HeaderPadding = new PointF(10, 10);
-        public PointF Origin = new PointF(200, 200);
+        public PointF Origin = new PointF(20, 20);
         public Color HeaderBackgroundColor = Color.FromArgb(220, 160, 1, 33);
         public Color ItemBackgroundColor = Color.FromArgb(180, 0, 0, 0);
         public Color ItemSelectedBackgroundColor = Color.FromArgb(200, 220, 220, 220);

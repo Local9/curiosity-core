@@ -39,6 +39,12 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
             bankBalanceHashKey = GetHashKey("BANK_BALANCE");
             cashBalanceHashKey = GetHashKey("MP0_WALLET_BALANCE");
+            BaseScript.Delay(0);
+            //int stam = GetHashKey("MP0_STAMINA");
+            //StatSetInt((uint)stam, 55, true);
+            //BaseScript.Delay(0);
+            //int shoot = GetHashKey("MP0_SHOOTING_ABILITY");
+            //StatSetInt((uint)shoot, 25, true);
         }
 
         static async void UpdateWallet(int amount)
