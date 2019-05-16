@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Business\BusinessUser.cs" />
     <Compile Include="Classes\Bank.cs" />
+    <Compile Include="Classes\PlayerMethods.cs" />
     <Compile Include="Classes\Session.cs" />
     <Compile Include="Classes\SessionManager.cs" />
     <Compile Include="Classes\Skills.cs" />

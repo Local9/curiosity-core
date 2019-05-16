@@ -144,7 +144,15 @@ namespace Curiosity.Client.net.Classes.Vehicle
                         //vehicleFuel = -1;
                         lastUpdate = -1;
                     }
-                    isNearFuelPump = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                    try
+                    {
+                        isNearFuelPump = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"FuelManager isNearFuelPump Error: {ex.Message}");
+                        isNearFuelPump = false;
+                    }
                     await BaseScript.Delay(500);
                 }
                 catch (Exception ex)
