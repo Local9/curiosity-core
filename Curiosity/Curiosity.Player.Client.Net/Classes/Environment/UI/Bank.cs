@@ -13,12 +13,12 @@ using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
 {
-    static class Cash
+    static class Bank
     {
         static Client client = Client.GetInstance();
 
-        static int wallet = 0;
-        static int bank = 0;
+        public static int wallet = 0;
+        public static int bank = 0;
         
         const int HUD_SCALEFORM_ID = 4;
         static bool showWallet = false;

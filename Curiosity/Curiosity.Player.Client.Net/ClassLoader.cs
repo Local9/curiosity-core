@@ -104,7 +104,7 @@ namespace Curiosity.Client.net
             //DeathHandler.Init();
             //WeaponUnholsterHandler.Init();
             Skills.Init();
-            Cash.Init();
+            Bank.Init();
             PlayerInformation.Init();
 
             // Vehicles
