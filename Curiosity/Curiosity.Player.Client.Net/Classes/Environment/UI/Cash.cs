@@ -34,8 +34,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             client.RegisterTickHandler(TickCash);
             client.RegisterTickHandler(ShowWallet);
 
-            client.RegisterEventHandler("curiosity:Player:Bank:UpdateWallet", new Action<int>(UpdateWallet));
-            client.RegisterEventHandler("curiosity:Player:Bank:UpdateBank", new Action<int>(UpdateBank));
+            client.RegisterEventHandler("curiosity:Client:Bank:UpdateWallet", new Action<int>(UpdateWallet));
+            client.RegisterEventHandler("curiosity:Client:Bank:UpdateBank", new Action<int>(UpdateBank));
 
             bankBalanceHashKey = GetHashKey("BANK_BALANCE");
             cashBalanceHashKey = GetHashKey("MP0_WALLET_BALANCE");

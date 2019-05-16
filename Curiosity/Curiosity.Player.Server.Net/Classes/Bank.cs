@@ -22,7 +22,7 @@ namespace Curiosity.Server.net.Classes
                 Session session = SessionManager.PlayerList[player.Handle];
                 Database.DatabaseUsersBank.IncreaseCash(session.UserID, amount);
                 session.IncreaseWallet(amount);
-                player.TriggerEvent("curiosity:Player:Bank:UpdateWallet", session.Wallet);
+                player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
             }
             catch (Exception ex)
             {
@@ -39,7 +39,7 @@ namespace Curiosity.Server.net.Classes
                 Session session = SessionManager.PlayerList[player.Handle];
                 Database.DatabaseUsersBank.DecreaseCash(session.UserID, amount);
                 session.DecreaseWallet(amount);
-                player.TriggerEvent("curiosity:Player:Bank:UpdateWallet", session.Wallet);
+                player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
             }
             catch (Exception ex)
             {
@@ -56,7 +56,7 @@ namespace Curiosity.Server.net.Classes
                 Session session = SessionManager.PlayerList[player.Handle];
                 Database.DatabaseUsersBank.IncreaseBank(session.UserID, amount);
                 session.IncreaseBankAccount(amount);
-                player.TriggerEvent("curiosity:Player:Bank:UpdateBank", session.BankAccount);
+                player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
             }
             catch (Exception ex)
             {
@@ -73,7 +73,7 @@ namespace Curiosity.Server.net.Classes
                 Session session = SessionManager.PlayerList[player.Handle];
                 Database.DatabaseUsersBank.DecreaseBank(session.UserID, amount);
                 session.DecreaseBankAccount(amount);
-                player.TriggerEvent("curiosity:Player:Bank:UpdateBank", session.BankAccount);
+                player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
             }
             catch (Exception ex)
             {

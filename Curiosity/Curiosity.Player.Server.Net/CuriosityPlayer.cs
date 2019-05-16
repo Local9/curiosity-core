@@ -113,9 +113,9 @@ namespace Curiosity.Server.net
                 await Delay(0);
                 player.TriggerEvent("curiosity:Client:Player:SessionCreated", user.UserId);
                 await Delay(0);
-                player.TriggerEvent("curiosity:Player:Bank:UpdateWallet", session.Wallet);
+                player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
                 await Delay(0);
-                player.TriggerEvent("curiosity:Player:Bank:UpdateBank", session.BankAccount);
+                player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
             }
             catch (Exception ex)
             {

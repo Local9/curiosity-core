@@ -75,12 +75,7 @@ namespace Curiosity.Server.net.Classes
 
         public void DecreaseWallet(int amount)
         {
-            int newAmount = this.Wallet - amount;
-
-            if (newAmount < 0)
-                newAmount = 0;
-
-            this.Wallet = newAmount;
+            this.Wallet = this.Wallet - amount;
         }
 
         public void IncreaseBankAccount(int amount)
@@ -90,12 +85,7 @@ namespace Curiosity.Server.net.Classes
 
         public void DecreaseBankAccount(int amount)
         {
-            int newAmount = this.BankAccount - amount;
-
-            if (newAmount < 0)
-                newAmount = 0;
-
-            this.BankAccount = newAmount;
+            this.BankAccount = this.BankAccount - amount;
         }
 
         public override string ToString()

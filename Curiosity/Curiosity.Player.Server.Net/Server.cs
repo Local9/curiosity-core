@@ -26,13 +26,16 @@ namespace Curiosity.Server.net
 
             // TODO: Move everything else to init from here.
 
+            // DATABASE
             Database.Database.Init();
             Database.DatabaseUsers.Init();
             Database.DatabaseUsersBank.Init();
             Database.DatabaseUsersSkills.Init();
 
+            // PLAYER EVENTS
             Classes.Skills.Init();
             Classes.Bank.Init();
+            Classes.PlayerMethods.Init();
 
             RegisterTickHandler(GetServerId);
 
