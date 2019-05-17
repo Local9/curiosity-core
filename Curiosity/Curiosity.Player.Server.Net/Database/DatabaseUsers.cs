@@ -50,7 +50,8 @@ namespace Curiosity.Server.net.Database
                         user.RoleId = 1;
                         await Delay(0);
 
-                        user.BankAccount = CitizenFX.Core.Native.API.GetConvarInt("starter_cash", 1000);
+                        user.BankAccount = CitizenFX.Core.Native.API.GetConvarInt("starter_bank", 1000);
+                        user.Wallet = CitizenFX.Core.Native.API.GetConvarInt("starter_cash", 100);
 
                         string bankAccount = "insert into usersbank (userId, serverId, bank) values (@userId, @serverId, @bank);";
                         Dictionary<string, object> bankParams = new Dictionary<string, object>();
