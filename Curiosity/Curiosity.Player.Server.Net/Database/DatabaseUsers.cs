@@ -53,10 +53,11 @@ namespace Curiosity.Server.net.Database
                         user.BankAccount = CitizenFX.Core.Native.API.GetConvarInt("starter_bank", 1000);
                         user.Wallet = CitizenFX.Core.Native.API.GetConvarInt("starter_cash", 100);
 
-                        string bankAccount = "insert into usersbank (userId, serverId, bank) values (@userId, @serverId, @bank);";
+                        string bankAccount = "insert into usersbank (userId, serverId, bank, cash) values (@userId, @serverId, @bank, @cash);";
                         Dictionary<string, object> bankParams = new Dictionary<string, object>();
                         bankParams["@userId"] = user.UserId;
                         bankParams["@serverId"] = Server.serverId;
+                        bankParams["@cash"] = user.Wallet;
                         bankParams["@bank"] = user.BankAccount;
                         await mySql.Query(bankAccount, bankParams, true);
                         

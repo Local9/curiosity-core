@@ -63,7 +63,7 @@ namespace Curiosity.Server.net.Database
 
                 if (keyValuePairs.Count == 0)
                 {
-                    Debug.WriteLine($"SKILLS -> No skills found for user {userId}, possible they are new.");
+                    // Debug.WriteLine($"SKILLS -> No skills found for user {userId}, possible they are new.");
                     return null;
                 }
 
