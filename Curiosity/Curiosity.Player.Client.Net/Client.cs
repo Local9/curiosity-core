@@ -12,7 +12,6 @@ namespace Curiosity.Client.net
     public class Client : BaseScript
     {
         private static Client _instance;
-        private static bool disableWanted = false;
 
         public static Client ActiveInstance = _instance;
 
@@ -62,16 +61,7 @@ namespace Curiosity.Client.net
         {
             try
             {
-                if (disableWanted)
-                {
-                    if (Game.Player.WantedLevel > 0)
-                    {
-                        Game.Player.WantedLevel = 0;
-                    }
-                }
-
                 Game.Player.SetRunSpeedMultThisFrame(DefaultPlayerSpeed);
-
                 CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.VehicleName);
                 CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.AreaName);
                 CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.StreetName);

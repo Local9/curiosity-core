@@ -106,6 +106,7 @@ namespace Curiosity.Client.net
             Skills.Init();
             Bank.Init();
             PlayerInformation.Init();
+            WantedLevels.Init();
 
             // Vehicles
             //Vehicles.Init();

@@ -23,8 +23,7 @@ namespace Curiosity.Client.net
             EventHandlers["curiosity:Client:Player:DisplayInfo"] += new Action<bool>(DisplayInfo);
 
             Tick += UpdatePlayerLocation;
-            Tick += PlayerSettings;
-            Tick += PlayerRole;
+            Tick += PlayerAndServerSettings;
             Tick += DisplayInformation;
         }
 
@@ -45,20 +44,7 @@ namespace Curiosity.Client.net
             }
         }
 
-        async Task PlayerSettings()
-        {
-            while (true)
-            {
-                API.ClearPlayerWantedLevel(Game.Player.Handle);
-                API.SetMaxWantedLevel(0);
-                API.SetPlayerWantedLevel(Game.Player.Handle, 0, false);
-                API.SetPlayerWantedLevelNow(Game.Player.Handle, false);
-                API.SetPlayerWantedLevelNoDrop(Game.Player.Handle, 0, false);
-                await Delay(0);
-            }
-        }
-
-        async Task PlayerRole()
+        async Task PlayerAndServerSettings()
         {
             while (true)
             {

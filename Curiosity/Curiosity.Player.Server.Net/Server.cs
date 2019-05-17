@@ -36,6 +36,7 @@ namespace Curiosity.Server.net
             Classes.Skills.Init();
             Classes.Bank.Init();
             Classes.PlayerMethods.Init();
+            Classes.ServerSettings.Init();
 
             RegisterTickHandler(GetServerId);
 

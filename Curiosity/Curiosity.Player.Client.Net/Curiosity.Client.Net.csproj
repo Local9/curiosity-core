@@ -54,6 +54,7 @@
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
+    <Compile Include="Classes\Environment\WantedLevels.cs" />
     <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\CharacterEditorMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\CustomizeButton.cs" />
