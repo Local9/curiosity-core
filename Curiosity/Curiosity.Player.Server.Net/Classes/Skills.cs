@@ -18,7 +18,6 @@ namespace Curiosity.Server.net.Classes
             Server.GetInstance().RegisterEventHandler("curiosity:Server:Skills:Decrease", new Action<Player, string, int>(DecreaseSkillByPlayer));
             Server.GetInstance().RegisterEventHandler("curiosity:Server:Skills:IncreaseByUserId", new Action<long, string, int>(IncreaseSkill));
             Server.GetInstance().RegisterEventHandler("curiosity:Server:Skills:DecreaseByUserId", new Action<long, string, int>(DecreaseSkill));
-
             Server.GetInstance().RegisterEventHandler("curiosity:Server:Skills:Get", new Action<Player>(GetUserSkills));
 
             Server.GetInstance().RegisterTickHandler(UpdateSkillsDictionary);
