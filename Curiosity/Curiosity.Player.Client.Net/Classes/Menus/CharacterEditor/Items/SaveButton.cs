@@ -14,8 +14,8 @@
         private void SaveAndExit(MenuItemStandard m)
         {
             // TODO: Proper support for this
-            // Roleplay.Client.CharacterEditor.Save();
-            // Roleplay.Client.CharacterEditor.Exit();
+            //Roleplay.Client.CharacterEditor.Save();
+            //Roleplay.Client.CharacterEditor.Exit();
         }
     }
 }

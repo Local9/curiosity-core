@@ -52,6 +52,7 @@ namespace Curiosity.Client.net
             //PlayerOverheadMarkers.Init();
             //PlayerOverheadText.Init(); // Not needed an longer; may be removed in later patch by me
             Speedometer.Init();
+            Speedometer3D.Init();
             //VehicleLoadoutPresets.Init();
             MenuGlobals.Init();
             //VehicleMenuTest.Init();

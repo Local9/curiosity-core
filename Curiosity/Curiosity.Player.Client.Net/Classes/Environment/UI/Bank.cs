@@ -98,6 +98,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             await BaseScript.Delay(3000);
             showWallet = false;
+            DisplayCash(false);
         }
     }
 }

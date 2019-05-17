@@ -125,7 +125,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
                         if (vehicleSpeed < 4f)
                         {
-                            vehicleSpeed = 2f;
+                            vehicleSpeed = 4f;
                         }
 
                         if (!Game.PlayerPed.CurrentVehicle.IsEngineRunning)
