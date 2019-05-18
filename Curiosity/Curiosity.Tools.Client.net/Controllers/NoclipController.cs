@@ -40,7 +40,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 		private async Task OnTick() {
 			try {
 
-				if( Game.IsControlJustPressed( 2, Control.SaveReplayClip ) && Client.IsDeveloper ) {
+				if(Shared.Client.net.Helper.ControlHelper.IsControlJustPressed(Control.SaveReplayClip, true) && Client.IsDeveloper ) {
 					IsEnabled = !IsEnabled;
 				}
 

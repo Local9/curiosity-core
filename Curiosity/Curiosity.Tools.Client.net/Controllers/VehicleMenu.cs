@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using Curiosity.Tools.Client.net.Helpers;
 using Curiosity.Tools.Client.net.Menus;
+using Curiosity.Shared.Client.net.Models;
+using Curiosity.Shared.Client.net.Enums;
 
 namespace Curiosity.Tools.Client.net.Controllers
 {
 	public class VehicleMenu : Menu
 	{
-		public bool IsInvincible { get; set; }
+        private bool IsDeveloper = false;
+
+        public bool IsInvincible { get; set; }
 		public bool IsInvisible { get; set; }
 		public bool HasNeon { get; set; }
 		public Color NeonColor { get; set; } = Color.FromArgb( 255, 50, 100 );
@@ -125,10 +129,25 @@ namespace Curiosity.Tools.Client.net.Controllers
 			Add( new MenuItemVehicleLivery( client, this ) );
 
 			client.RegisterTickHandler( OnTick );
-		}
+            client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(SetPriviledge));
+        }
 
-		private async Task OnTick() {
+        private void SetPriviledge(string json)
+        {
+            PlayerInformationModel playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
+            Privilege p = (Privilege)playerInfo.RoleId;
+            IsDeveloper = p.HasFlag(Privilege.SERVEROWNER);
+        }
+
+        private async Task OnTick() {
 			try {
+
+                if (!IsDeveloper)
+                {
+                    await BaseScript.Delay(100);
+                    return;
+                }
+
 				if( Game.PlayerPed.CurrentVehicle == null ) {
 					await BaseScript.Delay( 100 );
 					return;

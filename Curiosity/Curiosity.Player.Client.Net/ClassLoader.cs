@@ -33,7 +33,7 @@ namespace Curiosity.Client.net
     {
         public static void Init()
         {
-            Log.LogMessage("Entering ClassLoader Init");
+            Log.Info("Entering ClassLoader Init");
 
             // https://github.com/GroovyGiantPanda/FiveMRpServerResources/tree/master/src/FiveM/RPClient/Classes
 

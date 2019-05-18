@@ -7,6 +7,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Tools.Client.net.Helpers;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Tools.Client.net.Menus
 {
@@ -145,7 +146,7 @@ namespace Curiosity.Tools.Client.net.Menus
 				}
 			}
 			catch( Exception ex ) {
-				Log.Error( ex );
+				Helpers.Log.Error( ex );
 			}
 		}
 
@@ -190,7 +191,8 @@ namespace Curiosity.Tools.Client.net.Menus
 
 				if( CurrentMenu == null ) {
 					foreach( var kvp in _hotkeyMenus ) {
-						if( !Game.IsControlJustPressed( 2, kvp.Key ) ) continue;
+
+						if( !Shared.Client.net.Helper.ControlHelper.IsControlJustPressed(kvp.Key, true) ) continue;
 
 						CurrentMenu = kvp.Value;
 						API.PlaySoundFrontend( -1, "SELECT", "HUD_FREEMODE_SOUNDSET", false );
@@ -198,7 +200,7 @@ namespace Curiosity.Tools.Client.net.Menus
 						// Wait until the player releases the key to not interfere w/ Menu action controls
 						while( true ) {
 							await BaseScript.Delay( 100 );
-							if( !Game.IsControlPressed( 2, kvp.Key ) ) break;
+							if( !Shared.Client.net.Helper.ControlHelper.IsControlJustPressed(kvp.Key, true)) break;
 						}
 					}
 					return;
@@ -206,12 +208,12 @@ namespace Curiosity.Tools.Client.net.Menus
 
 				// Listen to all controls for triggering menu actions.
 				foreach( var kvp in new Dictionary<Control, bool>( _lastPresssed ) ) {
-					if( Game.IsControlPressed( 2, kvp.Key ) ) {
+					if(Shared.Client.net.Helper.ControlHelper.IsControlJustPressed(kvp.Key, true)) {
 						OnMenuControl( kvp.Key );
 						if( !kvp.Value ) {
 							var start = DateTime.Now;
 							while( true ) {
-								if( !Game.IsControlPressed( 2, kvp.Key ) ) return;
+								if( !Shared.Client.net.Helper.ControlHelper.IsControlJustPressed(kvp.Key, true)) return;
 
 								if( (DateTime.Now - start).TotalMilliseconds > HoldDownInterval * 12 ) break;
 
@@ -231,7 +233,7 @@ namespace Curiosity.Tools.Client.net.Menus
 				}
 			}
 			catch( Exception ex ) {
-				Log.Error( ex );
+                Helpers.Log.Error( ex );
 			}
 		}
 

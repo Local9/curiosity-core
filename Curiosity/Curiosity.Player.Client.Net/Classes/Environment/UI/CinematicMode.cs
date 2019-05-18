@@ -62,11 +62,11 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                 DoHideHud = !DoHideHud;
                 if (DoHideHud)
                 {
-                    Log.Debugg("HUD hidden");
+                    Log.Verbose("HUD hidden");
                 }
                 else
                 {
-                    Log.Debugg("HUD unhidden");
+                    Log.Verbose("HUD unhidden");
                 }
                 callbacks.ForEach(cb => { cb.Invoke(!DoHideHud); });
                 Function.Call(Hash.DISPLAY_RADAR, !DoHideHud);

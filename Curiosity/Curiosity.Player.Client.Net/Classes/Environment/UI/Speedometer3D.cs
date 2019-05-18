@@ -11,8 +11,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
     {
         static string speedUnit = "mph";
 
-        static Vector3 position = new Vector3(-1.2f, -2.5f, 0.0f);
-
         static List<VehicleClass> blackList = new List<VehicleClass> {
             VehicleClass.Industrial,
             VehicleClass.Utility,
@@ -34,7 +32,16 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 if (Game.PlayerPed.IsInVehicle() && !CinematicMode.DoHideHud)
                 {
+                    Vector3 position = new Vector3(-1.2f, -2.0f, 0.0f);
+
                     CitizenFX.Core.Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+
+                    if (VehicleClass.Motorcycles == vehicle.ClassType)
+                    {
+                        position.Y = -1.1f;
+                        position.X = -0.8f;
+                    }
+
                     int handle = vehicle.Handle;
                     Vector3 offset1 = API.GetOffsetFromEntityInWorldCoords(handle, 0.15f + position.X, position.Y, position.Z);
 
@@ -42,17 +49,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
                     if (ClassCheck(vehicle))
                     {
-
-                        if (VehicleClass.Motorcycles == vehicle.ClassType)
-                        {
-                            position.Y = -1f;
-                            position.X = -0.8f;
-                        }
-                        else
-                        {
-                            position.Y = -2.5f;
-                            position.X = -1.2f;
-                        }
 
                         if (vSpeed > -1 && vSpeed < 10)
                         {

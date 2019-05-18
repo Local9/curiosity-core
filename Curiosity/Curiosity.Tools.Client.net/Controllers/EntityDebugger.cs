@@ -73,7 +73,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 
 		private async Task OnTick() {
 			try {
-				if( Game.IsControlJustPressed( 2, Control.ReplayStartStopRecordingSecondary ) && Client.IsDeveloper ) {
+				if(Shared.Client.net.Helper.ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecordingSecondary, true) && Client.IsDeveloper ) {
 					IsEnabled = !IsEnabled;
 					UiHelper.ShowNotification( $"Entity Debugger is now {(IsEnabled ? "~g~Enabled" : "~r~Disabled")}~s~." );
 				}

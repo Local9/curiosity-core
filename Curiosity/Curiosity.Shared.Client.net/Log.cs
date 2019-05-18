@@ -1,28 +1,57 @@
-﻿
+﻿using System;
 using CitizenFX.Core;
 
 namespace Curiosity.Shared.Client.net
 {
     public static class Log
     {
-        public static void LogMessage(string message)
+        public static void Info(string msg)
         {
-            Debug.WriteLine(message);
+            WriteLine("INFO", msg, ConsoleColor.White);
         }
 
-        public static void Error(string message)
+        public static void Success(string msg)
         {
-            Debug.WriteLine($"ERROR -> {message}");
+            WriteLine("SUCCESS", msg, ConsoleColor.Green);
         }
 
-        public static void Info(string message)
+        public static void Warn(string msg)
         {
-            Debug.WriteLine($"INFO -> {message}");
+            WriteLine("WARN", msg, ConsoleColor.Yellow);
         }
 
-        public static void Debugg(string message)
+        public static void Error(string msg)
         {
-            Debug.WriteLine($"Debug -> {message}");
+            WriteLine("ERROR", msg, ConsoleColor.Red);
+        }
+
+        public static void Error(Exception ex, string msg = "")
+        {
+            WriteLine("ERROR", $"{msg}\r\n{ex}", ConsoleColor.Red);
+        }
+
+        public static void Verbose(string msg)
+        {
+            WriteLine("VERBOSE", msg, ConsoleColor.DarkGray);
+        }
+
+        private static void WriteLine(string title, string msg, ConsoleColor color)
+        {
+            try
+            {
+                var m = $"[{title}] {msg}";
+#if SERVER
+				Console.ForegroundColor = color;
+				Console.WriteLine( $"{DateTime.Now:HH:mm:ss.fff} {m}" );
+				Console.ResetColor();
+#else
+                Debug.WriteLine(m);
+#endif
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         public static void ToChat(string message)
