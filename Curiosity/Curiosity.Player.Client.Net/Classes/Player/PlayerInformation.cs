@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Models;
 using System;
-using System.Collections.Generic;
 
 namespace Curiosity.Client.net.Classes.Player
 {
@@ -44,15 +44,5 @@ namespace Curiosity.Client.net.Classes.Player
                 await BaseScript.Delay(10000);
             }
         }
-    }
-
-    class PlayerInformationModel
-    {
-        public string Handle;
-        public long UserId;
-        public int RoleId;
-        public int Wallet;
-        public int BankAccount;
-        public Dictionary<string, int> Skills;
     }
 }

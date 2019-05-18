@@ -100,7 +100,7 @@ namespace Curiosity.Client.net
 
             // Player
             //GunShotResidueManager.Init();
-            //PedDamage.Init();
+            //PedDamage.Init(); // In but off
             //PrisonSentence.Init();
             //DeathHandler.Init();
             //WeaponUnholsterHandler.Init();
