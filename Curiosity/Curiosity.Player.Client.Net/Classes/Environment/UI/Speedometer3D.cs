@@ -38,7 +38,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     int handle = vehicle.Handle;
                     Vector3 offset1 = API.GetOffsetFromEntityInWorldCoords(handle, 0.15f + position.X, position.Y, position.Z);
 
-                    float vSpeed = Game.PlayerPed.CurrentVehicle.Speed * (speedUnit == "mph" ? 2.24f : 3.60f);
+                    float vSpeed = float.Parse(string.Format("{0:0}", Game.PlayerPed.CurrentVehicle.Speed * (speedUnit == "mph" ? 2.24f : 3.60f)));
 
                     if (ClassCheck(vehicle))
                     {
