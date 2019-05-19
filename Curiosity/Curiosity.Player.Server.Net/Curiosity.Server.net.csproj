@@ -72,7 +72,6 @@
     <Compile Include="Classes\Session.cs" />
     <Compile Include="Classes\SessionManager.cs" />
     <Compile Include="Classes\Skills.cs" />
-    <Compile Include="CuriosityPlayer.cs" />
     <Compile Include="Database\DatabaseUsersBank.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\DatabaseUsersSkills.cs" />
