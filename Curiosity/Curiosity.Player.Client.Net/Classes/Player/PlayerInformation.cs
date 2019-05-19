@@ -15,7 +15,7 @@ namespace Curiosity.Client.net.Classes.Player
         public static async void Init()
         {
             Client.GetInstance().RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
-            await BaseScript.Delay(10000);
+            await BaseScript.Delay(1000);
             PeriodicCheck();
         }
 
@@ -24,16 +24,18 @@ namespace Curiosity.Client.net.Classes.Player
             playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
 
             privilege = (Privilege)playerInfo.RoleId;
+
+            await BaseScript.Delay(0);
         }
 
         public static bool IsAdmin()
         {
-            return privilege.Has(Privilege.IsAdmin);
+            return (privilege == Privilege.ADMINISTRATOR || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         }
 
         public static bool IsDeveloper()
         {
-            return privilege.Has(Privilege.IsDeveloper);
+            return (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         }
 
         static private async void PeriodicCheck()
@@ -41,7 +43,7 @@ namespace Curiosity.Client.net.Classes.Player
             while (true)
             {
                 BaseScript.TriggerServerEvent("curiosity:Server:Player:GetInformation");
-                await BaseScript.Delay(10000);
+                await BaseScript.Delay(60000);
             }
         }
     }

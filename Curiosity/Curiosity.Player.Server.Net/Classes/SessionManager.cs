@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Curiosity.Server.net.Enums;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -18,6 +20,24 @@ namespace Curiosity.Server.net.Classes
         public SessionManager()
         {
             sessionManager = this;
+            Server.GetInstance().RegisterTickHandler(UpdateSessions);
+        }
+
+        static async Task UpdateSessions()
+        {
+            while (true)
+            {
+                foreach(KeyValuePair<string, Session> playerItem in PlayerList)
+                {
+                    Session session = playerItem.Value;
+
+                    session.User = await Database.DatabaseUsers.GetUserAsync(playerItem.Value.License);
+                    session.Privilege = (Privilege)session.User.RoleId;
+                    
+                    await Delay(50);
+                }
+                await Delay(120000);
+            }
         }
 
         public static string GetNetId(int userId)

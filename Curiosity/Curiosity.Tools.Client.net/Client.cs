@@ -5,6 +5,7 @@ using Curiosity.Tools.Client.net.Controllers;
 using Curiosity.Tools.Client.net.Menus;
 using Curiosity.Shared.Client.net.Models;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Extensions;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
@@ -37,8 +38,8 @@ namespace Curiosity.Tools.Client.net
         private void SetPriviledge(string json)
         {
             PlayerInformationModel playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
-            Privilege p = (Privilege)playerInfo.RoleId;
-            IsDeveloper = p.HasFlag(Privilege.IsDeveloper);
+            Privilege privilege = (Privilege)playerInfo.RoleId;
+            IsDeveloper = (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         }
 
         private void OnSpawn() {
