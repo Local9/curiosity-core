@@ -1,11 +1,17 @@
-﻿namespace Curiosity.Server.net.Enums
+﻿using System;
+
+namespace Curiosity.Server.net.Enums
 {
-    public enum Privilege
+    [Flags]
+    public enum Privilege : int
     {
         UNDEFINED = 0,
         USER = 1,
-        SERVEROWNER = 2,
+        MODERATOR = 2,
         ADMINISTRATOR = 3,
-        MODERATOR = 4
+        DEVELOPER = 4,
+        PROJECTMANAGER = 5,
+        IsAdmin = PROJECTMANAGER | ADMINISTRATOR | DEVELOPER,
+        IsDeveloper = PROJECTMANAGER | DEVELOPER
     }
 }

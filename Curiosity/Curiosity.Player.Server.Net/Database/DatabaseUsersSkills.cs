@@ -19,7 +19,7 @@ namespace Curiosity.Server.net.Database
         {
             Dictionary<string, int> skills = new Dictionary<string, int>();
 
-            string query = "select skillId, description from skill;";
+            string query = "select skillId, description from curiosity.skill;";
 
             using (var result = mySql.QueryResult(query))
             {
@@ -29,8 +29,8 @@ namespace Curiosity.Server.net.Database
 
                 if (keyValuePairs.Count == 0)
                 {
-                    Debug.WriteLine("SKILLS -> No skills found");
-                    return null;
+                    Log.Warn("SKILLS -> No skills found");
+                    return skills;
                 }
 
                 foreach(Dictionary<string, object> keyValues in keyValuePairs)
@@ -46,7 +46,7 @@ namespace Curiosity.Server.net.Database
         {
             Dictionary<string, int> skills = new Dictionary<string, int>();
 
-            string query = "select description, experience from character_skill inner join skill on character_skill.skillId = skill.skillId where character_skill.characterId = @characterId;";
+            string query = "select description, experience from curiosity.character_skill inner join skill on character_skill.skillId = skill.skillId where character_skill.characterId = @characterId;";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@characterId", characterId);
@@ -74,7 +74,7 @@ namespace Curiosity.Server.net.Database
 
         public static void IncreaseSkill(long characterId, int skillId, int experience)
         {
-            string query = "INSERT INTO character_skill (`characterId`,`skillId`,`experience`)" +
+            string query = "INSERT INTO curiosity.character_skill (`characterId`,`skillId`,`experience`)" +
                 " VALUES (@characterId, @skillId, @experience)" +
                 " ON DUPLICATE KEY UPDATE `experience` = `experience` + @experience;";
 
@@ -88,7 +88,7 @@ namespace Curiosity.Server.net.Database
 
         public static void DecreaseSkill(long characterId, int skillId, int experience)
         {
-            string query = "INSERT INTO character_skill (`characterId`,`skillId`,`experience`)" +
+            string query = "INSERT INTO curiosity.character_skill (`characterId`,`skillId`,`experience`)" +
                 " VALUES (@characterId, @skillId, @experience)" +
                 " ON DUPLICATE KEY UPDATE `experience` = `experience` - @experience;";
 

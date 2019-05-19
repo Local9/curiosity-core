@@ -45,8 +45,12 @@ namespace Curiosity.Server.net.Classes
                 }
                 await BaseScript.Delay(0);
                 skills = await Database.DatabaseUsersSkills.GetSkills();
-                Server.WriteConsoleLine($"{skills.Count} SKILLS CONFIGURED", true);
-                Console.WriteLine();
+
+                if (skills.Count > 0)
+                {
+                    Log.Success($"{skills.Count} SKILLS CONFIGURED");
+                }
+                await BaseScript.Delay(10000);
             }
         }
 
@@ -58,7 +62,7 @@ namespace Curiosity.Server.net.Classes
                 
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle))
                 {
-                    Debug.WriteLine($"IncreaseSkill: Player session missing.");
+                    Log.Error($"IncreaseSkill: Player session missing.");
                     return;
                 }
 
@@ -67,14 +71,14 @@ namespace Curiosity.Server.net.Classes
 
                 if (!(characterId > 0))
                 {
-                    Debug.WriteLine($"IncreaseSkill: characterId Missing");
+                    Log.Error($"IncreaseSkill: characterId Missing");
                     return;
                 }
 
                 if (!skills.ContainsKey(skill))
                 {
-                    Debug.WriteLine($"IncreaseSkill: Unknown Skill -> {skill}");
-                    Debug.WriteLine($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    Log.Error($"IncreaseSkill: Unknown Skill -> {skill}");
+                    Log.Error($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
                     return;
                 }
                 Database.DatabaseUsersSkills.IncreaseSkill(characterId, skills[skill], experience);
@@ -94,7 +98,7 @@ namespace Curiosity.Server.net.Classes
 
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle))
                 {
-                    Debug.WriteLine($"DecreaseSkill: Player session missing.");
+                    Log.Error($"DecreaseSkill: Player session missing.");
                     return;
                 }
 
@@ -103,14 +107,14 @@ namespace Curiosity.Server.net.Classes
 
                 if (!(characterId > 0))
                 {
-                    Debug.WriteLine($"DecreaseSkill: characterId Missing");
+                    Log.Error($"DecreaseSkill: characterId Missing");
                     return;
                 }
 
                 if (!skills.ContainsKey(skill))
                 {
-                    Debug.WriteLine($"DecreaseSkill: Unknown Skill -> {skill}");
-                    Debug.WriteLine($"DecreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    Log.Error($"DecreaseSkill: Unknown Skill -> {skill}");
+                    Log.Error($"DecreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
                     return;
                 }
                 Database.DatabaseUsersSkills.DecreaseSkill(characterId, skills[skill], experience);

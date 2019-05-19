@@ -27,7 +27,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"IncreaseCash -> {ex.Message}");
+                Log.Error($"IncreaseCash -> {ex.Message}");
             }
         }
 
@@ -44,7 +44,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"DecreaseCash -> {ex.Message}");
+                Log.Error($"DecreaseCash -> {ex.Message}");
             }
 }
 
@@ -61,7 +61,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"IncreaseBank -> {ex.Message}");
+                Log.Error($"IncreaseBank -> {ex.Message}");
             }
         }
 
@@ -78,7 +78,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"DecreaseBank -> {ex.Message}");
+                Log.Error($"DecreaseBank -> {ex.Message}");
             }
         }
 
@@ -100,7 +100,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"DecreaseBank -> {ex.Message}");
+                Log.Error($"TransferMoney -> {ex.Message}");
             }
         }
     }

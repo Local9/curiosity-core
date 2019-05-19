@@ -33,7 +33,7 @@ namespace Curiosity.Client.net.Classes.Player
 
         public static bool IsDeveloper()
         {
-            return privilege.Has(Privilege.SERVEROWNER);
+            return privilege.Has(Privilege.IsDeveloper);
         }
 
         static private async void PeriodicCheck()

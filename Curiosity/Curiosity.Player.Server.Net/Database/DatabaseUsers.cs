@@ -8,7 +8,7 @@ using CitizenFX.Core;
 
 namespace Curiosity.Server.net.Database
 {
-    public class DatabaseUsers : BaseScript
+    class DatabaseUsers : BaseScript
     {
         static MySQL mySql;
 
@@ -34,7 +34,7 @@ namespace Curiosity.Server.net.Database
                 myParams.Add("@starterBank", user.BankAccount);
                 myParams.Add("@locationId", user.LocationId);
 
-                string selectQuery = "CALL `curiosity`.`spGetUserCharacter`(@license, @serverId, @starterCash, @starterBank, @locationId);";
+                string selectQuery = "CALL curiosity.spGetUserCharacter(@license, @serverId, @starterCash, @starterBank, @locationId);";
 
                 using (var result = mySql.QueryResult(selectQuery, myParams))
                 {
@@ -42,7 +42,7 @@ namespace Curiosity.Server.net.Database
                     await Delay(0);
                     if (keyValuePairs.Count == 0)
                     {
-                        throw new Exception("SQL ERROR");
+                        throw new Exception("SQL ERROR -> No rows returned");
                     }
 
                     foreach (Dictionary<string, object> keyValues in keyValuePairs)
@@ -63,9 +63,9 @@ namespace Curiosity.Server.net.Database
                         user.Wallet = int.Parse($"{keyValues["wallet"]}");
                         user.BankAccount = int.Parse($"{keyValues["bankAccount"]}");
 
-                        user.PosX = int.Parse($"{keyValues["x"]}");
-                        user.PosY = int.Parse($"{keyValues["y"]}");
-                        user.PosZ = int.Parse($"{keyValues["z"]}");
+                        user.PosX = float.Parse($"{keyValues["x"]}");
+                        user.PosY = float.Parse($"{keyValues["y"]}");
+                        user.PosZ = float.Parse($"{keyValues["z"]}");
 
                         user.Stamina = int.Parse($"{keyValues["stamina"]}");
                         user.Strength = int.Parse($"{keyValues["strength"]}");
@@ -80,14 +80,14 @@ namespace Curiosity.Server.net.Database
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"GetUserIdAsync -> {ex.Message}");
+                Log.Error($"GetUserIdAsync -> {ex.Message}");
                 return null;
             }
         }
 
         public static void IncreaseLiveExperience(long userId, int experience)
         {
-            string query = "update user set `lifeExperience` = `lifeExperience` + @experience where userId = @userId";
+            string query = "update curiosity.user set `lifeExperience` = `lifeExperience` + @experience where userId = @userId;";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@userId", userId);
@@ -98,7 +98,7 @@ namespace Curiosity.Server.net.Database
 
         public static void DecreaseLiveExperience(long userId, int experience)
         {
-            string query = "update user set `lifeExperience` = `lifeExperience` - @experience where userId = @userId";
+            string query = "update curiosity.user set `lifeExperience` = `lifeExperience` - @experience where userId = @userId;";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@userId", userId);
@@ -117,7 +117,7 @@ namespace Curiosity.Server.net.Database
                 myParams.Add("@y", y);
                 myParams.Add("@z", z);
 
-                string selectQuery = "update location set x = @x, y = @y, z = @z where locationId = @locationId";
+                string selectQuery = "update curiosity.location set x = @x, y = @y, z = @z where locationId = @locationId;";
                 await mySql.Query(selectQuery, myParams, false);
             }
             catch (Exception ex)
@@ -126,15 +126,15 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public static async Task UpdateUserLocationId(long userId, long locationId)
+        public static async Task UpdateUserLocationId(long characterId, long locationId)
         {
             try
             {
                 Dictionary<string, object> myParams = new Dictionary<string, object>();
-                myParams.Add("@userId", userId);
+                myParams.Add("@characterId", characterId);
                 myParams.Add("@locationId", locationId);
 
-                string selectQuery = "update users set locationId = @locationId where userId = @userId";
+                string selectQuery = "update curiosity.character set locationId = @locationId where characterId = @characterId;";
                 await mySql.Query(selectQuery, myParams, false);
             }
             catch (Exception ex)
@@ -154,7 +154,7 @@ namespace Curiosity.Server.net.Database
                 myParams.Add("@z", z);
                 myParams.Add("@serverId", Server.serverId);
 
-                string selectQuery = "insert into locations (locationType, locationDescription, x, y, z) values (@locationType, 'Player', @x, @y, @z)";
+                string selectQuery = "insert into curiosity.location (locationTypeId, description, x, y, z, serverId) values (@locationType, 'Character Spawn', @x, @y, @z, @serverId);";
                 return await mySql.Query(selectQuery, myParams, true);
             }
             catch (Exception ex)
@@ -172,7 +172,7 @@ namespace Curiosity.Server.net.Database
 
                 Dictionary<string, object> myParams = new Dictionary<string, object>();
                 myParams.Add("@locationId", locationId);
-                string selectQuery = "select x, y, z from locations where locationId = @locationId";
+                string selectQuery = "select x, y, z from curiosity.location where locationId = @locationId;";
                 using (var result = mySql.QueryResult(selectQuery, myParams))
                 {
                     ResultSet keyValuePairs = await result;

@@ -15,7 +15,7 @@ namespace Curiosity.Server.net.Database
 
         public static void IncreaseCash(long characterBankId, int amount)
         {
-            string query = "UPDATE character_bank set `wallet` = `wallet` + @wallet where characterBankId = @bankId;";
+            string query = "UPDATE curiosity.character_bank set `wallet` = `wallet` + @wallet where characterBankId = @bankId;";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@characterBankId", characterBankId);
             myParams.Add("@wallet", amount);
@@ -24,7 +24,7 @@ namespace Curiosity.Server.net.Database
 
         public static void DecreaseCash(long characterBankId, int amount)
         {
-            string query = "UPDATE character_bank set `wallet` = `wallet` - @wallet where characterBankId = @bankId;";
+            string query = "UPDATE curiosity.character_bank set `wallet` = `wallet` - @wallet where characterBankId = @bankId;";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@characterBankId", characterBankId);
             myParams.Add("@wallet", amount);
@@ -33,7 +33,7 @@ namespace Curiosity.Server.net.Database
 
         public static void IncreaseBank(long characterBankId, int amount)
         {
-            string query = "UPDATE character_bank set `bankAccount` = `bankAccount` + @bankAccount where characterBankId = @bankId;";
+            string query = "UPDATE curiosity.character_bank set `bankAccount` = `bankAccount` + @bankAccount where characterBankId = @bankId;";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@characterBankId", characterBankId);
             myParams.Add("@bankAccount", amount);
@@ -42,7 +42,7 @@ namespace Curiosity.Server.net.Database
 
         public static void DecreaseBank(long characterBankId, int amount)
         {
-            string query = "UPDATE character_bank set `bankAccount` = `bankAccount` - @bankAccount where characterBankId = @bankId;";
+            string query = "UPDATE curiosity.character_bank set `bankAccount` = `bankAccount` - @bankAccount where characterBankId = @bankId;";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@characterBankId", characterBankId);
             myParams.Add("@bankAccount", amount);

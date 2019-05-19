@@ -80,6 +80,7 @@
     <Compile Include="Entity\WeatherData.cs" />
     <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\Privilege.cs" />
+    <Compile Include="Helpers\Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
   </ItemGroup>

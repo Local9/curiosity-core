@@ -5,7 +5,8 @@ namespace Curiosity.Shared.Client.net.Models
     public class PlayerInformationModel
     {
         public string Handle;
-        public long UserId;
+        public int UserId;
+        public int CharacterId;
         public int RoleId;
         public int Wallet;
         public int BankAccount;

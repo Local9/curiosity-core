@@ -38,7 +38,7 @@ namespace Curiosity.Tools.Client.net
         {
             PlayerInformationModel playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
             Privilege p = (Privilege)playerInfo.RoleId;
-            IsDeveloper = p.HasFlag(Privilege.SERVEROWNER);
+            IsDeveloper = p.HasFlag(Privilege.IsDeveloper);
         }
 
         private void OnSpawn() {

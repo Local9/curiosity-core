@@ -30,8 +30,8 @@ namespace Curiosity.Server.net.Classes
         public int Ping => GetPlayerPing(NetId);
         public int LastMsg => GetPlayerLastMsg(NetId);
         public string EndPoint => GetPlayerEndpoint(NetId);
-        public bool IsDeveloper => Privilege.HasFlag(Privilege.SERVEROWNER);
-        public bool IsAdmin => Privilege.HasFlag(Privilege.ADMINISTRATOR);
+        public bool IsDeveloper => Privilege.HasFlag(Enums.Privilege.IsDeveloper);
+        public bool IsAdmin => Privilege.HasFlag(Enums.Privilege.IsAdmin);
         public void Drop(string reason) => DropPlayer(NetId, reason);
 
         public Player Player { get; private set; }

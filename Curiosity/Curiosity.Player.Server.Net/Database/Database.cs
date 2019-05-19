@@ -41,7 +41,7 @@ namespace Curiosity.Server.net.Database
 
         public static async Task<int> ServerIdExists(int serverId)
         {
-            string query = "select serverId from servers where servers.serverId = @serverId;";
+            string query = "select serverId from curiosity.server where server.serverId = @serverId;";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@serverId", serverId);
@@ -54,7 +54,7 @@ namespace Curiosity.Server.net.Database
 
                 if (keyValuePairs.Count == 0)
                 {
-                    Debug.WriteLine("SERVER ID NOT FOUND!");
+                    Log.Error("SERVER ID NOT FOUND!");
                     return 0;
                 }
 

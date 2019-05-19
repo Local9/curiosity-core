@@ -7,9 +7,11 @@ namespace Curiosity.Shared.Client.net.Enums
     {
         UNDEFINED = 0,
         USER = 1,
-        SERVEROWNER = 2,
+        MODERATOR = 2,
         ADMINISTRATOR = 3,
-        MODERATOR = 4,
-        IsAdmin = SERVEROWNER | ADMINISTRATOR
+        DEVELOPER = 4,
+        PROJECTMANAGER = 5,
+        IsAdmin = PROJECTMANAGER | ADMINISTRATOR | DEVELOPER,
+        IsDeveloper = PROJECTMANAGER | DEVELOPER
     }
 }

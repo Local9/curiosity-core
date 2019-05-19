@@ -8,7 +8,6 @@ namespace Curiosity.Server.net.Classes
 {
     class PlayerMethods
     {
-        static Business.BusinessUser businessUser;
         static Server server;
 
         public static void Init()
@@ -24,8 +23,6 @@ namespace Curiosity.Server.net.Classes
             // Internal Events
             server.RegisterEventHandler("curiosity:Server:Player:GetRoleId", new Action<int>(GetUserRoleId));
             server.RegisterEventHandler("curiosity:Server:Player:GetUserId", new Action<Player>(GetUserId));
-
-            businessUser = Business.BusinessUser.GetInstance();
         }
 
         async static void GetInformation([FromSource]Player player)
@@ -37,6 +34,7 @@ namespace Curiosity.Server.net.Classes
             PlayerInformation playerInformation = new PlayerInformation();
             playerInformation.Handle = session.NetId;
             playerInformation.UserId = session.UserID;
+            playerInformation.CharacterId = session.User.CharacterId;
             playerInformation.RoleId = (int)session.Privilege;
             playerInformation.Wallet = session.Wallet;
             playerInformation.BankAccount = session.BankAccount;
@@ -67,11 +65,13 @@ namespace Curiosity.Server.net.Classes
                     throw new Exception("LICENSE MISSING");
                 }
 
-                Entity.User user = await businessUser.GetUserAsync(license);
+                Entity.User user = await Business.BusinessUser.GetUserAsync(license);
+                await BaseScript.Delay(0);
                 player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, user.RoleId, user.Role, user.PosX, user.PosY, user.PosZ);
-                await BaseScript.Delay(1000);
+                Log.Info($"User Created: curiosity:Client:Player:Setup");
+                await BaseScript.Delay(0);
 
-                Classes.Session session = new Classes.Session(player);
+                Session session = new Session(player);
 
                 session.UserID = user.UserId;
                 session.Privilege = (Enums.Privilege)user.RoleId;
@@ -82,7 +82,7 @@ namespace Curiosity.Server.net.Classes
                 session.User = user;
 
                 session.Activate();
-                Debug.WriteLine($"session.Activate() -> {session}");
+
                 await BaseScript.Delay(0);
                 player.TriggerEvent("curiosity:Client:Rank:SetInitialXpLevels", user.LifeExperience, true, true);
                 await BaseScript.Delay(0);
@@ -91,10 +91,12 @@ namespace Curiosity.Server.net.Classes
                 player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
                 await BaseScript.Delay(0);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+
+                Log.Success($"session.Activate() -> {session.Name}");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"OnPlayerSetup -> {ex.Message}");
+                Log.Error($"OnPlayerSetup -> {ex.Message}");
             }
         }
 
@@ -109,11 +111,11 @@ namespace Curiosity.Server.net.Classes
                     throw new Exception("LICENSE MISSING");
                 }
 
-                await businessUser.SavePlayerLocationAsync(license, x, y, z);
+                await Business.BusinessUser.SavePlayerLocationAsync(license, x, y, z);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"OnSaveLocation -> {ex.Message}");
+                Log.Error($"OnSaveLocation -> {ex.Message}");
             }
         }
 
@@ -126,7 +128,7 @@ namespace Curiosity.Server.net.Classes
                 throw new Exception("LICENSE MISSING");
             }
 
-            Entity.User user = await businessUser.GetUserAsync(license);
+            Entity.User user = await Business.BusinessUser.GetUserAsync(license);
 
             player.TriggerEvent("curiosity:Client:Player:Role", user.Role);
         }
@@ -135,7 +137,7 @@ namespace Curiosity.Server.net.Classes
         {
             Player player = new PlayerList()[playerHandle];
             string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
-            Entity.User user = await businessUser.GetUserAsync(license);
+            Entity.User user = await Business.BusinessUser.GetUserAsync(license);
             player.TriggerEvent("curiosity:Server:Player:RoleId", user.RoleId);
         }
 
@@ -155,7 +157,8 @@ namespace Curiosity.Server.net.Classes
     class PlayerInformation
     {
         public string Handle;
-        public long UserId;
+        public int UserId;
+        public int CharacterId;
         public int RoleId;
         public int Wallet;
         public int BankAccount;

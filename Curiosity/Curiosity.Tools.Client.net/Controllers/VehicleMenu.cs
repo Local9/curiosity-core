@@ -136,7 +136,7 @@ namespace Curiosity.Tools.Client.net.Controllers
         {
             PlayerInformationModel playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
             Privilege p = (Privilege)playerInfo.RoleId;
-            IsDeveloper = p.HasFlag(Privilege.SERVEROWNER);
+            IsDeveloper = p.HasFlag(Privilege.IsDeveloper);
         }
 
         private async Task OnTick() {

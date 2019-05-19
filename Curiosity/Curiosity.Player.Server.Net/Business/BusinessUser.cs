@@ -4,7 +4,7 @@ using CitizenFX.Core;
 
 namespace Curiosity.Server.net.Business
 {
-    public class BusinessUser : BaseScript
+    class BusinessUser
     {
         static BusinessUser businessUser;
 
@@ -18,22 +18,22 @@ namespace Curiosity.Server.net.Business
             businessUser = this;
         }
 
-        public async Task TestQueryAsync()
+        public static async Task TestQueryAsync()
         {
             await Database.DatabaseUsers.TestQueryAsync();
         }
 
-        public async Task<Entity.User> GetUserAsync(string license)
+        public static async Task<Entity.User> GetUserAsync(string license)
         {
             return await Database.DatabaseUsers.GetUserAsync(license);
         }
 
-        public async Task<Vector3> GetUserLocationAsync(long locationId)
+        public static async Task<Vector3> GetUserLocationAsync(long locationId)
         {
             return await Database.DatabaseUsers.GetUserLocationAsync(locationId);
         }
 
-        public async Task SavePlayerLocationAsync(string license, float x, float y, float z)
+        public static async Task SavePlayerLocationAsync(string license, float x, float y, float z)
         {
             Entity.User user = await Database.DatabaseUsers.GetUserAsync(license);
 
@@ -43,8 +43,8 @@ namespace Curiosity.Server.net.Business
 
                 user.LocationId = (int)id;
 
-                await Delay(0);
-                await Database.DatabaseUsers.UpdateUserLocationId(user.UserId, user.LocationId);
+                await BaseScript.Delay(0);
+                await Database.DatabaseUsers.UpdateUserLocationId(user.CharacterId, user.LocationId);
             }
             else
             {

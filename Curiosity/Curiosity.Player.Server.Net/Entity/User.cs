@@ -26,9 +26,9 @@ namespace Curiosity.Server.net.Entity
         public int BankId;
         public int Wallet = 0;
         public int BankAccount = 0;
-        public int PosX;
-        public int PosY;
-        public int PosZ;
+        public float PosX;
+        public float PosY;
+        public float PosZ;
         public int ServerId;
         // CHARACTER STATS
         public int Stamina

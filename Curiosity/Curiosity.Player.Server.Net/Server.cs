@@ -22,7 +22,7 @@ namespace Curiosity.Server.net
         
         public Server()
         {
-            WriteConsoleLine("Entering Curiosity Server cter");
+            Log.Success("Entering Curiosity Server cter");
 
             _server = this;
 
@@ -30,13 +30,10 @@ namespace Curiosity.Server.net
 
             if (!isLive)
             {
-                WriteConsoleLine(string.Empty);
-                WriteConsoleLine("*****************************************************************");
-                WriteConsoleLine("*> SERVER IS IN A TESTING STATE <********************************");
-                WriteConsoleLine("*> DEBUG INFORMATION WILL BE DISPLAYED <*************************");
-                WriteConsoleLine("*****************************************************************");
-                Console.WriteLine();
-                Console.WriteLine();
+                Log.Warn("*****************************************************************");
+                Log.Warn("*> SERVER IS IN A TESTING STATE <********************************");
+                Log.Warn("*> DEBUG INFORMATION WILL BE DISPLAYED <*************************");
+                Log.Warn("*****************************************************************");
             }
 
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
@@ -60,30 +57,19 @@ namespace Curiosity.Server.net
 
             RegisterTickHandler(GetServerId);
 
-            WriteConsoleLine("Leaving Curiosity Server cter");
+            Log.Success("Leaving Curiosity Server cter");
         }
 
         private void OnResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
-            WriteConsoleLine(string.Empty);
-            WriteConsoleLine("-----------------------------------------------------------------");
-            WriteConsoleLine("-> CURIOSITY PLAYER RESOURCE STARTED <---------------------------");
-            WriteConsoleLine("-> IF A [SESSION ID] IS OVER 65K THEY WILL ERROR <---------------");
-            WriteConsoleLine("-> IF THEY COMPLAIN ABOUT NOT GETTING EXPERIENCE, THIS IS WHY <--");
-            WriteConsoleLine("-> END OF WARNINGS <---------------------------------------------");
-            WriteConsoleLine("-----------------------------------------------------------------");
-            Console.WriteLine();
-            Console.WriteLine();
-        }
-
-        void WriteConsoleLine(string message)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.WriteLine(message.PadRight(Console.WindowWidth));
-            Console.ResetColor();
+            Log.Warn("-----------------------------------------------------------------");
+            Log.Warn("-> CURIOSITY PLAYER RESOURCE STARTED <---------------------------");
+            Log.Warn("-> IF A [SESSION ID] IS OVER 65K THEY WILL ERROR <---------------");
+            Log.Warn("-> IF THEY COMPLAIN ABOUT NOT GETTING EXPERIENCE, THIS IS WHY <--");
+            Log.Warn("-> END OF WARNINGS <---------------------------------------------");
+            Log.Warn("-----------------------------------------------------------------");
         }
 
         static void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
@@ -111,37 +97,36 @@ namespace Curiosity.Server.net
                 await Delay(1000);
                 try
                 {
-                    serverKeyString = API.GetConvar("server_key", "false");
+                    serverKeyString = API.GetConvar("server_id", "false");
 
                     if (serverKeyString == "false")
                     {
-                        WriteConsoleLine(string.Empty);
-                        WriteConsoleLine($"SERVER_KEY IS MISSING");
+                        Log.Error($"SERVER_ID IS MISSING");
+                        return;
                     }
 
                     if (!int.TryParse(serverKeyString, out serverId))
                     {
-                        WriteConsoleLine(string.Empty);
-                        WriteConsoleLine($"SERVER_KEY MUST BE A NUMBER");
+                        Log.Warn($"SERVER_ID MUST BE A NUMBER");
+                        return;
                     }
 
                     serverId = await Database.Database.ServerIdExists(serverId);
 
                     if (serverId == 0)
                     {
-                        WriteConsoleLine("SERVER ID NOT FOUND!");
+                        Log.Error("SERVER ID NOT FOUND!");
                     }
                     else
                     {
-                        WriteConsoleLine($"SERVER KEY CONFIGURED -> {serverId}", true);
+                        Log.Success($"SERVER ID CONFIGURED -> {serverId}");
                     }
-                    Console.WriteLine();
                 }
                 catch (Exception ex)
                 {
-                    WriteConsoleLine($"GetServerId EXCEPTION-> {ex.Message}");
+                    Log.Error($"GetServerId EXCEPTION-> {ex.Message}");
                     if (ex.InnerException != null)
-                        WriteConsoleLine($"GetServerId INNER EXCEPTION-> {ex.InnerException.Message}");
+                        Log.Error($"GetServerId INNER EXCEPTION-> {ex.InnerException.Message}");
                 }
             }
         }
@@ -151,12 +136,6 @@ namespace Curiosity.Server.net
             EventHandlers[name] += action;
         }
 
-        public static void WriteConsoleLine(string message, bool good = false)
-        {
-            Console.ForegroundColor = good ? ConsoleColor.Green : ConsoleColor.Red;
-            Console.WriteLine(message.PadRight(Console.WindowWidth));
-            Console.ResetColor();
-        }
         /// <summary>
         /// Registers a tick function
         /// </summary>
