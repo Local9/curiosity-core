@@ -19,12 +19,9 @@ namespace Curiosity.Server.net.Database
         {
             Dictionary<string, int> skills = new Dictionary<string, int>();
 
-            string query = "select skillId, description from skills where serverId = @serverId or serverId is null;";
+            string query = "select skillId, description from skill;";
 
-            Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@serverId", Server.serverId);
-
-            using (var result = mySql.QueryResult(query, myParams))
+            using (var result = mySql.QueryResult(query))
             {
                 ResultSet keyValuePairs = await result;
 
@@ -45,15 +42,14 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public static async Task<Dictionary<string, int>> GetSkills(long userId)
+        public static async Task<Dictionary<string, int>> GetSkills(int characterId)
         {
             Dictionary<string, int> skills = new Dictionary<string, int>();
 
-            string query = "select description, experience from userskills inner join skills on userskills.skillId = skills.skillId where (serverId = @serverId or serverId is null) and userskills.userId = @userId;";
+            string query = "select description, experience from character_skill inner join skill on character_skill.skillId = skill.skillId where character_skill.characterId = @characterId;";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@serverId", Server.serverId);
-            myParams.Add("@userId", userId);
+            myParams.Add("@characterId", characterId);
 
             using (var result = mySql.QueryResult(query, myParams))
             {
@@ -76,28 +72,28 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public static void IncreaseSkill(long userId, int skillId, int experience)
+        public static void IncreaseSkill(long characterId, int skillId, int experience)
         {
-            string query = "INSERT INTO userskills (`userId`,`skillId`,`experience`)" +
-                " VALUES (@userId, @skillId, @experience)" +
+            string query = "INSERT INTO character_skill (`characterId`,`skillId`,`experience`)" +
+                " VALUES (@characterId, @skillId, @experience)" +
                 " ON DUPLICATE KEY UPDATE `experience` = `experience` + @experience;";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@userId", userId);
+            myParams.Add("@characterId", characterId);
             myParams.Add("@skillId", skillId);
             myParams.Add("@experience", experience);
 
             mySql.Query(query, myParams);
         }
 
-        public static void DecreaseSkill(long userId, int skillId, int experience)
+        public static void DecreaseSkill(long characterId, int skillId, int experience)
         {
-            string query = "INSERT INTO userskills (`userId`,`skillId`,`experience`)" +
-                " VALUES (@userId, @skillId, @experience)" +
+            string query = "INSERT INTO character_skill (`characterId`,`skillId`,`experience`)" +
+                " VALUES (@characterId, @skillId, @experience)" +
                 " ON DUPLICATE KEY UPDATE `experience` = `experience` - @experience;";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@userId", userId);
+            myParams.Add("@characterId", characterId);
             myParams.Add("@skillId", skillId);
             myParams.Add("@experience", experience);
 

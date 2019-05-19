@@ -17,7 +17,7 @@ namespace Curiosity.Server.net.Classes
         public string License { get; private set; } = null;
 
         // Player data
-        public long UserID { get; set; }
+        public int UserID { get; set; }
         public Privilege Privilege { get; set; }
         public long LocationId { get; set; }
 
@@ -36,6 +36,7 @@ namespace Curiosity.Server.net.Classes
 
         public Player Player { get; private set; }
         public SemaphoreSlim Mutex { get; private set; }
+        public Entity.User User { get; set; }
 
         public int Wallet { get; private set; }
         public int BankAccount { get; private set; }

@@ -39,12 +39,12 @@ namespace Curiosity.Server.net.Database
             mySQL = new MySQL(settings, taskScheduler);
         }
 
-        public static async Task<int> GetServerId(int serverKey)
+        public static async Task<int> ServerIdExists(int serverId)
         {
-            string query = "select serverId from servers where servers.key = @key;";
+            string query = "select serverId from servers where servers.serverId = @serverId;";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@key", serverKey);
+            myParams.Add("@serverId", serverId);
 
             using (var result = mySQL.QueryResult(query, myParams))
             {
@@ -57,8 +57,6 @@ namespace Curiosity.Server.net.Database
                     Debug.WriteLine("SERVER ID NOT FOUND!");
                     return 0;
                 }
-
-                int serverId = 0;
 
                 foreach (Dictionary<string, object> keyValues in keyValuePairs)
                 {

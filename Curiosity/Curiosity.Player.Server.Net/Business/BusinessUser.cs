@@ -39,7 +39,10 @@ namespace Curiosity.Server.net.Business
 
             if (user.LocationId == 1)
             {
-                user.LocationId = await Database.DatabaseUsers.SaveLocationAsync(2, x, y, z);
+                long id = await Database.DatabaseUsers.SaveLocationAsync(2, x, y, z);
+
+                user.LocationId = (int)id;
+
                 await Delay(0);
                 await Database.DatabaseUsers.UpdateUserLocationId(user.UserId, user.LocationId);
             }

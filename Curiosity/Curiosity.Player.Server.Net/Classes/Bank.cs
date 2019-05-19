@@ -21,7 +21,7 @@ namespace Curiosity.Server.net.Classes
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
-                Database.DatabaseUsersBank.IncreaseCash(session.UserID, amount);
+                Database.DatabaseUsersBank.IncreaseCash(session.User.CharacterId, amount);
                 session.IncreaseWallet(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
             }
@@ -38,7 +38,7 @@ namespace Curiosity.Server.net.Classes
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
-                Database.DatabaseUsersBank.DecreaseCash(session.UserID, amount);
+                Database.DatabaseUsersBank.DecreaseCash(session.User.CharacterId, amount);
                 session.DecreaseWallet(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
             }
@@ -55,7 +55,7 @@ namespace Curiosity.Server.net.Classes
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
-                Database.DatabaseUsersBank.IncreaseBank(session.UserID, amount);
+                Database.DatabaseUsersBank.IncreaseBank(session.User.CharacterId, amount);
                 session.IncreaseBankAccount(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
             }
@@ -72,7 +72,7 @@ namespace Curiosity.Server.net.Classes
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
-                Database.DatabaseUsersBank.DecreaseBank(session.UserID, amount);
+                Database.DatabaseUsersBank.DecreaseBank(session.User.CharacterId, amount);
                 session.DecreaseBankAccount(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
             }

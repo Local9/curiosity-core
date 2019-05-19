@@ -13,61 +13,39 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static void IncreaseCash(long userId, int cash)
+        public static void IncreaseCash(long characterBankId, int amount)
         {
-            string query = "INSERT INTO usersbank (`userId`,`cash`,`serverId`)" +
-                " VALUES (@userId, @cash, @serverId)" +
-                " ON DUPLICATE KEY UPDATE `cash` = `cash` + @cash;";
-
+            string query = "UPDATE character_bank set `wallet` = `wallet` + @wallet where characterBankId = @bankId;";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@userId", userId);
-            myParams.Add("@cash", cash);
-            myParams.Add("@serverId", Server.serverId);
-
-            Debug.WriteLine("mysql");
-
+            myParams.Add("@characterBankId", characterBankId);
+            myParams.Add("@wallet", amount);
             mySql.Query(query, myParams);
         }
 
-        public static void DecreaseCash(long userId, int cash)
+        public static void DecreaseCash(long characterBankId, int amount)
         {
-            string query = "INSERT INTO usersbank (`userId`,`cash`,`serverId`)" +
-                " VALUES (@userId, @cash, @serverId)" +
-                " ON DUPLICATE KEY UPDATE `cash` = `cash` - @cash;";
-
+            string query = "UPDATE character_bank set `wallet` = `wallet` - @wallet where characterBankId = @bankId;";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@userId", userId);
-            myParams.Add("@cash", cash);
-            myParams.Add("@serverId", Server.serverId);
-
+            myParams.Add("@characterBankId", characterBankId);
+            myParams.Add("@wallet", amount);
             mySql.Query(query, myParams);
         }
 
-        public static void IncreaseBank(long userId, int bank)
+        public static void IncreaseBank(long characterBankId, int amount)
         {
-            string query = "INSERT INTO usersbank (`userId`,`bank`,`serverId`)" +
-                " VALUES (@userId, @bank, @serverId)" +
-                " ON DUPLICATE KEY UPDATE `bank` = `bank` + @bank;";
-
+            string query = "UPDATE character_bank set `bankAccount` = `bankAccount` + @bankAccount where characterBankId = @bankId;";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@userId", userId);
-            myParams.Add("@bank", bank);
-            myParams.Add("@serverId", Server.serverId);
-
+            myParams.Add("@characterBankId", characterBankId);
+            myParams.Add("@bankAccount", amount);
             mySql.Query(query, myParams);
         }
 
-        public static void DecreaseBank(long userId, int bank)
+        public static void DecreaseBank(long characterBankId, int amount)
         {
-            string query = "INSERT INTO usersbank (`userId`,`bank`,`serverId`)" +
-                 " VALUES (@userId, @bank, @serverId)" +
-                 " ON DUPLICATE KEY UPDATE `bank` = `bank` - @bank;";
-
+            string query = "UPDATE character_bank set `bankAccount` = `bankAccount` - @bankAccount where characterBankId = @bankId;";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@userId", userId);
-            myParams.Add("@bank", bank);
-            myParams.Add("@serverId", Server.serverId);
-
+            myParams.Add("@characterBankId", characterBankId);
+            myParams.Add("@bankAccount", amount);
             mySql.Query(query, myParams);
         }
     }

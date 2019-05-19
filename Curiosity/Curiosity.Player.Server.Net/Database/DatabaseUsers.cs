@@ -22,21 +22,19 @@ namespace Curiosity.Server.net.Database
             try
             {
                 Entity.User user = new Entity.User();
+                user.BankAccount = CitizenFX.Core.Native.API.GetConvarInt("starter_bank", 1000);
+                user.Wallet = CitizenFX.Core.Native.API.GetConvarInt("starter_cash", 100);
+                user.LocationId = CitizenFX.Core.Native.API.GetConvarInt("starting_location_id", 1);
+                user.ServerId = Server.serverId;
 
                 Dictionary<string, object> myParams = new Dictionary<string, object>();
                 myParams.Add("@license", license);
-                myParams.Add("@serverId", Server.serverId);
+                myParams.Add("@serverId", user.ServerId);
+                myParams.Add("@starterCash", user.Wallet);
+                myParams.Add("@starterBank", user.BankAccount);
+                myParams.Add("@locationId", user.LocationId);
 
-                string selectQuery = " select" +
-                    " users.userId, users.locationId, roles.roleId, roles.description, IFNULL(userskills.experience, 0) as experience," +
-                    " IFNULL(usersbank.cash, 0) as cash, IFNULL(usersbank.bank, 0) as bank" +
-                    " from" +
-                    " users" +
-                    " inner join roles on users.roleId = roles.roleId" +
-                    " left join userskills on users.userId = userskills.userId and userskills.skillId = @serverId" +
-                    " left join skills on userskills.skillId = skills.skillId and (skills.serverId = @serverId or skills.serverId is null)" +
-                    " left join usersbank on users.userId = usersbank.userId and usersbank.serverId = @serverId" +
-                    " where users.license = @license;";
+                string selectQuery = "CALL `curiosity`.`spGetUserCharacter`(@license, @serverId, @starterCash, @starterBank, @locationId);";
 
                 using (var result = mySql.QueryResult(selectQuery, myParams))
                 {
@@ -44,35 +42,38 @@ namespace Curiosity.Server.net.Database
                     await Delay(0);
                     if (keyValuePairs.Count == 0)
                     {
-                        string myInsertQuery = "insert into users (license) values (@license);";
-                        user.UserId = await mySql.Query(myInsertQuery, myParams, true);
-                        user.LocationId = 1;
-                        user.RoleId = 1;
-                        await Delay(0);
-
-                        user.BankAccount = CitizenFX.Core.Native.API.GetConvarInt("starter_bank", 1000);
-                        user.Wallet = CitizenFX.Core.Native.API.GetConvarInt("starter_cash", 100);
-
-                        string bankAccount = "insert into usersbank (userId, serverId, bank, cash) values (@userId, @serverId, @bank, @cash);";
-                        Dictionary<string, object> bankParams = new Dictionary<string, object>();
-                        bankParams["@userId"] = user.UserId;
-                        bankParams["@serverId"] = Server.serverId;
-                        bankParams["@cash"] = user.Wallet;
-                        bankParams["@bank"] = user.BankAccount;
-                        await mySql.Query(bankAccount, bankParams, true);
-                        
-
+                        throw new Exception("SQL ERROR");
                     }
 
                     foreach (Dictionary<string, object> keyValues in keyValuePairs)
                     {
-                        user.UserId = long.Parse($"{keyValues["userId"]}");
-                        user.LocationId = long.Parse($"{keyValues["locationId"]}");
+                        user.UserId = int.Parse($"{keyValues["userId"]}");
+                        user.LifeExperience = int.Parse($"{keyValues["lifeExperience"]}");
+                        user.DateCreated = DateTime.Parse($"{keyValues["dateCreated"]}");
+
+                        user.CharacterId = int.Parse($"{keyValues["characterId"]}");
+                        user.LocationId = int.Parse($"{keyValues["locationId"]}");
+
                         user.RoleId = int.Parse($"{keyValues["roleId"]}");
-                        user.Role = $"{keyValues["description"]}";
-                        user.WorldExperience = long.Parse($"{keyValues["experience"]}");
-                        user.Wallet = int.Parse($"{keyValues["cash"]}");
-                        user.BankAccount = int.Parse($"{keyValues["bank"]}");
+                        user.Role = $"{keyValues["roleDescription"]}";
+
+                        user.StatId = int.Parse($"{keyValues["statId"]}");
+
+                        user.BankId = int.Parse($"{keyValues["bankId"]}");
+                        user.Wallet = int.Parse($"{keyValues["wallet"]}");
+                        user.BankAccount = int.Parse($"{keyValues["bankAccount"]}");
+
+                        user.PosX = int.Parse($"{keyValues["x"]}");
+                        user.PosY = int.Parse($"{keyValues["y"]}");
+                        user.PosZ = int.Parse($"{keyValues["z"]}");
+
+                        user.Stamina = int.Parse($"{keyValues["stamina"]}");
+                        user.Strength = int.Parse($"{keyValues["strength"]}");
+                        user.Stealth = int.Parse($"{keyValues["stealth"]}");
+                        user.Flying = int.Parse($"{keyValues["flying"]}");
+                        user.Driving = int.Parse($"{keyValues["driving"]}");
+                        user.LungCapacity = int.Parse($"{keyValues["lungCapacity"]}");
+                        user.MentalState = int.Parse($"{keyValues["mentalState"]}");
                     }
                     return user;
                 }
@@ -82,6 +83,28 @@ namespace Curiosity.Server.net.Database
                 Debug.WriteLine($"GetUserIdAsync -> {ex.Message}");
                 return null;
             }
+        }
+
+        public static void IncreaseLiveExperience(long userId, int experience)
+        {
+            string query = "update user set `lifeExperience` = `lifeExperience` + @experience where userId = @userId";
+
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@userId", userId);
+            myParams.Add("@experience", experience);
+
+            mySql.Query(query, myParams);
+        }
+
+        public static void DecreaseLiveExperience(long userId, int experience)
+        {
+            string query = "update user set `lifeExperience` = `lifeExperience` - @experience where userId = @userId";
+
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@userId", userId);
+            myParams.Add("@experience", experience);
+
+            mySql.Query(query, myParams);
         }
 
         public static async Task UpdatePlayerLocation(long locationId, float x, float y, float z)
@@ -94,7 +117,7 @@ namespace Curiosity.Server.net.Database
                 myParams.Add("@y", y);
                 myParams.Add("@z", z);
 
-                string selectQuery = "update locations set x = @x, y = @y, z = @z where locationId = @locationId";
+                string selectQuery = "update location set x = @x, y = @y, z = @z where locationId = @locationId";
                 await mySql.Query(selectQuery, myParams, false);
             }
             catch (Exception ex)
@@ -129,6 +152,7 @@ namespace Curiosity.Server.net.Database
                 myParams.Add("@x", x);
                 myParams.Add("@y", y);
                 myParams.Add("@z", z);
+                myParams.Add("@serverId", Server.serverId);
 
                 string selectQuery = "insert into locations (locationType, locationDescription, x, y, z) values (@locationType, 'Player', @x, @y, @z)";
                 return await mySql.Query(selectQuery, myParams, true);
