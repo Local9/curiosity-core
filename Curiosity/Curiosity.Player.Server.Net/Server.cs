@@ -49,6 +49,9 @@ namespace Curiosity.Server.net
             Database.DatabaseUsersBank.Init();
             Database.DatabaseUsersSkills.Init();
 
+            // Session Manager
+            Classes.SessionManager.Init();
+
             // PLAYER EVENTS
             Classes.Skills.Init();
             Classes.Bank.Init();

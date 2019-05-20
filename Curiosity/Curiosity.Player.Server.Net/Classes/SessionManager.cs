@@ -6,21 +6,13 @@ using Curiosity.Server.net.Enums;
 
 namespace Curiosity.Server.net.Classes
 {
-    public class SessionManager : BaseScript
+    static class SessionManager
     {
         public static Dictionary<string, Session> PlayerList = new Dictionary<string, Session>();
 
-        static SessionManager sessionManager;
-
-        public static SessionManager GetInstance()
+        public static void Init()
         {
-            return sessionManager;
-        }
-
-        public SessionManager()
-        {
-            sessionManager = this;
-            Server.GetInstance().RegisterTickHandler(UpdateSessions);
+            //Server.GetInstance().RegisterTickHandler(UpdateSessions);
         }
 
         static async Task UpdateSessions()
@@ -34,9 +26,9 @@ namespace Curiosity.Server.net.Classes
                     session.User = await Database.DatabaseUsers.GetUserAsync(playerItem.Value.License);
                     session.Privilege = (Privilege)session.User.RoleId;
                     
-                    await Delay(50);
+                    await BaseScript.Delay(50);
                 }
-                await Delay(120000);
+                await BaseScript.Delay(3000000);
             }
         }
 
@@ -53,6 +45,11 @@ namespace Curiosity.Server.net.Classes
         public static Player GetPlayer(long userId)
         {
             return PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(userId)).First().Player;
+        }
+
+        public static void UpdateUser(string netId, Entity.User user)
+        {
+            PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(netId)).First().User = user;
         }
 
         //public static bool SessionActive(string netId)

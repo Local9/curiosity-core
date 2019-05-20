@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Classes
 {
-    public class Skills
+    class Skills
     {
         static Dictionary<string, int> skills = new Dictionary<string, int>();
-
-        const string WORLD_SKILL = "world";
 
         public static void Init()
         {

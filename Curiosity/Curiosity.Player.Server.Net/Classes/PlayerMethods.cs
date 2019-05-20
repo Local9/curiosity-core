@@ -128,9 +128,11 @@ namespace Curiosity.Server.net.Classes
                 throw new Exception("LICENSE MISSING");
             }
 
-            Entity.User user = await Business.BusinessUser.GetUserAsync(license);
+            Session session = SessionManager.PlayerList[player.Handle];
 
-            player.TriggerEvent("curiosity:Client:Player:Role", user.Role);
+            session.User = await Business.BusinessUser.GetUserAsync(license);
+
+            player.TriggerEvent("curiosity:Client:Player:Role", session.User.Role);
         }
 
         async static void GetUserRoleId(int playerHandle)

@@ -48,7 +48,7 @@ namespace Curiosity.Client.net
         {
             while (true)
             {
-                await Delay(10000);
+                await Delay(30000);
                 TriggerServerEvent("curiosity:Server:Player:GetRole");
             }
         }
