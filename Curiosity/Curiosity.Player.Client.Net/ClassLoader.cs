@@ -110,6 +110,7 @@ namespace Curiosity.Client.net
             Bank.Init();
             PlayerInformation.Init();
             WantedLevels.Init();
+            MugshotCreator.Init();
 
             // Vehicles
             //Vehicles.Init();

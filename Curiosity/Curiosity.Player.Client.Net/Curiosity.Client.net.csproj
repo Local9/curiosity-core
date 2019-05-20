@@ -53,6 +53,7 @@
     <Compile Include="Classes\Environment\UI\Bank.cs" />
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
+    <Compile Include="Classes\Environment\UI\NuiEventHandler.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer3D.cs" />
     <Compile Include="Classes\Environment\WantedLevels.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Classes\Menus\CharacterEditor\Items\ExitButton.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\ModelSelector.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\SaveButton.cs" />
+    <Compile Include="Classes\Menus\NuiMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Submenus\CustomizeMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Submenus\CustomizeMenu\Items\ModelTextureSelector.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Submenus\CustomizeMenu\Items\MPBodyButton.cs" />
