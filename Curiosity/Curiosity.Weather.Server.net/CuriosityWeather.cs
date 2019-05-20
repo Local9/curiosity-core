@@ -99,11 +99,19 @@ namespace Curiosity.Server.Net
                 now = DateTime.Now;
                 timeNow = now.TimeOfDay;
 
-                double hourDouble = timeNow.TotalMinutes % 24;
+                //double hourDouble = timeNow.TotalMinutes % 24;
+                //double minuteDouble = (hourDouble % 1) * 60;
+
+                double hourDouble = (timeNow.TotalSeconds / 180) % 24; 
                 double minuteDouble = (hourDouble % 1) * 60;
 
                 hour = (int)hourDouble;
                 minute = (int)minuteDouble;
+
+                if (hour > 23)
+                {
+                    Console.WriteLine($"[ERROR] ServerTime -> Hour greater than 23 ({hour})", ConsoleColor.Red);
+                }
 
                 TriggerClientEvent("curiosity:Client:Time:Sync", hour, minute);
             }

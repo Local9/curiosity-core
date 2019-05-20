@@ -29,8 +29,8 @@ namespace Curiosity.Client.net.Classes.Environment
             PeriodicCheck();
 
             // Creates intriguing colored map area in the middle of the ocean.
-            Blip blip = World.CreateBlip(Center, Radius);
-            blip.Color = BlipColor.Red;
+            // Blip blip = World.CreateBlip(Center, Radius);
+            // blip.Color = BlipColor.Red;
         }
 
         static private async void PeriodicCheck()
