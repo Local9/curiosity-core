@@ -127,8 +127,7 @@ namespace Curiosity.Server.Net
             {
                 player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
 
-                if (!isLive)
-                    Debug.WriteLine($"WEATHER SYNC -> {weatherData}");
+                Debug.WriteLine($"WEATHER SYNC -> {weatherData}");
             }
             player.TriggerEvent("curiosity:Client:Time:Sync", hour, minute);
             await Delay(0);
@@ -160,8 +159,7 @@ namespace Curiosity.Server.Net
 
             TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
 
-            if (!isLive)
-                Debug.WriteLine($"WEATHER CHANGE -> {weatherData}");
+            Debug.WriteLine($"WEATHER CHANGE -> {weatherData}");
         }
 
         async Task ChangeWeather()
