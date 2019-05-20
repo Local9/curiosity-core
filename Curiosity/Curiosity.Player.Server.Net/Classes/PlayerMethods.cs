@@ -68,7 +68,6 @@ namespace Curiosity.Server.net.Classes
                 Entity.User user = await Business.BusinessUser.GetUserAsync(license);
                 await BaseScript.Delay(0);
                 player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, user.RoleId, user.Role, user.PosX, user.PosY, user.PosZ);
-                Log.Info($"User Created: curiosity:Client:Player:Setup");
                 await BaseScript.Delay(0);
 
                 Session session = new Session(player);
