@@ -39,7 +39,14 @@ namespace Curiosity.Tools.Client.net
         {
             PlayerInformationModel playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
             Privilege privilege = (Privilege)playerInfo.RoleId;
-            IsDeveloper = (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+            bool serverIsDeveloper = (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+
+            if (serverIsDeveloper && !IsDeveloper)
+            {
+                CitizenFX.Core.UI.Screen.ShowNotification("~r~DEV TOOLS: ~g~Activated");
+            }
+
+            IsDeveloper = serverIsDeveloper;
         }
 
         private void OnSpawn() {

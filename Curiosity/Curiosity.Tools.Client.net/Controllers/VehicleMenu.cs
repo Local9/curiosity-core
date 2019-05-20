@@ -33,14 +33,14 @@ namespace Curiosity.Tools.Client.net.Controllers
 			};
 			Add( invincible );
 
-			var invisible = new MenuItemCheckbox( client, this, "Invisible", IsInvisible ) {
-				IsChecked = () => IsInvisible
-			};
-			invisible.Activate += () => {
-				IsInvisible = !IsInvisible;
-				return Task.FromResult( 0 );
-			};
-			Add( invisible );
+			//var invisible = new MenuItemCheckbox( client, this, "Invisible", IsInvisible ) {
+			//	IsChecked = () => IsInvisible
+			//};
+			//invisible.Activate += () => {
+			//	IsInvisible = !IsInvisible;
+			//	return Task.FromResult( 0 );
+			//};
+			//Add( invisible );
 
 			var vehicleColors = new List<VehicleColor>();
 			foreach( VehicleColor color in Enum.GetValues( typeof( VehicleColor ) ) ) {
@@ -163,7 +163,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 				}
 
 				Game.PlayerPed.CurrentVehicle.IsInvincible = IsInvincible;
-				Game.PlayerPed.CurrentVehicle.Opacity = IsInvisible ? 0 : 255;
+				// Game.PlayerPed.CurrentVehicle.Opacity = IsInvisible ? 0 : 255;
 
 				if( IsInvincible ) {
 					Game.PlayerPed.CurrentVehicle.Repair();
