@@ -35,7 +35,7 @@ namespace Curiosity.Server.net.Classes
 
         async static Task UpdateSkillsDictionary()
         {
-            while (skills.Count == 0)
+            while (true)
             {
                 while (Server.serverId == 0)
                 {
@@ -48,7 +48,7 @@ namespace Curiosity.Server.net.Classes
                 {
                     Log.Success($"{skills.Count} SKILLS CONFIGURED");
                 }
-                await BaseScript.Delay(10000);
+                await BaseScript.Delay(300000);
             }
         }
 
@@ -56,16 +56,15 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                long characterId = 0;
-                
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle))
                 {
                     Log.Error($"IncreaseSkill: Player session missing.");
                     return;
                 }
 
-                characterId = SessionManager.PlayerList[player.Handle].User.CharacterId;
-                int userId = SessionManager.PlayerList[player.Handle].UserID;
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                int characterId = session.User.CharacterId;
 
                 if (!(characterId > 0))
                 {
@@ -79,8 +78,9 @@ namespace Curiosity.Server.net.Classes
                     Log.Error($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
                     return;
                 }
+
                 Database.DatabaseUsersSkills.IncreaseSkill(characterId, skills[skill], experience);
-                UpdateLifeExperience(userId, experience, false);
+                UpdateLifeExperience(session, experience, false);
             }
             catch (Exception ex)
             {
@@ -92,16 +92,15 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                long characterId = 0;
-
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle))
                 {
                     Log.Error($"DecreaseSkill: Player session missing.");
                     return;
                 }
 
-                characterId = SessionManager.PlayerList[player.Handle].User.CharacterId;
-                int userId = SessionManager.PlayerList[player.Handle].UserID;
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                int characterId = session.User.CharacterId;
 
                 if (!(characterId > 0))
                 {
@@ -116,7 +115,7 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
                 Database.DatabaseUsersSkills.DecreaseSkill(characterId, skills[skill], experience);
-                UpdateLifeExperience(userId, experience, false);
+                UpdateLifeExperience(session, experience, false);
             }
             catch (Exception ex)
             {
@@ -124,21 +123,20 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static void UpdateLifeExperience(long userId, int experience, bool removeXp)
+        static void UpdateLifeExperience(Session session, int experience, bool removeXp)
         {
             string eventToTrigger;
             if (removeXp)
             {
-                Database.DatabaseUsers.DecreaseLiveExperience(userId, experience);
+                Database.DatabaseUsers.DecreaseLiveExperience(session.User.UserId, experience);
                 eventToTrigger = "curiosity:Client:Rank:RemovePlayerXP";
             }
             else
             {
-                Database.DatabaseUsers.IncreaseLiveExperience(userId, experience);
+                Database.DatabaseUsers.IncreaseLiveExperience(session.User.UserId, experience);
                 eventToTrigger = "curiosity:Client:Rank:AddPlayerXP";
             }
-            Player player = SessionManager.GetPlayer(userId);
-            player.TriggerEvent(eventToTrigger, experience);
+            session.Player.TriggerEvent(eventToTrigger, experience);
         }
     }
 }
