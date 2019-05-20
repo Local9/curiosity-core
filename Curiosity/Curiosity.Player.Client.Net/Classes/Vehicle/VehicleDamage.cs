@@ -44,6 +44,30 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     currentVehicleBodyHealth = vehicle.BodyHealth;
                     currentVehicleEngineHealth = vehicle.EngineHealth;
 
+                    if (vehicle.EngineHealth < 300f)
+                    {
+                        vehicle.EngineTorqueMultiplier = -5f;
+                        vehicle.EnginePowerMultiplier = -5f;
+                    }
+
+                    if (vehicle.EngineHealth < 200f)
+                    {
+                        vehicle.EngineTorqueMultiplier = -10f;
+                        vehicle.EnginePowerMultiplier = -10f;
+                    }
+
+                    if (vehicle.EngineHealth < 100f)
+                    {
+                        vehicle.EngineTorqueMultiplier = -15f;
+                        vehicle.EnginePowerMultiplier = -15f;
+                    }
+
+                    if (vehicle.EngineHealth < 25f)
+                    {
+                        vehicle.EngineTorqueMultiplier = -20f;
+                        vehicle.EnginePowerMultiplier = -20f;
+                    }
+
                     float vehicleBodyDamageTaken = Math.Max(0.0f, oldVehicleBodyHealth - currentVehicleBodyHealth);
                     if (isMotorBike)
                     {
@@ -77,7 +101,12 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     if (vehicleBodyDamageTaken > 10.875f || vehicleEngineDamageTaken > 10.5f)
                     {
                         float higherDamage = vehicleBodyDamageTaken > vehicleEngineDamageTaken ? vehicleBodyDamageTaken : vehicleEngineDamageTaken;
-                        Game.PlayerPed.Health = (int)Math.Floor(Math.Max(110, Game.PlayerPed.Health - 0.1f * higherDamage));
+                        int newHealth = (int)Math.Floor(Math.Max(110, Game.PlayerPed.Health - 0.1f * higherDamage));
+
+                        if (newHealth < Game.PlayerPed.Health)
+                        {
+                            Game.PlayerPed.Health = newHealth;
+                        }
                     }
                     if ((vehicleBodyDamageTaken >= 100.0f || currentVehicleEngineHealth < 75f) && rand.NextBool(10) && vehicleBodyDamageTaken >= 10f)
                     {
