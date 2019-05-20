@@ -59,6 +59,8 @@ namespace Curiosity.Client.net
             SkillsMenu.Init();
             CharacterMenuTest.Init();
             InteractionListMenu.Init();
+            NuiMenu.Init();
+            NuiEventHandler.Init();
 
             // Environment
             //Poi.Init();

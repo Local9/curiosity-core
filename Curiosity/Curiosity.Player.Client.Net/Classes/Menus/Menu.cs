@@ -46,7 +46,7 @@ namespace Curiosity.Client.net.Classes.Menus
         public PointF ItemPadding = new PointF(3, 3);
         public PointF HeaderPadding = new PointF(10, 10);
         public PointF Origin = new PointF(20, 20);
-        public Color HeaderBackgroundColor = Color.FromArgb(220, 160, 1, 33);
+        public Color HeaderBackgroundColor = Color.FromArgb(220, 51, 153, 204);
         public Color ItemBackgroundColor = Color.FromArgb(180, 0, 0, 0);
         public Color ItemSelectedBackgroundColor = Color.FromArgb(200, 220, 220, 220);
         public Color ItemTextColor = Color.FromArgb(255, 255, 255, 255);
@@ -400,7 +400,7 @@ namespace Curiosity.Client.net.Classes.Menus
             menuDescription.Draw();
         }
 
-        public bool MouseEnabled = true;
+        public bool MouseEnabled = false;
         void CursorSelectCheck()
         {
             PointF point = UIHelpers.MousePosition();

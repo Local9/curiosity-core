@@ -180,6 +180,7 @@ namespace Curiosity.Client.net
                 }
             }
 
+            API.SetNuiFocus(false, false);
             API.ClearDrawOrigin();
 
             if (Screen.LoadingPrompt.IsActive)
