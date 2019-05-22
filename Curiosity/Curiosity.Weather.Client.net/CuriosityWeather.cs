@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Client.Net
 {
@@ -11,6 +12,19 @@ namespace Curiosity.Client.Net
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["curiosity:Client:Weather:Sync"] += new Action<string, bool, float>(WeatherSync);
             EventHandlers["curiosity:Client:Time:Sync"] += new Action<int, int>(TimeSync);
+
+            Tick += WeatherChecker;
+        }
+
+        async Task WeatherChecker()
+        {
+            while (true)
+            {
+                bool trails = World.Weather == Weather.Christmas;
+                API.SetForceVehicleTrails(trails);
+                API.SetForcePedFootstepsTracks(trails);
+                await Delay(0);
+            }
         }
 
         async void OnResourceStart(string resourceName)
