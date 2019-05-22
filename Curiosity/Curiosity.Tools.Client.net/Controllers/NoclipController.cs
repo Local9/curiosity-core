@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Tools.Client.net.Helpers;
 
 namespace Curiosity.Tools.Client.net.Controllers
@@ -127,7 +128,9 @@ namespace Curiosity.Tools.Client.net.Controllers
 					Game.DisableControlThisFrame( 2, ctrl );
 				}
 
-				Game.PlayerPed.Heading = Math.Max( 0f, (360 + CurrentCamera.Rotation.Z) % 360f );
+                Screen.ShowSubtitle($"Position: {Game.PlayerPed.Position}");
+
+                Game.PlayerPed.Heading = Math.Max( 0f, (360 + CurrentCamera.Rotation.Z) % 360f );
 				Game.PlayerPed.Opacity = 0;
 				API.DisablePlayerFiring( Game.Player.Handle, false );
 			}
