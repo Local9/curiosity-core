@@ -49,13 +49,13 @@ namespace Curiosity.Server.net.Classes
 
         public static void UpdateUser(string netId, Entity.User user)
         {
-            PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(netId)).First().User = user;
+            PlayerList.Select(x => x.Value).Where(x => x.NetId.Equals(netId)).First().User = user;
         }
 
-        //public static bool SessionActive(string netId)
-        //{
-        //    return PlayerList.ContainsKey(netId);
-        //}
+        public static bool SessionExists(string playerHandle)
+        {
+            return PlayerList.ContainsKey(playerHandle);
+        }
 
         //public static Session GetSession(string netId)
         //{

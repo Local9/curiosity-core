@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,12 +25,9 @@ namespace Curiosity.Client.net.Classes.Menus
                     Description = "Character Inventory",
                     OnActivate = new Action<MenuItemStandard>(async (events) =>
                     {
-                        await BaseScript.Delay(1000);
-
-                        API.SendNuiMessage($@"{{ ""panel"" : ""inventory""}}");
-                        API.SetNuiFocus(true, true);
-
-                        Observer.CloseMenu(true);
+                        await BaseScript.Delay(100);
+                        BaseScript.TriggerServerEvent("curiosity:Server:Inventory:GetItems");
+                        // Observer.CloseMenu(true);
                     })
                 };
 

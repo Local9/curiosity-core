@@ -59,26 +59,27 @@ namespace Curiosity.Server.Net
 
         void SetupWeathers()
         {
-            weathers.Add("EXTRASUNNY", new List<string> { "CLEAR", "SMOG" });
-            weathers.Add("SMOG", new List<string> { "FOGGY", "CLEAR", "CLEARING", "OVERCAST", "CLOUDS", "EXTRASUNNY" });
-            weathers.Add("CLEAR", new List<string> { "CLOUDS", "EXTRASUNNY", "CLEARING", "SMOG", "FOGGY", "OVERCAST" });
-            weathers.Add("CLOUDS", new List<string> { "CLEAR", "SMOG", "FOGGY", "CLEARING", "OVERCAST" });
-            weathers.Add("FOGGY", new List<string> { "CLEAR", "CLOUDS", "SMOG", "OVERCAST" });
-            weathers.Add("OVERCAST", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
-            weathers.Add("RAIN", new List<string> { "THUNDER", "CLEARING", "OVERCAST" });
-            weathers.Add("THUNDER", new List<string> { "RAIN", "CLEARING" });
-            weathers.Add("CLEARING", new List<string> { "CLEAR", "CLOUDS", "OVERCAST", "FOGGY", "SMOG" });
-
             if (isChristmas)
             {
                 weathers.Add("SNOW", new List<string> { "BLIZZARD", "RAIN", "SNOWLIGHT" });
                 weathers.Add("BLIZZARD", new List<string> { "SNOW", "SNOWLIGHT", "THUNDER" });
                 weathers.Add("SNOWLIGHT", new List<string> { "SNOW", "RAIN", "CLEARING" });
             }
-
-            if (isHalloween)
+            else if (isHalloween)
             {
                 weathers.Add("HALLOWEEN", new List<string> { "CLOUDS", "RAIN", "CLEARING", "CLEAR" });
+            }
+            else
+            {
+                weathers.Add("EXTRASUNNY", new List<string> { "CLEAR", "SMOG" });
+                weathers.Add("SMOG", new List<string> { "FOGGY", "CLEAR", "CLEARING", "OVERCAST", "CLOUDS", "EXTRASUNNY" });
+                weathers.Add("CLEAR", new List<string> { "CLOUDS", "EXTRASUNNY", "CLEARING", "SMOG", "FOGGY", "OVERCAST" });
+                weathers.Add("CLOUDS", new List<string> { "CLEAR", "SMOG", "FOGGY", "CLEARING", "OVERCAST" });
+                weathers.Add("FOGGY", new List<string> { "CLEAR", "CLOUDS", "SMOG", "OVERCAST" });
+                weathers.Add("OVERCAST", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
+                weathers.Add("RAIN", new List<string> { "THUNDER", "CLEARING", "OVERCAST" });
+                weathers.Add("THUNDER", new List<string> { "RAIN", "CLEARING" });
+                weathers.Add("CLEARING", new List<string> { "CLEAR", "CLOUDS", "OVERCAST", "FOGGY", "SMOG" });
             }
         }
 

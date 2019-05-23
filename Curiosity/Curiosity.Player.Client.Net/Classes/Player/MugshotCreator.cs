@@ -62,6 +62,8 @@ namespace Curiosity.Client.net.Classes.Player
         {
             int player = Game.PlayerPed.Handle;
 
+            Game.PlayerPed.Position = new Vector3(405.81110f, -995.05540f, -99.49297f);
+
             API.RequestAnimDict(maleAnimation);
             while (!API.HasAnimDictLoaded(maleAnimation))
             {

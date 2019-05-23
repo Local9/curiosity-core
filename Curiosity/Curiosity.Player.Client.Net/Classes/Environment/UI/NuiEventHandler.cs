@@ -18,6 +18,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static void ClosePanel(dynamic obj)
         {
             SetNuiFocus(false, false);
+            SetTransitionTimecycleModifier("DEFAULT", 5.0f);
         }
     }
 }

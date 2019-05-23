@@ -48,6 +48,7 @@ namespace Curiosity.Server.net
             Database.DatabaseUsers.Init();
             Database.DatabaseUsersBank.Init();
             Database.DatabaseUsersSkills.Init();
+            Database.DatabaseCharacterInventory.Init();
 
             // Session Manager
             Classes.SessionManager.Init();
@@ -57,6 +58,7 @@ namespace Curiosity.Server.net
             Classes.Bank.Init();
             Classes.PlayerMethods.Init();
             Classes.ServerSettings.Init();
+            Classes.Character.Init();
 
             RegisterTickHandler(GetServerId);
 
@@ -147,7 +149,7 @@ namespace Curiosity.Server.net
         {
             try
             {
-                Debug.WriteLine($"Added {action} Tick");
+                Debug.WriteLine($"Added {action.Method} Tick");
                 Tick += action;
             }
             catch (Exception ex)
