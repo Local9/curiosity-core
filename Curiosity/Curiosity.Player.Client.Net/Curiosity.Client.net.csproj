@@ -81,6 +81,7 @@
     <Compile Include="Classes\Menus\InteractionListMenu.cs" />
     <Compile Include="Classes\Menus\Menu.cs" />
     <Compile Include="Classes\Menus\SkillsMenu.cs" />
+    <Compile Include="Classes\Player\Inventory.cs" />
     <Compile Include="Classes\Player\MugshotCreator.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="Classes\Player\PedDamage.cs" />
@@ -109,6 +110,10 @@
     <Compile Include="Classes\Environment\UI\UI.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">
+      <Project>{fe7f0756-cfe5-4bb9-a822-e9e1cfbc412b}</Project>
+      <Name>Curiosity.Global.Shared.net</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Curiosity.Shared.Client.net\Curiosity.Shared.Client.net.csproj">
       <Project>{37f1f478-be0b-4c2b-a062-24077f851b69}</Project>
       <Name>Curiosity.Shared.Client.net</Name>
