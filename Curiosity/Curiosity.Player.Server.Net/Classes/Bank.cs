@@ -7,20 +7,26 @@ namespace Curiosity.Server.net.Classes
     {
         public static void Init()
         {
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseCash", new Action<Player, int>(IncreaseCash));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseCash", new Action<Player, int>(DecreaseCash));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseBank", new Action<Player, int>(IncreaseBank));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseBank", new Action<Player, int>(DecreaseBank));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseCash", new Action<Player, int, int>(IncreaseCash));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseCash", new Action<Player, int, int>(DecreaseCash));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseBank", new Action<Player, int, int>(IncreaseBank));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseBank", new Action<Player, int, int>(DecreaseBank));
             Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:TransferMoney", new Action<Player, int, bool>(TransferMoney));
         }
 
-        static void IncreaseCash([FromSource]Player player, int amount)
+        static void IncreaseCash([FromSource]Player player, int wallet, int amount)
         {
             try
             {
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
+
+                if (session.Wallet != wallet)
+                {
+                    return;
+                }
+
                 Database.DatabaseUsersBank.IncreaseCash(session.User.CharacterId, amount);
                 session.IncreaseWallet(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
@@ -31,13 +37,19 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static void DecreaseCash([FromSource]Player player, int amount)
+        static void DecreaseCash([FromSource]Player player, int wallet, int amount)
         {
             try
             {
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
+
+                if (session.Wallet != wallet)
+                {
+                    return;
+                }
+
                 Database.DatabaseUsersBank.DecreaseCash(session.User.CharacterId, amount);
                 session.DecreaseWallet(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
@@ -48,13 +60,19 @@ namespace Curiosity.Server.net.Classes
             }
 }
 
-        static void IncreaseBank([FromSource]Player player, int amount)
+        static void IncreaseBank([FromSource]Player player, int bankAccount, int amount)
         {
             try
             {
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
+
+                if (session.BankAccount != bankAccount)
+                {
+                    return;
+                }
+
                 Database.DatabaseUsersBank.IncreaseBank(session.User.CharacterId, amount);
                 session.IncreaseBankAccount(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
@@ -65,13 +83,19 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static void DecreaseBank([FromSource]Player player, int amount)
+        static void DecreaseBank([FromSource]Player player, int bankAccount, int amount)
         {
             try
             {
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
+
+                if (session.BankAccount != bankAccount)
+                {
+                    return;
+                }
+
                 Database.DatabaseUsersBank.DecreaseBank(session.User.CharacterId, amount);
                 session.DecreaseBankAccount(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
@@ -86,15 +110,29 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
+                if (!SessionManager.SessionExists(player.Handle)) return;
+
+                Session session = SessionManager.PlayerList[player.Handle];
+
                 if (toWallet) // TODO: Improve the process
                 {
-                    DecreaseBank(player, amount);
-                    IncreaseCash(player, amount);
+                    if (amount > session.BankAccount)
+                    {
+                        return;
+                    }
+
+                    DecreaseBank(player, session.BankAccount, amount);
+                    IncreaseCash(player, session.Wallet, amount);
                 }
                 else
                 {
-                    IncreaseBank(player, amount);
-                    DecreaseCash(player, amount);
+                    if (amount > session.Wallet)
+                    {
+                        return;
+                    }
+
+                    IncreaseBank(player, session.BankAccount, amount);
+                    DecreaseCash(player, session.Wallet, amount);
                 }
 
             }

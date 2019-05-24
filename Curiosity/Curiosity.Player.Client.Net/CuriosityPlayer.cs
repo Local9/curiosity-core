@@ -109,6 +109,8 @@ namespace Curiosity.Client.net
 
         async void OnPlayerSetup(long userId, int roleId, string role, float x, float y, float z)
         {
+            Screen.LoadingPrompt.Show("Loading Player");
+
             Setup();
             await Delay(0);
 
@@ -117,7 +119,9 @@ namespace Curiosity.Client.net
 
             isLoading = !isLoading;
 
-            Screen.LoadingPrompt.Show("Loading Player");
+            await Delay(0);
+
+            await Delay(0);
 
             while (API.GetPlayerSwitchState() != 5)
             {
@@ -180,8 +184,12 @@ namespace Curiosity.Client.net
                 }
             }
 
+            await Delay(0);
+
             API.SetNuiFocus(false, false);
             API.ClearDrawOrigin();
+
+            await Delay(0);
 
             if (Screen.LoadingPrompt.IsActive)
             {

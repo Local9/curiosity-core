@@ -34,27 +34,42 @@ namespace Curiosity.Server.net.Classes
 
         public static string GetNetId(int userId)
         {
-            return PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(userId)).First().NetId;
+            lock (PlayerList)
+            {
+                return PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(userId)).First().NetId;
+            }
         }
 
         public static long GetUserId(string netId)
         {
-            return PlayerList.Select(x => x.Value).Where(x => x.NetId.Equals(netId)).First().UserID;
+            lock (PlayerList)
+            {
+                return PlayerList.Select(x => x.Value).Where(x => x.NetId.Equals(netId)).First().UserID;
+            }
         }
 
         public static Player GetPlayer(long userId)
         {
-            return PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(userId)).First().Player;
+            lock (PlayerList)
+            {
+                return PlayerList.Select(x => x.Value).Where(x => x.UserID.Equals(userId)).First().Player;
+            }
         }
 
         public static void UpdateUser(string netId, Entity.User user)
         {
-            PlayerList.Select(x => x.Value).Where(x => x.NetId.Equals(netId)).First().User = user;
+            lock (PlayerList)
+            {
+                PlayerList.Select(x => x.Value).Where(x => x.NetId.Equals(netId)).First().User = user;
+            }
         }
 
         public static bool SessionExists(string playerHandle)
         {
-            return PlayerList.ContainsKey(playerHandle);
+            lock (PlayerList)
+            {
+                return PlayerList.ContainsKey(playerHandle);
+            }
         }
 
         //public static Session GetSession(string netId)
