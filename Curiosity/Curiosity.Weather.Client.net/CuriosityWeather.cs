@@ -9,7 +9,7 @@ namespace Curiosity.Client.Net
     {
         public CuriosityWeather()
         {
-            EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
+            EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
             EventHandlers["curiosity:Client:Weather:Sync"] += new Action<string, bool, float>(WeatherSync);
             EventHandlers["curiosity:Client:Time:Sync"] += new Action<int, int>(TimeSync);
 
@@ -27,7 +27,7 @@ namespace Curiosity.Client.Net
             }
         }
 
-        async void OnResourceStart(string resourceName)
+        async void OnClientResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
             await Delay(0);
