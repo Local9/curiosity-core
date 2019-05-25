@@ -21,15 +21,22 @@ namespace Curiosity.Client.net.Classes.Menus
             {
                 var _menuItems = new List<MenuItem>();
 
-                if (Skills.playerSkills.Count == 0)
+                if (Skills.playerSkills == null)
                 {
                     _menuItems.Add(new MenuItemStandard { Title = $"Loading..." });
                 }
                 else
                 {
-                    foreach (KeyValuePair<string, int> v in Skills.playerSkills)
+                    if (Skills.playerSkills.Count == 0)
                     {
-                        _menuItems.Add(new MenuItemStandard { Title = $"{v.Key.ToTitleCase()}", Detail = $"{v.Value:#,#00}" });
+                        _menuItems.Add(new MenuItemStandard { Title = $"Loading..." });
+                    }
+                    else
+                    {
+                        foreach (KeyValuePair<string, int> v in Skills.playerSkills)
+                        {
+                            _menuItems.Add(new MenuItemStandard { Title = $"{v.Key.ToTitleCase()}", Detail = $"{v.Value:#,#00}" });
+                        }
                     }
                 }
 
