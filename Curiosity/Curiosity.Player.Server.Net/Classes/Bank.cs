@@ -27,7 +27,7 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
-                Database.DatabaseUsersBank.IncreaseCash(session.User.CharacterId, amount);
+                Database.DatabaseUsersBank.IncreaseCash(session.User.BankId, amount);
                 session.IncreaseWallet(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
             }
@@ -50,7 +50,7 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
-                Database.DatabaseUsersBank.DecreaseCash(session.User.CharacterId, amount);
+                Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, amount);
                 session.DecreaseWallet(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
             }
@@ -73,7 +73,7 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
-                Database.DatabaseUsersBank.IncreaseBank(session.User.CharacterId, amount);
+                Database.DatabaseUsersBank.IncreaseBank(session.User.BankId, amount);
                 session.IncreaseBankAccount(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
             }
@@ -96,7 +96,7 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
-                Database.DatabaseUsersBank.DecreaseBank(session.User.CharacterId, amount);
+                Database.DatabaseUsersBank.DecreaseBank(session.User.BankId, amount);
                 session.DecreaseBankAccount(amount);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
             }

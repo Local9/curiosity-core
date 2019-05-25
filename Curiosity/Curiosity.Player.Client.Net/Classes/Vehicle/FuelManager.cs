@@ -76,15 +76,27 @@ namespace Curiosity.Client.net.Classes.Vehicle
             InteractionListMenu.RegisterInteractionMenuItem(ToRefuelMenuItem, () => { return isNearFuelPump; }, 1150);
 
             PeriodicCheck();
+            UpdateSettings();
 
             Client.GetInstance().RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
-
+            Client.GetInstance().RegisterEventHandler("curiosity:Client:Settings:InstantRefuel", new Action<bool>(InstantRefuel));
         }
 
         private static Random random = new Random();
         private static double PlayerToVehicleRefuelRange = 5f;
         private static bool isNearFuelPump;
         private static int cooldown = 0;
+
+        private static bool IsInstantRefuelDisabled = false;
+
+        static async void UpdateSettings()
+        {
+            while (true)
+            {
+                Client.TriggerServerEvent("curiosity:Server:Settings:InstantRefuel");
+                await Client.Delay(60000);
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -229,8 +241,19 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         static async void ClientRefuel()
         {
-            Refuel(100);
+            if (IsInstantRefuelDisabled)
+            {
+                return;
+            }
+
+            Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
+
             await BaseScript.Delay(0);
+        }
+
+        static void InstantRefuel(bool IsInstantRefuelDisabledSetting)
+        {
+            IsInstantRefuelDisabled = IsInstantRefuelDisabledSetting;
         }
 
         ///// <summary>
