@@ -18,6 +18,8 @@ namespace Curiosity.Server.Net
         bool isHalloween = true;
         bool isLive = false;
 
+        static bool weatherSetup = false;
+
         DateTime now;
         TimeSpan timeNow;
         int hour = 0;
@@ -34,8 +36,12 @@ namespace Curiosity.Server.Net
             SetupWindWeather();
             SetupWeathers();
 
-            EventHandlers["curiosity:Server:Weather:Sync"] += new Action<Player>(SyncWeather);
-            EventHandlers["curiosity:Server:Time:Sync"] += new Action<Player>(SyncTime);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            SetupWeather();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            EventHandlers["curiosity:Server:Weather:Sync"] += new Action<Player>(ClientSyncWeather);
+            EventHandlers["curiosity:Server:Time:Sync"] += new Action<Player>(ClientSyncTime);
 
             Tick += ChangeWeather;
             Tick += ServerTime;
@@ -83,7 +89,7 @@ namespace Curiosity.Server.Net
             }
         }
 
-        async void SyncTime([FromSource]Player player)
+        async void ClientSyncTime([FromSource]Player player)
         {
             player.TriggerEvent("curiosity:Client:Time:Sync", hour, minute);
             await Delay(0);
@@ -118,19 +124,21 @@ namespace Curiosity.Server.Net
             }
         }
 
-        async void SyncWeather([FromSource]Player player)
+        async void ClientSyncWeather([FromSource]Player player)
         {
-            if (string.IsNullOrEmpty(weatherData.CurrentWeather))
+            if (!weatherSetup)
             {
                 await Delay(1000);
                 await SetupWeather();
+                player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
+                Debug.WriteLine($"{player.Name} - WEATHER SYNC -> {weatherData}");
             } else
             {
                 player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
 
-                Debug.WriteLine($"WEATHER SYNC -> {weatherData}");
+                Debug.WriteLine($"{player.Name} - WEATHER SYNC -> {weatherData}");
             }
-            player.TriggerEvent("curiosity:Client:Time:Sync", hour, minute);
+            ClientSyncTime(player);
             await Delay(0);
         }
 
@@ -161,6 +169,7 @@ namespace Curiosity.Server.Net
             TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
 
             Debug.WriteLine($"WEATHER CHANGE -> {weatherData}");
+            weatherSetup = true;
         }
 
         async Task ChangeWeather()

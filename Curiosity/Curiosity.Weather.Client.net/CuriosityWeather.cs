@@ -3,7 +3,7 @@ using CitizenFX.Core.Native;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Client.Net
+namespace Curiosity.Client.net
 {
     public class CuriosityWeather : BaseScript
     {
@@ -30,7 +30,7 @@ namespace Curiosity.Client.Net
         async void OnClientResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
-            await Delay(0);
+            await Delay(3000);
             TriggerServerEvent("curiosity:Server:Weather:Sync"); // Also syncs the time
         }
 
