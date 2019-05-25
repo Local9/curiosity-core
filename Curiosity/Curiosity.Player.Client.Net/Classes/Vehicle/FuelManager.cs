@@ -76,6 +76,9 @@ namespace Curiosity.Client.net.Classes.Vehicle
             InteractionListMenu.RegisterInteractionMenuItem(ToRefuelMenuItem, () => { return isNearFuelPump; }, 1150);
 
             PeriodicCheck();
+
+            Client.GetInstance().RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
+
         }
 
         private static Random random = new Random();
@@ -222,6 +225,12 @@ namespace Curiosity.Client.net.Classes.Vehicle
             {
                 //Log.Error($"FuelManager Refuel Error: {ex.Message}");
             }
+        }
+
+        static async void ClientRefuel()
+        {
+            Refuel(100);
+            await BaseScript.Delay(0);
         }
 
         ///// <summary>
