@@ -36,9 +36,12 @@ namespace Curiosity.Client.net.Classes.Menus
                         foreach (KeyValuePair<string, int> v in Skills.playerSkills)
                         {
                             _menuItems.Add(new MenuItemStandard { Title = $"{v.Key.ToTitleCase()}", Detail = $"{v.Value:#,#00}" });
+                            
                         }
                     }
                 }
+
+                _menuItems.Add(new MenuItemStandard { Title = $"Last Update", Detail = $"{Skills.LastUpdate.ToString("HH:mm")}" });
 
                 menuItems = _menuItems;
             }

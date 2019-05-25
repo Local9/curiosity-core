@@ -8,6 +8,7 @@ namespace Curiosity.Client.net.Classes.Player
     static class Skills
     {
         public static Dictionary<string, int> playerSkills = new Dictionary<string, int>();
+        public static DateTime LastUpdate;
 
         static public async void Init()
         {
@@ -25,6 +26,7 @@ namespace Curiosity.Client.net.Classes.Player
         {
             while (true)
             {
+                LastUpdate = DateTime.Now;
                 BaseScript.TriggerServerEvent("curiosity:Server:Skills:Get");
                 await BaseScript.Delay(60000);
             }
