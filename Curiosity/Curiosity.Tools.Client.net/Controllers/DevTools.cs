@@ -84,6 +84,8 @@ namespace Curiosity.Tools.Client.net.Controllers
 
             if ( _currentSpectate != null && _currentSpectate == player ) {
 
+                API.DoScreenFadeOut(200);
+
                 API.NetworkSetInSpectatorMode(false, playerPedId);
 
                 API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
@@ -98,9 +100,11 @@ namespace Curiosity.Tools.Client.net.Controllers
                 _originalPosition = Vector3.Zero;
                 _currentSpectate = null;
 
-				API.DoScreenFadeOut( 200 );
 				await BaseScript.Delay( 50 );
-				return;
+
+                API.DoScreenFadeIn(200);
+
+                return;
 			}
 
             API.ClearPlayerWantedLevel(Game.Player.Handle);

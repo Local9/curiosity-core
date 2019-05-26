@@ -16,7 +16,7 @@ namespace Curiosity.Client.net
         public CuriosityPlayer()
         {
             EventHandlers["onClientResourceStart"] += new Action<string>(OnResourceStart);
-            EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
+            EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
 
             EventHandlers["curiosity:Client:Player:Setup"] += new Action<long, int, string, float, float, float>(OnPlayerSetup);
             EventHandlers["curiosity:Client:Player:Role"] += new Action<string>(UpdatePlayerRole);
@@ -99,7 +99,7 @@ namespace Curiosity.Client.net
             await Delay(0);
         }
 
-        async void OnResourceStop(string resourceName)
+        async void OnClientResourceStop(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
