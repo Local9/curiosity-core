@@ -79,6 +79,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
             UpdateSettings();
 
             Client.GetInstance().RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
+            Client.GetInstance().RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
             Client.GetInstance().RegisterEventHandler("curiosity:Client:Settings:InstantRefuel", new Action<bool>(InstantRefuel));
         }
 
@@ -248,6 +249,12 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
             Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
 
+            await BaseScript.Delay(0);
+        }
+
+        static async void GetCurrentFuelLevel()
+        {
+            BaseScript.TriggerEvent("curiosity:Client:Vehicle:CurrentFuel", vehicleFuel);
             await BaseScript.Delay(0);
         }
 
