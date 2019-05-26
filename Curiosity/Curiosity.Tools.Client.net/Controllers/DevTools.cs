@@ -19,6 +19,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 
 		private Player _currentSpectate = null;
 		private Vector3 _lastSpectatePos = Vector3.Zero;
+        private Vector3 _originalPosition = Vector3.Zero;
 
 		public DevTools( Client client ) : base( client ) {
 			var menu = new Menu( "Mooshe's DevTools" );
@@ -78,28 +79,53 @@ namespace Curiosity.Tools.Client.net.Controllers
 		public async Task Spectate( Player player ) {
 			API.DoScreenFadeOut( 200 );
 			await BaseScript.Delay( 200 );
-			if( _currentSpectate != null && _currentSpectate == player ) {
-				Function.Call( Hash.NETWORK_SET_IN_SPECTATOR_MODE, false, player.Character );
-				Game.PlayerPed.Detach();
-				Game.PlayerPed.PositionNoOffset = _lastSpectatePos;
 
-				_lastSpectatePos = Vector3.Zero;
-				_currentSpectate = null;
+            int playerPedId = API.GetPlayerPed(player.Handle);
+
+            if ( _currentSpectate != null && _currentSpectate == player ) {
+
+                API.NetworkSetInSpectatorMode(false, playerPedId);
+
+                API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
+                API.SetEntityCollision(Game.PlayerPed.Handle, true, true);
+                Game.Player.IsInvincible = false;
+                Game.PlayerPed.IsVisible = true;
+
+                Game.PlayerPed.Detach();
+                Game.PlayerPed.Position = _originalPosition;
+
+                _lastSpectatePos = Vector3.Zero;
+                _originalPosition = Vector3.Zero;
+                _currentSpectate = null;
 
 				API.DoScreenFadeOut( 200 );
 				await BaseScript.Delay( 50 );
 				return;
 			}
-			Function.Call( Hash.NETWORK_SET_IN_SPECTATOR_MODE, false, player.Character );
 
-			_currentSpectate = player;
+            API.ClearPlayerWantedLevel(Game.Player.Handle);
+
+            if (_originalPosition == Vector3.Zero)
+                _originalPosition = Game.PlayerPed.Position;
+
+            _currentSpectate = player;
+
 			if( _lastSpectatePos == Vector3.Zero )
 				_lastSpectatePos = Game.PlayerPed.Position;
 
-			Game.PlayerPed.Position = player.Character.Position + new Vector3( 0f, 0f, -5f );
-			Game.PlayerPed.AttachTo( player.Character, new Vector3( 0f, 0f, -5f ), Vector3.Zero );
+            API.SetEntityCoords(Game.PlayerPed.Handle, 0f, 0f, 0f, false, false, false, true);
 
-			API.DoScreenFadeIn( 200 );
+            API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
+            API.SetEntityCollision(Game.PlayerPed.Handle, false, true);
+            Game.Player.IsInvincible = true;
+            Game.PlayerPed.IsVisible = false;
+
+            Vector3 entityCords = API.GetEntityCoords(playerPedId, true);
+
+            API.RequestCollisionAtCoord(entityCords.X, entityCords.Y, entityCords.Z);
+            API.NetworkSetInSpectatorMode(true, playerPedId);
+
+            API.DoScreenFadeIn( 200 );
 			await BaseScript.Delay( 50 );
 		}
 

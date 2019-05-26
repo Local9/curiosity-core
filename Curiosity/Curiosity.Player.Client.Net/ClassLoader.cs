@@ -20,6 +20,7 @@ using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Classes.Menus;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Classes.Vehicle;
+using Curiosity.Client.net.Classes.Actions.Emotes;
 using Curiosity.Shared.Client.net;
 using CitizenFX.Core.Native;
 
@@ -40,7 +41,7 @@ namespace Curiosity.Client.net
             // Emotes
             //EmotesManager.Init();
             //HandsUp.Init();
-            //Pointing.Init();
+            Pointing.Init();
 
             // UI
             //ControlCodeTester.Init();
