@@ -158,6 +158,11 @@ namespace Curiosity.Client.net
 
             float left = (Screen.Width / 2) / 3f;
 
+            if (Screen.Resolution.Width > 1980)
+            {
+                left = 1f;
+            }
+
             text = new Text($"ROLE: {role}\nNAME: {Game.Player.Name}\nPLAYERID: {userId}", new System.Drawing.PointF { X = left, Y = Screen.Height - 50 }, 0.3f, System.Drawing.Color.FromArgb(75, 255, 255, 255), Font.ChaletComprimeCologne, Alignment.Left, false, true);
             text.WrapWidth = 300;
 

@@ -39,7 +39,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     if (VehicleClass.Motorcycles == vehicle.ClassType)
                     {
                         position.Y = -1.1f;
-                        position.X = -0.8f;
+                        position.X = -0.9f;
                     }
 
                     int handle = vehicle.Handle;

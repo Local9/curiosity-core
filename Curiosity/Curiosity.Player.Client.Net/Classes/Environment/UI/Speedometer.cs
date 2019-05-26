@@ -31,6 +31,11 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
                     Vector2 position = new Vector2(0.167f, 0.915f);
 
+                    if (Screen.Resolution.Width > 1980)
+                    {
+                        position = new Vector2(0.001f, 0.915f);
+                    }
+
                     string speedometerText = $"SPEED: {2.24 * Game.PlayerPed.CurrentVehicle.Speed:0} mph / {3.60 * Game.PlayerPed.CurrentVehicle.Speed:0} kph";
                     UI.DrawText(speedometerText, position, color, 0.3f, Font.ChaletComprimeCologne);
                     //if (CruiseControl.CruiseControlActive && !CruiseControl.CruiseControlDisabled)
@@ -42,6 +47,12 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     if (FuelManager.vehicleFuel >= 0f && !Game.PlayerPed.CurrentVehicle.Model.IsBicycle && !Game.PlayerPed.CurrentVehicle.Model.IsTrain && !Game.PlayerPed.CurrentVehicle.Model.IsBoat)
                     {
                         position = new Vector2(0.167f, 0.899f);
+
+                        if (Screen.Resolution.Width > 1980)
+                        {
+                            position = new Vector2(0.001f, 0.899f);
+                        }
+
                         UI.DrawText($"FUEL: {FuelManager.vehicleFuel:0.0}%", position, color, 0.3f, Font.ChaletComprimeCologne);
                     }
                 }
