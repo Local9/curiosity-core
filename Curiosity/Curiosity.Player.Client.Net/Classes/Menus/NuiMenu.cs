@@ -12,6 +12,7 @@ namespace Curiosity.Client.net.Classes.Menus
         public static List<Tuple<int, MenuItem, Func<bool>>> ItemsAll = new List<Tuple<int, MenuItem, Func<bool>>>();
         internal static List<MenuItem> ItemsFiltered = new List<MenuItem>();
         public static bool IsDirty = false;
+        static bool IsInventoryDisabled = false;
 
         class NuiMenuOptions : MenuModel
         {
@@ -19,19 +20,22 @@ namespace Curiosity.Client.net.Classes.Menus
             {
                 var _menuItems = new List<MenuItem>();
 
-                MenuItem inventoryPanel = new MenuItemStandard
+                if (!IsInventoryDisabled)
                 {
-                    Title = "Inventory",
-                    Description = "Character Inventory",
-                    OnActivate = new Action<MenuItemStandard>(async (events) =>
+                    MenuItem inventoryPanel = new MenuItemStandard
                     {
-                        await BaseScript.Delay(100);
-                        BaseScript.TriggerServerEvent("curiosity:Server:Inventory:GetItems");
-                        // Observer.CloseMenu(true);
-                    })
-                };
+                        Title = "Inventory",
+                        Description = "Character Inventory",
+                        OnActivate = new Action<MenuItemStandard>(async (events) =>
+                        {
+                            await BaseScript.Delay(100);
+                            BaseScript.TriggerServerEvent("curiosity:Server:Inventory:GetItems");
+                            // Observer.CloseMenu(true);
+                        })
+                    };
 
-                _menuItems.Add(inventoryPanel);
+                    _menuItems.Add(inventoryPanel);
+                }
 
                 _menuItems.Add(new MenuItemStandard { Title = "Team Management", Description = "Work in Progress" });
                 _menuItems.Add(new MenuItemStandard { Title = "Clan Management", Description = "Work in Progress" });
@@ -55,6 +59,9 @@ namespace Curiosity.Client.net.Classes.Menus
                     Title = $"Panels",
                     SubMenu = NuiMenuModel
                 }, () => true);
+
+                Client.GetInstance().RegisterEventHandler("curiosity:Client:Settings:Inventory", new Action<bool>(InventorySettings));
+                PeriodicCheck();
             }
             catch (Exception ex)
             {
@@ -63,6 +70,22 @@ namespace Curiosity.Client.net.Classes.Menus
                     Debug.WriteLine($"{ex.InnerException}");
 
             }
+        }
+
+        static async void PeriodicCheck()
+        {
+            await BaseScript.Delay(3000);
+            BaseScript.TriggerServerEvent("curiosity:Server:Settings:Inventory");
+            while (true)
+            {
+                await BaseScript.Delay(60000);
+                BaseScript.TriggerServerEvent("curiosity:Server:Settings:Inventory");
+            }
+        }
+
+        static void InventorySettings(bool setting)
+        {
+            IsInventoryDisabled = setting;
         }
     }
 }

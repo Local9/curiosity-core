@@ -49,7 +49,7 @@ namespace Curiosity.Client.net
             CinematicMode.Init();
             HideReticle.Init();
             Location.Init();
-            //PlayerOverheadMarkers.Init();
+            PlayerOverheadMarkers.Init();
             //PlayerOverheadText.Init(); // Not needed an longer; may be removed in later patch by me
             Speedometer.Init();
             Speedometer3D.Init();
@@ -68,10 +68,10 @@ namespace Curiosity.Client.net
             //ManipulateObject.Init();
             //NoClip.Init();
             //InstancingChecker.Init(); // Hard to test
-            //MarkerHandler.Init();
+            MarkerHandler.Init();
             //Pvp.Init();
             //WarpPoints.Init();
-            //Voip.Init();
+            Voip.Init();
             AquaticSpawner.Init();
             //EmergencyServices.Init();
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Curiosity.Client.net.Enums
+namespace Curiosity.Shared.Client.net.Enums
 {
     [Flags]
     public enum BlipCategory

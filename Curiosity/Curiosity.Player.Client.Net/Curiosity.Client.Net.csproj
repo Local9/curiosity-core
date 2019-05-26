@@ -49,13 +49,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Environment\AquaticSpawner.cs" />
+    <Compile Include="Classes\Environment\BlipHandler.cs" />
     <Compile Include="Classes\Environment\DevCommands.cs" />
+    <Compile Include="Classes\Environment\MarkerHandler.cs" />
     <Compile Include="Classes\Environment\UI\Bank.cs" />
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\NuiEventHandler.cs" />
+    <Compile Include="Classes\Environment\UI\PlayerOverheadMarkers.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer3D.cs" />
+    <Compile Include="Classes\Environment\VoipRange.cs" />
     <Compile Include="Classes\Environment\WantedLevels.cs" />
     <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\CharacterEditorMenu.cs" />
