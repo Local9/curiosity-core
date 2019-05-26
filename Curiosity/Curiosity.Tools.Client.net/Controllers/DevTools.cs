@@ -18,7 +18,6 @@ namespace Curiosity.Tools.Client.net.Controllers
 		private readonly List<KeyCodeEvent> _keyEvents = new List<KeyCodeEvent>();
 
 		private Player _currentSpectate = null;
-		private Vector3 _lastSpectatePos = Vector3.Zero;
         private Vector3 _originalPosition = Vector3.Zero;
 
 		public DevTools( Client client ) : base( client ) {
@@ -58,12 +57,27 @@ namespace Curiosity.Tools.Client.net.Controllers
 
 			Client.RegisterTickHandler( OnKeyCodeTick );
 			Client.RegisterTickHandler( OnKeyCodeRender );
+            Client.RegisterTickHandler( OnIsSpectating );
 
-			Client.RegisterEventHandler( "UI.ShowNotification", new Action<string>( OnNotification ) );
+            Client.RegisterEventHandler( "UI.ShowNotification", new Action<string>( OnNotification ) );
 			Client.RegisterEventHandler("curiosity:Tools:Player:Bring", new Action<int, float, float, float>( OnPlayerBring ) );
 		}
 
-		private void OnPlayerBring( int serverId, float x, float y, float z ) {
+        private async Task OnIsSpectating()
+        {
+            while (true)
+            {
+                if (_currentSpectate != null)
+                {
+                    Vector3 position = API.GetEntityCoords(_currentSpectate.Handle, true);
+                    Game.PlayerPed.Position = new Vector3(position.X, position.Y, -10);
+                }
+                await Client.Delay(0);
+            }
+        }
+
+
+        private void OnPlayerBring( int serverId, float x, float y, float z ) {
 			try {
 				var target = new PlayerList().FirstOrDefault( p => p.ServerId == serverId );
 				if( target != null ) {
@@ -84,8 +98,6 @@ namespace Curiosity.Tools.Client.net.Controllers
 
             if ( _currentSpectate != null && _currentSpectate == player ) {
 
-                API.DoScreenFadeOut(200);
-
                 API.NetworkSetInSpectatorMode(false, playerPedId);
 
                 API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
@@ -95,8 +107,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 
                 Game.PlayerPed.Detach();
                 Game.PlayerPed.Position = _originalPosition;
-
-                _lastSpectatePos = Vector3.Zero;
+                
                 _originalPosition = Vector3.Zero;
                 _currentSpectate = null;
 
@@ -113,9 +124,6 @@ namespace Curiosity.Tools.Client.net.Controllers
                 _originalPosition = Game.PlayerPed.Position;
 
             _currentSpectate = player;
-
-			if( _lastSpectatePos == Vector3.Zero )
-				_lastSpectatePos = Game.PlayerPed.Position;
 
             API.SetEntityCoords(Game.PlayerPed.Handle, 0f, 0f, 0f, false, false, false, true);
 
