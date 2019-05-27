@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Actions\Emotes\EmotesManager.cs" />
     <Compile Include="Classes\Actions\Emotes\Pointing.cs" />
     <Compile Include="Classes\Environment\AquaticSpawner.cs" />
     <Compile Include="Classes\Environment\BlipHandler.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Classes\Environment\UI\VideoLoader.cs" />
     <Compile Include="Classes\Environment\VoipRange.cs" />
     <Compile Include="Classes\Environment\WantedLevels.cs" />
+    <Compile Include="Classes\Environment\WarpPoints.cs" />
     <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\CharacterEditorMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\CustomizeButton.cs" />
