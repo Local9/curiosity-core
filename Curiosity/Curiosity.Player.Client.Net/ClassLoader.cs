@@ -76,6 +76,7 @@ namespace Curiosity.Client.net
             //WarpPoints.Init();
             Voip.Init();
             AquaticSpawner.Init();
+            VideoLoader.Init();
             //EmergencyServices.Init();
 
             // EMS
