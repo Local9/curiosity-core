@@ -59,9 +59,17 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
             API.SetMpGamerTagName(gamerTagId, player.Name);
 
-            if (API.HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17))
+            if (CinematicMode.DoHideHud)
+            {
+                API.SetMpGamerTagVisibility(gamerTagId, 0, false);
+            }
+            else if (API.HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17))
             {
                 API.SetMpGamerTagVisibility(gamerTagId, 0, true);
+            }
+            else
+            {
+                API.SetMpGamerTagVisibility(gamerTagId, 0, false);
             }
 
             await Task.FromResult(0);
