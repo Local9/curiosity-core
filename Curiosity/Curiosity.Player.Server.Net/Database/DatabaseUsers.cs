@@ -24,7 +24,7 @@ namespace Curiosity.Server.net.Database
                 Entity.User user = new Entity.User();
                 user.BankAccount = CitizenFX.Core.Native.API.GetConvarInt("starter_bank", 1000);
                 user.Wallet = CitizenFX.Core.Native.API.GetConvarInt("starter_cash", 100);
-                user.LocationId = CitizenFX.Core.Native.API.GetConvarInt("starting_location_id", 1);
+                user.LocationId = Server.startingLocationId;
                 user.ServerId = Server.serverId;
 
                 Dictionary<string, object> myParams = new Dictionary<string, object>();

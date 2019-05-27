@@ -37,7 +37,9 @@ namespace Curiosity.Server.net.Business
         {
             Entity.User user = await Database.DatabaseUsers.GetUserAsync(license);
 
-            if (user.LocationId == 1)
+            int starterLocation = Server.startingLocationId;
+
+            if (user.LocationId == starterLocation)
             {
                 long id = await Database.DatabaseUsers.SaveLocationAsync(2, x, y, z);
 

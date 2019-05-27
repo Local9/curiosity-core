@@ -11,6 +11,7 @@ namespace Curiosity.Server.net
 
         static string serverKeyString;
         public static int serverId = 0;
+        public static int startingLocationId = 0;
 
         public static string LICENSE_IDENTIFIER = "license";
         public static bool isLive = false;
@@ -27,6 +28,7 @@ namespace Curiosity.Server.net
             _server = this;
 
             isLive = API.GetConvar("server_live", "false") == "true";
+            startingLocationId = API.GetConvarInt("starting_location_id", 1);
 
             if (!isLive)
             {
