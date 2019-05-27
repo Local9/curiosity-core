@@ -69,8 +69,7 @@ namespace Curiosity.Tools.Client.net.Controllers
             {
                 if (_currentSpectate != null)
                 {
-                    Vector3 position = API.GetEntityCoords(_currentSpectate.Handle, true);
-                    Game.PlayerPed.Position = new Vector3(position.X, position.Y, -10);
+                    Game.PlayerPed.Position = new Vector3(_currentSpectate.Character.Position.X, _currentSpectate.Character.Position.Y, -10);
                 }
                 await Client.Delay(0);
             }
@@ -100,7 +99,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 
                 API.NetworkSetInSpectatorMode(false, playerPedId);
 
-                API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
+                // API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
                 API.SetEntityCollision(Game.PlayerPed.Handle, true, true);
                 Game.Player.IsInvincible = false;
                 Game.PlayerPed.IsVisible = true;
@@ -125,9 +124,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 
             _currentSpectate = player;
 
-            API.SetEntityCoords(Game.PlayerPed.Handle, 0f, 0f, 0f, false, false, false, true);
-
-            API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
+            // API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
             API.SetEntityCollision(Game.PlayerPed.Handle, false, true);
             Game.Player.IsInvincible = true;
             Game.PlayerPed.IsVisible = false;

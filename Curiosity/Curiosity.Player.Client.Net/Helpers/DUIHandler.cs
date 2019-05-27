@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
+using Curiosity.Client.net.Helpers.Dictionary;
 
 namespace Curiosity.Client.net.Helpers
 {
@@ -31,26 +32,27 @@ namespace Curiosity.Client.net.Helpers
         }
     }
 
-    public class DuiHandler : BaseScript
+    class DuiHandler
     {
-        public Dictionary<string, List<string>> RenderTargets { get; set; }
-        public Dictionary<string, List<DuiContainer>> DuiContainers { get; set; } = new Dictionary<string, List<DuiContainer>>();
-        public List<String> UsedRenderTargets = new List<string>();
-        public Dictionary<string, List<DuiContainer>> DeletedContainers = new Dictionary<string, List<DuiContainer>>();
-        public DuiHandler()
-        {
-            Exports.Add("createDui", new Func<string, string, Task<DuiContainer>>(AddDui));
-            Exports.Add("CreateRandomUniqueDuiContainer", new Func<string, Task<DuiContainer>>(CreateRandomUniqueDuiContainer));
-            Exports.Add("destroyAllDui", new Func<Task>(DestroyAllDui));
-            var renderTargetsJson = API.LoadResourceFile("addon", "renderTargets.json");
-            RenderTargets = JsonConvert.DeserializeObject<Dictionary<String, List<String>>>(renderTargetsJson);
+        public static Dictionary<string, List<string>> Targets { get; set; }
+        public static Dictionary<string, List<DuiContainer>> DuiContainers { get; set; } = new Dictionary<string, List<DuiContainer>>();
+        public static List<String> UsedRenderTargets = new List<string>();
+        public static Dictionary<string, List<DuiContainer>> DeletedContainers = new Dictionary<string, List<DuiContainer>>();
 
-            this.Tick += DuiHandler_Tick;
+        public static void Init()
+        {
+            //Exports.Add("createDui", new Func<string, string, Task<DuiContainer>>(AddDui));
+            //Exports.Add("CreateRandomUniqueDuiContainer", new Func<string, Task<DuiContainer>>(CreateRandomUniqueDuiContainer));
+            //Exports.Add("destroyAllDui", new Func<Task>(DestroyAllDui));
+
+            Targets = RenderTargets.targets;
+
+            Client.GetInstance().RegisterTickHandler(DuiHandler_Tick);
         }
 
-        public async Task<DuiContainer> CreateRandomUniqueDuiContainer(string url)
+        public static async Task<DuiContainer> CreateRandomUniqueDuiContainer(string url)
         {
-            var keys = RenderTargets.Keys;
+            var keys = Targets.Keys;
             var random = new Random();
             string renderName = null;
 
@@ -59,10 +61,10 @@ namespace Curiosity.Client.net.Helpers
                 renderName = keys.ElementAt(random.Next(0, keys.Count));
             }
 
-            return await this.AddDui(renderName, url);
+            return await AddDui(renderName, url);
         }
 
-        private async Task DestroyAllDui()
+        public static async Task DestroyAllDui()
         {
             List<DuiContainer> containers = new List<DuiContainer>();
             foreach (var renderTargetName in DuiContainers)
@@ -77,9 +79,11 @@ namespace Curiosity.Client.net.Helpers
             {
                 RemoveDuiContainer(duiContainer);
             }
+
+            await Task.FromResult(0);
         }
 
-        private void RemoveDuiContainer(DuiContainer duiContainer)
+        private static void RemoveDuiContainer(DuiContainer duiContainer)
         {
             API.SetDuiUrl(duiContainer.duiObj, "about:blank");
 
@@ -97,7 +101,7 @@ namespace Curiosity.Client.net.Helpers
                 DuiContainers.Remove(duiContainer.RenderTargetName);
         }
 
-        private async Task DuiHandler_Tick()
+        private static async Task DuiHandler_Tick()
         {
             foreach (var renderTargetName in DuiContainers)
             {
@@ -106,9 +110,10 @@ namespace Curiosity.Client.net.Helpers
                     duiContainer.Draw();
                 }
             }
+            await Task.FromResult(0);
         }
 
-        public async Task<DuiContainer> AddDui(String renderTarget, string url)
+        public static async Task<DuiContainer> AddDui(String renderTarget, string url)
         {
             DuiContainer duiContainer = null;
             if (DeletedContainers.ContainsKey(renderTarget) && DeletedContainers[renderTarget].Any())
@@ -132,7 +137,7 @@ namespace Curiosity.Client.net.Helpers
             return duiContainer;
         }
 
-        private DuiContainer ReuseDuiContainer(string renderTarget, string url)
+        private static DuiContainer ReuseDuiContainer(string renderTarget, string url)
         {
             DuiContainer duiContainer = DeletedContainers[renderTarget][0];
             DeletedContainers[renderTarget].Remove(duiContainer);
@@ -144,12 +149,12 @@ namespace Curiosity.Client.net.Helpers
             return duiContainer;
         }
 
-        private async Task<Tuple<Prop, string>> CreateModelForRender(String renderTarget, String modelName = null)
+        private static async Task<Tuple<Prop, string>> CreateModelForRender(String renderTarget, String modelName = null)
         {
             if (modelName == null)
             {
                 var random = new Random();
-                var props = this.RenderTargets[renderTarget];
+                var props = Targets[renderTarget];
                 modelName = props[random.Next(0, props.Count)];
             }
             Model model = new Model(modelName);
@@ -161,7 +166,7 @@ namespace Curiosity.Client.net.Helpers
             return new Tuple<Prop, String>(prop, modelName);
         }
 
-        private DuiContainer AddDuiInternal(string renderTarget, string modelName, string url)
+        private static DuiContainer AddDuiInternal(string renderTarget, string modelName, string url)
         {
             var duiContainer = new DuiContainer();
             var res = SetupScreen(url, renderTarget, modelName);
@@ -173,14 +178,14 @@ namespace Curiosity.Client.net.Helpers
             return duiContainer;
         }
 
-        private Tuple<long, int, long, string> SetupScreen(String url, String renderTargetName, String modelName)
+        private static Tuple<long, int, long, string> SetupScreen(String url, String renderTargetName, String modelName)
         {
             var model = API.GetHashKey(modelName);
             var uniqID = Guid.NewGuid();
 
-            var scale = 1.5;
-            var screenWidth = Math.Floor(Screen.Width / scale);
-            var screenHeight = Math.Floor(Screen.Height / scale);
+            //var scale = 1.5;
+            var screenWidth = Screen.Width; // / scale);
+            var screenHeight = Screen.Height; //  / scale);
             var handle = CreateNamedRenderTargetForModel(renderTargetName, (uint)model);
             var txd = API.CreateRuntimeTxd($"{renderTargetName}-{uniqID}");
             var duiObj = API.CreateDui(url, (int)screenWidth, (int)screenHeight);
@@ -191,7 +196,7 @@ namespace Curiosity.Client.net.Helpers
             return new Tuple<long, int, long, string>(tx, handle, duiObj, uniqID.ToString());
         }
 
-        private int CreateNamedRenderTargetForModel(string name, uint model)
+        private static int CreateNamedRenderTargetForModel(string name, uint model)
         {
             var handle = 0;
             if (!IsNamedRendertargetRegistered(name))

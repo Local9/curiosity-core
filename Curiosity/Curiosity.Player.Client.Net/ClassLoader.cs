@@ -15,6 +15,8 @@
 //using FamilyRP.Roleplay.Client.Classes.Jobs.Transportation.Trains;
 //using FamilyRP.Roleplay.Client.Classes.Player;
 //using FamilyRP.Roleplay.Client.Classes.Vehicle;
+using Curiosity.Client.net.Helpers.Dictionary;
+using Curiosity.Client.net.Helpers;
 using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Classes.Menus;
@@ -37,6 +39,10 @@ namespace Curiosity.Client.net
             Log.Info("Entering ClassLoader Init");
 
             // https://github.com/GroovyGiantPanda/FiveMRpServerResources/tree/master/src/FiveM/RPClient/Classes
+
+            // Addon stuff
+            RenderTargets.Init();
+            DuiHandler.Init();
 
             // Emotes
             //EmotesManager.Init();
@@ -76,7 +82,7 @@ namespace Curiosity.Client.net
             //WarpPoints.Init();
             Voip.Init();
             AquaticSpawner.Init();
-            VideoLoader.Init();
+            // VideoLoader.Init();
             //EmergencyServices.Init();
 
             // EMS

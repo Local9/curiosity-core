@@ -107,6 +107,7 @@
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
     <Compile Include="Helpers\CommandProcessor.cs" />
+    <Compile Include="Helpers\Dictionary\RenderTargets.cs" />
     <Compile Include="Helpers\DUIHandler.cs" />
     <Compile Include="Helpers\EntityEnumerators.cs" />
     <Compile Include="Helpers\Game.cs" />
@@ -127,9 +128,6 @@
       <Project>{37f1f478-be0b-4c2b-a062-24077f851b69}</Project>
       <Name>Curiosity.Shared.Client.net</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Helpers\renderTargets.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

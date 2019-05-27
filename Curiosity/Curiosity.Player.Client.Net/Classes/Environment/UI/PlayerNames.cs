@@ -11,6 +11,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
     static class PlayerNames
     {
         static internal IEnumerable<CitizenFX.Core.Player> MarkerPlayers;
+        static internal float MarkerDistance = 25;
+        static internal float MarkerVehicleDistance = 50;
 
         static public void Init()
         {
@@ -20,7 +22,15 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static internal bool ShouldShowName(CitizenFX.Core.Player player)
         {
-            bool isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < 25;
+            bool isCloseEnough;
+            if (player.Character.IsInVehicle())
+            {
+                isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < MarkerDistance;
+            }
+            else
+            {
+                isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < MarkerVehicleDistance;
+            }
             bool isSneaking = player.Character.IsInStealthMode || player.Character.IsInCover() || Function.Call<bool>(Hash.IS_PED_USING_SCENARIO, player.Character.Handle, "WORLD_HUMAN_SMOKING") /*|| (player.Character.IsInVehicle() && player.Character.CurrentVehicle.Speed < 3.0)*/;
             bool isCurrentPlayer = (Game.Player == player);
             if (isCloseEnough && !isSneaking && !isCurrentPlayer)

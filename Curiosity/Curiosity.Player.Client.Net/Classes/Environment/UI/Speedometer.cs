@@ -27,13 +27,11 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                         color = System.Drawing.Color.FromArgb(160, 255, 255, 255);
                     }
 
-
-
-                    Vector2 position = new Vector2(0.167f, 0.915f);
+                    Vector2 position = new Vector2(0.167f, 0.867f);
 
                     if (Screen.Resolution.Width > 1980)
                     {
-                        position = new Vector2(0.001f, 0.915f);
+                        position = new Vector2(0.001f, 0.867f);
                     }
 
                     string speedometerText = $"SPEED: {2.24 * Game.PlayerPed.CurrentVehicle.Speed:0} mph / {3.60 * Game.PlayerPed.CurrentVehicle.Speed:0} kph";
@@ -46,6 +44,18 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     // Exclude bikes & trains from fuel -- TODO: exclude electric cars?
                     if (FuelManager.vehicleFuel >= 0f && !Game.PlayerPed.CurrentVehicle.Model.IsBicycle && !Game.PlayerPed.CurrentVehicle.Model.IsTrain && !Game.PlayerPed.CurrentVehicle.Model.IsBoat)
                     {
+                        position = new Vector2(0.167f, 0.883f);
+
+                        if (Screen.Resolution.Width > 1980)
+                        {
+                            position = new Vector2(0.001f, 0.883f);
+                        }
+
+                        UI.DrawText($"FUEL: {FuelManager.vehicleFuel:0.0}%", position, color, 0.3f, Font.ChaletComprimeCologne);
+                    }
+
+                    if (!Game.PlayerPed.CurrentVehicle.Model.IsBicycle && !Game.PlayerPed.CurrentVehicle.Model.IsTrain && !Game.PlayerPed.CurrentVehicle.Model.IsBoat)
+                    {
                         position = new Vector2(0.167f, 0.899f);
 
                         if (Screen.Resolution.Width > 1980)
@@ -53,7 +63,16 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                             position = new Vector2(0.001f, 0.899f);
                         }
 
-                        UI.DrawText($"FUEL: {FuelManager.vehicleFuel:0.0}%", position, color, 0.3f, Font.ChaletComprimeCologne);
+                        UI.DrawText($"BODY: {Game.PlayerPed.CurrentVehicle.BodyHealth:0.0}%", position, color, 0.3f, Font.ChaletComprimeCologne);
+
+                        position = new Vector2(0.167f, 0.915f);
+
+                        if (Screen.Resolution.Width > 1980)
+                        {
+                            position = new Vector2(0.001f, 0.915f);
+                        }
+
+                        UI.DrawText($"ENGINE: {Game.PlayerPed.CurrentVehicle.EngineHealth:0.0}%", position, color, 0.3f, Font.ChaletComprimeCologne);
                     }
                 }
             }
