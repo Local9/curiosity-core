@@ -36,7 +36,7 @@ namespace Curiosity.Client.net
     {
         public static void Init()
         {
-            Log.Info("Entering ClassLoader Init");
+            Log.Verbose("Entering ClassLoader Init");
 
             // https://github.com/GroovyGiantPanda/FiveMRpServerResources/tree/master/src/FiveM/RPClient/Classes
 
@@ -45,7 +45,7 @@ namespace Curiosity.Client.net
             DuiHandler.Init();
 
             // Emotes
-            //EmotesManager.Init();
+            EmotesManager.Init();
             //HandsUp.Init();
             Pointing.Init();
 
@@ -79,7 +79,7 @@ namespace Curiosity.Client.net
             //InstancingChecker.Init(); // Hard to test
             MarkerHandler.Init();
             //Pvp.Init();
-            //WarpPoints.Init();
+            WarpPoints.Init();
             Voip.Init();
             AquaticSpawner.Init();
             // VideoLoader.Init();
@@ -141,7 +141,7 @@ namespace Curiosity.Client.net
             //Stay.Init();
             DisableAirControls.Init();
 
-            //Log.Verbose("Leaving ClassLoader Init");
+            Log.Verbose("Leaving ClassLoader Init");
         }
     }
 }

@@ -23,8 +23,8 @@ namespace Curiosity.Client.net.Classes.Vehicle
         // Just placeholders for testing, feel free to change
         static Dictionary<VehicleClass, float> FuelConsumptionClassMultiplier = new Dictionary<VehicleClass, float>()
         {
-            [VehicleClass.Planes] = 1 / 4f,
-            [VehicleClass.Helicopters] = 1 / 4f,
+            [VehicleClass.Planes] = 1.4f,
+            [VehicleClass.Helicopters] = 1.4f,
             [VehicleClass.Super] = 1.2f,
             [VehicleClass.Sports] = 1.2f
         };
