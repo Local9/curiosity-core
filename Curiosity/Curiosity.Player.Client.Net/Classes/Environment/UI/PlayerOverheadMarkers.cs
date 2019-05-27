@@ -51,7 +51,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             bool isCloseEnough;
             // TODO: Take into account VOIP range
             // TODO: increase visibility distance if other ped is in vehicle
-            if (player.Character.IsInVehicle())
+            if (!player.Character.IsInVehicle())
             {
                 isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < MarkerDistance;
             }

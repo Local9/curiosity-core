@@ -62,6 +62,7 @@
     <Compile Include="Classes\Environment\UI\PlayerOverheadMarkers.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer3D.cs" />
+    <Compile Include="Classes\Environment\UI\VideoLoader.cs" />
     <Compile Include="Classes\Environment\VoipRange.cs" />
     <Compile Include="Classes\Environment\WantedLevels.cs" />
     <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
@@ -106,6 +107,8 @@
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
     <Compile Include="Helpers\CommandProcessor.cs" />
+    <Compile Include="Helpers\Dictionary\RenderTargets.cs" />
+    <Compile Include="Helpers\DUIHandler.cs" />
     <Compile Include="Helpers\EntityEnumerators.cs" />
     <Compile Include="Helpers\Game.cs" />
     <Compile Include="Helpers\WorldProbe.cs" />
@@ -126,6 +129,5 @@
       <Name>Curiosity.Shared.Client.net</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

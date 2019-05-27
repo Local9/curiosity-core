@@ -23,7 +23,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static internal bool ShouldShowName(CitizenFX.Core.Player player)
         {
             bool isCloseEnough;
-            if (player.Character.IsInVehicle())
+            if (!player.Character.IsInVehicle())
             {
                 isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < MarkerDistance;
             }
