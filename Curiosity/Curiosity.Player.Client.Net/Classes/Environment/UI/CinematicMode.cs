@@ -60,6 +60,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             if (ControlHelper.IsControlJustPressed(Control.ReplayHidehud, true, ControlModifier.Shift))
             {
                 DoHideHud = !DoHideHud;
+                BaseScript.TriggerEvent("curiosity:Client:Player:HideHud", DoHideHud);
                 if (DoHideHud)
                 {
                     Log.Verbose("HUD hidden");
@@ -72,7 +73,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                 Function.Call(Hash.DISPLAY_RADAR, !DoHideHud);
                 BaseScript.TriggerEvent("curiosity:Client:Chat:EnableChatBox", !DoHideHud);
                 BaseScript.TriggerEvent("curiosity:Client:Player:DisplayInfo", !DoHideHud);
-                BaseScript.TriggerEvent("curiosity:Client:Player:HideHud", !DoHideHud);
             }
             else if (ControlHelper.IsControlJustPressed(Control.ReplayHidehud, true, ControlModifier.Alt))
             {

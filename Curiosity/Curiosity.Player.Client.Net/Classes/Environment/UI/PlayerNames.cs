@@ -15,13 +15,15 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static public void Init()
         {
             Client.GetInstance().RegisterTickHandler(OnTick);
+            //Client.GetInstance().RegisterEventHandler("onClientResourceStop", new Action<string>(OnCientResourceStop));
         }
 
-        static internal bool ShouldShowMarker(CitizenFX.Core.Player player)
+        static internal bool ShouldShowName(CitizenFX.Core.Player player)
         {
+            bool isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < 25;
             bool isSneaking = player.Character.IsInStealthMode || player.Character.IsInCover() || Function.Call<bool>(Hash.IS_PED_USING_SCENARIO, player.Character.Handle, "WORLD_HUMAN_SMOKING") /*|| (player.Character.IsInVehicle() && player.Character.CurrentVehicle.Speed < 3.0)*/;
             bool isCurrentPlayer = (Game.Player == player);
-            if (!isSneaking && !isCurrentPlayer)
+            if (isCloseEnough && !isSneaking && !isCurrentPlayer)
                 return true;
             return false;
         }
@@ -32,13 +34,34 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 if (CinematicMode.DoHideHud) return;
 
-                MarkerPlayers = new PlayerList().Where(ShouldShowMarker);
+                MarkerPlayers = new PlayerList().Where(ShouldShowName);
                 List<CitizenFX.Core.Player> playerList = MarkerPlayers.ToList();
-                playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(p => API.CreateMpGamerTag(p.player.Handle, p.player.Name, false, false, "", 0));
+                playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowName(p.player));
             }
             catch (Exception ex)
             {
                 Log.Error($"ERROR PlayerNames: {ex.Message}");
+            }
+
+            await Task.FromResult(0);
+        }
+
+        //static internal async void OnCientResourceStop(string resourceName)
+        //{
+
+        //}
+
+        static internal async Task ShowName(CitizenFX.Core.Player player)
+        {
+            if (!API.NetworkIsPlayerActive(player.Handle) && Game.Player.Handle == player.Handle) return;
+
+            int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, false, "", 0);
+
+            API.SetMpGamerTagName(gamerTagId, player.Name);
+
+            if (API.HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17))
+            {
+                API.SetMpGamerTagVisibility(gamerTagId, 0, true);
             }
 
             await Task.FromResult(0);
