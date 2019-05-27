@@ -57,6 +57,8 @@
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\NuiEventHandler.cs" />
+    <Compile Include="Classes\Environment\UI\PlayerBlips.cs" />
+    <Compile Include="Classes\Environment\UI\PlayerNames.cs" />
     <Compile Include="Classes\Environment\UI\PlayerOverheadMarkers.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer3D.cs" />

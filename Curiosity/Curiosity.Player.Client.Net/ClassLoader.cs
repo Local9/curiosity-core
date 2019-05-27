@@ -51,6 +51,8 @@ namespace Curiosity.Client.net
             HideReticle.Init();
             Location.Init();
             PlayerOverheadMarkers.Init();
+            // PlayerNames.Init(); // Not required
+            PlayerBlips.Init();
             //PlayerOverheadText.Init(); // Not needed an longer; may be removed in later patch by me
             Speedometer.Init();
             Speedometer3D.Init();
