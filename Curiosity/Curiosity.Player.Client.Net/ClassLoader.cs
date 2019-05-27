@@ -52,7 +52,7 @@ namespace Curiosity.Client.net
             // UI
             //ControlCodeTester.Init();
             //Radar.Init();
-            //ButtonInstructions.Init(); // To be tested
+            ButtonInstructions.Init(); // To be tested
             CinematicMode.Init();
             HideReticle.Init();
             Location.Init();

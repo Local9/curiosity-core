@@ -55,6 +55,7 @@
     <Compile Include="Classes\Environment\DevCommands.cs" />
     <Compile Include="Classes\Environment\MarkerHandler.cs" />
     <Compile Include="Classes\Environment\UI\Bank.cs" />
+    <Compile Include="Classes\Environment\UI\ButtonInstructions.cs" />
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\NuiEventHandler.cs" />

@@ -98,7 +98,7 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             Client.GetInstance().RegisterTickHandler(OnTick);
             PeriodicUpdate();
-            //ButtonInstructions.StatusCheckCallbacks.Add(new Func<KeyValuePair<Control, string>?>(DisplayButtonInstructionCheck));
+            UI.ButtonInstructions.StatusCheckCallbacks.Add(new Func<KeyValuePair<Control, string>?>(DisplayButtonInstructionCheck));
         }
 
         static public KeyValuePair<Control, string>? DisplayButtonInstructionCheck()
