@@ -128,7 +128,12 @@ namespace Curiosity.Tools.Client.net.Controllers
 					Game.DisableControlThisFrame( 2, ctrl );
 				}
 
-                Screen.ShowSubtitle($"POS: {Game.PlayerPed.Position} | ROT: {GameplayCamera.Rotation}");
+                //Screen.ShowNotification($"~r~Position:~w~\nX:{Game.PlayerPed.Position.X}\nY:{Game.PlayerPed.Position.Y}\nZ:{Game.PlayerPed.Position.Z}");
+                //await BaseScript.Delay(0);
+                //Screen.ShowNotification($"~r~Cam Heading:~w~ {Math.Max(0f, (360 + CurrentCamera.Rotation.Z) % 360f)}");
+                //await BaseScript.Delay(0);
+                //Screen.ShowNotification($"~r~Speed:~w~ {Speed:00.0}");
+                //await BaseScript.Delay(0);
 
                 Game.PlayerPed.Heading = Math.Max( 0f, (360 + CurrentCamera.Rotation.Z) % 360f );
 				Game.PlayerPed.Opacity = 0;

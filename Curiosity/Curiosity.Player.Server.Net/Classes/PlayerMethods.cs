@@ -90,7 +90,8 @@ namespace Curiosity.Server.net.Classes
                 player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
                 await BaseScript.Delay(0);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
-
+                await BaseScript.Delay(0);
+                player.TriggerEvent("curiosity:Client:Player:SessionActivated");
                 Log.Success($"session.Activate() -> {session.Name}");
             }
             catch (Exception ex)
