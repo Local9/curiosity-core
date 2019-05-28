@@ -84,6 +84,7 @@ namespace Curiosity.Client.net
             AquaticSpawner.Init();
             // VideoLoader.Init();
             //EmergencyServices.Init();
+            Vehicles.Init();
 
             // EMS
             //EMS.Init();

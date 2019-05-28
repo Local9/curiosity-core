@@ -30,14 +30,14 @@ namespace Curiosity.Client.net
             // Remove default ESC, Backspace & RMB behaviour
             Observer.Controller.controlBinds.Remove(Control.PhoneCancel);
 
-            Client.ActiveInstance.RegisterTickHandler(Update);
+            Client.GetInstance().RegisterTickHandler(Update);
         }
 
         ~CharacterEditorMenu()
         {
             Observer.CloseMenu(true);
 
-            Client.ActiveInstance.DeregisterTickHandler(Update);
+            Client.GetInstance().DeregisterTickHandler(Update);
         }
 
         public override void Refresh()

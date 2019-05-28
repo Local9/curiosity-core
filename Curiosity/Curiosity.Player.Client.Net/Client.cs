@@ -13,8 +13,6 @@ namespace Curiosity.Client.net
     {
         private static Client _instance;
 
-        public static Client ActiveInstance = _instance;
-
         public static Client GetInstance()
         {
             return _instance;

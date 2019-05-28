@@ -68,6 +68,7 @@
     <Compile Include="Business\BusinessUser.cs" />
     <Compile Include="Classes\Bank.cs" />
     <Compile Include="Classes\Character.cs" />
+    <Compile Include="Classes\Environment\Vehicles.cs" />
     <Compile Include="Classes\PlayerMethods.cs" />
     <Compile Include="Classes\ServerSettings.cs" />
     <Compile Include="Classes\Session.cs" />
@@ -97,5 +98,6 @@
       <Name>Curiosity.Global.Shared.net</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

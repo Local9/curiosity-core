@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Tools.Client.net.Helpers;
 using Curiosity.Tools.Client.net.Menus;
 using Curiosity.Shared.Client.net.Models;
@@ -190,6 +191,14 @@ namespace Curiosity.Tools.Client.net.Controllers
 			veh.NeedsToBeHotwired = false;
 			veh.IsEngineRunning = true;
 			veh.Mods.LicensePlate = "DEVTOOLS";
+
+            int migrationId = API.VehToNet(veh.Handle);
+
+            API.SetNetworkIdCanMigrate(migrationId, true);
+            API.SetNetworkIdExistsOnAllMachines(migrationId, true);
+
+            Client.TriggerServerEvent("curiosity:Server:Vehicles:Spawned", migrationId);
+
 			return true;
 		}
 

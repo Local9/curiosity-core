@@ -62,6 +62,9 @@ namespace Curiosity.Server.net
             Classes.ServerSettings.Init();
             Classes.Character.Init();
 
+            // Environment
+            Classes.Environment.Vehicles.Init();
+
             RegisterTickHandler(GetServerId);
 
             Log.Success("Leaving Curiosity Server cter");
