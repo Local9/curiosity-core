@@ -128,7 +128,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 					Game.DisableControlThisFrame( 2, ctrl );
 				}
 
-                Screen.ShowSubtitle($"POS: {Game.PlayerPed.Position} | RH: {GameplayCamera.RelativeHeading}");
+                Screen.ShowSubtitle($"POS: {Game.PlayerPed.Position} | ROT: {GameplayCamera.Rotation}");
 
                 Game.PlayerPed.Heading = Math.Max( 0f, (360 + CurrentCamera.Rotation.Z) % 360f );
 				Game.PlayerPed.Opacity = 0;

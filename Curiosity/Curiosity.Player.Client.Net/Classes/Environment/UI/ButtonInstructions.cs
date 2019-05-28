@@ -22,7 +22,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public void Init()
         {
-            Client.ActiveInstance.RegisterTickHandler(OnTick);
+            Client.GetInstance().RegisterTickHandler(OnTick);
         }
 
         static public async Task OnTick()
