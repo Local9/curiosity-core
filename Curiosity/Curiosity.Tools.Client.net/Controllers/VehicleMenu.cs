@@ -195,7 +195,7 @@ namespace Curiosity.Tools.Client.net.Controllers
             API.SetNetworkIdCanMigrate(veh.NetworkId, true);
             API.SetNetworkIdExistsOnAllMachines(veh.NetworkId, true);
 
-            Client.TriggerServerEvent("curiosity:Server:Vehicles:Spawned", veh.NetworkId);
+            // Client.TriggerServerEvent("curiosity:Server:Vehicles:Spawned", veh.NetworkId);
 
 			return true;
 		}
