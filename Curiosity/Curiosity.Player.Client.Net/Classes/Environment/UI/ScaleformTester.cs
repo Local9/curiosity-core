@@ -20,11 +20,19 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             if (ControlHelper.IsControlJustPressed(Control.MultiplayerInfo))
             {
-                Scaleform scaleform = await ScaleformWrapper.Request("mp_big_message_freemode");
-                //scaleform.CallFunction("SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "YOU KNOW ITS SIMPLE", "YOU KNOW ITS SIMPLE2", 5);
-                scaleform.CallFunction("SHOW_BIG_MP_MESSAGE_WITH_STRAP", "MISSION PASSED", "RESPECT+");
-
+                // Scaleform scaleform = await ScaleformWrapper.Request("mp_big_message_freemode");
+                // scaleform.CallFunction("SHOW_SHARD_CENTERED_TOP_MP_MESSAGE", "YOU KNOW ITS SIMPLE", "YOU KNOW ITS SIMPLE2", 5);
+                // scaleform.CallFunction("SHOW_BIG_MP_MESSAGE_WITH_STRAP", "MISSION PASSED", "RESPECT+");
+                // scaleform.CallFunction("SHOW_TERRITORY_CHANGE_MP_MESSAGE", "MISSION PASSED", "RESPECT+", "RESPECT+++");
                 //scaleform.CallFunction("SHOW_MP_MESSAGE_TOP", 1, "YOU KNOW ITS SIMPLE", "YOU KNOW ITS SIMPLE2", 5);
+
+                Scaleform scaleform = await ScaleformWrapper.Request("MISSION_COMPLETE");
+                scaleform.CallFunction("SET_MISSION_TITLE", 1, "TITLE", 1);
+                //scaleform.CallFunction("SET_DATA_SLOT", 1, "SOMTHIN");
+                //scaleform.CallFunction("SET_TOTAL", 1, 20, "20 Somthing");
+                //scaleform.CallFunction("SET_DATA_SLOT", 1);
+                //scaleform.CallFunction("SET_TOTAL", 1, 30, "30 Somthing");
+                //scaleform.CallFunction("SET_DATA_SLOT", 2);
 
                 int startTimer = API.GetGameTimer();
 
