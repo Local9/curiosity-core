@@ -30,11 +30,18 @@ namespace Curiosity.Levels.Client.net
         {
             SetupRanks();
 
+            EventHandlers["curiosity:Client:Rank:GetCurrentLevel"] += new Action(GetCurrentLevel);
+
             EventHandlers["curiosity:Client:Rank:SetInitialXpLevels"] += new Action<int, bool, bool>(SetInitialXpLevels);
             EventHandlers["curiosity:Client:Rank:AddPlayerXP"] += new Action<int>(AddPlayerXP);
             EventHandlers["curiosity:Client:Rank:RemovePlayerXP"] += new Action<int>(RemovePlayerXP);
 
             Tick += CheckButton;
+        }
+
+        void GetCurrentLevel()
+        {
+            TriggerEvent("curiosity:Client:Rank:CurrentLevel", GetLevelFromXP(currentXP));
         }
 
         void AddPlayerXP(int xpAmount)

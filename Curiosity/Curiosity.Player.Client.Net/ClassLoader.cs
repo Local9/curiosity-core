@@ -70,6 +70,7 @@ namespace Curiosity.Client.net
             InteractionListMenu.Init();
             NuiMenu.Init();
             NuiEventHandler.Init();
+            Scoreboard.Init();
 
             // Environment
             //Poi.Init();
