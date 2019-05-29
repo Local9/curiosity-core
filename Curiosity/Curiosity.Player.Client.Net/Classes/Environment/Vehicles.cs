@@ -10,10 +10,16 @@ namespace Curiosity.Client.net.Classes.Environment
             Client.GetInstance().RegisterEventHandler("curiosity:Server:Vehicles:Remove", new Action<int>(OnVehicleRemove));
         }
 
-        static void OnVehicleRemove(int vehicleHandle)
+        static async void OnVehicleRemove(int vehicleHandle)
         {
-            API.SetEntityAsNoLongerNeeded(ref vehicleHandle);
-            API.DeleteEntity(ref vehicleHandle);
+            int networkId = API.NetworkGetNetworkIdFromEntity(vehicleHandle);
+
+            if (API.NetworkIsHost())
+            {
+                API.DeleteVehicle(ref networkId);
+            }
+
+            await Client.Delay(0);
         }
     }
 }

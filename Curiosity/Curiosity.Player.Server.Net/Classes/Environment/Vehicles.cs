@@ -7,28 +7,56 @@ namespace Curiosity.Server.net.Classes.Environment
 {
     class Vehicles
     {
-        static List<Vehicle> vehicles = new List<Vehicle>();
+        static Dictionary<string, int> vehicles = new Dictionary<string, int>();
+        static List<string> toDelete = new List<string>();
 
         public static void Init()
         {
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Vehicles:Spawned", new Action<int>(OnVehicleSpawned));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Vehicles:Spawned", new Action<Player, int>(OnVehicleSpawned));
 
             Server.GetInstance().RegisterTickHandler(OnVehicleCheck);
         }
 
-        static void OnVehicleSpawned(int vehicleHandle)
+        static void OnVehicleSpawned([FromSource]Player player, int vehicleHandle)
         {
-            vehicles.Add(new Vehicle(vehicleHandle));
+            lock (vehicles)
+            {
+                if (vehicles.ContainsKey(player.Handle))
+                {
+                    vehicles[player.Handle] = vehicleHandle;
+                }
+                else
+                {
+                    vehicles.Add(player.Handle, vehicleHandle);
+                }
+            }
         }
 
         static async Task OnVehicleCheck()
         {
-            foreach(Vehicle vehicle in vehicles)
+            lock (vehicles)
             {
-                if (!SessionManager.PlayerList.ContainsKey(vehicle.Owner.Handle))
+                foreach (KeyValuePair<string, int> vehicle in vehicles)
                 {
-                    Server.TriggerClientEvent("curiosity:Server:Vehicles:Remove", vehicle.Handle);
-                    vehicles.Remove(vehicle);
+                    lock (SessionManager.PlayerList)
+                    {
+                        if (!SessionManager.PlayerList.ContainsKey(vehicle.Key))
+                        {
+                            Server.TriggerClientEvent("curiosity:Server:Vehicles:Remove", vehicle.Value);
+
+                            toDelete.Add(vehicle.Key);
+                        }
+                    }
+                }
+
+                foreach(string key in toDelete)
+                {
+                    vehicles.Remove(key);
+                }
+
+                if (toDelete.Count > 0)
+                {
+                    toDelete.Clear();
                 }
             }
             await Task.FromResult(0);
