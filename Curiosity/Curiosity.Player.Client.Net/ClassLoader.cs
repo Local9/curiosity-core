@@ -43,6 +43,7 @@ namespace Curiosity.Client.net
             // Addon stuff
             RenderTargets.Init();
             DuiHandler.Init();
+            //ScaleformTester.Init();
 
             // Emotes
             EmotesManager.Init();

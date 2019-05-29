@@ -62,6 +62,8 @@
     <Compile Include="Classes\Environment\UI\PlayerBlips.cs" />
     <Compile Include="Classes\Environment\UI\PlayerNames.cs" />
     <Compile Include="Classes\Environment\UI\PlayerOverheadMarkers.cs" />
+    <Compile Include="Classes\Environment\UI\ScaleformTester.cs" />
+    <Compile Include="Classes\Environment\UI\ScaleformWrapper.cs" />
     <Compile Include="Classes\Environment\UI\Scoreboard.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer3D.cs" />
