@@ -20,9 +20,15 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             server.RegisterEventHandler("curiosity:Server:Vehicles:Spawned", new Action<Player, int>(OnVehicleSpawned));
             server.RegisterEventHandler("curiosity:Server:Vehicles:TempStore", new Action<Player, int>(OnPlayerEnteredVehicle));
+            server.RegisterEventHandler("curiosity:Server:Vehicles:RemoveFromTempStore", new Action<Player, int>(OnRemoveFromTempStore));
 
             server.RegisterTickHandler(OnVehicleCheck);
             server.RegisterTickHandler(OnTempVehicleCheck);
+        }
+
+        static void OnRemoveFromTempStore([FromSource]Player player, int vehicleHandle)
+        {
+            tempVehiclesToDelete.Add(vehicleHandle);
         }
 
         static void OnPlayerEnteredVehicle([FromSource]Player player, int vehicleHandle)
@@ -64,28 +70,22 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             while (true)
             {
-                foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
-                {
-                    if ((DateTime.Now - vehicle.Value.Updated).Seconds > 10)
-                    {
-                        BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
-
-                        tempVehiclesToDelete.Add(vehicle.Key);
-
-                        Log.Verbose($"Marked Vehicle with NetworkID {vehicle.Value.NetworkId} for removal check");
-                    }
-                }
-
                 foreach (int key in tempVehiclesToDelete)
                 {
                     tempVehicles.Remove(key);
                 }
 
-                if (tempVehiclesToDelete.Count > 0)
+                foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
                 {
-                    tempVehiclesToDelete.Clear();
+                    if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
+                    {
+                        BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+
+                        Log.Verbose($"Marked Vehicle with NetworkID {vehicle.Value.NetworkId} for removal check");
+                    }
                 }
-                await BaseScript.Delay(1000);
+
+                await BaseScript.Delay(60000);
             }
         }
 
@@ -117,7 +117,7 @@ namespace Curiosity.Server.net.Classes.Environment
                 {
                     toDelete.Clear();
                 }
-                await BaseScript.Delay(1000);
+                await BaseScript.Delay(30000);
             }
         }
     }

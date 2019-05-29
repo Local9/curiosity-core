@@ -21,7 +21,20 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 int handleId = API.NetworkGetEntityFromNetworkId(vehicleHandle);
                 Debug.WriteLine($"OnVehicleRemove -> {vehicleHandle}");
-                API.DeleteVehicle(ref handleId);
+                CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(handleId);
+
+                if (!vehicle.Driver.IsPlayer)
+                {
+                    vehicle.Delete();
+                    BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
+                }
+                else
+                {
+                    int networkId = API.VehToNet(Game.PlayerPed.CurrentVehicle.Handle);
+                    API.SetNetworkIdExistsOnAllMachines(networkId, true);
+                    API.SetNetworkIdCanMigrate(networkId, true);
+                    BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
+                }
             }
 
             await Client.Delay(0);
