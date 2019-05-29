@@ -67,7 +67,11 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
             int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, false, "", 0);
 
-            if (CinematicMode.DoHideHud)
+            if (!API.NetworkIsPlayerActive(player.Handle))
+            {
+                API.SetMpGamerTagVisibility(gamerTagId, 0, false);
+            }
+            else if (CinematicMode.DoHideHud)
             {
                 API.SetMpGamerTagVisibility(gamerTagId, 0, false);
             }
