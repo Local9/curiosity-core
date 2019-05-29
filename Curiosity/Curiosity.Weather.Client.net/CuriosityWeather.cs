@@ -10,7 +10,7 @@ namespace Curiosity.Client.net
         public CuriosityWeather()
         {
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
-            EventHandlers["curiosity:Client:Weather:Sync"] += new Action<string, bool, float>(WeatherSync);
+            EventHandlers["curiosity:Client:Weather:Sync"] += new Action<string, bool, float, float>(WeatherSync);
             EventHandlers["curiosity:Client:Time:Sync"] += new Action<int, int>(TimeSync);
 
             Tick += WeatherChecker;
@@ -45,7 +45,7 @@ namespace Curiosity.Client.net
             await Delay(0);
         }
 
-        async void WeatherSync(string weather, bool wind, float windHeading)
+        async void WeatherSync(string weather, bool wind, float windSpeed, float windHeading)
         {
             await Delay(0);
 
@@ -61,7 +61,7 @@ namespace Curiosity.Client.net
             if (wind)
             {
                 API.SetWind(1.0f);
-                API.SetWindSpeed(4.0f);
+                API.SetWindSpeed(windSpeed);
                 API.SetWindDirection(windHeading);
             } else
             {

@@ -130,11 +130,11 @@ namespace Curiosity.Server.Net
             {
                 await Delay(1000);
                 await SetupWeather();
-                player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
+                player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
                 Debug.WriteLine($"{player.Name} - WEATHER SYNC -> {weatherData}");
             } else
             {
-                player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
+                player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
 
                 Debug.WriteLine($"{player.Name} - WEATHER SYNC -> {weatherData}");
             }
@@ -150,6 +150,7 @@ namespace Curiosity.Server.Net
 
             int countOfWeathers = weathers.Count;
             int countOfWeatherKeys = weathers.Keys.Count;
+            float windSpeed = 4.0f;
 
             if (string.IsNullOrEmpty(weatherData.CurrentWeather))
             {
@@ -166,7 +167,13 @@ namespace Curiosity.Server.Net
                 weatherData.WindHeading = randomSelect.Next(0, 360);
             }
 
-            TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindHeading);
+            if (weatherData.CurrentWeather == "THUNDER")
+            {
+                windSpeed = randomSelect.Next(4, 40);
+                weatherData.WindSpeed = windSpeed;
+            }
+
+            TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
 
             Debug.WriteLine($"WEATHER CHANGE -> {weatherData}");
             weatherSetup = true;

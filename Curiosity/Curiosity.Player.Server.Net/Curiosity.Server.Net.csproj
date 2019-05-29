@@ -81,6 +81,7 @@
     <Compile Include="Database\DatabaseUsersSkills.cs" />
     <Compile Include="Database\DatabaseUsers.cs" />
     <Compile Include="Entity\User.cs" />
+    <Compile Include="Entity\VehicleData.cs" />
     <Compile Include="Entity\WeatherData.cs" />
     <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\Privilege.cs" />
