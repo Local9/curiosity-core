@@ -17,8 +17,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         // This list is for other classes to register for a check every frame
         // On whether they want an instructional button to show or not
         static public List<Func<KeyValuePair<Control, string>?>> StatusCheckCallbacks = new List<Func<KeyValuePair<Control, string>?>>();
-        static internal CitizenFX.Core.Scaleform scaleform;
-        static internal bool hasLoadedScaleform = false;
 
         static public void Init()
         {
@@ -27,43 +25,49 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public async Task OnTick()
         {
-            if (instructions.Count() > 0)
+            if (StatusCheckCallbacks.Count > 0)
             {
-                if (!hasLoadedScaleform)
-                {
-                    scaleform = new Scaleform("instructional_buttons");
-                    hasLoadedScaleform = true;
-                }
-                else
-                {
-                    instructions.Clear();
-                    StatusCheckCallbacks
-                        .ForEach(cb =>
-                        {
-                            KeyValuePair<Control, string>? kvn = cb();
-                            if (kvn != null)
-                            {
-                                KeyValuePair<Control, string> kv = (KeyValuePair<Control, string>)kvn;
-                                instructions.Add(kv.Key, kv.Value);
-                            }
-                        });
+                Scaleform scaleform = await ScaleformWrapper.Request("instructional_buttons");
 
-                    if (instructions.Count() > 0)
+                instructions.Clear();
+
+                StatusCheckCallbacks
+                .ForEach(cb =>
+                {
+                    KeyValuePair<Control, string>? kvn = cb();
+                    if (kvn != null)
                     {
-                        scaleform.CallFunction("CLEAR_ALL", -1);
-                        scaleform.CallFunction("TOGGLE_MOUSE_BUTTONS", 0);
-                        scaleform.CallFunction("CREATE_CONTAINER");
-                        int slot = 0;
-                        instructions
-                            .ToList()
-                            .ForEach(i =>
-                            {
-                                scaleform.CallFunction("SET_DATA_SLOT", slot, Function.Call<string>(Hash.GET_CONTROL_INSTRUCTIONAL_BUTTON, 0, i.Key, 1), i.Value);
-                                slot++;
-                            });
-                        scaleform.CallFunction("DRAW_INSTRUCTIONAL_BUTTONS", -1);
-                        scaleform.Render2D();
+                        KeyValuePair<Control, string> kv = (KeyValuePair<Control, string>)kvn;
+                        instructions.Add(kv.Key, kv.Value);
                     }
+                });
+
+                if (instructions.Count > 0)
+                {
+                    scaleform.CallFunction("CLEAR_ALL", -1);
+                    scaleform.CallFunction("TOGGLE_MOUSE_BUTTONS", 0);
+                    scaleform.CallFunction("CREATE_CONTAINER");
+                    int slot = 0;
+                    instructions
+                        .ToList()
+                        .ForEach(i =>
+                        {
+                            scaleform.CallFunction("SET_DATA_SLOT", slot, Function.Call<string>(Hash.GET_CONTROL_INSTRUCTIONAL_BUTTON, 0, i.Key, 1), i.Value);
+                            slot++;
+                        });
+                    scaleform.CallFunction("DRAW_INSTRUCTIONAL_BUTTONS", -1);
+                }
+
+                int startTimer = API.GetGameTimer();
+
+                while (scaleform.IsLoaded)
+                {
+                    await Client.Delay(0);
+                    if (API.GetGameTimer() - startTimer >= 10000)
+                    {
+                        scaleform.Dispose();
+                    }
+                    scaleform.Render2D();
                 }
             }
             await Task.FromResult(0);

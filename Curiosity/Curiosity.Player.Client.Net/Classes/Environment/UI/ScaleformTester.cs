@@ -43,7 +43,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     {
                         scaleform.Dispose();
                     }
-                    scaleform.Draw2D();
+                    scaleform.Render2D();
                 }
             }
             await Task.FromResult(0);

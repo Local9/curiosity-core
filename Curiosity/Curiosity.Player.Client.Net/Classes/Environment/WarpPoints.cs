@@ -51,44 +51,44 @@ namespace Curiosity.Client.net.Classes.Environment
         static public List<WarpPointPair> Warps = new List<WarpPointPair>()
         {
             // Humain Labs
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(3540.89f, 3676.365f, 20.99179f + MarkerZAdjustment), 170.862f), B = new WarpPoint("Go Outside", new Vector3(3540.89f, 3676.365f, 27.36446f + MarkerZAdjustment), 166.890f), },
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(3540.89f, 3676.365f, 20.99179f + MarkerZAdjustment), 170.862f), B = new WarpPoint("go outside", new Vector3(3540.89f, 3676.365f, 27.36446f + MarkerZAdjustment), 166.890f), },
             //FIB Building Lobby -> Floor 49
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(136.404f, -761.284f, 45.752f + MarkerZAdjustment), 170.862f), B = new WarpPoint("Go Outside", new Vector3(136.090f, -761.715f, 242.152f + MarkerZAdjustment), 166.890f), },
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(141.951f, -769.271f, 242.152f + MarkerZAdjustment), 70.022f), B = new WarpPoint("Go Outside", new Vector3(143.132f, -769.822f, 242.152f + MarkerZAdjustment), 249.561f), },
+            new WarpPointPair { A = new WarpPoint("go down", new Vector3(136.404f, -761.284f, 45.752f + MarkerZAdjustment), 170.862f), B = new WarpPoint("go up", new Vector3(136.090f, -761.715f, 242.152f + MarkerZAdjustment), 166.890f), },
+            new WarpPointPair { A = new WarpPoint("leave room", new Vector3(141.951f, -769.271f, 242.152f + MarkerZAdjustment), 70.022f), B = new WarpPoint("enter room", new Vector3(143.132f, -769.822f, 242.152f + MarkerZAdjustment), 249.561f), },
             //Grove St. Garage
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(-71.883f, -1821.445f, 26.942f + MarkerZAdjustment), 226.341f), B = new WarpPoint("Go Outside", new Vector3(1027.370f, -3101.449f, -39.000f + MarkerZAdjustment), 94.845f),
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(-71.883f, -1821.445f, 26.942f + MarkerZAdjustment), 226.341f), B = new WarpPoint("go outside", new Vector3(1027.370f, -3101.449f, -39.000f + MarkerZAdjustment), 94.845f),
                                 IPLsAtoB = new Dictionary<string, bool>(){ ["ex_exec_warehouse_placement_interior_2_int_warehouse_l_dlc_milo"] = true } },
             //La Fuente Blanca
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(1399.189f, 1127.582f, 114.334f + MarkerZAdjustment), 189.848f), B = new WarpPoint("Go Outside", new Vector3(1399.462f, 1128.994f, 114.334f + MarkerZAdjustment), 357.484f) },
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(1390.025f, 1132.200f, 114.434f + MarkerZAdjustment), 88.331f), B = new WarpPoint("Go Outside", new Vector3(1391.408f, 1132.597f, 114.334f + MarkerZAdjustment), 268.4482f) },
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(1409.762f, 1147.303f, 114.334f + MarkerZAdjustment), 270.610f), B = new WarpPoint("Go Outside", new Vector3(1408.315f, 1147.484f, 114.334f + MarkerZAdjustment), 93.512f) },
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(1395.033f, 1141.936f, 114.628f + MarkerZAdjustment), 86.494f), B = new WarpPoint("Go Outside", new Vector3(1396.902f, 1141.769f, 114.334f + MarkerZAdjustment), 259.203f) },
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(1399.189f, 1127.582f, 114.334f + MarkerZAdjustment), 189.848f), B = new WarpPoint("go outside", new Vector3(1399.462f, 1128.994f, 114.334f + MarkerZAdjustment), 357.484f) },
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(1390.025f, 1132.200f, 114.434f + MarkerZAdjustment), 88.331f), B = new WarpPoint("go outside", new Vector3(1391.408f, 1132.597f, 114.334f + MarkerZAdjustment), 268.4482f) },
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(1409.762f, 1147.303f, 114.334f + MarkerZAdjustment), 270.610f), B = new WarpPoint("go outside", new Vector3(1408.315f, 1147.484f, 114.334f + MarkerZAdjustment), 93.512f) },
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(1395.033f, 1141.936f, 114.628f + MarkerZAdjustment), 86.494f), B = new WarpPoint("go outside", new Vector3(1396.902f, 1141.769f, 114.334f + MarkerZAdjustment), 259.203f) },
             //Psychologist House
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(-1911.674f, -576.088f, 19.097f + MarkerZAdjustment), 141.074f), B = new WarpPoint("Go Outside", new Vector3(-1910.834f, -575.006f, 19.097f + MarkerZAdjustment), 328.860f) },
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(-1911.674f, -576.088f, 19.097f + MarkerZAdjustment), 141.074f), B = new WarpPoint("go outside", new Vector3(-1910.834f, -575.006f, 19.097f + MarkerZAdjustment), 328.860f) },
             //Solomons Office
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(-1007.416f, -486.735f, 39.970f + MarkerZAdjustment), 122.347f), B = new WarpPoint("Go Outside", new Vector3(-1003.031f, -477.655f, 50.027f + MarkerZAdjustment), 114.669f) },
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(-1007.416f, -486.735f, 39.970f + MarkerZAdjustment), 122.347f), B = new WarpPoint("go outside", new Vector3(-1003.031f, -477.655f, 50.027f + MarkerZAdjustment), 114.669f) },
             //Vanilla Unicorn
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(126.428f, -1282.021f, 29.276f + MarkerZAdjustment), 127.886f), B = new WarpPoint("Go Outside", new Vector3(127.960f, -1280.941f, 29.270f + MarkerZAdjustment), 307.661f) },
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(126.428f, -1282.021f, 29.276f + MarkerZAdjustment), 127.886f), B = new WarpPoint("go outside", new Vector3(127.960f, -1280.941f, 29.270f + MarkerZAdjustment), 307.661f) },
             //Cocaine Lab (South Los Santos)
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(182.665f, -1836.874f, 28.103f + MarkerZAdjustment), 138.570f), B = new WarpPoint("Go Outside", new Vector3(1088.575f, -3187.979f, -38.993f + MarkerZAdjustment), 170.993f),
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(182.665f, -1836.874f, 28.103f + MarkerZAdjustment), 138.570f), B = new WarpPoint("go outside", new Vector3(1088.575f, -3187.979f, -38.993f + MarkerZAdjustment), 170.993f),
                                 PropListsAtoB = new Dictionary<string, bool>(){ ["security_high"] = true, ["equipment_basic"] = true, ["coke_cut_02"] = true, ["coke_cut_03"] = true, ["table_equipment"] = true, ["coke_press_basic"] = true, ["set_up"] = true },
                                 IPLsAtoB = new Dictionary<string, bool>(){ ["bkr_biker_interior_placement_interior_4_biker_dlc_int_ware03_milo"] = true } },
             //Counterfeit Cash (Bristol Coke Storage)
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(671.269f, -2667.656f, 6.081f + MarkerZAdjustment), 86.378f), B = new WarpPoint("Go Outside", new Vector3(1138.090f, -3198.728f, -39.666f + MarkerZAdjustment), 356.246f),
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(671.269f, -2667.656f, 6.081f + MarkerZAdjustment), 86.378f), B = new WarpPoint("go outside", new Vector3(1138.090f, -3198.728f, -39.666f + MarkerZAdjustment), 356.246f),
                                 PropListsAtoB = new Dictionary<string, bool>(){ ["counterfeit_security"] = true, ["counterfeit_standard_equip_no_prod"] = true, ["counterfeit_cashpile10a"] = true, ["counterfeit_cashpile100b"] = true, ["counterfeit_setup"] = true,
                                 ["dryera_off"] = true, ["dryerb_off"] = true, ["dryerc_open"] = true, ["dryerd_off"] = true, ["money_cutter"] = true, ["special_chairs"] = true},
                                 IPLsAtoB = new Dictionary<string, bool>(){ ["bkr_biker_interior_placement_interior_4_biker_dlc_int_ware04_milo"] = true } },
             //Document Forgery (Little Seoul)
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(-594.489f, -748.777f, 29.487f + MarkerZAdjustment), 183.966f), B = new WarpPoint("Go Outside", new Vector3(1173.498f, -3196.577f, -39.008f + MarkerZAdjustment), 94.503f),
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(-594.489f, -748.777f, 29.487f + MarkerZAdjustment), 183.966f), B = new WarpPoint("go outside", new Vector3(1173.498f, -3196.577f, -39.008f + MarkerZAdjustment), 94.503f),
                                 PropListsAtoB = new Dictionary<string, bool>(){ ["security_high"] = true, ["equipment_upgrade"] = true, ["production"] = true, ["set_up"] = true, ["clutter"] = true, ["interior_upgrade"] = true, ["set_up"] = true, ["chair01"] = true,
                                 ["chair02"] = true, ["chair03"] = true, ["chair04"] = true, ["chair05"] = true, ["chair06"] = true, ["chair07"] = true  },
                                 IPLsAtoB = new Dictionary<string, bool>(){ ["bkr_biker_interior_placement_interior_4_biker_dlc_int_ware05_milo"] = true } },
             //Indoor Grow (Rancho & MacDonald St)
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(449.594f, -1786.979f, 28.595f + MarkerZAdjustment), 69.950f), B = new WarpPoint("Go Outside", new Vector3(1038.967f, -3195.729f, -38.170f + MarkerZAdjustment), 254.853f),
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(449.594f, -1786.979f, 28.595f + MarkerZAdjustment), 69.950f), B = new WarpPoint("go outside", new Vector3(1038.967f, -3195.729f, -38.170f + MarkerZAdjustment), 254.853f),
                                 PropListsAtoB = new Dictionary<string, bool>(){ ["weed_security_upgrade"] = true, ["weed_standard_equip"] = true, ["weed_production"] = true, ["weed_set_up"] = true, ["weed_growthi_stage3"] = true, ["weed_growthe_stage2"] = true, ["weed_growthd_stage1"] = true },
                                 IPLsAtoB = new Dictionary<string, bool>(){ ["bkr_biker_interior_placement_interior_4_biker_dlc_int_ware02_milo"] = true } },
             //Meth Lab
-            new WarpPointPair { A = new WarpPoint("Go Inside", new Vector3(1240.946f, 1866.951f, 78.951f + MarkerZAdjustment), 219.684f), B = new WarpPoint("Go Outside", new Vector3(1011.925f, -3202.161f, -38.993f + MarkerZAdjustment), 356.264f),
+            new WarpPointPair { A = new WarpPoint("go inside", new Vector3(1240.946f, 1866.951f, 78.951f + MarkerZAdjustment), 219.684f), B = new WarpPoint("go outside", new Vector3(1011.925f, -3202.161f, -38.993f + MarkerZAdjustment), 356.264f),
                                 PropListsAtoB = new Dictionary<string, bool>(){ ["meth_lab_security_high"] = true, ["meth_lab_basic"] = true, ["meth_lab_production"] = true, ["meth_lab_setup"] = true },
                                 IPLsAtoB = new Dictionary<string, bool>(){ ["bkr_biker_interior_placement_interior_4_biker_dlc_int_ware01_milo"] = true } }
         };
@@ -98,19 +98,22 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             Client.GetInstance().RegisterTickHandler(OnTick);
             PeriodicUpdate();
-            UI.ButtonInstructions.StatusCheckCallbacks.Add(new Func<KeyValuePair<Control, string>?>(DisplayButtonInstructionCheck));
+            Client.GetInstance().RegisterTickHandler(DisplayButtonInstructionCheck);
         }
 
-        static public KeyValuePair<Control, string>? DisplayButtonInstructionCheck()
+        static async Task DisplayButtonInstructionCheck()
         {
-            WarpPoint warp = GetActiveWarpPoint().Item1;
-            if (warp != null)
+            while (true)
             {
-                return new KeyValuePair<Control, string>(Control.Context, warp.TargetLabel);
-            }
-            else
-            {
-                return null;
+                WarpPoint warp = GetActiveWarpPoint()?.Item1;
+                if (warp != null)
+                {
+                    API.SetTextComponentFormat("STRING");
+                    API.AddTextComponentString($" Press ~INPUT_PICKUP~ to {warp.TargetLabel}.");
+                    API.DisplayHelpTextFromStringLabel(0, false, true, -1);
+                }
+                await Client.Delay(0);
+                await Task.FromResult(0);
             }
         }
 
