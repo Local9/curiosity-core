@@ -81,75 +81,119 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             int wantedLevel = API.GetPlayerWantedLevel(playerHandle);
             int playerGamerTag = API.CreateMpGamerTag(playerHandle, player.Name, false, false, "", 0);
 
-            if (wantedLevel > 0)
+            if (!API.NetworkIsPlayerActive(player.Handle))
             {
-                API.SetMpGamerTagVisibility(playerGamerTag, 7, true);
-                API.SetMpGamerTagWantedLevel(playerGamerTag, wantedLevel);
-            }
-            else
-            {
-                API.SetMpGamerTagVisibility(playerGamerTag, 7, false);
-            }
-
-            if (API.NetworkIsPlayerTalking(playerHandle))
-            {
-                API.SetMpGamerTagVisibility(playerGamerTag, 9, true);
-            }
-            else
-            {
-                API.SetMpGamerTagVisibility(playerGamerTag, 9, false);
-            }
-
-            if (!API.DoesBlipExist(blip))
-            {
-                blip = API.AddBlipForEntity(playerCharacterHandle);
-                API.SetBlipSprite(blip, 1);
-                API.ShowHeadingIndicatorOnBlip(blip, true);
-            }
-            else
-            {
-                int vehicleHandle = API.GetVehiclePedIsIn(playerCharacterHandle, false);
-                BlipSprite currentBlipSprite = (BlipSprite)API.GetBlipSprite(blip);
-
-                if (API.IsEntityDead(playerCharacterHandle))
+                API.SetMpGamerTagVisibility(playerGamerTag, 0, false);
+                if (API.DoesBlipExist(blip))
                 {
-                    if (currentBlipSprite != BlipSprite.Dead)
-                    {
-                        API.SetBlipSprite(blip, (int)BlipSprite.Dead);
-                        API.ShowHeadingIndicatorOnBlip(blip, false);
-                    }
+                    API.SetBlipAlpha(blip, 0);
                 }
-                else if (vehicleHandle > 0)
+            }
+            else if (player.Character.Opacity == 0)
+            {
+                API.SetMpGamerTagVisibility(playerGamerTag, 0, false);
+                if (API.DoesBlipExist(blip))
                 {
-                    VehicleClass vehicleClass = (VehicleClass)API.GetVehicleClass(vehicleHandle);
-                    int vehModel = API.GetEntityModel(vehicleHandle);
+                    API.SetBlipAlpha(blip, 0);
+                }
+            }
+            else
+            {
 
-                    if (vehicleClass == VehicleClass.Helicopters)
+                if (wantedLevel > 0)
+                {
+                    API.SetMpGamerTagVisibility(playerGamerTag, 7, true);
+                    API.SetMpGamerTagWantedLevel(playerGamerTag, wantedLevel);
+                }
+                else
+                {
+                    API.SetMpGamerTagVisibility(playerGamerTag, 7, false);
+                }
+
+                if (API.NetworkIsPlayerTalking(playerHandle))
+                {
+                    API.SetMpGamerTagVisibility(playerGamerTag, 9, true);
+                }
+                else
+                {
+                    API.SetMpGamerTagVisibility(playerGamerTag, 9, false);
+                }
+
+                if (!API.DoesBlipExist(blip))
+                {
+                    blip = API.AddBlipForEntity(playerCharacterHandle);
+                    API.SetBlipSprite(blip, 1);
+                    API.ShowHeadingIndicatorOnBlip(blip, true);
+                }
+                else
+                {
+                    int vehicleHandle = API.GetVehiclePedIsIn(playerCharacterHandle, false);
+                    BlipSprite currentBlipSprite = (BlipSprite)API.GetBlipSprite(blip);
+
+                    if (API.IsEntityDead(playerCharacterHandle))
                     {
-                        if (currentBlipSprite != BlipSprite.HelicopterAnimated)
+                        if (currentBlipSprite != BlipSprite.Dead)
                         {
-                            API.SetBlipSprite(blip, (int)BlipSprite.HelicopterAnimated);
+                            API.SetBlipSprite(blip, (int)BlipSprite.Dead);
                             API.ShowHeadingIndicatorOnBlip(blip, false);
                         }
                     }
-                    else if (vehicleClass == VehicleClass.Planes)
+                    else if (vehicleHandle > 0)
                     {
-                        if (currentBlipSprite != BlipSprite.Plane)
+                        VehicleClass vehicleClass = (VehicleClass)API.GetVehicleClass(vehicleHandle);
+                        int vehModel = API.GetEntityModel(vehicleHandle);
+
+                        if (vehicleClass == VehicleClass.Helicopters)
                         {
-                            API.SetBlipSprite(blip, (int)BlipSprite.Plane);
-                            API.ShowHeadingIndicatorOnBlip(blip, false);
+                            if (currentBlipSprite != BlipSprite.HelicopterAnimated)
+                            {
+                                API.SetBlipSprite(blip, (int)BlipSprite.HelicopterAnimated);
+                                API.ShowHeadingIndicatorOnBlip(blip, false);
+                            }
                         }
-                    }
-                    else if (vehicleClass == VehicleClass.Boats)
-                    {
-                        if (currentBlipSprite != BlipSprite.Boat)
+                        else if (vehicleClass == VehicleClass.Planes)
                         {
-                            API.SetBlipSprite(blip, (int)BlipSprite.Boat);
-                            API.ShowHeadingIndicatorOnBlip(blip, false);
+                            if (currentBlipSprite != BlipSprite.Plane)
+                            {
+                                API.SetBlipSprite(blip, (int)BlipSprite.Plane);
+                                API.ShowHeadingIndicatorOnBlip(blip, false);
+                            }
+                        }
+                        else if (vehicleClass == VehicleClass.Boats)
+                        {
+                            if (currentBlipSprite != BlipSprite.Boat)
+                            {
+                                API.SetBlipSprite(blip, (int)BlipSprite.Boat);
+                                API.ShowHeadingIndicatorOnBlip(blip, false);
+                            }
+                        }
+                        else
+                        {
+                            if (currentBlipSprite != BlipSprite.Standard)
+                            {
+                                API.SetBlipSprite(blip, (int)BlipSprite.Standard);
+                                API.ShowHeadingIndicatorOnBlip(blip, true);
+                            }
+                        }
+
+                        int passengers = API.GetVehicleNumberOfPassengers(vehicleHandle);
+                        if (passengers > 0)
+                        {
+                            if (!API.IsVehicleSeatFree(vehicleHandle, -1))
+                            {
+                                passengers = passengers + 1;
+                            }
+
+                            API.ShowNumberOnBlip(blip, passengers);
+                        }
+                        else
+                        {
+                            API.HideNumberOnBlip(blip);
                         }
                     }
                     else
                     {
+                        API.HideNumberOnBlip(blip);
                         if (currentBlipSprite != BlipSprite.Standard)
                         {
                             API.SetBlipSprite(blip, (int)BlipSprite.Standard);
@@ -157,59 +201,36 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                         }
                     }
 
-                    int passengers = API.GetVehicleNumberOfPassengers(vehicleHandle);
-                    if (passengers > 0)
-                    {
-                        if (!API.IsVehicleSeatFree(vehicleHandle, -1))
-                        {
-                            passengers = passengers + 1;
-                        }
+                    API.SetBlipRotation(blip, (int)Math.Ceiling(API.GetEntityHeading(vehicleHandle)));
+                    API.SetBlipNameToPlayerName(blip, playerHandle);
+                    API.SetBlipScale(blip, 0.85f);
 
-                        API.ShowNumberOnBlip(blip, passengers);
+                    if (API.IsPauseMenuActive())
+                    {
+                        API.SetBlipAlpha(blip, 255);
                     }
                     else
                     {
-                        API.HideNumberOnBlip(blip);
+                        Vector3 characterPosition = player.Character.Position;
+                        Vector3 playerPosition = Game.PlayerPed.Position;
+
+                        double distance = (Math.Floor(Math.Abs(Math.Sqrt(
+                            (playerPosition.X - characterPosition.X) *
+                            (playerPosition.X - characterPosition.X) +
+                            (playerPosition.Y - characterPosition.Y) *
+                            (playerPosition.Y - characterPosition.Y))) / -1)) + 900;
+
+                        if (distance < 0)
+                        {
+                            distance = 0;
+                        }
+                        else if (distance > 255)
+                        {
+                            distance = 255;
+                        }
+
+                        API.SetBlipAlpha(blip, (int)distance);
                     }
-                }
-                else
-                {
-                    API.HideNumberOnBlip(blip);
-                    if (currentBlipSprite != BlipSprite.Standard)
-                    {
-                        API.SetBlipSprite(blip, (int)BlipSprite.Standard);
-                        API.ShowHeadingIndicatorOnBlip(blip, true);
-                    }
-                }
-
-                API.SetBlipRotation(blip, (int)Math.Ceiling(API.GetEntityHeading(vehicleHandle)));
-                API.SetBlipNameToPlayerName(blip, playerHandle);
-                API.SetBlipScale(blip, 0.85f);
-
-                if (API.IsPauseMenuActive())
-                {
-                    API.SetBlipAlpha(blip, 255);
-                }
-                else
-                {
-                    Vector3 characterPosition = player.Character.Position;
-                    Vector3 playerPosition = Game.PlayerPed.Position;
-
-                    double distance = (Math.Floor(Math.Abs(Math.Sqrt(
-                        (playerPosition.X - characterPosition.X) *
-                        (playerPosition.X - characterPosition.X) +
-                        (playerPosition.Y - characterPosition.Y) *
-                        (playerPosition.Y - characterPosition.Y))) / -1)) + 900;
-
-                    if (distance < 0)
-                    {
-                        distance = 0;
-                    } else if (distance > 255)
-                    {
-                        distance = 255;
-                    }
-
-                    API.SetBlipAlpha(blip, (int)distance);
                 }
             }
 
