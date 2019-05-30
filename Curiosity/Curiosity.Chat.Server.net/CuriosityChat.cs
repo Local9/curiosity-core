@@ -33,7 +33,6 @@ namespace Curiosity.Chat.Server.net
             if (message.ContainsProfanity())
             {
                 Debug.WriteLine($"[CHAT] PROFANITY !! '{message}' entered by '{player.Name}' (#{player.Handle})");
-                Function.Call(Hash.CANCEL_EVENT);
                 player.TriggerEvent("curiosity:Server:Chat:Profanity");
                 await Delay(0);
                 Regex wordFilter = new Regex($"({string.Join("|", ProfanityFilter.ProfanityArray())})");
