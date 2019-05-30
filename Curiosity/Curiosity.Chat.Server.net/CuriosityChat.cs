@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using CitizenFX.Core;
@@ -19,10 +20,25 @@ namespace Curiosity.Chat.Server.net
 
         async void ChatMessage([FromSource]Player player, string role, string message, string color, string scope)
         {
+            await Delay(0);
+
             if (string.IsNullOrWhiteSpace(color) || string.IsNullOrWhiteSpace(message))
             {
                 // TODO: Use Log instead
                 Debug.WriteLine($"[CHAT] Invalid chat message '{message}' entered by '{player.Name}' (#{player.Handle})");
+                Function.Call(Hash.CANCEL_EVENT);
+                return;
+            }
+
+            if (message.ContainsProfanity())
+            {
+                Debug.WriteLine($"[CHAT] PROFANITY !! '{message}' entered by '{player.Name}' (#{player.Handle})");
+                Function.Call(Hash.CANCEL_EVENT);
+                player.TriggerEvent("curiosity:Server:Chat:Profanity");
+                await Delay(0);
+                Regex wordFilter = new Regex($"({string.Join("|", ProfanityFilter.ProfanityArray())})");
+                message = wordFilter.Replace(message, "***");
+                player.TriggerEvent("curiosity:Client:Chat:Message", $"{role} {player.Name}", color, message);
                 return;
             }
 
@@ -32,7 +48,6 @@ namespace Curiosity.Chat.Server.net
                     TriggerClientEvent("curiosity:Client:Chat:Message", $"{role} {player.Name}", color, message);
                     break;
             }
-            await Delay(0);
         }
 
         internal void RconCommand([FromSource]Player player, string commandName, List<object> objargs)
