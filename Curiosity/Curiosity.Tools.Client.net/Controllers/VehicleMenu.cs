@@ -192,10 +192,11 @@ namespace Curiosity.Tools.Client.net.Controllers
 			veh.IsEngineRunning = true;
 			veh.Mods.LicensePlate = "DEVTOOLS";
 
-            API.SetNetworkIdCanMigrate(veh.NetworkId, true);
-            API.SetNetworkIdExistsOnAllMachines(veh.NetworkId, true);
+            int networkId = API.VehToNet(veh.Handle);
+            API.SetNetworkIdExistsOnAllMachines(networkId, true);
+            API.SetNetworkIdCanMigrate(networkId, true);
 
-            // Client.TriggerServerEvent("curiosity:Server:Vehicles:Spawned", veh.NetworkId);
+            Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
 
 			return true;
 		}
