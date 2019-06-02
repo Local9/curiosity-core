@@ -74,6 +74,7 @@
     <Compile Include="Classes\Environment\VoipRange.cs" />
     <Compile Include="Classes\Environment\WantedLevels.cs" />
     <Compile Include="Classes\Environment\WarpPoints.cs" />
+    <Compile Include="Classes\Environment\WayPoints.cs" />
     <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\CharacterEditorMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\CustomizeButton.cs" />

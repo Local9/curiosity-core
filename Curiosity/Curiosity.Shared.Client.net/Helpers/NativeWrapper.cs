@@ -113,5 +113,10 @@ namespace Curiosity.Shared.Client.net.Helper
             OutputArgument outputArgument = new OutputArgument();
             return Function.Call<Vector3>(Hash.GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS, entity, 0.0f, distance, 0.0);
         }
+
+        static public float GetDistanceBetween(Vector3 start, Vector3 end, bool useZ = false)
+        {
+            return API.GetDistanceBetweenCoords(start.X, start.Y, start.Z, end.X, end.Y, end.Z, useZ);
+        }
     }
 }

@@ -45,6 +45,11 @@ namespace Curiosity.Server.net.Classes
                     await BaseScript.Delay(0);
                 }
                 skills = await Database.DatabaseUsersSkills.GetSkills();
+
+                if (skills.Count > 0)
+                {
+                    Log.Success($"{skills.Count} SKILLS CONFIGURED");
+                }
                 await Task.FromResult(0);
             }
             else
