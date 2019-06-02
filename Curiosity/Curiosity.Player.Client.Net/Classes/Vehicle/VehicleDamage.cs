@@ -15,7 +15,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         // TODO: Move to config
         static bool preventVehicleFlip = true;
-        static int randomTireBurstInterval = 5;
+        static int randomTireBurstInterval = 15;
         static float sundayDriverAcceleratorCurve = 7.5f;
         static float sundayDriverBrakeCurve = 5.0f;
         static float engineSafeGuard = 100.0f;
@@ -68,6 +68,9 @@ namespace Curiosity.Client.net.Classes.Vehicle
         // local checks
         static bool isPedInSameVehicle = false;
         static Random random = new Random(API.GetGameTimer());
+
+        static CitizenFX.Core.Vehicle currentVehicle;
+        static CitizenFX.Core.Vehicle lastVehicle;
 
         static MenuItemStandard menuItemFix = new MenuItemStandard { Title = "Fix Vehicle", OnActivate = (item) => Fix() };
 
@@ -203,154 +206,170 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         async static Task VehicleFuckery()
         {
-            if (IsPlayerDrivingAVehicle())
+            while (true)
             {
-                CitizenFX.Core.Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
-                // ENGINE
-                healthEngineCurrent = vehicle.EngineHealth;
-                if (healthEngineCurrent == 1000.0f) healthEngineLast = 1000.0f;
-                healthEngineNew = healthEngineCurrent;
-                healthEngineDelta = healthEngineLast - healthEngineCurrent;
-                healthEngineDeltaScaled = healthEngineDelta * damageFactorEngine * classDamageMultiplier[vehicle.ClassType];
-
-                healthBodyCurrent = vehicle.BodyHealth;
-                if (healthBodyCurrent == 1000.0f) healthBodyLast = 1000.0f;
-                healthBodyNew = healthBodyCurrent;
-                healthBodyDelta = healthBodyLast - healthBodyCurrent;
-                healthBodyDeltaScaled = healthBodyDelta * damageFactorBody * classDamageMultiplier[vehicle.ClassType];
-
-                healthPetrolTankCurrent = vehicle.PetrolTankHealth;
-                if (healthPetrolTankCurrent == 1000.0f) healthPetrolTankLast = 1000.0f;
-                healthPetrolTankNew = healthPetrolTankCurrent;
-                healthPetrolTankDelta = healthPetrolTankLast - healthPetrolTankCurrent;
-                healthPetrolTankDeltaScaled = healthPetrolTankDelta * damageFactorPetrolTank * classDamageMultiplier[vehicle.ClassType];
-
-                if (healthEngineCurrent < engineSafeGuard+1) API.SetVehicleUndriveable(vehicle.Handle, true);
-                if (Game.PlayerPed.LastVehicle.Handle != vehicle.Handle) isPedInSameVehicle = false;
-
-                if (isPedInSameVehicle)
+                await Client.Delay(50);
+                if (IsPlayerDrivingAVehicle())
                 {
-                    if (healthEngineCurrent != 1000.0f || healthBodyCurrent != 1000.0f || healthPetrolTankCurrent != 1000.0f)
+                    currentVehicle = Game.PlayerPed.CurrentVehicle;
+                    // ENGINE
+                    healthEngineCurrent = currentVehicle.EngineHealth;
+                    if (healthEngineCurrent == 1000.0f) healthEngineLast = 1000.0f;
+                    healthEngineNew = healthEngineCurrent;
+                    healthEngineDelta = healthEngineLast - healthEngineCurrent;
+                    healthEngineDeltaScaled = healthEngineDelta * damageFactorEngine * classDamageMultiplier[currentVehicle.ClassType];
+
+                    healthBodyCurrent = currentVehicle.BodyHealth;
+                    if (healthBodyCurrent == 1000.0f) healthBodyLast = 1000.0f;
+                    healthBodyNew = healthBodyCurrent;
+                    healthBodyDelta = healthBodyLast - healthBodyCurrent;
+                    healthBodyDeltaScaled = healthBodyDelta * damageFactorBody * classDamageMultiplier[currentVehicle.ClassType];
+
+                    healthPetrolTankCurrent = currentVehicle.PetrolTankHealth;
+                    if (healthPetrolTankCurrent == 1000.0f) healthPetrolTankLast = 1000.0f;
+                    healthPetrolTankNew = healthPetrolTankCurrent;
+                    healthPetrolTankDelta = healthPetrolTankLast - healthPetrolTankCurrent;
+                    healthPetrolTankDeltaScaled = healthPetrolTankDelta * damageFactorPetrolTank * classDamageMultiplier[currentVehicle.ClassType];
+
+                    if (healthEngineCurrent < engineSafeGuard + 1) API.SetVehicleUndriveable(currentVehicle.Handle, true);
+                    if (lastVehicle != currentVehicle) isPedInSameVehicle = false;
+
+                    if (isPedInSameVehicle)
                     {
-                        float healthEngineCombinedDelta = new float[] { healthEngineDeltaScaled, healthBodyDeltaScaled, healthPetrolTankDeltaScaled }.Max();
+                        if (healthEngineCurrent != 1000.0f || healthBodyCurrent != 1000.0f || healthPetrolTankCurrent != 1000.0f)
+                        {
+                            float healthEngineCombinedDelta = new float[] { healthEngineDeltaScaled, healthBodyDeltaScaled, healthPetrolTankDeltaScaled }.Max();
 
-                        if (healthEngineCombinedDelta > (healthEngineCurrent - engineSafeGuard)) healthEngineCombinedDelta = (float)(healthEngineCombinedDelta * 0.7);
-                        if (healthEngineCombinedDelta > healthEngineCurrent) healthEngineCombinedDelta = healthEngineCurrent - (cascadingFailureThreshold / 5);
+                            if (healthEngineCombinedDelta > (healthEngineCurrent - engineSafeGuard)) healthEngineCombinedDelta = (float)(healthEngineCombinedDelta * 0.7);
+                            if (healthEngineCombinedDelta > healthEngineCurrent) healthEngineCombinedDelta = healthEngineCurrent - (cascadingFailureThreshold / 5);
 
-                        healthEngineNew = healthEngineLast - healthEngineCombinedDelta;
+                            healthEngineNew = healthEngineLast - healthEngineCombinedDelta;
 
-                        if (healthEngineNew > (cascadingFailureThreshold + 5) && healthEngineNew < degradingFailureThreshold) healthEngineNew = healthEngineNew - (0.038f * cascadingFailureSpeedFactor);
-                        if (healthEngineNew < engineSafeGuard) healthEngineNew = engineSafeGuard;
-                        if (healthPetrolTankCurrent < 750f) healthPetrolTankNew = 750.0f;
-                        if (healthBodyNew < 0) healthBodyNew = 0.0f;
+                            if (healthEngineNew > (cascadingFailureThreshold + 5) && healthEngineNew < degradingFailureThreshold) healthEngineNew = healthEngineNew - (0.038f * cascadingFailureSpeedFactor);
+                            if (healthEngineNew < engineSafeGuard) healthEngineNew = engineSafeGuard;
+                            if (healthPetrolTankCurrent < 750f) healthPetrolTankNew = 750.0f;
+                            if (healthBodyNew < 0) healthBodyNew = 0.0f;
+                        }
                     }
+                    else
+                    {
+                        fDeformationDamageMult = API.GetVehicleHandlingFloat(currentVehicle.Handle, "CHandlingData", "fDeformationDamageMult");
+                        fBrakeForce = API.GetVehicleHandlingFloat(currentVehicle.Handle, "CHandlingData", "fBrakeForce");
+                        float newFDeformationDamageMult = (float)Math.Pow(fDeformationDamageMult, deformationExponent);
+                        if (deformationMultiplier != -1) API.SetVehicleHandlingFloat(currentVehicle.Handle, "CHandlingData", "fDeformationDamageMult", newFDeformationDamageMult * deformationMultiplier);
+                        if (weaponsDamageMultiplier != -1) API.SetVehicleHandlingFloat(currentVehicle.Handle, "CHandlingData", "fWeaponDamageMult", weaponsDamageMultiplier / damageFactorBody);
+
+                        fCollisionDamageMult = API.GetVehicleHandlingFloat(currentVehicle.Handle, "CHandlingData", "fCollisionDamageMult");
+                        float newFCollisionDamageMultiplier = (float)Math.Pow(fCollisionDamageMult, collisionDamageExponent);
+                        API.SetVehicleHandlingFloat(currentVehicle.Handle, "CHandlingData", "fCollisionDamageMult", newFCollisionDamageMultiplier);
+
+                        fEngineDamageMult = API.GetVehicleHandlingFloat(currentVehicle.Handle, "CHandlingData", "fEngineDamageMult");
+                        float newFEngineDamageMult = (float)Math.Pow(fEngineDamageMult, engineDamageExponent);
+                        API.SetVehicleHandlingFloat(currentVehicle.Handle, "CHandlingData", "fEngineDamageMult", newFEngineDamageMult);
+
+                        if (healthBodyCurrent < cascadingFailureThreshold) healthBodyNew = cascadingFailureThreshold;
+                        isPedInSameVehicle = true;
+                    }
+
+                    if (healthEngineNew != healthEngineCurrent) currentVehicle.EngineHealth = healthEngineNew;
+                    if (healthBodyNew != healthBodyCurrent) currentVehicle.BodyHealth = healthBodyNew;
+                    if (healthPetrolTankNew != healthPetrolTankCurrent) currentVehicle.PetrolTankHealth = healthPetrolTankCurrent;
+
+                    healthEngineLast = healthEngineNew;
+                    healthBodyLast = healthBodyNew;
+                    healthPetrolTankLast = healthPetrolTankNew;
+
+                    if (randomTireBurstInterval != 0 && currentVehicle.Speed > 10f) TireBurstLottery(currentVehicle);
                 }
                 else
                 {
-                    fDeformationDamageMult = API.GetVehicleHandlingFloat(vehicle.Handle, "CHandlingData", "fDeformationDamageMult");
-                    fBrakeForce = API.GetVehicleHandlingFloat(vehicle.Handle, "CHandlingData", "fBrakeForce");
-                    float newFDeformationDamageMult = (float)Math.Pow(fDeformationDamageMult, deformationExponent);
-                    if (deformationMultiplier != -1) API.SetVehicleHandlingFloat(vehicle.Handle, "CHandlingData", "fDeformationDamageMult", newFDeformationDamageMult * deformationMultiplier);
-                    if (weaponsDamageMultiplier != -1) API.SetVehicleHandlingFloat(vehicle.Handle, "CHandlingData", "fWeaponDamageMult", weaponsDamageMultiplier / damageFactorBody);
-
-                    fCollisionDamageMult = API.GetVehicleHandlingFloat(vehicle.Handle, "CHandlingData", "fCollisionDamageMult");
-                    float newFCollisionDamageMultiplier = (float)Math.Pow(fCollisionDamageMult, collisionDamageExponent);
-                    API.SetVehicleHandlingFloat(vehicle.Handle, "CHandlingData", "fCollisionDamageMult", newFCollisionDamageMultiplier);
-
-                    fEngineDamageMult = API.GetVehicleHandlingFloat(vehicle.Handle, "CHandlingData", "fEngineDamageMult");
-                    float newFEngineDamageMult = (float)Math.Pow(fEngineDamageMult, engineDamageExponent);
-                    API.SetVehicleHandlingFloat(vehicle.Handle, "CHandlingData", "fEngineDamageMult", newFEngineDamageMult);
-
-                    if (healthBodyCurrent < cascadingFailureThreshold) healthBodyNew = cascadingFailureThreshold;
-                    isPedInSameVehicle = true;
+                    if (isPedInSameVehicle)
+                    {
+                        lastVehicle = Game.PlayerPed.LastVehicle;
+                        if (deformationMultiplier != -1) API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fDeformationDamageMult", 0.0f);
+                        API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fBrakeForce", 1.0f);
+                        if (weaponsDamageMultiplier != -1) API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fWeaponDamageMult", 0.124f);
+                        API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fCollisionDamageMult", 0.0f);
+                        API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fEngineDamageMult", 0.0f);
+                    }
+                    isPedInSameVehicle = false;
                 }
 
-                if (healthEngineNew != healthEngineCurrent) vehicle.EngineHealth = healthEngineNew;
-                if (healthBodyNew != healthBodyCurrent) vehicle.BodyHealth = healthBodyNew;
-                if (healthPetrolTankNew != healthPetrolTankCurrent) vehicle.PetrolTankHealth = healthPetrolTankCurrent;
-
-                healthEngineLast = healthEngineNew;
-                healthBodyLast = healthBodyNew;
-                healthPetrolTankLast = healthPetrolTankNew;
-                if (randomTireBurstInterval != 0 && vehicle.Speed > 10f) TireBurstLottery(vehicle);
+                await Task.FromResult(0);
             }
-
-            await Task.FromResult(0);
         }
 
         async static Task AdditionalVehicleFuckery()
         {
             if (!IsPlayerDrivingAVehicle()) return;
 
-            if (isPedInSameVehicle)
-            {
-                float factor = 1.0f;
-                if (healthEngineNew < 900)
-                {
-                    factor = (float)(healthEngineNew + 200.0) / 1100;
-                }
+            //if (isPedInSameVehicle)
+            //{
+            //    float factor = 1.0f;
+            //    if (healthEngineNew < 900)
+            //    {
+            //        factor = (float)(healthEngineNew + 200.0) / 1100;
+            //    }
 
-                if (Game.PlayerPed.CurrentVehicle.ClassType != VehicleClass.Boats)
-                {
-                    int accelerator = API.GetControlValue(2, (int)Control.VehicleAccelerate);
-                    int brake = API.GetControlValue(2, (int)Control.VehicleBrake);
-                    float speed = API.GetEntitySpeedVector(Game.PlayerPed.CurrentVehicle.Handle, false).Y;
-                    float brk = fBrakeForce;
-                    if (speed >= 1.0f)
-                    {
-                        if (accelerator > 127)
-                        {
-                            float acc = rangedScale(accelerator, 127.0f, 254.0f, 0.1f, 0.1f, 10.0f - (sundayDriverAcceleratorCurve * 2.0f));
-                            factor = factor * acc;
-                        }
-                        if (brake > 127)
-                        {
-                            isBrakingForward = true;
-                            brk = rangedScale(brake, 127.0f, 254.0f, 0.1f, fBrakeForce, 10.0f - (sundayDriverBrakeCurve * 2.0f));
-                        }
-                    }
-                    else if (speed <= -1.0f)
-                    {
-                        if (brake > 127)
-                        {
-                            float rev = rangedScale(brake, 127.0f, 254.0f, 0.1f, 0.1f, 10.0f - (sundayDriverAcceleratorCurve * 2.0f));
-                            factor = factor * rev;
-                        }
-                        if (accelerator > 127)
-                        {
-                            isBrakingReverse = true;
-                            brk = rangedScale(accelerator, 127.0f, 254.0f, 0.1f, fBrakeForce, 10.0f - (sundayDriverBrakeCurve * 2.0f));
-                        }
-                    }
-                    else
-                    {
-                        float entitySpeed = Game.PlayerPed.CurrentVehicle.Speed;
-                        if (entitySpeed < 1.0f)
-                        {
-                            if (isBrakingForward)
-                            {
-                                API.DisableControlAction(2, (int)Control.VehicleBrake, true);
-                                Game.PlayerPed.CurrentVehicle.Speed = speed * 0.98f;
-                                Game.PlayerPed.CurrentVehicle.AreBrakeLightsOn = true;
-                            }
-                            if (isBrakingReverse)
-                            {
-                                API.DisableControlAction(2, (int)Control.VehicleAccelerate, true);
-                                Game.PlayerPed.CurrentVehicle.Speed = speed * 0.98f;
-                                Game.PlayerPed.CurrentVehicle.AreBrakeLightsOn = true;
-                            }
-                            if (isBrakingForward && API.GetDisabledControlNormal(2, (int)Control.VehicleBrake) == 0) isBrakingForward = false;
-                            if (isBrakingReverse && API.GetDisabledControlNormal(2, (int)Control.VehicleAccelerate) == 0) isBrakingReverse = false;
-                        }
-                    }
-                    if (brk > fBrakeForce - 0.02f) brk = fBrakeForce;
-                    API.SetVehicleHandlingFloat(Game.PlayerPed.CurrentVehicle.Handle, "CHandlingData", "fBrakeForce", brk);
-
-                    CitizenFX.Core.UI.Screen.ShowSubtitle($"BR: {isBrakingReverse}\nBF: {isBrakingForward}");
-                }
-                if (healthEngineNew < engineSafeGuard) factor = limpModeMultiplier;
-                Game.PlayerPed.CurrentVehicle.EngineTorqueMultiplier = factor;
-            }
+            //    if (Game.PlayerPed.CurrentVehicle.ClassType != VehicleClass.Boats)
+            //    {
+            //        int accelerator = API.GetControlValue(2, (int)Control.VehicleAccelerate);
+            //        int brake = API.GetControlValue(2, (int)Control.VehicleBrake);
+            //        float speed = API.GetEntitySpeedVector(Game.PlayerPed.CurrentVehicle.Handle, false).Y;
+            //        float brk = fBrakeForce;
+            //        if (speed >= 1.0f)
+            //        {
+            //            if (accelerator > 127)
+            //            {
+            //                float acc = rangedScale(accelerator, 127.0f, 254.0f, 0.1f, 0.1f, 10.0f - (sundayDriverAcceleratorCurve * 2.0f));
+            //                factor = factor * acc;
+            //            }
+            //            if (brake > 127)
+            //            {
+            //                isBrakingForward = true;
+            //                brk = rangedScale(brake, 127.0f, 254.0f, 0.1f, fBrakeForce, 10.0f - (sundayDriverBrakeCurve * 2.0f));
+            //            }
+            //        }
+            //        else if (speed <= -1.0f)
+            //        {
+            //            if (brake > 127)
+            //            {
+            //                float rev = rangedScale(brake, 127.0f, 254.0f, 0.1f, 0.1f, 10.0f - (sundayDriverAcceleratorCurve * 2.0f));
+            //                factor = factor * rev;
+            //            }
+            //            if (accelerator > 127)
+            //            {
+            //                isBrakingReverse = true;
+            //                brk = rangedScale(accelerator, 127.0f, 254.0f, 0.1f, fBrakeForce, 10.0f - (sundayDriverBrakeCurve * 2.0f));
+            //            }
+            //        }
+            //        else
+            //        {
+            //            float entitySpeed = Game.PlayerPed.CurrentVehicle.Speed;
+            //            if (entitySpeed < 1.0f)
+            //            {
+            //                if (isBrakingForward)
+            //                {
+            //                    API.DisableControlAction(2, (int)Control.VehicleBrake, true);
+            //                    Game.PlayerPed.CurrentVehicle.Speed = speed * 0.98f;
+            //                    Game.PlayerPed.CurrentVehicle.AreBrakeLightsOn = true;
+            //                }
+            //                if (isBrakingReverse)
+            //                {
+            //                    API.DisableControlAction(2, (int)Control.VehicleAccelerate, true);
+            //                    Game.PlayerPed.CurrentVehicle.Speed = speed * 0.98f;
+            //                    Game.PlayerPed.CurrentVehicle.AreBrakeLightsOn = true;
+            //                }
+            //                if (isBrakingForward && API.GetDisabledControlNormal(2, (int)Control.VehicleBrake) == 0) isBrakingForward = false;
+            //                if (isBrakingReverse && API.GetDisabledControlNormal(2, (int)Control.VehicleAccelerate) == 0) isBrakingReverse = false;
+            //            }
+            //        }
+            //        if (brk > fBrakeForce - 0.02f) brk = fBrakeForce;
+            //        API.SetVehicleHandlingFloat(Game.PlayerPed.CurrentVehicle.Handle, "CHandlingData", "fBrakeForce", brk);
+            //    }
+            //    if (healthEngineNew < engineSafeGuard) factor = limpModeMultiplier;
+            //    Game.PlayerPed.CurrentVehicle.EngineTorqueMultiplier = factor;
+            //}
 
             if (preventVehicleFlip && IsPlayerDrivingAVehicle())
             {

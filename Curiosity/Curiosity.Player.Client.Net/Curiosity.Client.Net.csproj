@@ -68,6 +68,7 @@
     <Compile Include="Classes\Environment\UI\Speedometer.cs" />
     <Compile Include="Classes\Environment\UI\Speedometer3D.cs" />
     <Compile Include="Classes\Environment\UI\VideoLoader.cs" />
+    <Compile Include="Classes\Environment\UI\WorldTime.cs" />
     <Compile Include="Classes\Environment\Vehicles.cs" />
     <Compile Include="Classes\Environment\VoipRange.cs" />
     <Compile Include="Classes\Environment\WantedLevels.cs" />

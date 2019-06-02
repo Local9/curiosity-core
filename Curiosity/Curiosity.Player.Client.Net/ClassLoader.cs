@@ -71,6 +71,7 @@ namespace Curiosity.Client.net
             NuiMenu.Init();
             NuiEventHandler.Init();
             Scoreboard.Init();
+            WorldTime.Init();
 
             // Environment
             //Poi.Init();
