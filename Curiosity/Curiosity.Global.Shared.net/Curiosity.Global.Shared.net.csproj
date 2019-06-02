@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Inventory.cs" />
+    <Compile Include="Entity\PlayerInformation.cs" />
+    <Compile Include="Entity\Skills.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

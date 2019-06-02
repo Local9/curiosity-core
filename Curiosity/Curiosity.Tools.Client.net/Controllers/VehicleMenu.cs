@@ -1,19 +1,18 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Tools.Client.net.Helpers;
+using Curiosity.Tools.Client.net.Menus;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Tools.Client.net.Helpers;
-using Curiosity.Tools.Client.net.Menus;
-using Curiosity.Shared.Client.net.Models;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Tools.Client.net.Controllers
 {
-	public class VehicleMenu : Menu
+    public class VehicleMenu : Menu
 	{
         private bool IsDeveloper = false;
 

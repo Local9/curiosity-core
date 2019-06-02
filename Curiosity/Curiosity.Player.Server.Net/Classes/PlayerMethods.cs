@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using CitizenFX.Core.Native;
 using System.Threading.Tasks;
 
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+
 namespace Curiosity.Server.net.Classes
 {
     class PlayerMethods
@@ -164,6 +166,6 @@ namespace Curiosity.Server.net.Classes
         public int RoleId;
         public int Wallet;
         public int BankAccount;
-        public Dictionary<string, int> Skills;
+        public Dictionary<string, GlobalEntity.Skills> Skills;
     }
 }

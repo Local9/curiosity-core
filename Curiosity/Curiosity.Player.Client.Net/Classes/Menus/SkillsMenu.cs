@@ -4,6 +4,7 @@ using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
@@ -33,10 +34,17 @@ namespace Curiosity.Client.net.Classes.Menus
                     }
                     else
                     {
-                        foreach (KeyValuePair<string, int> v in Skills.playerSkills)
+                        foreach (KeyValuePair<string, GlobalEntity.Skills> v in Skills.playerSkills)
                         {
-                            _menuItems.Add(new MenuItemStandard { Title = $"{v.Key.ToTitleCase()}", Detail = $"{v.Value:#,#00}" });
-                            
+                            string labelDes = v.Value.LabelDescription;
+                            if (string.IsNullOrEmpty(labelDes))
+                            {
+                                _menuItems.Add(new MenuItemStandard { Title = $"{v.Value.Label.ToTitleCase()}", Detail = $"{v.Value.Value:#,#00}" });
+                            }
+                            else
+                            {
+                                _menuItems.Add(new MenuItemStandard { Title = $"{v.Value.Label.ToTitleCase()}", Detail = $"{v.Value.Value:#,#00}", SubDetail = $"{labelDes}" });
+                            }
                         }
                     }
                 }

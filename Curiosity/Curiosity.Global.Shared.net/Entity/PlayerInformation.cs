@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Curiosity.Shared.Client.net.Models
+namespace Curiosity.Global.Shared.net.Entity
 {
     public class PlayerInformationModel
     {
@@ -10,6 +10,6 @@ namespace Curiosity.Shared.Client.net.Models
         public int RoleId;
         public int Wallet;
         public int BankAccount;
-        public Dictionary<string, int> Skills;
+        public Dictionary<string, Skills> Skills;
     }
 }

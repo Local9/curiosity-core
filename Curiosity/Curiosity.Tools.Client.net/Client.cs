@@ -1,17 +1,16 @@
-﻿using System;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Tools.Client.net.Controllers;
 using Curiosity.Tools.Client.net.Menus;
-using Curiosity.Shared.Client.net.Models;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Extensions;
+using System;
+using System.Threading.Tasks;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace Curiosity.Tools.Client.net
 {
-	public class Client : BaseScript
+    public class Client : BaseScript
 	{
 		public DevTools Tools { get; }
 		public MenuController Menu { get; }

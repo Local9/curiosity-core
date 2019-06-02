@@ -2,28 +2,29 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Client.net.Classes.Player
 {
     static class Skills
     {
-        public static Dictionary<string, int> playerSkills = new Dictionary<string, int>();
+        public static Dictionary<string, GlobalEntity.Skills> playerSkills = new Dictionary<string, GlobalEntity.Skills>();
         public static DateTime LastUpdate;
 
         static public async void Init()
         {
-            await BaseScript.Delay(10000);
             Client.GetInstance().RegisterEventHandler("curiosity:Player:Skills:Get", new Action<string>(UpdateSkillsList));
             PeriodicCheck();
         }
 
         static async void UpdateSkillsList(string json)
         {
-            playerSkills = JsonConvert.DeserializeObject<Dictionary<string, int>>(json);
+            playerSkills = JsonConvert.DeserializeObject<Dictionary<string, GlobalEntity.Skills>>(json);
         }
 
         static private async void PeriodicCheck()
         {
+            await BaseScript.Delay(10000);
             while (true)
             {
                 LastUpdate = DateTime.Now;

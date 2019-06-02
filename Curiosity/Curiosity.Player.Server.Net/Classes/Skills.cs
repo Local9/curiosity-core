@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+
 namespace Curiosity.Server.net.Classes
 {
     class Skills
     {
-        static Dictionary<string, int> skills = new Dictionary<string, int>();
+        static Dictionary<string, GlobalEntity.Skills> skills = new Dictionary<string, GlobalEntity.Skills>();
 
         public static void Init()
         {
@@ -21,10 +23,10 @@ namespace Curiosity.Server.net.Classes
 
         async static void GetUserSkills([FromSource]Player player)
         {
-            Dictionary<string, int> skills = new Dictionary<string, int>();
+            Dictionary<string, GlobalEntity.Skills> skills = new Dictionary<string, GlobalEntity.Skills>();
             if (!SessionManager.PlayerList.ContainsKey(player.Handle))
             {
-                skills.Add("Session Loading...", 0);
+                skills.Add("Session Loading...", new GlobalEntity.Skills { Id = 0, TypeId = 0, Description = "Loading", Label = "Loading" });
             }
             else
             {
@@ -35,20 +37,33 @@ namespace Curiosity.Server.net.Classes
 
         async static Task UpdateSkillsDictionary()
         {
-            while (true)
+            await BaseScript.Delay(0);
+            if (Server.isLive)
             {
                 while (Server.serverId == 0)
                 {
                     await BaseScript.Delay(0);
                 }
-                await BaseScript.Delay(0);
                 skills = await Database.DatabaseUsersSkills.GetSkills();
-
-                if (skills.Count > 0)
+                await Task.FromResult(0);
+            }
+            else
+            {
+                while (true)
                 {
-                    Log.Success($"{skills.Count} SKILLS CONFIGURED");
+                    while (Server.serverId == 0)
+                    {
+                        await BaseScript.Delay(0);
+                    }
+                    skills = await Database.DatabaseUsersSkills.GetSkills();
+
+                    if (skills.Count > 0)
+                    {
+                        Log.Success($"{skills.Count} SKILLS CONFIGURED");
+                    }
+                    Log.Verbose("Next skill update in 5 minutes");
+                    await BaseScript.Delay((1000 * 60) * 5);
                 }
-                await BaseScript.Delay(300000);
             }
         }
 
@@ -79,8 +94,10 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
-                Database.DatabaseUsersSkills.IncreaseSkill(characterId, skills[skill], experience);
-                UpdateLifeExperience(session, experience, false);
+                Database.DatabaseUsersSkills.IncreaseSkill(characterId, skills[skill].Id, experience);
+
+                if (skills[skill].TypeId == 1)
+                    UpdateLifeExperience(session, experience, false);
             }
             catch (Exception ex)
             {
@@ -114,8 +131,10 @@ namespace Curiosity.Server.net.Classes
                     Log.Error($"DecreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
                     return;
                 }
-                Database.DatabaseUsersSkills.DecreaseSkill(characterId, skills[skill], experience);
-                UpdateLifeExperience(session, experience, false);
+                Database.DatabaseUsersSkills.DecreaseSkill(characterId, skills[skill].Id, experience);
+
+                if (skills[skill].TypeId == 1)
+                    UpdateLifeExperience(session, experience, false);
             }
             catch (Exception ex)
             {

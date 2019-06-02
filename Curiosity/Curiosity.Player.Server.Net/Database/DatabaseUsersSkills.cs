@@ -4,6 +4,8 @@ using GHMatti.Data.MySQL.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+
 namespace Curiosity.Server.net.Database
 {
     public class DatabaseUsersSkills : BaseScript
@@ -15,11 +17,11 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static async Task<Dictionary<string, int>> GetSkills()
+        public static async Task<Dictionary<string, GlobalEntity.Skills>> GetSkills()
         {
-            Dictionary<string, int> skills = new Dictionary<string, int>();
+            Dictionary<string, GlobalEntity.Skills> skillsDictionary = new Dictionary<string, GlobalEntity.Skills>();
 
-            string query = "select skillId, description from curiosity.skill;";
+            string query = "select skillId, skillTypeId, description, label, labelDescription from curiosity.skill;";
 
             using (var result = mySql.QueryResult(query))
             {
@@ -30,23 +32,31 @@ namespace Curiosity.Server.net.Database
                 if (keyValuePairs.Count == 0)
                 {
                     Log.Warn("SKILLS -> No skills found");
-                    return skills;
+                    return skillsDictionary;
                 }
 
                 foreach(Dictionary<string, object> keyValues in keyValuePairs)
                 {
-                    skills.Add($"{keyValues["description"]}", int.Parse($"{keyValues["skillId"]}"));
+                    GlobalEntity.Skills skills = new GlobalEntity.Skills
+                    {
+                        Id = int.Parse($"{keyValues["skillId"]}"),
+                        TypeId = int.Parse($"{keyValues["skillTypeId"]}"),
+                        Description = $"{keyValues["description"]}",
+                        Label = $"{keyValues["label"]}",
+                        LabelDescription = $"{keyValues["labelDescription"]}"
+                    };
+                    skillsDictionary.Add($"{keyValues["description"]}", skills);
                 }
 
-                return skills;
+                return skillsDictionary;
             }
         }
 
-        public static async Task<Dictionary<string, int>> GetSkills(int characterId)
+        public static async Task<Dictionary<string, GlobalEntity.Skills>> GetSkills(int characterId)
         {
-            Dictionary<string, int> skills = new Dictionary<string, int>();
+            Dictionary<string, GlobalEntity.Skills> skillsDictionary = new Dictionary<string, GlobalEntity.Skills>();
 
-            string query = "select description, experience from curiosity.character_skill inner join skill on character_skill.skillId = skill.skillId where character_skill.characterId = @characterId;";
+            string query = "select skill.skillId, skill.skillTypeId, skill.description, skill.label, skill.labelDescription, character_skill.experience from curiosity.character_skill inner join skill on character_skill.skillId = skill.skillId where character_skill.characterId = @characterId order by skill.skillTypeId;";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@characterId", characterId);
@@ -65,10 +75,19 @@ namespace Curiosity.Server.net.Database
 
                 foreach (Dictionary<string, object> keyValues in keyValuePairs)
                 {
-                    skills.Add($"{keyValues["description"]}", int.Parse($"{keyValues["experience"]}"));
+                    GlobalEntity.Skills skills = new GlobalEntity.Skills
+                    {
+                        Id = int.Parse($"{keyValues["skillId"]}"),
+                        TypeId = int.Parse($"{keyValues["skillTypeId"]}"),
+                        Description = $"{keyValues["description"]}",
+                        Label = $"{keyValues["label"]}",
+                        LabelDescription = $"{keyValues["labelDescription"]}",
+                        Value = int.Parse($"{keyValues["experience"]}")
+                    };
+                    skillsDictionary.Add($"{keyValues["description"]}", skills);
                 }
 
-                return skills;
+                return skillsDictionary;
             }
         }
 

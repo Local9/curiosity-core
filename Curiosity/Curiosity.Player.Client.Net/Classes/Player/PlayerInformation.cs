@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Shared.Client.net.Models;
 using System;
 
 namespace Curiosity.Client.net.Classes.Player
