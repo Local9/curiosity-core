@@ -12,13 +12,15 @@ namespace Curiosity.Server.net.Classes
     {
         static Dictionary<string, GlobalEntity.Skills> skills = new Dictionary<string, GlobalEntity.Skills>();
 
+        static Server server = Server.GetInstance();
+
         public static void Init()
         {
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Skills:Increase", new Action<Player, string, int>(IncreaseSkillByPlayer));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Skills:Decrease", new Action<Player, string, int>(DecreaseSkillByPlayer));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Skills:Get", new Action<Player>(GetUserSkills));
+            server.RegisterEventHandler("curiosity:Server:Skills:Increase", new Action<Player, string, int>(IncreaseSkillByPlayer));
+            server.RegisterEventHandler("curiosity:Server:Skills:Decrease", new Action<Player, string, int>(DecreaseSkillByPlayer));
+            server.RegisterEventHandler("curiosity:Server:Skills:Get", new Action<Player>(GetUserSkills));
 
-            Server.GetInstance().RegisterTickHandler(UpdateSkillsDictionary);
+            server.RegisterTickHandler(UpdateSkillsDictionary);
         }
 
         async static void GetUserSkills([FromSource]Player player)
@@ -40,6 +42,13 @@ namespace Curiosity.Server.net.Classes
             await BaseScript.Delay(0);
             if (Server.isLive)
             {
+                if (skills.Count > 0)
+                {
+                    await BaseScript.Delay((1000 * 60) * 30);
+                    return;
+                }
+
+
                 while (Server.serverId == 0)
                 {
                     await BaseScript.Delay(0);
@@ -99,14 +108,24 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
+                if (!Server.isLive)
+                {
+                    Log.Success($"IncreaseSkill: {skill} + {experience}");
+                }
+
                 Database.DatabaseUsersSkills.IncreaseSkill(characterId, skills[skill].Id, experience);
 
                 if (skills[skill].TypeId == 1)
                     UpdateLifeExperience(session, experience, false);
+
+                if (!Server.isLive)
+                {
+                    player.TriggerEvent("curiosity:Client:Chat:Message", "SERVER", "#FF0000", $"IncreaseSkill: {skill} + {experience}");
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"IncreaseSkill -> {ex.Message}");
+                Log.Error($"IncreaseSkill -> {ex.Message}");
             }
         }
 
@@ -136,14 +155,25 @@ namespace Curiosity.Server.net.Classes
                     Log.Error($"DecreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
                     return;
                 }
+
+                if (!Server.isLive)
+                {
+                    Log.Success($"DecreaseSkill: {skill} - {experience}");
+                }
+
                 Database.DatabaseUsersSkills.DecreaseSkill(characterId, skills[skill].Id, experience);
 
                 if (skills[skill].TypeId == 1)
                     UpdateLifeExperience(session, experience, false);
+
+                if (!Server.isLive)
+                {
+                    player.TriggerEvent("curiosity:Client:Chat:Message", "SERVER", "#FF0000", $"DecreaseSkill: {skill} - {experience}");
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"IncreaseSkill -> {ex.Message}");
+                Log.Error($"DecreaseSkill -> {ex.Message}");
             }
         }
 
