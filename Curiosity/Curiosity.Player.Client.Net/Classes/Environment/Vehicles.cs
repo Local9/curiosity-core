@@ -27,7 +27,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 {
                     if (!vehicle.Driver.IsPlayer)
                     {
-                        API.NetworkFadeOutEntity(vehicle.Handle, true, true);
+                        API.NetworkFadeOutEntity(vehicle.Handle, true, false);
                         await Client.Delay(4000);
                         vehicle.Delete();
                         BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);

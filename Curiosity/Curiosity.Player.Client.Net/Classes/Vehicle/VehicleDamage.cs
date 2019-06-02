@@ -228,7 +228,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                 if (healthEngineCurrent < engineSafeGuard+1) API.SetVehicleUndriveable(vehicle.Handle, true);
                 if (Game.PlayerPed.LastVehicle.Handle != vehicle.Handle) isPedInSameVehicle = false;
 
-                if (!isPedInSameVehicle)
+                if (isPedInSameVehicle)
                 {
                     if (healthEngineCurrent != 1000.0f || healthBodyCurrent != 1000.0f || healthPetrolTankCurrent != 1000.0f)
                     {
@@ -292,8 +292,8 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
                 if (Game.PlayerPed.CurrentVehicle.ClassType != VehicleClass.Boats)
                 {
-                    int accelerator = API.GetControlValue(2, 71);
-                    int brake = API.GetControlValue(2, 72);
+                    int accelerator = API.GetControlValue(2, (int)Control.VehicleAccelerate);
+                    int brake = API.GetControlValue(2, (int)Control.VehicleBrake);
                     float speed = API.GetEntitySpeedVector(Game.PlayerPed.CurrentVehicle.Handle, false).Y;
                     float brk = fBrakeForce;
                     if (speed >= 1.0f)
@@ -329,26 +329,29 @@ namespace Curiosity.Client.net.Classes.Vehicle
                         {
                             if (isBrakingForward)
                             {
-                                API.DisableControlAction(2, 72, true);
+                                API.DisableControlAction(2, (int)Control.VehicleBrake, true);
                                 Game.PlayerPed.CurrentVehicle.Speed = speed * 0.98f;
                                 Game.PlayerPed.CurrentVehicle.AreBrakeLightsOn = true;
                             }
                             if (isBrakingReverse)
                             {
-                                API.DisableControlAction(2, 71, true);
+                                API.DisableControlAction(2, (int)Control.VehicleAccelerate, true);
                                 Game.PlayerPed.CurrentVehicle.Speed = speed * 0.98f;
                                 Game.PlayerPed.CurrentVehicle.AreBrakeLightsOn = true;
                             }
-                            if (isBrakingForward && API.GetDisabledControlNormal(2, 72) == 0) isBrakingForward = false;
-                            if (isBrakingReverse && API.GetDisabledControlNormal(2, 71) == 0) isBrakingReverse = false;
+                            if (isBrakingForward && API.GetDisabledControlNormal(2, (int)Control.VehicleBrake) == 0) isBrakingForward = false;
+                            if (isBrakingReverse && API.GetDisabledControlNormal(2, (int)Control.VehicleAccelerate) == 0) isBrakingReverse = false;
                         }
                     }
                     if (brk > fBrakeForce - 0.02f) brk = fBrakeForce;
                     API.SetVehicleHandlingFloat(Game.PlayerPed.CurrentVehicle.Handle, "CHandlingData", "fBrakeForce", brk);
+
+                    CitizenFX.Core.UI.Screen.ShowSubtitle($"BR: {isBrakingReverse}\nBF: {isBrakingForward}");
                 }
                 if (healthEngineNew < engineSafeGuard) factor = limpModeMultiplier;
                 Game.PlayerPed.CurrentVehicle.EngineTorqueMultiplier = factor;
             }
+
             if (preventVehicleFlip && IsPlayerDrivingAVehicle())
             {
                 float roll = API.GetEntityRoll(Game.PlayerPed.CurrentVehicle.Handle);
