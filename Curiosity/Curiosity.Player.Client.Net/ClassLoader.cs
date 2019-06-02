@@ -87,6 +87,7 @@ namespace Curiosity.Client.net
             // VideoLoader.Init();
             //EmergencyServices.Init();
             Vehicles.Init();
+            // DeleteProps.Init();
 
             // EMS
             //EMS.Init();
