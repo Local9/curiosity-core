@@ -20,7 +20,20 @@ namespace Curiosity.Server.net.Classes.Environment
             server.RegisterEventHandler("curiosity:Server:Vehicles:TempStore", new Action<Player, int>(OnPlayerEnteredVehicle));
             server.RegisterEventHandler("curiosity:Server:Vehicles:RemoveFromTempStore", new Action<Player, int>(OnRemoveFromTempStore));
 
+            server.RegisterEventHandler("playerDropped", new Action<Player, string>(OnPlayerDropped));
+
             server.RegisterTickHandler(OnVehicleCheck);
+        }
+
+        static void OnPlayerDropped([FromSource]Player player, string reason)
+        {
+            foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
+            {
+                if (vehicle.Value.PlayerHandle == player.Handle)
+                {
+                    BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                }
+            }
         }
 
         static void OnRemoveFromTempStore([FromSource]Player player, int vehicleHandle)
