@@ -103,6 +103,7 @@
     <Compile Include="Classes\Player\MugshotCreator.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="Classes\Player\PedDamage.cs" />
+    <Compile Include="Classes\Player\Queue.cs" />
     <Compile Include="Classes\Player\Skills.cs" />
     <Compile Include="Classes\Vehicle\BrakeSignals.cs" />
     <Compile Include="Classes\Vehicle\DisableAirControls.cs" />

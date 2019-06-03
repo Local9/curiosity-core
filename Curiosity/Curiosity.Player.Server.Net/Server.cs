@@ -40,10 +40,11 @@ namespace Curiosity.Server.net
 
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
 
-            RegisterEventHandler("playerConnecting", new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting));
+            // RegisterEventHandler("playerConnecting", new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting));
             RegisterEventHandler("playerDropped", new Action<Player, string>(OnPlayerDropped));
 
             // TODO: Move everything else to init from here.
+            Business.Queue.Init();
 
             // DATABASE
             Database.Database.Init();

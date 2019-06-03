@@ -17,7 +17,41 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static async Task<Entity.User> GetUserAsync(string license)
+        public static async Task<Entity.User> GetUser(string license, string name)
+        {
+            Entity.User user = new Entity.User();
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@license", license);
+            myParams.Add("@username", name);
+
+            string selectQuery = "CALL curiosity.spGetUser(@license, @username);";
+
+            using (var result = mySql.QueryResult(selectQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+                await Delay(0);
+                if (keyValuePairs.Count == 0)
+                {
+                    throw new Exception("SQL ERROR -> No rows returned");
+                }
+
+                foreach (Dictionary<string, object> keyValues in keyValuePairs)
+                {
+                    user.UserId = int.Parse($"{keyValues["userId"]}");
+                    user.LifeExperience = int.Parse($"{keyValues["lifeExperience"]}");
+                    user.DateCreated = DateTime.Parse($"{keyValues["dateCreated"]}");
+                    string bannedUntilDate = $"{keyValues["bannedUntil"]}";
+                    user.BannedUntil = (!string.IsNullOrEmpty(bannedUntilDate)) ? DateTime.Parse($"{keyValues["bannedUntil"]}").ToString("yyyy-MM-dd HH:mm") : string.Empty;
+                    user.BannedPerm = ($"{keyValues["bannedPerm"]}" == "1");
+                    user.Banned = ($"{keyValues["banned"]}" == "1");
+                    user.QueueLevel = int.Parse($"{keyValues["queueLevel"]}");
+                    user.QueuePriority = int.Parse($"{keyValues["queuePriority"]}");
+                }
+                return user;
+            }
+        }
+
+        public static async Task<Entity.User> GetUserWithCharacterAsync(string license)
         {
             try
             {

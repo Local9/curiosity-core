@@ -40,6 +40,8 @@ namespace Curiosity.Client.net
 
             // https://github.com/GroovyGiantPanda/FiveMRpServerResources/tree/master/src/FiveM/RPClient/Classes
 
+            Queue.Init();
+
             // Addon stuff
             RenderTargets.Init();
             DuiHandler.Init();

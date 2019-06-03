@@ -23,7 +23,7 @@ namespace Curiosity.Server.net.Classes
                 {
                     Session session = playerItem.Value;
 
-                    session.User = await Database.DatabaseUsers.GetUserAsync(playerItem.Value.License);
+                    session.User = await Database.DatabaseUsers.GetUserWithCharacterAsync(playerItem.Value.License);
                     session.Privilege = (Privilege)session.User.RoleId;
                     
                     await BaseScript.Delay(50);

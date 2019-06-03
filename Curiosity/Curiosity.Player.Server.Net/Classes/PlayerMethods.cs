@@ -54,7 +54,7 @@ namespace Curiosity.Server.net.Classes
             await SetupPlayerAsync(player);
         }
 
-        async static Task SetupPlayerAsync(Player player)
+        public async static Task SetupPlayerAsync(Player player)
         {
             try
             {

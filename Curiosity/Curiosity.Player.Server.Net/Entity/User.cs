@@ -17,6 +17,11 @@ namespace Curiosity.Server.net.Entity
         public int UserId;
         public int LifeExperience;
         public DateTime DateCreated;
+        public bool Banned;
+        public bool BannedPerm;
+        public string BannedUntil;
+        public int QueuePriority;
+        public int QueueLevel;
         // CHARACTER
         public int CharacterId;
         public int LocationId;
