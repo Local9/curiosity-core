@@ -12,8 +12,6 @@ namespace Curiosity.Client.net.Classes.Environment
 {
     static class AfkKick
     {
-        static bool isStaff = false;
-
         static Vector3 lastPlayerLocation = new Vector3();
         static int lastMovement = 0;
         static int lastKeyPress = 0;
