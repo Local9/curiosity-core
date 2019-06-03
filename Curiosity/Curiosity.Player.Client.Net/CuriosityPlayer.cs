@@ -110,7 +110,7 @@ namespace Curiosity.Client.net
 
             Setup();
             await Delay(0);
-            // TriggerServerEvent("curiosity:Server:Player:Setup");
+            TriggerServerEvent("curiosity:Server:Player:Setup");
             await Delay(0);
         }
 

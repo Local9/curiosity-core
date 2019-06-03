@@ -73,7 +73,7 @@ namespace Curiosity.Server.net.Database
                 using (var result = mySql.QueryResult(selectQuery, myParams))
                 {
                     ResultSet keyValuePairs = await result;
-                    await Delay(0);
+                    await Delay(100);
                     if (keyValuePairs.Count == 0)
                     {
                         throw new Exception("SQL ERROR -> No rows returned");

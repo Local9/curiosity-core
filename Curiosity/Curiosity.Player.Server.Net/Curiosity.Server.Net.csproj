@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\BusinessUser.cs" />
+    <Compile Include="Business\Queue.cs" />
     <Compile Include="Classes\Bank.cs" />
     <Compile Include="Classes\Character.cs" />
     <Compile Include="Classes\Environment\Scoreboard.cs" />

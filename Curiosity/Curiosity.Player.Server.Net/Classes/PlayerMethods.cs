@@ -54,11 +54,11 @@ namespace Curiosity.Server.net.Classes
             await SetupPlayerAsync(player);
         }
 
-        public async static Task SetupPlayerAsync(Player player)
+        async static Task SetupPlayerAsync(Player player)
         {
             try
             {
-                await BaseScript.Delay(3000);
+                await BaseScript.Delay(1000);
 
                 string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
 
