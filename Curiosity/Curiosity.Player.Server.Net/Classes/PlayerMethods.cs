@@ -53,8 +53,6 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                Log.Info(session.ToString());
-
                 PlayerInformation playerInformation = new PlayerInformation();
                 playerInformation.Handle = session.NetId;
                 playerInformation.UserId = session.UserID;
