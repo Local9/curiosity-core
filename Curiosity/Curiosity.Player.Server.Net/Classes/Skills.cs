@@ -25,16 +25,33 @@ namespace Curiosity.Server.net.Classes
 
         async static void GetUserSkills([FromSource]Player player)
         {
-            Dictionary<string, GlobalEntity.Skills> skills = new Dictionary<string, GlobalEntity.Skills>();
-            if (!SessionManager.PlayerList.ContainsKey(player.Handle))
+            try
             {
-                skills.Add("Session Loading...", new GlobalEntity.Skills { Id = 0, TypeId = 0, Description = "Loading", Label = "Loading" });
+                Dictionary<string, GlobalEntity.Skills> skills = new Dictionary<string, GlobalEntity.Skills>();
+
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle))
+                {
+                    skills.Add("Session Loading...", new GlobalEntity.Skills { Id = 0, TypeId = 0, Description = "Loading", Label = "Loading" });
+                }
+                else
+                {
+                    Session session = SessionManager.PlayerList[player.Handle];
+                    if (session.Skills.Count > 0)
+                    {
+                        skills = session.Skills;
+                    }
+                    else
+                    {
+                        skills = await Database.DatabaseUsersSkills.GetSkills(session.User.CharacterId);
+                        session.Skills = skills;
+                    }
+                }
+                player.TriggerEvent("curiosity:Player:Skills:Get", Newtonsoft.Json.JsonConvert.SerializeObject(skills));
             }
-            else
+            catch (Exception ex)
             {
-                skills = await Database.DatabaseUsersSkills.GetSkills(SessionManager.PlayerList[player.Handle].User.CharacterId);
+                Log.Error($"GetUserSkills -> {ex}");
             }
-            player.TriggerEvent("curiosity:Player:Skills:Get", Newtonsoft.Json.JsonConvert.SerializeObject(skills));
         }
 
         async static Task UpdateSkillsDictionary()
@@ -118,6 +135,15 @@ namespace Curiosity.Server.net.Classes
                 if (skills[skill].TypeId == 1)
                     UpdateLifeExperience(session, experience, false);
 
+                if (!session.Skills.ContainsKey(skill))
+                {
+                    session.Skills.Add(skill, skills[skill]);
+                    session.Skills[skill].Value = 0 + experience;
+                }
+
+                session.Skills[skill].Value = session.Skills[skill].Value + experience;
+                PlayerMethods.SendUpdatedInformation(session);
+
                 if (!Server.isLive)
                 {
                     player.TriggerEvent("curiosity:Client:Chat:Message", "SERVER", "#FF0000", $"IncreaseSkill: {skill} + {experience}");
@@ -165,6 +191,15 @@ namespace Curiosity.Server.net.Classes
 
                 if (skills[skill].TypeId == 1)
                     UpdateLifeExperience(session, experience, false);
+
+                if (!session.Skills.ContainsKey(skill))
+                {
+                    session.Skills.Add(skill, skills[skill]);
+                    session.Skills[skill].Value = 0 - experience;
+                }
+
+                session.Skills[skill].Value = session.Skills[skill].Value - experience;
+                PlayerMethods.SendUpdatedInformation(session);
 
                 if (!Server.isLive)
                 {

@@ -66,6 +66,10 @@ namespace Curiosity.Client.net
             Speedometer.Init();
             Speedometer3D.Init();
             //VehicleLoadoutPresets.Init();
+            Scoreboard.Init();
+            WorldTime.Init();
+
+            // MENU
             MenuGlobals.Init();
             //VehicleMenuTest.Init();
             SkillsMenu.Init();
@@ -73,8 +77,7 @@ namespace Curiosity.Client.net
             InteractionListMenu.Init();
             NuiMenu.Init();
             NuiEventHandler.Init();
-            Scoreboard.Init();
-            WorldTime.Init();
+            // PlayerActionsMenu.Init();
 
             // Environment
             //Poi.Init();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System;
 using static CitizenFX.Core.Native.API;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -37,6 +38,7 @@ namespace Curiosity.Server.net.Classes
         public Player Player { get; private set; }
         public SemaphoreSlim Mutex { get; private set; }
         public Entity.User User { get; set; }
+        public Dictionary<string, GlobalEntity.Skills> Skills = new Dictionary<string, GlobalEntity.Skills>();
 
         public int Wallet { get; private set; }
         public int BankAccount { get; private set; }
@@ -91,7 +93,7 @@ namespace Curiosity.Server.net.Classes
 
         public override string ToString()
         {
-            return $"Player: {Name} (#{UserID}) [{NetId}] -> Privilege: {Privilege}";
+            return $"Player: {Name} (#{UserID}) [{NetId}] -> Privilege: {Privilege} | Number Of Skills: {Skills.Count}";
         }
 
         public bool Activate()

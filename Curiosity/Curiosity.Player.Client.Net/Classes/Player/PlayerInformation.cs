@@ -44,6 +44,7 @@ namespace Curiosity.Client.net.Classes.Player
 
         static private async void PeriodicCheck()
         {
+            await BaseScript.Delay(5000);
             while (true)
             {
                 BaseScript.TriggerServerEvent("curiosity:Server:Player:GetInformation");

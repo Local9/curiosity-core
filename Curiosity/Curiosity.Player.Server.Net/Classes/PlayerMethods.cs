@@ -40,13 +40,40 @@ namespace Curiosity.Server.net.Classes
             playerInformation.RoleId = (int)session.Privilege;
             playerInformation.Wallet = session.Wallet;
             playerInformation.BankAccount = session.BankAccount;
-            playerInformation.Skills = await Database.DatabaseUsersSkills.GetSkills(session.User.CharacterId);
+            playerInformation.Skills = session.Skills;
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
 
             player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
 
             await BaseScript.Delay(0);
+        }
+
+        public async static void SendUpdatedInformation(Session session)
+        {
+            try
+            {
+                Log.Info(session.ToString());
+
+                PlayerInformation playerInformation = new PlayerInformation();
+                playerInformation.Handle = session.NetId;
+                playerInformation.UserId = session.UserID;
+                playerInformation.CharacterId = session.User.CharacterId;
+                playerInformation.RoleId = (int)session.Privilege;
+                playerInformation.Wallet = session.Wallet;
+                playerInformation.BankAccount = session.BankAccount;
+                playerInformation.Skills = session.Skills;
+
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
+
+                session.Player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
+
+                await BaseScript.Delay(0);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"SendUpdatedInformation -> {ex}");
+            }
         }
 
         async static void OnSetupPlayer([FromSource]Player player)
@@ -81,6 +108,7 @@ namespace Curiosity.Server.net.Classes
                 session.IncreaseBankAccount(user.BankAccount);
 
                 session.User = user;
+                session.Skills = await Database.DatabaseUsersSkills.GetSkills(session.User.CharacterId);
 
                 session.Activate();
 
