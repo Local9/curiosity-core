@@ -99,6 +99,7 @@
     <Compile Include="Classes\Menus\DevCharacterMenu.cs" />
     <Compile Include="Classes\Menus\InteractionListMenu.cs" />
     <Compile Include="Classes\Menus\Menu.cs" />
+    <Compile Include="Classes\Menus\PlayerActionsMenu.cs" />
     <Compile Include="Classes\Menus\SkillsMenu.cs" />
     <Compile Include="Classes\Player\Inventory.cs" />
     <Compile Include="Classes\Player\MugshotCreator.cs" />
