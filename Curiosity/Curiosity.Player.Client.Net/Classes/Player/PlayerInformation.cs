@@ -27,6 +27,11 @@ namespace Curiosity.Client.net.Classes.Player
             await BaseScript.Delay(0);
         }
 
+        public static bool IsStaff()
+        {
+            return (privilege == Privilege.MODERATOR || privilege == Privilege.ADMINISTRATOR || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+        }
+
         public static bool IsAdmin()
         {
             return (privilege == Privilege.ADMINISTRATOR || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);

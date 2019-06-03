@@ -78,7 +78,7 @@ namespace Curiosity.Client.net
 
             // Environment
             //Poi.Init();
-            //AfkKick.Init();
+            AfkKick.Init();
             //ManipulateObject.Init();
             //NoClip.Init();
             //InstancingChecker.Init(); // Hard to test
