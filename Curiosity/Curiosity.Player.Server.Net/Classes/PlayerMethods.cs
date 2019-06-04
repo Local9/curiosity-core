@@ -45,7 +45,10 @@ namespace Curiosity.Server.net.Classes
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
 
             player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
-
+            await BaseScript.Delay(0);
+            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+            await BaseScript.Delay(0);
+            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
             await BaseScript.Delay(0);
         }
 
@@ -65,7 +68,10 @@ namespace Curiosity.Server.net.Classes
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
 
                 session.Player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
-
+                await BaseScript.Delay(0);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                await BaseScript.Delay(0);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
                 await BaseScript.Delay(0);
             }
             catch (Exception ex)

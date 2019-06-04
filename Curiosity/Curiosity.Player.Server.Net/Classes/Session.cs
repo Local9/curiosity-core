@@ -71,6 +71,16 @@ namespace Curiosity.Server.net.Classes
             BankAccount = 0;
         }
 
+        public void SetWallet(int amount)
+        {
+            this.Wallet = amount;
+        }
+
+        public void SetBankAccount(int amount)
+        {
+            this.BankAccount = amount;
+        }
+
         public void IncreaseWallet(int amount)
         {
             this.Wallet = this.Wallet + amount;

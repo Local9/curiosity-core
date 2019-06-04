@@ -12,7 +12,7 @@ namespace Curiosity.Server.net.Classes
 
         public static void Init()
         {
-            //Server.GetInstance().RegisterTickHandler(UpdateSessions);
+            Server.GetInstance().RegisterTickHandler(UpdateSessions);
         }
 
         static async Task UpdateSessions()
@@ -25,10 +25,17 @@ namespace Curiosity.Server.net.Classes
 
                     session.User = await Database.DatabaseUsers.GetUserWithCharacterAsync(playerItem.Value.License);
                     session.Privilege = (Privilege)session.User.RoleId;
-                    
-                    await BaseScript.Delay(50);
+                    session.SetBankAccount(session.User.BankAccount);
+                    session.SetWallet(session.User.Wallet);
+
+                    session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                    await BaseScript.Delay(0);
+                    session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                    await BaseScript.Delay(0);
+
+                    await BaseScript.Delay(500);
                 }
-                await BaseScript.Delay(3000000);
+                await BaseScript.Delay((1000 * 60) * 2);
             }
         }
 
