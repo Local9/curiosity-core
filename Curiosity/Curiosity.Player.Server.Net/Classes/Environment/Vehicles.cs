@@ -79,23 +79,33 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             while (true)
             {
-                foreach (int key in tempVehiclesToDelete)
+                try
                 {
-                    tempVehicles.Remove(key);
-                }
+                    lock (tempVehicles)
+                    {
+                        foreach (int key in tempVehiclesToDelete)
+                        {
+                            tempVehicles.Remove(key);
+                        }
+                    }
 
-                foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
+                    foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
+                    {
+                        if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
+                        {
+                            BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                            // tempVehicles.Select((v) => v.Value.PlayerHandle == vehicle.Value.PlayerHandle).ToList().ForEach(p => BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key));
+                        }
+                        else if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
+                        {
+                            BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                        }
+                        await BaseScript.Delay(0);
+                    }
+                }
+                catch(Exception ex)
                 {
-                    if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
-                    {
-                        BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
-                        // tempVehicles.Select((v) => v.Value.PlayerHandle == vehicle.Value.PlayerHandle).ToList().ForEach(p => BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key));
-                    }
-                    else if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
-                    {
-                        BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
-                    }
-                    await BaseScript.Delay(0);
+                    Log.Error($"OnVehicleCheck() -> {ex.Message}");
                 }
 
                 await BaseScript.Delay(60000);
