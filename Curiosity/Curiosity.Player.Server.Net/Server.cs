@@ -52,9 +52,13 @@ namespace Curiosity.Server.net
             Database.DatabaseUsersBank.Init();
             Database.DatabaseUsersSkills.Init();
             Database.DatabaseCharacterInventory.Init();
+            Database.DatabaseLog.Init();
 
             // Session Manager
             Classes.SessionManager.Init();
+
+            // Menu Items
+            Classes.Menu.Lists.Init();
 
             // PLAYER EVENTS
             Classes.Skills.Init();

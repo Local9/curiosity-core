@@ -1,10 +1,9 @@
-﻿using GHMatti.Data.MySQL;
+﻿using CitizenFX.Core;
+using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
-using CitizenFX.Core;
 
 namespace Curiosity.Server.net.Database
 {

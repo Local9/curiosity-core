@@ -77,7 +77,7 @@ namespace Curiosity.Client.net
             InteractionListMenu.Init();
             NuiMenu.Init();
             NuiEventHandler.Init();
-            // PlayerActionsMenu.Init();
+            PlayerActionsMenu.Init();
 
             // Environment
             //Poi.Init();
