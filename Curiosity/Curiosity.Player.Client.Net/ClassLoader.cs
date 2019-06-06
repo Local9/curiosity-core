@@ -68,6 +68,7 @@ namespace Curiosity.Client.net
             //VehicleLoadoutPresets.Init();
             Scoreboard.Init();
             WorldTime.Init();
+            Notifications.Init();
 
             // MENU
             MenuGlobals.Init();

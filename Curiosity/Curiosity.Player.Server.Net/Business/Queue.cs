@@ -660,10 +660,18 @@ namespace Curiosity.Server.net.Business
                 {
                     return;
                 }
-                session.TryGetValue(license, out SessionState oldState);
-                session.TryUpdate(license, SessionState.Grace, oldState);
-                if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> GRACE -> {license}"); }
-                UpdateTimer(license);
+                if (message.Contains("Kick") || message.Contains("Ban"))
+                {
+                    RemoveFrom(license, true, true, true, true, true, true);
+                    if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : REMOVED -> {license}"); }
+                }
+                else
+                {
+                    session.TryGetValue(license, out SessionState oldState);
+                    session.TryUpdate(license, SessionState.Grace, oldState);
+                    if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> GRACE -> {license}"); }
+                    UpdateTimer(license);
+                }
             }
             catch (Exception)
             {

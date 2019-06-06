@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using CitizenFX.Core.Native;
 using System.Threading.Tasks;
-
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Server.net.Classes
@@ -25,6 +24,144 @@ namespace Curiosity.Server.net.Classes
             // Internal Events
             server.RegisterEventHandler("curiosity:Server:Player:GetRoleId", new Action<int>(GetUserRoleId));
             server.RegisterEventHandler("curiosity:Server:Player:GetUserId", new Action<Player>(GetUserId));
+            // admin methods
+            server.RegisterEventHandler("curiosity:Server:Player:Kick", new Action<Player, string, string>(AdminKickPlayer));
+            server.RegisterEventHandler("curiosity:Server:Player:Ban", new Action<Player, string, string, bool, int>(AdminBanPlayer));
+        }
+
+        static bool IsStaff(Enums.Privilege privilege)
+        {
+            bool canKick = false;
+
+            switch (privilege)
+            {
+                case Enums.Privilege.MODERATOR:
+                case Enums.Privilege.DEVELOPER:
+                case Enums.Privilege.ADMINISTRATOR:
+                case Enums.Privilege.PROJECTMANAGER:
+                    canKick = true;
+                    break;
+                default:
+                    canKick = false;
+                    break;
+            }
+
+            return canKick;
+        }
+
+        async static void AdminKickPlayer([FromSource]Player player, string playerHandleToKick, string reason)
+        {
+            try
+            {
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                if (!IsStaff(session.Privilege)) return;
+
+                if (!SessionManager.PlayerList.ContainsKey(playerHandleToKick)) return;
+
+                Session sessionOfPlayerToKick = SessionManager.PlayerList[playerHandleToKick];
+
+                if (sessionOfPlayerToKick.UserID == session.UserID)
+                {
+                    Helpers.Notifications.Advanced($"Really??", $"Please don't try to kick yourself.", 221, player);
+                    return;
+                }
+
+                if (IsStaff(sessionOfPlayerToKick.Privilege))
+                {
+                    Helpers.Notifications.Advanced($"Sigh...", $"Staff members are protected.", 221, player);
+                    return;
+                }
+
+                await Server.Delay(0);
+
+                if (sessionOfPlayerToKick == null)
+                {
+                    Log.Warn("AdminKickPlayer -> Player not found");
+                }
+                else
+                {
+                    string nameOfPlayerBeingKicked = sessionOfPlayerToKick.Name;
+
+                    if (nameOfPlayerBeingKicked.Length > 20)
+                    {
+                        nameOfPlayerBeingKicked = string.Format("{0}...", nameOfPlayerBeingKicked.Substring(0, 20));
+                    }
+
+                    string[] reasonData = reason.Split('|');
+                    string[] text = reasonData[1].Split(':');
+
+                    Database.DatabaseUsers.LogKick(sessionOfPlayerToKick.UserID, session.UserID, int.Parse(reasonData[0]), sessionOfPlayerToKick.User.CharacterId);
+
+                    sessionOfPlayerToKick.Drop($"{reasonData[1]}");
+
+                    Helpers.Notifications.Advanced($"Kicked User", $"~g~Name: ~w~{nameOfPlayerBeingKicked}~n~~g~Reason: ~w~{text[1].Trim()}", 17);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"AdminKickPlayer -> {ex.Message}");
+            }
+        }
+
+        async static void AdminBanPlayer([FromSource]Player player, string playerHandleToKick, string reason, bool perm, int duration)
+        {
+            try
+            {
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                if (!IsStaff(session.Privilege)) return;
+
+                if (!SessionManager.PlayerList.ContainsKey(playerHandleToKick)) return;
+
+                Session sessionOfPlayerToBan = SessionManager.PlayerList[playerHandleToKick];
+
+                if (sessionOfPlayerToBan.UserID == session.UserID)
+                {
+                    Helpers.Notifications.Advanced($"Wow... Really??", $"Trying to ban yourself?! You really want to be removed from the planet?", 221, player);
+                    return;
+                }
+
+                if (IsStaff(sessionOfPlayerToBan.Privilege))
+                {
+                    Helpers.Notifications.Advanced($"Sigh...", $"Staff members are protected.", 221, player);
+                    return;
+                }
+
+                await Server.Delay(0);
+
+                if (sessionOfPlayerToBan == null)
+                {
+                    Log.Warn("AdminBanPlayer -> Player not found");
+                }
+                else
+                {
+                    string nameOfPlayerBeingBanned = sessionOfPlayerToBan.Name;
+
+                    if (nameOfPlayerBeingBanned.Length > 20)
+                    {
+                        nameOfPlayerBeingBanned = string.Format("{0}...", nameOfPlayerBeingBanned.Substring(0, 20));
+                    }
+
+                    string[] reasonData = reason.Split('|');
+
+                    DateTime bannedUntilTimestamp = DateTime.Now.AddDays(duration);
+
+                    Database.DatabaseUsers.LogBan(sessionOfPlayerToBan.UserID, session.UserID, int.Parse(reasonData[0]), sessionOfPlayerToBan.User.CharacterId, perm, bannedUntilTimestamp);
+
+                    string banDuration = string.Format("{0} Days", duration);
+                    if (perm)
+                        banDuration = "Permanently";
+
+                    Helpers.Notifications.Advanced($"Banned User", $"~g~Name: ~w~{nameOfPlayerBeingBanned}~n~~g~Reason: ~w~{reasonData[1].Trim()}~n~~g~Duration: ~w~{banDuration}", 8);
+
+                    sessionOfPlayerToBan.Drop($"{reasonData[1]} | Ban Duration: {banDuration}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"AdminBanPlayer -> {ex.Message}");
+            }
         }
 
         async static void GetInformation([FromSource]Player player)

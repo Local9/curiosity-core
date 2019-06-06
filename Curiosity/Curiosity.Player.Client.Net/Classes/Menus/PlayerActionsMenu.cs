@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using CitizenFX.Core.Native;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Curiosity.Client.net.Classes.Menus
         public static MenuModel PlayerActionsMenuModel;
         public static MenuModel PlayerSubActionsMenu;
         public static MenuModel BanActionSubMenu;
+        public static MenuModel BanDurationSubMenu;
         public static MenuModel KickActionSubMenu;
         public static List<Tuple<int, MenuItem, Func<bool>>> ItemsAll = new List<Tuple<int, MenuItem, Func<bool>>>();
         internal static List<MenuItem> ItemsFiltered = new List<MenuItem>();
@@ -24,6 +26,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
         static string playerHandle;
         static string playerName;
+        static string banReason;
         static bool isListSetup = false;
 
         static List<GlobalEntities.LogType> banReasons = new List<GlobalEntities.LogType>();
@@ -38,6 +41,26 @@ namespace Curiosity.Client.net.Classes.Menus
             return playerName.Length > 20 ? string.Format("{0}...", playerName.Substring(0, 20)) : playerName;
         }
 
+        static void CloseAndCleanup()
+        {
+            InteractionListMenu.Observer.CloseMenu(true);
+
+            if (!MenuGlobals.MuteSounds)
+                Audio.PlaySoundFrontend("BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET");
+
+            playerHandle = string.Empty;
+            playerName = string.Empty;
+            banReason = string.Empty;
+
+            
+        }
+
+        static void BanPlayer(string playerHandle, string banReason, int banDuration, bool perm)
+        {
+            Client.TriggerServerEvent("curiosity:Server:Player:Ban", playerHandle, banReason, perm, banDuration);
+            CloseAndCleanup();
+        }
+
         public static void Init()
         {
             try
@@ -47,7 +70,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
                 client.RegisterTickHandler(OnTick);
 
-                PlayerActionsMenuModel = new PlayerMenu { numVisibleItems = 7 };
+                PlayerActionsMenuModel = new PlayerMenu { numVisibleItems = 16 };
                 PlayerActionsMenuModel.headerTitle = "Players";
                 PlayerActionsMenuModel.statusTitle = "";
                 PlayerActionsMenuModel.menuItems = new List<MenuItem>() { new MenuItemStandard { Title = "Loading..." } };
@@ -80,7 +103,7 @@ namespace Curiosity.Client.net.Classes.Menus
                     if (banReasons.Count > 0)
                     {
                         isListSetup = true;
-                        CitizenFX.Core.UI.Screen.ShowNotification("~b~Staff Actions: ~g~Configured");
+                        Environment.UI.Notifications.Advanced("CHAR_LESTER", 1, "Curiosity", "Staff Menu", "Player actions menu configured", 184);
                     }
                 }
             }
@@ -97,7 +120,7 @@ namespace Curiosity.Client.net.Classes.Menus
             kickReasons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GlobalEntities.LogType>>(json);
         }
 
-        class BanPlayerMenu : MenuModel
+        class BanDurationMenu : MenuModel
         {
             public override void Refresh()
             {
@@ -111,18 +134,48 @@ namespace Curiosity.Client.net.Classes.Menus
                     }
                     else
                     {
+                        _menuItems.Add(new MenuItemStandard { Title = "3 Day Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 3, false); } });
+                        _menuItems.Add(new MenuItemStandard { Title = "7 Day Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 7, false); } });
+                        _menuItems.Add(new MenuItemStandard { Title = "14 Day Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 14, false); } });
+                        _menuItems.Add(new MenuItemStandard { Title = "28 Day Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 28, false); } });
+                        _menuItems.Add(new MenuItemStandard { Title = "Permanent Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 0, true); } });
+                    }
+                }
+
+                menuItems = _menuItems;
+            }
+        }
+
+        class BanPlayerMenu : MenuModel
+        {
+            public override void Refresh()
+            {
+                BanDurationSubMenu = new BanDurationMenu { numVisibleItems = 7 };
+                BanDurationSubMenu.headerTitle = $"Ban Duration";
+                BanDurationSubMenu.statusTitle = "";
+                BanDurationSubMenu.menuItems = new List<MenuItem>() { new MenuItemStandard { Title = "Loading..." } };
+
+                var _menuItems = new List<MenuItem>();
+
+                if (Player.PlayerInformation.IsStaff())
+                {
+                    if (string.IsNullOrEmpty(playerHandle))
+                    {
+                        _menuItems.Add(new MenuItemBack { Title = "Player Handle Missing", Description = "Change menu to another item and back to fix" });
+                    }
+                    else
+                    {
+                        _menuItems.Add(new MenuItemBack { Title = "Go Back", OnSelect = (item) => { } });
                         foreach (GlobalEntities.LogType logType in banReasons)
                         {
-                            _menuItems.Add(new MenuItemStandard
+                            _menuItems.Add(new MenuItemSubMenu
                             {
-                                Title = logType.Description
-                                ,
-                                MetaData = $"{logType.LogTypeId}"
-                                ,
-                                OnActivate = (item) =>
-                              {
-                                  Screen.ShowNotification($"Test ban for {item.MetaData} on {playerName}");
-                              }
+                                Title = logType.Description,
+                                SubMenu = BanDurationSubMenu,
+                                OnSelect = (item) =>
+                                {
+                                    banReason = $"{logType.LogTypeId}|{logType.Description}";
+                                }
                             });
                         }
                     }
@@ -142,7 +195,7 @@ namespace Curiosity.Client.net.Classes.Menus
                 {
                     if (string.IsNullOrEmpty(playerHandle))
                     {
-                        _menuItems.Add(new MenuItemBack { Title = "Player Handle Missing" });
+                        _menuItems.Add(new MenuItemBack { Title = "Player Handle Missing", Description = "Change menu to another item and back to fix" });
                     }
                     else
                     {
@@ -150,14 +203,13 @@ namespace Curiosity.Client.net.Classes.Menus
                         {
                             _menuItems.Add(new MenuItemStandard
                             {
-                                Title = logType.Description
-                                ,
-                                MetaData = $"{logType.LogTypeId}"
-                                ,
+                                Title = logType.Description,
+                                MetaData = $"{logType.LogTypeId}|{logType.Description}",
                                 OnActivate = (item) =>
-                              {
-                                  Screen.ShowNotification($"Test kick for {item.MetaData} on {playerName}");
-                              }
+                                {
+                                    Client.TriggerServerEvent("curiosity:Server:Player:Kick", playerHandle, item.MetaData);
+                                    CloseAndCleanup();
+                                }
                             });
                         }
                     }
@@ -212,9 +264,9 @@ namespace Curiosity.Client.net.Classes.Menus
                 {
                     _menuItems.Add(new MenuItemSubMenu
                     {
-                        Title = $"{player.ServerId}: {player.Name}"
-                        , SubMenu = PlayerSubActionsMenu
-                        , OnSelect = (item) =>
+                        Title = $"{player.ServerId}: {player.Name}",
+                        SubMenu = PlayerSubActionsMenu,
+                        OnSelect = (item) =>
                         {
                             if (item.Title.Contains(":"))
                             {

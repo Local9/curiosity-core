@@ -118,6 +118,34 @@ namespace Curiosity.Server.net.Database
             }
         }
 
+        public static void LogKick(int userId, int userIdLogging, int logTypeId, int characterId)
+        {
+            string query = "call spLogKickedUser(@userId, @loggedById, @logTypeId, @characterId);";
+
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@userId", userId);
+            myParams.Add("@loggedById", userIdLogging);
+            myParams.Add("@logTypeId", logTypeId);
+            myParams.Add("@characterId", characterId);
+
+            mySql.Query(query, myParams);
+        }
+
+        public static void LogBan(int userId, int userIdLogging, int logTypeId, int characterId, bool permBan, DateTime bannedUntil)
+        {
+            string query = "call spLogBannedUser(@userId, @loggedById, @logTypeId, @characterId, @permBan, @bannedUntil);";
+
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@userId", userId);
+            myParams.Add("@loggedById", userIdLogging);
+            myParams.Add("@logTypeId", logTypeId);
+            myParams.Add("@characterId", characterId);
+            myParams.Add("@permBan", permBan);
+            myParams.Add("@bannedUntil", bannedUntil);
+
+            mySql.Query(query, myParams);
+        }
+
         public static void IncreaseLiveExperience(long userId, int experience)
         {
             string query = "update curiosity.user set `lifeExperience` = `lifeExperience` + @experience where userId = @userId;";
