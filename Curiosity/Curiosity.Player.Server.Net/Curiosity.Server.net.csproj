@@ -71,12 +71,14 @@
     <Compile Include="Classes\Character.cs" />
     <Compile Include="Classes\Environment\Scoreboard.cs" />
     <Compile Include="Classes\Environment\Vehicles.cs" />
+    <Compile Include="Classes\Menu\Lists.cs" />
     <Compile Include="Classes\PlayerMethods.cs" />
     <Compile Include="Classes\ServerSettings.cs" />
     <Compile Include="Classes\Session.cs" />
     <Compile Include="Classes\SessionManager.cs" />
     <Compile Include="Classes\Skills.cs" />
     <Compile Include="Database\DatabaseCharacterInventory.cs" />
+    <Compile Include="Database\DatabaseLog.cs" />
     <Compile Include="Database\DatabaseUsersBank.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\DatabaseUsersSkills.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\Privilege.cs" />
     <Compile Include="Helpers\Log.cs" />
+    <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
   </ItemGroup>

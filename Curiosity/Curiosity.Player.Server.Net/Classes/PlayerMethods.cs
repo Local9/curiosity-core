@@ -144,6 +144,7 @@ namespace Curiosity.Server.net.Classes
                     }
 
                     string[] reasonData = reason.Split('|');
+                    string[] text = reasonData[1].Split(':');
 
                     DateTime bannedUntilTimestamp = DateTime.Now.AddDays(duration);
 
@@ -153,7 +154,7 @@ namespace Curiosity.Server.net.Classes
                     if (perm)
                         banDuration = "Permanently";
 
-                    Helpers.Notifications.Advanced($"Banned User", $"~g~Name: ~w~{nameOfPlayerBeingBanned}~n~~g~Reason: ~w~{reasonData[1].Trim()}~n~~g~Duration: ~w~{banDuration}", 8);
+                    Helpers.Notifications.Advanced($"Banned User", $"~g~Name: ~w~{nameOfPlayerBeingBanned}~n~~g~Reason: ~w~{text[1].Trim()}~n~~g~Duration: ~w~{banDuration}", 8);
 
                     sessionOfPlayerToBan.Drop($"{reasonData[1]} | Ban Duration: {banDuration}");
                 }
