@@ -93,9 +93,9 @@ namespace Curiosity.Server.net.Classes
 
                     Database.DatabaseUsers.LogKick(sessionOfPlayerToKick.UserID, session.UserID, int.Parse(reasonData[0]), sessionOfPlayerToKick.User.CharacterId);
 
-                    sessionOfPlayerToKick.Drop($"{reasonData[1]}");
+                    sessionOfPlayerToKick.Drop($"{reasonData[1]} by {player.Name}");
 
-                    Helpers.Notifications.Advanced($"Kicked User", $"~g~Name: ~w~{nameOfPlayerBeingKicked}~n~~g~Reason: ~w~{text[1].Trim()}", 17);
+                    Helpers.Notifications.Advanced($"Kicked User", $"~g~Name: ~w~{nameOfPlayerBeingKicked}~n~~g~Reason: ~w~{text[1].Trim()}~n~~g~By: ~w~{player.Name}", 17);
                 }
             }
             catch (Exception ex)
@@ -154,9 +154,9 @@ namespace Curiosity.Server.net.Classes
                     if (perm)
                         banDuration = "Permanently";
 
-                    Helpers.Notifications.Advanced($"Banned User", $"~g~Name: ~w~{nameOfPlayerBeingBanned}~n~~g~Reason: ~w~{text[1].Trim()}~n~~g~Duration: ~w~{banDuration}", 8);
+                    Helpers.Notifications.Advanced($"Banned User", $"~g~Name: ~w~{nameOfPlayerBeingBanned}~n~~g~Reason: ~w~{text[1].Trim()}~n~~g~Duration: ~w~{banDuration}~n~~g~By: ~w~{player.Name}", 8);
 
-                    sessionOfPlayerToBan.Drop($"{reasonData[1]} | Ban Duration: {banDuration}");
+                    sessionOfPlayerToBan.Drop($"{reasonData[1]} by {player.Name} | Ban Duration: {banDuration}");
                 }
             }
             catch (Exception ex)

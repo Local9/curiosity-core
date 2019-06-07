@@ -209,6 +209,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
             while (true)
             {
                 await Client.Delay(50);
+
                 if (IsPlayerDrivingAVehicle())
                 {
                     currentVehicle = Game.PlayerPed.CurrentVehicle;
@@ -283,14 +284,17 @@ namespace Curiosity.Client.net.Classes.Vehicle
                 }
                 else
                 {
-                    if (isPedInSameVehicle)
+                    if (IsPlayerDrivingAVehicle())
                     {
-                        lastVehicle = Game.PlayerPed.LastVehicle;
-                        if (deformationMultiplier != -1) API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fDeformationDamageMult", 0.0f);
-                        API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fBrakeForce", 1.0f);
-                        if (weaponsDamageMultiplier != -1) API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fWeaponDamageMult", 0.124f);
-                        API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fCollisionDamageMult", 0.0f);
-                        API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fEngineDamageMult", 0.0f);
+                        if (isPedInSameVehicle)
+                        {
+                            lastVehicle = Game.PlayerPed.LastVehicle;
+                            if (deformationMultiplier != -1) API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fDeformationDamageMult", 0.0f);
+                            API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fBrakeForce", 1.0f);
+                            if (weaponsDamageMultiplier != -1) API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fWeaponDamageMult", 0.124f);
+                            API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fCollisionDamageMult", 0.0f);
+                            API.SetVehicleHandlingFloat(lastVehicle.Handle, "CHandlingData", "fEngineDamageMult", 0.0f);
+                        }
                     }
                     isPedInSameVehicle = false;
                 }
