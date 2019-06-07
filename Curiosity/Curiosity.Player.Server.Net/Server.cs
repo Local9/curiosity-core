@@ -60,6 +60,9 @@ namespace Curiosity.Server.net
             // Menu Items
             Classes.Menu.Lists.Init();
 
+            // Scaleform
+            Classes.Environment.Chat.Init();
+
             // PLAYER EVENTS
             Classes.Skills.Init();
             Classes.Bank.Init();

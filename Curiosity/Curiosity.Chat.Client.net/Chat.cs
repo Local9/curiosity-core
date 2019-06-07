@@ -104,7 +104,7 @@ namespace Curiosity.Chat.Client.net
                 var spaceSplit = Message.Split(' ');
                 if (Message.Substring(0, 1) == "/" && Message.Length >= 2)
                 {
-                    Screen.ShowNotification("Work in progress");
+                    API.ExecuteCommand(Message.Replace("/", ""));
                 }
                 else
                 {
