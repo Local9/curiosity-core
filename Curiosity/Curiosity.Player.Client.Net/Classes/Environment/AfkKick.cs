@@ -21,8 +21,8 @@ namespace Curiosity.Client.net.Classes.Environment
         // Also, if dev don't kick
         static public void Init()
         {
-            lastMovement = lastKeyPress = Function.Call<int>(Hash.GET_GAME_TIMER);
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            lastMovement = lastKeyPress = API.GetGameTimer();
+            // Client.GetInstance().RegisterTickHandler(OnTick);
             MinuteLoop();
         }
 
@@ -46,19 +46,30 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 if (lastPlayerLocation != (lastPlayerLocation = Game.PlayerPed.Position))
                 {
-                    lastMovement = Function.Call<int>(Hash.GET_GAME_TIMER);
+                    lastMovement = API.GetGameTimer();
                 }
 
-                int currentTime = Function.Call<int>(Hash.GET_GAME_TIMER);
-                if (((currentTime - lastMovement) > 60000 * afkLimit || (currentTime - lastKeyPress) > 60000 * afkLimit))
+                int currentTime = API.GetGameTimer();
+
+                if ((currentTime - lastMovement) > 60000 * afkLimit)
                 {
                     BaseScript.TriggerServerEvent("AfkKick.RequestDrop");
                 }
-                else if ((currentTime - lastMovement) > 60000 * (afkLimit - afkWarning) || (currentTime - lastKeyPress) > 60000 * (afkLimit - afkWarning))
+                else if ((currentTime - lastMovement) > 60000 * (afkLimit - afkWarning))
                 {
-                    float timeRemaining = Math.Max((currentTime - lastMovement), (currentTime - lastKeyPress)) / 60000f;
+                    float timeRemaining = (currentTime - lastMovement) / 60000f;
                     BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#FF0000", $@"You will be kicked for being AFK in {(afkLimit - timeRemaining):0} minute{(afkLimit - timeRemaining > 1 ? "s" : "")}.");
                 }
+
+                //if (((currentTime - lastMovement) > 60000 * afkLimit || (currentTime - lastKeyPress) > 60000 * afkLimit))
+                //{
+                //    BaseScript.TriggerServerEvent("AfkKick.RequestDrop");
+                //}
+                //else if ((currentTime - lastMovement) > 60000 * (afkLimit - afkWarning) || (currentTime - lastKeyPress) > 60000 * (afkLimit - afkWarning))
+                //{
+                //    float timeRemaining = Math.Max((currentTime - lastMovement), (currentTime - lastKeyPress)) / 60000f;
+                //    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#FF0000", $@"You will be kicked for being AFK in {(afkLimit - timeRemaining):0} minute{(afkLimit - timeRemaining > 1 ? "s" : "")}.");
+                //}
             }
         }
     }
