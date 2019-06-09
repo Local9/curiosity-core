@@ -19,6 +19,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             API.RegisterCommand("announce", new Action<int, List<object>, string>(Announcement), false);
             API.RegisterCommand("spawn", new Action<int, List<object>, string>(Spawn), false);
+            API.RegisterCommand("sc", new Action<int, List<object>, string>(SpawnCar), false);
         }
 
         static void SavePosition([FromSource]Player player, string positionName, float posX, float posY, float posZ)
@@ -66,6 +67,24 @@ namespace Curiosity.Server.net.Classes.Environment
 
             List<string> args = arguments.Cast<string>().ToList();
             Server.TriggerClientEvent("curiosity:Client:Scalefrom:Announce", String.Join(" ", args));
+        }
+
+        static void SpawnCar(int playerHandle, List<object> arguments, string raw)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+                Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+                if (!session.IsDeveloper) return;
+
+                Server.TriggerClientEvent("curiosity:Client:Command:SpawnCar", arguments[0]);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Chat->Spawn-> {ex.Message}");
+            }
         }
 
         static void Spawn(int playerHandle, List<object> arguments, string raw)

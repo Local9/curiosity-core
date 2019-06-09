@@ -22,6 +22,37 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("mod", new Action<int, List<object>, string>(ModVehicle), false);
             API.RegisterCommand("tp", new Action<int, List<object>, string>(Teleport), false);
             API.RegisterCommand("pos", new Action<int, List<object>, string>(SaveCoords), false);
+            API.RegisterCommand("dv", new Action<int, List<object>, string>(DeleteVehicle), false);
+        }
+
+        static async void DeleteVehicle(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsStaff()) return;
+
+            CitizenFX.Core.Vehicle veh = null;
+
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                veh = Game.PlayerPed.CurrentVehicle;
+                Game.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+            }
+            else
+            {
+                 veh = Helpers.WorldProbe.GetVehicleInFrontOfPlayer();
+            }
+
+            if (veh == null) return;
+
+            int handle = veh.Handle;
+
+            API.NetworkFadeOutEntity(veh.Handle, true, false);
+            veh.IsEngineRunning = false;
+            veh.MarkAsNoLongerNeeded();
+            await Client.Delay(1000);
+            API.DeleteEntity(ref handle);
+
+
+            await BaseScript.Delay(0);
         }
 
         static async void SaveCoords(int playerHandle, List<object> arguments, string raw)
@@ -105,6 +136,8 @@ namespace Curiosity.Client.net.Classes.Actions
             {
                 return false;
             }
+
+            API.NetworkFadeInEntity(veh.Handle, false);
 
             Game.PlayerPed.Task.WarpIntoVehicle(veh, VehicleSeat.Driver);
             veh.LockStatus = VehicleLockStatus.Unlocked;
