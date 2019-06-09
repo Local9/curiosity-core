@@ -22,7 +22,7 @@ namespace Curiosity.Chat.Client.net
         const string chatMessageColor = "#e7bd42";
         const float localChatAoe = 25f;
 
-        string role = "| ";
+        string role = "";
 
         public Chat()
         {
