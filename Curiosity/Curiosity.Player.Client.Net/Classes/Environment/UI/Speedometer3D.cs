@@ -110,9 +110,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                 {
                     return false;
                 }
-                return true;
             }
-
             return true;
         }
     }
