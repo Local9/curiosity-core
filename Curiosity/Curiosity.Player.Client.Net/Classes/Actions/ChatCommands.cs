@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
@@ -9,16 +10,30 @@ using CitizenFX.Core.UI;
 
 namespace Curiosity.Client.net.Classes.Actions
 {
-    class Spawners
+    class ChatCommands
     {
         static Client client = Client.GetInstance();
 
         public static void Init()
         {
-            client.RegisterEventHandler("curiosity:Client:Spawn:Weapon", new Action<string>(SpawnWeapon));
-            client.RegisterEventHandler("curiosity:Client:Spawn:Car", new Action<string>(SpawnCar));
+            client.RegisterEventHandler("curiosity:Client:Command:SpawnWeapon", new Action<string>(SpawnWeapon));
+            client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string>(SpawnCar));
 
             API.RegisterCommand("mod", new Action<int, List<object>, string>(ModVehicle), false);
+            API.RegisterCommand("tp", new Action<int, List<object>, string>(Teleport), false);
+            API.RegisterCommand("pos", new Action<int, List<object>, string>(SaveCoords), false);
+        }
+
+        static async void SaveCoords(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (arguments.Count < 1) return;
+
+            Vector3 pos = Game.PlayerPed.Position;
+
+            Client.TriggerServerEvent("curiosity:Server:Command:SavePosition", $"{arguments[0]}", pos.X, pos.Y, pos.Z);
+
+            await BaseScript.Delay(0);
         }
 
         static async void SpawnCar(string car)
@@ -116,6 +131,20 @@ namespace Curiosity.Client.net.Classes.Actions
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
 
+        }
+
+        static void Teleport(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (arguments.Count < 3) return;
+
+            float posX = float.Parse(arguments[0].ToString());
+            float posY = float.Parse(arguments[1].ToString());
+            float posZ = float.Parse(arguments[2].ToString());
+
+            API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
+            Game.PlayerPed.Position = new Vector3(posX, posY, posZ);
+            API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
         }
 
         static void ModVehicle(int playerHandle, List<object> arguments, string raw)

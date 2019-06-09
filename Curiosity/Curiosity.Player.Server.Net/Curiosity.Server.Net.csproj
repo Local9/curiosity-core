@@ -69,7 +69,7 @@
     <Compile Include="Business\Queue.cs" />
     <Compile Include="Classes\Bank.cs" />
     <Compile Include="Classes\Character.cs" />
-    <Compile Include="Classes\Environment\Chat.cs" />
+    <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="Classes\Environment\Scoreboard.cs" />
     <Compile Include="Classes\Environment\Vehicles.cs" />
     <Compile Include="Classes\Menu\Lists.cs" />

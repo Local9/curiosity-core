@@ -16,7 +16,6 @@ namespace Curiosity.Server.net.Classes.Environment
 
         public static void Init()
         {
-            //server.RegisterEventHandler("curiosity:Server:Vehicles:Spawned", new Action<Player, int>(OnVehicleSpawned));
             server.RegisterEventHandler("curiosity:Server:Vehicles:TempStore", new Action<Player, int>(OnPlayerEnteredVehicle));
             server.RegisterEventHandler("curiosity:Server:Vehicles:RemoveFromTempStore", new Action<Player, int>(OnRemoveFromTempStore));
 
@@ -38,7 +37,10 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static void OnRemoveFromTempStore([FromSource]Player player, int vehicleHandle)
         {
-            tempVehiclesToDelete.Add(vehicleHandle);
+            lock (tempVehiclesToDelete)
+            {
+                tempVehiclesToDelete.Add(vehicleHandle);
+            }
         }
 
         static void OnPlayerEnteredVehicle([FromSource]Player player, int vehicleHandle)
@@ -60,21 +62,6 @@ namespace Curiosity.Server.net.Classes.Environment
             }
         }
 
-        //static void OnVehicleSpawned([FromSource]Player player, int vehicleHandle)
-        //{
-        //    lock (vehicles)
-        //    {
-        //        if (vehicles.ContainsKey(player.Handle))
-        //        {
-        //            vehicles[player.Handle] = vehicleHandle;
-        //        }
-        //        else
-        //        {
-        //            vehicles.Add(player.Handle, vehicleHandle);
-        //        }
-        //    }
-        //}
-
         static async Task OnVehicleCheck()
         {
             while (true)
@@ -89,18 +76,9 @@ namespace Curiosity.Server.net.Classes.Environment
                         }
                     }
 
-                    foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
+                    lock (tempVehicles)
                     {
-                        if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
-                        {
-                            BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
-                            // tempVehicles.Select((v) => v.Value.PlayerHandle == vehicle.Value.PlayerHandle).ToList().ForEach(p => BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key));
-                        }
-                        else if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
-                        {
-                            BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
-                        }
-                        await BaseScript.Delay(0);
+                        RunChecker();
                     }
                 }
                 catch(Exception ex)
@@ -109,6 +87,22 @@ namespace Curiosity.Server.net.Classes.Environment
                 }
 
                 await BaseScript.Delay(60000);
+            }
+        }
+
+        static async void RunChecker()
+        {
+            foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
+            {
+                if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
+                {
+                    BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                }
+                else if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
+                {
+                    BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                }
+                await BaseScript.Delay(0);
             }
         }
     }

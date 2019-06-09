@@ -50,7 +50,7 @@
   <ItemGroup>
     <Compile Include="Classes\Actions\Emotes\EmotesManager.cs" />
     <Compile Include="Classes\Actions\Emotes\Pointing.cs" />
-    <Compile Include="Classes\Actions\Spawners.cs" />
+    <Compile Include="Classes\Actions\ChatCommands.cs" />
     <Compile Include="Classes\Environment\AfkKick.cs" />
     <Compile Include="Classes\Environment\AquaticSpawner.cs" />
     <Compile Include="Classes\Environment\BlipHandler.cs" />

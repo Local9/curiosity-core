@@ -48,7 +48,7 @@ namespace Curiosity.Client.net
             DuiHandler.Init();
             // WayPoints.Init();
             Scaleforms.Init();
-            Spawners.Init();
+            ChatCommands.Init();
 
             // Emotes
             EmotesManager.Init();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 using Curiosity.Server.net.Enums;
 
 namespace Curiosity.Server.net.Classes
@@ -19,23 +20,52 @@ namespace Curiosity.Server.net.Classes
         {
             while (true)
             {
-                foreach(KeyValuePair<string, Session> playerItem in PlayerList)
-                {
-                    Session session = playerItem.Value;
+                try {
 
-                    session.User = await Database.DatabaseUsers.GetUserWithCharacterAsync(playerItem.Value.License);
-                    session.Privilege = (Privilege)session.User.RoleId;
-                    session.SetBankAccount(session.User.BankAccount);
-                    session.SetWallet(session.User.Wallet);
+                    lock(PlayerList)
+                    {
+                        UpdatePlayersInformation();
+                    }
 
-                    session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-                    await BaseScript.Delay(0);
-                    session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
-                    await BaseScript.Delay(0);
-
-                    await BaseScript.Delay(500);
+                    await BaseScript.Delay((1000 * 60) * 2);
                 }
-                await BaseScript.Delay((1000 * 60) * 2);
+                catch (Exception ex)
+                {
+                    Log.Error($"UpdateSessions() -> {ex.Message}");
+                }
+            }
+        }
+
+        private static async void UpdatePlayersInformation()
+        {
+            foreach (KeyValuePair<string, Session> playerItem in PlayerList)
+            {
+                Session session = playerItem.Value;
+
+                session.User = await Database.DatabaseUsers.GetUserWithCharacterAsync(playerItem.Value.License);
+                session.Privilege = (Privilege)session.User.RoleId;
+                session.SetBankAccount(session.User.BankAccount);
+                session.SetWallet(session.User.Wallet);
+
+                PlayerInformation playerInformation = new PlayerInformation();
+                playerInformation.Handle = session.NetId;
+                playerInformation.UserId = session.UserID;
+                playerInformation.CharacterId = session.User.CharacterId;
+                playerInformation.RoleId = (int)session.Privilege;
+                playerInformation.Wallet = session.Wallet;
+                playerInformation.BankAccount = session.BankAccount;
+                playerInformation.Skills = session.Skills;
+
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
+
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                await BaseScript.Delay(0);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                await BaseScript.Delay(0);
+                session.Player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
+                await BaseScript.Delay(0);
+
+                await BaseScript.Delay(500);
             }
         }
 

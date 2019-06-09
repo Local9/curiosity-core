@@ -61,7 +61,7 @@ namespace Curiosity.Server.net
             Classes.Menu.Lists.Init();
 
             // Scaleform
-            Classes.Environment.Chat.Init();
+            Classes.Environment.ChatCommands.Init();
 
             // PLAYER EVENTS
             Classes.Skills.Init();
