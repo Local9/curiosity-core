@@ -27,11 +27,6 @@ namespace Curiosity.Client.net.Classes.Actions
             {
                 if (!Player.PlayerInformation.IsDeveloper()) return;
 
-                if (Game.PlayerPed.CurrentVehicle != null)
-                {
-                    Game.PlayerPed.CurrentVehicle.Delete();
-                }
-
                 Model model = null;
                 var enumName = Enum.GetNames(typeof(VehicleHash)).FirstOrDefault(s => s.ToLower().StartsWith(car.ToLower())) ?? "";
 
@@ -71,35 +66,50 @@ namespace Curiosity.Client.net.Classes.Actions
                     modelName = car;
                 }
 
-                var veh = await World.CreateVehicle(model, Game.PlayerPed.Position, Game.PlayerPed.Heading);
-                if (veh == null)
+                if (!await SpawnVehicle(model))
                 {
-                    return;
+                    Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Error", $"Could not load model {modelName}", 2);
                 }
 
-                Game.PlayerPed.Task.WarpIntoVehicle(veh, VehicleSeat.Driver);
-                veh.LockStatus = VehicleLockStatus.Unlocked;
-                veh.NeedsToBeHotwired = false;
-                veh.IsEngineRunning = true;
-                veh.Mods.LicensePlate = "DEVTOOLS";
-
-                veh.Mods.InstallModKit();
-                veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
-                veh.Mods[VehicleModType.Brakes].Index = veh.Mods[VehicleModType.Brakes].ModCount - 1;
-                veh.Mods[VehicleModType.Transmission].Index = veh.Mods[VehicleModType.Transmission].ModCount - 1;
-
-                int networkId = API.VehToNet(veh.Handle);
-                API.SetNetworkIdExistsOnAllMachines(networkId, true);
-                API.SetNetworkIdCanMigrate(networkId, true);
-
-                Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
-
-                Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}", 2);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
+        }
+        
+        private static async Task<bool> SpawnVehicle(Model model)
+        {
+            if (Game.PlayerPed.CurrentVehicle != null)
+            {
+                Game.PlayerPed.CurrentVehicle.Delete();
+            }
+
+            var veh = await World.CreateVehicle(model, Game.PlayerPed.Position, Game.PlayerPed.Heading);
+            if (veh == null)
+            {
+                return false;
+            }
+
+            Game.PlayerPed.Task.WarpIntoVehicle(veh, VehicleSeat.Driver);
+            veh.LockStatus = VehicleLockStatus.Unlocked;
+            veh.NeedsToBeHotwired = false;
+            veh.IsEngineRunning = true;
+            veh.Mods.LicensePlate = "DEVTOOLS";
+
+            veh.Mods.InstallModKit();
+            veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
+            veh.Mods[VehicleModType.Brakes].Index = veh.Mods[VehicleModType.Brakes].ModCount - 1;
+            veh.Mods[VehicleModType.Transmission].Index = veh.Mods[VehicleModType.Transmission].ModCount - 1;
+
+            int networkId = API.VehToNet(veh.Handle);
+            API.SetNetworkIdExistsOnAllMachines(networkId, true);
+            API.SetNetworkIdCanMigrate(networkId, true);
+
+            Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
+            Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}", 2);
+
+            return true;
         }
 
         static void SpawnWeapon(string weapon)
