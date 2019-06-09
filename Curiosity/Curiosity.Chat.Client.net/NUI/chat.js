@@ -217,7 +217,7 @@ $(function () {
                 if (name.indexOf('|') == -1) {
                     nameStr = '<strong style="color:' + color + ';"><i class="fas fa-comment"></i> ' + name + ': </strong>';
                 } else {
-                    nameStr = '<strong><i class="fas fa-comment"></i> ' + name + ': </strong>';
+                    nameStr = '<strong><i class="fas fa-comment"></i> ' + name.replace("|","") + ': </strong>';
                 }
             } else {
                 if (name.indexOf('|') == -1) {

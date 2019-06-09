@@ -20,6 +20,7 @@ using Curiosity.Client.net.Helpers;
 using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Actions;
 using Curiosity.Client.net.Classes.Environment.UI;
+using Curiosity.Client.net.Classes.Environment.UI.Mobile;
 using Curiosity.Client.net.Classes.Menus;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Classes.Vehicle;
@@ -71,6 +72,7 @@ namespace Curiosity.Client.net
             Scoreboard.Init();
             WorldTime.Init();
             Notifications.Init();
+            // MobilePhone.Init();
 
             // MENU
             MenuGlobals.Init();

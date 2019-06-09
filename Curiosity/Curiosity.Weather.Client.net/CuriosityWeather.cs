@@ -11,8 +11,9 @@ namespace Curiosity.Client.net
         {
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
             EventHandlers["curiosity:Client:Weather:Sync"] += new Action<string, bool, float, float>(WeatherSync);
-            EventHandlers["curiosity:Client:Time:Sync"] += new Action<int, int>(TimeSync);
+            // EventHandlers["curiosity:Client:Time:Sync"] += new Action<int, int>(TimeSync);
 
+            Tick += TimeNetworkSync;
             Tick += WeatherChecker;
         }
 
@@ -43,6 +44,16 @@ namespace Curiosity.Client.net
 
             API.NetworkOverrideClockTime(hour, minute, 0);
             await Delay(0);
+        }
+
+        async Task TimeNetworkSync()
+        {
+            int hours = 0;
+            int minutes = 0;
+            int seconds = 0;
+            API.NetworkGetServerTime(ref hours, ref minutes, ref seconds);
+            API.NetworkOverrideClockTime(hours, minutes, 0);
+            await Task.FromResult(0);
         }
 
         async void WeatherSync(string weather, bool wind, float windSpeed, float windHeading)
