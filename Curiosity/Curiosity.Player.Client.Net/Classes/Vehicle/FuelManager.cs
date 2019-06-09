@@ -53,7 +53,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         static bool isDev = true;
 
-        static MenuItemStandard menuItemRefuel = new MenuItemStandard { Title = "Refuel to Full", OnActivate = (item) => Refuel(100) };
+        static MenuItemStandard menuItemRefuel = new MenuItemStandard { Title = "Refuel to Full", OnActivate = (item) => DevRefuel() };
 
         static public void Init()
         {
@@ -228,6 +228,13 @@ namespace Curiosity.Client.net.Classes.Vehicle
             {
                 //Log.Error($"FuelManager Refuel Error: {ex.Message}");
             }
+        }
+
+        static async void DevRefuel()
+        {
+            Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
+
+            await BaseScript.Delay(0);
         }
 
         static async void ClientRefuel()

@@ -19,7 +19,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             VehicleClass.Helicopters,
             VehicleClass.Planes,
             VehicleClass.Commercial,
-            VehicleClass.Trains };
+            VehicleClass.Trains
+        };
 
         public static void Init()
         {

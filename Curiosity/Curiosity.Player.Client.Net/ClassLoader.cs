@@ -18,6 +18,7 @@
 using Curiosity.Client.net.Helpers.Dictionary;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Client.net.Classes.Environment;
+using Curiosity.Client.net.Classes.Actions;
 using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Classes.Menus;
 using Curiosity.Client.net.Classes.Player;
@@ -47,6 +48,7 @@ namespace Curiosity.Client.net
             DuiHandler.Init();
             // WayPoints.Init();
             Scaleforms.Init();
+            Spawners.Init();
 
             // Emotes
             EmotesManager.Init();
