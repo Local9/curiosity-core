@@ -61,6 +61,11 @@
     <Compile Include="Classes\Environment\UI\ButtonInstructions.cs" />
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
+    <Compile Include="Classes\Environment\UI\Mobile\Api\Applications.cs" />
+    <Compile Include="Classes\Environment\UI\Mobile\Api\Entity\Screen.cs" />
+    <Compile Include="Classes\Environment\UI\Mobile\Api\Entity\Application.cs" />
+    <Compile Include="Classes\Environment\UI\Mobile\Api\Screens.cs" />
+    <Compile Include="Classes\Environment\UI\Mobile\MobilePhone.cs" />
     <Compile Include="Classes\Environment\UI\Notifications.cs" />
     <Compile Include="Classes\Environment\UI\NuiEventHandler.cs" />
     <Compile Include="Classes\Environment\UI\PlayerBlips.cs" />

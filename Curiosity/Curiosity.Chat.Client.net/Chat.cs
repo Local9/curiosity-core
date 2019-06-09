@@ -50,7 +50,7 @@ namespace Curiosity.Chat.Client.net
             }
             else if (roleIn == "Project Manager")
             {
-                role = "P-M";
+                role = "PM";
             }
             else if (roleIn == "Moderator")
             {
@@ -62,7 +62,7 @@ namespace Curiosity.Chat.Client.net
             }
             else if (roleIn == "Senior Admin")
             {
-                roleIn = "S-A";
+                roleIn = "SA";
             }
             else if (roleIn == "Helper")
             {
@@ -70,7 +70,7 @@ namespace Curiosity.Chat.Client.net
             }
             else if (roleIn == "Head Admin")
             {
-                role = "H-A";
+                role = "HA";
             }
             else
             {

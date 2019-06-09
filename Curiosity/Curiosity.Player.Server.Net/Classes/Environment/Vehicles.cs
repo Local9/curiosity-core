@@ -92,17 +92,24 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static async void RunChecker()
         {
-            foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
+            try
             {
-                if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
+                foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
                 {
-                    BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                    if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
+                    {
+                        BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                    }
+                    else if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
+                    {
+                        BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                    }
+                    await BaseScript.Delay(0);
                 }
-                else if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
-                {
-                    BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
-                }
-                await BaseScript.Delay(0);
+            }
+            catch (Exception ex)
+            {
+                Log.Warn($"Vehicle -> RunChecker() -> {ex.Message}");
             }
         }
     }

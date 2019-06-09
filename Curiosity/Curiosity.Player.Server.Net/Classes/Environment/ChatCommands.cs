@@ -49,7 +49,7 @@ namespace Curiosity.Server.net.Classes.Environment
                     tw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm")},{positionName},{posX},{posY},{posZ}");
                 }
 
-                Helpers.Notifications.Advanced($"Position Saved", $"~b~Name: ~s~{positionName}", 20);
+                Helpers.Notifications.Advanced($"Position Saved", $"~b~Name: ~s~{positionName}", 20, session.Player);
             }
             catch (Exception ex)
             {
@@ -79,7 +79,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 if (!session.IsDeveloper) return;
 
-                Server.TriggerClientEvent("curiosity:Client:Command:SpawnCar", arguments[0]);
+                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", arguments[0]);
             }
             catch (Exception ex)
             {
@@ -103,10 +103,10 @@ namespace Curiosity.Server.net.Classes.Environment
                 switch (type)
                 {
                     case "weapon":
-                        Server.TriggerClientEvent("curiosity:Client:Command:SpawnWeapon", args[1]);
+                        session.Player.TriggerEvent("curiosity:Client:Command:SpawnWeapon", args[1]);
                         break;
                     case "car":
-                        Server.TriggerClientEvent("curiosity:Client:Command:SpawnCar", args[1]);
+                        session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", args[1]);
                         break;
                 }
             }
