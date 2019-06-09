@@ -39,7 +39,7 @@ namespace Curiosity.Client.net.Classes.Player
 
         public static bool IsTrustedAdmin()
         {
-            return (privilege == Privilege.SENIORADMIN || privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+            return (privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         }
 
         public static bool IsDeveloper()
