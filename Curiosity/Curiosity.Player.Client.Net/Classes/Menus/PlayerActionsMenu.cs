@@ -138,7 +138,9 @@ namespace Curiosity.Client.net.Classes.Menus
                         _menuItems.Add(new MenuItemStandard { Title = "7 Day Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 7, false); } });
                         _menuItems.Add(new MenuItemStandard { Title = "14 Day Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 14, false); } });
                         _menuItems.Add(new MenuItemStandard { Title = "28 Day Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 28, false); } });
-                        _menuItems.Add(new MenuItemStandard { Title = "Permanent Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 0, true); } });
+
+                        if (Player.PlayerInformation.IsTrustedAdmin())
+                            _menuItems.Add(new MenuItemStandard { Title = "Permanent Ban", OnActivate = (item) => { BanPlayer(playerHandle, banReason, 0, true); } });
                     }
                 }
 
