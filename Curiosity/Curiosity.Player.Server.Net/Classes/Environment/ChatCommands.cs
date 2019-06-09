@@ -1,10 +1,10 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net.Enums;
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-
-using CitizenFX.Core;
 
 namespace Curiosity.Server.net.Classes.Environment
 {
@@ -62,7 +62,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             Session session = SessionManager.PlayerList[$"{playerHandle}"];
 
-            if (session.Privilege == Enums.Privilege.USER) return;
+            if (session.Privilege == Privilege.USER) return;
 
             List<string> args = arguments.Cast<string>().ToList();
             Server.TriggerClientEvent("curiosity:Client:Scalefrom:Announce", String.Join(" ", args));

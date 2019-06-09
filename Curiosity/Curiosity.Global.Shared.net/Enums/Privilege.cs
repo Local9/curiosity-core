@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Shared.Client.net.Enums
+﻿namespace Curiosity.Global.Shared.net.Enums
 {
     public enum Privilege
     {

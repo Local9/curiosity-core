@@ -1,5 +1,5 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Server.net.Enums;
+using Curiosity.Global.Shared.net.Enums;
 using System.Collections.Generic;
 using System.Threading;
 using System;

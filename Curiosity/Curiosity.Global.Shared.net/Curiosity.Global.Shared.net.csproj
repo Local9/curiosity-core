@@ -47,6 +47,7 @@
     <Compile Include="Entity\Skills.cs" />
     <Compile Include="Enums\LogGroup.cs" />
     <Compile Include="Enums\Messages.cs" />
+    <Compile Include="Enums\Privilege.cs" />
     <Compile Include="Enums\Reserved.cs" />
     <Compile Include="Enums\SessionState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

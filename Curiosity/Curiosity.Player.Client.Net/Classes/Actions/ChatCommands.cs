@@ -130,7 +130,7 @@ namespace Curiosity.Client.net.Classes.Actions
         static void SpawnWeapon(string weapon)
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
-
+            
         }
 
         static void Teleport(int playerHandle, List<object> arguments, string raw)

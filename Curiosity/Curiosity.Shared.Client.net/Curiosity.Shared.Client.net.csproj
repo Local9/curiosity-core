@@ -48,7 +48,6 @@
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\Police.cs" />
-    <Compile Include="Enums\Privilege.cs" />
     <Compile Include="Extensions\BoolExtension.cs" />
     <Compile Include="Extensions\ColorExtension.cs" />
     <Compile Include="Extensions\DateTimeExtension.cs" />

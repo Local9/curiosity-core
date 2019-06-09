@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using System;
 using System.Collections.Generic;
-using CitizenFX.Core.Native;
 using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -29,16 +29,16 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Player:Ban", new Action<Player, string, string, bool, int>(AdminBanPlayer));
         }
 
-        static bool IsStaff(Enums.Privilege privilege)
+        static bool IsStaff(Privilege privilege)
         {
             bool canKick = false;
 
             switch (privilege)
             {
-                case Enums.Privilege.MODERATOR:
-                case Enums.Privilege.DEVELOPER:
-                case Enums.Privilege.ADMINISTRATOR:
-                case Enums.Privilege.PROJECTMANAGER:
+                case Privilege.MODERATOR:
+                case Privilege.DEVELOPER:
+                case Privilege.ADMINISTRATOR:
+                case Privilege.PROJECTMANAGER:
                     canKick = true;
                     break;
                 default:
@@ -244,7 +244,7 @@ namespace Curiosity.Server.net.Classes
                 Session session = new Session(player);
 
                 session.UserID = user.UserId;
-                session.Privilege = (Enums.Privilege)user.RoleId;
+                session.Privilege = (Privilege)user.RoleId;
                 session.LocationId = user.LocationId;
                 session.IncreaseWallet(user.Wallet);
                 session.IncreaseBankAccount(user.BankAccount);

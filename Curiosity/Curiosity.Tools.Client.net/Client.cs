@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Tools.Client.net.Controllers;
 using Curiosity.Tools.Client.net.Menus;
 using System;
