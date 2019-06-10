@@ -100,6 +100,7 @@ namespace Curiosity.Client.net
             Vehicles.Init();
             // DeleteProps.Init();
             Sit.Init();
+            Birds.Init();
 
             // EMS
             //EMS.Init();
