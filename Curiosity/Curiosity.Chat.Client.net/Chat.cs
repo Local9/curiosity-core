@@ -72,6 +72,10 @@ namespace Curiosity.Chat.Client.net
             {
                 role = "HA";
             }
+            else if (roleIn == "Donator")
+            {
+                role = "*DON";
+            }
             else
             {
                 role = "|";

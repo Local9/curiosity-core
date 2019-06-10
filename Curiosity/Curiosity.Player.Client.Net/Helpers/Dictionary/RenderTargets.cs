@@ -151,19 +151,19 @@ namespace Curiosity.Client.net.Helpers.Dictionary {
             targets.Add ("prop_x17_8scrn_02", new List<string> {
                 "xm_prop_x17_screens_02a_02"
             });
-            targets.Add ("prop_x17_8scrn_03", new List<string> {
-                "xm_prop_x17_screens_02a_03"
-            });
-            targets.Add ("prop_x17_8scrn_04", new List<string> {
+            //targets.Add ("prop_x17_8scrn_03", new List<string> {
+            //    "xm_prop_x17_screens_02a_03"
+            //});
+            targets.Add("prop_x17_8scrn_04", new List<string> {
                 "xm_prop_x17_screens_02a_04"
             });
-            targets.Add ("prop_x17_8scrn_05", new List<string> {
+            targets.Add("prop_x17_8scrn_05", new List<string> {
                 "xm_prop_x17_screens_02a_05"
             });
-            targets.Add ("prop_x17_8scrn_06", new List<string> {
+            targets.Add("prop_x17_8scrn_06", new List<string> {
                 "xm_prop_x17_screens_02a_06"
             });
-            targets.Add ("prop_x17_8scrn_07", new List<string> {
+            targets.Add("prop_x17_8scrn_07", new List<string> {
                 "xm_prop_x17_screens_02a_07"
             });
             targets.Add ("prop_x17_8scrn_08", new List<string> {

@@ -11,9 +11,11 @@ namespace Curiosity.Client.net.Classes.Environment.UI
     {
         static internal Client client = Client.GetInstance();
 
-        static string url = "https://www.youtube.com/embed/hsaLDnl_fEs?controls=0&autoplay=1&showinfo=0&rel=0";
+        static string url = "https://player.twitch.tv/?volume=0.50&channel=twitch";
+        static string offlineUrl = "about:blank";
 
         static bool IsVideoLoaded = false;
+        static Vector3 spawnedVideo;
 
         public static void Init()
         {
@@ -22,17 +24,17 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static async Task ShowVideo()
         {
-            if (ControlHelper.IsControlJustPressed(Control.SelectCharacterMichael, true))
+            if (IsVideoLoaded)
             {
-                if (!IsVideoLoaded)
+                if (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, spawnedVideo, true) < 10)
                 {
-                    await DuiHandler.CreateRandomUniqueDuiContainer(url);
+                    
                 }
-                else
-                {
-                    await DuiHandler.DestroyAllDui();
-                }
-                IsVideoLoaded = !IsVideoLoaded;
+            }
+
+            if (!IsVideoLoaded)
+            {
+                // DuiHandler.CreateModelForRenderInPosition("", "ex_prop_ex_tv_flat_01", , 0.0f);
             }
         }
     }

@@ -214,7 +214,9 @@ $(function () {
             // add name
             var nameStr = '';
             if (name !== '') {
-                if (name.indexOf('|') == -1) {
+                if (name.indexOf('*') == -1) {
+                    nameStr = '<strong style="color:dodgerblue;"><i class="fas fa-comment"></i> ' + name.replace("*", "") + ': </strong>';
+                } else if (name.indexOf('|') == -1) {
                     nameStr = '<strong style="color:' + color + ';"><i class="fas fa-comment"></i> ' + name + ': </strong>';
                 } else {
                     nameStr = '<strong><i class="fas fa-comment"></i> ' + name.replace("|","") + ': </strong>';

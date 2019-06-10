@@ -166,6 +166,17 @@ namespace Curiosity.Client.net.Helpers
             return new Tuple<Prop, String>(prop, modelName);
         }
 
+        public static async Task<Tuple<Prop, string>> CreateModelForRenderInPosition(String renderTarget, String modelName, Vector3 position, float heading)
+        {
+            Model model = new Model(modelName);
+            model.Request();
+
+            var prop = await World.CreateProp(model, position, false, false);
+            prop.IsCollisionEnabled = false;
+            prop.Heading = heading;
+            return new Tuple<Prop, String>(prop, modelName);
+        }
+
         private static DuiContainer AddDuiInternal(string renderTarget, string modelName, string url)
         {
             var duiContainer = new DuiContainer();

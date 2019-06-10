@@ -11,6 +11,7 @@
         // NEW ROLES
         SENIORADMIN     =   6,
         HELPER          =   7,
-        HEADADMIN       =   8
+        HEADADMIN       =   8,
+        DONATOR         =   9
     }
 }
