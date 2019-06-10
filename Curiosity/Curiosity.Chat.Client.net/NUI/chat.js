@@ -204,29 +204,36 @@ $(function () {
 
             // add colors
             // disables colorization in /me and system messages
-            if (name != '') {
-                if (name.indexOf('|') == -1) {
-                    name = colorize(name);
-                    message = colorize(message);
-                }
-            }
+            //if (name != '') {
+            //    if (name.indexOf('|') == -1) {
+            //        name = colorize(name);
+            //        message = colorize(message);
+            //    }
+            //}
 
             // add name
             var nameStr = '';
             if (name !== '') {
-                if (name.indexOf('*') == -1) {
-                    nameStr = '<strong style="color:dodgerblue;"><i class="fas fa-comment"></i> ' + name.replace("*", "") + ': </strong>';
-                } else if (name.indexOf('|') == -1) {
-                    nameStr = '<strong style="color:' + color + ';"><i class="fas fa-comment"></i> ' + name + ': </strong>';
-                } else {
-                    nameStr = '<strong><i class="fas fa-comment"></i> ' + name.replace("|","") + ': </strong>';
+
+                switch (name.charAt(0)) {
+                    case "*":
+                        color = "#72CC72";
+                        break;
+                    case "|":
+                        color = "white";
+                        break;
+                    default:
+                        color = "#FF9900";
+                        break;
                 }
+
+                console.log(name);
+
+                name = name.replace("*", "").replace("|", "");
+
+                nameStr = '<strong style="color:' + color + ';"><i class="fas fa-comment"></i> ' + name + ': </strong>';
             } else {
-                if (name.indexOf('|') == -1) {
-                    message = '<span style="color:' + color + ';">' + message + '</span>';
-                } else {
-                    message = '<span>' + message + '</span>';
-                }
+                message = '<span style="color:' + color + ';">' + message + '</span>';
             }
         }
         else {

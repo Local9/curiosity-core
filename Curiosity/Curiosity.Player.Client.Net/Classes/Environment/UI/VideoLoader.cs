@@ -58,6 +58,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                         await Client.Delay(2000);
                         container = await DuiHandler.AddDuiAtPosition("ex_tvscreen", "ex_prop_ex_tv_flat_01", url, spawnedVideo, 97.99994f);
                         IsVideoLoaded = true;
+                        if (url != "http://lifev.net")
+                            Notifications.LifeV(1, "Lounge", "Welcome to the Lounge", "Type /watch to watch the movie", 2);
                     }
                 }
 

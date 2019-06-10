@@ -60,7 +60,7 @@ namespace Curiosity.Server.net.Classes.Environment
                     }
                 }
 
-                session.Player.TriggerEvent("curiosity:Client:Video:SetUrl", pilotsLoungeVideoUrl);
+                Server.TriggerClientEvent("curiosity:Client:Video:SetUrl", pilotsLoungeVideoUrl);
             }
             catch (Exception ex)
             {
