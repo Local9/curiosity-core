@@ -231,15 +231,20 @@ namespace Curiosity.Client.net
             }
         }
 
-        void SaveLocation()
+        async void SaveLocation()
         {
             Vector3 playerPosition = Game.PlayerPed.Position;
 
-            float posZ = playerPosition.Z;
+            float? posZ = playerPosition.Z;
 
             if (Game.PlayerPed.IsInAir)
             {
-                API.GetGroundZFor_3dCoord(playerPosition.X, playerPosition.Y, playerPosition.Z, ref posZ, false);
+                Vector2 v2 = new Vector2(playerPosition.X, playerPosition.Y);
+
+                float? gpz = await Helpers.WorldProbe.FindGroundZ(v2);
+
+                if (gpz != null)
+                    posZ = gpz;
             }
 
             TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, posZ);

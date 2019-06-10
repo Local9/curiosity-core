@@ -180,7 +180,16 @@ namespace Curiosity.Client.net.Classes.Actions.Emotes
                 Function.Call(Hash.RESET_SCENARIO_TYPES_ENABLED);
                 if (!Game.PlayerPed.IsInVehicle())
                 {
-                    Function.Call(Hash.TASK_START_SCENARIO_IN_PLACE, Game.PlayerPed.Handle, scenarios[emoteName], 0, true);
+                    if (scenarios[emoteName] == "PROP_HUMAN_SEAT_ARMCHAIR" || scenarios[emoteName] == "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER")
+                    {
+                        API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
+                        API.TaskStartScenarioAtPosition(Game.PlayerPed.Handle, scenarios[emoteName], Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z - 0.5f, Game.PlayerPed.Heading, 0, true, true);
+                        API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
+                    }
+                    else
+                    {
+                        Function.Call(Hash.TASK_START_SCENARIO_IN_PLACE, Game.PlayerPed.Handle, scenarios[emoteName], 0, true);
+                    }
                     isPlayingEmote = true;
                 }
             }

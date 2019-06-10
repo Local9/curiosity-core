@@ -183,7 +183,7 @@ namespace Curiosity.Server.net.Database
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"UpdatePlayerLocation -> {ex.Message}");
+                Log.Error($"UpdatePlayerLocation -> {ex.Message}");
             }
         }
 
@@ -200,7 +200,7 @@ namespace Curiosity.Server.net.Database
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"UpdateUserLocationId -> {ex.Message}");
+                Log.Error($"UpdateUserLocationId -> {ex.Message}");
             }
         }
 
@@ -220,7 +220,7 @@ namespace Curiosity.Server.net.Database
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"SaveLocationAsync -> {ex.Message}");
+                Log.Error($"SaveLocationAsync -> {ex.Message}");
                 return 0;
             }
         }
@@ -250,7 +250,7 @@ namespace Curiosity.Server.net.Database
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"GetUserLocationAsync -> {ex.Message}");
+                Log.Error($"GetUserLocationAsync -> {ex.Message}");
                 return new Vector3();
             }
         }

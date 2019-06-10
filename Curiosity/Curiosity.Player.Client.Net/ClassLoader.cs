@@ -99,6 +99,7 @@ namespace Curiosity.Client.net
             //EmergencyServices.Init();
             Vehicles.Init();
             // DeleteProps.Init();
+            Sit.Init();
 
             // EMS
             //EMS.Init();

@@ -64,6 +64,8 @@ namespace Curiosity.Server.net
             Classes.Environment.ChatCommands.Init();
 
             // PLAYER EVENTS
+            Classes.Player.Sit.Init();
+
             Classes.Skills.Init();
             Classes.Bank.Init();
             Classes.PlayerMethods.Init();
@@ -163,12 +165,12 @@ namespace Curiosity.Server.net
         {
             try
             {
-                Debug.WriteLine($"Added {action.Method} Tick");
+                Log.Info($"Added {action.Method} Tick");
                 Tick += action;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"RegisterTickHandler -> {ex.Message}");
+                Log.Error($"RegisterTickHandler -> {ex.Message}");
             }
         }
 

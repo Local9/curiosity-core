@@ -46,7 +46,7 @@ namespace Curiosity.Server.net.Database
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"SaveLocationAsync -> {ex.Message}");
+                Log.Warn($"GetLogReasons -> {ex.Message}");
                 return lst;
             }
         }

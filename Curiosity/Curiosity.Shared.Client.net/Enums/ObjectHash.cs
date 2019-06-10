@@ -1,7 +1,7 @@
 ﻿namespace Curiosity.Shared.Client.net.Enums
 {
     // Object hashes will need to be cast to uints for some spawning functions
-    public enum ObjectHash : int
+    public enum ObjectHash : long
     {
         _02gate3_l = -1267889684,
         ap1_lod_emi_a_slod3 = 2083865423,
@@ -11430,6 +11430,8 @@
         zion = -1122289213,
         zion2 = -1193103848,
         zprop_bin_01a_old = 1919238784,
-        ztype = 758895617
+        ztype = 758895617,
+        ex_office2c_sofa01 = 2694234047,
+        ex_mp_h_stn_chairstrip_05 = 2024568303
     }
 }

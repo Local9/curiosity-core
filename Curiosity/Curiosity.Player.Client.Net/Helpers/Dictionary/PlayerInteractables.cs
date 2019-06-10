@@ -12,8 +12,20 @@ namespace Curiosity.Client.net.Helpers.Dictionary
         public static List<string> Interactables = new List<string>();
         public static Dictionary<string, Entity.InteractableSetting> SitableItems = new Dictionary<string, Entity.InteractableSetting>();
 
+        public static bool InteractableContains(string model)
+        {
+            return Interactables.Contains(model);
+        }
+
+        public static Entity.InteractableSetting GetInteractableSetting(string model)
+        {
+            return SitableItems[model];
+        }
+
         public static void SetupInteractables()
         {
+            if (Interactables.Count > 0) return;
+
             Interactables.Add("prop_bench_01a");
             Interactables.Add("prop_bench_01b");
             Interactables.Add("prop_bench_01c");
@@ -22,7 +34,7 @@ namespace Curiosity.Client.net.Helpers.Dictionary
             Interactables.Add("prop_bench_04");
             Interactables.Add("prop_bench_05");
             Interactables.Add("prop_bench_06");
-            Interactables.Add("prop_bench_05");
+            Interactables.Add("prop_bench_07");
             Interactables.Add("prop_bench_08");
             Interactables.Add("prop_bench_09");
             Interactables.Add("prop_bench_10");
@@ -40,7 +52,7 @@ namespace Curiosity.Client.net.Helpers.Dictionary
             Interactables.Add("prop_chair_04b");
             Interactables.Add("prop_chair_05");
             Interactables.Add("prop_chair_06");
-            Interactables.Add("prop_chair_05");
+            Interactables.Add("prop_chair_07");
             Interactables.Add("prop_chair_08");
             Interactables.Add("prop_chair_09");
             Interactables.Add("prop_chair_10");
@@ -91,11 +103,7 @@ namespace Curiosity.Client.net.Helpers.Dictionary
             Interactables.Add("prop_table_03_chr");
             Interactables.Add("prop_torture_ch_01");
             Interactables.Add("v_ilev_fh_dineeamesa");
-            Interactables.Add("v_ilev_fh_kitchenstool");
             Interactables.Add("v_ilev_tort_stool");
-            Interactables.Add("v_ilev_fh_kitchenstool");
-            Interactables.Add("v_ilev_fh_kitchenstool");
-            Interactables.Add("v_ilev_fh_kitchenstool");
             Interactables.Add("v_ilev_fh_kitchenstool");
             Interactables.Add("hei_prop_yah_seat_01");
             Interactables.Add("hei_prop_yah_seat_02");
@@ -123,10 +131,15 @@ namespace Curiosity.Client.net.Helpers.Dictionary
             Interactables.Add("v_tre_sofa_mess_c_s");
             Interactables.Add("prop_roller_car_01");
             Interactables.Add("prop_roller_car_02");
+            Interactables.Add("ex_mp_h_off_sofa_01");
+            Interactables.Add("ex_office2c_sofa01");
+            Interactables.Add("ex_mp_h_stn_chairstrip_05");
         }
 
         public static void SetupSitableItems()
         {
+            if (SitableItems.Count > 0) return;
+
             SitableItems.Add("prop_bench_01a", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_bench_01b", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_bench_01c", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
@@ -135,7 +148,7 @@ namespace Curiosity.Client.net.Helpers.Dictionary
             SitableItems.Add("prop_bench_04", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_bench_05", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_bench_06", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
-            SitableItems.Add("prop_bench_05", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
+            SitableItems.Add("prop_bench_07", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_bench_08", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_bench_09", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_bench_10", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
@@ -153,7 +166,7 @@ namespace Curiosity.Client.net.Helpers.Dictionary
             SitableItems.Add("prop_chair_04b", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_chair_05", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_chair_06", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
-            SitableItems.Add("prop_chair_05", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
+            SitableItems.Add("prop_chair_07", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_chair_08", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_chair_09", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_chair_10", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
@@ -204,11 +217,7 @@ namespace Curiosity.Client.net.Helpers.Dictionary
             SitableItems.Add("prop_table_03_chr", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_torture_ch_01", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("v_ilev_fh_dineeamesa", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
-            SitableItems.Add("v_ilev_fh_kitchenstool", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("v_ilev_tort_stool", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
-            SitableItems.Add("v_ilev_fh_kitchenstool", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
-            SitableItems.Add("v_ilev_fh_kitchenstool", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
-            SitableItems.Add("v_ilev_fh_kitchenstool", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("v_ilev_fh_kitchenstool", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("hei_prop_yah_seat_01", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("hei_prop_yah_seat_02", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
@@ -236,6 +245,8 @@ namespace Curiosity.Client.net.Helpers.Dictionary
             SitableItems.Add("v_tre_sofa_mess_c_s", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_roller_car_01", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
             SitableItems.Add("prop_roller_car_02", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
+            SitableItems.Add("ex_office2c_sofa01", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_BENCH", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
+            SitableItems.Add("ex_mp_h_stn_chairstrip_05", new Entity.InteractableSetting { Scenario = "PROP_HUMAN_SEAT_ARMCHAIR﻿", VerticalOffset = -0.5f, ForwardOffset = 0.0f, LeftOffset = 0.0f });
         }
     }
 }

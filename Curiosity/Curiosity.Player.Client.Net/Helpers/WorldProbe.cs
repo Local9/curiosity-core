@@ -17,6 +17,37 @@ namespace Curiosity.Client.net.Helpers
             Client.GetInstance().RegisterTickHandler(new Func<Task>(() => { CrosshairRaycastThisTick = null; return Task.FromResult(0); }));
         }
 
+        public static CitizenFX.Core.Entity GetPropEntityInFrontOfPlayer(float distance = 5f)
+        {
+            try
+            {
+                Entity source = Game.PlayerPed;
+                return GetPropEntityInFrontOfPlayer(source, source, distance);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"WorldProbe GetPropInFrontOfPlayer Error: {ex.Message}");
+            }
+            return default(CitizenFX.Core.Prop);
+        }
+
+        public static CitizenFX.Core.Entity GetPropEntityInFrontOfPlayer(Entity source, Entity ignore, float distance = 5f)
+        {
+            try
+            {
+                RaycastResult raycast = World.Raycast(source.Position + new Vector3(0f, 0f, -0.4f), source.GetOffsetPosition(new Vector3(0f, distance, 0f)) + new Vector3(0f, 0f, -0.4f), IntersectOptions.Objects, ignore);
+                if (raycast.DitHitEntity && raycast.HitEntity.Model.IsProp)
+                {
+                    return (CitizenFX.Core.Entity)raycast.HitEntity;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Info($"[WORLDPROBE] GetPropInFrontOfPlayer Error: {ex.Message}");
+            }
+            return default(CitizenFX.Core.Entity);
+        }
+
         public static CitizenFX.Core.Vehicle GetVehicleInFrontOfPlayer(float distance = 5f)
         {
             try
