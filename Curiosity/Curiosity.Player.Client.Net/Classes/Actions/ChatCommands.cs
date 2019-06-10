@@ -155,7 +155,8 @@ namespace Curiosity.Client.net.Classes.Actions
             API.SetNetworkIdCanMigrate(networkId, true);
 
             Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
-            Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}", 2);
+            Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
+            Debug.WriteLine($"{string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
 
             return true;
         }
@@ -194,7 +195,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
                 if (vehicleModTypeName == "list")
                 {
-                    Environment.UI.Notifications.Curiosity(1, "Curiosity", "Mod Type Unknown", $"Available Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}", 2);
+                    Debug.WriteLine($"Available Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
                     return;
                 }
 

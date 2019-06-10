@@ -137,6 +137,7 @@ namespace Curiosity.Client.net
             WantedLevels.Init();
             // MugshotCreator.Init();
             Inventory.Init();
+            Weapons.Init();
 
             // Vehicles
             //Vehicles.Init();
