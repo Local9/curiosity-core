@@ -75,6 +75,7 @@
     <Compile Include="Classes\Environment\Vehicles.cs" />
     <Compile Include="Classes\Menu\Lists.cs" />
     <Compile Include="Classes\PlayerMethods.cs" />
+    <Compile Include="Classes\Player\Sit.cs" />
     <Compile Include="Classes\ServerSettings.cs" />
     <Compile Include="Classes\Session.cs" />
     <Compile Include="Classes\SessionManager.cs" />

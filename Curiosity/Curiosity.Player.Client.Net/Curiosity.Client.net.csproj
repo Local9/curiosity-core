@@ -113,6 +113,7 @@
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="Classes\Player\PedDamage.cs" />
     <Compile Include="Classes\Player\Queue.cs" />
+    <Compile Include="Classes\Player\Sit.cs" />
     <Compile Include="Classes\Player\Skills.cs" />
     <Compile Include="Classes\Player\Weapons.cs" />
     <Compile Include="Classes\Vehicle\BrakeSignals.cs" />
@@ -128,6 +129,8 @@
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
     <Compile Include="Helpers\CommandProcessor.cs" />
+    <Compile Include="Helpers\Dictionary\Entity\InteractableSetting.cs" />
+    <Compile Include="Helpers\Dictionary\PlayerInteractables.cs" />
     <Compile Include="Helpers\Dictionary\RenderTargets.cs" />
     <Compile Include="Helpers\DUIHandler.cs" />
     <Compile Include="Helpers\EntityEnumerators.cs" />
