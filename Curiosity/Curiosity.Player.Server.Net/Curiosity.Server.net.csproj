@@ -57,6 +57,7 @@
     <Reference Include="System.Threading.Tasks.Extensions.net">
       <HintPath>..\_Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
