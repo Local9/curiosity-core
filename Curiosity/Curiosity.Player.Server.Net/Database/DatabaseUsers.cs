@@ -176,7 +176,7 @@ namespace Curiosity.Server.net.Database
                 myParams.Add("@locationId", locationId);
                 myParams.Add("@x", x);
                 myParams.Add("@y", y);
-                myParams.Add("@z", z);
+                myParams.Add("@z", z + 0.5);
 
                 string selectQuery = "update curiosity.location set x = @x, y = @y, z = @z where locationId = @locationId;";
                 await mySql.Query(selectQuery, myParams, false);
@@ -212,7 +212,7 @@ namespace Curiosity.Server.net.Database
                 myParams.Add("@locationType", locationType);
                 myParams.Add("@x", x);
                 myParams.Add("@y", y);
-                myParams.Add("@z", z);
+                myParams.Add("@z", z + 0.5);
                 myParams.Add("@serverId", Server.serverId);
 
                 string selectQuery = "insert into curiosity.location (locationTypeId, description, x, y, z, serverId) values (@locationType, 'Character Spawn', @x, @y, @z, @serverId);";

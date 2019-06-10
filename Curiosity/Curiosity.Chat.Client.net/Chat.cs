@@ -139,7 +139,7 @@ namespace Curiosity.Chat.Client.net
                 var spaceSplit = Message.Split(' ');
                 if (Message.Substring(0, 1) == "/" && Message.Length >= 2)
                 {
-                    API.ExecuteCommand(Message.Replace("/", ""));
+                    API.ExecuteCommand(Message.Substring(1));
                 }
                 else
                 {

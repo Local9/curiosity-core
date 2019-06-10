@@ -95,7 +95,7 @@ namespace Curiosity.Client.net
             WarpPoints.Init();
             Voip.Init();
             AquaticSpawner.Init();
-            // VideoLoader.Init();
+            VideoLoader.Init();
             //EmergencyServices.Init();
             Vehicles.Init();
             // DeleteProps.Init();

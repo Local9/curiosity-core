@@ -113,6 +113,29 @@ namespace Curiosity.Client.net.Helpers
             await Task.FromResult(0);
         }
 
+        public static async Task<DuiContainer> AddDuiAtPosition(String renderTarget, String modelName, string url, Vector3 position, float heading)
+        {
+            DuiContainer duiContainer = null;
+            if (DeletedContainers.ContainsKey(renderTarget) && DeletedContainers[renderTarget].Any())
+            {
+                duiContainer = ReuseDuiContainer(renderTarget, url);
+            }
+
+            var propAndModelName = await CreateModelForRenderInPosition(modelName, position, heading);
+            if (duiContainer == null)
+                duiContainer = AddDuiInternal(renderTarget, modelName, url);
+            duiContainer.Props = new List<Prop>() { propAndModelName.Item1 };
+            if (!DuiContainers.ContainsKey(renderTarget))
+                DuiContainers.Add(renderTarget, new List<DuiContainer>());
+
+            DuiContainers[renderTarget].Add(duiContainer);
+            if (!UsedRenderTargets.Contains(renderTarget))
+            {
+                UsedRenderTargets.Add(renderTarget);
+            }
+            return duiContainer;
+        }
+
         public static async Task<DuiContainer> AddDui(String renderTarget, string url)
         {
             DuiContainer duiContainer = null;
@@ -166,7 +189,7 @@ namespace Curiosity.Client.net.Helpers
             return new Tuple<Prop, String>(prop, modelName);
         }
 
-        public static async Task<Tuple<Prop, string>> CreateModelForRenderInPosition(String renderTarget, String modelName, Vector3 position, float heading)
+        public static async Task<Tuple<Prop, string>> CreateModelForRenderInPosition(String modelName, Vector3 position, float heading)
         {
             Model model = new Model(modelName);
             model.Request();
