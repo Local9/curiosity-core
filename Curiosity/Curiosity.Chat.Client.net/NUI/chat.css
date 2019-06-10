@@ -95,7 +95,7 @@ input.fake {
 }
 
 #chatBuffer {
-    height: 400px;
+    height: 600px;
     overflow: hidden;
 }
 
@@ -109,7 +109,7 @@ input.fake {
 
 #PgDnIndicator {
     position: relative;
-    top: 400px;
+    top: 600px;
     opacity: 0;
 }
 

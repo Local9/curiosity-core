@@ -15,6 +15,9 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static string pilotsLoungeVideoUrl = "https//lifev.net";
 
+        static long lastTimePIA = 0;
+        static int coolDownTime = 15000;
+
         static public void Init()
         {
             server.RegisterEventHandler("curiosity:Server:Command:SavePosition", new Action<CitizenFX.Core.Player, string, float, float, float>(SavePosition));
@@ -24,6 +27,21 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("sc", new Action<int, List<object>, string>(SpawnCar), false);
             API.RegisterCommand("video", new Action<int, List<object>, string>(ChangeVideoURL), false);
             API.RegisterCommand("watch", new Action<int, List<object>, string>(RequestURL), false);
+
+            API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
+        }
+
+        static void PIA(int playerHandle, List<object> arguments, string raw)
+        {
+            if ((API.GetGameTimer() - lastTimePIA) < coolDownTime) return;
+
+            lastTimePIA = API.GetGameTimer();
+
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            Server.TriggerClientEvent("curiosity:Client:Chat:Message", "PIA", "dodgerblue", "Q: <- <u>I cannot see PIA or SSIA. What do I do to fix it?</u> -><br /><i>In advanced Graphics in your settings</i><br />1.<b>Turning High Detail Streaming While Flying</b>[ON]<br />2.<b>Extended - Distance Scaling to max</b> (or high depending on your PC<br />3.Restart your FiveM<hr /><img src=https://i.imgur.com/KnXKWhL.jpg width=100% />");
         }
 
         static void RequestURL(int playerHandle, List<object> arguments, string raw)

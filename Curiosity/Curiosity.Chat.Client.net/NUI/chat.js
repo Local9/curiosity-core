@@ -215,23 +215,35 @@ $(function () {
             var nameStr = '';
             if (name !== '') {
 
+                var icon = '<i class="fas fa-comment"></i> ';
+
                 switch (name.charAt(0)) {
                     case "*":
                         color = "#72CC72";
+                        icon = '<i class="fas fa-donate"></i> ';
                         break;
                     case "|":
                         color = "white";
                         break;
                     default:
                         color = "#FF9900";
+                        icon = '<i class="fas fa-star"></i> ';
                         break;
                 }
 
-                console.log(name);
+                if (name.substring(0, 3) === "DEV") {
+                    color = "#4169E1";
+                    icon = '<i class="fas fa-hand-spock"></i> ';
+                }
+
+                if (name.substring(0, 2) === "PM") {
+                    color = "#B22222";
+                    icon = '<i class="fas fa-hard-hat"></i> ';
+                }
 
                 name = name.replace("*", "").replace("|", "");
 
-                nameStr = '<strong style="color:' + color + ';"><i class="fas fa-comment"></i> ' + name + ': </strong>';
+                nameStr = '<strong style="color:' + color + ';">' + icon + name + ': </strong>';
             } else {
                 message = '<span style="color:' + color + ';">' + message + '</span>';
             }
