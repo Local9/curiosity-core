@@ -18,9 +18,9 @@ namespace Curiosity.Server.net.Classes
 
         public static void Init()
         {
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Settings:Wanted", new Action<Player>(WantedSettings));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Settings:Inventory", new Action<Player>(InventorySettings));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Settings:InstantRefuel", new Action<Player>(InstantRefuel));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Settings:Wanted", new Action<CitizenFX.Core.Player>(WantedSettings));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Settings:Inventory", new Action<CitizenFX.Core.Player>(InventorySettings));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Settings:InstantRefuel", new Action<CitizenFX.Core.Player>(InstantRefuel));
 
             IsWantedDisabled = API.GetConvar("police_wanted_disabled", "false") == "true";
             MaxWantedLevel = API.GetConvarInt("police_max_wanted_level", 5);
@@ -33,20 +33,20 @@ namespace Curiosity.Server.net.Classes
             Log.Verbose($"ServerSettings -> IsInventoryDisabled {IsInventoryDisabled}");
         }
 
-        static void InventorySettings([FromSource]Player player)
+        static void InventorySettings([FromSource]CitizenFX.Core.Player player)
         {
             IsInventoryDisabled = API.GetConvar("disable_inventory", "false") == "true";
             player.TriggerEvent("curiosity:Client:Settings:Inventory", IsInventoryDisabled);
         }
 
-        static void WantedSettings([FromSource]Player player)
+        static void WantedSettings([FromSource]CitizenFX.Core.Player player)
         {
             IsWantedDisabled = API.GetConvar("police_wanted_disabled", "false") == "true";
             MaxWantedLevel = API.GetConvarInt("police_max_wanted_level", 5);
             player.TriggerEvent("curiosity:Client:Settings:WantedDisabled", IsWantedDisabled, MaxWantedLevel);
         }
 
-        static void InstantRefuel([FromSource]Player player)
+        static void InstantRefuel([FromSource]CitizenFX.Core.Player player)
         {
             IsInstantRefuelDisabled = API.GetConvar("instant_refuel_disabled", "false") == "true";
             player.TriggerEvent("curiosity:Client:Settings:InstantRefuel", IsInstantRefuelDisabled);

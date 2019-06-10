@@ -17,7 +17,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static public void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Command:SavePosition", new Action<Player, string, float, float, float>(SavePosition));
+            server.RegisterEventHandler("curiosity:Server:Command:SavePosition", new Action<CitizenFX.Core.Player, string, float, float, float>(SavePosition));
 
             API.RegisterCommand("announce", new Action<int, List<object>, string>(Announcement), false);
             API.RegisterCommand("spawn", new Action<int, List<object>, string>(Spawn), false);
@@ -68,7 +68,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
         }
 
-        static void SavePosition([FromSource]Player player, string positionName, float posX, float posY, float posZ)
+        static void SavePosition([FromSource]CitizenFX.Core.Player player, string positionName, float posX, float posY, float posZ)
         {
             try
             {

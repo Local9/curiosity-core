@@ -16,14 +16,14 @@ namespace Curiosity.Server.net.Classes
 
         public static void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Skills:Increase", new Action<Player, string, int>(IncreaseSkillByPlayer));
-            server.RegisterEventHandler("curiosity:Server:Skills:Decrease", new Action<Player, string, int>(DecreaseSkillByPlayer));
-            server.RegisterEventHandler("curiosity:Server:Skills:Get", new Action<Player>(GetUserSkills));
+            server.RegisterEventHandler("curiosity:Server:Skills:Increase", new Action<CitizenFX.Core.Player, string, int>(IncreaseSkillByPlayer));
+            server.RegisterEventHandler("curiosity:Server:Skills:Decrease", new Action<CitizenFX.Core.Player, string, int>(DecreaseSkillByPlayer));
+            server.RegisterEventHandler("curiosity:Server:Skills:Get", new Action<CitizenFX.Core.Player>(GetUserSkills));
 
             server.RegisterTickHandler(UpdateSkillsDictionary);
         }
 
-        async static void GetUserSkills([FromSource]Player player)
+        async static void GetUserSkills([FromSource]CitizenFX.Core.Player player)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static void IncreaseSkillByPlayer([FromSource]Player player, string skill, int experience)
+        static void IncreaseSkillByPlayer([FromSource]CitizenFX.Core.Player player, string skill, int experience)
         {
             try
             {
@@ -155,7 +155,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static void DecreaseSkillByPlayer([FromSource]Player player, string skill, int experience)
+        static void DecreaseSkillByPlayer([FromSource]CitizenFX.Core.Player player, string skill, int experience)
         {
             try
             {

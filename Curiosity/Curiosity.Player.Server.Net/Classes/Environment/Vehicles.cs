@@ -16,15 +16,15 @@ namespace Curiosity.Server.net.Classes.Environment
 
         public static void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Vehicles:TempStore", new Action<Player, int>(OnPlayerEnteredVehicle));
-            server.RegisterEventHandler("curiosity:Server:Vehicles:RemoveFromTempStore", new Action<Player, int>(OnRemoveFromTempStore));
+            server.RegisterEventHandler("curiosity:Server:Vehicles:TempStore", new Action<CitizenFX.Core.Player, int>(OnPlayerEnteredVehicle));
+            server.RegisterEventHandler("curiosity:Server:Vehicles:RemoveFromTempStore", new Action<CitizenFX.Core.Player, int>(OnRemoveFromTempStore));
 
-            server.RegisterEventHandler("playerDropped", new Action<Player, string>(OnPlayerDropped));
+            server.RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(OnPlayerDropped));
 
             server.RegisterTickHandler(OnVehicleCheck);
         }
 
-        static void OnPlayerDropped([FromSource]Player player, string reason)
+        static void OnPlayerDropped([FromSource]CitizenFX.Core.Player player, string reason)
         {
             foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
             {
@@ -35,7 +35,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
         }
 
-        static void OnRemoveFromTempStore([FromSource]Player player, int vehicleHandle)
+        static void OnRemoveFromTempStore([FromSource]CitizenFX.Core.Player player, int vehicleHandle)
         {
             lock (tempVehiclesToDelete)
             {
@@ -43,7 +43,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
         }
 
-        static void OnPlayerEnteredVehicle([FromSource]Player player, int vehicleHandle)
+        static void OnPlayerEnteredVehicle([FromSource]CitizenFX.Core.Player player, int vehicleHandle)
         {
             lock (tempVehicles)
             {

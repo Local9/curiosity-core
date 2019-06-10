@@ -92,7 +92,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        public static Player GetPlayer(long userId)
+        public static CitizenFX.Core.Player GetPlayer(long userId)
         {
             lock (PlayerList)
             {

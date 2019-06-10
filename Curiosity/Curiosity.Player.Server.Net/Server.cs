@@ -40,8 +40,8 @@ namespace Curiosity.Server.net
 
             EventHandlers["onResourceStart"] += new Action<string>(OnResourceStart);
 
-            // RegisterEventHandler("playerConnecting", new Action<Player, string, dynamic, dynamic>(OnPlayerConnecting));
-            RegisterEventHandler("playerDropped", new Action<Player, string>(OnPlayerDropped));
+            // RegisterEventHandler("playerConnecting", new Action<CitizenFX.Core.Player, string, dynamic, dynamic>(OnPlayerConnecting));
+            RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(OnPlayerDropped));
 
             // TODO: Move everything else to init from here.
             Business.Queue.Init();
@@ -91,7 +91,7 @@ namespace Curiosity.Server.net
             Log.Warn("-----------------------------------------------------------------");
         }
 
-        static void OnPlayerConnecting([FromSource]Player player, string playerName, dynamic setKickReason, dynamic deferrals)
+        static void OnPlayerConnecting([FromSource]CitizenFX.Core.Player player, string playerName, dynamic setKickReason, dynamic deferrals)
         {
             string license = player.Identifiers[LICENSE_IDENTIFIER];
 
@@ -101,7 +101,7 @@ namespace Curiosity.Server.net
             }
         }
 
-        static void OnPlayerDropped([FromSource]Player player, string reason)
+        static void OnPlayerDropped([FromSource]CitizenFX.Core.Player player, string reason)
         {
             if (Classes.SessionManager.PlayerList.ContainsKey(player.Handle))
             {

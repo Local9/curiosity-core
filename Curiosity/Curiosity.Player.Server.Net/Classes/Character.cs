@@ -12,10 +12,10 @@ namespace Curiosity.Server.net.Classes
 
         public static void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Inventory:GetItems", new Action<Player>(GetActiveCharacterInventory));
+            server.RegisterEventHandler("curiosity:Server:Inventory:GetItems", new Action<CitizenFX.Core.Player>(GetActiveCharacterInventory));
         }
 
-        static async void GetActiveCharacterInventory([FromSource]Player player)
+        static async void GetActiveCharacterInventory([FromSource]CitizenFX.Core.Player player)
         {
             try
             {

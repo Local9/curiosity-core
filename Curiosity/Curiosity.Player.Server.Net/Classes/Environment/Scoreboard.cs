@@ -15,15 +15,15 @@ namespace Curiosity.Server.net.Classes.Environment
 
         public static void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Scoreboard:MaxPlayers", new Action<Player>(OnGetMaxPlayers));
+            server.RegisterEventHandler("curiosity:Server:Scoreboard:MaxPlayers", new Action<CitizenFX.Core.Player>(OnGetMaxPlayers));
             server.RegisterEventHandler("curiosity:Server:Scoreboard:SetPlayerRow", new Action<int, string, int, bool>(OnSetPlayerConfig));
         }
 
-        static async void OnGetMaxPlayers([FromSource]Player player)
+        static async void OnGetMaxPlayers([FromSource]CitizenFX.Core.Player player)
         {
             player.TriggerEvent("curiosity:Client:Scoreboard:MaxPlayers", int.Parse(GetConvar("sv_maxClients", "32").ToString()));
             var pl = new PlayerList();
-            foreach (Player p in pl)
+            foreach (CitizenFX.Core.Player p in pl)
             {
                 if (list.ContainsKey(int.Parse(p.Handle)))
                 {

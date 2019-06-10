@@ -9,7 +9,7 @@ namespace Curiosity.Server.net.Helpers
 {
     static class Notifications
     {
-        public static void Advanced(string title, string message, int gtaColorId, Player player = null, NotificationType notificationType = NotificationType.CHAR_LESTER)
+        public static void Advanced(string title, string message, int gtaColorId, CitizenFX.Core.Player player = null, NotificationType notificationType = NotificationType.CHAR_LESTER)
         {
             if (player == null)
             {

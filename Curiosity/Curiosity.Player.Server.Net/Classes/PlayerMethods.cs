@@ -15,18 +15,18 @@ namespace Curiosity.Server.net.Classes
         {
             server = Server.GetInstance();
 
-            server.RegisterEventHandler("curiosity:Server:Player:GetInformation", new Action<Player>(GetInformation));
+            server.RegisterEventHandler("curiosity:Server:Player:GetInformation", new Action<CitizenFX.Core.Player>(GetInformation));
 
-            server.RegisterEventHandler("curiosity:Server:Player:Setup", new Action<Player>(OnSetupPlayer));
-            server.RegisterEventHandler("curiosity:Server:Player:GetRole", new Action<Player>(GetUserRole));
+            server.RegisterEventHandler("curiosity:Server:Player:Setup", new Action<CitizenFX.Core.Player>(OnSetupPlayer));
+            server.RegisterEventHandler("curiosity:Server:Player:GetRole", new Action<CitizenFX.Core.Player>(GetUserRole));
             // Saves Data
-            server.RegisterEventHandler("curiosity:Server:Player:SaveLocation", new Action<Player, float, float, float>(OnSaveLocation));
+            server.RegisterEventHandler("curiosity:Server:Player:SaveLocation", new Action<CitizenFX.Core.Player, float, float, float>(OnSaveLocation));
             // Internal Events
             server.RegisterEventHandler("curiosity:Server:Player:GetRoleId", new Action<int>(GetUserRoleId));
-            server.RegisterEventHandler("curiosity:Server:Player:GetUserId", new Action<Player>(GetUserId));
+            server.RegisterEventHandler("curiosity:Server:Player:GetUserId", new Action<CitizenFX.Core.Player>(GetUserId));
             // admin methods
-            server.RegisterEventHandler("curiosity:Server:Player:Kick", new Action<Player, string, string>(AdminKickPlayer));
-            server.RegisterEventHandler("curiosity:Server:Player:Ban", new Action<Player, string, string, bool, int>(AdminBanPlayer));
+            server.RegisterEventHandler("curiosity:Server:Player:Kick", new Action<CitizenFX.Core.Player, string, string>(AdminKickPlayer));
+            server.RegisterEventHandler("curiosity:Server:Player:Ban", new Action<CitizenFX.Core.Player, string, string, bool, int>(AdminBanPlayer));
         }
 
         static bool IsStaff(Privilege privilege)
@@ -51,7 +51,7 @@ namespace Curiosity.Server.net.Classes
             return canKick;
         }
 
-        async static void AdminKickPlayer([FromSource]Player player, string playerHandleToKick, string reason)
+        async static void AdminKickPlayer([FromSource]CitizenFX.Core.Player player, string playerHandleToKick, string reason)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        async static void AdminBanPlayer([FromSource]Player player, string playerHandleToKick, string reason, bool perm, int duration)
+        async static void AdminBanPlayer([FromSource]CitizenFX.Core.Player player, string playerHandleToKick, string reason, bool perm, int duration)
         {
             try
             {
@@ -167,7 +167,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        async static void GetInformation([FromSource]Player player)
+        async static void GetInformation([FromSource]CitizenFX.Core.Player player)
         {
             if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
@@ -220,12 +220,12 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        async static void OnSetupPlayer([FromSource]Player player)
+        async static void OnSetupPlayer([FromSource]CitizenFX.Core.Player player)
         {
             await SetupPlayerAsync(player);
         }
 
-        async static Task SetupPlayerAsync(Player player)
+        async static Task SetupPlayerAsync(CitizenFX.Core.Player player)
         {
             try
             {
@@ -274,7 +274,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        async static void OnSaveLocation([FromSource]Player player, float x, float y, float z)
+        async static void OnSaveLocation([FromSource]CitizenFX.Core.Player player, float x, float y, float z)
         {
             try
             {
@@ -293,7 +293,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        async static void GetUserRole([FromSource]Player player)
+        async static void GetUserRole([FromSource]CitizenFX.Core.Player player)
         {
             string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
 
@@ -311,13 +311,13 @@ namespace Curiosity.Server.net.Classes
 
         async static void GetUserRoleId(int playerHandle)
         {
-            Player player = new PlayerList()[playerHandle];
+            CitizenFX.Core.Player player = new PlayerList()[playerHandle];
             string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
             Entity.User user = await Business.BusinessUser.GetUserAsync(license);
             player.TriggerEvent("curiosity:Server:Player:RoleId", user.RoleId);
         }
 
-        async static void GetUserId([FromSource]Player player)
+        async static void GetUserId([FromSource]CitizenFX.Core.Player player)
         {
             if (!Classes.SessionManager.PlayerList.ContainsKey(player.Handle))
             {

@@ -12,10 +12,10 @@ namespace Curiosity.Server.net.Classes.Menu
 
         public static void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Menu:Reasons", new Action<Player, int>(GetReasons));
+            server.RegisterEventHandler("curiosity:Server:Menu:Reasons", new Action<CitizenFX.Core.Player, int>(GetReasons));
         }
 
-        static async void GetReasons([FromSource]Player player, int logGroupId)
+        static async void GetReasons([FromSource]CitizenFX.Core.Player player, int logGroupId)
         {
             GlobalEnums.LogGroup logGroup = (GlobalEnums.LogGroup)logGroupId;
             List<GlobalEntities.LogType> logTypes = await Database.DatabaseLog.GetLogReasons(logGroup);

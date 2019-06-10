@@ -56,9 +56,9 @@ namespace Curiosity.Server.net.Business
             SetupMessages();
 
             server.RegisterEventHandler("onResourceStop", new Action<string>(OnResourceStop));
-            server.RegisterEventHandler("playerConnecting", new Action<Player, string, dynamic, dynamic>(PlayerConnecting));
-            server.RegisterEventHandler("playerDropped", new Action<Player, string>(PlayerDropped));
-            server.RegisterEventHandler("curiosity:Server:Queue:PlayerConnected", new Action<Player>(PlayerActivated));
+            server.RegisterEventHandler("playerConnecting", new Action<CitizenFX.Core.Player, string, dynamic, dynamic>(PlayerConnecting));
+            server.RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(PlayerDropped));
+            server.RegisterEventHandler("curiosity:Server:Queue:PlayerConnected", new Action<CitizenFX.Core.Player>(PlayerActivated));
             server.RegisterTickHandler(QueueCycle);
             isServerQueueReady = true;
         }
@@ -108,7 +108,7 @@ namespace Curiosity.Server.net.Business
             return isServerQueueReady;
         }
 
-        static async void PlayerConnecting([FromSource]Player player, string playerName, dynamic denyWithReason, dynamic deferrals)
+        static async void PlayerConnecting([FromSource]CitizenFX.Core.Player player, string playerName, dynamic denyWithReason, dynamic deferrals)
         {
             try
             {

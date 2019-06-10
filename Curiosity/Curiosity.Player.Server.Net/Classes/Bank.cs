@@ -7,14 +7,14 @@ namespace Curiosity.Server.net.Classes
     {
         public static void Init()
         {
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseCash", new Action<Player, int, int>(IncreaseCash));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseCash", new Action<Player, int, int>(DecreaseCash));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseBank", new Action<Player, int, int>(IncreaseBank));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseBank", new Action<Player, int, int>(DecreaseBank));
-            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:TransferMoney", new Action<Player, int, bool>(TransferMoney));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseCash", new Action<CitizenFX.Core.Player, int, int>(IncreaseCash));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseCash", new Action<CitizenFX.Core.Player, int, int>(DecreaseCash));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:IncreaseBank", new Action<CitizenFX.Core.Player, int, int>(IncreaseBank));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:DecreaseBank", new Action<CitizenFX.Core.Player, int, int>(DecreaseBank));
+            Server.GetInstance().RegisterEventHandler("curiosity:Server:Bank:TransferMoney", new Action<CitizenFX.Core.Player, int, bool>(TransferMoney));
         }
 
-        static void IncreaseCash([FromSource]Player player, int wallet, int amount)
+        static void IncreaseCash([FromSource]CitizenFX.Core.Player player, int wallet, int amount)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static void DecreaseCash([FromSource]Player player, int wallet, int amount)
+        static void DecreaseCash([FromSource]CitizenFX.Core.Player player, int wallet, int amount)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Curiosity.Server.net.Classes
             }
 }
 
-        static void IncreaseBank([FromSource]Player player, int bankAccount, int amount)
+        static void IncreaseBank([FromSource]CitizenFX.Core.Player player, int bankAccount, int amount)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static void DecreaseBank([FromSource]Player player, int bankAccount, int amount)
+        static void DecreaseBank([FromSource]CitizenFX.Core.Player player, int bankAccount, int amount)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static void TransferMoney([FromSource]Player player, int amount, bool toWallet)
+        static void TransferMoney([FromSource]CitizenFX.Core.Player player, int amount, bool toWallet)
         {
             try
             {

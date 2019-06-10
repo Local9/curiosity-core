@@ -35,7 +35,7 @@ namespace Curiosity.Server.net.Classes
         public bool IsAdmin => (Privilege == Privilege.ADMINISTRATOR || Privilege == Privilege.SENIORADMIN || Privilege == Privilege.HEADADMIN || Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);
         public void Drop(string reason) => DropPlayer(NetId, reason);
 
-        public Player Player { get; private set; }
+        public CitizenFX.Core.Player Player { get; private set; }
         public SemaphoreSlim Mutex { get; private set; }
         public Entity.User User { get; set; }
         public Dictionary<string, GlobalEntity.Skills> Skills = new Dictionary<string, GlobalEntity.Skills>();
@@ -43,7 +43,7 @@ namespace Curiosity.Server.net.Classes
         public int Wallet { get; private set; }
         public int BankAccount { get; private set; }
 
-        public Session(Player player)
+        public Session(CitizenFX.Core.Player player)
         {
             Mutex = new SemaphoreSlim(1, 1);
             Player = player;
