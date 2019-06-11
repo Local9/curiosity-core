@@ -165,7 +165,7 @@ namespace Curiosity.Server.net
         {
             try
             {
-                Log.Info($"Added {action.Method} Tick");
+                Log.Verbose($"Server Tick -> Added {action.Method} Tick");
                 Tick += action;
             }
             catch (Exception ex)

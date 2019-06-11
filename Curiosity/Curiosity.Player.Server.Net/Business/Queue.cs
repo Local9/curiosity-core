@@ -85,16 +85,15 @@ namespace Curiosity.Server.net.Business
             reservedTypeTwoSlots = API.GetConvarInt("queue_type_2_reserved_slots", reservedTypeTwoSlots);
             reservedTypeThreeSlots = API.GetConvarInt("queue_type_3_reserved_slots", reservedTypeThreeSlots);
             publicTypeSlots = maxSession - reservedTypeOneSlots - reservedTypeTwoSlots - reservedTypeThreeSlots;
-            Log.Verbose($"-> Queue Settings ----------------------------");
-            Log.Verbose($"-> queue_max_session_slots {maxSession}");
-            Log.Verbose($"-> queue_loading_timeout {loadTime} mins");
-            Log.Verbose($"-> queue_reconnect_timeout {graceTime} mins");
-            Log.Verbose($"-> queue_cancel_timeout {queueGraceTime} mins");
-            Log.Verbose($"-> queue_type_1_reserved_slots {reservedTypeOneSlots}");
-            Log.Verbose($"-> queue_type_2_reserved_slots {reservedTypeTwoSlots}");
-            Log.Verbose($"-> queue_type_3_reserved_slots {reservedTypeThreeSlots}");
-            Log.Verbose($"-> Final Public Slots: {publicTypeSlots}");
-            Log.Verbose($"-> Queue Settings ----------------------------");
+
+            Log.Verbose($"Queue Settings -> queue_max_session_slots {maxSession}");
+            Log.Verbose($"Queue Settings -> queue_loading_timeout {loadTime} mins");
+            Log.Verbose($"Queue Settings -> queue_reconnect_timeout {graceTime} mins");
+            Log.Verbose($"Queue Settings -> queue_cancel_timeout {queueGraceTime} mins");
+            Log.Verbose($"Queue Settings -> queue_type_1_reserved_slots {reservedTypeOneSlots}");
+            Log.Verbose($"Queue Settings -> queue_type_2_reserved_slots {reservedTypeTwoSlots}");
+            Log.Verbose($"Queue Settings -> queue_type_3_reserved_slots {reservedTypeThreeSlots}");
+            Log.Verbose($"Queue Settings -> Final Public Slots: {publicTypeSlots}");
         }
 
         static void SetupMessages()
