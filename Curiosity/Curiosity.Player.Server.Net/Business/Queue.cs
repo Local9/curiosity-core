@@ -26,9 +26,9 @@ namespace Curiosity.Server.net.Business
         static int inPriorityQueue = 0;
         static int lastCount = 0;
         // Configurable Queue Settings
-        static double queueGraceTime = 2;
-        static double graceTime = 2;
-        static double loadTime = 10;
+        static int queueGraceTime = 2;
+        static int graceTime = 2;
+        static int loadTime = 10;
         static int reservedTypeOneSlots = 2;
         static int reservedTypeTwoSlots = 0;
         static int reservedTypeThreeSlots = 0;
@@ -66,7 +66,7 @@ namespace Curiosity.Server.net.Business
         static void SetupConvars()
         {
             stateChangeMessages = API.GetConvar("queue_enable_console_messages", "true") == "true";
-            maxSession = API.GetConvarInt("queue_max_session_slots", 32);
+            maxSession = API.GetConvarInt("queue_max_session_slots", maxSession);
 
             if (API.GetConvar("onesync_enabled", "false") == "true")
             {
@@ -78,13 +78,23 @@ namespace Curiosity.Server.net.Business
             }
             API.ExecuteCommand($"sv_maxclients {maxSession}");
 
-            loadTime = API.GetConvarInt("queue_loading_timeout", 4);
-            graceTime = API.GetConvarInt("queue_reconnect_timeout", 2);
-            queueGraceTime = API.GetConvarInt("queue_cancel_timeout", 2);
-            reservedTypeOneSlots = API.GetConvarInt("queue_type_1_reserved_slots", 2);
-            reservedTypeTwoSlots = API.GetConvarInt("queue_type_2_reserved_slots", 0);
-            reservedTypeThreeSlots = API.GetConvarInt("queue_type_3_reserved_slots", 0);
+            loadTime = API.GetConvarInt("queue_loading_timeout", loadTime);
+            graceTime = API.GetConvarInt("queue_reconnect_timeout", graceTime);
+            queueGraceTime = API.GetConvarInt("queue_cancel_timeout", queueGraceTime);
+            reservedTypeOneSlots = API.GetConvarInt("queue_type_1_reserved_slots", reservedTypeOneSlots);
+            reservedTypeTwoSlots = API.GetConvarInt("queue_type_2_reserved_slots", reservedTypeTwoSlots);
+            reservedTypeThreeSlots = API.GetConvarInt("queue_type_3_reserved_slots", reservedTypeThreeSlots);
             publicTypeSlots = maxSession - reservedTypeOneSlots - reservedTypeTwoSlots - reservedTypeThreeSlots;
+            Log.Verbose($"-> Queue Settings ----------------------------");
+            Log.Verbose($"-> queue_max_session_slots {maxSession}");
+            Log.Verbose($"-> queue_loading_timeout {loadTime} mins");
+            Log.Verbose($"-> queue_reconnect_timeout {graceTime} mins");
+            Log.Verbose($"-> queue_cancel_timeout {queueGraceTime} mins");
+            Log.Verbose($"-> queue_type_1_reserved_slots {reservedTypeOneSlots}");
+            Log.Verbose($"-> queue_type_2_reserved_slots {reservedTypeTwoSlots}");
+            Log.Verbose($"-> queue_type_3_reserved_slots {reservedTypeThreeSlots}");
+            Log.Verbose($"-> Final Public Slots: {publicTypeSlots}");
+            Log.Verbose($"-> Queue Settings ----------------------------");
         }
 
         static void SetupMessages()
