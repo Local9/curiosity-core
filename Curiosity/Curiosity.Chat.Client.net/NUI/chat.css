@@ -95,21 +95,21 @@ input.fake {
 }
 
 #chatBuffer {
-    height: 600px;
+    height: 50vh;
     overflow: hidden;
 }
 
 #pageIndicators {
     position: absolute;
     right: 10px;
-    top: 200px;
+    top: 15vh;
     color: #fff;
     text-shadow: 1px 0 1px #000, 0 -1px 1px #000, 0 1px 1px #000, -1px 0 1px #000;
 }
 
 #PgDnIndicator {
     position: relative;
-    top: 600px;
+    top: 55vh;
     opacity: 0;
 }
 
