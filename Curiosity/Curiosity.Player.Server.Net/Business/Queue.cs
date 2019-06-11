@@ -28,7 +28,7 @@ namespace Curiosity.Server.net.Business
         // Configurable Queue Settings
         static double queueGraceTime = 2;
         static double graceTime = 2;
-        static double loadTime = 4;
+        static double loadTime = 10;
         static int reservedTypeOneSlots = 2;
         static int reservedTypeTwoSlots = 0;
         static int reservedTypeThreeSlots = 0;
@@ -683,6 +683,7 @@ namespace Curiosity.Server.net.Business
         {
             try
             {
+                await Server.Delay(0);
                 string license = source.Identifiers["license"];
                 if (!session.ContainsKey(license))
                 {
