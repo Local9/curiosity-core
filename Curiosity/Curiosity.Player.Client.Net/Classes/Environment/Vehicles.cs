@@ -17,7 +17,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static async void OnVehicleRemove(int vehicleHandle)
         {
-            if (API.NetworkIsHost())
+            try
             {
                 int handleId = API.NetworkGetEntityFromNetworkId(vehicleHandle);
                 Debug.WriteLine($"OnVehicleRemove -> {vehicleHandle}");
@@ -40,6 +40,10 @@ namespace Curiosity.Client.net.Classes.Environment
                         BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
 
             await Client.Delay(0);

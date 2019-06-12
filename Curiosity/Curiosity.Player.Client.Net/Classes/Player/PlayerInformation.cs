@@ -7,13 +7,14 @@ namespace Curiosity.Client.net.Classes.Player
 {
     static class PlayerInformation
     {
-        public static Privilege privilege;
-
+        static Client client = Client.GetInstance();
         static PlayerInformationModel playerInfo = new PlayerInformationModel();
+
+        public static Privilege privilege;
 
         public static async void Init()
         {
-            Client.GetInstance().RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
+            client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             await BaseScript.Delay(1000);
             PeriodicCheck();
         }

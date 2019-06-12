@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Actions
 {
@@ -156,7 +154,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
             Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
             Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
-            Debug.WriteLine($"{string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
+            Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
 
             return true;
         }
@@ -195,7 +193,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
                 if (vehicleModTypeName == "list")
                 {
-                    Debug.WriteLine($"Available Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
+                    Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
                     return;
                 }
 

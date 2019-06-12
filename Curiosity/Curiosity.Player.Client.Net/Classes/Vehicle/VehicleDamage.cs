@@ -383,6 +383,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     API.DisableControlAction(2, 59, true);
                     API.DisableControlAction(2, 60, true);
                     Game.PlayerPed.CurrentVehicle.IsEngineRunning = false;
+                    await Client.Delay(2000);
                     Game.PlayerPed.Task.LeaveVehicle((LeaveVehicleFlags)4160);
                 }
             }

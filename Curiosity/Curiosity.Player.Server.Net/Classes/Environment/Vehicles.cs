@@ -94,7 +94,9 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             try
             {
-                foreach (KeyValuePair<int, VehicleData> vehicle in tempVehicles)
+                Dictionary<int, VehicleData> vehiclesToCheck = tempVehicles;
+
+                foreach (KeyValuePair<int, VehicleData> vehicle in vehiclesToCheck)
                 {
                     if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
                     {
