@@ -1,7 +1,7 @@
 ﻿using System;
 using CitizenFX.Core;
 
-namespace Curiosity.Server.net
+namespace Curiosity.Shared.Server.net.Helpers
 {
     public static class Log
     {

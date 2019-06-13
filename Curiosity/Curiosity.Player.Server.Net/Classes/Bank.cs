@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Curiosity.Shared.Server.net.Helpers;
 
 namespace Curiosity.Server.net.Classes
 {

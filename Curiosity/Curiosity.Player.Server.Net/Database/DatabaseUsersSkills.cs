@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Shared.Server.net.Helpers;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Server.net.Database

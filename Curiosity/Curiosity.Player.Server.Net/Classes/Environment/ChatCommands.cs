@@ -6,6 +6,7 @@ using System.Web;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Curiosity.Shared.Server.net.Helpers;
 
 namespace Curiosity.Server.net.Classes.Environment
 {

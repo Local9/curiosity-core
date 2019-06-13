@@ -3,6 +3,7 @@ using Curiosity.Global.Shared.net.Entity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using Curiosity.Shared.Server.net.Helpers;
 
 namespace Curiosity.Server.net.Classes
 {

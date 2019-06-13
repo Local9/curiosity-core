@@ -1,9 +1,10 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Server.net.Classes
 {

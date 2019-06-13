@@ -90,7 +90,6 @@
     <Compile Include="Entity\VehicleData.cs" />
     <Compile Include="Entity\WeatherData.cs" />
     <Compile Include="Enums\ObjectHash.cs" />
-    <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
@@ -104,6 +103,10 @@
     <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">
       <Project>{fe7f0756-cfe5-4bb9-a822-e9e1cfbc412b}</Project>
       <Name>Curiosity.Global.Shared.net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Curiosity.Shared.Server.net\Curiosity.Shared.Server.net.csproj">
+      <Project>{e665b41e-6ffb-4ea8-998f-80122b2afe7c}</Project>
+      <Name>Curiosity.Shared.Server.net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

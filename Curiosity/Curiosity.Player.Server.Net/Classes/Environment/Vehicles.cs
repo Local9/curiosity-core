@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Curiosity.Server.net.Entity;
+using Curiosity.Shared.Server.net.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Classes.Environment
 {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Curiosity.Shared.Server.net.Helpers;
 
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
