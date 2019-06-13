@@ -28,9 +28,20 @@ namespace Curiosity.Client.net.Classes.Environment
                     if (!vehicle.Driver.IsPlayer)
                     {
                         API.NetworkFadeOutEntity(vehicle.Handle, true, false);
-                        await Client.Delay(4000);
-                        vehicle.Delete();
-                        BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
+                        await Client.Delay(0);
+                        API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, false);
+                        await Client.Delay(0);
+                        API.SetEntityAsMissionEntity(vehicle.Handle, false, false);
+                        await Client.Delay(0);
+                        API.NetworkFadeOutEntity(vehicle.Handle, true, false);
+                        await Client.Delay(0);
+                        int copyRef = vehicle.Handle;
+
+                        if (API.DoesEntityExist(vehicleHandle))
+                        {
+                            API.DeleteEntity(ref copyRef);
+                            BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
+                        }
                     }
                     else
                     {

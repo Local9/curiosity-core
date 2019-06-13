@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Client.net.Classes.Actions
 {
@@ -21,6 +22,39 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("tp", new Action<int, List<object>, string>(Teleport), false);
             API.RegisterCommand("pos", new Action<int, List<object>, string>(SaveCoords), false);
             API.RegisterCommand("dv", new Action<int, List<object>, string>(DeleteVehicle), false);
+            API.RegisterCommand("dvn", new Action<int, List<object>, string>(DeleteVehicleNuke), false);
+        }
+
+        static async void DeleteVehicleNuke(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsStaff()) return;
+
+            int totalFound = 0;
+            int totalNotDeleted = 0;
+
+            foreach(int vehicleHandle in new Helpers.VehicleList())
+            {
+                if (!IsPedAPlayer(GetPedInVehicleSeat(vehicleHandle, -1)))
+                {
+                    totalFound++;
+
+                    int currentHandle = vehicleHandle;
+                    SetVehicleHasBeenOwnedByPlayer(vehicleHandle, false);
+                    await Client.Delay(0);
+                    SetEntityAsMissionEntity(vehicleHandle, false, false);
+                    await Client.Delay(0);
+                    API.DeleteVehicle(ref currentHandle);
+
+                    if (DoesEntityExist(vehicleHandle))
+                        API.DeleteVehicle(ref currentHandle);
+
+                    await Client.Delay(0);
+
+                    if (DoesEntityExist(vehicleHandle))
+                        totalNotDeleted++;
+                }
+            }
+            Environment.UI.Notifications.LifeV(7, "Server Information", "Vehicle Nuke Info", $"Total Removed: {totalFound - totalNotDeleted:00} / {totalFound:00}", 2);
         }
 
         static async void DeleteVehicle(int playerHandle, List<object> arguments, string raw)
