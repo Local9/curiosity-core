@@ -39,14 +39,16 @@ namespace Curiosity.Client.net.Classes.Actions
                     totalFound++;
 
                     int currentHandle = vehicleHandle;
+                    int vehToDelete = vehicleHandle;
                     SetVehicleHasBeenOwnedByPlayer(vehicleHandle, false);
                     await Client.Delay(0);
                     SetEntityAsMissionEntity(vehicleHandle, false, false);
+                    API.SetEntityAsNoLongerNeeded(ref currentHandle);
                     await Client.Delay(0);
-                    API.DeleteVehicle(ref currentHandle);
+                    API.DeleteEntity(ref vehToDelete);
 
                     if (DoesEntityExist(vehicleHandle))
-                        API.DeleteVehicle(ref currentHandle);
+                        API.DeleteEntity(ref vehToDelete);
 
                     await Client.Delay(0);
 
