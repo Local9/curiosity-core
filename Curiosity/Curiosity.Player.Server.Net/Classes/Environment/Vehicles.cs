@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Server.net.Entity;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
@@ -11,7 +12,7 @@ namespace Curiosity.Server.net.Classes.Environment
     {
         static Dictionary<int, VehicleData> tempVehicles = new Dictionary<int, VehicleData>();
         static List<int> tempVehiclesToDelete = new List<int>();
-
+        static long timerCheck = API.GetGameTimer();
         static Server server = Server.GetInstance();
 
         public static void Init()
@@ -64,55 +65,38 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static async Task OnVehicleCheck()
         {
-            while (true)
+            if ((API.GetGameTimer() - timerCheck) > 60000)
             {
+                timerCheck = API.GetGameTimer();
                 try
                 {
-                    lock (tempVehicles)
+                    foreach (int key in tempVehiclesToDelete)
                     {
-                        foreach (int key in tempVehiclesToDelete)
-                        {
-                            tempVehicles.Remove(key);
-                        }
+                        tempVehicles.Remove(key);
                     }
+                    tempVehiclesToDelete.Clear();
 
-                    lock (tempVehicles)
+                    Dictionary<int, VehicleData> vehiclesToCheck = tempVehicles;
+
+                    foreach (KeyValuePair<int, VehicleData> vehicle in vehiclesToCheck)
                     {
-                        RunChecker();
+                        if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
+                        {
+                            BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                        }
+                        else if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
+                        {
+                            BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                        }
+                        await BaseScript.Delay(0);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Log.Error($"OnVehicleCheck() -> {ex.Message}");
                 }
-
-                await BaseScript.Delay(60000);
             }
-        }
-
-        static async void RunChecker()
-        {
-            try
-            {
-                Dictionary<int, VehicleData> vehiclesToCheck = tempVehicles;
-
-                foreach (KeyValuePair<int, VehicleData> vehicle in vehiclesToCheck)
-                {
-                    if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
-                    {
-                        BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
-                    }
-                    else if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
-                    {
-                        BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
-                    }
-                    await BaseScript.Delay(0);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Warn($"Vehicle -> RunChecker() -> {ex.Message}");
-            }
+            await Task.FromResult(0);
         }
     }
 }
