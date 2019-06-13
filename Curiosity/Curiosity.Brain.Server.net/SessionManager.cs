@@ -8,6 +8,7 @@ namespace Curiosity.Brain.Server.net
     public class SessionManager : BaseScript
     {
         string currentlyHosting = null;
+        string currentHostName = null;
         List<Action> hostReleaseCallbacks = new List<Action>();
 
         public SessionManager()
@@ -16,7 +17,7 @@ namespace Curiosity.Brain.Server.net
             RegisterEventHandler("hostedSession", new Action<Player>(HostedSession));
 
             NativeWrappers.EnableEnhancedHostSupport(true);
-            Debug.WriteLine("SessionManager initialized");
+            Log.Info("Curiosity Session Host Manager Initialized");
         }
 
         public void HostingSession([FromSource] Player source)
@@ -46,7 +47,8 @@ namespace Curiosity.Brain.Server.net
 
             hostReleaseCallbacks.Clear();
             currentlyHosting = source.Handle;
-            Log.Info($"[SESSION HOST] current game host is '{currentlyHosting}'");
+            currentHostName = source.Name;
+            Log.Verbose($"Curiosity Session Host Manager -> Current game host is [{currentlyHosting}] {currentHostName}");
 
             TriggerClientEvent(source, "sessionHostResult", "go");
 
@@ -59,7 +61,7 @@ namespace Curiosity.Brain.Server.net
         {
             if (currentlyHosting != source.Handle && !String.IsNullOrEmpty(currentlyHosting))
             {
-                Log.Info($@"[SESSION HOST] Player client ""lying"" about being the host: current host '#{currentlyHosting}' != client '#{source.Handle}'");
+                Log.Verbose($@"Curiosity Session Host Manager -> Player client is ""lying"" about being the host: current host is '#{currentlyHosting}:{currentHostName}' and not '#{source.Handle}:{source.Name}'");
                 return;
             }
 
