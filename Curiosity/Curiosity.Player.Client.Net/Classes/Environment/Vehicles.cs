@@ -20,10 +20,14 @@ namespace Curiosity.Client.net.Classes.Environment
             try
             {
                 int handleId = API.NetworkGetEntityFromNetworkId(vehicleHandle);
-                Debug.WriteLine($"OnVehicleRemove -> {vehicleHandle}");
                 CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(handleId);
 
-                if (!vehicle.Exists())
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Debug.WriteLine("OnVehicleRemove Starting");
+                }
+
+                if (vehicle.Exists())
                 {
                     if (!vehicle.Driver.IsPlayer)
                     {
@@ -37,10 +41,21 @@ namespace Curiosity.Client.net.Classes.Environment
                         await Client.Delay(0);
                         int copyRef = vehicle.Handle;
 
-                        if (API.DoesEntityExist(vehicleHandle))
+                        if (API.DoesEntityExist(vehicle.Handle))
                         {
                             API.DeleteEntity(ref copyRef);
-                            BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
+
+                            if (!API.DoesEntityExist(vehicle.Handle))
+                            {
+                                BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
+                            }
+                            else
+                            {
+                                if (Player.PlayerInformation.IsDeveloper())
+                                {
+                                    Debug.WriteLine($"OnVehicleRemove -> Failed to remove vehicle with handle {vehicleHandle}");
+                                }
+                            }
                         }
                     }
                     else
@@ -50,6 +65,10 @@ namespace Curiosity.Client.net.Classes.Environment
                         API.SetNetworkIdCanMigrate(networkId, true);
                         BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
                     }
+                }
+                else
+                {
+                    BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
                 }
             }
             catch (Exception ex)
