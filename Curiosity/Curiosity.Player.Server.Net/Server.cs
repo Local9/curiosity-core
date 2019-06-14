@@ -175,6 +175,21 @@ namespace Curiosity.Server.net
             }
         }
 
-
+        /// <summary>
+        /// Deregisters a tick function
+        /// </summary>
+        /// <param name="action"></param>
+        public void DeregisterTickHandler(Func<Task> action)
+        {
+            try
+            {
+                Log.Verbose($"Server Tick -> Removed {action.Method} Tick");
+                Tick -= action;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"RegisterTickHandler -> {ex.Message}");
+            }
+        }
     }
 }

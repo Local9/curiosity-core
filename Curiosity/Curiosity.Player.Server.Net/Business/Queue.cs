@@ -35,6 +35,9 @@ namespace Curiosity.Server.net.Business
         static int publicTypeSlots = 0;
         static int maxSession = 32;
 
+        static long serverSetupTimer = API.GetGameTimer();
+        static long forceWait = (1000 * 30);
+
         // Concurrent Values
         static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
         static ConcurrentDictionary<string, Player> sentLoading = new ConcurrentDictionary<string, Player>();
@@ -60,7 +63,36 @@ namespace Curiosity.Server.net.Business
             server.RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(PlayerDropped));
             server.RegisterEventHandler("curiosity:Server:Queue:PlayerConnected", new Action<CitizenFX.Core.Player>(PlayerActivated));
             server.RegisterTickHandler(QueueCycle);
-            isServerQueueReady = true;
+            server.RegisterTickHandler(SetupTimer);
+
+            serverSetupTimer = API.GetGameTimer();
+        }
+
+        static async Task SetupTimer()
+        {
+            try
+            {
+                if (!Server.isLive)
+                {
+                    isServerQueueReady = true;
+                    server.DeregisterTickHandler(SetupTimer);
+                    Log.Verbose("Server Queue is ready.");
+                }
+                else
+                {
+                    if ((API.GetGameTimer() - serverSetupTimer) > forceWait)
+                    {
+                        isServerQueueReady = true;
+                        server.DeregisterTickHandler(SetupTimer);
+                        Log.Verbose("Server Queue is ready.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Verbose($"SetupTimer() -> {ex.Message}");
+            }
+            await Task.FromResult(0);
         }
 
         static void SetupConvars()
@@ -122,7 +154,11 @@ namespace Curiosity.Server.net.Business
             try
             {
                 deferrals.defer();
-                await Server.Delay(500);
+
+                await Server.Delay(100);
+
+                if (!IsEverythingReady())
+                    deferrals.update($"Checking server startup");
 
                 while (!IsEverythingReady()) { await Server.Delay(0); }
                 deferrals.update($"{messages[Messages.Gathering]}");

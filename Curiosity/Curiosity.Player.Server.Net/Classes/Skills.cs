@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace Curiosity.Server.net.Classes
         static Dictionary<string, GlobalEntity.Skills> skills = new Dictionary<string, GlobalEntity.Skills>();
 
         static Server server = Server.GetInstance();
+
+        static long skillTicker = API.GetGameTimer();
+        static int skillMinuteUpdate = (Server.isLive ? 30 : 5);
 
         public static void Init()
         {
@@ -57,45 +61,22 @@ namespace Curiosity.Server.net.Classes
 
         async static Task UpdateSkillsDictionary()
         {
-            await BaseScript.Delay(0);
-            if (Server.isLive)
+            while (Server.serverId == 0)
             {
-                if (skills.Count > 0)
-                {
-                    await BaseScript.Delay((1000 * 60) * 30);
-                    return;
-                }
-
-
-                while (Server.serverId == 0)
-                {
-                    await BaseScript.Delay(0);
-                }
-                skills = await Database.DatabaseUsersSkills.GetSkills();
-
-                if (skills.Count > 0)
-                {
-                    Log.Success($"{skills.Count} SKILLS CONFIGURED");
-                }
-                await Task.FromResult(0);
+                Log.Warn($"Skills -> Server ID not configured");
+                await BaseScript.Delay(1000);
             }
-            else
-            {
-                while (true)
-                {
-                    while (Server.serverId == 0)
-                    {
-                        await BaseScript.Delay(0);
-                    }
-                    skills = await Database.DatabaseUsersSkills.GetSkills();
 
-                    if (skills.Count > 0)
-                    {
-                        Log.Success($"{skills.Count} SKILLS CONFIGURED");
-                    }
-                    Log.Verbose("Next skill update in 5 minutes");
-                    await BaseScript.Delay((1000 * 60) * 5);
-                }
+            if (skills.Count == 0 && (API.GetGameTimer() - skillTicker) > 1000)
+            {
+                skillTicker = API.GetGameTimer();
+                skills = await Database.DatabaseUsersSkills.GetSkills();
+                Log.Verbose($"Skills -> {skills.Count} Found.");
+            } else if ((API.GetGameTimer() - skillTicker) > (1000 * 60) * skillMinuteUpdate)
+            {
+                skillTicker = API.GetGameTimer();
+                skills = await Database.DatabaseUsersSkills.GetSkills();
+                Log.Verbose($"Skills -> {skills.Count} Found. Next update in {skillMinuteUpdate} mins.");
             }
         }
 

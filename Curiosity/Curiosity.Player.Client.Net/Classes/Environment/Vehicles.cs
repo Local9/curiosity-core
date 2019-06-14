@@ -31,8 +31,6 @@ namespace Curiosity.Client.net.Classes.Environment
                 {
                     if (!vehicle.Driver.IsPlayer)
                     {
-                        API.NetworkFadeOutEntity(vehicle.Handle, true, false);
-                        await Client.Delay(0);
                         API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, false);
                         await Client.Delay(0);
                         API.SetEntityAsMissionEntity(vehicle.Handle, false, false);
@@ -47,6 +45,11 @@ namespace Curiosity.Client.net.Classes.Environment
 
                             if (!API.DoesEntityExist(vehicle.Handle))
                             {
+                                if (Player.PlayerInformation.IsDeveloper())
+                                {
+                                    Debug.WriteLine($"OnVehicleRemove -> Removed vehicle with handle {vehicleHandle}");
+                                }
+
                                 BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
                             }
                             else
