@@ -54,6 +54,7 @@ namespace Curiosity.Server.net
             Database.DatabaseUsersSkills.Init();
             Database.DatabaseCharacterInventory.Init();
             Database.DatabaseLog.Init();
+            Database.Config.Init();
 
             // Session Manager
             Classes.SessionManager.Init();
@@ -76,6 +77,9 @@ namespace Curiosity.Server.net
             // Environment
             Classes.Environment.Vehicles.Init();
             Classes.Environment.Scoreboard.Init();
+
+            // Config
+            Classes.DiscordWrapper.Init();
 
             RegisterTickHandler(GetServerId);
 
