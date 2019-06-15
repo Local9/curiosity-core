@@ -39,7 +39,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        public static async Task SendDiscordMessage(WebhookChannel webhookChannel, string name, string title, string description, DiscordColor discordColor)
+        public static async Task SendDiscordEmbededMessage(WebhookChannel webhookChannel, string name, string title, string description, DiscordColor discordColor)
         {
             try
             {
@@ -67,6 +67,29 @@ namespace Curiosity.Server.net.Classes
             catch (Exception ex)
             {
                 Log.Error($"SendDiscordMessage() -> {ex.Message}");
+            }
+        }
+
+        public static async Task SendDiscordSimpleMessage(WebhookChannel webhookChannel, string name, string message)
+        {
+            try
+            {
+                Entity.DiscordWebhook discordWebhook = webhooks[webhookChannel];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $@"`{DateTime.Now.ToString(DATE_FORMAT)}` {name}: {message}";
+                webhook.Username = name;
+
+                await Server.Delay(0);
+                await webhook.Send();
+                await Server.Delay(0);
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"SendDiscordSimpleMessage() -> {ex.Message}");
             }
         }
     }

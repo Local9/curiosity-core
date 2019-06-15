@@ -124,7 +124,7 @@ namespace Curiosity.Server.net
             await Delay(5000);
             if (Classes.DiscordWrapper.isConfigured)
             {
-                await Classes.DiscordWrapper.SendDiscordMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Server Startup Initated", "Server has started, accepting players soon.", Enums.Discord.DiscordColor.Green);
+                await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Server Startup Initated", "Server has started, accepting players soon.", Enums.Discord.DiscordColor.Green);
                 DeregisterTickHandler(SentStartupMessage);
             }
 
