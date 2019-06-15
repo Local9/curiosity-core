@@ -65,7 +65,6 @@
     <Compile Include="Controllers\WorldMenu.cs" />
     <Compile Include="Helpers\CachedValue.cs" />
     <Compile Include="Helpers\Log.cs" />
-    <Compile Include="Helpers\ObjectHash.cs" />
     <Compile Include="Helpers\StringExtents.cs" />
     <Compile Include="Helpers\TimeCycle.cs" />
     <Compile Include="Helpers\UiHelper.cs" />

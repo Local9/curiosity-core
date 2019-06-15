@@ -2,7 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Client.net.Classes.Menus;
 using Curiosity.Client.net.Helpers;
-using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Global.Shared.net.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

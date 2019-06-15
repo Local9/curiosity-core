@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Global.Shared.net.Enums;
+using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment
 {

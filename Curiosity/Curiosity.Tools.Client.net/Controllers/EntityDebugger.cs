@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Tools.Client.net.Helpers;
+using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Tools.Client.net.Controllers
 {

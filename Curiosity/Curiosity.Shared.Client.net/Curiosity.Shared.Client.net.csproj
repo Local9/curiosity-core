@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Enums\Blips.cs" />
     <Compile Include="Enums\Controls.cs" />
-    <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\Police.cs" />
     <Compile Include="Extensions\BoolExtension.cs" />
     <Compile Include="Extensions\ColorExtension.cs" />
