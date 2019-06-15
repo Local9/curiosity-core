@@ -19,6 +19,8 @@ namespace Curiosity.Server.net.Classes
 
         public static void Init()
         {
+            server.RegisterEventHandler("curiosity:Server:Discord:ChatMessage", new Action<string, string>(SendDiscordChatMessage));
+
             server.RegisterTickHandler(SetupDiscordWebhooksDictionary);
         }
 
@@ -37,6 +39,17 @@ namespace Curiosity.Server.net.Classes
                     }
                 }
             }
+        }
+
+        static async void SendDiscordChatMessage(string name, string message)
+        {
+            if (!webhooks.ContainsKey(WebhookChannel.Chat))
+            {
+                Log.Warn($"SendDiscordChatMessage() -> Discord Chat Webhook Missing");
+                return;
+            }
+
+            await SendDiscordSimpleMessage(WebhookChannel.Chat, name, message);
         }
 
         public static async Task SendDiscordEmbededMessage(WebhookChannel webhookChannel, string name, string title, string description, DiscordColor discordColor)

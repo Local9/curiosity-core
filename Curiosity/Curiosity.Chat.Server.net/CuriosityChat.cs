@@ -21,6 +21,8 @@ namespace Curiosity.Chat.Server.net
         async void ChatMessage([FromSource]Player player, string role, string message, string color, string scope)
         {
             await Delay(0);
+            string originalMessage = message;
+            bool profanityFound = false;
 
             if (string.IsNullOrWhiteSpace(color) || string.IsNullOrWhiteSpace(message))
             {
@@ -32,13 +34,11 @@ namespace Curiosity.Chat.Server.net
 
             if (message.ContainsProfanity())
             {
-                Debug.WriteLine($"[CHAT] PROFANITY !! '{message}' entered by '{player.Name}' (#{player.Handle})");
+                profanityFound = true;
                 player.TriggerEvent("curiosity:Server:Chat:Profanity");
                 await Delay(0);
                 Regex wordFilter = new Regex($"({string.Join("|", ProfanityFilter.ProfanityArray())})");
-                message = wordFilter.Replace(message, "***");
-                player.TriggerEvent("curiosity:Client:Chat:Message", $"{role} {player.Name}", color, message);
-                return;
+                message = wordFilter.Replace(message, "#####");
             }
 
             switch (scope)
@@ -47,6 +47,11 @@ namespace Curiosity.Chat.Server.net
                     TriggerClientEvent("curiosity:Client:Chat:Message", $"{role} {player.Name}", color, message);
                     break;
             }
+            await Delay(0);
+            if (profanityFound)
+                message = string.Format("\n:warning: **PROFANITY REMOVED** :warning:\n **Sent to Players:** {0}\n **Original Message:** {1}", message, originalMessage);
+
+            TriggerEvent("curiosity:Server:Discord:ChatMessage", player.Name, message);
         }
 
         internal void RconCommand([FromSource]Player player, string commandName, List<object> objargs)
