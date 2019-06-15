@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Server.net.Enums.Discord
 {
-    enum Webhook
+    enum WebhookChannel
     {
         Chat = 1,
         Report,

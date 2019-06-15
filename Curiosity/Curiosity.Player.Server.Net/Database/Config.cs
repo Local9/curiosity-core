@@ -14,9 +14,9 @@ namespace Curiosity.Server.net.Database
             mySQL = Database.mySQL;
         }
 
-        public static async Task<Dictionary<Enums.Discord.Webhook, Entity.DiscordWebhook>> GetDiscordWebhooksAsync(int serverId)
+        public static async Task<Dictionary<Enums.Discord.WebhookChannel, Entity.DiscordWebhook>> GetDiscordWebhooksAsync(int serverId)
         {
-            Dictionary<Enums.Discord.Webhook, Entity.DiscordWebhook> wh = new Dictionary<Enums.Discord.Webhook, Entity.DiscordWebhook>();
+            Dictionary<Enums.Discord.WebhookChannel, Entity.DiscordWebhook> wh = new Dictionary<Enums.Discord.WebhookChannel, Entity.DiscordWebhook>();
 
             string query = "call selDiscordWebhooks(@serverId);";
 
@@ -34,7 +34,7 @@ namespace Curiosity.Server.net.Database
 
                 foreach(Dictionary<string, object> pairs in rs)
                 {
-                    Enums.Discord.Webhook webhook = (Enums.Discord.Webhook)int.Parse($"{pairs["discordTypeId"]}");
+                    Enums.Discord.WebhookChannel webhook = (Enums.Discord.WebhookChannel)int.Parse($"{pairs["discordTypeId"]}");
 
                     Entity.DiscordWebhook discordWebhook = new Entity.DiscordWebhook
                     {
