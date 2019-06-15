@@ -88,6 +88,7 @@
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\DatabaseUsersSkills.cs" />
     <Compile Include="Database\DatabaseUsers.cs" />
+    <Compile Include="Enums\Discord\DiscordColor.cs" />
     <Compile Include="Entity\DiscordWebhook.cs" />
     <Compile Include="Entity\User.cs" />
     <Compile Include="Entity\VehicleData.cs" />

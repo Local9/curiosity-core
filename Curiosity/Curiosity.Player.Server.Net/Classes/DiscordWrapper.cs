@@ -15,6 +15,7 @@ namespace Curiosity.Server.net.Classes
 
         static long setupChecker = API.GetGameTimer();
         static string DATE_FORMAT = "yyyy-MM-dd HH:mm";
+        public static bool isConfigured = false;
 
         public static void Init()
         {
@@ -30,12 +31,15 @@ namespace Curiosity.Server.net.Classes
                     webhooks = await Database.Config.GetDiscordWebhooksAsync(Server.serverId);
 
                     if (webhooks.Count > 0)
+                    {
+                        isConfigured = true;
                         server.DeregisterTickHandler(SetupDiscordWebhooksDictionary);
+                    }
                 }
             }
         }
 
-        static async Task SendDiscordMessage(WebhookChannel webhookChannel, string name, string title, string description, DiscordColor discordColor)
+        public static async Task SendDiscordMessage(WebhookChannel webhookChannel, string name, string title, string description, DiscordColor discordColor)
         {
             try
             {
