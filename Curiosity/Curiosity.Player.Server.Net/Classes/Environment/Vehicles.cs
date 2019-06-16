@@ -100,13 +100,13 @@ namespace Curiosity.Server.net.Classes.Environment
                     {
                         if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
                         {
-                            BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                            Server.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
                             sent++;
                         }
                         else if ((DateTime.Now - vehicle.Value.Updated).Seconds > 300)
                         {
                             sent++;
-                            BaseScript.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
+                            Server.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
                         }
                         await BaseScript.Delay(0);
                     }
