@@ -22,6 +22,7 @@ namespace Curiosity.Server.net.Classes
             if (Server.isLive)
             {
                 server.RegisterEventHandler("curiosity:Server:Discord:ChatMessage", new Action<string, string>(SendDiscordChatMessage));
+                server.RegisterEventHandler("curiosity:Server:Discord:Report", new Action<string, string, string>(SendDiscordReportMessage));
             }
 
             server.RegisterTickHandler(SetupDiscordWebhooksDictionary);
@@ -55,7 +56,42 @@ namespace Curiosity.Server.net.Classes
             await SendDiscordSimpleMessage(WebhookChannel.Chat, "World", name, message);
         }
 
+        static async void SendDiscordReportMessage(string reporterName, string playerBeingReported, string reason)
+        {
+            try
+            {
+                if (!webhooks.ContainsKey(WebhookChannel.Report))
+                {
+                    Log.Warn($"SendDiscordReportMessage() -> Discord {WebhookChannel.Report} Webhook Missing");
+                    return;
+                }
 
+                Entity.DiscordWebhook discordWebhook = webhooks[WebhookChannel.Report];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
+                webhook.Username = "Report";
+
+                Embed embed = new Embed();
+                embed.Author = new EmbedAuthor { Name = reporterName, IconUrl = discordWebhook.Avatar };
+                embed.Title = $"Player: {reporterName}";
+                embed.Description = $"Reason: {reason}";
+                embed.Color = (int)DiscordColor.Blue;
+                embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+
+                webhook.Embeds.Add(embed);
+                await Server.Delay(0);
+                await webhook.Send();
+                await Server.Delay(0);
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"SendDiscordReportMessage() -> {ex.Message}");
+            }
+        }
 
         public static async Task SendDiscordEmbededMessage(WebhookChannel webhookChannel, string name, string title, string description, DiscordColor discordColor)
         {
