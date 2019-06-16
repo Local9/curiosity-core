@@ -19,59 +19,65 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             try
             {
-                int handleId = API.NetworkGetEntityFromNetworkId(vehicleHandle);
-                CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(handleId);
-
-                if (Player.PlayerInformation.IsDeveloper())
+                if (API.NetworkIsHost())
                 {
-                    Debug.WriteLine("OnVehicleRemove Starting");
-                }
+                    int handleId = API.NetworkGetEntityFromNetworkId(vehicleHandle);
 
-                if (vehicle.Exists())
-                {
-                    if (!vehicle.Driver.IsPlayer)
+                    API.NetworkRequestControlOfEntity(handleId);
+
+                    CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(handleId);
+
+                    if (Player.PlayerInformation.IsDeveloper())
                     {
-                        API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, false);
-                        await Client.Delay(0);
-                        API.SetEntityAsMissionEntity(vehicle.Handle, false, false);
-                        await Client.Delay(0);
-                        API.NetworkFadeOutEntity(vehicle.Handle, true, false);
-                        await Client.Delay(0);
-                        int copyRef = vehicle.Handle;
+                        Debug.WriteLine("OnVehicleRemove Starting");
+                    }
 
-                        if (API.DoesEntityExist(vehicle.Handle))
+                    if (vehicle.Exists())
+                    {
+                        if (!vehicle.Driver.IsPlayer)
                         {
-                            API.DeleteEntity(ref copyRef);
+                            API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, false);
+                            await Client.Delay(0);
+                            API.SetEntityAsMissionEntity(vehicle.Handle, false, false);
+                            await Client.Delay(0);
+                            API.NetworkFadeOutEntity(vehicle.Handle, true, false);
+                            await Client.Delay(0);
+                            int copyRef = vehicle.Handle;
 
-                            if (!API.DoesEntityExist(vehicle.Handle))
+                            if (API.DoesEntityExist(vehicle.Handle))
                             {
-                                if (Player.PlayerInformation.IsDeveloper())
-                                {
-                                    Debug.WriteLine($"OnVehicleRemove -> Removed vehicle with handle {vehicleHandle}");
-                                }
+                                API.DeleteEntity(ref copyRef);
 
-                                BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
-                            }
-                            else
-                            {
-                                if (Player.PlayerInformation.IsDeveloper())
+                                if (!API.DoesEntityExist(vehicle.Handle))
                                 {
-                                    Debug.WriteLine($"OnVehicleRemove -> Failed to remove vehicle with handle {vehicleHandle}");
+                                    if (Player.PlayerInformation.IsDeveloper())
+                                    {
+                                        Debug.WriteLine($"OnVehicleRemove -> Removed vehicle with handle {vehicleHandle}");
+                                    }
+
+                                    BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
+                                }
+                                else
+                                {
+                                    if (Player.PlayerInformation.IsDeveloper())
+                                    {
+                                        Debug.WriteLine($"OnVehicleRemove -> Failed to remove vehicle with handle {vehicleHandle}");
+                                    }
                                 }
                             }
+                        }
+                        else
+                        {
+                            int networkId = API.VehToNet(Game.PlayerPed.CurrentVehicle.Handle);
+                            API.SetNetworkIdExistsOnAllMachines(networkId, true);
+                            API.SetNetworkIdCanMigrate(networkId, true);
+                            BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
                         }
                     }
                     else
                     {
-                        int networkId = API.VehToNet(Game.PlayerPed.CurrentVehicle.Handle);
-                        API.SetNetworkIdExistsOnAllMachines(networkId, true);
-                        API.SetNetworkIdCanMigrate(networkId, true);
-                        BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
+                        BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
                     }
-                }
-                else
-                {
-                    BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
                 }
             }
             catch (Exception ex)
