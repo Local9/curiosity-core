@@ -5,6 +5,6 @@
         Character = 1,
         Ban,
         Kick,
-        Reason
+        Report
     }
 }

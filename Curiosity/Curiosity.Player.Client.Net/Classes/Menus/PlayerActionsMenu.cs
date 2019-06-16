@@ -20,6 +20,7 @@ namespace Curiosity.Client.net.Classes.Menus
         public static MenuModel BanActionSubMenu;
         public static MenuModel BanDurationSubMenu;
         public static MenuModel KickActionSubMenu;
+        public static MenuModel ReportActionSubMenu;
         public static List<Tuple<int, MenuItem, Func<bool>>> ItemsAll = new List<Tuple<int, MenuItem, Func<bool>>>();
         internal static List<MenuItem> ItemsFiltered = new List<MenuItem>();
         public static bool IsDirty = false;
@@ -31,6 +32,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
         static List<GlobalEntities.LogType> banReasons = new List<GlobalEntities.LogType>();
         static List<GlobalEntities.LogType> kickReasons = new List<GlobalEntities.LogType>();
+        static List<GlobalEntities.LogType> reportReasons = new List<GlobalEntities.LogType>();
 
         static string FormatName()
         {
@@ -67,8 +69,10 @@ namespace Curiosity.Client.net.Classes.Menus
             {
                 client.RegisterEventHandler("curiosity:Client:Menu:Ban", new Action<string>(SetupBanReasons));
                 client.RegisterEventHandler("curiosity:Client:Menu:Kick", new Action<string>(SetupKickReasons));
+                client.RegisterEventHandler("curiosity:Client:Menu:Report", new Action<string>(SetupReportReasons));
 
-                client.RegisterTickHandler(OnTick);
+                client.RegisterTickHandler(OnAdminMenuOptions);
+                client.RegisterTickHandler(OnMenuOptions);
 
                 PlayerActionsMenuModel = new PlayerMenu { numVisibleItems = 16 };
                 PlayerActionsMenuModel.headerTitle = "Players";
@@ -90,7 +94,21 @@ namespace Curiosity.Client.net.Classes.Menus
             }
         }
 
-        static async Task OnTick()
+        static async Task OnMenuOptions()
+        {
+            while (reportReasons.Count == 0)
+            {
+                await Client.Delay(2000);
+                Client.TriggerServerEvent("curiosity:Server:Menu:Reasons", (int)GlobalEnums.LogGroup.Report);
+                if (reportReasons.Count > 0)
+                {
+                    client.DeregisterTickHandler(OnMenuOptions);
+                }
+            }
+            await Task.FromResult(0);
+        }
+
+        static async Task OnAdminMenuOptions()
         {
             if (Player.PlayerInformation.IsStaff())
             {
@@ -103,6 +121,7 @@ namespace Curiosity.Client.net.Classes.Menus
                     if (banReasons.Count > 0)
                     {
                         isListSetup = true;
+                        client.DeregisterTickHandler(OnAdminMenuOptions);
                         Environment.UI.Notifications.Advanced("CHAR_LESTER", 1, "Curiosity", "Staff Menu", "Player actions menu configured", 184);
                     }
                 }
@@ -110,14 +129,19 @@ namespace Curiosity.Client.net.Classes.Menus
             await Task.FromResult(0);
         }
 
-        static async void SetupBanReasons(string json)
+        static void SetupBanReasons(string json)
         {
             banReasons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GlobalEntities.LogType>>(json);
         }
 
-        static async void SetupKickReasons(string json)
+        static void SetupKickReasons(string json)
         {
             kickReasons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GlobalEntities.LogType>>(json);
+        }
+
+        static void SetupReportReasons(string json)
+        {
+            reportReasons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GlobalEntities.LogType>>(json);
         }
 
         class BanDurationMenu : MenuModel
@@ -221,6 +245,40 @@ namespace Curiosity.Client.net.Classes.Menus
             }
         }
 
+        class ReportPlayerMenu : MenuModel
+        {
+            public override void Refresh()
+            {
+                var _menuItems = new List<MenuItem>();
+
+                if (Player.PlayerInformation.IsStaff())
+                {
+                    if (string.IsNullOrEmpty(playerHandle))
+                    {
+                        _menuItems.Add(new MenuItemBack { Title = "Player Handle Missing", Description = "Change menu to another item and back to fix" });
+                    }
+                    else
+                    {
+                        foreach (GlobalEntities.LogType logType in reportReasons)
+                        {
+                            _menuItems.Add(new MenuItemStandard
+                            {
+                                Title = logType.Description,
+                                MetaData = $"{logType.LogTypeId}|{logType.Description}",
+                                OnActivate = (item) =>
+                                {
+                                    Client.TriggerServerEvent("curiosity:Server:Player:Report", playerHandle, item.MetaData);
+                                    CloseAndCleanup();
+                                }
+                            });
+                        }
+                    }
+                }
+
+                menuItems = _menuItems;
+            }
+        }
+
         class SubActionsMenu : MenuModel
         {
             public override void Refresh()
@@ -235,6 +293,11 @@ namespace Curiosity.Client.net.Classes.Menus
                 KickActionSubMenu.statusTitle = "";
                 KickActionSubMenu.menuItems = new List<MenuItem>() { new MenuItemStandard { Title = "Loading..." } };
 
+                ReportActionSubMenu = new ReportPlayerMenu { numVisibleItems = 7 };
+                ReportActionSubMenu.headerTitle = $"Report {FormatName()}";
+                ReportActionSubMenu.statusTitle = "";
+                ReportActionSubMenu.menuItems = new List<MenuItem>() { new MenuItemStandard { Title = "Loading..." } };
+
                 var _menuItems = new List<MenuItem>();
 
                 if (Player.PlayerInformation.IsStaff())
@@ -242,6 +305,8 @@ namespace Curiosity.Client.net.Classes.Menus
                     _menuItems.Add(new MenuItemSubMenu { Title = "Kick", SubMenu = KickActionSubMenu });
                     _menuItems.Add(new MenuItemSubMenu { Title = "Ban", SubMenu = BanActionSubMenu });
                 }
+
+                _menuItems.Add(new MenuItemSubMenu { Title = "Report", SubMenu = ReportActionSubMenu });
 
                 _menuItems.Add(new MenuItemStandard { Title = "Invite to Party", Description = "Coming Soon™" });
 
