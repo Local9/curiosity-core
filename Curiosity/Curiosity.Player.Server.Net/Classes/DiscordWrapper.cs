@@ -55,10 +55,18 @@ namespace Curiosity.Server.net.Classes
             await SendDiscordSimpleMessage(WebhookChannel.Chat, "World", name, message);
         }
 
+
+
         public static async Task SendDiscordEmbededMessage(WebhookChannel webhookChannel, string name, string title, string description, DiscordColor discordColor)
         {
             try
             {
+                if (!webhooks.ContainsKey(webhookChannel))
+                {
+                    Log.Warn($"SendDiscordEmbededMessage() -> Discord {webhookChannel} Webhook Missing");
+                    return;
+                }
+
                 Entity.DiscordWebhook discordWebhook = webhooks[webhookChannel];
 
                 Webhook webhook = new Webhook(discordWebhook.Url);
