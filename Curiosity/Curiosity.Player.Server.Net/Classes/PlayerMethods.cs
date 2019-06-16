@@ -2,6 +2,7 @@
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
@@ -95,9 +96,15 @@ namespace Curiosity.Server.net.Classes
                     string[] reasonData = reason.Split('|');
                     string[] text = reasonData[1].Split(':');
 
-                    // Database.DatabaseUsers.LogKick(sessionOfPlayerBeingReported.UserID, session.UserID, int.Parse(reasonData[0]), sessionOfPlayerBeingReported.User.CharacterId);
+                    Database.DatabaseUsers.LogReport(sessionOfPlayerBeingReported.UserID, session.UserID, int.Parse(reasonData[0]), sessionOfPlayerBeingReported.User.CharacterId);
 
-                    Helpers.Notifications.Advanced($"Reporting User", $"~g~Name: ~w~{nameOfPlayerBeingReported}~n~~g~Reason: ~w~{text[1].Trim()}~n~~g~By: ~w~{player.Name}", 17);
+                    List<Session> sessions = SessionManager.PlayerList.Select(x => x.Value).Where(p => p.IsAdmin == true).ToList();
+
+                    foreach (Session adminSession in sessions)
+                    {
+                        Helpers.Notifications.Advanced($"User being reported", $"~g~Name: ~w~{nameOfPlayerBeingReported}~n~~g~Reason: ~w~{text[1].Trim()}~n~~g~By: ~w~{player.Name}", 17, adminSession.Player);
+                        await Server.Delay(1);
+                    }
 
                     DiscordWrapper.SendDiscordReportMessage(player.Name, nameOfPlayerBeingReported, text[1].Trim());
                 }

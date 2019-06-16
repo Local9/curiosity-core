@@ -119,6 +119,19 @@ namespace Curiosity.Server.net.Database
             }
         }
 
+        public static void LogReport(int userId, int userIdLogging, int logTypeId, int characterId)
+        {
+            string query = "call spLogReportUser(@userId, @loggedById, @logTypeId, @characterId);";
+
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@userId", userId);
+            myParams.Add("@loggedById", userIdLogging);
+            myParams.Add("@logTypeId", logTypeId);
+            myParams.Add("@characterId", characterId);
+
+            mySql.Query(query, myParams);
+        }
+
         public static void LogKick(int userId, int userIdLogging, int logTypeId, int characterId)
         {
             string query = "call spLogKickedUser(@userId, @loggedById, @logTypeId, @characterId);";
