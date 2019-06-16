@@ -4,6 +4,7 @@
     {
         Character = 1,
         Ban,
-        Kick
+        Kick,
+        Reason
     }
 }

@@ -27,6 +27,7 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Player:GetUserId", new Action<CitizenFX.Core.Player>(GetUserId));
             // admin methods
             server.RegisterEventHandler("curiosity:Server:Player:Kick", new Action<CitizenFX.Core.Player, string, string>(AdminKickPlayer));
+            server.RegisterEventHandler("curiosity:Server:Player:Report", new Action<CitizenFX.Core.Player, string, string>(ReportingPlayer));
             server.RegisterEventHandler("curiosity:Server:Player:Ban", new Action<CitizenFX.Core.Player, string, string, bool, int>(AdminBanPlayer));
         }
 
@@ -50,6 +51,61 @@ namespace Curiosity.Server.net.Classes
             }
 
             return canKick;
+        }
+
+        async static void ReportingPlayer([FromSource]CitizenFX.Core.Player player, string playerHAndleBeingReported, string reason)
+        {
+            try
+            {
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                if (!IsStaff(session.Privilege)) return;
+
+                if (!SessionManager.PlayerList.ContainsKey(playerHAndleBeingReported)) return;
+
+                Session sessionOfPlayerBeingReported = SessionManager.PlayerList[playerHAndleBeingReported];
+
+                if (sessionOfPlayerBeingReported.UserID == session.UserID)
+                {
+                    Helpers.Notifications.Advanced($"Really??", $"Please don't try to report yourself.", 221, player);
+                    return;
+                }
+
+                if (IsStaff(sessionOfPlayerBeingReported.Privilege))
+                {
+                    Helpers.Notifications.Advanced($"Sigh...", $"Staff members are protected, please raise this in Discord.", 221, player);
+                    return;
+                }
+
+                await Server.Delay(0);
+
+                if (sessionOfPlayerBeingReported == null)
+                {
+                    Log.Warn("ReportingPlayer -> Player not found");
+                }
+                else
+                {
+                    string nameOfPlayerBeingReported = sessionOfPlayerBeingReported.Name;
+
+                    if (nameOfPlayerBeingReported.Length > 20)
+                    {
+                        nameOfPlayerBeingReported = string.Format("{0}...", nameOfPlayerBeingReported.Substring(0, 20));
+                    }
+
+                    string[] reasonData = reason.Split('|');
+                    string[] text = reasonData[1].Split(':');
+
+                    // Database.DatabaseUsers.LogKick(sessionOfPlayerBeingReported.UserID, session.UserID, int.Parse(reasonData[0]), sessionOfPlayerBeingReported.User.CharacterId);
+
+                    Helpers.Notifications.Advanced($"Reporting User", $"~g~Name: ~w~{nameOfPlayerBeingReported}~n~~g~Reason: ~w~{text[1].Trim()}~n~~g~By: ~w~{player.Name}", 17);
+
+                    DiscordWrapper.SendDiscordReportMessage(player.Name, nameOfPlayerBeingReported, text[1].Trim());
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"ReportingPlayer -> {ex.Message}");
+            }
         }
 
         async static void AdminKickPlayer([FromSource]CitizenFX.Core.Player player, string playerHandleToKick, string reason)

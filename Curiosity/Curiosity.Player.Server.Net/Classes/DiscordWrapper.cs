@@ -91,7 +91,6 @@ namespace Curiosity.Server.net.Classes
                 webhook.Embeds.Add(embed);
                 await Server.Delay(0);
                 await webhook.Send();
-                await Server.Delay(0);
                 await Task.FromResult(0);
             }
             catch (Exception ex)
@@ -100,7 +99,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static async void SendDiscordReportMessage(string reporterName, string playerBeingReported, string reason)
+        public static async void SendDiscordReportMessage(string reporterName, string playerBeingReported, string reason)
         {
             try
             {
@@ -128,7 +127,6 @@ namespace Curiosity.Server.net.Classes
                 webhook.Embeds.Add(embed);
                 await Server.Delay(0);
                 await webhook.Send();
-                await Server.Delay(0);
                 await Task.FromResult(0);
             }
             catch (Exception ex)
@@ -165,7 +163,6 @@ namespace Curiosity.Server.net.Classes
                 webhook.Embeds.Add(embed);
                 await Server.Delay(0);
                 await webhook.Send();
-                await Server.Delay(0);
                 await Task.FromResult(0);
             }
             catch (Exception ex)
@@ -188,7 +185,6 @@ namespace Curiosity.Server.net.Classes
 
                 await Server.Delay(0);
                 await webhook.Send();
-                await Server.Delay(0);
                 await Task.FromResult(0);
             }
             catch (Exception ex)
