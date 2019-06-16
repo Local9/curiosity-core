@@ -52,7 +52,7 @@ namespace Curiosity.Server.net.Classes
                 return;
             }
 
-            await SendDiscordSimpleMessage(WebhookChannel.Chat, name, message);
+            await SendDiscordSimpleMessage(WebhookChannel.Chat, "World", name, message);
         }
 
         public static async Task SendDiscordEmbededMessage(WebhookChannel webhookChannel, string name, string title, string description, DiscordColor discordColor)
@@ -86,7 +86,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        public static async Task SendDiscordSimpleMessage(WebhookChannel webhookChannel, string name, string message)
+        public static async Task SendDiscordSimpleMessage(WebhookChannel webhookChannel, string username, string name, string message)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace Curiosity.Server.net.Classes
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
                 webhook.Content = $@"`{DateTime.Now.ToString(DATE_FORMAT)}` {name}: {message}";
-                webhook.Username = name;
+                webhook.Username = username;
 
                 await Server.Delay(0);
                 await webhook.Send();
