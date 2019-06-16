@@ -232,11 +232,13 @@ $(function () {
                 }
 
                 if (name.substring(0, 3) === "DEV") {
+                    name = name.substring(3, name.length);
                     color = "#4169E1";
                     icon = '<i class="fas fa-hand-spock"></i> ';
                 }
 
                 if (name.substring(0, 2) === "PM") {
+                    name = name.substring(2, name.length);
                     color = "#B22222";
                     icon = '<i class="fas fa-hard-hat"></i> ';
                 }

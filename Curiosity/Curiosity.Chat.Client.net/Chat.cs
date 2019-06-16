@@ -42,46 +42,31 @@ namespace Curiosity.Chat.Client.net
             Tick += UpdateChat;
         }
 
-        async void UpdatePlayerRole(string roleIn)
+        void UpdatePlayerRole(string roleIn)
         {
-            if (roleIn == "Developer")
+            switch(roleIn)
             {
-                role = "DEV";
+                case "Developer":
+                    role = "DEV";
+                    break;
+                case "Project Manager":
+                    role = "PM";
+                    break;
+                case "Moderator":
+                case "Administrator":
+                case "Senior Admin":
+                case "Head Admin":
+                    role = "";
+                    break;
+                case "Helper":
+                    break;
+                case "Donator":
+                    role = "*";
+                    break;
+                default:
+                    role = "|";
+                    break;
             }
-            else if (roleIn == "Project Manager")
-            {
-                role = "PM";
-            }
-            else if (roleIn == "Moderator")
-            {
-                role = "MOD";
-            }
-            else if (roleIn == "Administrator")
-            {
-                role = "ADM";
-            }
-            else if (roleIn == "Senior Admin")
-            {
-                roleIn = "SA";
-            }
-            else if (roleIn == "Helper")
-            {
-                roleIn = "HLP";
-            }
-            else if (roleIn == "Head Admin")
-            {
-                role = "HA";
-            }
-            else if (roleIn == "Donator")
-            {
-                role = "*DON";
-            }
-            else
-            {
-                role = "|";
-            }
-
-            await Delay(0);
         }
 
         /// <summary>

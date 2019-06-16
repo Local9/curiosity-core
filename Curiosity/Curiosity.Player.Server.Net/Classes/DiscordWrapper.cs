@@ -19,7 +19,10 @@ namespace Curiosity.Server.net.Classes
 
         public static void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Discord:ChatMessage", new Action<string, string>(SendDiscordChatMessage));
+            if (Server.isLive)
+            {
+                server.RegisterEventHandler("curiosity:Server:Discord:ChatMessage", new Action<string, string>(SendDiscordChatMessage));
+            }
 
             server.RegisterTickHandler(SetupDiscordWebhooksDictionary);
         }
