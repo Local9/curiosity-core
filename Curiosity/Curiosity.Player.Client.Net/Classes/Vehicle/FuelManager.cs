@@ -4,6 +4,7 @@ using Curiosity.Client.net.Classes.Menus;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared.net.Enums;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -51,9 +52,10 @@ namespace Curiosity.Client.net.Classes.Vehicle
         static private int lastUpdate;
         static ObjectList ObjectList = new ObjectList();
 
+        static Client client = Client.GetInstance();
         static bool isDev = true;
 
-        static MenuItemStandard menuItemRefuel = new MenuItemStandard { Title = "Refuel to Full", OnActivate = (item) => DevRefuel() };
+        static MenuItemStandard menuItemRefuel = new MenuItemStandard { Title = "Admin: Refuel to Full", OnActivate = (item) => DevRefuel() };
 
         static public void Init()
         {
@@ -65,12 +67,12 @@ namespace Curiosity.Client.net.Classes.Vehicle
             MenuItem ToRefuelMenuItem = new MenuItemStandard { Title = "Refuel to Full", OnActivate = (item) => Refuel(100) };
             InteractionListMenu.RegisterInteractionMenuItem(ToRefuelMenuItem, () => { return isNearFuelPump; }, 1150);
 
-            PeriodicCheck();
+            client.RegisterTickHandler(PeriodicCheck);
             UpdateSettings();
 
-            Client.GetInstance().RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
-            Client.GetInstance().RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
-            Client.GetInstance().RegisterEventHandler("curiosity:Client:Settings:InstantRefuel", new Action<bool>(InstantRefuel));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
+            client.RegisterEventHandler("curiosity:Client:Settings:InstantRefuel", new Action<bool>(InstantRefuel));
         }
 
         private static Random random = new Random();
@@ -91,81 +93,78 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         /// <summary>
         /// </summary>
-        static async void PeriodicCheck()
+        static async Task PeriodicCheck()
         {
-            while (true)
+            try
             {
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    if (!Function.Call<bool>(Hash.DECOR_EXIST_ON, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel"))
+                    {
+                        // For very large random float numbers this method does not yield a uniform distribution
+                        // But for this magnitude it is perfectly fine
+                        float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (random.NextDouble()));
+                        Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", randomFuel);
+                    }
+                    vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel");
+
+                    if (!Function.Call<bool>(Hash.DECOR_EXIST_ON, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier"))
+                    {
+                        fuelUsageMultiplier = startingMultiplier;
+                        //Log.ToChat($"{fuelUsageMultiplier:0.00000}");
+                        VehicleClass VehicleClass = (VehicleClass)Function.Call<int>(Hash.GET_VEHICLE_CLASS, Game.PlayerPed.CurrentVehicle.Handle);
+                        fuelUsageMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(VehicleClass) ? FuelConsumptionClassMultiplier[VehicleClass] : 1.0f);
+                        fuelUsageMultiplier *= FuelConsumptionModelMultiplier.ContainsKey((VehicleHash)(uint)Game.PlayerPed.CurrentVehicle.Model.Hash) ? FuelConsumptionModelMultiplier[(VehicleHash)(uint)Game.PlayerPed.CurrentVehicle.Model.Hash] : 1f;
+                        Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier", fuelUsageMultiplier);
+                    }
+                    if (lastUpdate == -1)
+                    {
+                        lastUpdate = Function.Call<int>(Hash.GET_GAME_TIMER);
+                    }
+                    if (fuelUsageMultiplier < 0)
+                    {
+                        fuelUsageMultiplier = Function.Call<float>(Hash._DECOR_GET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier");
+                    }
+                    currentUpdate = Function.Call<int>(Hash.GET_GAME_TIMER);
+                    double deltaTime = (currentUpdate - lastUpdate) / 1000f;
+                    float vehicleSpeed = Math.Abs(Game.PlayerPed.CurrentVehicle.Speed);
+
+                    if (vehicleSpeed < 4f)
+                    {
+                        vehicleSpeed = 4f;
+                    }
+
+                    if (!Game.PlayerPed.CurrentVehicle.IsEngineRunning)
+                    {
+                        vehicleSpeed = 0f;
+                    }
+
+                    vehicleFuel = Math.Max(0f, vehicleFuel - (float)(deltaTime * fuelUsageMultiplier * vehicleSpeed));
+
+                    Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", vehicleFuel);
+                    lastUpdate = currentUpdate;
+                }
+                else
+                {
+                    fuelUsageMultiplier = -1;
+                    //vehicleFuel = -1;
+                    lastUpdate = -1;
+                }
                 try
                 {
-                    if (Game.PlayerPed.IsInVehicle())
-                    {
-                        if (!Function.Call<bool>(Hash.DECOR_EXIST_ON, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel"))
-                        {
-                            // For very large random float numbers this method does not yield a uniform distribution
-                            // But for this magnitude it is perfectly fine
-                            float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (random.NextDouble()));
-                            Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", randomFuel);
-                        }
-                        vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel");
-
-                        if (!Function.Call<bool>(Hash.DECOR_EXIST_ON, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier"))
-                        {
-                            fuelUsageMultiplier = startingMultiplier;
-                            //Log.ToChat($"{fuelUsageMultiplier:0.00000}");
-                            VehicleClass VehicleClass = (VehicleClass)Function.Call<int>(Hash.GET_VEHICLE_CLASS, Game.PlayerPed.CurrentVehicle.Handle);
-                            fuelUsageMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(VehicleClass) ? FuelConsumptionClassMultiplier[VehicleClass] : 1.0f);
-                            fuelUsageMultiplier *= FuelConsumptionModelMultiplier.ContainsKey((VehicleHash)(uint)Game.PlayerPed.CurrentVehicle.Model.Hash) ? FuelConsumptionModelMultiplier[(VehicleHash)(uint)Game.PlayerPed.CurrentVehicle.Model.Hash] : 1f;
-                            Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier", fuelUsageMultiplier);
-                        }
-                        if (lastUpdate == -1)
-                        {
-                            lastUpdate = Function.Call<int>(Hash.GET_GAME_TIMER);
-                        }
-                        if (fuelUsageMultiplier < 0)
-                        {
-                            fuelUsageMultiplier = Function.Call<float>(Hash._DECOR_GET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.FuelUsageMultiplier");
-                        }
-                        currentUpdate = Function.Call<int>(Hash.GET_GAME_TIMER);
-                        double deltaTime = (currentUpdate - lastUpdate) / 1000f;
-                        float vehicleSpeed = Math.Abs(Game.PlayerPed.CurrentVehicle.Speed);
-
-                        if (vehicleSpeed < 4f)
-                        {
-                            vehicleSpeed = 4f;
-                        }
-
-                        if (!Game.PlayerPed.CurrentVehicle.IsEngineRunning)
-                        {
-                            vehicleSpeed = 0f;
-                        }
-
-                        vehicleFuel = Math.Max(0f, vehicleFuel - (float)(deltaTime * fuelUsageMultiplier * vehicleSpeed));
-
-                        Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", vehicleFuel);
-                        lastUpdate = currentUpdate;
-                    }
-                    else
-                    {
-                        fuelUsageMultiplier = -1;
-                        //vehicleFuel = -1;
-                        lastUpdate = -1;
-                    }
-                    try
-                    {
-                        isNearFuelPump = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"FuelManager isNearFuelPump Error: {ex.Message}");
-                        isNearFuelPump = false;
-                    }
-                    await BaseScript.Delay(500);
+                    isNearFuelPump = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"FuelManager Error: {ex.Message}");
-                    await BaseScript.Delay(500);
+                    Debug.WriteLine($"FuelManager isNearFuelPump Error: {ex.Message}");
+                    isNearFuelPump = false;
                 }
+                await BaseScript.Delay(500);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"FuelManager Error: {ex.Message}");
+                await BaseScript.Delay(500);
             }
         }
 
@@ -175,7 +174,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
             {
                 if (Game.PlayerPed.IsInVehicle())
                 {
-                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#BB5555", $"You can't refuel while in your vehicle!");
+                    Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "You can't refuel while in your vehicle!", 8);
                     return;
                 }
 
@@ -184,7 +183,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                 var NearbyVehicles = new VehicleList().Select(v => (CitizenFX.Core.Vehicle)Entity.FromHandle(v)).Where(v => v.Bones["wheel_rr"].Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(PlayerToVehicleRefuelRange, 2)).OrderBy(v => v.Bones["wheel_rr"].Position.DistanceToSquared(Game.PlayerPed.Position));
                 if (!NearbyVehicles.Any())
                 {
-                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#AA5555", "You are not close enough to a vehicle.");
+                    Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "You are not close enough to a vehicle.", 8);
                     return;
                 }
                 CitizenFX.Core.Vehicle vehicle = NearbyVehicles.First();
@@ -192,7 +191,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                 var NearbyPumps = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Where(o => o.Position.DistanceToSquared(vehicle.Position) < Math.Pow(FuelPumpRange, 2));
                 if (!NearbyPumps.Any())
                 {
-                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#AA5555", "You are not close enough to a pump.");
+                    Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "You are not close enough to a pump.", 8);
                     return;
                 }
 
@@ -209,7 +208,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     {
                         if (startingPosition != vehicle.Position)
                         {
-                            BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#BB5555", $"Your vehicle moved while refuelling.");
+                            Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "Your vehicle moved while refuelling.", 8);
                             return;
                         }
 
@@ -221,7 +220,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                         Function.Call(Hash._DECOR_SET_FLOAT, vehicle.Handle, "Vehicle.Fuel", vehicleFuel);
                     }
 
-                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#55BB55", $"You have finished refuelling.");
+                    Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "You have finished refuelling.", 20);
                 }
             }
             catch (Exception ex)

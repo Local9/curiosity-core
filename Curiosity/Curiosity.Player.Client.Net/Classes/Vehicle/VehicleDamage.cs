@@ -181,25 +181,25 @@ namespace Curiosity.Client.net.Classes.Vehicle
                 if (!vehicle.CanTiresBurst) return; // DAM WE LOST!
 
                 int numWheels = API.GetVehicleNumberOfWheels(vehicle.Handle);
-                int affectedTire;
+                int affectedTyre;
                 if (numWheels == 2)
                 {
-                    affectedTire = (random.Next(2) - 1) * 4;
+                    affectedTyre = (random.Next(2) - 1) * 4;
                 }
                 else if (numWheels == 4)
                 {
-                    affectedTire = (random.Next(4) - 1);
-                    if (affectedTire > 1) affectedTire = affectedTire + 2; // 0, 1, 4, 5
+                    affectedTyre = (random.Next(4) - 1);
+                    if (affectedTyre > 1) affectedTyre = affectedTyre + 2; // 0, 1, 4, 5
                 }
                 else if (numWheels == 6)
                 {
-                    affectedTire = (random.Next(6) - 1);
+                    affectedTyre = (random.Next(6) - 1);
                 }
                 else
                 {
-                    affectedTire = 0;
+                    affectedTyre = 0;
                 }
-                API.SetVehicleTyreBurst(vehicle.Handle, affectedTire, false, 1000.0f);
+                API.SetVehicleTyreBurst(vehicle.Handle, affectedTyre, false, 1000.0f);
                 tireBurstLuckyNumber = random.Next(tireBurstMaxNumber);
             }
         }
@@ -279,6 +279,12 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     healthEngineLast = healthEngineNew;
                     healthBodyLast = healthBodyNew;
                     healthPetrolTankLast = healthPetrolTankNew;
+
+                    if (healthEngineLast < 100.0f)
+                    {
+                        currentVehicle.EngineHealth = 100.0f;
+                        currentVehicle.IsEngineRunning = false;
+                    }
 
                     if (randomTireBurstInterval != 0 && currentVehicle.Speed > 10f) TireBurstLottery(currentVehicle);
                 }

@@ -95,6 +95,7 @@
     <Compile Include="Entity\WeatherData.cs" />
     <Compile Include="Enums\Discord\Webhook.cs" />
     <Compile Include="Helpers\Notifications.cs" />
+    <Compile Include="Helpers\Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
   </ItemGroup>
