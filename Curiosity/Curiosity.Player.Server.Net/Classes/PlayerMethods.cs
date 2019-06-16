@@ -99,6 +99,8 @@ namespace Curiosity.Server.net.Classes
                     sessionOfPlayerToKick.Drop($"{reasonData[1]} by {player.Name}");
 
                     Helpers.Notifications.Advanced($"Kicked User", $"~g~Name: ~w~{nameOfPlayerBeingKicked}~n~~g~Reason: ~w~{text[1].Trim()}~n~~g~By: ~w~{player.Name}", 17);
+
+                    DiscordWrapper.SendDiscordStaffMessage(player.Name, nameOfPlayerBeingKicked, "Kick", text[1].Trim(), string.Empty);
                 }
             }
             catch (Exception ex)
@@ -160,6 +162,8 @@ namespace Curiosity.Server.net.Classes
                     Helpers.Notifications.Advanced($"Banned User", $"~g~Name: ~w~{nameOfPlayerBeingBanned}~n~~g~Reason: ~w~{text[1].Trim()}~n~~g~Duration: ~w~{banDuration}~n~~g~By: ~w~{player.Name}", 8);
 
                     sessionOfPlayerToBan.Drop($"{reasonData[1]} by {player.Name} | Ban Duration: {banDuration}");
+
+                    DiscordWrapper.SendDiscordStaffMessage(player.Name, nameOfPlayerBeingBanned, "Ban", text[1].Trim(), banDuration);
                 }
             }
             catch (Exception ex)

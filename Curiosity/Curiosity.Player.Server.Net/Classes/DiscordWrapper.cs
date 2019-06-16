@@ -56,6 +56,50 @@ namespace Curiosity.Server.net.Classes
             await SendDiscordSimpleMessage(WebhookChannel.Chat, "World", name, message);
         }
 
+        public static async void SendDiscordStaffMessage(string adminName, string player, string action, string reason, string duration)
+        {
+            try
+            {
+                if (!webhooks.ContainsKey(WebhookChannel.StaffLog))
+                {
+                    Log.Warn($"SendDiscordStaffMessage() -> Discord {WebhookChannel.StaffLog} Webhook Missing");
+                    return;
+                }
+
+                Entity.DiscordWebhook discordWebhook = webhooks[WebhookChannel.StaffLog];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
+                webhook.Username = "Staff";
+
+                Embed embed = new Embed();
+                embed.Author = new EmbedAuthor { Name = adminName, IconUrl = discordWebhook.Avatar };
+                embed.Title = $"Player: {player}";
+
+                embed.Description = $" **{action}**: {reason}";
+                if (!string.IsNullOrEmpty(duration))
+                    embed.Description = $" **{action}**: {reason} \n **Duration**: {duration}";
+
+                embed.Color = (int)DiscordColor.Orange;
+                if (action == "Ban")
+                    embed.Color = (int)DiscordColor.Red;
+
+                embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+
+                webhook.Embeds.Add(embed);
+                await Server.Delay(0);
+                await webhook.Send();
+                await Server.Delay(0);
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"SendDiscordStaffMessage() -> {ex.Message}");
+            }
+        }
+
         static async void SendDiscordReportMessage(string reporterName, string playerBeingReported, string reason)
         {
             try
