@@ -15,7 +15,7 @@ namespace Curiosity.Server.net.Business
     {
         // service requirements
         static Server server = Server.GetInstance();
-        static Regex regex = new Regex(@"^[ A-Za-z0-9_.#\[\]|]{1,32}$");
+        static Regex regex = new Regex(@"^[ A-Za-z0-9-_.#\[\]|]{1,32}$");
         static string resourceName = API.GetCurrentResourceName();
         static Dictionary<Messages, string> messages = new Dictionary<Messages, string>();
         static bool isServerQueueReady = false;
