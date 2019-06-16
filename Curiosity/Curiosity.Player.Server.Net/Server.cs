@@ -12,6 +12,7 @@ namespace Curiosity.Server.net
 
         static string serverKeyString;
         public static int serverId = 0;
+        public static bool serverActive = false;
         public static int startingLocationId = 0;
 
         public static string LICENSE_IDENTIFIER = "license";
@@ -160,6 +161,8 @@ namespace Curiosity.Server.net
                     else
                     {
                         Log.Success($"SERVER ID CONFIGURED -> {serverId}");
+                        serverActive = true;
+                        DeregisterTickHandler(GetServerId);
                     }
                 }
                 catch (Exception ex)

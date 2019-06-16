@@ -61,10 +61,9 @@ namespace Curiosity.Server.net.Classes
 
         async static Task UpdateSkillsDictionary()
         {
-            while (Server.serverId == 0)
+            while (!Server.serverActive)
             {
-                Log.Warn($"Skills -> Server ID not configured");
-                await BaseScript.Delay(1000);
+                await BaseScript.Delay(0);
             }
 
             if (skills.Count == 0 && (API.GetGameTimer() - skillTicker) > 1000)
