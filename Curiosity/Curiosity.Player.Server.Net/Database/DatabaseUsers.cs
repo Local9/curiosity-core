@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Shared.Server.net.Helpers;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
@@ -49,6 +50,15 @@ namespace Curiosity.Server.net.Database
                 }
                 return user;
             }
+        }
+
+        internal static void UpdateCharacterRole(int characterId, Privilege privilege)
+        {
+            string query = "CALL curiosity.upCharacterRole(@characterId, @roleId);";
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@characterId", characterId);
+            myParams.Add("@roleId", (int)privilege);
+            mySql.Query(query, myParams);
         }
 
         public static async Task<Entity.User> GetUserWithCharacterAsync(string license)

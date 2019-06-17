@@ -11,12 +11,26 @@ namespace Curiosity.Client.net.Classes.Player
         static PlayerInformationModel playerInfo = new PlayerInformationModel();
 
         public static Privilege privilege;
-
         public static async void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             await BaseScript.Delay(1000);
             PeriodicCheck();
+
+            if (!PlayerInformation.IsStaff())
+            {
+                CheckIfDonator();
+            }
+        }
+
+        static async void CheckIfDonator()
+        {
+            await BaseScript.Delay(5000);
+            while (true)
+            {
+                BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
+                await BaseScript.Delay((1000 * 60) * 10);
+            }
         }
 
         static async void PlayerInfo(string json)

@@ -1,4 +1,5 @@
-﻿using GHMatti.Data.MySQL;
+﻿using Curiosity.Global.Shared.net.Enums;
+using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,6 +13,32 @@ namespace Curiosity.Server.net.Database
         public static void Init()
         {
             mySQL = Database.mySQL;
+        }
+
+        public static async Task<Dictionary<string, Privilege>> GetDiscordRolesAsync()
+        {
+            Dictionary<string, Privilege> privileges = new Dictionary<string, Privilege>();
+
+            string query = "call selDiscordRoles();";
+
+            using (var result = mySQL.QueryResult(query))
+            {
+                ResultSet rs = await result;
+                await Server.Delay(0);
+                if (rs.Count == 0)
+                {
+                    return privileges;
+                }
+
+                foreach (Dictionary<string, object> pairs in rs)
+                {
+                    Privilege privilege = (Privilege)int.Parse($"{pairs["roleId"]}");
+
+                    privileges.Add($"{pairs["discordId"]}", privilege);
+                }
+
+                return privileges;
+            }
         }
 
         public static async Task<Dictionary<Enums.Discord.WebhookChannel, Entity.DiscordWebhook>> GetDiscordWebhooksAsync(int serverId)

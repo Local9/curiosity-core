@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\BusinessUser.cs" />
+    <Compile Include="Business\Discord.cs" />
     <Compile Include="Business\Queue.cs" />
     <Compile Include="Classes\Bank.cs" />
     <Compile Include="Classes\Character.cs" />
@@ -88,6 +89,9 @@
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\DatabaseUsersSkills.cs" />
     <Compile Include="Database\DatabaseUsers.cs" />
+    <Compile Include="Entity\Discord\Converter.cs" />
+    <Compile Include="Entity\Discord\Guild.cs" />
+    <Compile Include="Entity\Discord\Member.cs" />
     <Compile Include="Enums\Discord\DiscordColor.cs" />
     <Compile Include="Entity\DiscordWebhook.cs" />
     <Compile Include="Entity\User.cs" />

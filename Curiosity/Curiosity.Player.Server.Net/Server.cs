@@ -16,6 +16,7 @@ namespace Curiosity.Server.net
         public static int startingLocationId = 0;
 
         public static string LICENSE_IDENTIFIER = "license";
+        public static string DISCORD_IDENTIFIER = "discord";
         public static bool isLive = false;
 
         public static Server GetInstance()
@@ -47,6 +48,7 @@ namespace Curiosity.Server.net
 
             // TODO: Move everything else to init from here.
             Business.Queue.Init();
+            Business.Discord.Init();
 
             // DATABASE
             Database.Database.Init();

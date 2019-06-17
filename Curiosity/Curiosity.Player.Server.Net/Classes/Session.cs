@@ -33,6 +33,7 @@ namespace Curiosity.Server.net.Classes
         public string EndPoint => GetPlayerEndpoint(NetId);
         public bool IsDeveloper => (Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);
         public bool IsAdmin => (Privilege == Privilege.ADMINISTRATOR || Privilege == Privilege.SENIORADMIN || Privilege == Privilege.HEADADMIN || Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);
+        public bool IsStaff => (Privilege == Privilege.MODERATOR || Privilege == Privilege.ADMINISTRATOR || Privilege == Privilege.SENIORADMIN || Privilege == Privilege.HEADADMIN || Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);
         public void Drop(string reason) => DropPlayer(NetId, reason);
 
         public CitizenFX.Core.Player Player { get; private set; }
