@@ -13,8 +13,8 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>none</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Z:\FXServer\curiosity\resources\curiosity-tools\server\</OutputPath>
     <DefineConstants>TRACE;DEBUG;SERVER</DefineConstants>
