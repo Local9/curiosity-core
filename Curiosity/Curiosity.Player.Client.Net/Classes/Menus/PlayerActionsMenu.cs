@@ -327,7 +327,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
                 _menuItems.Add(new MenuItemBack { Title = "Go Back", OnSelect = (item) => { playerName = string.Empty; playerHandle = string.Empty; } });
 
-                foreach(CitizenFX.Core.Player player in new PlayerList())
+                foreach(CitizenFX.Core.Player player in Client.players)
                 {
                     _menuItems.Add(new MenuItemSubMenu
                     {

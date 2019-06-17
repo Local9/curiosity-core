@@ -75,14 +75,14 @@ namespace Curiosity.Client.net
             // MobilePhone.Init();
 
             // MENU
-            MenuGlobals.Init();
-            //VehicleMenuTest.Init();
-            SkillsMenu.Init();
-            CharacterMenuTest.Init();
-            InteractionListMenu.Init();
-            NuiMenu.Init();
-            NuiEventHandler.Init();
-            PlayerActionsMenu.Init();
+            //MenuGlobals.Init();
+            ////VehicleMenuTest.Init();
+            //SkillsMenu.Init();
+            //CharacterMenuTest.Init();
+            //InteractionListMenu.Init();
+            //NuiMenu.Init();
+            //NuiEventHandler.Init();
+            //PlayerActionsMenu.Init();
 
             // Environment
             //Poi.Init();

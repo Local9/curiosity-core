@@ -5,6 +5,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Tools.Client.net.Menus;
+using Font = CitizenFX.Core.UI.Font;
 
 namespace Curiosity.Tools.Client.net.Helpers
 {
@@ -13,7 +14,7 @@ namespace Curiosity.Tools.Client.net.Helpers
 		public static readonly Color DefaultColor = Color.FromArgb( 255, 255, 255 );
 
 		public static void DrawText( string text, Vector2 pos, Color? color = null, float scale = 0.25f,
-			bool shadow = false, float shadowOffset = 1f, Alignment alignment = Alignment.Left, Font font = Font.ChaletLondon ) {
+			bool shadow = false, float shadowOffset = 1f, Alignment alignment = Alignment.Left, CitizenFX.Core.UI.Font font = Font.ChaletLondon ) {
 			try {
 				Function.Call( Hash.SET_TEXT_FONT, font );
 				Function.Call( Hash.SET_TEXT_PROPORTIONAL, 0 );

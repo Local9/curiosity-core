@@ -14,6 +14,8 @@ namespace Curiosity.Client.net
         public static int pedHandle = Game.PlayerPed.Handle;
         public static int playerHandle = Game.Player.Handle;
 
+        public static PlayerList players;
+
         private static Client _instance;
 
         public static Client GetInstance()
@@ -29,6 +31,8 @@ namespace Curiosity.Client.net
         public Client()
         {
             _instance = this;
+
+            players = Players;
 
             ClassLoader.Init();
             RegisterTickHandler(OnTick);
@@ -173,7 +177,7 @@ namespace Curiosity.Client.net
 
         //private Task HandleLocalChat(PointEvent pointEvent)
         //{
-        //    TriggerEvent("Chat.Message", new PlayerList()[pointEvent.SourceServerId].Name, "#FFD23F", pointEvent.SerializedArguments);
+        //    TriggerEvent("Chat.Message", Client.players[pointEvent.SourceServerId].Name, "#FFD23F", pointEvent.SerializedArguments);
 
         //    return Task.FromResult(0);
         //}

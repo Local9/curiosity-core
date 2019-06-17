@@ -72,7 +72,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             try
             {
                 if (CinematicMode.DoHideHud) return;
-                var TalkingPlayers = new PlayerList().Where(p => (Function.Call<bool>(Hash.NETWORK_IS_PLAYER_TALKING, p.Handle) || (p == Game.Player && ControlHelper.IsControlPressed(Control.PushToTalk, true, ControlModifier.Any))) && p.Character.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(Voip.currentRange.Key, 2)).ToList();
+                var TalkingPlayers = Client.players.Where(p => (Function.Call<bool>(Hash.NETWORK_IS_PLAYER_TALKING, p.Handle) || (p == Game.Player && ControlHelper.IsControlPressed(Control.PushToTalk, true, ControlModifier.Any))) && p.Character.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(Voip.currentRange.Key, 2)).ToList();
                 string currentlyTalking = $"{(ControlHelper.IsControlPressed(Control.PushToTalk, true, ControlModifier.Any) ? $"{Game.Player.Name}\n" : "")}{String.Join("\n", TalkingPlayers.Select(p => $"{p.Name}"))}";
 
                 if (currentlyTalking.Length > 0)
@@ -93,7 +93,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             try
             {
                 if (CinematicMode.DoHideHud) return;
-                MarkerPlayers = new PlayerList().Where(ShouldShowMarker);
+                MarkerPlayers = Client.players.Where(ShouldShowMarker);
                 List<CitizenFX.Core.Player> playerList = MarkerPlayers.ToList();
                 //Debug.WriteLine($"[MarkerS] Number of players to draw: {playerList.Count()}");
                 playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await DrawMarker(p.player, p.rank));
@@ -119,7 +119,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 if (Function.Call<int>(Hash.GET_VEHICLE_NUMBER_OF_PASSENGERS, player.Character.CurrentVehicle.Handle) + (Function.Call<bool>(Hash.IS_VEHICLE_SEAT_FREE, player.Character.CurrentVehicle.Handle, -1) ? 0 : 1) > 1)
                 {
-                    var talkingPlayersInVehicle = new PlayerList().Where(p => Function.Call<bool>(Hash.NETWORK_IS_PLAYER_TALKING, player) && p.Character.IsInVehicle() && p.Character.CurrentVehicle.Handle == player.Character.CurrentVehicle.Handle);
+                    var talkingPlayersInVehicle = Client.players.Where(p => Function.Call<bool>(Hash.NETWORK_IS_PLAYER_TALKING, player) && p.Character.IsInVehicle() && p.Character.CurrentVehicle.Handle == player.Character.CurrentVehicle.Handle);
                     if (talkingPlayersInVehicle.Count() > 0)
                     {
                         MarkerColor = MarkerColorTalking;

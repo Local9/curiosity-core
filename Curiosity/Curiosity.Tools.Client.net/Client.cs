@@ -17,12 +17,16 @@ namespace Curiosity.Tools.Client.net
 		public NoclipController NoClip { get; }
 		public EntityDebugger Debugger { get; }
 
+        public PlayerList players;
+
 		private bool _isInstantiated;
 
         public bool IsDeveloper = false;
 
 		public Client() {
-			Menu = new MenuController( this );
+            players = Players;
+
+            Menu = new MenuController( this );
 			Tools = new DevTools( this );
 			NoClip = new NoclipController( this );
 			Debugger = new EntityDebugger( this );

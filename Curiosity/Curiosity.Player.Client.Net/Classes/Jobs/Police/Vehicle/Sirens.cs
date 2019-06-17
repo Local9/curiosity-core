@@ -185,7 +185,7 @@ namespace Curiosity.Client.net.Classes.Jobs.Police.Vehicle
                 //        Function.Call(Hash.RELEASE_SOUND_ID, SirenSoundIds[SoundEvent.SourceServerId]);
                 //    }
                 //    SirenSoundIds[SoundEvent.SourceServerId] = Function.Call<int>(Hash.GET_SOUND_ID);
-                //    Function.Call(Hash.PLAY_SOUND_FROM_ENTITY, SirenSoundIds[SoundEvent.SourceServerId], SoundEvent.SoundName, new PlayerList()[SoundEvent.SourceServerId].Character.CurrentVehicle.Handle, 0, 0, 0);
+                //    Function.Call(Hash.PLAY_SOUND_FROM_ENTITY, SirenSoundIds[SoundEvent.SourceServerId], SoundEvent.SoundName, Client.players[SoundEvent.SourceServerId].Character.CurrentVehicle.Handle, 0, 0, 0);
                 //}
             }
             catch (Exception ex)

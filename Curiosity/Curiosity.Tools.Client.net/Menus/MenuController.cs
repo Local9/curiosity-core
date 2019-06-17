@@ -8,6 +8,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Tools.Client.net.Helpers;
 using Curiosity.Shared.Client.net;
+using Font = CitizenFX.Core.UI.Font;
 
 namespace Curiosity.Tools.Client.net.Menus
 {

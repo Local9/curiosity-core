@@ -56,8 +56,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             try
             {
                 if (CinematicMode.DoHideHud) return;
-
-                BlipPlayersList = new PlayerList().Where(ShouldShowBlip);
+                
+                BlipPlayersList = Client.players.Where(ShouldShowBlip);
                 List<CitizenFX.Core.Player> playerList = BlipPlayersList.ToList();
                 playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowBlip(p.player));
             }

@@ -86,7 +86,7 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 float screenX = 0.0f;
                 float screenY = 0.0f;
-                API.World3dToScreen2d2(ped.Position.X, ped.Position.Y, ped.Position.Z, ref screenX, ref screenY);
+                API.World3dToScreen2d(ped.Position.X, ped.Position.Y, ped.Position.Z, ref screenX, ref screenY);
 
                 UI.UI.DrawText($"IDX: {currentIndex}\nWP: {currentWaypoint}", new Vector2 { X = screenX, Y = screenY }, System.Drawing.Color.FromArgb(255, 255, 255, 255), 0.3f, Font.ChaletComprimeCologne, Alignment.Center);
 

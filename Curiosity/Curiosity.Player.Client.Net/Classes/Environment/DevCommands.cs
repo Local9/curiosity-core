@@ -843,11 +843,11 @@ namespace Curiosity.Client.net.Classes.Environment
         //        CitizenFX.Core.Player targetPlayer;
         //        if (isNumeric)
         //        {
-        //            targetPlayer = new PlayerList().Where(p => p.ServerId == playerId).First();
+        //            targetPlayer = Client.players.Where(p => p.ServerId == playerId).First();
         //        }
         //        else
         //        {
-        //            targetPlayer = new PlayerList().Where(p => p.Name.Contains(command.Args.Get(0))).First();
+        //            targetPlayer = Client.players.Where(p => p.Name.Contains(command.Args.Get(0))).First();
         //        }
         //        Log.ToChat($"Trying to teleport to {targetPlayer.Name} (#{targetPlayer.Handle}, server # {targetPlayer.ServerId})");
         //        Entity entity = Game.PlayerPed.IsInVehicle() ? (Entity)Game.PlayerPed.CurrentVehicle : (Entity)Game.PlayerPed;
@@ -1196,12 +1196,12 @@ namespace Curiosity.Client.net.Classes.Environment
         //        if (isNumeric)
         //        {
         //            Log.ToChat($"Bringing by ID");
-        //            targetPlayer = new PlayerList().Where(p => p.ServerId == playerId).First();
+        //            targetPlayer = Client.players.Where(p => p.ServerId == playerId).First();
         //        }
         //        else
         //        {
         //            Log.ToChat($"Bringing by Name");
-        //            targetPlayer = new PlayerList().Where(p => p.Name.Contains(command.Args.Get(0))).First();
+        //            targetPlayer = Client.players.Where(p => p.Name.Contains(command.Args.Get(0))).First();
         //        }
         //        Log.ToChat($"Trying to bring {targetPlayer.Name} (#{targetPlayer.Handle}, server # {targetPlayer.ServerId})");
         //        BaseScript.TriggerServerEvent("Dev.Bring", targetPlayer.ServerId);
@@ -1217,7 +1217,7 @@ namespace Curiosity.Client.net.Classes.Environment
         //    try
         //    {
         //        CitizenFX.Core.Player destinationPlayer;
-        //        destinationPlayer = new PlayerList().Where(p => p.ServerId == destinationPlayerHandle).First();
+        //        destinationPlayer = Client.players.Where(p => p.ServerId == destinationPlayerHandle).First();
         //        Entity entity = Game.PlayerPed.IsInVehicle() ? (Entity)Game.PlayerPed.CurrentVehicle : (Entity)Game.PlayerPed;
         //        entity.PositionNoOffset = destinationPlayer.Character.Position;
         //        Log.ToChat($"Trying to go to bring requester {destinationPlayer.Name} (#{destinationPlayer.Handle}, server # {destinationPlayer.ServerId})");

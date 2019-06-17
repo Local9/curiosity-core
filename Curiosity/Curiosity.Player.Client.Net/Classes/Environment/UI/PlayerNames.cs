@@ -44,7 +44,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 if (CinematicMode.DoHideHud) return;
 
-                MarkerPlayers = new PlayerList().Where(ShouldShowName);
+                MarkerPlayers = Client.players.Where(ShouldShowName);
                 List<CitizenFX.Core.Player> playerList = MarkerPlayers.ToList();
                 playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowName(p.player));
             }

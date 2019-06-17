@@ -8,7 +8,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
 {
     static class BrakeSignals
     {
-        static PlayerList PlayerList = new PlayerList();
+        static PlayerList PlayerList = Client.players;
         static public void Init()
         {
             Client.GetInstance().RegisterTickHandler(OnTick);

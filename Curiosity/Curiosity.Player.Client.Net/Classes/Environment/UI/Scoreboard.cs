@@ -16,7 +16,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static bool ScaleSetup = false;
         static int currentPage = 0;
         static Scaleform scale;
-        static int maxPages = (int)Math.Ceiling((double)new PlayerList().Count() / 16.0);
+        static int maxPages = (int)Math.Ceiling((double)Client.players.Count() / 16.0);
 
         public struct PlayerRowConfig
         {
@@ -92,7 +92,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         /// </summary>
         static void UpdateMaxPages()
         {
-            maxPages = (int)Math.Ceiling((double)new PlayerList().Count() / 16.0);
+            maxPages = (int)Math.Ceiling((double)Client.players.Count() / 16.0);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             }
 
             var amount = 0;
-            foreach (CitizenFX.Core.Player p in new PlayerList())
+            foreach (CitizenFX.Core.Player p in Client.players)
             {
                 if (IsRowSupposedToShow(amount))
                 {
@@ -395,7 +395,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         /// <returns></returns>
         static async Task UpdateHeadshots()
         {
-            PlayerList playersToCheck = new PlayerList();
+            PlayerList playersToCheck = Client.players;
 
             foreach (CitizenFX.Core.Player p in playersToCheck)
             {

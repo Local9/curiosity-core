@@ -116,7 +116,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 					return;
 				}
 
-				var players = new PlayerList();
+				var players = Client.players;
 				var all = this.OfType<MpPlayerMenu>().ToList();
 				var list = all.Where( pm => pm.Player == null || players.All( pl => pl.ServerId != pm.Player.ServerId ) ).ToList();
 				foreach( var player in new List<MpPlayerMenu>( list ) ) {

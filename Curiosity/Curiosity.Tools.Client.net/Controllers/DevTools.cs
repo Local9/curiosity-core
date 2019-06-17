@@ -78,7 +78,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 
         private void OnPlayerBring( int serverId, float x, float y, float z ) {
 			try {
-				var target = new PlayerList().FirstOrDefault( p => p.ServerId == serverId );
+				var target = Client.players.FirstOrDefault( p => p.ServerId == serverId );
 				if( target != null ) {
 					Game.PlayerPed.PositionNoOffset = new Vector3( x, y, z );
 					UiHelper.ShowNotification( $"You were brought by ~g~{target.Name}~s~." );

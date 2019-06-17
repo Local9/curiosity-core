@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Rectangle = CitizenFX.Core.UI.Rectangle;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
@@ -41,8 +42,8 @@ namespace Curiosity.Client.net.Classes.Menus
         public float ItemHeight = 20;
         public float ItemTextSize = 0.25f;
         public float HeaderTextSize = 0.6f;
-        public Font HeaderFont = Font.HouseScript;
-        public Font ItemFont = Font.ChaletLondon;
+        public CitizenFX.Core.UI.Font HeaderFont = CitizenFX.Core.UI.Font.HouseScript;
+        public CitizenFX.Core.UI.Font ItemFont = CitizenFX.Core.UI.Font.ChaletLondon;
         public PointF ItemPadding = new PointF(3, 3);
         public PointF HeaderPadding = new PointF(10, 10);
         public PointF Origin = new PointF(20, 20);

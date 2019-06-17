@@ -17,7 +17,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 
 		private static readonly Vector2 DefaultPos = new Vector2( 0.6f, 0.5f );
 
-		private static readonly PlayerList Players = new PlayerList();
+		private static PlayerList players;
 
 		public bool IsEnabled { get; set; }
 
@@ -29,6 +29,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 		}
 
 		private Dictionary<string, string> GetDataFor( Entity entity ) {
+            players = Client.players;
 			var list = new Dictionary<string, string>();
 			try {
 				var pos = entity.Position;
@@ -39,7 +40,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 				list["Model Hash (Hex)"] = $"0x{entity.Model.Hash:X}";
 				list[""] = "";
 
-				var player = Players.FirstOrDefault( p => p.Character == entity );
+				var player = players.FirstOrDefault( p => p.Character == entity );
 				if( player != null ) {
 					list["Player Name"] = player.Name;
 					list["Server ID"] = $"{player.ServerId}";
