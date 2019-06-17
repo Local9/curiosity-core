@@ -28,7 +28,10 @@ namespace Curiosity.Client.net.Classes.Player
             await BaseScript.Delay(10000);
             while (true)
             {
-                BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
+                if (!PlayerInformation.IsStaff())
+                {
+                    BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
+                }
                 await BaseScript.Delay((1000 * 60) * 10);
             }
         }
