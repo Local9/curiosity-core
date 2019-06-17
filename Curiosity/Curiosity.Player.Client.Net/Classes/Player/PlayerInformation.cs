@@ -25,7 +25,7 @@ namespace Curiosity.Client.net.Classes.Player
 
         static async void CheckIfDonator()
         {
-            await BaseScript.Delay(5000);
+            await BaseScript.Delay(10000);
             while (true)
             {
                 BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");

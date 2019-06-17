@@ -63,6 +63,11 @@ namespace Curiosity.Server.net.Business
                 }
                 return Privilege.USER;
             }
+            else if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
+            {
+                Log.Verbose($"User was not found on the Discord server.");
+                return Privilege.USER;
+            }
             else
             {
                 Log.Warn($"An error occured, please check the config: Error {requestResponse.status}");

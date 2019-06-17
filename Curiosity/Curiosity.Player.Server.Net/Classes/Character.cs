@@ -26,13 +26,18 @@ namespace Curiosity.Server.net.Classes
                 if (!SessionManager.SessionExists(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
+
                 if (session.IsStaff)
+                {
                     return; // DON'T EDIT STAFF!
+                }
 
                 string discordIdentifier = player.Identifiers[Server.DISCORD_IDENTIFIER];
 
                 if (string.IsNullOrEmpty(discordIdentifier))
+                {
                     return;
+                }
 
                 Privilege privilege = await Discord.DiscordPrivilege(long.Parse(discordIdentifier));
                 session.Privilege = privilege;
