@@ -1,10 +1,8 @@
 ﻿using MenuAPI;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using GlobalEntities = Curiosity.Global.Shared.net.Entity;
 using GlobalEnums = Curiosity.Global.Shared.net.Enums;
-using CitizenFX.Core;
 
 namespace Curiosity.Client.net.Classes.MenuConfiguration.PlayerInteractions
 {
@@ -33,7 +31,12 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration.PlayerInteractions
                 {
                     Client.TriggerServerEvent("curiosity:Server:Menu:Reasons", (int)GlobalEnums.LogGroup.Kick);
                     menu.AddMenuItem(new MenuItem("Loading..."));
-                    await Client.Delay(1000);
+
+                    while (kickReasons.Count == 0)
+                    {
+                        await Client.Delay(0);
+                    }
+
                     menu.ClearMenuItems();
                 }
 

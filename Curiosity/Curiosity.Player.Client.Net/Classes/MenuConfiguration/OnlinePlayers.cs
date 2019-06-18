@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using MenuAPI;
-using System.Drawing;
-using Curiosity.Shared.Client.net.Helper;
+﻿using MenuAPI;
 
 namespace Curiosity.Client.net.Classes.MenuConfiguration
 {
@@ -32,6 +23,9 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration
                     {
                         Menu kickOptions = PlayerInteractions.KickInteraction.CreateMenu("Kick", player);
                         AddSubMenu(playerMenu, kickOptions);
+
+                        Menu banOptions = PlayerInteractions.BanInteraction.CreateMenu("Ban", player);
+                        AddSubMenu(playerMenu, banOptions);
                     }
                     AddSubMenu(menu, playerMenu);
                 }

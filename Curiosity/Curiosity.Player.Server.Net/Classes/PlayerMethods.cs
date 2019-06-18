@@ -58,6 +58,9 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
+                if (!Server.isLive)
+                    Log.Verbose($"Report by {player.Name}, handle: {playerHandleBeingReported}, reason: {reason}");
+
                 Session session = SessionManager.PlayerList[player.Handle];
 
                 if (!SessionManager.PlayerList.ContainsKey(playerHandleBeingReported)) return;
@@ -117,6 +120,9 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
+                if (!Server.isLive)
+                    Log.Verbose($"Kick by {player.Name}, handle: {playerHandleToKick}, reason: {reason}");
+
                 Session session = SessionManager.PlayerList[player.Handle];
 
                 if (!IsStaff(session.Privilege)) return;
@@ -170,17 +176,20 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        async static void AdminBanPlayer([FromSource]CitizenFX.Core.Player player, string playerHandleToKick, string reason, bool perm, int duration)
+        async static void AdminBanPlayer([FromSource]CitizenFX.Core.Player player, string playerHandleToBan, string reason, bool perm, int duration)
         {
             try
             {
+                if (!Server.isLive)
+                    Log.Verbose($"Ban by {player.Name}, handle: {playerHandleToBan}, reason: {reason}, perm: {perm}, duration: {duration}");
+
                 Session session = SessionManager.PlayerList[player.Handle];
 
                 if (!IsStaff(session.Privilege)) return;
 
-                if (!SessionManager.PlayerList.ContainsKey(playerHandleToKick)) return;
+                if (!SessionManager.PlayerList.ContainsKey(playerHandleToBan)) return;
 
-                Session sessionOfPlayerToBan = SessionManager.PlayerList[playerHandleToKick];
+                Session sessionOfPlayerToBan = SessionManager.PlayerList[playerHandleToBan];
 
                 if (sessionOfPlayerToBan.UserID == session.UserID)
                 {

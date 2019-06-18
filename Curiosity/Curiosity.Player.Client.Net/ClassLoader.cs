@@ -89,6 +89,7 @@ namespace Curiosity.Client.net
             Classes.MenuConfiguration.OnlinePlayers.Init();
             Classes.MenuConfiguration.PlayerInteractions.ReportInteraction.Init();
             Classes.MenuConfiguration.PlayerInteractions.KickInteraction.Init();
+            Classes.MenuConfiguration.PlayerInteractions.BanInteraction.Init();
 
             // Environment
             //Poi.Init();

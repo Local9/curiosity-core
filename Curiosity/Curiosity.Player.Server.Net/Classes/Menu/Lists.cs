@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using GlobalEntities = Curiosity.Global.Shared.net.Entity;
 using GlobalEnums = Curiosity.Global.Shared.net.Enums;
+using Curiosity.Shared.Server.net.Helpers;
 
 namespace Curiosity.Server.net.Classes.Menu
 {
@@ -17,10 +18,22 @@ namespace Curiosity.Server.net.Classes.Menu
 
         static async void GetReasons([FromSource]CitizenFX.Core.Player player, int logGroupId)
         {
-            GlobalEnums.LogGroup logGroup = (GlobalEnums.LogGroup)logGroupId;
-            List<GlobalEntities.LogType> logTypes = await Database.DatabaseLog.GetLogReasons(logGroup);
-            string reasons = Newtonsoft.Json.JsonConvert.SerializeObject(logTypes);
-            player.TriggerEvent($"curiosity:Client:Menu:{logGroup}", reasons);
+            try
+            {
+                GlobalEnums.LogGroup logGroup = (GlobalEnums.LogGroup)logGroupId;
+
+                if (!Server.isLive)
+                {
+                    Log.Verbose($"Player {player.Name} has requested {logGroup} reasons.");
+                }
+                List<GlobalEntities.LogType> logTypes = await Database.DatabaseLog.GetLogReasons(logGroup);
+                string reasons = Newtonsoft.Json.JsonConvert.SerializeObject(logTypes);
+                player.TriggerEvent($"curiosity:Client:Menu:{logGroup}", reasons);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"GetReasons() -> {ex.Message}");
+            }
         }
 
     }
