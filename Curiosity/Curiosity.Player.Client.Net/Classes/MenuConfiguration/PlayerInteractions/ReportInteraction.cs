@@ -1,14 +1,7 @@
-﻿using System;
+﻿using MenuAPI;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using MenuAPI;
-using System.Drawing;
-using Curiosity.Shared.Client.net.Helper;
 using GlobalEntities = Curiosity.Global.Shared.net.Entity;
 using GlobalEnums = Curiosity.Global.Shared.net.Enums;
 
@@ -18,7 +11,6 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration.PlayerInteractions
     {
         static Client client = Client.GetInstance();
         static List<GlobalEntities.LogType> reportReasons = new List<GlobalEntities.LogType>();
-        static int playerHandle = 0;
 
         public static void Init()
         {
