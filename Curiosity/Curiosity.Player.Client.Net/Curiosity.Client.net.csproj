@@ -31,15 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core">
-      <HintPath>..\_Dependancies\client\CitizenFX.Core.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1347\lib\net45\CitizenFX.Core.Client.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json.net">
       <HintPath>..\_Dependancies\Newtonsoft.Json.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -85,6 +85,9 @@
     <Compile Include="Classes\Environment\WarpPoints.cs" />
     <Compile Include="Classes\Environment\WayPoints.cs" />
     <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
+    <Compile Include="Classes\MenuConfiguration\PlayerInteractions\ReportInteraction.cs" />
+    <Compile Include="Classes\MenuConfiguration\PlayerMenu.cs" />
+    <Compile Include="Classes\MenuConfiguration\OnlinePlayers.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\CharacterEditorMenu.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\CustomizeButton.cs" />
     <Compile Include="Classes\Menus\CharacterEditor\Items\ExitButton.cs" />
@@ -158,6 +161,9 @@
       <Project>{9c746601-9f3d-4b0d-877c-1c7bc493c5bc}</Project>
       <Name>MenuAPI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -45,21 +45,6 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration.PlayerInteractions
             reportReasons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GlobalEntities.LogType>>(json);
         }
 
-        static string GetStringBetweenCharacters(string input, char charFrom, char charTo)
-        {
-            int posFrom = input.IndexOf(charFrom);
-            if (posFrom != -1) //if found char
-            {
-                int posTo = input.IndexOf(charTo, posFrom + 1);
-                if (posTo != -1) //if found char
-                {
-                    return input.Substring(posFrom + 1, posTo - posFrom - 1);
-                }
-            }
-
-            return string.Empty;
-        }
-
         public static Menu CreateMenu(string menuTitle, CitizenFX.Core.Player player)
         {
             Menu menu = new Menu(menuTitle, $"Report: {player.Name}");
