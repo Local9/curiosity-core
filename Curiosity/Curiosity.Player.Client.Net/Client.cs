@@ -13,6 +13,7 @@ namespace Curiosity.Client.net
     {
         public static int pedHandle = Game.PlayerPed.Handle;
         public static int playerHandle = Game.Player.Handle;
+        public static bool isSessionActive = false;
 
         public static PlayerList players;
 
@@ -36,11 +37,19 @@ namespace Curiosity.Client.net
 
             ClassLoader.Init();
             RegisterTickHandler(OnTick);
+            RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action(OnSessionActive));
 
             Log.Info("Curiosity.Client.net loaded\n");
 
             //RegisterEventHandler("TriggerEventNearPoint", new Action<string>(HandleLocalEvent));
             //Client.GetInstance().PointEventHandlers["Communication.LocalChat"] = new Func<PointEvent, Task>(HandleLocalChat);
+        }
+
+        async void OnSessionActive()
+        {
+            BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
+            await Delay(1000);
+            isSessionActive = true;
         }
 
         /// <summary>

@@ -28,6 +28,11 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration
                     Menu reportingOptions = PlayerInteractions.ReportInteraction.CreateMenu("Report", player);
                     AddSubMenu(playerMenu, reportingOptions);
 
+                    if (Player.PlayerInformation.IsStaff())
+                    {
+                        Menu kickOptions = PlayerInteractions.KickInteraction.CreateMenu("Kick", player);
+                        AddSubMenu(playerMenu, kickOptions);
+                    }
                     AddSubMenu(menu, playerMenu);
                 }
             };
