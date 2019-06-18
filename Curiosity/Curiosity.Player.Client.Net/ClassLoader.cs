@@ -84,6 +84,11 @@ namespace Curiosity.Client.net
             //NuiEventHandler.Init();
             //PlayerActionsMenu.Init();
 
+            // MENU 2.0
+            Classes.MenuConfiguration.PlayerMenu.Init();
+            Classes.MenuConfiguration.OnlinePlayers.Init();
+            Classes.MenuConfiguration.PlayerInteractions.ReportInteraction.Init();
+
             // Environment
             //Poi.Init();
             AfkKick.Init();

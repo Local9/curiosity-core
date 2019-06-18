@@ -54,17 +54,15 @@ namespace Curiosity.Server.net.Classes
             return canKick;
         }
 
-        async static void ReportingPlayer([FromSource]CitizenFX.Core.Player player, string playerHAndleBeingReported, string reason)
+        async static void ReportingPlayer([FromSource]CitizenFX.Core.Player player, string playerHandleBeingReported, string reason)
         {
             try
             {
                 Session session = SessionManager.PlayerList[player.Handle];
 
-                if (!IsStaff(session.Privilege)) return;
+                if (!SessionManager.PlayerList.ContainsKey(playerHandleBeingReported)) return;
 
-                if (!SessionManager.PlayerList.ContainsKey(playerHAndleBeingReported)) return;
-
-                Session sessionOfPlayerBeingReported = SessionManager.PlayerList[playerHAndleBeingReported];
+                Session sessionOfPlayerBeingReported = SessionManager.PlayerList[playerHandleBeingReported];
 
                 if (sessionOfPlayerBeingReported.UserID == session.UserID)
                 {
