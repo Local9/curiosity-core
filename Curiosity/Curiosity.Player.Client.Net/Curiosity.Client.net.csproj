@@ -57,6 +57,7 @@
     <Compile Include="Classes\Environment\BlipHandler.cs" />
     <Compile Include="Classes\Environment\DeleteProps.cs" />
     <Compile Include="Classes\Environment\DevCommands.cs" />
+    <Compile Include="Classes\Environment\InstancingChecker.cs" />
     <Compile Include="Classes\Environment\MarkerHandler.cs" />
     <Compile Include="Classes\Environment\UI\Bank.cs" />
     <Compile Include="Classes\Environment\UI\ButtonInstructions.cs" />
@@ -85,6 +86,10 @@
     <Compile Include="Classes\Environment\WarpPoints.cs" />
     <Compile Include="Classes\Environment\WayPoints.cs" />
     <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
+    <Compile Include="Classes\MenuConfiguration\VehicleMenu.cs" />
+    <Compile Include="Classes\MenuConfiguration\Inventory.cs" />
+    <Compile Include="Classes\MenuConfiguration\PlayerInteractions\BanInteraction.cs" />
+    <Compile Include="Classes\MenuConfiguration\PlayerInteractions\KickInteraction.cs" />
     <Compile Include="Classes\MenuConfiguration\PlayerInteractions\ReportInteraction.cs" />
     <Compile Include="Classes\MenuConfiguration\PlayerMenu.cs" />
     <Compile Include="Classes\MenuConfiguration\OnlinePlayers.cs" />
