@@ -24,6 +24,8 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration
             //// To test this, checkout one of the checkbox items in this example menu. Clicking it will toggle the menu alignment.
             MenuController.MenuAlignment = MenuController.MenuAlignmentOption.Left;
             //// Creating the first menu.
+
+            // menu.HeaderTexture = new KeyValuePair<string, string>("shopui_title_graphics_franklin", "shopui_title_graphics_franklin");
             MenuController.AddMenu(menu);
 
             //// Adding a new button by directly creating one inline. You could also just store it and then add it but we don't need to do that in this example.
@@ -117,14 +119,14 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration
             //};
 
             //// Normal
-            List<string> normalList = new List<string>() { "None", "Home", "Some other fckin place" };
-            MenuListItem normalListItem = new MenuListItem("Quick GPS", normalList, 0, "Select to place your waypoint at a set location.");
+            List<string> quickGpsList = new List<string>() { "None", "Home", "Some other fckin place" };
+            MenuListItem quickGpsMenuListItem = new MenuListItem("Quick GPS", quickGpsList, 0, "Select to place your waypoint at a set location.");
 
             //// Adding the lists to the menu.
             //menu.AddMenuItem(hairColors);
             //menu.AddMenuItem(makeupColors);
             //menu.AddMenuItem(opacity);
-            menu.AddMenuItem(normalListItem);
+            menu.AddMenuItem(quickGpsMenuListItem);
 
             //// Creating a submenu, adding it to the menus list, and creating and binding a button for it.
             //Menu submenu = new Menu("Submenu", "Secondary Menu");
@@ -207,7 +209,7 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration
             menu.OnItemSelect += (_menu, _item, _index) =>
             {
                 // Code in here would get executed whenever an item is pressed.
-                Debug.WriteLine($"OnItemSelect: [{_menu}, {_item}, {_index}]");
+                Debug.WriteLine($"OnItemSelect: [{_menu}, {_item}, {_item.ItemData}, {_index}]");
             };
 
             //menu.OnIndexChange += (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>

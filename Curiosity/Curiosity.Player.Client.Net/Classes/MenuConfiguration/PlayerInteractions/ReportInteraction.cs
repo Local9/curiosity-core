@@ -44,7 +44,7 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration.PlayerInteractions
             menu.OnMenuOpen += (_menu) => {
                 foreach(GlobalEntities.LogType logType in reportReasons)
                 {
-                    menu.AddMenuItem(new MenuItem(logType.Description) { ItemData = logType });
+                    menu.AddMenuItem(new MenuItem(logType.Description) { ItemData = logType, Description = "Select to report the player" });
                 }
             };
 

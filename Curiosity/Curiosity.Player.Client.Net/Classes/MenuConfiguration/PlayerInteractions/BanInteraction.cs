@@ -25,7 +25,7 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration.PlayerInteractions
         {
             string title = (menuTitle.Length > 15) ? $"{menuTitle.Substring(0, 15)}..." : menuTitle;
 
-            Menu periodMenu = new Menu(title, $"Ban Period");
+            Menu periodMenu = new Menu(title, $"Select to set Ban Period");
             periodMenu.AddMenuItem(new MenuItem("3 Days") { ItemData = 3 });
             periodMenu.AddMenuItem(new MenuItem("7 Days") { ItemData = 7 });
             periodMenu.AddMenuItem(new MenuItem("14 Days") { ItemData = 14 });
@@ -69,8 +69,16 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration.PlayerInteractions
 
                 foreach (GlobalEntities.LogType logType in banReasons)
                 {
-                    Menu periodMenu = CreatePeriodMenu(logType.Description, logType, player);
-                    AddSubMenu(menu, periodMenu, logType.Description);
+                    if (logType.Description.Contains("Permanent") && Player.PlayerInformation.IsTrustedAdmin())
+                    {
+                        Menu periodMenu = CreatePeriodMenu(logType.Description, logType, player);
+                        AddSubMenu(menu, periodMenu, logType.Description);
+                    }
+                    else if (!logType.Description.Contains("Permanent"))
+                    {
+                        Menu periodMenu = CreatePeriodMenu(logType.Description, logType, player);
+                        AddSubMenu(menu, periodMenu, logType.Description);
+                    }
                 }
             };
 

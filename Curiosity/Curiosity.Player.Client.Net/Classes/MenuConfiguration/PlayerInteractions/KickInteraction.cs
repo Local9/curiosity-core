@@ -42,7 +42,7 @@ namespace Curiosity.Client.net.Classes.MenuConfiguration.PlayerInteractions
 
                 foreach (GlobalEntities.LogType logType in kickReasons)
                 {
-                    menu.AddMenuItem(new MenuItem(logType.Description) { ItemData = logType });
+                    menu.AddMenuItem(new MenuItem(logType.Description) { ItemData = logType, Description = "Select to kick the player" });
                 }
             };
 

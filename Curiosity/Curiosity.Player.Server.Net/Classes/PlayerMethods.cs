@@ -21,6 +21,7 @@ namespace Curiosity.Server.net.Classes
 
             server.RegisterEventHandler("curiosity:Server:Player:Setup", new Action<CitizenFX.Core.Player>(OnSetupPlayer));
             server.RegisterEventHandler("curiosity:Server:Player:GetRole", new Action<CitizenFX.Core.Player>(GetUserRole));
+            server.RegisterEventHandler("curiosity:Server:Player:Instance", new Action<CitizenFX.Core.Player>(PlayerInstanced));
             // Saves Data
             server.RegisterEventHandler("curiosity:Server:Player:SaveLocation", new Action<CitizenFX.Core.Player, float, float, float>(OnSaveLocation));
             // Internal Events
@@ -52,6 +53,12 @@ namespace Curiosity.Server.net.Classes
             }
 
             return canKick;
+        }
+
+        async static void PlayerInstanced([FromSource]CitizenFX.Core.Player player)
+        {
+            player.Drop("Instanced");
+            await Server.Delay(0);
         }
 
         async static void ReportingPlayer([FromSource]CitizenFX.Core.Player player, string playerHandleBeingReported, string reason)
@@ -370,38 +377,59 @@ namespace Curiosity.Server.net.Classes
 
         async static void GetUserRole([FromSource]CitizenFX.Core.Player player)
         {
-            string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
-
-            if (string.IsNullOrEmpty(license))
+            try
             {
-                throw new Exception("LICENSE MISSING");
+                string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
+
+                if (string.IsNullOrEmpty(license))
+                {
+                    throw new Exception("LICENSE MISSING");
+                }
+
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                session.User = await Business.BusinessUser.GetUserAsync(license);
+
+                player.TriggerEvent("curiosity:Client:Player:Role", session.User.Role);
             }
-
-            Session session = SessionManager.PlayerList[player.Handle];
-
-            session.User = await Business.BusinessUser.GetUserAsync(license);
-
-            player.TriggerEvent("curiosity:Client:Player:Role", session.User.Role);
+            catch (Exception ex)
+            {
+                Log.Error($"GetUserRoleId() -> {ex.Message}");
+            }
         }
 
         async static void GetUserRoleId(int playerHandle)
         {
-            CitizenFX.Core.Player player = new PlayerList()[playerHandle];
-            string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
-            Entity.User user = await Business.BusinessUser.GetUserAsync(license);
-            player.TriggerEvent("curiosity:Server:Player:RoleId", user.RoleId);
+            try
+            {
+                CitizenFX.Core.Player player = new PlayerList()[playerHandle];
+                string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
+                Entity.User user = await Business.BusinessUser.GetUserAsync(license);
+                player.TriggerEvent("curiosity:Server:Player:RoleId", user.RoleId);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"GetUserRoleId() -> {ex.Message}");
+            }
         }
 
         async static void GetUserId([FromSource]CitizenFX.Core.Player player)
         {
-            if (!Classes.SessionManager.PlayerList.ContainsKey(player.Handle))
+            try
             {
-                player.TriggerEvent("curiosity:Client:Player:UserId", null);
-                return;
+                if (!Classes.SessionManager.PlayerList.ContainsKey(player.Handle))
+                {
+                    player.TriggerEvent("curiosity:Client:Player:UserId", null);
+                    return;
+                }
+                long userId = Classes.SessionManager.GetUserId($"{player.Handle}");
+                player.TriggerEvent("curiosity:Client:Player:UserId", userId);
+                await BaseScript.Delay(0);
             }
-            long userId = Classes.SessionManager.GetUserId($"{player.Handle}");
-            player.TriggerEvent("curiosity:Client:Player:UserId", userId);
-            await BaseScript.Delay(0);
+            catch (Exception ex)
+            {
+                Log.Error($"GetUserRoleId() -> {ex.Message}");
+            }
         }
     }
 

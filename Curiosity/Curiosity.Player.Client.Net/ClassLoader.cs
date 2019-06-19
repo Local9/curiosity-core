@@ -86,10 +86,14 @@ namespace Curiosity.Client.net
 
             // MENU 2.0
             Classes.MenuConfiguration.PlayerMenu.Init();
+            Classes.MenuConfiguration.Inventory.Init();
+            // ONLINE PLAYER MENU ITEMS
             Classes.MenuConfiguration.OnlinePlayers.Init();
             Classes.MenuConfiguration.PlayerInteractions.ReportInteraction.Init();
             Classes.MenuConfiguration.PlayerInteractions.KickInteraction.Init();
             Classes.MenuConfiguration.PlayerInteractions.BanInteraction.Init();
+            // Additional Items
+            Classes.MenuConfiguration.VehicleMenu.Init();
 
             // Environment
             //Poi.Init();

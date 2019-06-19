@@ -18,6 +18,7 @@ namespace Curiosity.Server.net
         public static string LICENSE_IDENTIFIER = "license";
         public static string DISCORD_IDENTIFIER = "discord";
         public static bool isLive = false;
+        public static PlayerList players;
 
         public static Server GetInstance()
         {
@@ -27,6 +28,8 @@ namespace Curiosity.Server.net
         public Server()
         {
             Log.Success("Entering Curiosity Server cter");
+
+            players = Players;
 
             _server = this;
 
@@ -85,6 +88,7 @@ namespace Curiosity.Server.net
             Classes.DiscordWrapper.Init();
 
             RegisterTickHandler(GetServerId);
+            //RegisterTickHandler(InstanceChecker);
 
             if (Server.isLive)
                 RegisterTickHandler(SentStartupMessage);
@@ -132,6 +136,11 @@ namespace Curiosity.Server.net
             }
 
         }
+
+        //async Task InstanceChecker()
+        //{
+        //    TriggerClientEvent("curiosity:Client:Settings:PlayerCount", players.GetEnumerator().Count);
+        //}
 
         async Task GetServerId()
         {
