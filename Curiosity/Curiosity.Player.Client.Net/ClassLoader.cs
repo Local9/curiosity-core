@@ -112,6 +112,7 @@ namespace Curiosity.Client.net
             // DeleteProps.Init();
             Sit.Init();
             Birds.Init();
+            SpawnManagement.Init();
 
             // EMS
             //EMS.Init();

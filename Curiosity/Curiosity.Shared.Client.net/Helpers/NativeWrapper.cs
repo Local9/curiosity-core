@@ -12,6 +12,76 @@ namespace Curiosity.Shared.Client.net.Helper
     /// </summary>
     public static class NativeWrappers
     {
+        public static bool NetworkIsSessionStarted()
+        {
+            return Function.Call<bool>(Hash.NETWORK_IS_SESSION_STARTED, new InputArgument[0]);
+        }
+
+        public static int PlayerId()
+        {
+            return Function.Call<int>(Hash.PLAYER_ID);
+        }
+
+        public static bool IsPedFatallyInjured(int ped)
+        {
+            return Function.Call<bool>(Hash.IS_PED_FATALLY_INJURED, ped);
+        }
+
+        public static void ClearPedTasksImmediately(int ped)
+        {
+            Function.Call(Hash.CLEAR_PED_TASKS_IMMEDIATELY, ped);
+        }
+
+        public static void RequestCollisionAtCoord(Vector3 location)
+        {
+            Function.Call(Hash.REQUEST_COLLISION_AT_COORD, location.X, location.Y, location.Z);
+        }
+
+        public static void LoadScene(Vector3 location)
+        {
+            Function.Call(Hash.LOAD_SCENE, location.X, location.Y, location.Z);
+        }
+
+        public static void NetworkResurrectLocalPlayer(Vector3 location, float heading)
+        {
+            Function.Call(Hash.NETWORK_RESURRECT_LOCAL_PLAYER, location.X, location.Y, location.Z, heading, true, true, false);
+        }
+
+        public static void SetEntityCoordsNoOffset(int handle, Vector3 location)
+        {
+            Function.Call(Hash.SET_ENTITY_COORDS_NO_OFFSET, handle, location.X, location.Y, location.Z, false, false, false, true);
+        }
+
+        public static void ClearPlayerWantedLevel(int playerId)
+        {
+            Function.Call(Hash.CLEAR_PLAYER_WANTED_LEVEL, playerId);
+        }
+
+        public static void ShutdownLoadingScreen()
+        {
+            Function.Call(Hash.SHUTDOWN_LOADING_SCREEN, new InputArgument[0]);
+        }
+
+        public static bool HasCollisionLoadedAroundEntity(int ped)
+        {
+            return Function.Call<bool>(Hash.HAS_COLLISION_LOADED_AROUND_ENTITY, ped);
+        }
+
+        public static string GetPlayerFromServerId(int playerId)
+        {
+            return Function.Call<string>(Hash.GET_PLAYER_FROM_SERVER_ID, playerId);
+        }
+
+        public static string GetPlayerName(string netId)
+        {
+            return Function.Call<string>(Hash.GET_PLAYER_NAME, netId);
+        }
+
+        public static bool NetworkIsPlayerActive(int playerId)
+        {
+            return Function.Call<bool>(Hash.NETWORK_IS_PLAYER_ACTIVE, playerId);
+        }
+
         static public void RegisterNuiCallbackType(string TriggerName)
         {
             Function.Call(Hash.REGISTER_NUI_CALLBACK_TYPE, TriggerName);

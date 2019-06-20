@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Helper;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
@@ -20,7 +21,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             client.RegisterEventHandler("curiosity:Client:Scalefrom:Announce", new Action<string>(Announcement));
         }
 
-        static async void Announcement(string message)
+        public static async void Announcement(string message)
         {
             if (scaleformActive) return;
 
@@ -29,7 +30,18 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             ShowScaleform(scaleform);
         }
 
-        static async void ShowScaleform(Scaleform scaleform)
+        public static async void Wasted()
+        {
+            if (scaleformActive) return;
+
+            Game.PlaySound("Bed", "WastedSounds");
+            Screen.Effects.Start(ScreenEffect.DeathFailMpDark, 3000);
+            Scaleform scaleform = await ScaleformWrapper.Request("mp_big_message_freemode");
+            scaleform.CallFunction("SHOW_SHARD_WASTED_MP_MESSAGE", "~r~WASTED", "", 1);
+            ShowScaleform(scaleform, 3000);
+        }
+
+        static async void ShowScaleform(Scaleform scaleform, int duration = 10000)
         {
             int startTimer = API.GetGameTimer();
 
@@ -37,7 +49,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 scaleformActive = true;
                 await Client.Delay(0);
-                if (API.GetGameTimer() - startTimer >= 10000)
+                if (API.GetGameTimer() - startTimer >= duration)
                 {
                     scaleformActive = false;
                     scaleform.Dispose();

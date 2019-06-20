@@ -9,10 +9,20 @@ namespace Curiosity.Client.net
     public class CuriosityPlayer : BaseScript
     {
         long userId = 0;
+        int roleId;
+        string roleName;
+        float posX;
+        float posY;
+        float posZ;
+
         bool isLoading = false;
         bool displayInfo = true;
         Text text;
         int screenWidth;
+        bool hasSpawned = false;
+        bool serverReady = false;
+
+        Model defaultModel = PedHash.FreemodeMale01;
 
         public CuriosityPlayer()
         {
@@ -26,6 +36,7 @@ namespace Curiosity.Client.net
             Tick += UpdatePlayerLocation;
             Tick += PlayerAndServerSettings;
             Tick += DisplayInformation;
+            Tick += SpawnTick;
         }
 
         async void DisplayInfo(bool display)
@@ -41,6 +52,15 @@ namespace Curiosity.Client.net
                 if (text != null)
                     text.Enabled = displayInfo;
 
+                await Delay(0);
+            }
+        }
+
+        async Task DisplayLoading()
+        {
+            while (Screen.LoadingPrompt.IsActive)
+            {
+                Screen.LoadingPrompt.Show("Loading Player");
                 await Delay(0);
             }
         }
@@ -122,11 +142,75 @@ namespace Curiosity.Client.net
             SaveLocation();
         }
 
-        async void OnPlayerSetup(long userId, int roleId, string role, float x, float y, float z)
+        void OnPlayerSetup(long userId, int roleId, string role, float x, float y, float z)
         {
+            this.userId = userId;
+            this.roleId = roleId;
+            this.roleName = role;
+            this.posX = x;
+            this.posY = y;
+            this.posZ = z;
+            serverReady = true;
+        }
+
+        async Task SpawnTick()
+        {
+            bool playerPedExists = (Game.PlayerPed.Handle != 0);
+            bool playerActive = API.NetworkIsPlayerActive(API.PlayerId());
+
+            if (playerPedExists && playerActive && !hasSpawned && serverReady)
+            {
+                SpawnPlayer(userId, roleId, roleName, posX, posY, posZ);
+                hasSpawned = true;
+            }
+            await Task.FromResult(0);
+        }
+
+        async void SpawnPlayer(long userId, int roleId, string role, float x, float y, float z)
+        {
+
+            Screen.Fading.FadeOut(500);
+
+            Debug.WriteLine("OnPlayerSetup() -> STARTING");
+
             Screen.LoadingPrompt.Show("Loading Player");
 
             Setup();
+
+            Vector3 vector3 = new Vector3(x, y, z);
+
+            defaultModel.Request();
+
+            while (!defaultModel.IsLoaded)
+            {
+                defaultModel.Request();
+                await Client.Delay(0);
+            }
+
+            await Game.Player.ChangeModel(defaultModel);
+
+            int playerPed = Game.PlayerPed.Handle;
+            API.SetPedComponentVariation(playerPed, 0, 0, 0, 2); // Face
+            API.SetPedComponentVariation(playerPed, 2, 11, 4, 2); // Hair
+            API.SetPedComponentVariation(playerPed, 4, 1, 5, 2); // Pantalon
+            API.SetPedComponentVariation(playerPed, 6, 1, 0, 2); // Shoes
+            API.SetPedComponentVariation(playerPed, 11, 7, 2, 2); // Jacket
+
+            defaultModel.MarkAsNoLongerNeeded();
+
+            API.RequestCollisionAtCoord(x, y, z);
+
+            while(!API.HasCollisionLoadedAroundEntity(playerPed))
+            {
+                await Delay(0);
+            }
+
+            API.SetEntityCoordsNoOffset(playerPed, x, y, z, false, false, false);
+            API.NetworkResurrectLocalPlayer(x, y, z, 0.0f, true, false);
+
+            API.ShutdownLoadingScreen();
+            API.ShutdownLoadingScreenNui();
+
             await Delay(0);
 
             if (isLoading)
@@ -136,32 +220,33 @@ namespace Curiosity.Client.net
 
             await Delay(0);
 
-            await Delay(0);
-
             while (API.GetPlayerSwitchState() != 5)
             {
                 await Delay(0);
                 ClearScreen();
             }
 
-            API.ShutdownLoadingScreen();
             ClearScreen();
             await Delay(0);
-            Screen.Fading.FadeOut(1);
 
-            API.ShutdownLoadingScreenNui();
+            while(Screen.Fading.IsFadingOut)
+            {
+                await Delay(0);
+            }
 
             ClearScreen();
             await Delay(0);
             ClearScreen();
 
-            Screen.Fading.FadeIn(500);
+            Screen.Fading.FadeIn(1000);
 
             while(!Screen.Fading.IsFadedIn)
             {
                 await Delay(0);
                 ClearScreen();
             }
+
+            Game.PlayerPed.Position = new Vector3(x, y, z);
 
             int gameTimer = API.GetGameTimer();
 
@@ -182,8 +267,6 @@ namespace Curiosity.Client.net
 
             text = new Text($"ROLE: {role}\nNAME: {Game.Player.Name}\nPLAYERID: {userId}", new System.Drawing.PointF { X = left, Y = Screen.Height - 50 }, 0.3f, System.Drawing.Color.FromArgb(75, 255, 255, 255), Font.ChaletComprimeCologne, Alignment.Left, false, true);
             text.WrapWidth = 300;
-
-            Game.PlayerPed.Position = new Vector3(x, y, z);
 
             while (true)
             {
@@ -213,6 +296,8 @@ namespace Curiosity.Client.net
             {
                 Screen.LoadingPrompt.Hide();
             }
+
+            Client.TriggerEvent("playerSpawned");
 
             while (true)
             {

@@ -14,6 +14,7 @@ namespace Curiosity.Server.net.Classes
         static int minutesInterest = 30;
         static int timeMark = (1000 * 60) * minutesInterest;
         static float bankInterestPct = 0.013f;
+        static float medicalFees = 0.05f;
 
         public static void Init()
         {
@@ -22,17 +23,53 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Bank:IncreaseBank", new Action<CitizenFX.Core.Player, int, int>(IncreaseBank));
             server.RegisterEventHandler("curiosity:Server:Bank:DecreaseBank", new Action<CitizenFX.Core.Player, int, int>(DecreaseBank));
             server.RegisterEventHandler("curiosity:Server:Bank:TransferMoney", new Action<CitizenFX.Core.Player, int, bool>(TransferMoney));
+            server.RegisterEventHandler("curiosity:Server:Bank:MedicalFees", new Action<CitizenFX.Core.Player>(MedicalFees));
 
             timerCheck = API.GetGameTimer();
 
             bankInterestPct = float.Parse(API.GetConvar("bank_interest", $"{bankInterestPct}"));
             minutesInterest = API.GetConvarInt("bank_interest_gain", minutesInterest);
+            medicalFees = float.Parse(API.GetConvar("medical_fee", $"{medicalFees}"));
             timeMark = (1000 * 60) * minutesInterest;
 
             Log.Verbose($"Bank Settings -> bank_interest {bankInterestPct}");
             Log.Verbose($"Bank Settings -> bank_interest_gain {minutesInterest} mins");
 
             server.RegisterTickHandler(BankInterest);
+        }
+
+        static async void MedicalFees([FromSource]CitizenFX.Core.Player player)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            double interestBankAccountDouble = (session.BankAccount * medicalFees);
+            double interestWalletAccountDouble = (session.Wallet * medicalFees);
+
+            if (interestBankAccountDouble <= 0)
+            {
+                if (interestWalletAccountDouble <= 0) return;
+
+                await Server.Delay(0);
+                Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, (int)interestWalletAccountDouble);
+                await Server.Delay(0);
+                SessionManager.PlayerList[session.NetId].DecreaseWallet((int)interestWalletAccountDouble);
+                await Server.Delay(0);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                await Server.Delay(0);
+            }
+            else
+            {
+                await Server.Delay(0);
+                Database.DatabaseUsersBank.DecreaseBank(session.User.BankId, (int)interestBankAccountDouble);
+                await Server.Delay(0);
+                SessionManager.PlayerList[session.NetId].DecreaseBankAccount((int)interestBankAccountDouble);
+                await Server.Delay(0);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                await Server.Delay(0);
+            }
+
         }
 
         static async Task BankInterest()
