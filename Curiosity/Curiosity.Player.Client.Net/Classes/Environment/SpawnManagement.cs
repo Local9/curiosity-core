@@ -73,7 +73,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 foreach (Vector3 hosPos in hospitals)
                 {
                     float distance = API.GetDistanceBetweenCoords(playerPos.X, playerPos.Y, playerPos.Z, hosPos.X, hosPos.Y, hosPos.Z, false);
-                    Debug.WriteLine($"{distance}");
+                    
                     if (distance < 3000f)
                     {
                         pos = hosPos;
