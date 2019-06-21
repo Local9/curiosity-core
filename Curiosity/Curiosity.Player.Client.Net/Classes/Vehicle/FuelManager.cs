@@ -7,6 +7,8 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using Curiosity.Client.net.Models;
+using Curiosity.Shared.Client.net.Helper;
 
 namespace Curiosity.Client.net.Classes.Vehicle
 {
@@ -46,6 +48,38 @@ namespace Curiosity.Client.net.Classes.Vehicle
             ObjectHash.prop_vintage_pump
         };
 
+        static List<Vector3> GasStations = new List<Vector3>()
+        {
+            new Vector3(49.4187f, 2778.793f, 58.043f),
+            new Vector3(263.894f, 2606.463f, 44.983f),
+            new Vector3(1039.958f, 2671.134f, 39.550f),
+            new Vector3(1207.260f, 2660.175f, 37.899f),
+            new Vector3(2539.685f, 2594.192f, 37.944f),
+            new Vector3(2679.858f, 3263.946f, 55.240f),
+            new Vector3(2005.055f, 3773.887f, 32.403f),
+            new Vector3(1687.156f, 4929.392f, 42.078f),
+            new Vector3(1701.314f, 6416.028f, 32.763f),
+            new Vector3(179.857f, 6602.839f, 31.868f),
+            new Vector3(-94.4619f, 6419.594f, 31.489f),
+            new Vector3(-2554.996f, 2334.40f, 33.078f),
+            new Vector3(-1800.375f, 803.661f, 138.651f),
+            new Vector3(-1437.622f, -276.747f, 46.207f),
+            new Vector3(-2096.243f, -320.286f, 13.168f),
+            new Vector3(-724.619f, -935.1631f, 19.213f),
+            new Vector3(-526.019f, -1211.003f, 18.184f),
+            new Vector3(-70.2148f, -1761.792f, 29.534f),
+            new Vector3(265.648f, -1261.309f, 29.292f),
+            new Vector3(819.653f, -1028.846f, 26.403f),
+            new Vector3(1208.951f, -1402.567f, 35.224f),
+            new Vector3(1181.381f, -330.847f, 69.316f),
+            new Vector3(620.843f, 269.100f, 103.089f),
+            new Vector3(2581.321f, 362.039f, 108.468f),
+            new Vector3(176.631f, -1562.025f, 29.263f),
+            new Vector3(176.631f, -1562.025f, 29.263f),
+            new Vector3(-319.292f, -1471.715f, 30.549f),
+            new Vector3(1784.324f, 3330.55f, 41.253f)
+        };
+
         static float fuelUsageMultiplier = -1;
         public static float vehicleFuel = -1;
         static private int currentUpdate = -1;
@@ -53,27 +87,6 @@ namespace Curiosity.Client.net.Classes.Vehicle
         static ObjectList ObjectList = new ObjectList();
 
         static Client client = Client.GetInstance();
-        static bool isDev = true;
-
-        //static MenuItemStandard menuItemRefuel = new MenuItemStandard { Title = "Admin: Refuel to Full", OnActivate = (item) => DevRefuel() };
-
-        static public void Init()
-        {
-            Function.Call(Hash.DECOR_REGISTER, "Vehicle.Fuel", 1);
-            Function.Call(Hash.DECOR_REGISTER, "Vehicle.FuelUsageMultiplier", 1);
-
-            //InteractionListMenu.RegisterInteractionMenuItem(menuItemRefuel, () => Game.PlayerPed.IsInVehicle() && Player.PlayerInformation.IsDeveloper(), 998);
-
-            //MenuItem ToRefuelMenuItem = new MenuItemStandard { Title = "Refuel to Full", OnActivate = (item) => Refuel(100) };
-            //InteractionListMenu.RegisterInteractionMenuItem(ToRefuelMenuItem, () => { return isNearFuelPump; }, 1150);
-
-            client.RegisterTickHandler(PeriodicCheck);
-            UpdateSettings();
-
-            client.RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
-            client.RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
-            client.RegisterEventHandler("curiosity:Client:Settings:InstantRefuel", new Action<bool>(InstantRefuel));
-        }
 
         private static Random random = new Random();
         private static double PlayerToVehicleRefuelRange = 5f;
@@ -82,12 +95,97 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         private static bool IsInstantRefuelDisabled = false;
 
+        static public void Init()
+        {
+            Function.Call(Hash.DECOR_REGISTER, "Vehicle.Fuel", 1);
+            Function.Call(Hash.DECOR_REGISTER, "Vehicle.FuelUsageMultiplier", 1);
+
+            client.RegisterTickHandler(PeriodicCheck);
+            client.RegisterTickHandler(GasStationBlips);
+            UpdateSettings();
+            CheckFuelPumpDistance();
+
+            client.RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
+            client.RegisterEventHandler("curiosity:Client:Settings:InstantRefuel", new Action<bool>(InstantRefuel));
+        }
+
+        static async Task GasStationBlips()
+        {
+            Blip currentGasBlip = null;
+            while (true)
+            {
+                await BaseScript.Delay(10000);
+                
+                if (Game.PlayerPed.IsInHeli || Game.PlayerPed.IsInBoat || Game.PlayerPed.IsInPlane || !Game.PlayerPed.IsInVehicle() || Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Cycles)
+                {
+                    if (currentGasBlip != null)
+                    {
+                        if (currentGasBlip.Exists())
+                        {
+                            currentGasBlip.Delete();
+                        }
+                    }
+                }
+                else
+                {
+
+                    Vector3 playerPos = Game.PlayerPed.Position;
+                    float closest = 1000.0f;
+                    Vector3 closestCoords = new Vector3();
+
+                    foreach (Vector3 gasStation in GasStations)
+                    {
+                        float distanceCheck = NativeWrappers.GetDistanceBetween(playerPos, gasStation, false);
+
+                        if (distanceCheck < closest)
+                        {
+                            closest = distanceCheck;
+                            closestCoords = gasStation;
+                        }
+                    }
+
+                    if (currentGasBlip != null)
+                    {
+                        if (currentGasBlip.Exists())
+                        {
+                            currentGasBlip.Delete();
+                        }
+                    }
+
+                    currentGasBlip = new Blip(API.AddBlipForCoord(closestCoords.X, closestCoords.Y, closestCoords.Z));
+                    currentGasBlip.Sprite = BlipSprite.JerryCan;
+                    currentGasBlip.Color = BlipColor.Red;
+                    currentGasBlip.Scale = 0.9f;
+                    currentGasBlip.IsShortRange = true;
+                }
+            }
+        }
+
         static async void UpdateSettings()
         {
             while (true)
             {
-                Client.TriggerServerEvent("curiosity:Server:Settings:InstantRefuel");
-                await Client.Delay(60000);
+                BaseScript.TriggerServerEvent("curiosity:Server:Settings:InstantRefuel");
+                await BaseScript.Delay(60000);
+            }
+        }
+
+        static async void CheckFuelPumpDistance()
+        {
+            while (true)
+            {
+                try
+                {
+                    await BaseScript.Delay(250);
+                    isNearFuelPump = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                    if (isNearFuelPump)
+                        Debug.WriteLine($"{DateTime.Now}: Near Pump: {isNearFuelPump}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"CheckFuelPumpDistance() -> {ex.Message}");
+                }
             }
         }
 
@@ -150,15 +248,15 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     //vehicleFuel = -1;
                     lastUpdate = -1;
                 }
-                try
-                {
-                    isNearFuelPump = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"FuelManager isNearFuelPump Error: {ex.Message}");
-                    isNearFuelPump = false;
-                }
+                //try
+                //{
+                //    isNearFuelPump = ObjectList.Select(o => new Prop(o)).Where(o => FuelPumpModelHashes.Contains((ObjectHash)(uint)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                //}
+                //catch (Exception ex)
+                //{
+                //    Debug.WriteLine($"FuelManager isNearFuelPump Error: {ex.Message}");
+                //    isNearFuelPump = false;
+                //}
                 await BaseScript.Delay(500);
             }
             catch (Exception ex)
