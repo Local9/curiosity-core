@@ -122,6 +122,7 @@
     <Compile Include="Helpers\Game.cs" />
     <Compile Include="Helpers\Pools.cs" />
     <Compile Include="Helpers\WorldProbe.cs" />
+    <Compile Include="Models\FuelPump.cs" />
     <Compile Include="Models\Keybind.cs" />
     <Compile Include="Models\PedData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

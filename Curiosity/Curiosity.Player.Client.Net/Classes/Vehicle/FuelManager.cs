@@ -116,7 +116,8 @@ namespace Curiosity.Client.net.Classes.Vehicle
             while (true)
             {
                 await BaseScript.Delay(10000);
-                
+                isNearFuelPump = false;
+
                 if (Game.PlayerPed.IsInHeli || Game.PlayerPed.IsInBoat || Game.PlayerPed.IsInPlane || !Game.PlayerPed.IsInVehicle() || Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Cycles)
                 {
                     if (currentGasBlip != null)
@@ -140,6 +141,9 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
                         if (distanceCheck < closest)
                         {
+                            if (distanceCheck < 10f)
+                                isNearFuelPump = true;
+
                             closest = distanceCheck;
                             closestCoords = gasStation;
                         }
