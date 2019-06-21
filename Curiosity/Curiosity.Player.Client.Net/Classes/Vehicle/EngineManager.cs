@@ -10,15 +10,17 @@ namespace Curiosity.Client.net.Classes.Vehicle
 {
     static class EngineManager
     {
+        // TODO: MOVE TO VEHICLE MENU
+
         static bool isInVehicle = false;
         static bool EngineDisabled = false;
-        static MenuItem menuItem = new MenuItemCheckbox { Title = "Turn On Engine", state = true, OnActivate = (state, item) => { ToggleEngine(state); } };
+        //static MenuItem menuItem = new MenuItemCheckbox { Title = "Turn On Engine", state = true, OnActivate = (state, item) => { ToggleEngine(state); } };
 
         static public void Init()
         {
             PeriodicCheck();
             // Client.GetInstance().ClientCommands.Register("/engine", HandleEngineToggle);
-            InteractionListMenu.RegisterInteractionMenuItem(menuItem, () => Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed, 500);
+            //InteractionListMenu.RegisterInteractionMenuItem(menuItem, () => Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed, 500);
         }
 
         //static private async void HandleEngineToggle(Command command)

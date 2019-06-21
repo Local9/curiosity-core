@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3AAB33B2-EE7C-4E8C-B348-E84ACAFB1C5F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Curiosity.Deprecated</RootNamespace>
+    <AssemblyName>Curiosity.Deprecated</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EmotesManager.cs" />
+    <Compile Include="Menus\CharacterEditor\CharacterEditorMenu.cs" />
+    <Compile Include="Menus\CharacterEditor\Items\CustomizeButton.cs" />
+    <Compile Include="Menus\CharacterEditor\Items\ExitButton.cs" />
+    <Compile Include="Menus\CharacterEditor\Items\ModelSelector.cs" />
+    <Compile Include="Menus\CharacterEditor\Items\SaveButton.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Items\ModelTextureSelector.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Items\MPBodyButton.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Items\MPEyeSelector.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Items\MPHairButton.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Items\MPOverlayButton.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPBodyMenu\Items\ItemSelector.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPBodyMenu\Items\ItemSlider.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPBodyMenu\MPBodyMenu.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPHairMenu\Items\ItemSelector.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPHairMenu\MPHairMenu.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPOverlayMenu\Items\ItemSelector.cs" />
+    <Compile Include="Menus\CharacterEditor\Submenus\CustomizeMenu\Submenus\MPOverlayMenu\MPOverlayMenu.cs" />
+    <Compile Include="Menus\DevCharacterMenu.cs" />
+    <Compile Include="Menus\InteractionListMenu.cs" />
+    <Compile Include="Menus\Menu.cs" />
+    <Compile Include="Menus\NuiMenu.cs" />
+    <Compile Include="Menus\PlayerActionsMenu.cs" />
+    <Compile Include="Menus\SkillsMenu.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

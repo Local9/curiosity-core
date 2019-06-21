@@ -1,10 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.Menus;
-using Curiosity.Shared.Client.net.Extensions;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Vehicle
@@ -72,11 +70,11 @@ namespace Curiosity.Client.net.Classes.Vehicle
         static CitizenFX.Core.Vehicle currentVehicle;
         static CitizenFX.Core.Vehicle lastVehicle;
 
-        static MenuItemStandard menuItemFix = new MenuItemStandard { Title = "Fix Vehicle", OnActivate = (item) => Fix() };
+        //static MenuItemStandard menuItemFix = new MenuItemStandard { Title = "Fix Vehicle", OnActivate = (item) => Fix() };
 
         static public void Init()
         {
-            InteractionListMenu.RegisterInteractionMenuItem(menuItemFix, () => Game.PlayerPed.IsInVehicle() && Player.PlayerInformation.IsDeveloper(), 999);
+            //InteractionListMenu.RegisterInteractionMenuItem(menuItemFix, () => Game.PlayerPed.IsInVehicle() && Player.PlayerInformation.IsDeveloper(), 999);
             client.RegisterTickHandler(VehicleFuckery);
             client.RegisterTickHandler(AdditionalVehicleFuckery);
 

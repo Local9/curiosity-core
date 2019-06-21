@@ -9,7 +9,7 @@ using MenuAPI;
 using System.Drawing;
 using Curiosity.Shared.Client.net.Helper;
 
-namespace Curiosity.Client.net.Classes.MenuConfiguration
+namespace Curiosity.Client.net.Classes.Menus
 {
     class PlayerMenu
     {

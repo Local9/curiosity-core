@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using GlobalEntities = Curiosity.Global.Shared.net.Entity;
 using GlobalEnums = Curiosity.Global.Shared.net.Enums;
 
-namespace Curiosity.Client.net.Classes.MenuConfiguration.PlayerInteractions
+namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
 {
     class KickInteraction
     {

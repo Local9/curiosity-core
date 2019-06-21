@@ -1,6 +1,6 @@
 ﻿using MenuAPI;
 
-namespace Curiosity.Client.net.Classes.MenuConfiguration
+namespace Curiosity.Client.net.Classes.Menus
 {
     class Inventory
     {

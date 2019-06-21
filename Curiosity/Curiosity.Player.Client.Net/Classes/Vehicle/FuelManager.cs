@@ -55,17 +55,17 @@ namespace Curiosity.Client.net.Classes.Vehicle
         static Client client = Client.GetInstance();
         static bool isDev = true;
 
-        static MenuItemStandard menuItemRefuel = new MenuItemStandard { Title = "Admin: Refuel to Full", OnActivate = (item) => DevRefuel() };
+        //static MenuItemStandard menuItemRefuel = new MenuItemStandard { Title = "Admin: Refuel to Full", OnActivate = (item) => DevRefuel() };
 
         static public void Init()
         {
             Function.Call(Hash.DECOR_REGISTER, "Vehicle.Fuel", 1);
             Function.Call(Hash.DECOR_REGISTER, "Vehicle.FuelUsageMultiplier", 1);
 
-            InteractionListMenu.RegisterInteractionMenuItem(menuItemRefuel, () => Game.PlayerPed.IsInVehicle() && Player.PlayerInformation.IsDeveloper(), 998);
+            //InteractionListMenu.RegisterInteractionMenuItem(menuItemRefuel, () => Game.PlayerPed.IsInVehicle() && Player.PlayerInformation.IsDeveloper(), 998);
 
-            MenuItem ToRefuelMenuItem = new MenuItemStandard { Title = "Refuel to Full", OnActivate = (item) => Refuel(100) };
-            InteractionListMenu.RegisterInteractionMenuItem(ToRefuelMenuItem, () => { return isNearFuelPump; }, 1150);
+            //MenuItem ToRefuelMenuItem = new MenuItemStandard { Title = "Refuel to Full", OnActivate = (item) => Refuel(100) };
+            //InteractionListMenu.RegisterInteractionMenuItem(ToRefuelMenuItem, () => { return isNearFuelPump; }, 1150);
 
             client.RegisterTickHandler(PeriodicCheck);
             UpdateSettings();

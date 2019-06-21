@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 
-namespace Curiosity.Client.net.Classes.MenuConfiguration
+namespace Curiosity.Client.net.Classes.Menus
 {
     class OnlinePlayers
     {

@@ -15,18 +15,15 @@
 //using FamilyRP.Roleplay.Client.Classes.Jobs.Transportation.Trains;
 //using FamilyRP.Roleplay.Client.Classes.Player;
 //using FamilyRP.Roleplay.Client.Classes.Vehicle;
-using Curiosity.Client.net.Helpers.Dictionary;
-using Curiosity.Client.net.Helpers;
-using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Actions;
+using Curiosity.Client.net.Classes.Actions.Emotes;
+using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Environment.UI;
-using Curiosity.Client.net.Classes.Environment.UI.Mobile;
-using Curiosity.Client.net.Classes.Menus;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Classes.Vehicle;
-using Curiosity.Client.net.Classes.Actions.Emotes;
+using Curiosity.Client.net.Helpers;
+using Curiosity.Client.net.Helpers.Dictionary;
 using Curiosity.Shared.Client.net;
-using CitizenFX.Core.Native;
 
 namespace Curiosity.Client.net
 {
@@ -52,7 +49,7 @@ namespace Curiosity.Client.net
             ChatCommands.Init();
 
             // Emotes
-            EmotesManager.Init();
+            //EmotesManager.Init();
             //HandsUp.Init();
             Pointing.Init();
 
@@ -85,15 +82,15 @@ namespace Curiosity.Client.net
             //PlayerActionsMenu.Init();
 
             // MENU 2.0
-            Classes.MenuConfiguration.PlayerMenu.Init();
-            Classes.MenuConfiguration.Inventory.Init();
+            Classes.Menus.PlayerMenu.Init();
+            Classes.Menus.Inventory.Init();
             // ONLINE PLAYER MENU ITEMS
-            Classes.MenuConfiguration.OnlinePlayers.Init();
-            Classes.MenuConfiguration.PlayerInteractions.ReportInteraction.Init();
-            Classes.MenuConfiguration.PlayerInteractions.KickInteraction.Init();
-            Classes.MenuConfiguration.PlayerInteractions.BanInteraction.Init();
+            Classes.Menus.OnlinePlayers.Init();
+            Classes.Menus.PlayerInteractions.ReportInteraction.Init();
+            Classes.Menus.PlayerInteractions.KickInteraction.Init();
+            Classes.Menus.PlayerInteractions.BanInteraction.Init();
             // Additional Items
-            Classes.MenuConfiguration.VehicleMenu.Init();
+            Classes.Menus.VehicleMenu.Init();
 
             // Environment
             //Poi.Init();
@@ -150,7 +147,7 @@ namespace Curiosity.Client.net
             PlayerInformation.Init();
             WantedLevels.Init();
             // MugshotCreator.Init();
-            Inventory.Init();
+            Classes.Player.Inventory.Init();
             Weapons.Init();
 
             // Vehicles
@@ -161,8 +158,8 @@ namespace Curiosity.Client.net
             //CruiseControl.Init();
             VehicleDamage.Init();
             EngineManager.Init();
-            VehicleWindowManager.Init();
-            DoorManager.Init();
+            //VehicleWindowManager.Init();
+            //DoorManager.Init();
             FuelManager.Init();
             //LockManager.Init();
             //Lockpicking.Init();
