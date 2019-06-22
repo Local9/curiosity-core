@@ -44,32 +44,33 @@ namespace Curiosity.Server.net.Classes
 
             Session session = SessionManager.PlayerList[player.Handle];
 
-            double interestBankAccountDouble = (session.BankAccount * medicalFees);
-            double interestWalletAccountDouble = (session.Wallet * medicalFees);
+            double medicalFeeAmount = ((session.BankAccount + session.Wallet) * medicalFees);
 
-            if (interestBankAccountDouble <= 0)
+            if (medicalFeeAmount <= 0)
             {
-                if (interestWalletAccountDouble <= 0) return;
 
-                await Server.Delay(0);
-                Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, (int)interestWalletAccountDouble);
-                await Server.Delay(0);
-                SessionManager.PlayerList[session.NetId].DecreaseWallet((int)interestWalletAccountDouble);
-                await Server.Delay(0);
-                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-                await Server.Delay(0);
-            }
-            else
-            {
-                await Server.Delay(0);
-                Database.DatabaseUsersBank.DecreaseBank(session.User.BankId, (int)interestBankAccountDouble);
-                await Server.Delay(0);
-                SessionManager.PlayerList[session.NetId].DecreaseBankAccount((int)interestBankAccountDouble);
-                await Server.Delay(0);
-                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
-                await Server.Delay(0);
-            }
+                if ((session.Wallet - medicalFeeAmount) > 0)
+                {
 
+                    await Server.Delay(0);
+                    Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, (int)medicalFeeAmount);
+                    await Server.Delay(0);
+                    SessionManager.PlayerList[session.NetId].DecreaseWallet((int)medicalFeeAmount);
+                    await Server.Delay(0);
+                    session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                    await Server.Delay(0);
+                }
+                else
+                {
+                    await Server.Delay(0);
+                    Database.DatabaseUsersBank.DecreaseBank(session.User.BankId, (int)medicalFeeAmount);
+                    await Server.Delay(0);
+                    SessionManager.PlayerList[session.NetId].DecreaseBankAccount((int)medicalFeeAmount);
+                    await Server.Delay(0);
+                    session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                    await Server.Delay(0);
+                }
+            }
         }
 
         static async Task BankInterest()
