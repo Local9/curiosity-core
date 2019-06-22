@@ -107,14 +107,14 @@ namespace Curiosity.Client.net.Classes.Menus
             //};
 
             //// Normal
-            List<string> quickGpsList = new List<string>() { "None", "Home", "Some other fckin place" };
-            MenuListItem quickGpsMenuListItem = new MenuListItem("Quick GPS", quickGpsList, 0, "Select to place your waypoint at a set location.");
+            //List<string> quickGpsList = new List<string>() { "None", "Home", "Some other fckin place" };
+            //MenuListItem quickGpsMenuListItem = new MenuListItem("Quick GPS", quickGpsList, 0, "Select to place your waypoint at a set location.");
 
             //// Adding the lists to the menu.
             //menu.AddMenuItem(hairColors);
             //menu.AddMenuItem(makeupColors);
             //menu.AddMenuItem(opacity);
-            menu.AddMenuItem(quickGpsMenuListItem);
+            //menu.AddMenuItem(quickGpsMenuListItem);
 
             //// Creating a submenu, adding it to the menus list, and creating and binding a button for it.
             //Menu submenu = new Menu("Submenu", "Secondary Menu");
