@@ -78,7 +78,7 @@ namespace Curiosity.Client.net
             //CharacterMenuTest.Init();
             //InteractionListMenu.Init();
             //NuiMenu.Init();
-            //NuiEventHandler.Init();
+            NuiEventHandler.Init();
             //PlayerActionsMenu.Init();
 
             // MENU 2.0

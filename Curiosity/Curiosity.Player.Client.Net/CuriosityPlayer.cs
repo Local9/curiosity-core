@@ -144,6 +144,9 @@ namespace Curiosity.Client.net
 
         void OnPlayerSetup(long userId, int roleId, string role, float x, float y, float z)
         {
+            API.SetNuiFocus(false, false);
+            API.SetTransitionTimecycleModifier("DEFAULT", 5.0f);
+
             this.userId = userId;
             this.roleId = roleId;
             this.roleName = role;

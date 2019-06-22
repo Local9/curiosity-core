@@ -34,13 +34,17 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
+                if (!Server.isLive)
+                    Log.Verbose($"{player.Name} - GetListData()");
+
+                await BaseScript.Delay(0);
                 List<GlobalEntity.Skills> skillsList = new List<GlobalEntity.Skills>();
 
                 GlobalEnum.SkillType skillType = (GlobalEnum.SkillType)skillTypeId;
 
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle))
                 {
-                    skillsList.Add(new GlobalEntity.Skills { Id = 0, TypeId = 0, Description = "Loading", Label = "Loading" });
+                    skillsList.Add(new GlobalEntity.Skills { Label = "Please try again", Value = 0 });
                 }
                 else
                 {
@@ -49,7 +53,7 @@ namespace Curiosity.Server.net.Classes
                     {
                         if (skill.Value.TypeId == skillType)
                         {
-                            skillsList.Add(new GlobalEntity.Skills { Label = skill.Value.Label, Value = skill.Value.Value });
+                            skillsList.Add(new GlobalEntity.Skills { Label = skill.Value.Label, Value = skill.Value.Value, Description = skill.Value.Description, LabelDescription = skill.Value.LabelDescription });
                         }
                     }
                 }
@@ -57,8 +61,12 @@ namespace Curiosity.Server.net.Classes
                 GlobalEntity.NuiData nuiData = new GlobalEntity.NuiData();
                 nuiData.panel = $"{skillType}";
                 nuiData.skills = skillsList;
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(nuiData);
 
-                player.TriggerEvent("curiosity:Player:Skills:GetListData", Newtonsoft.Json.JsonConvert.SerializeObject(nuiData));
+                if (!Server.isLive)
+                    Log.Verbose($"{player.Name} - {json}");
+
+                player.TriggerEvent("curiosity:Player:Skills:GetListData", json);
             }
             catch (Exception ex)
             {

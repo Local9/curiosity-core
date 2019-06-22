@@ -8,6 +8,7 @@ using static CitizenFX.Core.Native.API;
 using MenuAPI;
 using System.Drawing;
 using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
@@ -27,10 +28,6 @@ namespace Curiosity.Client.net.Classes.Menus
 
             // menu.HeaderTexture = new KeyValuePair<string, string>("shopui_title_graphics_franklin", "shopui_title_graphics_franklin");
             MenuController.AddMenu(menu);
-
-            //// Adding a new button by directly creating one inline. You could also just store it and then add it but we don't need to do that in this example.
-            //menu.AddMenuItem(new MenuItem("Normal Button", "This is a simple button with a simple description. Scroll down for more button types!"));
-
 
             //// Creating 3 sliders, showing off the 3 possible variations and custom colors.
             //MenuSliderItem slider = new MenuSliderItem("Slider", 0, 10, 5, false);
@@ -128,6 +125,9 @@ namespace Curiosity.Client.net.Classes.Menus
             //menu.AddMenuItem(opacity);
             menu.AddMenuItem(quickGpsMenuListItem);
 
+            menu.AddMenuItem(new MenuItem("Open Skills", "View Skills") { ItemData = SkillType.Experience });
+            menu.AddMenuItem(new MenuItem("Open Stats", "View Stats") { ItemData = SkillType.Statistic });
+
             //// Creating a submenu, adding it to the menus list, and creating and binding a button for it.
             //Menu submenu = new Menu("Submenu", "Secondary Menu");
             //MenuController.AddSubmenu(menu, submenu);
@@ -209,7 +209,14 @@ namespace Curiosity.Client.net.Classes.Menus
             menu.OnItemSelect += (_menu, _item, _index) =>
             {
                 // Code in here would get executed whenever an item is pressed.
-                Debug.WriteLine($"OnItemSelect: [{_menu}, {_item}, {_item.ItemData}, {_index}]");
+                if (_item.ItemData == SkillType.Experience || _item.ItemData == SkillType.Statistic)
+                {
+                    Client.TriggerServerEvent("curiosity:Server:Skills:GetListData", (int)_item.ItemData);
+                }
+
+                menu.CloseMenu();
+
+                // Debug.WriteLine($"OnItemSelect: [{_menu}, {_item}, {_item.ItemData}, {_index}]");
             };
 
             //menu.OnIndexChange += (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>
