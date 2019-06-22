@@ -12,7 +12,7 @@ using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
-    class PlayerMenu
+    class MenuBase
     {
         static Client client = Client.GetInstance();
 

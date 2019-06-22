@@ -15,7 +15,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
         public static void Init()
         {
-            PlayerMenu.AddSubMenu(menu);
+            MenuBase.AddSubMenu(menu);
 
             menu.OnMenuOpen += (_menu) => {
 

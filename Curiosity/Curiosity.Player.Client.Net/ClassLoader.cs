@@ -82,7 +82,7 @@ namespace Curiosity.Client.net
             //PlayerActionsMenu.Init();
 
             // MENU 2.0
-            Classes.Menus.PlayerMenu.Init();
+            Classes.Menus.MenuBase.Init();
             Classes.Menus.Inventory.Init();
             // ONLINE PLAYER MENU ITEMS
             Classes.Menus.OnlinePlayers.Init();

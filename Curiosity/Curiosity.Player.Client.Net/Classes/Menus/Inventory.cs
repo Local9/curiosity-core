@@ -9,7 +9,7 @@ namespace Curiosity.Client.net.Classes.Menus
         public static void Init()
         {
             MenuItem menuItem = new MenuItem("Inventory") { ItemData = "Inventory", Description = "Open Character Inventory" };
-            PlayerMenu.AddMenuItem(menuItem);
+            MenuBase.AddMenuItem(menuItem);
         }
     }
 }
