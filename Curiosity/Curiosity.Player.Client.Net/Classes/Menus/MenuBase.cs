@@ -1,14 +1,5 @@
-﻿using System;
+﻿using MenuAPI;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using MenuAPI;
-using System.Drawing;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
@@ -125,9 +116,6 @@ namespace Curiosity.Client.net.Classes.Menus
             //menu.AddMenuItem(opacity);
             menu.AddMenuItem(quickGpsMenuListItem);
 
-            menu.AddMenuItem(new MenuItem("Open Skills", "View Skills") { ItemData = SkillType.Experience });
-            menu.AddMenuItem(new MenuItem("Open Stats", "View Stats") { ItemData = SkillType.Statistic });
-
             //// Creating a submenu, adding it to the menus list, and creating and binding a button for it.
             //Menu submenu = new Menu("Submenu", "Secondary Menu");
             //MenuController.AddSubmenu(menu, submenu);
@@ -208,14 +196,6 @@ namespace Curiosity.Client.net.Classes.Menus
 
             menu.OnItemSelect += (_menu, _item, _index) =>
             {
-                // Code in here would get executed whenever an item is pressed.
-                if (_item.ItemData == SkillType.Experience || _item.ItemData == SkillType.Statistic)
-                {
-                    Client.TriggerServerEvent("curiosity:Server:Skills:GetListData", (int)_item.ItemData);
-                }
-
-                menu.CloseMenu();
-
                 // Debug.WriteLine($"OnItemSelect: [{_menu}, {_item}, {_item.ItemData}, {_index}]");
             };
 
@@ -234,7 +214,7 @@ namespace Curiosity.Client.net.Classes.Menus
             menu.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
                 // Code in here would get executed whenever a list item is pressed.
-                Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
+                // Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
             };
 
             //menu.OnSliderPositionChange += (_menu, _sliderItem, _oldPosition, _newPosition, _itemIndex) =>

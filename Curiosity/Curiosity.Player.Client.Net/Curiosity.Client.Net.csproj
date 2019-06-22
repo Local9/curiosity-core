@@ -86,6 +86,7 @@
     <Compile Include="Classes\Environment\WarpPoints.cs" />
     <Compile Include="Classes\Environment\WayPoints.cs" />
     <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
+    <Compile Include="Classes\Menus\PlayerMenu.cs" />
     <Compile Include="Classes\Menus\VehicleMenu.cs" />
     <Compile Include="Classes\Menus\Inventory.cs" />
     <Compile Include="Classes\Menus\PlayerInteractions\BanInteraction.cs" />
