@@ -5,6 +5,7 @@ using GHMatti.Data.MySQL.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using GlobalEnum = Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Server.net.Database
 {
@@ -40,7 +41,7 @@ namespace Curiosity.Server.net.Database
                     GlobalEntity.Skills skills = new GlobalEntity.Skills
                     {
                         Id = int.Parse($"{keyValues["skillId"]}"),
-                        TypeId = int.Parse($"{keyValues["skillTypeId"]}"),
+                        TypeId = (GlobalEnum.SkillType)int.Parse($"{keyValues["skillTypeId"]}"),
                         Description = $"{keyValues["description"]}",
                         Label = $"{keyValues["label"]}",
                         LabelDescription = $"{keyValues["labelDescription"]}"
@@ -78,7 +79,7 @@ namespace Curiosity.Server.net.Database
                     GlobalEntity.Skills skills = new GlobalEntity.Skills
                     {
                         Id = int.Parse($"{keyValues["skillId"]}"),
-                        TypeId = int.Parse($"{keyValues["skillTypeId"]}"),
+                        TypeId = (GlobalEnum.SkillType)int.Parse($"{keyValues["skillTypeId"]}"),
                         Description = $"{keyValues["description"]}",
                         Label = $"{keyValues["label"]}",
                         LabelDescription = $"{keyValues["labelDescription"]}",
@@ -117,6 +118,42 @@ namespace Curiosity.Server.net.Database
             myParams.Add("@experience", experience);
 
             mySql.Query(query, myParams);
+        }
+
+        public async Task<List<GlobalEntity.Skills>> GetSkills(int characterId, GlobalEnum.SkillType skillType)
+        {
+            List<GlobalEntity.Skills> skillsList = new List<GlobalEntity.Skills>();
+
+            string query = "call selCharacterSkills(characterId, skillTypeId);";
+
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@characterId", characterId);
+            myParams.Add("@skillTypeId", (int)skillType);
+
+            using (var result = mySql.QueryResult(query, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                await Delay(0);
+
+                if (keyValuePairs.Count == 0)
+                {
+                    // Log.Warn($"SKILLS -> No skills found for user {userId}, possible they are new.");
+                    return skillsList;
+                }
+
+                foreach (Dictionary<string, object> keyValues in keyValuePairs)
+                {
+                    GlobalEntity.Skills skills = new GlobalEntity.Skills
+                    {
+                        Label = $"{keyValues["label"]}",
+                        Value = int.Parse($"{keyValues["experience"]}")
+                    };
+                    skillsList.Add(skills);
+                }
+
+                return skillsList;
+            }
         }
     }
 }

@@ -3,7 +3,7 @@
     public class Skills
     {
         public int Id;
-        public int TypeId;
+        public Enums.SkillType TypeId;
         public string Description;
         public string Label;
         public string LabelDescription;

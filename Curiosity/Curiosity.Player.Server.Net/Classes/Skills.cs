@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Curiosity.Shared.Server.net.Helpers;
 
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using GlobalEnum = Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -24,8 +25,45 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Skills:Increase", new Action<CitizenFX.Core.Player, string, int>(IncreaseSkillByPlayer));
             server.RegisterEventHandler("curiosity:Server:Skills:Decrease", new Action<CitizenFX.Core.Player, string, int>(DecreaseSkillByPlayer));
             server.RegisterEventHandler("curiosity:Server:Skills:Get", new Action<CitizenFX.Core.Player>(GetUserSkills));
+            server.RegisterEventHandler("curiosity:Server:Skills:GetListData", new Action<CitizenFX.Core.Player, int>(GetListData));
 
             server.RegisterTickHandler(UpdateSkillsDictionary);
+        }
+
+        async static void GetListData([FromSource]CitizenFX.Core.Player player, int skillTypeId)
+        {
+            try
+            {
+                List<GlobalEntity.Skills> skillsList = new List<GlobalEntity.Skills>();
+
+                GlobalEnum.SkillType skillType = (GlobalEnum.SkillType)skillTypeId;
+
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle))
+                {
+                    skillsList.Add(new GlobalEntity.Skills { Id = 0, TypeId = 0, Description = "Loading", Label = "Loading" });
+                }
+                else
+                {
+                    Session session = SessionManager.PlayerList[player.Handle];
+                    foreach (KeyValuePair<string, GlobalEntity.Skills> skill in session.Skills)
+                    {
+                        if (skill.Value.TypeId == skillType)
+                        {
+                            skillsList.Add(new GlobalEntity.Skills { Label = skill.Value.Label, Value = skill.Value.Value });
+                        }
+                    }
+                }
+
+                GlobalEntity.NuiData nuiData = new GlobalEntity.NuiData();
+                nuiData.panel = $"{skillType}";
+                nuiData.skills = skillsList;
+
+                player.TriggerEvent("curiosity:Player:Skills:GetListData", Newtonsoft.Json.JsonConvert.SerializeObject(nuiData));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"GetListData -> {ex}");
+            }
         }
 
         async static void GetUserSkills([FromSource]CitizenFX.Core.Player player)
@@ -113,7 +151,7 @@ namespace Curiosity.Server.net.Classes
 
                 Database.DatabaseUsersSkills.IncreaseSkill(characterId, skills[skill].Id, experience);
 
-                if (skills[skill].TypeId == 1)
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
                     UpdateLifeExperience(session, experience, false);
 
                 if (!session.Skills.ContainsKey(skill))
@@ -170,7 +208,7 @@ namespace Curiosity.Server.net.Classes
 
                 Database.DatabaseUsersSkills.DecreaseSkill(characterId, skills[skill].Id, experience);
 
-                if (skills[skill].TypeId == 1)
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
                     UpdateLifeExperience(session, experience, false);
 
                 if (!session.Skills.ContainsKey(skill))

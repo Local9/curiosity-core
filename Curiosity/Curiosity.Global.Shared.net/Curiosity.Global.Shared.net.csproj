@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Entity\Inventory.cs" />
     <Compile Include="Entity\LogType.cs" />
+    <Compile Include="Entity\NuiData.cs" />
     <Compile Include="Entity\PlayerInformation.cs" />
     <Compile Include="Entity\Skills.cs" />
     <Compile Include="Enums\LogGroup.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Enums\Privilege.cs" />
     <Compile Include="Enums\Reserved.cs" />
     <Compile Include="Enums\SessionState.cs" />
+    <Compile Include="Enums\SkillType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
