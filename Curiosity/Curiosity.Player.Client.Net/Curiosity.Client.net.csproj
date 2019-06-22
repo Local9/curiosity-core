@@ -86,12 +86,13 @@
     <Compile Include="Classes\Environment\WarpPoints.cs" />
     <Compile Include="Classes\Environment\WayPoints.cs" />
     <Compile Include="Classes\Jobs\Police\Vehicle\Sirens.cs" />
+    <Compile Include="Classes\Menus\PlayerMenu.cs" />
     <Compile Include="Classes\Menus\VehicleMenu.cs" />
     <Compile Include="Classes\Menus\Inventory.cs" />
     <Compile Include="Classes\Menus\PlayerInteractions\BanInteraction.cs" />
     <Compile Include="Classes\Menus\PlayerInteractions\KickInteraction.cs" />
     <Compile Include="Classes\Menus\PlayerInteractions\ReportInteraction.cs" />
-    <Compile Include="Classes\Menus\PlayerMenu.cs" />
+    <Compile Include="Classes\Menus\MenuBase.cs" />
     <Compile Include="Classes\Menus\OnlinePlayers.cs" />
     <Compile Include="Classes\Player\Inventory.cs" />
     <Compile Include="Classes\Player\MugshotCreator.cs" />
