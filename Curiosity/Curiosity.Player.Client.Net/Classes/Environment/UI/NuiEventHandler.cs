@@ -6,12 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
 {
     class NuiEventHandler
     {
         static Client client = Client.GetInstance();
+
+        static bool panelIsActive = false;
 
         public static void Init()
         {
@@ -23,6 +26,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             SetNuiFocus(false, false);
             SetTransitionTimecycleModifier("DEFAULT", 5.0f);
+
+            CinematicMode.DoHideHud = false;
+            DisplayRadar(true);
         }
 
         static void GetListData(SkillType skillType)
@@ -40,6 +46,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             SetNuiFocus(true, true);
             SetTransitionTimecycleModifier($"BLACKOUT", 5.0f);
+
+            CinematicMode.DoHideHud = true;
+            DisplayRadar(false);
         }
     }
 }
