@@ -12,6 +12,13 @@ namespace Curiosity.Shared.Client.net.Helper
     /// </summary>
     public static class NativeWrappers
     {
+        public static void DrawHelpText(string message)
+        {
+            SetTextComponentFormat("STRING");
+            AddTextComponentString(message);
+            DisplayHelpTextFromStringLabel(0, false, true, -1);
+        }
+
         public static bool NetworkIsSessionStarted()
         {
             return Function.Call<bool>(Hash.NETWORK_IS_SESSION_STARTED, new InputArgument[0]);
@@ -140,13 +147,6 @@ namespace Curiosity.Shared.Client.net.Helper
         static public Vector3 GetEntityCords(Entity entity)
         {
             return Function.Call<Vector3>(Hash.GET_ENTITY_COORDS, entity);
-        }
-
-        static public void DrawHelpText(string message)
-        {
-            SetTextComponentFormat("STRING");
-            AddTextComponentString(message);
-            DisplayHelpTextFromStringLabel(0, false, true, -1);
         }
 
         static public void Draw3DText(float x, float y, float z, string message)

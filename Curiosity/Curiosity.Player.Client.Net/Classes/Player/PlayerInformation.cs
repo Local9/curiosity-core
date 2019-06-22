@@ -8,7 +8,7 @@ namespace Curiosity.Client.net.Classes.Player
     static class PlayerInformation
     {
         static Client client = Client.GetInstance();
-        static PlayerInformationModel playerInfo = new PlayerInformationModel();
+        public static PlayerInformationModel playerInfo = new PlayerInformationModel();
 
         public static Privilege privilege;
         public static async void Init()
