@@ -76,7 +76,6 @@ namespace Curiosity.Client.net.Classes.Vehicle
             new Vector3(620.843f, 269.100f, 103.089f),
             new Vector3(2581.321f, 362.039f, 108.468f),
             new Vector3(176.631f, -1562.025f, 29.263f),
-            new Vector3(176.631f, -1562.025f, 29.263f),
             new Vector3(-319.292f, -1471.715f, 30.549f),
             new Vector3(1784.324f, 3330.55f, 41.253f)
         };
@@ -114,11 +113,14 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         static async Task Controls()
         {
-            if (ControlHelper.IsControlPressed(Control.VehicleAccelerate) && !Game.PlayerPed.CurrentVehicle.IsEngineRunning)
-                Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                if (ControlHelper.IsControlPressed(Control.VehicleAccelerate) && !Game.PlayerPed.CurrentVehicle.IsEngineRunning)
+                    Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
+            }
 
-            if (isNearFuelPump && ControlHelper.IsControlPressed(Control.Context))
-                Refuel(100.0000f);
+            if (isNearFuelPump && ControlHelper.IsControlPressed(Control.Pickup) && Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver.IsPlayer)
+                Refuel(99.98f);
 
             await Task.FromResult(0);
         }
@@ -272,9 +274,12 @@ namespace Curiosity.Client.net.Classes.Vehicle
                         vehicleSpeed = 0f;
                     }
 
-                    vehicleFuel = Math.Max(0f, vehicleFuel - (float)(deltaTime * fuelUsageMultiplier * vehicleSpeed));
+                    if (Game.PlayerPed.CurrentVehicle.IsEngineRunning)
+                    {
+                        vehicleFuel = Math.Max(0f, vehicleFuel - (float)(deltaTime * fuelUsageMultiplier * vehicleSpeed));
+                        Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", vehicleFuel);
+                    }
 
-                    Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", vehicleFuel);
                     lastUpdate = currentUpdate;
                 }
                 else
@@ -343,9 +348,10 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     Vector3 startingPosition = vehicle.Position;
                     while (refueled < amount)
                     {
+                        vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, vehicle.Handle, "Vehicle.Fuel");
                         if (startingPosition != vehicle.Position)
                         {
-                            Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "Your vehicle moved while refuelling.", 8);
+                            Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "Your vehicle moved while refuelling. You can try refuelling again.", 8);
                             Charge((int)(refueled));
                             return;
                         }
