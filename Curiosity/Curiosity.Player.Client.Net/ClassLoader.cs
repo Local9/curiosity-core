@@ -101,7 +101,6 @@ namespace Curiosity.Client.net
             AfkKick.Init();
             //ManipulateObject.Init();
             //NoClip.Init();
-            //InstancingChecker.Init(); // Hard to test
             MarkerHandler.Init();
             //Pvp.Init();
             WarpPoints.Init();
@@ -114,6 +113,7 @@ namespace Curiosity.Client.net
             Sit.Init();
             Birds.Init();
             SpawnManagement.Init();
+            InstancingChecker.Init();
 
             // EMS
             //EMS.Init();

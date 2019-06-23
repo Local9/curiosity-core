@@ -32,9 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core">
-      <HintPath>..\..\..\Local FiveM\_dependencies\server\CitizenFX.Core.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\CitizenFX.Core.Server.1.0.1358\lib\net45\CitizenFX.Core.Server.dll</HintPath>
     </Reference>
     <Reference Include="DiscordWebhook.net">
       <HintPath>..\..\..\Local FiveM\_dependencies\server\DiscordWebhook.net.dll</HintPath>
@@ -73,6 +72,7 @@
     <Compile Include="Classes\Character.cs" />
     <Compile Include="Classes\DiscordWrapper.cs" />
     <Compile Include="Classes\Environment\ChatCommands.cs" />
+    <Compile Include="Classes\Environment\InstanceChecker.cs" />
     <Compile Include="Classes\Environment\Scoreboard.cs" />
     <Compile Include="Classes\Environment\Vehicles.cs" />
     <Compile Include="Classes\Menu\Lists.cs" />
@@ -104,6 +104,7 @@
     <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="settings.xml.example">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

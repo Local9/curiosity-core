@@ -57,7 +57,7 @@ namespace Curiosity.Server.net.Classes
 
         async static void PlayerInstanced([FromSource]CitizenFX.Core.Player player)
         {
-            player.Drop("Instanced");
+            player.Drop("Instanced Client, please reconnect");
             await Server.Delay(0);
         }
 
@@ -402,7 +402,7 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                CitizenFX.Core.Player player = new PlayerList()[playerHandle];
+                CitizenFX.Core.Player player = Server.players[playerHandle];
                 string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
                 Entity.User user = await Business.BusinessUser.GetUserAsync(license);
                 player.TriggerEvent("curiosity:Server:Player:RoleId", user.RoleId);

@@ -329,7 +329,7 @@ namespace Curiosity.Server.net.Business
                 {
                     string license = j.Key;
                     SessionState state = j.Value;
-                    PlayerList players = new PlayerList();
+                    PlayerList players = Server.players;
                     switch (state)
                     {
                         case SessionState.Loading:

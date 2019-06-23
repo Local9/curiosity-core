@@ -25,6 +25,10 @@ namespace Curiosity.Client.net.Classes.Menus
 
                     Menu playerMenu = new Menu(player.Name, "Player Interactions");
 
+                    playerMenu.OnItemSelect += (_playerMenu, _menuItem, _itemIndex) => {
+                        OnItemSelect(_playerMenu, _menuItem, _itemIndex);
+                    };
+
                     Menu reportingOptions = PlayerInteractions.ReportInteraction.CreateMenu("Report", player);
                     AddSubMenu(playerMenu, reportingOptions);
 
@@ -43,8 +47,6 @@ namespace Curiosity.Client.net.Classes.Menus
                     AddSubMenu(menu, playerMenu);
                 }
             };
-
-            menu.OnItemSelect += OnItemSelect;
 
             menu.OnMenuClose += (_menu) =>
             {
@@ -85,6 +87,7 @@ namespace Curiosity.Client.net.Classes.Menus
             API.NetworkFadeOutEntity(player.Character.Handle, true, false);
 
             Vector3 pos = Game.PlayerPed.Position;
+
             player.Character.Position = new Vector3(pos.X + 2f, pos.Y, pos.Z);
 
             await BaseScript.Delay(50);

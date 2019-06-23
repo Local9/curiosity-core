@@ -22,7 +22,7 @@ namespace Curiosity.Server.net.Classes.Environment
         static async void OnGetMaxPlayers([FromSource]CitizenFX.Core.Player player)
         {
             player.TriggerEvent("curiosity:Client:Scoreboard:MaxPlayers", int.Parse(GetConvar("sv_maxClients", "32").ToString()));
-            var pl = new PlayerList();
+            var pl = Server.players;
             foreach (CitizenFX.Core.Player p in pl)
             {
                 if (list.ContainsKey(int.Parse(p.Handle)))

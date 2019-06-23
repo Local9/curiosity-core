@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CitizenFX.Core;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -11,12 +8,13 @@ namespace Curiosity.Client.net.Classes.Environment
     {
         static PlayerList playerList;
         static bool lastCheckFailed = false;
+        static Client client = Client.GetInstance();
 
         public static void Init()
         {
             playerList = Client.players;
 
-            Client.GetInstance().RegisterEventHandler("curiosity:Client:Settings:PlayerCount", new Func<int, Task>(PlayerCountUpdate));
+            client.RegisterEventHandler("curiosity:Client:Settings:PlayerCount", new Action<int>(PlayerCountUpdate));
             // Server sends its playercount to all clients once a minute to trigger InstancingChecker.PlayerCount
             // Compare player numbers, and if player count locally is lower TWICE IN A ROW
             // yell at player and trigger the servertrigger InstancingChecker.RequestDrop after N seconds
@@ -24,14 +22,14 @@ namespace Curiosity.Client.net.Classes.Environment
             // If this does not work as intended when we go live just disable it completely
         }
 
-        static public async Task PlayerCountUpdate(int remoteCount)
+        static public async void PlayerCountUpdate(int remoteCount)
         {
             int localCount = playerList.Count();
             if (localCount < remoteCount)
             {
                 if (lastCheckFailed)
                 {
-                    // BaseScript.TriggerEvent("Chat.Message", "INSTANCED", "#FF0000", "The playercount as reported by your local client is lower than the one reported by the server. You will be dropped in 60 seconds.");
+                    Classes.Environment.UI.Notifications.Curiosity(1, "Curiosity", "Instanced", "You're instanced and will be dropped in 60s. Please reconnect now or after.", 8);
                     await BaseScript.Delay(60000);
                     BaseScript.TriggerServerEvent("curiosity:Server:Player:Instance");
                 }

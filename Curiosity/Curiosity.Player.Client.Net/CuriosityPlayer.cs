@@ -280,8 +280,6 @@ namespace Curiosity.Client.net
                     ClearScreen();
                     while (API.GetPlayerSwitchState() != 12)
                     {
-                        Debug.WriteLine("Player State is still 12");
-
                         await Delay(0);
                         ClearScreen();
                     }
