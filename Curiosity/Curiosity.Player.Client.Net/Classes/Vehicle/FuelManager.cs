@@ -305,13 +305,13 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
                 PlayerInformationModel playerInfo = Player.PlayerInformation.playerInfo;
 
-                int cashTotal = playerInfo.Wallet + playerInfo.BankAccount;
+                //int cashTotal = playerInfo.Wallet + playerInfo.BankAccount;
 
-                if (cashTotal < (int)amount)
-                {
-                    Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "You don't have enough money.", 8);
-                    return;
-                }
+                //if (cashTotal < (int)amount)
+                //{
+                //    Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "You don't have enough money.", 8);
+                //    return;
+                //}
 
                 //if (Game.PlayerPed.IsInVehicle())
                 //{

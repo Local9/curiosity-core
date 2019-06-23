@@ -32,7 +32,7 @@ namespace Curiosity.Client.net.Classes.Player
                 {
                     BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
                 }
-                await BaseScript.Delay((1000 * 60) * 10);
+                await BaseScript.Delay((1000 * 60) * 30);
             }
         }
 

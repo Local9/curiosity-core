@@ -4,6 +4,7 @@ using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -15,7 +16,7 @@ namespace Curiosity.Server.net.Business
         static string discordGuild;
         static string discordBotKey;
 
-        static Dictionary<string, Privilege> privileges = new Dictionary<string, Privilege>();
+        static ConcurrentDictionary<string, Privilege> privileges = new ConcurrentDictionary<string, Privilege>();
 
         public static void Init()
         {
@@ -47,23 +48,35 @@ namespace Curiosity.Server.net.Business
                 return await request.Http($"https://discordapp.com/api/{endpoint}", method, jsonData, headers);
         }
 
-        public static async Task<Privilege> DiscordPrivilege(long discordId, Privilege privilege)
+        public static async Task<Privilege> DiscordPrivilege(long discordId, Privilege privilegeIn)
         {
             try
             {
                 RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{discordGuild}/members/{discordId}", string.Empty);
+                Privilege privilege = privilegeIn;
                 if (requestResponse.status == System.Net.HttpStatusCode.OK)
                 {
                     Entity.Discord.Member member = JsonConvert.DeserializeObject<Entity.Discord.Member>(requestResponse.content);
 
                     foreach (string role in member.Roles)
                     {
+                        if (privileges.Count == 0)
+                        {
+                            privilege = Privilege.USER;
+                            break;
+                        }
+
                         if (privileges.ContainsKey(role))
                         {
-                            return privileges[role];
+                            privilege = privileges[role];
+                            break;
+                        }
+                        else
+                        {
+                            privilege = Privilege.USER;
                         }
                     }
-                    return Privilege.USER;
+                    return privilege;
                 }
                 else if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
                 {
@@ -82,7 +95,7 @@ namespace Curiosity.Server.net.Business
             {
                 await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"DiscordPrivilege() -> {ex.Message}", Enums.Discord.DiscordColor.Red);
                 Log.Error($"DiscordPrivilege() -> {ex.Message}");
-                return privilege;
+                return privilegeIn;
             }
         }
 

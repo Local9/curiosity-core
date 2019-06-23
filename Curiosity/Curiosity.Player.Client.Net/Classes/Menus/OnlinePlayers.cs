@@ -35,7 +35,7 @@ namespace Curiosity.Client.net.Classes.Menus
                     if (Player.PlayerInformation.IsStaff())
                     {
                         playerMenu.AddMenuItem(new MenuItem("Spectate") { ItemData = player, Description = "Spectate player" });
-                        playerMenu.AddMenuItem(new MenuItem("Bring Player") { ItemData = player, Description = "Teleport player to your location." });
+                        // playerMenu.AddMenuItem(new MenuItem("Bring Player") { ItemData = player, Description = "Teleport player to your location." });
                         playerMenu.AddMenuItem(new MenuItem("Goto Player") { ItemData = player, Description = "Teleport to a players location." });
 
                         Menu kickOptions = PlayerInteractions.KickInteraction.CreateMenu("Kick", player);

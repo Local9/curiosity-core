@@ -2,6 +2,7 @@
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Database
@@ -15,9 +16,9 @@ namespace Curiosity.Server.net.Database
             mySQL = Database.mySQL;
         }
 
-        public static async Task<Dictionary<string, Privilege>> GetDiscordRolesAsync()
+        public static async Task<ConcurrentDictionary<string, Privilege>> GetDiscordRolesAsync()
         {
-            Dictionary<string, Privilege> privileges = new Dictionary<string, Privilege>();
+            ConcurrentDictionary<string, Privilege> privileges = new ConcurrentDictionary<string, Privilege>();
 
             string query = "call selDiscordRoles();";
 
@@ -34,7 +35,7 @@ namespace Curiosity.Server.net.Database
                 {
                     Privilege privilege = (Privilege)int.Parse($"{pairs["roleId"]}");
 
-                    privileges.Add($"{pairs["discordId"]}", privilege);
+                    privileges.TryAdd($"{pairs["discordId"]}", privilege);
                 }
 
                 return privileges;

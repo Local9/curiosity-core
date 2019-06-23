@@ -191,9 +191,16 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
-                Database.DatabaseUsersBank.DecreaseBank(session.User.BankId, amount);
-                session.DecreaseBankAccount(amount);
-                player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                if (bankAccount <= 5000)
+                {
+                    player.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Life V", "Bank Account", "YOU'RE BROKE!", 8);
+                }
+                else
+                {
+                    Database.DatabaseUsersBank.DecreaseBank(session.User.BankId, amount);
+                    session.DecreaseBankAccount(amount);
+                    player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                }
             }
             catch (Exception ex)
             {
