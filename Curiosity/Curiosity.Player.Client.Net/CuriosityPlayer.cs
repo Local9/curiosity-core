@@ -92,7 +92,7 @@ namespace Curiosity.Client.net
                 screenWidth = Screen.Resolution.Width;
             }
 
-            text.Caption = $"ROLE: {role}\nNAME: {Game.Player.Name}\nPLAYERID: {userId}";
+            text.Caption = $"ROLE: {role}\nNAME: {Game.Player.Name}\nLIFEVID: {userId}";
 
             await Delay(0);
         }
@@ -267,7 +267,7 @@ namespace Curiosity.Client.net
 
             screenWidth = Screen.Resolution.Width;
 
-            text = new Text($"ROLE: {role}\nNAME: {Game.Player.Name}\nPLAYERID: {userId}", new System.Drawing.PointF { X = left, Y = Screen.Height - 50 }, 0.3f, System.Drawing.Color.FromArgb(75, 255, 255, 255), Font.ChaletComprimeCologne, Alignment.Left, false, true);
+            text = new Text($"ROLE: {role}\nNAME: {Game.Player.Name}\nLIFEVID: {userId}", new System.Drawing.PointF { X = left, Y = Screen.Height - 50 }, 0.3f, System.Drawing.Color.FromArgb(75, 255, 255, 255), Font.ChaletComprimeCologne, Alignment.Left, false, true);
             text.WrapWidth = 300;
 
             while (true)

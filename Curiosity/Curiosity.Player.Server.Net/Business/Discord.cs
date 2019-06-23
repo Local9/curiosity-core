@@ -58,24 +58,35 @@ namespace Curiosity.Server.net.Business
                 {
                     Entity.Discord.Member member = JsonConvert.DeserializeObject<Entity.Discord.Member>(requestResponse.content);
 
-                    foreach (string role in member.Roles)
+                    if (member.Roles.Length == 0)
                     {
-                        if (privileges.Count == 0)
+                        privilege = Privilege.USER;
+                    }
+                    else
+                    {
+                        foreach (string role in member.Roles)
                         {
-                            privilege = Privilege.USER;
-                            break;
-                        }
+                            if (privileges.Count == 0)
+                            {
+                                privilege = Privilege.USER;
+                                break;
+                            }
 
-                        if (privileges.ContainsKey(role))
-                        {
-                            privilege = privileges[role];
-                            break;
-                        }
-                        else
-                        {
-                            privilege = Privilege.USER;
+                            if (privileges.ContainsKey(role))
+                            {
+                                privilege = privileges[role];
+                                await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Role Update",
+                                    $"Player: {name}\nDiscord:{discordId}\nPriviledgeIn: {privilegeIn}\nPriviledgeMatch: {privilege}\nJSON: {JsonConvert.SerializeObject(member)}",
+                                    Enums.Discord.DiscordColor.Blue);
+                                break;
+                            }
+                            else
+                            {
+                                privilege = Privilege.USER;
+                            }
                         }
                     }
+
                     return privilege;
                 }
                 else if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
