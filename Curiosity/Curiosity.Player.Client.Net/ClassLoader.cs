@@ -113,7 +113,7 @@ namespace Curiosity.Client.net
             Sit.Init();
             Birds.Init();
             SpawnManagement.Init();
-            InstancingChecker.Init();
+            // InstancingChecker.Init();
 
             // EMS
             //EMS.Init();

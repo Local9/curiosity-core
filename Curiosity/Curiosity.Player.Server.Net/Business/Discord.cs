@@ -48,7 +48,7 @@ namespace Curiosity.Server.net.Business
                 return await request.Http($"https://discordapp.com/api/{endpoint}", method, jsonData, headers);
         }
 
-        public static async Task<Privilege> DiscordPrivilege(long discordId, Privilege privilegeIn)
+        public static async Task<Privilege> DiscordPrivilege(long discordId, Privilege privilegeIn, string name)
         {
             try
             {
@@ -80,20 +80,20 @@ namespace Curiosity.Server.net.Business
                 }
                 else if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
                 {
-                    await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Warning", $"User was not found", Enums.Discord.DiscordColor.Orange);
+                    await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Warning", $"User was not found: {name}|{discordId}|{privilegeIn}", Enums.Discord.DiscordColor.Orange);
                     Log.Verbose($"User was not found on the Discord server.");
                     return Privilege.USER;
                 }
                 else
                 {
-                    await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"An error occured, please check the config:\nDiscord Response {requestResponse.status}", Enums.Discord.DiscordColor.Orange);
+                    await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"An error occured, please check the config:\nDiscord Response: {requestResponse.status}\nPlayer: {name}|{discordId}|{privilegeIn}", Enums.Discord.DiscordColor.Orange);
                     Log.Warn($"An error occured, please check the config: Error {requestResponse.status}");
                     return privilege;
                 }
             }
             catch (Exception ex)
             {
-                await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"DiscordPrivilege() -> {ex.Message}", Enums.Discord.DiscordColor.Red);
+                await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"DiscordPrivilege() -> {ex.Message}\nPlayer: {name}|{discordId}|{privilegeIn}", Enums.Discord.DiscordColor.Red);
                 Log.Error($"DiscordPrivilege() -> {ex.Message}");
                 return privilegeIn;
             }
