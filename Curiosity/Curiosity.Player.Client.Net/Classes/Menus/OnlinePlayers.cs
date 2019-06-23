@@ -70,9 +70,17 @@ namespace Curiosity.Client.net.Classes.Menus
 
         static async Task BringPlayer(CitizenFX.Core.Player player)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
+            if (!Player.PlayerInformation.IsStaff())
+            {
+                Debug.WriteLine("Don't know how you did that...");
+                return;
+            }
 
-            if (player.ServerId == Game.Player.ServerId) return;
+            if (player.ServerId == Game.Player.ServerId)
+            {
+                Debug.WriteLine("Cannot spec yourself");
+                return;
+            }
 
             API.NetworkFadeOutEntity(player.Character.Handle, true, false);
 
@@ -88,9 +96,17 @@ namespace Curiosity.Client.net.Classes.Menus
 
         static async Task GotoPlayer(CitizenFX.Core.Player player)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
+            if (!Player.PlayerInformation.IsStaff())
+            {
+                Debug.WriteLine("Don't know how you did that...");
+                return;
+            }
 
-            if (player.ServerId == Game.Player.ServerId) return;
+            if (player.ServerId == Game.Player.ServerId)
+            {
+                Debug.WriteLine("Cannot teleport to yourself");
+                return;
+            }
 
             API.DoScreenFadeOut(200);
             await BaseScript.Delay(200);
@@ -112,9 +128,17 @@ namespace Curiosity.Client.net.Classes.Menus
 
         static async Task Spectate(CitizenFX.Core.Player player)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
+            if (!Player.PlayerInformation.IsStaff())
+            {
+                Debug.WriteLine("Don't know how you did that...");
+                return;
+            }
 
-            if (player.ServerId == Game.Player.ServerId) return;
+            if (player.ServerId == Game.Player.ServerId)
+            {
+                Debug.WriteLine("Cannot bring yourself to yourself");
+                return;
+            }
 
             API.DoScreenFadeOut(200);
             await BaseScript.Delay(200);

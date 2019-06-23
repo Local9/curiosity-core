@@ -21,6 +21,7 @@ namespace Curiosity.Client.net
         int screenWidth;
         bool hasSpawned = false;
         bool serverReady = false;
+        bool canSaveLocation = false;
 
         Model defaultModel = PedHash.FreemodeMale01;
 
@@ -176,11 +177,7 @@ namespace Curiosity.Client.net
 
             Debug.WriteLine("OnPlayerSetup() -> STARTING");
 
-            Screen.LoadingPrompt.Show("Loading Player");
-
             Setup();
-
-            Vector3 vector3 = new Vector3(x, y, z);
 
             defaultModel.Request();
 
@@ -203,16 +200,19 @@ namespace Curiosity.Client.net
 
             API.RequestCollisionAtCoord(x, y, z);
 
-            while(!API.HasCollisionLoadedAroundEntity(playerPed))
-            {
-                await Delay(0);
-            }
+            //while(!API.HasCollisionLoadedAroundEntity(playerPed))
+            //{
+            //    Debug.WriteLine("Still requesting collision");
+            //    await Delay(0);
+            //}
 
             API.SetEntityCoordsNoOffset(playerPed, x, y, z, false, false, false);
             API.NetworkResurrectLocalPlayer(x, y, z, 0.0f, true, false);
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
+
+            Screen.LoadingPrompt.Show("Loading Player");
 
             await Delay(0);
 
@@ -239,9 +239,8 @@ namespace Curiosity.Client.net
 
             ClearScreen();
             await Delay(0);
-            ClearScreen();
 
-            Screen.Fading.FadeIn(1000);
+            Screen.Fading.FadeIn(500);
 
             while(!Screen.Fading.IsFadedIn)
             {
@@ -281,6 +280,8 @@ namespace Curiosity.Client.net
                     ClearScreen();
                     while (API.GetPlayerSwitchState() != 12)
                     {
+                        Debug.WriteLine("Player State is still 12");
+
                         await Delay(0);
                         ClearScreen();
                     }
@@ -301,6 +302,7 @@ namespace Curiosity.Client.net
             }
 
             Client.TriggerEvent("playerSpawned");
+            canSaveLocation = true;
 
             while (true)
             {
@@ -314,7 +316,9 @@ namespace Curiosity.Client.net
             await Delay(10000);
             while (true)
             {
-                SaveLocation();
+                if (canSaveLocation)
+                    SaveLocation();
+
                 await Delay(1000 * 30);
             }
         }
@@ -322,6 +326,9 @@ namespace Curiosity.Client.net
         async void SaveLocation()
         {
             Vector3 playerPosition = Game.PlayerPed.Position;
+
+            if (playerPosition.IsZero)
+                return;
 
             float? posZ = playerPosition.Z;
 

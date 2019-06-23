@@ -46,29 +46,28 @@ namespace Curiosity.Server.net.Classes
 
             double medicalFeeAmount = ((session.BankAccount + session.Wallet) * medicalFees);
 
-            if (medicalFeeAmount <= 0)
+            if (medicalFeeAmount > 0)
             {
 
                 if ((session.Wallet - medicalFeeAmount) > 0)
                 {
-
-                    await Server.Delay(0);
+                    await Server.Delay(1);
                     Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, (int)medicalFeeAmount);
-                    await Server.Delay(0);
+                    await Server.Delay(1);
                     SessionManager.PlayerList[session.NetId].DecreaseWallet((int)medicalFeeAmount);
-                    await Server.Delay(0);
+                    await Server.Delay(1);
                     session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-                    await Server.Delay(0);
+                    await Server.Delay(1);
                 }
                 else
                 {
-                    await Server.Delay(0);
+                    await Server.Delay(1);
                     Database.DatabaseUsersBank.DecreaseBank(session.User.BankId, (int)medicalFeeAmount);
-                    await Server.Delay(0);
+                    await Server.Delay(1);
                     SessionManager.PlayerList[session.NetId].DecreaseBankAccount((int)medicalFeeAmount);
-                    await Server.Delay(0);
+                    await Server.Delay(1);
                     session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
-                    await Server.Delay(0);
+                    await Server.Delay(1);
                 }
             }
         }

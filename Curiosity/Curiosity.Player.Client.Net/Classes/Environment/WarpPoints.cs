@@ -51,7 +51,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static public List<WarpPointPair> Warps = new List<WarpPointPair>()
         {
             // Nightclub
-            new WarpPointPair { A = new WarpPoint("go outside", new Vector3(195.0901f, -3167.226f, 5.790268f + MarkerZAdjustment), 100.0f), B = new WarpPoint("go inside", new Vector3(-1569.226f, -3017.124f, -74.40616f + MarkerZAdjustment), 0.0f), },
+            // new WarpPointPair { A = new WarpPoint("go outside", new Vector3(195.0901f, -3167.226f, 5.790268f + MarkerZAdjustment), 100.0f), B = new WarpPoint("go inside", new Vector3(-1569.226f, -3017.124f, -74.40616f + MarkerZAdjustment), 0.0f), },
             // Humain Labs
             new WarpPointPair { A = new WarpPoint("go inside", new Vector3(3540.89f, 3676.365f, 20.99179f + MarkerZAdjustment), 170.862f), B = new WarpPoint("go outside", new Vector3(3540.89f, 3676.365f, 27.36446f + MarkerZAdjustment), 166.890f), },
             //FIB Building Lobby -> Floor 49

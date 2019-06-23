@@ -115,11 +115,11 @@ namespace Curiosity.Client.net.Classes.Vehicle
         {
             if (Game.PlayerPed.IsInVehicle())
             {
-                if (ControlHelper.IsControlPressed(Control.VehicleAccelerate) && !Game.PlayerPed.CurrentVehicle.IsEngineRunning)
+                if (ControlHelper.IsControlPressed(Control.VehicleAccelerate, false) && !Game.PlayerPed.CurrentVehicle.IsEngineRunning)
                     Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
             }
 
-            if (isNearFuelPump && ControlHelper.IsControlPressed(Control.Pickup) && Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver.IsPlayer)
+            if (isNearFuelPump && ControlHelper.IsControlPressed(Control.Pickup, false) && Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver.IsPlayer)
                 Refuel(99.98f);
 
             await Task.FromResult(0);
@@ -174,6 +174,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     currentGasBlip.Color = BlipColor.Red;
                     currentGasBlip.Scale = 0.9f;
                     currentGasBlip.IsShortRange = true;
+                    currentGasBlip.Name = "Gas Station";
                 }
             }
         }

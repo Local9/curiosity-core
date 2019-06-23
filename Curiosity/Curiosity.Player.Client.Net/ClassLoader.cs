@@ -48,6 +48,9 @@ namespace Curiosity.Client.net
             Scaleforms.Init();
             ChatCommands.Init();
 
+            // IPLs
+            // Classes.Environment.IPL.Nightclub.Init();
+
             // Emotes
             //EmotesManager.Init();
             //HandsUp.Init();

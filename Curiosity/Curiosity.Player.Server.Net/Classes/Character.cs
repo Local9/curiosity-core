@@ -39,7 +39,7 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
-                Privilege privilege = await Discord.DiscordPrivilege(long.Parse(discordIdentifier));
+                Privilege privilege = await Discord.DiscordPrivilege(long.Parse(discordIdentifier), session.Privilege);
                 session.Privilege = privilege;
 
                 Database.DatabaseUsers.UpdateCharacterRole(session.User.CharacterId, privilege);
