@@ -94,7 +94,7 @@ namespace Curiosity.Client.net
             Classes.Menus.PlayerInteractions.KickInteraction.Init();
             Classes.Menus.PlayerInteractions.BanInteraction.Init();
             // Additional Items
-            // Classes.Menus.VehicleMenu.Init();
+            Classes.Menus.VehicleMenu.Init();
 
             // Environment
             //Poi.Init();
@@ -159,7 +159,7 @@ namespace Curiosity.Client.net
             //CarHud.Init();
             //BannedMilitaryVehicles.Init();
             BrakeSignals.Init();
-            //CruiseControl.Init();
+            CruiseControl.Init();
             VehicleDamage.Init();
             EngineManager.Init();
             //VehicleWindowManager.Init();

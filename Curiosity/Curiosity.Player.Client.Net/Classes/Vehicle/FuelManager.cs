@@ -115,7 +115,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
         {
             if (Game.PlayerPed.IsInVehicle())
             {
-                if (ControlHelper.IsControlPressed(Control.VehicleAccelerate, false) && !Game.PlayerPed.CurrentVehicle.IsEngineRunning)
+                if (ControlHelper.IsControlPressed(Control.VehicleAccelerate, false) && !Game.PlayerPed.CurrentVehicle.IsEngineRunning && isNearFuelPump)
                     Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
             }
 

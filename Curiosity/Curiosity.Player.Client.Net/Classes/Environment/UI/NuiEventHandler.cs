@@ -14,21 +14,50 @@ namespace Curiosity.Client.net.Classes.Environment.UI
     {
         static Client client = Client.GetInstance();
 
-        static bool panelIsActive = false;
+        static bool IsPanelActive = false;
 
         public static void Init()
         {
             client.RegisterNuiEventHandler("ClosePanel", new Action<dynamic>(ClosePanel));
             client.RegisterEventHandler("curiosity:Player:Skills:GetListData", new Action<string>(OpenDataList));
+
+            client.RegisterTickHandler(OnTick);
         }
 
-        static void ClosePanel(dynamic obj)
+        static async Task OnTick()
         {
-            SetNuiFocus(false, false);
-            SetTransitionTimecycleModifier("DEFAULT", 5.0f);
+            if (IsPanelActive)
+            {
+                API.DisableAllControlActions(0);
+                API.DisableAllControlActions(1);
+                API.DisableAllControlActions(2);
+            }
+
+            if (ControlHelper.IsDisabledControlJustPressed(Control.FrontendCancel, false) && IsPanelActive)
+            {
+                ClosePanel(null);
+            }
+            await Task.FromResult(0);
+        }
+
+        static async void ClosePanel(dynamic obj)
+        {
+            await BaseScript.Delay(0);
+
+            IsPanelActive = false;
+
+            API.EnableAllControlActions(0);
+            API.EnableAllControlActions(1);
+            API.EnableAllControlActions(2);
 
             CinematicMode.DoHideHud = false;
             DisplayRadar(true);
+
+            await BaseScript.Delay(0);
+            SendNuiMessage(Newtonsoft.Json.JsonConvert.SerializeObject(new NuiData() { panel = "close" }));
+
+            SetNuiFocus(false, false);
+            SetTransitionTimecycleModifier("DEFAULT", 5.0f);
         }
 
         static void GetListData(SkillType skillType)
@@ -46,7 +75,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             SetNuiFocus(true, true);
             SetTransitionTimecycleModifier($"BLACKOUT", 5.0f);
-
+            IsPanelActive = true;
             CinematicMode.DoHideHud = true;
             DisplayRadar(false);
         }
