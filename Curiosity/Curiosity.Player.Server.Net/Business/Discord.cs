@@ -75,8 +75,15 @@ namespace Curiosity.Server.net.Business
                             if (privileges.ContainsKey(role))
                             {
                                 privilege = privileges[role];
+
+                                if (privilege == privilegeIn)
+                                {
+                                    // NO CHANGE
+                                    return privilege;
+                                }
+
                                 await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Role Update",
-                                    $"Player: {name}\nDiscord:{discordId}\nPriviledgeIn: {privilegeIn}\nPriviledgeMatch: {privilege}\nJSON: {JsonConvert.SerializeObject(member)}",
+                                    $"Player: {name}\nDiscord: {discordId}\nPriviledgeIn: {privilegeIn}\nPriviledgeMatch: {privilege}\nJSON: {JsonConvert.SerializeObject(member)}",
                                     Enums.Discord.DiscordColor.Blue);
                                 break;
                             }

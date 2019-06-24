@@ -162,8 +162,6 @@ namespace Curiosity.Client.net
             CruiseControl.Init();
             VehicleDamage.Init();
             EngineManager.Init();
-            //VehicleWindowManager.Init();
-            //DoorManager.Init();
             FuelManager.Init();
             //LockManager.Init();
             //Lockpicking.Init();

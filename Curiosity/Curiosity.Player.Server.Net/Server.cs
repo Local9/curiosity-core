@@ -101,12 +101,9 @@ namespace Curiosity.Server.net
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
-            Log.Warn("-----------------------------------------------------------------");
-            Log.Warn("-> CURIOSITY PLAYER RESOURCE STARTED <---------------------------");
-            Log.Warn("-> IF A [SESSION ID] IS OVER 65K THEY WILL ERROR <---------------");
-            Log.Warn("-> IF THEY COMPLAIN ABOUT NOT GETTING EXPERIENCE, THIS IS WHY <--");
-            Log.Warn("-> END OF WARNINGS <---------------------------------------------");
-            Log.Warn("-----------------------------------------------------------------");
+            Log.Success("-----------------------------------------------------------------");
+            Log.Success("-> CURIOSITY SERVER RESOURCE STARTING UP <-----------------------");
+            Log.Success("-----------------------------------------------------------------");
         }
 
         static void OnPlayerConnecting([FromSource]CitizenFX.Core.Player player, string playerName, dynamic setKickReason, dynamic deferrals)
@@ -137,11 +134,6 @@ namespace Curiosity.Server.net
             }
 
         }
-
-        //async Task InstanceChecker()
-        //{
-        //    TriggerClientEvent("curiosity:Client:Settings:PlayerCount", players.GetEnumerator().Count);
-        //}
 
         async Task GetServerId()
         {

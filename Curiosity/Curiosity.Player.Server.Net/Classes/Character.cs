@@ -40,7 +40,10 @@ namespace Curiosity.Server.net.Classes
                 }
 
                 Privilege privilege = await Discord.DiscordPrivilege(long.Parse(discordIdentifier), session.Privilege, session.Name);
-                session.Privilege = privilege;
+
+                if (session.Privilege == privilege) return;
+
+                SessionManager.PlayerList[player.Handle].Privilege = privilege;
 
                 Database.DatabaseUsers.UpdateCharacterRole(session.User.CharacterId, privilege);
             }
