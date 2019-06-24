@@ -44,6 +44,7 @@ namespace Curiosity.Server.net.Classes
                 if (session.Privilege == privilege) return;
 
                 SessionManager.PlayerList[player.Handle].Privilege = privilege;
+                SessionManager.PlayerList[player.Handle].User.RoleId = (int)privilege;
 
                 Database.DatabaseUsers.UpdateCharacterRole(session.User.CharacterId, privilege);
             }

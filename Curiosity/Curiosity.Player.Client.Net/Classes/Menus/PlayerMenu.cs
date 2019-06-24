@@ -14,19 +14,31 @@ namespace Curiosity.Client.net.Classes.Menus
             MenuBase.AddSubMenu(menu);
 
             menu.OnMenuOpen += (_menu) => {
+
                 menu.AddMenuItem(new MenuItem("Open Skills", "View Skills") { ItemData = SkillType.Experience });
                 menu.AddMenuItem(new MenuItem("Open Stats", "View Stats") { ItemData = SkillType.Statistic });
+                menu.AddMenuItem(new MenuCheckboxItem("Cinematic Mode", "Enable Cinematic Mode") { ItemData = "CINEMATIC", Checked = false });
+                menu.AddMenuItem(new MenuItem("Cinematic Bars", "Select to adjust Cinematic Bars") { ItemData = "CINEMATICBARS" });
+
+            };
+
+            menu.OnCheckboxChange += (Menu _menu, MenuCheckboxItem _menuItem, int _itemIndex, bool _newCheckedState) =>
+            {
+                if (_menuItem.ItemData == "CINEMATIC")
+                    Environment.UI.CinematicMode.HideHud();
             };
 
             menu.OnItemSelect += (_menu, _item, _index) =>
             {
                 // Code in here would get executed whenever an item is pressed.
-                if (_item.ItemData == SkillType.Experience || _item.ItemData == SkillType.Statistic)
+                if ($"{_item.ItemData}" == $"{SkillType.Experience}" || $"{_item.ItemData}" == $"{SkillType.Statistic}")
                 {
                     Client.TriggerServerEvent("curiosity:Server:Skills:GetListData", (int)_item.ItemData);
+                    menu.CloseMenu();
                 }
 
-                menu.CloseMenu();
+                if ($"{_item.ItemData}" == "CINEMATICBARS")
+                    Environment.UI.CinematicMode.BlackBarHeight();
             };
 
             menu.OnMenuOpen += (_menu) =>

@@ -57,38 +57,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public async Task OnTick()
         {
-            if (ControlHelper.IsControlJustPressed(Control.ReplayHidehud, true, ControlModifier.Shift))
-            {
-                DoHideHud = !DoHideHud;
-                BaseScript.TriggerEvent("curiosity:Client:Player:HideHud", DoHideHud);
-                if (DoHideHud)
-                {
-                    Log.Verbose("HUD hidden");
-                }
-                else
-                {
-                    Log.Verbose("HUD unhidden");
-                }
-                callbacks.ForEach(cb => { cb.Invoke(!DoHideHud); });
-                Function.Call(Hash.DISPLAY_RADAR, !DoHideHud);
-                BaseScript.TriggerEvent("curiosity:Client:Chat:EnableChatBox", !DoHideHud);
-                BaseScript.TriggerEvent("curiosity:Client:Player:DisplayInfo", !DoHideHud);
-            }
-            else if (ControlHelper.IsControlJustPressed(Control.ReplayHidehud, true, ControlModifier.Alt))
-            {
-                switch (blackBarHeight)
-                {
-                    case 0f:
-                        blackBarHeight = 0.15f;
-                        break;
-                    case 0.15f:
-                        blackBarHeight = 0.19f;
-                        break;
-                    case 0.19f:
-                        blackBarHeight = 0f;
-                        break;
-                }
-            }
             if (DoHideHud)
             {
                 hideComponents.ForEach(c => Screen.Hud.HideComponentThisFrame(c));
@@ -99,6 +67,42 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                 Function.Call(Hash.DRAW_RECT, 0.5f, 1 - blackBarHeight / 2, 1f, blackBarHeight, 0, 0, 0, 255);
             }
             await Task.FromResult(0);
+        }
+
+        static public async void BlackBarHeight()
+        {
+            switch (blackBarHeight)
+            {
+                case 0f:
+                    blackBarHeight = 0.15f;
+                    break;
+                case 0.15f:
+                    blackBarHeight = 0.19f;
+                    break;
+                case 0.19f:
+                    blackBarHeight = 0f;
+                    break;
+            }
+            await BaseScript.Delay(0);
+        }
+
+        static public async void HideHud()
+        {
+            DoHideHud = !DoHideHud;
+            BaseScript.TriggerEvent("curiosity:Client:Player:HideHud", DoHideHud);
+            if (DoHideHud)
+            {
+                Log.Verbose("HUD hidden");
+            }
+            else
+            {
+                Log.Verbose("HUD unhidden");
+            }
+            callbacks.ForEach(cb => { cb.Invoke(!DoHideHud); });
+            Function.Call(Hash.DISPLAY_RADAR, !DoHideHud);
+            BaseScript.TriggerEvent("curiosity:Client:Chat:EnableChatBox", !DoHideHud);
+            BaseScript.TriggerEvent("curiosity:Client:Player:DisplayInfo", !DoHideHud);
+            await BaseScript.Delay(0);
         }
     }
 }
