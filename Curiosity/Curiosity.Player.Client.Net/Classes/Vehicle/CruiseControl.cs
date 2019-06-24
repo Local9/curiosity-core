@@ -73,7 +73,11 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     }
                     else
                     {
-                        if ((Game.PlayerPed.CurrentVehicle.Speed * 2.24f) > 70.0f)
+                        if (IsCruiseControlActive && (ControlHelper.IsControlPressed(Control.VehicleBrake, false) || ControlHelper.IsControlPressed(Control.VehicleHandbrake, false)))
+                        {
+                            Disable();
+                        }
+                        else if ((Game.PlayerPed.CurrentVehicle.Speed * 2.24f) > 70.0f)
                         {
                             Disable("~r~Disabled, going too fast.");
                         }

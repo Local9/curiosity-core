@@ -46,6 +46,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static async Task OnWastedCheck()
         {
+            await Client.Delay(10);
             if (Game.PlayerPed.IsDead && hasPlayerSpawned)
             {
                 await Client.Delay(0);
@@ -106,7 +107,6 @@ namespace Curiosity.Client.net.Classes.Environment
                 UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You have been charged for your stay, please try to stay alive.", 132);
 
             }
-            await Client.Delay(10);
         }
 
     }

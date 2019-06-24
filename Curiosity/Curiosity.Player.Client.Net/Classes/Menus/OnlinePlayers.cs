@@ -48,8 +48,14 @@ namespace Curiosity.Client.net.Classes.Menus
                 }
             };
 
+            menu.OnMenuOpen += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = true;
+            };
+
             menu.OnMenuClose += (_menu) =>
             {
+                Environment.UI.Location.HideLocation = false;
                 _menu.ClearMenuItems();
             };            
         }

@@ -188,6 +188,7 @@ namespace Curiosity.Client.net
             }
 
             await Game.Player.ChangeModel(defaultModel);
+            Game.PlayerPed.IsInvincible = true;
 
             int playerPed = Game.PlayerPed.Handle;
             API.SetPedComponentVariation(playerPed, 0, 0, 0, 2); // Face
@@ -299,6 +300,7 @@ namespace Curiosity.Client.net
                 Screen.LoadingPrompt.Hide();
             }
 
+            Game.PlayerPed.IsInvincible = false;
             Client.TriggerEvent("playerSpawned");
             canSaveLocation = true;
 

@@ -27,6 +27,8 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
 
             menu.OnMenuOpen += async (_menu) => {
 
+                Environment.UI.Location.HideLocation = true;
+
                 if (kickReasons.Count == 0)
                 {
                     Client.TriggerServerEvent("curiosity:Server:Menu:Reasons", (int)GlobalEnums.LogGroup.Kick);
@@ -48,6 +50,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
 
             menu.OnMenuClose += (_menu) =>
             {
+                Environment.UI.Location.HideLocation = false;
                 _menu.ClearMenuItems();
             };
 

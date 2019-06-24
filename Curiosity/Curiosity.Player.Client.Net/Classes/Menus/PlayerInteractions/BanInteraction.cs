@@ -32,8 +32,14 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
             periodMenu.AddMenuItem(new MenuItem("28 Days") { ItemData = 28 });
             periodMenu.AddMenuItem(new MenuItem("Permanent Ban") { ItemData = 0 });
 
+            periodMenu.OnMenuOpen += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = true;
+            };
+
             periodMenu.OnMenuClose += (_menu) =>
             {
+                Environment.UI.Location.HideLocation = false;
                 _menu.ClearMenuItems();
             };
 
@@ -53,6 +59,8 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
             Menu menu = new Menu(menuTitle, $"Ban: {player.Name}");
 
             menu.OnMenuOpen += async (_menu) => {
+
+                Environment.UI.Location.HideLocation = true;
 
                 if (banReasons.Count == 0)
                 {
@@ -84,6 +92,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
 
             menu.OnMenuClose += (_menu) =>
             {
+                Environment.UI.Location.HideLocation = false;
                 _menu.ClearMenuItems();
             };
 

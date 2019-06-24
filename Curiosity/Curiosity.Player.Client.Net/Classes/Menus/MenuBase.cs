@@ -229,17 +229,15 @@ namespace Curiosity.Client.net.Classes.Menus
             //    Debug.WriteLine($"OnSliderItemSelect: [{_menu}, {_sliderItem}, {_sliderPosition}, {_itemIndex}]");
             //};
 
-            //menu.OnMenuClose += (_menu) =>
-            //{
-            //    // Code in here gets triggered whenever the menu is closed.
-            //    Debug.WriteLine($"OnMenuClose: [{_menu}]");
-            //};
+            menu.OnMenuClose += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = false;
+            };
 
-            //menu.OnMenuOpen += (_menu) =>
-            //{
-            //    // Code in here gets triggered whenever the menu is opened.
-            //    Debug.WriteLine($"OnMenuOpen: [{_menu}]");
-            //};
+            menu.OnMenuOpen += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = true;
+            };
 
             //menu.OnDynamicListItemCurrentItemChange += (_menu, _dynamicListItem, _oldCurrentItem, _newCurrentItem) =>
             //{

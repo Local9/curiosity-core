@@ -72,8 +72,14 @@ namespace Curiosity.Client.net.Classes.Menus
 
             };
 
+            menu.OnMenuOpen += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = true;
+            };
+
             menu.OnMenuClose += (_menu) =>
             {
+                Environment.UI.Location.HideLocation = false;
                 _menu.ClearMenuItems();
             };
 
@@ -105,6 +111,17 @@ namespace Curiosity.Client.net.Classes.Menus
                 if (menuItem.Checked) door.Open(); else door.Close();
             };
 
+            doorsMenu.OnMenuOpen += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = true;
+            };
+
+            doorsMenu.OnMenuClose += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = false;
+                _menu.ClearMenuItems();
+            };
+
             AddSubMenu(menu, doorsMenu);
         }
 
@@ -113,6 +130,7 @@ namespace Curiosity.Client.net.Classes.Menus
             Menu windowMenu = new Menu("Windows");
             windowMenu.OnMenuOpen += (_menu) =>
             {
+                Environment.UI.Location.HideLocation = true;
                 if (windowStates != null)
                     windowStates.Clear();
 
@@ -132,6 +150,12 @@ namespace Curiosity.Client.net.Classes.Menus
                 VehicleWindow window = currentVehicle.Windows[menuItem.ItemData];
                 if (menuItem.Checked) window.RollDown(); else window.RollUp();
                 windowStates[(VehicleWindowIndex)menuItem.Index] = menuItem.Checked;
+            };
+
+            windowMenu.OnMenuClose += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = false;
+                _menu.ClearMenuItems();
             };
 
             AddSubMenu(menu, windowMenu);

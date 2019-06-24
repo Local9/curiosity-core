@@ -95,6 +95,7 @@
     <Compile Include="Classes\Menus\PlayerInteractions\ReportInteraction.cs" />
     <Compile Include="Classes\Menus\MenuBase.cs" />
     <Compile Include="Classes\Menus\OnlinePlayers.cs" />
+    <Compile Include="Classes\Player\Creation.cs" />
     <Compile Include="Classes\Player\Inventory.cs" />
     <Compile Include="Classes\Player\MugshotCreator.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />

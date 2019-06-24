@@ -19,7 +19,6 @@ using Curiosity.Client.net.Classes.Actions;
 using Curiosity.Client.net.Classes.Actions.Emotes;
 using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Environment.UI;
-using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Classes.Vehicle;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Client.net.Helpers.Dictionary;
@@ -39,7 +38,7 @@ namespace Curiosity.Client.net
 
             // https://github.com/GroovyGiantPanda/FiveMRpServerResources/tree/master/src/FiveM/RPClient/Classes
 
-            Queue.Init();
+            Classes.Player.Queue.Init();
 
             // Addon stuff
             RenderTargets.Init();
@@ -110,7 +109,7 @@ namespace Curiosity.Client.net
             //EmergencyServices.Init();
             Vehicles.Init();
             // DeleteProps.Init();
-            Sit.Init();
+            Classes.Player.Sit.Init();
             Birds.Init();
             SpawnManagement.Init();
             // InstancingChecker.Init();
@@ -146,13 +145,14 @@ namespace Curiosity.Client.net
             //PrisonSentence.Init();
             //DeathHandler.Init();
             //WeaponUnholsterHandler.Init();
-            Skills.Init();
+            Classes.Player.Skills.Init();
             Bank.Init();
-            PlayerInformation.Init();
+            Classes.Player.PlayerInformation.Init();
             WantedLevels.Init();
             // MugshotCreator.Init();
             Classes.Player.Inventory.Init();
-            Weapons.Init();
+            Classes.Player.Weapons.Init();
+            // Classes.Player.Creation.Init();
 
             // Vehicles
             //Vehicles.Init();

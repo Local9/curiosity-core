@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Client.net.Classes.Player
 {
@@ -20,7 +21,11 @@ namespace Curiosity.Client.net.Classes.Player
         static async Task OnTick()
         {
             if (!PlayerInformation.IsDeveloper())
+            {
                 Game.PlayerPed.Weapons.RemoveAll();
+                API.BlockWeaponWheelThisFrame();
+                Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed, true);
+            }
 
             await Task.FromResult(0);
         }

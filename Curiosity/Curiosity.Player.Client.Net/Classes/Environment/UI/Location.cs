@@ -9,6 +9,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
     public static class Location
     {
         public static string CompactLocation { get; set; }
+        public static bool HideLocation = false;
 
         // version can be 1 or 2
         // (This is temporary for testing variations only)
@@ -31,6 +32,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static public async Task OnTick()
         {
             if (CinematicMode.DoHideHud)
+                return;
+
+            if (HideLocation)
                 return;
 
             string currentStreetName = World.GetStreetName(Game.PlayerPed.Position);
@@ -125,51 +129,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     UI.DrawText($"&", new Vector2(topLeftCardinal.X - StreetNameWidth - AmpersandWidth, topLeftCardinal.Y + 0.034f), colorLowImportance, 0.3f, 0, Alignment.Left);
                     UI.DrawText($"{currentCrossingName}", new Vector2(topLeftCardinal.X - StreetNameWidth - AmpersandWidth - CrossingNameWidth, topLeftCardinal.Y + 0.032f), colorFocus, 0.35f, 0, Alignment.Left);
                 }
-
-                //Function.Call();
-                //new CitizenFX.Core.UI.Text(textAddition, new PointF(x, y), colorFocus, 1f, 0, true);
-                //x += GetTextWidth(textAddition, font, scale);
-
-                //textAddition = $"{localizedZone}";
-                //UI.DrawText(textAddition, new Vector2(x, y), colorFocus, 0.25f, 0, false);
-                //x += GetTextWidth(textAddition, font, scale);
-
-                //if (String.IsNullOrWhiteSpace(currentCrossingName))
-                //{
-                //    textAddition = "on";
-                //    UI.DrawText(textAddition, new Vector2(x, y), colorLowImportance, 0.25f, 0, false);
-                //    x += GetTextWidth(textAddition, font, scale);
-
-                //    textAddition = $"{currentStreetName}";
-                //    UI.DrawText(textAddition, new Vector2(x, y), colorFocus, 0.25f, 0, false);
-                //    x += GetTextWidth(textAddition, font, scale);
-                //}
-                //else
-                //{
-                //    textAddition = "at crossing of";
-                //    UI.DrawText(textAddition, new Vector2(x, y), colorLowImportance, 0.25f, 0, false);
-                //    x += GetTextWidth(textAddition, font, scale);
-
-                //    textAddition = $"{currentStreetName}";
-                //    UI.DrawText(textAddition, new Vector2(x, y), colorFocus, 0.25f, 0, false);
-                //    x += GetTextWidth(textAddition, font, scale);
-
-                //    textAddition = "and";
-                //    UI.DrawText(textAddition, new Vector2(x, y), colorLowImportance, 0.25f, 0, false);
-                //    x += GetTextWidth(textAddition, font, scale);
-
-                //    textAddition = $"{currentCrossingName}";
-                //    UI.DrawText(textAddition, new Vector2(x, y), colorFocus, 0.25f, 0, false);
-                //    x += GetTextWidth(textAddition, font, scale);
-                //}
-
-                //textAddition = "looking";
-                //UI.DrawText(textAddition, new Vector2(x, y), colorLowImportance, 0.25f, 0, false);
-                //x += GetTextWidth(textAddition, font, scale);
-
-                //textAddition = $"{Compass.GetCardinalDirection()}";
-                //UI.DrawText(textAddition, new Vector2(x, y), colorFocus, 0.25f, 0, false);
-                //x += GetTextWidth(textAddition, font, scale);
             }
 
             await Task.FromResult(0);
