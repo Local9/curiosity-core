@@ -1,7 +1,5 @@
-﻿using MenuAPI;
-using System.Collections.Generic;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using MenuAPI;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
@@ -13,6 +11,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
         static string CRUISE_CONTROL = "CruiseControl";
         static string THREE_D_SPEEDO = "ThreeDSpeedo";
+        static string ENGINE = "Engine";
 
         public static void Init()
         {
@@ -26,20 +25,28 @@ namespace Curiosity.Client.net.Classes.Menus
 
                 MenuCheckboxItem cruiseControlMenuItem = new MenuCheckboxItem("Cruise Control")
                 {
-                    Checked = false,
-                    Description = "Enables or disables the cruise control feature.",
+                    Checked = !Vehicle.CruiseControl.IsCruiseControlDisabled,
+                    Description = "Enables or disables the cruise control feature",
                     ItemData = CRUISE_CONTROL
                 };
 
-                MenuCheckboxItem hideThreeDSpeedo = new MenuCheckboxItem("3D Speed-o-meter")
+                MenuCheckboxItem hideThreeDSpeedoMenuItem = new MenuCheckboxItem("3D Speed-o-meter")
                 {
-                    Checked = true,
+                    Checked = !Environment.UI.Speedometer3D.Hide,
                     Description = "Hide or show the 3D Speed-o-meter",
                     ItemData = THREE_D_SPEEDO
                 };
 
+                MenuCheckboxItem engineMenuItem = new MenuCheckboxItem("Engine")
+                {
+                    Checked = Game.PlayerPed.CurrentVehicle.IsEngineRunning,
+                    Description = "Turn the engine on/off",
+                    ItemData = ENGINE
+                };
+
                 menu.AddMenuItem(cruiseControlMenuItem);
-                menu.AddMenuItem(hideThreeDSpeedo);
+                menu.AddMenuItem(hideThreeDSpeedoMenuItem);
+                menu.AddMenuItem(engineMenuItem);
 
             };
 
@@ -63,6 +70,8 @@ namespace Curiosity.Client.net.Classes.Menus
                 Vehicle.CruiseControl.IsCruiseControlDisabled = !menuItem.Checked;
             if (menuItem.ItemData == THREE_D_SPEEDO)
                 Environment.UI.Speedometer3D.Hide = !menuItem.Checked;
+            if (menuItem.ItemData == ENGINE)
+                Game.PlayerPed.CurrentVehicle.IsEngineRunning = menuItem.Checked;
         }
     }
 }

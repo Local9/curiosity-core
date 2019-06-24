@@ -37,7 +37,7 @@ namespace Curiosity.Server.net.Classes
 
             server.RegisterTickHandler(BankInterest);
         }
-
+        
         static async void MedicalFees([FromSource]CitizenFX.Core.Player player)
         {
             if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;

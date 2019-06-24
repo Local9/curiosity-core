@@ -55,11 +55,6 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
             if (IsCruiseControlActive && Game.PlayerPed.IsInVehicle() && (Game.PlayerPed.CurrentVehicle.Model.IsCar || Game.PlayerPed.CurrentVehicle.Model.IsBike))
             {
-                if ((Game.PlayerPed.CurrentVehicle.Speed * 2.24f) > 70.0f)
-                {
-                    Disable("~r~Disabled, going too fast.");
-                }
-
                 if (!Game.PlayerPed.CurrentVehicle.IsOnAllWheels)
                 {
                     IsCruiseControlActive = false;
@@ -78,7 +73,11 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     }
                     else
                     {
-                        if (Game.PlayerPed.CurrentVehicle.HasCollided)
+                        if ((Game.PlayerPed.CurrentVehicle.Speed * 2.24f) > 70.0f)
+                        {
+                            Disable("~r~Disabled, going too fast.");
+                        }
+                        else if (Game.PlayerPed.CurrentVehicle.HasCollided)
                         {
                             Disable();
                         }
