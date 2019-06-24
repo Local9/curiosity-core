@@ -19,6 +19,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
     {
         static float startingMultiplier = 1 / 1600f;
         static float FuelPumpRange = 4f;
+        static bool refueling = false;
 
         // For random vehicles with unassigned fuel levels
         static float minRandomFuel = 14f;
@@ -304,6 +305,10 @@ namespace Curiosity.Client.net.Classes.Vehicle
         {
             try
             {
+                if (refueling)
+                    return;
+
+                refueling = true;
 
                 PlayerInformationModel playerInfo = Player.PlayerInformation.playerInfo;
 
@@ -328,6 +333,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                 var NearbyVehicles = World.GetAllVehicles().Where(v => v.Bones["wheel_rr"].Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(PlayerToVehicleRefuelRange, 2)).OrderBy(v => v.Bones["wheel_rr"].Position.DistanceToSquared(Game.PlayerPed.Position));
                 if (!NearbyVehicles.Any())
                 {
+                    refueling = false;
                     Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "You are not close enough to a vehicle.", 8);
                     return;
                 }
@@ -336,6 +342,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                 var NearbyPumps = World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Where(o => o.Position.DistanceToSquared(vehicle.Position) < Math.Pow(FuelPumpRange, 2));
                 if (!NearbyPumps.Any())
                 {
+                    refueling = false;
                     Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "You are not close enough to a pump.", 8);
                     return;
                 }
@@ -354,6 +361,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                         vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, vehicle.Handle, "Vehicle.Fuel");
                         if (startingPosition != vehicle.Position)
                         {
+                            refueling = false;
                             Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "Your vehicle moved while refuelling. You can try refuelling again.", 8);
                             Charge((int)(refueled));
                             return;
@@ -361,6 +369,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
                         if (Game.PlayerPed.CurrentVehicle.IsEngineRunning)
                         {
+                            refueling = false;
                             Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "Your vehicles engine started while refuelling.", 8);
                             Charge((int)(refueled));
                             return;
@@ -376,6 +385,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     await BaseScript.Delay(0);
                     Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "You have finished refuelling.", 20);
                     Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
+                    refueling = false;
 
                     Charge((int)(refueled));
                 }

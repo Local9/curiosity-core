@@ -26,7 +26,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
         {
             if (!IsCruiseControlDisabled && Game.PlayerPed.IsInVehicle() && (Game.PlayerPed.CurrentVehicle.Model.IsCar || Game.PlayerPed.CurrentVehicle.Model.IsBike))
             {
-                if (Game.PlayerPed.CurrentVehicle.Speed > 18.0f && ControlHelper.IsControlPressed(Control.VehicleAccelerate, false))
+                if ((Game.PlayerPed.CurrentVehicle.Speed * 2.24f) > 40.0f && ControlHelper.IsControlPressed(Control.VehicleAccelerate, false))
                 {
                     SpeedToKeep = Game.PlayerPed.CurrentVehicle.Speed;
                     IsCruiseControlActive = true;
@@ -55,7 +55,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
             if (IsCruiseControlActive && Game.PlayerPed.IsInVehicle() && (Game.PlayerPed.CurrentVehicle.Model.IsCar || Game.PlayerPed.CurrentVehicle.Model.IsBike))
             {
-                if (Game.PlayerPed.CurrentVehicle.Speed > 70.0f)
+                if ((Game.PlayerPed.CurrentVehicle.Speed * 2.24f) > 70.0f)
                 {
                     Disable("~r~Disabled, going too fast.");
                 }

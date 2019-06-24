@@ -104,6 +104,7 @@
     <Compile Include="Classes\Player\Skills.cs" />
     <Compile Include="Classes\Player\Weapons.cs" />
     <Compile Include="Classes\Vehicle\BrakeSignals.cs" />
+    <Compile Include="Classes\Vehicle\CruiseControl.cs" />
     <Compile Include="Classes\Vehicle\DisableAirControls.cs" />
     <Compile Include="Classes\Vehicle\DoorManager.cs" />
     <Compile Include="Classes\Vehicle\EngineManager.cs" />
