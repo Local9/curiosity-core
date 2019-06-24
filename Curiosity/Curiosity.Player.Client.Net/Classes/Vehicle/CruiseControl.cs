@@ -73,7 +73,19 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     }
                     else
                     {
-                        if (IsCruiseControlActive && (ControlHelper.IsControlPressed(Control.VehicleBrake, false) || ControlHelper.IsControlPressed(Control.VehicleHandbrake, false)))
+                        if (!Game.PlayerPed.CurrentVehicle.IsEngineRunning)
+                        {
+                            Disable();
+                        }
+                        else if (Game.PlayerPed.CurrentVehicle.IsInAir)
+                        {
+                            Disable();
+                        }
+                        else if (!Game.PlayerPed.CurrentVehicle.IsOnAllWheels)
+                        {
+                            Disable();
+                        }
+                        else if (IsCruiseControlActive && (ControlHelper.IsControlPressed(Control.VehicleBrake, false) || ControlHelper.IsControlPressed(Control.VehicleHandbrake, false)))
                         {
                             Disable();
                         }
