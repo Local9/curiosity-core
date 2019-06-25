@@ -385,7 +385,7 @@ namespace Curiosity.Server.net.Classes
                     throw new Exception("LICENSE MISSING");
                 }
 
-                Session session = SessionManager.PlayerList[player.Handle];
+                Session session = SessionManager.PlayerList[license];
 
                 session.User = await Business.BusinessUser.GetUserAsync(license);
 
@@ -393,7 +393,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Log.Error($"GetUserRole() -> {ex.Message}");
+                Log.Error($"GetUserRole() -> {player.Name} - {ex.Message}");
             }
         }
 

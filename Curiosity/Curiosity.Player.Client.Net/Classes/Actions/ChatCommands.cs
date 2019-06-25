@@ -23,6 +23,22 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("pos", new Action<int, List<object>, string>(SaveCoords), false);
             API.RegisterCommand("dv", new Action<int, List<object>, string>(DeleteVehicle), false);
             API.RegisterCommand("dvn", new Action<int, List<object>, string>(DeleteVehicleNuke), false);
+            API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
+        }
+
+        static async void Pulse(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsStaff()) return;
+            Screen.Fading.FadeOut(10000);
+            while (Screen.Fading.IsFadingOut)
+            {
+                await BaseScript.Delay(1);
+            }
+            Screen.Fading.FadeIn(10000);
+            while (Screen.Fading.IsFadingIn)
+            {
+                await BaseScript.Delay(1);
+            }
         }
 
         static async void DeleteVehicleNuke(int playerHandle, List<object> arguments, string raw)
