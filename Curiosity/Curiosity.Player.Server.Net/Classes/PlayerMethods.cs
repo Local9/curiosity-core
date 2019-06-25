@@ -25,7 +25,6 @@ namespace Curiosity.Server.net.Classes
             // Saves Data
             server.RegisterEventHandler("curiosity:Server:Player:SaveLocation", new Action<CitizenFX.Core.Player, float, float, float>(OnSaveLocation));
             // Internal Events
-            server.RegisterEventHandler("curiosity:Server:Player:GetRoleId", new Action<int>(GetUserRoleId));
             server.RegisterEventHandler("curiosity:Server:Player:GetUserId", new Action<CitizenFX.Core.Player>(GetUserId));
             // admin methods
             server.RegisterEventHandler("curiosity:Server:Player:Kick", new Action<CitizenFX.Core.Player, string, string>(AdminKickPlayer));
@@ -394,22 +393,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Log.Error($"GetUserRoleId() -> {ex.Message}");
-            }
-        }
-
-        async static void GetUserRoleId(int playerHandle)
-        {
-            try
-            {
-                CitizenFX.Core.Player player = Server.players[playerHandle];
-                string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
-                Entity.User user = await Business.BusinessUser.GetUserAsync(license);
-                player.TriggerEvent("curiosity:Server:Player:RoleId", user.RoleId);
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"GetUserRoleId() -> {ex.Message}");
+                Log.Error($"GetUserRole() -> {ex.Message}");
             }
         }
 
@@ -428,7 +412,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Log.Error($"GetUserRoleId() -> {ex.Message}");
+                Log.Error($"GetUserId() -> {ex.Message}");
             }
         }
     }
