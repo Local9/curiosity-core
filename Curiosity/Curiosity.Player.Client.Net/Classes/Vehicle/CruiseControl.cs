@@ -97,6 +97,18 @@ namespace Curiosity.Client.net.Classes.Vehicle
                         {
                             Disable();
                         }
+                        else if (Game.PlayerPed.CurrentVehicle.BodyHealth < 250.0f)
+                        {
+                            Disable("~r~Vehicle too damaged");
+                        }
+                        else if (Game.PlayerPed.CurrentVehicle.EngineHealth < 250.0f)
+                        {
+                            Disable("~r~Engine too damaged");
+                        }
+                        else if (Game.PlayerPed.CurrentVehicle.PetrolTankHealth < 250.0f)
+                        {
+                            Disable("~r~Petrol Tank too damaged");
+                        }
                         else
                         {
                             Game.PlayerPed.CurrentVehicle.Speed = SpeedToKeep;

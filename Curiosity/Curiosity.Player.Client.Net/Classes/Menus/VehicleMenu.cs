@@ -95,19 +95,53 @@ namespace Curiosity.Client.net.Classes.Menus
         {
             Menu doorsMenu = new Menu("Doors");
 
+            CitizenFX.Core.Vehicle attachedVehicle = null;
+
             VehicleDoor[] doors = currentVehicle.Doors.GetAll();
+            VehicleDoor[] attachedDoors = null;
+
             doors.ToList().ForEach(door =>
             {
                 if (!door.IsBroken)
                     doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open {door.Index.ToString().AddSpacesToCamelCase()}")
                     {
                         Checked = door.IsOpen,
-                        ItemData = door.Index
+                        ItemData = new MyDoor() { Type = 1, index = door.Index }
                     });
             });
 
+            int trailerHandle = 0;
+            CitizenFX.Core.Native.API.GetVehicleTrailerVehicle(currentVehicle.Handle, ref trailerHandle);
+
+            if (trailerHandle != 0)
+            {
+                attachedVehicle = new CitizenFX.Core.Vehicle(trailerHandle);
+                attachedDoors = attachedVehicle.Doors.GetAll();
+
+                attachedDoors.ToList().ForEach(door =>
+                {
+                    if (!door.IsBroken)
+                        doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open {door.Index.ToString().AddSpacesToCamelCase()}")
+                        {
+                            Checked = door.IsOpen,
+                            ItemData = new MyDoor() { Type = 2, index = door.Index }
+                        });
+                });
+            }
+            else
+            {
+                attachedVehicle = null;
+            }
+
             doorsMenu.OnCheckboxChange += (Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState) => {
-                VehicleDoor door = currentVehicle.Doors[menuItem.ItemData];
+                VehicleDoor door = null;
+
+                if (menuItem.ItemData.Type == 1)
+                    door = currentVehicle.Doors[menuItem.ItemData.index];
+
+                if (menuItem.ItemData.Type == 2)
+                    door = attachedVehicle.Doors[menuItem.ItemData.index];
+
                 if (menuItem.Checked) door.Open(); else door.Close();
             };
 
@@ -178,5 +212,11 @@ namespace Curiosity.Client.net.Classes.Menus
             menu.AddMenuItem(submenuButton);
             MenuController.BindMenuItem(menu, submenu, submenuButton);
         }
+    }
+
+    public class MyDoor
+    {
+        public int Type;
+        public VehicleDoorIndex index;
     }
 }
