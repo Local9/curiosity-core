@@ -142,7 +142,7 @@ namespace Curiosity.Client.net.Classes.Menus
                 if (menuItem.ItemData.Type == 2)
                     door = attachedVehicle.Doors[menuItem.ItemData.index];
 
-                if (menuItem.Checked) door.Open(); else door.Close();
+                if (menuItem.Checked) door.Open(); else door.Close((menuItem.ItemData.Type == 2));
             };
 
             doorsMenu.OnMenuOpen += (_menu) =>
