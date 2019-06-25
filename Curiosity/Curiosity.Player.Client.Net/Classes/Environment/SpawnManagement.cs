@@ -49,6 +49,9 @@ namespace Curiosity.Client.net.Classes.Environment
             await Client.Delay(10);
             if (Game.PlayerPed.IsDead && hasPlayerSpawned)
             {
+                Entity entity = Game.PlayerPed.GetKiller();
+
+                
                 await Client.Delay(0);
                 UI.Scaleforms.Wasted();
 

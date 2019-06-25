@@ -30,10 +30,12 @@ namespace Curiosity.Server.net.Database
             using (var result = mySql.QueryResult(selectQuery, myParams))
             {
                 ResultSet keyValuePairs = await result;
-                await Delay(0);
+
+                await Delay(1000);
+                
                 if (keyValuePairs.Count == 0)
                 {
-                    throw new Exception("SQL ERROR -> No rows returned");
+                    throw new Exception($"SQL ERROR -> No rows returned | Name: {name} License: {license}");
                 }
 
                 foreach (Dictionary<string, object> keyValues in keyValuePairs)
