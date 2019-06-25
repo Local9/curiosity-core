@@ -199,7 +199,7 @@ namespace Curiosity.Client.net
 
             defaultModel.MarkAsNoLongerNeeded();
 
-            API.RequestCollisionAtCoord(x, y, z);
+            // API.RequestCollisionAtCoord(x, y, z);
 
             //while(!API.HasCollisionLoadedAroundEntity(playerPed))
             //{
@@ -207,8 +207,11 @@ namespace Curiosity.Client.net
             //    await Delay(0);
             //}
 
-            API.SetEntityCoordsNoOffset(playerPed, x, y, z, false, false, false);
-            API.NetworkResurrectLocalPlayer(x, y, z, 0.0f, true, false);
+            float groundZ = z;
+            API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
+
+            API.SetEntityCoordsNoOffset(playerPed, x, y, groundZ, false, false, false);
+            API.NetworkResurrectLocalPlayer(x, y, groundZ, 0.0f, true, false);
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
@@ -249,7 +252,7 @@ namespace Curiosity.Client.net
                 ClearScreen();
             }
 
-            Game.PlayerPed.Position = new Vector3(x, y, z);
+            Game.PlayerPed.Position = new Vector3(x, y, groundZ);
 
             int gameTimer = API.GetGameTimer();
 
