@@ -68,6 +68,11 @@ namespace Curiosity.Client.net
 
         async Task PlayerAndServerSettings()
         {
+            while(!Client.isSessionActive)
+            {
+                await Delay(10);
+            }
+
             while (true)
             {
                 await Delay(30000);

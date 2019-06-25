@@ -385,6 +385,8 @@ namespace Curiosity.Server.net.Classes
                     throw new Exception("LICENSE MISSING");
                 }
 
+                if (!SessionManager.PlayerList.ContainsKey(license)) return;
+
                 Session session = SessionManager.PlayerList[license];
 
                 session.User = await Business.BusinessUser.GetUserAsync(license);
@@ -401,7 +403,14 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                if (!Classes.SessionManager.PlayerList.ContainsKey(player.Handle))
+                string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
+
+                if (string.IsNullOrEmpty(license))
+                {
+                    throw new Exception("LICENSE MISSING");
+                }
+
+                if (!SessionManager.PlayerList.ContainsKey(license))
                 {
                     player.TriggerEvent("curiosity:Client:Player:UserId", null);
                     return;
