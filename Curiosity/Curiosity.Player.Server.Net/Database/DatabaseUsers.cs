@@ -18,12 +18,12 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static async Task<Entity.User> GetUser(string license, string name)
+        public static async Task<Entity.User> GetUser(string license, Player player)
         {
             Entity.User user = new Entity.User();
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@license", license);
-            myParams.Add("@username", name);
+            myParams.Add("@username", player.Name);
 
             string selectQuery = "CALL curiosity.spGetUser(@license, @username);";
 
@@ -31,11 +31,12 @@ namespace Curiosity.Server.net.Database
             {
                 ResultSet keyValuePairs = await result;
 
-                await Delay(1000);
-                
+                await Delay(200);
+
                 if (keyValuePairs.Count == 0)
                 {
-                    throw new Exception($"SQL ERROR -> No rows returned | Name: {name} License: {license}");
+                    player.Drop($"Sorry {player.Name}, an error occurred while you were trying to connect to the server or update your characters information, please try to connect again. If the issue persists visit our Discord @ discord.gg/6xHuXwG");
+                    throw new Exception($"SQL ERROR -> No rows returned : Maybe failed to setup the character {player.Name}");
                 }
 
                 foreach (Dictionary<string, object> keyValues in keyValuePairs)
@@ -63,7 +64,7 @@ namespace Curiosity.Server.net.Database
             mySql.Query(query, myParams);
         }
 
-        public static async Task<Entity.User> GetUserWithCharacterAsync(string license)
+        public static async Task<Entity.User> GetUserWithCharacterAsync(string license, Player player)
         {
             try
             {
@@ -85,10 +86,13 @@ namespace Curiosity.Server.net.Database
                 using (var result = mySql.QueryResult(selectQuery, myParams))
                 {
                     ResultSet keyValuePairs = await result;
-                    await Delay(100);
+
+                    await Delay(200);
+
                     if (keyValuePairs.Count == 0)
                     {
-                        throw new Exception("SQL ERROR -> No rows returned");
+                        player.Drop($"Sorry {player.Name}, an error occurred while you were trying to connect to the server or update your characters information, please try to connect again. If the issue persists visit our Discord @ discord.gg/6xHuXwG");
+                        throw new Exception($"SQL ERROR -> No rows returned : Maybe failed to setup the character {player.Name}");
                     }
 
                     foreach (Dictionary<string, object> keyValues in keyValuePairs)
@@ -126,7 +130,7 @@ namespace Curiosity.Server.net.Database
             }
             catch (Exception ex)
             {
-                Log.Error($"GetUserIdAsync -> {ex.Message}");
+                Log.Error($"GetUserWithCharacterAsync() -> {ex.Message}");
                 return null;
             }
         }

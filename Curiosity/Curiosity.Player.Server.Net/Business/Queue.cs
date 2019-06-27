@@ -155,7 +155,7 @@ namespace Curiosity.Server.net.Business
             {
                 deferrals.defer();
 
-                await Server.Delay(100);
+                await Server.Delay(0);
 
                 if (!IsEverythingReady())
                     deferrals.update($"Checking server startup");
@@ -168,7 +168,7 @@ namespace Curiosity.Server.net.Business
 
                 if (!regex.IsMatch(playerName)) { deferrals.done($"{messages[Messages.Symbols]}"); return; }
 
-                Entity.User user = await Database.DatabaseUsers.GetUser(license, player.Name);
+                Entity.User user = await Database.DatabaseUsers.GetUser(license, player);
 
                 if (user.Banned)
                 {

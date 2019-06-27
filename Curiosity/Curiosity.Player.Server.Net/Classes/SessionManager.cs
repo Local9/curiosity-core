@@ -45,7 +45,7 @@ namespace Curiosity.Server.net.Classes
                 {
                     Session session = playerItem.Value;
 
-                    session.User = await Database.DatabaseUsers.GetUserWithCharacterAsync(playerItem.Value.License);
+                    session.User = await Database.DatabaseUsers.GetUserWithCharacterAsync(playerItem.Value.License, session.Player);
                     session.Privilege = (Privilege)session.User.RoleId;
                     session.SetBankAccount(session.User.BankAccount);
                     session.SetWallet(session.User.Wallet);

@@ -23,9 +23,9 @@ namespace Curiosity.Server.net.Business
             await Database.DatabaseUsers.TestQueryAsync();
         }
 
-        public static async Task<Entity.User> GetUserAsync(string license)
+        public static async Task<Entity.User> GetUserAsync(string license, Player player)
         {
-            return await Database.DatabaseUsers.GetUserWithCharacterAsync(license);
+            return await Database.DatabaseUsers.GetUserWithCharacterAsync(license, player);
         }
 
         public static async Task<Vector3> GetUserLocationAsync(long locationId)
@@ -35,7 +35,11 @@ namespace Curiosity.Server.net.Business
 
         public static async Task SavePlayerLocationAsync(string license, float x, float y, float z)
         {
-            Entity.User user = await Database.DatabaseUsers.GetUserWithCharacterAsync(license);
+            if (!Classes.SessionManager.PlayerList.ContainsKey(license)) return;
+
+            Player player = Classes.SessionManager.PlayerList[license].Player;
+
+            Entity.User user = await Database.DatabaseUsers.GetUserWithCharacterAsync(license, player);
 
             int starterLocation = Server.startingLocationId;
 

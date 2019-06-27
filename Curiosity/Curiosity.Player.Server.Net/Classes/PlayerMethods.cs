@@ -319,7 +319,7 @@ namespace Curiosity.Server.net.Classes
                     throw new Exception("LICENSE MISSING");
                 }
 
-                Entity.User user = await Business.BusinessUser.GetUserAsync(license);
+                Entity.User user = await Business.BusinessUser.GetUserAsync(license, player);
                 await BaseScript.Delay(0);
                 player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, user.RoleId, user.Role, user.PosX, user.PosY, user.PosZ);
                 await BaseScript.Delay(0);
@@ -389,7 +389,7 @@ namespace Curiosity.Server.net.Classes
 
                 Session session = SessionManager.PlayerList[license];
 
-                session.User = await Business.BusinessUser.GetUserAsync(license);
+                session.User = await Business.BusinessUser.GetUserAsync(license, session.Player);
 
                 player.TriggerEvent("curiosity:Client:Player:Role", session.User.Role);
             }
