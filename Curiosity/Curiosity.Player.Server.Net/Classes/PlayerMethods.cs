@@ -366,7 +366,7 @@ namespace Curiosity.Server.net.Classes
                     throw new Exception("LICENSE MISSING");
                 }
 
-                await Business.BusinessUser.SavePlayerLocationAsync(license, x, y, z);
+                await Business.BusinessUser.SavePlayerLocationAsync(player.Handle, x, y, z);
             }
             catch (Exception ex)
             {
@@ -385,9 +385,9 @@ namespace Curiosity.Server.net.Classes
                     throw new Exception("LICENSE MISSING");
                 }
 
-                if (!SessionManager.PlayerList.ContainsKey(license)) return;
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
-                Session session = SessionManager.PlayerList[license];
+                Session session = SessionManager.PlayerList[player.Handle];
 
                 session.User = await Business.BusinessUser.GetUserAsync(license, session.Player);
 
@@ -410,7 +410,7 @@ namespace Curiosity.Server.net.Classes
                     throw new Exception("LICENSE MISSING");
                 }
 
-                if (!SessionManager.PlayerList.ContainsKey(license))
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle))
                 {
                     player.TriggerEvent("curiosity:Client:Player:UserId", null);
                     return;

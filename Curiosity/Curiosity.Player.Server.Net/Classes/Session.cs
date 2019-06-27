@@ -102,6 +102,11 @@ namespace Curiosity.Server.net.Classes
             this.BankAccount = this.BankAccount - amount;
         }
 
+        public void UpdatePrivilege(Privilege privilegeIn)
+        {
+            this.Privilege = privilegeIn;
+        }
+
         public override string ToString()
         {
             return $"Player: {Name} (#{UserID}) [{NetId}] -> Privilege: {Privilege} | Number Of Skills: {Skills.Count}";

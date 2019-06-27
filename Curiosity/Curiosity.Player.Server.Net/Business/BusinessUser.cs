@@ -33,13 +33,13 @@ namespace Curiosity.Server.net.Business
             return await Database.DatabaseUsers.GetUserLocationAsync(locationId);
         }
 
-        public static async Task SavePlayerLocationAsync(string license, float x, float y, float z)
+        public static async Task SavePlayerLocationAsync(string playerHandle, float x, float y, float z)
         {
-            if (!Classes.SessionManager.PlayerList.ContainsKey(license)) return;
+            if (!Classes.SessionManager.PlayerList.ContainsKey(playerHandle)) return;
 
-            Player player = Classes.SessionManager.PlayerList[license].Player;
+            Classes.Session session = Classes.SessionManager.PlayerList[playerHandle];
 
-            Entity.User user = await Database.DatabaseUsers.GetUserWithCharacterAsync(license, player);
+            Entity.User user = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.Player);
 
             int starterLocation = Server.startingLocationId;
 
