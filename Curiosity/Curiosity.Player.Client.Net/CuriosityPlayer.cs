@@ -204,7 +204,7 @@ namespace Curiosity.Client.net
             API.SetPedComponentVariation(playerPed, 6, rnd.Next(10), 0, 0); // Shoes
             API.SetPedComponentVariation(playerPed, 11, 0, 0, 0); // Jacket
 
-            API.SetPedHeadBlendData(playerPed, rnd.Next(10), rnd.Next(10), rnd.Next(49), rnd.Next(10), rnd.Next(10), rnd.Next(49), rnd.Next(10), rnd.Next(10), rnd.Next(49), false);
+            API.SetPedHeadBlendData(playerPed, rnd.Next(45), rnd.Next(45), 0, rnd.Next(45), rnd.Next(45), 0, rnd.Next(49), rnd.Next(49), 0, false);
 
             defaultModel.MarkAsNoLongerNeeded();
 
