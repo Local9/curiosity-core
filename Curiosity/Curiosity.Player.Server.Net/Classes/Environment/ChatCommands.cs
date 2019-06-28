@@ -21,7 +21,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static public void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Command:SavePosition", new Action<CitizenFX.Core.Player, string, float, float, float>(SavePosition));
+            server.RegisterEventHandler("curiosity:Server:Command:SavePosition", new Action<CitizenFX.Core.Player, string, float, float, float, float>(SavePosition));
 
             API.RegisterCommand("announce", new Action<int, List<object>, string>(Announcement), false);
             API.RegisterCommand("spawn", new Action<int, List<object>, string>(Spawn), false);
@@ -87,7 +87,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
         }
 
-        static void SavePosition([FromSource]CitizenFX.Core.Player player, string positionName, float posX, float posY, float posZ)
+        static void SavePosition([FromSource]CitizenFX.Core.Player player, string positionName, float posX, float posY, float posZ, float heading)
         {
             try
             {
@@ -105,13 +105,13 @@ namespace Curiosity.Server.net.Classes.Environment
 
                     using (TextWriter tw = new StreamWriter(filePath))
                     {
-                        tw.WriteLine("Date,Name,X,Y,Z");
+                        tw.WriteLine("Date,Name,X,Y,Z,Heading");
                     }
                 }
 
                 using (TextWriter tw = new StreamWriter(filePath, true))
                 {
-                    tw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm")},{positionName},{posX},{posY},{posZ}");
+                    tw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm")},{positionName},{posX},{posY},{posZ},{heading}");
                 }
 
                 Helpers.Notifications.Advanced($"Position Saved", $"~b~Name: ~s~{positionName}", 20, session.Player);

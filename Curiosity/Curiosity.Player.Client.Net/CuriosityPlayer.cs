@@ -23,6 +23,8 @@ namespace Curiosity.Client.net
         bool serverReady = false;
         bool canSaveLocation = false;
 
+        Random rnd = new Random();
+
         Model defaultModel = PedHash.FreemodeMale01;
 
         public CuriosityPlayer()
@@ -197,10 +199,12 @@ namespace Curiosity.Client.net
 
             int playerPed = Game.PlayerPed.Handle;
             API.SetPedComponentVariation(playerPed, 0, 0, 0, 0); // Face
-            API.SetPedComponentVariation(playerPed, 2, 0, 0, 0); // Hair
-            API.SetPedComponentVariation(playerPed, 4, 0, 0, 0); // Pantalon
-            API.SetPedComponentVariation(playerPed, 6, 0, 0, 0); // Shoes
+            API.SetPedComponentVariation(playerPed, 2, rnd.Next(10), 0, 0); // Hair
+            API.SetPedComponentVariation(playerPed, 4, rnd.Next(10), 0, 0); // Pantalon
+            API.SetPedComponentVariation(playerPed, 6, rnd.Next(10), 0, 0); // Shoes
             API.SetPedComponentVariation(playerPed, 11, 0, 0, 0); // Jacket
+
+            API.SetPedHeadBlendData(playerPed, rnd.Next(10), rnd.Next(10), rnd.Next(49), rnd.Next(10), rnd.Next(10), rnd.Next(49), rnd.Next(10), rnd.Next(10), rnd.Next(49), false);
 
             defaultModel.MarkAsNoLongerNeeded();
 

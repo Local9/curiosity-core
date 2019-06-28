@@ -112,7 +112,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
             Vector3 pos = Game.PlayerPed.Position;
 
-            Client.TriggerServerEvent("curiosity:Server:Command:SavePosition", $"{arguments[0]}", pos.X, pos.Y, pos.Z);
+            Client.TriggerServerEvent("curiosity:Server:Command:SavePosition", $"{arguments[0]}", pos.X, pos.Y, pos.Z, Game.PlayerPed.Heading);
 
             await BaseScript.Delay(0);
         }
