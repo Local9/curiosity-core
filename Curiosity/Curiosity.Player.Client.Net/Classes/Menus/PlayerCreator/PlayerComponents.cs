@@ -79,7 +79,6 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             menu.OnListIndexChange += async (Menu _menu, MenuListItem _listItem, int _oldSelectionIndex, int _newSelectionIndex, int _itemIndex) =>
             {
                 await BaseScript.Delay(0);
-                Debug.WriteLine($"OnListIndexChange: [{_menu}, {_listItem}, {_oldSelectionIndex}, {_newSelectionIndex}, {_itemIndex}, {_listItem.ItemData.ToString()}]");
                 if (_listItem.ItemData.TextureCount > 1)
                 {
                     componentSettings[_listItem.ItemData.ToString()] = new Tuple<int, int>(componentSettings[_listItem.ItemData.ToString()].Item1, _newSelectionIndex);
