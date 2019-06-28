@@ -196,11 +196,11 @@ namespace Curiosity.Client.net
             Game.PlayerPed.IsInvincible = true;
 
             int playerPed = Game.PlayerPed.Handle;
-            API.SetPedComponentVariation(playerPed, 0, 0, 0, 2); // Face
-            API.SetPedComponentVariation(playerPed, 2, 11, 4, 2); // Hair
-            API.SetPedComponentVariation(playerPed, 4, 1, 5, 2); // Pantalon
-            API.SetPedComponentVariation(playerPed, 6, 1, 0, 2); // Shoes
-            API.SetPedComponentVariation(playerPed, 11, 7, 2, 2); // Jacket
+            API.SetPedComponentVariation(playerPed, 0, 0, 0, 0); // Face
+            API.SetPedComponentVariation(playerPed, 2, 0, 0, 0); // Hair
+            API.SetPedComponentVariation(playerPed, 4, 0, 0, 0); // Pantalon
+            API.SetPedComponentVariation(playerPed, 6, 0, 0, 0); // Shoes
+            API.SetPedComponentVariation(playerPed, 11, 0, 0, 0); // Jacket
 
             defaultModel.MarkAsNoLongerNeeded();
 

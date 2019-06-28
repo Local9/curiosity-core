@@ -11,8 +11,8 @@ namespace Curiosity.Client.net
 {
     public class Client : BaseScript
     {
-        public static int pedHandle = Game.PlayerPed.Handle;
-        public static int playerHandle = Game.Player.Handle;
+        public static int PedHandle { get { return Game.PlayerPed.Handle; } }
+        public static int playerHandle { get { return Game.Player.Handle; } }
         public static bool isSessionActive = false;
 
         public static PlayerList players;

@@ -7,8 +7,8 @@ namespace Curiosity.Client.net.Classes.Menus
     {
         static Client client = Client.GetInstance();
 
-        static Menu menu = new Menu("Interaction Menu", "Interaction Menu");
-        public static bool isMenuOpen = menu.Visible;
+        public static Menu Menu = new Menu("Interaction Menu", "Interaction Menu");
+        public static bool isMenuOpen = Menu.Visible;
 
         public static void Init()
         {
@@ -18,7 +18,7 @@ namespace Curiosity.Client.net.Classes.Menus
             //// Creating the first menu.
 
             // menu.HeaderTexture = new KeyValuePair<string, string>("shopui_title_graphics_franklin", "shopui_title_graphics_franklin");
-            MenuController.AddMenu(menu);
+            MenuController.AddMenu(Menu);
 
             //// Creating 3 sliders, showing off the 3 possible variations and custom colors.
             //MenuSliderItem slider = new MenuSliderItem("Slider", 0, 10, 5, false);
@@ -194,7 +194,7 @@ namespace Curiosity.Client.net.Classes.Menus
             //    }
             //};
 
-            menu.OnItemSelect += (_menu, _item, _index) =>
+            Menu.OnItemSelect += (_menu, _item, _index) =>
             {
                 // Debug.WriteLine($"OnItemSelect: [{_menu}, {_item}, {_item.ItemData}, {_index}]");
             };
@@ -211,7 +211,7 @@ namespace Curiosity.Client.net.Classes.Menus
             //    Debug.WriteLine($"OnListIndexChange: [{_menu}, {_listItem}, {_oldIndex}, {_newIndex}, {_itemIndex}]");
             //};
 
-            menu.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
+            Menu.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
                 // Code in here would get executed whenever a list item is pressed.
                 // Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
@@ -229,12 +229,12 @@ namespace Curiosity.Client.net.Classes.Menus
             //    Debug.WriteLine($"OnSliderItemSelect: [{_menu}, {_sliderItem}, {_sliderPosition}, {_itemIndex}]");
             //};
 
-            menu.OnMenuClose += (_menu) =>
+            Menu.OnMenuClose += (_menu) =>
             {
                 Environment.UI.Location.HideLocation = false;
             };
 
-            menu.OnMenuOpen += (_menu) =>
+            Menu.OnMenuOpen += (_menu) =>
             {
                 Environment.UI.Location.HideLocation = true;
             };
@@ -254,15 +254,29 @@ namespace Curiosity.Client.net.Classes.Menus
 
         public static void AddMenuItem(MenuItem menuItem)
         {
-            menu.AddMenuItem(menuItem);
+            Menu.AddMenuItem(menuItem);
         }
 
         public static void AddSubMenu(Menu submenu)
+        {
+            AddSubMenu(Menu, submenu);
+        }
+
+        public static void AddSubMenu(Menu menu, Menu submenu)
         {
             MenuController.AddSubmenu(menu, submenu);
             MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = "→→→" };
             menu.AddMenuItem(submenuButton);
             MenuController.BindMenuItem(menu, submenu, submenuButton);
+        }
+
+        public static void RemoveMenu(Menu menu)
+        {
+            foreach(MenuItem menuItem in Menu.GetMenuItems())
+            {
+                if (menu.MenuTitle == menuItem.Text)
+                    Menu.RemoveMenuItem(menuItem);
+            }
         }
     }
 }

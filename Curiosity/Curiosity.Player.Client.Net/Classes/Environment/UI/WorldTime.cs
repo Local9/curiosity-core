@@ -13,6 +13,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
     class WorldTime
     {
         static Client client = Client.GetInstance();
+        public static bool HideClock = false;
 
         public static void Init()
         {
@@ -31,8 +32,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             int hours = API.GetClockHours();
             int minutes = API.GetClockMinutes();
 
-            if (!CinematicMode.DoHideHud)
-                UI.DrawText($"{hours:00}:{minutes:00}", position, System.Drawing.Color.FromArgb(255, 255, 255, 255), 0.3f, Font.ChaletComprimeCologne);
+            if (!HideClock)
+                if (!CinematicMode.DoHideHud)
+                    UI.DrawText($"{hours:00}:{minutes:00}", position, System.Drawing.Color.FromArgb(255, 255, 255, 255), 0.3f, Font.ChaletComprimeCologne);
 
             await Task.FromResult(0);
         }

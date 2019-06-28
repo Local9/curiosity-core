@@ -28,21 +28,21 @@ namespace Curiosity.Client.net.Classes.Player
         static int signProp1;
         static int signProp2;
         static string maleAnimation = "mp_character_creation@customise@male_a";
-        static bool IsPedHoldingSign = false;
+        public static bool IsPedHoldingSign = false;
         static bool IsCameraMoving = true;
 
         // MENU
-        static Menu menu = new Menu("Character Creator");
+        static Menu menu = Menus.MenuBase.Menu;
 
         static public void Init()
         {
             client.RegisterEventHandler("playerSpawned", new Action(PlayerMugshot));
+
             client.RegisterTickHandler(DisableMovement);
+
             client.RegisterTickHandler(HoldSign);
 
             IsCameraMoving = true;
-
-            API.DisplayRadar(false);
         }
 
         static async void SetupMenu()
@@ -54,33 +54,9 @@ namespace Curiosity.Client.net.Classes.Player
                     await BaseScript.Delay(0);
                 }
 
-                int hairColorPrimary = 0;
-                int hairColorSecondary = 0;
-
-                List<string> colorList = new List<string>();
-                for (var i = 0; i < 64; i++)
-                {
-                    colorList.Add($"Color #{i}");
-                }
                 await BaseScript.Delay(0);
-                MenuListItem hairColors = new MenuListItem("Primary Hair Color", colorList, 0, "Hair color pallete.") { ShowColorPanel = true, ItemData = "HAIR_PRIM" };
-                await BaseScript.Delay(0);
-                MenuListItem hairSecondayColors = new MenuListItem("Secondary Hair Color", colorList, 0, "Secondary Hair color pallete.") { ShowColorPanel = true, ItemData = "HAIR_SEC" };
-                await BaseScript.Delay(0);
-
-                menu.AddMenuItem(hairColors);
-                menu.AddMenuItem(hairSecondayColors);
-
-                menu.OnListIndexChange += (Menu _menu, MenuListItem _listItem, int _oldSelectionIndex, int _newSelectionIndex, int _itemIndex) =>
-                {
-                    if (_listItem.ItemData == "HAIR_PRIM") hairColorPrimary = _listItem.Index;
-                    if (_listItem.ItemData == "HAIR_SEC") hairColorSecondary = _listItem.Index;
-                    if (_listItem.ItemData == "HAIR_SEC" || _listItem.ItemData == "HAIR_PRIM") API.SetPedHairColor(playerPedHandle, hairColorPrimary, hairColorSecondary);
-                };
-
-                await BaseScript.Delay(0);
-                menu.Visible = true;
-                menu.IgnoreDontOpenMenus = true;
+                Menus.MenuBase.Menu.IgnoreDontOpenMenus = true;
+                Menus.PlayerCreator.PlayerCreatorMenu.ManualOpenMenu();
                 Debug.WriteLine($"SetupMenu()");
             }
             catch (Exception ex)
@@ -100,6 +76,7 @@ namespace Curiosity.Client.net.Classes.Player
                     API.DisableAllControlActions(1);
                     API.DisableAllControlActions(2);
                     await BaseScript.Delay(0);
+                    API.HideHudAndRadarThisFrame();
                 }
 
                 if (hasCreatedCharacter)
@@ -107,8 +84,6 @@ namespace Curiosity.Client.net.Classes.Player
                     API.EnableAllControlActions(0);
                     API.EnableAllControlActions(1);
                     API.EnableAllControlActions(2);
-
-                    API.DisplayRadar(true);
 
                     client.DeregisterTickHandler(DisableMovement);
                 }
@@ -120,20 +95,23 @@ namespace Curiosity.Client.net.Classes.Player
             await Task.FromResult(0);
         }
 
-        static async void PlayerMugshot()
+        public static async void PlayerMugshot()
         {
             try
             {
+                Environment.UI.Location.HideLocation = true;
+                Environment.UI.WorldTime.HideClock = true;
+
+                playerPedHandle = Game.PlayerPed.Handle;
+
                 IsCameraMoving = true;
-                Screen.Fading.FadeOut(2000);
-                while (Screen.Fading.IsFadingOut) await BaseScript.Delay(0);
 
                 Camera cam = World.CreateCamera(creatorCamera, creatorCameraRotation, 70);
                 World.RenderingCamera = cam;
 
-                Game.PlayerPed.Position = new Vector3(406.0043f, -997.2242f, -98.72668f);
-                Game.PlayerPed.Heading = 180.0f;
                 Game.PlayerPed.Task.AchieveHeading(180.0f);
+                Game.PlayerPed.Heading = 180.0f;
+                Game.PlayerPed.Position = new Vector3(406.0043f, -997.2242f, -98.72668f);
 
                 await BaseScript.Delay(500);
 
@@ -155,6 +133,9 @@ namespace Curiosity.Client.net.Classes.Player
                 await BaseScript.Delay(500);
 
                 IsCameraMoving = false;
+                IsPedHoldingSign = false;
+                
+
                 Debug.WriteLine($"DisableMovement()");
             }
             catch (Exception ex)
@@ -163,7 +144,7 @@ namespace Curiosity.Client.net.Classes.Player
             }
 }
 
-        static async Task HoldSign()
+        public static async Task HoldSign()
         {
             try
             {
@@ -174,8 +155,10 @@ namespace Curiosity.Client.net.Classes.Player
 
                 if (IsPedHoldingSign)
                 {
-                    client.DeregisterTickHandler(HoldSign);
+                    await BaseScript.Delay(0);
+                    return;
                 }
+                IsPedHoldingSign = true;
 
                 API.RequestAnimDict(maleAnimation);
                 while (!API.HasAnimDictLoaded(maleAnimation))
@@ -207,10 +190,10 @@ namespace Curiosity.Client.net.Classes.Player
                 while (API.HasScaleformMovieLoaded(scaleformMovie))
                 {
                     API.PushScaleformMovieFunction(scaleformMovie, "SET_BOARD");
-                    API.PushScaleformMovieFunctionParameterString("Life V Network"); // LINE 1
+                    API.PushScaleformMovieFunctionParameterString("Line 1");
                     API.PushScaleformMovieFunctionParameterString(Game.Player.Name);
                     API.PushScaleformMovieFunctionParameterString(DateTime.Now.ToString("yyyy-MM-dd"));
-                    API.PushScaleformMovieFunctionParameterString(""); // LINE 2
+                    API.PushScaleformMovieFunctionParameterString("Line 2");
                     API.PushScaleformMovieFunctionParameterInt(0); // No visible effect 
                     API.PushScaleformMovieFunctionParameterInt(0); // GTA Online Character level
                     API.PushScaleformMovieFunctionParameterInt(0); // No visible effect
@@ -224,8 +207,6 @@ namespace Curiosity.Client.net.Classes.Player
                     API.SetTextRenderId(API.GetDefaultScriptRendertargetRenderId());
                     Function.Call((Hash)0x40332D115A898AF5, scaleformMovie, false);
                     await BaseScript.Delay(0);
-                    if (!IsPedHoldingSign) Debug.WriteLine($"HOLD THE FUCKING SIGN");
-                    IsPedHoldingSign = true;
                 }
             }
             catch (Exception ex)
@@ -233,6 +214,22 @@ namespace Curiosity.Client.net.Classes.Player
                 Debug.WriteLine($"DisableMovement() -> {ex.Message}");
             }
             await Task.FromResult(0);
+        }
+
+        public static void ClearTasks()
+        {
+            API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
+            API.StopAnimTask(Game.PlayerPed.Handle, maleAnimation, "loop", 8.0f);
+
+            inAnimation = false;
+
+            API.DeleteObject(ref signProp1);
+            API.DeleteObject(ref signProp2);
+            API.SetObjectAsNoLongerNeeded(ref signProp1);
+            API.SetObjectAsNoLongerNeeded(ref signProp2);
+
+            API.SetScaleformMovieAsNoLongerNeeded(ref scaleformMovie);
+            API.SetScaleformMovieAsNoLongerNeeded(ref scaleformHandle);
         }
 
         // Credits to throwarray converted function in his post from lua to C#
