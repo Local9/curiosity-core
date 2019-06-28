@@ -87,7 +87,7 @@ namespace Curiosity.Server.net.Database
                 {
                     ResultSet keyValuePairs = await result;
 
-                    await Delay(200);
+                    await Delay(100);
 
                     if (keyValuePairs.Count == 0)
                     {

@@ -21,29 +21,11 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
         static int blendSkinA = 0;
         static int blendSkinB = 0;
         static float blendSkinAmount = 0.5f;
-        static Dictionary<string, Tuple<int, int>> componentSettings = new Dictionary<string, Tuple<int, int>>();
-        static Dictionary<string, Tuple<int, int>> propSettings = new Dictionary<string, Tuple<int, int>>();
-        static Dictionary<string, string> componentAndPropRenamings = new Dictionary<string, string>()
-        {
-            ["Torso"] = "Arms",
-            ["Legs"] = "Pants",
-            ["Hands"] = "Parachutes, Vests and Bags",
-            ["Special1"] = "Neck",
-            ["Special2"] = "Overshirt",
-            ["Special3"] = "Tactical Vests",
-            ["Textures"] = "Logos",
-            ["Torso"] = "Arms",
-            ["Torso2"] = "Jacket",
-            ["EarPieces"] = "Ear Pieces"
-        };
-
-        static List<PedProps> PedPropValues = Enum.GetValues(typeof(PedProps)).OfType<PedProps>().ToList();
-        static List<string> PedPropNames = Enum.GetNames(typeof(PedProps)).Select(c => c.AddSpacesToCamelCase()).ToList();
 
         public static Menu menu = new Menu("Player Creator", "Customise your character");
         static float defaultFov = 0.0f;
 
-        static List<string> GenerateNumberList(string txt, int max)
+        public static List<string> GenerateNumberList(string txt, int max)
         {
             List<string> lst = new List<string>();
             for (int i = 0; i < max + 1; i++)
@@ -108,7 +90,12 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
             menu.OnListIndexChange += async (Menu _menu, MenuListItem _listItem, int _oldSelectionIndex, int _newSelectionIndex, int _itemIndex) =>
             {
-                if ($"{_listItem.ItemData}" == "GENDER")
+                if ($"{_listItem.ItemData}" == "HAIR")
+                {
+                    API.SetPedComponentVariation(Client.PedHandle, 2, _newSelectionIndex, 1, 2);
+                }
+
+                    if ($"{_listItem.ItemData}" == "GENDER")
                 {
                     string model = "mp_m_freemode_01";
                     if (_newSelectionIndex == 1)
