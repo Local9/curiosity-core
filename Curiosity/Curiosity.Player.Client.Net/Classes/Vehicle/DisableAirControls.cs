@@ -13,7 +13,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         private static Task OnTick()
         {
-            if (Game.PlayerPed.Exists() && Game.PlayerPed.IsInVehicle() && (Game.PlayerPed.CurrentVehicle.Model.IsCar || Game.PlayerPed.CurrentVehicle.Model.IsBike) && (Game.PlayerPed.CurrentVehicle.IsInAir/* || Game.PlayerPed.CurrentVehicle.IsUpsideDown*/))
+            if (Game.PlayerPed.Exists() && Game.PlayerPed.IsInVehicle() && (Game.PlayerPed.CurrentVehicle.Model.IsCar || Game.PlayerPed.CurrentVehicle.Model.IsBike) && (Game.PlayerPed.CurrentVehicle.IsInAir/* || Game.PlayerPed.CurrentVehicle.IsUpsideDown*/) && !(Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Cycles))
             {
                 if (ControlHelper.IsControlJustPressed(Control.VehicleExit))
                     Game.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.BailOut);
