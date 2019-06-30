@@ -11,13 +11,14 @@ namespace Curiosity.Server.net.Helpers
     {
         public static void Advanced(string title, string message, int gtaColorId, CitizenFX.Core.Player player = null, NotificationType notificationType = NotificationType.CHAR_LESTER)
         {
+            string messageTitle = notificationType == NotificationType.CHAR_LESTER ? "Curiosity" : "Life V";
             if (player == null)
             {
-                Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"{notificationType}", 1, "Curiosity", title, message, gtaColorId);
+                Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"{notificationType}", 1, messageTitle, title, message, gtaColorId);
             }
             else
             {
-                player.TriggerEvent("curiosity:Client:Notification:Advanced", $"{notificationType}", 1, "Curiosity", title, message, gtaColorId);
+                player.TriggerEvent("curiosity:Client:Notification:Advanced", $"{notificationType}", 1, messageTitle, title, message, gtaColorId);
             }
         }
     }
