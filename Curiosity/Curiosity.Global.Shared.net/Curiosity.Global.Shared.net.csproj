@@ -44,6 +44,7 @@
     <Compile Include="Entity\Inventory.cs" />
     <Compile Include="Entity\LogType.cs" />
     <Compile Include="Entity\NuiData.cs" />
+    <Compile Include="Entity\PlayerCharacter.cs" />
     <Compile Include="Entity\PlayerInformation.cs" />
     <Compile Include="Entity\Skills.cs" />
     <Compile Include="Enums\LogGroup.cs" />

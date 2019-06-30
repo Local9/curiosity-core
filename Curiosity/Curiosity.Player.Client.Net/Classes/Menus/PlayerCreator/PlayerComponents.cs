@@ -50,11 +50,11 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                         if (!componentSettings.ContainsKey(c.ToString())) componentSettings.Add(c.ToString(), new Tuple<int, int>(0, 0));
                         if (componentSettings[c.ToString()].Item1 < 0 || componentSettings[c.ToString()].Item1 > c.Count - 1) componentSettings[c.ToString()] = new Tuple<int, int>(0, componentSettings[c.ToString()].Item2);
                         if (componentSettings[c.ToString()].Item2 < 0 || componentSettings[c.ToString()].Item2 > c.TextureCount - 1) componentSettings[c.ToString()] = new Tuple<int, int>(componentSettings[c.ToString()].Item1, 0);
-                        if (c.Count > 1)
+                        if (c.HasVariations)
                         {
                             menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}", PlayerCreatorMenu.GenerateNumberList("", c.Count - 1), 0) { ItemData = c });
                         }
-                        if (c.TextureCount > 1)
+                        if (c.HasTextureVariations && !(c.ToString() == "Hair"))
                         {
                             menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}: Variants", PlayerCreatorMenu.GenerateNumberList("", c.TextureCount - 1), 0) { ItemData = c });
                         }
@@ -76,18 +76,23 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                 Environment.UI.Location.HideLocation = false;
             };
 
+            int currentModel = 0;
+            int currentTexture = 0;
+
             menu.OnListIndexChange += async (Menu _menu, MenuListItem _listItem, int _oldSelectionIndex, int _newSelectionIndex, int _itemIndex) =>
             {
                 await BaseScript.Delay(0);
-                if (_listItem.ItemData.TextureCount > 1)
+                if (_listItem.ItemData.HasTextureVariations)
                 {
-                    componentSettings[_listItem.ItemData.ToString()] = new Tuple<int, int>(componentSettings[_listItem.ItemData.ToString()].Item1, _newSelectionIndex);
-                    API.SetPedComponentVariation(Client.PedHandle, Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(_listItem.ItemData.ToString()), componentSettings[_listItem.ItemData.ToString()].Item1, _newSelectionIndex, 0);
+                    currentTexture = _newSelectionIndex;
+                    componentSettings[_listItem.ItemData.ToString()] = new Tuple<int, int>(currentModel, currentTexture);
+                    API.SetPedComponentVariation(Client.PedHandle, Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(_listItem.ItemData.ToString()), currentModel, currentTexture, 0);
                 }
                 else
                 {
-                    componentSettings[_listItem.ItemData.ToString()] = new Tuple<int, int>(_newSelectionIndex, 0);
-                    API.SetPedComponentVariation(Client.PedHandle, Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(_listItem.ItemData.ToString()), _newSelectionIndex, 0, 0);
+                    currentModel = _newSelectionIndex;
+                    componentSettings[_listItem.ItemData.ToString()] = new Tuple<int, int>(currentModel, 0);
+                    API.SetPedComponentVariation(Client.PedHandle, Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(_listItem.ItemData.ToString()), currentModel, 0, 0);
                 }
             };
 
