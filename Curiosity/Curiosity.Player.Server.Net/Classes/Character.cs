@@ -15,8 +15,27 @@ namespace Curiosity.Server.net.Classes
 
         public static void Init()
         {
+
             server.RegisterEventHandler("curiosity:Server:Inventory:GetItems", new Action<CitizenFX.Core.Player>(GetActiveCharacterInventory));
             server.RegisterEventHandler("curiosity:Server:Character:RoleCheck", new Action<CitizenFX.Core.Player>(CharacterRoleCheck));
+            server.RegisterEventHandler("curiosity:Server:Character:Save", new Action<CitizenFX.Core.Player, string>(CharacterSave));
+        }
+        static void CharacterSave([FromSource]CitizenFX.Core.Player player, string characterData)
+        {
+            try
+            {
+                if (!SessionManager.SessionExists(player.Handle)) return;
+
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                Database.DatabaseUsers.SaveCharacterSkins(session.User.CharacterId, characterData);
+
+                Helpers.Notifications.Advanced($"Character Saved", $"", 20, player, Helpers.NotificationType.CHAR_LIFEINVADER);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"GetActiveCharacterInventory -> {ex.Message}");
+            }
         }
 
         static async void CharacterRoleCheck([FromSource]CitizenFX.Core.Player player)

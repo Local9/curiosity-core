@@ -55,6 +55,15 @@ namespace Curiosity.Server.net.Database
             }
         }
 
+        internal static void SaveCharacterSkins(int characterId, string characterData)
+        {
+            string query = "CALL curiosity.upCharacterSkin(@characterId, @skin);";
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@characterId", characterId);
+            myParams.Add("@skin", characterData);
+            mySql.Query(query, myParams);
+        }
+
         internal static void UpdateCharacterRole(int characterId, Privilege privilege)
         {
             string query = "CALL curiosity.upCharacterRole(@characterId, @roleId);";

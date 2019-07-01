@@ -22,6 +22,7 @@ namespace Curiosity.Client.net
         bool hasSpawned = false;
         bool serverReady = false;
         bool canSaveLocation = false;
+        public bool isPlayerSpawned = false;
 
         Random rnd = new Random();
 
@@ -317,6 +318,7 @@ namespace Curiosity.Client.net
             Game.PlayerPed.IsInvincible = false;
             Client.TriggerEvent("playerSpawned");
             canSaveLocation = true;
+            isPlayerSpawned = true;
 
             while (true)
             {

@@ -90,6 +90,7 @@
     <Compile Include="Classes\Menus\PlayerCreator\PlayerComponents.cs" />
     <Compile Include="Classes\Menus\PlayerCreator\PlayerCreatorMenu.cs" />
     <Compile Include="Classes\Menus\PlayerCreator\PlayerOverlays.cs" />
+    <Compile Include="Classes\Menus\PlayerCreator\PlayerSave.cs" />
     <Compile Include="Classes\Menus\PlayerMenu.cs" />
     <Compile Include="Classes\Menus\VehicleMenu.cs" />
     <Compile Include="Classes\Menus\Inventory.cs" />

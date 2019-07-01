@@ -13,6 +13,7 @@ namespace Curiosity.Client.net
     {
         public static int PedHandle { get { return Game.PlayerPed.Handle; } }
         public static int playerHandle { get { return Game.Player.Handle; } }
+
         public static bool isSessionActive = false;
 
         public static PlayerList players;
@@ -25,7 +26,6 @@ namespace Curiosity.Client.net
         }
 
         private const float DefaultPlayerSpeed = 1f;
-        private float _playerSpeed = DefaultPlayerSpeed;
 
         public Dictionary<string, Func<PointEvent, Task>> PointEventHandlers = new Dictionary<string, Func<PointEvent, Task>>();
 
