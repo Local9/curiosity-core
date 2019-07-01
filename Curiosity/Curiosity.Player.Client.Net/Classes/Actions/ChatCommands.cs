@@ -23,12 +23,28 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("pos", new Action<int, List<object>, string>(SaveCoords), false);
             API.RegisterCommand("dv", new Action<int, List<object>, string>(DeleteVehicle), false);
             API.RegisterCommand("dvn", new Action<int, List<object>, string>(DeleteVehicleNuke), false);
+            // test commands
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
+            API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
+        }
+
+        static async void Fire(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+
+            Random random = new Random();
+
+            Vector3 pos = Game.PlayerPed.Position;
+            Vector3 offset = API.GetOffsetFromEntityInWorldCoords(Client.PedHandle, 0.0f, 5f, 0.0f);
+
+            float posZ = offset.Z;
+            API.GetGroundZFor_3dCoord(offset.X, offset.Y, offset.Z, ref posZ, false);
+            API.StartScriptFire(offset.X, offset.Y, posZ, 25, true);
         }
 
         static async void Pulse(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
+            if (!Player.PlayerInformation.IsDeveloper()) return;
             Screen.Fading.FadeOut(10000);
             while (Screen.Fading.IsFadingOut)
             {

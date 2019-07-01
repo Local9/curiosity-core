@@ -10,7 +10,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
     static class Speedometer3D
     {
         static string speedUnit = "mph";
-        static public bool Hide = false;
+        static public bool Hide = true;
 
         static List<VehicleClass> blackList = new List<VehicleClass> {
             VehicleClass.Industrial,
