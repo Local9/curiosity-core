@@ -19,10 +19,10 @@ namespace Curiosity.Global.Shared.net.Entity
         public int HairColor = 0;
         public int HairSecondaryColor = 0;
         // OverLays
-        public Dictionary<int, int> PedHeadOverlay;
-        public Dictionary<int, Tuple<int, int>> PedHeadOverlayColor;
+        public Dictionary<int, int> PedHeadOverlay = new Dictionary<int, int>();
+        public Dictionary<int, Tuple<int, int>> PedHeadOverlayColor = new Dictionary<int, Tuple<int, int>>();
         // Additional Variations
-        public Dictionary<int, Tuple<int, int>> Components;
-        public Dictionary<int, Tuple<int, int>> Props;
+        public Dictionary<int, Tuple<int, int>> Components = new Dictionary<int, Tuple<int, int>>();
+        public Dictionary<int, Tuple<int, int>> Props = new Dictionary<int, Tuple<int, int>>();
     }
 }

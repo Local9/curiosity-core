@@ -12,7 +12,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
         public static void SaveCharacter()
         {
-            string dataToSave = JsonConvert.SerializeObject(PlayerCreatorMenu.playerCharacter);
+            string dataToSave = JsonConvert.SerializeObject(PlayerCreatorMenu.PlayerCharacter());
             Client.TriggerServerEvent("curiosity:Server:Character:Save", dataToSave);
         }
     }

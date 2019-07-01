@@ -15,7 +15,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 {
     class PlayerCreatorMenu
     {
-        public static PlayerCharacter playerCharacter = new PlayerCharacter();
+        private static PlayerCharacter _playerCharacter;
         // It's fine if this is kept between switches
         static int blendHeadA = 0;
         static int blendHeadB = 0;
@@ -35,8 +35,15 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             return lst;
         }
 
+        public static PlayerCharacter PlayerCharacter()
+        {
+            return _playerCharacter;
+        }
+
         public static void Init()
         {
+            _playerCharacter = new PlayerCharacter();
+
             MenuListItem gender = new MenuListItem($@"Gender", new List<string> { "Male", "Female" }, 0) { ItemData = "GENDER" };
             menu.AddMenuItem(gender);
 
@@ -69,6 +76,23 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             menu.AddMenuItem(eyeColors);
             menu.AddMenuItem(hairColors);
             menu.AddMenuItem(hairSecondayColors);
+
+            menu.OnSliderPositionChange += (Menu menu, MenuSliderItem sliderItem, int oldPosition, int newPosition, int itemIndex) =>
+            {
+                if ($"{sliderItem.ItemData}" == "FACE_GENEWEIGHT")
+                {
+                    blendHeadAmount = newPosition;
+                    _playerCharacter.FatherMotherAppearanceGene = blendHeadAmount;
+                    API.SetPedHeadBlendData(Client.PedHandle, blendHeadA, blendHeadB, 0, blendSkinA, blendSkinB, 0, blendHeadAmount, blendSkinAmount, 0f, false);
+                }
+
+                if ($"{sliderItem.ItemData}" == "SKIN_GENEWEIGHT")
+                {
+                    blendSkinAmount = newPosition;
+                    _playerCharacter.FatherMotherSkinGene = blendSkinAmount;
+                    API.SetPedHeadBlendData(Client.PedHandle, blendHeadA, blendHeadB, 0, blendSkinA, blendSkinB, 0, blendHeadAmount, blendSkinAmount, 0f, false);
+                }
+            };
 
             menu.OnMenuOpen += (_menu) =>
             {
@@ -108,7 +132,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                         model = "mp_f_freemode_01";
                     }
 
-                    playerCharacter.Model = model;
+                    _playerCharacter.Model = model;
 
                     await new Model(model).Request(10000);
 
@@ -130,42 +154,28 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                 if ($"{_listItem.ItemData}" == "FATHER_FACE")
                 {
                     blendHeadA = _newSelectionIndex;
-                    playerCharacter.FatherAppearance = blendHeadA;
+                    _playerCharacter.FatherAppearance = blendHeadA;
                     API.SetPedHeadBlendData(Client.PedHandle, blendHeadA, blendHeadB, 0, blendSkinA, blendSkinB, 0, blendHeadAmount, blendSkinAmount, 0f, false);
                 }
 
                 if ($"{_listItem.ItemData}" == "MOTHER_FACE")
                 {
                     blendHeadB = _newSelectionIndex;
-                    playerCharacter.MotherAppearance = blendHeadB;
-                    API.SetPedHeadBlendData(Client.PedHandle, blendHeadA, blendHeadB, 0, blendSkinA, blendSkinB, 0, blendHeadAmount, blendSkinAmount, 0f, false);
-                }
-
-                if ($"{_listItem.ItemData}" == "FACE_GENEWEIGHT")
-                {
-                    blendHeadAmount = _newSelectionIndex;
-                    playerCharacter.FatherMotherAppearanceGene = blendHeadAmount;
+                    _playerCharacter.MotherAppearance = blendHeadB;
                     API.SetPedHeadBlendData(Client.PedHandle, blendHeadA, blendHeadB, 0, blendSkinA, blendSkinB, 0, blendHeadAmount, blendSkinAmount, 0f, false);
                 }
 
                 if ($"{_listItem.ItemData}" == "FATHER_SKIN")
                 {
                     blendSkinA = _newSelectionIndex;
-                    playerCharacter.FatherSkin = blendSkinA;
+                    _playerCharacter.FatherSkin = blendSkinA;
                     API.SetPedHeadBlendData(Client.PedHandle, blendHeadA, blendHeadB, 0, blendSkinA, blendSkinB, 0, blendHeadAmount, blendSkinAmount, 0f, false);
                 }
 
                 if ($"{_listItem.ItemData}" == "MOTHER_SKIN")
                 {
                     blendSkinB = _newSelectionIndex;
-                    playerCharacter.MotherSkin = blendSkinB;
-                    API.SetPedHeadBlendData(Client.PedHandle, blendHeadA, blendHeadB, 0, blendSkinA, blendSkinB, 0, blendHeadAmount, blendSkinAmount, 0f, false);
-                }
-
-                if ($"{_listItem.ItemData}" == "SKIN_GENEWEIGHT")
-                {
-                    blendSkinAmount = _newSelectionIndex;
-                    playerCharacter.FatherMotherSkinGene = blendSkinAmount;
+                    _playerCharacter.MotherSkin = blendSkinB;
                     API.SetPedHeadBlendData(Client.PedHandle, blendHeadA, blendHeadB, 0, blendSkinA, blendSkinB, 0, blendHeadAmount, blendSkinAmount, 0f, false);
                 }
 
@@ -174,13 +184,13 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                     if ($"{_listItem.ItemData}" == "HAIR_PRIM")
                     {
                         hairColorPrimary = _newSelectionIndex;
-                        playerCharacter.HairColor = hairColorPrimary;
+                        _playerCharacter.HairColor = hairColorPrimary;
                     }
 
                     if ($"{_listItem.ItemData}" == "HAIR_SEC")
                     {
                         hairColorSecondary = _newSelectionIndex;
-                        playerCharacter.HairSecondaryColor = hairColorSecondary;
+                        _playerCharacter.HairSecondaryColor = hairColorSecondary;
                     }
 
                     API.SetPedHairColor(Client.PedHandle, hairColorPrimary, hairColorSecondary);
@@ -188,7 +198,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
                 if ($"{_listItem.ItemData}" == "EYE_COLOR")
                 {
-                    playerCharacter.EyeColor = _newSelectionIndex;
+                    _playerCharacter.EyeColor = _newSelectionIndex;
                     API.SetPedEyeColor(Client.PedHandle, _newSelectionIndex);
                 }
             };
@@ -208,49 +218,49 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
         public static void StoreOverlay(int overlayId, int option)
         {
-            if (playerCharacter.PedHeadOverlay.ContainsKey(overlayId))
+            if (_playerCharacter.PedHeadOverlay.ContainsKey(overlayId))
             {
-                playerCharacter.PedHeadOverlay[overlayId] = option;
+                _playerCharacter.PedHeadOverlay[overlayId] = option;
             }
             else
             {
-                playerCharacter.PedHeadOverlay.Add(overlayId, option);
+                _playerCharacter.PedHeadOverlay.Add(overlayId, option);
             }
         }
 
         public static void StoreOverlayColor(int overlayId, int colorType, int option)
         {
-            if (playerCharacter.PedHeadOverlayColor.ContainsKey(overlayId))
+            if (_playerCharacter.PedHeadOverlayColor.ContainsKey(overlayId))
             {
-                playerCharacter.PedHeadOverlayColor[overlayId] = new Tuple<int, int>(colorType, option);
+                _playerCharacter.PedHeadOverlayColor[overlayId] = new Tuple<int, int>(colorType, option);
             }
             else
             {
-                playerCharacter.PedHeadOverlayColor.Add(overlayId, new Tuple<int, int>(colorType, option));
+                _playerCharacter.PedHeadOverlayColor.Add(overlayId, new Tuple<int, int>(colorType, option));
             }
         }
 
         public static void StoreComponents(int componentId, int model, int texture)
         {
-            if (playerCharacter.Components.ContainsKey(componentId))
+            if (_playerCharacter.Components.ContainsKey(componentId))
             {
-                playerCharacter.Components[componentId] = new Tuple<int, int>(model, texture);
+                _playerCharacter.Components[componentId] = new Tuple<int, int>(model, texture);
             }
             else
             {
-                playerCharacter.Components.Add(componentId, new Tuple<int, int>(model, texture));
+                _playerCharacter.Components.Add(componentId, new Tuple<int, int>(model, texture));
             }
         }
 
         public static void StoreProps(int propId, int model, int texture)
         {
-            if (playerCharacter.Props.ContainsKey(propId))
+            if (_playerCharacter.Props.ContainsKey(propId))
             {
-                playerCharacter.Props[propId] = new Tuple<int, int>(model, texture);
+                _playerCharacter.Props[propId] = new Tuple<int, int>(model, texture);
             }
             else
             {
-                playerCharacter.Props.Add(propId, new Tuple<int, int>(model, texture));
+                _playerCharacter.Props.Add(propId, new Tuple<int, int>(model, texture));
             }
         }
     }

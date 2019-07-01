@@ -16,6 +16,8 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
     class PlayerComponents
     {
+        static bool HasSetupMenu = false;
+
         static Menu menu = new Menu("Player Components", "Player components");
 
         static Dictionary<string, Tuple<int, int>> componentSettings = new Dictionary<string, Tuple<int, int>>();
@@ -38,6 +40,9 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             menu.OnMenuOpen += (_menu) =>
             {
                 Environment.UI.Location.HideLocation = true;
+
+                if (HasSetupMenu)
+                    return;
 
                 PedComponent[] components = Game.PlayerPed.Style.GetAllComponents();
 
@@ -65,6 +70,8 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                         Log.Error($"[PlayerComponents] Exception in components code; {ex.Message}");
                     }
                 });
+
+                HasSetupMenu = true;
             };
 
             menu.OnMenuClose += (_menu) =>
@@ -91,6 +98,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                     API.SetPedComponentVariation(Client.PedHandle, Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(_listItem.ItemData.PedComponent.ToString()), currentModel, 0, 0);
                 }
 
+                PlayerCreatorMenu.StoreComponents(Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(_listItem.ItemData.PedComponent.ToString()), currentModel, currentTexture);
             };
 
             MenuBase.AddSubMenu(PlayerCreatorMenu.menu, menu);

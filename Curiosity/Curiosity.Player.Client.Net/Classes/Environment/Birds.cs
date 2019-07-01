@@ -15,7 +15,7 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             while (true)
             {
-                CitizenFX.Core.Native.API.SetGlobalMinBirdFlightHeight(50.0f);
+                CitizenFX.Core.Native.API.SetGlobalMinBirdFlightHeight(20.0f);
                 await Client.Delay(0);
             }
         }

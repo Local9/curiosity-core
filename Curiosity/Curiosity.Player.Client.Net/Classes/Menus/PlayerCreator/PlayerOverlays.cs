@@ -68,11 +68,13 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                 if (_listItem.ItemData.OverlayType == "OVERLAY_TYPE")
                 {
                     Function.Call(Hash.SET_PED_HEAD_OVERLAY, Client.PedHandle, _listItem.ItemData.ID, _newSelectionIndex, 1f);
+                    PlayerCreatorMenu.StoreOverlay(_listItem.ItemData.ID, _newSelectionIndex);
                 }
 
                 if (_listItem.ItemData.OverlayType == "OVERLAY_TYPE_COLOR")
                 {
                     Function.Call(Hash._SET_PED_HEAD_OVERLAY_COLOR, Client.PedHandle, _listItem.ItemData.ID, _listItem.ItemData.colorType, _newSelectionIndex, _newSelectionIndex);
+                    PlayerCreatorMenu.StoreOverlayColor(_listItem.ItemData.ID, _listItem.ItemData.colorType, _newSelectionIndex);
                 }
             };
 
