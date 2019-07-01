@@ -140,6 +140,8 @@ namespace Curiosity.Server.net.Classes.Environment
             {
                 if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
 
+                if (arguments.Count < 1) return;
+
                 Session session = SessionManager.PlayerList[$"{playerHandle}"];
 
                 if (!session.IsDeveloper) return;

@@ -138,6 +138,7 @@ namespace Curiosity.Client.net.Classes.Actions
             try
             {
                 if (!Player.PlayerInformation.IsDeveloper()) return;
+                if (string.IsNullOrEmpty(car)) return;
 
                 Model model = null;
                 var enumName = Enum.GetNames(typeof(VehicleHash)).FirstOrDefault(s => s.ToLower().StartsWith(car.ToLower())) ?? "";
