@@ -24,7 +24,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
     class PlayerOverlays
     {
-        static Menu menu = new Menu("Player Head Overlays", "Customise your characters face");
+        static Menu menu = new Menu("Makeup", "Customise your characters face");
 
         static List<PedHeadOverlay> overlays = new List<PedHeadOverlay>()
         {

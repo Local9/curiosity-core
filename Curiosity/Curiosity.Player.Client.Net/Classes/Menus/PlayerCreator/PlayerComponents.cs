@@ -18,7 +18,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
     {
         static bool HasSetupMenu = false;
 
-        static Menu menu = new Menu("Player Components", "Player components");
+        static Menu menu = new Menu("Clothing", "Clothing");
 
         static Dictionary<string, Tuple<int, int>> componentSettings = new Dictionary<string, Tuple<int, int>>();
 

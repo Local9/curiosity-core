@@ -90,6 +90,7 @@ namespace Curiosity.Client.net
             Classes.Menus.PlayerCreator.PlayerCreatorMenu.Init();
             Classes.Menus.PlayerCreator.PlayerOverlays.Init();
             Classes.Menus.PlayerCreator.PlayerComponents.Init();
+            Classes.Menus.PlayerCreator.PlayerProps.Init();
             // Classes.Menus.PlayerCreator.PlayerSave.Init();
             // ONLINE PLAYER MENU ITEMS
             Classes.Menus.OnlinePlayers.Init();

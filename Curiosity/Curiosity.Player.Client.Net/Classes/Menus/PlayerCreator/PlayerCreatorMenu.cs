@@ -27,10 +27,10 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
         public static Menu menu = new Menu("Player Creator", "Customise your character");
         static float defaultFov = 0.0f;
 
-        public static List<string> GenerateNumberList(string txt, int max)
+        public static List<string> GenerateNumberList(string txt, int max, int min = 0)
         {
             List<string> lst = new List<string>();
-            for (int i = 0; i < max + 1; i++)
+            for (int i = min; i < max + 1; i++)
                 lst.Add($"{txt} #{i.ToString()}");
             return lst;
         }
