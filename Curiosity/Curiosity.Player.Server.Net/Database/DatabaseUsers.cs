@@ -6,6 +6,7 @@ using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Server.net.Database
 {
@@ -18,9 +19,9 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static async Task<Entity.User> GetUser(string license, Player player)
+        public static async Task<GlobalEntity.User> GetUser(string license, Player player)
         {
-            Entity.User user = new Entity.User();
+            GlobalEntity.User user = new GlobalEntity.User();
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@license", license);
             myParams.Add("@username", player.Name);
@@ -73,11 +74,11 @@ namespace Curiosity.Server.net.Database
             mySql.Query(query, myParams);
         }
 
-        public static async Task<Entity.User> GetUserWithCharacterAsync(string license, Player player)
+        public static async Task<GlobalEntity.User> GetUserWithCharacterAsync(string license, Player player)
         {
             try
             {
-                Entity.User user = new Entity.User();
+                GlobalEntity.User user = new GlobalEntity.User();
                 user.BankAccount = CitizenFX.Core.Native.API.GetConvarInt("starter_bank", 1000);
                 user.Wallet = CitizenFX.Core.Native.API.GetConvarInt("starter_cash", 100);
                 user.LocationId = Server.startingLocationId;

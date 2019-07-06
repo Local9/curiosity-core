@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CitizenFX.Core;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Server.net.Business
 {
@@ -23,7 +24,7 @@ namespace Curiosity.Server.net.Business
             await Database.DatabaseUsers.TestQueryAsync();
         }
 
-        public static async Task<Entity.User> GetUserAsync(string license, Player player)
+        public static async Task<GlobalEntity.User> GetUserAsync(string license, Player player)
         {
             return await Database.DatabaseUsers.GetUserWithCharacterAsync(license, player);
         }
@@ -39,7 +40,7 @@ namespace Curiosity.Server.net.Business
 
             Classes.Session session = Classes.SessionManager.PlayerList[playerHandle];
 
-            Entity.User user = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.Player);
+            GlobalEntity.User user = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.Player);
 
             int starterLocation = Server.startingLocationId;
 

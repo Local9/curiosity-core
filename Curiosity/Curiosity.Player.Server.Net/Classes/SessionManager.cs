@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -101,7 +102,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        public static void UpdateUser(string netId, Entity.User user)
+        public static void UpdateUser(string netId, GlobalEntity.User user)
         {
             lock (PlayerList)
             {

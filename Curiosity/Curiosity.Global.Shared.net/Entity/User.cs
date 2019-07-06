@@ -1,7 +1,6 @@
-﻿using CitizenFX.Core;
-using System;
+﻿using System;
 
-namespace Curiosity.Server.net.Entity
+namespace Curiosity.Global.Shared.net.Entity
 {
     public class User
     {

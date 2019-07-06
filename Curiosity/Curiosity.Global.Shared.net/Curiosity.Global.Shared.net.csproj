@@ -47,6 +47,7 @@
     <Compile Include="Entity\PlayerCharacter.cs" />
     <Compile Include="Entity\PlayerInformation.cs" />
     <Compile Include="Entity\Skills.cs" />
+    <Compile Include="Entity\User.cs" />
     <Compile Include="Enums\LogGroup.cs" />
     <Compile Include="Enums\Messages.cs" />
     <Compile Include="Enums\ObjectHash.cs" />

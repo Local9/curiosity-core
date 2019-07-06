@@ -94,7 +94,6 @@
     <Compile Include="Entity\Discord\Member.cs" />
     <Compile Include="Enums\Discord\DiscordColor.cs" />
     <Compile Include="Entity\DiscordWebhook.cs" />
-    <Compile Include="Entity\User.cs" />
     <Compile Include="Entity\VehicleData.cs" />
     <Compile Include="Entity\WeatherData.cs" />
     <Compile Include="Enums\Discord\Webhook.cs" />

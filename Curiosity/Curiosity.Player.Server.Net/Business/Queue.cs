@@ -8,6 +8,7 @@ using Curiosity.Shared.Server.net.Helpers;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Server.net.Business
 {
@@ -168,7 +169,7 @@ namespace Curiosity.Server.net.Business
 
                 if (!regex.IsMatch(playerName)) { deferrals.done($"{messages[Messages.Symbols]}"); return; }
 
-                Entity.User user = await Database.DatabaseUsers.GetUser(license, player);
+                GlobalEntity.User user = await Database.DatabaseUsers.GetUser(license, player);
 
                 if (user.Banned)
                 {

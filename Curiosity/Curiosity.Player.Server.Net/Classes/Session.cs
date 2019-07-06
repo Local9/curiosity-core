@@ -38,7 +38,7 @@ namespace Curiosity.Server.net.Classes
 
         public CitizenFX.Core.Player Player { get; private set; }
         public SemaphoreSlim Mutex { get; private set; }
-        public Entity.User User { get; set; }
+        public GlobalEntity.User User { get; set; }
         public Dictionary<string, GlobalEntity.Skills> Skills = new Dictionary<string, GlobalEntity.Skills>();
 
         public int Wallet { get; private set; }
