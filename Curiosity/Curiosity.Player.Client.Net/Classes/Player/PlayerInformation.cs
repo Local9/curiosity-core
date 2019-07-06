@@ -16,20 +16,6 @@ namespace Curiosity.Client.net.Classes.Player
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             await BaseScript.Delay(1000);
             PeriodicCheck();
-
-            if (!PlayerInformation.IsStaff())
-            {
-                CheckIfDonator();
-            }
-        }
-
-        static async void CheckIfDonator()
-        {
-            await BaseScript.Delay(10000);
-            if (!PlayerInformation.IsStaff())
-            {
-                BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
-            }
         }
 
         static async void PlayerInfo(string json)

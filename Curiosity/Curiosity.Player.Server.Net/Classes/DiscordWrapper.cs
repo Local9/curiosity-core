@@ -115,11 +115,11 @@ namespace Curiosity.Server.net.Classes
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
                 webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
-                webhook.Username = "Report";
+                webhook.Username = $"Report by {reporterName}";
 
                 Embed embed = new Embed();
                 embed.Author = new EmbedAuthor { Name = reporterName, IconUrl = discordWebhook.Avatar };
-                embed.Title = $"Player: {reporterName}";
+                embed.Title = $"Player: {playerBeingReported}";
                 embed.Description = $"Reason: {reason}";
                 embed.Color = (int)DiscordColor.Blue;
                 embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
