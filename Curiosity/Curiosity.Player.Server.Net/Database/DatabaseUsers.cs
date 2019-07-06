@@ -134,6 +134,14 @@ namespace Curiosity.Server.net.Database
                         user.Driving = int.Parse($"{keyValues["driving"]}");
                         user.LungCapacity = int.Parse($"{keyValues["lungCapacity"]}");
                         user.MentalState = int.Parse($"{keyValues["mentalState"]}");
+
+                        string skin = $"{keyValues["skin"]}";
+
+                        if (!string.IsNullOrWhiteSpace(skin))
+                        {
+                            user.skin = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalEntity.PlayerCharacter>(skin);
+                        }
+
                     }
                     return user;
                 }
