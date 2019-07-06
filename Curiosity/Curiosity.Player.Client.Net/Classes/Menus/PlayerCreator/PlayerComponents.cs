@@ -35,8 +35,11 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             ["EarPieces"] = "Ear Pieces"
         };
 
-        public static void Init()
+        public static async void Init()
         {
+            while (!PlayerCreatorMenu.MenuSetup)
+                await BaseScript.Delay(0);
+
             menu.OnMenuOpen += (_menu) =>
             {
                 Environment.UI.Location.HideLocation = true;

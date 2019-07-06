@@ -6,6 +6,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
 using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Shared.Client.net.Models;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Client.net
 {
@@ -13,6 +14,7 @@ namespace Curiosity.Client.net
     {
         public static int PedHandle { get { return Game.PlayerPed.Handle; } }
         public static int playerHandle { get { return Game.Player.Handle; } }
+        public static GlobalEntity.User User;
 
         public static bool isSessionActive = false;
 

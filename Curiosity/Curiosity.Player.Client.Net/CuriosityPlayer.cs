@@ -2,12 +2,17 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Client.net
 {
     public class CuriosityPlayer : BaseScript
     {
+        GlobalEntity.User user;
+
         long userId = 0;
         int roleId;
         string roleName;
@@ -26,14 +31,12 @@ namespace Curiosity.Client.net
 
         Random rnd = new Random();
 
-        Model defaultModel = PedHash.FreemodeMale01;
-
         public CuriosityPlayer()
         {
             EventHandlers["onClientResourceStart"] += new Action<string>(OnResourceStart);
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
 
-            EventHandlers["curiosity:Client:Player:Setup"] += new Action<long, int, string, float, float, float>(OnPlayerSetup);
+            EventHandlers["curiosity:Client:Player:Setup"] += new Action<string>(OnPlayerSetup);
             EventHandlers["curiosity:Client:Player:Role"] += new Action<string>(UpdatePlayerRole);
             EventHandlers["curiosity:Client:Player:DisplayInfo"] += new Action<bool>(DisplayInfo);
 
@@ -151,17 +154,21 @@ namespace Curiosity.Client.net
             SaveLocation();
         }
 
-        void OnPlayerSetup(long userId, int roleId, string role, float x, float y, float z)
+        void OnPlayerSetup(string jsonUser)
         {
             API.SetNuiFocus(false, false);
             API.SetTransitionTimecycleModifier("DEFAULT", 5.0f);
 
-            this.userId = userId;
-            this.roleId = roleId;
-            this.roleName = role;
-            this.posX = x;
-            this.posY = y;
-            this.posZ = z;
+            user = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalEntity.User>(jsonUser);
+
+            Client.User = user;
+
+            this.userId = user.UserId;
+            this.roleId = user.RoleId;
+            this.roleName = user.Role;
+            this.posX = user.PosX;
+            this.posY = user.PosY;
+            this.posZ = user.PosZ;
             serverReady = true;
         }
 
@@ -187,7 +194,9 @@ namespace Curiosity.Client.net
 
             Setup();
 
-            defaultModel.Request();
+            Model defaultModel = user.Skin.Model.ToEnum(PedHash.FreemodeMale01);
+
+            await defaultModel.Request(10000);
 
             while (!defaultModel.IsLoaded)
             {
@@ -199,13 +208,39 @@ namespace Curiosity.Client.net
             Game.PlayerPed.IsInvincible = true;
 
             int playerPed = Game.PlayerPed.Handle;
-            API.SetPedComponentVariation(playerPed, 0, 0, 0, 0); // Face
-            API.SetPedComponentVariation(playerPed, 2, rnd.Next(10), 0, 0); // Hair
-            // API.SetPedComponentVariation(playerPed, 4, rnd.Next(10), 0, 0); // Pantalon
-            API.SetPedComponentVariation(playerPed, 6, rnd.Next(10), 0, 0); // Shoes
-            // API.SetPedComponentVariation(playerPed, 11, 0, 0, 0); // Jacket
 
-            API.SetPedHeadBlendData(playerPed, rnd.Next(45), rnd.Next(45), 0, rnd.Next(45), rnd.Next(45), 0, rnd.Next(49), rnd.Next(49), 0, false);
+            API.SetPedHeadBlendData(playerPed, user.Skin.FatherAppearance, user.Skin.MotherAppearance, 0, user.Skin.FatherSkin, user.Skin.MotherSkin, 0, user.Skin.FatherMotherAppearanceGene, user.Skin.FatherMotherSkinGene, 0, false);
+
+            API.SetPedEyeColor(playerPed, user.Skin.EyeColor);
+
+            API.SetPedHairColor(playerPed, user.Skin.HairColor, user.Skin.HairSecondaryColor);
+
+            if (user.Skin.Components.Count == 0) // Set some random defaults
+            {
+                API.SetPedComponentVariation(playerPed, 0, 0, 0, 0); // Face
+                API.SetPedComponentVariation(playerPed, 2, rnd.Next(10), 0, 0); // Hair
+                API.SetPedComponentVariation(playerPed, 6, rnd.Next(10), 0, 0); // Shoes
+            }
+
+            foreach (KeyValuePair<int, Tuple<int, int>> comp in user.Skin.Components)
+            {
+                API.SetPedComponentVariation(playerPed, comp.Key, comp.Value.Item1, comp.Value.Item2, 0);
+            }
+
+            foreach(KeyValuePair<int, int> over in user.Skin.PedHeadOverlay)
+            {
+                API.SetPedHeadOverlay(playerPed, over.Key, over.Value, 1.0f);
+            }
+
+            foreach (KeyValuePair<int, Tuple<int, int>> over in user.Skin.PedHeadOverlayColor)
+            {
+                API.SetPedHeadOverlayColor(playerPed, over.Key, over.Value.Item1, over.Value.Item2, 0);
+            }
+
+            foreach (KeyValuePair<int, Tuple<int, int>> over in user.Skin.Props)
+            {
+                API.SetPedPropIndex(playerPed, over.Key, over.Value.Item1, over.Value.Item2, false);
+            }
 
             defaultModel.MarkAsNoLongerNeeded();
 

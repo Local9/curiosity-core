@@ -52,8 +52,11 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             return lst;
         }
 
-        public static void Init()
+        public static async void Init()
         {
+            while (!PlayerCreatorMenu.MenuSetup)
+                await BaseScript.Delay(0);
+
             overlays.ForEach(o =>
             {
                 menu.AddMenuItem(new MenuListItem(o.Name, o.OptionNames, 0) { ItemData = new PedHeadOverlay { OverlayType = "OVERLAY_TYPE", ID = o.ID } });

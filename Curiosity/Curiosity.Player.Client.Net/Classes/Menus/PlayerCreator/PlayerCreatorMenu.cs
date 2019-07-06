@@ -25,6 +25,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
         static float blendSkinAmount = 0.5f;
 
         public static Menu menu = new Menu("Player Creator", "Customise your character");
+        public static bool MenuSetup = false;
         static float defaultFov = 0.0f;
 
         public static List<string> GenerateNumberList(string txt, int max, int min = 0)
@@ -40,25 +41,28 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             return _playerCharacter;
         }
 
-        public static void Init()
+        public static async void Init()
         {
-            _playerCharacter = new PlayerCharacter();
+            while (!Client.isSessionActive)
+                await BaseScript.Delay(0);
 
-            MenuListItem gender = new MenuListItem($@"Gender", new List<string> { "Male", "Female" }, 0) { ItemData = "GENDER" };
+            _playerCharacter = Client.User.Skin;
+
+            MenuListItem gender = new MenuListItem($@"Gender", new List<string> { "Male", "Female" }, (_playerCharacter.Model == "mp_m_freemode_01") ? 0 : 1) { ItemData = "GENDER" };
             menu.AddMenuItem(gender);
 
-            MenuListItem fatherAppearance = new MenuListItem($@"Face: Father's appearance", GenerateNumberList("Face", 45), 0) { ItemData = "FATHER_FACE" };
-            MenuListItem motherAppearance = new MenuListItem($@"Face: Mother's appearance", GenerateNumberList("Face", 45), 0) { ItemData = "MOTHER_FACE" };
+            MenuListItem fatherAppearance = new MenuListItem($@"Face: Father's appearance", GenerateNumberList("Face", 45), _playerCharacter.FatherAppearance) { ItemData = "FATHER_FACE" };
+            MenuListItem motherAppearance = new MenuListItem($@"Face: Mother's appearance", GenerateNumberList("Face", 45), _playerCharacter.MotherAppearance) { ItemData = "MOTHER_FACE" };
             menu.AddMenuItem(fatherAppearance);
             menu.AddMenuItem(motherAppearance);
-            MenuSliderItem fatherMotherGene = new MenuSliderItem($@"Face: Blend", 0, 49, 24) { SliderLeftIcon = MenuItem.Icon.MALE, SliderRightIcon = MenuItem.Icon.FEMALE, ItemData = "FACE_GENEWEIGHT" };
+            MenuSliderItem fatherMotherGene = new MenuSliderItem($@"Face: Blend", 0, 49, (int)_playerCharacter.FatherMotherAppearanceGene) { SliderLeftIcon = MenuItem.Icon.MALE, SliderRightIcon = MenuItem.Icon.FEMALE, ItemData = "FACE_GENEWEIGHT" };
             menu.AddMenuItem(fatherMotherGene);
 
-            MenuListItem fatherSkin = new MenuListItem($@"Skin color: Father's appearance", GenerateNumberList("Color", 45), 0) { ItemData = "FATHER_SKIN" };
-            MenuListItem motherSkin = new MenuListItem($@"Skin color: Mother's appearance", GenerateNumberList("Color", 45), 0) { ItemData = "MOTHER_SKIN" };
+            MenuListItem fatherSkin = new MenuListItem($@"Skin color: Father's appearance", GenerateNumberList("Color", 45), _playerCharacter.FatherSkin) { ItemData = "FATHER_SKIN" };
+            MenuListItem motherSkin = new MenuListItem($@"Skin color: Mother's appearance", GenerateNumberList("Color", 45), _playerCharacter.MotherSkin) { ItemData = "MOTHER_SKIN" };
             menu.AddMenuItem(fatherSkin);
             menu.AddMenuItem(motherSkin);
-            MenuSliderItem fatherMotherSkin = new MenuSliderItem($@"Skin color: Blend", 0, 49, 24) { SliderLeftIcon = MenuItem.Icon.MALE, SliderRightIcon = MenuItem.Icon.FEMALE, ItemData = "SKIN_GENEWEIGHT" };
+            MenuSliderItem fatherMotherSkin = new MenuSliderItem($@"Skin color: Blend", 0, 49, (int)_playerCharacter.FatherMotherSkinGene) { SliderLeftIcon = MenuItem.Icon.MALE, SliderRightIcon = MenuItem.Icon.FEMALE, ItemData = "SKIN_GENEWEIGHT" };
             menu.AddMenuItem(fatherMotherSkin);
 
             int hairColorPrimary = 0;
@@ -69,9 +73,9 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             {
                 colorList.Add($"Color #{i}");
             }
-            MenuListItem eyeColors = new MenuListItem("Eye Color", GenerateNumberList("Color", 31), 0) { ItemData = "EYE_COLOR" };
-            MenuListItem hairColors = new MenuListItem("Primary Hair Color", colorList, 0, "Hair color pallete.") { ShowColorPanel = true, ItemData = "HAIR_PRIM" };
-            MenuListItem hairSecondayColors = new MenuListItem("Secondary Hair Color", colorList, 0, "Secondary Hair color pallete.") { ShowColorPanel = true, ItemData = "HAIR_SEC" };
+            MenuListItem eyeColors = new MenuListItem("Eye Color", GenerateNumberList("Color", 31), _playerCharacter.EyeColor) { ItemData = "EYE_COLOR" };
+            MenuListItem hairColors = new MenuListItem("Primary Hair Color", colorList, _playerCharacter.HairColor, "Hair color pallete.") { ShowColorPanel = true, ItemData = "HAIR_PRIM" };
+            MenuListItem hairSecondayColors = new MenuListItem("Secondary Hair Color", colorList, _playerCharacter.HairSecondaryColor, "Secondary Hair color pallete.") { ShowColorPanel = true, ItemData = "HAIR_SEC" };
 
             menu.AddMenuItem(eyeColors);
             menu.AddMenuItem(hairColors);
@@ -204,6 +208,8 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             };
 
             MenuBase.AddSubMenu(menu);
+
+            MenuSetup = true;
         }
 
         public static void RemoveMenu()

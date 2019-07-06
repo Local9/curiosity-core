@@ -34,7 +34,7 @@ namespace Curiosity.Global.Shared.net.Entity
         public float PosY;
         public float PosZ;
         public int ServerId;
-        public PlayerCharacter skin;
+        public PlayerCharacter Skin = new PlayerCharacter();
         // CHARACTER STATS
         public int Stamina
         {

@@ -322,7 +322,7 @@ namespace Curiosity.Server.net.Classes
                 GlobalEntity.User user = await Business.BusinessUser.GetUserAsync(license, player);
                 await BaseScript.Delay(0);
 
-                player.TriggerEvent("curiosity:Client:Player:Setup", user.UserId, user.RoleId, user.Role, user.PosX, user.PosY, user.PosZ);
+                player.TriggerEvent("curiosity:Client:Player:Setup", Newtonsoft.Json.JsonConvert.SerializeObject(user));
                 await BaseScript.Delay(0);
 
                 Session session = new Session(player);

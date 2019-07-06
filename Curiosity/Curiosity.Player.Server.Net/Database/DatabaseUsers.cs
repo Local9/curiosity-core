@@ -139,7 +139,7 @@ namespace Curiosity.Server.net.Database
 
                         if (!string.IsNullOrWhiteSpace(skin))
                         {
-                            user.skin = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalEntity.PlayerCharacter>(skin);
+                            user.Skin = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalEntity.PlayerCharacter>(skin);
                         }
 
                     }
