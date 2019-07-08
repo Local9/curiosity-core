@@ -366,9 +366,12 @@ namespace Curiosity.Client.net
 
             if (user.Skin.Components.Count == 0)
             {
+                while (!Classes.Menus.PlayerCreator.PlayerCreatorMenu.MenuSetup)
+                    await Delay(0);
+
                 Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(0, 0, 0);
                 Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(2, randomNumber, 0);
-                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(5, randomNumber, 0);
+                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(5, 0, 0);
                 Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(6, randomNumber, 0);
             }
 
