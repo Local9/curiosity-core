@@ -48,6 +48,14 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
             _playerCharacter = Client.User.Skin;
 
+            blendHeadA = _playerCharacter.FatherAppearance;
+            blendHeadB = _playerCharacter.MotherAppearance;
+            blendHeadAmount = _playerCharacter.FatherMotherAppearanceGene;
+
+            blendSkinA = _playerCharacter.FatherSkin;
+            blendSkinB = _playerCharacter.MotherSkin;
+            blendSkinAmount = _playerCharacter.FatherMotherSkinGene;
+
             MenuListItem gender = new MenuListItem($@"Gender", new List<string> { "Male", "Female" }, (_playerCharacter.Model == "mp_m_freemode_01") ? 0 : 1) { ItemData = "GENDER" };
             menu.AddMenuItem(gender);
 

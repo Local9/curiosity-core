@@ -72,7 +72,9 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                     }
                 });
 
+                HasSetupMenu = true;
             };
+
 
             menu.OnMenuClose += (_menu) =>
             {

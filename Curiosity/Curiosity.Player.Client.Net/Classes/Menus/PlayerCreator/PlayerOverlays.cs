@@ -24,6 +24,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
     class PlayerOverlays
     {
+        static bool HasSetupMenu = false;
         static Menu menu = new Menu("Makeup", "Customise your characters face");
 
         static List<PedHeadOverlay> overlays = new List<PedHeadOverlay>()
@@ -57,14 +58,24 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             while (!PlayerCreatorMenu.MenuSetup)
                 await BaseScript.Delay(0);
 
-            overlays.ForEach(o =>
+            menu.OnMenuOpen += (_menu) =>
             {
-                menu.AddMenuItem(new MenuListItem(o.Name, o.OptionNames, 0) { ItemData = new PedHeadOverlay { OverlayType = "OVERLAY_TYPE", ID = o.ID } });
-                if (o.colorType != 0)
+                Environment.UI.Location.HideLocation = true;
+
+                if (HasSetupMenu)
+                    return;
+
+                overlays.ForEach(o =>
                 {
-                    menu.AddMenuItem(new MenuListItem(o.Name, GenerateNumberList("Color", o.maxOption), 0) { ItemData = new PedHeadOverlay { OverlayType = "OVERLAY_TYPE_COLOR", ID = o.ID, colorType = o.colorType } });
-                };
-            });
+                    menu.AddMenuItem(new MenuListItem(o.Name, o.OptionNames, 0) { ItemData = new PedHeadOverlay { OverlayType = "OVERLAY_TYPE", ID = o.ID } });
+                    if (o.colorType != 0)
+                    {
+                        menu.AddMenuItem(new MenuListItem(o.Name, GenerateNumberList("Color", o.maxOption), 0) { ItemData = new PedHeadOverlay { OverlayType = "OVERLAY_TYPE_COLOR", ID = o.ID, colorType = o.colorType } });
+                    };
+                });
+
+                HasSetupMenu = true;
+            };
 
             menu.OnListIndexChange += (Menu _menu, MenuListItem _listItem, int _oldSelectionIndex, int _newSelectionIndex, int _itemIndex) =>
             {
