@@ -19,10 +19,10 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
         // It's fine if this is kept between switches
         static int blendHeadA = 0;
         static int blendHeadB = 0;
-        static float blendHeadAmount = 0.5f;
+        static int blendHeadAmount = 25;
         static int blendSkinA = 0;
         static int blendSkinB = 0;
-        static float blendSkinAmount = 0.5f;
+        static int blendSkinAmount = 25;
 
         public static Menu menu = new Menu("Player Creator", "Customise your character");
         public static bool MenuSetup = false;
@@ -55,14 +55,14 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             MenuListItem motherAppearance = new MenuListItem($@"Face: Mother's appearance", GenerateNumberList("Face", 45), _playerCharacter.MotherAppearance) { ItemData = "MOTHER_FACE" };
             menu.AddMenuItem(fatherAppearance);
             menu.AddMenuItem(motherAppearance);
-            MenuSliderItem fatherMotherGene = new MenuSliderItem($@"Face: Blend", 0, 49, (int)_playerCharacter.FatherMotherAppearanceGene) { SliderLeftIcon = MenuItem.Icon.MALE, SliderRightIcon = MenuItem.Icon.FEMALE, ItemData = "FACE_GENEWEIGHT" };
+            MenuSliderItem fatherMotherGene = new MenuSliderItem($@"Face: Blend", 0, 49, _playerCharacter.FatherMotherAppearanceGene) { SliderLeftIcon = MenuItem.Icon.MALE, SliderRightIcon = MenuItem.Icon.FEMALE, ItemData = "FACE_GENEWEIGHT" };
             menu.AddMenuItem(fatherMotherGene);
 
             MenuListItem fatherSkin = new MenuListItem($@"Skin color: Father's appearance", GenerateNumberList("Color", 45), _playerCharacter.FatherSkin) { ItemData = "FATHER_SKIN" };
             MenuListItem motherSkin = new MenuListItem($@"Skin color: Mother's appearance", GenerateNumberList("Color", 45), _playerCharacter.MotherSkin) { ItemData = "MOTHER_SKIN" };
             menu.AddMenuItem(fatherSkin);
             menu.AddMenuItem(motherSkin);
-            MenuSliderItem fatherMotherSkin = new MenuSliderItem($@"Skin color: Blend", 0, 49, (int)_playerCharacter.FatherMotherSkinGene) { SliderLeftIcon = MenuItem.Icon.MALE, SliderRightIcon = MenuItem.Icon.FEMALE, ItemData = "SKIN_GENEWEIGHT" };
+            MenuSliderItem fatherMotherSkin = new MenuSliderItem($@"Skin color: Blend", 0, 49, _playerCharacter.FatherMotherSkinGene) { SliderLeftIcon = MenuItem.Icon.MALE, SliderRightIcon = MenuItem.Icon.FEMALE, ItemData = "SKIN_GENEWEIGHT" };
             menu.AddMenuItem(fatherMotherSkin);
 
             int hairColorPrimary = 0;

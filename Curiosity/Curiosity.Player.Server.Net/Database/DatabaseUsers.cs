@@ -141,6 +141,10 @@ namespace Curiosity.Server.net.Database
                         {
                             user.Skin = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalEntity.PlayerCharacter>(skin);
                         }
+                        else
+                        {
+                            user.Skin = new GlobalEntity.PlayerCharacter();
+                        }
 
                     }
                     return user;

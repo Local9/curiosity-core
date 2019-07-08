@@ -105,7 +105,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                     currentProp = _newSelectionIndex;
                 }
 
-                PlayerCreatorMenu.StoreProps(Enum.GetNames(typeof(PedProps)).ToList().IndexOf(_listItem.ItemData.PedComponent.ToString()), currentProp, currentTexture);
+                PlayerCreatorMenu.StoreProps(Enum.GetNames(typeof(PedProps)).ToList().IndexOf(_listItem.ItemData.PedProp.ToString()), currentProp, currentTexture);
             };
 
             MenuBase.AddSubMenu(PlayerCreatorMenu.menu, menu);

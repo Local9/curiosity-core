@@ -60,11 +60,19 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                             if (componentSettings[c.ToString()].Item2 < 0 || componentSettings[c.ToString()].Item2 > c.TextureCount - 1) componentSettings[c.ToString()] = new Tuple<int, int>(componentSettings[c.ToString()].Item1, 0);
                             if (c.HasVariations)
                             {
-                                menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}", PlayerCreatorMenu.GenerateNumberList("", c.Count - 1), 0) { ItemData = new ComponentType() { Type = 1, PedComponent = c } });
+                                int index = 0;
+                                if (Client.User.Skin.Components.ContainsKey(Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString())))
+                                    index = Client.User.Skin.Components[Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString())].Item1;
+
+                                menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}", PlayerCreatorMenu.GenerateNumberList("", c.Count - 1), index) { ItemData = new ComponentType() { Type = 1, PedComponent = c } });
                             }
                             if (c.HasTextureVariations && !(c.ToString() == "Hair"))
                             {
-                                menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}: Variants", PlayerCreatorMenu.GenerateNumberList("", c.TextureCount - 1), 0) { ItemData = new ComponentType() { Type = 2, PedComponent = c } });
+                                int index = 0;
+                                if (Client.User.Skin.Components.ContainsKey(Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString())))
+                                    index = Client.User.Skin.Components[Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString())].Item2;
+
+                                menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}: Variants", PlayerCreatorMenu.GenerateNumberList("", c.TextureCount - 1), index) { ItemData = new ComponentType() { Type = 2, PedComponent = c } });
                             }
                         }
                     }

@@ -161,6 +161,11 @@ namespace Curiosity.Client.net
 
             user = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalEntity.User>(jsonUser);
 
+            if (user.Skin == null)
+            {
+                user.Skin = new GlobalEntity.PlayerCharacter();
+            }
+
             Client.User = user;
 
             this.userId = user.UserId;
@@ -215,11 +220,15 @@ namespace Curiosity.Client.net
 
             API.SetPedHairColor(playerPed, user.Skin.HairColor, user.Skin.HairSecondaryColor);
 
+
+            int randomNumber = rnd.Next(10);
+
             if (user.Skin.Components.Count == 0) // Set some random defaults
             {
                 API.SetPedComponentVariation(playerPed, 0, 0, 0, 0); // Face
-                API.SetPedComponentVariation(playerPed, 2, rnd.Next(10), 0, 0); // Hair
-                API.SetPedComponentVariation(playerPed, 6, rnd.Next(10), 0, 0); // Shoes
+                API.SetPedComponentVariation(playerPed, 2, randomNumber, 0, 0); // Hair
+                API.SetPedComponentVariation(playerPed, 5, 0, 0, 0); // Hands
+                API.SetPedComponentVariation(playerPed, 6, randomNumber, 0, 0); // Shoes
             }
 
             foreach (KeyValuePair<int, Tuple<int, int>> comp in user.Skin.Components)
@@ -354,6 +363,14 @@ namespace Curiosity.Client.net
             Client.TriggerEvent("playerSpawned");
             canSaveLocation = true;
             isPlayerSpawned = true;
+
+            if (user.Skin.Components.Count == 0)
+            {
+                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(0, 0, 0);
+                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(2, randomNumber, 0);
+                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(5, randomNumber, 0);
+                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(6, randomNumber, 0);
+            }
 
             while (true)
             {
