@@ -418,7 +418,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
             await BaseScript.Delay(0);
         }
 
-        static async void DevRefuel()
+        public static async void DevRefuel()
         {
             Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
 

@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Enums;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
@@ -32,9 +34,15 @@ namespace Curiosity.Client.net.Classes.Menus
 
             menu.OnMenuOpen += (_menu) => {
 
-                //List<string> vehicleLocking = new List<string>() { "Everyone", "Party", "Clan", "No One" };
-                //MenuListItem mliVehicleLocks = new MenuListItem("Access Rights", vehicleLocking, 0, "Select to set vehicle access rights");
-                //menu.AddMenuItem(mliVehicleLocks);
+                if (currentVehicle != Game.PlayerPed.CurrentVehicle)
+                    currentVehicle = Game.PlayerPed.CurrentVehicle;
+
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    List<string> vehicleLocking = Enum.GetNames(typeof(VehicleLock)).Select(d => d.AddSpacesToCamelCase()).ToList();
+                    MenuListItem mliVehicleLocks = new MenuListItem("DEV: Access Grant", vehicleLocking, 0, "Select to set vehicle access rights\n~r~Warning:~s~ Changing from a locked state to unlocked may cause your ped to break the window.") { ItemData = "VEHICLE_LOCK" };
+                    menu.AddMenuItem(mliVehicleLocks);
+                }
 
                 MenuCheckboxItem cruiseControlMenuItem = new MenuCheckboxItem("Cruise Control")
                 {
@@ -55,8 +63,6 @@ namespace Curiosity.Client.net.Classes.Menus
 
                 if (Game.PlayerPed.IsInVehicle())
                 {
-                    currentVehicle = Game.PlayerPed.CurrentVehicle;
-
                     MenuCheckboxItem engineMenuItem = new MenuCheckboxItem("Engine")
                     {
                         Checked = Game.PlayerPed.CurrentVehicle.IsEngineRunning,
@@ -66,8 +72,10 @@ namespace Curiosity.Client.net.Classes.Menus
 
                     menu.AddMenuItem(engineMenuItem);
 
-                    SetupWindowsMenu();
                     SetupDoorsMenu();
+                    SetupWindowsMenu();
+
+                    if (Player.PlayerInformation.IsDeveloper()) DeveloperMenu();
                 }
 
             };
@@ -85,10 +93,75 @@ namespace Curiosity.Client.net.Classes.Menus
 
             menu.OnListIndexChange += (_menu, _listItem, _oldIndex, _newIndex, _itemIndex) =>
             {
-                //Debug.WriteLine($"OnListIndexChange: [{_menu}, {_listItem}, {_oldIndex}, {_newIndex}, {_itemIndex}]");
+                if (_listItem.ItemData == "VEHICLE_LOCK")
+                {
+                    API.SetVehicleExclusiveDriver(currentVehicle.Handle, Client.PedHandle); // Should only do this on spawn
+
+                    if (_newIndex == (int)VehicleLock.Everyone)
+                    {
+                        API.SetVehicleAllowNoPassengersLockon(currentVehicle.Handle, false);
+                        API.SetVehicleDoorsLockedForAllPlayers(currentVehicle.Handle, false);
+                        currentVehicle.LockStatus = VehicleLockStatus.None;
+                    }
+
+                    if (_newIndex == (int)VehicleLock.PassengersOnly)
+                    {
+                        API.SetVehicleDoorsLockedForAllPlayers(currentVehicle.Handle, false);
+                        API.SetVehicleAllowNoPassengersLockon(currentVehicle.Handle, true);
+                        currentVehicle.LockStatus = VehicleLockStatus.None;
+                    }
+
+                    if (_newIndex == (int)VehicleLock.NoOne)
+                    {
+                        currentVehicle.LockStatus = VehicleLockStatus.Locked;
+                        API.SetVehicleAllowNoPassengersLockon(currentVehicle.Handle, true);
+                        API.SetVehicleDoorsLockedForAllPlayers(currentVehicle.Handle, true);
+                    }
+
+                    API.SetVehicleDoorsLockedForPlayer(currentVehicle.Handle, Client.PedHandle, false);
+                }
             };
 
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
+        }
+
+        private static void DeveloperMenu()
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+
+            Menu developerMenu = new Menu("Developer Options");
+            developerMenu.OnMenuOpen += (_menu) =>
+            {
+                _menu.AddMenuItem(new MenuItem("Repair", "Repair Vehicle") { ItemData = "VEHICLE_REPAIR" });
+                _menu.AddMenuItem(new MenuItem("Refuel", "Refuel Vehicle") { ItemData = "VEHICLE_REFUEL" });
+            };
+
+            developerMenu.OnMenuOpen += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = true;
+            };
+
+            developerMenu.OnMenuClose += (_menu) =>
+            {
+                Environment.UI.Location.HideLocation = false;
+                _menu.ClearMenuItems();
+            };
+
+            developerMenu.OnItemSelect += (Menu menu, MenuItem menuItem, int itemIndex) =>
+            {
+                if (menuItem.ItemData == "VEHICLE_REPAIR")
+                {
+                    Vehicle.VehicleDamage.Fix();
+                }
+
+                if (menuItem.ItemData == "VEHICLE_REFUEL")
+                {
+                    Vehicle.FuelManager.DevRefuel();
+                }
+
+            };
+
+            AddSubMenu(menu, developerMenu);
         }
 
         private static void SetupDoorsMenu()
