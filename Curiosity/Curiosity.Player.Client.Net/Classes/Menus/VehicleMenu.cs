@@ -26,17 +26,13 @@ namespace Curiosity.Client.net.Classes.Menus
         static List<string> VehicleDoorNames = Enum.GetNames(typeof(VehicleDoorIndex)).Select(d => d.AddSpacesToCamelCase()).ToList();
 
         static CitizenFX.Core.Vehicle ownedVehicle = null;
-        static CitizenFX.Core.Vehicle currentVehicle = null;
 
         public static void Init()
         {
             MenuBase.AddSubMenu(menu);
 
             menu.OnMenuOpen += (_menu) => {
-
-                if (Game.PlayerPed.IsInVehicle())
-                    currentVehicle = Game.PlayerPed.CurrentVehicle;
-
+                
                 if (Player.PlayerInformation.IsDeveloper())
                 {
                     List<string> vehicleLocking = Enum.GetNames(typeof(VehicleLock)).Select(d => d.AddSpacesToCamelCase()).ToList();
@@ -75,7 +71,7 @@ namespace Curiosity.Client.net.Classes.Menus
                     SetupWindowsMenu();
                 }
 
-                if (currentVehicle != null)
+                if (MenuBase.CurrentVehicle != null)
                     SetupDoorsMenu();
 
                 if (Game.PlayerPed.IsInVehicle())
@@ -99,30 +95,28 @@ namespace Curiosity.Client.net.Classes.Menus
             {
                 if (_listItem.ItemData == "VEHICLE_LOCK")
                 {
-                    API.SetVehicleExclusiveDriver(currentVehicle.Handle, Client.PedHandle); // Should only do this on spawn
-
                     if (_newIndex == (int)VehicleLock.Everyone)
                     {
-                        API.SetVehicleAllowNoPassengersLockon(currentVehicle.Handle, false);
-                        API.SetVehicleDoorsLockedForAllPlayers(currentVehicle.Handle, false);
-                        currentVehicle.LockStatus = VehicleLockStatus.None;
+                        API.SetVehicleAllowNoPassengersLockon(MenuBase.CurrentVehicle.Handle, false);
+                        API.SetVehicleDoorsLockedForAllPlayers(MenuBase.CurrentVehicle.Handle, false);
+                        MenuBase.CurrentVehicle.LockStatus = VehicleLockStatus.None;
                     }
 
                     if (_newIndex == (int)VehicleLock.PassengersOnly)
                     {
-                        API.SetVehicleDoorsLockedForAllPlayers(currentVehicle.Handle, true);
-                        API.SetVehicleAllowNoPassengersLockon(currentVehicle.Handle, false);
-                        currentVehicle.LockStatus = VehicleLockStatus.None;
+                        API.SetVehicleDoorsLockedForAllPlayers(MenuBase.CurrentVehicle.Handle, true);
+                        API.SetVehicleAllowNoPassengersLockon(MenuBase.CurrentVehicle.Handle, false);
+                        MenuBase.CurrentVehicle.LockStatus = VehicleLockStatus.None;
                     }
 
                     if (_newIndex == (int)VehicleLock.NoOne)
                     {
-                        currentVehicle.LockStatus = VehicleLockStatus.Locked;
-                        API.SetVehicleAllowNoPassengersLockon(currentVehicle.Handle, true);
-                        API.SetVehicleDoorsLockedForAllPlayers(currentVehicle.Handle, true);
+                        MenuBase.CurrentVehicle.LockStatus = VehicleLockStatus.Locked;
+                        API.SetVehicleAllowNoPassengersLockon(MenuBase.CurrentVehicle.Handle, true);
+                        API.SetVehicleDoorsLockedForAllPlayers(MenuBase.CurrentVehicle.Handle, true);
                     }
 
-                    API.SetVehicleDoorsLockedForPlayer(currentVehicle.Handle, Client.PedHandle, false);
+                    API.SetVehicleDoorsLockedForPlayer(MenuBase.CurrentVehicle.Handle, Client.PedHandle, false);
                 }
             };
 
@@ -174,7 +168,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
             CitizenFX.Core.Vehicle attachedVehicle = null;
 
-            VehicleDoor[] doors = currentVehicle.Doors.GetAll();
+            VehicleDoor[] doors = MenuBase.CurrentVehicle.Doors.GetAll();
             VehicleDoor[] attachedDoors = null;
 
             doors.ToList().ForEach(door =>
@@ -188,7 +182,7 @@ namespace Curiosity.Client.net.Classes.Menus
             });
 
             int trailerHandle = 0;
-            CitizenFX.Core.Native.API.GetVehicleTrailerVehicle(currentVehicle.Handle, ref trailerHandle);
+            CitizenFX.Core.Native.API.GetVehicleTrailerVehicle(MenuBase.CurrentVehicle.Handle, ref trailerHandle);
 
             if (trailerHandle != 0)
             {
@@ -214,7 +208,7 @@ namespace Curiosity.Client.net.Classes.Menus
                 VehicleDoor door = null;
 
                 if (menuItem.ItemData.Type == 1)
-                    door = currentVehicle.Doors[menuItem.ItemData.index];
+                    door = MenuBase.CurrentVehicle.Doors[menuItem.ItemData.index];
 
                 if (menuItem.ItemData.Type == 2)
                     door = attachedVehicle.Doors[menuItem.ItemData.index];
@@ -249,7 +243,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
                 VehicleWindowValues.Select((window, index) => new { window, index }).ToList().ForEach(o =>
                 {
-                    var window = currentVehicle.Windows[o.window];
+                    var window = MenuBase.CurrentVehicle.Windows[o.window];
                     windowMenu.AddMenuItem(new MenuCheckboxItem($"Roll Down {window.Index.ToString().AddSpacesToCamelCase()}") {
                         Checked = windowStates[window.Index],
                         ItemData = window.Index
@@ -258,7 +252,7 @@ namespace Curiosity.Client.net.Classes.Menus
             };
 
             windowMenu.OnCheckboxChange += (Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState) => {
-                VehicleWindow window = currentVehicle.Windows[menuItem.ItemData];
+                VehicleWindow window = MenuBase.CurrentVehicle.Windows[menuItem.ItemData];
                 if (menuItem.Checked) window.RollDown(); else window.RollUp();
                 windowStates[(VehicleWindowIndex)menuItem.Index] = menuItem.Checked;
             };

@@ -1,5 +1,7 @@
 ﻿using MenuAPI;
 using System.Collections.Generic;
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
@@ -9,6 +11,8 @@ namespace Curiosity.Client.net.Classes.Menus
 
         public static Menu Menu = new Menu("Interaction Menu", "Interaction Menu");
         public static bool isMenuOpen = Menu.Visible;
+
+        public static CitizenFX.Core.Vehicle CurrentVehicle = null;
 
         public static void Init()
         {
@@ -237,6 +241,14 @@ namespace Curiosity.Client.net.Classes.Menus
             Menu.OnMenuOpen += (_menu) =>
             {
                 Environment.UI.Location.HideLocation = true;
+
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    CurrentVehicle = Game.PlayerPed.CurrentVehicle;
+
+                    if (!CurrentVehicle.PreviouslyOwnedByPlayer)
+                        API.SetVehicleExclusiveDriver(CurrentVehicle.Handle, Client.PedHandle);
+                }
             };
 
             //menu.OnDynamicListItemCurrentItemChange += (_menu, _dynamicListItem, _oldCurrentItem, _newCurrentItem) =>
