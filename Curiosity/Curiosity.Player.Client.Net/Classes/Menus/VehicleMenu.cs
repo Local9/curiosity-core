@@ -34,7 +34,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
             menu.OnMenuOpen += (_menu) => {
 
-                if (currentVehicle != Game.PlayerPed.CurrentVehicle)
+                if (Game.PlayerPed.IsInVehicle())
                     currentVehicle = Game.PlayerPed.CurrentVehicle;
 
                 if (Player.PlayerInformation.IsDeveloper())
@@ -72,12 +72,16 @@ namespace Curiosity.Client.net.Classes.Menus
 
                     menu.AddMenuItem(engineMenuItem);
 
-                    SetupDoorsMenu();
                     SetupWindowsMenu();
-
-                    if (Player.PlayerInformation.IsDeveloper()) DeveloperMenu();
                 }
 
+                if (currentVehicle != null)
+                    SetupDoorsMenu();
+
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    if (Player.PlayerInformation.IsDeveloper()) DeveloperMenu();
+                }
             };
 
             menu.OnMenuOpen += (_menu) =>
@@ -106,8 +110,8 @@ namespace Curiosity.Client.net.Classes.Menus
 
                     if (_newIndex == (int)VehicleLock.PassengersOnly)
                     {
-                        API.SetVehicleDoorsLockedForAllPlayers(currentVehicle.Handle, false);
-                        API.SetVehicleAllowNoPassengersLockon(currentVehicle.Handle, true);
+                        API.SetVehicleDoorsLockedForAllPlayers(currentVehicle.Handle, true);
+                        API.SetVehicleAllowNoPassengersLockon(currentVehicle.Handle, false);
                         currentVehicle.LockStatus = VehicleLockStatus.None;
                     }
 

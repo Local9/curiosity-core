@@ -16,11 +16,12 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
     class PlayerComponents
     {
-        static bool HasSetupMenu = false;
-
         static Menu menu = new Menu("Clothing", "Clothing");
 
+        static List<string> currentVariants = PlayerCreatorMenu.GenerateNumberList("", 0);
+
         static Dictionary<string, Tuple<int, int>> componentSettings = new Dictionary<string, Tuple<int, int>>();
+        static MenuListItem menuVariants;
 
         static Dictionary<string, string> componentAndPropRenamings = new Dictionary<string, string>()
         {
@@ -44,9 +45,6 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             {
                 Environment.UI.Location.HideLocation = true;
 
-                if (HasSetupMenu)
-                    return;
-
                 PedComponent[] components = Game.PlayerPed.Style.GetAllComponents();
 
                 components.ToList().ForEach(c =>
@@ -66,28 +64,26 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
                                 menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}", PlayerCreatorMenu.GenerateNumberList("", c.Count - 1), index) { ItemData = new ComponentType() { Type = 1, PedComponent = c } });
                             }
-                            if (c.HasTextureVariations && !(c.ToString() == "Hair"))
-                            {
-                                int index = 0;
-                                if (Client.User.Skin.Components.ContainsKey(Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString())))
-                                    index = Client.User.Skin.Components[Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString())].Item2;
 
-                                menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}: Variants", PlayerCreatorMenu.GenerateNumberList("", c.TextureCount - 1), index) { ItemData = new ComponentType() { Type = 2, PedComponent = c } });
-                            }
-                        }
+                            int indexVariant = 0;
+                            if (Client.User.Skin.Components.ContainsKey(Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString())))
+                                indexVariant = Client.User.Skin.Components[Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString())].Item2;
+
+                            menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}: Variants", currentVariants, indexVariant) { ItemData = new ComponentType() { Type = 2, PedComponent = c }, Enabled = indexVariant > 0 });
+                    }
                     }
                     catch (Exception ex)
                     {
                         Log.Error($"[PlayerComponents] Exception in components code; {ex.Message}");
                     }
                 });
-
-                HasSetupMenu = true;
+                
             };
 
             menu.OnMenuClose += (_menu) =>
             {
                 Environment.UI.Location.HideLocation = false;
+                _menu.ClearMenuItems();
             };
 
             int currentModel = 0;
@@ -107,6 +103,21 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                     currentModel = _newSelectionIndex;
                     componentSettings[_listItem.ItemData.PedComponent.ToString()] = new Tuple<int, int>(currentModel, 0);
                     API.SetPedComponentVariation(Client.PedHandle, Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(_listItem.ItemData.PedComponent.ToString()), currentModel, 0, 0);
+
+                    MenuListItem m = (MenuListItem)_menu.GetMenuItems()[_itemIndex + 1];
+
+                    if (_listItem.ItemData.PedComponent.HasTextureVariations)
+                    {
+                        m.Enabled = true;
+                        m.ListItems = PlayerCreatorMenu.GenerateNumberList("", _listItem.ItemData.PedComponent.TextureCount - 1);
+                        m.ListIndex = 0;
+                    }
+                    else
+                    {
+                        m.Enabled = false;
+                        m.ListItems = PlayerCreatorMenu.GenerateNumberList("", 0);
+                        m.ListIndex = 0;
+                    }
                 }
 
                 PlayerCreatorMenu.StoreComponents(Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(_listItem.ItemData.PedComponent.ToString()), currentModel, currentTexture);

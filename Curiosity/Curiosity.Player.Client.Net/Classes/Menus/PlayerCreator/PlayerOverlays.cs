@@ -19,12 +19,12 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
         public string Name;
         public int maxOption;
         public int colorType = 0;
-        public List<string> OptionNames { get { var list = Enumerable.Range(0, maxOption + 1).Select(i => i.ToString()).ToList(); list.Add("None"); return list; } }
     }
 
     class PlayerOverlays
     {
         static bool HasSetupMenu = false;
+        static int currentColor = 0;
         static Menu menu = new Menu("Makeup", "Customise your characters face");
 
         static List<PedHeadOverlay> overlays = new List<PedHeadOverlay>()
@@ -67,8 +67,8 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
                 overlays.ForEach(o =>
                 {
-                    menu.AddMenuItem(new MenuListItem(o.Name, o.OptionNames, 0) { ItemData = new PedHeadOverlay { OverlayType = "OVERLAY_TYPE", ID = o.ID } });
-                    if (o.colorType != 0)
+                    menu.AddMenuItem(new MenuListItem(o.Name, GenerateNumberList("", o.maxOption), 0) { ItemData = new PedHeadOverlay { OverlayType = "OVERLAY_TYPE", ID = o.ID } });
+                    if (o.colorType > 0)
                     {
                         menu.AddMenuItem(new MenuListItem(o.Name, GenerateNumberList("Color", o.maxOption), 0) { ItemData = new PedHeadOverlay { OverlayType = "OVERLAY_TYPE_COLOR", ID = o.ID, colorType = o.colorType } });
                     };
@@ -77,16 +77,26 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                 HasSetupMenu = true;
             };
 
-            menu.OnListIndexChange += (Menu _menu, MenuListItem _listItem, int _oldSelectionIndex, int _newSelectionIndex, int _itemIndex) =>
+            menu.OnListIndexChange += async (Menu _menu, MenuListItem _listItem, int _oldSelectionIndex, int _newSelectionIndex, int _itemIndex) =>
             {
                 if (_listItem.ItemData.OverlayType == "OVERLAY_TYPE")
                 {
-                    Function.Call(Hash.SET_PED_HEAD_OVERLAY, Client.PedHandle, _listItem.ItemData.ID, _newSelectionIndex, 1f);
+
+                    if (_newSelectionIndex == 0)
+                        currentColor = 0;
+
+                    API.SetPedHeadOverlay(Client.PedHandle, _listItem.ItemData.ID, _newSelectionIndex, 1f);
+                    await BaseScript.Delay(0);
+                    API.SetPedHeadOverlayColor(Client.PedHandle, _listItem.ItemData.ID, _listItem.ItemData.colorType, currentColor, currentColor);
+                    await BaseScript.Delay(0);
                     PlayerCreatorMenu.StoreOverlay(_listItem.ItemData.ID, _newSelectionIndex);
+                    await BaseScript.Delay(0);
+                    PlayerCreatorMenu.StoreOverlayColor(_listItem.ItemData.ID, _listItem.ItemData.colorType, currentColor);
                 }
 
                 if (_listItem.ItemData.OverlayType == "OVERLAY_TYPE_COLOR")
                 {
+                    currentColor = _newSelectionIndex;
                     Function.Call(Hash._SET_PED_HEAD_OVERLAY_COLOR, Client.PedHandle, _listItem.ItemData.ID, _listItem.ItemData.colorType, _newSelectionIndex, _newSelectionIndex);
                     PlayerCreatorMenu.StoreOverlayColor(_listItem.ItemData.ID, _listItem.ItemData.colorType, _newSelectionIndex);
                 }

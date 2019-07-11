@@ -22,6 +22,8 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
         static bool HasSetupMenu = false;
         static Menu menu = new Menu("Accessories", "Accessories");
         static Dictionary<string, Tuple<int, int>> propSettings = new Dictionary<string, Tuple<int, int>>();
+        static List<string> currentVariants = PlayerCreatorMenu.GenerateNumberList("", 1);
+        static MenuListItem menuVariants;
 
         static Dictionary<string, string> componentAndPropRenamings = new Dictionary<string, string>()
         {
@@ -58,13 +60,18 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
                         if (p.HasVariations)
                         {
-                            menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(p.ToString()) ? componentAndPropRenamings[p.ToString()] : p.ToString())}", PlayerCreatorMenu.GenerateNumberList("", p.Count - 1, -1), 0) { ItemData = new PropType() { Type = 1, PedProp = p } });
+                            int index = 0;
+                            if (Client.User.Skin.Props.ContainsKey(Enum.GetNames(typeof(PedProps)).ToList().IndexOf(p.ToString())))
+                                index = Client.User.Skin.Props[Enum.GetNames(typeof(PedProps)).ToList().IndexOf(p.ToString())].Item1;
+
+                            menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(p.ToString()) ? componentAndPropRenamings[p.ToString()] : p.ToString())}", PlayerCreatorMenu.GenerateNumberList("", p.Count - 1), 0) { ItemData = new PropType() { Type = 1, PedProp = p } });
                         }
 
-                        if (p.HasTextureVariations)
-                        {
-                            menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(p.ToString()) ? componentAndPropRenamings[p.ToString()] : p.ToString())}: Variants", PlayerCreatorMenu.GenerateNumberList("", p.TextureCount - 1), 0) { ItemData = new PropType() { Type = 2, PedProp = p } });
-                        }
+                        int indexVariant = 0;
+                        if (Client.User.Skin.Props.ContainsKey(Enum.GetNames(typeof(PedProps)).ToList().IndexOf(p.ToString())))
+                            indexVariant = Client.User.Skin.Props[Enum.GetNames(typeof(PedProps)).ToList().IndexOf(p.ToString())].Item2;
+
+                        menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(p.ToString()) ? componentAndPropRenamings[p.ToString()] : p.ToString())}: Variants", currentVariants, indexVariant) { ItemData = new PropType() { Type = 2, PedProp = p }, Enabled = indexVariant > 0 });
                     }
                     catch (Exception ex)
                     {
@@ -96,7 +103,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                 else
                 {
                     propSettings[_listItem.ItemData.PedProp.ToString()] = new Tuple<int, int>(_newSelectionIndex, 0);
-                    if (_newSelectionIndex == -1)
+                    if (_newSelectionIndex == 0)
                     {
                         Function.Call(Hash.CLEAR_PED_PROP, Client.PedHandle, Enum.GetNames(typeof(PedProps)).ToList().IndexOf(_listItem.ItemData.PedProp.ToString()));
                     }
@@ -105,6 +112,21 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                         Function.Call(Hash.SET_PED_PROP_INDEX, Client.PedHandle, Enum.GetNames(typeof(PedProps)).ToList().IndexOf(_listItem.ItemData.PedProp.ToString()), _newSelectionIndex, 0, false);
                     }
                     currentProp = _newSelectionIndex;
+
+                    MenuListItem m = (MenuListItem)_menu.GetMenuItems()[_itemIndex + 1];
+
+                    if (_listItem.ItemData.PedProp.HasTextureVariations)
+                    {
+                        m.Enabled = true;
+                        m.ListItems = PlayerCreatorMenu.GenerateNumberList("", _listItem.ItemData.PedProp.TextureCount - 1);
+                        m.ListIndex = 0;
+                    }
+                    else
+                    {
+                        m.Enabled = false;
+                        m.ListItems = PlayerCreatorMenu.GenerateNumberList("", 0);
+                        m.ListIndex = 0;
+                    }
                 }
 
                 PlayerCreatorMenu.StoreProps(Enum.GetNames(typeof(PedProps)).ToList().IndexOf(_listItem.ItemData.PedProp.ToString()), currentProp, currentTexture);
