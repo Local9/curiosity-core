@@ -12,9 +12,12 @@ namespace Curiosity.Client.net.Classes.Actions
     class ChatCommands
     {
         static Client client = Client.GetInstance();
+        static uint playerGroupHash = 0;
 
         public static void Init()
         {
+            API.AddRelationshipGroup("PLAYER", ref playerGroupHash);
+
             client.RegisterEventHandler("curiosity:Client:Command:SpawnWeapon", new Action<string>(SpawnWeapon));
             client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string>(SpawnCar));
 
@@ -26,9 +29,39 @@ namespace Curiosity.Client.net.Classes.Actions
             // test commands
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
+
+            API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
         }
 
-        static async void Fire(int playerHandle, List<object> arguments, string raw)
+        static void KnifeCallout(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+
+            int numberToSpawn = 1;
+            if (arguments.Count > 0)
+                int.TryParse($"{arguments[0]}", out numberToSpawn);
+
+            string location = "~o~24/7, Sandy Shores~w~";
+            string callout = "~r~Armed Man~w~";
+            string response = "~r~Code 3~w~";
+
+            uint suspectGroupHash = 0;
+            API.AddRelationshipGroup("suspect", ref suspectGroupHash);
+            API.SetRelationshipBetweenGroups(5, suspectGroupHash, playerGroupHash);
+            API.SetRelationshipBetweenGroups(5, playerGroupHash, suspectGroupHash);
+
+            Model marine = PedHash.Marine01SMY;
+            Vector3 postion = new Vector3(1966.8389892578f, 3737.8703613281f, 32.188823699951f);
+
+            for(int i = 0; i < numberToSpawn; i++)
+                Environment.PedClasses.PedHandler.Create(marine, postion, 180.0f, suspectGroupHash);
+
+            Environment.UI.Notifications.LifeV(1, $"All Units", $"{response} {location}", $"{callout}", 2);
+        }
+
+        
+
+        static void Fire(int playerHandle, List<object> arguments, string raw)
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
 
