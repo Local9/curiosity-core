@@ -70,7 +70,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                                 indexVariant = Client.User.Skin.Components[Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString())].Item2;
 
                             menu.AddMenuItem(new MenuListItem($@"{(componentAndPropRenamings.ContainsKey(c.ToString()) ? componentAndPropRenamings[c.ToString()] : c.ToString())}: Variants", currentVariants, indexVariant) { ItemData = new ComponentType() { Type = 2, PedComponent = c }, Enabled = indexVariant > 0 });
-                    }
+                        }
                     }
                     catch (Exception ex)
                     {

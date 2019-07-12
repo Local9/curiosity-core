@@ -12,8 +12,6 @@ namespace Curiosity.Client.net.Classes.Menus
         public static Menu Menu = new Menu("Interaction Menu", "Interaction Menu");
         public static bool isMenuOpen = Menu.Visible;
 
-        public static CitizenFX.Core.Vehicle CurrentVehicle = null;
-
         public static void Init()
         {
             //// Setting the menu alignment to be right aligned. This can be changed at any time and it'll update instantly.
@@ -241,14 +239,6 @@ namespace Curiosity.Client.net.Classes.Menus
             Menu.OnMenuOpen += (_menu) =>
             {
                 Environment.UI.Location.HideLocation = true;
-
-                if (Game.PlayerPed.IsInVehicle())
-                {
-                    CurrentVehicle = Game.PlayerPed.CurrentVehicle;
-
-                    if (!CurrentVehicle.PreviouslyOwnedByPlayer)
-                        API.SetVehicleExclusiveDriver(CurrentVehicle.Handle, Client.PedHandle);
-                }
             };
 
             //menu.OnDynamicListItemCurrentItemChange += (_menu, _dynamicListItem, _oldCurrentItem, _newCurrentItem) =>

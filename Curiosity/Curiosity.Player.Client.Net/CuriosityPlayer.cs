@@ -22,7 +22,6 @@ namespace Curiosity.Client.net
 
         bool isLoading = false;
         bool displayInfo = true;
-        Text text;
         int screenWidth;
         bool hasSpawned = false;
         bool serverReady = false;
@@ -42,7 +41,6 @@ namespace Curiosity.Client.net
 
             Tick += UpdatePlayerLocation;
             Tick += PlayerAndServerSettings;
-            Tick += DisplayInformation;
             Tick += SpawnTick;
         }
 
@@ -50,17 +48,6 @@ namespace Curiosity.Client.net
         {
             displayInfo = display;
             await Delay(0);
-        }
-
-        async Task DisplayInformation()
-        {
-            while (true)
-            {
-                if (text != null)
-                    text.Enabled = displayInfo;
-
-                await Delay(0);
-            }
         }
 
         async Task DisplayLoading()
@@ -88,22 +75,23 @@ namespace Curiosity.Client.net
 
         async void UpdatePlayerRole(string role)
         {
-            if (text == null) return;
+            if (role != roleName)
+                Classes.Environment.UI.Notifications.LifeV(1, $"Information", "Privilege Update", $"You have been granted the role of ~y~{role}.", 2);
 
-            if (screenWidth != Screen.Resolution.Width)
-            {
-                float left = (Screen.Width / 2) / 3f;
+            //if (screenWidth != Screen.Resolution.Width)
+            //{
+            //    float left = (Screen.Width / 2) / 3f;
 
-                if (Screen.Resolution.Width > 1980)
-                {
-                    left = 1f;
-                }
+            //    if (Screen.Resolution.Width > 1980)
+            //    {
+            //        left = 1f;
+            //    }
 
-                text.Position = new System.Drawing.PointF { X = left, Y = Screen.Height - 50 };
-                screenWidth = Screen.Resolution.Width;
-            }
+            //    text.Position = new System.Drawing.PointF { X = left, Y = Screen.Height - 50 };
+            //    screenWidth = Screen.Resolution.Width;
+            //}
 
-            text.Caption = $"ROLE: {role}\nNAME: {Game.Player.Name}\nLIFEVID: {userId}";
+            //text.Caption = $"ROLE: {role}\nNAME: {Game.Player.Name}\nLIFEVID: {userId}";
 
             await Delay(0);
         }
@@ -192,7 +180,6 @@ namespace Curiosity.Client.net
 
         async void SpawnPlayer(long userId, int roleId, string role, float x, float y, float z)
         {
-
             Screen.Fading.FadeOut(500);
 
             Debug.WriteLine("OnPlayerSetup() -> STARTING");
@@ -318,18 +305,6 @@ namespace Curiosity.Client.net
 
             await Delay(0);
 
-            float left = (Screen.Width / 2) / 3f;
-
-            if (Screen.Resolution.Width > 1980)
-            {
-                left = 1f;
-            }
-
-            screenWidth = Screen.Resolution.Width;
-
-            text = new Text($"ROLE: {role}\nNAME: {Game.Player.Name}\nLIFEVID: {userId}", new System.Drawing.PointF { X = left, Y = Screen.Height - 50 }, 0.3f, System.Drawing.Color.FromArgb(75, 255, 255, 255), Font.ChaletComprimeCologne, Alignment.Left, false, true);
-            text.WrapWidth = 300;
-
             while (true)
             {
                 ClearScreen();
@@ -375,11 +350,7 @@ namespace Curiosity.Client.net
                 Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(6, randomNumber, 0);
             }
 
-            while (true)
-            {
-                text.Draw();
-                await Delay(0);
-            }
+            Classes.Environment.UI.Notifications.LifeV(1, $"Welcome...", $"~y~{Game.Player.Name}~s~!", $"~b~Life V ID: ~y~{userId}~n~~b~Role: ~y~{role}", 2);
         }
 
         async Task UpdatePlayerLocation()
