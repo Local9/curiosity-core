@@ -65,6 +65,7 @@
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\Mobile\Api\Applications.cs" />
+    <Compile Include="Classes\Environment\UI\Mobile\Api\Entity\Item.cs" />
     <Compile Include="Classes\Environment\UI\Mobile\Api\Entity\Screen.cs" />
     <Compile Include="Classes\Environment\UI\Mobile\Api\Entity\Application.cs" />
     <Compile Include="Classes\Environment\UI\Mobile\Api\Screens.cs" />

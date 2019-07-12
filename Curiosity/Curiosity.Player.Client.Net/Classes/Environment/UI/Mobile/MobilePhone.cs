@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Client.net.Classes.Environment.UI.Mobile.Api.Entity;
 
 namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
 {
@@ -18,6 +19,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
         static public bool IsMobilePhoneOpen = false;
         static public bool InSleepMode = false;
         static public bool IsInApp = false;
+
         static int theme = API.GetResourceKvpInt("vf_phone_theme");
         static int wallpaper = API.GetResourceKvpInt("vf_phone_wallpaper");
 
@@ -26,18 +28,39 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
         static int visibleAnimProgress = 21;
         static int selectedItem = 4;
 
+        public static Dictionary<int, Application> applications = new Dictionary<int, Application>();
+
         // app screen
-
-
         static int mobileScaleform;
 
         public static void Init()
         {
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnMobileCreationTick);
             client.RegisterTickHandler(OnMainAppTick);
+
+            AddApplication(Api.AppIcons.Empty);
+            AddApplication(Api.AppIcons.Empty);
+            AddApplication(Api.AppIcons.Contacts);
+
+            AddApplication(Api.AppIcons.Empty);
+            AddApplication(Api.AppIcons.Empty);
+            AddApplication(Api.AppIcons.Empty);
+
+            AddApplication(Api.AppIcons.Empty);
+            AddApplication(Api.AppIcons.Settings);
+            AddApplication(Api.AppIcons.Empty);
         }
 
-        static async Task OnTick()
+        static void AddApplication(Api.AppIcons appIcon)
+        {
+            if (applications.Count == 9) return;
+
+            int id = applications.Count + 1;
+
+            applications.Add(id, new Application() { Id = id, Name = $"App #{id}", Icon = appIcon });
+        }
+
+        static async Task OnMobileCreationTick()
         {
             if (IsMobilePhoneOpen)
             {
@@ -129,7 +152,15 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                         API.PushScaleformMovieFunctionParameterInt(1);
                         API.PushScaleformMovieFunctionParameterInt(i);
                         // Need to loop over applications
-                        API.PushScaleformMovieFunctionParameterInt(3);
+
+                        if (applications.ContainsKey(i + 1))
+                        {
+                            API.PushScaleformMovieFunctionParameterInt((int)applications[i + 1].Icon);
+                        }
+                        else
+                        {
+                            API.PushScaleformMovieFunctionParameterInt(3);
+                        }
 
                         API.PopScaleformMovieFunctionVoid();
                     }
@@ -142,7 +173,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                     for (int i = 0; i < TOTAL_APPS; i++)
                     {
                         API.PushScaleformMovieFunction(mobileScaleform, "SET_HEADER");
-                        API.PushScaleformMovieFunctionParameterString("LifeV");
+                        API.PushScaleformMovieFunctionParameterString("Life V");
                         API.PopScaleformMovieFunctionVoid();
                     }
 

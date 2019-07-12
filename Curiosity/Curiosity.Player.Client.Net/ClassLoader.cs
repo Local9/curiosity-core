@@ -71,7 +71,9 @@ namespace Curiosity.Client.net
             Scoreboard.Init();
             WorldTime.Init();
             Notifications.Init();
-            // MobilePhone.Init();
+
+            // Mobile Phone Addons
+            // Classes.Environment.UI.Mobile.MobilePhone.Init();
 
             // MENU
             //MenuGlobals.Init();

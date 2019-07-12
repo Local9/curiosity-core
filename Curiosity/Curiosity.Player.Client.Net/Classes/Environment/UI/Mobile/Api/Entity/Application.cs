@@ -10,6 +10,17 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api.Entity
     {
         public int Id;
         public string Name;
-        public int Icon;
+        public AppIcons Icon;
+
+        public int GetID { get { return Id; } }
+        public string GetName { get { return Name; } }
+        public AppIcons GetIcon { get { return Icon; } }
+
+        static Dictionary<int, Screen> Screens = new Dictionary<int, Screen>();
+
+        public static void CreateListScreen(string header)
+        {
+
+        }
     }
 }
