@@ -33,7 +33,7 @@ namespace Curiosity.Client.net.Classes.Environment
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
             client.RegisterTickHandler(OnWastedCheck);
 
-            foreach(Vector3 pos in hospitals)
+            foreach (Vector3 pos in hospitals)
             {
                 API.AddHospitalRestart(pos.X, pos.Y, pos.Z - 1.0f, 0.0f, 0);
             }
@@ -46,71 +46,77 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static async Task OnWastedCheck()
         {
-            await Client.Delay(10);
-            if (Game.PlayerPed.IsDead && hasPlayerSpawned)
+            try
             {
-                Entity entity = Game.PlayerPed.GetKiller();
-
-                
-                await Client.Delay(0);
-                UI.Scaleforms.Wasted();
-
-                await Client.Delay(2000);
-
-                Screen.Fading.FadeOut(1000);
-
-                while (Screen.Fading.IsFadingOut)
+                await Client.Delay(10);
+                if (Game.PlayerPed.IsDead && hasPlayerSpawned)
                 {
+                    // Entity entity = Game.PlayerPed.GetKiller();
+
                     await Client.Delay(0);
-                }
+                    UI.Scaleforms.Wasted();
 
-                Game.Player.WantedLevel = 0;
-                Game.PlayerPed.ClearBloodDamage();
-                Game.PlayerPed.ClearLastWeaponDamage();
+                    await Client.Delay(2000);
 
-                int r = rnd.Next(hospitals.Count);
+                    Screen.Fading.FadeOut(1000);
 
-                Vector3 playerPos = Game.PlayerPed.Position;
-
-                Vector3 pos = new Vector3();
-
-                foreach (Vector3 hosPos in hospitals)
-                {
-                    float distance = API.GetDistanceBetweenCoords(playerPos.X, playerPos.Y, playerPos.Z, hosPos.X, hosPos.Y, hosPos.Z, false);
-                    
-                    if (distance < 3000f)
+                    while (Screen.Fading.IsFadingOut)
                     {
-                        pos = hosPos;
-                        break;
+                        await Client.Delay(0);
                     }
+
+                    Game.Player.WantedLevel = 0;
+                    Game.PlayerPed.ClearBloodDamage();
+                    Game.PlayerPed.ClearLastWeaponDamage();
+
+                    int r = rnd.Next(hospitals.Count);
+
+                    Vector3 playerPos = Game.PlayerPed.Position;
+
+                    Vector3 pos = new Vector3();
+
+                    foreach (Vector3 hosPos in hospitals)
+                    {
+                        float distance = API.GetDistanceBetweenCoords(playerPos.X, playerPos.Y, playerPos.Z, hosPos.X, hosPos.Y, hosPos.Z, false);
+
+                        if (distance < 3000f)
+                        {
+                            pos = hosPos;
+                            break;
+                        }
+                    }
+
+                    if (pos.IsZero)
+                    {
+                        pos = hospitals[r];
+                        UI.Notifications.LifeV(1, "EMS", "", "Looks like you had a bad coma...", 132);
+                    }
+
+                    float groundZ = pos.Z;
+                    API.GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z, ref groundZ, false);
+
+                    Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, pos.Z - 1.0f);
+
+                    Game.PlayerPed.Resurrect();
+                    await Client.Delay(1000);
+
+                    Screen.Fading.FadeIn(1000);
+
+                    while (Screen.Fading.IsFadingIn)
+                    {
+                        await Client.Delay(0);
+                    }
+
+                    Client.TriggerServerEvent("curiosity:Server:Bank:MedicalFees");
+                    UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You have been charged for your stay, please try to stay alive.", 132);
                 }
-
-                if (pos.IsZero)
-                {
-                    pos = hospitals[r];
-                    UI.Notifications.LifeV(1, "EMS", "", "Looks like you had a bad coma...", 132);
-                }
-
-                float groundZ = pos.Z;
-                API.GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z, ref groundZ, false);
-
-                Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, pos.Z - 1.0f);
-
-                Game.PlayerPed.Resurrect();
-                await Client.Delay(1000);
-
-                Screen.Fading.FadeIn(1000);
-
-                while (Screen.Fading.IsFadingIn)
-                {
-                    await Client.Delay(0);
-                }
-
-                Client.TriggerServerEvent("curiosity:Server:Bank:MedicalFees");
-                UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You have been charged for your stay, please try to stay alive.", 132);
-
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"OnWastedCheck -> {ex.Message}");
             }
         }
-
     }
+
 }
+

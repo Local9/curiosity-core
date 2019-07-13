@@ -1,16 +1,27 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Client.net.Classes.Vehicle;
 using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
 {
+    class SpeedoData
+    {
+        public bool showhud;
+        public double speed;
+    }
+
     static class Speedometer
     {
+        static Client client = Client.GetInstance();
+        static SpeedoData speedoData = new SpeedoData();
+
         static public void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnTick);
         }
 
         static public async Task OnTick()
@@ -28,31 +39,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     }
 
                     Vector2 position = new Vector2(0.167f, 0.867f);
-
-                    if (Screen.Resolution.Width > 1980)
-                    {
-                        position = new Vector2(0.001f, 0.867f);
-                    }
-
-                    string speedometerText = $"SPEED: {2.24 * Game.PlayerPed.CurrentVehicle.Speed:0} mph / {3.60 * Game.PlayerPed.CurrentVehicle.Speed:0} kph";
-                    UI.DrawText(speedometerText, position, color, 0.3f, Font.ChaletComprimeCologne);
-                    //if (CruiseControl.CruiseControlActive && !CruiseControl.CruiseControlDisabled)
-                    //{
-                    //    float speedometerWidth = Location.GetTextWidth(speedometerText, CitizenFX.Core.UI.Font.ChaletLondon, 0.25f);
-                    //    FamilyRP.Roleplay.Client.UI.DrawText($"(CRUISE CONTROL)", new Vector2(0.18f + speedometerWidth, 0.93f), Color.FromArgb(160, 200, 200, 0), 0.25f);
-                    //}
-                    // Exclude bikes & trains from fuel -- TODO: exclude electric cars?
-                    if (FuelManager.vehicleFuel >= 0f && !Game.PlayerPed.CurrentVehicle.Model.IsBicycle && !Game.PlayerPed.CurrentVehicle.Model.IsTrain && !Game.PlayerPed.CurrentVehicle.Model.IsBoat)
-                    {
-                        position = new Vector2(0.167f, 0.883f);
-
-                        if (Screen.Resolution.Width > 1980)
-                        {
-                            position = new Vector2(0.001f, 0.883f);
-                        }
-
-                        UI.DrawText($"FUEL: {FuelManager.vehicleFuel:0.0}%", position, color, 0.3f, Font.ChaletComprimeCologne);
-                    }
 
                     if (!Game.PlayerPed.CurrentVehicle.Model.IsBicycle && !Game.PlayerPed.CurrentVehicle.Model.IsTrain && !Game.PlayerPed.CurrentVehicle.Model.IsBoat)
                     {
