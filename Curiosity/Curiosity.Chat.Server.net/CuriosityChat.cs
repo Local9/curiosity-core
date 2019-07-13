@@ -12,6 +12,8 @@ namespace Curiosity.Chat.Server.net
 {
     public class CuriosityChat : BaseScript
     {
+        Regex regex = new Regex(@"^[\x20-\x7E£]+$");
+
         public CuriosityChat()
         {
             EventHandlers["curiosity:Server:Chat:Message"] += new Action<Player, string, string, string, string>(ChatMessage);
@@ -29,6 +31,13 @@ namespace Curiosity.Chat.Server.net
                 // TODO: Use Log instead
                 Debug.WriteLine($"[CHAT] Invalid chat message '{message}' entered by '{player.Name}' (#{player.Handle})");
                 Function.Call(Hash.CANCEL_EVENT);
+                return;
+            }
+
+            if (!regex.Match(message).Success)
+            {
+                player.TriggerEvent("curiosity:Client:Chat:Message", $"SERVER", "red", "Invalid characters detected, message not sent.");
+                Debug.WriteLine($"[CHAT] Invalid chat message '{message}' entered by '{player.Name}' (#{player.Handle})");
                 return;
             }
 
