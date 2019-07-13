@@ -41,6 +41,9 @@ namespace Curiosity.Client.net.Classes.Actions
             if (arguments.Count > 0)
                 int.TryParse($"{arguments[0]}", out numberToSpawn);
 
+            if (numberToSpawn > 8)
+                numberToSpawn = 8;
+
             string location = "~o~24/7, Sandy Shores~w~";
             string callout = "~r~Armed Man~w~";
             string response = "~r~Code 3~w~";
@@ -56,7 +59,7 @@ namespace Curiosity.Client.net.Classes.Actions
             for(int i = 0; i < numberToSpawn; i++)
                 Environment.PedClasses.PedHandler.Create(marine, postion, 180.0f, suspectGroupHash);
 
-            Environment.UI.Notifications.LifeV(1, $"All Units", $"{response} {location}", $"{callout}", 2);
+            Environment.UI.Notifications.NineOneOne(2, $"All Units", $"{response} {location}", $"{callout}", 2);
         }
 
         

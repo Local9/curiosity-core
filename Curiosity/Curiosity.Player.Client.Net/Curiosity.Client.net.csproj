@@ -59,12 +59,14 @@
     <Compile Include="Classes\Environment\InstancingChecker.cs" />
     <Compile Include="Classes\Environment\IPL\Nightclub.cs" />
     <Compile Include="Classes\Environment\MarkerHandler.cs" />
+    <Compile Include="Classes\Environment\PedClasses\PedHandler.cs" />
     <Compile Include="Classes\Environment\SpawnManagement.cs" />
     <Compile Include="Classes\Environment\UI\Bank.cs" />
     <Compile Include="Classes\Environment\UI\ButtonInstructions.cs" />
     <Compile Include="Classes\Environment\UI\Compass.cs" />
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\Mobile\Api\Applications.cs" />
+    <Compile Include="Classes\Environment\UI\Mobile\Api\Entity\Item.cs" />
     <Compile Include="Classes\Environment\UI\Mobile\Api\Entity\Screen.cs" />
     <Compile Include="Classes\Environment\UI\Mobile\Api\Entity\Application.cs" />
     <Compile Include="Classes\Environment\UI\Mobile\Api\Screens.cs" />

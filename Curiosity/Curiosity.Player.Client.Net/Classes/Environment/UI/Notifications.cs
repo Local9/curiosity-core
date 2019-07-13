@@ -41,6 +41,15 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             API.DrawNotification(false, true);
         }
 
+        static public void NineOneOne(int iconType, string title, string subject, string message, int gtaColorId)
+        {
+            API.SetNotificationBackgroundColor(gtaColorId);
+            API.SetNotificationTextEntry("STRING");
+            API.AddTextComponentString(message);
+            API.SetNotificationMessage("CHAR_CALL911", "CHAR_CALL911", false, iconType, title, subject);
+            API.DrawNotification(false, true);
+        }
+
         static public void Advanced(string icon, int iconType, string title, string subject, string message, int gtaColorId)
         {
             API.SetNotificationBackgroundColor(gtaColorId);

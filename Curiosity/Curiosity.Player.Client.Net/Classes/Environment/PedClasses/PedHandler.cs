@@ -13,6 +13,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
         static Client client = Client.GetInstance();
         static List<Ped> peds = new List<Ped>();
         static Random random = new Random();
+        static int pedGroup = 1;
 
         public static void Init()
         {
@@ -26,12 +27,17 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             while (!model.IsLoaded)
                 await BaseScript.Delay(0);
 
+            if (!API.DoesGroupExist(pedGroup))
+            {
+                API.CreateGroup(pedGroup);
+                API.SetGroupFormation(pedGroup, 2);
+            }
+
             Ped ped = await World.CreatePed(model, position, 180.0f);
 
             ped.Weapons.Give(WeaponHash.Machete, 1000, true, true);
-            ped.RelationshipGroup = group;
+            API.SetPedRelationshipGroupHash(ped.Handle, group);
             ped.Task.FightAgainstHatedTargets(10.0f);
-            ped.Task.WanderAround();
 
             API.SetPedCombatMovement(ped.Handle, 2);
             API.SetPedCombatAttributes(ped.Handle, 5, true);
@@ -41,8 +47,18 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             Blip blip = ped.AttachBlip();
             blip.Color = BlipColor.Red;
             blip.Sprite = BlipSprite.Crosshair2;
+            blip.IsShortRange = true;
 
             peds.Add(ped);
+
+            if (peds.Count == 0)
+            {
+                API.SetPedAsGroupLeader(ped.Handle, pedGroup);
+            }
+            else
+            {
+                API.SetPedAsGroupMember(ped.Handle, pedGroup);
+            }
         }
 
         static async Task PedTick()
