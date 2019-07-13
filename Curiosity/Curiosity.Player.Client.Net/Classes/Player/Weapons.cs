@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using CitizenFX.Core;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 
 namespace Curiosity.Client.net.Classes.Player
 {
@@ -22,9 +17,11 @@ namespace Curiosity.Client.net.Classes.Player
         {
             if (!PlayerInformation.IsDeveloper())
             {
-                Game.PlayerPed.Weapons.RemoveAll();
-                API.BlockWeaponWheelThisFrame();
-                Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed, true);
+                if (Game.PlayerPed.Weapons.HasWeapon(WeaponHash.Minigun))
+                {
+                    Game.PlayerPed.Weapons.RemoveAll();
+                    Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed, true);
+                }
             }
 
             await Task.FromResult(0);
