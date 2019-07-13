@@ -76,7 +76,10 @@ namespace Curiosity.Client.net
         async void UpdatePlayerRole(string role)
         {
             if (role != roleName)
+            {
                 Classes.Environment.UI.Notifications.LifeV(1, $"Information", "Privilege Update", $"You have been granted the role of ~y~{role}.", 2);
+                role = roleName;
+            }
 
             //if (screenWidth != Screen.Resolution.Width)
             //{
