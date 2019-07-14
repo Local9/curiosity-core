@@ -19,9 +19,15 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             server.RegisterEventHandler("curiosity:Server:Vehicles:TempStore", new Action<CitizenFX.Core.Player, int>(OnPlayerEnteredVehicle));
             server.RegisterEventHandler("curiosity:Server:Vehicles:RemoveFromTempStore", new Action<CitizenFX.Core.Player, int>(OnRemoveFromTempStore));
+            server.RegisterEventHandler("curiosity:Server:Vehicle:Detonate", new Action<int>(OnDetonateVehicle));
             server.RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(OnPlayerDropped));
             server.RegisterTickHandler(OnVehicleCheck);
             Log.Verbose("Vehicle Manager Init");
+        }
+
+        static void OnDetonateVehicle(int vehId)
+        {
+            BaseScript.TriggerClientEvent("curiosity:Client:Vehicle:Detonate", vehId);
         }
 
         static void OnPlayerDropped([FromSource]CitizenFX.Core.Player player, string reason)

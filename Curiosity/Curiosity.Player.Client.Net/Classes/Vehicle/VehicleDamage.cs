@@ -78,6 +78,8 @@ namespace Curiosity.Client.net.Classes.Vehicle
             client.RegisterTickHandler(VehicleFuckery);
             client.RegisterTickHandler(AdditionalVehicleFuckery);
 
+            client.RegisterEventHandler("curiosity:Client:Vehicle:Detonate", new Action<int>(OnVehicleDetonate));
+
             if (randomTireBurstInterval != 0)
             {
                 tireBurstLuckyNumber = random.Next(tireBurstMaxNumber);
@@ -105,6 +107,19 @@ namespace Curiosity.Client.net.Classes.Vehicle
             classDamageMultiplier.Add(VehicleClass.Military, 0.67f);
             classDamageMultiplier.Add(VehicleClass.Commercial, 0.43f);
             classDamageMultiplier.Add(VehicleClass.Trains, 1.0f);
+        }
+
+        static void OnVehicleDetonate(int vehicleId)
+        {
+            int id = API.NetworkGetEntityFromNetworkId(vehicleId);
+            CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(id);
+            if (vehicle != null)
+            {
+                Vector3 pos = vehicle.Position;
+                API.AddExplosion(pos.X, pos.Y, pos.Z, (int)ExplosionType.Car, 1000.0f, true, false, 3.0f);
+                vehicle.Explode();
+                vehicle.ExplodeNetworked();
+            }
         }
 
         static float rangedScale(float inputValue, float originalMin, float originalMax, float newBegin, float newEnd, float curve)

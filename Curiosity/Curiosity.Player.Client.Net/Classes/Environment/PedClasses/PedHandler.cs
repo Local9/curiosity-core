@@ -54,9 +54,11 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 CitizenFX.Core.Player player = Client.players[name];
 
                 ped.Weapons.Give(WeaponHash.Pistol, 1000, true, true);
-                ped.Task.EnterAnyVehicle(VehicleSeat.Driver);
+                ped.Task.EnterAnyVehicle(VehicleSeat.Driver, 5000, 2.0f, 16);
                 ped.Task.VehicleChase(player.Character);
                 ped.Task.ChaseWithGroundVehicle(player.Character);
+
+                Classes.Environment.UI.Notifications.NineOneOne(1, "CHAR", "debug", $"{player.Name}", 2);
             }
 
             Blip blip = ped.AttachBlip();
