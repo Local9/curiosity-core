@@ -36,6 +36,11 @@ namespace Curiosity.Server.net
             isLive = API.GetConvar("server_live", "false") == "true";
             startingLocationId = API.GetConvarInt("starting_location_id", 1);
 
+            API.SetConvar("sv_authMaxVariance", "");
+            API.SetConvar("sv_authMinTrust", "");
+
+            API.SetConvarServerInfo("Discord", API.GetConvar("discord_url", "discord_url not set"));
+
             if (!isLive)
             {
                 Log.Warn("*****************************************************************");
