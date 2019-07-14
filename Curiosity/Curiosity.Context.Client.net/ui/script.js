@@ -21,13 +21,11 @@ $(document).ready(function(){
   // Listen for NUI Events
   window.addEventListener('message', function(event){
     // Crosshair
-    if(event.data.crosshair == true){
+    if(event.data.crosshair){
       $(".crosshair").addClass('fadeIn');
-      // $("#cursorPointer").css("display","block");
     }
-    if(event.data.crosshair == false){
+    if(!event.data.crosshair){
       $(".crosshair").removeClass('fadeIn');
-      // $("#cursorPointer").css("display","none");
     }
 
     // Menu
@@ -35,13 +33,11 @@ $(document).ready(function(){
       $(".crosshair").addClass('active');
       $(".menu-car").addClass('fadeIn');
       idEnt = event.data.idEntity;
-      // $("#cursorPointer").css("display","none");
     }
     if(event.data.menu == 'user'){
       $(".crosshair").addClass('active');
       $(".menu-user").addClass('fadeIn');
       idEnt = event.data.idEntity;
-      // $("#cursorPointer").css("display","none");
     }
     if((event.data.menu == false)){
       $(".crosshair").removeClass('active');
@@ -68,33 +64,33 @@ $(document).ready(function(){
   // Vehicle
   $('.openCoffre').on('click', function(e){
     e.preventDefault();
-    $.post('http://menu/togglecoffre', JSON.stringify({
+    $.post('http://curiosity-context/togglecoffre', JSON.stringify({
       id: idEnt
     }));
     $(this).find('.text').text($(this).find('.text').text() == 'Ouvrir le coffre' ? 'Fermer le coffre' : 'Ouvrir le coffre');
   });
 
-  $('.openCapot').on('click', function(e){
+    $('.openCarboot').on('click', function(e){
     e.preventDefault();
-    $.post('http://menu/togglecapot', JSON.stringify({
+    $.post('http://curiosity-context/togglecarboot', JSON.stringify({
       id: idEnt
     }));
-    $(this).find('.text').text($(this).find('.text').text() == 'Ouvrir le capot' ? 'Fermer le capot' : 'Ouvrir le capot');
+    $(this).find('.text').text($(this).find('.text').text() == 'Open the boot' ? 'Close the boot' : 'Open the boot');
   });
 
   $('.lock').on('click', function(e){
     e.preventDefault();
-    $.post('http://menu/togglelock', JSON.stringify({
+    $.post('http://curiosity-context/togglelock', JSON.stringify({
       id: idEnt
     }));
-    $(this).find('.text').text($(this).find('.text').text() == 'Verrouiller' ? 'Déverouiller' : 'Verrouiller');
+    $(this).find('.text').text($(this).find('.text').text() == 'Lock' ? 'Unlock' : 'Lock');
   });
 
   // Functions
   // User
   $('.cheer').on('click', function(e){
     e.preventDefault();
-    $.post('http://menu/cheer', JSON.stringify({
+    $.post('http://curiosity-context/cheer', JSON.stringify({
       id: idEnt
     }));
   });
@@ -105,7 +101,7 @@ $(document).ready(function(){
     e.preventDefault();
     $(".crosshair").removeClass('fadeIn').removeClass('active');
     $(".menu").removeClass('fadeIn');
-    $.post('http://menu/disablenuifocus', JSON.stringify({
+    $.post('http://curiosity-context/disablenuifocus', JSON.stringify({
       nuifocus: false
     }));
   });
@@ -113,7 +109,7 @@ $(document).ready(function(){
     if(e.which == 101){ // if "E" is pressed
       $(".crosshair").removeClass('fadeIn').removeClass('active');
       $(".menu").removeClass('fadeIn');
-      $.post('http://menu/disablenuifocus', JSON.stringify({
+      $.post('http://curiosity-context/disablenuifocus', JSON.stringify({
         nuifocus: false
       }));
     }

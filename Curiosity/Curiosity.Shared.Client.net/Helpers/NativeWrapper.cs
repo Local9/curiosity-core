@@ -178,7 +178,7 @@ namespace Curiosity.Shared.Client.net.Helper
             ClearDrawOrigin();
         }
 
-        static public Vector3 GetInFrontOfEntity(Entity entity, float distance)
+        static public Vector3 GetPositionInFrontOfEntity(Entity entity, float distance)
         {
             OutputArgument outputArgument = new OutputArgument();
             return Function.Call<Vector3>(Hash.GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS, entity, 0.0f, distance, 0.0);

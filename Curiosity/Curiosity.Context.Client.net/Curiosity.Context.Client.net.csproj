@@ -35,6 +35,9 @@
       <HintPath>..\packages\CitizenFX.Core.Client.1.0.1390\lib\net45\CitizenFX.Core.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json.net">
+      <HintPath>..\_Dependancies\Newtonsoft.Json.net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

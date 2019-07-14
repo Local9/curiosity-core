@@ -19,6 +19,7 @@ namespace Curiosity.Client.net.Classes.Menus
         static string ENGINE = "Engine";
         static VehicleLock lockState = VehicleLock.Unlocked;
         static bool lockBool = false;
+        static bool carbootBool = false;
 
         static List<VehicleWindowIndex> VehicleWindowValues = Enum.GetValues(typeof(VehicleWindowIndex)).OfType<VehicleWindowIndex>().Where(w => (int)w < 4).ToList();
         static List<string> VehicleWindowNames = VehicleWindowValues.Select(d => d.ToString().AddSpacesToCamelCase()).ToList();
@@ -31,6 +32,7 @@ namespace Curiosity.Client.net.Classes.Menus
         {
 
             client.RegisterEventHandler("curiosity:Client:Menu:CarLock", new Action<int>(OnToggleLockState));
+            client.RegisterEventHandler("curiosity:Client:Menu:Carboot", new Action<int>(OnToggleCarbootState));
 
             MenuBase.AddSubMenu(menu);
 
@@ -102,8 +104,32 @@ namespace Curiosity.Client.net.Classes.Menus
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
         }
 
+        static void OnToggleCarbootState(int vehicleId)
+        {
+            if (Client.CurrentVehicle == null) return;
+
+            if (vehicleId != Client.CurrentVehicle.Handle)
+            {
+                Environment.UI.Notifications.LifeV(1, "Vehicle", "", "Sorry, you can only affect a car you own.", 2);
+                return;
+            }
+
+            carbootBool = !carbootBool;
+
+            if (carbootBool)
+            {
+                API.SetVehicleDoorOpen(vehicleId, 5, false, false);
+            }
+            else
+            {
+                API.SetVehicleDoorShut(vehicleId, 5, false);
+            }
+        }
+
         static void OnToggleLockState(int vehicleId)
         {
+            if (Client.CurrentVehicle == null) return;
+
             if (vehicleId != Client.CurrentVehicle.Handle)
             {
                 Environment.UI.Notifications.LifeV(1, "Vehicle Lock", "", "Sorry, you can only lock a car you own.", 2);

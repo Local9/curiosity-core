@@ -203,6 +203,8 @@ namespace Curiosity.Chat.Client.net
                     DisableControlAction(0, Control.CursorScrollDown, true);
                     SetPedCanSwitchWeapon(Game.PlayerPed, false);
                 }
+
+                TriggerEvent("curiosity:Client:Chat:ChatboxActive", isChatInputActive);
             }
             catch(Exception ex)
             {
