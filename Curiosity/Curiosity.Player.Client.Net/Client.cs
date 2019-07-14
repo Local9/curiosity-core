@@ -70,7 +70,8 @@ namespace Curiosity.Client.net
                 {
                     if (CurrentVehicle != Game.PlayerPed.CurrentVehicle)
                     {
-                        CurrentVehicle = Game.PlayerPed.CurrentVehicle;
+                        if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
+                            CurrentVehicle = Game.PlayerPed.CurrentVehicle;
 
                         if (!CurrentVehicle.PreviouslyOwnedByPlayer)
                             API.SetVehicleExclusiveDriver(CurrentVehicle.Handle, Client.PedHandle);
