@@ -65,21 +65,19 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
         static async Task PedTick()
         {
-            for(var i = 0; i < peds.Count; i++)
+            List<Ped> pedsToRun = peds;
+            for (var i = 0; i < pedsToRun.Count; i++)
             {
                 try
                 {
-                    if (peds[i].IsDead)
+                    if (pedsToRun[i].IsDead)
                     {
-                        peds[i].AttachedBlip.Delete();
+                        pedsToRun[i].AttachedBlip.Delete();
                         peds.Remove(peds[i]);
                     }
                 }
                 catch (Exception ex)
                 {
-                    int ped = peds[i].Handle;
-                    API.DeleteEntity(ref ped);
-
                     peds.Remove(peds[i]);
                 }
             }
