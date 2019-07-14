@@ -209,7 +209,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             }
             scale = new Scaleform("MP_MM_CARD_FREEMODE");
             var titleIcon = "2";
-            var titleLeftText = "FiveM";
+            var titleLeftText = "Life V Network";
             var titleRightText = $"Players {NetworkGetNumConnectedPlayers()}/{maxClients}";
             scale.CallFunction("SET_TITLE", titleLeftText, titleRightText, titleIcon);
             await UpdateScale();

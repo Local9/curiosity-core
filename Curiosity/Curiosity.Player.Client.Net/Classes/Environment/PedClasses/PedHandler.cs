@@ -20,7 +20,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             client.RegisterTickHandler(PedTick);
         }
 
-        public static async void Create(Model model, Vector3 position, float heading, uint group, bool wander = false, int playerToAttack = 0)
+        public static async void Create(Model model, Vector3 position, float heading, uint group, bool wander = false, bool chasePlayer = false, string name = "")
         {
             await model.Request(10000);
 
@@ -46,15 +46,17 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             if (wander)
                 ped.Task.WanderAround();
 
-            if (playerToAttack > 0)
+            if (chasePlayer)
             {
-                CitizenFX.Core.Player player = Client.players[playerToAttack];
-                if (player.Character.IsInVehicle())
-                {
-                    ped.Weapons.Give(WeaponHash.CombatMG, 1000, true, true);
-                    ped.Weapons.Give(WeaponHash.Pistol, 1000, true, true);
-                    ped.Task.ChaseWithGroundVehicle(player.Character);
-                }
+                if (string.IsNullOrEmpty(name))
+                    name = Game.Player.Name;
+
+                CitizenFX.Core.Player player = Client.players[name];
+
+                ped.Weapons.Give(WeaponHash.Pistol, 1000, true, true);
+                ped.Task.EnterAnyVehicle(VehicleSeat.Driver);
+                ped.Task.VehicleChase(player.Character);
+                ped.Task.ChaseWithGroundVehicle(player.Character);
             }
 
             Blip blip = ped.AttachBlip();
