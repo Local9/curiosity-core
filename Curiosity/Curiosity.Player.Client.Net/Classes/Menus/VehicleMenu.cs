@@ -115,6 +115,9 @@ namespace Curiosity.Client.net.Classes.Menus
         {
             if (menuItem.ItemData == "KABOOM")
             {
+                Vector3 pos = Client.CurrentVehicle.Position;
+                API.AddExplosion(pos.X, pos.Y, pos.Z, (int)ExplosionType.Car, 1000.0f, true, false, 3.0f);
+                Client.CurrentVehicle.Explode();
                 Client.CurrentVehicle.ExplodeNetworked();
                 Client.CurrentVehicle = null;
             }
