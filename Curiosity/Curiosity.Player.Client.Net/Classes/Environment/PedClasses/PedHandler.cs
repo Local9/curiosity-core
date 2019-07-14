@@ -52,6 +52,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 if (player.Character.IsInVehicle())
                 {
                     ped.Weapons.Give(WeaponHash.CombatMG, 1000, true, true);
+                    ped.Weapons.Give(WeaponHash.Pistol, 1000, true, true);
                     ped.Task.ChaseWithGroundVehicle(player.Character);
                 }
             }
