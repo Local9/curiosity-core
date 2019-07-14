@@ -41,6 +41,10 @@ namespace Curiosity.Client.net.Classes.Actions
             if (arguments.Count > 0)
                 int.TryParse($"{arguments[0]}", out numberToSpawn);
 
+            int playerToAttack = 0;
+            if (arguments.Count > 1)
+                int.TryParse($"{arguments[1]}", out playerToAttack);
+
             if (numberToSpawn > 8)
                 numberToSpawn = 8;
 
@@ -57,7 +61,7 @@ namespace Curiosity.Client.net.Classes.Actions
             Vector3 postion = new Vector3(1966.8389892578f, 3737.8703613281f, 32.188823699951f);
 
             for(int i = 0; i < numberToSpawn; i++)
-                Environment.PedClasses.PedHandler.Create(marine, postion, 180.0f, suspectGroupHash, true);
+                Environment.PedClasses.PedHandler.Create(marine, postion, 180.0f, suspectGroupHash, true, playerToAttack);
 
             Environment.UI.Notifications.NineOneOne(2, $"All Units", $"{response} {location}", $"{callout}", 2);
         }

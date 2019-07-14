@@ -20,7 +20,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             client.RegisterTickHandler(PedTick);
         }
 
-        public static async void Create(Model model, Vector3 position, float heading, uint group, bool wander = false)
+        public static async void Create(Model model, Vector3 position, float heading, uint group, bool wander = false, int playerToAttack = 0)
         {
             await model.Request(10000);
 
@@ -45,6 +45,16 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             ped.Armor = random.Next(100);
             if (wander)
                 ped.Task.WanderAround();
+
+            if (playerToAttack > 0)
+            {
+                CitizenFX.Core.Player player = Client.players[playerToAttack];
+                if (player.Character.IsInVehicle())
+                {
+                    ped.Weapons.Give(WeaponHash.CombatMG, 1000, true, true);
+                    ped.Task.ChaseWithGroundVehicle(player.Character);
+                }
+            }
 
             Blip blip = ped.AttachBlip();
             blip.Color = BlipColor.Red;
