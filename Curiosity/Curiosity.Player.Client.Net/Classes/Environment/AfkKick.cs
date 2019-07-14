@@ -53,7 +53,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 if ((currentTime - lastMovement) > 60000 * afkLimit)
                 {
-                    BaseScript.TriggerServerEvent("AfkKick.RequestDrop");
+                    BaseScript.TriggerServerEvent("curiosity:Server:Player:AfkKick");
                 }
                 else if ((currentTime - lastMovement) > 60000 * (afkLimit - afkWarning))
                 {

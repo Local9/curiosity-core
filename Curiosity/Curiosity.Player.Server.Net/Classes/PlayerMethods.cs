@@ -30,6 +30,7 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Player:Kick", new Action<CitizenFX.Core.Player, string, string>(AdminKickPlayer));
             server.RegisterEventHandler("curiosity:Server:Player:Report", new Action<CitizenFX.Core.Player, string, string>(ReportingPlayer));
             server.RegisterEventHandler("curiosity:Server:Player:Ban", new Action<CitizenFX.Core.Player, string, string, bool, int>(AdminBanPlayer));
+            server.RegisterEventHandler("curiosity:Server:Player:AfkKick", new Action<CitizenFX.Core.Player>(AfkKick));
         }
 
         static bool IsStaff(Privilege privilege)
@@ -52,6 +53,12 @@ namespace Curiosity.Server.net.Classes
             }
 
             return canKick;
+        }
+
+        async static void AfkKick([FromSource]CitizenFX.Core.Player player)
+        {
+            player.Drop("You have been removed for being AFK");
+            await Server.Delay(0);
         }
 
         async static void PlayerInstanced([FromSource]CitizenFX.Core.Player player)
