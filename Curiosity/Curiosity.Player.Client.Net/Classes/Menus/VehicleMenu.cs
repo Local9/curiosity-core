@@ -37,7 +37,12 @@ namespace Curiosity.Client.net.Classes.Menus
             MenuBase.AddSubMenu(menu);
 
             menu.OnMenuOpen += (_menu) => {
-                
+
+                if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+                {
+                    menu.AddMenuItem(new MenuItem("DETINATE THE CAR") { ItemData = "KABOOM" });
+                }
+
                 List<string> vehicleLocking = Enum.GetNames(typeof(VehicleLock)).Select(d => d.AddSpacesToCamelCase()).ToList();
                 MenuListItem mliVehicleLocks = new MenuListItem("Access Grant", vehicleLocking, (int)lockState, "Select to set vehicle access rights\n~r~Warning:~s~ Changing from a locked state to unlocked may cause your ped to break the window.") { ItemData = "VEHICLE_LOCK" };
                 menu.AddMenuItem(mliVehicleLocks);
@@ -101,7 +106,18 @@ namespace Curiosity.Client.net.Classes.Menus
                 }
             };
 
+            menu.OnItemSelect += Menu_OnItemSelect;
+
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
+        }
+
+        private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
+        {
+            if (menuItem.ItemData == "KABOOM")
+            {
+                Client.CurrentVehicle.ExplodeNetworked();
+                Client.CurrentVehicle = null;
+            }
         }
 
         static void OnToggleCarbootState(int vehicleId)
