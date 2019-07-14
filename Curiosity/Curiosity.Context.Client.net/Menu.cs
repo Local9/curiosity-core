@@ -236,7 +236,7 @@ namespace Curiosity.Context.Client.net
         {
             try
             {
-                RaycastResult raycast = World.RaycastCapsule(source.Position, CitizenFX.Core.Game.PlayerPed.Position + 10 * GameplayCamForwardVector(), 2.5f, IntersectOptions.Everything, ignore);
+                RaycastResult raycast = World.Raycast(source.Position, CitizenFX.Core.Game.PlayerPed.Position + 10 * GameplayCamForwardVector(), IntersectOptions.Everything, ignore);
                 if (raycast.DitHitEntity)
                 {
                     return raycast.HitEntity;
