@@ -30,10 +30,11 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
 
-            API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
+            // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
+            
         }
 
-        static void KnifeCallout(int playerHandle, List<object> arguments, string raw)
+        static async void KnifeCallout(int playerHandle, List<object> arguments, string raw)
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
 
@@ -64,8 +65,11 @@ namespace Curiosity.Client.net.Classes.Actions
             Model marine = PedHash.Marine01SMY;
             Vector3 postion = new Vector3(1966.8389892578f, 3737.8703613281f, 32.188823699951f);
 
-            for(int i = 0; i < numberToSpawn; i++)
-                Environment.PedClasses.PedHandler.Create(marine, postion, 180.0f, suspectGroupHash, !attackPlayer, attackPlayer, nameOfPlayer);
+            for (int i = 0; i < numberToSpawn; i++)
+            {
+                //Environment.PedClasses.PedHandler.Create(marine, postion, 180.0f, suspectGroupHash, !attackPlayer, attackPlayer, nameOfPlayer);
+                await BaseScript.Delay(2500);
+            }
 
             Environment.UI.Notifications.NineOneOne(2, $"All Units", $"{response} {location}", $"{callout}", 2);
         }

@@ -23,6 +23,7 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             server.RegisterEventHandler("curiosity:Server:Command:SavePosition", new Action<CitizenFX.Core.Player, string, float, float, float, float>(SavePosition));
 
+            API.RegisterCommand("chase", new Action<int, List<object>, string>(OnChaser), false);
             API.RegisterCommand("announce", new Action<int, List<object>, string>(Announcement), false);
             API.RegisterCommand("spawn", new Action<int, List<object>, string>(Spawn), false);
             API.RegisterCommand("sc", new Action<int, List<object>, string>(SpawnCar), false);
@@ -30,6 +31,35 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("watch", new Action<int, List<object>, string>(RequestURL), false);
 
             API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
+        }
+
+        static void OnChaser(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (!session.IsDeveloper) return;
+
+            if (arguments.Count < 0)
+            {
+                Helpers.Notifications.Advanced($"Agruments Missing", $"", 2, session.Player);
+                return;
+            }
+
+            int playerToChase = 0;
+            int.TryParse($"{arguments[0]}", out playerToChase);
+
+            if (!SessionManager.PlayerList.ContainsKey($"{playerToChase}"))
+            {
+                Helpers.Notifications.Advanced($"Player Missing", $"", 2, session.Player);
+                return;
+            }
+
+            Session sessionToChase = SessionManager.PlayerList[$"{playerToChase}"];
+            sessionToChase.Player.TriggerEvent("curiosity:Client:Command:SpawnChaser");
+
+            Helpers.Notifications.Advanced($"Set Chaser", $"Chasing ~y~{sessionToChase.Player.Name}", 20, session.Player);
         }
 
         static void PIA(int playerHandle, List<object> arguments, string raw)
