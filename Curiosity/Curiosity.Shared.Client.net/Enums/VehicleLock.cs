@@ -2,8 +2,7 @@
 {
     public enum VehicleLock
     {
-        Everyone = 0,
-        PassengersOnly,
-        NoOne
+        Unlocked = 0,
+        Locked
     }
 }

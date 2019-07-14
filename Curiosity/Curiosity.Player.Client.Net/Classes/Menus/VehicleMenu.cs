@@ -17,6 +17,8 @@ namespace Curiosity.Client.net.Classes.Menus
         static string CRUISE_CONTROL = "CruiseControl";
         static string THREE_D_SPEEDO = "ThreeDSpeedo";
         static string ENGINE = "Engine";
+        static VehicleLock lockState = VehicleLock.Unlocked;
+        static bool lockBool = false;
 
         static List<VehicleWindowIndex> VehicleWindowValues = Enum.GetValues(typeof(VehicleWindowIndex)).OfType<VehicleWindowIndex>().Where(w => (int)w < 4).ToList();
         static List<string> VehicleWindowNames = VehicleWindowValues.Select(d => d.ToString().AddSpacesToCamelCase()).ToList();
@@ -27,16 +29,16 @@ namespace Curiosity.Client.net.Classes.Menus
 
         public static void Init()
         {
+
+            client.RegisterEventHandler("curiosity:Client:Menu:CarLock", new Action<int>(OnToggleLockState));
+
             MenuBase.AddSubMenu(menu);
 
             menu.OnMenuOpen += (_menu) => {
                 
-                if (Player.PlayerInformation.IsDeveloper())
-                {
-                    List<string> vehicleLocking = Enum.GetNames(typeof(VehicleLock)).Select(d => d.AddSpacesToCamelCase()).ToList();
-                    MenuListItem mliVehicleLocks = new MenuListItem("DEV: Access Grant", vehicleLocking, 0, "Select to set vehicle access rights\n~r~Warning:~s~ Changing from a locked state to unlocked may cause your ped to break the window.") { ItemData = "VEHICLE_LOCK" };
-                    menu.AddMenuItem(mliVehicleLocks);
-                }
+                List<string> vehicleLocking = Enum.GetNames(typeof(VehicleLock)).Select(d => d.AddSpacesToCamelCase()).ToList();
+                MenuListItem mliVehicleLocks = new MenuListItem("Access Grant", vehicleLocking, (int)lockState, "Select to set vehicle access rights\n~r~Warning:~s~ Changing from a locked state to unlocked may cause your ped to break the window.") { ItemData = "VEHICLE_LOCK" };
+                menu.AddMenuItem(mliVehicleLocks);
 
                 MenuCheckboxItem cruiseControlMenuItem = new MenuCheckboxItem("Cruise Control")
                 {
@@ -93,32 +95,40 @@ namespace Curiosity.Client.net.Classes.Menus
             {
                 if (_listItem.ItemData == "VEHICLE_LOCK")
                 {
-                    if (_newIndex == (int)VehicleLock.Everyone)
-                    {
-                        API.SetVehicleAllowNoPassengersLockon(Client.CurrentVehicle.Handle, false);
-                        API.SetVehicleDoorsLockedForAllPlayers(Client.CurrentVehicle.Handle, false);
-                        Client.CurrentVehicle.LockStatus = VehicleLockStatus.None;
-                    }
-
-                    if (_newIndex == (int)VehicleLock.PassengersOnly)
-                    {
-                        API.SetVehicleDoorsLockedForAllPlayers(Client.CurrentVehicle.Handle, true);
-                        API.SetVehicleAllowNoPassengersLockon(Client.CurrentVehicle.Handle, false);
-                        Client.CurrentVehicle.LockStatus = VehicleLockStatus.None;
-                    }
-
-                    if (_newIndex == (int)VehicleLock.NoOne)
-                    {
-                        Client.CurrentVehicle.LockStatus = VehicleLockStatus.Locked;
-                        API.SetVehicleAllowNoPassengersLockon(Client.CurrentVehicle.Handle, true);
-                        API.SetVehicleDoorsLockedForAllPlayers(Client.CurrentVehicle.Handle, true);
-                    }
-
-                    API.SetVehicleDoorsLockedForPlayer(Client.CurrentVehicle.Handle, Client.PedHandle, false);
+                    OnToggleLockState(Client.CurrentVehicle.Handle);
                 }
             };
 
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
+        }
+
+        static void OnToggleLockState(int vehicleId)
+        {
+            if (vehicleId != Client.CurrentVehicle.Handle)
+            {
+                Environment.UI.Notifications.LifeV(1, "Vehicle Lock", "", "Sorry, you can only lock a car you own.", 2);
+                return;
+            }
+
+            lockBool = !lockBool;
+
+            API.SetVehicleAllowNoPassengersLockon(Client.CurrentVehicle.Handle, lockBool);
+            API.SetVehicleDoorsLockedForAllPlayers(Client.CurrentVehicle.Handle, lockBool);
+
+            if (lockBool)
+            {
+                API.PlayVehicleDoorCloseSound(Client.CurrentVehicle.Handle, 1);
+                Client.CurrentVehicle.LockStatus = VehicleLockStatus.Locked;
+                lockState = VehicleLock.Locked;
+                Environment.UI.Notifications.LifeV(1, "Vehicle Locked", "", "", 2);
+            }
+            else
+            {
+                API.PlayVehicleDoorOpenSound(Client.CurrentVehicle.Handle, 0);
+                Client.CurrentVehicle.LockStatus = VehicleLockStatus.None;
+                lockState = VehicleLock.Unlocked;
+                Environment.UI.Notifications.LifeV(1, "Vehicle Unlocked", "", "", 2);
+            }
         }
 
         private static void DeveloperMenu()
