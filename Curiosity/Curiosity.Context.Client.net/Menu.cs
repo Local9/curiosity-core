@@ -20,6 +20,8 @@ namespace Curiosity.Context.Client.net
     class MenuSetting
     {
         public dynamic menu;
+        public bool showDutyMenu;
+        public string dutyMenuText;
         public int idEntity;
     }
 
@@ -28,11 +30,13 @@ namespace Curiosity.Context.Client.net
         private static Menu _instance;
 
         bool showMenu = false;
+        bool showDutyMenu = false;
         bool playingEmote = false;
-
         bool toggleCarboot = false;
-
         bool isChatInputActive = false;
+
+        string dutyMenuText;
+        string dutyEventToCall;
 
         public Menu()
         {
@@ -40,11 +44,21 @@ namespace Curiosity.Context.Client.net
 
             RegisterEventHandler("curiosity:Client:Chat:ChatboxActive", new Action<bool>(OnChatboxActive));
 
+            RegisterEventHandler("curiosity:Client:Context:ShowDutyMenu", new Action<bool, string, string>(OnDutyMenu));
+
             RegisterNuiEventHandler("disablenuifocus", new Action<dynamic>(DisableNuiFocus));
             RegisterNuiEventHandler("togglelock", new Action<dynamic>(OnToggleLockStatus));
             RegisterNuiEventHandler("togglecarboot", new Action<dynamic>(OnOpenCarboot));
+            RegisterNuiEventHandler("openDutyMenu", new Action<dynamic>(OnOpenDutyMenu));
 
             RegisterTickHandler(OnTick);
+        }
+
+        void OnDutyMenu(bool enable, string menuText, string eventToCall)
+        {
+            showDutyMenu = enable;
+            dutyMenuText = menuText;
+            dutyEventToCall = eventToCall;
         }
 
         void OnChatboxActive(bool isChatActive)
@@ -62,12 +76,20 @@ namespace Curiosity.Context.Client.net
             TriggerEvent("curiosity:Client:Menu:CarLock", nui.id);
         }
 
+        void OnOpenDutyMenu(dynamic nui)
+        {
+            if (!string.IsNullOrEmpty(dutyEventToCall))
+                TriggerEvent(dutyEventToCall);
+
+            DisableNuiFocus(null);
+        }
+
         void Crosshair(bool toggle)
         {
             SendNuiMessage(JsonConvert.SerializeObject(new Crosshair { crosshair = toggle }));
         }
 
-        async void DisableNuiFocus(dynamic nui)
+        void DisableNuiFocus(dynamic nui)
         {
             showMenu = false;
             SetNuiFocus(false, false);
@@ -79,76 +101,86 @@ namespace Curiosity.Context.Client.net
         {
             try
             {
-                if (!isChatInputActive)
+                Entity playerPed = Game.PlayerPed;
+
+                if (!Game.PlayerPed.IsInVehicle())
                 {
-                    Entity playerPed = Game.PlayerPed;
 
-                    Entity ent = GetEntityInCrosshair(playerPed, playerPed);
-
-                    if (ent == null)
+                    if (!isChatInputActive)
                     {
-                        if (showMenu)
+                        Entity ent = GetEntityInCrosshair(playerPed, playerPed);
+
+                        if (ent == null)
                         {
+                            if (showMenu)
+                            {
+                                DisableNuiFocus(null);
+                            }
+                            Crosshair(false);
+
+                            await Task.FromResult(0);
+                            return;
+                        }
+
+                        int entityType = GetEntityType(ent.Handle);
+
+                        if (entityType == 2) // Vehicle
+                        {
+                            if (!showMenu)
+                            {
+                                SetNuiFocus(false, false);
+                            }
+                            Crosshair(true);
+
+                            if (ControlHelper.IsControlJustReleased(Control.Context))
+                            {
+                                showMenu = true;
+                                SetNuiFocus(true, true);
+
+                                Vehicle vehicle = (Vehicle)ent;
+
+                                SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting
+                                {
+                                    menu = "vehicle",
+                                    showDutyMenu = (vehicle.ClassType == VehicleClass.Emergency && showDutyMenu),
+                                    dutyMenuText = dutyMenuText,
+                                    idEntity = ent.Handle
+                                }));
+                            }
+                        }
+                        //else if (entityType == 1) // Ped
+                        //{
+                        //    if (!showMenu)
+                        //    {
+                        //        SetNuiFocus(false, false);
+
+                        //        if (ent.IsPositionFrozen)
+                        //            FreezeEntityPosition(ent.Handle, false);
+                        //    }
+                        //    Crosshair(true);
+
+                        //    if (ControlHelper.IsControlJustReleased(Control.Context))
+                        //    {
+                        //        showMenu = true;
+                        //        SetNuiFocus(true, true);
+                        //        SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = "user", idEntity = ent.Handle }));
+
+                        //        FreezeEntityPosition(ent.Handle, true);
+                        //        Ped ped = (Ped)ent;
+                        //        ped.Task.ClearAll();
+                        //        ped.Task.LookAt(playerPed, 3000);
+                        //    }
+                        //}
+                        else
+                        {
+                            if (ent.IsPositionFrozen)
+                                FreezeEntityPosition(ent.Handle, false);
+
                             SetNuiFocus(false, false);
+                            Crosshair(false);
                             SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = false }));
                             showMenu = false;
                         }
-
-                        Crosshair(false);
-
-                        await Task.FromResult(0);
-                        return;
-                    }
-
-                    int entityType = GetEntityType(ent.Handle);
-
-                    if (entityType == 2) // Vehicle
-                    {
-                        if (!showMenu)
-                        {
-                            SetNuiFocus(false, false);
-                        }
-                        Crosshair(true);
-
-                        if (ControlHelper.IsControlJustReleased(Control.Context))
-                        {
-                            showMenu = true;
-                            SetNuiFocus(true, true);
-                            SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = "vehicle", idEntity = ent.Handle }));
-                        }
-                    }
-                    //else if (entityType == 1) // Ped
-                    //{
-                    //    if (!showMenu)
-                    //    {
-                    //        SetNuiFocus(false, false);
-
-                    //        if (ent.IsPositionFrozen)
-                    //            FreezeEntityPosition(ent.Handle, false);
-                    //    }
-                    //    Crosshair(true);
-
-                    //    if (ControlHelper.IsControlJustReleased(Control.Context))
-                    //    {
-                    //        showMenu = true;
-                    //        SetNuiFocus(true, true);
-                    //        SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = "user", idEntity = ent.Handle }));
-
-                    //        FreezeEntityPosition(ent.Handle, true);
-                    //        Ped ped = (Ped)ent;
-                    //        ped.Task.ClearAll();
-                    //        ped.Task.LookAt(playerPed, 3000);
-                    //    }
-                    //}
-                    else
-                    {
-                        if (ent.IsPositionFrozen)
-                            FreezeEntityPosition(ent.Handle, false);
-
-                        SetNuiFocus(false, false);
-                        Crosshair(false);
-                        SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = false }));
-                        showMenu = false;
                     }
 
                     if (playingEmote)

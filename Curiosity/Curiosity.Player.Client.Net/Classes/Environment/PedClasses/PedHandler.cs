@@ -20,7 +20,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             client.RegisterTickHandler(PedTick);
         }
 
-        public static async void Create(Model model, Vector3 position, float heading, uint group)
+        public static async void Create(Model model, Vector3 position, float heading, uint group, bool wander = false)
         {
             await model.Request(10000);
 
@@ -43,6 +43,8 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             API.SetPedCombatAttributes(ped.Handle, 5, true);
             API.SetPedCombatAbility(ped.Handle, 100);
             ped.Armor = random.Next(100);
+            if (wander)
+                ped.Task.WanderAround();
 
             Blip blip = ped.AttachBlip();
             blip.Color = BlipColor.Red;
@@ -65,9 +67,19 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
         {
             for(var i = 0; i < peds.Count; i++)
             {
-                if (peds[i].IsDead)
+                try
                 {
-                    peds[i].AttachedBlip.Delete();
+                    if (peds[i].IsDead)
+                    {
+                        peds[i].AttachedBlip.Delete();
+                        peds.Remove(peds[i]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    int ped = peds[i].Handle;
+                    API.DeleteEntity(ref ped);
+
                     peds.Remove(peds[i]);
                 }
             }
