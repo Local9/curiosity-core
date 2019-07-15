@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
-using Curiosity.Client.net.Classes.Environment.UI;
-using Curiosity.Shared.Client.net.Models;
-using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using System;
+using System.Threading.Tasks;
 
-namespace Curiosity.Client.net
+namespace Curiosity.Interface.Client.net
 {
     public class Client : BaseScript
     {
         public static int PedHandle { get { return Game.PlayerPed.Handle; } }
         public static int PlayerHandle { get { return Game.Player.Handle; } }
-        public static GlobalEntity.User User;
-        public static Vehicle CurrentVehicle = null;
-        public static Vehicle ownedVehicle = null;
-
-        public static bool isSessionActive = false;
-
         public static PlayerList players;
+        public static bool isSessionActive = false;
+        public static bool clientSpawned = false;
+        public static bool hideHud = false;
 
         private static Client _instance;
 
@@ -29,24 +22,18 @@ namespace Curiosity.Client.net
             return _instance;
         }
 
-        private const float DefaultPlayerSpeed = 1f;
-
-        public Dictionary<string, Func<PointEvent, Task>> PointEventHandlers = new Dictionary<string, Func<PointEvent, Task>>();
-
         public Client()
         {
             _instance = this;
-
             players = Players;
+            RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action(OnSessionActive));
+            RegisterEventHandler("curiosity:Client:Player:HideHud", new Action<bool>(OnHideHud));
+            RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
 
             ClassLoader.Init();
-            RegisterTickHandler(OnTick);
-            RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action(OnSessionActive));
 
-            Log.Info("Curiosity.Client.net loaded\n");
+            Log.Info("Interface loaded\n");
 
-            //RegisterEventHandler("TriggerEventNearPoint", new Action<string>(HandleLocalEvent));
-            //Client.GetInstance().PointEventHandlers["Communication.LocalChat"] = new Func<PointEvent, Task>(HandleLocalChat);
         }
 
         async void OnSessionActive()
@@ -54,6 +41,16 @@ namespace Curiosity.Client.net
             BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
             await Delay(1000);
             isSessionActive = true;
+        }
+
+        void OnPlayerSpawned()
+        {
+            clientSpawned = true;
+        }
+
+        void OnHideHud(bool hudState)
+        {
+            hideHud = hudState;
         }
 
         /// <summary>
@@ -64,42 +61,11 @@ namespace Curiosity.Client.net
         {
             try
             {
-                UI.Render();
-                await UpdateFrameSettings();
-                if (Game.PlayerPed.IsInVehicle())
-                {
-                    if (CurrentVehicle != Game.PlayerPed.CurrentVehicle)
-                    {
-                        if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
-                        {
-                            CurrentVehicle = Game.PlayerPed.CurrentVehicle;
-   
-                            if (!CurrentVehicle.PreviouslyOwnedByPlayer)
-                                API.SetVehicleExclusiveDriver(CurrentVehicle.Handle, Client.PedHandle);
-                        }
-                    }
-                }
+                
             }
             catch (Exception ex)
             {
                 Log.Error($"[CurrentVehicle] {ex.Message}");
-            }
-
-            await Task.FromResult(0);
-        }
-
-        public async Task UpdateFrameSettings()
-        {
-            try
-            {
-                Game.Player.SetRunSpeedMultThisFrame(DefaultPlayerSpeed);
-                CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.VehicleName);
-                CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.AreaName);
-                CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.StreetName);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
             }
 
             await Task.FromResult(0);
@@ -182,30 +148,5 @@ namespace Curiosity.Client.net
         {
             Exports.Add(name, action);
         }
-
-        //public void HandleLocalEvent(string serializedPointEvent)
-        //{
-        //    try
-        //    {
-        //        PointEvent pointEvent = Helpers.MsgPack.Deserialize<PointEvent>(serializedPointEvent);
-
-        //        if (pointEvent.IgnoreOwnEvent && pointEvent.SourceServerId == Game.Player.ServerId)
-        //            return;
-
-        //        if (Game.PlayerPed.Position.DistanceToSquared2D(pointEvent.ToVector3()) < Math.Pow(pointEvent.AoeRange, 2))
-        //            PointEventHandlers[pointEvent.EventName].Invoke(pointEvent);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error(ex.Message);
-        //    }
-        //}
-
-        //private Task HandleLocalChat(PointEvent pointEvent)
-        //{
-        //    TriggerEvent("Chat.Message", Client.players[pointEvent.SourceServerId].Name, "#FFD23F", pointEvent.SerializedArguments);
-
-        //    return Task.FromResult(0);
-        //}
     }
 }

@@ -15,7 +15,6 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
         static Random random = new Random();
         static int pedGroup = 1;
         static uint playerGroupHash = 0;
-        static CitizenFX.Core.Vehicle vehicle;
 
         static Array weaponValues = Enum.GetValues(typeof(WeaponHash));
 
@@ -49,7 +48,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 }
 
                 
-                Vector3 spawnPosition = World.GetSafeCoordForPed(new Vector3(1966.8389892578f, 3737.8703613281f, 32.188823699951f), true);
+                Vector3 spawnPosition = World.GetNextPositionOnSidewalk(new Vector3(0f, 0f, 0f));
                 Ped ped = await World.CreatePed(model, spawnPosition, 180.0f);
 
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
@@ -57,7 +56,6 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
 
                 API.SetPedRelationshipGroupHash(ped.Handle, suspectGroupHash);
-                ped.Task.FightAgainstHatedTargets(20.0f);
                 API.SetPedCombatMovement(ped.Handle, 2);
                 API.SetPedCombatAttributes(ped.Handle, 5, true);
                 API.SetPedCombatAbility(ped.Handle, 100);
@@ -72,7 +70,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 Model vehModel = VehicleHash.Bodhi2;
                 await vehModel.Request(10000);
 
-                vehicle = await World.CreateVehicle(vehModel, streetSpawnPosition, ped.Heading);
+                CitizenFX.Core.Vehicle vehicle = await World.CreateVehicle(vehModel, streetSpawnPosition, ped.Heading);
 
                 vehModel.MarkAsNoLongerNeeded();
 
@@ -84,30 +82,11 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 blip.Scale = 0.0f;
                 blip.Name = "Looks angry... run?";
 
-                //if (!ped.IsInVehicle())
-                //    ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver, -1, 2.0f, 0);
-
-                while (!ped.IsInVehicle())
+                while(!ped.IsInVehicle())
                 {
                     ped.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
-                    await BaseScript.Delay(500);
+                    await BaseScript.Delay(0);
                 }
-
-                while (!ped.IsNearEntity(Game.PlayerPed, new Vector3(20f, 20f, 20f)))
-                {
-                    if (ped.IsInVehicle())
-                    {
-                        ped.Task.DriveTo(vehicle, Game.PlayerPed.Position, 10.0f, 40.0f, (int)VehicleDrivingFlags.DriveBySight);
-                        //if (Player.PlayerInformation.IsDeveloper())
-                        //{
-                        //    CitizenFX.Core.UI.Screen.ShowSubtitle($"Hunting: {ped.Position}");
-                        //    blip.ShowRoute = true;
-                        //}
-                    }
-                    await BaseScript.Delay(500);
-                }
-                blip.Scale = 1.0f;
-                ped.Task.VehicleChase(Game.PlayerPed);
 
                 peds.Add(ped);
 
@@ -135,9 +114,24 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 {
                     try
                     {
+                        if (!pedsToRun[i].IsNearEntity(Game.PlayerPed, new Vector3(15.0f, 15.0f, 15.0f)))
+                        {
+                            pedsToRun[i].Task.DriveTo(pedsToRun[i].CurrentVehicle, Game.PlayerPed.Position, 10.0f, 40.0f, 1074528293);
+                        }
+                        else
+                        {
+                            pedsToRun[i].AttachedBlip.Scale = 1.0f;
+                            pedsToRun[i].Task.FightAgainstHatedTargets(20.0f);
+                        }
+
                         if (pedsToRun[i].IsDead)
                         {
+                            if (pedsToRun[i].CurrentVehicle.Exists())
+                                pedsToRun[i].CurrentVehicle.Delete();
+
+                            pedsToRun[i].Weapons.RemoveAll();
                             pedsToRun[i].AttachedBlip.Delete();
+                            pedsToRun[i].Delete();
                             peds.Remove(peds[i]);
                         }
                     }

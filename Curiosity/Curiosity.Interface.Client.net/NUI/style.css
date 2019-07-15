@@ -1,0 +1,37 @@
+﻿body {
+    font-family: Roboto;
+    color: #efefef;
+    font-variant-caps: small-caps;
+}
+
+.icons {
+    position: absolute;
+    width: 2.8vw;
+    height: 2vh;
+    top: 16vh;
+    left: 88.5vw;
+    padding: 0.125rem;
+    /*background-color: rgba(24, 27, 32, 0.9);
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;*/
+    text-align: right;
+    letter-spacing: 0.1rem;
+    color: dodgerblue;
+}
+
+.player-hud {
+    position: absolute;
+    width: 7vw;
+    height: 5.4vh;
+    top: 12vh;
+    left: 91.5vw;
+    background-color: rgba(24, 27, 32, 0.9);
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    border: solid black 1px;
+    padding: 0.125rem;
+}
+
+.active {
+    color: #FF9900;
+}

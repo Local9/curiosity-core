@@ -72,6 +72,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Deprecated", "Cur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Context.Client.net", "Curiosity.Context.Client.net\Curiosity.Context.Client.net.csproj", "{DA551675-E01B-4F7C-9D0C-009290F64974}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Interface.Client.net", "Curiosity.Interface.Client.net\Curiosity.Interface.Client.net.csproj", "{556761EB-5538-4102-8CE1-35330FCAD1E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,6 +144,10 @@ Global
 		{DA551675-E01B-4F7C-9D0C-009290F64974}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA551675-E01B-4F7C-9D0C-009290F64974}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA551675-E01B-4F7C-9D0C-009290F64974}.Release|Any CPU.Build.0 = Release|Any CPU
+		{556761EB-5538-4102-8CE1-35330FCAD1E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{556761EB-5538-4102-8CE1-35330FCAD1E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{556761EB-5538-4102-8CE1-35330FCAD1E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{556761EB-5538-4102-8CE1-35330FCAD1E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +172,7 @@ Global
 		{9C746601-9F3D-4B0D-877C-1C7BC493C5BC} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{3AAB33B2-EE7C-4E8C-B348-E84ACAFB1C5F} = {5CB9B26A-88FF-4B46-BBE4-4FF11C7FDFC8}
 		{DA551675-E01B-4F7C-9D0C-009290F64974} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
+		{556761EB-5538-4102-8CE1-35330FCAD1E1} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
