@@ -26,50 +26,76 @@ $(document).ready(function () {
     window.addEventListener('message', function (event) {
         var element;
 
-        if (event.data.hideHud) {
-            $(".player-hud").hide();
-            $(".icons").hide();
-        } else {
-            $(".player-hud").show();
-            $(".icons").show();
-        }
-
-        switch (event.data.job) {
-            case "police":
-                element = $(".police");
-                $(".medic").hide();
-                $(".fire").hide();
-                break;
-            case "fire":
-                element = $(".fire");
-                $(".medic").hide();
-                $(".police").hide();
-                break;
-            case "medic":
-                element = $(".medic");
-                $(".police").hide();
-                $(".fire").hide();
-                break;
-        }
-
-        if (element) {
-            if (event.data.duty) {
-                element.show();
+        if (event.data.hasOwnProperty("hideHud")) {
+            if (event.data.hideHud) {
+                $(".player-hud").hide();
+                $(".icons").hide();
             } else {
-                element.hide();
-            }
-
-            if (event.data.dutyActive) {
-                element.addClass('active');
-            }
-            if (!event.data.dutyActive) {
-                element.removeClass('active');
+                $(".player-hud").show();
+                $(".icons").show();
             }
         } else {
-            $(".police").hide();
-            $(".medic").hide();
-            $(".fire").hide();
+
+            var jobText = "unknown";
+
+            if (!event.data.hasOwnProperty("job")) {
+                $(".duty-job").text("no job active");
+                $(".duty-state").text("not on active duty");
+            } else {
+
+                switch (event.data.job) {
+                    case "police":
+                        element = $(".police");
+                        $(".medic").hide();
+                        $(".fire").hide();
+                        jobText = "Police Officer";
+                        break;
+                    case "fire":
+                        element = $(".fire");
+                        $(".medic").hide();
+                        $(".police").hide();
+                        jobText = "Firefighter";
+                        break;
+                    case "medic":
+                        element = $(".medic");
+                        $(".police").hide();
+                        $(".fire").hide();
+                        jobText = "Paramedic";
+                        break;
+                    default:
+                        $(".duty-job").text("job is unknown");
+                        $(".duty-state").text("not on active duty");
+                        break;
+                }
+
+                if (element) {
+                    if (event.data.duty) {
+                        element.show();
+                        $(".duty-job").text(jobText);
+                        $(".duty-state").text(event.data.dutyActive ? "active" : "on break");
+                    } else {
+                        element.hide();
+                        $(".duty-job").text("no job active");
+                        $(".duty-state").text("not on active duty");
+                    }
+
+                    if (event.data.dutyActive) {
+                        element.addClass('active');
+                    }
+
+                    if (!event.data.dutyActive) {
+                        element.removeClass('active');
+                    }
+
+                } else {
+                    $(".police").hide();
+                    $(".medic").hide();
+                    $(".fire").hide();
+                }
+            }
+
         }
+        
 
         // Crosshair
         //if (event.data.crosshair) {
