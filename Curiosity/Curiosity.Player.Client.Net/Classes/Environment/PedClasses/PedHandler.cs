@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment.PedClasses
 {
@@ -12,11 +10,13 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
     {
         static Client client = Client.GetInstance();
         static List<Ped> peds = new List<Ped>();
-        static Random random = new Random();
+        static Random random = new Random(Guid.NewGuid().GetHashCode());
         static int pedGroup = 1;
         static uint playerGroupHash = 0;
 
         static Array weaponValues = Enum.GetValues(typeof(WeaponHash));
+
+        static List<int> groups = new List<int>();
 
         public static void Init()
         {
@@ -24,6 +24,31 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             client.RegisterTickHandler(PedTick);
 
             client.RegisterEventHandler("curiosity:Client:Command:SpawnChaser", new Action(CreateChaser));
+            client.RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
+        }
+
+        static async void OnClientResourceStop(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            foreach(int groupId in groups)
+            {
+                if (API.DoesGroupExist(groupId))
+                {
+                    API.RemoveGroup(groupId);
+                }
+            }
+        }
+
+        static async void CreateSenario()
+        {
+            uint suspectGroupHash = 0;
+            API.AddRelationshipGroup($"spawnedPeds:{Client.PlayerHandle}", ref suspectGroupHash);
+            int group = API.CreateGroup(random.Next(100000));
+            API.SetRelationshipBetweenGroups(5, suspectGroupHash, playerGroupHash);
+            API.SetRelationshipBetweenGroups(5, playerGroupHash, suspectGroupHash);
+
+            
         }
 
         public static async void CreateChaser()
@@ -57,8 +82,16 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
                 API.SetPedRelationshipGroupHash(ped.Handle, suspectGroupHash);
                 API.SetPedCombatMovement(ped.Handle, 2);
+
+                API.SetPedCombatAttributes(ped.Handle, 0, true);
+                API.SetPedCombatAttributes(ped.Handle, 1, true);
+                API.SetPedCombatAttributes(ped.Handle, 2, true);
+                API.SetPedCombatAttributes(ped.Handle, 3, true);
                 API.SetPedCombatAttributes(ped.Handle, 5, true);
+                API.SetPedCombatAttributes(ped.Handle, 46, true);
+                API.SetPedCombatAttributes(ped.Handle, 52, true);
                 API.SetPedCombatAbility(ped.Handle, 100);
+
                 ped.Armor = random.Next(100);
 
                 await BaseScript.Delay(0);

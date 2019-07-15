@@ -37,6 +37,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
         {
             client.RegisterTickHandler(OnMobileCreationTick);
             client.RegisterTickHandler(OnMainAppTick);
+            client.RegisterTickHandler(Test);
 
             AddApplication(Api.AppIcons.Empty);
             AddApplication(Api.AppIcons.Empty);
@@ -49,6 +50,35 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
             AddApplication(Api.AppIcons.Empty);
             AddApplication(Api.AppIcons.Settings);
             AddApplication(Api.AppIcons.Empty);
+        }
+
+        static async Task Test()
+        {
+            if (ControlHelper.IsControlJustPressed(Control.FrontendSocialClub))
+            {
+                API.DisplayOnscreenKeyboard(6, "FMMC_KEY_TIP8", "", "", "", "", "", 60);
+                await BaseScript.Delay(100); // 100ms delay to prevent instant enter.
+                while (API.UpdateOnscreenKeyboard() != 1 && API.UpdateOnscreenKeyboard() != 2)
+                {
+                    API.DisableAllControlActions(0);
+                    await BaseScript.Delay(0);
+                }
+                if (API.UpdateOnscreenKeyboard() == 1)
+                {
+                    string message = API.GetOnscreenKeyboardResult();
+                    API.SetNotificationTextEntry("STRING");
+                    if (message.Length <= 0)
+                    {
+                        API.AddTextComponentString("~r~Message too short!");
+                    }
+                    else
+                    {
+                        API.AddTextComponentString("~g~Message sent! " + message);
+                    }
+                    API.DrawNotification(true, true);
+                }
+                API.EnableAllControlActions(0);
+            }
         }
 
         static void AddApplication(Api.AppIcons appIcon)
