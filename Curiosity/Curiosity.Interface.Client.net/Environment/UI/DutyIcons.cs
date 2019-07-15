@@ -37,7 +37,11 @@ namespace Curiosity.Interface.Client.net.Environment.UI
 
         static async Task HideHtmlHud()
         {
-            if (API.IsPauseMenuActive())
+            if (!Client.clientSpawned)
+            {
+                API.SendNuiMessage(JsonConvert.SerializeObject(new HudMessage { hideHud = true }));
+            }
+            else if (API.IsPauseMenuActive())
             {
                 API.SendNuiMessage(JsonConvert.SerializeObject(new HudMessage { hideHud = true }));
             }
