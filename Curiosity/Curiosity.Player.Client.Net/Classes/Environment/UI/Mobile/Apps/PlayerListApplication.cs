@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Curiosity.Client.net.Classes.Environment.UI.Mobile.Api;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net.Enums.Mobile;
 
 namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
 {
@@ -21,7 +22,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
         public static void Init()
         {
             App = new Application("Player List", AppIcons.ContactsPlus);
-            Screen screen = new Screen(App, "Player List", Screen.LIST);
+            Screen screen = new Screen(App, "Player List", (int)View.Contacts);
             App.LauncherScreen = screen;
             App.StartTask = StartTick;
             App.StopTask = StopTick;
@@ -46,9 +47,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
             if (App != null && ApplicationHandler.CurrentApp == App)
             {
                 App.LauncherScreen.ClearItems();
-                /*for (int i = 0; i < PlayerList.MaxPlayers; i++)
-                {
-                }*/
+                App.LauncherScreen.Items.Clear();
+
                 foreach (CitizenFX.Core.Player player in Client.players)
                 {
                     /* Skip the current client.
@@ -56,21 +56,19 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
                     {
                         continue;
                     }*/
-                    Screen playerOptionsMenu = App.AddListScreen(player.Name); // Screen which contains options for this player.
-                    Item playerItem = new Item(App.LauncherScreen, // Create an item that switches to the new screen.
-                        Item.CreateData(0, PREFIX + player.Name), // Item push data.
-                        ApplicationHandler.ChangeScreen, playerOptionsMenu); // Action callback and arguments.
-                    App.LauncherScreen.AddItem(playerItem); // Add the item to the launcher screen.
+                    Screen playerOptionsMenu = App.AddScreenType(player.Name, View.Settings); // Screen which contains options for this player.
 
                     // Add option to message the player.
-                    Item messageItem = new Item(playerOptionsMenu, Item.CreateData(0, PREFIX + "Message 1"),
-                        new Action<dynamic[]>(MessagePlayer), player.ServerId);
-
-                    Item messageItem2 = new Item(playerOptionsMenu, Item.CreateData(0, PREFIX + "Message 2"),
-                        new Action<dynamic[]>(MessagePlayer), player.ServerId);
+                    
+                    Item messageItem = new Item(playerOptionsMenu, Item.CreateData(2, PREFIX + "Message", (int)ListIcons.Attachment),
+                        new Action<dynamic[]>(MessagePlayer), player);
 
                     playerOptionsMenu.AddItem(messageItem);
-                    playerOptionsMenu.AddItem(messageItem2);
+
+                    Item playerItem = new Item(App.LauncherScreen, // Create an item that switches to the new screen.
+                        Item.CreateData(2, PREFIX + player.Name, 1), // Item push data.
+                        ApplicationHandler.ChangeScreen, playerOptionsMenu); // Action callback and arguments.
+                    App.LauncherScreen.AddItem(playerItem); // Add the item to the launcher screen.
                 }
                 await BaseScript.Delay(1000); // Tick occurs once per second.
             }
@@ -78,11 +76,15 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
 
         static async void MessagePlayer(dynamic[] data)
         {
+            ApplicationHandler.IsInKeyboard = true;
+
+            await BaseScript.Delay(100);
+
             API.DisplayOnscreenKeyboard(6, "FMMC_KEY_TIP8", "", "", "", "", "", 60);
 
             await BaseScript.Delay(100); // 100ms delay to prevent instant enter.
 
-            while (API.UpdateOnscreenKeyboard() == 0)
+            while (API.UpdateOnscreenKeyboard() != 1 && API.UpdateOnscreenKeyboard() != 2)
             {
                 API.DisableAllControlActions(0);
                 await BaseScript.Delay(0);
@@ -91,18 +93,17 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
             if (API.UpdateOnscreenKeyboard() == 1)
             {
                 string message = API.GetOnscreenKeyboardResult();
-                API.SetNotificationTextEntry("STRING");
                 if (message.Length <= 0)
                 {
-                    API.AddTextComponentString("~r~Message too short!");
+                    Notifications.LifeV(1, "SMS", "Message Error", "Message was too short", 2);
                 }
                 else
                 {
-                    API.AddTextComponentString("~g~Message sent! " + message);
+                    Notifications.LifeV(1, "SMS", "Message Sent", $"To: {data[0].Name}~n~{message}", 2);
                 }
-                API.DrawNotification(true, true);
             }
             API.EnableAllControlActions(0);
+            ApplicationHandler.IsInKeyboard = false;
         }
     }
 }

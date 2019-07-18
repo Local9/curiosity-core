@@ -55,6 +55,7 @@
     <Compile Include="Entity\User.cs" />
     <Compile Include="Enums\LogGroup.cs" />
     <Compile Include="Enums\Messages.cs" />
+    <Compile Include="Enums\Mobile\MobileEnums.cs" />
     <Compile Include="Enums\ObjectHash.cs" />
     <Compile Include="Enums\Privilege.cs" />
     <Compile Include="Enums\Reserved.cs" />

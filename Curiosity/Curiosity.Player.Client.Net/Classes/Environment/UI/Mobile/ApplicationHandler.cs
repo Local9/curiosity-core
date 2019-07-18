@@ -10,7 +10,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
     class ApplicationHandler
     {
         static Client client = Client.GetInstance();
-        static Task task;
 
         public static List<Application> Apps = new List<Application>();
 
@@ -20,11 +19,15 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
         public static int SelectedItem;
 
         public static bool IsInApp = false;
+        public static bool IsInKeyboard = false;
 
         public static void ChangeScreen(dynamic[] dynamics)
         {
-            PreviousScreens.Add(CurrentAppScreen);
-            CurrentAppScreen = dynamics[0];
+            if (dynamics != null)
+            {
+                PreviousScreens.Add(CurrentAppScreen);
+                CurrentAppScreen = dynamics[0];
+            }
         }
 
         public static void Start(Application application)
@@ -32,7 +35,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
             if (application.LauncherScreen != null)
             {
                 CurrentApp = application;
-                CurrentAppScreen = application.LauncherScreen;
+                CurrentAppScreen = CurrentApp.LauncherScreen;
                 PreviousScreens.Clear();
                 SelectedItem = 0;
                 IsInApp = true;
@@ -62,7 +65,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
 
         public static async Task CreateScreen()
         {
-            if (CurrentApp != null)
+            if (CurrentApp != null && !IsInKeyboard)
             {
                 if (CurrentAppScreen == null)
                 {
@@ -90,9 +93,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                 }
                 else
                 {
-                    API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "SET_DATA_SLOT_EMPTY");
-                    API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
-                    API.PopScaleformMovieFunctionVoid();
+                    //API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "SET_DATA_SLOT_EMPTY");
+                    //API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
+                    //API.PopScaleformMovieFunctionVoid();
 
                     string header = string.Empty;
                     if (!string.IsNullOrEmpty(CurrentAppScreen.Header))
@@ -108,16 +111,19 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                     API.PushScaleformMovieFunctionParameterString(header);
                     API.PopScaleformMovieFunctionVoid();
 
+                    int i = 0;
+
                     foreach(Item item in CurrentAppScreen.Items)
                     {
                         API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "SET_DATA_SLOT");
                         API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
-                        API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Id);
+                        API.PushScaleformMovieFunctionParameterInt(i);
                         foreach(ItemData itemData in item.Data)
                         {
                             itemData.Push();
                         }
                         API.PopScaleformMovieFunctionVoid();
+                        i++;
                     }
 
                     API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "DISPLAY_VIEW");
@@ -151,6 +157,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                         {
                             CurrentAppScreen = PreviousScreens[PreviousScreens.Count - 1];
                             SelectedItem = 0;
+                            PreviousScreens.Remove(CurrentAppScreen);
                         }
                         else
                         {

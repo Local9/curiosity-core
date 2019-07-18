@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using Curiosity.Global.Shared.net.Enums.Mobile;
 
 namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
 {
@@ -40,6 +41,13 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
             {
                 LauncherScreen = screen;
             }
+        }
+
+        public Screen AddScreenType(string header, View view)
+        {
+            Screen listScreen = new Screen(this, header, (int)view);
+            AddScreen(listScreen);
+            return listScreen;
         }
 
         public Screen AddListScreen(string header)

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Global.Shared.net.Enums.Mobile;
 using Curiosity.Client.net.Classes.Environment.UI.Mobile.Api;
 
 namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
@@ -36,33 +38,20 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
             client.RegisterTickHandler(OnMainAppTick);
         }
 
-        static async Task Test()
+        static void SetSoftKey(int scaleForm, SoftKey buttonId, Color color, SoftkeyIcon icon)
         {
-            if (ControlHelper.IsControlJustPressed(Control.FrontendSocialClub))
-            {
-                API.DisplayOnscreenKeyboard(6, "FMMC_KEY_TIP8", "", "", "", "", "", 60);
-                await BaseScript.Delay(100); // 100ms delay to prevent instant enter.
-                while (API.UpdateOnscreenKeyboard() != 1 && API.UpdateOnscreenKeyboard() != 2)
-                {
-                    API.DisableAllControlActions(0);
-                    await BaseScript.Delay(0);
-                }
-                if (API.UpdateOnscreenKeyboard() == 1)
-                {
-                    string message = API.GetOnscreenKeyboardResult();
-                    API.SetNotificationTextEntry("STRING");
-                    if (message.Length <= 0)
-                    {
-                        API.AddTextComponentString("~r~Message too short!");
-                    }
-                    else
-                    {
-                        API.AddTextComponentString("~g~Message sent! " + message);
-                    }
-                    API.DrawNotification(true, true);
-                }
-                API.EnableAllControlActions(0);
-            }
+            API.PushScaleformMovieFunction(scaleForm, "SET_SOFT_KEYS");
+            API.PushScaleformMovieFunctionParameterInt((int)buttonId);
+            API.PushScaleformMovieFunctionParameterBool(true);
+            API.PushScaleformMovieFunctionParameterInt((int)icon);
+            API.PopScaleformMovieFunctionVoid();
+
+            //API.PushScaleformMovieFunction(MobileScaleform, "SET_SOFT_KEYS_COLOUR");
+            //API.PushScaleformMovieFunctionParameterInt(buttonId);
+            //API.PushScaleformMovieFunctionParameterInt(color.R);
+            //API.PushScaleformMovieFunctionParameterInt(color.G);
+            //API.PushScaleformMovieFunctionParameterInt(color.B);
+            //API.PopScaleformMovieFunctionVoid();
         }
 
         static async Task OnMobileCreationTick()
@@ -108,6 +97,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
 
                 API.SetTextRenderId(renderID);
 
+                //SetSoftKey(MobileScaleform, SoftKey.Left, Color.White, SoftkeyIcon.Select);
+                //SetSoftKey(MobileScaleform, 2, Color.White, 0);
+                //SetSoftKey(MobileScaleform, 3, Color.White, 0);
+
                 API.DrawScaleformMovie(MobileScaleform, 0.0998f, 0.1775f, 0.1983f, 0.364f, 255, 255, 255, 255, 0);
                 API.SetTextRenderId(1);
             }
@@ -126,16 +119,17 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
 
                 visibleAnimProgress = 21;
                 IsMobilePhoneOpen = true;
-                API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
-                API.SetMobilePhoneScale(285.0f);
+                API.SetMobilePhonePosition(0.0f, 0.0f, 0.0f);
+                // API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
+                // API.SetMobilePhoneScale(285.0f);
                 API.CreateMobilePhone(0);
-                // API.N_0x83a169eabcdb10a2(Game.PlayerPed.Handle, 4);
+                API.N_0x83a169eabcdb10a2(Game.PlayerPed.Handle, 4);
             }
 
             await Task.FromResult(0);
         }
 
-        static void ClosePhone(bool closingApp = false)
+        public static void ClosePhone(bool closingApp = false)
         {
             if (closingApp)
             {
@@ -144,9 +138,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
             }
             else
             {
-                Game.PlayerPed.SetConfigFlag(242, true);
-                Game.PlayerPed.SetConfigFlag(243, true);
-                Game.PlayerPed.SetConfigFlag(244, false);
+                //Game.PlayerPed.SetConfigFlag(242, true);
+                //Game.PlayerPed.SetConfigFlag(243, true);
+                //Game.PlayerPed.SetConfigFlag(244, false);
 
                 IsMobilePhoneOpen = false;
                 API.SetScaleformMovieAsNoLongerNeeded(ref MobileScaleform);
