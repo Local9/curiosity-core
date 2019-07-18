@@ -1,21 +1,4 @@
-﻿//using FamilyRP.Roleplay.Client.Classes;
-//using FamilyRP.Roleplay.Client.Classes.Actions;
-//using FamilyRP.Roleplay.Client.Classes.Actions.Emotes;
-//using FamilyRP.Roleplay.Client.Classes.Actions.EMS;
-//using FamilyRP.Roleplay.Client.Classes.Actions.Jobs.Police;
-//using FamilyRP.Roleplay.Client.Classes.Environment;
-//using FamilyRP.Roleplay.Client.Classes.Environment.Controls;
-//using FamilyRP.Roleplay.Client.Classes.Environment.DevTools;
-//using FamilyRP.Roleplay.Client.Classes.Environment.UI;
-//using FamilyRP.Roleplay.Client.Classes.Environment.UI.Police;
-//using FamilyRP.Roleplay.Client.Classes.Jobs;
-//using FamilyRP.Roleplay.Client.Classes.Jobs.Police;
-//using FamilyRP.Roleplay.Client.Classes.Jobs.Police.Helicopter;
-//using FamilyRP.Roleplay.Client.Classes.Jobs.Police.Vehicle;
-//using FamilyRP.Roleplay.Client.Classes.Jobs.Transportation.Trains;
-//using FamilyRP.Roleplay.Client.Classes.Player;
-//using FamilyRP.Roleplay.Client.Classes.Vehicle;
-using Curiosity.Client.net.Classes.Actions;
+﻿using Curiosity.Client.net.Classes.Actions;
 using Curiosity.Client.net.Classes.Actions.Emotes;
 using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Environment.UI;
@@ -73,7 +56,9 @@ namespace Curiosity.Client.net
             Notifications.Init();
 
             // Mobile Phone Addons
-            // Classes.Environment.UI.Mobile.MobilePhone.Init();
+            Classes.Environment.UI.Mobile.MobilePhone.Init();
+            Classes.Environment.UI.Mobile.Apps.PlayerListApplication.Init();
+            // Classes.Environment.UI.Mobile.Apps.SettingsApplication.Init();
 
             // MENU
             //MenuGlobals.Init();

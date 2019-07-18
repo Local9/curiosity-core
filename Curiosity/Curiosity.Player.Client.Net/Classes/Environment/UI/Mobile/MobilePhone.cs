@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Client.net.Classes.Environment.UI.Mobile.Api.Entity;
+using Curiosity.Client.net.Classes.Environment.UI.Mobile.Api;
 
 namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
 {
@@ -18,38 +18,22 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
 
         static public bool IsMobilePhoneOpen = false;
         static public bool InSleepMode = false;
-        static public bool IsInApp = false;
 
         static int theme = API.GetResourceKvpInt("vf_phone_theme");
         static int wallpaper = API.GetResourceKvpInt("vf_phone_wallpaper");
 
-        static int phoneTheme = 5;
-        static int phoneWallpaper = 11;
+        public static int phoneTheme = 5;
+        public static int phoneWallpaper = 11;
         static int visibleAnimProgress = 21;
         static int selectedItem = 4;
 
-        public static Dictionary<int, Application> applications = new Dictionary<int, Application>();
-
         // app screen
-        static int mobileScaleform;
+        public static int MobileScaleform;
 
         public static void Init()
         {
             client.RegisterTickHandler(OnMobileCreationTick);
             client.RegisterTickHandler(OnMainAppTick);
-            client.RegisterTickHandler(Test);
-
-            AddApplication(Api.AppIcons.Empty);
-            AddApplication(Api.AppIcons.Empty);
-            AddApplication(Api.AppIcons.Contacts);
-
-            AddApplication(Api.AppIcons.Empty);
-            AddApplication(Api.AppIcons.Empty);
-            AddApplication(Api.AppIcons.Empty);
-
-            AddApplication(Api.AppIcons.Empty);
-            AddApplication(Api.AppIcons.Settings);
-            AddApplication(Api.AppIcons.Empty);
         }
 
         static async Task Test()
@@ -81,15 +65,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
             }
         }
 
-        static void AddApplication(Api.AppIcons appIcon)
-        {
-            if (applications.Count == 9) return;
-
-            int id = applications.Count + 1;
-
-            applications.Add(id, new Application() { Id = id, Name = $"App #{id}", Icon = appIcon });
-        }
-
         static async Task OnMobileCreationTick()
         {
             if (IsMobilePhoneOpen)
@@ -106,25 +81,25 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                 int seconds = 0;
                 API.NetworkGetServerTime(ref hours, ref minutes, ref seconds);
 
-                API.PushScaleformMovieFunction(mobileScaleform, "SET_TITLEBAR_TIME");
+                API.PushScaleformMovieFunction(MobileScaleform, "SET_TITLEBAR_TIME");
                 API.PushScaleformMovieFunctionParameterInt(hours);
                 API.PushScaleformMovieFunctionParameterInt(minutes);
                 API.PopScaleformMovieFunctionVoid();
 
-                API.PushScaleformMovieFunction(mobileScaleform, "SET_SLEEP_MODE");
+                API.PushScaleformMovieFunction(MobileScaleform, "SET_SLEEP_MODE");
                 API.PushScaleformMovieFunctionParameterBool(InSleepMode);
                 API.PopScaleformMovieFunctionVoid();
 
-                API.PushScaleformMovieFunction(mobileScaleform, "SET_THEME");
+                API.PushScaleformMovieFunction(MobileScaleform, "SET_THEME");
                 API.PushScaleformMovieFunctionParameterInt(phoneTheme);
                 API.PopScaleformMovieFunctionVoid();
 
-                API.PushScaleformMovieFunction(mobileScaleform, "SET_BACKGROUND_IMAGE");
+                API.PushScaleformMovieFunction(MobileScaleform, "SET_BACKGROUND_IMAGE");
                 API.PushScaleformMovieFunctionParameterInt(phoneWallpaper);
                 API.PopScaleformMovieFunctionVoid();
 
                 Vector3 pos = Game.PlayerPed.Position;
-                API.PushScaleformMovieFunction(mobileScaleform, "SET_SIGNAL_STRENGTH");
+                API.PushScaleformMovieFunction(MobileScaleform, "SET_SIGNAL_STRENGTH");
                 API.PushScaleformMovieFunctionParameterInt(API.GetZoneScumminess(API.GetZoneAtCoords(pos.X, pos.Y, pos.Z)));
                 API.PopScaleformMovieFunctionVoid();
 
@@ -133,22 +108,28 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
 
                 API.SetTextRenderId(renderID);
 
-                API.DrawScaleformMovie(mobileScaleform, 0.0998f, 0.1775f, 0.1983f, 0.364f, 255, 255, 255, 255, 0);
+                API.DrawScaleformMovie(MobileScaleform, 0.0998f, 0.1775f, 0.1983f, 0.364f, 255, 255, 255, 255, 0);
                 API.SetTextRenderId(1);
             }
             else if (ControlHelper.IsControlJustPressed(Control.ReplayFfwd))
             {
                 API.PlaySoundFrontend(-1, "Pull_Out", "Phone_SoundSet_Default", true);
-                mobileScaleform = API.RequestScaleformMovie("CELLPHONE_IFRUIT");
-                if (!API.HasScaleformMovieLoaded(mobileScaleform))
+                MobileScaleform = API.RequestScaleformMovie("CELLPHONE_IFRUIT");
+                if (!API.HasScaleformMovieLoaded(MobileScaleform))
                 {
                     await Client.Delay(0);
                 }
+
+                Game.PlayerPed.SetConfigFlag(242, false);
+                Game.PlayerPed.SetConfigFlag(243, false);
+                Game.PlayerPed.SetConfigFlag(244, true);
+
                 visibleAnimProgress = 21;
                 IsMobilePhoneOpen = true;
                 API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
                 API.SetMobilePhoneScale(285.0f);
                 API.CreateMobilePhone(0);
+                // API.N_0x83a169eabcdb10a2(Game.PlayerPed.Handle, 4);
             }
 
             await Task.FromResult(0);
@@ -158,13 +139,17 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
         {
             if (closingApp)
             {
-                IsInApp = false;
+                ApplicationHandler.IsInApp = false;
                 API.PlaySoundFrontend(-1, "Hang_Up", "Phone_SoundSet_Michael", true);
             }
             else
             {
+                Game.PlayerPed.SetConfigFlag(242, true);
+                Game.PlayerPed.SetConfigFlag(243, true);
+                Game.PlayerPed.SetConfigFlag(244, false);
+
                 IsMobilePhoneOpen = false;
-                API.SetScaleformMovieAsNoLongerNeeded(ref mobileScaleform);
+                API.SetScaleformMovieAsNoLongerNeeded(ref MobileScaleform);
                 API.DestroyMobilePhone();
             }
 
@@ -174,35 +159,37 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
         {
             try
             {
-                if (IsMobilePhoneOpen && !IsInApp)
+                if (IsMobilePhoneOpen && !ApplicationHandler.IsInApp)
                 {
-                    for (int i = 0; i < TOTAL_APPS; i++)
+
+                    foreach(Application application in ApplicationHandler.Apps)
                     {
-                        API.PushScaleformMovieFunction(mobileScaleform, "SET_DATA_SLOT");
+                        API.PushScaleformMovieFunction(MobileScaleform, "SET_DATA_SLOT");
                         API.PushScaleformMovieFunctionParameterInt(1);
-                        API.PushScaleformMovieFunctionParameterInt(i);
+                        API.PushScaleformMovieFunctionParameterInt(application.GetID);
                         // Need to loop over applications
-
-                        if (applications.ContainsKey(i + 1))
-                        {
-                            API.PushScaleformMovieFunctionParameterInt((int)applications[i + 1].Icon);
-                        }
-                        else
-                        {
-                            API.PushScaleformMovieFunctionParameterInt(3);
-                        }
-
+                        API.PushScaleformMovieFunctionParameterInt((int)application.GetIcon);
                         API.PopScaleformMovieFunctionVoid();
                     }
 
-                    API.PushScaleformMovieFunction(mobileScaleform, "DISPLAY_VIEW");
+                    // FILL
+                    for (int i = ApplicationHandler.Apps.Count; i < TOTAL_APPS; i++)
+                    {
+                        API.PushScaleformMovieFunction(MobileScaleform, "SET_DATA_SLOT");
+                        API.PushScaleformMovieFunctionParameterInt(1);
+                        API.PushScaleformMovieFunctionParameterInt(i);
+                        API.PushScaleformMovieFunctionParameterInt((int)Api.AppIcons.Empty);
+                        API.PopScaleformMovieFunctionVoid();
+                    }
+
+                    API.PushScaleformMovieFunction(MobileScaleform, "DISPLAY_VIEW");
                     API.PushScaleformMovieFunctionParameterInt(1);
                     API.PushScaleformMovieFunctionParameterInt(selectedItem);
                     API.PopScaleformMovieFunctionVoid();
 
                     for (int i = 0; i < TOTAL_APPS; i++)
                     {
-                        API.PushScaleformMovieFunction(mobileScaleform, "SET_HEADER");
+                        API.PushScaleformMovieFunction(MobileScaleform, "SET_HEADER");
                         API.PushScaleformMovieFunctionParameterString("Life V");
                         API.PopScaleformMovieFunctionVoid();
                     }
@@ -237,7 +224,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                     {
                         if (ControlHelper.IsControlJustPressed(Control.CreatorAccept))
                         {
-                                
+                            ApplicationHandler.Start(ApplicationHandler.Apps[selectedItem]);
                         }
                         else if (ControlHelper.IsControlJustPressed(Control.FrontendCancel))
                         {
@@ -254,7 +241,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{ex.Message}");
+                Debug.WriteLine($"OnMainAppTick -> {ex.ToString()}");
             }
             await Task.FromResult(0);
         }
