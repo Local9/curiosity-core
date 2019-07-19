@@ -64,7 +64,7 @@ namespace Curiosity.Client.net
         {
             try
             {
-                UI.Render();
+                // UI.Render();
                 await UpdateFrameSettings();
                 if (Game.PlayerPed.IsInVehicle())
                 {

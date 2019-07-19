@@ -23,7 +23,7 @@ namespace Curiosity.Client.net.Classes.Player
                     Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed, true);
                 }
             }
-
+            await BaseScript.Delay(1);
             await Task.FromResult(0);
         }
     }

@@ -56,9 +56,9 @@ namespace Curiosity.Client.net
             Notifications.Init();
 
             // Mobile Phone Addons
-            Classes.Environment.UI.Mobile.MobilePhone.Init();
-            Classes.Environment.UI.Mobile.Apps.PlayerListApplication.Init();
-            Classes.Environment.UI.Mobile.Apps.SettingsApplication.Init();
+            //Classes.Environment.UI.Mobile.MobilePhone.Init();
+            //Classes.Environment.UI.Mobile.Apps.PlayerListApplication.Init();
+            //Classes.Environment.UI.Mobile.Apps.SettingsApplication.Init();
 
             // MENU
             //MenuGlobals.Init();
@@ -92,7 +92,7 @@ namespace Curiosity.Client.net
             AfkKick.Init();
             //ManipulateObject.Init();
             //NoClip.Init();
-            MarkerHandler.Init();
+            //MarkerHandler.Init();
             //Pvp.Init();
             WarpPoints.Init();
             Voip.Init();
@@ -105,7 +105,7 @@ namespace Curiosity.Client.net
             Birds.Init();
             SpawnManagement.Init();
             // InstancingChecker.Init();
-            Classes.Environment.PedClasses.PedHandler.Init();
+            // Classes.Environment.PedClasses.PedHandler.Init();
 
             // EMS
             //EMS.Init();
@@ -143,7 +143,7 @@ namespace Curiosity.Client.net
             Classes.Player.PlayerInformation.Init();
             WantedLevels.Init();
             // MugshotCreator.Init();
-            Classes.Player.Inventory.Init();
+            //Classes.Player.Inventory.Init();
             Classes.Player.Weapons.Init();
             // Classes.Player.Creation.Init();
 
