@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
+namespace Curiosity.Mobile.Client.net.Mobile.Api
 {
     class Item
     {

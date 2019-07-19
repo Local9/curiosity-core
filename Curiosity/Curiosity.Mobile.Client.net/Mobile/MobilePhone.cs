@@ -8,9 +8,9 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Global.Shared.net.Enums.Mobile;
-using Curiosity.Client.net.Classes.Environment.UI.Mobile.Api;
+using Curiosity.Mobile.Client.net.Mobile.Api;
 
-namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
+namespace Curiosity.Mobile.Client.net.Mobile
 {
     class MobilePhone
     {
@@ -96,7 +96,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
 
                 Vector3 pos = Game.PlayerPed.Position;
                 API.PushScaleformMovieFunction(MobileScaleform, "SET_SIGNAL_STRENGTH");
-                API.PushScaleformMovieFunctionParameterInt(API.GetZoneScumminess(API.GetZoneAtCoords(pos.X, pos.Y, pos.Z)));
+                // API.PushScaleformMovieFunctionParameterInt(API.GetZoneScumminess(API.GetZoneAtCoords(pos.X, pos.Y, pos.Z)));
+                API.PushScaleformMovieFunctionParameterInt(0);
                 API.PopScaleformMovieFunctionVoid();
 
                 int renderID = 0;

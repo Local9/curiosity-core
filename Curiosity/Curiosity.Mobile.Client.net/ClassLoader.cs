@@ -13,9 +13,9 @@ namespace Curiosity.Mobile.Client.net
             Log.Verbose("Entering ClassLoader Init");
 
             // Mobile Phone Addons
-            //Classes.Environment.UI.Mobile.MobilePhone.Init();
-            //Classes.Environment.UI.Mobile.Apps.PlayerListApplication.Init();
-            //Classes.Environment.UI.Mobile.Apps.SettingsApplication.Init();
+            Mobile.MobilePhone.Init();
+            Mobile.Apps.PlayerListApplication.Init();
+            Mobile.Apps.SettingsApplication.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

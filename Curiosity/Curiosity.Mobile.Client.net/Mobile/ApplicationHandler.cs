@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.Environment.UI.Mobile.Api;
+using Curiosity.Mobile.Client.net.Mobile.Api;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Curiosity.Shared.Client.net.Helper;
 
-namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
+namespace Curiosity.Mobile.Client.net.Mobile
 {
     class ApplicationHandler
     {

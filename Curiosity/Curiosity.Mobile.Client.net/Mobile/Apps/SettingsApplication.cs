@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.Environment.UI.Mobile.Api;
+using Curiosity.Mobile.Client.net.Mobile.Api;
 using Curiosity.Global.Shared.net.Enums.Mobile;
 using System;
 
-namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
+namespace Curiosity.Mobile.Client.net.Mobile.Apps
 {
     class SettingsApplication
     {

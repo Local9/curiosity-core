@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Curiosity.Client.net.Classes.Environment.UI.Mobile.Api;
+using Curiosity.Mobile.Client.net.Mobile.Api;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums.Mobile;
 
-namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
+namespace Curiosity.Mobile.Client.net.Mobile.Apps
 {
     class PlayerListApplication
     {
@@ -76,34 +76,37 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
 
         static async void MessagePlayer(dynamic[] data)
         {
-            ApplicationHandler.IsInKeyboard = true;
+            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "SMS", "Message Error", "Network Error", 2);
+            await BaseScript.Delay(0);
 
-            await BaseScript.Delay(100);
+            //ApplicationHandler.IsInKeyboard = true;
 
-            API.DisplayOnscreenKeyboard(6, "FMMC_KEY_TIP8", "", "", "", "", "", 60);
+            //await BaseScript.Delay(100);
 
-            await BaseScript.Delay(100); // 100ms delay to prevent instant enter.
+            //API.DisplayOnscreenKeyboard(6, "FMMC_KEY_TIP8", "", "", "", "", "", 60);
 
-            while (API.UpdateOnscreenKeyboard() != 1 && API.UpdateOnscreenKeyboard() != 2)
-            {
-                API.DisableAllControlActions(0);
-                await BaseScript.Delay(0);
-            }
+            //await BaseScript.Delay(100); // 100ms delay to prevent instant enter.
 
-            if (API.UpdateOnscreenKeyboard() == 1)
-            {
-                string message = API.GetOnscreenKeyboardResult();
-                if (message.Length <= 0)
-                {
-                    Notifications.LifeV(1, "SMS", "Message Error", "Message was too short", 2);
-                }
-                else
-                {
-                    Notifications.LifeV(1, "SMS", "Message Sent", $"To: {data[0].Name}~n~{message}", 2);
-                }
-            }
-            API.EnableAllControlActions(0);
-            ApplicationHandler.IsInKeyboard = false;
+            //while (API.UpdateOnscreenKeyboard() != 1 && API.UpdateOnscreenKeyboard() != 2)
+            //{
+            //    API.DisableAllControlActions(0);
+            //    await BaseScript.Delay(0);
+            //}
+
+            //if (API.UpdateOnscreenKeyboard() == 1)
+            //{
+            //    string message = API.GetOnscreenKeyboardResult();
+            //    if (message.Length <= 0)
+            //    {
+            //        Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "SMS", "Message Error", "Message was too short", 2);
+            //    }
+            //    else
+            //    {
+            //        Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "SMS", "Message Sent", $"To: {data[0].Name}~n~{message}", 2);
+            //    }
+            //}
+            //API.EnableAllControlActions(0);
+            //ApplicationHandler.IsInKeyboard = false;
         }
     }
 }

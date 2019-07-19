@@ -1,7 +1,7 @@
 ﻿using Curiosity.Shared.Client.net;
 using System.Collections.Generic;
 
-namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
+namespace Curiosity.Mobile.Client.net.Mobile.Api
 { 
     class Screen
     {

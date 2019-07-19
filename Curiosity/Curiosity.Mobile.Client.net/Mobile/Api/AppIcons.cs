@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
+﻿namespace Curiosity.Mobile.Client.net.Mobile.Api
 {
     enum AppIcons
     {
