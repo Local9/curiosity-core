@@ -58,6 +58,13 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
         {
             if (IsMobilePhoneOpen)
             {
+                float scale = 0;
+                if (API.GetFollowPedCamViewMode() == 4)
+                    scale = 0f;
+                else
+                    scale = 285f;
+                API.SetMobilePhoneScale(scale);
+
                 API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
                 API.SetMobilePhoneRotation(-90.0f, visibleAnimProgress * 4.0f, 0.0f, 0);
                 if (visibleAnimProgress > 0)
@@ -120,7 +127,14 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                 visibleAnimProgress = 21;
                 IsMobilePhoneOpen = true;
                 API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
-                API.SetMobilePhoneScale(285.0f);
+
+                float scale = 0;
+                if (API.GetFollowPedCamViewMode() == 4)
+                    scale = 0f;
+                else
+                    scale = 285f;
+                API.SetMobilePhoneScale(scale);
+
                 API.CreateMobilePhone(0);
                 API.N_0x83a169eabcdb10a2(Game.PlayerPed.Handle, 4);
             }
