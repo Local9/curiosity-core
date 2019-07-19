@@ -93,9 +93,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                 }
                 else
                 {
-                    //API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "SET_DATA_SLOT_EMPTY");
-                    //API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
-                    //API.PopScaleformMovieFunctionVoid();
+                    API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "SET_DATA_SLOT_EMPTY");
+                    API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
+                    API.PopScaleformMovieFunctionVoid();
 
                     string header = string.Empty;
                     if (!string.IsNullOrEmpty(CurrentAppScreen.Header))

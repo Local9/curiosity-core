@@ -7,7 +7,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
 {
     class Application
     {
-        public static int NUM_APPS = 0;
+        public static int NUM_APPS = 1;
         public static Dictionary<int, Application> applications = new Dictionary<int, Application>();
 
         protected int Id;
@@ -26,11 +26,11 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
         public Func<bool> StartTask;
         public Func<bool> StopTask;
 
-        public Application(string name, AppIcons appIcon)
+        public Application(string name, AppIcons appIcon, int position)
         {
             Name = name;
             Icon = appIcon;
-            applications.Add(NUM_APPS, this);
+            applications.Add(position, this);
             NUM_APPS++;
         }
 

@@ -119,9 +119,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
 
                 visibleAnimProgress = 21;
                 IsMobilePhoneOpen = true;
-                API.SetMobilePhonePosition(0.0f, 0.0f, 0.0f);
-                // API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
-                // API.SetMobilePhoneScale(285.0f);
+                API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
+                API.SetMobilePhoneScale(285.0f);
                 API.CreateMobilePhone(0);
                 API.N_0x83a169eabcdb10a2(Game.PlayerPed.Handle, 4);
             }
@@ -161,7 +160,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                         API.PushScaleformMovieFunction(MobileScaleform, "SET_DATA_SLOT");
                         API.PushScaleformMovieFunctionParameterInt(1);
                         API.PushScaleformMovieFunctionParameterInt(application.GetID);
-                        // Need to loop over applications
                         API.PushScaleformMovieFunctionParameterInt((int)application.GetIcon);
                         API.PopScaleformMovieFunctionVoid();
                     }

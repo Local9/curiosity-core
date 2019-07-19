@@ -21,7 +21,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Apps
 
         public static void Init()
         {
-            App = new Application("Player List", AppIcons.ContactsPlus);
+            App = new Application("Player List", AppIcons.Contacts, 1);
             Screen screen = new Screen(App, "Player List", (int)View.Contacts);
             App.LauncherScreen = screen;
             App.StartTask = StartTick;

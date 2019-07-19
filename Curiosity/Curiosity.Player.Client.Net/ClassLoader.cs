@@ -58,7 +58,7 @@ namespace Curiosity.Client.net
             // Mobile Phone Addons
             Classes.Environment.UI.Mobile.MobilePhone.Init();
             Classes.Environment.UI.Mobile.Apps.PlayerListApplication.Init();
-            // Classes.Environment.UI.Mobile.Apps.SettingsApplication.Init();
+            Classes.Environment.UI.Mobile.Apps.SettingsApplication.Init();
 
             // MENU
             //MenuGlobals.Init();
