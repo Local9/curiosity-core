@@ -7,10 +7,11 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
 {
     class Application
     {
-        public static int NUM_APPS = 1;
+        public static int NUM_APPS = 0;
         public static Dictionary<int, Application> applications = new Dictionary<int, Application>();
 
         protected int Id;
+        protected int Position;
         protected string Name;
         protected AppIcons Icon;
         protected List<Screen> screens = new List<Screen>();
@@ -18,6 +19,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
         protected Task task;
 
         public int GetID { get { return Id; } }
+        public int GetPosition { get { return Position; } }
         public string GetName { get { return Name; } }
         public AppIcons GetIcon { get { return Icon; } }
         public Task GetTask { get { return task; } }
@@ -30,6 +32,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile.Api
         {
             Name = name;
             Icon = appIcon;
+            Position = position;
             applications.Add(position, this);
             NUM_APPS++;
         }

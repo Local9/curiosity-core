@@ -154,14 +154,15 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
             {
                 if (IsMobilePhoneOpen && !ApplicationHandler.IsInApp)
                 {
-
-                    foreach(Application application in ApplicationHandler.Apps)
+                    int a = 0;
+                    foreach(Application application in ApplicationHandler.Apps.OrderBy(x => x.GetPosition))
                     {
                         API.PushScaleformMovieFunction(MobileScaleform, "SET_DATA_SLOT");
                         API.PushScaleformMovieFunctionParameterInt(1);
-                        API.PushScaleformMovieFunctionParameterInt(application.GetID);
+                        API.PushScaleformMovieFunctionParameterInt(a);
                         API.PushScaleformMovieFunctionParameterInt((int)application.GetIcon);
                         API.PopScaleformMovieFunctionVoid();
+                        a++;
                     }
 
                     // FILL
@@ -210,13 +211,14 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                     {
                         selectedItem = selectedItem - 1;
                         if (selectedItem < 0)
-                            selectedItem = 9;
+                            selectedItem = 8;
                     }
                     else
                     {
                         if (ControlHelper.IsControlJustPressed(Control.CreatorAccept))
                         {
-                            ApplicationHandler.Start(ApplicationHandler.Apps[selectedItem]);
+                            if (ApplicationHandler.Apps[selectedItem] != null)
+                                ApplicationHandler.Start(ApplicationHandler.Apps[selectedItem]);
                         }
                         else if (ControlHelper.IsControlJustPressed(Control.FrontendCancel))
                         {
