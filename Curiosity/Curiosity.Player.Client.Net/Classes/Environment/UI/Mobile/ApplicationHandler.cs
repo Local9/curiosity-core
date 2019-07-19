@@ -93,6 +93,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI.Mobile
                 }
                 else
                 {
+                    // CLEARS PREVIOUS ITEMS....
                     API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "SET_DATA_SLOT_EMPTY");
                     API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
                     API.PopScaleformMovieFunctionVoid();
