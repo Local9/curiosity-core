@@ -1,6 +1,8 @@
-﻿namespace Curiosity.Tools.Server.net
+﻿using CitizenFX.Core;
+
+namespace Curiosity.Tools.Server.net
 {
-	public class ServerAccessor
+	public class ServerAccessor : BaseScript
 	{
 		protected Server Server { get; }
 

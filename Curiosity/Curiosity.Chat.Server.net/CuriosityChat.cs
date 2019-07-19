@@ -78,7 +78,7 @@ namespace Curiosity.Chat.Server.net
                 {
                     int target = Int32.Parse(args[1]);
                     string message = String.Join(" ", args.Skip(1).Take(args.Count - 1));
-                    PlayerList playerList = new PlayerList();
+                    PlayerList playerList = Players;
                     Player targetPlayer = playerList[target];
                     TriggerClientEvent(targetPlayer, "curiosity:Client:Chat:Message", "console", "#FF0000", message);
                     Function.Call(Hash.CANCEL_EVENT);

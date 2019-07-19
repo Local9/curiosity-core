@@ -15,13 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Dependancies", "_Dependanc
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{EF02F259-FF7B-41FB-8B0C-6A72DD1441E6}"
-	ProjectSection(SolutionItems) = preProject
-		_Dependancies\client\CitizenFX.Core.dll = _Dependancies\client\CitizenFX.Core.dll
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{6CA7B9F3-882C-42D2-B81B-9D7AAA6C4B46}"
 	ProjectSection(SolutionItems) = preProject
-		_Dependancies\server\CitizenFX.Core.dll = _Dependancies\server\CitizenFX.Core.dll
 		_Dependancies\server\DiscordWebhook.net.dll = _Dependancies\server\DiscordWebhook.net.dll
 		_Dependancies\server\DiscordWebhook.net.dll.config = _Dependancies\server\DiscordWebhook.net.dll.config
 	EndProjectSection
