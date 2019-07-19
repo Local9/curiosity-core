@@ -50,6 +50,15 @@
   <ItemGroup>
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Mobile\Api\AppIcons.cs" />
+    <Compile Include="Mobile\Api\Application.cs" />
+    <Compile Include="Mobile\Api\Item.cs" />
+    <Compile Include="Mobile\Api\ItemData.cs" />
+    <Compile Include="Mobile\Api\Screen.cs" />
+    <Compile Include="Mobile\ApplicationHandler.cs" />
+    <Compile Include="Mobile\Apps\PlayerListApplication.cs" />
+    <Compile Include="Mobile\Apps\SettingsApplication.cs" />
+    <Compile Include="Mobile\MobilePhone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

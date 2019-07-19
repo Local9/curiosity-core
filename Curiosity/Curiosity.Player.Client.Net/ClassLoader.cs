@@ -55,11 +55,6 @@ namespace Curiosity.Client.net
             WorldTime.Init();
             Notifications.Init();
 
-            // Mobile Phone Addons
-            //Classes.Environment.UI.Mobile.MobilePhone.Init();
-            //Classes.Environment.UI.Mobile.Apps.PlayerListApplication.Init();
-            //Classes.Environment.UI.Mobile.Apps.SettingsApplication.Init();
-
             // MENU
             //MenuGlobals.Init();
             ////VehicleMenuTest.Init();
