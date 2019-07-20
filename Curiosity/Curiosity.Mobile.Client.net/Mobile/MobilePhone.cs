@@ -29,6 +29,8 @@ namespace Curiosity.Mobile.Client.net.Mobile
         static int visibleAnimProgress = 21;
         static int selectedItem = 4;
 
+        public static bool IsOnDuty = false;
+
         // app screen
         public static int MobileScaleform;
 
@@ -156,6 +158,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 //Game.PlayerPed.SetConfigFlag(243, true);
                 //Game.PlayerPed.SetConfigFlag(244, false);
 
+                ApplicationHandler.Kill();
                 IsMobilePhoneOpen = false;
                 API.SetScaleformMovieAsNoLongerNeeded(ref MobileScaleform);
                 API.DestroyMobilePhone();

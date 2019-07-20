@@ -20,6 +20,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
         public static bool IsInApp = false;
         public static bool IsInKeyboard = false;
+        public static bool IsSendingEvent = false;
 
         public static void ChangeScreen(dynamic[] dynamics)
         {
@@ -52,9 +53,12 @@ namespace Curiosity.Mobile.Client.net.Mobile
         {
             IsInApp = false;
 
-            if (CurrentApp.StopTask != null)
+            if (CurrentApp != null)
             {
-                CurrentApp.StopTask.Invoke();
+                if (CurrentApp.StopTask != null)
+                {
+                    CurrentApp.StopTask.Invoke();
+                }
             }
 
             CurrentApp = null;

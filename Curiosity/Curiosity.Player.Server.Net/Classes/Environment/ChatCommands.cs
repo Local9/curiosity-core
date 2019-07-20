@@ -27,6 +27,7 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("announce", new Action<int, List<object>, string>(Announcement), false);
             API.RegisterCommand("spawn", new Action<int, List<object>, string>(Spawn), false);
             API.RegisterCommand("sc", new Action<int, List<object>, string>(SpawnCar), false);
+            API.RegisterCommand("dc", new Action<int, List<object>, string>(DevCar), false);
             API.RegisterCommand("video", new Action<int, List<object>, string>(ChangeVideoURL), false);
             API.RegisterCommand("watch", new Action<int, List<object>, string>(RequestURL), false);
 
@@ -177,6 +178,22 @@ namespace Curiosity.Server.net.Classes.Environment
                 if (!session.IsDeveloper) return;
 
                 session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", arguments[0]);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Chat->Spawn-> {ex.Message}");
+            }
+        }
+
+        static void DevCar(int playerHandle, List<object> arguments, string raw)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+                Session session = SessionManager.PlayerList[$"{playerHandle}"];
+                if (session.Privilege != Privilege.DEVELOPER) return;
+
+                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", "vagner");
             }
             catch (Exception ex)
             {

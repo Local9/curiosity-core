@@ -61,7 +61,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
                     // Add option to message the player.
                     
                     Item messageItem = new Item(playerOptionsMenu, Item.CreateData(2, PREFIX + "Message", (int)ListIcons.Attachment),
-                        new Action<dynamic[]>(MessagePlayer), player);
+                        MessagePlayer, player);
 
                     playerOptionsMenu.AddItem(messageItem);
 
@@ -77,6 +77,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         static async void MessagePlayer(dynamic[] data)
         {
             Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "SMS", "Message Error", "Network Error", 2);
+            ApplicationHandler.Kill();
             await BaseScript.Delay(0);
 
             //ApplicationHandler.IsInKeyboard = true;
