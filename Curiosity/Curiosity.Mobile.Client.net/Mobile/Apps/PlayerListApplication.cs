@@ -51,11 +51,11 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
 
                 foreach (CitizenFX.Core.Player player in Client.players)
                 {
-                    /* Skip the current client.
-                    if (player == LocalPlayer)
+                    /* Skip the current client.*/
+                    if (player == Game.Player)
                     {
                         continue;
-                    }*/
+                    }
                     Screen playerOptionsMenu = App.AddScreenType(player.Name, View.Settings); // Screen which contains options for this player.
 
                     // Add option to message the player.

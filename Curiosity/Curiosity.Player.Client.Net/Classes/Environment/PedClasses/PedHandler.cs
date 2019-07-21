@@ -79,6 +79,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
+                ped.Task.FightAgainstHatedTargets(20.0f);
 
                 API.SetPedRelationshipGroupHash(ped.Handle, suspectGroupHash);
                 API.SetPedCombatMovement(ped.Handle, 2);
@@ -154,7 +155,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                         else
                         {
                             pedsToRun[i].AttachedBlip.Scale = 1.0f;
-                            pedsToRun[i].Task.FightAgainstHatedTargets(20.0f);
+                            pedsToRun[i].Task.FightAgainst(Game.PlayerPed);
                         }
 
                         if (pedsToRun[i].IsDead)
