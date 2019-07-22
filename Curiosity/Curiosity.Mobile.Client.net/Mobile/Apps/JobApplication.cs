@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Mobile.Client.net.Mobile.Api;
 using Curiosity.Global.Shared.net.Enums.Mobile;
 using Curiosity.Global.Shared.net.Enums;
@@ -12,7 +13,8 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         static Application App;
         static string PREFIX = "~l~";
         static string CurrentJob = string.Empty;
-        static int visibleAnimProgress;
+        static long GameTimer = API.GetGameTimer();
+        static bool timeout = false;
 
         public static void Init()
         {
@@ -50,8 +52,9 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
                 //jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Trucker}", (int)ListIcons.Settings1), SetJob, Job.Trucker));
 
                 // ADD TO SCREEN
-                App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + $"{(MobilePhone.IsJobActive ? "Come off Duty" : "Go on Duty")}", (int)ListIcons.Settings1), ToggleDutyStatus));
+                App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + $"Change Status", (int)ListIcons.Settings1), ToggleActiveStatus));
                 App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + "Job", (int)ListIcons.Settings1), ApplicationHandler.ChangeScreen, jobMenu));
+                GameTimer = API.GetGameTimer();
             }
         }
 
@@ -82,12 +85,32 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
             Client.TriggerEvent("curiosity:Mobile:Job:Active", MobilePhone.IsJobActive);
         }
 
-        static void ToggleDutyStatus(dynamic[] dynamics)
+        static async void ToggleActiveStatus(dynamic[] dynamics)
         {
+            if (timeout)
+            {
+                API.PlaySoundFrontend(-1, "ERROR", "HUD_AMMO_SHOP_SOUNDSET", true);
+                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "", $"~w~Status cannot be changed currently, please wait.", 2);
+                return;
+            }
             MobilePhone.IsJobActive = !MobilePhone.IsJobActive;
-            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "Changed Duty", $"~w~Duty Status: ~s~{(MobilePhone.IsJobActive ? $"On Duty" : $"Off Duty")}", 2);
+            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "", $"~w~Status: ~s~{(MobilePhone.IsJobActive ? $"Active" : $"Deactivated")}", 2);
             Client.TriggerEvent("curiosity:Client:Interface:Duty", !string.IsNullOrEmpty(CurrentJob), MobilePhone.IsJobActive, CurrentJob);
-            ApplicationHandler.Kill();
+            await TimeOut();
+        }
+
+        static async Task TimeOut()
+        {
+            timeout = true;
+            GameTimer = API.GetGameTimer();
+            while ((API.GetGameTimer() - GameTimer) < 10000)
+            {
+                await Client.Delay(1000);
+            }
+            timeout = false;
+
+            API.PlaySoundFrontend(-1, "CHALLENGE_UNLOCKED", "HUD_AWARDS", true);
+            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "", $"~w~Status can now be changed.", 2);
         }
     }
 }

@@ -31,6 +31,11 @@ namespace Curiosity.Mobile.Client.net.Mobile
             }
         }
 
+        public static void PlaySound(string audio, string audioSet)
+        {
+            API.PlaySoundFrontend(-1, audio, audioSet, true);
+        }
+
         public static void Start(Application application)
         {
             if (application.LauncherScreen != null)
@@ -73,7 +78,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
         public static async Task CreateScreen()
         {
-            if (CurrentApp != null && !IsInKeyboard)
+            while (CurrentApp != null && !IsInKeyboard)
             {
                 if (CurrentAppScreen == null)
                 {
@@ -185,6 +190,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                         API.PlaySoundFrontend(-1, "Menu_Navigate", "Phone_SoundSet_Default", true);
                     }
                 }
+                await Client.Delay(0);
             }
             await Task.FromResult(0);
         }
