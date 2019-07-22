@@ -1,12 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.Menus;
-using Curiosity.Shared.Client.net.Extensions;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Curiosity.Client.net.Classes.Vehicle
+namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 {
     static class EngineManager
     {

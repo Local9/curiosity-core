@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Enums;
 
-namespace Curiosity.Client.net.Classes.Vehicle
+namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 {
     static class BrakeSignals
     {

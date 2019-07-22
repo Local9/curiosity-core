@@ -100,8 +100,8 @@
     <Compile Include="Classes\Player\Creation.cs" />
     <Compile Include="Classes\Player\Inventory.cs" />
     <Compile Include="Classes\Player\MugshotCreator.cs" />
-    <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="Classes\Player\PedDamage.cs" />
+    <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="Classes\Player\Queue.cs" />
     <Compile Include="Classes\Player\Sit.cs" />
     <Compile Include="Classes\Player\Skills.cs" />
@@ -118,7 +118,6 @@
     <Compile Include="Helpers\Game.cs" />
     <Compile Include="Helpers\Pools.cs" />
     <Compile Include="Helpers\WorldProbe.cs" />
-    <Compile Include="Models\FuelPump.cs" />
     <Compile Include="Models\Keybind.cs" />
     <Compile Include="Models\PedData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

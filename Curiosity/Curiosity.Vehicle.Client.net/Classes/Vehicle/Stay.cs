@@ -3,7 +3,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Helper;
 
-namespace Curiosity.Client.net.Classes.Vehicle
+namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 {
     static class Stay
     {

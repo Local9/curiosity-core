@@ -1,14 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.Menus;
-using Curiosity.Client.net.Helpers;
-using Curiosity.Shared.Client.net.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Curiosity.Client.net.Classes.Vehicle
+namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 {
     public class VehicleMemoryModel
     {

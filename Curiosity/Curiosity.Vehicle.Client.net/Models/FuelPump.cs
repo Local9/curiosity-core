@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Client.net.Models
+﻿namespace Curiosity.Vehicle.Client.net.Models
 {
     class FuelPump
     {
