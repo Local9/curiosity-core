@@ -80,6 +80,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
             client.RegisterEventHandler("curiosity:Client:Vehicle:Detonate", new Action<int>(OnVehicleDetonate));
 
+            client.RegisterEventHandler("curiosity:Client:Vehicle:DevRepair", new Action(DevRepair));
+
             if (randomTireBurstInterval != 0)
             {
                 tireBurstLuckyNumber = random.Next(tireBurstMaxNumber);
@@ -409,9 +411,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             await Task.FromResult(0);
         }
 
-        public static void Fix()
+        public static void DevRepair()
         {
-            if (Game.PlayerPed.IsInVehicle())
+            if (Game.PlayerPed.IsInVehicle() && Player.PlayerInformation.IsDeveloper())
             {
                 Game.PlayerPed.CurrentVehicle.Repair();
                 Game.PlayerPed.CurrentVehicle.EngineHealth = 1000f;

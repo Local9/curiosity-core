@@ -42,7 +42,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
             Menu menu = new Menu(menuTitle, $"Report: {player.Name}");
 
             menu.OnMenuOpen += (_menu) => {
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
                 foreach (GlobalEntities.LogType logType in reportReasons)
                 {
                     menu.AddMenuItem(new MenuItem(logType.Description) { ItemData = logType, Description = "Select to report the player" });
@@ -51,7 +51,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
 
             menu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuBase.MenuOpen(false);
                 _menu.ClearMenuItems();
             };
 

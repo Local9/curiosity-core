@@ -108,7 +108,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
             menu.OnMenuOpen += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
 
                 if (defaultFov == 0.0f)
                     defaultFov = World.RenderingCamera.FieldOfView;
@@ -118,7 +118,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
             menu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuBase.MenuOpen(false);
             };
 
             menu.OnIndexChange += (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>

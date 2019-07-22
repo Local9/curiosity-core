@@ -45,7 +45,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
             menu.OnMenuOpen += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
                 if (HasSetupMenu)
                     return;
 
@@ -85,7 +85,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
             menu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuBase.MenuOpen(false);
             };
 
             int currentProp = 0;

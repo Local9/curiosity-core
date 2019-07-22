@@ -31,6 +31,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
         public static bool IsJobActive = false;
         public static bool IsLeaning = false;
+        public static bool IsMenuOpen = false;
 
         // app screen
         public static int MobileScaleform;
@@ -39,6 +40,13 @@ namespace Curiosity.Mobile.Client.net.Mobile
         {
             client.RegisterTickHandler(OnMobileCreationTick);
             client.RegisterTickHandler(OnMainAppTick);
+
+            client.RegisterEventHandler("curiosity:Client:Menu:IsOpened", new Action<bool>(InteractionMenuOpen));
+        }
+
+        static void InteractionMenuOpen(bool isOpen)
+        {
+            IsMenuOpen = isOpen;
         }
 
         static void SetSoftKey(int scaleForm, SoftKey buttonId, Color color, SoftkeyIcon icon)
@@ -129,7 +137,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 API.DrawScaleformMovie(MobileScaleform, 0.0998f, 0.1775f, 0.1983f, 0.364f, 255, 255, 255, 255, 0);
                 API.SetTextRenderId(1);
             }
-            else if (ControlHelper.IsControlJustPressed(Control.ReplayFfwd))
+            else if (ControlHelper.IsControlJustPressed(Control.ReplayFfwd) && !IsMenuOpen)
             {
                 API.PlaySoundFrontend(-1, "Pull_Out", "Phone_SoundSet_Default", true);
                 MobileScaleform = API.RequestScaleformMovie("CELLPHONE_IFRUIT");

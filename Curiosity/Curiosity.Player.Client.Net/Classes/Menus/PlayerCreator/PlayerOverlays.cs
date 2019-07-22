@@ -60,7 +60,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
 
             menu.OnMenuOpen += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
 
                 if (HasSetupMenu)
                     return;
@@ -75,6 +75,11 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                 });
 
                 HasSetupMenu = true;
+            };
+
+            menu.OnMenuClose += (_menu) =>
+            {
+                MenuBase.MenuOpen(false);
             };
 
             menu.OnListIndexChange += async (Menu _menu, MenuListItem _listItem, int _oldSelectionIndex, int _newSelectionIndex, int _itemIndex) =>

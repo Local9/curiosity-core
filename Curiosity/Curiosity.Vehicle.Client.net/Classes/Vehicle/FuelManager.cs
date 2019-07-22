@@ -106,6 +106,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             client.RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
             client.RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
             client.RegisterEventHandler("curiosity:Client:Settings:InstantRefuel", new Action<bool>(InstantRefuel));
+
+            //DevRefuel
+            client.RegisterEventHandler("curiosity:Client:Vehicle:DevRefuel", new Action(DevRefuel));
         }
 
         static async Task GasStationBlips()
@@ -407,11 +410,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             await BaseScript.Delay(0);
         }
 
-        public static async void DevRefuel()
+        static void DevRefuel()
         {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
             Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
-
-            await BaseScript.Delay(0);
         }
 
         static async void ClientRefuel()

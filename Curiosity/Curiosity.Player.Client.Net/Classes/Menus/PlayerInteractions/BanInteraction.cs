@@ -34,12 +34,12 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
 
             periodMenu.OnMenuOpen += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
             };
 
             periodMenu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuBase.MenuOpen(false);
                 _menu.ClearMenuItems();
             };
 
@@ -60,7 +60,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
 
             menu.OnMenuOpen += async (_menu) => {
 
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
 
                 if (banReasons.Count == 0)
                 {
@@ -92,7 +92,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerInteractions
 
             menu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuBase.MenuOpen(false);
                 _menu.ClearMenuItems();
             };
 

@@ -188,12 +188,12 @@ namespace Curiosity.Client.net.Classes.Menus
 
             developerMenu.OnMenuOpen += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
             };
 
             developerMenu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuBase.MenuOpen(false);
                 _menu.ClearMenuItems();
             };
 
@@ -201,12 +201,12 @@ namespace Curiosity.Client.net.Classes.Menus
             {
                 if (menuItem.ItemData == "VEHICLE_REPAIR")
                 {
-                    // Vehicle.VehicleDamage.Fix();
+                    BaseScript.TriggerEvent("curiosity:Client:Vehicle:DevRepair");
                 }
 
                 if (menuItem.ItemData == "VEHICLE_REFUEL")
                 {
-                    // Vehicle.FuelManager.DevRefuel();
+                    BaseScript.TriggerEvent("curiosity:Client:Vehicle:DevRefuel");
                 }
             };
 

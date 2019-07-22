@@ -233,12 +233,12 @@ namespace Curiosity.Client.net.Classes.Menus
 
             Menu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuOpen(false);
             };
 
             Menu.OnMenuOpen += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = true;
+                MenuOpen(true);
             };
 
             //menu.OnDynamicListItemCurrentItemChange += (_menu, _dynamicListItem, _oldCurrentItem, _newCurrentItem) =>
@@ -252,6 +252,20 @@ namespace Curiosity.Client.net.Classes.Menus
             //    // Code in here would get executed whenever a dynamic list item is pressed.
             //    Debug.WriteLine($"OnDynamicListItemSelect: [{_menu}, {_dynamicListItem}, {_currentItem}]");
             //};
+        }
+
+        public static void MenuOpen(bool isOpen)
+        {
+            if (isOpen)
+            {
+                Environment.UI.Location.HideLocation = true;
+                Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
+            }
+            else
+            {
+                Environment.UI.Location.HideLocation = false;
+                Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
+            }
         }
 
         public static void AddMenuItem(MenuItem menuItem)
