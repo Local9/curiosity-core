@@ -1,4 +1,5 @@
 ﻿using Curiosity.Shared.Client.net;
+using System;
 
 namespace Curiosity.Mobile.Client.net
 {
@@ -8,6 +9,8 @@ namespace Curiosity.Mobile.Client.net
     /// </summary>
     static class ClassLoader
     {
+        static Client client = Client.GetInstance();
+
         public static void Init()
         {
             Log.Verbose("Entering ClassLoader Init");
@@ -18,7 +21,14 @@ namespace Curiosity.Mobile.Client.net
             Mobile.Apps.JobApplication.Init();
             Mobile.Apps.SettingsApplication.Init();
 
+            client.RegisterEventHandler("curiosity:Mobile:Job:Active", new Action<bool>(OnJobActive));
+
             Log.Verbose("Leaving ClassLoader Init");
+        }
+
+        static void OnJobActive(bool active)
+        {
+            Mobile.MobilePhone.IsJobActive = active;
         }
     }
 }

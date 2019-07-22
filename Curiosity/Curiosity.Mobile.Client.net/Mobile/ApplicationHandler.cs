@@ -61,6 +61,10 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 }
             }
 
+            API.SetPhoneLean(false);
+            MobilePhone.IsLeaning = false;
+            CitizenFX.Core.Native.API.SetMobilePhoneRotation(0.0f, 0.0f, 0.0f, 0);
+
             CurrentApp = null;
             API.PlaySoundFrontend(-1, "Hang_Up", "Phone_SoundSet_Michael", true);
             

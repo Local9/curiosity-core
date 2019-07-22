@@ -29,7 +29,8 @@ namespace Curiosity.Mobile.Client.net.Mobile
         static int visibleAnimProgress = 21;
         static int selectedItem = 4;
 
-        public static bool IsOnDuty = false;
+        public static bool IsJobActive = false;
+        public static bool IsLeaning = false;
 
         // app screen
         public static int MobileScaleform;
@@ -56,6 +57,17 @@ namespace Curiosity.Mobile.Client.net.Mobile
             //API.PopScaleformMovieFunctionVoid();
         }
 
+        public static async void LeanPhone(bool lean)
+        {
+            MobilePhone.IsLeaning = lean;
+            API.SetPhoneLean(lean);
+
+            if (lean)
+                API.SetMobilePhoneRotation(-90.0f, 0.0f, 180.0f, 0);
+
+            await Client.Delay(0);
+        }
+
         static async Task OnMobileCreationTick()
         {
             if (IsMobilePhoneOpen)
@@ -67,11 +79,14 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     scale = 285f;
                 API.SetMobilePhoneScale(scale);
 
-                API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
-                API.SetMobilePhoneRotation(-90.0f, visibleAnimProgress * 4.0f, 0.0f, 0);
-                if (visibleAnimProgress > 0)
+                if (!MobilePhone.IsLeaning)
                 {
-                    visibleAnimProgress = visibleAnimProgress - 3;
+                    API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
+                    API.SetMobilePhoneRotation(-90.0f, visibleAnimProgress * 4.0f, 0.0f, 0);
+                    if (visibleAnimProgress > 0)
+                    {
+                        visibleAnimProgress = visibleAnimProgress - 3;
+                    }
                 }
 
                 int hours = 0;

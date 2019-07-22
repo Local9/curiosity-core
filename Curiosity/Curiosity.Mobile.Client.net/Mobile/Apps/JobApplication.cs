@@ -11,6 +11,8 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
     {
         static Application App;
         static string PREFIX = "~l~";
+        static string CurrentJob = string.Empty;
+        static int visibleAnimProgress;
 
         public static void Init()
         {
@@ -18,23 +20,21 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
             Screen screen = new Screen(App, "Job Options", (int)View.Settings);
             App.LauncherScreen = screen;
             App.StartTask = StartTick;
-            App.StopTask = StopTick;
             ApplicationHandler.Apps.Add(App); // Add the app to the loaded apps.
         }
 
         public static bool StartTick()
         {
-            Client.GetInstance().RegisterTickHandler(Tick);
+            Tick();
             return true;
         }
 
         public static bool StopTick()
         {
-            Client.GetInstance().DeregisterTickHandler(Tick);
             return true;
         }
 
-        public static async Task Tick()
+        public static void Tick()
         {
             if (App != null && ApplicationHandler.CurrentApp == App)
             {
@@ -45,26 +45,48 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
                 Screen jobMenu = App.AddScreenType("Job", View.Settings);
                 jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Firefighter}", (int)ListIcons.Settings1), SetJob, Job.Firefighter));
                 jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Paramedic}", (int)ListIcons.Settings1), SetJob, Job.Paramedic));
-                jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Pilot}", (int)ListIcons.Settings1), SetJob, Job.Pilot));
+                //jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Pilot}", (int)ListIcons.Settings1), SetJob, Job.Pilot));
                 jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.PoliceOfficer}", (int)ListIcons.Settings1), SetJob, Job.PoliceOfficer));
-                jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Trucker}", (int)ListIcons.Settings1), SetJob, Job.Trucker));
+                //jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Trucker}", (int)ListIcons.Settings1), SetJob, Job.Trucker));
 
                 // ADD TO SCREEN
-                App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + $"{(MobilePhone.IsOnDuty ? "Come off Duty" : "Go on Duty")}", (int)ListIcons.Settings1), ToggleDutyStatus));
+                App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + $"{(MobilePhone.IsJobActive ? "Come off Duty" : "Go on Duty")}", (int)ListIcons.Settings1), ToggleDutyStatus));
                 App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + "Job", (int)ListIcons.Settings1), ApplicationHandler.ChangeScreen, jobMenu));
             }
-            await Task.FromResult(0);
         }
 
         static void SetJob(dynamic[] dynamics)
         {
+            MobilePhone.IsJobActive = false;
 
+            Job selectedJob = (Job)dynamics[0];
+            CurrentJob = string.Empty;
+
+            switch (selectedJob)
+            {
+                case Job.Firefighter:
+                    CurrentJob = "fire";
+                    break;
+                case Job.Paramedic:
+                    CurrentJob = "medic";
+                    break;
+                case Job.PoliceOfficer:
+                    CurrentJob = "police";
+                    break;
+                default:
+                    CurrentJob = string.Empty;
+                    break;
+            }
+
+            Client.TriggerEvent("curiosity:Client:Interface:Duty", !string.IsNullOrEmpty(CurrentJob), MobilePhone.IsJobActive, CurrentJob);
+            Client.TriggerEvent("curiosity:Mobile:Job:Active", MobilePhone.IsJobActive);
         }
 
         static void ToggleDutyStatus(dynamic[] dynamics)
         {
-            MobilePhone.IsOnDuty = !MobilePhone.IsOnDuty;
-            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "Changed Duty", $"~w~Duty Status: ~s~{(MobilePhone.IsOnDuty ? $"On Duty" : $"Off Duty")}", 2);
+            MobilePhone.IsJobActive = !MobilePhone.IsJobActive;
+            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "Changed Duty", $"~w~Duty Status: ~s~{(MobilePhone.IsJobActive ? $"On Duty" : $"Off Duty")}", 2);
+            Client.TriggerEvent("curiosity:Client:Interface:Duty", !string.IsNullOrEmpty(CurrentJob), MobilePhone.IsJobActive, CurrentJob);
             ApplicationHandler.Kill();
         }
     }

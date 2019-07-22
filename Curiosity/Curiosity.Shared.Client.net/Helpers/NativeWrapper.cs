@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using static CitizenFX.Core.Native.API;
@@ -188,5 +189,80 @@ namespace Curiosity.Shared.Client.net.Helper
         {
             return API.GetDistanceBetweenCoords(start.X, start.Y, start.Z, end.X, end.Y, end.Z, useZ);
         }
+
+        public static bool IsWithinRange(Vector3 pos1, Vector3 pos2, float range)
+        {
+            // From Kronus
+            // Check if it is within the cube of eachother.
+            if (pos1.X - pos2.X > range || pos1.Y - pos2.Y > range
+                || pos2.X - pos1.X > range || pos2.Y - pos1.Y > range
+                || pos1.Z - pos2.Z > range || pos2.Z - pos1.Z > range) // Check Z last since it usually isn't the determining factor.
+            {
+                return false;
+            }
+            float distX = pos1.X - pos2.X;
+            float distY = pos1.Y - pos2.Y;
+            float distZ = pos1.Z - pos2.Z;
+            distX *= distX;
+            distY *= distY;
+            distZ *= distZ;
+            return distX + distY + distZ <= range * range;
+        }
+
+        //public static int NearestItemInCone(Vector3 loc, Vector3 dir, float range, float angle, Dictionary<int, LocationData> items)
+        //{
+        //    int currentClosestItem = -1; // Null item.
+        //    float invSquaredRange = 1.0f / range;
+        //    invSquaredRange *= invSquaredRange;
+        //    float maxSquaredRatio = (float)Math.Sin(angle) * range;
+        //    maxSquaredRatio *= maxSquaredRatio;
+        //    float currentSquaredRadialDistance = maxSquaredRatio; // Maximum distance horizontally in the cone.
+        //    maxSquaredRatio *= invSquaredRange;
+        //    float currentLinearDistance = range; // Maximum vertical distance in the cone.
+        //    float squaredRadialDistance;
+        //    float linearDistance;
+        //    float squaredLinearDistance;
+        //    float x, y, z;
+        //    float dot;
+        //    float squaredTotalDistance;
+        //    Vector3 target;
+        //    foreach (int key in items.Keys)
+        //    {
+        //        target = items[key].Location; // Location of the target item.
+        //        // Distances between each coordinate.
+        //        x = target.X - loc.X;
+        //        y = target.Y - loc.Y;
+        //        z = target.Z - loc.Z;
+        //        if (x > range || -x > range || y > range || -y > range || z > range || -z > range) // Not within the cube of detection, skip item.
+        //        {
+        //            continue;
+        //        }
+
+        //        squaredTotalDistance = x * x + y * y + z * z; // Total distance squared.
+        //        if (squaredTotalDistance > range * range) // If it's too far away, skip item.
+        //        {
+        //            continue;
+        //        }
+
+        //        // Vector geometry. Basically Vel'Koz.
+        //        dot = x * dir.X + y * dir.Y + z * dir.Z;
+        //        linearDistance = dot / (dir.X * dir.X + dir.Y * dir.Y + dir.Z * dir.Z);
+        //        squaredLinearDistance = linearDistance * linearDistance;
+        //        squaredRadialDistance = squaredTotalDistance - squaredLinearDistance; // Piddagorean magic.
+        //        //Log(string.Format("Linear distance = {0}, squaredRadialDistance = {1}, totalDistanceSquared = {2}, xyz = {3}, {4}, {5}", linearDistance, squaredRadialDistance, squaredTotalDistance, x, y, z));
+        //        if (linearDistance < 0 || squaredRadialDistance / squaredLinearDistance > maxSquaredRatio) // Ensure it is within the cone.
+        //        {
+        //            continue;
+        //        }
+
+        //        if (ConeCompare(linearDistance, squaredRadialDistance, currentLinearDistance, currentSquaredRadialDistance))
+        //        {
+        //            currentLinearDistance = linearDistance;
+        //            currentSquaredRadialDistance = squaredRadialDistance;
+        //            currentClosestItem = key;
+        //        }
+        //    }
+        //    return currentClosestItem;
+        //}
     }
 }
