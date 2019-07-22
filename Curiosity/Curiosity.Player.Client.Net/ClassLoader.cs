@@ -2,7 +2,6 @@
 using Curiosity.Client.net.Classes.Actions.Emotes;
 using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Environment.UI;
-using Curiosity.Client.net.Classes.Vehicle;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Client.net.Helpers.Dictionary;
 using Curiosity.Shared.Client.net;
@@ -80,7 +79,7 @@ namespace Curiosity.Client.net
             Classes.Menus.PlayerInteractions.KickInteraction.Init();
             Classes.Menus.PlayerInteractions.BanInteraction.Init();
             // Additional Items
-            Classes.Menus.VehicleMenu.Init();
+            // Classes.Menus.VehicleMenu.Init();
 
             // Environment
             //Poi.Init();
@@ -146,17 +145,11 @@ namespace Curiosity.Client.net
             //Vehicles.Init();
             //CarHud.Init();
             //BannedMilitaryVehicles.Init();
-            BrakeSignals.Init();
-            CruiseControl.Init();
-            VehicleDamage.Init();
-            EngineManager.Init();
-            FuelManager.Init();
             //LockManager.Init();
             //Lockpicking.Init();
             //RandomCarLocks.Init();
             //EmotesManager.Init();
             //Stay.Init();
-            DisableAirControls.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

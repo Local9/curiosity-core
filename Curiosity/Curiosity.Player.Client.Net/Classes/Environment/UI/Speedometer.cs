@@ -1,10 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Client.net.Classes.Vehicle;
 using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
 {

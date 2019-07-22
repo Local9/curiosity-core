@@ -49,7 +49,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
                 MenuCheckboxItem cruiseControlMenuItem = new MenuCheckboxItem("Cruise Control")
                 {
-                    Checked = !Vehicle.CruiseControl.IsCruiseControlDisabled,
+                    //Checked = !Vehicle.CruiseControl.IsCruiseControlDisabled,
                     Description = "Enables or disables the cruise control feature",
                     ItemData = CRUISE_CONTROL
                 };
@@ -201,14 +201,13 @@ namespace Curiosity.Client.net.Classes.Menus
             {
                 if (menuItem.ItemData == "VEHICLE_REPAIR")
                 {
-                    Vehicle.VehicleDamage.Fix();
+                    // Vehicle.VehicleDamage.Fix();
                 }
 
                 if (menuItem.ItemData == "VEHICLE_REFUEL")
                 {
-                    Vehicle.FuelManager.DevRefuel();
+                    // Vehicle.FuelManager.DevRefuel();
                 }
-
             };
 
             AddSubMenu(menu, developerMenu);
@@ -321,7 +320,7 @@ namespace Curiosity.Client.net.Classes.Menus
         private static void Menu_OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
         {
             if (menuItem.ItemData == CRUISE_CONTROL)
-                Vehicle.CruiseControl.IsCruiseControlDisabled = !menuItem.Checked;
+                //Vehicle.CruiseControl.IsCruiseControlDisabled = !menuItem.Checked;
             if (menuItem.ItemData == THREE_D_SPEEDO)
                 Environment.UI.Speedometer3D.Hide = !menuItem.Checked;
             if (menuItem.ItemData == ENGINE)

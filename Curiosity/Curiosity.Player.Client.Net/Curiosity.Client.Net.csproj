@@ -106,14 +106,6 @@
     <Compile Include="Classes\Player\Sit.cs" />
     <Compile Include="Classes\Player\Skills.cs" />
     <Compile Include="Classes\Player\Weapons.cs" />
-    <Compile Include="Classes\Vehicle\BrakeSignals.cs" />
-    <Compile Include="Classes\Vehicle\CruiseControl.cs" />
-    <Compile Include="Classes\Vehicle\DisableAirControls.cs" />
-    <Compile Include="Classes\Vehicle\EngineManager.cs" />
-    <Compile Include="Classes\Vehicle\FuelManager.cs" />
-    <Compile Include="Classes\Vehicle\Stay.cs" />
-    <Compile Include="Classes\Vehicle\VehicleDamage.cs" />
-    <Compile Include="Classes\Vehicle\VehiclePack.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
