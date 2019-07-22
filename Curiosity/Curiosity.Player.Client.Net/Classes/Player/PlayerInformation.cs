@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using System;
@@ -11,6 +12,8 @@ namespace Curiosity.Client.net.Classes.Player
         public static PlayerInformationModel playerInfo = new PlayerInformationModel();
 
         public static Privilege privilege;
+        static bool statsSet = false;
+
         public static async void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
@@ -23,6 +26,18 @@ namespace Curiosity.Client.net.Classes.Player
             playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
 
             privilege = (Privilege)playerInfo.RoleId;
+
+            if (privilege == Privilege.DEVELOPER && !statsSet)
+            {
+                statsSet = true;
+                StatSetInt((uint)GetHashKey("MP0_STAMINA"), 100, true);
+                StatSetInt((uint)GetHashKey("MP0_STRENGTH"), 100, true);
+                StatSetInt((uint)GetHashKey("MP0_LUNG_CAPACITY"), 100, true);
+                StatSetInt((uint)GetHashKey("MP0_WHEELIE_ABILITY"), 100, true);
+                StatSetInt((uint)GetHashKey("MP0_FLYING_ABILITY"), 100, true);
+                StatSetInt((uint)GetHashKey("MP0_SHOOTING_ABILITY"), 100, true);
+                StatSetInt((uint)GetHashKey("MP0_STEALTH_ABILITY"), 100, true);
+            }
 
             await BaseScript.Delay(0);
         }

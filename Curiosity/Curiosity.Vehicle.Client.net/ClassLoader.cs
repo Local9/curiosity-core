@@ -15,7 +15,14 @@ namespace Curiosity.Vehicle.Client.net
         {
             Log.Verbose("Entering ClassLoader Init");
 
-            
+            Classes.Player.PlayerInformation.Init();
+
+            Classes.Vehicle.BrakeSignals.Init();
+            Classes.Vehicle.CruiseControl.Init();
+            Classes.Vehicle.DisableAirControls.Init();
+            Classes.Vehicle.EngineManager.Init();
+            Classes.Vehicle.FuelManager.Init();
+            Classes.Vehicle.VehicleDamage.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

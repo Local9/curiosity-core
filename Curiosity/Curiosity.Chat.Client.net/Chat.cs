@@ -18,11 +18,13 @@ namespace Curiosity.Chat.Client.net
         static bool isChatInputActive = false;
         static bool isChatScrollEnabled = true;
         static bool isChatInputActivating = false;
+        static bool previousState = false;
 
         const string chatMessageColor = "#e7bd42";
         const float localChatAoe = 25f;
 
         string role = "|";
+
 
         public Chat()
         {
@@ -112,25 +114,25 @@ namespace Curiosity.Chat.Client.net
                 EnableControlAction(0, Control.CursorScrollDown, true);
                 SetPedCanSwitchWeapon(Game.PlayerPed, true);
                 SetNuiFocus(false);
-                isChatInputActive = false;
 
                 IDictionary<string, object> chatResult = data;
 
                 if (!chatResult.ContainsKey("message") || string.IsNullOrWhiteSpace((string)chatResult["message"]))
                     return;
 
-                string Message = (String)chatResult["message"];
+                string message = (String)chatResult["message"];
 
-                var spaceSplit = Message.Split(' ');
-                if (Message.Substring(0, 1) == "/" && Message.Length >= 2)
+                var spaceSplit = message.Split(' ');
+                if (message.Substring(0, 1) == "/" && message.Length >= 2)
                 {
-                    API.ExecuteCommand(Message.Substring(1));
+                    API.ExecuteCommand(message.Substring(1));
                 }
                 else
                 {
                     // async void ChatMessage([FromSource]Player player, string message, string color, string scope)
-                    TriggerServerEvent("curiosity:Server:Chat:Message", role, Message, chatMessageColor, "all");
+                    TriggerServerEvent("curiosity:Server:Chat:Message", role, message, chatMessageColor, "all");
                 }
+                isChatInputActive = false;
             }
             catch (Exception ex)
             {
@@ -204,7 +206,11 @@ namespace Curiosity.Chat.Client.net
                     SetPedCanSwitchWeapon(Game.PlayerPed, false);
                 }
 
-                TriggerEvent("curiosity:Client:Chat:ChatboxActive", isChatInputActive);
+                if (previousState != isChatInputActive)
+                {
+                    TriggerEvent("curiosity:Client:Chat:ChatboxActive", isChatInputActive);
+                    previousState = isChatInputActive;
+                }
             }
             catch(Exception ex)
             {

@@ -22,6 +22,8 @@ namespace Curiosity.Chat.Server.net
 
         async void ChatMessage([FromSource]Player player, string role, string message, string color, string scope)
         {
+            Console.WriteLine($"{role} {player.Name} - {message}");
+
             await Delay(0);
             string originalMessage = message;
             bool profanityFound = false;
