@@ -18,16 +18,16 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             Client.GetInstance().RegisterEventHandler("curiosity:Client:Settings:WantedDisabled", new Action<bool, int>(WantedDisabled));
 
-            Client.GetInstance().RegisterTickHandler(GetWantedSettings);
-            Client.GetInstance().RegisterTickHandler(WantedSettings);
+            GetWantedSettings();
+            WantedSettings();
         }
 
-        static async Task GetWantedSettings()
+        static async void GetWantedSettings()
         {
             while (true)
             {
                 BaseScript.TriggerServerEvent("curiosity:Server:Settings:Wanted");
-                await BaseScript.Delay(10000);
+                await BaseScript.Delay(60000);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Curiosity.Client.net.Classes.Environment
             MaxWantedLevel = maxWantedLevel;
         }
 
-        static async Task WantedSettings()
+        static async void WantedSettings()
         {
             while (true)
             {

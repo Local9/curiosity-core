@@ -49,7 +49,7 @@ namespace Curiosity.Client.net
             PlayerNames.Init();
             PlayerBlips.Init();
             Speedometer.Init();
-            Speedometer3D.Init();
+            // Speedometer3D.Init();
             //VehicleLoadoutPresets.Init();
             Scoreboard.Init();
             WorldTime.Init();

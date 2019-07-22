@@ -100,8 +100,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
             Function.Call(Hash.DECOR_REGISTER, "Vehicle.Fuel", 1);
             Function.Call(Hash.DECOR_REGISTER, "Vehicle.FuelUsageMultiplier", 1);
 
-            client.RegisterTickHandler(PeriodicCheck);
-            client.RegisterTickHandler(Controls);
+            client.RegisterTickHandler(PeriodicCheckRefuel);
             client.RegisterTickHandler(GasStationBlips);
             UpdateSettings();
             CheckFuelPumpDistance();
@@ -110,22 +109,6 @@ namespace Curiosity.Client.net.Classes.Vehicle
             client.RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
             client.RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
             client.RegisterEventHandler("curiosity:Client:Settings:InstantRefuel", new Action<bool>(InstantRefuel));
-        }
-
-        static async Task Controls()
-        {
-            if (Game.PlayerPed.IsInVehicle())
-            {
-                if (ControlHelper.IsControlPressed(Control.VehicleAccelerate, false) && !Game.PlayerPed.CurrentVehicle.IsEngineRunning && isNearFuelPump)
-                    Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
-            }
-
-            if (isNearFuelPump && ControlHelper.IsControlPressed(Control.Pickup, false) && Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver.IsPlayer)
-            {
-                Refuel(100.0f - vehicleFuel);
-            }
-
-            await Task.FromResult(0);
         }
 
         static async Task GasStationBlips()
@@ -232,12 +215,20 @@ namespace Curiosity.Client.net.Classes.Vehicle
 
         /// <summary>
         /// </summary>
-        static async Task PeriodicCheck()
+        static async Task PeriodicCheckRefuel()
         {
             try
             {
+                if (isNearFuelPump && ControlHelper.IsControlPressed(Control.Pickup, false) && Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver.IsPlayer)
+                {
+                    Refuel(100.0f - vehicleFuel);
+                }
+
                 if (Game.PlayerPed.IsInVehicle())
                 {
+                    if (ControlHelper.IsControlPressed(Control.VehicleAccelerate, false) && !Game.PlayerPed.CurrentVehicle.IsEngineRunning && isNearFuelPump)
+                        Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
+
                     if (!Function.Call<bool>(Hash.DECOR_EXIST_ON, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel"))
                     {
                         // For very large random float numbers this method does not yield a uniform distribution
@@ -358,6 +349,7 @@ namespace Curiosity.Client.net.Classes.Vehicle
                     Vector3 startingPosition = vehicle.Position;
                     while (refueled < amount)
                     {
+                        Environment.UI.Notifications.LifeV(1, "Vehicle", "Refuel", "Tank is filling", 20);
                         vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, vehicle.Handle, "Vehicle.Fuel");
                         if (startingPosition != vehicle.Position)
                         {

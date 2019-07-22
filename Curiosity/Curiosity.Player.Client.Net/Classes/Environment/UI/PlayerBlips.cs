@@ -19,7 +19,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public void Init()
         {
-            client.RegisterTickHandler(OnTick);
+            OnTickShowPlayerBlips();
             client.RegisterTickHandler(OnControlPressed);
         }
 
@@ -51,22 +51,24 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             await Task.FromResult(0);
         }
 
-        static internal async Task OnTick()
+        static internal async void OnTickShowPlayerBlips()
         {
-            try
+            while (true)
             {
-                if (CinematicMode.DoHideHud) return;
-                
-                BlipPlayersList = Client.players.Where(ShouldShowBlip);
-                List<CitizenFX.Core.Player> playerList = BlipPlayersList.ToList();
-                playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowBlip(p.player));
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"ERROR PlayerNames: {ex.Message}");
-            }
+                try
+                {
+                    if (CinematicMode.DoHideHud) return;
 
-            await Task.FromResult(0);
+                    BlipPlayersList = Client.players.Where(ShouldShowBlip);
+                    List<CitizenFX.Core.Player> playerList = BlipPlayersList.ToList();
+                    playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowBlip(p.player));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"ERROR PlayerNames: {ex.Message}");
+                }
+                await Client.Delay(0);
+            }
         }
 
         static internal async Task ShowBlip(CitizenFX.Core.Player player)

@@ -61,11 +61,11 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static public void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Client.GetInstance().RegisterTickHandler(OnTickMarkerHandler);
             PeriodicUpdate();
         }
 
-        static public Task OnTick()
+        static public Task OnTickMarkerHandler()
         {
             if (!HideAllMarkers)
             {

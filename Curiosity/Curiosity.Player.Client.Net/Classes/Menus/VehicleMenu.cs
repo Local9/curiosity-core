@@ -53,16 +53,15 @@ namespace Curiosity.Client.net.Classes.Menus
                     Description = "Enables or disables the cruise control feature",
                     ItemData = CRUISE_CONTROL
                 };
-
-                MenuCheckboxItem hideThreeDSpeedoMenuItem = new MenuCheckboxItem("3D Speed-o-meter")
-                {
-                    Checked = !Environment.UI.Speedometer3D.Hide,
-                    Description = "Hide or show the 3D Speed-o-meter",
-                    ItemData = THREE_D_SPEEDO
-                };
-
                 menu.AddMenuItem(cruiseControlMenuItem);
-                menu.AddMenuItem(hideThreeDSpeedoMenuItem);
+
+                //MenuCheckboxItem hideThreeDSpeedoMenuItem = new MenuCheckboxItem("3D Speed-o-meter")
+                //{
+                //    Checked = !Environment.UI.Speedometer3D.Hide,
+                //    Description = "Hide or show the 3D Speed-o-meter",
+                //    ItemData = THREE_D_SPEEDO
+                //};
+                //menu.AddMenuItem(hideThreeDSpeedoMenuItem);
 
                 if (Game.PlayerPed.IsInVehicle())
                 {

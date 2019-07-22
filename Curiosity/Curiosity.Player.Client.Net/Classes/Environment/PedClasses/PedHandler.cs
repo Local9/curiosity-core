@@ -36,19 +36,9 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 if (API.DoesGroupExist(groupId))
                 {
                     API.RemoveGroup(groupId);
+                    await Client.Delay(0);
                 }
             }
-        }
-
-        static async void CreateSenario()
-        {
-            uint suspectGroupHash = 0;
-            API.AddRelationshipGroup($"spawnedPeds:{Client.PlayerHandle}", ref suspectGroupHash);
-            int group = API.CreateGroup(random.Next(100000));
-            API.SetRelationshipBetweenGroups(5, suspectGroupHash, playerGroupHash);
-            API.SetRelationshipBetweenGroups(5, playerGroupHash, suspectGroupHash);
-
-            
         }
 
         public static async void CreateChaser()

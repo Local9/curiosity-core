@@ -8,10 +8,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static public void Init()
         {
             // TODO: Uncomment (just annoying LOL)
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Client.GetInstance().RegisterTickHandler(OnTickHideReticle);
         }
 
-        static public async Task OnTick()
+        static public async Task OnTickHideReticle()
         {
             bool isAimCamActive = Function.Call<bool>(Hash.IS_AIM_CAM_ACTIVE);
             bool isFirstPersonAimCamActive = Function.Call<bool>(Hash.IS_FIRST_PERSON_AIM_CAM_ACTIVE);

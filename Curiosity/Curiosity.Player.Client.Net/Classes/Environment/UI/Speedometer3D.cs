@@ -25,10 +25,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         public static void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Client.GetInstance().RegisterTickHandler(ThreeDSpeedo);
         }
 
-        static async Task OnTick()
+        static async Task ThreeDSpeedo()
         {
             try
             {
