@@ -13,6 +13,7 @@ namespace Curiosity.Client.net.Classes.Actions
     {
         static Client client = Client.GetInstance();
         static uint playerGroupHash = 0;
+        static bool hasCalledChaser = false;
 
         public static void Init()
         {
@@ -31,7 +32,39 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
 
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
-            
+            RegisterCommand("god", new Action<int, List<object>, string>((source, args, raw) =>
+            {
+                if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER)
+                {
+                    if (hasCalledChaser) return;
+                    Environment.PedClasses.PedHandler.CreateChaser();
+                    hasCalledChaser = true;
+                    return;
+                }
+
+                if (Game.Player.IsInvincible)
+                {
+                    Game.Player.IsInvincible = false;
+                    Game.Player.CanControlRagdoll = true;
+                    Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
+                    SetPedConfigFlag(Game.PlayerPed.Handle, 32, true);
+                    Game.PlayerPed.ClearBloodDamage();
+                    Game.PlayerPed.ResetVisibleDamage();
+                    Game.PlayerPed.ClearLastWeaponDamage();
+
+                }
+                else
+                {
+                    Game.Player.IsInvincible = true;
+                    Game.Player.CanControlRagdoll = false;
+                    Game.PlayerPed.CanBeDraggedOutOfVehicle = false;
+                    SetPedConfigFlag(Game.PlayerPed.Handle, 32, false);
+                }
+
+                CitizenFX.Core.UI.Screen.ShowNotification($"GodeMode: {(Game.Player.IsInvincible ? "Active" : "Disabled")}");
+
+            }), false);
+
         }
 
         static async void KnifeCallout(int playerHandle, List<object> arguments, string raw)
