@@ -19,6 +19,7 @@ namespace Curiosity.Mobile.Client.net
             Mobile.MobilePhone.Init();
             Mobile.Apps.PlayerListApplication.Init();
             Mobile.Apps.JobApplication.Init();
+            Mobile.Apps.SkillsApplication.Init();
             Mobile.Apps.SettingsApplication.Init();
 
             client.RegisterEventHandler("curiosity:Mobile:Job:Active", new Action<bool>(OnJobActive));

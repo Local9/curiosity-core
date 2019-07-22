@@ -19,7 +19,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         public static void Init()
         {
             client.RegisterNuiEventHandler("ClosePanel", new Action<dynamic>(ClosePanel));
-            client.RegisterEventHandler("curiosity:Player:Skills:GetListData", new Action<string>(OpenDataList));
+            // client.RegisterEventHandler("curiosity:Player:Skills:GetListData", new Action<string>(OpenDataList));
 
             client.RegisterTickHandler(OnTick);
         }

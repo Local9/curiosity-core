@@ -57,6 +57,7 @@
     <Compile Include="Mobile\Api\ItemData.cs" />
     <Compile Include="Mobile\Api\Screen.cs" />
     <Compile Include="Mobile\ApplicationHandler.cs" />
+    <Compile Include="Mobile\Apps\SkillsApplication.cs" />
     <Compile Include="Mobile\Apps\PlayerListApplication.cs" />
     <Compile Include="Mobile\Apps\JobApplication.cs" />
     <Compile Include="Mobile\Apps\SettingsApplication.cs" />

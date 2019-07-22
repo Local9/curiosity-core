@@ -81,6 +81,9 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
                     break;
             }
 
+            API.SetDiscordRichPresenceAssetSmall("banner");
+            API.SetDiscordRichPresenceAssetSmallText($"{selectedJob}");
+
             Client.TriggerEvent("curiosity:Client:Interface:Duty", !string.IsNullOrEmpty(CurrentJob), MobilePhone.IsJobActive, CurrentJob);
             Client.TriggerEvent("curiosity:Mobile:Job:Active", MobilePhone.IsJobActive);
         }

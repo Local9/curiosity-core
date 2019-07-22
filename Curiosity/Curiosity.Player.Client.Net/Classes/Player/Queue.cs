@@ -29,8 +29,5 @@ namespace Curiosity.Client.net.Classes.Player
                 Debug.WriteLine($"Curiosity Client Queue - Connected()");
             }
         }
-
-
-        // TriggerServerEvent("curiosity:Server:Player:Setup");
     }
 }
