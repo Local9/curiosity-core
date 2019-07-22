@@ -1,12 +1,10 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Shared.Server.net.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 
 namespace Curiosity.Chat.Server.net
 {
@@ -16,8 +14,8 @@ namespace Curiosity.Chat.Server.net
 
         public CuriosityChat()
         {
-            EventHandlers["curiosity:Server:Chat:Message"] += new Action<Player, string, string, string, string>(ChatMessage);
-            EventHandlers["curiosity:Server:Chat:RconCommand"] += new Action<Player, string, List<object>>(RconCommand);
+            RegisterEventHandler("curiosity:Server:Chat:Message", new Action<Player, string, string, string, string>(ChatMessage));
+            RegisterEventHandler("curiosity:Server:Chat:RconCommand", new Action<Player, string, List<object>>(RconCommand));
         }
 
         async void ChatMessage([FromSource]Player player, string role, string message, string color, string scope)
@@ -94,6 +92,11 @@ namespace Curiosity.Chat.Server.net
             {
                 Debug.WriteLine($"RconCommand ERROR: {ex.Message}");
             }
+        }
+
+        void RegisterEventHandler(string name, Delegate action)
+        {
+            EventHandlers[name] += action;
         }
     }
 }

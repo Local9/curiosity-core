@@ -114,6 +114,7 @@ namespace Curiosity.Chat.Client.net
                 EnableControlAction(0, Control.CursorScrollDown, true);
                 SetPedCanSwitchWeapon(Game.PlayerPed, true);
                 SetNuiFocus(false);
+                isChatInputActive = false;
 
                 IDictionary<string, object> chatResult = data;
 
@@ -132,7 +133,6 @@ namespace Curiosity.Chat.Client.net
                     // async void ChatMessage([FromSource]Player player, string message, string color, string scope)
                     TriggerServerEvent("curiosity:Server:Chat:Message", role, message, chatMessageColor, "all");
                 }
-                isChatInputActive = false;
             }
             catch (Exception ex)
             {

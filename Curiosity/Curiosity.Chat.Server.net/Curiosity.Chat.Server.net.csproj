@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Z:\FXServer\curiosity\resources\curiosity-chat\</OutputPath>
+    <OutputPath>Z:\FXServer\curiosity\resources\curiosity-chat\server\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -51,6 +51,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">
+      <Project>{fe7f0756-cfe5-4bb9-a822-e9e1cfbc412b}</Project>
+      <Name>Curiosity.Global.Shared.net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Curiosity.Shared.Server.net\Curiosity.Shared.Server.net.csproj">
+      <Project>{e665b41e-6ffb-4ea8-998f-80122b2afe7c}</Project>
+      <Name>Curiosity.Shared.Server.net</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
