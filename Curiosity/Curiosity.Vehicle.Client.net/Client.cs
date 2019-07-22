@@ -4,7 +4,7 @@ using Curiosity.Shared.Client.net;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Mobile.Client.net
+namespace Curiosity.Vehicle.Client.net
 {
     public class Client : BaseScript
     {
@@ -24,7 +24,7 @@ namespace Curiosity.Mobile.Client.net
 
             ClassLoader.Init();
 
-            Log.Info("Curiosity.Mobile.Client.net loaded\n");
+            Log.Info("Curiosity.Vehicle.Client.net loaded\n");
         }
 
         /// <summary>
