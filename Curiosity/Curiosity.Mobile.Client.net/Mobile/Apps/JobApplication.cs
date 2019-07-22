@@ -90,6 +90,13 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
 
         static async void ToggleActiveStatus(dynamic[] dynamics)
         {
+            if(string.IsNullOrEmpty(CurrentJob))
+            {
+                API.PlaySoundFrontend(-1, "ERROR", "HUD_AMMO_SHOP_SOUNDSET", true);
+                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "", $"~w~Status cannot be changed, please select a job first.", 2);
+                return;
+            }
+
             if (timeout)
             {
                 API.PlaySoundFrontend(-1, "ERROR", "HUD_AMMO_SHOP_SOUNDSET", true);
