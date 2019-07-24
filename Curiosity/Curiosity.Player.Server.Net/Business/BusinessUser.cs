@@ -1,6 +1,8 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using Curiosity.Shared.Server.net.Helpers;
+using System;
 using System.Threading.Tasks;
-using CitizenFX.Core;
+using System.Timers;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Server.net.Business
@@ -8,6 +10,7 @@ namespace Curiosity.Server.net.Business
     class BusinessUser
     {
         static BusinessUser businessUser;
+        static int lastHour = 0;
 
         public static BusinessUser GetInstance()
         {
@@ -56,6 +59,19 @@ namespace Curiosity.Server.net.Business
             else
             {
                 await Database.DatabaseUsers.UpdatePlayerLocation(user.LocationId, x, y, z);
+            }
+        }
+
+        public static void BanManagement(object source, ElapsedEventArgs e)
+        {
+            if (lastHour < DateTime.Now.Hour || (lastHour == 23 && DateTime.Now.Hour == 0))
+            {
+                Log.Verbose("-----------------------------------------------------------------");
+                Log.Verbose("-> CURIOSITY SERVER PROCESSING BANS <----------------------------");
+                Log.Verbose("-----------------------------------------------------------------");
+
+                lastHour = DateTime.Now.Hour;
+                Database.DatabaseUsers.RemoveBans();
             }
         }
     }

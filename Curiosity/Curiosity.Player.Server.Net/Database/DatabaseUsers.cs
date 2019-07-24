@@ -56,6 +56,11 @@ namespace Curiosity.Server.net.Database
             }
         }
 
+        internal static void RemoveBans()
+        {
+            mySql.Query("CALL curiosity.spProcessBans();");
+        }
+
         internal static void SaveCharacterSkins(int characterId, string characterData)
         {
             string query = "CALL curiosity.upCharacterSkin(@characterId, @skin);";

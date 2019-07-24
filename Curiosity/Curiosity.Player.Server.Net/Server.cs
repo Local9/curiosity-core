@@ -96,6 +96,10 @@ namespace Curiosity.Server.net
             RegisterTickHandler(GetServerId);
             //RegisterTickHandler(InstanceChecker);
 
+            System.Timers.Timer aTimer = new System.Timers.Timer(1000 * 60 * 10); //One second, (use less to add precision, use more to consume less processor time
+            int lastHour = DateTime.Now.Hour;
+            aTimer.Elapsed += new System.Timers.ElapsedEventHandler(Business.BusinessUser.BanManagement);
+
             if (Server.isLive)
                 RegisterTickHandler(SentStartupMessage);
 
