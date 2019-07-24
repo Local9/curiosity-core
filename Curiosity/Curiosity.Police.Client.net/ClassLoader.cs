@@ -11,7 +11,24 @@ namespace Curiosity.Police.Client.net
         public static void Init()
         {
             Log.Verbose("Entering ClassLoader Init");
-            
+
+            /// INSPIRATION!
+            // Police
+            //Sirens.Init();
+            //WeaponStash.Init();
+            //Arrest.Init(); 
+            //CivilianCarSirenLights.Init();
+            //CustomizationCommands.Init();
+            //Helicopter.Init();
+            //SkinLoadoutPresets.Init();
+            //Slimjim.Init();
+            //SpikeStrip.Init();
+            //CellDoors.Init();
+            //Tackle.Init();
+            //PoliceCharacterMenu.Init();
+            //PoliceVehicleMenu.Init();
+            //DutyManager.Init();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
     }

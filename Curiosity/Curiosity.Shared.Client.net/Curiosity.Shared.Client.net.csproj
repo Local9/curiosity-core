@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Enums\Blips.cs" />
     <Compile Include="Enums\Controls.cs" />
+    <Compile Include="Enums\NotificationCharacter.cs" />
     <Compile Include="Enums\Police.cs" />
     <Compile Include="Enums\VehicleLock.cs" />
     <Compile Include="Extensions\BoolExtension.cs" />
