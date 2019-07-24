@@ -96,7 +96,7 @@ namespace Curiosity.Server.net
             RegisterTickHandler(GetServerId);
             //RegisterTickHandler(InstanceChecker);
 
-            System.Timers.Timer aTimer = new System.Timers.Timer(1000 * 60 * 10); //One second, (use less to add precision, use more to consume less processor time
+            System.Timers.Timer aTimer = new System.Timers.Timer(1000 * 60 * 10); // MAYBE JUST MAYBE Future Ant can see that marking this with a flag so other servers don't run it would of been a good idea...
             int lastHour = DateTime.Now.Hour;
             aTimer.Elapsed += new System.Timers.ElapsedEventHandler(Business.BusinessUser.BanManagement);
 
