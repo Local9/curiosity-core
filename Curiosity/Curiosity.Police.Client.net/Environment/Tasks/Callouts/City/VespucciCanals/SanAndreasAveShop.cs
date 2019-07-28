@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 
-namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.VespucciCanals
+namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.VespucciCanals
 {
     class SanAndreasAveShop
     {
@@ -12,8 +12,8 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.VespucciCanals
         static float SuspectHeading = 233.6525f;
 
         static Model ShopKeeperModel = PedHash.ShopKeep01;
-        static Vector3 ShopKeeperPosition = new Vector3(-1226.846f, -901.4744f, 12.28888f);
-        static float ShopKeeperHeading = 233.4752f;
+        static Vector3 ShopKeeperPosition = new Vector3(-1222.146f, -908.513f, 12.32636f);
+        static float ShopKeeperHeading = 26.50367f;
 
         public static bool Init()
         {

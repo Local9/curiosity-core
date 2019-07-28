@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 
-namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Downtown
+namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Downtown
 {
     class ClintonAveShop
     {

@@ -18,8 +18,6 @@ namespace Curiosity.Police.Client.net.Classes
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
             await BaseScript.Delay(0);
-
-            Environment.Tasks.Callouts.Downtown.ClintonAveShop.Init();
         }
     }
 }

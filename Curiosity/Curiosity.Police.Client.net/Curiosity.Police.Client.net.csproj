@@ -57,8 +57,9 @@
     <Compile Include="Enums\CalloutType.cs" />
     <Compile Include="Environment\Job\DutyManager.cs" />
     <Compile Include="Environment\Tasks\CalloutHandler.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Downtown\ClintonAveShop.cs" />
-    <Compile Include="Environment\Tasks\Callouts\VespucciCanals\SanAndreasAveShop.cs" />
+    <Compile Include="Environment\Tasks\Callouts\City\Downtown\ClintonAveShop.cs" />
+    <Compile Include="Environment\Tasks\Callouts\City\Morningwood\ProsperityStreetShop.cs" />
+    <Compile Include="Environment\Tasks\Callouts\City\VespucciCanals\SanAndreasAveShop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
