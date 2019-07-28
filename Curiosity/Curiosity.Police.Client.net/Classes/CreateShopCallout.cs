@@ -25,6 +25,8 @@ namespace Curiosity.Police.Client.net.Classes
 
         public static async void StartCallout(string name, Vector3 location, Model suspectModel, Vector3 suspectLocation, float suspectHeading, Model shopkeeperModel, Vector3 shopkeeperLocation, float shopkeeperHeading)
         {
+            Environment.Job.DutyManager.OnSetCallOutStatus(true);
+
             Name = name;
             Location = location;
             SuspectModel = suspectModel;
@@ -94,13 +96,9 @@ namespace Curiosity.Police.Client.net.Classes
             API.AddRelationshipGroup("suspect", ref suspectGroupHash);
             API.SetRelationshipBetweenGroups(5, suspectGroupHash, Client.PlayerGroupHash);
             API.SetRelationshipBetweenGroups(5, Client.PlayerGroupHash, suspectGroupHash);
-
-            float distanceBetween = 100.0f;
-
-            while (distanceBetween > 40.0f)
+            
+            while (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location) > 40.0f)
             {
-                distanceBetween = NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location);
-                CitizenFX.Core.UI.Screen.ShowSubtitle($"{distanceBetween}");
                 await Client.Delay(50);
             }
 
@@ -146,12 +144,21 @@ namespace Curiosity.Police.Client.net.Classes
                 API.SetBlipFade(LocationBlip.Handle, 0, 3000);
                 await Client.Delay(3000);
                 LocationBlip.Delete();
+
+                Environment.Job.DutyManager.OnSetCallOutStatus(false);
             }
         }
 
-        public static void EndCallOut()
+        public static void EndCallout()
         {
-            LocationBlip.Delete();
+            if (Suspect != null)
+            {
+                Suspect.AttachedBlip.Delete();
+                ShopKeeper.Task.ReactAndFlee(Suspect);
+                ShopKeeper.MarkAsNoLongerNeeded();
+                Suspect.MarkAsNoLongerNeeded();
+                LocationBlip.Delete();
+            }
         }
     }
 }

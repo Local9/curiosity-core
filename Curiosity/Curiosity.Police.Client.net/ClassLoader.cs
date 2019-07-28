@@ -26,6 +26,9 @@ namespace Curiosity.Police.Client.net
             CityCallOuts.Add(1, Environment.Tasks.Callouts.Downtown.ClintonAveShop.Init);
             CityCallOuts.Add(2, Environment.Tasks.Callouts.VespucciCanals.SanAndreasAveShop.Init);
 
+            CityCallOuts.Add(3, Environment.Tasks.Callouts.Downtown.ClintonAveShop.Init);
+            CityCallOuts.Add(4, Environment.Tasks.Callouts.VespucciCanals.SanAndreasAveShop.Init);
+
             /// INSPIRATION!
             // Police
             //Sirens.Init();

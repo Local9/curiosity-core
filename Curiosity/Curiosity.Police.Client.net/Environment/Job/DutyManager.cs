@@ -26,10 +26,28 @@ namespace Curiosity.Police.Client.net.Environment.Job
             if (job != "police")
             {
                 IsPoliceJobActive = false;
+                IsOnDuty = false;
+                IsOnCallout = false;
+                Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
                 return; // TODO: Refactor job code
             }
-            IsPoliceJobActive = true;
             IsOnDuty = dutyState;
+
+            if (IsOnDuty)
+            {
+                IsPoliceJobActive = true;
+                Tasks.CalloutHandler.PlayerCanTakeCallout();
+            }
+            else
+            {
+                if (IsOnCallout)
+                {
+                    Classes.CreateShopCallout.EndCallout();
+                }
+
+                IsPoliceJobActive = false;
+                Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
+            }
         }
 
         static void OnPatrolZone(int zone)
@@ -38,10 +56,24 @@ namespace Curiosity.Police.Client.net.Environment.Job
             PatrolZone = (PatrolZone)zone;
         }
 
-        static void OnSetCallOutStatus(bool status)
+        public static void OnSetCallOutStatus(bool status)
         {
-            if (!IsPoliceJobActive) return;
+            if (!IsPoliceJobActive)
+            {
+                IsOnCallout = false;
+                return;
+            }
+
             IsOnCallout = status;
+
+            if (IsOnCallout)
+            {
+                Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
+            }
+            else
+            {
+                Tasks.CalloutHandler.PlayerCanTakeCallout();
+            }
         }
 
         static void OnGetCallOutStatus()
