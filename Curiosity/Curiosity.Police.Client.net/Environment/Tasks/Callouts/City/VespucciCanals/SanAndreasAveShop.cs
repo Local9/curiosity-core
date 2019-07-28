@@ -4,7 +4,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.VespucciCa
 {
     class SanAndreasAveShop
     {
-        static string Name = "24/7 on San Andreas Ave";
+        static string Name = "Robs Liquor on San Andreas Ave";
         static Vector3 Location = new Vector3(-1226.846f, -901.4744f, 12.28888f);
 
         static Model SuspectModel = PedHash.ChiCold01GMM;
