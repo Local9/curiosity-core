@@ -55,7 +55,6 @@
     <Compile Include="Client.cs" />
     <Compile Include="Enums\CalloutType.cs" />
     <Compile Include="Environment\Job\DutyManager.cs" />
-    <Compile Include="Environment\PedHandler.cs" />
     <Compile Include="Environment\Tasks\CalloutHandler.cs" />
     <Compile Include="Environment\Tasks\Callouts\Downtown\ClintonAveShop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
