@@ -1,5 +1,5 @@
-﻿namespace Curiosity.Client.net.Enums
-{
+﻿namespace Curiosity.Shared.Client.net.Enums
+{ 
     namespace Helicopter
     {
         public enum CameraMode
@@ -16,5 +16,16 @@
         None = 0,
         Cuffed = 1,
         Hobbled = 2
+    }
+
+    namespace Patrol
+    {
+        public enum PatrolZone
+        {
+            City = 1,
+            Country,
+            Ocean,
+            Highway
+        }
     }
 }

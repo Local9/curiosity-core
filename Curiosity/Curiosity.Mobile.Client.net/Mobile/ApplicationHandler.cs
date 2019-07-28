@@ -148,24 +148,24 @@ namespace Curiosity.Mobile.Client.net.Mobile
                         SelectedItem = CurrentAppScreen.Items.Count - 1;
 
                     bool navigated = true;
-                    if (ControlHelper.IsControlJustPressed(Control.ReplayFfwd))
+                    if (ControlHelper.IsControlJustPressed(Control.PhoneUp, false))
                     {
                         SelectedItem = SelectedItem - 1;
                         if (SelectedItem < 0)
                             SelectedItem = CurrentAppScreen.Items.Count - 1;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.ReplayRewind))
+                    else if (ControlHelper.IsControlJustPressed(Control.PhoneDown, false) || ControlHelper.IsControlJustReleased(Control.PhoneDown, false))
                     {
                         SelectedItem = SelectedItem + 1;
                         if (SelectedItem > CurrentAppScreen.Items.Count - 1)
                             SelectedItem = CurrentAppScreen.Items.Count - 1;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.CreatorAccept))
+                    else if (ControlHelper.IsControlJustPressed(Control.PhoneSelect, false) || ControlHelper.IsControlJustReleased(Control.PhoneSelect, false))
                     {
                         Item item = CurrentAppScreen.Items[SelectedItem];
                         item.Select();
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.FrontendCancel))
+                    else if (ControlHelper.IsControlJustPressed(Control.PhoneCancel, false))
                     {
                         if (PreviousScreens.Count > 0)
                         {

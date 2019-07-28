@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-
-using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Client.net.Helpers;
-using Curiosity.Client.net.Enums;
+using Curiosity.Shared.Client.net.Helper;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+// using Curiosity.Client.net.Helpers;
+// using Curiosity.Shared.Client.net.Enums.Helicopter;
 
 namespace Curiosity.Client.net.Classes.Jobs.Police.Vehicle
 {

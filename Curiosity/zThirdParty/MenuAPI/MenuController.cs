@@ -224,6 +224,7 @@ namespace MenuAPI
                 }
 
                 Game.DisableControlThisFrame(0, Control.MultiplayerInfo);
+                Game.DisableControlThisFrame(0, Control.Phone);
             }
         }
 

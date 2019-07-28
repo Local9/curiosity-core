@@ -137,7 +137,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 API.DrawScaleformMovie(MobileScaleform, 0.0998f, 0.1775f, 0.1983f, 0.364f, 255, 255, 255, 255, 0);
                 API.SetTextRenderId(1);
             }
-            else if (ControlHelper.IsControlJustPressed(Control.ReplayFfwd) && !IsMenuOpen)
+            else if (ControlHelper.IsControlJustPressed(Control.Phone, false) && !IsMenuOpen)
             {
                 API.PlaySoundFrontend(-1, "Pull_Out", "Phone_SoundSet_Default", true);
                 MobileScaleform = API.RequestScaleformMovie("CELLPHONE_IFRUIT");
@@ -230,25 +230,25 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
                     bool changeNavigation = true;
 
-                    if (ControlHelper.IsControlJustPressed(Control.ReplayFfwd))
+                    if (ControlHelper.IsControlJustPressed(Control.PhoneUp, false))
                     {
                         selectedItem = selectedItem - 3;
                         if (selectedItem < 0)
                             selectedItem = 9 + selectedItem;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.ReplayRewind))
+                    else if (ControlHelper.IsControlJustPressed(Control.PhoneDown, false) || ControlHelper.IsControlJustReleased(Control.PhoneDown, false))
                     {
                         selectedItem = selectedItem + 3;
                         if (selectedItem > 8)
                             selectedItem = selectedItem - 9;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.ReplayAdvance))
+                    else if (ControlHelper.IsControlJustPressed(Control.PhoneRight, false))
                     {
                         selectedItem = selectedItem + 1;
                         if (selectedItem > 8)
                             selectedItem = 0;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.ReplayBack))
+                    else if (ControlHelper.IsControlJustPressed(Control.PhoneLeft, false))
                     {
                         selectedItem = selectedItem - 1;
                         if (selectedItem < 0)
@@ -256,12 +256,12 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     }
                     else
                     {
-                        if (ControlHelper.IsControlJustPressed(Control.CreatorAccept))
+                        if (ControlHelper.IsControlJustPressed(Control.FrontendAccept, false) || ControlHelper.IsControlJustReleased(Control.FrontendAccept, false))
                         {
                             if (ApplicationHandler.Apps[selectedItem] != null)
                                 ApplicationHandler.Start(ApplicationHandler.Apps[selectedItem]);
                         }
-                        else if (ControlHelper.IsControlJustPressed(Control.FrontendCancel))
+                        else if (ControlHelper.IsControlJustPressed(Control.PhoneCancel, false))
                         {
                             ClosePhone();
                         }
