@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CreateShopCallout.cs" />
     <Compile Include="Classes\Developer.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="ClassLoader.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Environment\Job\DutyManager.cs" />
     <Compile Include="Environment\Tasks\CalloutHandler.cs" />
     <Compile Include="Environment\Tasks\Callouts\Downtown\ClintonAveShop.cs" />
+    <Compile Include="Environment\Tasks\Callouts\VespucciCanals\SanAndreasAveShop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

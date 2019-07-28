@@ -1,4 +1,6 @@
 ﻿using Curiosity.Shared.Client.net;
+using System.Collections.Generic;
+using System;
 
 namespace Curiosity.Police.Client.net
 {
@@ -8,6 +10,9 @@ namespace Curiosity.Police.Client.net
     /// </summary>
     static class ClassLoader
     {
+        public static Dictionary<int, Func<bool>> CityCallOuts = new Dictionary<int, Func<bool>>();
+        public static Dictionary<int, Func<bool>> CountryCallOuts = new Dictionary<int, Func<bool>>();
+
         public static void Init()
         {
             Log.Verbose("Entering ClassLoader Init");
@@ -17,6 +22,9 @@ namespace Curiosity.Police.Client.net
 
             // Developer
             Classes.Developer.Init();
+
+            CityCallOuts.Add(1, Environment.Tasks.Callouts.Downtown.ClintonAveShop.Init);
+            CityCallOuts.Add(2, Environment.Tasks.Callouts.VespucciCanals.SanAndreasAveShop.Init);
 
             /// INSPIRATION!
             // Police
