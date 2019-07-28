@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Environment\Job\DutyManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

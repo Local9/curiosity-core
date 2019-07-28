@@ -12,6 +12,8 @@ namespace Curiosity.Police.Client.net
         {
             Log.Verbose("Entering ClassLoader Init");
 
+            Environment.Job.DutyManager.Init();
+
             /// INSPIRATION!
             // Police
             //Sirens.Init();

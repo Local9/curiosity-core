@@ -126,7 +126,14 @@ namespace Curiosity.Server.net.Classes
 
         public void Deactivate()
         {
-            SessionManager.PlayerList.Remove(NetId);
+            try
+            {
+                SessionManager.PlayerList.Remove(NetId);
+            }
+            catch (Exception ex)
+            {
+                Log.Verbose($"Deactivated session couldn't clean up -> {ex.Message}");
+            }
         }
 
         public void Dropped(string reason)
