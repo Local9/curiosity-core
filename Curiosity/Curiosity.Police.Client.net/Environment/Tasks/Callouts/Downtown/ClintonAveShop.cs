@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Helper;
 using System;
 
 namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Downtown
@@ -16,7 +17,6 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Downtown
 
         static Ped Suspect;
         static Model SuspectModel = PedHash.ChiCold01GMM;
-        static Vector3 SuspectPosition = new Vector3(361.1253f, 358.807f, 103.8156f);
 
         static Ped ShopKeeper;
         static Model ShopKeeperModel = PedHash.ShopKeep01;
@@ -32,6 +32,15 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Downtown
             {
                 if (LocationBlip.Exists())
                     LocationBlip.Delete();
+            }
+
+            SetupLocationBlip();
+
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code: 459S", $"{Name}", string.Empty, 2);
+
+            while (API.GetDistanceBetweenCoords(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, Location.X, Location.Y, Location.Z, false) > 500.0f)
+            {
+                await Client.Delay(50);
             }
 
             if (ShopKeeper != null)
@@ -57,7 +66,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Downtown
             ShopKeeper.Task.Wait(-1);
 
             await SuspectModel.Request(10000);
-            Suspect = await World.CreatePed(SuspectModel, SuspectPosition, 255.8121f);
+            Suspect = await World.CreatePed(SuspectModel, StartHoldUpCoords, 255.8121f);
             SuspectModel.MarkAsNoLongerNeeded();
 
             // Suspect.Task.FightAgainstHatedTargets(30.0f);
@@ -69,29 +78,9 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Downtown
             suspectBlip.IsShortRange = true;
             suspectBlip.Alpha = 0;
 
-            CalloutCompleted();
-
-            API.TaskFollowNavMeshToCoord(Suspect.Handle, StartHoldUpCoords.X, StartHoldUpCoords.Y, StartHoldUpCoords.Z, 2.0f, -1, 0.0f, true, 0);
-
-            while (API.GetDistanceBetweenCoords(Suspect.Position.X, Suspect.Position.Y, Suspect.Position.Z, StartHoldUpCoords.X, StartHoldUpCoords.Y, StartHoldUpCoords.Z, false) > 1.0f)
-            {
-                await Client.Delay(50);
-            }
-
-            Suspect.Task.AimAt(ShopKeeper, -1);
             Suspect.Weapons.Give(WeaponHash.Pistol, 30, true, true);
+            Suspect.Task.AimAt(ShopKeeper, -1);
             ShopKeeper.Task.Cower(-1);
-
-            SetupLocationBlip(); // ALERT
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code: 459S", $"{Name}", string.Empty, 2);
-
-            while (API.GetDistanceBetweenCoords(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, StartHoldUpCoords.X, StartHoldUpCoords.Y, StartHoldUpCoords.Z, false) > 250.0f)
-            {
-                await Client.Delay(50);
-            }
-            suspectBlip.Alpha = 255;
-            LocationBlip.ShowRoute = false;
-
             Suspect.Accuracy = random.Next(30, 100);
             Suspect.AlwaysDiesOnLowHealth = true;
 
@@ -100,14 +89,22 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Downtown
             API.SetRelationshipBetweenGroups(5, suspectGroupHash, Client.PlayerGroupHash);
             API.SetRelationshipBetweenGroups(5, Client.PlayerGroupHash, suspectGroupHash);
 
-            while (API.GetDistanceBetweenCoords(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, StartHoldUpCoords.X, StartHoldUpCoords.Y, StartHoldUpCoords.Z, false) > 30.0f)
+            float distanceBetween = 100.0f;
+
+            while (distanceBetween > 40.0f)
             {
+                distanceBetween = NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location);
+                CitizenFX.Core.UI.Screen.ShowSubtitle($"{distanceBetween}");
                 await Client.Delay(50);
             }
 
             Player player = new Player(API.GetNearestPlayerToEntity(Suspect.Handle));
 
             Suspect.Task.ShootAt(player.Character, -1, FiringPattern.BurstFirePistol);
+            suspectBlip.Alpha = 255;
+            LocationBlip.ShowRoute = false;
+
+            CalloutCompleted();
         }
 
         static void SetupLocationBlip()
@@ -120,9 +117,8 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Downtown
             LocationBlip.ShowRoute = true;
             LocationBlip.Priority = 9;
             LocationBlip.IsShortRange = true;
+
             API.SetBlipDisplay(LocationBlip.Handle, 5);
-            API.SetBlipAsMissionCreatorBlip(LocationBlip.Handle, true);
-            API.SetBlipCategory(LocationBlip.Handle, 1);
         }
 
         static async void CalloutCompleted()
