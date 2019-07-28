@@ -51,7 +51,7 @@ namespace Curiosity.Client.net
             // Speedometer3D.Init();
             //VehicleLoadoutPresets.Init();
             Scoreboard.Init();
-            WorldTime.Init();
+            // WorldTime.Init();
             Notifications.Init();
 
             // MENU

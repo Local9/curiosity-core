@@ -17,8 +17,15 @@ namespace Curiosity.Client.net.Classes.Player
         public static async void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
+            client.RegisterEventHandler("curiosity:Client:Player:Information", new Action(GetPlayerInfo));
             await BaseScript.Delay(1000);
             PeriodicCheck();
+        }
+
+        static async void GetPlayerInfo()
+        {
+            Client.TriggerEvent("curiosity:Client:Player:InternalInformation", Newtonsoft.Json.JsonConvert.SerializeObject(playerInfo));
+            await BaseScript.Delay(0);
         }
 
         static async void PlayerInfo(string json)

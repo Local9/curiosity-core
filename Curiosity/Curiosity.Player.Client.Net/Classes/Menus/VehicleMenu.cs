@@ -88,12 +88,12 @@ namespace Curiosity.Client.net.Classes.Menus
 
             menu.OnMenuOpen += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
             };
 
             menu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuBase.MenuOpen(false);
                 _menu.ClearMenuItems();
             };
 
@@ -269,12 +269,12 @@ namespace Curiosity.Client.net.Classes.Menus
 
             doorsMenu.OnMenuOpen += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
             };
 
             doorsMenu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuBase.MenuOpen(false);
                 _menu.ClearMenuItems();
             };
 
@@ -286,7 +286,7 @@ namespace Curiosity.Client.net.Classes.Menus
             Menu windowMenu = new Menu("Windows");
             windowMenu.OnMenuOpen += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = true;
+                MenuBase.MenuOpen(true);
                 if (windowStates != null)
                     windowStates.Clear();
 
@@ -310,7 +310,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
             windowMenu.OnMenuClose += (_menu) =>
             {
-                Environment.UI.Location.HideLocation = false;
+                MenuBase.MenuOpen(false);
                 _menu.ClearMenuItems();
             };
 

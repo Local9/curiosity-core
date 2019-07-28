@@ -11,6 +11,8 @@ namespace Curiosity.Police.Client.net
         private static Client _instance;
         public static PlayerList players;
 
+        public static uint PlayerGroupHash = 0;
+
         public static Client GetInstance()
         {
             return _instance;
@@ -19,6 +21,8 @@ namespace Curiosity.Police.Client.net
         public Client()
         {
             _instance = this;
+
+            API.AddRelationshipGroup("PLAYER", ref PlayerGroupHash);
 
             players = Players;
 

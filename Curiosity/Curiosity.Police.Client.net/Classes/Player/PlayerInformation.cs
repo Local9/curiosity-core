@@ -11,18 +11,28 @@ namespace Curiosity.Police.Client.net.Classes.Player
         public static PlayerInformationModel playerInfo = new PlayerInformationModel();
 
         public static Privilege privilege;
-        static bool statsSet = false;
 
-        public static void Init()
+        public static async void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
+            client.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
+            await Client.Delay(2000);
+            Client.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         static async void PlayerInfo(string json)
         {
             playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
 
-            privilege = (Privilege)playerInfo.RoleId;
+            if (privilege != (Privilege)playerInfo.RoleId)
+            {
+                privilege = (Privilege)playerInfo.RoleId;
+
+                if (privilege == Privilege.DEVELOPER)
+                {
+                    CitizenFX.Core.UI.Screen.ShowNotification("Police Developer: Active");
+                }
+            }
 
             await BaseScript.Delay(0);
         }
