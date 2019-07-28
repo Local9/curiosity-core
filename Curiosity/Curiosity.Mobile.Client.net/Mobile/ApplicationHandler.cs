@@ -154,13 +154,13 @@ namespace Curiosity.Mobile.Client.net.Mobile
                         if (SelectedItem < 0)
                             SelectedItem = CurrentAppScreen.Items.Count - 1;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.PhoneDown, false) || ControlHelper.IsControlJustReleased(Control.PhoneDown, false))
+                    else if (ControlHelper.IsControlJustPressed(Control.PhoneDown) || ControlHelper.IsControlJustReleased(Control.PhoneDown, false))
                     {
                         SelectedItem = SelectedItem + 1;
                         if (SelectedItem > CurrentAppScreen.Items.Count - 1)
                             SelectedItem = CurrentAppScreen.Items.Count - 1;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.PhoneSelect, false) || ControlHelper.IsControlJustReleased(Control.PhoneSelect, false))
+                    else if (ControlHelper.IsControlJustPressed(Control.PhoneSelect) || ControlHelper.IsControlJustReleased(Control.PhoneSelect, false))
                     {
                         Item item = CurrentAppScreen.Items[SelectedItem];
                         item.Select();

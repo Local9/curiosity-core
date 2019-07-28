@@ -236,7 +236,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                         if (selectedItem < 0)
                             selectedItem = 9 + selectedItem;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.PhoneDown, false) || ControlHelper.IsControlJustReleased(Control.PhoneDown, false))
+                    else if (ControlHelper.IsControlJustPressed(Control.PhoneDown) || ControlHelper.IsControlJustReleased(Control.PhoneDown, false))
                     {
                         selectedItem = selectedItem + 3;
                         if (selectedItem > 8)
@@ -256,7 +256,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     }
                     else
                     {
-                        if (ControlHelper.IsControlJustPressed(Control.FrontendAccept, false) || ControlHelper.IsControlJustReleased(Control.FrontendAccept, false))
+                        if (ControlHelper.IsControlJustPressed(Control.FrontendAccept) || ControlHelper.IsControlJustReleased(Control.FrontendAccept, false))
                         {
                             if (ApplicationHandler.Apps[selectedItem] != null)
                                 ApplicationHandler.Start(ApplicationHandler.Apps[selectedItem]);
