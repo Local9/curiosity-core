@@ -1,5 +1,6 @@
 ﻿using System;
 using Curiosity.Shared.Client.net.Enums.Patrol;
+using Curiosity.Shared.Client.net.Enums;
 using CitizenFX.Core;
 
 namespace Curiosity.Police.Client.net.Environment.Job
@@ -52,8 +53,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
         static void OnPatrolZone(int zone)
         {
-            if (!IsPoliceJobActive) return;
             PatrolZone = (PatrolZone)zone;
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Patol Zone Change", $"Zone: {PatrolZone}", string.Empty, 2);
         }
 
         public static void OnSetCallOutStatus(bool status)

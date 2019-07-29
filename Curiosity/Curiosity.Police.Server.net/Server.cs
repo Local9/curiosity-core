@@ -18,13 +18,9 @@ namespace Curiosity.Police.Server.net
 
         public Server()
         {
-            Log.Success("Entering Curiosity Police cter");
-
             players = Players;
 
             _server = this;
-
-            
 
             Log.Success("Leaving Curiosity Police cter");
         }

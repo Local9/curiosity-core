@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Mobile.Client.net.Mobile.Api;
 using Curiosity.Global.Shared.net.Enums.Mobile;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Shared.Client.net.Enums.Patrol;
 using System;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         static string CurrentJob = string.Empty;
         static long GameTimer = API.GetGameTimer();
         static bool timeout = false;
+        static PatrolZone PatrolZone = PatrolZone.City;
 
         public static void Init()
         {
@@ -52,8 +54,9 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
                 //jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Trucker}", (int)ListIcons.Settings1), SetJob, Job.Trucker));
 
                 // ADD TO SCREEN
-                App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + $"Change Status", (int)ListIcons.Settings1), ToggleActiveStatus));
                 App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + "Job", (int)ListIcons.Settings1), ApplicationHandler.ChangeScreen, jobMenu));
+                App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + $"Change Status", (int)ListIcons.Settings1), ToggleActiveStatus));
+                App.LauncherScreen.AddItem(new Item(App.LauncherScreen, Item.CreateData(2, PREFIX + $"Change Location", (int)ListIcons.Settings1), ToggleLocation));
                 GameTimer = API.GetGameTimer();
             }
         }
@@ -86,6 +89,19 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
 
             Client.TriggerEvent("curiosity:Client:Interface:Duty", !string.IsNullOrEmpty(CurrentJob), MobilePhone.IsJobActive, CurrentJob);
             Client.TriggerEvent("curiosity:Mobile:Job:Active", MobilePhone.IsJobActive);
+        }
+
+        static void ToggleLocation(dynamic[] dynamics)
+        {
+            if (string.IsNullOrEmpty(CurrentJob))
+            {
+                API.PlaySoundFrontend(-1, "ERROR", "HUD_AMMO_SHOP_SOUNDSET", true);
+                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "", $"~w~Status cannot be changed, please select a job first.", 2);
+                return;
+            }
+
+            PatrolZone = (PatrolZone == PatrolZone.City) ? PatrolZone.Country : PatrolZone.City;
+            Client.TriggerEvent("curiosity:Client:Police:PatrolZone", (int)PatrolZone);
         }
 
         static async void ToggleActiveStatus(dynamic[] dynamics)
