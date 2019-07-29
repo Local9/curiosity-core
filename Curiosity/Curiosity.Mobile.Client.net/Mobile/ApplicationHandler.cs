@@ -148,24 +148,30 @@ namespace Curiosity.Mobile.Client.net.Mobile
                         SelectedItem = CurrentAppScreen.Items.Count - 1;
 
                     bool navigated = true;
-                    if (ControlHelper.IsControlJustPressed(Control.PhoneUp, false))
+                    if (Game.IsControlJustPressed(0, Control.FrontendUp) ||
+                            Game.IsDisabledControlJustPressed(0, Control.FrontendUp) ||
+                            Game.IsControlJustPressed(0, Control.PhoneScrollBackward) ||
+                            Game.IsDisabledControlJustPressed(0, Control.PhoneScrollBackward))
                     {
                         SelectedItem = SelectedItem - 1;
                         if (SelectedItem < 0)
                             SelectedItem = CurrentAppScreen.Items.Count - 1;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.PhoneDown) || ControlHelper.IsControlJustReleased(Control.PhoneDown, false))
+                    else if (Game.IsControlJustPressed(0, Control.FrontendDown) ||
+                            Game.IsDisabledControlJustPressed(0, Control.FrontendDown) ||
+                            Game.IsControlJustPressed(0, Control.PhoneScrollForward) ||
+                            Game.IsDisabledControlJustPressed(0, Control.PhoneScrollForward))
                     {
                         SelectedItem = SelectedItem + 1;
                         if (SelectedItem > CurrentAppScreen.Items.Count - 1)
                             SelectedItem = CurrentAppScreen.Items.Count - 1;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.PhoneSelect) || ControlHelper.IsControlJustReleased(Control.PhoneSelect, false))
+                    else if (Game.IsControlJustPressed(0, Control.FrontendAccept))
                     {
                         Item item = CurrentAppScreen.Items[SelectedItem];
                         item.Select();
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.PhoneCancel, false))
+                    else if (Game.IsControlJustPressed(0, Control.FrontendCancel))
                     {
                         if (PreviousScreens.Count > 0)
                         {

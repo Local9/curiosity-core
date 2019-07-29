@@ -230,25 +230,31 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
                     bool changeNavigation = true;
 
-                    if (ControlHelper.IsControlJustPressed(Control.PhoneUp, false))
+                    if (Game.IsControlJustPressed(0, Control.FrontendUp) ||
+                            Game.IsDisabledControlJustPressed(0, Control.FrontendUp) ||
+                            Game.IsControlJustPressed(0, Control.PhoneScrollBackward) ||
+                            Game.IsDisabledControlJustPressed(0, Control.PhoneScrollBackward))
                     {
                         selectedItem = selectedItem - 3;
                         if (selectedItem < 0)
                             selectedItem = 9 + selectedItem;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.PhoneDown) || ControlHelper.IsControlJustReleased(Control.PhoneDown, false))
-                    {
+                    else if (Game.IsControlJustPressed(0, Control.FrontendDown) ||
+                            Game.IsDisabledControlJustPressed(0, Control.FrontendDown) ||
+                            Game.IsControlJustPressed(0, Control.PhoneScrollForward) ||
+                            Game.IsDisabledControlJustPressed(0, Control.PhoneScrollForward))
+                    { 
                         selectedItem = selectedItem + 3;
                         if (selectedItem > 8)
                             selectedItem = selectedItem - 9;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.PhoneRight, false))
+                    else if (Game.IsControlJustPressed(0, Control.FrontendRight))
                     {
                         selectedItem = selectedItem + 1;
                         if (selectedItem > 8)
                             selectedItem = 0;
                     }
-                    else if (ControlHelper.IsControlJustPressed(Control.PhoneLeft, false))
+                    else if (Game.IsControlJustPressed(0, Control.FrontendLeft))
                     {
                         selectedItem = selectedItem - 1;
                         if (selectedItem < 0)
@@ -256,7 +262,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     }
                     else
                     {
-                        if (ControlHelper.IsControlJustPressed(Control.FrontendAccept) || ControlHelper.IsControlJustReleased(Control.FrontendAccept, false))
+                        if (Game.IsControlJustPressed(0, Control.FrontendAccept))
                         {
                             if (ApplicationHandler.Apps[selectedItem] != null)
                                 ApplicationHandler.Start(ApplicationHandler.Apps[selectedItem]);
@@ -279,6 +285,41 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 Debug.WriteLine($"OnMainAppTick -> {ex.ToString()}");
             }
             await Task.FromResult(0);
+        }
+
+        static bool IsDownPressed()
+        {
+            Debug.WriteLine("DOWN");
+            // Return false if the buttons are not currently enabled.
+            if (!IsMenuOpen)
+            {
+                return false;
+            }
+            Debug.WriteLine("DOWN 2");
+            // when the player is holding TAB, while not in a vehicle, and when the scrollwheel is being used, return false to prevent interferring with weapon selection.
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                if (Game.IsControlPressed(0, Control.SelectWeapon))
+                {
+                    if (Game.IsControlPressed(0, Control.SelectNextWeapon) || Game.IsControlPressed(0, Control.SelectPrevWeapon))
+                    {
+                        return false;
+                    }
+                }
+            }
+            Debug.WriteLine("DOWN 3");
+            // return true if the scrollwheel down or the arrow down key is being used at this frame.
+            if (Game.IsControlPressed(0, Control.FrontendDown) ||
+                Game.IsDisabledControlPressed(0, Control.FrontendDown) ||
+                Game.IsControlPressed(0, Control.PhoneScrollForward) ||
+                Game.IsDisabledControlPressed(0, Control.PhoneScrollForward))
+            {
+                return true;
+            }
+
+            Debug.WriteLine("DOWN 4");
+            // return false if none of the conditions matched.
+            return false;
         }
     }
 }
