@@ -7,7 +7,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.VespucciCa
         static string Name = "Rob's Liquor on San Andreas Ave";
         static Vector3 Location = new Vector3(-1226.846f, -901.4744f, 12.28888f);
 
-        static Model SuspectModel = PedHash.ChiCold01GMM;
+        static Model SuspectModel = PedHash.Eastsa01AMM;
         static Vector3 SuspectPosition = new Vector3(-1224.359f, -905.7396f, 12.32636f);
         static float SuspectHeading = 233.6525f;
 

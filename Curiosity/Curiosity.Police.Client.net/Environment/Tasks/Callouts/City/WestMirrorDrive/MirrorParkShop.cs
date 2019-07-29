@@ -7,7 +7,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.WestMirror
         static string Name = "LTD on West Mirror Drive";
         static Vector3 Location = new Vector3(1159.815f, -327.377f, 69.21338f);
 
-        static Model SuspectModel = PedHash.ChiCold01GMM;
+        static Model SuspectModel = PedHash.Dockwork01SMY;
         static Vector3 SuspectPosition = new Vector3(1160.791f, -320.9355f, 69.20513f);
         static float SuspectHeading = 224.5752f;
 

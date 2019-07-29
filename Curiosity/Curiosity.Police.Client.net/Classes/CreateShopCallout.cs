@@ -65,7 +65,7 @@ namespace Curiosity.Police.Client.net.Classes
             //    }
             //}
 
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "459S", $"{Name}", string.Empty, 2);
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "459S Burglar alarm, silent", $"{Name}", string.Empty, 2);
             API.PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
 
             await Client.Delay(0);
@@ -80,6 +80,7 @@ namespace Curiosity.Police.Client.net.Classes
 
             while (API.GetDistanceBetweenCoords(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, Location.X, Location.Y, Location.Z, false) > 500.0f)
             {
+                LocationBlip.Name = string.Empty;
                 await Client.Delay(50);
             }
 
@@ -108,6 +109,9 @@ namespace Curiosity.Police.Client.net.Classes
             await SuspectModel.Request(10000);
             Suspect = await World.CreatePed(SuspectModel, SuspectPosition, suspectHeading);
             SuspectModel.MarkAsNoLongerNeeded();
+
+            API.SetNetworkIdCanMigrate(Suspect.NetworkId, true);
+            API.SetNetworkIdCanMigrate(ShopKeeper.NetworkId, true);
 
             // Suspect.Task.FightAgainstHatedTargets(30.0f);
 
@@ -189,12 +193,19 @@ namespace Curiosity.Police.Client.net.Classes
         {
             if (Suspect != null)
             {
-                Suspect.AttachedBlip.Delete();
-                ShopKeeper.Task.ReactAndFlee(Suspect);
-                ShopKeeper.MarkAsNoLongerNeeded();
-                Suspect.MarkAsNoLongerNeeded();
+                if (Suspect.Exists())
+                {
+                    Suspect.AttachedBlip.Delete();
+                    ShopKeeper.Task.ReactAndFlee(Suspect);
+                    ShopKeeper.MarkAsNoLongerNeeded();
+                    Suspect.MarkAsNoLongerNeeded();
+                }
             }
-            LocationBlip.Delete();
+            if (LocationBlip != null)
+            {
+                if (LocationBlip.Exists())
+                    LocationBlip.Delete();
+            }
             Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", string.Empty, 2);
         }
     }

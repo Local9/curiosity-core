@@ -104,7 +104,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
                 return;
             }
             MobilePhone.IsJobActive = !MobilePhone.IsJobActive;
-            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "", $"~w~Status: ~s~{(MobilePhone.IsJobActive ? $"Active" : $"Deactivated")}", 2);
+            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", $"~w~Status: ~s~{(MobilePhone.IsJobActive ? $"Active" : $"Deactivated")}", string.Empty, 2);
             Client.TriggerEvent("curiosity:Client:Interface:Duty", !string.IsNullOrEmpty(CurrentJob), MobilePhone.IsJobActive, CurrentJob);
             await TimeOut();
         }
@@ -120,7 +120,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
             timeout = false;
 
             API.PlaySoundFrontend(-1, "CHALLENGE_UNLOCKED", "HUD_AWARDS", true);
-            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "", $"~w~Status can now be changed.", 2);
+            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", $"~w~Status can now be changed.", string.Empty, 2);
         }
     }
 }

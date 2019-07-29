@@ -34,8 +34,11 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
                     return;
                 }
 
-                if ((API.GetGameTimer() - TimeStampOfLastCallout) < FIVE_MINUTES)
+                if ((API.GetGameTimer() - TimeStampOfLastCallout) > FIVE_MINUTES)
                 {
+                    if (Job.DutyManager.IsOnCallout)
+                        TimeStampOfLastCallout = API.GetGameTimer();
+
                     await Client.Delay(10000);
                     await Task.FromResult(0);
                     return;

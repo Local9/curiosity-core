@@ -7,7 +7,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Morningwoo
         static string Name = "Rob's Liquor on Prosperity St";
         static Vector3 Location = new Vector3(-1491.354f, -384.2097f, 40.08645f);
 
-        static Model SuspectModel = PedHash.ChiCold01GMM;
+        static Model SuspectModel = PedHash.BikerChic;
         static Vector3 SuspectPosition = new Vector3(-1487.207f, -382.805f, 40.16343f);
         static float SuspectHeading = 351.4111f;
 

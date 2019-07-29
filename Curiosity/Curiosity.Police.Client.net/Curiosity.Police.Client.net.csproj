@@ -81,6 +81,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Environment\Tasks\Callouts\Country\" />
+    <Folder Include="Environment\Tasks\Callouts\Rural\" />
     <Folder Include="Environment\Vehicle\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
