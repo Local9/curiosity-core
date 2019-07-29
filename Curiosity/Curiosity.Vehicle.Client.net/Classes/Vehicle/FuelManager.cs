@@ -338,7 +338,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     return;
                 }
 
-                int refuelTick = 50;
+                int refuelTick = 25;
                 float refuelTickAmount = 0.07f;
                 float refuelRate = 0.35f;
                 float refueled = 0f;
@@ -390,7 +390,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
         static async void Charge(int cost)
         {
-            cost = cost * 3;
+            cost = cost * 2;
             PlayerInformationModel playerInfo = Player.PlayerInformation.playerInfo;
             
             if ((playerInfo.Wallet - cost) > 0)

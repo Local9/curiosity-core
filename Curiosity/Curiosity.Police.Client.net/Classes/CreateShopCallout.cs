@@ -23,9 +23,14 @@ namespace Curiosity.Police.Client.net.Classes
         static Model ShopKeeperModel = PedHash.ShopKeep01;
         static Vector3 ShopKeeperPosition;
 
+        //static bool AcceptedCallout = false;
+        //static long GameTime = API.GetGameTimer();
+
         public static async void StartCallout(string name, Vector3 location, Model suspectModel, Vector3 suspectLocation, float suspectHeading, Model shopkeeperModel, Vector3 shopkeeperLocation, float shopkeeperHeading)
         {
             Environment.Job.DutyManager.OnSetCallOutStatus(true);
+            //AcceptedCallout = false;
+            //GameTime = API.GetGameTimer();
 
             Name = name;
             Location = location;
@@ -33,6 +38,35 @@ namespace Curiosity.Police.Client.net.Classes
             SuspectPosition = suspectLocation;
             ShopKeeperModel = shopkeeperModel;
             ShopKeeperPosition = shopkeeperLocation;
+
+            // AN IDEA TO WORK ON
+            //while (!AcceptedCallout)
+            //{
+            //    await Client.Delay(0);
+
+            //    if ((API.GetGameTimer() - GameTime) > (1000 * 30))
+            //    {
+            //        Environment.Job.DutyManager.OnSetCallOutStatus(true);
+            //        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", "", 2);
+            //        return;
+            //    }
+
+            //    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "459S", $"{Name}", "~y~Accept: ~g~E~n~~y~Decline: ~g~BACKSPACE", 2);
+            //    if (Game.IsControlPressed(0, Control.CreatorAccept))
+            //    {
+            //        AcceptedCallout = true;
+            //    }
+
+            //    if (Game.IsControlPressed(0, Control.FrontendCancel))
+            //    {
+            //        Environment.Job.DutyManager.OnSetCallOutStatus(true);
+            //        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-4", $"Message received, understood", "Callout Declined", 2);
+            //        return;
+            //    }
+            //}
+
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "459S", $"{Name}", string.Empty, 2);
+            API.PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
 
             await Client.Delay(0);
 
@@ -43,8 +77,6 @@ namespace Curiosity.Police.Client.net.Classes
             }
 
             SetupLocationBlip();
-
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code: 459S", $"{Name}", string.Empty, 2);
 
             while (API.GetDistanceBetweenCoords(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, Location.X, Location.Y, Location.Z, false) > 500.0f)
             {
@@ -139,13 +171,17 @@ namespace Curiosity.Police.Client.net.Classes
                 ShopKeeper.MarkAsNoLongerNeeded();
                 Suspect.MarkAsNoLongerNeeded();
 
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code: 10-26", $"Location is clear", string.Empty, 2);
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
                 API.ShowTickOnBlip(LocationBlip.Handle, true);
                 API.SetBlipFade(LocationBlip.Handle, 0, 3000);
                 await Client.Delay(3000);
                 LocationBlip.Delete();
 
+                // API.PlaySoundFrontend(-1, "FLIGHT_SCHOOL_LESSON_PASSED", "HUD_AWARDS", true);
+
                 Environment.Job.DutyManager.OnSetCallOutStatus(false);
+
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", string.Empty, 2);
             }
         }
 
@@ -157,8 +193,9 @@ namespace Curiosity.Police.Client.net.Classes
                 ShopKeeper.Task.ReactAndFlee(Suspect);
                 ShopKeeper.MarkAsNoLongerNeeded();
                 Suspect.MarkAsNoLongerNeeded();
-                LocationBlip.Delete();
             }
+            LocationBlip.Delete();
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", string.Empty, 2);
         }
     }
 }

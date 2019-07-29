@@ -10,6 +10,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         static int FIVE_MINUTES = ((1000*60) * 5);
         static Client client = Client.GetInstance();
         static Random random = new Random();
+        static int PreviousCallout = 0;
 
         static long TimeStampOfLastCallout;
 
@@ -43,6 +44,14 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
                 if (Job.DutyManager.PatrolZone == PatrolZone.City)
                 {
                     int randomCallout = random.Next(0, ClassLoader.CityCallOuts.Count - 1);
+
+                    while (PreviousCallout == randomCallout)
+                    {
+                        randomCallout = randomCallout = random.Next(0, ClassLoader.CityCallOuts.Count - 1);
+                        await Client.Delay(10);
+                    }
+                    PreviousCallout = randomCallout;
+
                     ClassLoader.CityCallOuts[randomCallout].Invoke();
 
                     TimeStampOfLastCallout = API.GetGameTimer();

@@ -291,7 +291,7 @@ namespace Curiosity.Client.net.Classes.Actions
             veh.LockStatus = VehicleLockStatus.Unlocked;
             veh.NeedsToBeHotwired = false;
             veh.IsEngineRunning = true;
-            veh.Mods.LicensePlate = "DEVTOOLS";
+            veh.Mods.LicensePlate = "LIFEVDEV";
 
             veh.Mods.InstallModKit();
             veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;

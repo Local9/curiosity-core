@@ -105,7 +105,6 @@ namespace Curiosity.Context.Client.net
 
                 if (!Game.PlayerPed.IsInVehicle())
                 {
-
                     if (!isChatInputActive)
                     {
                         Entity ent = GetEntityInCrosshair(playerPed, playerPed);
@@ -200,6 +199,10 @@ namespace Curiosity.Context.Client.net
                         Crosshair(false);
                         SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = false }));
                         showMenu = false;
+                    }
+                    else
+                    {
+                        Crosshair(false);
                     }
                 }
             }
