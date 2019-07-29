@@ -11,6 +11,7 @@ namespace Curiosity.Police.Client.net
     static class ClassLoader
     {
         public static Dictionary<int, Func<bool>> CityCallOuts = new Dictionary<int, Func<bool>>();
+        public static Dictionary<int, Func<bool>> RuralCallOuts = new Dictionary<int, Func<bool>>();
         public static Dictionary<int, Func<bool>> CountryCallOuts = new Dictionary<int, Func<bool>>();
 
         public static void Init()
@@ -23,14 +24,20 @@ namespace Curiosity.Police.Client.net
             // Developer
             Classes.Developer.Init();
 
-            CityCallOuts.Add(1, Environment.Tasks.Callouts.City.Downtown.ClintonAveShop.Init);
-            CityCallOuts.Add(2, Environment.Tasks.Callouts.City.VespucciCanals.SanAndreasAveShop.Init);
-            CityCallOuts.Add(3, Environment.Tasks.Callouts.City.Morningwood.ProsperityStreetShop.Init);
-            CityCallOuts.Add(4, Environment.Tasks.Callouts.City.Palomino.LittleSeoulShop.Init);
-            CityCallOuts.Add(5, Environment.Tasks.Callouts.City.ElginAve.StrawberryShop.Init);
-            CityCallOuts.Add(6, Environment.Tasks.Callouts.City.DavisAve.DavisAveShop.Init);
-            CityCallOuts.Add(7, Environment.Tasks.Callouts.City.VespucciBlvd.MurrietaHeightsShop.Init);
-            CityCallOuts.Add(8, Environment.Tasks.Callouts.City.WestMirrorDrive.MirrorParkShop.Init);
+            CityCallOuts.Add(1, Environment.Tasks.Callouts.City.Shops.ClintonAve.Init);
+            CityCallOuts.Add(2, Environment.Tasks.Callouts.City.Shops.SanAndreasAve.Init);
+            CityCallOuts.Add(3, Environment.Tasks.Callouts.City.Shops.ProsperityStreet.Init);
+            CityCallOuts.Add(4, Environment.Tasks.Callouts.City.Shops.LittleSeoul.Init);
+            CityCallOuts.Add(5, Environment.Tasks.Callouts.City.Shops.Strawberry.Init);
+            CityCallOuts.Add(6, Environment.Tasks.Callouts.City.Shops.DavisAve.Init);
+            CityCallOuts.Add(7, Environment.Tasks.Callouts.City.Shops.MurrietaHeights.Init);
+            CityCallOuts.Add(8, Environment.Tasks.Callouts.City.Shops.MirrorPark.Init);
+
+            RuralCallOuts.Add(9, Environment.Tasks.Callouts.Rural.Shops.BanhamCanyonRobsLiquor.Init);
+            RuralCallOuts.Add(10, Environment.Tasks.Callouts.Rural.Shops.BanhamCanyonTwentyFour.Init);
+            RuralCallOuts.Add(11, Environment.Tasks.Callouts.Rural.Shops.Chumash.Init);
+            RuralCallOuts.Add(12, Environment.Tasks.Callouts.Rural.Shops.RichmanGlen.Init);
+            RuralCallOuts.Add(13, Environment.Tasks.Callouts.Rural.Shops.TataviamMountains.Init);
 
             /// INSPIRATION!
             // Police

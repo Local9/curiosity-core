@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 
-namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Palomino
+namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Shops
 {
-    class LittleSeoulShop
+    class LittleSeoul
     {
         static string Name = "LTD on Palomino Ave & Ginger St";
         static Vector3 Location = new Vector3(-711.6313f, -918.0067f, 19.21452f);

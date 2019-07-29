@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 
-namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.VespucciCanals
+namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Shops
 {
-    class SanAndreasAveShop
+    class SanAndreasAve
     {
         static string Name = "Rob's Liquor on San Andreas Ave";
         static Vector3 Location = new Vector3(-1226.846f, -901.4744f, 12.28888f);
