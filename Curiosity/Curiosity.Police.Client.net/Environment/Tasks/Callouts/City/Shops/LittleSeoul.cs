@@ -4,7 +4,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Shops
 {
     class LittleSeoul
     {
-        static string Name = "LTD on Palomino Ave & Ginger St";
+        static string Name = "LTD, Palomino Ave & Ginger St";
         static Vector3 Location = new Vector3(-711.6313f, -918.0067f, 19.21452f);
 
         static Model SuspectModel = PedHash.ChiGoon02GMM;

@@ -4,7 +4,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Shops
 {
     class Strawberry
     {
-        static string Name = "24/7 on Elgin Ave";
+        static string Name = "24/7, Elgin Ave";
         static Vector3 Location = new Vector3(29.32283f, -1349.734f, 29.32919f);
 
         static Model SuspectModel = PedHash.AlDiNapoli;

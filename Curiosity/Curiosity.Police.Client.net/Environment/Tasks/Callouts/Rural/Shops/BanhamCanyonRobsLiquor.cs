@@ -4,7 +4,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Rural.Shops
 {
     class BanhamCanyonRobsLiquor
     {
-        static string Name = "Rob's Liquor on Banham Canyon";
+        static string Name = "Rob's Liquor, Banham Canyon";
         static Vector3 Location = new Vector3(-2974.973f, 390.8409f, 15.03081f);
 
         static Model SuspectModel = PedHash.StrPunk01GMY;

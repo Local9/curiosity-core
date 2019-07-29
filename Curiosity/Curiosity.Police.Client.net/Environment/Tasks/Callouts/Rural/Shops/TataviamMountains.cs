@@ -4,7 +4,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Rural.Shops
 {
     class TataviamMountains
     {
-        static string Name = "24/7 on Tataviam Mountains";
+        static string Name = "24/7, Tataviam Mountains";
         static Vector3 Location = new Vector3(2561.057f, 385.2407f, 108.6211f);
 
         static Model SuspectModel = PedHash.Farmer01AMM;

@@ -4,7 +4,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Shops
 {
     class MirrorPark
     {
-        static string Name = "LTD on West Mirror Drive";
+        static string Name = "LTD, West Mirror Drive";
         static Vector3 Location = new Vector3(1159.815f, -327.377f, 69.21338f);
 
         static Model SuspectModel = PedHash.Dockwork01SMY;

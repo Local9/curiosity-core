@@ -65,6 +65,13 @@
     <Compile Include="Environment\Tasks\Callouts\City\Shops\MurrietaHeights.cs" />
     <Compile Include="Environment\Tasks\Callouts\City\Shops\SanAndreasAve.cs" />
     <Compile Include="Environment\Tasks\Callouts\City\Shops\MirrorPark.cs" />
+    <Compile Include="Environment\Tasks\Callouts\Country\Shops\MountChiliad.cs" />
+    <Compile Include="Environment\Tasks\Callouts\Country\Shops\Grapeseed.cs" />
+    <Compile Include="Environment\Tasks\Callouts\Country\Shops\SandyShoresLiquorAce.cs" />
+    <Compile Include="Environment\Tasks\Callouts\Country\Shops\SandyShoresTwentyFour.cs" />
+    <Compile Include="Environment\Tasks\Callouts\Country\Shops\GrandSenoraDesertTwentyFour.cs" />
+    <Compile Include="Environment\Tasks\Callouts\Country\Shops\GrandSenoraDesertScoops.cs" />
+    <Compile Include="Environment\Tasks\Callouts\Country\Shops\Harmony.cs" />
     <Compile Include="Environment\Tasks\Callouts\Rural\Shops\Chumash.cs" />
     <Compile Include="Environment\Tasks\Callouts\Rural\Shops\BanhamCanyonTwentyFour.cs" />
     <Compile Include="Environment\Tasks\Callouts\Rural\Shops\BanhamCanyonRobsLiquor.cs" />
@@ -86,7 +93,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Environment\Tasks\Callouts\Country\" />
     <Folder Include="Environment\Vehicle\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

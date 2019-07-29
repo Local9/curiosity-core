@@ -39,6 +39,14 @@ namespace Curiosity.Police.Client.net
             RuralCallOuts.Add(12, Environment.Tasks.Callouts.Rural.Shops.RichmanGlen.Init);
             RuralCallOuts.Add(13, Environment.Tasks.Callouts.Rural.Shops.TataviamMountains.Init);
 
+            CountryCallOuts.Add(14, Environment.Tasks.Callouts.Country.Shops.GrandSenoraDesertScoops.Init);
+            CountryCallOuts.Add(15, Environment.Tasks.Callouts.Country.Shops.GrandSenoraDesertTwentyFour.Init);
+            CountryCallOuts.Add(16, Environment.Tasks.Callouts.Country.Shops.Grapeseed.Init);
+            CountryCallOuts.Add(17, Environment.Tasks.Callouts.Country.Shops.Harmony.Init);
+            CountryCallOuts.Add(18, Environment.Tasks.Callouts.Country.Shops.MountChiliad.Init);
+            CountryCallOuts.Add(19, Environment.Tasks.Callouts.Country.Shops.SandyShoresLiquorAce.Init);
+            CountryCallOuts.Add(20, Environment.Tasks.Callouts.Country.Shops.SandyShoresTwentyFour.Init);
+
             /// INSPIRATION!
             // Police
             //Sirens.Init();

@@ -4,7 +4,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Shops
 {
     class MurrietaHeights
     {
-        static string Name = "Rob's Liquor on Vespucci Blvd";
+        static string Name = "Rob's Liquor, Vespucci Blvd";
         static Vector3 Location = new Vector3(1142.1f, -980.7694f, 46.20402f);
 
         static Model SuspectModel = PedHash.Dealer01SMY;
