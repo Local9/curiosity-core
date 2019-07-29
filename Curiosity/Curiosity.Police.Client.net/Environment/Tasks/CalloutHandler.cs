@@ -10,22 +10,32 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 {
     class CalloutHandler
     {
-        static int FIVE_MINUTES = ((1000*60) * 5);
+        static int FIVE_MINUTES = ((1000 * 60) * 5);
+        //static int FIVE_MINUTES = 15000;
         static Client client = Client.GetInstance();
         static Random random = new Random();
         static int PreviousCallout = -1;
+        static bool IsRunnningCallout = false;
 
         static long TimeStampOfLastCallout;
 
-        public static void PlayerCanTakeCallout()
+        public static async void PlayerCanTakeCallout()
         {
+            //if (Classes.Player.PlayerInformation.IsDeveloper())
+            //    Log.Verbose($"TICK: PlayerCanTakeCallout");
+
+            await Client.Delay(0);
+            IsRunnningCallout = false;
             TimeStampOfLastCallout = API.GetGameTimer();
-            
             client.RegisterTickHandler(SelectCallout);
         }
 
-        public static void PlayerIsOnActiveCalloutOrOffDuty()
+        public static async void PlayerIsOnActiveCalloutOrOffDuty()
         {
+            //if (Classes.Player.PlayerInformation.IsDeveloper())
+            //    Log.Verbose($"TICK: PlayerIsOnActiveCalloutOrOffDuty");
+
+            await Client.Delay(0);
             client.DeregisterTickHandler(SelectCallout);
         }
 
@@ -46,38 +56,39 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
                         TimeStampOfLastCallout = API.GetGameTimer();
                     }
 
+                    //if (Classes.Player.PlayerInformation.IsDeveloper())
+                    //    Log.Verbose($"SelectCallout TimerValue: {(API.GetGameTimer() - TimeStampOfLastCallout) / 1000.0}s");
+
                     await Client.Delay(10000);
                     await Task.FromResult(0);
                     return;
                 }
 
-                await Task.FromResult(0);
+                if (IsRunnningCallout)
+                {
+                    await Task.FromResult(0);
+                    return;
+                };
 
-                Func<bool> CallOutToInvoke = null;
+                IsRunnningCallout = true;
+
+                await Task.FromResult(0);
 
                 if (random.Next(1) == 1) // 50/50 chance of being called out to the middle of the map
                 {
-                    CallOutToInvoke = await GetRandomCallout(ClassLoader.RuralCallOuts);
+                    GetRandomCallout(ClassLoader.RuralCallOuts);
                 }
 
                 if (Job.DutyManager.PatrolZone == PatrolZone.City)
                 {
 
-                    CallOutToInvoke = await GetRandomCallout(ClassLoader.CityCallOuts);
+                    GetRandomCallout(ClassLoader.CityCallOuts);
                 }
 
                 if (Job.DutyManager.PatrolZone == PatrolZone.Country)
                 {
-                    CallOutToInvoke = await GetRandomCallout(ClassLoader.CountryCallOuts);
+                     GetRandomCallout(ClassLoader.CountryCallOuts);
                 }
-
-                if (CallOutToInvoke == null) return;
-
-                await Client.Delay(0);
-
-                CallOutToInvoke.Invoke();
-
-                await Task.FromResult(0);
             }
             catch (Exception ex)
             {
@@ -85,18 +96,37 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             }
         }
 
-        static async Task<Func<bool>> GetRandomCallout(Dictionary<int, Func<bool>> calloutDictionary)
+        static async void GetRandomCallout(Dictionary<int, Func<bool>> calloutDictionary)
         {
-            int calloutId = random.Next(0, calloutDictionary.Count);
+            //if (Classes.Player.PlayerInformation.IsDeveloper())
+            //    Log.Verbose($"GetRandomCallout");
 
-            while (PreviousCallout == calloutId)
+            int randomCalloutIndex = random.Next(0, calloutDictionary.Count);
+            int calloutId = calloutDictionary.ElementAt(randomCalloutIndex).Key;
+
+            bool foundNewCallout = false;
+
+            while (!foundNewCallout)
             {
-                calloutId = calloutDictionary.ElementAt(calloutId).Key;
-                await Client.Delay(0);
+                randomCalloutIndex = random.Next(0, calloutDictionary.Count);
+                calloutId = calloutDictionary.ElementAt(randomCalloutIndex).Key;
+
+                if (PreviousCallout != calloutId)
+                {
+                    foundNewCallout = true;
+                }
+
+                await Client.Delay(100);
             }
+
             PreviousCallout = calloutId;
 
-            return calloutDictionary.ElementAt(calloutId).Value;
+            //if (Classes.Player.PlayerInformation.IsDeveloper())
+            //    Log.Verbose($"GetRandomCallout: Result {calloutId}");
+
+            calloutDictionary.ElementAt(randomCalloutIndex).Value.Invoke();
+
+            await Task.FromResult(0);
         }
     }
 }
