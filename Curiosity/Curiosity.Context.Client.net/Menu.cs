@@ -103,7 +103,11 @@ namespace Curiosity.Context.Client.net
             {
                 Entity playerPed = Game.PlayerPed;
 
-                if (!Game.PlayerPed.IsInVehicle())
+                if (Game.PlayerPed.IsAiming || Game.PlayerPed.IsAimingFromCover)
+                {
+                    Crosshair(false);
+                }
+                else if (!Game.PlayerPed.IsInVehicle())
                 {
                     if (!isChatInputActive)
                     {

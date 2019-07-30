@@ -139,7 +139,27 @@ namespace Curiosity.Police.Client.net.Classes
             }
 
             CitizenFX.Core.Player player = new CitizenFX.Core.Player(API.GetNearestPlayerToEntity(Suspect.Handle));
+            Suspect.Task.WanderAround();
 
+            while (!API.CanPedSeePed(Suspect.Handle, player.Character.Handle))
+            {
+                if (API.IsPedInCombat(Suspect.Handle, player.Character.Handle))
+                    break;
+
+                if (API.IsPedInCombat(player.Character.Handle, Suspect.Handle))
+                    break;
+
+                if (API.IsPedFacingPed(player.Character.Handle, Suspect.Handle, 90.0f))
+                    break;
+
+                if (API.IsPedFacingPed(Suspect.Handle, player.Character.Handle, 90.0f))
+                    break;
+
+                await Client.Delay(50);
+            }
+
+            Suspect.Task.TurnTo(player.Character);
+            await Client.Delay(150);
             Suspect.Task.ShootAt(player.Character, -1, FiringPattern.BurstFirePistol);
             suspectBlip.Alpha = 255;
             LocationBlip.ShowRoute = false;
