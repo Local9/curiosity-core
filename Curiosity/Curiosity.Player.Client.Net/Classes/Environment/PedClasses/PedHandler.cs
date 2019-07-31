@@ -48,6 +48,9 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 Model model = PedHash.Trevor;
                 await model.Request(10000);
 
+                Model vehModel = VehicleHash.Bodhi2;
+                await vehModel.Request(10000);
+
                 uint suspectGroupHash = 0;
                 API.AddRelationshipGroup("suspect", ref suspectGroupHash);
                 API.SetRelationshipBetweenGroups(5, suspectGroupHash, playerGroupHash);
@@ -62,12 +65,18 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                     API.SetGroupFormation(pedGroup, 2);
                 }
 
-                
-                Vector3 spawnPosition = World.GetNextPositionOnSidewalk(new Vector3(0f, 0f, 0f));
+                Vector3 streetSpawnPosition = World.GetNextPositionOnStreet(World.GetNextPositionOnStreet(new Vector3(0f, 0f, 0f)), true);
+                Vehicle vehicle = await World.CreateVehicle(vehModel, streetSpawnPosition, 0.0f);
+
+                Vector3 spawnPosition = World.GetNextPositionOnSidewalk(new Vector3(3f, 3f, 0f));
                 Ped ped = await World.CreatePed(model, spawnPosition, 180.0f);
 
-                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
-                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
+                while (!ped.IsInVehicle())
+                {
+                    ped.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+                    await BaseScript.Delay(0);
+                }
+                
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
                 // ped.Task.FightAgainstHatedTargets(20.0f);
 
@@ -88,13 +97,6 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 await BaseScript.Delay(0);
 
                 model.MarkAsNoLongerNeeded();
-                
-                Vector3 streetSpawnPosition = World.GetNextPositionOnStreet(ped.Position, true);
-                
-                Model vehModel = VehicleHash.Bodhi2;
-                await vehModel.Request(10000);
-
-                CitizenFX.Core.Vehicle vehicle = await World.CreateVehicle(vehModel, streetSpawnPosition, ped.Heading);
 
                 vehModel.MarkAsNoLongerNeeded();
 
@@ -105,12 +107,6 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 blip.IsShortRange = true;
                 blip.Scale = 0.0f;
                 blip.Name = "Looks angry... run?";
-
-                while(!ped.IsInVehicle())
-                {
-                    ped.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
-                    await BaseScript.Delay(0);
-                }
 
                 peds.Add(ped);
 

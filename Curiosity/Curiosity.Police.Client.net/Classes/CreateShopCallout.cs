@@ -122,14 +122,30 @@ namespace Curiosity.Police.Client.net.Classes
             suspectBlip.IsShortRange = true;
             suspectBlip.Alpha = 0;
 
-            bool equip = random.Next(1) == 1;
-
-            Suspect.Weapons.Give(WeaponHash.Pistol, 30, equip, true);
-            Suspect.Weapons.Give(WeaponHash.SawnOffShotgun, 30, !equip, true);
+            if (random.Next(1) == 1)
+            {
+                Suspect.Weapons.Give(WeaponHash.Pistol, 30, true, true);
+            }
+            else
+            {
+                Suspect.Weapons.Give(WeaponHash.SawnOffShotgun, 30, true, true);
+            }
 
             Suspect.Task.AimAt(ShopKeeper, -1);
             ShopKeeper.Task.Cower(-1);
             Suspect.Accuracy = random.Next(30, 100);
+
+            if (random.Next(0, 9) == 0)
+            {
+                Suspect.Accuracy = random.Next(30);
+                API.SetPedIsDrunk(Suspect.Handle, true);
+                if (!API.HasAnimSetLoaded("move_m@drunk@verydrunk"))
+                {
+                    API.RequestAnimSet("move_m@drunk@verydrunk");
+                }
+                API.SetPedMovementClipset(Suspect.Handle, "move_m@drunk@verydrunk", 0x3E800000);
+            }
+
             Suspect.AlwaysDiesOnLowHealth = true;
 
             uint suspectGroupHash = 0;
@@ -164,7 +180,16 @@ namespace Curiosity.Police.Client.net.Classes
 
             Suspect.Task.TurnTo(player.Character);
             await Client.Delay(150);
-            Suspect.Task.ShootAt(player.Character, -1, FiringPattern.BurstFirePistol);
+
+            if (Suspect.Weapons.HasWeapon(WeaponHash.SawnOffShotgun))
+            {
+                Suspect.Task.ShootAt(player.Character, -1, FiringPattern.Default);
+            }
+            else
+            {
+                Suspect.Task.ShootAt(player.Character, -1, FiringPattern.BurstFirePistol);
+            }
+
             suspectBlip.Alpha = 0;
             LocationBlip.ShowRoute = false;
 
