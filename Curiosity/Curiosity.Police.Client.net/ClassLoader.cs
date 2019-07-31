@@ -20,6 +20,7 @@ namespace Curiosity.Police.Client.net
 
             Classes.Player.PlayerInformation.Init();
             Environment.Job.DutyManager.Init();
+            Environment.Tasks.CalloutHandler.Init();
 
             // Developer
             Classes.Developer.Init();

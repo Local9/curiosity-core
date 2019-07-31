@@ -25,7 +25,8 @@
             City = 1,
             Country,
             Ocean,
-            Highway
+            Highway,
+            Rural
         }
     }
 }

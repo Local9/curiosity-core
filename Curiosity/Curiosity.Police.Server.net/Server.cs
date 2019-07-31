@@ -22,6 +22,8 @@ namespace Curiosity.Police.Server.net
 
             _server = this;
 
+            Environment.Callout.Init();
+
             Log.Success("Leaving Curiosity Police cter");
         }
 

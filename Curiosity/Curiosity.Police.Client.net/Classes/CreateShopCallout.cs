@@ -207,6 +207,8 @@ namespace Curiosity.Police.Client.net.Classes
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", string.Empty, 2);
             }
+
+            Tidy();
         }
 
         public static void EndCallout()
@@ -227,6 +229,12 @@ namespace Curiosity.Police.Client.net.Classes
                     LocationBlip.Delete();
             }
             Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", string.Empty, 2);
+            Tidy();
+        }
+
+        static void Tidy()
+        {
+            Environment.Tasks.CalloutHandler.CalloutEnded();
         }
     }
 }
