@@ -55,7 +55,7 @@ namespace Curiosity.Client.net.Classes.Menus
                 };
                 menu.AddMenuItem(cruiseControlMenuItem);
 
-                //MenuCheckboxItem hideThreeDSpeedoMenuItem = new MenuCheckboxItem("3D Speed-o-meter")
+                //MenuCheckboxItem hideThreeDSpeedoMenuItem = new MenuCheckboxItem("3D Speed-o-meter") // removed gimmik
                 //{
                 //    Checked = !Environment.UI.Speedometer3D.Hide,
                 //    Description = "Hide or show the 3D Speed-o-meter",
