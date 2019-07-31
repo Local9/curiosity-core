@@ -97,8 +97,11 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, pos.Z - 1.0f);
 
+                    Game.PlayerPed.IsPositionFrozen = true;
+                    Game.PlayerPed.Health = 200;
                     Game.PlayerPed.Resurrect();
                     await Client.Delay(1000);
+                    Game.PlayerPed.IsPositionFrozen = false;
 
                     Screen.Fading.FadeIn(1000);
 

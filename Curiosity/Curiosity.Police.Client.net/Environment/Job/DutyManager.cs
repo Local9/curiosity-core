@@ -38,6 +38,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
             {
                 IsPoliceJobActive = true;
                 Tasks.CalloutHandler.PlayerCanTakeCallout();
+
+                Game.PlayerPed.Weapons.Give(WeaponHash.Pistol, 120, false, true);
             }
             else
             {
@@ -45,7 +47,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 {
                     Classes.CreateShopCallout.EndCallout();
                 }
-
+                Game.PlayerPed.Weapons.RemoveAll();
                 IsPoliceJobActive = false;
                 Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
             }

@@ -122,7 +122,11 @@ namespace Curiosity.Police.Client.net.Classes
             suspectBlip.IsShortRange = true;
             suspectBlip.Alpha = 0;
 
-            Suspect.Weapons.Give(WeaponHash.Pistol, 30, true, true);
+            bool equip = random.Next(1) == 1;
+
+            Suspect.Weapons.Give(WeaponHash.Pistol, 30, equip, true);
+            Suspect.Weapons.Give(WeaponHash.SawnOffShotgun, 30, !equip, true);
+
             Suspect.Task.AimAt(ShopKeeper, -1);
             ShopKeeper.Task.Cower(-1);
             Suspect.Accuracy = random.Next(30, 100);
@@ -161,7 +165,7 @@ namespace Curiosity.Police.Client.net.Classes
             Suspect.Task.TurnTo(player.Character);
             await Client.Delay(150);
             Suspect.Task.ShootAt(player.Character, -1, FiringPattern.BurstFirePistol);
-            suspectBlip.Alpha = 255;
+            suspectBlip.Alpha = 0;
             LocationBlip.ShowRoute = false;
 
             CalloutCompleted();
