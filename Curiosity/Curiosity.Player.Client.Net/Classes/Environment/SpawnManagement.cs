@@ -100,6 +100,14 @@ namespace Curiosity.Client.net.Classes.Environment
                     Game.PlayerPed.IsPositionFrozen = true;
                     Game.PlayerPed.Health = 200;
                     Game.PlayerPed.Resurrect();
+
+                    while(Game.PlayerPed.IsDead)
+                    {
+                        await Client.Delay(0);
+                        Game.PlayerPed.Health = 200;
+                        Game.PlayerPed.Resurrect();
+                    }
+
                     await Client.Delay(1000);
                     Game.PlayerPed.IsPositionFrozen = false;
 

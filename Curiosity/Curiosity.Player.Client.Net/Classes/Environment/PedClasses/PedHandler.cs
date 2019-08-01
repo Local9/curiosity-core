@@ -68,8 +68,13 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 Vector3 streetSpawnPosition = World.GetNextPositionOnStreet(World.GetNextPositionOnStreet(new Vector3(0f, 0f, 0f)), true);
                 Vehicle vehicle = await World.CreateVehicle(vehModel, streetSpawnPosition, 0.0f);
 
+                vehModel.MarkAsNoLongerNeeded();
+
                 Vector3 spawnPosition = World.GetNextPositionOnSidewalk(new Vector3(3f, 3f, 0f));
                 Ped ped = await World.CreatePed(model, spawnPosition, 180.0f);
+
+                model.MarkAsNoLongerNeeded();
+
 
                 while (!ped.IsInVehicle())
                 {
@@ -96,27 +101,37 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
                 await BaseScript.Delay(0);
 
-                model.MarkAsNoLongerNeeded();
-
-                vehModel.MarkAsNoLongerNeeded();
-
                 Blip blip = ped.AttachBlip();
                 blip.Sprite = BlipSprite.Enemy;
                 blip.Color = BlipColor.Red;
                 blip.IsFriendly = false;
-                blip.IsShortRange = true;
-                blip.Scale = 0.0f;
+                blip.IsShortRange = false;
+                blip.Alpha = 0;
                 blip.Name = "Looks angry... run?";
 
-                peds.Add(ped);
+                while (ped.IsAlive)
+                {
+                    if (!ped.IsNearEntity(Game.PlayerPed, new Vector3(15.0f, 15.0f, 15.0f)))
+                    {
+                        ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 40.0f, 1074528293);
+                    }
+                    else
+                    {
+                        await BaseScript.Delay(10);
+                        ped.Task.FightAgainst(Game.PlayerPed);
+                    }
 
-                if (peds.Count == 0)
-                {
-                    API.SetPedAsGroupLeader(ped.Handle, pedGroup);
-                }
-                else
-                {
-                    API.SetPedAsGroupMember(ped.Handle, pedGroup);
+                    await BaseScript.Delay(10);
+                    if (ped.IsDead)
+                    {
+                        if (ped.CurrentVehicle.Exists())
+                            ped.CurrentVehicle.Delete();
+
+                        ped.Weapons.RemoveAll();
+                        ped.AttachedBlip.Delete();
+                        ped.Delete();
+                        peds.Remove(ped);
+                    }
                 }
             }
             catch (Exception ex)
@@ -130,34 +145,16 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             try
             {
                 List<Ped> pedsToRun = peds;
-                for (var i = 0; i < pedsToRun.Count; i++)
+                foreach(Ped ped in pedsToRun)
                 {
+                    await BaseScript.Delay(10);
                     try
                     {
-                        if (!pedsToRun[i].IsNearEntity(Game.PlayerPed, new Vector3(15.0f, 15.0f, 15.0f)))
-                        {
-                            pedsToRun[i].Task.DriveTo(pedsToRun[i].CurrentVehicle, Game.PlayerPed.Position, 10.0f, 40.0f, 1074528293);
-                        }
-                        else
-                        {
-                            pedsToRun[i].AttachedBlip.Scale = 1.0f;
-                            pedsToRun[i].Task.FightAgainst(Game.PlayerPed);
-                        }
-
-                        if (pedsToRun[i].IsDead)
-                        {
-                            if (pedsToRun[i].CurrentVehicle.Exists())
-                                pedsToRun[i].CurrentVehicle.Delete();
-
-                            pedsToRun[i].Weapons.RemoveAll();
-                            pedsToRun[i].AttachedBlip.Delete();
-                            pedsToRun[i].Delete();
-                            peds.Remove(peds[i]);
-                        }
+                        
                     }
                     catch (Exception ex)
                     {
-                        peds.Remove(peds[i]);
+                        peds.Remove(ped);
                     }
                 }
 
