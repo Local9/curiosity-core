@@ -255,8 +255,10 @@ namespace Curiosity.Client.net
 
             API.NetworkResurrectLocalPlayer(402.668f, -1003.000f, -98.004f, 0.0f, true, false);
 
-            Vector3 safeCoord = new Vector3();
-            API.GetSafeCoordForPed(x, y, z, true, ref safeCoord, 16);
+            float groundZ = z;
+            API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
+            Vector3 safeCoord = new Vector3(x, y, groundZ);
+            API.GetSafeCoordForPed(x, y, groundZ, true, ref safeCoord, 16);
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
@@ -299,10 +301,7 @@ namespace Curiosity.Client.net
 
             if (safeCoord.IsZero)
             {
-                float groundZ = z;
-                API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
-                API.SetEntityCoordsNoOffset(playerPed, x, y, groundZ, false, false, false);
-                safeCoord = World.GetNextPositionOnSidewalk(new Vector3(x, y, z));
+                safeCoord = World.GetNextPositionOnSidewalk(new Vector3(x, y, groundZ));
             }
 
             Game.PlayerPed.IsPositionFrozen = false;
