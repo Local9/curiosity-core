@@ -257,7 +257,7 @@ namespace Curiosity.Client.net
             API.SetEntityCoordsNoOffset(playerPed, x, y, groundZ, false, false, false);
             API.NetworkResurrectLocalPlayer(x, y, groundZ, 0.0f, true, false);
 
-            Game.PlayerPed.Position = World.GetSafeCoordForPed(Game.PlayerPed.Position, true, 16);
+            Game.PlayerPed.Position = World.GetNextPositionOnSidewalk(Game.PlayerPed.Position);
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();

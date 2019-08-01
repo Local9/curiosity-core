@@ -30,6 +30,7 @@ namespace Curiosity.Client.net.Classes.Actions
             // test commands
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
+            API.RegisterCommand("die", new Action<int, List<object>, string>(Die), false);
 
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
             RegisterCommand("god", new Action<int, List<object>, string>((source, args, raw) =>
@@ -65,6 +66,11 @@ namespace Curiosity.Client.net.Classes.Actions
 
             }), false);
 
+        }
+
+        static void Die(int playerHandle, List<object> arguments, string raw)
+        {
+            Game.PlayerPed.Kill();
         }
 
         static async void KnifeCallout(int playerHandle, List<object> arguments, string raw)

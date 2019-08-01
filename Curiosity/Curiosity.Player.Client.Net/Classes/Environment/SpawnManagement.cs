@@ -118,6 +118,21 @@ namespace Curiosity.Client.net.Classes.Environment
                         await Client.Delay(0);
                     }
 
+                    //if (!Screen.Fading.IsFadedIn)
+                    //{
+                    //    UI.Notifications.LifeV(1, "EMS", "Medical Fees", "Shit... you're still fading in", 132);
+                    //}
+
+                    //if (Game.PlayerPed.IsDead)
+                    //{
+                    //    UI.Notifications.LifeV(1, "EMS", "Medical Fees", "Shit... you're dead", 132);
+                    //}
+
+                    //if (Game.Player.IsDead)
+                    //{
+                    //    UI.Notifications.LifeV(1, "EMS", "Medical Fees", "Shit... you're dead also?!", 132);
+                    //}
+
                     Client.TriggerServerEvent("curiosity:Server:Bank:MedicalFees");
                     UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You have been charged for your stay, please try to stay alive.", 132);
                 }
