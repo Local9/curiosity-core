@@ -79,7 +79,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
         static async Task OnMobileCreationTick()
         {
             if (IsMobilePhoneOpen)
-            {
+            { 
                 float scale = 0;
                 if (API.GetFollowPedCamViewMode() == 4)
                     scale = 0f;

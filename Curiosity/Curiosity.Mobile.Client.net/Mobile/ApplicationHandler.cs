@@ -80,6 +80,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
         {
             while (CurrentApp != null && !IsInKeyboard)
             {
+                Game.DisableControlThisFrame(0, Control.InteractionMenu);
                 if (CurrentAppScreen == null)
                 {
                     if (PreviousScreens == null)

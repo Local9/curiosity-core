@@ -371,11 +371,11 @@ namespace MenuAPI
                     }
                 }
             }
-            else
-            {
-                await BaseScript.Delay(0);
-                Debug.WriteLine($"IsPaused: {!Game.IsPaused}, !IsPauseMenuRestarting: {!IsPauseMenuRestarting()}, IsScreenFadedIn: {IsScreenFadedIn()}, !IsPlayerSwitchInProgress: {!IsPlayerSwitchInProgress()}, !IsDead: {!Game.PlayerPed.IsDead}, !DisableMenuButtons: {!DisableMenuButtons}");
-            }
+            //else
+            //{
+            //    await BaseScript.Delay(0);
+            //    //Debug.WriteLine($"IsPaused: {!Game.IsPaused}, !IsPauseMenuRestarting: {!IsPauseMenuRestarting()}, IsScreenFadedIn: {IsScreenFadedIn()}, !IsPlayerSwitchInProgress: {!IsPlayerSwitchInProgress()}, !IsDead: {!Game.PlayerPed.IsDead}, !DisableMenuButtons: {!DisableMenuButtons}");
+            //}
         }
 
         /// <summary>

@@ -201,6 +201,8 @@ namespace Curiosity.Client.net
 
             await Game.Player.ChangeModel(defaultModel);
             Game.PlayerPed.IsInvincible = true;
+            Game.PlayerPed.IsPositionFrozen = true;
+            Game.PlayerPed.Position = new Vector3(402.668f, -1003.000f, -98.004f);
 
             int playerPed = Game.PlayerPed.Handle;
 
@@ -251,13 +253,10 @@ namespace Curiosity.Client.net
             //    await Delay(0);
             //}
 
-            float groundZ = z;
-            API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
+            API.NetworkResurrectLocalPlayer(402.668f, -1003.000f, -98.004f, 0.0f, true, false);
 
-            API.SetEntityCoordsNoOffset(playerPed, x, y, groundZ, false, false, false);
-            API.NetworkResurrectLocalPlayer(x, y, groundZ, 0.0f, true, false);
-
-            Game.PlayerPed.Position = World.GetNextPositionOnSidewalk(Game.PlayerPed.Position);
+            Vector3 safeCoord = new Vector3();
+            API.GetSafeCoordForPed(x, y, z, true, ref safeCoord, 16);
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
@@ -298,7 +297,16 @@ namespace Curiosity.Client.net
                 ClearScreen();
             }
 
-            Game.PlayerPed.Position = new Vector3(x, y, groundZ);
+            if (safeCoord.IsZero)
+            {
+                float groundZ = z;
+                API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
+                API.SetEntityCoordsNoOffset(playerPed, x, y, groundZ, false, false, false);
+                safeCoord = World.GetNextPositionOnSidewalk(new Vector3(x, y, z));
+            }
+
+            Game.PlayerPed.IsPositionFrozen = false;
+            Game.PlayerPed.Position = safeCoord;
 
             int gameTimer = API.GetGameTimer();
 
