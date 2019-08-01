@@ -25,6 +25,13 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             client.RegisterEventHandler("curiosity:Client:Police:CalloutTaken", new Action(CalloutTaken));
             client.RegisterEventHandler("curiosity:Client:Police:CalloutEnded", new Action(PlayerCanTakeCallout));
             client.RegisterEventHandler("curiosity:Client:Police:CalloutStart", new Action<int, int>(CalloutStart));
+            client.RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
+        }
+
+        static void OnClientResourceStop(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+            Client.TriggerServerEvent("curiosity:Server:Police:CalloutEnded", PreviousCallout);
         }
 
         static void CalloutStart(int calloutId, int patrolZone)
@@ -64,6 +71,8 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             //    Log.Verbose($"TICK: PlayerCanTakeCallout");
 
             if (TickIsRegistered) return;
+
+            Client.TriggerServerEvent("curiosity:Server:Police:CalloutEnded", PreviousCallout);
 
             await Client.Delay(0);
             IsRunnningCallout = false;

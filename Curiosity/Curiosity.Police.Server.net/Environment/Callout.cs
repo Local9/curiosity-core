@@ -37,7 +37,13 @@ namespace Curiosity.Police.Server.net.Environment
         {
             lock(CalloutsActive)
             {
-                CalloutsActive.Remove(calloutId);
+                foreach(KeyValuePair<int, Tuple<string, int>> keyValuePair in CalloutsActive)
+                {
+                    if (keyValuePair.Value.Item1 == player.Handle)
+                    {
+                        CalloutsActive.Remove(calloutId);
+                    }
+                }
                 player.TriggerEvent("curiosity:Client:Police:CalloutEnded");
             }
         }
