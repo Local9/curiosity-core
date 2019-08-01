@@ -104,11 +104,13 @@ namespace Curiosity.Police.Client.net.Classes
             Blip shopKeeperBlip = ShopKeeper.AttachBlip();
             shopKeeperBlip.Alpha = 0;
             // TASK
+            await Client.Delay(0);
             ShopKeeper.Task.Wait(-1);
 
             await SuspectModel.Request(10000);
             Suspect = await World.CreatePed(SuspectModel, SuspectPosition, suspectHeading);
             SuspectModel.MarkAsNoLongerNeeded();
+            await Client.Delay(0);
 
             API.SetNetworkIdCanMigrate(Suspect.NetworkId, true);
             API.SetNetworkIdCanMigrate(ShopKeeper.NetworkId, true);
@@ -122,6 +124,8 @@ namespace Curiosity.Police.Client.net.Classes
             suspectBlip.IsShortRange = true;
             suspectBlip.Alpha = 0;
 
+            await Client.Delay(0);
+
             if (random.Next(1) == 1)
             {
                 Suspect.Weapons.Give(WeaponHash.Pistol, 30, true, true);
@@ -131,9 +135,13 @@ namespace Curiosity.Police.Client.net.Classes
                 Suspect.Weapons.Give(WeaponHash.SawnOffShotgun, 30, true, true);
             }
 
+            await Client.Delay(0);
+
             Suspect.Task.AimAt(ShopKeeper, -1);
             ShopKeeper.Task.Cower(-1);
             Suspect.Accuracy = random.Next(30, 100);
+
+            await Client.Delay(0);
 
             if (random.Next(0, 9) == 0)
             {
@@ -146,7 +154,9 @@ namespace Curiosity.Police.Client.net.Classes
                 API.SetPedMovementClipset(Suspect.Handle, "move_m@drunk@verydrunk", 0x3E800000);
             }
 
-            Suspect.AlwaysDiesOnLowHealth = true;
+            await Client.Delay(0);
+
+            Suspect.AlwaysDiesOnLowHealth = random.Next(1) == 1;
 
             uint suspectGroupHash = 0;
             API.AddRelationshipGroup("suspect", ref suspectGroupHash);
