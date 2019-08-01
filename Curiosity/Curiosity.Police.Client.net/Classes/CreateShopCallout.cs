@@ -78,7 +78,7 @@ namespace Curiosity.Police.Client.net.Classes
 
             SetupLocationBlip();
 
-            while (API.GetDistanceBetweenCoords(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, Location.X, Location.Y, Location.Z, false) > 500.0f)
+            while (API.GetDistanceBetweenCoords(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, Location.X, Location.Y, Location.Z, false) > 200.0f)
             {
                 LocationBlip.Name = string.Empty;
                 await Client.Delay(50);

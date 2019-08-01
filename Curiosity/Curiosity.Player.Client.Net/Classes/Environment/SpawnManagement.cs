@@ -58,16 +58,16 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     await Client.Delay(2000);
 
-                    Screen.Fading.FadeOut(1000);
+                    API.DoScreenFadeOut(1000);
 
-                    while (Screen.Fading.IsFadingOut)
+                    while (!API.IsScreenFadedOut())
                     {
                         await Client.Delay(0);
                     }
 
-                    Game.Player.WantedLevel = 0;
-                    Game.PlayerPed.ClearBloodDamage();
-                    Game.PlayerPed.ClearLastWeaponDamage();
+                    //Game.Player.WantedLevel = 0;
+                    //Game.PlayerPed.ClearBloodDamage();
+                    //Game.PlayerPed.ClearLastWeaponDamage();
 
                     int r = rnd.Next(hospitals.Count);
 
@@ -98,22 +98,17 @@ namespace Curiosity.Client.net.Classes.Environment
                     Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, pos.Z - 1.0f);
 
                     Game.PlayerPed.IsPositionFrozen = true;
-                    Game.PlayerPed.Health = 200;
-                    Game.PlayerPed.Resurrect();
-
-                    while(Game.PlayerPed.IsDead)
-                    {
-                        await Client.Delay(0);
-                        Game.PlayerPed.Health = 200;
-                        Game.PlayerPed.Resurrect();
-                    }
+                    //Game.PlayerPed.Health = 200;
+                    //Game.PlayerPed.Resurrect();
+                    API.NetworkResurrectLocalPlayer(pos.X, pos.Y, pos.Z - 1.0f, 0.0f, false, false);
+                    //API.ResurrectPed(Game.PlayerPed.Handle);
 
                     await Client.Delay(1000);
                     Game.PlayerPed.IsPositionFrozen = false;
 
-                    Screen.Fading.FadeIn(1000);
+                    API.DoScreenFadeIn(1000);
 
-                    while (Screen.Fading.IsFadingIn)
+                    while (!API.IsScreenFadedIn())
                     {
                         await Client.Delay(0);
                     }

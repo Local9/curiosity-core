@@ -35,16 +35,24 @@ namespace Curiosity.Police.Server.net.Environment
 
         static void OnCalloutEnded([FromSource]Player player, int calloutId)
         {
-            lock(CalloutsActive)
+            try
             {
-                foreach(KeyValuePair<int, Tuple<string, int>> keyValuePair in CalloutsActive)
+                lock (CalloutsActive)
                 {
-                    if (keyValuePair.Value.Item1 == player.Handle)
+                    Dictionary<int, Tuple<string, int>> listToRun = CalloutsActive;
+                    foreach (KeyValuePair<int, Tuple<string, int>> keyValuePair in listToRun)
                     {
-                        CalloutsActive.Remove(calloutId);
+                        if (keyValuePair.Value.Item1 == player.Handle)
+                        {
+                            CalloutsActive.Remove(calloutId);
+                        }
                     }
+                    player.TriggerEvent("curiosity:Client:Police:CalloutEnded");
                 }
-                player.TriggerEvent("curiosity:Client:Police:CalloutEnded");
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"OnCalloutEnded -> {ex.Message}");
             }
         }
     }
