@@ -68,7 +68,14 @@ namespace Curiosity.Client.net
                 await UpdateFrameSettings();
                 if (Game.PlayerPed.IsInVehicle())
                 {
-                    if (CurrentVehicle != Game.PlayerPed.CurrentVehicle)
+                    if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+                    {
+                        if (CurrentVehicle != Game.PlayerPed.CurrentVehicle)
+                        {
+                            CurrentVehicle = Game.PlayerPed.CurrentVehicle;
+                        }
+                    }
+                    else if (CurrentVehicle != Game.PlayerPed.CurrentVehicle)
                     {
                         if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
                         {
