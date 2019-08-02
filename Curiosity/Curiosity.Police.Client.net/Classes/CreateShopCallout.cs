@@ -105,7 +105,6 @@ namespace Curiosity.Police.Client.net.Classes
             shopKeeperBlip.Alpha = 0;
             // TASK
             await Client.Delay(0);
-            ShopKeeper.Task.Wait(-1);
 
             await SuspectModel.Request(10000);
             Suspect = await World.CreatePed(SuspectModel, SuspectPosition, suspectHeading);
@@ -114,8 +113,6 @@ namespace Curiosity.Police.Client.net.Classes
 
             API.SetNetworkIdCanMigrate(Suspect.NetworkId, true);
             API.SetNetworkIdCanMigrate(ShopKeeper.NetworkId, true);
-
-            // Suspect.Task.FightAgainstHatedTargets(30.0f);
 
             Blip suspectBlip = Suspect.AttachBlip();
             suspectBlip.Sprite = BlipSprite.Enemy;
@@ -137,9 +134,9 @@ namespace Curiosity.Police.Client.net.Classes
 
             await Client.Delay(0);
 
-            Suspect.Task.AimAt(ShopKeeper, -1);
             ShopKeeper.Task.Cower(-1);
             Suspect.Accuracy = random.Next(30, 100);
+            Suspect.DropsWeaponsOnDeath = false;
 
             await Client.Delay(0);
 
@@ -156,7 +153,7 @@ namespace Curiosity.Police.Client.net.Classes
 
             await Client.Delay(0);
 
-            Suspect.AlwaysDiesOnLowHealth = random.Next(1) == 1;
+            Suspect.AlwaysDiesOnLowHealth = random.Next(9) == 0;
 
             string group = "SUSPECT";
             RelationshipGroup suspectGroup = World.AddRelationshipGroup(group);
@@ -180,37 +177,6 @@ namespace Curiosity.Police.Client.net.Classes
             }
 
             await Client.Delay(50);
-
-            //Suspect.Task.WanderAround();
-
-            //while (!API.CanPedSeePed(Suspect.Handle, player.Character.Handle))
-            //{
-            //    if (API.IsPedInCombat(Suspect.Handle, player.Character.Handle))
-            //        break;
-
-            //    if (API.IsPedInCombat(player.Character.Handle, Suspect.Handle))
-            //        break;
-
-            //    if (API.IsPedFacingPed(player.Character.Handle, Suspect.Handle, 90.0f))
-            //        break;
-
-            //    if (API.IsPedFacingPed(Suspect.Handle, player.Character.Handle, 90.0f))
-            //        break;
-
-            //    await Client.Delay(50);
-            //}
-
-            //Suspect.Task.TurnTo(player.Character);
-            //await Client.Delay(150);
-
-            //if (Suspect.Weapons.HasWeapon(WeaponHash.SawnOffShotgun))
-            //{
-            //    Suspect.Task.ShootAt(player.Character, -1, FiringPattern.Default);
-            //}
-            //else
-            //{
-            //    Suspect.Task.ShootAt(player.Character, -1, FiringPattern.BurstFirePistol);
-            //}
 
             while (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location) > 40.0f)
             {
@@ -260,8 +226,6 @@ namespace Curiosity.Police.Client.net.Classes
                     API.SetBlipFade(LocationBlip.Handle, 0, 3000);
                     await Client.Delay(3000);
                     LocationBlip.Delete();
-
-                    // API.PlaySoundFrontend(-1, "FLIGHT_SCHOOL_LESSON_PASSED", "HUD_AWARDS", true);
 
                     Environment.Job.DutyManager.OnSetCallOutStatus(false);
 
