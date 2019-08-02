@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Helper;
 using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Police.Client.net.Classes
 {
@@ -10,6 +11,8 @@ namespace Curiosity.Police.Client.net.Classes
     {
         static Random random = new Random();
         static Client client = Client.GetInstance();
+
+        static List<Ped> Suspects = new List<Ped>();
 
         static string Name;
         static Vector3 Location;
@@ -100,80 +103,31 @@ namespace Curiosity.Police.Client.net.Classes
             await ShopKeeperModel.Request(10000);
             ShopKeeper = await World.CreatePed(ShopKeeperModel, ShopKeeperPosition, shopkeeperHeading);
             ShopKeeperModel.MarkAsNoLongerNeeded();
+            API.SetNetworkIdCanMigrate(ShopKeeper.NetworkId, true);
             // BLIP
             Blip shopKeeperBlip = ShopKeeper.AttachBlip();
             shopKeeperBlip.Alpha = 0;
+            ShopKeeper.Task.Cower(-1);
             // TASK
             await Client.Delay(0);
-
-            await SuspectModel.Request(10000);
-            Suspect = await World.CreatePed(SuspectModel, SuspectPosition, suspectHeading);
-            SuspectModel.MarkAsNoLongerNeeded();
-            await Client.Delay(0);
-
-            API.SetNetworkIdCanMigrate(Suspect.NetworkId, true);
-            API.SetNetworkIdCanMigrate(ShopKeeper.NetworkId, true);
-
-            Blip suspectBlip = Suspect.AttachBlip();
-            suspectBlip.Sprite = BlipSprite.Enemy;
-            suspectBlip.Color = BlipColor.Red;
-            suspectBlip.Priority = 10;
-            suspectBlip.IsShortRange = true;
-            suspectBlip.Alpha = 0;
-
-            await Client.Delay(0);
-
-            if (random.Next(1) == 1)
-            {
-                Suspect.Weapons.Give(WeaponHash.Pistol, 30, true, true);
-            }
-            else
-            {
-                Suspect.Weapons.Give(WeaponHash.SawnOffShotgun, 30, true, true);
-            }
-
-            await Client.Delay(0);
-
-            ShopKeeper.Task.Cower(-1);
-            Suspect.Accuracy = random.Next(30, 100);
-            Suspect.DropsWeaponsOnDeath = false;
-
-            await Client.Delay(0);
-
-            if (random.Next(0, 9) == 0)
-            {
-                Suspect.Accuracy = random.Next(30);
-                API.SetPedIsDrunk(Suspect.Handle, true);
-                if (!API.HasAnimSetLoaded("move_m@drunk@verydrunk"))
-                {
-                    API.RequestAnimSet("move_m@drunk@verydrunk");
-                }
-                API.SetPedMovementClipset(Suspect.Handle, "move_m@drunk@verydrunk", 0x3E800000);
-            }
-
-            await Client.Delay(0);
-
-            Suspect.AlwaysDiesOnLowHealth = random.Next(9) == 0;
 
             string group = "SUSPECT";
             RelationshipGroup suspectGroup = World.AddRelationshipGroup(group);
             suspectGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Hate, true);
-            Suspect.RelationshipGroup = suspectGroup;
 
-            while (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location) > 100.0f)
+            await SuspectModel.Request(10000);
+            Ped ped = await CreatePed.Create(suspectModel, SuspectPosition, suspectHeading, suspectGroup);
+            SuspectModel.MarkAsNoLongerNeeded();
+
+            Suspects.Add(ped);
+
+            if (random.Next(1) == 1)
             {
-                await Client.Delay(50);
-            }
-
-            CitizenFX.Core.Player player = new CitizenFX.Core.Player(API.GetNearestPlayerToEntity(Suspect.Handle));
-
-            if (NativeWrappers.EntityActive(Suspect.Handle))
-            {
-                API.SetEntityOnlyDamagedByPlayer(Suspect.Handle, true);
-                API.SetBlockingOfNonTemporaryEvents(Suspect.Handle, false);
-                API.SetPedSphereDefensiveArea(Suspect.Handle, location.X, location.Y, Location.Z, 20.0f, true, false);
-                API.TaskCombatHatedTargetsAroundPedTimed(Suspect.Handle, 130.0f, -1, 0);
-                API.N_0x2016c603d6b8987c(Suspect.Handle, false);
+                Model m = random.Next(1) == 1 ? PedHash.ArmGoon01GMM : PedHash.ArmGoon02GMY;
+                await m.Request(10000);
+                Ped p = await CreatePed.Create(m, Location, suspectHeading, suspectGroup);
+                m.MarkAsNoLongerNeeded();
+                Suspects.Add(p);
             }
 
             await Client.Delay(50);
@@ -211,26 +165,35 @@ namespace Curiosity.Police.Client.net.Classes
                     await Client.Delay(100);
                 }
 
-                if (Suspect.IsDead)
+                int PedsAlive = Suspects.Count;
+
+                while(PedsAlive > 0)
                 {
-                    if (NativeWrappers.EntityActive(Suspect.Handle))
+                    List<Ped> peds = Suspects;
+                    foreach(Ped ped in peds)
                     {
-                        Suspect.AttachedBlip.Delete();
-                        ShopKeeper.Task.ReactAndFlee(Suspect);
-                        ShopKeeper.MarkAsNoLongerNeeded();
-                        Suspect.MarkAsNoLongerNeeded();
+                        if (ped.IsDead)
+                        {
+                            ped.AttachedBlip.Delete();
+                            ShopKeeper.Task.ReactAndFlee(ped);
+                            ShopKeeper.MarkAsNoLongerNeeded();
+                            ped.MarkAsNoLongerNeeded();
+                            PedsAlive--;
+                        }
+                        await Client.Delay(50);
                     }
-
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
-                    API.ShowTickOnBlip(LocationBlip.Handle, true);
-                    API.SetBlipFade(LocationBlip.Handle, 0, 3000);
-                    await Client.Delay(3000);
-                    LocationBlip.Delete();
-
-                    Environment.Job.DutyManager.OnSetCallOutStatus(false);
-
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", string.Empty, 2);
+                    await Client.Delay(50);
                 }
+                
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
+                API.ShowTickOnBlip(LocationBlip.Handle, true);
+                API.SetBlipFade(LocationBlip.Handle, 0, 3000);
+                await Client.Delay(3000);
+                LocationBlip.Delete();
+
+                Environment.Job.DutyManager.OnSetCallOutStatus(false);
+
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", string.Empty, 2);
 
                 Tidy();
             }
@@ -244,13 +207,15 @@ namespace Curiosity.Police.Client.net.Classes
         {
             try
             {
-                if (NativeWrappers.EntityActive(Suspect.Handle))
+                List<Ped> peds = Suspects;
+                foreach (Ped ped in peds)
                 {
-                    Suspect.AttachedBlip.Delete();
-                    ShopKeeper.Task.ReactAndFlee(Suspect);
+                    ped.AttachedBlip.Delete();
+                    ShopKeeper.Task.ReactAndFlee(ped);
                     ShopKeeper.MarkAsNoLongerNeeded();
-                    Suspect.MarkAsNoLongerNeeded();
+                    ped.MarkAsNoLongerNeeded();
                 }
+
                 if (LocationBlip != null)
                 {
                     if (LocationBlip.Exists())
@@ -267,6 +232,7 @@ namespace Curiosity.Police.Client.net.Classes
 
         static void Tidy()
         {
+            Suspects.Clear();
             Environment.Tasks.CalloutHandler.CalloutEnded();
         }
     }

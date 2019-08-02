@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CreatePed.cs" />
     <Compile Include="Classes\CreateShopCallout.cs" />
     <Compile Include="Classes\Developer.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />

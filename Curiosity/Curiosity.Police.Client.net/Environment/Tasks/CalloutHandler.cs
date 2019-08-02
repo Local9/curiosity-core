@@ -10,8 +10,8 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 {
     class CalloutHandler
     {
-        static int FIVE_MINUTES = ((1000 * 60) * 3);
-        // static int FIVE_MINUTES = 15000; // DEV USE
+        /// static int FIVE_MINUTES = ((1000 * 60) * 3);
+        static int FIVE_MINUTES = 15000; // DEV USE
         static Client client = Client.GetInstance();
         static Random random = new Random();
         static int PreviousCallout = -1;

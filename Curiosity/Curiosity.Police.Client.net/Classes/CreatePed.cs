@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Shared.Client.net.Enums;
+
+namespace Curiosity.Police.Client.net.Classes
+{
+    class CreatePed
+    {
+        static Random random = new Random();
+
+        public static async Task<Ped> Create(Model suspectModel, Vector3 suspectPosition, float suspectHeading, RelationshipGroup relationshipGroup)
+        {
+            Ped createdPed = await World.CreatePed(suspectModel, suspectPosition, suspectHeading);
+            
+            API.SetNetworkIdCanMigrate(createdPed.NetworkId, true);
+
+            Blip suspectBlip = createdPed.AttachBlip();
+            suspectBlip.Sprite = BlipSprite.Enemy;
+            suspectBlip.Color = BlipColor.Red;
+            suspectBlip.Priority = 10;
+            suspectBlip.IsShortRange = true;
+            suspectBlip.Alpha = 0;
+
+            createdPed.Armor = random.Next(100);
+
+            if (random.Next(1) == 1)
+            {
+                createdPed.Weapons.Give(WeaponHash.Pistol, 30, true, true);
+            }
+            else
+            {
+                createdPed.Weapons.Give(WeaponHash.SawnOffShotgun, 30, true, true);
+            }
+
+            createdPed.Accuracy = random.Next(30, 100);
+            createdPed.DropsWeaponsOnDeath = false;
+
+            if (random.Next(0, 9) == 0)
+            {
+                createdPed.Accuracy = random.Next(30);
+                API.SetPedIsDrunk(createdPed.Handle, true);
+                if (!API.HasAnimSetLoaded("move_m@drunk@verydrunk"))
+                {
+                    API.RequestAnimSet("move_m@drunk@verydrunk");
+                }
+                API.SetPedMovementClipset(createdPed.Handle, "move_m@drunk@verydrunk", 0x3E800000);
+            }
+
+            createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
+
+            createdPed.RelationshipGroup = relationshipGroup;
+
+            API.SetEntityOnlyDamagedByPlayer(createdPed.Handle, true);
+            API.SetBlockingOfNonTemporaryEvents(createdPed.Handle, false);
+            API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 2.5f, true, false);
+            API.TaskCombatHatedTargetsAroundPedTimed(createdPed.Handle, 50.0f, -1, 0);
+            API.N_0x2016c603d6b8987c(createdPed.Handle, false);
+
+            return createdPed;
+        }
+    }
+}
