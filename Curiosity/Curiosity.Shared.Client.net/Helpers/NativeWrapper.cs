@@ -150,6 +150,15 @@ namespace Curiosity.Shared.Client.net.Helper
             return Function.Call<Vector3>(Hash.GET_ENTITY_COORDS, entity);
         }
 
+        public static bool EntityActive(int entityId)
+        {
+            if (!API.DoesEntityExist(entityId))
+            {
+                return false;
+            }
+            return !API.IsEntityDead(entityId);
+        }
+
         static public void Draw3DText(float x, float y, float z, string message)
         {
             float distance = (float)Math.Sqrt(GameplayCamera.Position.DistanceToSquared(new Vector3(x, y, z)));

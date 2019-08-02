@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Curiosity.Police.Server.net.Environment
     {
         static Server server = Server.GetInstance();
 
-        static Dictionary<int, Tuple<string, int>> CalloutsActive = new Dictionary<int, Tuple<string, int>>();
+        static ConcurrentDictionary<int, Tuple<string, int>> CalloutsActive = new ConcurrentDictionary<int, Tuple<string, int>>();
 
         public static void Init()
         {
@@ -28,7 +29,7 @@ namespace Curiosity.Police.Server.net.Environment
             }
             else
             {
-                CalloutsActive.Add(calloutId, new Tuple<string, int>(player.Handle, patrolZone));
+                CalloutsActive.TryAdd(calloutId, new Tuple<string, int>(player.Handle, patrolZone));
                 player.TriggerEvent("curiosity:Client:Police:CalloutStart", calloutId, patrolZone);
             }
         }
@@ -37,18 +38,16 @@ namespace Curiosity.Police.Server.net.Environment
         {
             try
             {
-                lock (CalloutsActive)
+                ConcurrentDictionary<int, Tuple<string, int>> listToRun = CalloutsActive;
+                foreach (var keyValuePair in listToRun)
                 {
-                    Dictionary<int, Tuple<string, int>> listToRun = CalloutsActive;
-                    foreach (KeyValuePair<int, Tuple<string, int>> keyValuePair in listToRun)
+                    if (keyValuePair.Value.Item1 == player.Handle)
                     {
-                        if (keyValuePair.Value.Item1 == player.Handle)
-                        {
-                            CalloutsActive.Remove(calloutId);
-                        }
+                        Tuple<string, int> thing;
+                        CalloutsActive.TryRemove(calloutId, out thing);
                     }
-                    player.TriggerEvent("curiosity:Client:Police:CalloutEnded");
                 }
+                player.TriggerEvent("curiosity:Client:Police:CalloutEnded");
             }
             catch (Exception ex)
             {

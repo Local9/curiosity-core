@@ -158,49 +158,65 @@ namespace Curiosity.Police.Client.net.Classes
 
             Suspect.AlwaysDiesOnLowHealth = random.Next(1) == 1;
 
-            uint suspectGroupHash = 0;
-            API.AddRelationshipGroup("suspect", ref suspectGroupHash);
-            API.SetRelationshipBetweenGroups(5, suspectGroupHash, Client.PlayerGroupHash);
-            API.SetRelationshipBetweenGroups(5, Client.PlayerGroupHash, suspectGroupHash);
-            
-            while (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location) > 40.0f)
+            string group = "SUSPECT";
+            RelationshipGroup suspectGroup = World.AddRelationshipGroup(group);
+            suspectGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Hate, true);
+            Suspect.RelationshipGroup = suspectGroup;
+
+            while (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location) > 100.0f)
             {
                 await Client.Delay(50);
             }
 
             CitizenFX.Core.Player player = new CitizenFX.Core.Player(API.GetNearestPlayerToEntity(Suspect.Handle));
-            Suspect.Task.WanderAround();
 
-            while (!API.CanPedSeePed(Suspect.Handle, player.Character.Handle))
+            if (NativeWrappers.EntityActive(Suspect.Handle))
             {
-                if (API.IsPedInCombat(Suspect.Handle, player.Character.Handle))
-                    break;
+                API.SetEntityOnlyDamagedByPlayer(Suspect.Handle, true);
+                API.SetBlockingOfNonTemporaryEvents(Suspect.Handle, false);
+                API.SetPedSphereDefensiveArea(Suspect.Handle, location.X, location.Y, Location.Z, 20.0f, true, false);
+                API.TaskCombatHatedTargetsAroundPedTimed(Suspect.Handle, 130.0f, -1, 0);
+                API.N_0x2016c603d6b8987c(Suspect.Handle, false);
+            }
 
-                if (API.IsPedInCombat(player.Character.Handle, Suspect.Handle))
-                    break;
+            await Client.Delay(50);
 
-                if (API.IsPedFacingPed(player.Character.Handle, Suspect.Handle, 90.0f))
-                    break;
+            //Suspect.Task.WanderAround();
 
-                if (API.IsPedFacingPed(Suspect.Handle, player.Character.Handle, 90.0f))
-                    break;
+            //while (!API.CanPedSeePed(Suspect.Handle, player.Character.Handle))
+            //{
+            //    if (API.IsPedInCombat(Suspect.Handle, player.Character.Handle))
+            //        break;
 
+            //    if (API.IsPedInCombat(player.Character.Handle, Suspect.Handle))
+            //        break;
+
+            //    if (API.IsPedFacingPed(player.Character.Handle, Suspect.Handle, 90.0f))
+            //        break;
+
+            //    if (API.IsPedFacingPed(Suspect.Handle, player.Character.Handle, 90.0f))
+            //        break;
+
+            //    await Client.Delay(50);
+            //}
+
+            //Suspect.Task.TurnTo(player.Character);
+            //await Client.Delay(150);
+
+            //if (Suspect.Weapons.HasWeapon(WeaponHash.SawnOffShotgun))
+            //{
+            //    Suspect.Task.ShootAt(player.Character, -1, FiringPattern.Default);
+            //}
+            //else
+            //{
+            //    Suspect.Task.ShootAt(player.Character, -1, FiringPattern.BurstFirePistol);
+            //}
+
+            while (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location) > 40.0f)
+            {
                 await Client.Delay(50);
             }
 
-            Suspect.Task.TurnTo(player.Character);
-            await Client.Delay(150);
-
-            if (Suspect.Weapons.HasWeapon(WeaponHash.SawnOffShotgun))
-            {
-                Suspect.Task.ShootAt(player.Character, -1, FiringPattern.Default);
-            }
-            else
-            {
-                Suspect.Task.ShootAt(player.Character, -1, FiringPattern.BurstFirePistol);
-            }
-
-            suspectBlip.Alpha = 0;
             LocationBlip.ShowRoute = false;
 
             CalloutCompleted();
@@ -222,53 +238,67 @@ namespace Curiosity.Police.Client.net.Classes
 
         static async void CalloutCompleted()
         {
-            while (Suspect.IsAlive)
+            try
             {
-                await Client.Delay(100);
-            }
+                while (Suspect.IsAlive)
+                {
+                    await Client.Delay(100);
+                }
 
-            if (Suspect.IsDead)
+                if (Suspect.IsDead)
+                {
+                    if (NativeWrappers.EntityActive(Suspect.Handle))
+                    {
+                        Suspect.AttachedBlip.Delete();
+                        ShopKeeper.Task.ReactAndFlee(Suspect);
+                        ShopKeeper.MarkAsNoLongerNeeded();
+                        Suspect.MarkAsNoLongerNeeded();
+                    }
+
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
+                    API.ShowTickOnBlip(LocationBlip.Handle, true);
+                    API.SetBlipFade(LocationBlip.Handle, 0, 3000);
+                    await Client.Delay(3000);
+                    LocationBlip.Delete();
+
+                    // API.PlaySoundFrontend(-1, "FLIGHT_SCHOOL_LESSON_PASSED", "HUD_AWARDS", true);
+
+                    Environment.Job.DutyManager.OnSetCallOutStatus(false);
+
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", string.Empty, 2);
+                }
+
+                Tidy();
+            }
+            catch (Exception ex)
             {
-                Suspect.AttachedBlip.Delete();
-                ShopKeeper.Task.ReactAndFlee(Suspect);
-                ShopKeeper.MarkAsNoLongerNeeded();
-                Suspect.MarkAsNoLongerNeeded();
-
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
-                API.ShowTickOnBlip(LocationBlip.Handle, true);
-                API.SetBlipFade(LocationBlip.Handle, 0, 3000);
-                await Client.Delay(3000);
-                LocationBlip.Delete();
-
-                // API.PlaySoundFrontend(-1, "FLIGHT_SCHOOL_LESSON_PASSED", "HUD_AWARDS", true);
-
-                Environment.Job.DutyManager.OnSetCallOutStatus(false);
-
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", string.Empty, 2);
+                // 
             }
-
-            Tidy();
         }
 
         public static void EndCallout()
         {
-            if (Suspect != null)
+            try
             {
-                if (Suspect.Exists())
+                if (NativeWrappers.EntityActive(Suspect.Handle))
                 {
                     Suspect.AttachedBlip.Delete();
                     ShopKeeper.Task.ReactAndFlee(Suspect);
                     ShopKeeper.MarkAsNoLongerNeeded();
                     Suspect.MarkAsNoLongerNeeded();
                 }
+                if (LocationBlip != null)
+                {
+                    if (LocationBlip.Exists())
+                        LocationBlip.Delete();
+                }
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", string.Empty, 2);
+                Tidy();
             }
-            if (LocationBlip != null)
+            catch (Exception ex)
             {
-                if (LocationBlip.Exists())
-                    LocationBlip.Delete();
+                // 
             }
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", string.Empty, 2);
-            Tidy();
         }
 
         static void Tidy()
