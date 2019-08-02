@@ -30,7 +30,7 @@ namespace Curiosity.Police.Client.net.Classes
 
             createdPed.Armor = random.Next(100);
 
-            if (random.Next(1) == 1)
+            if (random.Next(2) == 1)
             {
                 createdPed.Weapons.Give(WeaponHash.Pistol, 30, true, true);
             }
@@ -59,7 +59,7 @@ namespace Curiosity.Police.Client.net.Classes
 
             API.SetEntityOnlyDamagedByPlayer(createdPed.Handle, true);
             API.SetBlockingOfNonTemporaryEvents(createdPed.Handle, false);
-            API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 2.5f, true, false);
+            API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 30.0f, true, false);
             API.TaskCombatHatedTargetsAroundPedTimed(createdPed.Handle, 50.0f, -1, 0);
             API.N_0x2016c603d6b8987c(createdPed.Handle, false);
 

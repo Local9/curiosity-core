@@ -10,8 +10,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 {
     class CalloutHandler
     {
-        /// static int FIVE_MINUTES = ((1000 * 60) * 3);
-        static int FIVE_MINUTES = 15000; // DEV USE
+        static int FIVE_MINUTES = ((1000 * 60) * 3);
         static Client client = Client.GetInstance();
         static Random random = new Random();
         static int PreviousCallout = -1;
@@ -36,7 +35,6 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
         static void CalloutStart(int calloutId, int patrolZone)
         {
-
             PatrolZone pz = (PatrolZone)patrolZone;
 
             if (pz == PatrolZone.Rural) // 50/50 chance of being called out to the middle of the map
@@ -78,7 +76,14 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             IsRunnningCallout = false;
             TimeStampOfLastCallout = API.GetGameTimer();
 
+            //if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+            //{
+            //    FIVE_MINUTES = 5000;
+            //}
+            //else
+            //{
             FIVE_MINUTES = random.Next(60000, 300000);
+            //}
 
             client.RegisterTickHandler(SelectCallout);
             TickIsRegistered = true;
