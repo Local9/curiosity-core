@@ -181,12 +181,9 @@ namespace Curiosity.Police.Client.net.Classes
                         await Client.Delay(100);
                         if (ped.IsDead) // TODO : Why was this null?
                         {
-                            if (NativeWrappers.EntityActive(ped.Handle))
-                            {
-                                ped.AttachedBlip.Delete();
-                                ped.MarkAsNoLongerNeeded();
-                                PedsAlive--;
-                            }
+                            ped.AttachedBlip.Delete();
+                            ped.MarkAsNoLongerNeeded();
+                            PedsAlive--;
                         }
                     }
                 }
