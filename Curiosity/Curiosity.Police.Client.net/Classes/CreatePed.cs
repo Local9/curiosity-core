@@ -17,9 +17,12 @@ namespace Curiosity.Police.Client.net.Classes
 
         public static async Task<Ped> Create(Model suspectModel, Vector3 suspectPosition, float suspectHeading, RelationshipGroup relationshipGroup)
         {
+            await Client.Delay(0);
+
             Ped createdPed = await World.CreatePed(suspectModel, suspectPosition, suspectHeading);
-            
             API.SetNetworkIdCanMigrate(createdPed.NetworkId, true);
+
+            await Client.Delay(0);
 
             Blip suspectBlip = createdPed.AttachBlip();
             suspectBlip.Sprite = BlipSprite.Enemy;
@@ -27,6 +30,8 @@ namespace Curiosity.Police.Client.net.Classes
             suspectBlip.Priority = 10;
             suspectBlip.IsShortRange = true;
             suspectBlip.Alpha = 0;
+
+            await Client.Delay(0);
 
             createdPed.Armor = random.Next(100);
 
@@ -41,6 +46,9 @@ namespace Curiosity.Police.Client.net.Classes
 
             createdPed.Accuracy = random.Next(30, 100);
             createdPed.DropsWeaponsOnDeath = false;
+            createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
+
+            await Client.Delay(0);
 
             if (random.Next(0, 9) == 0)
             {
@@ -53,15 +61,16 @@ namespace Curiosity.Police.Client.net.Classes
                 API.SetPedMovementClipset(createdPed.Handle, "move_m@drunk@verydrunk", 0x3E800000);
             }
 
-            createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
+            await Client.Delay(0);
 
             createdPed.RelationshipGroup = relationshipGroup;
-
             API.SetEntityOnlyDamagedByPlayer(createdPed.Handle, true);
             API.SetBlockingOfNonTemporaryEvents(createdPed.Handle, false);
             API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 30.0f, true, false);
             API.TaskCombatHatedTargetsAroundPedTimed(createdPed.Handle, 50.0f, -1, 0);
             API.N_0x2016c603d6b8987c(createdPed.Handle, false);
+
+            await Client.Delay(0);
 
             return createdPed;
         }
