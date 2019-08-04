@@ -188,7 +188,7 @@ namespace Curiosity.Police.Client.net.Classes
                                 // API.PlaystatsAwardXp(10, -1859646258, -294598082);
                             }
 
-                            Vector3 dmgPos = ped.Bones.LastDamaged.Position;
+                            Vector3 dmgPos = ped.Position;
                             string message = "10xp";
                             if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head)
                             {
@@ -202,7 +202,14 @@ namespace Curiosity.Police.Client.net.Classes
                     }
                 }
 
-                ShopKeeper.Task.FleeFrom(Game.PlayerPed);
+                if (ShopKeeper.IsAlive)
+                {
+                    ShopKeeper.Task.FleeFrom(Game.PlayerPed);
+                }
+                else
+                {
+                    NativeWrappers.Draw3DTextTimeout(ShopKeeper.Position.X, ShopKeeper.Position.Y, ShopKeeper.Position.Z, "-30xp", 2500);
+                }
                 ShopKeeper.MarkAsNoLongerNeeded();
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);

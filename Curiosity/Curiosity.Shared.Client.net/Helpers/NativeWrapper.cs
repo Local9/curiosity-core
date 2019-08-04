@@ -167,7 +167,7 @@ namespace Curiosity.Shared.Client.net.Helper
             while (TimeoutStateValue)
             {
                 await BaseScript.Delay(0);
-                Draw3DText(x, y, z, message);
+                Draw3DText(x, y, z, message, 40.0f);
             }
         }
 
@@ -178,10 +178,10 @@ namespace Curiosity.Shared.Client.net.Helper
             TimeoutStateValue = false;
         }
 
-        static public void Draw3DText(float x, float y, float z, string message)
+        static public void Draw3DText(float x, float y, float z, string message, float scaleMod = 20.0f)
         {
             float distance = (float)Math.Sqrt(GameplayCamera.Position.DistanceToSquared(new Vector3(x, y, z)));
-            float scale = ((1 / distance) * 2) * GameplayCamera.FieldOfView / 20.0f;
+            float scale = ((1 / distance) * 2) * GameplayCamera.FieldOfView / scaleMod;
 
             if (distance > 20.0f)
             {
