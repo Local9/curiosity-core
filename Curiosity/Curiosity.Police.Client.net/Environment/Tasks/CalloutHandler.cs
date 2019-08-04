@@ -144,7 +144,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
         static void GetRandomCallout()
         {
-            if (random.Next(1) == 1) // 50/50 chance of being called out to the middle of the map
+            if (random.Next(2) == 1) // 50/50 chance of being called out to the middle of the map
             {
                 GetRandomCallout(ClassLoader.RuralCallOuts, PatrolZone.Rural);
             }
