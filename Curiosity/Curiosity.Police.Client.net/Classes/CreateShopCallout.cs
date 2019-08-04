@@ -184,9 +184,10 @@ namespace Curiosity.Police.Client.net.Classes
                         if (pedToCheck.IsDead) // TODO : Why was this null?
                         {
                             pedToCheck.MarkAsNoLongerNeeded();
-                            PedsAlive--;
+                            PedsAlive = PedsAlive - 1;
                         }
                     }
+                    CitizenFX.Core.UI.Screen.ShowNotification($"PED A: {PedsAlive}");
                 }
 
                 ShopKeeper.Task.FleeFrom(Game.PlayerPed);
