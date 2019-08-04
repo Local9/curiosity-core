@@ -307,7 +307,7 @@ namespace Curiosity.Police.Client.net.Classes
                 Client.TriggerServerEvent("curiosity:Server:Skills:Decrease", $"{Enums.Skills.policexp}", xp);
                 message = $"-{xp}xp";
             }
-            NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, timeout);
+            NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, timeout, 40.0f);
         }
     }
 }
