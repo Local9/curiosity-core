@@ -189,12 +189,12 @@ namespace Curiosity.Police.Client.net.Classes
                             }
 
                             Vector3 dmgPos = ped.Position;
-                            string message = "10xp";
+                            int experience = 10;
                             if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head)
                             {
-                                message = "20xp";
+                                experience = 20;
                             }
-                            NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, 2500);
+                            Experience(dmgPos, experience, 2500, true);
 
                             ped.MarkAsNoLongerNeeded();
                             Suspects.Remove(ped);
@@ -208,7 +208,7 @@ namespace Curiosity.Police.Client.net.Classes
                 }
                 else
                 {
-                    NativeWrappers.Draw3DTextTimeout(ShopKeeper.Position.X, ShopKeeper.Position.Y, ShopKeeper.Position.Z, "-30xp", 2500);
+                    Experience(ShopKeeper.Position, 30, 2500, false);
                 }
                 ShopKeeper.MarkAsNoLongerNeeded();
 
@@ -261,6 +261,21 @@ namespace Curiosity.Police.Client.net.Classes
         {
             Suspects.Clear();
             Environment.Tasks.CalloutHandler.CalloutEnded();
+        }
+
+        static void Experience(Vector3 dmgPos, int xp, int timeout, bool increase)
+        {
+            string message = $"{xp}xp";
+            if (increase)
+            {
+                Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", xp);
+            }
+            else
+            {
+                Client.TriggerServerEvent("curiosity:Server:Skills:Decrease", $"{Enums.Skills.policexp}", xp);
+                message = $"-{xp}xp";
+            }
+            NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, timeout);
         }
     }
 }

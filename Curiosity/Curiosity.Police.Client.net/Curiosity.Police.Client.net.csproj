@@ -56,6 +56,7 @@
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Enums\CalloutType.cs" />
+    <Compile Include="Enums\Skills.cs" />
     <Compile Include="Environment\Job\DutyManager.cs" />
     <Compile Include="Environment\Tasks\CalloutHandler.cs" />
     <Compile Include="Environment\Tasks\Callouts\City\Shops\DavisAve.cs" />

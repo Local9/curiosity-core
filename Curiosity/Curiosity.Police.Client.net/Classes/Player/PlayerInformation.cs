@@ -56,5 +56,15 @@ namespace Curiosity.Police.Client.net.Classes.Player
         {
             return (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         }
+
+        public static void IncreaseXp(string skill, int exp)
+        {
+            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", skill, exp);
+        }
+
+        public static void DecreaseXp(string skill, int exp)
+        {
+            Client.TriggerServerEvent("curiosity:Server:Skills:Decrease", skill, exp);
+        }
     }
 }
