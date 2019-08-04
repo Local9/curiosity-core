@@ -13,6 +13,8 @@ namespace Curiosity.Shared.Client.net.Helper
     /// </summary>
     public static class NativeWrappers
     {
+        public static bool TimeoutStateValue = false;
+
         public static void DrawHelpText(string message)
         {
             SetTextComponentFormat("STRING");
@@ -157,6 +159,22 @@ namespace Curiosity.Shared.Client.net.Helper
                 return false;
             }
             return !API.IsEntityDead(entityId);
+        }
+
+        static public void Draw3DTextTimeout(float x, float y, float z, string message, int timeout)
+        {
+            TimeoutState(timeout);
+            while (TimeoutStateValue)
+            {
+                Draw3DText(x, y, z, message);
+            }
+        }
+
+        static public async void TimeoutState(int timeout)
+        {
+            TimeoutStateValue = true;
+            await BaseScript.Delay(timeout);
+            TimeoutStateValue = false;
         }
 
         static public void Draw3DText(float x, float y, float z, string message)
