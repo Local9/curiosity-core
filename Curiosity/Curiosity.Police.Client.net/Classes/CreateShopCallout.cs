@@ -180,7 +180,7 @@ namespace Curiosity.Police.Client.net.Classes
                     foreach(Ped ped in SuspectCopy)
                     {
                         await Client.Delay(100);
-                        if (ped.IsDead) // TODO : Why was this null?
+                        if (ped.IsDead)
                         {
                             if (ped.AttachedBlip.Exists())
                             {
