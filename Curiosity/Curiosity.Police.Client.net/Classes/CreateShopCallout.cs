@@ -228,6 +228,7 @@ namespace Curiosity.Police.Client.net.Classes
                 }
 
                 Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 200));
+                Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", 100);
 
                 ShopKeeper.MarkAsNoLongerNeeded();
                 await Client.Delay(10);
