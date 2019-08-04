@@ -12,7 +12,8 @@ namespace Curiosity.Client.net.Classes.Environment
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Vehicles:Remove", new Action<int>(OnVehicleRemove));
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnVehicleEnterTick);
+            client.RegisterTickHandler(InsideVehicleTick);
         }
 
         static async void OnVehicleRemove(int vehicleHandle)
@@ -88,22 +89,69 @@ namespace Curiosity.Client.net.Classes.Environment
             await Client.Delay(0);
         }
 
-        static async Task OnTick()
+        static async Task InsideVehicleTick()
         {
+            await Task.FromResult(10);
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+
+                if (Game.PlayerPed.SeatIndex == VehicleSeat.Driver)
+                {
+                    if (vehicle.Mods.LicensePlate == "STAFFCAR")
+                    {
+                        if (!Player.PlayerInformation.IsStaff())
+                        {
+                            Game.PlayerPed.Task.LeaveVehicle();
+                        }
+                        return;
+                    }
+
+                    if (vehicle.Mods.LicensePlate == "LIFEVDEV")
+                    {
+                        if (!Player.PlayerInformation.IsDeveloper())
+                        {
+                            Game.PlayerPed.Task.LeaveVehicle();
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
+        static async Task OnVehicleEnterTick()
+        {
+            await Task.FromResult(0);
             int veh = API.GetVehiclePedIsTryingToEnter(Game.PlayerPed.Handle);
             if (veh != 0)
             {
                 CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(veh);
                 if (API.GetSeatPedIsTryingToEnter(Game.PlayerPed.Handle) == -1)
                 {
+                    if (vehicle.Mods.LicensePlate == "STAFFCAR")
+                    {
+                        if (!Player.PlayerInformation.IsStaff())
+                        {
+                            vehicle.LockStatus = VehicleLockStatus.Locked;
+                        }
+                        return;
+                    }
+
+                    if (vehicle.Mods.LicensePlate == "LIFEVDEV")
+                    {
+                        if (!Player.PlayerInformation.IsDeveloper())
+                        {
+                            vehicle.LockStatus = VehicleLockStatus.Locked;
+                        }
+                        return;
+                    }
+
                     int networkId = API.VehToNet(vehicle.Handle);
                     API.SetNetworkIdExistsOnAllMachines(networkId, true);
                     API.SetNetworkIdCanMigrate(networkId, true);
                     BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
                 }
             }
-
-            await Task.FromResult(0);
         }
     }
 }
