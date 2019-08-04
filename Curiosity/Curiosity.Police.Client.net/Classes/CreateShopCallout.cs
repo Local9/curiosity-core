@@ -226,6 +226,9 @@ namespace Curiosity.Police.Client.net.Classes
                         }
                     }
                 }
+
+                Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 200));
+
                 ShopKeeper.MarkAsNoLongerNeeded();
                 await Client.Delay(10);
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
@@ -237,7 +240,6 @@ namespace Curiosity.Police.Client.net.Classes
                 Environment.Job.DutyManager.OnSetCallOutStatus(false);
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", string.Empty, 2);
-
                 Tidy();
             }
             catch (Exception ex)
@@ -303,7 +305,6 @@ namespace Curiosity.Police.Client.net.Classes
                 Client.TriggerServerEvent("curiosity:Server:Skills:Decrease", $"{Enums.Skills.policexp}", xp);
                 message = $"-{xp}xp";
             }
-            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 200));
             NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, timeout);
         }
     }
