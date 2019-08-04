@@ -185,6 +185,7 @@ namespace Curiosity.Police.Client.net.Classes
                             if (ped.AttachedBlip.Exists())
                             {
                                 ped.AttachedBlip.Delete();
+                                // API.PlaystatsAwardXp(10, -1859646258, -294598082);
                             }
 
                             ped.MarkAsNoLongerNeeded();
