@@ -90,6 +90,7 @@
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\DatabaseUsersSkills.cs" />
     <Compile Include="Database\DatabaseUsers.cs" />
+    <Compile Include="Entity\AdaptiveCard.cs" />
     <Compile Include="Entity\Discord\Converter.cs" />
     <Compile Include="Entity\Discord\Guild.cs" />
     <Compile Include="Entity\Discord\Member.cs" />

@@ -251,9 +251,12 @@ namespace Curiosity.Server.net.Business
                 }
                 await Server.Delay(500);
 
-                deferrals.presentCard(adaptiveWelcomeCard);
+                if (!string.IsNullOrEmpty(adaptiveWelcomeCard))
+                {
+                    deferrals.presentCard(adaptiveWelcomeCard);
+                }
 
-                await Server.Delay(15000);
+                await Server.Delay(10000);
 
                 deferrals.done();
             }
