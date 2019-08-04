@@ -189,7 +189,8 @@ namespace Curiosity.Police.Client.net.Classes
 
                             Vector3 dmgPos = ped.Position;
                             int experience = 10;
-                            if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head)
+                            if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head
+                                || ped.Bones.LastDamaged.Index == (int)Bone.IK_Head)
                             {
                                 experience = 20;
                             }
