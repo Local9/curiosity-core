@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using System.IO;
 
 namespace Curiosity.Server.net.Business
 {
@@ -18,6 +19,7 @@ namespace Curiosity.Server.net.Business
         static Server server = Server.GetInstance();
         static Regex regex = new Regex(@"^[ A-Za-z0-9-_.#\[\]]{1,32}$");
         static string resourceName = API.GetCurrentResourceName();
+        static string resourcePath = $"resources/{API.GetResourcePath(resourceName).Substring(API.GetResourcePath(resourceName).LastIndexOf("//") + 2)}";
         static Dictionary<Messages, string> messages = new Dictionary<Messages, string>();
         static bool isServerQueueReady = false;
         static string hostName = string.Empty;
@@ -39,6 +41,8 @@ namespace Curiosity.Server.net.Business
         static long serverSetupTimer = API.GetGameTimer();
         static long forceWait = (1000 * 30);
 
+        static string adaptiveWelcomeCard;
+
         // Concurrent Values
         static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
         static ConcurrentDictionary<string, Player> sentLoading = new ConcurrentDictionary<string, Player>();
@@ -58,6 +62,9 @@ namespace Curiosity.Server.net.Business
         {
             SetupConvars();
             SetupMessages();
+
+            string path = Path.Combine($@"{resourcePath}/data/welcome.json");
+            adaptiveWelcomeCard = File.ReadAllText(path);
 
             server.RegisterEventHandler("onResourceStop", new Action<string>(OnResourceStop));
             server.RegisterEventHandler("playerConnecting", new Action<CitizenFX.Core.Player, string, dynamic, dynamic>(PlayerConnecting));
@@ -163,6 +170,7 @@ namespace Curiosity.Server.net.Business
 
                 while (!IsEverythingReady()) { await Server.Delay(0); }
                 deferrals.update($"{messages[Messages.Gathering]}");
+
                 string license = player.Identifiers["license"];
 
                 if (license == null) { deferrals.done($"{messages[Messages.License]}"); return; }
@@ -242,6 +250,11 @@ namespace Curiosity.Server.net.Business
                     await Server.Delay(5000);
                 }
                 await Server.Delay(500);
+
+                deferrals.presentCard(adaptiveWelcomeCard);
+
+                await Server.Delay(15000);
+
                 deferrals.done();
             }
             catch (Exception ex)
@@ -249,6 +262,11 @@ namespace Curiosity.Server.net.Business
                 Log.Error($"Curiosity Queue Manager : {ex.Message}");
                 deferrals.done($"{messages[Messages.Error]}"); return;
             }
+        }
+
+        static void Message()
+        {
+
         }
 
         static async void StopHardcap()
