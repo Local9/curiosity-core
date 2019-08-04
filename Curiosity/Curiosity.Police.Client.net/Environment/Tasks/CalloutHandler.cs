@@ -76,14 +76,14 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             IsRunnningCallout = false;
             TimeStampOfLastCallout = API.GetGameTimer();
 
-            if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
-            {
-                FIVE_MINUTES = 5000;
-            }
-            else
-            {
+            //if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+            //{
+            //    FIVE_MINUTES = 5000;
+            //}
+            //else
+            //{
                 FIVE_MINUTES = random.Next(60000, 300000);
-            }
+            //}
 
             client.RegisterTickHandler(SelectCallout);
             TickIsRegistered = true;
