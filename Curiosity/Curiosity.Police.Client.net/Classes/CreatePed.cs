@@ -66,8 +66,8 @@ namespace Curiosity.Police.Client.net.Classes
             createdPed.RelationshipGroup = relationshipGroup;
             API.SetEntityOnlyDamagedByPlayer(createdPed.Handle, true);
             API.SetBlockingOfNonTemporaryEvents(createdPed.Handle, false);
-            API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 30.0f, true, false);
-            API.TaskCombatHatedTargetsAroundPedTimed(createdPed.Handle, 50.0f, -1, 0);
+            API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 50.0f, true, false);
+            API.TaskCombatHatedTargetsAroundPedTimed(createdPed.Handle, 130.0f, -1, 0);
             API.N_0x2016c603d6b8987c(createdPed.Handle, false);
 
             await Client.Delay(0);
