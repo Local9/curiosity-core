@@ -17,6 +17,8 @@ namespace Curiosity.Client.net
         public static GlobalEntity.User User;
         public static Vehicle CurrentVehicle = null;
         public static Vehicle ownedVehicle = null;
+        public static string PLAYER_GROUP = "PLAYER";
+        public static RelationshipGroup PlayerRelationshipGroup;
 
         public static bool isSessionActive = false;
 
@@ -38,6 +40,7 @@ namespace Curiosity.Client.net
             _instance = this;
 
             players = Players;
+            PlayerRelationshipGroup = World.AddRelationshipGroup(PLAYER_GROUP);
 
             ClassLoader.Init();
             RegisterTickHandler(OnTick);
