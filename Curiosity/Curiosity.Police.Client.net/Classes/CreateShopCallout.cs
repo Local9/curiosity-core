@@ -175,21 +175,20 @@ namespace Curiosity.Police.Client.net.Classes
 
                 while(PedsAlive > 0)
                 {
-                    List<Ped> peds = Suspects;
-                    foreach(Ped ped in peds)
+                    await Client.Delay(100);
+                    foreach(Ped ped in Suspects)
                     {
+                        await Client.Delay(100);
                         if (ped.IsDead) // TODO : Why was this null?
                         {
                             if (NativeWrappers.EntityActive(ped.Handle))
                             {
                                 ped.AttachedBlip.Delete();
                                 ped.MarkAsNoLongerNeeded();
+                                PedsAlive--;
                             }
-                            PedsAlive--;
                         }
-                        await Client.Delay(50);
                     }
-                    await Client.Delay(50);
                 }
 
                 ShopKeeper.Task.FleeFrom(Game.PlayerPed);
