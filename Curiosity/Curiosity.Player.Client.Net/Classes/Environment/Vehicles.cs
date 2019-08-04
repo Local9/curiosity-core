@@ -91,12 +91,12 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static async Task InsideVehicleTick()
         {
-            await Task.FromResult(10);
+            await Task.FromResult(0);
             if (Game.PlayerPed.IsInVehicle())
             {
                 Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
 
-                if (Game.PlayerPed.SeatIndex == VehicleSeat.Driver)
+                if (vehicle.Driver.Handle == Game.PlayerPed.Handle)
                 {
                     if (vehicle.Mods.LicensePlate == "STAFFCAR")
                     {
@@ -109,7 +109,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     if (vehicle.Mods.LicensePlate == "LIFEVDEV")
                     {
-                        if (!Player.PlayerInformation.IsDeveloper())
+                        if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
                         {
                             Game.PlayerPed.Task.LeaveVehicle();
                         }
@@ -139,7 +139,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     if (vehicle.Mods.LicensePlate == "LIFEVDEV")
                     {
-                        if (!Player.PlayerInformation.IsDeveloper())
+                        if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
                         {
                             vehicle.LockStatus = VehicleLockStatus.Locked;
                         }
