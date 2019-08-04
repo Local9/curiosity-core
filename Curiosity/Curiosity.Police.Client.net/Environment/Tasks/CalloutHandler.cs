@@ -90,7 +90,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             }
             else
             {
-                FIVE_MINUTES = random.Next(60000, 300000);
+                FIVE_MINUTES = random.Next(60000, 180000);
             }
 
             client.RegisterTickHandler(SelectCallout);
