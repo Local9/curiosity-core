@@ -47,8 +47,8 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
 
                 // SETUP OPTIONS
                 Screen jobMenu = App.AddScreenType("Job", View.Settings);
-                jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Firefighter}", (int)ListIcons.Settings1), SetJob, Job.Firefighter));
-                jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Paramedic}", (int)ListIcons.Settings1), SetJob, Job.Paramedic));
+                //jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Firefighter}", (int)ListIcons.Settings1), SetJob, Job.Firefighter));
+                //jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Paramedic}", (int)ListIcons.Settings1), SetJob, Job.Paramedic));
                 //jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Pilot}", (int)ListIcons.Settings1), SetJob, Job.Pilot));
                 jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.PoliceOfficer}", (int)ListIcons.Settings1), SetJob, Job.PoliceOfficer));
                 //jobMenu.AddItem(new Item(jobMenu, Item.CreateData(2, PREFIX + $"{Job.Trucker}", (int)ListIcons.Settings1), SetJob, Job.Trucker));
