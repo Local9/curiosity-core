@@ -171,6 +171,7 @@ namespace Curiosity.Police.Client.net.Classes
         {
             try
             {
+                bool pedFlee = false;
                 while(Suspects.Count > 0)
                 {
                     await Client.Delay(100);
@@ -182,6 +183,12 @@ namespace Curiosity.Police.Client.net.Classes
                         await Client.Delay(100);
                         if (ped.IsDead)
                         {
+                            if (!pedFlee && random.Next(2) == 1)
+                            {
+                                ShopKeeper.Task.FleeFrom(ped);
+                                pedFlee = true;
+                            }
+
                             if (ped.AttachedBlip.Exists())
                             {
                                 ped.AttachedBlip.Delete();
@@ -206,29 +213,23 @@ namespace Curiosity.Police.Client.net.Classes
                     }
                 }
 
-                if (ShopKeeper.IsAlive)
+                if (ShopKeeper.IsDead) // Player Check
                 {
-                    ShopKeeper.Task.FleeFrom(Game.PlayerPed);
-                }
-                else
-                {
-                    if (ShopKeeper.IsDead) // Player Check
+                    Entity killer = ShopKeeper.GetKiller();
+                    if (killer.Handle == Game.PlayerPed.Handle)
                     {
-                        Entity killer = ShopKeeper.GetKiller();
-                        if (killer.Handle == Game.PlayerPed.Handle)
-                        {
-                            await Client.Delay(10);
-                            Experience(ShopKeeper.Position, 30, 2500, false);
-                            await Client.Delay(10);
-                            Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 250));
-                            await Client.Delay(10);
-                            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Civilian Killed", $"Paid medical fees for civilian", string.Empty, 2);
-                        }
+                        await Client.Delay(10);
+                        Experience(ShopKeeper.Position, 30, 2500, false);
+                        await Client.Delay(10);
+                        Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 250));
+                        await Client.Delay(10);
+                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Civilian Killed", $"Paid medical fees for civilian", string.Empty, 2);
                     }
                 }
 
                 Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 200));
                 Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(10, 16));
+                Game.PlayerPed.Weapons.Current.Ammo = Game.PlayerPed.Weapons.Current.Ammo + random.Next(10);
 
                 ShopKeeper.MarkAsNoLongerNeeded();
                 await Client.Delay(10);
