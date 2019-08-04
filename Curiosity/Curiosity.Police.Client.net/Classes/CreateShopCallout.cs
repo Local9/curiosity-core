@@ -131,7 +131,7 @@ namespace Curiosity.Police.Client.net.Classes
                 {
                     Model m = random.Next(1) == 1 ? PedHash.ArmGoon01GMM : PedHash.ArmGoon02GMY;
                     await m.Request(10000);
-                    Ped p = await CreatePed.Create(m, Location, suspectHeading - 180f, suspectGroup);
+                    Ped p = await CreatePed.Create(m, Location, shopkeeperHeading - 90f, suspectGroup);
                     m.MarkAsNoLongerNeeded();
                     Suspects.Add(p);
                 }
