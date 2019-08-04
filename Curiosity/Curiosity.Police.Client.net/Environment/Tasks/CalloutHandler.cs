@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core.Native;
+using CitizenFX.Core;
 
 namespace Curiosity.Police.Client.net.Environment.Tasks
 {
@@ -79,7 +80,13 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
             if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
             {
-                FIVE_MINUTES = 5000;
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    if (Game.PlayerPed.CurrentVehicle.Mods.LicensePlate == "LIFEVDEV")
+                    {
+                        FIVE_MINUTES = 5000;
+                    }
+                }
             }
             else
             {
