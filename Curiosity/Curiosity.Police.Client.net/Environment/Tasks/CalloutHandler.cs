@@ -69,6 +69,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             //    Log.Verbose($"TICK: PlayerCanTakeCallout");
 
             if (TickIsRegistered) return;
+            TickIsRegistered = true;
 
             Client.TriggerServerEvent("curiosity:Server:Police:CalloutEnded", PreviousCallout);
 
@@ -86,7 +87,6 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             }
 
             client.RegisterTickHandler(SelectCallout);
-            TickIsRegistered = true;
         }
 
         public static async void PlayerIsOnActiveCalloutOrOffDuty()
@@ -147,11 +147,11 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             if (random.Next(2) == 1) // 50/50 chance of being called out to the middle of the map
             {
                 GetRandomCallout(ClassLoader.RuralCallOuts, PatrolZone.Rural);
+                return;
             }
 
             if (Job.DutyManager.PatrolZone == PatrolZone.City)
             {
-
                 GetRandomCallout(ClassLoader.CityCallOuts, PatrolZone.City);
             }
 
