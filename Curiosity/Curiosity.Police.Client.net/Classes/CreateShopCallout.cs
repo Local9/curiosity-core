@@ -188,6 +188,14 @@ namespace Curiosity.Police.Client.net.Classes
                                 // API.PlaystatsAwardXp(10, -1859646258, -294598082);
                             }
 
+                            Vector3 dmgPos = ped.Bones.LastDamaged.Position;
+                            string message = "10xp";
+                            if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head)
+                            {
+                                message = "20xp";
+                            }
+                            NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, 2500);
+
                             ped.MarkAsNoLongerNeeded();
                             Suspects.Remove(ped);
                         }
