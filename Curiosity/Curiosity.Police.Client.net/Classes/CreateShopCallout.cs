@@ -256,7 +256,10 @@ namespace Curiosity.Police.Client.net.Classes
                 {
                     if (ped.Exists())
                     {
-                        ped.AttachedBlip.Delete();
+                        if (ped.AttachedBlip.Exists())
+                        {
+                            ped.AttachedBlip.Delete();
+                        }
                     }
 
                     if (ShopKeeper.IsAlive)
