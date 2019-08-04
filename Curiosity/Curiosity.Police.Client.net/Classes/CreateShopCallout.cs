@@ -171,23 +171,26 @@ namespace Curiosity.Police.Client.net.Classes
         {
             try
             {
-                int PedsAlive = Suspects.Count;
-
-                while(PedsAlive > 0)
+                while(Suspects.Count > 0)
                 {
                     await Client.Delay(100);
-                    foreach(Ped ped in Suspects)
+
+                    List<Ped> SuspectCopy = new List<Ped>(Suspects);
+
+                    foreach(Ped ped in SuspectCopy)
                     {
-                        CitizenFX.Core.UI.Screen.ShowNotification($"PED: {Suspects.Count} | {ped.Handle} State: {ped.IsDead}");
-                        Ped pedToCheck = new Ped(ped.Handle);
                         await Client.Delay(100);
-                        if (pedToCheck.IsDead) // TODO : Why was this null?
+                        if (ped.IsDead) // TODO : Why was this null?
                         {
-                            pedToCheck.MarkAsNoLongerNeeded();
-                            PedsAlive = PedsAlive - 1;
+                            if (ped.AttachedBlip.Exists())
+                            {
+                                ped.AttachedBlip.Delete();
+                            }
+
+                            ped.MarkAsNoLongerNeeded();
+                            Suspects.Remove(ped);
                         }
                     }
-                    CitizenFX.Core.UI.Screen.ShowNotification($"PED A: {PedsAlive}");
                 }
 
                 ShopKeeper.Task.FleeFrom(Game.PlayerPed);
