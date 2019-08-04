@@ -10,6 +10,7 @@ namespace Curiosity.Client.net
         public CuriosityWeather()
         {
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
+            EventHandlers["playerSpawned"] += new Action(OnPlayerSpawned);
             EventHandlers["curiosity:Client:Weather:Sync"] += new Action<string, bool, float, float>(WeatherSync);
             // EventHandlers["curiosity:Client:Time:Sync"] += new Action<int, int>(TimeSync);
 
@@ -26,6 +27,11 @@ namespace Curiosity.Client.net
                 API.SetForcePedFootstepsTracks(trails);
                 await Delay(0);
             }
+        }
+
+        void OnPlayerSpawned()
+        {
+            TriggerServerEvent("curiosity:Server:Weather:Sync");
         }
 
         async void OnClientResourceStart(string resourceName)
