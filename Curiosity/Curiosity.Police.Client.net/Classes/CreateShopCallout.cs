@@ -178,11 +178,11 @@ namespace Curiosity.Police.Client.net.Classes
                     await Client.Delay(100);
                     foreach(Ped ped in Suspects)
                     {
+                        CitizenFX.Core.UI.Screen.ShowNotification($"PED: {Suspects.Count} | {ped.Handle} State: {ped.IsDead}");
                         Ped pedToCheck = new Ped(ped.Handle);
                         await Client.Delay(100);
                         if (pedToCheck.IsDead) // TODO : Why was this null?
                         {
-                            pedToCheck.AttachedBlip.Delete();
                             pedToCheck.MarkAsNoLongerNeeded();
                             PedsAlive--;
                         }
