@@ -208,10 +208,15 @@ namespace Curiosity.Police.Client.net.Classes
                 }
                 else
                 {
+                    await Client.Delay(10);
                     Experience(ShopKeeper.Position, 30, 2500, false);
+                    await Client.Delay(10);
+                    Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 250));
+                    await Client.Delay(10);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Civilian Killed", $"Paid medical fees for civilian", string.Empty, 2);
                 }
                 ShopKeeper.MarkAsNoLongerNeeded();
-
+                await Client.Delay(10);
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
                 API.ShowTickOnBlip(LocationBlip.Handle, true);
                 API.SetBlipFade(LocationBlip.Handle, 0, 3000);
@@ -275,6 +280,7 @@ namespace Curiosity.Police.Client.net.Classes
                 Client.TriggerServerEvent("curiosity:Server:Skills:Decrease", $"{Enums.Skills.policexp}", xp);
                 message = $"-{xp}xp";
             }
+            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, 200 + random.Next(100, 150));
             NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, timeout);
         }
     }
