@@ -64,6 +64,7 @@ namespace Curiosity.Client.net
             API.SetWeatherTypeOverTime(weather, 60.00f);
 
             bool trails = (weather == "XMAS");
+
             API.SetForceVehicleTrails(trails);
             API.SetForcePedFootstepsTracks(trails);
 

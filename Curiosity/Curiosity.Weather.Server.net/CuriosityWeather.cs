@@ -126,16 +126,16 @@ namespace Curiosity.Server.Net
 
         async void ClientSyncWeather([FromSource]Player player)
         {
+            await Delay(1000);
             if (!weatherSetup)
             {
-                await Delay(1000);
                 await SetupWeather();
                 player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
                 Debug.WriteLine($"{player.Name} - WEATHER SYNC -> {weatherData}");
-            } else
+            }
+            else
             {
                 player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
-
                 Debug.WriteLine($"{player.Name} - WEATHER SYNC -> {weatherData}");
             }
             ClientSyncTime(player);
