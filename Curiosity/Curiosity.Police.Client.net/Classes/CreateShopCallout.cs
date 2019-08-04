@@ -178,11 +178,12 @@ namespace Curiosity.Police.Client.net.Classes
                     await Client.Delay(100);
                     foreach(Ped ped in Suspects)
                     {
+                        Ped pedToCheck = new Ped(ped.Handle);
                         await Client.Delay(100);
-                        if (ped.IsDead) // TODO : Why was this null?
+                        if (pedToCheck.IsDead) // TODO : Why was this null?
                         {
-                            ped.AttachedBlip.Delete();
-                            ped.MarkAsNoLongerNeeded();
+                            pedToCheck.AttachedBlip.Delete();
+                            pedToCheck.MarkAsNoLongerNeeded();
                             PedsAlive--;
                         }
                     }
