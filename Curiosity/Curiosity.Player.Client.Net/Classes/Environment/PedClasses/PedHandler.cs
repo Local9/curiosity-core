@@ -59,7 +59,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                     await BaseScript.Delay(0);
 
                 Vector3 spawnPosition = new Vector3();
-                API.GetNthClosestVehicleNode(0f, 0f, 0f, random.Next(10, 20), ref spawnPosition, 0, 0, 0);
+                API.GetNthClosestVehicleNode(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, random.Next(500, 1000), ref spawnPosition, 0, 0, 0);
 
                 Vector3 streetSpawnPosition = World.GetNextPositionOnStreet(spawnPosition, true);
                 Vehicle vehicle = await World.CreateVehicle(vehModel, streetSpawnPosition, 0.0f);

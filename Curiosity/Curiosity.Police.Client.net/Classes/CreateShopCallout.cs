@@ -131,7 +131,7 @@ namespace Curiosity.Police.Client.net.Classes
                 {
                     Model m = random.Next(1) == 1 ? PedHash.ArmGoon01GMM : PedHash.ArmGoon02GMY;
                     await m.Request(10000);
-                    Ped p = await CreatePed.Create(m, Location, shopkeeperHeading - 90f, suspectGroup);
+                    Ped p = await CreatePed.Create(m, Location, shopkeeperHeading - 45f, suspectGroup);
                     m.MarkAsNoLongerNeeded();
                     Suspects.Add(p);
                 }
@@ -187,15 +187,19 @@ namespace Curiosity.Police.Client.net.Classes
                                 ped.AttachedBlip.Delete();
                             }
 
-                            Vector3 dmgPos = ped.Position;
-                            int experience = 10;
-                            if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head
-                                || ped.Bones.LastDamaged.Index == (int)Bone.IK_Head)
-                            {
-                                experience = 20;
-                            }
-                            Experience(dmgPos, experience, 2500, true);
+                            Entity killer = ped.GetKiller();
 
+                            if (killer.Handle == Game.PlayerPed.Handle)
+                            {
+                                Vector3 dmgPos = ped.Position;
+                                int experience = 10;
+                                if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head
+                                    || ped.Bones.LastDamaged.Index == (int)Bone.IK_Head)
+                                {
+                                    experience = 20;
+                                }
+                                Experience(dmgPos, experience, 2500, true);
+                            }
                             ped.MarkAsNoLongerNeeded();
                             Suspects.Remove(ped);
                         }
@@ -208,12 +212,19 @@ namespace Curiosity.Police.Client.net.Classes
                 }
                 else
                 {
-                    await Client.Delay(10);
-                    Experience(ShopKeeper.Position, 30, 2500, false);
-                    await Client.Delay(10);
-                    Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 250));
-                    await Client.Delay(10);
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Civilian Killed", $"Paid medical fees for civilian", string.Empty, 2);
+                    if (ShopKeeper.IsDead) // Player Check
+                    {
+                        Entity killer = ShopKeeper.GetKiller();
+                        if (killer.Handle == Game.PlayerPed.Handle)
+                        {
+                            await Client.Delay(10);
+                            Experience(ShopKeeper.Position, 30, 2500, false);
+                            await Client.Delay(10);
+                            Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 250));
+                            await Client.Delay(10);
+                            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Civilian Killed", $"Paid medical fees for civilian", string.Empty, 2);
+                        }
+                    }
                 }
                 ShopKeeper.MarkAsNoLongerNeeded();
                 await Client.Delay(10);
@@ -239,13 +250,22 @@ namespace Curiosity.Police.Client.net.Classes
         {
             try
             {
-                List<Ped> peds = Suspects;
+                List<Ped> peds = new List<Ped>(Suspects);
+
                 foreach (Ped ped in peds)
                 {
-                    ped.AttachedBlip.Delete();
-                    ShopKeeper.Task.ReactAndFlee(ped);
+                    if (ped.Exists())
+                    {
+                        ped.AttachedBlip.Delete();
+                    }
+
+                    if (ShopKeeper.IsAlive)
+                    {
+                        ShopKeeper.Task.FleeFrom(Game.PlayerPed);
+                    }
                     ShopKeeper.MarkAsNoLongerNeeded();
                     ped.MarkAsNoLongerNeeded();
+                    peds.Remove(ped);
                 }
 
                 if (LocationBlip != null)
@@ -280,7 +300,7 @@ namespace Curiosity.Police.Client.net.Classes
                 Client.TriggerServerEvent("curiosity:Server:Skills:Decrease", $"{Enums.Skills.policexp}", xp);
                 message = $"-{xp}xp";
             }
-            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, 200 + random.Next(100, 150));
+            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 200));
             NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, timeout);
         }
     }
