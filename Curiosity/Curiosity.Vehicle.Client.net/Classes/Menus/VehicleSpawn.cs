@@ -124,22 +124,23 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         {
             float fuelLevel = random.Next(60, 100);
 
-            if (Game.PlayerPed.CurrentVehicle != null)
-            {
-                fuelLevel = Game.PlayerPed.CurrentVehicle.FuelLevel;
-                API.NetworkFadeOutEntity(Game.PlayerPed.CurrentVehicle.Handle, true, false);
-                await Client.Delay(1000);
-                Game.PlayerPed.CurrentVehicle.Delete();
-            }
-
             if (Client.CurrentVehicle != null)
             {
                 if (Client.CurrentVehicle.Exists())
                 {
-                    fuelLevel = Game.PlayerPed.CurrentVehicle.FuelLevel;
+                    fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Client.CurrentVehicle.Handle, "Vehicle.Fuel");
+
+                    if (Client.CurrentVehicle.AttachedBlip.Exists())
+                    {
+                        Client.CurrentVehicle.AttachedBlip.Delete();
+                    }
+
                     API.NetworkFadeOutEntity(Client.CurrentVehicle.Handle, true, false);
+                    Client.CurrentVehicle.IsEngineRunning = false;
+                    Client.CurrentVehicle.MarkAsNoLongerNeeded();
                     await Client.Delay(1000);
-                    Client.CurrentVehicle.Delete();
+                    int handle = Client.CurrentVehicle.Handle;
+                    API.DeleteEntity(ref handle);
                 }
             }
 
@@ -165,7 +166,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                 fuelLevel = 15f;
             }
 
-            veh.FuelLevel = fuelLevel;
+            Function.Call(Hash._DECOR_SET_FLOAT, veh.Handle, "Vehicle.Fuel", fuelLevel);
 
             veh.BodyHealth = 1000f;
             veh.EngineHealth = 1000f;
@@ -177,7 +178,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             blip.Priority = 100;
             blip.Name = "Personal Vehicle";
 
-            Client.CurrentVehicle = Game.PlayerPed.CurrentVehicle;
+            Client.CurrentVehicle = veh;
 
             int networkId = API.VehToNet(veh.Handle);
             API.SetNetworkIdExistsOnAllMachines(networkId, true);
