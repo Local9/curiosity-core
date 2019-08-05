@@ -11,5 +11,6 @@ namespace Curiosity.Server.net.Entity
         public string CurrentWeather;
         public bool Wind;
         public float WindHeading;
+        public float WindSpeed;
     }
 }

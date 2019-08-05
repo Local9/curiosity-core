@@ -89,6 +89,7 @@ namespace Curiosity.Server.net
             Classes.Environment.Vehicles.Init();
             Classes.Environment.Scoreboard.Init();
             // Classes.Environment.InstanceChecker.Init();
+            Classes.Environment.WeatherSystems.Init();
 
             // Config
             Classes.DiscordWrapper.Init();
