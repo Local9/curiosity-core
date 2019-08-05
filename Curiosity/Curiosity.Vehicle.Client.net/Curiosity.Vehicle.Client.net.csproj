@@ -53,6 +53,7 @@
     <Compile Include="Classes\Menus\MenuBaseFunctions.cs" />
     <Compile Include="Classes\Menus\VehicleSpawn.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
+    <Compile Include="Classes\Vehicle\Spawn.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Models\FuelPump.cs" />
