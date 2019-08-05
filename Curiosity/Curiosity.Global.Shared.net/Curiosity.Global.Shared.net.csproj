@@ -61,6 +61,7 @@
     <Compile Include="Enums\Reserved.cs" />
     <Compile Include="Enums\SessionState.cs" />
     <Compile Include="Enums\SkillType.cs" />
+    <Compile Include="Enums\SpawnLocations.cs" />
     <Compile Include="Enums\SpawnTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

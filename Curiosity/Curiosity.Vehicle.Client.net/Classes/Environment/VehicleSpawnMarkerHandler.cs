@@ -94,6 +94,13 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                     API.AddTextComponentString($" Press ~INPUT_PICKUP~ to open spawn menu.");
                     API.DisplayHelpTextFromStringLabel(0, false, true, -1);
                 }
+
+                if (marker == null && IsMenuOpen)
+                {
+                    IsMenuOpen = false;
+                    Menus.VehicleSpawn.CloseMenu();
+                }
+
                 await Client.Delay(0);
                 await Task.FromResult(0);
             }
