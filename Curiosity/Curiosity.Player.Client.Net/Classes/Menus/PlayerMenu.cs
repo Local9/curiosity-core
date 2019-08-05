@@ -15,6 +15,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
             menu.OnMenuOpen += (_menu) => {
 
+                MenuBase.MenuOpen(true);
                 //menu.AddMenuItem(new MenuItem("Open Skills", "View Skills") { ItemData = SkillType.Experience });
                 //menu.AddMenuItem(new MenuItem("Open Stats", "View Stats") { ItemData = SkillType.Statistic });
                 menu.AddMenuItem(new MenuCheckboxItem("Cinematic Mode", "Enable Cinematic Mode") { ItemData = "CINEMATIC", Checked = false });
@@ -39,11 +40,6 @@ namespace Curiosity.Client.net.Classes.Menus
 
                 if ($"{_item.ItemData}" == "CINEMATICBARS")
                     Environment.UI.CinematicMode.BlackBarHeight();
-            };
-
-            menu.OnMenuOpen += (_menu) =>
-            {
-                MenuBase.MenuOpen(true);
             };
 
             menu.OnMenuClose += (_menu) =>

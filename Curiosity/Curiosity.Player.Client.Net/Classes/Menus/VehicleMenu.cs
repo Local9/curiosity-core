@@ -37,6 +37,7 @@ namespace Curiosity.Client.net.Classes.Menus
             MenuBase.AddSubMenu(menu);
 
             menu.OnMenuOpen += (_menu) => {
+                MenuBase.MenuOpen(true);
 
                 if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
                 {
@@ -84,11 +85,6 @@ namespace Curiosity.Client.net.Classes.Menus
                 {
                     if (Player.PlayerInformation.IsDeveloper()) DeveloperMenu();
                 }
-            };
-
-            menu.OnMenuOpen += (_menu) =>
-            {
-                MenuBase.MenuOpen(true);
             };
 
             menu.OnMenuClose += (_menu) =>

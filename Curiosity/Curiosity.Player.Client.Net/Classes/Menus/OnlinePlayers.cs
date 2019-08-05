@@ -18,6 +18,7 @@ namespace Curiosity.Client.net.Classes.Menus
             MenuBase.AddSubMenu(menu);
 
             menu.OnMenuOpen += (_menu) => {
+                MenuBase.MenuOpen(true);
 
                 foreach (CitizenFX.Core.Player player in Client.players)
                 {
@@ -46,11 +47,6 @@ namespace Curiosity.Client.net.Classes.Menus
                     }
                     AddSubMenu(menu, playerMenu);
                 }
-            };
-
-            menu.OnMenuOpen += (_menu) =>
-            {
-                MenuBase.MenuOpen(true);
             };
 
             menu.OnMenuClose += (_menu) =>
