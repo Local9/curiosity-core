@@ -165,7 +165,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     {
                         SelectedItem = SelectedItem + 1;
                         if (SelectedItem > CurrentAppScreen.Items.Count - 1)
-                            SelectedItem = CurrentAppScreen.Items.Count - 1;
+                            SelectedItem = 0;
                     }
                     else if (Game.IsControlJustPressed(0, Control.FrontendAccept))
                     {
