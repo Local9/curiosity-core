@@ -167,6 +167,11 @@ namespace Curiosity.Server.Net
                 weatherData.WindHeading = randomSelect.Next(0, 360);
             }
 
+            if (!weatherData.Wind)
+            {
+                windSpeed = 0f;
+            }
+
             if (weatherData.CurrentWeather == "THUNDER")
             {
                 windSpeed = randomSelect.Next(4, 18);
