@@ -84,8 +84,10 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                     API.TaskWarpPedIntoVehicle(ped.Handle, vehicle.Handle, (int)VehicleSeat.Driver);
                     await BaseScript.Delay(0);
                 }
-                
+
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
+                ped.Weapons.Give(WeaponHash.APPistol, 1000, true, true);
+                ped.Weapons.Give(WeaponHash.HeavyPistol, 1000, true, true);
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
 
@@ -159,8 +161,6 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                                 {
                                     API.SetPedSphereDefensiveArea(ped.Handle, ped.Position.X, ped.Position.Y, ped.Position.Z, 100f, false, false);
                                     ped.Task.FightAgainstHatedTargets(100.0f);
-                                    await Client.Delay(0);
-                                    ped.Task.ShootAt(Game.PlayerPed, -1, FiringPattern.Default);
                                     IsFightingPlayer = true;
                                 }
                             }
