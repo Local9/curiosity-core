@@ -11,8 +11,8 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
         static Client client = Client.GetInstance();
         static List<Ped> peds = new List<Ped>();
         static Random random = new Random(Guid.NewGuid().GetHashCode());
-        static int pedGroup = 1;
-        static uint playerGroupHash = 0;
+
+        static bool IsFightingPlayer = false;
 
         static Array weaponValues = Enum.GetValues(typeof(WeaponHash));
 
@@ -20,9 +20,6 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
         public static void Init()
         {
-            API.AddRelationshipGroup("PLAYER", ref playerGroupHash);
-            client.RegisterTickHandler(PedTick);
-
             client.RegisterEventHandler("curiosity:Client:Command:SpawnChaser", new Action(CreateChaser));
             client.RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
         }
@@ -60,27 +57,39 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
                 Vector3 spawnPosition = new Vector3();
                 API.GetNthClosestVehicleNode(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, random.Next(500, 1000), ref spawnPosition, 0, 0, 0);
+                
+                await BaseScript.Delay(1000);
 
                 Vector3 streetSpawnPosition = World.GetNextPositionOnStreet(spawnPosition, true);
                 Vehicle vehicle = await World.CreateVehicle(vehModel, streetSpawnPosition, 0.0f);
 
+                Blip vehBlip = vehicle.AttachBlip();
+                vehBlip.Alpha = 0;
+
                 vehModel.MarkAsNoLongerNeeded();
 
-                Ped ped = await World.CreatePed(model, new Vector3(402.668f, -1003.000f, -98.004f), 180.0f);
+                Ped ped = await World.CreatePed(model, new Vector3(spawnPosition.X, spawnPosition.Y, spawnPosition.Z), 180.0f);
                 ped.IsPositionFrozen = true;
+
+                peds.Add(ped);
+
                 await BaseScript.Delay(0);
                 model.MarkAsNoLongerNeeded();
+
+                await BaseScript.Delay(1000);
 
                 while (!ped.IsInVehicle())
                 {
                     ped.IsPositionFrozen = false;
-                    await BaseScript.Delay(0);
-                    ped.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+                    API.TaskWarpPedIntoVehicle(ped.Handle, vehicle.Handle, (int)VehicleSeat.Driver);
                     await BaseScript.Delay(0);
                 }
                 
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
+                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
+                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
 
+                await BaseScript.Delay(0);
                 ped.RelationshipGroup = suspectGroup;
                 API.SetPedCombatMovement(ped.Handle, 2);
 
@@ -93,20 +102,25 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 API.SetPedCombatAttributes(ped.Handle, 52, true);
                 API.SetPedCombatAbility(ped.Handle, 100);
 
+                await BaseScript.Delay(0);
+
+                API.SetPedSteersAroundObjects(ped.Handle, true);
+                API.SetPedSteersAroundPeds(ped.Handle, true);
+                API.SetPedSteersAroundVehicles(ped.Handle, true);
+                API.SetDriverAbility(ped.Handle, 1.0f);
+                API.SetDriverAggressiveness(ped.Handle, 1.0f);
+                API.SetPedFleeAttributes(ped.Handle, 0, false);
+                API.TaskSetBlockingOfNonTemporaryEvents(ped.Handle, true);
+
                 ped.Armor = random.Next(100);
 
                 await BaseScript.Delay(0);
 
                 Blip blip = ped.AttachBlip();
-                blip.Sprite = BlipSprite.Enemy;
-                blip.Color = BlipColor.Red;
-                blip.IsFriendly = false;
-                blip.IsShortRange = false;
                 blip.Alpha = 0;
-                blip.Name = "Looks angry... run?";
-                API.SetBlipDisplay(blip.Handle, 5);
 
                 await BaseScript.Delay(0);
+                client.RegisterTickHandler(PedTick);
             }
             catch (Exception ex)
             {
@@ -118,32 +132,49 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
         {
             try
             {
+                if (peds.Count == 0)
+                {
+                    await BaseScript.Delay(10);
+                    return;
+                }
+
                 List<Ped> pedsToRun = new List<Ped>(peds);
                 foreach(Ped ped in pedsToRun)
                 {
                     await BaseScript.Delay(50);
-                    if (ped.IsAlive)
-                    {
-                        if (!ped.IsNearEntity(Game.PlayerPed, new Vector3(15.0f, 15.0f, 15.0f)))
-                        {
-                            ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 40.0f, 1074528293);
-                        }
-                        else
-                        {
-                            ped.Task.FightAgainstHatedTargets(40.0f);
-                        }
-                    }
 
-                    await BaseScript.Delay(10);
-                    if (ped.IsDead)
+                    if (ped.Exists())
                     {
-                        if (ped.CurrentVehicle.Exists())
-                            ped.CurrentVehicle.Delete();
 
-                        ped.Weapons.RemoveAll();
-                        ped.AttachedBlip.Delete();
-                        ped.Delete();
-                        peds.Remove(ped);
+                        if (ped.IsAlive)
+                        {
+                            if (!ped.IsNearEntity(Game.PlayerPed, new Vector3(15.0f, 15.0f, 100.0f)))
+                            {
+                                ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 40.0f, 1074528293);
+                                IsFightingPlayer = false;
+                            }
+                            else
+                            {
+                                if (!IsFightingPlayer)
+                                {
+                                    ped.Task.FightAgainstHatedTargets(40.0f);
+                                    IsFightingPlayer = true;
+                                }
+                            }
+                        }
+
+                        await BaseScript.Delay(10);
+                        if (ped.IsDead)
+                        {
+                            if (ped.CurrentVehicle.Exists())
+                                ped.CurrentVehicle.Delete();
+
+                            ped.Weapons.RemoveAll();
+                            ped.AttachedBlip.Delete();
+                            ped.Delete();
+                            peds.Remove(ped);
+                            client.DeregisterTickHandler(PedTick);
+                        }
                     }
                 }
             }

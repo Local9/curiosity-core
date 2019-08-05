@@ -42,27 +42,30 @@ namespace Curiosity.Client.net.Classes.Actions
                     hasCalledChaser = true;
                     return;
                 }
-
-                if (Game.Player.IsInvincible)
-                {
-                    Game.Player.IsInvincible = false;
-                    Game.Player.CanControlRagdoll = true;
-                    Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
-                    SetPedConfigFlag(Game.PlayerPed.Handle, 32, true);
-                    Game.PlayerPed.ClearBloodDamage();
-                    Game.PlayerPed.ResetVisibleDamage();
-                    Game.PlayerPed.ClearLastWeaponDamage();
-
-                }
                 else
                 {
-                    Game.Player.IsInvincible = true;
-                    Game.Player.CanControlRagdoll = false;
-                    Game.PlayerPed.CanBeDraggedOutOfVehicle = false;
-                    SetPedConfigFlag(Game.PlayerPed.Handle, 32, false);
-                }
 
-                CitizenFX.Core.UI.Screen.ShowNotification($"GodeMode: {(Game.Player.IsInvincible ? "Active" : "Disabled")}");
+                    if (Game.Player.IsInvincible)
+                    {
+                        Game.Player.IsInvincible = false;
+                        Game.Player.CanControlRagdoll = true;
+                        Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
+                        SetPedConfigFlag(Game.PlayerPed.Handle, 32, true);
+                        Game.PlayerPed.ClearBloodDamage();
+                        Game.PlayerPed.ResetVisibleDamage();
+                        Game.PlayerPed.ClearLastWeaponDamage();
+
+                    }
+                    else
+                    {
+                        Game.Player.IsInvincible = true;
+                        Game.Player.CanControlRagdoll = false;
+                        Game.PlayerPed.CanBeDraggedOutOfVehicle = false;
+                        SetPedConfigFlag(Game.PlayerPed.Handle, 32, false);
+                    }
+
+                    CitizenFX.Core.UI.Screen.ShowNotification($"GodeMode: {(Game.Player.IsInvincible ? "Active" : "Disabled")}");
+                }
 
             }), false);
 

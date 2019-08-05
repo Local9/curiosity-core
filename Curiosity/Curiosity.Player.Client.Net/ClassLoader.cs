@@ -99,7 +99,7 @@ namespace Curiosity.Client.net
             Birds.Init();
             SpawnManagement.Init();
             // InstancingChecker.Init();
-            // Classes.Environment.PedClasses.PedHandler.Init();
+            Classes.Environment.PedClasses.PedHandler.Init();
             WeatherSystem.Init();
 
             // EMS
