@@ -12,7 +12,6 @@ namespace Curiosity.Client.net
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
             EventHandlers["playerSpawned"] += new Action(OnPlayerSpawned);
             EventHandlers["curiosity:Client:Weather:Sync"] += new Action<string, bool, float, float>(WeatherSync);
-            // EventHandlers["curiosity:Client:Time:Sync"] += new Action<int, int>(TimeSync);
 
             Tick += TimeNetworkSync;
             Tick += WeatherChecker;
@@ -39,17 +38,6 @@ namespace Curiosity.Client.net
             if (API.GetCurrentResourceName() != resourceName) return;
             await Delay(3000);
             TriggerServerEvent("curiosity:Server:Weather:Sync"); // Also syncs the time
-        }
-
-        async void TimeSync(int hour, int minute)
-        {
-            if (hour > 23)
-            {
-                hour = 0;
-            }
-
-            API.NetworkOverrideClockTime(hour, minute, 0);
-            await Delay(0);
         }
 
         async Task TimeNetworkSync()
