@@ -132,7 +132,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             if (weatherData.CurrentWeather == "THUNDER")
             {
-                windSpeed = randomSelect.Next(4, 18);
+                windSpeed = randomSelect.Next(4, 10);
                 weatherData.WindSpeed = windSpeed;
             }
 

@@ -10,6 +10,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
     {
         public static string CompactLocation { get; set; }
         public static bool HideLocation = false;
+        static Client client = Client.GetInstance();
 
         // version can be 1 or 2
         // (This is temporary for testing variations only)
@@ -17,7 +18,13 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         public static void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            client.RegisterEventHandler("curiosity:Client:UI:LocationHide", new Action<bool>(LocationDisplayState));
+            client.RegisterTickHandler(OnTick);
+        }
+
+        static void LocationDisplayState(bool state)
+        {
+            HideLocation = state;
         }
 
         //[SecurityCritical]

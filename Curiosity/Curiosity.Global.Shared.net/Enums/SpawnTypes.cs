@@ -2,6 +2,7 @@
 {
     public enum VehicleSpawnTypes
     {
+        Spawner,
         Police,
         Ems,
         Fire,
