@@ -62,7 +62,7 @@
     <Compile Include="Extensions\StringExtension.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\VectorExtension.cs" />
-    <Compile Include="GameData\MPHairModelList.cs" />
+    <Compile Include="GameData\SpawnInfo.cs" />
     <Compile Include="Helpers\ControlHelper.cs" />
     <Compile Include="Helpers\Game.cs" />
     <Compile Include="Helpers\NativeWrapper.cs" />

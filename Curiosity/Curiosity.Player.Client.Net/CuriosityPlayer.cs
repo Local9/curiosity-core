@@ -345,7 +345,7 @@ namespace Curiosity.Client.net
             }
 
             Game.PlayerPed.IsInvincible = false;
-            Client.TriggerEvent("playerSpawned");
+
             canSaveLocation = true;
             isPlayerSpawned = true;
 
@@ -361,6 +361,20 @@ namespace Curiosity.Client.net
             }
 
             Classes.Environment.UI.Notifications.LifeV(1, $"Welcome...", $"~y~{Game.Player.Name}~s~!", $"~b~Life V ID: ~y~{userId}~n~~b~Role: ~y~{role}", 2);
+
+            Curiosity.Shared.Client.net.GameData.SpawnInfo spawnInfo = new Shared.Client.net.GameData.SpawnInfo();
+            spawnInfo.z = groundZ;
+            spawnInfo.y = y;
+            spawnInfo.x = x;
+            spawnInfo.heading = Game.PlayerPed.Heading;
+            spawnInfo.idx = 0;
+            spawnInfo.model = Game.PlayerPed.Model.Hash;
+
+            dynamic spawnInfodyn = spawnInfo;
+
+            await Delay(500);
+
+            TriggerEvent("playerSpawned", spawnInfodyn);
         }
 
         async Task UpdatePlayerLocation()

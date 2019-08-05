@@ -92,12 +92,10 @@ namespace Curiosity.Server.net.Classes.Environment
             {
                 await SetupWeather();
                 player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
-                Debug.WriteLine($"{player.Name} - WEATHER SYNC -> {weatherData}");
             }
             else
             {
                 player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
-                Debug.WriteLine($"{player.Name} - WEATHER SYNC -> {weatherData}");
             }
             await Server.Delay(0);
         }
@@ -129,7 +127,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             if (!weatherData.Wind)
             {
-                windSpeed = 0f;
+                windSpeed = random.Next(0, 2);
             }
 
             if (weatherData.CurrentWeather == "THUNDER")
@@ -140,7 +138,6 @@ namespace Curiosity.Server.net.Classes.Environment
 
             Server.TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
 
-            Debug.WriteLine($"WEATHER CHANGE -> {weatherData}");
             weatherSetup = true;
         }
 
