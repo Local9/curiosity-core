@@ -98,7 +98,10 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 if (vehicle.Driver.Handle == Game.PlayerPed.Handle)
                 {
-                    if (vehicle.Mods.LicensePlate == "STAFFCAR")
+                    if (
+                        vehicle.Mods.LicensePlate == "LIFE-V-STAFF"
+                        || vehicle.Mods.LicensePlate == "LIFE-V-HEAD"
+                        )
                     {
                         if (!Player.PlayerInformation.IsStaff())
                         {
@@ -107,7 +110,7 @@ namespace Curiosity.Client.net.Classes.Environment
                         return;
                     }
 
-                    if (vehicle.Mods.LicensePlate == "LIFEVDEV")
+                    if (vehicle.Mods.LicensePlate == "LIFE-V-DEV")
                     {
                         if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
                         {
@@ -128,7 +131,10 @@ namespace Curiosity.Client.net.Classes.Environment
                 CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(veh);
                 if (API.GetSeatPedIsTryingToEnter(Game.PlayerPed.Handle) == -1)
                 {
-                    if (vehicle.Mods.LicensePlate == "STAFFCAR")
+                    if (
+                        vehicle.Mods.LicensePlate == "LIFE-V-STAFF"
+                        || vehicle.Mods.LicensePlate == "LIFE-V-HEAD"
+                        )
                     {
                         if (!Player.PlayerInformation.IsStaff())
                         {
@@ -137,7 +143,7 @@ namespace Curiosity.Client.net.Classes.Environment
                         return;
                     }
 
-                    if (vehicle.Mods.LicensePlate == "LIFEVDEV")
+                    if (vehicle.Mods.LicensePlate == "LIFE-V-DEV")
                     {
                         if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
                         {

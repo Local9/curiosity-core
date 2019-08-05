@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +11,18 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
     // Might make this class more general later to actually inform other classes that it's in range or getting close to a marker
     class Marker
     {
+        public VehicleSpawnTypes SpawnType { get; private set; }
         public Vector3 Position { get; private set; }
         public Vector3 Rotation { get; private set; }
         public Vector3 Direction { get; private set; }
         public MarkerType Type { get; private set; }
         public Vector3 Scale { get; private set; }
         public System.Drawing.Color Color { get; private set; }
+        public Func<bool> Action { get; set; }
 
-        public Marker(Vector3 position, MarkerType type = MarkerType.VerticleCircle)
+        public Marker(VehicleSpawnTypes spawnType, Vector3 position, MarkerType type = MarkerType.VerticleCircle)
         {
+            this.SpawnType = SpawnType;
             this.Position = position;
             this.Rotation = new Vector3(0, 0, 0);
             this.Direction = new Vector3(0, 0, 0);
@@ -27,8 +31,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             this.Scale = 1.0f * new Vector3(1f, 1f, 1f);
         }
 
-        public Marker(Vector3 position, MarkerType type, System.Drawing.Color color, float scale = 0.3f)
+        public Marker(VehicleSpawnTypes spawnType, Vector3 position, MarkerType type, System.Drawing.Color color, float scale = 0.3f)
         {
+            this.SpawnType = SpawnType;
             this.Position = position;
             this.Rotation = new Vector3(0, 0, 0);
             this.Direction = new Vector3(0, 0, 0);
@@ -37,8 +42,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             this.Scale = scale * new Vector3(1f, 1f, 1f);
         }
 
-        public Marker(Vector3 position, MarkerType type, System.Drawing.Color color, Vector3 scale, Vector3 rotation, Vector3 direction)
+        public Marker(VehicleSpawnTypes spawnType, Vector3 position, MarkerType type, System.Drawing.Color color, Vector3 scale, Vector3 rotation, Vector3 direction)
         {
+            this.SpawnType = SpawnType;
             this.Position = position;
             this.Rotation = rotation;
             this.Direction = direction;
@@ -71,7 +77,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             if (!HideAllMarkers)
             {
-                Close.ForEach(m => CitizenFX.Core.World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color));
+                Close.ForEach(m => CitizenFX.Core.World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true));
             }
             return Task.FromResult(0);
         }

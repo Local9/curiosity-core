@@ -224,7 +224,7 @@ namespace Curiosity.Client.net.Classes.Actions
         {
             try
             {
-                if (!Player.PlayerInformation.IsDeveloper()) return;
+                if (!Player.PlayerInformation.IsStaff()) return;
                 if (string.IsNullOrEmpty(car)) return;
 
                 Model model = null;
@@ -299,21 +299,22 @@ namespace Curiosity.Client.net.Classes.Actions
             veh.IsEngineRunning = true;
             veh.Mods.LicensePlate = numberPlate;
 
-            if (numberPlate == "LIFEVDEV")
-            {
-                veh.Mods.InstallModKit();
-                veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
-                veh.Mods[VehicleModType.Brakes].Index = veh.Mods[VehicleModType.Brakes].ModCount - 1;
-                veh.Mods[VehicleModType.Transmission].Index = veh.Mods[VehicleModType.Transmission].ModCount - 1;
-            }
+            veh.Mods.InstallModKit();
+            veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
+            veh.Mods[VehicleModType.Brakes].Index = veh.Mods[VehicleModType.Brakes].ModCount - 1;
+            veh.Mods[VehicleModType.Transmission].Index = veh.Mods[VehicleModType.Transmission].ModCount - 1;
 
             int networkId = API.VehToNet(veh.Handle);
             API.SetNetworkIdExistsOnAllMachines(networkId, true);
             API.SetNetworkIdCanMigrate(networkId, true);
 
             Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
-            Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
-            Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
+            if (numberPlate == "LIFE-V-HEAD" || numberPlate == "LIFE-V-DEV")
+            {
+                Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
+                Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
+            }
+            Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"~b~Engine: ~y~MAX~n~~b~Brakes: ~y~MAX~n~~b~Transmission: ~y~MAX", 2);
 
             return true;
         }
