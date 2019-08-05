@@ -27,9 +27,6 @@ namespace Curiosity.Vehicle.Client.net
             // Environment
             Classes.Environment.VehicleSpawnMarkerHandler.Init();
 
-            // UI
-            // Classes.Vehicle.VehicleBlip.Init();
-
             Log.Verbose("Leaving ClassLoader Init");
         }
     }
