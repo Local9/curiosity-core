@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net;
 using System;
 using System.Threading.Tasks;
 
@@ -54,7 +55,10 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static async void WeatherSync(string weather, bool wind, float windSpeed, float windHeading)
         {
-            Debug.WriteLine($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}");
+            if (Player.PlayerInformation.IsDeveloper())
+            {
+                Log.Verbose($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}");
+            }
 
             await Client.Delay(0);
 
