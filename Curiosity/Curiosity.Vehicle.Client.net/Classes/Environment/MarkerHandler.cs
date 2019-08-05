@@ -60,6 +60,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static public bool HideAllMarkers = false;
 
         const float drawThreshold = 15f;
+        static float contextAoe = 5f; // How close you need to be to see instruction
 
         // Any other class can add or remove markers from this dictionary (by ID preferrably)
         static internal Dictionary<int, Marker> All = new Dictionary<int, Marker>();
@@ -71,13 +72,25 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             PeriodicUpdate();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            // SETUP
+            SetupVehicleSpawnMarkers();
+            // CONTROLLER
         }
 
         static public Task OnTickMarkerHandler()
         {
-            if (!HideAllMarkers)
+            try
             {
-                Close.ForEach(m => CitizenFX.Core.World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true));
+                if (!HideAllMarkers)
+                {
+                    Close.ForEach(m => CitizenFX.Core.World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true));
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                // qqq
             }
             return Task.FromResult(0);
         }
@@ -95,6 +108,29 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             Close = All.ToList().Select(m => m.Value).Where(m => m.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(drawThreshold, 2)).ToList();
             return Task.FromResult(0);
+        }
+
+        static void SetupVehicleSpawnMarkers()
+        {
+            // THIS WILL BE OFF AN EVENT
+
+            Marker marker = new Marker(VehicleSpawnTypes.Police, new CitizenFX.Core.Vector3(-1108.226f, -847.1646f, 19.31689f), CitizenFX.Core.MarkerType.CarSymbol, System.Drawing.Color.FromArgb(255, 135, 206, 250), 1.0f);
+            // CAR MARKER
+            All.Add(1, marker);
+        }
+
+        static Marker GetActiveMarker()
+        {
+            try
+            {
+                Marker closestMarker = Close.Where(w => w.Position.DistanceToSquared(Game.PlayerPed.Position) < contextAoe).FirstOrDefault();
+                if (closestMarker == null) return null;
+                return closestMarker;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

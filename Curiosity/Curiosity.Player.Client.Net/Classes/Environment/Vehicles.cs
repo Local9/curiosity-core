@@ -148,8 +148,6 @@ namespace Curiosity.Client.net.Classes.Environment
                         return;
                     }
 
-                    Debug.WriteLine($"{vehicle.Mods.LicensePlate == DEV_LICENSE_PLATE} .. {vehicle.Mods.LicensePlate} .. {DEV_LICENSE_PLATE}");
-
                     if (vehicle.Mods.LicensePlate == DEV_LICENSE_PLATE)
                     {
                         if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))

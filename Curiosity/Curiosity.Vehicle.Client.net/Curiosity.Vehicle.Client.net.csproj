@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Environment\MarkerHandler.cs" />
-    <Compile Include="Classes\Environment\SpawnMarkerHandler.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />

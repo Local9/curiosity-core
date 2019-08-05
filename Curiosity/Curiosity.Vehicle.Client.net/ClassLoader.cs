@@ -26,7 +26,6 @@ namespace Curiosity.Vehicle.Client.net
 
             // Environment
             Classes.Environment.MarkerHandler.Init();
-            Classes.Environment.SpawnMarkerHandler.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }
