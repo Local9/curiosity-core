@@ -148,16 +148,19 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
                         if (ped.IsAlive)
                         {
-                            if (!ped.IsNearEntity(Game.PlayerPed, new Vector3(15.0f, 15.0f, 100.0f)))
+                            if (!ped.IsNearEntity(Game.PlayerPed, new Vector3(30.0f, 30.0f, 30.0f)))
                             {
-                                ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 40.0f, 1074528293);
+                                ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 100.0f, 1074528293);
                                 IsFightingPlayer = false;
                             }
                             else
                             {
                                 if (!IsFightingPlayer)
                                 {
-                                    ped.Task.FightAgainstHatedTargets(40.0f);
+                                    API.SetPedSphereDefensiveArea(ped.Handle, ped.Position.X, ped.Position.Y, ped.Position.Z, 100f, false, false);
+                                    ped.Task.FightAgainstHatedTargets(100.0f);
+                                    await Client.Delay(0);
+                                    ped.Task.ShootAt(Game.PlayerPed, -1, FiringPattern.Default);
                                     IsFightingPlayer = true;
                                 }
                             }
