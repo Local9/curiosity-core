@@ -53,7 +53,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         // For e.g. cinematic mode
         static public bool HideAllMarkers = false;
 
-        const float drawThreshold = 50f;
+        const float drawThreshold = 15f;
 
         // Any other class can add or remove markers from this dictionary (by ID preferrably)
         static internal Dictionary<int, Marker> All = new Dictionary<int, Marker>();
