@@ -309,7 +309,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.SetNetworkIdCanMigrate(networkId, true);
 
             Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
-            if (numberPlate == "LIFE-V-HEAD" || numberPlate == "LIFE-V-DEV")
+            if (numberPlate == Environment.Vehicles.HSTAFF_LICENSE_PLATE || numberPlate == Environment.Vehicles.DEV_LICENSE_PLATE)
             {
                 Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
                 Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");

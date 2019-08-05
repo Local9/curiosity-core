@@ -374,7 +374,14 @@ namespace Curiosity.Client.net
 
             await Delay(500);
 
-            TriggerEvent("playerSpawned", spawnInfodyn);
+            try
+            {
+                TriggerEvent("playerSpawned", spawnInfodyn);
+            }
+            catch (Exception ex)
+            {
+                // DO NOTHING
+            }
         }
 
         async Task UpdatePlayerLocation()

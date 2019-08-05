@@ -19,6 +19,10 @@ namespace Curiosity.Server.net.Classes.Environment
         static long lastTimePIA = 0;
         static int coolDownTime = 15000;
 
+        static string STAFF_LICENSE_PLATE = "LV0STAFF";
+        static string HSTAFF_LICENSE_PLATE = "LV0HSTAF";
+        static string DEV_LICENSE_PLATE = "LIFEVDEV";
+
         static public void Init()
         {
             server.RegisterEventHandler("curiosity:Server:Command:SavePosition", new Action<CitizenFX.Core.Player, string, float, float, float, float>(SavePosition));
@@ -178,7 +182,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 if (!session.IsDeveloper) return;
 
-                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", arguments[0], "LIFE-V-HEAD");
+                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", arguments[0], HSTAFF_LICENSE_PLATE);
             }
             catch (Exception ex)
             {
@@ -195,7 +199,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 if (!session.IsStaff) return;
 
-                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", "deluxo", "LIFE-V-STAFF");
+                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", "deluxo", STAFF_LICENSE_PLATE);
             }
             catch (Exception ex)
             {
@@ -211,7 +215,7 @@ namespace Curiosity.Server.net.Classes.Environment
                 Session session = SessionManager.PlayerList[$"{playerHandle}"];
                 if (session.Privilege != Privilege.DEVELOPER) return;
 
-                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", "vagner", "LIFE-V-DEV");
+                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", "vagner", DEV_LICENSE_PLATE);
             }
             catch (Exception ex)
             {

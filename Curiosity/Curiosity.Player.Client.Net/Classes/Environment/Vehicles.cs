@@ -9,6 +9,10 @@ namespace Curiosity.Client.net.Classes.Environment
     {
         static Client client = Client.GetInstance();
 
+        public static string STAFF_LICENSE_PLATE = "LV0STAFF";
+        public static string HSTAFF_LICENSE_PLATE = "LV0HSTAF";
+        public static string DEV_LICENSE_PLATE = "LIFEVDEV";
+
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Vehicles:Remove", new Action<int>(OnVehicleRemove));
@@ -99,24 +103,24 @@ namespace Curiosity.Client.net.Classes.Environment
                 if (vehicle.Driver.Handle == Game.PlayerPed.Handle)
                 {
                     if (
-                        vehicle.Mods.LicensePlate == "LIFE-V-STAFF"
-                        || vehicle.Mods.LicensePlate == "LIFE-V-HEAD"
+                        vehicle.Mods.LicensePlate == STAFF_LICENSE_PLATE
+                        || vehicle.Mods.LicensePlate == HSTAFF_LICENSE_PLATE
                         )
                     {
                         if (!Player.PlayerInformation.IsStaff())
                         {
                             Game.PlayerPed.Task.LeaveVehicle();
+                            SentNotification();
                         }
-                        return;
                     }
 
-                    if (vehicle.Mods.LicensePlate == "LIFE-V-DEV")
+                    if (vehicle.Mods.LicensePlate == DEV_LICENSE_PLATE)
                     {
                         if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
                         {
-                            vehicle.LockStatus = VehicleLockStatus.Locked;
+                            Game.PlayerPed.Task.LeaveVehicle();
+                            SentNotification();
                         }
-                        return;
                     }
                 }
             }
@@ -132,22 +136,26 @@ namespace Curiosity.Client.net.Classes.Environment
                 if (API.GetSeatPedIsTryingToEnter(Game.PlayerPed.Handle) == -1)
                 {
                     if (
-                        vehicle.Mods.LicensePlate == "LIFE-V-STAFF"
-                        || vehicle.Mods.LicensePlate == "LIFE-V-HEAD"
+                        vehicle.Mods.LicensePlate == STAFF_LICENSE_PLATE
+                        || vehicle.Mods.LicensePlate == HSTAFF_LICENSE_PLATE
                         )
                     {
                         if (!Player.PlayerInformation.IsStaff())
                         {
                             vehicle.LockStatus = VehicleLockStatus.Locked;
+                            SentNotification();
                         }
                         return;
                     }
 
-                    if (vehicle.Mods.LicensePlate == "LIFE-V-DEV")
+                    Debug.WriteLine($"{vehicle.Mods.LicensePlate == DEV_LICENSE_PLATE} .. {vehicle.Mods.LicensePlate} .. {DEV_LICENSE_PLATE}");
+
+                    if (vehicle.Mods.LicensePlate == DEV_LICENSE_PLATE)
                     {
                         if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
                         {
                             vehicle.LockStatus = VehicleLockStatus.Locked;
+                            SentNotification();
                         }
                         return;
                     }
@@ -158,6 +166,11 @@ namespace Curiosity.Client.net.Classes.Environment
                     BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
                 }
             }
+        }
+
+        static void SentNotification()
+        {
+            Environment.UI.Notifications.LifeV(1, "Invalid Role", "Sorry you cannot drive this car", string.Empty, 2);
         }
     }
 }

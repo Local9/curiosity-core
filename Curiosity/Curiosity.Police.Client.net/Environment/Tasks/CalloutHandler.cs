@@ -18,6 +18,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         static bool TickIsRegistered = false;
 
         static long TimeStampOfLastCallout;
+        public static string DEV_LICENSE_PLATE = "LV DEV";
 
         public static void Init()
         {
@@ -81,7 +82,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             {
                 if (Game.PlayerPed.IsInVehicle())
                 {
-                    if (Game.PlayerPed.CurrentVehicle.Mods.LicensePlate == "LIFEVDEV")
+                    if (Game.PlayerPed.CurrentVehicle.Mods.LicensePlate == DEV_LICENSE_PLATE)
                     {
                         FIVE_MINUTES = 5000;
                     }
