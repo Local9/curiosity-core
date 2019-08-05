@@ -150,7 +150,7 @@ namespace Curiosity.Server.Net
 
             int countOfWeathers = weathers.Count;
             int countOfWeatherKeys = weathers.Keys.Count;
-            float windSpeed = 4.0f;
+            float windSpeed = random.Next(0, 2);
 
             if (string.IsNullOrEmpty(weatherData.CurrentWeather))
             {
@@ -169,7 +169,7 @@ namespace Curiosity.Server.Net
 
             if (weatherData.CurrentWeather == "THUNDER")
             {
-                windSpeed = randomSelect.Next(4, 40);
+                windSpeed = randomSelect.Next(4, 18);
                 weatherData.WindSpeed = windSpeed;
             }
 
