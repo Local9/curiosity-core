@@ -177,7 +177,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 if (!session.IsDeveloper) return;
 
-                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", arguments[0]);
+                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", arguments[0], "STAFFCAR");
             }
             catch (Exception ex)
             {
@@ -193,7 +193,7 @@ namespace Curiosity.Server.net.Classes.Environment
                 Session session = SessionManager.PlayerList[$"{playerHandle}"];
                 if (session.Privilege != Privilege.DEVELOPER) return;
 
-                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", "vagner");
+                session.Player.TriggerEvent("curiosity:Client:Command:SpawnCar", "vagner", "LIFEVDEV");
             }
             catch (Exception ex)
             {

@@ -20,7 +20,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.AddRelationshipGroup("PLAYER", ref playerGroupHash);
 
             client.RegisterEventHandler("curiosity:Client:Command:SpawnWeapon", new Action<string>(SpawnWeapon));
-            client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string>(SpawnCar));
+            client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string, string>(SpawnCar));
 
             API.RegisterCommand("mod", new Action<int, List<object>, string>(ModVehicle), false);
             API.RegisterCommand("tp", new Action<int, List<object>, string>(Teleport), false);
@@ -220,7 +220,7 @@ namespace Curiosity.Client.net.Classes.Actions
             await BaseScript.Delay(0);
         }
 
-        static async void SpawnCar(string car)
+        static async void SpawnCar(string car, string numberPlate)
         {
             try
             {
@@ -266,7 +266,7 @@ namespace Curiosity.Client.net.Classes.Actions
                     modelName = car;
                 }
 
-                if (!await SpawnVehicle(model))
+                if (!await SpawnVehicle(model, numberPlate))
                 {
                     Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Error", $"Could not load model {modelName}", 2);
                 }
@@ -278,7 +278,7 @@ namespace Curiosity.Client.net.Classes.Actions
             }
         }
         
-        private static async Task<bool> SpawnVehicle(Model model)
+        private static async Task<bool> SpawnVehicle(Model model, string numberPlate)
         {
             if (Game.PlayerPed.CurrentVehicle != null)
             {
@@ -297,7 +297,7 @@ namespace Curiosity.Client.net.Classes.Actions
             veh.LockStatus = VehicleLockStatus.Unlocked;
             veh.NeedsToBeHotwired = false;
             veh.IsEngineRunning = true;
-            veh.Mods.LicensePlate = "LIFEVDEV";
+            veh.Mods.LicensePlate = numberPlate;
 
             veh.Mods.InstallModKit();
             veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;

@@ -109,9 +109,9 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     if (vehicle.Mods.LicensePlate == "LIFEVDEV")
                     {
-                        if (!Player.PlayerInformation.IsDeveloper())
+                        if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
                         {
-                            Game.PlayerPed.Task.LeaveVehicle();
+                            vehicle.LockStatus = VehicleLockStatus.Locked;
                         }
                         return;
                     }
@@ -139,14 +139,10 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     if (vehicle.Mods.LicensePlate == "LIFEVDEV")
                     {
-                        if (!Player.PlayerInformation.IsDeveloper())
+                        if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
                         {
                             vehicle.LockStatus = VehicleLockStatus.Locked;
                         }
-                        //if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
-                        //{
-                        //    vehicle.LockStatus = VehicleLockStatus.Locked;
-                        //}
                         return;
                     }
 

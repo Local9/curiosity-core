@@ -15,7 +15,6 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         static Client client = Client.GetInstance();
         static Random random = new Random();
         static int PreviousCallout = -1;
-        static bool IsRunnningCallout = false;
         static bool TickIsRegistered = false;
 
         static long TimeStampOfLastCallout;
@@ -75,7 +74,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             Client.TriggerServerEvent("curiosity:Server:Police:CalloutEnded", PreviousCallout);
 
             await Client.Delay(0);
-            IsRunnningCallout = false;
+            Job.DutyManager.IsOnCallout = false;
             TimeStampOfLastCallout = API.GetGameTimer();
 
             if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
@@ -131,13 +130,13 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
                     return;
                 }
 
-                if (IsRunnningCallout)
+                if (Job.DutyManager.IsOnCallout)
                 {
                     await Task.FromResult(0);
                     return;
                 };
 
-                IsRunnningCallout = true;
+                Job.DutyManager.IsOnCallout = true;
 
                 await Task.FromResult(0);
 
