@@ -62,7 +62,7 @@
     <Compile Include="Classes\Vehicle\DisableAirControls.cs" />
     <Compile Include="Classes\Vehicle\EngineManager.cs" />
     <Compile Include="Classes\Vehicle\FuelManager.cs" />
-    <Compile Include="Classes\Vehicle\Stay.cs" />
+    <Compile Include="Classes\Vehicle\VehicleBlip.cs" />
     <Compile Include="Classes\Vehicle\VehicleDamage.cs" />
     <Compile Include="Classes\Vehicle\VehiclePack.cs" />
   </ItemGroup>

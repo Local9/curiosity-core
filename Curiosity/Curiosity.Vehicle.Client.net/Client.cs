@@ -10,6 +10,7 @@ namespace Curiosity.Vehicle.Client.net
     {
         private static Client _instance;
         public static PlayerList players;
+        public static CitizenFX.Core.Vehicle CurrentVehicle;
 
         public static Client GetInstance()
         {
