@@ -76,6 +76,7 @@
     <Compile Include="Classes\Environment\InstanceChecker.cs" />
     <Compile Include="Classes\Environment\Scoreboard.cs" />
     <Compile Include="Classes\Environment\Vehicles.cs" />
+    <Compile Include="Classes\Environment\WeatherSystems.cs" />
     <Compile Include="Classes\Menu\Lists.cs" />
     <Compile Include="Classes\PlayerMethods.cs" />
     <Compile Include="Classes\Player\Sit.cs" />
