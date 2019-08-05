@@ -88,6 +88,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
                 ped.Weapons.Give(WeaponHash.APPistol, 1000, true, true);
                 ped.Weapons.Give(WeaponHash.HeavyPistol, 1000, true, true);
+                ped.Weapons.Give(WeaponHash.HeavyShotgun, 1000, true, true);
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
 
