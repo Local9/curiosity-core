@@ -299,10 +299,13 @@ namespace Curiosity.Client.net.Classes.Actions
             veh.IsEngineRunning = true;
             veh.Mods.LicensePlate = numberPlate;
 
-            veh.Mods.InstallModKit();
-            veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
-            veh.Mods[VehicleModType.Brakes].Index = veh.Mods[VehicleModType.Brakes].ModCount - 1;
-            veh.Mods[VehicleModType.Transmission].Index = veh.Mods[VehicleModType.Transmission].ModCount - 1;
+            if (numberPlate == "LIFEVDEV")
+            {
+                veh.Mods.InstallModKit();
+                veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
+                veh.Mods[VehicleModType.Brakes].Index = veh.Mods[VehicleModType.Brakes].ModCount - 1;
+                veh.Mods[VehicleModType.Transmission].Index = veh.Mods[VehicleModType.Transmission].ModCount - 1;
+            }
 
             int networkId = API.VehToNet(veh.Handle);
             API.SetNetworkIdExistsOnAllMachines(networkId, true);
