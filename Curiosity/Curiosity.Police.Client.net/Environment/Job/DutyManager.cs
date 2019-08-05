@@ -40,6 +40,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 Tasks.CalloutHandler.PlayerCanTakeCallout();
 
                 Game.PlayerPed.Weapons.Give(WeaponHash.Pistol, 120, false, true);
+                Game.PlayerPed.Armor = 100;
             }
             else
             {

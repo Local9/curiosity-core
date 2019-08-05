@@ -384,6 +384,11 @@ namespace Curiosity.Client.net
 
             float? posZ = playerPosition.Z;
 
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                posZ = posZ + 1f;
+            }
+
             if (Game.PlayerPed.IsInAir)
             {
                 Vector2 v2 = new Vector2(playerPosition.X, playerPosition.Y);
