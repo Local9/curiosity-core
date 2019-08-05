@@ -85,6 +85,7 @@
     <Compile Include="Classes\SessionManager.cs" />
     <Compile Include="Classes\Skills.cs" />
     <Compile Include="Database\Config.cs" />
+    <Compile Include="Database\DatabaseVehicles.cs" />
     <Compile Include="Database\DatabaseCharacterInventory.cs" />
     <Compile Include="Database\DatabaseLog.cs" />
     <Compile Include="Database\DatabaseUsersBank.cs" />

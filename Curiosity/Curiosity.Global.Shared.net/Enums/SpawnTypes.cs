@@ -3,7 +3,8 @@
     public enum VehicleSpawnTypes
     {
         Spawner,
-        Police,
+        PoliceCity,
+        PoliceCounty,
         Ems,
         Fire,
         Truck,

@@ -291,6 +291,8 @@ namespace Curiosity.Client.net.Classes.Actions
                 return false;
             }
 
+            model.MarkAsNoLongerNeeded();
+
             API.NetworkFadeInEntity(veh.Handle, false);
 
             Game.PlayerPed.Task.WarpIntoVehicle(veh, VehicleSeat.Driver);
