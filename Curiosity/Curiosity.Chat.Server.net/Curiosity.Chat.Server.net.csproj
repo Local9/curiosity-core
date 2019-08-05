@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\CitizenFX.Core.Server.1.0.1412\lib\net45\CitizenFX.Core.Server.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Server.1.0.1465\lib\net45\CitizenFX.Core.Server.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -50,9 +50,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">
       <Project>{fe7f0756-cfe5-4bb9-a822-e9e1cfbc412b}</Project>
       <Name>Curiosity.Global.Shared.net</Name>
@@ -61,6 +58,9 @@
       <Project>{e665b41e-6ffb-4ea8-998f-80122b2afe7c}</Project>
       <Name>Curiosity.Shared.Server.net</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
