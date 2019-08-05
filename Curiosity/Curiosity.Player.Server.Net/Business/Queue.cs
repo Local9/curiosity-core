@@ -41,8 +41,6 @@ namespace Curiosity.Server.net.Business
         static long serverSetupTimer = API.GetGameTimer();
         static long forceWait = (1000 * 30);
 
-        static string adaptiveWelcomeCard;
-
         // Concurrent Values
         static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
         static ConcurrentDictionary<string, Player> sentLoading = new ConcurrentDictionary<string, Player>();
@@ -62,9 +60,6 @@ namespace Curiosity.Server.net.Business
         {
             SetupConvars();
             SetupMessages();
-
-            string path = Path.Combine($@"{resourcePath}/data/welcome.json");
-            adaptiveWelcomeCard = File.ReadAllText(path);
 
             server.RegisterEventHandler("onResourceStop", new Action<string>(OnResourceStop));
             server.RegisterEventHandler("playerConnecting", new Action<CitizenFX.Core.Player, string, dynamic, dynamic>(PlayerConnecting));
@@ -167,6 +162,14 @@ namespace Curiosity.Server.net.Business
 
                 if (!IsEverythingReady())
                     deferrals.update($"Checking server startup");
+
+                string adaptiveWelcomeCard = string.Empty;
+                string path = Path.Combine($@"{resourcePath}/data/welcome.json");
+
+                if (File.Exists(path))
+                {
+                    adaptiveWelcomeCard = File.ReadAllText(path);
+                }
 
                 while (!IsEverythingReady()) { await Server.Delay(0); }
                 deferrals.update($"{messages[Messages.Gathering]}");
