@@ -39,37 +39,29 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     if (vehicle.Exists())
                     {
-                        if (!vehicle.Driver.IsPlayer)
+                        if (vehicle.PreviouslyOwnedByPlayer)
                         {
-                            API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, false);
-                            await Client.Delay(0);
-                            API.SetEntityAsMissionEntity(vehicle.Handle, false, false);
-                            await Client.Delay(0);
-                            API.NetworkFadeOutEntity(vehicle.Handle, true, false);
-                            await Client.Delay(0);
-                            int copyRef = vehicle.Handle;
-
-                            if (API.DoesEntityExist(vehicle.Handle))
+                            int entity = 0;
+                            API.GetVehicleOwner(vehicle.Handle, ref entity);
+                            if (entity > 0)
                             {
-                                API.DeleteEntity(ref copyRef);
-
-                                if (!API.DoesEntityExist(vehicle.Handle))
+                                foreach(CitizenFX.Core.Player p in Client.players)
                                 {
-                                    if (Player.PlayerInformation.IsDeveloper())
+                                    if (!(p.ServerId == entity))
                                     {
-                                        Debug.WriteLine($"OnVehicleRemove -> Removed vehicle with handle {vehicleHandle}");
+                                        await DeleteVehicle(vehicle);
                                     }
-
-                                    BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
-                                }
-                                else
-                                {
-                                    if (Player.PlayerInformation.IsDeveloper())
-                                    {
-                                        Debug.WriteLine($"OnVehicleRemove -> Failed to remove vehicle with handle {vehicleHandle}");
-                                    }
+                                    await Client.Delay(100);
                                 }
                             }
+                            else
+                            {
+                                await DeleteVehicle(vehicle);
+                            }
+                        }
+                        else if (!vehicle.Driver.IsPlayer)
+                        {
+                            await DeleteVehicle(vehicle);
                         }
                         else
                         {
@@ -91,6 +83,40 @@ namespace Curiosity.Client.net.Classes.Environment
             }
 
             await Client.Delay(0);
+        }
+
+        static async Task DeleteVehicle(Vehicle vehicle)
+        {
+            API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, false);
+            await Client.Delay(0);
+            API.SetEntityAsMissionEntity(vehicle.Handle, false, false);
+            await Client.Delay(0);
+            API.NetworkFadeOutEntity(vehicle.Handle, true, false);
+            await Client.Delay(0);
+            int copyRef = vehicle.Handle;
+
+            if (API.DoesEntityExist(vehicle.Handle))
+            {
+                API.DeleteEntity(ref copyRef);
+
+                if (!API.DoesEntityExist(vehicle.Handle))
+                {
+                    if (Player.PlayerInformation.IsDeveloper())
+                    {
+                        Debug.WriteLine($"OnVehicleRemove -> Removed vehicle with handle {copyRef}");
+                    }
+
+                    BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", copyRef);
+                }
+                else
+                {
+                    if (Player.PlayerInformation.IsDeveloper())
+                    {
+                        Debug.WriteLine($"OnVehicleRemove -> Failed to remove vehicle with handle {copyRef}");
+                    }
+                }
+            }
+            await Task.FromResult(0);
         }
 
         static async Task InsideVehicleTick()

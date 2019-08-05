@@ -67,6 +67,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             blip.Priority = 100;
             blip.Name = "Personal Vehicle";
 
+            API.SetVehicleHasBeenOwnedByPlayer(veh.Handle, true);
+
             Client.CurrentVehicle = veh;
 
             int networkId = API.VehToNet(veh.Handle);
