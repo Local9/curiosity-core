@@ -171,6 +171,11 @@ namespace Curiosity.Client.net.Classes.Environment
                             vehicle.LockStatus = VehicleLockStatus.Locked;
                             SentNotification();
                         }
+
+                        if (Player.PlayerInformation.IsStaff())
+                        {
+                            vehicle.LockStatus = VehicleLockStatus.Unlocked;
+                        }
                         return;
                     }
 
@@ -180,6 +185,11 @@ namespace Curiosity.Client.net.Classes.Environment
                         {
                             vehicle.LockStatus = VehicleLockStatus.Locked;
                             SentNotification();
+                        }
+
+                        if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+                        {
+                            vehicle.LockStatus = VehicleLockStatus.Unlocked;
                         }
                         return;
                     }
