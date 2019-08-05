@@ -3,43 +3,46 @@ using CitizenFX.Core.Native;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Client.net
+namespace Curiosity.Client.net.Classes.Environment
 {
-    public class CuriosityWeather : BaseScript
+    class WeatherSystem
     {
-        public CuriosityWeather()
-        {
-            EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
-            EventHandlers["playerSpawned"] += new Action(OnPlayerSpawned);
-            EventHandlers["curiosity:Client:Weather:Sync"] += new Action<string, bool, float, float>(WeatherSync);
+        static Client client = Client.GetInstance();
 
-            Tick += TimeNetworkSync;
-            Tick += WeatherChecker;
+        public static void Init()
+        {
+            client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+            client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
+            client.RegisterEventHandler("curiosity:Client:Weather:Sync", new Action<string, bool, float, float>(WeatherSync));
+
+            client.RegisterTickHandler(TimeNetworkSync);
+            client.RegisterTickHandler(WeatherChecker);
         }
 
-        async Task WeatherChecker()
+
+        static async Task WeatherChecker()
         {
             while (true)
             {
                 bool trails = World.Weather == Weather.Christmas;
                 API.SetForceVehicleTrails(trails);
                 API.SetForcePedFootstepsTracks(trails);
-                await Delay(0);
+                await Client.Delay(0);
             }
         }
 
-        void OnPlayerSpawned()
+        static void OnPlayerSpawned()
         {
-            TriggerServerEvent("curiosity:Server:Weather:Sync");
+            Client.TriggerServerEvent("curiosity:Server:Weather:Sync");
         }
 
-        void OnClientResourceStart(string resourceName)
+        static void OnClientResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
-            TriggerServerEvent("curiosity:Server:Weather:Sync");
+            Client.TriggerServerEvent("curiosity:Server:Weather:Sync");
         }
 
-        async Task TimeNetworkSync()
+        static async Task TimeNetworkSync()
         {
             int hours = 0;
             int minutes = 0;
@@ -49,11 +52,11 @@ namespace Curiosity.Client.net
             await Task.FromResult(0);
         }
 
-        async void WeatherSync(string weather, bool wind, float windSpeed, float windHeading)
+        static async void WeatherSync(string weather, bool wind, float windSpeed, float windHeading)
         {
             Debug.WriteLine($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}");
 
-            await Delay(0);
+            await Client.Delay(0);
 
             API.ClearWeatherTypePersist();
             API.SetWeatherTypeOverTime(weather, 60.00f);
@@ -63,19 +66,20 @@ namespace Curiosity.Client.net
             API.SetForceVehicleTrails(trails);
             API.SetForcePedFootstepsTracks(trails);
 
-            await Delay(0);
+            await Client.Delay(0);
 
             if (wind)
             {
                 API.SetWind(1.0f);
                 API.SetWindSpeed(windSpeed);
                 API.SetWindDirection(windHeading);
-            } else
+            }
+            else
             {
                 API.SetWind(0f);
                 API.SetWindSpeed(0f);
             }
-            await Delay(0);
+            await Client.Delay(0);
         }
     }
 }

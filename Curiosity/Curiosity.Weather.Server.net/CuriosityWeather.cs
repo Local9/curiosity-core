@@ -144,6 +144,8 @@ namespace Curiosity.Server.Net
 
         async Task SetupWeather()
         {
+            Debug.WriteLine("WEATHER SYNC REQUEST");
+
             await Delay(0);
             Random random = new Random(API.GetGameTimer().GetHashCode());
             Random randomSelect = new Random();
