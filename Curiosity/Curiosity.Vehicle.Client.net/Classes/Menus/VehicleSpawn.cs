@@ -18,6 +18,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         static Menu menu;
         static Client client = Client.GetInstance();
         static VehicleSpawnTypes VehicleSpawnType;
+        static Random random = new Random();
 
         public static void Init()
         {
@@ -121,8 +122,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
         private static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading)
         {
+            float fuelLevel = random.Next(60, 100);
+
             if (Game.PlayerPed.CurrentVehicle != null)
             {
+                fuelLevel = Game.PlayerPed.CurrentVehicle.FuelLevel;
                 API.NetworkFadeOutEntity(Game.PlayerPed.CurrentVehicle.Handle, true, false);
                 await Client.Delay(1000);
                 Game.PlayerPed.CurrentVehicle.Delete();
@@ -132,6 +136,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             {
                 if (Client.CurrentVehicle.Exists())
                 {
+                    fuelLevel = Game.PlayerPed.CurrentVehicle.FuelLevel;
                     API.NetworkFadeOutEntity(Client.CurrentVehicle.Handle, true, false);
                     await Client.Delay(1000);
                     Client.CurrentVehicle.Delete();
@@ -154,6 +159,17 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             veh.LockStatus = VehicleLockStatus.Unlocked;
             veh.NeedsToBeHotwired = false;
             veh.IsEngineRunning = true;
+
+            if (fuelLevel < 5f)
+            {
+                fuelLevel = 15f;
+            }
+
+            veh.FuelLevel = fuelLevel;
+
+            veh.BodyHealth = 1000f;
+            veh.EngineHealth = 1000f;
+            veh.PetrolTankHealth = 1000f;
 
             Blip blip = veh.AttachBlip();
             blip.IsShortRange = false;
