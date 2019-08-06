@@ -163,13 +163,13 @@ namespace Curiosity.Server.net.Business
                 if (!IsEverythingReady())
                     deferrals.update($"Checking server startup");
 
-                string adaptiveWelcomeCard = string.Empty;
-                string path = Path.Combine($@"{resourcePath}/data/welcome.json");
+                //string adaptiveWelcomeCard = string.Empty;
+                //string path = Path.Combine($@"{resourcePath}/data/welcome.json");
 
-                if (File.Exists(path))
-                {
-                    adaptiveWelcomeCard = File.ReadAllText(path);
-                }
+                //if (File.Exists(path))
+                //{
+                //    adaptiveWelcomeCard = File.ReadAllText(path);
+                //}
 
                 while (!IsEverythingReady()) { await Server.Delay(0); }
                 deferrals.update($"{messages[Messages.Gathering]}");
@@ -254,10 +254,10 @@ namespace Curiosity.Server.net.Business
                 }
                 await Server.Delay(500);
 
-                if (!string.IsNullOrEmpty(adaptiveWelcomeCard))
-                {
-                    deferrals.presentCard(adaptiveWelcomeCard);
-                }
+                //if (!string.IsNullOrEmpty(adaptiveWelcomeCard))
+                //{
+                //    deferrals.presentCard(adaptiveWelcomeCard);
+                //}
 
                 await Server.Delay(10000);
 
