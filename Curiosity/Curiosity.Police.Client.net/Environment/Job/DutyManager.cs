@@ -28,8 +28,11 @@ namespace Curiosity.Police.Client.net.Environment.Job
             {
                 IsPoliceJobActive = false;
                 IsOnDuty = false;
+                if (IsOnCallout)
+                {
+                    Classes.CreateShopCallout.EndCallout();
+                }
                 IsOnCallout = false;
-                Classes.CreateShopCallout.EndCallout();
                 Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
                 return; // TODO: Refactor job code
             }
