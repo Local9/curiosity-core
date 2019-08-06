@@ -161,7 +161,6 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                             {
                                 if (!IsFightingPlayer)
                                 {
-                                    IsDrivingToPlayer = false;
                                     API.SetPedSphereDefensiveArea(ped.Handle, ped.Position.X, ped.Position.Y, ped.Position.Z, 100f, false, false);
                                     ped.Task.FightAgainstHatedTargets(100.0f);
                                     IsFightingPlayer = true;
