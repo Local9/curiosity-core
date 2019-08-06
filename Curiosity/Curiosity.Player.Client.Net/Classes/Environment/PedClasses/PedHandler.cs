@@ -13,6 +13,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
         static Random random = new Random(Guid.NewGuid().GetHashCode());
 
         static bool IsFightingPlayer = false;
+        static bool IsDrivingToPlayer = false;
 
         static Array weaponValues = Enum.GetValues(typeof(WeaponHash));
 
@@ -153,13 +154,14 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                         {
                             if (!ped.IsNearEntity(Game.PlayerPed, new Vector3(30.0f, 30.0f, 30.0f)))
                             {
-                                ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 100.0f, 1074528293);
+                                ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 40.0f, 1074528293);
                                 IsFightingPlayer = false;
                             }
                             else
                             {
                                 if (!IsFightingPlayer)
                                 {
+                                    IsDrivingToPlayer = false;
                                     API.SetPedSphereDefensiveArea(ped.Handle, ped.Position.X, ped.Position.Y, ped.Position.Z, 100f, false, false);
                                     ped.Task.FightAgainstHatedTargets(100.0f);
                                     IsFightingPlayer = true;
@@ -186,6 +188,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             {
                 Debug.WriteLine($"[PedTick] -> {ex.Message}");
             }
+            await Client.Delay(1000);
             await Task.FromResult(0);
         }
     }
