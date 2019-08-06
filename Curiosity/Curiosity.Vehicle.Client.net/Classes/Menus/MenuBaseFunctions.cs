@@ -12,14 +12,28 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         {
             Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
             Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
-            Environment.VehicleSpawnMarkerHandler.IsMenuOpen = true;
+            try
+            {
+                Environment.VehicleSpawnMarkerHandler.IsMenuOpen = true;
+            }
+            catch (Exception ex)
+            {
+                // 
+            }
         }
 
         public static void MenuClose()
         {
+            try
+            {
+                Environment.VehicleSpawnMarkerHandler.IsMenuOpen = false;
+            }
+            catch (Exception ex)
+            {
+                // 
+            }
             Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
             Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
-            Environment.VehicleSpawnMarkerHandler.IsMenuOpen = false;
         }
     }
 }
