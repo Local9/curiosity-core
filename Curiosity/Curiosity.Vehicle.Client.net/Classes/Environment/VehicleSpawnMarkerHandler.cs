@@ -93,6 +93,16 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                     API.SetTextComponentFormat("STRING");
                     API.AddTextComponentString($" Press ~INPUT_PICKUP~ to open spawn menu.");
                     API.DisplayHelpTextFromStringLabel(0, false, true, -1);
+
+                    if (Game.IsControlJustPressed(0, Control.Pickup) ||
+                    Game.IsControlJustReleased(0, Control.Pickup))
+                    {
+                        if (!IsMenuOpen)
+                        {
+                            IsMenuOpen = true;
+                            Menus.VehicleSpawn.OpenMenu(marker.SpawnType);
+                        }
+                    }
                 }
 
                 if (marker == null && IsMenuOpen)
@@ -113,19 +123,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 if (!HideAllMarkers)
                 {
                     Close.ForEach(m => CitizenFX.Core.World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true));
-                }
-                if (
-                    Game.IsControlJustPressed(0, Control.Pickup) ||
-                    Game.IsControlJustReleased(0, Control.Pickup)
-                    )
-                {
-                    if (IsMenuOpen) return Task.FromResult(0);
-
-                    IsMenuOpen = true;
-
-                    Marker marker = GetActiveMarker();
-                    if (marker == null) Task.FromResult(0);
-                    Menus.VehicleSpawn.OpenMenu(marker.SpawnType);
                 }
             }
             catch (Exception ex)

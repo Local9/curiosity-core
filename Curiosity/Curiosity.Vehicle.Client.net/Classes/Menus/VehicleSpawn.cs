@@ -47,7 +47,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
         public static void CloseMenu()
         {
-            menu.CloseMenu();
+            if (menu != null)
+                menu.CloseMenu();
         }
 
         private static void Menu_OnMenuClose(Menu menu)
