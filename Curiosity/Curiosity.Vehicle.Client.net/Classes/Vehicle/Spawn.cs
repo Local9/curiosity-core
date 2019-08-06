@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
@@ -9,7 +11,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
     {
         static Random random = new Random();
 
-        public static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading)
+        public static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading, Vector3 spawnLocation)
         {
             float fuelLevel = random.Next(60, 100);
 
@@ -36,19 +38,46 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             await model.Request(10000);
 
             var veh = await World.CreateVehicle(model, spawnPosition, heading);
+
             if (veh == null)
             {
                 return false;
             }
 
+            await Client.Delay(0);
+
             model.MarkAsNoLongerNeeded();
 
-            API.NetworkFadeInEntity(veh.Handle, false);
+            API.SetEntityLoadCollisionFlag(veh.Handle, true);
+
+            API.NetworkDoesNetworkIdExist(veh.NetworkId);
+            API.SetEntitySomething(veh.NetworkId, true);
+            API.SetNetworkIdCanMigrate(veh.NetworkId, true);
+            API.SetNetworkIdExistsOnAllMachines(veh.NetworkId, true);
+            API.SetNetworkIdSyncToPlayer(veh.NetworkId, Game.Player.Handle, true);
+            API.SetVehicleIsStolen(veh.Handle, false);
+            await Client.Delay(0);
+            // API.SetEntityCollision(veh.Handle, false, false);
+            API.SetEntityProofs(veh.Handle, true, true, true, true, true, true, true, true);
+            API.SetVehicleOnGroundProperly(veh.Handle);
+
+            await Client.Delay(0);
+
+            if (API.DecorIsRegisteredAsType("Player_Vehicle", 3))
+            {
+                API.DecorSetInt(veh.Handle, "Player_Vehicle", Game.Player.ServerId);
+            }
+
+            await Client.Delay(0);
+
+            API.NetworkFadeInEntity(veh.Handle, true);
 
             Game.PlayerPed.Task.WarpIntoVehicle(veh, VehicleSeat.Driver);
             veh.LockStatus = VehicleLockStatus.Unlocked;
             veh.NeedsToBeHotwired = false;
             veh.IsEngineRunning = true;
+
+            await Client.Delay(0);
 
             if (fuelLevel < 5f)
             {
@@ -57,9 +86,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
             Function.Call(Hash._DECOR_SET_FLOAT, veh.Handle, "Vehicle.Fuel", fuelLevel);
 
+            await Client.Delay(0);
+
+            veh.Health = 1000;
             veh.BodyHealth = 1000f;
             veh.EngineHealth = 1000f;
             veh.PetrolTankHealth = 1000f;
+
+            await Client.Delay(0);
 
             Blip blip = veh.AttachBlip();
             blip.IsShortRange = false;
@@ -71,11 +105,47 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
             Client.CurrentVehicle = veh;
 
-            int networkId = API.VehToNet(veh.Handle);
-            API.SetNetworkIdExistsOnAllMachines(networkId, true);
-            API.SetNetworkIdCanMigrate(networkId, true);
+            Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", veh.NetworkId);
 
-            Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
+            List<CitizenFX.Core.Vehicle> vehicles = new List<CitizenFX.Core.Vehicle>();
+            vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 15f).ToList();
+            vehicles.Remove(veh);
+
+            while (vehicles.Count > 0)
+            {
+                if (veh.Position.DistanceToSquared(spawnPosition) > 40f)
+                {
+                    break;
+                }
+
+                vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 15f).ToList();
+                vehicles.Remove(veh);
+                await Client.Delay(0);
+                foreach(CitizenFX.Core.Vehicle vehicle in vehicles)
+                {
+                    if (veh.Handle != vehicle.Handle)
+                    {
+                        veh.Opacity = 200;
+                        vehicle.Opacity = 200;
+                        API.SetEntityNoCollisionEntity(veh.Handle, vehicle.Handle, false);
+                        await Client.Delay(0);
+                    }
+                }
+            }
+
+            await Client.Delay(500);
+
+            vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 50f).ToList();
+
+            foreach (CitizenFX.Core.Vehicle vehicle in vehicles)
+            {
+                vehicle.ResetOpacity();
+                API.SetEntityNoCollisionEntity(veh.Handle, vehicle.Handle, true);
+                await Client.Delay(10);
+            }
+
+            vehicles.Clear();
+
             return true;
         }
     }

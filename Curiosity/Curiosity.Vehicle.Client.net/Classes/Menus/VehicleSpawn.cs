@@ -70,7 +70,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             menu.ClearMenuItems();
             // add new items
             // VehicleHash, VehicleName, Enabled, Description
-            menu.AddMenuItem(new MenuItem("car1") { ItemData = new VehicleItem() { Name = "Ruiner", VehicleHashString = "Ruiner3", SpawnPosition = new Vector3(-1069.468f, -878.0467f, 5.85375f), SpawnHeading = 206.0515f } });
+            menu.AddMenuItem(new MenuItem("car1") { ItemData = new VehicleItem() { Name = "Ruiner", VehicleHashString = "Ruiner3", SpawnPosition = new Vector3(-1069.468f, -878.0467f, 5.85375f), SpawnHeading = 206.0515f, LocationOfSpawn = new Vector3(-1108.226f, -847.1646f, 19.31689f) } });
         }
 
         private static async void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
@@ -115,7 +115,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                 modelName = car;
             }
 
-            if (!await Vehicle.Spawn.SpawnVehicle(model, vehicleItem.SpawnPosition, vehicleItem.SpawnHeading))
+
+
+            if (!await Vehicle.Spawn.SpawnVehicle(model, vehicleItem.SpawnPosition, vehicleItem.SpawnHeading, vehicleItem.LocationOfSpawn))
             {
                 Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Please try again shortly.", string.Empty, 2);
             }

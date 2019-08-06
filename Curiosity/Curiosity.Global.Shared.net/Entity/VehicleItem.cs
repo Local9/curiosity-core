@@ -14,6 +14,7 @@ namespace Curiosity.Global.Shared.net.Entity
         public string Description;
         public VehicleHash Hash;
         public Vector3 SpawnPosition;
+        public Vector3 LocationOfSpawn;
         public float SpawnHeading;
     }
 }

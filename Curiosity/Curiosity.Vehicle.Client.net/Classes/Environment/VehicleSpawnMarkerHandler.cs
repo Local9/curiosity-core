@@ -152,10 +152,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             // THIS WILL BE OFF AN EVENT
 
             Marker marker = new Marker(VehicleSpawnTypes.PoliceCity, new CitizenFX.Core.Vector3(-1108.226f, -847.1646f, 19.31689f), CitizenFX.Core.MarkerType.CarSymbol, System.Drawing.Color.FromArgb(255, 135, 206, 250), 1.0f, 15f);
-            Marker marker2 = new Marker(VehicleSpawnTypes.Spawner, new CitizenFX.Core.Vector3(-1108.226f, -847.1646f, 19.31689f - 1f), CitizenFX.Core.MarkerType.VerticalCylinder, System.Drawing.Color.FromArgb(255, 135, 206, 250), 1.5f, 1.5f);
 
             All.Add(1, marker);
-            All.Add(2, marker2);
         }
 
         static Marker GetActiveMarker()

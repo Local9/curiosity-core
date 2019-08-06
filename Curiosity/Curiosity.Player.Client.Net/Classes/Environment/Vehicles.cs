@@ -43,20 +43,22 @@ namespace Curiosity.Client.net.Classes.Environment
                         {
                             int entity = 0;
                             API.GetVehicleOwner(vehicle.Handle, ref entity);
-                            if (entity > 0)
+
+                            if (!(API.DecorGetInt(vehicle.Handle, "Player_Vehicle") == -1))
                             {
-                                foreach(CitizenFX.Core.Player p in Client.players)
+                                int playerServerId = API.DecorGetInt(vehicle.Handle, "Player_Vehicle");
+
+                                if (entity > 0)
                                 {
-                                    if (!(p.ServerId == entity))
+                                    if (Client.players[playerServerId] == null)
                                     {
                                         await DeleteVehicle(vehicle);
                                     }
-                                    await Client.Delay(100);
                                 }
-                            }
-                            else
-                            {
-                                await DeleteVehicle(vehicle);
+                                else
+                                {
+                                    await DeleteVehicle(vehicle);
+                                }
                             }
                         }
                         else if (!vehicle.Driver.IsPlayer)
