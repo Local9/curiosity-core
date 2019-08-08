@@ -259,7 +259,7 @@ namespace Curiosity.Server.net.Business
                 //    deferrals.presentCard(adaptiveWelcomeCard);
                 //}
 
-                await Server.Delay(10000);
+                // await Server.Delay(10000);
 
                 deferrals.done();
             }
