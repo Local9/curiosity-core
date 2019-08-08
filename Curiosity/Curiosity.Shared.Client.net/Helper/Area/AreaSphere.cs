@@ -3,7 +3,7 @@ using System;
 
 namespace Curiosity.Shared.Client.net.Helper.Area
 {
-    class AreaSphere : AreaBase
+    public class AreaSphere : AreaBase
     {
         public Vector3 Pos { get; set; }
         public float Radius { get; set; }

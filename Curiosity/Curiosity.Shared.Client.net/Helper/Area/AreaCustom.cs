@@ -2,7 +2,7 @@
 
 namespace Curiosity.Shared.Client.net.Helper.Area
 {
-    class AreaCustom : AreaBase
+    public class AreaCustom : AreaBase
     {
         public Vector2[] Points { get; set; }
 

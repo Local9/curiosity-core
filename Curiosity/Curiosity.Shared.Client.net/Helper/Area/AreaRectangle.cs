@@ -4,7 +4,7 @@ using System;
 
 namespace Curiosity.Shared.Client.net.Helper.Area
 {
-    class AreaRectangle : AreaBase
+    public class AreaRectangle : AreaBase
     {
         public Vector2 Pos1 { get; set; }
         public Vector2 Pos2 { get; set; }

@@ -3,7 +3,7 @@ using System;
 
 namespace Curiosity.Shared.Client.net.Helper.Area
 {
-    class AreaBox : AreaBase
+    public class AreaBox : AreaBase
     {
         public Vector3 Pos1 { get; set; }
         public Vector3 Pos2 { get; set; }
@@ -13,11 +13,13 @@ namespace Curiosity.Shared.Client.net.Helper.Area
         {
             if (CoordsInside(Game.PlayerPed.Position) && !this.PlayerInside)
             {
+                Log.Info("Entered Area");
                 this.PlayerInside = true;
                 this.TriggerEnter();
             }
             else if (!CoordsInside(Game.PlayerPed.Position) && this.PlayerInside)
             {
+                Log.Info("Exited Area");
                 this.PlayerInside = false;
                 this.TriggerExit();
             }

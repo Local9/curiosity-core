@@ -107,45 +107,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
             Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", veh.NetworkId);
 
-            List<CitizenFX.Core.Vehicle> vehicles = new List<CitizenFX.Core.Vehicle>();
-            vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 15f).ToList();
-            vehicles.Remove(veh);
-
-            while (vehicles.Count > 0)
-            {
-                if (veh.Position.DistanceToSquared(spawnPosition) > 40f)
-                {
-                    break;
-                }
-
-                vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 15f).ToList();
-                vehicles.Remove(veh);
-                await Client.Delay(0);
-                foreach(CitizenFX.Core.Vehicle vehicle in vehicles)
-                {
-                    if (veh.Handle != vehicle.Handle)
-                    {
-                        veh.Opacity = 200;
-                        vehicle.Opacity = 200;
-                        API.SetEntityNoCollisionEntity(veh.Handle, vehicle.Handle, false);
-                        await Client.Delay(0);
-                    }
-                }
-            }
-
-            await Client.Delay(500);
-
-            vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 50f).ToList();
-
-            foreach (CitizenFX.Core.Vehicle vehicle in vehicles)
-            {
-                vehicle.ResetOpacity();
-                API.SetEntityNoCollisionEntity(veh.Handle, vehicle.Handle, true);
-                await Client.Delay(10);
-            }
-
-            vehicles.Clear();
-
             return true;
         }
     }
