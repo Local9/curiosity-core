@@ -16,32 +16,27 @@ namespace Curiosity.Shared.Client.net.Helper.Area
 
         protected void TriggerEnter()
         {
-            Log.Verbose("No TriggerEnter");
             Vector3 PlayerPos = Game.PlayerPed.Position;
             BaseScript.TriggerEvent("curiosity:Client:Player:Environment:OnEnterArea", Identifier, new { X = PlayerPos.X, Y = PlayerPos.Y, Z = PlayerPos.Z });
             BaseScript.TriggerServerEvent("curiosity:Server:Player:Environment:OnEnterArea", Identifier, new { X = PlayerPos.X, Y = PlayerPos.Y, Z = PlayerPos.Z });
 
             if (this.OnEnter == null)
             {
-                Log.Verbose("No CallbackDelegate");
                 return;
             }
 
             if (this.OnEnter.GetType() == typeof(System.String))
             {
-                Log.Verbose("Event");
                 BaseScript.TriggerEvent((String)this.OnEnter, this.Params);
             }
             else if (this.OnEnter.GetType() == typeof(CitizenFX.Core.CallbackDelegate))
             {   
                 if (this.Params != null)
                 {
-                    Log.Verbose("CallbackDelegate: Params");
                     ((CallbackDelegate)this.OnEnter).Invoke(this.Params);
                 }
                 else
                 {
-                    Log.Verbose("CallbackDelegate");
                     ((CallbackDelegate)this.OnEnter).Invoke();
                 }
             }
