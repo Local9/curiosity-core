@@ -51,7 +51,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 while (IsInArea)
                 {
                     HasBeenInAnArea = true;
-                    vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 25f).ToList();
+                    vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 15f).ToList();
                     vehicles.Remove(veh);
                     await Client.Delay(0);
                     veh.Opacity = 150;
@@ -59,7 +59,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
                     while (vehicles.Count > 0)
                     {
-                        vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 25f).ToList();
                         vehicles.Remove(veh);
                         await Client.Delay(0);
                         foreach (CitizenFX.Core.Vehicle vehicle in vehicles)
@@ -71,6 +70,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                                 await Client.Delay(0);
                             }
                         }
+                        vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 15f).ToList();
                     }
 
                     vehicles.Clear();
@@ -80,13 +80,13 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
                 if (HasBeenInAnArea)
                 {
-                    vehicles = World.GetAllVehicles().ToList();
+                    vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) > 50f).ToList();
 
                     foreach (CitizenFX.Core.Vehicle vehicle in vehicles)
                     {
                         vehicle.ResetOpacity();
                         API.SetEntityNoCollisionEntity(veh.Handle, vehicle.Handle, true);
-                        await Client.Delay(0);
+                        await Client.Delay(5);
                     }
 
                     Game.PlayerPed.ResetOpacity();
