@@ -13,13 +13,11 @@ namespace Curiosity.Shared.Client.net.Helper.Area
         {
             if (CoordsInside(Game.PlayerPed.Position) && !this.PlayerInside)
             {
-                Log.Info("Entered Area");
                 this.PlayerInside = true;
                 this.TriggerEnter();
             }
             else if (!CoordsInside(Game.PlayerPed.Position) && this.PlayerInside)
             {
-                Log.Info("Exited Area");
                 this.PlayerInside = false;
                 this.TriggerExit();
             }

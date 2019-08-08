@@ -80,7 +80,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
                 if (HasBeenInAnArea)
                 {
-                    vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(veh.Position) < 50f).ToList();
+                    vehicles = World.GetAllVehicles().ToList();
 
                     foreach (CitizenFX.Core.Vehicle vehicle in vehicles)
                     {
