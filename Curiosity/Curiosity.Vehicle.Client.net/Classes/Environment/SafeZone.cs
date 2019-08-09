@@ -24,6 +24,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static int Opacity = 180;
 
         static bool IsInArea = false;
+        static bool IsInOwnVehicle = false;
 
         public static void Init()
         {
@@ -46,7 +47,15 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 Game.PlayerPed.Opacity = Opacity;
 
                 if (Game.PlayerPed.IsInVehicle())
+                {
+                    //if (Game.PlayerPed.CurrentVehicle.Driver.Handle == Game.PlayerPed.Handle)
+                    //{
+                    //    if (!Game.PlayerPed.CurrentVehicle.PreviouslyOwnedByPlayer)
+                    //        Client.CurrentVehicle = Game.PlayerPed.CurrentVehicle;
+                    //}
+
                     Game.PlayerPed.CurrentVehicle.Opacity = Opacity;
+                }
 
                 try
                 {
@@ -127,6 +136,24 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 }
             }
         }
+
+        //static async Task IsLeavingCar()
+        //{
+        //    await Task.FromResult(0);
+        //    if (IsInOwnVehicle)
+        //    {
+        //        if (API.IsPedInAnyVehicle(Game.PlayerPed.Handle, false))
+        //        {
+        //            API.NetworkFadeOutEntity(Client.CurrentVehicle.Handle, false, true);
+
+        //            await Client.Delay(1000);
+
+        //            Client.CurrentVehicle.Delete();
+
+        //            Client.CurrentVehicle = null;
+        //        }
+        //    }
+        //}
 
         public static void OnEnter()
         {
