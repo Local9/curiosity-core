@@ -318,7 +318,7 @@ namespace Curiosity.Client.net.Classes.Actions
             {
                 Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
                 Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
-                Debug.WriteLine($"Vehicle Extras 1-9");
+                Debug.WriteLine($"Vehicle Extras 1-9 '/mod extra 1-9 true/false'");
 
             }
             Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"~b~Engine: ~y~MAX~n~~b~Brakes: ~y~MAX~n~~b~Transmission: ~y~MAX", 2);
@@ -361,7 +361,7 @@ namespace Curiosity.Client.net.Classes.Actions
                 if (vehicleModTypeName == "list")
                 {
                     Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
-                    Debug.WriteLine($"Vehicle Extras 1-9");
+                    Debug.WriteLine($"Vehicle Extras 1-9 '/mod extra 1-9 true/false'");
                     return;
                 }
 
