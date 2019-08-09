@@ -78,6 +78,12 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
         static async Task OnMobileCreationTick()
         {
+            if (Game.PlayerPed.IsDead)
+            {
+                await Task.FromResult(0);
+                return;
+            }
+
             if (IsMobilePhoneOpen)
             { 
                 float scale = 0;
@@ -289,13 +295,11 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
         static bool IsDownPressed()
         {
-            Debug.WriteLine("DOWN");
             // Return false if the buttons are not currently enabled.
             if (!IsMenuOpen)
             {
                 return false;
             }
-            Debug.WriteLine("DOWN 2");
             // when the player is holding TAB, while not in a vehicle, and when the scrollwheel is being used, return false to prevent interferring with weapon selection.
             if (!Game.PlayerPed.IsInVehicle())
             {
@@ -307,7 +311,6 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     }
                 }
             }
-            Debug.WriteLine("DOWN 3");
             // return true if the scrollwheel down or the arrow down key is being used at this frame.
             if (Game.IsControlPressed(0, Control.FrontendDown) ||
                 Game.IsDisabledControlPressed(0, Control.FrontendDown) ||
@@ -317,7 +320,6 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 return true;
             }
 
-            Debug.WriteLine("DOWN 4");
             // return false if none of the conditions matched.
             return false;
         }
