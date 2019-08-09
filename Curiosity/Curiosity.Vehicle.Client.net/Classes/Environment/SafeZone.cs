@@ -61,7 +61,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
                 try
                 {
-                    playerPeds = Client.players.ToList().Select(m => m).Where(m => areaBox.CoordsInside(m.Character.Position)).ToList();
+                    playerPeds = Client.players.ToList().Select(m => m).Where(m => m.Character.Position.DistanceToSquared(Game.PlayerPed.Position) < 15f).ToList();
                     playerPeds.Remove(Game.Player);
 
                     foreach (CitizenFX.Core.Player pedInSafeZone in playerPeds)
