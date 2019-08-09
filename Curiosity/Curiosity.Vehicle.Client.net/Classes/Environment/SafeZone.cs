@@ -78,6 +78,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                         if (Game.PlayerPed.IsInVehicle())
                         {
                             API.SetEntityNoCollisionEntity(Game.PlayerPed.CurrentVehicle.Handle, pedInSafeZone.Character.Handle, false);
+
+                            if (pedInSafeZone.Character.IsInVehicle())
+                                API.SetEntityNoCollisionEntity(Game.PlayerPed.CurrentVehicle.Handle, pedInSafeZone.Character.CurrentVehicle.Handle, false);
                         }
                     }
                 }
@@ -101,6 +104,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 if (Game.PlayerPed.IsInVehicle())
                 {
                     API.SetEntityNoCollisionEntity(Game.PlayerPed.CurrentVehicle.Handle, pedInSafeZone.Character.Handle, true);
+
+                    if (pedInSafeZone.Character.IsInVehicle())
+                        API.SetEntityNoCollisionEntity(Game.PlayerPed.CurrentVehicle.Handle, pedInSafeZone.Character.CurrentVehicle.Handle, true);
                 }
             }
 
