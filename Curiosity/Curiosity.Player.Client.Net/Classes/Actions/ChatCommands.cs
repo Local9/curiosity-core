@@ -367,14 +367,11 @@ namespace Curiosity.Client.net.Classes.Actions
 
                 if (vehicleModTypeName == "extra")
                 {
-                    if (vehicleModIndex < 0)
-                    {
-                        veh.ToggleExtra(0, false);
-                    }
-                    else
-                    {
-                        veh.ToggleExtra(vehicleModIndex, true);
-                    }
+                    if (veh == null || arguments.Count < 3) return;
+
+                    bool enable = Convert.ToBoolean(arguments[2].ToString());
+                    veh.ToggleExtra(vehicleModIndex, enable);
+
                     return;
                 }
 
