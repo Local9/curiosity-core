@@ -61,7 +61,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
         static void OnPatrolZone(int zone)
         {
             PatrolZone = (PatrolZone)zone;
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Patol Zone Change", $"Zone: {PatrolZone}", string.Empty, 2);
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Patrol Zone Change", $"Zone: {PatrolZone}", string.Empty, 2);
         }
 
         public static void OnSetCallOutStatus(bool status)
