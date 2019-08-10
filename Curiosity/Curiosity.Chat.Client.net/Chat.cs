@@ -124,6 +124,9 @@ namespace Curiosity.Chat.Client.net
                 string message = (String)chatResult["message"];
 
                 var spaceSplit = message.Split(' ');
+
+                Debug.WriteLine(message);
+
                 if (message.Substring(0, 1) == "/" && message.Length >= 2)
                 {
                     API.ExecuteCommand(message.Substring(1));
