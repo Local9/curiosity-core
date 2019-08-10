@@ -48,6 +48,9 @@ namespace Curiosity.Police.Client.net.Classes
             createdPed.DropsWeaponsOnDeath = false;
             createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
 
+            API.SetPedHearingRange(createdPed.Handle, 1000.0f);
+            API.SetPedSeeingRange(createdPed.Handle, 1000.0f);
+
             await Client.Delay(0);
 
             if (random.Next(0, 9) == 0)

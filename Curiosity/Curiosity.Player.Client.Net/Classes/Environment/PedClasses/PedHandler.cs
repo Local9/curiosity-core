@@ -71,6 +71,8 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
                 Ped ped = await World.CreatePed(model, new Vector3(spawnPosition.X, spawnPosition.Y, spawnPosition.Z), 180.0f);
                 ped.IsPositionFrozen = true;
+                API.SetPedHearingRange(ped.Handle, 1000.0f);
+                API.SetPedSeeingRange(ped.Handle, 1000.0f);
 
                 peds.Add(ped);
 
@@ -159,6 +161,11 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                             }
                             else
                             {
+                                if (ped.Position.DistanceToSquared(Game.PlayerPed.Position) < 30.0f && ped.IsInVehicle() && !IsFightingPlayer)
+                                {
+                                    ped.Task.LeaveVehicle();
+                                }
+
                                 if (!IsFightingPlayer)
                                 {
                                     API.SetPedSphereDefensiveArea(ped.Handle, ped.Position.X, ped.Position.Y, ped.Position.Z, 100f, false, false);

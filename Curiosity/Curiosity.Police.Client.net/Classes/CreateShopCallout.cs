@@ -120,6 +120,7 @@ namespace Curiosity.Police.Client.net.Classes
                 string group = "SUSPECT";
                 RelationshipGroup suspectGroup = World.AddRelationshipGroup(group);
                 suspectGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Hate, true);
+                suspectGroup.SetRelationshipBetweenGroups(suspectGroup, Relationship.Respect, true);
 
                 await SuspectModel.Request(10000);
                 Ped ped = await CreatePed.Create(suspectModel, SuspectPosition, suspectHeading, suspectGroup);
@@ -265,15 +266,15 @@ namespace Curiosity.Police.Client.net.Classes
                             ped.AttachedBlip.Delete();
                         }
                     }
-
-                    if (ShopKeeper.IsAlive)
-                    {
-                        ShopKeeper.Task.FleeFrom(Game.PlayerPed);
-                    }
-                    ShopKeeper.MarkAsNoLongerNeeded();
                     ped.MarkAsNoLongerNeeded();
                     peds.Remove(ped);
                 }
+
+                if (ShopKeeper.IsAlive)
+                {
+                    ShopKeeper.Task.FleeFrom(Game.PlayerPed);
+                }
+                ShopKeeper.MarkAsNoLongerNeeded();
 
                 if (LocationBlip != null)
                 {
