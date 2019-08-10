@@ -53,7 +53,19 @@ namespace Curiosity.Police.Client.net.Classes
             API.SetPedHearingRange(createdPed.Handle, 1000.0f);
             API.SetPedSeeingRange(createdPed.Handle, 1000.0f);
 
-            await Client.Delay(0);
+            createdPed.IsOnlyDamagedByPlayer = true;
+
+            API.SetEntityAsMissionEntity(createdPed.Handle, true, true);
+            API.SetPedFleeAttributes(createdPed.Handle, 0, false);
+            API.SetPedCombatAttributes(createdPed.Handle, 5, true);
+            API.SetPedCombatAttributes(createdPed.Handle, 16, true);
+            API.SetPedCombatAttributes(createdPed.Handle, 46, true);
+            API.SetPedCombatAttributes(createdPed.Handle, 26, true);
+            API.SetPedCombatAttributes(createdPed.Handle, 3, false);
+            API.SetPedCombatAttributes(createdPed.Handle, 2, true);
+            API.SetPedCombatAttributes(createdPed.Handle, 1, true); // can use vehicles
+
+           await Client.Delay(0);
 
             if (random.Next(0, 9) == 0)
             {
