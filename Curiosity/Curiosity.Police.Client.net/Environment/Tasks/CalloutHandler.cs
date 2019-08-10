@@ -66,34 +66,41 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
         public static async void PlayerCanTakeCallout()
         {
-            //if (Classes.Player.PlayerInformation.IsDeveloper())
-            //    Log.Verbose($"TICK: PlayerCanTakeCallout");
-
-            if (TickIsRegistered) return;
-            TickIsRegistered = true;
-
-            Client.TriggerServerEvent("curiosity:Server:Police:CalloutEnded", PreviousCallout);
-
-            await Client.Delay(0);
-            Job.DutyManager.IsOnCallout = false;
-            TimeStampOfLastCallout = API.GetGameTimer();
-
-            if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+            try
             {
-                if (Game.PlayerPed.IsInVehicle())
+                //if (Classes.Player.PlayerInformation.IsDeveloper())
+                //    Log.Verbose($"TICK: PlayerCanTakeCallout");
+
+                if (TickIsRegistered) return;
+                TickIsRegistered = true;
+
+                Client.TriggerServerEvent("curiosity:Server:Police:CalloutEnded", PreviousCallout);
+
+                await Client.Delay(0);
+                Job.DutyManager.IsOnCallout = false;
+                TimeStampOfLastCallout = API.GetGameTimer();
+
+                if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
                 {
-                    if (Game.PlayerPed.CurrentVehicle.Mods.LicensePlate == DEV_LICENSE_PLATE)
+                    if (Game.PlayerPed.IsInVehicle())
                     {
-                        FIVE_MINUTES = 5000;
+                        if (Game.PlayerPed.CurrentVehicle.Mods.LicensePlate == DEV_LICENSE_PLATE)
+                        {
+                            FIVE_MINUTES = 5000;
+                        }
                     }
                 }
-            }
-            else
-            {
-                FIVE_MINUTES = random.Next(60000, 180000);
-            }
+                else
+                {
+                    FIVE_MINUTES = random.Next(60000, 180000);
+                }
 
-            client.RegisterTickHandler(SelectCallout);
+                client.RegisterTickHandler(SelectCallout);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"PlayerCanTakeCallout -> {ex.Message}");
+            }
         }
 
         public static async void PlayerIsOnActiveCalloutOrOffDuty()
