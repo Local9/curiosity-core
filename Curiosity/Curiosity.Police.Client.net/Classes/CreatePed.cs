@@ -19,6 +19,8 @@ namespace Curiosity.Police.Client.net.Classes
         {
             await Client.Delay(0);
 
+            int collisionId = API.RequestCollisionAtCoord(suspectPosition.X, suspectPosition.Y, suspectPosition.Z);
+
             Ped createdPed = await World.CreatePed(suspectModel, suspectPosition, suspectHeading);
             API.SetNetworkIdCanMigrate(createdPed.NetworkId, true);
 
