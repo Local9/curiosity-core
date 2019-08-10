@@ -164,8 +164,8 @@ namespace Curiosity.Client.net.Classes.Environment
                 if (API.GetSeatPedIsTryingToEnter(Game.PlayerPed.Handle) == -1)
                 {
                     if (
-                        vehicle.Mods.LicensePlate == STAFF_LICENSE_PLATE
-                        || vehicle.Mods.LicensePlate == HSTAFF_LICENSE_PLATE
+                        vehicle.Mods.LicensePlate.Trim() == STAFF_LICENSE_PLATE
+                        || vehicle.Mods.LicensePlate.Trim() == HSTAFF_LICENSE_PLATE
                         )
                     {
                         if (!Player.PlayerInformation.IsStaff())
@@ -181,7 +181,24 @@ namespace Curiosity.Client.net.Classes.Environment
                         return;
                     }
 
-                    if (vehicle.Mods.LicensePlate == DEV_LICENSE_PLATE)
+                    if (
+                        vehicle.Mods.LicensePlate.Trim() == "TROUBLE"
+                        )
+                    {
+                        if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.PROJECTMANAGER))
+                        {
+                            vehicle.LockStatus = VehicleLockStatus.Locked;
+                            SentNotification();
+                        }
+
+                        if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.PROJECTMANAGER)
+                        {
+                            vehicle.LockStatus = VehicleLockStatus.Unlocked;
+                        }
+                        return;
+                    }
+
+                    if (vehicle.Mods.LicensePlate.Trim() == DEV_LICENSE_PLATE)
                     {
                         if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER))
                         {

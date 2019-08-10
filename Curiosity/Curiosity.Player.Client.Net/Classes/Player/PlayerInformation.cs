@@ -69,6 +69,11 @@ namespace Curiosity.Client.net.Classes.Player
             return (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         }
 
+        public static bool IsProjectManager()
+        {
+            return (privilege == Privilege.PROJECTMANAGER);
+        }
+
         static private async void PeriodicCheck()
         {
             await BaseScript.Delay(5000);
