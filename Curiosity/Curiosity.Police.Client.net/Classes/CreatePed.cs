@@ -64,8 +64,19 @@ namespace Curiosity.Police.Client.net.Classes
             API.SetPedCombatAttributes(createdPed.Handle, 3, false);
             API.SetPedCombatAttributes(createdPed.Handle, 2, true);
             API.SetPedCombatAttributes(createdPed.Handle, 1, true); // can use vehicles
+            API.SetPedCombatMovement(createdPed.Handle, 2);
 
-           await Client.Delay(0);
+            await Client.Delay(0);
+
+            API.SetPedSteersAroundObjects(createdPed.Handle, true);
+            API.SetPedSteersAroundPeds(createdPed.Handle, true);
+            API.SetPedSteersAroundVehicles(createdPed.Handle, true);
+            API.SetDriverAbility(createdPed.Handle, 1.0f);
+            API.SetDriverAggressiveness(createdPed.Handle, 1.0f);
+            API.SetPedFleeAttributes(createdPed.Handle, 0, false);
+            API.TaskSetBlockingOfNonTemporaryEvents(createdPed.Handle, true);
+
+            await Client.Delay(0);
 
             if (random.Next(0, 9) == 0)
             {
