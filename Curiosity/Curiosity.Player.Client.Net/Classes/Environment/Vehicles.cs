@@ -7,6 +7,7 @@ namespace Curiosity.Client.net.Classes.Environment
 {
     class Vehicles
     {
+        private const string TROUBLE_LICENSE_PLATE = "TROUBLES";
         static Client client = Client.GetInstance();
 
         public static string STAFF_LICENSE_PLATE = "LV0STAFF";
@@ -182,7 +183,7 @@ namespace Curiosity.Client.net.Classes.Environment
                     }
 
                     if (
-                        vehicle.Mods.LicensePlate.Trim() == "TROUBLE"
+                        vehicle.Mods.LicensePlate.Trim() == TROUBLE_LICENSE_PLATE
                         )
                     {
                         if (!(Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.PROJECTMANAGER))
