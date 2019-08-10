@@ -308,6 +308,15 @@ namespace Curiosity.Client.net.Classes.Actions
             veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
             veh.Mods[VehicleModType.Brakes].Index = veh.Mods[VehicleModType.Brakes].ModCount - 1;
             veh.Mods[VehicleModType.Transmission].Index = veh.Mods[VehicleModType.Transmission].ModCount - 1;
+            veh.Mods[VehicleModType.Suspension].Index = veh.Mods[VehicleModType.Suspension].ModCount - 1;
+
+            List<int> listOfExtras = new List<int>();
+
+            for(int i = 0; i < 255; i++)
+            {
+                if (veh.ExtraExists(i))
+                    listOfExtras.Add(i);
+            }
 
             int networkId = API.VehToNet(veh.Handle);
             API.SetNetworkIdExistsOnAllMachines(networkId, true);
@@ -318,7 +327,10 @@ namespace Curiosity.Client.net.Classes.Actions
             {
                 Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
                 Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
-                Debug.WriteLine($"Vehicle Extras 1-9 '/mod extra 1-9 true/false'");
+                if (listOfExtras.Count > 0)
+                {
+                    Debug.WriteLine($"Vehicle Extras: '/mod extra number true/false' avaiable: {string.Join(", ", listOfExtras)}");
+                }
 
             }
             Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"~b~Engine: ~y~MAX~n~~b~Brakes: ~y~MAX~n~~b~Transmission: ~y~MAX", 2);
@@ -360,8 +372,20 @@ namespace Curiosity.Client.net.Classes.Actions
 
                 if (vehicleModTypeName == "list")
                 {
+
+                    List<int> listOfExtras = new List<int>();
+
+                    for (int i = 0; i < 255; i++)
+                    {
+                        if (veh.ExtraExists(i))
+                            listOfExtras.Add(i);
+                    }
+
                     Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
-                    Debug.WriteLine($"Vehicle Extras 1-9 '/mod extra 1-9 true/false'");
+                    if (listOfExtras.Count > 0)
+                    {
+                        Debug.WriteLine($"Vehicle Extras: '/mod extra number true/false' avaiable: {string.Join(", ", listOfExtras)}");
+                    }
                     return;
                 }
 
