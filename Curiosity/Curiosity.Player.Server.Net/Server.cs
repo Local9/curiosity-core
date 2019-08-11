@@ -98,7 +98,7 @@ namespace Curiosity.Server.net
             Classes.DiscordWrapper.Init();
 
             RegisterTickHandler(GetServerId);
-            ServerUpTime();
+            // ServerUpTime();
             //RegisterTickHandler(InstanceChecker);
 
             API.SetConvarServerInfo("Map", $"Los Santos");
