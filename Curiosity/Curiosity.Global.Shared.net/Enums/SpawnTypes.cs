@@ -2,12 +2,13 @@
 {
     public enum VehicleSpawnTypes
     {
-        Spawner,
-        PoliceCity,
-        PoliceCounty,
-        Ems,
-        Fire,
-        Truck,
-        Plane
+        PoliceCity = 1,
+        PoliceState = 2,
+        PoliceSheriff = 3,
+        FireFighter = 4,
+        Medical = 5,
+        Truck = 6,
+        Plane = 7,
+        Helicopter = 8
     }
 }

@@ -125,7 +125,7 @@ namespace Curiosity.Chat.Client.net
 
                 var spaceSplit = message.Split(' ');
 
-                Debug.WriteLine(message);
+                // Debug.WriteLine(message);
 
                 if (message.Substring(0, 1) == "/" && message.Length >= 2)
                 {
