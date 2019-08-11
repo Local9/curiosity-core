@@ -4,6 +4,7 @@ using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace Curiosity.Police.Client.net.Classes
@@ -34,6 +35,12 @@ namespace Curiosity.Police.Client.net.Classes
             try
             {
                 Environment.Job.DutyManager.OnSetCallOutStatus(true);
+
+                if (LocationBlip != null)
+                {
+                    if (LocationBlip.Exists())
+                        LocationBlip.Delete();
+                }
                 //AcceptedCallout = false;
                 //GameTime = API.GetGameTimer();
 
@@ -43,6 +50,8 @@ namespace Curiosity.Police.Client.net.Classes
                 SuspectPosition = suspectLocation;
                 ShopKeeperModel = shopkeeperModel;
                 ShopKeeperPosition = shopkeeperLocation;
+
+                SetupLocationBlip();
 
                 // AN IDEA TO WORK ON
                 //while (!AcceptedCallout)
@@ -75,17 +84,8 @@ namespace Curiosity.Police.Client.net.Classes
 
                 await Client.Delay(0);
 
-                if (LocationBlip != null)
-                {
-                    if (LocationBlip.Exists())
-                        LocationBlip.Delete();
-                }
-
-                SetupLocationBlip();
-
                 while (API.GetDistanceBetweenCoords(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, Location.X, Location.Y, Location.Z, false) > 200.0f)
                 {
-                    LocationBlip.Name = string.Empty;
                     await Client.Delay(50);
                 }
 
@@ -139,8 +139,26 @@ namespace Curiosity.Police.Client.net.Classes
 
                 await Client.Delay(50);
 
-                while (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location) > 40.0f)
+                while (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location) > 180.0f)
                 {
+                    List<Ped> SuspectCopy = new List<Ped>(Suspects);
+
+                    int numberDead = 0;
+
+                    foreach (Ped pedCopy in SuspectCopy)
+                    {
+                        if (pedCopy.Exists())
+                        {
+                            if (pedCopy.IsDead)
+                            {
+                                numberDead++;
+                            }
+                        }
+                    }
+
+                    if (numberDead == Suspects.Count)
+                        return;
+
                     await Client.Delay(50);
                 }
 
@@ -190,11 +208,6 @@ namespace Curiosity.Police.Client.net.Classes
                                 pedFlee = true;
                             }
 
-                            if (ped.AttachedBlip.Exists())
-                            {
-                                ped.AttachedBlip.Delete();
-                            }
-
                             Entity killer = ped.GetKiller();
 
                             if (killer.Handle == Game.PlayerPed.Handle)
@@ -236,14 +249,12 @@ namespace Curiosity.Police.Client.net.Classes
                 await Client.Delay(10);
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
                 API.ShowTickOnBlip(LocationBlip.Handle, true);
-                API.SetBlipFade(LocationBlip.Handle, 0, 3000);
-                await Client.Delay(3000);
-                LocationBlip.Delete();
+                
 
                 Environment.Job.DutyManager.OnSetCallOutStatus(false);
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", string.Empty, 2);
-                Tidy();
+                await Tidy();
             }
             catch (Exception ex)
             {
@@ -251,7 +262,7 @@ namespace Curiosity.Police.Client.net.Classes
             }
         }
 
-        public static void EndCallout()
+        public static async void EndCallout()
         {
             try
             {
@@ -276,13 +287,8 @@ namespace Curiosity.Police.Client.net.Classes
                 }
                 ShopKeeper.MarkAsNoLongerNeeded();
 
-                if (LocationBlip != null)
-                {
-                    if (LocationBlip.Exists())
-                        LocationBlip.Delete();
-                }
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", string.Empty, 2);
-                Tidy();
+                await Tidy();
             }
             catch (Exception ex)
             {
@@ -290,10 +296,24 @@ namespace Curiosity.Police.Client.net.Classes
             }
         }
 
-        static void Tidy()
+        static async Task Tidy()
         {
+            if (LocationBlip.Exists())
+            {
+                Debug.WriteLine("KILL BLIP");
+
+                LocationBlip.ShowRoute = false;
+                API.SetBlipFade(LocationBlip.Handle, 0, 3000);
+                await Client.Delay(3000);
+                LocationBlip.Delete();
+                int handle = LocationBlip.Handle;
+                API.RemoveBlip(ref handle);
+            }
+
             Suspects.Clear();
             Environment.Tasks.CalloutHandler.CalloutEnded();
+
+            await Task.FromResult(0);
         }
 
         static void Experience(Vector3 dmgPos, int xp, int timeout, bool increase)

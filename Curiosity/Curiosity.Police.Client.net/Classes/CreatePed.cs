@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Enums;
+using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Police.Client.net.Classes
 {
@@ -21,7 +15,7 @@ namespace Curiosity.Police.Client.net.Classes
 
             int collisionId = API.RequestCollisionAtCoord(suspectPosition.X, suspectPosition.Y, suspectPosition.Z);
 
-            Ped createdPed = await World.CreatePed(suspectModel, suspectPosition, suspectHeading);
+            Ped createdPed = await World.CreatePed(suspectModel, suspectPosition, random.Next((int)suspectHeading));
             API.SetNetworkIdCanMigrate(createdPed.NetworkId, true);
 
             await Client.Delay(0);
@@ -46,12 +40,16 @@ namespace Curiosity.Police.Client.net.Classes
                 createdPed.Weapons.Give(WeaponHash.SawnOffShotgun, 30, true, true);
             }
 
+            await Client.Delay(0);
+
             createdPed.Accuracy = random.Next(30, 100);
             createdPed.DropsWeaponsOnDeath = false;
             createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
 
-            API.SetPedHearingRange(createdPed.Handle, 1000.0f);
-            API.SetPedSeeingRange(createdPed.Handle, 1000.0f);
+            API.SetPedHearingRange(createdPed.Handle, 150.0f);
+            API.SetPedSeeingRange(createdPed.Handle, 150.0f);
+
+            await Client.Delay(0);
 
             createdPed.IsOnlyDamagedByPlayer = true;
 

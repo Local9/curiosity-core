@@ -11,6 +11,7 @@ namespace Curiosity.Client.net.Classes.Menus
 {
     class VehicleMenu
     {
+        private const string VTOL = "vtol";
         static Client client = Client.GetInstance();
         static Menu menu = new Menu("Vehicle", "Vehicle Settings and Options");
 
@@ -20,6 +21,7 @@ namespace Curiosity.Client.net.Classes.Menus
         static VehicleLock lockState = VehicleLock.Unlocked;
         static bool lockBool = false;
         static bool carbootBool = false;
+        static bool inVTOL = false;
 
         static List<VehicleWindowIndex> VehicleWindowValues = Enum.GetValues(typeof(VehicleWindowIndex)).OfType<VehicleWindowIndex>().Where(w => (int)w < 4).ToList();
         static List<string> VehicleWindowNames = VehicleWindowValues.Select(d => d.ToString().AddSpacesToCamelCase()).ToList();
@@ -74,6 +76,25 @@ namespace Curiosity.Client.net.Classes.Menus
                     };
 
                     menu.AddMenuItem(engineMenuItem);
+
+                    if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Planes)
+                    {
+                        Model model = new Model("avenger");
+                        if (API.IsVehicleModel(Game.PlayerPed.CurrentVehicle.GetHashCode(), (uint)model.Hash))
+                        {
+
+                            inVTOL = API.GetPlaneHoverModePercentage(Game.PlayerPed.CurrentVehicle.Handle) > 0.0f;
+
+                            MenuCheckboxItem vtol = new MenuCheckboxItem("VTOL")
+                            {
+                                Checked = inVTOL,
+                                Description = "Turn VTOL on/off",
+                                ItemData = VTOL
+                            };
+                            menu.AddMenuItem(vtol);
+                        }
+                        model.MarkAsNoLongerNeeded();
+                    }
 
                     SetupWindowsMenu();
                 }
@@ -321,6 +342,13 @@ namespace Curiosity.Client.net.Classes.Menus
                 Environment.UI.Speedometer3D.Hide = !menuItem.Checked;
             if (menuItem.ItemData == ENGINE)
                 Game.PlayerPed.CurrentVehicle.IsEngineRunning = menuItem.Checked;
+
+            if (menuItem.ItemData == VTOL)
+            {
+                int vehicleId = Game.PlayerPed.CurrentVehicle.Handle;
+                API.SetDesiredVerticalFlightPhase(vehicleId, inVTOL ? 0.0f : 1.0f);
+            }
+                
         }
 
         public static void AddSubMenu(Menu menu, Menu submenu)

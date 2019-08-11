@@ -18,7 +18,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         static bool TickIsRegistered = false;
 
         static long TimeStampOfLastCallout;
-        public static string DEV_LICENSE_PLATE = "LV DEV";
+        public static string DEV_LICENSE_PLATE = "LIFEVDEV";
 
         public static void Init()
         {
