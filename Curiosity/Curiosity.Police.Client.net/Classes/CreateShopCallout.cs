@@ -304,16 +304,17 @@ namespace Curiosity.Police.Client.net.Classes
 
         static async Task Tidy()
         {
-            if (LocationBlip.Exists())
+            if (LocationBlip != null)
             {
-                Debug.WriteLine("KILL BLIP");
-
-                LocationBlip.ShowRoute = false;
-                API.SetBlipFade(LocationBlip.Handle, 0, 3000);
-                await Client.Delay(3000);
-                LocationBlip.Delete();
-                int handle = LocationBlip.Handle;
-                API.RemoveBlip(ref handle);
+                if (LocationBlip.Exists())
+                {
+                    LocationBlip.ShowRoute = false;
+                    API.SetBlipFade(LocationBlip.Handle, 0, 3000);
+                    await Client.Delay(3000);
+                    LocationBlip.Delete();
+                    int handle = LocationBlip.Handle;
+                    API.RemoveBlip(ref handle);
+                }
             }
 
             Suspects.Clear();
