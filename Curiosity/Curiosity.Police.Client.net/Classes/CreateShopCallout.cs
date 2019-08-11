@@ -297,6 +297,11 @@ namespace Curiosity.Police.Client.net.Classes
                 }
                 ShopKeeper.MarkAsNoLongerNeeded();
 
+                if (!string.IsNullOrEmpty(message))
+                {
+                    Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "error");
+                }
+
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", message, 2);
                 await Tidy();
             }
