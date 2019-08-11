@@ -102,7 +102,7 @@ namespace Curiosity.Server.net
             //RegisterTickHandler(InstanceChecker);
 
             API.SetConvarServerInfo("Map", $"Los Santos");
-            API.SetConvarServerInfo("Game type", $"Curiosity: 1.0.0.976");
+            API.SetConvarServerInfo("Curiosity", $"v1.0.0.986");
 
             System.Timers.Timer aTimer = new System.Timers.Timer(1000 * 60 * 10); // MAYBE JUST MAYBE Future Ant can see that marking this with a flag so other servers don't run it would of been a good idea...
             int lastHour = DateTime.Now.Hour;
