@@ -125,7 +125,8 @@ namespace Curiosity.Police.Client.net.Classes
                 await SuspectModel.Request(10000);
                 Ped ped = await CreatePed.Create(suspectModel, SuspectPosition, suspectHeading, suspectGroup);
                 SuspectModel.MarkAsNoLongerNeeded();
-
+                await Client.Delay(5);
+                ped.Task.TurnTo(location);
                 Suspects.Add(ped);
 
                 if (random.Next(2) == 1)
@@ -134,6 +135,8 @@ namespace Curiosity.Police.Client.net.Classes
                     await m.Request(10000);
                     Ped p = await CreatePed.Create(m, Location, shopkeeperHeading - 45f, suspectGroup);
                     m.MarkAsNoLongerNeeded();
+                    await Client.Delay(5);
+                    p.Task.TurnTo(location);
                     Suspects.Add(p);
                 }
 
