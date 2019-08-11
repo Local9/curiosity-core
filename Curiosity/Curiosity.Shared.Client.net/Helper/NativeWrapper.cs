@@ -167,7 +167,7 @@ namespace Curiosity.Shared.Client.net.Helper
             while (TimeoutStateValue)
             {
                 await BaseScript.Delay(0);
-                Draw3DText(x, y, z, message, 40.0f);
+                Draw3DText(x, y, z, message, distanceToHide);
             }
         }
 
