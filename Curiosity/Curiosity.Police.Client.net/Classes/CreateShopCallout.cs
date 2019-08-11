@@ -208,6 +208,12 @@ namespace Curiosity.Police.Client.net.Classes
                                 pedFlee = true;
                             }
 
+                            if (ped.AttachedBlip != null)
+                            {
+                                if (ped.AttachedBlip.Exists())
+                                    ped.AttachedBlip.Delete();
+                            }
+
                             Entity killer = ped.GetKiller();
 
                             if (killer.Handle == Game.PlayerPed.Handle)
