@@ -20,6 +20,8 @@ namespace Curiosity.Server.net
         public static bool isLive = false;
         public static PlayerList players;
 
+        static DateTime serverStarted;
+
         public static Server GetInstance()
         {
             return _server;
@@ -29,6 +31,7 @@ namespace Curiosity.Server.net
         {
             Log.Success("Entering Curiosity Server cter");
 
+            serverStarted = DateTime.Now;
             players = Players;
 
             _server = this;
@@ -95,6 +98,7 @@ namespace Curiosity.Server.net
             Classes.DiscordWrapper.Init();
 
             RegisterTickHandler(GetServerId);
+            ServerUpTime();
             //RegisterTickHandler(InstanceChecker);
 
             System.Timers.Timer aTimer = new System.Timers.Timer(1000 * 60 * 10); // MAYBE JUST MAYBE Future Ant can see that marking this with a flag so other servers don't run it would of been a good idea...
@@ -105,6 +109,21 @@ namespace Curiosity.Server.net
                 RegisterTickHandler(SentStartupMessage);
 
             Log.Success("Leaving Curiosity Server cter");
+        }
+
+        private static async void ServerUpTime()
+        {
+            long started = API.GetGameTimer();
+            while ((API.GetGameTimer() - started) > 60000)
+            {
+                DateTime dateTimeRun = DateTime.Now;
+                TimeSpan timeSpan = dateTimeRun - serverStarted;
+                long numberOfTicks = Math.Abs(timeSpan.Ticks / TimeSpan.TicksPerMillisecond);
+                long hours = numberOfTicks / (1000 * 60 * 60);
+                long minutes = (numberOfTicks - (hours * 60 * 60 * 1000)) / (1000 * 60);
+                API.SetConvarServerInfo("Uptime", $"{hours:00}:{minutes:00}");
+                await BaseScript.Delay(30000);
+            }
         }
 
         private void OnResourceStart(string resourceName)
