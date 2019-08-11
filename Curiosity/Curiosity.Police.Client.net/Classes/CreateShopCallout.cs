@@ -268,10 +268,11 @@ namespace Curiosity.Police.Client.net.Classes
             catch (Exception ex)
             {
                 Log.Error($"CalloutCompleted -> {ex.ToString()}");
+                EndCallout("There was an error found, callout ended. Sorry.");
             }
         }
 
-        public static async void EndCallout()
+        public static async void EndCallout(string message = "")
         {
             try
             {
@@ -296,7 +297,7 @@ namespace Curiosity.Police.Client.net.Classes
                 }
                 ShopKeeper.MarkAsNoLongerNeeded();
 
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", string.Empty, 2);
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", message, 2);
                 await Tidy();
             }
             catch (Exception ex)
