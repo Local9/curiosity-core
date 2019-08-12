@@ -172,6 +172,7 @@ namespace Curiosity.Police.Client.net.Classes
             catch (Exception ex)
             {
                 Log.Error($"StartCallout -> {ex.ToString()}");
+                Log.Error($"StartCallout -> {ex.TargetSite}");
             }
 }
 
@@ -211,55 +212,64 @@ namespace Curiosity.Police.Client.net.Classes
                                 pedFlee = true;
                             }
 
-                            if (ped.AttachedBlip != null)
-                            {
-                                if (ped.AttachedBlip.Exists())
-                                    ped.AttachedBlip.Delete();
-                            }
-
                             Entity killer = ped.GetKiller();
 
-                            if (killer.Handle == Game.PlayerPed.Handle)
+                            if (killer != null)
                             {
-                                Vector3 dmgPos = ped.Position;
-                                int experience = 10;
-                                if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head
-                                    || ped.Bones.LastDamaged.Index == (int)Bone.IK_Head)
+
+                                if (killer.Handle == Game.PlayerPed.Handle)
                                 {
-                                    experience = 20;
+                                    Vector3 dmgPos = ped.Position;
+                                    int experience = 10;
+                                    if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head
+                                        || ped.Bones.LastDamaged.Index == (int)Bone.IK_Head)
+                                    {
+                                        experience = 20;
+                                    }
+                                    Experience(dmgPos, experience, 2500, true);
                                 }
-                                Experience(dmgPos, experience, 2500, true);
                             }
+
                             ped.MarkAsNoLongerNeeded();
                             Suspects.Remove(ped);
                         }
                     }
                 }
 
-                if (ShopKeeper.IsDead) // Player Check
+                if (ShopKeeper != null)
                 {
-                    Entity killer = ShopKeeper.GetKiller();
-                    if (killer.Handle == Game.PlayerPed.Handle)
+                    if (ShopKeeper.Exists())
                     {
-                        await Client.Delay(10);
-                        Experience(ShopKeeper.Position, 30, 2500, false);
-                        await Client.Delay(10);
-                        Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 250));
-                        await Client.Delay(10);
-                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Civilian Killed", $"Paid medical fees for civilian", string.Empty, 2);
+                        if (ShopKeeper.IsDead) // Player Check
+                        {
+                            Entity killer = ShopKeeper.GetKiller();
+
+                            //foreach(CitizenFX.Core.Player p in Client.players)
+                            //{
+                            //    if () // NEED A SERVER EVENT
+                            //}
+
+                            if (killer.Handle == Game.PlayerPed.Handle)
+                            {
+                                await Client.Delay(0);
+                                Experience(ShopKeeper.Position, random.Next(20, 30), 2500, false);
+                                await Client.Delay(0);
+                                Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 250));
+                                await Client.Delay(0);
+                                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Civilian Killed", $"Paid medical fees for civilian", string.Empty, 2);
+                            }
+                        }
+                        ShopKeeper.MarkAsNoLongerNeeded();
                     }
                 }
-
+                
                 Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 200));
                 Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(10, 16));
-                Game.PlayerPed.Weapons.Current.Ammo = Game.PlayerPed.Weapons.Current.Ammo + random.Next(12);
+                Game.PlayerPed.Weapons.Current.Ammo = Game.PlayerPed.Weapons.Current.Ammo + random.Next(24);                
 
-                ShopKeeper.MarkAsNoLongerNeeded();
                 await Client.Delay(10);
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
                 API.ShowTickOnBlip(LocationBlip.Handle, true);
-                
-
                 Environment.Job.DutyManager.OnSetCallOutStatus(false);
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", string.Empty, 2);
@@ -268,6 +278,7 @@ namespace Curiosity.Police.Client.net.Classes
             catch (Exception ex)
             {
                 Log.Error($"CalloutCompleted -> {ex.ToString()}");
+                Log.Error($"CalloutCompleted -> {ex.TargetSite}");
                 EndCallout("There was an error found, callout ended. Sorry.");
             }
         }
@@ -276,6 +287,11 @@ namespace Curiosity.Police.Client.net.Classes
         {
             try
             {
+                if (!string.IsNullOrEmpty(message))
+                {
+                    Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "error");
+                }
+
                 List<Ped> peds = new List<Ped>(Suspects);
 
                 foreach (Ped ped in peds)
@@ -291,15 +307,13 @@ namespace Curiosity.Police.Client.net.Classes
                     peds.Remove(ped);
                 }
 
-                if (ShopKeeper.IsAlive)
+                if (ShopKeeper != null)
                 {
-                    ShopKeeper.Task.FleeFrom(Game.PlayerPed);
-                }
-                ShopKeeper.MarkAsNoLongerNeeded();
-
-                if (!string.IsNullOrEmpty(message))
-                {
-                    Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "error");
+                    if (ShopKeeper.IsAlive)
+                    {
+                        ShopKeeper.Task.FleeFrom(Game.PlayerPed);
+                    }
+                    ShopKeeper.MarkAsNoLongerNeeded();
                 }
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-7", $"Out of Service", message, 2);
@@ -307,28 +321,36 @@ namespace Curiosity.Police.Client.net.Classes
             }
             catch (Exception ex)
             {
-                // 
+                Log.Error($"EndCallout -> {ex.ToString()}");
+                Log.Error($"EndCallout -> {ex.TargetSite}");
             }
         }
 
         static async Task Tidy()
         {
-            if (LocationBlip != null)
+            try
             {
-                if (LocationBlip.Exists())
+                if (LocationBlip != null)
                 {
-                    LocationBlip.ShowRoute = false;
-                    API.SetBlipFade(LocationBlip.Handle, 0, 3000);
-                    await Client.Delay(3000);
-                    LocationBlip.Delete();
-                    int handle = LocationBlip.Handle;
-                    API.RemoveBlip(ref handle);
+                    if (LocationBlip.Exists())
+                    {
+                        LocationBlip.ShowRoute = false;
+                        API.SetBlipFade(LocationBlip.Handle, 0, 3000);
+                        await Client.Delay(3000);
+                        LocationBlip.Delete();
+                        int handle = LocationBlip.Handle;
+                        API.RemoveBlip(ref handle);
+                    }
                 }
+
+                Suspects.Clear();
+                Environment.Tasks.CalloutHandler.CalloutEnded();
             }
-
-            Suspects.Clear();
-            Environment.Tasks.CalloutHandler.CalloutEnded();
-
+            catch (Exception ex)
+            {
+                Log.Error($"Tidy -> {ex.ToString()}");
+                Log.Error($"Tidy -> {ex.TargetSite}");
+            }
             await Task.FromResult(0);
         }
 

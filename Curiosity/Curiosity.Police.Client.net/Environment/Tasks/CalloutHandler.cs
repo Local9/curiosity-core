@@ -68,9 +68,6 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         {
             try
             {
-                //if (Classes.Player.PlayerInformation.IsDeveloper())
-                //    Log.Verbose($"TICK: PlayerCanTakeCallout");
-
                 if (TickIsRegistered) return;
                 TickIsRegistered = true;
 
@@ -105,9 +102,6 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
         public static async void PlayerIsOnActiveCalloutOrOffDuty()
         {
-            //if (Classes.Player.PlayerInformation.IsDeveloper())
-            //    Log.Verbose($"TICK: PlayerIsOnActiveCalloutOrOffDuty");
-
             await Client.Delay(0);
             TickIsRegistered = false;
             client.DeregisterTickHandler(SelectCallout);
@@ -178,18 +172,16 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         static async void GetRandomCallout(Dictionary<int, Func<bool>> calloutDictionary, PatrolZone patrolZone)
         {
             client.DeregisterTickHandler(SelectCallout);
+            int maxCallout = calloutDictionary.Count;
 
-            //if (Classes.Player.PlayerInformation.IsDeveloper())
-            //    Log.Verbose($"GetRandomCallout");
-
-            int randomCalloutIndex = random.Next(0, calloutDictionary.Count);
+            int randomCalloutIndex = random.Next(0, maxCallout);
             int calloutId = calloutDictionary.ElementAt(randomCalloutIndex).Key;
 
             bool foundNewCallout = false;
 
             while (!foundNewCallout)
             {
-                randomCalloutIndex = random.Next(0, calloutDictionary.Count);
+                randomCalloutIndex = random.Next(0, maxCallout);
                 calloutId = calloutDictionary.ElementAt(randomCalloutIndex).Key;
 
                 if (PreviousCallout != calloutId)
@@ -202,12 +194,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
             PreviousCallout = calloutId;
 
-            //if (Classes.Player.PlayerInformation.IsDeveloper())
-            //    Log.Verbose($"GetRandomCallout: Result {calloutId}");
-
             Client.TriggerServerEvent("curiosity:Server:Police:CalloutFree", calloutId, (int)patrolZone);
-
-            //calloutDictionary.ElementAt(randomCalloutIndex).Value.Invoke();
 
             await Task.FromResult(0);
         }

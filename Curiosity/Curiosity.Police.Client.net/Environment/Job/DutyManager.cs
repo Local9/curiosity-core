@@ -24,6 +24,15 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
         static void OnDutyState(bool jobActive, bool dutyState, string job)
         {
+            if (job == "error")
+            {
+                IsPoliceJobActive = false;
+                IsOnDuty = false;
+                IsOnCallout = false;
+                Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
+                return;
+            }
+
             if (job != "police")
             {
                 IsPoliceJobActive = false;

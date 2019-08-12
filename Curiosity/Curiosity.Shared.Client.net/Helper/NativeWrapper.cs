@@ -152,7 +152,17 @@ namespace Curiosity.Shared.Client.net.Helper
             return Function.Call<Vector3>(Hash.GET_ENTITY_COORDS, entity);
         }
 
-        public static bool EntityActive(int entityId)
+        public static bool DoesEntityExist(Entity entity)
+        {
+            return API.DoesEntityExist(entity.Handle);
+        }
+
+        public static bool IsEntityAlive(Entity entity)
+        {
+            return IsEntityAlive(entity.Handle);
+        }
+
+        public static bool IsEntityAlive(int entityId)
         {
             if (!API.DoesEntityExist(entityId))
             {
