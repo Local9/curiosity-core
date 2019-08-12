@@ -184,8 +184,13 @@ namespace Curiosity.Server.net.Classes.Environment
             }
 
             await Server.Delay(MINUTES_TO_WAIT);
+
+            await Server.Delay(0);
+
             isChristmas = API.GetConvar("christmas_weather", "false") == "true";
             isHalloween = API.GetConvar("halloween_weather", "false") == "true";
+
+            await Server.Delay(0);
 
             SetupWindWeather();
             SetupWeathers();
