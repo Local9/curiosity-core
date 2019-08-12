@@ -1,11 +1,10 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Shared.Server.net.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
-using CitizenFX.Core.Native;
-using CitizenFX.Core;
 
 namespace Curiosity.Server.net.Classes.Environment
 {
@@ -30,6 +29,13 @@ namespace Curiosity.Server.net.Classes.Environment
             isChristmas = API.GetConvar("christmas_weather", "false") == "true";
             isHalloween = API.GetConvar("halloween_weather", "false") == "true";
             isLive = API.GetConvar("server_live", "false") == "true";
+
+            if (isChristmas)
+            {
+                Log.Success("-----------------------------------------------------------------");
+                Log.Success("-> CURIOSITY SERVER WEATHER: CHRISMAS <--------------------------");
+                Log.Success("-----------------------------------------------------------------");
+            }
 
             SetupWindWeather();
             SetupWeathers();
@@ -91,11 +97,11 @@ namespace Curiosity.Server.net.Classes.Environment
             if (!weatherSetup)
             {
                 await SetupWeather();
-                player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
+                player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading, isChristmas, isHalloween);
             }
             else
             {
-                player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
+                player.TriggerEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading, isChristmas, isHalloween);
             }
             await Server.Delay(0);
         }
@@ -136,7 +142,7 @@ namespace Curiosity.Server.net.Classes.Environment
                 weatherData.WindSpeed = windSpeed;
             }
 
-            Server.TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading);
+            Server.TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading, isChristmas, isHalloween);
 
             weatherSetup = true;
         }
@@ -144,6 +150,8 @@ namespace Curiosity.Server.net.Classes.Environment
         static async Task ChangeWeather()
         {
             await Server.Delay(MINUTES_TO_WAIT);
+            isChristmas = API.GetConvar("christmas_weather", "false") == "true";
+            isHalloween = API.GetConvar("halloween_weather", "false") == "true";
             await SetupWeather();
         }
     }
