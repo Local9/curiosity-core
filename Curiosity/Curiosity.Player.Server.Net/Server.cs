@@ -101,6 +101,18 @@ namespace Curiosity.Server.net
             // ServerUpTime();
             //RegisterTickHandler(InstanceChecker);
 
+            string tags = API.GetConvar("tags", string.Empty);
+            string[] tagArr = tags.Split(',');
+            string curiosity = "Curiosity";
+
+            if (tagArr.Length > 0)
+            {
+                API.SetConvar("tags", $"{tags}, {curiosity}");
+            } else
+            {
+                API.SetConvar("tags", $"{curiosity}");
+            }
+
             API.SetConvarServerInfo("Map", $"Los Santos");
             API.SetConvarServerInfo("Curiosity", $"v1.0.0.986");
 
