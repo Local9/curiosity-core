@@ -15,8 +15,8 @@ namespace Curiosity.Server.net.Classes.Environment
         static Dictionary<string, List<string>> weathers = new Dictionary<string, List<string>>();
         static Dictionary<string, bool> windWeathers = new Dictionary<string, bool>();
 
-        static bool isChristmas = true;
-        static bool isHalloween = true;
+        static bool isChristmas = false;
+        static bool isHalloween = false;
         static bool isLive = false;
         static bool weatherSetup = false;
 
@@ -75,10 +75,19 @@ namespace Curiosity.Server.net.Classes.Environment
                 weathers.Add("SNOW", new List<string> { "BLIZZARD", "RAIN", "SNOWLIGHT", "SMOG" });
                 weathers.Add("BLIZZARD", new List<string> { "SNOW", "SNOWLIGHT", "THUNDER", "SMOG" });
                 weathers.Add("SNOWLIGHT", new List<string> { "SNOW", "RAIN", "CLEARING", "FOGGY" });
+                weathers.Add("RAIN", new List<string> { "SNOW", "CLEARING", "FOGGY" });
+                weathers.Add("FOGGY", new List<string> { "SNOW", "BLIZZARD", "SNOWLIGHT" });
+                weathers.Add("CLEARING", new List<string> { "SNOW", "BLIZZARD", "SNOWLIGHT" });
+                weathers.Add("SMOG", new List<string> { "SNOW", "BLIZZARD", "SNOWLIGHT", "RAIN" });
+                weathers.Add("THUNDER", new List<string> { "SNOW", "BLIZZARD", "FOGGY", "RAIN" });
             }
             else if (isHalloween)
             {
                 weathers.Add("HALLOWEEN", new List<string> { "CLOUDS", "RAIN", "CLEARING", "CLEAR" });
+                weathers.Add("CLOUDS", new List<string> { "HALLOWEEN", "RAIN", "CLEARING", "CLEAR" });
+                weathers.Add("RAIN", new List<string> { "CLOUDS", "HALLOWEEN", "CLEARING", "CLEAR" });
+                weathers.Add("CLEARING", new List<string> { "CLOUDS", "RAIN", "HALLOWEEN", "CLEAR" });
+                weathers.Add("CLEAR", new List<string> { "CLOUDS", "RAIN", "CLEARING", "HALLOWEEN" });
             }
             else
             {
@@ -91,6 +100,11 @@ namespace Curiosity.Server.net.Classes.Environment
                 weathers.Add("RAIN", new List<string> { "THUNDER", "CLEARING", "OVERCAST" });
                 weathers.Add("THUNDER", new List<string> { "RAIN", "CLEARING" });
                 weathers.Add("CLEARING", new List<string> { "CLEAR", "CLOUDS", "OVERCAST", "FOGGY", "SMOG" });
+
+                weathers.Add("HALLOWEEN", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
+                weathers.Add("SNOW", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
+                weathers.Add("BLIZZARD", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
+                weathers.Add("SNOWLIGHT", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
             }
         }
 
@@ -111,43 +125,55 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static async Task SetupWeather()
         {
-            await Server.Delay(0);
-            Random random = new Random(API.GetGameTimer().GetHashCode());
-            Random randomSelect = new Random();
-
-            int countOfWeathers = weathers.Count;
-            int countOfWeatherKeys = weathers.Keys.Count;
-            float windSpeed = random.Next(0, 2);
-
-            if (string.IsNullOrEmpty(weatherData.CurrentWeather))
+            try
             {
-                weatherData.CurrentWeather = weathers.Keys.OrderBy(s => Guid.NewGuid()).First();
+                await Server.Delay(0);
+                Random random = new Random(API.GetGameTimer().GetHashCode());
+                Random randomSelect = new Random();
+
+                int countOfWeathers = weathers.Count;
+                int countOfWeatherKeys = weathers.Keys.Count;
+                float windSpeed = random.Next(0, 2);
+
+                if (string.IsNullOrEmpty(weatherData.CurrentWeather))
+                {
+                    weatherData.CurrentWeather = weathers.Keys.OrderBy(s => Guid.NewGuid()).First();
+                }
+                else
+                {
+                    weatherData.CurrentWeather = weathers[weatherData.CurrentWeather].OrderBy(s => Guid.NewGuid()).First();
+                }
+
+                if (randomSelect.Next(0, 2) == 0)
+                {
+                    weatherData.Wind = windWeathers[weatherData.CurrentWeather];
+                    weatherData.WindHeading = randomSelect.Next(0, 360);
+                }
+
+                if (!weatherData.Wind)
+                {
+                    windSpeed = random.Next(0, 2);
+                }
+
+                if (weatherData.CurrentWeather == "THUNDER")
+                {
+                    windSpeed = randomSelect.Next(2, 4);
+                    weatherData.WindSpeed = windSpeed;
+                }
+
+                if (!isChristmas && (weatherData.CurrentWeather == "XMAS" || weatherData.CurrentWeather == "BLIZZARD" || weatherData.CurrentWeather == "SNOW" || weatherData.CurrentWeather == "SNOWLIGHT"))
+                {
+                    weatherData.CurrentWeather = weathers["CLEAR"].OrderBy(s => Guid.NewGuid()).First();
+                }
+
+                Server.TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading, isChristmas, isHalloween);
+
+                weatherSetup = true;
             }
-            else
+            catch(Exception ex)
             {
-                weatherData.CurrentWeather = weathers[weatherData.CurrentWeather].OrderBy(s => Guid.NewGuid()).First();
+                // 
             }
-
-            if (randomSelect.Next(0, 2) == 0)
-            {
-                weatherData.Wind = windWeathers[weatherData.CurrentWeather];
-                weatherData.WindHeading = randomSelect.Next(0, 360);
-            }
-
-            if (!weatherData.Wind)
-            {
-                windSpeed = random.Next(0, 2);
-            }
-
-            if (weatherData.CurrentWeather == "THUNDER")
-            {
-                windSpeed = randomSelect.Next(2, 4);
-                weatherData.WindSpeed = windSpeed;
-            }
-
-            Server.TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading, isChristmas, isHalloween);
-
-            weatherSetup = true;
         }
 
         static async Task ChangeWeather()
