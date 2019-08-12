@@ -57,7 +57,7 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             if (Player.PlayerInformation.IsDeveloper())
             {
-                Log.Verbose($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}");
+                Log.Verbose($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}, isChristmas: {isChristmas}");
             }
 
             await Client.Delay(0);
@@ -110,6 +110,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 }
 
                 API.SetWeatherTypeOverTime("XMAS", 60.00f);
+
                 API.SetWeatherTypeTransition(0xAAC9C895, weatherStruct, 0.5f);
             }
             else

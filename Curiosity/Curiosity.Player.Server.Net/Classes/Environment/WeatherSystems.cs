@@ -20,7 +20,7 @@ namespace Curiosity.Server.net.Classes.Environment
         static bool isLive = false;
         static bool weatherSetup = false;
 
-        const int MINUTES_TO_WAIT = (1000 * 60) * 20;
+        static int MINUTES_TO_WAIT = (1000 * 60) * 20;
 
         static Entity.WeatherData weatherData = new Entity.WeatherData();
 
@@ -51,6 +51,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static void SetupWindWeather()
         {
+            windWeathers.Clear();
             windWeathers.Add("OVERCAST", true);
             windWeathers.Add("RAIN", true);
             windWeathers.Add("THUNDER", true);
@@ -67,11 +68,13 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static void SetupWeathers()
         {
+            weathers.Clear();
+
             if (isChristmas)
             {
-                weathers.Add("SNOW", new List<string> { "BLIZZARD", "RAIN", "SNOWLIGHT" });
-                weathers.Add("BLIZZARD", new List<string> { "SNOW", "SNOWLIGHT", "THUNDER" });
-                weathers.Add("SNOWLIGHT", new List<string> { "SNOW", "RAIN", "CLEARING" });
+                weathers.Add("SNOW", new List<string> { "BLIZZARD", "RAIN", "SNOWLIGHT", "SMOG" });
+                weathers.Add("BLIZZARD", new List<string> { "SNOW", "SNOWLIGHT", "THUNDER", "SMOG" });
+                weathers.Add("SNOWLIGHT", new List<string> { "SNOW", "RAIN", "CLEARING", "FOGGY" });
             }
             else if (isHalloween)
             {
@@ -149,9 +152,18 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static async Task ChangeWeather()
         {
+            if (!Server.isLive)
+            {
+                MINUTES_TO_WAIT = (1000 * 60);
+            }
+
             await Server.Delay(MINUTES_TO_WAIT);
             isChristmas = API.GetConvar("christmas_weather", "false") == "true";
             isHalloween = API.GetConvar("halloween_weather", "false") == "true";
+
+            SetupWindWeather();
+            SetupWeathers();
+
             await SetupWeather();
         }
     }
