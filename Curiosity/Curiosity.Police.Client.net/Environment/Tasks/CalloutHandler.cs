@@ -56,7 +56,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
         static void CalloutTaken()
         {
-            GetRandomCallout();
+            GenerateRandomCallout();
         }
 
         public static void CalloutEnded()
@@ -142,7 +142,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
                 await Task.FromResult(0);
 
-                GetRandomCallout();
+                GenerateRandomCallout();
             }
             catch (Exception ex)
             {
@@ -150,22 +150,30 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             }
         }
 
-        static void GetRandomCallout()
+        static void GenerateRandomCallout()
         {
-            if (random.Next(9) == 1) // 1/10 chance of being called out to the middle of the map
+            try
             {
-                GetRandomCallout(ClassLoader.RuralCallOuts, PatrolZone.Rural);
-                return;
-            }
+                if (random.Next(10) == 1) // 1/10 chance of being called out to the middle of the map
+                {
+                    GetRandomCallout(ClassLoader.RuralCallOuts, PatrolZone.Rural);
+                    return;
+                }
 
-            if (Job.DutyManager.PatrolZone == PatrolZone.City)
-            {
-                GetRandomCallout(ClassLoader.CityCallOuts, PatrolZone.City);
-            }
+                if (Job.DutyManager.PatrolZone == PatrolZone.City)
+                {
+                    GetRandomCallout(ClassLoader.CityCallOuts, PatrolZone.City);
+                }
 
-            if (Job.DutyManager.PatrolZone == PatrolZone.Country)
+                if (Job.DutyManager.PatrolZone == PatrolZone.Country)
+                {
+                    GetRandomCallout(ClassLoader.CountryCallOuts, PatrolZone.Country);
+                }
+            }
+            catch (Exception ex)
             {
-                GetRandomCallout(ClassLoader.CountryCallOuts, PatrolZone.Country);
+                Log.Error($"GetRandomCallout -> {ex.ToString()}");
+                Log.Error($"GetRandomCallout -> {ex.TargetSite}");
             }
         }
 
