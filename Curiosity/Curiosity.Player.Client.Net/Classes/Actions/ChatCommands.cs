@@ -135,10 +135,9 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
 
             }), false);
-
         }
 
-        private static Task OnTick()
+        private static Task OnEmoteTick()
         {
             try
             {
@@ -151,6 +150,7 @@ namespace Curiosity.Client.net.Classes.Actions
                 {
                     isPlayingEmote = false;
                     Game.PlayerPed.Task.ClearAll();
+                    client.DeregisterTickHandler(OnEmoteTick);
                 }
             }
             catch (Exception ex)
@@ -192,6 +192,7 @@ namespace Curiosity.Client.net.Classes.Actions
                         Function.Call(Hash.TASK_START_SCENARIO_IN_PLACE, Game.PlayerPed.Handle, scenarios[emoteName], 0, true);
                     }
                     isPlayingEmote = true;
+                    client.RegisterTickHandler(OnEmoteTick);
                 }
             }
             catch (Exception ex)
