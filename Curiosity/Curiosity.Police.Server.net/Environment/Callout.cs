@@ -19,6 +19,28 @@ namespace Curiosity.Police.Server.net.Environment
         {
             server.RegisterEventHandler("curiosity:Server:Police:CalloutFree", new Action<Player, int, int>(OnCalloutFree));
             server.RegisterEventHandler("curiosity:Server:Police:CalloutEnded", new Action<Player, int>(OnCalloutEnded));
+            server.RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(PlayerDropped));
+        }
+
+        static void PlayerDropped([FromSource]Player player, string reason)
+        {
+            try
+            {
+                ConcurrentDictionary<int, Tuple<string, int>> listToRun = CalloutsActive;
+                foreach (var keyValuePair in listToRun)
+                {
+                    if (keyValuePair.Value.Item1 == player.Handle)
+                    {
+                        Tuple<string, int> thing;
+                        CalloutsActive.TryRemove(keyValuePair.Key, out thing);
+                    }
+                }
+                player.TriggerEvent("curiosity:Client:Police:CalloutEnded");
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"PlayerDropped (REMOVE CALLOUTS) -> {ex.Message}");
+            }
         }
 
         static void OnCalloutFree([FromSource]Player player, int calloutId, int patrolZone)
@@ -44,7 +66,7 @@ namespace Curiosity.Police.Server.net.Environment
                     if (keyValuePair.Value.Item1 == player.Handle)
                     {
                         Tuple<string, int> thing;
-                        CalloutsActive.TryRemove(calloutId, out thing);
+                        CalloutsActive.TryRemove(keyValuePair.Key, out thing);
                     }
                 }
                 player.TriggerEvent("curiosity:Client:Police:CalloutEnded");
