@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
+using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Shared.Client.net.Enums;
 
 namespace Curiosity.Client.net.Classes.Actions
 {
@@ -14,6 +17,69 @@ namespace Curiosity.Client.net.Classes.Actions
         static Client client = Client.GetInstance();
         static uint playerGroupHash = 0;
         static bool hasCalledChaser = false;
+        static bool isPlayingEmote = false;
+
+        static Dictionary<string, string> scenarios = new Dictionary<string, string>()
+        {
+            ["cheer"] = "WORLD_HUMAN_CHEERING",
+            ["sit"] = "WORLD_HUMAN_PICNIC",
+            ["sitchair"] = "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER",
+            ["lean"] = "WORLD_HUMAN_LEANING",
+            ["hangout"] = "WORLD_HUMAN_HANG_OUT_STREET",
+            ["cop"] = "WORLD_HUMAN_COP_IDLES",
+            ["bum"] = "WORLD_HUMAN_BUM_STANDING",
+            ["kneel"] = "CODE_HUMAN_MEDIC_KNEEL",
+            ["medic"] = "CODE_HUMAN_MEDIC_TEND_TO_DEAD",
+            ["musician"] = "WORLD_HUMAN_MUSICIAN",
+            ["film"] = "WORLD_HUMAN_MOBILE_FILM_SHOCKING",
+            ["guard"] = "WORLD_HUMAN_GUARD_STAND",
+            ["phone"] = "WORLD_HUMAN_STAND_MOBILE",
+            ["traffic"] = "WORLD_HUMAN_CAR_PARK_ATTENDANT",
+            ["bumsleep"] = "WORLD_HUMAN_BUM_SLUMPED",
+            ["smoke"] = "WORLD_HUMAN_SMOKING",
+            ["drink"] = "WORLD_HUMAN_DRINKING",
+            ["dealer"] = "WORLD_HUMAN_DRUG_DEALER",
+            ["dealerhard"] = "WORLD_HUMAN_DRUG_DEALER_HARD",
+            ["patrol"] = "WORLD_HUMAN_GUARD_PATROL",
+            ["hangout"] = "WORLD_HUMAN_HANG_OUT_STREET",
+            ["hikingstand"] = "WORLD_HUMAN_HIKER_STANDING",
+            ["statue"] = "WORLD_HUMAN_HUMAN_STATUE",
+            ["jog"] = "WORLD_HUMAN_JOG_STANDING",
+            ["maid"] = "WORLD_HUMAN_MAID_CLEAN",
+            ["flex"] = "WORLD_HUMAN_MUSCLE_FLEX",
+            ["weights"] = "WORLD_HUMAN_MUSCLE_FLEX",
+            ["party"] = "WORLD_HUMAN_PARTYING",
+            ["prosthigh"] = "WORLD_HUMAN_PROSTITUTE_HIGH_CLASS",
+            ["prostlow"] = "WORLD_HUMAN_PROSTITUTE_LOW_CLASS",
+            ["pushup"] = "WORLD_HUMAN_PUSH_UPS",
+            ["sitsteps"] = "WORLD_HUMAN_SEAT_STEPS",
+            ["sitwall"] = "WORLD_HUMAN_SEAT_WALL",
+            ["situp"] = "WORLD_HUMAN_SIT_UPS",
+            ["fire"] = "WORLD_HUMAN_STAND_FIRE",
+            ["impatient"] = "WORLD_HUMAN_STAND_IMPATIENT",
+            ["impatientup"] = "WORLD_HUMAN_STAND_IMPATIENT_UPRIGHT",
+            ["mobileup"] = "WORLD_HUMAN_STAND_MOBILE_UPRIGHT",
+            ["stripwatch"] = "WORLD_HUMAN_STRIP_WATCH_STAND",
+            ["stupor"] = "WORLD_HUMAN_STUPOR",
+            ["sunbathe"] = "WORLD_HUMAN_SUNBATHE",
+            ["sunbatheback"] = "WORLD_HUMAN_SUNBATHE_BACK",
+            ["map"] = "WORLD_HUMAN_TOURIST_MAP",
+            ["tourist"] = "WORLD_HUMAN_TOURIST_MOBILE",
+            ["mechanic"] = "WORLD_HUMAN_VEHICLE_MECHANIC",
+            ["windowshop"] = "WORLD_HUMAN_WINDOW_SHOP_BROWSE",
+            ["yoga"] = "WORLD_HUMAN_YOGA",
+            ["atm"] = "PROP_HUMAN_ATM",
+            ["bumbin"] = "PROP_HUMAN_BUM_BIN",
+            ["cart"] = "PROP_HUMAN_BUM_SHOPPING_CART",
+            ["chinup"] = "PROP_HUMAN_MUSCLE_CHIN_UPS",
+            ["chinuparmy"] = "PROP_HUMAN_MUSCLE_CHIN_UPS_ARMY",
+            ["chinupprison"] = "PROP_HUMAN_MUSCLE_CHIN_UPS_PRISON",
+            ["parkingmeter"] = "PROP_HUMAN_PARKING_METER",
+            ["armchair"] = "PROP_HUMAN_SEAT_ARMCHAIR",
+            ["crossroad"] = "CODE_HUMAN_CROSS_ROAD_WAIT",
+            ["crowdcontrol"] = "CODE_HUMAN_POLICE_CROWD_CONTROL",
+            ["investigate"] = "CODE_HUMAN_POLICE_INVESTIGATE"
+        };
 
         public static void Init()
         {
@@ -31,6 +97,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
             API.RegisterCommand("die", new Action<int, List<object>, string>(Die), false);
+            API.RegisterCommand("emote", new Action<int, List<object>, string>(OnEmote), false);
 
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
             RegisterCommand("god", new Action<int, List<object>, string>((source, args, raw) =>
@@ -69,6 +136,68 @@ namespace Curiosity.Client.net.Classes.Actions
 
             }), false);
 
+        }
+
+        private static Task OnTick()
+        {
+            try
+            {
+                if (isPlayingEmote
+                    && (ControlHelper.IsControlJustPressed(Control.MoveUpOnly, false, ControlModifier.Any)
+                    || ControlHelper.IsControlJustPressed(Control.MoveDown, false, ControlModifier.Any)
+                    || ControlHelper.IsControlJustPressed(Control.MoveLeft, false, ControlModifier.Any)
+                    || ControlHelper.IsControlJustPressed(Control.MoveRight, false, ControlModifier.Any))
+                    && !Game.PlayerPed.IsInVehicle() && Game.PlayerPed.VehicleTryingToEnter == null)
+                {
+                    isPlayingEmote = false;
+                    Game.PlayerPed.Task.ClearAll();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Emotes OnTick error: {ex.Message}");
+            }
+            return Task.FromResult(0);
+        }
+
+        static void OnEmote(int playerHandle, List<object> arguments, string raw)
+        {
+            try
+            {
+                if (arguments.Count == 0) return;
+
+                if (arguments.Count > 1) return;
+
+                string emoteName = $"{arguments[0]}";
+
+                if (!scenarios.ContainsKey(emoteName))
+                {
+                    Environment.UI.Notifications.LifeV(1, "Emote", $"Emote '{emoteName}' was not found.", string.Empty, 2);
+                    return;
+                }
+
+                //if (Arrest.playerCuffState != Enums.Police.CuffState.None) return;
+                Function.Call(Hash.SET_SCENARIO_TYPE_ENABLED, scenarios[emoteName]);
+                Function.Call(Hash.RESET_SCENARIO_TYPES_ENABLED);
+                if (!Game.PlayerPed.IsInVehicle())
+                {
+                    if (scenarios[emoteName] == "PROP_HUMAN_SEAT_ARMCHAIR" || scenarios[emoteName] == "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER")
+                    {
+                        API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
+                        API.TaskStartScenarioAtPosition(Game.PlayerPed.Handle, scenarios[emoteName], Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z - 0.5f, Game.PlayerPed.Heading, 0, true, true);
+                        API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
+                    }
+                    else
+                    {
+                        Function.Call(Hash.TASK_START_SCENARIO_IN_PLACE, Game.PlayerPed.Handle, scenarios[emoteName], 0, true);
+                    }
+                    isPlayingEmote = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"PlayEmote Error, possible emote is not known");
+            }
         }
 
         static void Die(int playerHandle, List<object> arguments, string raw)
