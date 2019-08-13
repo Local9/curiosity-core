@@ -22,7 +22,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
         public static void Init()
         {
-            client.RegisterEventHandler("curiosity:Server:Vehicle:VehicleList", new Action<string>(OnUpdateMenu));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:VehicleList", new Action<string>(OnUpdateMenu));
         }
 
         public static void OpenMenu(VehicleSpawnTypes vehicleSpawnType)
@@ -70,7 +70,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             menu.ClearMenuItems();
             // add new items
             // VehicleHash, VehicleName, Enabled, Description
-            menu.AddMenuItem(new MenuItem("car1") { ItemData = new VehicleItem() { Name = "Ruiner", VehicleHashString = "Ruiner3", SpawnPosition = new Vector3(-1069.468f, -878.0467f, 5.85375f), SpawnHeading = 206.0515f, LocationOfSpawn = new Vector3(-1108.226f, -847.1646f, 19.31689f) } });
+            menu.AddMenuItem(new MenuItem("Ruiner") { ItemData = new VehicleItem() { Name = "Ruiner", VehicleHashString = "Ruiner3", SpawnPosition = new Vector3(-1069.468f, -878.0467f, 5.85375f), SpawnHeading = 206.0515f, LocationOfSpawn = new Vector3(-1108.226f, -847.1646f, 19.31689f) } });
         }
 
         private static async void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)

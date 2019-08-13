@@ -74,6 +74,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static public void Init()
         {
             client.RegisterTickHandler(OnTickMarkerHandler);
+            // client.RegisterTickHandler(OnTickBlipHandler);
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             PeriodicUpdate();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -81,6 +82,12 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             // SETUP
             SetupVehicleSpawnMarkers();
             // CONTROLLER
+            client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
+        }
+
+        static void OnPlayerSpawned(dynamic spawnObj)
+        {
+            Client.TriggerServerEvent("curiosity:Server:Markers:GetMarkerList");
         }
 
         static public async Task OnTickInformationPanel()

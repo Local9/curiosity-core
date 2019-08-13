@@ -60,6 +60,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             // API.SetEntityCollision(veh.Handle, false, false);
             API.SetEntityProofs(veh.Handle, true, true, true, true, true, true, true, true);
             API.SetVehicleOnGroundProperly(veh.Handle);
+            veh.IsPersistent = true;
 
             await Client.Delay(0);
 
