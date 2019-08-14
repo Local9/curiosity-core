@@ -78,7 +78,7 @@ namespace Curiosity.Client.net
             if (role != roleName)
             {
                 Classes.Environment.UI.Notifications.LifeV(1, $"Information", "Privilege Update", $"You have been granted the role of ~y~{role}.", 2);
-                role = roleName;
+                roleName = role;
             }
 
             //if (screenWidth != Screen.Resolution.Width)
