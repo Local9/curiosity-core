@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Client.net
@@ -184,17 +185,13 @@ namespace Curiosity.Client.net
         async void SpawnPlayer(long userId, int roleId, string role, float x, float y, float z)
         {
             Screen.Fading.FadeOut(500);
-
-            Debug.WriteLine("OnPlayerSetup() -> STARTING");
-
             Setup();
 
-            PedHash myPedModel = PedHash.FreemodeMale01;
             PedHash myPedModelToLoad = PedHash.FreemodeMale01;
 
-            if (Enum.TryParse(user.Skin.Model, out myPedModel))
+            if (user.Skin.Model == "mp_f_freemode_01")
             {
-                myPedModelToLoad = myPedModel;
+                myPedModelToLoad = PedHash.FreemodeFemale01;
             }
 
             Model defaultModel = myPedModelToLoad;
