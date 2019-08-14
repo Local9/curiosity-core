@@ -132,6 +132,10 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                 {
                     PlayerSave.SaveCharacter();
                 }
+                if (menuItem.ItemData == "RESET")
+                {
+                    PlayerReset.ResetCharacter();
+                }
             };
 
             menu.OnListIndexChange += async (Menu _menu, MenuListItem _listItem, int _oldSelectionIndex, int _newSelectionIndex, int _itemIndex) =>

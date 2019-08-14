@@ -1,0 +1,89 @@
+﻿using MenuAPI;
+using Newtonsoft.Json;
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net.Entity;
+using System.Collections.Generic;
+using System;
+
+namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
+{
+    class PlayerReset
+    {
+        static bool resetBuffer = false;
+
+        public static async void Init()
+        {
+            while (!PlayerCreatorMenu.MenuSetup)
+                await BaseScript.Delay(0);
+
+            PlayerCreatorMenu.menu.AddMenuItem(new MenuItem("Reset Changes") { ItemData = "RESET", Description = "~r~Warning:~s~ Will reset all changes to how you looked when you connected." });
+        }
+
+        public static async void ResetCharacter()
+        {
+            if (resetBuffer)
+                return;
+
+            resetBuffer = true;
+
+            User user = Client.User;
+
+            PedHash myPedModelToLoad = PedHash.FreemodeMale01;
+
+            if (user.Skin.Model == "mp_f_freemode_01")
+            {
+                myPedModelToLoad = PedHash.FreemodeFemale01;
+            }
+
+            Model defaultModel = myPedModelToLoad;
+            await defaultModel.Request(10000);
+
+            while (!defaultModel.IsLoaded)
+            {
+                defaultModel.Request();
+                await Client.Delay(0);
+            }
+
+            await Game.Player.ChangeModel(defaultModel);
+
+            int playerPed = Client.PedHandle;
+
+            API.SetPedHeadBlendData(playerPed, user.Skin.FatherAppearance, user.Skin.MotherAppearance, 0, user.Skin.FatherSkin, user.Skin.MotherSkin, 0, user.Skin.FatherMotherAppearanceGene, user.Skin.FatherMotherSkinGene, 0, false);
+
+            API.SetPedEyeColor(playerPed, user.Skin.EyeColor);
+
+            API.SetPedHairColor(playerPed, user.Skin.HairColor, user.Skin.HairSecondaryColor);
+
+            foreach (KeyValuePair<int, Tuple<int, int>> comp in user.Skin.Components)
+            {
+                await Client.Delay(0);
+                API.SetPedComponentVariation(playerPed, comp.Key, comp.Value.Item1, comp.Value.Item2, 0);
+            }
+
+            foreach (KeyValuePair<int, int> over in user.Skin.PedHeadOverlay)
+            {
+                await Client.Delay(0);
+                API.SetPedHeadOverlay(playerPed, over.Key, over.Value, over.Value == 0 ? 0f : 1.0f);
+            }
+
+            foreach (KeyValuePair<int, Tuple<int, int>> over in user.Skin.PedHeadOverlayColor)
+            {
+                await Client.Delay(0);
+                API.SetPedHeadOverlayColor(playerPed, over.Key, over.Value.Item1, over.Value.Item2, 0);
+            }
+
+            foreach (KeyValuePair<int, Tuple<int, int>> over in user.Skin.Props)
+            {
+                await Client.Delay(0);
+                API.SetPedPropIndex(playerPed, over.Key, over.Value.Item1, over.Value.Item2, false);
+            }
+
+            defaultModel.MarkAsNoLongerNeeded();
+
+            await BaseScript.Delay(2000);
+
+            resetBuffer = false;
+        }
+    }
+}
