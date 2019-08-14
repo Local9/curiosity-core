@@ -1,6 +1,7 @@
 ﻿using System;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net;
 using CitizenFX.Core;
 
 namespace Curiosity.Police.Client.net.Environment.Job
@@ -24,8 +25,14 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
         static void OnDutyState(bool jobActive, bool dutyState, string job)
         {
+            if (Classes.Player.PlayerInformation.IsDeveloper())
+            {
+                Log.Info($"OnDutyState -> Method Called");
+            }
+
             if (job == "error")
             {
+                Log.Error("OnDutyState -> Error");
                 IsPoliceJobActive = false;
                 IsOnDuty = false;
                 IsOnCallout = false;
@@ -35,6 +42,10 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job != "police")
             {
+                if (Classes.Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Info($"OnDutyState -> Job changed from police to {job}");
+                }
                 IsPoliceJobActive = false;
                 IsOnDuty = false;
                 if (IsOnCallout)
@@ -46,6 +57,11 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 return; // TODO: Refactor job code
             }
             IsOnDuty = dutyState;
+
+            if (Classes.Player.PlayerInformation.IsDeveloper())
+            {
+                Log.Info($"OnDutyState -> Player Duty State {IsOnDuty}");
+            }
 
             if (IsOnDuty)
             {

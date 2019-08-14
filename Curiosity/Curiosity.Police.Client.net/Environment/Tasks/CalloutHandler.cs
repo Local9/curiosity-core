@@ -16,6 +16,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         static Random random = new Random();
         static int PreviousCallout = -1;
         static bool TickIsRegistered = false;
+        static bool RequestingCallout = false;
 
         static long TimeStampOfLastCallout;
         public static string DEV_LICENSE_PLATE = "LIFEVDEV";
@@ -36,6 +37,8 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
         static void CalloutStart(int calloutId, int patrolZone)
         {
+            Job.DutyManager.IsOnCallout = true;
+
             PatrolZone pz = (PatrolZone)patrolZone;
 
             if (pz == PatrolZone.Rural) // 50/50 chance of being called out to the middle of the map
@@ -56,6 +59,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
         static void CalloutTaken()
         {
+            RequestingCallout = false;
             GenerateRandomCallout();
         }
 
@@ -70,6 +74,8 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             {
                 if (TickIsRegistered) return;
                 TickIsRegistered = true;
+
+                RequestingCallout = false;
 
                 Client.TriggerServerEvent("curiosity:Server:Police:CalloutEnded", PreviousCallout);
 
@@ -104,10 +110,11 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         {
             await Client.Delay(0);
             TickIsRegistered = false;
+            RequestingCallout = false;
             client.DeregisterTickHandler(SelectCallout);
         }
 
-        static async Task SelectCallout()
+        public static async Task SelectCallout()
         {
             try
             {
@@ -124,60 +131,63 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
                         TimeStampOfLastCallout = API.GetGameTimer();
                     }
 
-                    //if (Classes.Player.PlayerInformation.IsDeveloper())
-                    //    Log.Verbose($"SelectCallout TimerValue: {(API.GetGameTimer() - TimeStampOfLastCallout) / 1000.0}s");
-
                     await Client.Delay(10000);
                     await Task.FromResult(0);
                     return;
                 }
 
-                if (Job.DutyManager.IsOnCallout)
+                if (RequestingCallout)
                 {
                     await Task.FromResult(0);
                     return;
                 };
 
-                Job.DutyManager.IsOnCallout = true;
-
                 await Task.FromResult(0);
 
-                GenerateRandomCallout();
+                RequestingCallout = true;
+
+                await GenerateRandomCallout();
             }
             catch (Exception ex)
             {
-                // nothing
+                if (Classes.Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Error($"SelectCallout -> {ex.Message}");
+                }
             }
         }
 
-        static void GenerateRandomCallout()
+        static async Task GenerateRandomCallout()
         {
             try
             {
                 if (random.Next(10) == 1) // 1/10 chance of being called out to the middle of the map
                 {
-                    GetRandomCallout(ClassLoader.RuralCallOuts, PatrolZone.Rural);
+                    await GetRandomCallout(ClassLoader.RuralCallOuts, PatrolZone.Rural);
                     return;
                 }
 
                 if (Job.DutyManager.PatrolZone == PatrolZone.City)
                 {
-                    GetRandomCallout(ClassLoader.CityCallOuts, PatrolZone.City);
+                    await GetRandomCallout(ClassLoader.CityCallOuts, PatrolZone.City);
                 }
 
                 if (Job.DutyManager.PatrolZone == PatrolZone.Country)
                 {
-                    GetRandomCallout(ClassLoader.CountryCallOuts, PatrolZone.Country);
+                    await GetRandomCallout(ClassLoader.CountryCallOuts, PatrolZone.Country);
                 }
+                await Task.FromResult(0);
             }
             catch (Exception ex)
             {
-                Log.Error($"GetRandomCallout -> {ex.ToString()}");
-                Log.Error($"GetRandomCallout -> {ex.TargetSite}");
+                if (Classes.Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Error($"GenerateRandomCallout -> {ex.Message}");
+                }
             }
         }
 
-        static async void GetRandomCallout(Dictionary<int, Func<bool>> calloutDictionary, PatrolZone patrolZone)
+        static async Task GetRandomCallout(Dictionary<int, Func<bool>> calloutDictionary, PatrolZone patrolZone)
         {
             client.DeregisterTickHandler(SelectCallout);
             int maxCallout = calloutDictionary.Count;

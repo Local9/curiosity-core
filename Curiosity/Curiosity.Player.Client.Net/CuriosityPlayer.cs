@@ -189,8 +189,15 @@ namespace Curiosity.Client.net
 
             Setup();
 
-            Model defaultModel = user.Skin.Model.ToEnum(PedHash.FreemodeMale01);
+            PedHash myPedModel = PedHash.FreemodeMale01;
+            PedHash myPedModelToLoad = PedHash.FreemodeMale01;
 
+            if (Enum.TryParse(user.Skin.Model, out myPedModel))
+            {
+                myPedModelToLoad = myPedModel;
+            }
+
+            Model defaultModel = myPedModelToLoad;
             await defaultModel.Request(10000);
 
             while (!defaultModel.IsLoaded)

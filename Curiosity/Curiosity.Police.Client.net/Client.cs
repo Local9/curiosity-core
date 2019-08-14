@@ -76,6 +76,10 @@ namespace Curiosity.Police.Client.net
         {
             try
             {
+                if (Classes.Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Info($"Tick Registered -> {action.Method.Name}");
+                }
                 // Debug.WriteLine($"{action.Method.Name}");
                 Tick += action;
             }
@@ -93,6 +97,10 @@ namespace Curiosity.Police.Client.net
         {
             try
             {
+                if (Classes.Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Info($"Tick Deregistered -> {action.Method.Name}");
+                }
                 Tick -= action;
             }
             catch (Exception ex)

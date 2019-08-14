@@ -172,7 +172,6 @@ namespace Curiosity.Police.Client.net.Classes
             catch (Exception ex)
             {
                 Log.Error($"StartCallout -> {ex.ToString()}");
-                Log.Error($"StartCallout -> {ex.TargetSite}");
             }
 }
 
@@ -278,7 +277,6 @@ namespace Curiosity.Police.Client.net.Classes
             catch (Exception ex)
             {
                 Log.Error($"CalloutCompleted -> {ex.ToString()}");
-                Log.Error($"CalloutCompleted -> {ex.TargetSite}");
                 EndCallout("There was an error found, callout ended. Sorry.");
             }
         }
@@ -322,7 +320,6 @@ namespace Curiosity.Police.Client.net.Classes
             catch (Exception ex)
             {
                 Log.Error($"EndCallout -> {ex.ToString()}");
-                Log.Error($"EndCallout -> {ex.TargetSite}");
             }
         }
 
@@ -349,7 +346,6 @@ namespace Curiosity.Police.Client.net.Classes
             catch (Exception ex)
             {
                 Log.Error($"Tidy -> {ex.ToString()}");
-                Log.Error($"Tidy -> {ex.TargetSite}");
             }
             await Task.FromResult(0);
         }
