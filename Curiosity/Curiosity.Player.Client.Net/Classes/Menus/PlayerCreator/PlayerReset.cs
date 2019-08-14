@@ -17,7 +17,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             while (!PlayerCreatorMenu.MenuSetup)
                 await BaseScript.Delay(0);
 
-            PlayerCreatorMenu.menu.AddMenuItem(new MenuItem("Reset Changes") { ItemData = "RESET", Description = "~r~Warning:~s~ Will reset all changes to how you looked when you connected." });
+            PlayerCreatorMenu.menu.AddMenuItem(new MenuItem("Reset Changes") { ItemData = "RESET", Description = "~r~Warning:~s~ Will reset all changes ~r~except for gender~s~ to how you looked when you connected." });
         }
 
         public static async void ResetCharacter()
@@ -28,24 +28,6 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
             resetBuffer = true;
 
             User user = Client.User;
-
-            PedHash myPedModelToLoad = PedHash.FreemodeMale01;
-
-            if (user.Skin.Model == "mp_f_freemode_01")
-            {
-                myPedModelToLoad = PedHash.FreemodeFemale01;
-            }
-
-            Model defaultModel = myPedModelToLoad;
-            await defaultModel.Request(10000);
-
-            while (!defaultModel.IsLoaded)
-            {
-                defaultModel.Request();
-                await Client.Delay(0);
-            }
-
-            await Game.Player.ChangeModel(defaultModel);
 
             int playerPed = Client.PedHandle;
 
@@ -78,8 +60,6 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                 await Client.Delay(0);
                 API.SetPedPropIndex(playerPed, over.Key, over.Value.Item1, over.Value.Item2, false);
             }
-
-            defaultModel.MarkAsNoLongerNeeded();
 
             await BaseScript.Delay(2000);
 
