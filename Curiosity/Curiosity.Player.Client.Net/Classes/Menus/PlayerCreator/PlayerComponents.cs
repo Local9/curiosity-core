@@ -117,6 +117,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                         m.Enabled = false;
                         m.ListItems = PlayerCreatorMenu.GenerateNumberList("", 0);
                         m.ListIndex = 0;
+                        currentTexture = 0;
                     }
                 }
 

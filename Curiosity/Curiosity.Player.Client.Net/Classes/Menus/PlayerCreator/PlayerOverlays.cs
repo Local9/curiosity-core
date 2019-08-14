@@ -90,7 +90,7 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                     if (_newSelectionIndex == 0)
                         currentColor = 0;
 
-                    API.SetPedHeadOverlay(Client.PedHandle, _listItem.ItemData.ID, _newSelectionIndex, 1f);
+                    API.SetPedHeadOverlay(Client.PedHandle, _listItem.ItemData.ID, _newSelectionIndex, _newSelectionIndex == 0 ? 0f : 1f);
                     await BaseScript.Delay(0);
                     API.SetPedHeadOverlayColor(Client.PedHandle, _listItem.ItemData.ID, _listItem.ItemData.colorType, currentColor, currentColor);
                     await BaseScript.Delay(0);
@@ -103,7 +103,6 @@ namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
                 {
                     currentColor = _newSelectionIndex;
                     Function.Call(Hash._SET_PED_HEAD_OVERLAY_COLOR, Client.PedHandle, _listItem.ItemData.ID, _listItem.ItemData.colorType, _newSelectionIndex, _newSelectionIndex);
-                    PlayerCreatorMenu.StoreOverlayColor(_listItem.ItemData.ID, _listItem.ItemData.colorType, _newSelectionIndex);
                 }
             };
 
