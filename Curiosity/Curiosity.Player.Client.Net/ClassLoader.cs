@@ -16,8 +16,6 @@ namespace Curiosity.Client.net
     {
         public static void Init()
         {
-            Log.Verbose("Entering ClassLoader Init");
-
             // https://github.com/GroovyGiantPanda/FiveMRpServerResources/tree/master/src/FiveM/RPClient/Classes
 
             Classes.Player.Queue.Init();
@@ -152,7 +150,6 @@ namespace Curiosity.Client.net
             //EmotesManager.Init();
             //Stay.Init();
 
-            Log.Verbose("Leaving ClassLoader Init");
         }
     }
 }

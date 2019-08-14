@@ -46,8 +46,6 @@ namespace Curiosity.Client.net
             RegisterTickHandler(OnTick);
             RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action(OnSessionActive));
 
-            Log.Info("Curiosity.Client.net loaded\n");
-
             //RegisterEventHandler("TriggerEventNearPoint", new Action<string>(HandleLocalEvent));
             //Client.GetInstance().PointEventHandlers["Communication.LocalChat"] = new Func<PointEvent, Task>(HandleLocalChat);
         }
