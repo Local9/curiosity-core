@@ -236,7 +236,7 @@ namespace Curiosity.Client.net
             foreach(KeyValuePair<int, int> over in user.Skin.PedHeadOverlay)
             {
                 await Delay(0);
-                API.SetPedHeadOverlay(playerPed, over.Key, over.Value, 1.0f);
+                API.SetPedHeadOverlay(playerPed, over.Key, over.Value, over.Value == 0 ? 0f : 1.0f);
             }
 
             foreach (KeyValuePair<int, Tuple<int, int>> over in user.Skin.PedHeadOverlayColor)
