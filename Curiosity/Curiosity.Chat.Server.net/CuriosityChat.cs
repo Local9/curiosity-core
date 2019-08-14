@@ -20,7 +20,7 @@ namespace Curiosity.Chat.Server.net
 
         async void ChatMessage([FromSource]Player player, string role, string message, string color, string scope)
         {
-            Console.WriteLine($"{role} {player.Name} - {message}");
+            // Console.WriteLine($"{role} {player.Name} - {message}");
 
             await Delay(0);
             string originalMessage = message;
@@ -47,7 +47,7 @@ namespace Curiosity.Chat.Server.net
                 player.TriggerEvent("curiosity:Server:Chat:Profanity");
                 await Delay(0);
                 Regex wordFilter = new Regex($"({string.Join("|", ProfanityFilter.ProfanityArray())})");
-                message = wordFilter.Replace(message, "#####");
+                message = wordFilter.Replace(message, "$!\"£^!@");
             }
 
             switch (scope)
@@ -57,8 +57,6 @@ namespace Curiosity.Chat.Server.net
                     break;
             }
             await Delay(0);
-            if (profanityFound)
-                message = string.Format("\n:warning: **PROFANITY REMOVED** :warning:\n **Sent to Players:** {0}\n **Original Message:** {1}", message, originalMessage);
 
             TriggerEvent("curiosity:Server:Discord:ChatMessage", player.Name, message);
         }
