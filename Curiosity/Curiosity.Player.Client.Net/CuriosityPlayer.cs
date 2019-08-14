@@ -229,21 +229,25 @@ namespace Curiosity.Client.net
 
             foreach (KeyValuePair<int, Tuple<int, int>> comp in user.Skin.Components)
             {
+                await Delay(0);
                 API.SetPedComponentVariation(playerPed, comp.Key, comp.Value.Item1, comp.Value.Item2, 0);
             }
 
             foreach(KeyValuePair<int, int> over in user.Skin.PedHeadOverlay)
             {
+                await Delay(0);
                 API.SetPedHeadOverlay(playerPed, over.Key, over.Value, 1.0f);
             }
 
             foreach (KeyValuePair<int, Tuple<int, int>> over in user.Skin.PedHeadOverlayColor)
             {
+                await Delay(0);
                 API.SetPedHeadOverlayColor(playerPed, over.Key, over.Value.Item1, over.Value.Item2, 0);
             }
 
             foreach (KeyValuePair<int, Tuple<int, int>> over in user.Skin.Props)
             {
+                await Delay(0);
                 API.SetPedPropIndex(playerPed, over.Key, over.Value.Item1, over.Value.Item2, false);
             }
 
