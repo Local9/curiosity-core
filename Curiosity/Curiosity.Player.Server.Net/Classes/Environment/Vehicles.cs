@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Server.net.Entity;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,30 @@ namespace Curiosity.Server.net.Classes.Environment
             server.RegisterEventHandler("curiosity:Server:Vehicles:TempStore", new Action<CitizenFX.Core.Player, int>(OnPlayerEnteredVehicle));
             server.RegisterEventHandler("curiosity:Server:Vehicles:RemoveFromTempStore", new Action<CitizenFX.Core.Player, int>(OnRemoveFromTempStore));
             server.RegisterEventHandler("curiosity:Server:Vehicle:Detonate", new Action<int>(OnDetonateVehicle));
+
+            server.RegisterEventHandler("curiosity:Server:Vehicle:GetVehicleSpawnLocations", new Action<CitizenFX.Core.Player>(OnGetVehicleSpawnLocations));
+
             server.RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(OnPlayerDropped));
             server.RegisterTickHandler(OnVehicleCheck);
             Log.Verbose("Vehicle Manager Init");
+        }
+
+        static async void OnGetVehicleSpawnLocations([FromSource]CitizenFX.Core.Player player)
+        {
+            try
+            {
+                List<VehicleSpawnLocation> loc = await Database.DatabaseVehicles.GetVehicleSpawns();
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(loc);
+
+                //string base64EncodedExternalAccount = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json));
+                //byte[] byteArray = Convert.FromBase64String(base64EncodedExternalAccount);
+
+                player.TriggerEvent("curiosity:Client:Vehicle:VehicleSpawnLocations", json);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}");
+            }
         }
 
         static void OnDetonateVehicle(int vehId)

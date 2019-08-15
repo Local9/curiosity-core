@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.net.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +66,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         // For e.g. cinematic mode
         static public bool HideAllMarkers = false;
         static public bool IsMenuOpen = false;
+        static public bool IsSpawning = false;
 
         static float contextAoe = 2f; // How close you need to be to see instruction
 
@@ -79,15 +82,28 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             PeriodicUpdate();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             client.RegisterTickHandler(OnTickInformationPanel);
-            // SETUP
-            SetupVehicleSpawnMarkers();
             // CONTROLLER
             client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
+            client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:VehicleSpawnLocations", new Action<string>(OnVehicleSpawnLocations));
         }
 
-        static void OnPlayerSpawned(dynamic spawnObj)
+        static async void OnPlayerSpawned(dynamic spawnObj)
         {
-            Client.TriggerServerEvent("curiosity:Server:Markers:GetMarkerList");
+            IsSpawning = true;
+            await Client.Delay(5000);
+            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleSpawnLocations");
+        }
+
+        static async void OnClientResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            await Client.Delay(10000);
+            if (!IsSpawning)
+            {
+                Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleSpawnLocations");
+            }
         }
 
         static public async Task OnTickInformationPanel()
@@ -154,13 +170,33 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             return Task.FromResult(0);
         }
 
-        static void SetupVehicleSpawnMarkers()
+        static void OnVehicleSpawnLocations(string json)
         {
-            // THIS WILL BE OFF AN EVENT
+            try
+            {
+                All.Clear();
+                
+                List <VehicleSpawnLocation> vehicleSpawnLocations = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleSpawnLocation>>(json);
 
-            Marker marker = new Marker(VehicleSpawnTypes.PoliceCity, new CitizenFX.Core.Vector3(-1108.226f, -847.1646f, 19.31689f), CitizenFX.Core.MarkerType.CarSymbol, System.Drawing.Color.FromArgb(255, 135, 206, 250), 1.0f, 15f);
+                foreach (VehicleSpawnLocation vehicleSpawnLocation in vehicleSpawnLocations)
+                {
+                    Vector3 markerLocation = new Vector3(vehicleSpawnLocation.X, vehicleSpawnLocation.Y, vehicleSpawnLocation.Z);
+                    Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 135, 206, 250), 1.0f, 15f);
+                    All.Add(vehicleSpawnLocation.spawnId, marker);
+                }
 
-            All.Add(1, marker);
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 2, "Vehicle Resource", $"Markers Setup", string.Empty, 2);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Error($"{ex.Message}");
+                }
+            }
         }
 
         static Marker GetActiveMarker()

@@ -68,6 +68,7 @@ namespace Curiosity.Server.net
             Database.DatabaseUsersSkills.Init();
             Database.DatabaseCharacterInventory.Init();
             Database.DatabaseLog.Init();
+            Database.DatabaseVehicles.Init();
             Database.Config.Init();
 
             // Session Manager
