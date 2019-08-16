@@ -36,10 +36,9 @@ namespace Curiosity.Server.net.Classes.Environment
                 List<VehicleSpawnLocation> loc = await Database.DatabaseVehicles.GetVehicleSpawns();
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(loc);
 
-                //string base64EncodedExternalAccount = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json));
-                //byte[] byteArray = Convert.FromBase64String(base64EncodedExternalAccount);
+                string encodedJson = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json));
 
-                player.TriggerEvent("curiosity:Client:Vehicle:VehicleSpawnLocations", json);
+                player.TriggerEvent("curiosity:Client:Vehicle:SpawnLocations", $"{encodedJson}");
             }
             catch (Exception ex)
             {

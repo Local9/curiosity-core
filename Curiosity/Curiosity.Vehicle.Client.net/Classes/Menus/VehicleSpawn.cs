@@ -17,7 +17,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
     {
         static Menu menu;
         static Client client = Client.GetInstance();
-        static VehicleSpawnTypes VehicleSpawnType;
         static Random random = new Random();
 
         public static void Init()
@@ -25,9 +24,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             client.RegisterEventHandler("curiosity:Client:Vehicle:VehicleList", new Action<string>(OnUpdateMenu));
         }
 
-        public static void OpenMenu(VehicleSpawnTypes vehicleSpawnType)
+        public static void OpenMenu(VehicleSpawnTypes vehicleSpawnType, int spawnId)
         {
-            VehicleSpawnType = vehicleSpawnType;
+            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleList", vehicleSpawnType, spawnId);
 
             if (menu == null)
             {
@@ -61,8 +60,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         {
             MenuBaseFunctions.MenuOpen();
             menu.AddMenuItem(new MenuItem("Loading..."));
-            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleList", VehicleSpawnType);
-            OnUpdateMenu(string.Empty);
         }
 
         private static void OnUpdateMenu(string json)

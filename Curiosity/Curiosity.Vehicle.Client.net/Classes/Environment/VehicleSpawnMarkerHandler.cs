@@ -1,9 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Global.Shared.net.Entity;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,8 +24,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         public Vector3 Scale { get; private set; }
         public System.Drawing.Color Color { get; private set; }
         public float DrawThreshold { get; private set; }
+        public int SpawnId { get; private set; }
 
-        public Marker(VehicleSpawnTypes spawnType, Vector3 position, MarkerType type = MarkerType.VerticleCircle)
+        public Marker(VehicleSpawnTypes spawnType, int spawnId, Vector3 position, MarkerType type = MarkerType.VerticleCircle)
         {
             this.SpawnType = SpawnType;
             this.Position = position;
@@ -33,9 +36,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             this.Type = type;
             this.Scale = 1.0f * new Vector3(1f, 1f, 1f);
             this.DrawThreshold = 15f;
+            this.SpawnId = spawnId;
         }
 
-        public Marker(VehicleSpawnTypes spawnType, Vector3 position, MarkerType type, System.Drawing.Color color, float scale = 0.3f, float drawThreshold = 15f)
+        public Marker(VehicleSpawnTypes spawnType, int spawnId, Vector3 position, MarkerType type, System.Drawing.Color color, float scale = 0.3f, float drawThreshold = 15f)
         {
             this.SpawnType = SpawnType;
             this.Position = position;
@@ -45,9 +49,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             this.Type = type;
             this.Scale = scale * new Vector3(1f, 1f, 1f);
             this.DrawThreshold = drawThreshold;
+            this.SpawnId = spawnId;
         }
 
-        public Marker(VehicleSpawnTypes spawnType, Vector3 position, MarkerType type, System.Drawing.Color color, Vector3 scale, Vector3 rotation, Vector3 direction, float drawThreshold = 15f)
+        public Marker(VehicleSpawnTypes spawnType, int spawnId, Vector3 position, MarkerType type, System.Drawing.Color color, Vector3 scale, Vector3 rotation, Vector3 direction, float drawThreshold = 15f)
         {
             this.SpawnType = SpawnType;
             this.Position = position;
@@ -57,6 +62,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             this.Type = type;
             this.Scale = scale;
             this.DrawThreshold = drawThreshold;
+            this.SpawnId = spawnId;
         }
     }
 
@@ -85,7 +91,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             // CONTROLLER
             client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
-            client.RegisterEventHandler("curiosity:Client:Vehicle:VehicleSpawnLocations", new Action<string>(OnVehicleSpawnLocations));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:SpawnLocations", new Action<string>(OnVehicleSpawnLocations));
         }
 
         static async void OnPlayerSpawned(dynamic spawnObj)
@@ -123,7 +129,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                         if (!IsMenuOpen)
                         {
                             IsMenuOpen = true;
-                            Menus.VehicleSpawn.OpenMenu(marker.SpawnType);
+                            Menus.VehicleSpawn.OpenMenu(marker.SpawnType, marker.SpawnId);
                         }
                     }
                 }
@@ -170,18 +176,20 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             return Task.FromResult(0);
         }
 
-        static void OnVehicleSpawnLocations(string json)
+        static void OnVehicleSpawnLocations(string encodedJson)
         {
             try
             {
                 All.Clear();
-                
-                List <VehicleSpawnLocation> vehicleSpawnLocations = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleSpawnLocation>>(json);
+
+                string json = NativeWrappers.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
+
+                List<VehicleSpawnLocation> vehicleSpawnLocations = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleSpawnLocation>>(json);
 
                 foreach (VehicleSpawnLocation vehicleSpawnLocation in vehicleSpawnLocations)
                 {
                     Vector3 markerLocation = new Vector3(vehicleSpawnLocation.X, vehicleSpawnLocation.Y, vehicleSpawnLocation.Z);
-                    Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 135, 206, 250), 1.0f, 15f);
+                    Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, vehicleSpawnLocation.spawnId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 135, 206, 250), 1.0f, 15f);
                     All.Add(vehicleSpawnLocation.spawnId, marker);
                 }
 
