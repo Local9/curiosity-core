@@ -1,7 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Server.net.Entity;
+using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Server.net.Entity;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
@@ -35,8 +36,7 @@ namespace Curiosity.Server.net.Classes.Environment
             {
                 List<VehicleSpawnLocation> loc = await Database.DatabaseVehicles.GetVehicleSpawns();
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(loc);
-
-                string encodedJson = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json));
+                string encodedJson = Encode.StringToBase64(json);
 
                 player.TriggerEvent("curiosity:Client:Vehicle:SpawnLocations", $"{encodedJson}");
             }

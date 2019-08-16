@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Encode.cs" />
     <Compile Include="Entity\GamePed\PedObject.cs" />
+    <Compile Include="Entity\GenericData.cs" />
     <Compile Include="Entity\Inventory.cs" />
     <Compile Include="Entity\LogType.cs" />
     <Compile Include="Entity\NuiData.cs" />

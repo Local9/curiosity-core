@@ -95,6 +95,9 @@ namespace Curiosity.Server.net
             // Classes.Environment.InstanceChecker.Init();
             Classes.Environment.WeatherSystems.Init();
 
+            // menu options
+            Classes.Menu.Player.Init();
+
             // Config
             Classes.DiscordWrapper.Init();
 

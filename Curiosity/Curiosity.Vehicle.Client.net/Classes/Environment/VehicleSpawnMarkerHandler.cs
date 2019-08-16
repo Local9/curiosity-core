@@ -1,11 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Shared.Client.net;
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -182,7 +181,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             {
                 All.Clear();
 
-                string json = NativeWrappers.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
+                string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
 
                 List<VehicleSpawnLocation> vehicleSpawnLocations = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleSpawnLocation>>(json);
 

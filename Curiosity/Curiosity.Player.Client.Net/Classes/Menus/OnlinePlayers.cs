@@ -1,7 +1,11 @@
-﻿using MenuAPI;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using MenuAPI;
+using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
@@ -15,16 +19,32 @@ namespace Curiosity.Client.net.Classes.Menus
 
         public static void Init()
         {
-            MenuBase.AddSubMenu(menu);
+            client.RegisterEventHandler("curiosity:Client:Player:Bring", new Action<string>(OnBringPlayer));
+            client.RegisterEventHandler("curiosity:Client:Player:Freeze", new Action<string>(OnFreezePlayer));
 
             menu.OnMenuOpen += (_menu) => {
                 MenuBase.MenuOpen(true);
 
                 foreach (CitizenFX.Core.Player player in Client.players)
                 {
-                    // if (player.ServerId == Game.Player.ServerId) continue;
+                    if (!Player.PlayerInformation.IsDeveloper())
+                    {
+                        if (player.ServerId == Game.Player.ServerId) continue;
+                    }
 
                     Menu playerMenu = new Menu(player.Name, "Player Interactions");
+
+                    playerMenu.OnMenuOpen += (_m) =>
+                    {
+                        MenuBase.MenuOpen(true);
+                    };
+
+                    playerMenu.OnMenuClose += (_m) =>
+                    {
+
+                        MenuBase.MenuOpen(false);
+                        _m.ClearMenuItems();
+                    };
 
                     playerMenu.OnItemSelect += (_playerMenu, _menuItem, _itemIndex) => {
                         OnItemSelect(_playerMenu, _menuItem, _itemIndex);
@@ -36,8 +56,9 @@ namespace Curiosity.Client.net.Classes.Menus
                     if (Player.PlayerInformation.IsStaff())
                     {
                         playerMenu.AddMenuItem(new MenuItem("Spectate") { ItemData = player, Description = "Spectate player" });
-                        // playerMenu.AddMenuItem(new MenuItem("Bring Player") { ItemData = player, Description = "Teleport player to your location." });
-                        playerMenu.AddMenuItem(new MenuItem("Goto Player") { ItemData = player, Description = "Teleport to a players location." });
+                        playerMenu.AddMenuItem(new MenuItem("Bring Player") { ItemData = player, Description = "Teleport player to your location" });
+                        playerMenu.AddMenuItem(new MenuItem("Goto Player") { ItemData = player, Description = "Teleport to a players location" });
+                        playerMenu.AddMenuItem(new MenuItem("Freeze Player") { ItemData = player, Description = "Freeze players location" });
 
                         Menu kickOptions = PlayerInteractions.KickInteraction.CreateMenu("Kick", player);
                         AddSubMenu(playerMenu, kickOptions);
@@ -53,7 +74,9 @@ namespace Curiosity.Client.net.Classes.Menus
             {
                 MenuBase.MenuOpen(false);
                 _menu.ClearMenuItems();
-            };            
+            };
+
+            MenuBase.AddSubMenu(menu);
         }
 
         private static void OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
@@ -70,9 +93,13 @@ namespace Curiosity.Client.net.Classes.Menus
             {
                 GotoPlayer(menuItem.ItemData);
             }
+            if (menuItem.Text == "Freeze Player")
+            {
+                FreezePlayer(menuItem.ItemData);
+            }
         }
 
-        static async Task BringPlayer(CitizenFX.Core.Player player)
+        static async void BringPlayer(CitizenFX.Core.Player player)
         {
             if (!Player.PlayerInformation.IsStaff())
             {
@@ -82,21 +109,88 @@ namespace Curiosity.Client.net.Classes.Menus
 
             if (player.ServerId == Game.Player.ServerId)
             {
-                Debug.WriteLine("Cannot spec yourself");
+                Debug.WriteLine("Cannot teleport to yourself");
                 return;
             }
 
-            API.NetworkFadeOutEntity(player.Character.Handle, true, false);
-
             Vector3 pos = Game.PlayerPed.Position;
 
-            player.Character.Position = new Vector3(pos.X + 2f, pos.Y, pos.Z);
+            Client.TriggerServerEvent("curiosity:Server:Player:Bring", player.ServerId, pos.X, pos.Y, pos.Z);
 
             await BaseScript.Delay(50);
+        }
 
-            API.NetworkFadeInEntity(player.Character.Handle, false);
+        static async void FreezePlayer(CitizenFX.Core.Player player)
+        {
+            try
+            {
+                if (!Player.PlayerInformation.IsStaff())
+                {
+                    Debug.WriteLine("Don't know how you did that...");
+                    return;
+                }
+
+                if (player.ServerId == Game.Player.ServerId)
+                {
+                    Debug.WriteLine("Cannot freeze yourself");
+                    return;
+                }
+
+                Client.TriggerServerEvent("curiosity:Server:Player:Freeze", player.ServerId);
+            }
+            catch (Exception ex)
+            {
+                // 
+            }
 
             await BaseScript.Delay(50);
+        }
+
+        static async void OnBringPlayer(string data)
+        {
+            try
+            {
+                string json = Encode.BytesToStringConverted(Convert.FromBase64String(data));
+
+                GenericData genericData = Newtonsoft.Json.JsonConvert.DeserializeObject<GenericData>(json);
+
+                Screen.Fading.FadeOut(2000);
+                while (Screen.Fading.IsFadingOut)
+                {
+                    await Client.Delay(10);
+                }
+
+                await Client.Delay(0);
+                Game.PlayerPed.Position = new Vector3(genericData.X, genericData.Y, genericData.Z);
+                await Client.Delay(0);
+
+                Screen.Fading.FadeIn(2000);
+                while (Screen.Fading.IsFadingIn)
+                {
+                    await Client.Delay(10);
+                }
+            }
+            catch (Exception ex)
+            {
+                Game.PlayerPed.IsPositionFrozen = false;
+                Screen.Fading.FadeOut(10);
+            }
+        }
+
+        static void OnFreezePlayer(string data)
+        {
+            try
+            {
+                string json = Encode.BytesToStringConverted(Convert.FromBase64String(data));
+                GenericData genericData = Newtonsoft.Json.JsonConvert.DeserializeObject<GenericData>(json);
+
+                if (genericData.IsSentByServer)
+                    Game.PlayerPed.IsPositionFrozen = !Game.PlayerPed.IsPositionFrozen;
+            }
+            catch (Exception ex)
+            {
+                Game.PlayerPed.IsPositionFrozen = false;
+            }
         }
 
         static async Task GotoPlayer(CitizenFX.Core.Player player)

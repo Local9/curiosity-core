@@ -78,6 +78,7 @@
     <Compile Include="Classes\Environment\Vehicles.cs" />
     <Compile Include="Classes\Environment\WeatherSystems.cs" />
     <Compile Include="Classes\Menu\Lists.cs" />
+    <Compile Include="Classes\Menu\Player.cs" />
     <Compile Include="Classes\PlayerMethods.cs" />
     <Compile Include="Classes\Player\Sit.cs" />
     <Compile Include="Classes\ServerSettings.cs" />

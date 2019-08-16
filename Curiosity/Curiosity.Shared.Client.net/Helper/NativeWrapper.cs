@@ -247,17 +247,6 @@ namespace Curiosity.Shared.Client.net.Helper
             return distX + distY + distZ <= range * range;
         }
 
-        public static string BytesToStringConverted(byte[] bytes)
-        {
-            using (var stream = new System.IO.MemoryStream(bytes))
-            {
-                using (var streamReader = new System.IO.StreamReader(stream))
-                {
-                    return streamReader.ReadToEnd();
-                }
-            }
-        }
-
         //public static int NearestItemInCone(Vector3 loc, Vector3 dir, float range, float angle, Dictionary<int, LocationData> items)
         //{
         //    int currentClosestItem = -1; // Null item.
