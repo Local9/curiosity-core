@@ -28,6 +28,9 @@ namespace Curiosity.Vehicle.Client.net
             Classes.Environment.VehicleSpawnMarkerHandler.Init();
             Classes.Environment.SafeZone.Init();
 
+            // MENU
+            Classes.Menus.VehicleSpawn.Init();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
     }

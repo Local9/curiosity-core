@@ -55,13 +55,13 @@ namespace Curiosity.Server.net.Database
             return vehicleSpawnLocations;
         }
 
-        public static async Task<List<Inventory>> GetVehicleSpawnsForLocation(SpawnLocations spawnLocation)
+        public static async Task<List<VehicleItem>> GetVehiclesForSpawn(int spawnId)
         {
-            List<Inventory> inventoryList = new List<Inventory>();
+            List<VehicleItem> vehicleItems = new List<VehicleItem>();
 
-            string sql = "CALL curiosity.selVehiclesSpawnsForLocation(@spawnLocation);";
+            string sql = "CALL curiosity.selVehicleSpawnList(@spawnIdIn);";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@spawnLocation", (int)spawnLocation);
+            myParams.Add("@spawnIdIn", spawnId);
 
             using (var result = mySql.QueryResult(sql, myParams))
             {
@@ -69,57 +69,27 @@ namespace Curiosity.Server.net.Database
                 await Delay(0);
                 if (keyValuePairs.Count == 0)
                 {
-                    return inventoryList;
+                    return vehicleItems;
                 }
 
                 foreach (Dictionary<string, object> k in keyValuePairs)
                 {
-                    Inventory inventory = new Inventory
+                    VehicleItem vehicleItem = new VehicleItem
                     {
-                        ItemId = int.Parse($"{k["itemId"]}"),
-                        NumberOfItems = int.Parse($"{k["numberOfItem"]}"),
-                        Limit = int.Parse($"{k["limit"]}"),
-                        Description = $"{k["description"]}",
-                        Icon = $"{k["icon"]}"
+                        Name = $"{k["vehicleLabel"]}",
+                        VehicleHashString = $"{k["vehicleHash"]}",
+                        UnlockRequiredSkill = $"{k["requiredSkill"]}",
+                        UnlockRequiredSkillDescription = $"{k["requiredSkillDescription"]}",
+                        UnlockRequirementValue = int.Parse($"{k["vehicleUnlockRequirement"]}"),
+                        SpawnPositionX = float.Parse($"{k["x"]}"),
+                        SpawnPositionY = float.Parse($"{k["y"]}"),
+                        SpawnPositionZ = float.Parse($"{k["z"]}"),
+                        SpawnHeading = float.Parse($"{k["spawnOutputHeading"]}")
                     };
-                    inventoryList.Add(inventory);
+                    vehicleItems.Add(vehicleItem);
                 }
             }
-            return inventoryList;
-        }
-
-        public static async Task<List<Inventory>> GetVehicleList(VehicleSpawnTypes vehicleSpawnType, SpawnLocations spawnLocation)
-        {
-            List<Inventory> inventoryList = new List<Inventory>();
-
-            string sql = "CALL curiosity.selVehiclesForSpawnLocation(@spawnType, @spawnLocation);";
-            Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@spawnType", (int)vehicleSpawnType);
-            myParams.Add("@spawnLocation", (int)spawnLocation);
-
-            using (var result = mySql.QueryResult(sql, myParams))
-            {
-                ResultSet keyValuePairs = await result;
-                await Delay(0);
-                if (keyValuePairs.Count == 0)
-                {
-                    return inventoryList;
-                }
-
-                foreach (Dictionary<string, object> k in keyValuePairs)
-                {
-                    Inventory inventory = new Inventory
-                    {
-                        ItemId = int.Parse($"{k["itemId"]}"),
-                        NumberOfItems = int.Parse($"{k["numberOfItem"]}"),
-                        Limit = int.Parse($"{k["limit"]}"),
-                        Description = $"{k["description"]}",
-                        Icon = $"{k["icon"]}"
-                    };
-                    inventoryList.Add(inventory);
-                }
-            }
-            return inventoryList;
+            return vehicleItems;
         }
     }
 }

@@ -119,7 +119,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 if (marker != null && !IsMenuOpen)
                 {
                     API.SetTextComponentFormat("STRING");
-                    API.AddTextComponentString($" Press ~INPUT_PICKUP~ to open spawn menu.");
+                    API.AddTextComponentString($" Press ~INPUT_PICKUP~ to open menu.");
                     API.DisplayHelpTextFromStringLabel(0, false, true, -1);
 
                     if (Game.IsControlJustPressed(0, Control.Pickup) ||
@@ -128,7 +128,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                         if (!IsMenuOpen)
                         {
                             IsMenuOpen = true;
-                            Menus.VehicleSpawn.OpenMenu(marker.SpawnType, marker.SpawnId);
+                            Menus.VehicleSpawn.OpenMenu(marker.SpawnId);
                         }
                     }
                 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MenuAPI;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net;
 using Curiosity.Shared.Client.net;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
@@ -24,9 +25,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             client.RegisterEventHandler("curiosity:Client:Vehicle:VehicleList", new Action<string>(OnUpdateMenu));
         }
 
-        public static void OpenMenu(VehicleSpawnTypes vehicleSpawnType, int spawnId)
+        public static void OpenMenu(int spawnId)
         {
-            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleList", vehicleSpawnType, spawnId);
+            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleList", spawnId);
 
             if (menu == null)
             {
@@ -62,12 +63,19 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             menu.AddMenuItem(new MenuItem("Loading..."));
         }
 
-        private static void OnUpdateMenu(string json)
+        private static void OnUpdateMenu(string encodedJson)
         {
             menu.ClearMenuItems();
-            // add new items
-            // VehicleHash, VehicleName, Enabled, Description
-            menu.AddMenuItem(new MenuItem("Ruiner") { ItemData = new VehicleItem() { Name = "Ruiner", VehicleHashString = "Ruiner3", SpawnPosition = new Vector3(-1069.468f, -878.0467f, 5.85375f), SpawnHeading = 206.0515f, LocationOfSpawn = new Vector3(-1108.226f, -847.1646f, 19.31689f) } });
+
+            string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
+            List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
+
+            foreach (VehicleItem vehicle in vehicleItems)
+            {
+                MenuItem item = new MenuItem(vehicle.Name) { ItemData = vehicle, Enabled = (Player.PlayerInformation.playerInfo.Skills[vehicle.UnlockRequiredSkill].Value >= vehicle.UnlockRequirementValue) };
+                item.Description = $"Requires: {vehicle.UnlockRequiredSkillDescription} >= {vehicle.UnlockRequirementValue}";
+                menu.AddMenuItem(item);
+            }
         }
 
         private static async void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
@@ -112,9 +120,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                 modelName = car;
             }
 
+            Vector3 positionToSpawn = new Vector3(vehicleItem.SpawnPositionX, vehicleItem.SpawnPositionY, vehicleItem.SpawnPositionZ);
 
 
-            if (!await Vehicle.Spawn.SpawnVehicle(model, vehicleItem.SpawnPosition, vehicleItem.SpawnHeading, vehicleItem.LocationOfSpawn))
+            if (!await Vehicle.Spawn.SpawnVehicle(model, positionToSpawn, vehicleItem.SpawnHeading))
             {
                 Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Please try again shortly.", string.Empty, 2);
             }

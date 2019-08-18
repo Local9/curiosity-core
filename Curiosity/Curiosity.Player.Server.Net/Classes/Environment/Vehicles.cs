@@ -24,10 +24,28 @@ namespace Curiosity.Server.net.Classes.Environment
             server.RegisterEventHandler("curiosity:Server:Vehicle:Detonate", new Action<int>(OnDetonateVehicle));
 
             server.RegisterEventHandler("curiosity:Server:Vehicle:GetVehicleSpawnLocations", new Action<CitizenFX.Core.Player>(OnGetVehicleSpawnLocations));
+            server.RegisterEventHandler("curiosity:Server:Vehicle:GetVehicleList", new Action<CitizenFX.Core.Player, int>(OnGetVehicleList));
 
             server.RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(OnPlayerDropped));
             server.RegisterTickHandler(OnVehicleCheck);
             Log.Verbose("Vehicle Manager Init");
+        }
+
+        static async void OnGetVehicleList([FromSource]CitizenFX.Core.Player player, int spawnId)
+        {
+            try
+            {
+                List<VehicleItem> vehicles = await Database.DatabaseVehicles.GetVehiclesForSpawn(spawnId);
+
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicles);
+                string encodedJson = Encode.StringToBase64(json);
+
+                player.TriggerEvent("curiosity:Client:Vehicle:VehicleList", encodedJson);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.Message}");
+            }
         }
 
         static async void OnGetVehicleSpawnLocations([FromSource]CitizenFX.Core.Player player)
@@ -38,7 +56,7 @@ namespace Curiosity.Server.net.Classes.Environment
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(loc);
                 string encodedJson = Encode.StringToBase64(json);
 
-                player.TriggerEvent("curiosity:Client:Vehicle:SpawnLocations", $"{encodedJson}");
+                player.TriggerEvent("curiosity:Client:Vehicle:SpawnLocations", encodedJson);
             }
             catch (Exception ex)
             {

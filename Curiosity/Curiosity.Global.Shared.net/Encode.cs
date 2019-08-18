@@ -20,5 +20,10 @@ namespace Curiosity.Global.Shared.net
             }
         }
 
+        //public static T ConvertToObject<T>(this string json)
+        //{
+        //    string decoded = Encode.BytesToStringConverted(System.Convert.FromBase64String(json));
+        //    return Newton 
+        //}
     }
 }

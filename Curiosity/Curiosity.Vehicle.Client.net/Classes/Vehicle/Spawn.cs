@@ -11,7 +11,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
     {
         static Random random = new Random();
 
-        public static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading, Vector3 spawnLocation)
+        public static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading)
         {
             float fuelLevel = random.Next(60, 100);
 
