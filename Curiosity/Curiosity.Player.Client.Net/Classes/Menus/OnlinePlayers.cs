@@ -55,6 +55,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
                     if (Player.PlayerInformation.IsStaff())
                     {
+                        playerMenu.AddMenuItem(new MenuItem("-- ADMIN TOOLS --") { Enabled = false, LeftIcon = MenuItem.Icon.STAR });
                         playerMenu.AddMenuItem(new MenuItem("Spectate") { ItemData = player, Description = "Spectate player" });
                         playerMenu.AddMenuItem(new MenuItem("Bring Player") { ItemData = player, Description = "Teleport player to your location" });
                         playerMenu.AddMenuItem(new MenuItem("Goto Player") { ItemData = player, Description = "Teleport to a players location" });
@@ -154,7 +155,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
                 GenericData genericData = Newtonsoft.Json.JsonConvert.DeserializeObject<GenericData>(json);
 
-                Screen.Fading.FadeOut(2000);
+                Screen.Fading.FadeOut(200);
                 while (Screen.Fading.IsFadingOut)
                 {
                     await Client.Delay(10);
@@ -164,7 +165,7 @@ namespace Curiosity.Client.net.Classes.Menus
                 Game.PlayerPed.Position = new Vector3(genericData.X, genericData.Y, genericData.Z);
                 await Client.Delay(0);
 
-                Screen.Fading.FadeIn(2000);
+                Screen.Fading.FadeIn(200);
                 while (Screen.Fading.IsFadingIn)
                 {
                     await Client.Delay(10);
