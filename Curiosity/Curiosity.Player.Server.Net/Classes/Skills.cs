@@ -34,9 +34,6 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                if (!Server.isLive)
-                    Log.Verbose($"{player.Name} - GetListData()");
-
                 await BaseScript.Delay(0);
                 List<GlobalEntity.Skills> skillsList = new List<GlobalEntity.Skills>();
 
@@ -62,9 +59,6 @@ namespace Curiosity.Server.net.Classes
                 nuiData.panel = $"{skillType}";
                 nuiData.skills = skillsList;
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(nuiData);
-
-                if (!Server.isLive)
-                    Log.Verbose($"{player.Name} - {json}");
 
                 player.TriggerEvent("curiosity:Player:Skills:GetListData", json);
             }
