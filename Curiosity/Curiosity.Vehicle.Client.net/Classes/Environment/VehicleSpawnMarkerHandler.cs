@@ -76,8 +76,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static float contextAoe = 2f; // How close you need to be to see instruction
 
         // Any other class can add or remove markers from this dictionary (by ID preferrably)
-        static internal Dictionary<int, Marker> All = new Dictionary<int, Marker>();
-        static internal List<Marker> Close = new List<Marker>();
+        static internal Dictionary<int, Marker> MarkersAll = new Dictionary<int, Marker>();
+        static internal List<Marker> MarkersClose = new List<Marker>();
 
         static public void Init()
         {
@@ -150,7 +150,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             {
                 if (!HideAllMarkers)
                 {
-                    Close.ForEach(m => CitizenFX.Core.World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true));
+                    MarkersClose.ForEach(m => CitizenFX.Core.World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true));
                 }
             }
             catch (Exception ex)
@@ -171,7 +171,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         static public Task RefreshClose()
         {
-            Close = All.ToList().Select(m => m.Value).Where(m => m.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(m.DrawThreshold, 2)).ToList();
+            MarkersClose = MarkersAll.ToList().Select(m => m.Value).Where(m => m.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(m.DrawThreshold, 2)).ToList();
             return Task.FromResult(0);
         }
 
@@ -179,7 +179,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             try
             {
-                All.Clear();
+                MarkersAll.Clear();
 
                 string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
 
@@ -189,7 +189,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 {
                     Vector3 markerLocation = new Vector3(vehicleSpawnLocation.X, vehicleSpawnLocation.Y, vehicleSpawnLocation.Z);
                     Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, vehicleSpawnLocation.spawnId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 135, 206, 250), 1.0f, 15f);
-                    All.Add(vehicleSpawnLocation.spawnId, marker);
+                    MarkersAll.Add(vehicleSpawnLocation.spawnId, marker);
+
+                    BlipData blipData = new BlipData(vehicleSpawnLocation.spawnBlipName, markerLocation, (BlipSprite)vehicleSpawnLocation.spawnBlip, Shared.Client.net.Enums.BlipCategory.Unknown, (BlipColor)vehicleSpawnLocation.spawnBlipColor);
+                    BlipHandler.Add(blipData);
                 }
 
                 if (Player.PlayerInformation.IsDeveloper())
@@ -210,7 +213,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             try
             {
-                Marker closestMarker = Close.Where(w => w.Position.DistanceToSquared(Game.PlayerPed.Position) < contextAoe).FirstOrDefault();
+                Marker closestMarker = MarkersClose.Where(w => w.Position.DistanceToSquared(Game.PlayerPed.Position) < contextAoe).FirstOrDefault();
                 if (closestMarker == null) return null;
                 return closestMarker;
             }

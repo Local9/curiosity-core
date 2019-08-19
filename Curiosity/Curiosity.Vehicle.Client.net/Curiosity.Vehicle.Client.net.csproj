@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Environment\BlipHandler.cs" />
     <Compile Include="Classes\Environment\SafeZone.cs" />
     <Compile Include="Classes\Environment\VehicleSpawnMarkerHandler.cs" />
     <Compile Include="Classes\Menus\MenuBaseFunctions.cs" />
