@@ -197,7 +197,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
                 if (Player.PlayerInformation.IsDeveloper())
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 2, "Vehicle Resource", $"Markers Setup", string.Empty, 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 2, "Vehicle Resource", $"Markers & Blips Setup", string.Empty, 2);
                 }
             }
             catch (Exception ex)
