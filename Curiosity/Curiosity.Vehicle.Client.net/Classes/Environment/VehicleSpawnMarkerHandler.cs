@@ -79,6 +79,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static internal Dictionary<int, Marker> MarkersAll = new Dictionary<int, Marker>();
         static internal List<Marker> MarkersClose = new List<Marker>();
 
+        static string DeveloperJson;
+
         static public void Init()
         {
             client.RegisterTickHandler(OnTickMarkerHandler);
@@ -175,7 +177,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             return Task.FromResult(0);
         }
 
-        static void OnVehicleSpawnLocations(string encodedJson)
+        static async void OnVehicleSpawnLocations(string encodedJson)
         {
             try
             {
@@ -183,12 +185,15 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
                 string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
 
+                DeveloperJson = json;
+
                 List<VehicleSpawnLocation> vehicleSpawnLocations = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleSpawnLocation>>(json);
 
                 foreach (VehicleSpawnLocation vehicleSpawnLocation in vehicleSpawnLocations)
                 {
+                    await Client.Delay(5);
                     Vector3 markerLocation = new Vector3(vehicleSpawnLocation.X, vehicleSpawnLocation.Y, vehicleSpawnLocation.Z);
-                    Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, vehicleSpawnLocation.spawnId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 135, 206, 250), 1.0f, 15f);
+                    Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, vehicleSpawnLocation.spawnId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 255, 255, 255), 1.0f, 15f);
                     MarkersAll.Add(vehicleSpawnLocation.spawnId, marker);
 
                     BlipData blipData = new BlipData(vehicleSpawnLocation.spawnBlipName, markerLocation, (BlipSprite)vehicleSpawnLocation.spawnBlip, Shared.Client.net.Enums.BlipCategory.Unknown, (BlipColor)vehicleSpawnLocation.spawnBlipColor);
@@ -205,6 +210,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 if (Player.PlayerInformation.IsDeveloper())
                 {
                     Log.Error($"{ex.Message}");
+                    Log.Error($"{ex.ToString()}");
+                    Log.Error($"{DeveloperJson}");
                 }
             }
         }

@@ -27,6 +27,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static bool IsInArea = false;
         static bool IsInOwnVehicle = false;
 
+        static Dictionary<Vector3, AreaBox> safeZones = new Dictionary<Vector3, AreaBox>();
+
         public static void Init()
         {
             areaBox.Angle = 10f;

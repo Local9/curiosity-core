@@ -38,8 +38,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             Create();
         }
 
-        public BlipData(Entity entity, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
+        public BlipData(string name, Entity entity, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
         {
+            this.Name = name;
             this.isEntityBlip = true;
             this.Entity = entity;
             this.Sprite = sprite;
