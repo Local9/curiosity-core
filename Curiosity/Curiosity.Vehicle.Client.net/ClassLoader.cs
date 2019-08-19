@@ -26,6 +26,7 @@ namespace Curiosity.Vehicle.Client.net
 
             // Environment
             Classes.Environment.VehicleSpawnMarkerHandler.Init();
+            Classes.Environment.BlipHandler.Init();
             Classes.Environment.SafeZone.Init();
 
             // MENU

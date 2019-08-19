@@ -25,10 +25,12 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         private BlipColor Color { get; set; }
         private bool IsShortRange { get; set; }
         private string Name { get; set; }
+        public int SpawnId { get; set; }
 
-        public BlipData(string name, Vector3 position, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
+        public BlipData(int spawnId, string name, Vector3 position, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
         {
             this.Name = name;
+            this.SpawnId = spawnId;
             this.isEntityBlip = false;
             this.Position = position;
             this.Sprite = sprite;
@@ -38,9 +40,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             Create();
         }
 
-        public BlipData(string name, Entity entity, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
+        public BlipData(int spawnId, string name, Entity entity, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
         {
             this.Name = name;
+            this.SpawnId = spawnId;
             this.isEntityBlip = true;
             this.Entity = entity;
             this.Sprite = sprite;
@@ -58,12 +61,18 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             }
             else
             {
-                Blip = new Blip(Function.Call<int>(Hash.ADD_BLIP_FOR_COORD, Position.X, Position.Y, Position.Z));
+                Blip = World.CreateBlip(new Vector3(Position.X, Position.Y, Position.Z));
             }
             Blip.Name = Name;
             Blip.Sprite = Sprite;
             Blip.Color = Color;
             Blip.IsShortRange = IsShortRange;
+
+            string blipKey = Name.Replace(" ", "");
+            API.AddTextEntry(blipKey, Name);
+            API.AddTextComponentSubstringBlipName(Blip.Handle);
+            API.BeginTextCommandSetBlipName(blipKey);
+            API.EndTextCommandSetBlipName(Blip.Handle);
         }
     }
 
@@ -79,9 +88,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         internal static int Add(BlipData blip)
         {
-            int id = All.OrderBy(b => b.Key).Last().Key + 1;
-            All.Add(id, blip);
-            return id;
+            if (All.ContainsKey(blip.SpawnId)) return blip.SpawnId;
+
+            All.Add(blip.SpawnId, blip);
+            return blip.SpawnId;
         }
 
         internal static void Remove(int id)

@@ -196,7 +196,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                     Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, vehicleSpawnLocation.spawnId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 255, 255, 255), 1.0f, 15f);
                     MarkersAll.Add(vehicleSpawnLocation.spawnId, marker);
 
-                    BlipData blipData = new BlipData(vehicleSpawnLocation.spawnBlipName, markerLocation, (BlipSprite)vehicleSpawnLocation.spawnBlip, Shared.Client.net.Enums.BlipCategory.Unknown, (BlipColor)vehicleSpawnLocation.spawnBlipColor);
+                    BlipData blipData = new BlipData(vehicleSpawnLocation.spawnId, vehicleSpawnLocation.spawnBlipName, markerLocation, (BlipSprite)vehicleSpawnLocation.spawnBlip, Shared.Client.net.Enums.BlipCategory.Unknown, (BlipColor)vehicleSpawnLocation.spawnBlipColor);
                     BlipHandler.Add(blipData);
                 }
 
