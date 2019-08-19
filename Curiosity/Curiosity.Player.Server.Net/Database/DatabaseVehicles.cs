@@ -42,7 +42,7 @@ namespace Curiosity.Server.net.Database
                         spawnMarker = int.Parse($"{k["spawnMarkerId"]}"),
                         spawnBlip = int.Parse($"{k["blipTypeId"]}"),
                         spawnBlipColor = int.Parse($"{k["blipColorId"]}"),
-                        spawnBlipName = $"{k["spawnTypeId"]}"
+                        spawnBlipName = $"{k["blipName"]}"
                     };
 
                     vehicleSpawnLocation.X = float.Parse($"{k["x"]}");
