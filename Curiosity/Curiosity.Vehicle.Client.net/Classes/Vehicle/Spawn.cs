@@ -25,13 +25,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     {
                         Client.CurrentVehicle.AttachedBlip.Delete();
                     }
-
+                    
                     API.NetworkFadeOutEntity(Client.CurrentVehicle.Handle, true, false);
                     Client.CurrentVehicle.IsEngineRunning = false;
                     Client.CurrentVehicle.MarkAsNoLongerNeeded();
                     await Client.Delay(1000);
                     int handle = Client.CurrentVehicle.Handle;
                     API.DeleteEntity(ref handle);
+
                 }
             }
 

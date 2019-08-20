@@ -50,6 +50,7 @@ namespace Curiosity.Client.net.Classes.Menus
                 MenuListItem mliVehicleLocks = new MenuListItem("Access Grant", vehicleLocking, (int)lockState, "Select to set vehicle access rights\n~r~Warning:~s~ Changing from a locked state to unlocked may cause your ped to break the window.") { ItemData = "VEHICLE_LOCK" };
                 menu.AddMenuItem(mliVehicleLocks);
 
+
                 MenuCheckboxItem cruiseControlMenuItem = new MenuCheckboxItem("Cruise Control")
                 {
                     //Checked = !Vehicle.CruiseControl.IsCruiseControlDisabled,
@@ -66,7 +67,7 @@ namespace Curiosity.Client.net.Classes.Menus
                 //};
                 //menu.AddMenuItem(hideThreeDSpeedoMenuItem);
 
-                if (Game.PlayerPed.IsInVehicle())
+                if (Client.CurrentVehicle != null)
                 {
                     MenuCheckboxItem engineMenuItem = new MenuCheckboxItem("Engine")
                     {
@@ -74,9 +75,11 @@ namespace Curiosity.Client.net.Classes.Menus
                         Description = "Turn the engine on/off",
                         ItemData = ENGINE
                     };
-
                     menu.AddMenuItem(engineMenuItem);
+                }
 
+                if (Game.PlayerPed.IsInVehicle())
+                {
                     if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Planes)
                     {
                         Model model = new Model("avenger");

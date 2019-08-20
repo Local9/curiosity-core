@@ -1,16 +1,11 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net;
+using MenuAPI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MenuAPI;
-using Curiosity.Global.Shared.net.Enums;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net;
-using Curiosity.Shared.Client.net;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Menus
 {
@@ -65,16 +60,43 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
         private static void OnUpdateMenu(string encodedJson)
         {
-            menu.ClearMenuItems();
 
-            string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
-            List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
-
-            foreach (VehicleItem vehicle in vehicleItems)
+            string skillDesc = string.Empty;
+            try
             {
-                MenuItem item = new MenuItem(vehicle.Name) { ItemData = vehicle, Enabled = (Player.PlayerInformation.playerInfo.Skills[vehicle.UnlockRequiredSkill].Value >= vehicle.UnlockRequirementValue) };
-                item.Description = $"Requires: {vehicle.UnlockRequiredSkillDescription} >= {vehicle.UnlockRequirementValue}";
-                menu.AddMenuItem(item);
+                menu.ClearMenuItems();
+
+                string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
+                List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
+
+                foreach (VehicleItem vehicle in vehicleItems)
+                {
+                    MenuItem item = new MenuItem(vehicle.Name) { ItemData = vehicle };
+
+                    if (vehicle.UnlockRequirementValue == 0)
+                    {
+                        item.Enabled = true;
+                    }
+                    else
+                    {
+                        if (!Player.PlayerInformation.playerInfo.Skills.ContainsKey(vehicle.UnlockRequiredSkill))
+                        {
+                            item.Enabled = false;
+                        }
+                        else
+                        {
+                            item.Enabled = (Player.PlayerInformation.playerInfo.Skills[vehicle.UnlockRequiredSkill].Value >= vehicle.UnlockRequirementValue);
+                        }
+                    }
+
+                    item.Description = $"Requires: {vehicle.UnlockRequiredSkillDescription} >= {vehicle.UnlockRequirementValue}";
+                    skillDesc = vehicle.UnlockRequiredSkillDescription;
+                    menu.AddMenuItem(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error getting list, possible that you have no experience in the required skill. Skill Required: {skillDesc}");
             }
         }
 
