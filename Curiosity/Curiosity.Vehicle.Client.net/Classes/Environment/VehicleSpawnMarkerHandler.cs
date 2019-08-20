@@ -191,13 +191,16 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
                 foreach (VehicleSpawnLocation vehicleSpawnLocation in vehicleSpawnLocations)
                 {
-                    await Client.Delay(5);
-                    Vector3 markerLocation = new Vector3(vehicleSpawnLocation.X, vehicleSpawnLocation.Y, vehicleSpawnLocation.Z);
-                    Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, vehicleSpawnLocation.spawnId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 255, 255, 255), 1.0f, 15f);
-                    MarkersAll.Add(vehicleSpawnLocation.spawnId, marker);
+                    if (!MarkersAll.ContainsKey(vehicleSpawnLocation.spawnId))
+                    {
+                        await Client.Delay(5);
+                        Vector3 markerLocation = new Vector3(vehicleSpawnLocation.X, vehicleSpawnLocation.Y, vehicleSpawnLocation.Z);
+                        Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, vehicleSpawnLocation.spawnId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 255, 255, 255), 1.0f, 15f);
+                        MarkersAll.Add(vehicleSpawnLocation.spawnId, marker);
 
-                    BlipData blipData = new BlipData(vehicleSpawnLocation.spawnId, vehicleSpawnLocation.spawnBlipName, markerLocation, (BlipSprite)vehicleSpawnLocation.spawnBlip, Shared.Client.net.Enums.BlipCategory.Unknown, (BlipColor)vehicleSpawnLocation.spawnBlipColor);
-                    BlipHandler.Add(blipData);
+                        BlipData blipData = new BlipData(vehicleSpawnLocation.spawnId, vehicleSpawnLocation.spawnBlipName, markerLocation, (BlipSprite)vehicleSpawnLocation.spawnBlip, Shared.Client.net.Enums.BlipCategory.Unknown, (BlipColor)vehicleSpawnLocation.spawnBlipColor);
+                        BlipHandler.Add(blipData);
+                    }
                 }
 
                 if (Player.PlayerInformation.IsDeveloper())
