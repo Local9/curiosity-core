@@ -79,6 +79,7 @@ namespace Curiosity.Client.net
             Classes.Menus.PlayerInteractions.BanInteraction.Init();
             // Additional Items
             Classes.Menus.VehicleMenu.Init();
+            // Classes.Menus.Developer.Init();
 
             // Environment
             //Poi.Init();

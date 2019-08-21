@@ -69,6 +69,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                 string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
                 List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
 
+                if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER && vehicleItems.Count > 0)
+                {
+                    VehicleItem dev = vehicleItems[0];
+                    dev.VehicleHashString = "tezeract";
+
+                    menu.AddMenuItem(new MenuItem("Developer Car") { ItemData = dev });
+                }
+
                 foreach (VehicleItem vehicle in vehicleItems)
                 {
                     MenuItem item = new MenuItem(vehicle.Name) { ItemData = vehicle };
