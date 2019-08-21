@@ -113,6 +113,10 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 API.SetWeatherTypeTransition(0xAAC9C895, weatherStruct, 0.5f);
             }
+            else if (isHalloween)
+            {
+                API.SetWeatherTypeOverTime("HALLOWEEN", 60.00f);
+            }
             else
             {
                 API.SetWeatherTypeOverTime(weather, 60.00f);
