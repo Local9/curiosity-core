@@ -20,7 +20,7 @@ namespace Curiosity.Client.net.Classes.Menus
             //// Creating the first menu.
 
             // menu.HeaderTexture = new KeyValuePair<string, string>("shopui_title_graphics_franklin", "shopui_title_graphics_franklin");
-            MenuController.AddMenu(Menu);
+            
 
             //// Creating 3 sliders, showing off the 3 possible variations and custom colors.
             //MenuSliderItem slider = new MenuSliderItem("Slider", 0, 10, 5, false);
@@ -233,12 +233,14 @@ namespace Curiosity.Client.net.Classes.Menus
 
             Menu.OnMenuClose += (_menu) =>
             {
-                MenuOpen(false);
+                Environment.UI.Location.HideLocation = false;
+                Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
             };
 
             Menu.OnMenuOpen += (_menu) =>
             {
-                MenuOpen(true);
+                Environment.UI.Location.HideLocation = true;
+                Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
             };
 
             //menu.OnDynamicListItemCurrentItemChange += (_menu, _dynamicListItem, _oldCurrentItem, _newCurrentItem) =>
@@ -252,6 +254,8 @@ namespace Curiosity.Client.net.Classes.Menus
             //    // Code in here would get executed whenever a dynamic list item is pressed.
             //    Debug.WriteLine($"OnDynamicListItemSelect: [{_menu}, {_dynamicListItem}, {_currentItem}]");
             //};
+
+            MenuController.AddMenu(Menu);
         }
 
         public static void MenuOpen(bool isOpen)

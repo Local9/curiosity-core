@@ -452,6 +452,9 @@ namespace Curiosity.Client.net.Classes.Actions
             API.SetNetworkIdExistsOnAllMachines(networkId, true);
             API.SetNetworkIdCanMigrate(networkId, true);
 
+            API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
+            API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
+
             Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
             if (numberPlate == Environment.Vehicles.HSTAFF_LICENSE_PLATE || numberPlate == Environment.Vehicles.DEV_LICENSE_PLATE)
             {
