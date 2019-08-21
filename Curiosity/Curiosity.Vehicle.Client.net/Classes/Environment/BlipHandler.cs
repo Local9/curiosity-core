@@ -40,29 +40,29 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             Create();
         }
 
-        public BlipData(int spawnId, string name, Entity entity, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
-        {
-            this.Name = name;
-            this.SpawnId = spawnId;
-            this.isEntityBlip = true;
-            this.Entity = entity;
-            this.Sprite = sprite;
-            this.Color = color;
-            this.IsShortRange = isShortRange;
-            this.Category = category;
-            Create();
-        }
+        //public BlipData(int spawnId, string name, Entity entity, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
+        //{
+        //    this.Name = name;
+        //    this.SpawnId = spawnId;
+        //    this.isEntityBlip = true;
+        //    this.Entity = entity;
+        //    this.Sprite = sprite;
+        //    this.Color = color;
+        //    this.IsShortRange = isShortRange;
+        //    this.Category = category;
+        //    Create();
+        //}
 
         public void Create()
         {
-            if (isEntityBlip)
-            {
-                Blip = new Blip(Function.Call<int>(Hash.ADD_BLIP_FOR_ENTITY, Entity));
-            }
-            else
-            {
+            //if (isEntityBlip)
+            //{
+            //    Blip = new Blip(Function.Call<int>(Hash.ADD_BLIP_FOR_ENTITY, Entity));
+            //}
+            //else
+            //{
                 Blip = World.CreateBlip(new Vector3(Position.X, Position.Y, Position.Z));
-            }
+            //}
             Blip.Name = Name;
             Blip.Sprite = Sprite;
             Blip.Color = Color;
@@ -83,6 +83,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         internal static void Init()
         {
+            All.Clear();
+            Current.Clear();
             // Even if this is empty, it needs to stay to init the method early
         }
 
