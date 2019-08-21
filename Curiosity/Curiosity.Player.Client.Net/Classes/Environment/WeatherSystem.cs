@@ -68,50 +68,7 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 API.SetForceVehicleTrails(isChristmas);
                 API.SetForcePedFootstepsTracks(isChristmas);
-                API.SetWeatherTypeOverTime(weather, 60.00f);
-
-                uint weatherStruct = 0x27EA2814; // blizzard
-
-                switch (weather)
-                {
-                    case "CLEAR":
-                        weatherStruct = 0x36A83D84;
-                        break;
-                    case "EXTRASUNNY":
-                        weatherStruct = 0x97AA0A79;
-                        break;
-                    case "CLOUDS":
-                        weatherStruct = 0x36A83D84;
-                        break;
-                    case "OVERCAST":
-                        weatherStruct = 0xBB898D2D;
-                        break;
-                    case "RAIN":
-                        weatherStruct = 0x54A69840;
-                        break;
-                    case "CLEARING":
-                        weatherStruct = 0x6DB1A50D;
-                        break;
-                    case "THUNDER":
-                        weatherStruct = 0xB677829F;
-                        break;
-                    case "SMOG":
-                        weatherStruct = 0x10DCF4B5;
-                        break;
-                    case "FOGGY":
-                        weatherStruct = 0xAE737644;
-                        break;
-                    case "XMAS":
-                        weatherStruct = 0xAAC9C895;
-                        break;
-                    case "SNOWLIGHT":
-                        weatherStruct = 0x23FB812B;
-                        break;
-                }
-
                 API.SetWeatherTypeOverTime("XMAS", 60.00f);
-
-                API.SetWeatherTypeTransition(0xAAC9C895, weatherStruct, 0.5f);
             }
             else if (isHalloween)
             {
