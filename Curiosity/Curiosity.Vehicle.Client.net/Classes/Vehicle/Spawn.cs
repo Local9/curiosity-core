@@ -66,7 +66,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                 API.SetVehicleIsStolen(veh.Handle, false);
                 await Client.Delay(0);
                 // API.SetEntityCollision(veh.Handle, false, false);
-                API.SetEntityProofs(veh.Handle, true, true, true, true, true, true, true, true);
+                // API.SetEntityProofs(veh.Handle, true, true, true, true, true, true, true, true);
                 API.SetVehicleOnGroundProperly(veh.Handle);
                 veh.IsPersistent = true;
 

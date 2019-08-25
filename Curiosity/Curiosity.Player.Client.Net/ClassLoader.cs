@@ -45,7 +45,7 @@ namespace Curiosity.Client.net
             // PlayerOverheadMarkers.Init();
             PlayerNames.Init();
             PlayerBlips.Init();
-            Speedometer.Init();
+            // Speedometer.Init();
             // Speedometer3D.Init();
             //VehicleLoadoutPresets.Init();
             Scoreboard.Init();

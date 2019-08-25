@@ -46,8 +46,8 @@ namespace Curiosity.Police.Client.net.Classes
             createdPed.DropsWeaponsOnDeath = false;
             createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
 
-            API.SetPedHearingRange(createdPed.Handle, 150.0f);
-            API.SetPedSeeingRange(createdPed.Handle, 150.0f);
+            API.SetPedHearingRange(createdPed.Handle, 200.0f);
+            API.SetPedSeeingRange(createdPed.Handle, 200.0f);
 
             await Client.Delay(0);
 
@@ -66,11 +66,16 @@ namespace Curiosity.Police.Client.net.Classes
 
             await Client.Delay(0);
 
-            API.SetPedSteersAroundObjects(createdPed.Handle, true);
-            API.SetPedSteersAroundPeds(createdPed.Handle, true);
-            API.SetPedSteersAroundVehicles(createdPed.Handle, true);
-            API.SetDriverAbility(createdPed.Handle, 1.0f);
-            API.SetDriverAggressiveness(createdPed.Handle, 1.0f);
+            if (createdPed.IsInVehicle())
+            {
+                API.SetPedSteersAroundObjects(createdPed.Handle, true);
+                API.SetPedSteersAroundPeds(createdPed.Handle, true);
+                API.SetPedSteersAroundVehicles(createdPed.Handle, true);
+                API.SetDriverAbility(createdPed.Handle, 1.0f);
+                API.SetDriverAggressiveness(createdPed.Handle, 1.0f);
+                await Client.Delay(0);
+            }
+
             API.SetPedFleeAttributes(createdPed.Handle, 0, false);
             API.TaskSetBlockingOfNonTemporaryEvents(createdPed.Handle, true);
 
@@ -87,15 +92,16 @@ namespace Curiosity.Police.Client.net.Classes
                 API.SetPedMovementClipset(createdPed.Handle, "move_m@drunk@verydrunk", 0x3E800000);
             }
 
+            createdPed.Task.WanderAround(suspectPosition, 5f);
+
             await Client.Delay(0);
 
             createdPed.RelationshipGroup = relationshipGroup;
             API.SetEntityOnlyDamagedByPlayer(createdPed.Handle, true);
             API.SetBlockingOfNonTemporaryEvents(createdPed.Handle, false);
-            API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 80.0f, true, false);
-            API.TaskCombatHatedTargetsAroundPedTimed(createdPed.Handle, 130.0f, -1, 0);
+            API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 150.0f, true, false);
+            API.TaskCombatHatedTargetsAroundPedTimed(createdPed.Handle, 150.0f, -1, 0);
             API.N_0x2016c603d6b8987c(createdPed.Handle, false);
-
             await Client.Delay(0);
 
             return createdPed;

@@ -24,7 +24,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Police:CalloutTaken", new Action(CalloutTaken));
-            client.RegisterEventHandler("curiosity:Client:Police:CalloutEnded", new Action(PlayerCanTakeCallout));
+            client.RegisterEventHandler("curiosity:Client:Police:PlayerCanTakeCallout", new Action(PlayerCanTakeCallout));
             client.RegisterEventHandler("curiosity:Client:Police:CalloutStart", new Action<int, int>(CalloutStart));
             client.RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
         }
@@ -76,8 +76,6 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
                 TickIsRegistered = true;
 
                 RequestingCallout = false;
-
-                Client.TriggerServerEvent("curiosity:Server:Police:CalloutEnded", PreviousCallout);
 
                 await Client.Delay(0);
                 Job.DutyManager.IsOnCallout = false;
@@ -189,31 +187,38 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
         static async Task GetRandomCallout(Dictionary<int, Func<bool>> calloutDictionary, PatrolZone patrolZone)
         {
-            client.DeregisterTickHandler(SelectCallout);
-            int maxCallout = calloutDictionary.Count;
+            try
+            { 
+                client.DeregisterTickHandler(SelectCallout);
+                int maxCallout = calloutDictionary.Count;
 
-            int randomCalloutIndex = random.Next(0, maxCallout);
-            int calloutId = calloutDictionary.ElementAt(randomCalloutIndex).Key;
+                int randomCalloutIndex = maxCallout == 1 ? 1 : random.Next(0, maxCallout);
+                int calloutId = calloutDictionary.ElementAt(randomCalloutIndex).Key;
 
-            bool foundNewCallout = false;
+                bool foundNewCallout = false;
 
-            while (!foundNewCallout)
-            {
-                randomCalloutIndex = random.Next(0, maxCallout);
-                calloutId = calloutDictionary.ElementAt(randomCalloutIndex).Key;
-
-                if (PreviousCallout != calloutId)
+                while (!foundNewCallout)
                 {
-                    foundNewCallout = true;
+                    randomCalloutIndex = maxCallout == 1 ? 1 : random.Next(0, maxCallout);
+                    calloutId = calloutDictionary.ElementAt(randomCalloutIndex).Key;
+
+                    if (PreviousCallout != calloutId)
+                    {
+                        foundNewCallout = true;
+                    }
+
+                    await Client.Delay(100);
                 }
 
-                await Client.Delay(100);
+                PreviousCallout = calloutId;
+
+                Client.TriggerServerEvent("curiosity:Server:Police:CalloutFree", calloutId, (int)patrolZone);
             }
-
-            PreviousCallout = calloutId;
-
-            Client.TriggerServerEvent("curiosity:Server:Police:CalloutFree", calloutId, (int)patrolZone);
-
+            catch (Exception ex)
+            {
+                if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+                    Log.Error($"GetRandomCallout -> {ex.Message}");
+            }
             await Task.FromResult(0);
         }
     }

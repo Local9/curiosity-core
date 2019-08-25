@@ -35,7 +35,6 @@ namespace Curiosity.Police.Server.net.Environment
                         CalloutsActive.TryRemove(keyValuePair.Key, out thing);
                     }
                 }
-                player.TriggerEvent("curiosity:Client:Police:CalloutEnded");
             }
             catch (Exception ex)
             {
@@ -43,8 +42,10 @@ namespace Curiosity.Police.Server.net.Environment
             }
         }
 
-        static void OnCalloutFree([FromSource]Player player, int calloutId, int patrolZone)
+        static async void OnCalloutFree([FromSource]Player player, int calloutId, int patrolZone)
         {
+            await RemoveCallout(player);
+
             if (CalloutsActive.ContainsKey(calloutId))
             {
                 player.TriggerEvent("curiosity:Client:Police:CalloutTaken");
@@ -56,25 +57,31 @@ namespace Curiosity.Police.Server.net.Environment
             }
         }
 
-        static void OnCalloutEnded([FromSource]Player player, int calloutId)
+        static async void OnCalloutEnded([FromSource]Player player, int calloutId)
         {
             try
             {
-                ConcurrentDictionary<int, Tuple<string, int>> listToRun = CalloutsActive;
-                foreach (var keyValuePair in listToRun)
-                {
-                    if (keyValuePair.Value.Item1 == player.Handle)
-                    {
-                        Tuple<string, int> thing;
-                        CalloutsActive.TryRemove(keyValuePair.Key, out thing);
-                    }
-                }
-                player.TriggerEvent("curiosity:Client:Police:CalloutEnded");
+                await RemoveCallout(player);
+                player.TriggerEvent("curiosity:Client:Police:PlayerCanTakeCallout");
             }
             catch (Exception ex)
             {
                 Log.Error($"OnCalloutEnded -> {ex.Message}");
             }
+        }
+
+        static async Task RemoveCallout(Player player)
+        {
+            ConcurrentDictionary<int, Tuple<string, int>> listToRun = CalloutsActive;
+            foreach (var keyValuePair in listToRun)
+            {
+                if (keyValuePair.Value.Item1 == player.Handle)
+                {
+                    Tuple<string, int> thing;
+                    CalloutsActive.TryRemove(keyValuePair.Key, out thing);
+                }
+            }
+            await Task.FromResult(0);
         }
     }
 }

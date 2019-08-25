@@ -8,8 +8,8 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.City.Shops
         static Vector3 Location = new Vector3(29.32283f, -1349.734f, 29.32919f);
 
         static Model SuspectModel = PedHash.AlDiNapoli;
-        static Vector3 SuspectPosition = new Vector3(28.28516f, -1343.619f, 29.49703f);
-        static float SuspectHeading = 121.8859f;
+        static Vector3 SuspectPosition = new Vector3(29.5332f, -1346.235f, 29.49703f);
+        static float SuspectHeading = 180.1658f;
 
         static Model ShopKeeperModel = PedHash.ShopKeep01;
         static Vector3 ShopKeeperPosition = new Vector3(24.48178f, -1346.606f, 29.49703f);

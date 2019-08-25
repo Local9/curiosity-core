@@ -260,10 +260,10 @@ namespace Curiosity.Client.net.Classes.Menus
 
         public static void MenuOpen(bool isOpen)
         {
-            if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
-            {
-                Debug.WriteLine($"MenuOpen: {isOpen}");
-            }
+            //if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+            //{
+            //    Debug.WriteLine($"MenuOpen: {isOpen}");
+            //}
 
             if (isOpen)
             {

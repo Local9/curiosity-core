@@ -178,10 +178,10 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static async Task ChangeWeather()
         {
-            if (!Server.isLive)
-            {
-                MINUTES_TO_WAIT = (1000 * 60);
-            }
+            //if (!Server.isLive)
+            //{
+            //    MINUTES_TO_WAIT = (1000 * 60);
+            //}
 
             await Server.Delay(MINUTES_TO_WAIT);
 
