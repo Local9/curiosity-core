@@ -98,6 +98,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
             API.RegisterCommand("die", new Action<int, List<object>, string>(Die), false);
             API.RegisterCommand("emote", new Action<int, List<object>, string>(OnEmote), false);
+            // API.RegisterCommand("minigame", new Action<int, List<object>, string>(OnMinigame), false);
 
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
             RegisterCommand("god", new Action<int, List<object>, string>((source, args, raw) =>
@@ -158,6 +159,11 @@ namespace Curiosity.Client.net.Classes.Actions
                 Log.Error($"Emotes OnTick error: {ex.Message}");
             }
             return Task.FromResult(0);
+        }
+
+        static void OnMinigame(int playerHandle, List<object> arguments, string raw)
+        {
+            MinigameTest.Start();
         }
 
         static void OnEmote(int playerHandle, List<object> arguments, string raw)
