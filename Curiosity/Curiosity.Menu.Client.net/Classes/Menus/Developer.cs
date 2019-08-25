@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Client.net.Classes.Menus
+namespace Curiosity.Menus.Client.net.Classes.Menus
 {
     class Developer
     {

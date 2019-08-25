@@ -32,7 +32,7 @@ namespace Curiosity.Client.net.Classes.Player
         static bool IsCameraMoving = true;
 
         // MENU
-        static Menu menu = Menus.MenuBase.Menu;
+        //static Menu menu = Menus.MenuBase.Menu;
 
         static public void Init()
         {
@@ -55,8 +55,8 @@ namespace Curiosity.Client.net.Classes.Player
                 }
 
                 await BaseScript.Delay(0);
-                Menus.MenuBase.Menu.IgnoreDontOpenMenus = true;
-                Menus.PlayerCreator.PlayerCreatorMenu.ManualOpenMenu();
+                //Menus.MenuBase.Menu.IgnoreDontOpenMenus = true;
+                //Menus.PlayerCreator.PlayerCreatorMenu.ManualOpenMenu();
                 Debug.WriteLine($"SetupMenu()");
             }
             catch (Exception ex)

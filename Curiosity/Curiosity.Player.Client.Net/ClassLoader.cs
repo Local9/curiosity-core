@@ -62,25 +62,6 @@ namespace Curiosity.Client.net
             NuiEventHandler.Init();
             //PlayerActionsMenu.Init();
 
-            // MENU 2.0
-            Classes.Menus.MenuBase.Init();
-            // Classes.Menus.Inventory.Init();
-            Classes.Menus.PlayerMenu.Init();
-            Classes.Menus.PlayerCreator.PlayerCreatorMenu.Init();
-            Classes.Menus.PlayerCreator.PlayerOverlays.Init();
-            Classes.Menus.PlayerCreator.PlayerComponents.Init();
-            Classes.Menus.PlayerCreator.PlayerProps.Init();
-            Classes.Menus.PlayerCreator.PlayerReset.Init();
-            Classes.Menus.PlayerCreator.PlayerSave.Init();
-            // ONLINE PLAYER MENU ITEMS
-            Classes.Menus.OnlinePlayers.Init();
-            Classes.Menus.PlayerInteractions.ReportInteraction.Init();
-            Classes.Menus.PlayerInteractions.KickInteraction.Init();
-            Classes.Menus.PlayerInteractions.BanInteraction.Init();
-            // Additional Items
-            Classes.Menus.VehicleMenu.Init();
-            // Classes.Menus.Developer.Init();
-
             // Environment
             //Poi.Init();
             AfkKick.Init();

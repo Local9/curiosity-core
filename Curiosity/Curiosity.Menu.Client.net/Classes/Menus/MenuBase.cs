@@ -20,7 +20,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             //// Creating the first menu.
 
             // menu.HeaderTexture = new KeyValuePair<string, string>("shopui_title_graphics_franklin", "shopui_title_graphics_franklin");
-            MenuController.AddMenu(Menu);
+            
 
             //// Creating 3 sliders, showing off the 3 possible variations and custom colors.
             //MenuSliderItem slider = new MenuSliderItem("Slider", 0, 10, 5, false);
@@ -198,7 +198,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             Menu.OnItemSelect += (_menu, _item, _index) =>
             {
-                // Debug.WriteLine($"OnItemSelect: [{_menu}, {_item}, {_item.ItemData}, {_index}]");
+
             };
 
             //menu.OnIndexChange += (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>
@@ -215,8 +215,6 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             Menu.OnListItemSelect += (_menu, _listItem, _listIndex, _itemIndex) =>
             {
-                // Code in here would get executed whenever a list item is pressed.
-                // Debug.WriteLine($"OnListItemSelect: [{_menu}, {_listItem}, {_listIndex}, {_itemIndex}]");
             };
 
             //menu.OnSliderPositionChange += (_menu, _sliderItem, _oldPosition, _newPosition, _itemIndex) =>
@@ -233,12 +231,14 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             Menu.OnMenuClose += (_menu) =>
             {
-                MenuOpen(false);
+                Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
+                Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
             };
 
             Menu.OnMenuOpen += (_menu) =>
             {
-                MenuOpen(true);
+                Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
+                Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
             };
 
             //menu.OnDynamicListItemCurrentItemChange += (_menu, _dynamicListItem, _oldCurrentItem, _newCurrentItem) =>
@@ -252,16 +252,40 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             //    // Code in here would get executed whenever a dynamic list item is pressed.
             //    Debug.WriteLine($"OnDynamicListItemSelect: [{_menu}, {_dynamicListItem}, {_currentItem}]");
             //};
+
+            MenuController.AddMenu(Menu);
+
+            //// Classes.Menus.Inventory.Init();
+            Classes.Menus.PlayerMenu.Init();
+            Classes.Menus.PlayerCreator.PlayerCreatorMenu.Init();
+            Classes.Menus.PlayerCreator.PlayerOverlays.Init();
+            Classes.Menus.PlayerCreator.PlayerComponents.Init();
+            Classes.Menus.PlayerCreator.PlayerProps.Init();
+            Classes.Menus.PlayerCreator.PlayerSave.Init();
+            //// ONLINE PLAYER MENU ITEMS
+            Classes.Menus.OnlinePlayers.Init();
+            Classes.Menus.PlayerInteractions.ReportInteraction.Init();
+            Classes.Menus.PlayerInteractions.KickInteraction.Init();
+            Classes.Menus.PlayerInteractions.BanInteraction.Init();
+            //// VEHICLE
+            Classes.Menus.VehicleMenu.Init();
         }
 
         public static void MenuOpen(bool isOpen)
         {
+            //if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+            //{
+            //    Debug.WriteLine($"MenuOpen: {isOpen}");
+            //}
+
             if (isOpen)
             {
+                Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
                 Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
             }
             else
             {
+                Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
                 Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
             }
         }
@@ -286,7 +310,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         public static void RemoveMenu(Menu menu)
         {
-            foreach (MenuItem menuItem in Menu.GetMenuItems())
+            foreach(MenuItem menuItem in Menu.GetMenuItems())
             {
                 if (menu.MenuTitle == menuItem.Text)
                     Menu.RemoveMenuItem(menuItem);

@@ -1,209 +1,300 @@
-﻿//using MenuAPI;
-//using System.Threading.Tasks;
-//using CitizenFX.Core;
-//using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using MenuAPI;
+using System;
+using System.Threading.Tasks;
 
-//namespace Curiosity.Menus.Client.net.Classes.Menus
-//{
-//    class OnlinePlayers
-//    {
-//        static Menu menu = new Menu("Online Players", "Online Players");
-//        static Client client = Client.GetInstance();
+namespace Curiosity.Menus.Client.net.Classes.Menus
+{
+    class OnlinePlayers
+    {
+        static Menu menu = new Menu("Online Players", "Online Players");
+        static Client client = Client.GetInstance();
 
-//        private static CitizenFX.Core.Player _currentSpectate = null;
-//        private static Vector3 _originalPosition = Vector3.Zero;
+        private static CitizenFX.Core.Player _currentSpectate = null;
+        private static Vector3 _originalPosition = Vector3.Zero;
 
-//        public static void Init()
-//        {
-//            MenuBase.AddSubMenu(menu);
+        public static void Init()
+        {
+            client.RegisterEventHandler("curiosity:Client:Player:Bring", new Action<string>(OnBringPlayer));
+            client.RegisterEventHandler("curiosity:Client:Player:Freeze", new Action<string>(OnFreezePlayer));
 
-//            menu.OnMenuOpen += (_menu) => {
+            menu.OnMenuOpen += (_menu) => {
+                MenuBase.MenuOpen(true);
 
-//                foreach (CitizenFX.Core.Player player in Client.players)
-//                {
-//                    // if (player.ServerId == Game.Player.ServerId) continue;
+                foreach (CitizenFX.Core.Player player in Client.players)
+                {
+                    if (!Player.PlayerInformation.IsDeveloper())
+                    {
+                        if (player.ServerId == Game.Player.ServerId) continue;
+                    }
 
-//                    Menu playerMenu = new Menu(player.Name, "Player Interactions");
+                    Menu playerMenu = new Menu(player.Name, "Player Interactions");
 
-//                    playerMenu.OnItemSelect += (_playerMenu, _menuItem, _itemIndex) => {
-//                        OnItemSelect(_playerMenu, _menuItem, _itemIndex);
-//                    };
+                    playerMenu.OnMenuOpen += (_m) =>
+                    {
+                        MenuBase.MenuOpen(true);
+                    };
 
-//                    Menu reportingOptions = PlayerInteractions.ReportInteraction.CreateMenu("Report", player);
-//                    AddSubMenu(playerMenu, reportingOptions);
+                    playerMenu.OnMenuClose += (_m) =>
+                    {
 
-//                    if (Player.PlayerInformation.IsStaff())
-//                    {
-//                        playerMenu.AddMenuItem(new MenuItem("Spectate") { ItemData = player, Description = "Spectate player" });
-//                        // playerMenu.AddMenuItem(new MenuItem("Bring Player") { ItemData = player, Description = "Teleport player to your location." });
-//                        playerMenu.AddMenuItem(new MenuItem("Goto Player") { ItemData = player, Description = "Teleport to a players location." });
+                        MenuBase.MenuOpen(false);
+                        _m.ClearMenuItems();
+                    };
 
-//                        Menu kickOptions = PlayerInteractions.KickInteraction.CreateMenu("Kick", player);
-//                        AddSubMenu(playerMenu, kickOptions);
+                    playerMenu.OnItemSelect += (_playerMenu, _menuItem, _itemIndex) => {
+                        OnItemSelect(_playerMenu, _menuItem, _itemIndex);
+                    };
 
-//                        Menu banOptions = PlayerInteractions.BanInteraction.CreateMenu("Ban", player);
-//                        AddSubMenu(playerMenu, banOptions);
-//                    }
-//                    AddSubMenu(menu, playerMenu);
-//                }
-//            };
+                    Menu reportingOptions = PlayerInteractions.ReportInteraction.CreateMenu("Report", player);
+                    AddSubMenu(playerMenu, reportingOptions);
 
-//            menu.OnMenuOpen += (_menu) =>
-//            {
-//                MenuBase.MenuOpen(true);
-//            };
+                    if (Player.PlayerInformation.IsStaff())
+                    {
+                        playerMenu.AddMenuItem(new MenuItem("-- ADMIN TOOLS --") { Enabled = false, LeftIcon = MenuItem.Icon.STAR });
+                        playerMenu.AddMenuItem(new MenuItem("Spectate") { ItemData = player, Description = "Spectate player" });
+                        playerMenu.AddMenuItem(new MenuItem("Bring Player") { ItemData = player, Description = "Teleport player to your location" });
+                        playerMenu.AddMenuItem(new MenuItem("Goto Player") { ItemData = player, Description = "Teleport to a players location" });
+                        playerMenu.AddMenuItem(new MenuItem("Freeze Player") { ItemData = player, Description = "Freeze players location" });
 
-//            menu.OnMenuClose += (_menu) =>
-//            {
-//                MenuBase.MenuOpen(false);
-//                _menu.ClearMenuItems();
-//            };            
-//        }
+                        Menu kickOptions = PlayerInteractions.KickInteraction.CreateMenu("Kick", player);
+                        AddSubMenu(playerMenu, kickOptions);
 
-//        private static void OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
-//        {
-//            if (menuItem.Text == "Spectate")
-//            {
-//                Spectate(menuItem.ItemData);
-//            }
-//            if (menuItem.Text == "Bring Player")
-//            {
-//                BringPlayer(menuItem.ItemData);
-//            }
-//            if (menuItem.Text == "Goto Player")
-//            {
-//                GotoPlayer(menuItem.ItemData);
-//            }
-//        }
+                        Menu banOptions = PlayerInteractions.BanInteraction.CreateMenu("Ban", player);
+                        AddSubMenu(playerMenu, banOptions);
+                    }
+                    AddSubMenu(menu, playerMenu);
+                }
+            };
 
-//        static async Task BringPlayer(CitizenFX.Core.Player player)
-//        {
-//            if (!Player.PlayerInformation.IsStaff())
-//            {
-//                Debug.WriteLine("Don't know how you did that...");
-//                return;
-//            }
+            menu.OnMenuClose += (_menu) =>
+            {
+                MenuBase.MenuOpen(false);
+                _menu.ClearMenuItems();
+            };
 
-//            if (player.ServerId == Game.Player.ServerId)
-//            {
-//                Debug.WriteLine("Cannot spec yourself");
-//                return;
-//            }
+            MenuBase.AddSubMenu(menu);
+        }
 
-//            API.NetworkFadeOutEntity(player.Character.Handle, true, false);
+        private static void OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
+        {
+            if (menuItem.Text == "Spectate")
+            {
+                Spectate(menuItem.ItemData);
+            }
+            if (menuItem.Text == "Bring Player")
+            {
+                BringPlayer(menuItem.ItemData);
+            }
+            if (menuItem.Text == "Goto Player")
+            {
+                GotoPlayer(menuItem.ItemData);
+            }
+            if (menuItem.Text == "Freeze Player")
+            {
+                FreezePlayer(menuItem.ItemData);
+            }
+        }
 
-//            Vector3 pos = Game.PlayerPed.Position;
+        static async void BringPlayer(CitizenFX.Core.Player player)
+        {
+            if (!Player.PlayerInformation.IsStaff())
+            {
+                Debug.WriteLine("Don't know how you did that...");
+                return;
+            }
 
-//            player.Character.Position = new Vector3(pos.X + 2f, pos.Y, pos.Z);
+            if (player.ServerId == Game.Player.ServerId)
+            {
+                Debug.WriteLine("Cannot teleport to yourself");
+                return;
+            }
 
-//            await BaseScript.Delay(50);
+            Vector3 pos = Game.PlayerPed.Position;
 
-//            API.NetworkFadeInEntity(player.Character.Handle, false);
+            Client.TriggerServerEvent("curiosity:Server:Player:Bring", player.ServerId, pos.X, pos.Y, pos.Z);
 
-//            await BaseScript.Delay(50);
-//        }
+            await BaseScript.Delay(50);
+        }
 
-//        static async Task GotoPlayer(CitizenFX.Core.Player player)
-//        {
-//            if (!Player.PlayerInformation.IsStaff())
-//            {
-//                Debug.WriteLine("Don't know how you did that...");
-//                return;
-//            }
+        static async void FreezePlayer(CitizenFX.Core.Player player)
+        {
+            try
+            {
+                if (!Player.PlayerInformation.IsStaff())
+                {
+                    Debug.WriteLine("Don't know how you did that...");
+                    return;
+                }
 
-//            if (player.ServerId == Game.Player.ServerId)
-//            {
-//                Debug.WriteLine("Cannot teleport to yourself");
-//                return;
-//            }
+                if (player.ServerId == Game.Player.ServerId)
+                {
+                    Debug.WriteLine("Cannot freeze yourself");
+                    return;
+                }
 
-//            API.DoScreenFadeOut(200);
-//            await BaseScript.Delay(200);
+                Client.TriggerServerEvent("curiosity:Server:Player:Freeze", player.ServerId);
+            }
+            catch (Exception ex)
+            {
+                // 
+            }
 
-//            API.NetworkFadeOutEntity(Game.PlayerPed.Handle, true, false);
+            await BaseScript.Delay(50);
+        }
 
-//            await BaseScript.Delay(50);
+        static async void OnBringPlayer(string data)
+        {
+            try
+            {
+                string json = Encode.BytesToStringConverted(Convert.FromBase64String(data));
 
-//            Vector3 pos = player.Character.Position;
-//            Game.PlayerPed.Position = new Vector3(pos.X + 2f, pos.Y, pos.Z);
+                GenericData genericData = Newtonsoft.Json.JsonConvert.DeserializeObject<GenericData>(json);
 
-//            await BaseScript.Delay(50);
+                Screen.Fading.FadeOut(200);
+                while (Screen.Fading.IsFadingOut)
+                {
+                    await Client.Delay(10);
+                }
 
-//            API.NetworkFadeInEntity(Game.PlayerPed.Handle, false);
+                await Client.Delay(0);
+                Game.PlayerPed.Position = new Vector3(genericData.X, genericData.Y, genericData.Z);
+                await Client.Delay(0);
 
-//            API.DoScreenFadeIn(200);
-//            await BaseScript.Delay(50);
-//        }
+                Screen.Fading.FadeIn(200);
+                while (Screen.Fading.IsFadingIn)
+                {
+                    await Client.Delay(10);
+                }
+            }
+            catch (Exception ex)
+            {
+                Game.PlayerPed.IsPositionFrozen = false;
+                Screen.Fading.FadeOut(10);
+            }
+        }
 
-//        static async Task Spectate(CitizenFX.Core.Player player)
-//        {
-//            if (!Player.PlayerInformation.IsStaff())
-//            {
-//                Debug.WriteLine("Don't know how you did that...");
-//                return;
-//            }
+        static void OnFreezePlayer(string data)
+        {
+            try
+            {
+                string json = Encode.BytesToStringConverted(Convert.FromBase64String(data));
+                GenericData genericData = Newtonsoft.Json.JsonConvert.DeserializeObject<GenericData>(json);
 
-//            if (player.ServerId == Game.Player.ServerId)
-//            {
-//                Debug.WriteLine("Cannot bring yourself to yourself");
-//                return;
-//            }
+                if (genericData.IsSentByServer)
+                    Game.PlayerPed.IsPositionFrozen = !Game.PlayerPed.IsPositionFrozen;
+            }
+            catch (Exception ex)
+            {
+                Game.PlayerPed.IsPositionFrozen = false;
+            }
+        }
 
-//            API.DoScreenFadeOut(200);
-//            await BaseScript.Delay(200);
+        static async Task GotoPlayer(CitizenFX.Core.Player player)
+        {
+            if (!Player.PlayerInformation.IsStaff())
+            {
+                Debug.WriteLine("Don't know how you did that...");
+                return;
+            }
 
-//            int playerPedId = API.GetPlayerPed(player.Handle);
+            if (player.ServerId == Game.Player.ServerId)
+            {
+                Debug.WriteLine("Cannot teleport to yourself");
+                return;
+            }
 
-//            if (_currentSpectate != null && _currentSpectate == player)
-//            {
+            API.DoScreenFadeOut(200);
+            await BaseScript.Delay(200);
 
-//                API.NetworkSetInSpectatorMode(false, playerPedId);
+            API.NetworkFadeOutEntity(Game.PlayerPed.Handle, true, false);
 
-//                // API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
-//                API.SetEntityCollision(Game.PlayerPed.Handle, true, true);
-//                Game.Player.IsInvincible = false;
-//                Game.PlayerPed.IsVisible = true;
+            await BaseScript.Delay(50);
 
-//                Game.PlayerPed.Detach();
-//                Game.PlayerPed.Position = _originalPosition;
+            Vector3 pos = player.Character.Position;
+            Game.PlayerPed.Position = new Vector3(pos.X + 2f, pos.Y, pos.Z);
 
-//                _originalPosition = Vector3.Zero;
-//                _currentSpectate = null;
+            await BaseScript.Delay(50);
 
-//                await BaseScript.Delay(50);
+            API.NetworkFadeInEntity(Game.PlayerPed.Handle, false);
 
-//                API.DoScreenFadeIn(200);
+            API.DoScreenFadeIn(200);
+            await BaseScript.Delay(50);
+        }
 
-//                return;
-//            }
+        static async Task Spectate(CitizenFX.Core.Player player)
+        {
+            if (!Player.PlayerInformation.IsStaff())
+            {
+                Debug.WriteLine("Don't know how you did that...");
+                return;
+            }
 
-//            API.ClearPlayerWantedLevel(Game.Player.Handle);
+            if (player.ServerId == Game.Player.ServerId)
+            {
+                Debug.WriteLine("Cannot bring yourself to yourself");
+                return;
+            }
 
-//            if (_originalPosition == Vector3.Zero)
-//                _originalPosition = Game.PlayerPed.Position;
+            API.DoScreenFadeOut(200);
+            await BaseScript.Delay(200);
 
-//            _currentSpectate = player;
+            int playerPedId = API.GetPlayerPed(player.Handle);
 
-//            // API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
-//            API.SetEntityCollision(Game.PlayerPed.Handle, false, true);
-//            Game.Player.IsInvincible = true;
-//            Game.PlayerPed.IsVisible = false;
+            if (_currentSpectate != null && _currentSpectate == player)
+            {
 
-//            Vector3 entityCords = API.GetEntityCoords(playerPedId, true);
+                API.NetworkSetInSpectatorMode(false, playerPedId);
 
-//            API.RequestCollisionAtCoord(entityCords.X, entityCords.Y, entityCords.Z);
-//            API.NetworkSetInSpectatorMode(true, playerPedId);
+                // API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
+                API.SetEntityCollision(Game.PlayerPed.Handle, true, true);
+                Game.Player.IsInvincible = false;
+                Game.PlayerPed.IsVisible = true;
 
-//            API.DoScreenFadeIn(200);
-//            await BaseScript.Delay(50);
-//        }
+                Game.PlayerPed.Detach();
+                Game.PlayerPed.Position = _originalPosition;
 
-//        public static void AddSubMenu(Menu menu, Menu submenu)
-//        {
-//            MenuController.AddSubmenu(menu, submenu);
-//            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = "→→→" };
-//            menu.AddMenuItem(submenuButton);
-//            MenuController.BindMenuItem(menu, submenu, submenuButton);
-//        }
-//    }
-//}
+                _originalPosition = Vector3.Zero;
+                _currentSpectate = null;
+
+                await BaseScript.Delay(50);
+
+                API.DoScreenFadeIn(200);
+
+                return;
+            }
+
+            API.ClearPlayerWantedLevel(Game.Player.Handle);
+
+            if (_originalPosition == Vector3.Zero)
+                _originalPosition = Game.PlayerPed.Position;
+
+            _currentSpectate = player;
+
+            // API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
+            API.SetEntityCollision(Game.PlayerPed.Handle, false, true);
+            Game.Player.IsInvincible = true;
+            Game.PlayerPed.IsVisible = false;
+
+            Vector3 entityCords = API.GetEntityCoords(playerPedId, true);
+
+            API.RequestCollisionAtCoord(entityCords.X, entityCords.Y, entityCords.Z);
+            API.NetworkSetInSpectatorMode(true, playerPedId);
+
+            API.DoScreenFadeIn(200);
+            await BaseScript.Delay(50);
+        }
+
+        public static void AddSubMenu(Menu menu, Menu submenu)
+        {
+            MenuController.AddSubmenu(menu, submenu);
+            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = "→→→" };
+            menu.AddMenuItem(submenuButton);
+            MenuController.BindMenuItem(menu, submenu, submenuButton);
+        }
+    }
+}

@@ -16,8 +16,6 @@ namespace Curiosity.Menus.Client.net.Classes.Player
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
-            await Client.Delay(2000);
-            Client.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         static async void PlayerInfo(string json)
@@ -50,6 +48,11 @@ namespace Curiosity.Menus.Client.net.Classes.Player
         public static bool IsDeveloper()
         {
             return (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+        }
+
+        public static bool IsProjectManager()
+        {
+            return (privilege == Privilege.PROJECTMANAGER);
         }
     }
 }

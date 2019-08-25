@@ -18,8 +18,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
         public static void Init()
         {
+            client.RegisterEventHandler("curiosity:Player:Vehicle:CruiseControl", new Action(ToggleCruiseControl));
             client.RegisterTickHandler(OnTick);
             client.RegisterTickHandler(Cruise);
+        }
+
+        static void ToggleCruiseControl()
+        {
+            IsCruiseControlDisabled = !IsCruiseControlDisabled;
         }
 
         static async Task OnTick()

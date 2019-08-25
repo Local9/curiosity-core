@@ -357,17 +357,6 @@ namespace Curiosity.Client.net
             canSaveLocation = true;
             isPlayerSpawned = true;
 
-            if (user.Skin.Components.Count == 0)
-            {
-                while (!Classes.Menus.PlayerCreator.PlayerCreatorMenu.MenuSetup)
-                    await Delay(0);
-
-                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(0, 0, 0);
-                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(2, randomNumber, 0);
-                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(5, 0, 0);
-                Classes.Menus.PlayerCreator.PlayerCreatorMenu.StoreComponents(6, randomNumber, 0);
-            }
-
             Classes.Environment.UI.Notifications.LifeV(1, $"Welcome...", $"~y~{Game.Player.Name}~s~!", $"~b~Life V ID: ~y~{userId}~n~~b~Role: ~y~{role}", 2);
 
             Curiosity.Shared.Client.net.GameData.SpawnInfo spawnInfo = new Shared.Client.net.GameData.SpawnInfo();

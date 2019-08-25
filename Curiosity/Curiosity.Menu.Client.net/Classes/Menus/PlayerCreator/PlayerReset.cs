@@ -6,7 +6,7 @@ using Curiosity.Global.Shared.net.Entity;
 using System.Collections.Generic;
 using System;
 
-namespace Curiosity.Client.net.Classes.Menus.PlayerCreator
+namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerCreator
 {
     class PlayerReset
     {

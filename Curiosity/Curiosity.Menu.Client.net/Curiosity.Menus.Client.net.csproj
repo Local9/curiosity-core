@@ -15,9 +15,9 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>Z:\FXServer\curiosity\resources\curiosity-menu\client\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Menus\Developer.cs" />
     <Compile Include="Classes\Menus\Inventory.cs" />
     <Compile Include="Classes\Menus\MenuBase.cs" />
     <Compile Include="Classes\Menus\OnlinePlayers.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Classes\Menus\PlayerCreator\PlayerCreatorMenu.cs" />
     <Compile Include="Classes\Menus\PlayerCreator\PlayerOverlays.cs" />
     <Compile Include="Classes\Menus\PlayerCreator\PlayerProps.cs" />
+    <Compile Include="Classes\Menus\PlayerCreator\PlayerReset.cs" />
     <Compile Include="Classes\Menus\PlayerCreator\PlayerSave.cs" />
     <Compile Include="Classes\Menus\PlayerInteractions\BanInteraction.cs" />
     <Compile Include="Classes\Menus\PlayerInteractions\KickInteraction.cs" />

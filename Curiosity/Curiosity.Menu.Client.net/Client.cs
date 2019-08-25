@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 using System;
 using System.Threading.Tasks;
 
@@ -10,6 +11,14 @@ namespace Curiosity.Menus.Client.net
     {
         private static Client _instance;
         public static PlayerList players;
+        public static GlobalEntity.User User;
+
+        public static int PedHandle { get { return Game.PlayerPed.Handle; } }
+        public static int PlayerHandle { get { return Game.Player.Handle; } }
+
+        public static bool hasPlayerSpawned = false;
+
+        public static Vehicle CurrentVehicle;
 
         public static Client GetInstance()
         {
@@ -24,7 +33,25 @@ namespace Curiosity.Menus.Client.net
 
             ClassLoader.Init();
 
+            RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
+            RegisterEventHandler("curiosity:Client:Player:Setup", new Action<string>(OnPlayerSetup));
+
             Log.Info("Curiosity.Mobile.Client.net loaded\n");
+        }
+
+        async void OnPlayerSetup(string jsonUser)
+        {
+            User = Newtonsoft.Json.JsonConvert.DeserializeObject<GlobalEntity.User>(jsonUser);
+
+            if (User.Skin == null)
+            {
+                User.Skin = new GlobalEntity.PlayerCharacter();
+            }
+        }
+
+        void OnPlayerSpawned(dynamic spawnedPlayer)
+        {
+            hasPlayerSpawned = true;
         }
 
         /// <summary>

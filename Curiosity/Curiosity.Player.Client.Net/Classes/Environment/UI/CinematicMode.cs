@@ -16,6 +16,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static List<Func<bool, Task>> callbacks = new List<Func<bool, Task>>();
         static public bool DoHideHud { get; set; } = false;
         static float blackBarHeight = 0.0f;
+        static Client client = Client.GetInstance();
 
         static List<HudComponent> hideComponents = new List<HudComponent>()
         {
@@ -52,7 +53,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             // May have to make this actually receive a string for an exported function instead
             // (Yet to be tested)
             //Exports.Add("CinematicMode.RegisterCallback", new Func<Func<bool, Task>, Task>(RegisterCallback));
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnTick);
+            client.RegisterEventHandler("curiosity:Player:UI:CinematicMode", new Action(HideHud));
+            client.RegisterEventHandler("curiosity:Player:UI:BlackBarHeight", new Action(BlackBarHeight));
         }
 
         static public async Task OnTick()
