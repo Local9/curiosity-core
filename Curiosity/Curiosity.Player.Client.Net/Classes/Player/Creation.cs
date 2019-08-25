@@ -3,7 +3,6 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using System;
 using System.Collections.Generic;
-using MenuAPI;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Player
