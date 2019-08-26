@@ -126,18 +126,53 @@ namespace Curiosity.Police.Client.net.Classes
                 Ped ped = await CreatePed.Create(suspectModel, SuspectPosition, suspectHeading, suspectGroup);
                 SuspectModel.MarkAsNoLongerNeeded();
                 await Client.Delay(5);
+
                 ped.Task.TurnTo(location);
                 Suspects.Add(ped);
 
+                Model m = random.Next(1) == 1 ? PedHash.ArmGoon01GMM : PedHash.ArmGoon02GMY;
+                await m.Request(10000);
+
+                Ped p = await CreatePed.Create(m, Location, shopkeeperHeading - 45f, suspectGroup);
+                m.MarkAsNoLongerNeeded();
+                await Client.Delay(5);
+                p.Task.WanderAround();
+                Suspects.Add(p);
+
                 if (random.Next(2) == 1)
                 {
-                    Model m = random.Next(1) == 1 ? PedHash.ArmGoon01GMM : PedHash.ArmGoon02GMY;
-                    await m.Request(10000);
-                    Ped p = await CreatePed.Create(m, Location, shopkeeperHeading - 45f, suspectGroup);
-                    m.MarkAsNoLongerNeeded();
+                    Model randomPedModel = random.Next(1) == 1 ? PedHash.Dealer01SMY : PedHash.KorLieut01GMY;
+                    await randomPedModel.Request(10000);
+
+                    Ped randomPed = await CreatePed.Create(randomPedModel, Location, shopkeeperHeading - 45f, suspectGroup);
+                    randomPedModel.MarkAsNoLongerNeeded();
                     await Client.Delay(5);
-                    p.Task.TurnTo(location);
-                    Suspects.Add(p);
+                    randomPed.Task.WanderAround();
+                    Suspects.Add(randomPed);
+                }
+
+                if (random.Next(5) == 1)
+                {
+                    Model randomPedModel = random.Next(1) == 1 ? PedHash.ExArmy01 : PedHash.Lost01GFY;
+                    await randomPedModel.Request(10000);
+
+                    Ped randomPed = await CreatePed.Create(randomPedModel, Location, shopkeeperHeading - 45f, suspectGroup);
+                    randomPedModel.MarkAsNoLongerNeeded();
+                    await Client.Delay(5);
+                    randomPed.Task.WanderAround();
+                    Suspects.Add(randomPed);
+                }
+
+                if (random.Next(10) == 1)
+                {
+                    Model randomPedModel = random.Next(1) == 1 ? PedHash.Lost01GMY : PedHash.Lost03GMY;
+                    await randomPedModel.Request(10000);
+
+                    Ped randomPed = await CreatePed.Create(randomPedModel, Location, shopkeeperHeading - 45f, suspectGroup);
+                    randomPedModel.MarkAsNoLongerNeeded();
+                    await Client.Delay(5);
+                    randomPed.Task.WanderAround();
+                    Suspects.Add(randomPed);
                 }
 
                 await Client.Delay(50);
@@ -264,7 +299,8 @@ namespace Curiosity.Police.Client.net.Classes
                 
                 Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 200));
                 Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(10, 16));
-                Game.PlayerPed.Weapons.Current.Ammo = Game.PlayerPed.Weapons.Current.Ammo + random.Next(24);                
+                Game.PlayerPed.Weapons.Current.Ammo = Game.PlayerPed.Weapons.Current.Ammo + random.Next(24, 64);
+                Game.PlayerPed.Armor = random.Next(Game.PlayerPed.Armor, 100);
 
                 await Client.Delay(10);
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);
@@ -362,7 +398,7 @@ namespace Curiosity.Police.Client.net.Classes
                 Client.TriggerServerEvent("curiosity:Server:Skills:Decrease", $"{Enums.Skills.policexp}", xp);
                 message = $"-{xp}xp";
             }
-            NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, timeout, 60.0f);
+            NativeWrappers.Draw3DTextTimeout(dmgPos.X, dmgPos.Y, dmgPos.Z, message, timeout, 40f, 60.0f);
         }
     }
 }

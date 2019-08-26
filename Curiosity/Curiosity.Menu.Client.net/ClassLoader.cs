@@ -15,6 +15,7 @@ namespace Curiosity.Menus.Client.net
         {
             Log.Verbose("Entering ClassLoader Init");
 
+            Classes.Player.PlayerInformation.Init();
             // MENU 2.0
             Classes.Menus.MenuBase.Init();
 

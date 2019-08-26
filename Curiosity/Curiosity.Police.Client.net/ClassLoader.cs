@@ -23,6 +23,8 @@ namespace Curiosity.Police.Client.net
             Environment.Tasks.CalloutHandler.Init();
 
             Environment.Vehicle.Sirens.Init();
+            Environment.BlipHandler.Init();
+            Environment.Job.DutyMarkers.Init();
 
             // Developer
             Classes.Developer.Init();

@@ -171,13 +171,13 @@ namespace Curiosity.Shared.Client.net.Helper
             return !API.IsEntityDead(entityId);
         }
 
-        static public async void Draw3DTextTimeout(float x, float y, float z, string message, int timeout = 2500, float distanceToHide = 20.0f)
+        static public async void Draw3DTextTimeout(float x, float y, float z, string message, int timeout = 2500, float scaleMod = 20.0f, float distanceToHide = 20f)
         {
             TimeoutState(timeout);
             while (TimeoutStateValue)
             {
                 await BaseScript.Delay(0);
-                Draw3DText(x, y, z, message, distanceToHide);
+                Draw3DText(x, y, z, message, scaleMod, distanceToHide);
             }
         }
 

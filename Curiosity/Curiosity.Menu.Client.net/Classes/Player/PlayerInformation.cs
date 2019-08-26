@@ -16,6 +16,10 @@ namespace Curiosity.Menus.Client.net.Classes.Player
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
+
+            await Client.Delay(2000);
+
+            Client.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         static async void PlayerInfo(string json)

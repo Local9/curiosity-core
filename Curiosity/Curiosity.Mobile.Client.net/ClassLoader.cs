@@ -18,7 +18,7 @@ namespace Curiosity.Mobile.Client.net
             // Mobile Phone Addons
             Mobile.MobilePhone.Init();
             Mobile.Apps.PlayerListApplication.Init();
-            Mobile.Apps.JobApplication.Init();
+            // Mobile.Apps.JobApplication.Init();
             Mobile.Apps.SkillsApplication.Init();
             Mobile.Apps.SettingsApplication.Init();
 

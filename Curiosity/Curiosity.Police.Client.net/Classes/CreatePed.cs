@@ -46,8 +46,17 @@ namespace Curiosity.Police.Client.net.Classes
             createdPed.DropsWeaponsOnDeath = false;
             createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
 
-            API.SetPedHearingRange(createdPed.Handle, 200.0f);
-            API.SetPedSeeingRange(createdPed.Handle, 200.0f);
+            API.SetPedHearingRange(createdPed.Handle, 100.0f);
+            API.SetPedSeeingRange(createdPed.Handle, 100.0f);
+
+            await Client.Delay(0);
+
+            API.SetPedVisualFieldCenterAngle(createdPed.Handle, 180f);
+            API.SetPedVisualFieldMaxAngle(createdPed.Handle, 180f);
+            API.SetPedVisualFieldMinAngle(createdPed.Handle, 75f);
+            API.SetPedVisualFieldMaxElevationAngle(createdPed.Handle, 90f);
+            API.SetPedVisualFieldMinElevationAngle(createdPed.Handle, 0f);
+            API.SetPedVisualFieldPeripheralRange(createdPed.Handle, 45f);
 
             await Client.Delay(0);
 
@@ -92,17 +101,17 @@ namespace Curiosity.Police.Client.net.Classes
                 API.SetPedMovementClipset(createdPed.Handle, "move_m@drunk@verydrunk", 0x3E800000);
             }
 
-            createdPed.Task.WanderAround(suspectPosition, 5f);
-
             await Client.Delay(0);
 
             createdPed.RelationshipGroup = relationshipGroup;
             API.SetEntityOnlyDamagedByPlayer(createdPed.Handle, true);
             API.SetBlockingOfNonTemporaryEvents(createdPed.Handle, false);
-            API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 150.0f, true, false);
+            API.SetPedSphereDefensiveArea(createdPed.Handle, createdPed.Position.X, createdPed.Position.Y, createdPed.Position.Z, 100.0f, true, false);
             API.TaskCombatHatedTargetsAroundPedTimed(createdPed.Handle, 150.0f, -1, 0);
             API.N_0x2016c603d6b8987c(createdPed.Handle, false);
             await Client.Delay(0);
+
+            createdPed.Task.WanderAround(suspectPosition, 5f);
 
             return createdPed;
         }
