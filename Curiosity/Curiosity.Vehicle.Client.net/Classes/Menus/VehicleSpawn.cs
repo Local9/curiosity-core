@@ -55,7 +55,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         private static void Menu_OnMenuOpen(Menu menu)
         {
             MenuBaseFunctions.MenuOpen();
-            menu.AddMenuItem(new MenuItem("Loading..."));
+            menu.AddMenuItem(new MenuItem("Loading...") { Enabled = false });
         }
 
         private static void OnUpdateMenu(string encodedJson)
@@ -69,7 +69,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                 string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
                 List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
 
-                if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER && vehicleItems.Count > 0)
+                if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
                 {
                     VehicleItem dev = vehicleItems[0];
                     dev.VehicleHashString = "tezeract";
