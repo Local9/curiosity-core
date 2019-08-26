@@ -11,5 +11,6 @@
         public int UnlockRequirementValue;
         public string UnlockRequiredSkill;
         public string UnlockRequiredSkillDescription;
+        public bool InstallSirens;
     }
 }

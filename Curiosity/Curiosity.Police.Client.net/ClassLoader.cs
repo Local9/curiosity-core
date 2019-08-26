@@ -22,6 +22,8 @@ namespace Curiosity.Police.Client.net
             Environment.Job.DutyManager.Init();
             Environment.Tasks.CalloutHandler.Init();
 
+            Environment.Vehicle.Sirens.Init();
+
             // Developer
             Classes.Developer.Init();
 

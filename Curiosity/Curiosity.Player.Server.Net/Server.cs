@@ -82,6 +82,7 @@ namespace Curiosity.Server.net
 
             // PLAYER EVENTS
             Classes.Player.Sit.Init();
+            Classes.Environment.TriggerEventForMultipule.Init();
 
             Classes.Skills.Init();
             Classes.Bank.Init();

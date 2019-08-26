@@ -98,6 +98,9 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
             API.RegisterCommand("die", new Action<int, List<object>, string>(Die), false);
             API.RegisterCommand("emote", new Action<int, List<object>, string>(OnEmote), false);
+
+            API.RegisterCommand("installsirens", new Action<int, List<object>, string>(OnInstallSirens), false);
+
             // API.RegisterCommand("minigame", new Action<int, List<object>, string>(OnMinigame), false);
 
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
@@ -159,6 +162,39 @@ namespace Curiosity.Client.net.Classes.Actions
                 Log.Error($"Emotes OnTick error: {ex.Message}");
             }
             return Task.FromResult(0);
+        }
+
+        static void OnInstallSirens(int playerHandle, List<object> arguments, string raw)
+        {
+            try
+            {
+                if (!Player.PlayerInformation.IsDeveloper()) return;
+
+                if (!Game.PlayerPed.IsInVehicle()) return;
+
+                bool AreSirensInstalled = API.DecorExistOn(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.SirensInstalled") ? API.DecorGetBool(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.SirensInstalled") : Game.PlayerPed.IsInPoliceVehicle;
+                bool targetState;
+                if (arguments.Count < 1)
+                {
+                    Environment.UI.Notifications.LifeV(1, "Siren", $"Sirens {(AreSirensInstalled ? "removed" : "installed")}.", string.Empty, 2);
+                    API.DecorSetBool(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.SirensInstalled", !AreSirensInstalled);
+                    return;
+                }
+                else if (bool.TryParse($"{arguments[0]}", out targetState))
+                {
+                    Environment.UI.Notifications.LifeV(1, "Siren", $"Sirens {(targetState ? "installed" : "removed")}.", string.Empty, 2);
+                    API.DecorSetBool(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.SirensInstalled", targetState);
+                }
+                else
+                {
+                    Environment.UI.Notifications.LifeV(1, "Siren", "Invalid arguments given.", string.Empty, 2);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"InstallSirens error: {ex.Message}");
+            }
+
         }
 
         static void OnMinigame(int playerHandle, List<object> arguments, string raw)

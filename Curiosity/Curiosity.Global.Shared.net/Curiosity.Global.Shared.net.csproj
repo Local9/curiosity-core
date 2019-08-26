@@ -53,6 +53,8 @@
     <Compile Include="Entity\PlayerCharacter.cs" />
     <Compile Include="Entity\PlayerInformation.cs" />
     <Compile Include="Entity\Skills.cs" />
+    <Compile Include="Entity\SoundEventModel.cs" />
+    <Compile Include="Entity\TriggerEventForAll.cs" />
     <Compile Include="Entity\User.cs" />
     <Compile Include="Entity\VehicleItem.cs" />
     <Compile Include="Entity\VehicleSpawnLocation.cs" />

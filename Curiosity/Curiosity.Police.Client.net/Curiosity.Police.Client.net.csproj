@@ -79,6 +79,7 @@
     <Compile Include="Environment\Tasks\Callouts\Rural\Shops\BanhamCanyonRobsLiquor.cs" />
     <Compile Include="Environment\Tasks\Callouts\Rural\Shops\RichmanGlen.cs" />
     <Compile Include="Environment\Tasks\Callouts\Rural\Shops\TataviamMountains.cs" />
+    <Compile Include="Environment\Vehicle\Sirens.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,9 +92,7 @@
       <Name>Curiosity.Shared.Client.net</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Environment\Vehicle\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

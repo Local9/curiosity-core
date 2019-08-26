@@ -84,7 +84,8 @@ namespace Curiosity.Server.net.Database
                         SpawnPositionX = float.Parse($"{k["x"]}"),
                         SpawnPositionY = float.Parse($"{k["y"]}"),
                         SpawnPositionZ = float.Parse($"{k["z"]}"),
-                        SpawnHeading = float.Parse($"{k["spawnOutputHeading"]}")
+                        SpawnHeading = float.Parse($"{k["spawnOutputHeading"]}"),
+                        InstallSirens = int.Parse($"{k["installSirens"]}") == 1
                     };
                     vehicleItems.Add(vehicleItem);
                 }

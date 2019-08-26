@@ -13,7 +13,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
         static bool isSpawning = false;
 
-        public static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading)
+        public static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading, bool installSirens = false)
         {
             try
             {
@@ -75,6 +75,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                 if (API.DecorIsRegisteredAsType("Player_Vehicle", 3))
                 {
                     API.DecorSetInt(veh.Handle, "Player_Vehicle", Game.Player.ServerId);
+                }
+
+                if (API.DecorIsRegisteredAsType("Vehicle.SirensInstalled", 2) && installSirens)
+                {
+                    API.DecorSetBool(veh.Handle, "Vehicle.SirensInstalled", installSirens);
                 }
 
                 await Client.Delay(0);
