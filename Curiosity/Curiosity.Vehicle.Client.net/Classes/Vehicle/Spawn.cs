@@ -119,6 +119,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
                 Client.CurrentVehicle = veh;
 
+                API.SetResourceKvpInt("curiosity:vehicle", veh.Handle);
+
+                Client.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
+
                 API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 

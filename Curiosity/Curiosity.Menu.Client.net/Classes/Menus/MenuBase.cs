@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus
 {
@@ -14,6 +15,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         public static void Init()
         {
+            client.RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
+
             //// Setting the menu alignment to be right aligned. This can be changed at any time and it'll update instantly.
             //// To test this, checkout one of the checkbox items in this example menu. Clicking it will toggle the menu alignment.
             MenuController.MenuAlignment = MenuController.MenuAlignmentOption.Left;
@@ -315,6 +318,11 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 if (menu.MenuTitle == menuItem.Text)
                     Menu.RemoveMenuItem(menuItem);
             }
+        }
+
+        public static void OnVehicleId(int vehicleId)
+        {
+            Client.CurrentVehicle = new Vehicle(vehicleId);
         }
     }
 }
