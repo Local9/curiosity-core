@@ -75,6 +75,7 @@
     <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="Classes\Environment\InstanceChecker.cs" />
     <Compile Include="Classes\Environment\Scoreboard.cs" />
+    <Compile Include="Classes\Environment\TriggerEventForMultipule.cs" />
     <Compile Include="Classes\Environment\Vehicles.cs" />
     <Compile Include="Classes\Environment\WeatherSystems.cs" />
     <Compile Include="Classes\Menu\Lists.cs" />
