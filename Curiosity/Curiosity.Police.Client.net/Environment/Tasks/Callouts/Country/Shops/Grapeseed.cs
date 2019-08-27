@@ -4,7 +4,7 @@ namespace Curiosity.Police.Client.net.Environment.Tasks.Callouts.Country.Shops
 {
     class Grapeseed
     {
-        static string Name = "LTD Grage, Grapeseed";
+        static string Name = "LTD Garage, Grapeseed";
         static Vector3 Location = new Vector3(1698.641f, 4929.917f, 42.0781f);
 
         static Model SuspectModel = PedHash.Farmer01AMM;

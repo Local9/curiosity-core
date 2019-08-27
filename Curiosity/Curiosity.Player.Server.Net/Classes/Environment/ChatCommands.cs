@@ -37,6 +37,18 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("watch", new Action<int, List<object>, string>(RequestURL), false);
 
             API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
+            API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
+        }
+
+        static void OnFire(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (!session.IsDeveloper) return;
+
+            session.Player.TriggerEvent("curiosity:Client:Command:OnFire", playerHandle);
         }
 
         static void OnChaser(int playerHandle, List<object> arguments, string raw)

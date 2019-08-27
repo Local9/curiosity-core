@@ -87,6 +87,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
             client.RegisterEventHandler("curiosity:Client:Command:SpawnWeapon", new Action<string>(SpawnWeapon));
             client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string, string>(SpawnCar));
+            client.RegisterEventHandler("curiosity:Client:Command:OnFire", new Action<int>(OnFire));
 
             API.RegisterCommand("mod", new Action<int, List<object>, string>(ModVehicle), false);
             API.RegisterCommand("tp", new Action<int, List<object>, string>(Teleport), false);
@@ -100,7 +101,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("emote", new Action<int, List<object>, string>(OnEmote), false);
 
             API.RegisterCommand("installsirens", new Action<int, List<object>, string>(OnInstallSirens), false);
-            API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFireFootprints), false);
+            //API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFireFootprints), false);
 
             // API.RegisterCommand("minigame", new Action<int, List<object>, string>(OnMinigame), false);
 
@@ -142,6 +143,26 @@ namespace Curiosity.Client.net.Classes.Actions
             }), false);
         }
 
+        static void OnFire(int playerId)
+        {
+            if (Client.players[playerId] != null)
+            {
+                Ped ped = new Ped(API.GetPlayerPed(playerId));
+
+                if (ped.GetConfigFlag(421))
+                {
+                    Function.Call((Hash)0xBA3D194057C79A7B, "");
+                    ped.SetConfigFlag(421, false);
+                }
+                else
+                {
+                    if (!API.HasNamedPtfxAssetLoaded("scr_bike_adversary")) API.RequestNamedPtfxAsset("scr_bike_adversary");
+                    Function.Call((Hash)0xBA3D194057C79A7B, "scr_adversary_foot_flames");
+                    ped.SetConfigFlag(421, true);
+                }
+            }
+        }
+
         private static Task OnEmoteTick()
         {
             try
@@ -165,29 +186,29 @@ namespace Curiosity.Client.net.Classes.Actions
             return Task.FromResult(0);
         }
 
-        static void OnFireFootprints(int playerHandle, List<object> arguments, string raw)
-        {
-            try
-            {
-                if (!Player.PlayerInformation.IsDeveloper()) return;
+        //static void OnFireFootprints(int playerHandle, List<object> arguments, string raw)
+        //{
+        //    try
+        //    {
+        //        if (!Player.PlayerInformation.IsDeveloper()) return;
 
-                if (Game.PlayerPed.GetConfigFlag(421))
-                {
-                    Function.Call((Hash)0xBA3D194057C79A7B, "");
-                    Game.PlayerPed.SetConfigFlag(421, false);
-                }
-                else
-                {
-                    if (!API.HasNamedPtfxAssetLoaded("scr_bike_adversary")) API.RequestNamedPtfxAsset("scr_bike_adversary");
-                    Function.Call((Hash)0xBA3D194057C79A7B, "scr_adversary_foot_flames");
-                    Game.PlayerPed.SetConfigFlag(421, true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"OnFireFootprints error: {ex.Message}");
-            }
-        }
+        //        if (Game.PlayerPed.GetConfigFlag(421))
+        //        {
+        //            Function.Call((Hash)0xBA3D194057C79A7B, "");
+        //            Game.PlayerPed.SetConfigFlag(421, false);
+        //        }
+        //        else
+        //        {
+        //            if (!API.HasNamedPtfxAssetLoaded("scr_bike_adversary")) API.RequestNamedPtfxAsset("scr_bike_adversary");
+        //            Function.Call((Hash)0xBA3D194057C79A7B, "scr_adversary_foot_flames");
+        //            Game.PlayerPed.SetConfigFlag(421, true);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Error($"OnFireFootprints error: {ex.Message}");
+        //    }
+        //}
 
         static void OnInstallSirens(int playerHandle, List<object> arguments, string raw)
         {
