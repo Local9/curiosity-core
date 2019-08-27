@@ -48,7 +48,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             if (!session.IsDeveloper) return;
 
-            session.Player.TriggerEvent("curiosity:Client:Command:OnFire", playerHandle);
+            Server.TriggerClientEvent("curiosity:Client:Command:OnFire", session.NetId);
         }
 
         static void OnChaser(int playerHandle, List<object> arguments, string raw)

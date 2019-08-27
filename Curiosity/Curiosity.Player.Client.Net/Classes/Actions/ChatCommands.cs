@@ -147,18 +147,20 @@ namespace Curiosity.Client.net.Classes.Actions
         {
             if (Client.players[playerId] != null)
             {
-                Ped ped = new Ped(API.GetPlayerPed(playerId));
+                Ped ped = new Ped(API.NetworkGetEntityFromNetworkId(playerId));
 
                 if (ped.GetConfigFlag(421))
                 {
                     Function.Call((Hash)0xBA3D194057C79A7B, "");
                     ped.SetConfigFlag(421, false);
+                    CitizenFX.Core.UI.Screen.ShowNotification("On Fire: Disabled");
                 }
                 else
                 {
                     if (!API.HasNamedPtfxAssetLoaded("scr_bike_adversary")) API.RequestNamedPtfxAsset("scr_bike_adversary");
                     Function.Call((Hash)0xBA3D194057C79A7B, "scr_adversary_foot_flames");
                     ped.SetConfigFlag(421, true);
+                    CitizenFX.Core.UI.Screen.ShowNotification($"On Fire: Enabled");
                 }
             }
         }
