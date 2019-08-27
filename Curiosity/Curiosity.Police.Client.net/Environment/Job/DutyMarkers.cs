@@ -76,8 +76,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 MarkersAll.Add(1, new Marker(new Vector3(-1110.701f, -844.0428f, 18.31688f), PatrolZone.City));
                 MarkersAll.Add(2, new Marker(new Vector3(441.0764f, -981.1343f, 29.6896f), PatrolZone.City));
                 MarkersAll.Add(3, new Marker(new Vector3(622.13f, 17.52761f, 86.86286f), PatrolZone.City));
-                MarkersAll.Add(4, new Marker(new Vector3(1849.479f, 3689.86f, 33.26705f), PatrolZone.Country));
-                MarkersAll.Add(5, new Marker(new Vector3(-448.4843f, 6008.57f, 30.71637f), PatrolZone.Country));
+                MarkersAll.Add(4, new Marker(new Vector3(1851.431f, 3683.458f, 33.26704f), PatrolZone.Country)); // SANDY
+                MarkersAll.Add(5, new Marker(new Vector3(-448.4843f, 6008.57f, 30.71637f), PatrolZone.Country)); // PALETO Bay
 
                 if (BlipHandler.All.Count == 0)
                 {
@@ -131,7 +131,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
                     MarkersClose.ForEach(m => {
                         CitizenFX.Core.World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true);
                         string dutyMessage = (!DutyManager.IsPoliceJobActive) ? "~g~Go on Duty" : "~r~Go off Duty";
-                        NativeWrappers.Draw3DTextTimeout(m.Position.X, m.Position.Y, m.Position.Z + 1, $"~s~Police Duty Status~n~{dutyMessage}", 2500, 50f, 5f);
+                        NativeWrappers.Draw3DText(m.Position.X, m.Position.Y, m.Position.Z + 1, $"~s~Police Duty Status~n~{dutyMessage}", 50f, 10f);
                     });
                 }
             }
