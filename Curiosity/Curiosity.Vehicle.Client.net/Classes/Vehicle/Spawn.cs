@@ -4,6 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Shared.Client.net.Enums;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 {
@@ -28,18 +32,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     {
                         fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Client.CurrentVehicle.Handle, "Vehicle.Fuel");
 
-                        if (Client.CurrentVehicle.AttachedBlip.Exists())
-                        {
-                            Client.CurrentVehicle.AttachedBlip.Delete();
-                        }
-
-                        API.NetworkFadeOutEntity(Client.CurrentVehicle.Handle, true, false);
-                        Client.CurrentVehicle.IsEngineRunning = false;
-                        Client.CurrentVehicle.MarkAsNoLongerNeeded();
-                        await Client.Delay(1000);
-                        int handle = Client.CurrentVehicle.Handle;
-                        API.DeleteEntity(ref handle);
-
+                        SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
                     }
                 }
 
@@ -137,6 +130,12 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                 isSpawning = false;
                 return false;
             }
+        }
+
+        static void SendDeletionEvent(string vehicleNetworkId)
+        {
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", vehicleNetworkId));
+            BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
     }
 }
