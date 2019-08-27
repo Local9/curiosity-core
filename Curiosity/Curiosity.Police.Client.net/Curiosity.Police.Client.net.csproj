@@ -95,6 +95,10 @@
       <Project>{37f1f478-be0b-4c2b-a062-24077f851b69}</Project>
       <Name>Curiosity.Shared.Client.net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\zThirdParty\MenuAPI\MenuAPI.csproj">
+      <Project>{9c746601-9f3d-4b0d-877c-1c7bc493c5bc}</Project>
+      <Name>MenuAPI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

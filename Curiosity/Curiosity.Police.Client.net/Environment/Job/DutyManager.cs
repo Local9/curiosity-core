@@ -3,6 +3,7 @@ using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net;
 using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Police.Client.net.Environment.Job
 {
@@ -68,7 +69,16 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 IsPoliceJobActive = true;
                 Tasks.CalloutHandler.PlayerCanTakeCallout();
 
-                Game.PlayerPed.Weapons.Give(WeaponHash.Pistol, 120, false, true);
+                Game.PlayerPed.Weapons.RemoveAll();
+
+                Game.PlayerPed.DropsWeaponsOnDeath = false;
+                Game.PlayerPed.Weapons.Give(WeaponHash.CombatPistol, 240, false, false);
+                Game.PlayerPed.Weapons.Give(WeaponHash.Nightstick, 1, false, false);
+                Game.PlayerPed.Weapons.Give(WeaponHash.StunGun, 1, false, false);
+                Game.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, false, false);
+
+                GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.CombatPistol, (uint)GetHashKey("COMPONENT_AT_PI_FLSH"));
+
                 Game.PlayerPed.Armor = 100;
             }
             else
