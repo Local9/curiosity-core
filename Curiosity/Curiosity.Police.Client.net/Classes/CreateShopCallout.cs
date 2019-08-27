@@ -229,11 +229,38 @@ namespace Curiosity.Police.Client.net.Classes
             try
             {
                 bool pedFlee = false;
+
                 while(Suspects.Count > 0)
                 {
-                    await Client.Delay(100);
-
                     List<Ped> SuspectCopy = new List<Ped>(Suspects);
+
+                    if (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, Location) > 180.0f)
+                    {
+                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Commissioner ", $"well well well", $"I guess you're not cut out for police work.", 2);
+                        Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "police");
+
+                        foreach (Ped ped in SuspectCopy)
+                        {
+                            if (ped != null)
+                            {
+                                if (ped.Exists())
+                                {
+                                    ped.MarkAsNoLongerNeeded();
+                                }
+                            }
+                        }
+
+                        if (ShopKeeper != null)
+                        {
+                            if (ShopKeeper.Exists()) {
+                                ShopKeeper.MarkAsNoLongerNeeded();
+                            }
+                        }
+
+                        break;
+                    }
+
+                    await Client.Delay(100);
 
                     foreach(Ped ped in SuspectCopy)
                     {
