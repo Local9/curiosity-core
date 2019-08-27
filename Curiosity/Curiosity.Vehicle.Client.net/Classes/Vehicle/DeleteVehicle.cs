@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net;
+using System;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
@@ -17,13 +14,15 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             client.RegisterEventHandler("curiosity:Player:Vehicle:Delete", new Action<string>(OnDelete));
         }
 
-        static void OnDelete(string vehicleNetworkId)
+        static void OnDelete(string encodedNetworkId)
         {
             try
             {
-                if (string.IsNullOrEmpty(vehicleNetworkId)) return;
+                if (string.IsNullOrEmpty(encodedNetworkId)) return;
 
-                int vehicleId = NetworkGetEntityFromNetworkId(int.Parse(vehicleNetworkId));
+                string decryptedNetworkId = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedNetworkId));
+
+                int vehicleId = NetworkGetEntityFromNetworkId(int.Parse(decryptedNetworkId));
 
                 CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(vehicleId);
 

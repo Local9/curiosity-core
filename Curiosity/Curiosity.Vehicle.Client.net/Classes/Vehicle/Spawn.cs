@@ -8,6 +8,7 @@ using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Global.Shared.net;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 {
@@ -134,7 +135,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
         static void SendDeletionEvent(string vehicleNetworkId)
         {
-            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", vehicleNetworkId));
+            string encodedString = Encode.StringToBase64(vehicleNetworkId);
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
     }

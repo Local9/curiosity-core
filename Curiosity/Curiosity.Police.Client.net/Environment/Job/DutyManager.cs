@@ -57,6 +57,9 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
                 return; // TODO: Refactor job code
             }
+
+            Game.PlayerPed.IsInvincible = false;
+
             IsOnDuty = dutyState;
 
             if (Classes.Player.PlayerInformation.IsDeveloper())
