@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FE7F0756-CFE5-4BB9-A822-E9E1CFBC412B}</ProjectGuid>
+    <ProjectGuid>{F3CBC98F-A17F-4240-BBE9-D28CF272E82B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.Global.Shared.net</RootNamespace>
-    <AssemblyName>Curiosity.Global.Shared.net</AssemblyName>
+    <RootNamespace>Curiosity.World.Server.net</RootNamespace>
+    <AssemblyName>Curiosity.World.Server.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>Z:\FXServer\curiosity\resources\curiosity-world\server\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,8 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1465\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+    <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\CitizenFX.Core.Server.1.0.1552\lib\net45\CitizenFX.Core.Server.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.net">
+      <HintPath>..\_Dependancies\Newtonsoft.Json.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,33 +48,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Encode.cs" />
-    <Compile Include="Entity\GamePed\PedObject.cs" />
-    <Compile Include="Entity\GenericData.cs" />
-    <Compile Include="Entity\Inventory.cs" />
-    <Compile Include="Entity\LogType.cs" />
-    <Compile Include="Entity\NuiData.cs" />
-    <Compile Include="Entity\PlayerCharacter.cs" />
-    <Compile Include="Entity\PlayerInformation.cs" />
-    <Compile Include="Entity\Skills.cs" />
-    <Compile Include="Entity\SoundEventModel.cs" />
-    <Compile Include="Entity\TriggerEventForAll.cs" />
-    <Compile Include="Entity\User.cs" />
-    <Compile Include="Entity\VehicleItem.cs" />
-    <Compile Include="Entity\VehicleSpawnLocation.cs" />
-    <Compile Include="Entity\WeatherData.cs" />
-    <Compile Include="Enums\Job.cs" />
-    <Compile Include="Enums\LogGroup.cs" />
-    <Compile Include="Enums\Messages.cs" />
-    <Compile Include="Enums\Mobile\MobileEnums.cs" />
-    <Compile Include="Enums\ObjectHash.cs" />
-    <Compile Include="Enums\Privilege.cs" />
-    <Compile Include="Enums\Reserved.cs" />
-    <Compile Include="Enums\SessionState.cs" />
-    <Compile Include="Enums\SkillType.cs" />
-    <Compile Include="Enums\SpawnLocations.cs" />
-    <Compile Include="Enums\SpawnTypes.cs" />
+    <Compile Include="Classes\Environment\WorldWeatherCycle.cs" />
+    <Compile Include="Classes\Environment\WorldTimeCycle.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">
+      <Project>{fe7f0756-cfe5-4bb9-a822-e9e1cfbc412b}</Project>
+      <Name>Curiosity.Global.Shared.net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Curiosity.Shared.Server.net\Curiosity.Shared.Server.net.csproj">
+      <Project>{e665b41e-6ffb-4ea8-998f-80122b2afe7c}</Project>
+      <Name>Curiosity.Shared.Server.net</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

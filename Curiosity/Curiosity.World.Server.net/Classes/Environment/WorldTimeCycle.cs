@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Server.net.Classes.Environment
+namespace Curiosity.World.Server.net.Classes.Environment
 {
     class WorldTimeCycle
     {

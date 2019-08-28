@@ -5,8 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Curiosity.Global.Shared.net.Entity;
 
-namespace Curiosity.Server.net.Classes.Environment
+namespace Curiosity.World.Server.net.Classes.Environment
 {
     class WeatherSystems
     {
@@ -22,7 +23,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static int MINUTES_TO_WAIT = (1000 * 60) * 20;
 
-        static Entity.WeatherData weatherData = new Entity.WeatherData();
+        static WeatherData weatherData = new WeatherData();
 
         public static void Init()
         {
