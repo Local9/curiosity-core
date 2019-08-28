@@ -81,7 +81,6 @@ namespace Curiosity.Client.net
             SpawnManagement.Init();
             // InstancingChecker.Init();
             Classes.Environment.PedClasses.PedHandler.Init();
-            WeatherSystem.Init();
 
             // EMS
             //EMS.Init();

@@ -21,8 +21,8 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
 
         public static void Init()
         {
-            App = new Application("Player List", AppIcons.Contacts, 0);
-            Screen screen = new Screen(App, "Player List", (int)View.Contacts);
+            App = new Application("Contacts", AppIcons.Contacts, 0);
+            Screen screen = new Screen(App, "Contacts", (int)View.Contacts);
             App.LauncherScreen = screen;
             App.StartTask = StartTick;
             App.StopTask = StopTick;
@@ -60,7 +60,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
 
                     // Add option to message the player.
                     
-                    Item messageItem = new Item(playerOptionsMenu, Item.CreateData(2, PREFIX + "Message", (int)ListIcons.Attachment),
+                    Item messageItem = new Item(playerOptionsMenu, Item.CreateData(2, PREFIX + "Message", (int)ListIcons.Profile, "CHAR_MULTIPLAYER"),
                         MessagePlayer, player);
 
                     playerOptionsMenu.AddItem(messageItem);
@@ -70,8 +70,29 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
                         ApplicationHandler.ChangeScreen, playerOptionsMenu); // Action callback and arguments.
                     App.LauncherScreen.AddItem(playerItem); // Add the item to the launcher screen.
                 }
+
+                Item taxiServices = new Item(App.LauncherScreen, Item.CreateData(2, $"{PREFIX}Life V Taxi", 0, "CHAR_TAXI"), ServiceNotAvailable, "Life V Taxi");
+                App.LauncherScreen.AddItem(taxiServices);
+
+                Item towTruck = new Item(App.LauncherScreen, Item.CreateData(2, $"{PREFIX}Life V Towing", 0, "CHAR_PROPERTY_TOWING_IMPOUND"), ServiceNotAvailable, "Life V Towing");
+                App.LauncherScreen.AddItem(towTruck);
+
                 await BaseScript.Delay(1000); // Tick occurs once per second.
             }
+        }
+
+        static async void ServiceNotAvailable(dynamic[] data)
+        {
+            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 2, $"{data[0]}", "Service Unavailable", "Sorry, we are currently unable to provide this service.", 2);
+            ApplicationHandler.Kill();
+            await BaseScript.Delay(0);
+        }
+
+        static async void CallTowTruck(dynamic[] data)
+        {
+            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "SMS", "Message Error", "Network Error", 2);
+            ApplicationHandler.Kill();
+            await BaseScript.Delay(0);
         }
 
         static async void MessagePlayer(dynamic[] data)

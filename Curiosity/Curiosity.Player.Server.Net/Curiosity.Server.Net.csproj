@@ -78,6 +78,7 @@
     <Compile Include="Classes\Environment\TriggerEventForMultipule.cs" />
     <Compile Include="Classes\Environment\Vehicles.cs" />
     <Compile Include="Classes\Environment\WeatherSystems.cs" />
+    <Compile Include="Classes\Environment\WorldTimeCycle.cs" />
     <Compile Include="Classes\Menu\Lists.cs" />
     <Compile Include="Classes\Menu\Player.cs" />
     <Compile Include="Classes\PlayerMethods.cs" />

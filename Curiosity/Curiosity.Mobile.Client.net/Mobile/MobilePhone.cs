@@ -29,6 +29,8 @@ namespace Curiosity.Mobile.Client.net.Mobile
         static int visibleAnimProgress = 21;
         static int selectedItem = 4;
 
+        static WeaponHash equipedWeapon = WeaponHash.Unarmed;
+
         public static bool IsJobActive = false;
         public static bool IsLeaning = false;
         public static bool IsMenuOpen = false;
@@ -145,6 +147,12 @@ namespace Curiosity.Mobile.Client.net.Mobile
             }
             else if (ControlHelper.IsControlJustPressed(Control.Phone, false) && !IsMenuOpen)
             {
+                if (Game.PlayerPed.Weapons.Current.Hash != WeaponHash.Unarmed)
+                {
+                    equipedWeapon = Game.PlayerPed.Weapons.Current.Hash;
+                    API.SetCurrentPedWeapon(Game.PlayerPed.Handle, (uint)WeaponHash.Unarmed, true);
+                }
+
                 API.PlaySoundFrontend(-1, "Pull_Out", "Phone_SoundSet_Default", true);
                 MobileScaleform = API.RequestScaleformMovie("CELLPHONE_IFRUIT");
                 if (!API.HasScaleformMovieLoaded(MobileScaleform))
@@ -174,7 +182,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
             await Task.FromResult(0);
         }
 
-        public static void ClosePhone(bool closingApp = false)
+        public async static void ClosePhone(bool closingApp = false)
         {
             if (closingApp)
             {
@@ -191,6 +199,13 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 IsMobilePhoneOpen = false;
                 API.SetScaleformMovieAsNoLongerNeeded(ref MobileScaleform);
                 API.DestroyMobilePhone();
+
+                await Client.Delay(1000);
+
+                if (equipedWeapon != WeaponHash.Unarmed)
+                {
+                    API.SetCurrentPedWeapon(Game.PlayerPed.Handle, (uint)equipedWeapon, true);
+                }
             }
 
         }

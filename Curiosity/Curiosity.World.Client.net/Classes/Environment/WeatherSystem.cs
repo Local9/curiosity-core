@@ -4,7 +4,7 @@ using Curiosity.Shared.Client.net;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Client.net.Classes.Environment
+namespace Curiosity.World.Client.net.Classes.Environment
 {
     class WeatherSystem
     {
@@ -15,17 +15,15 @@ namespace Curiosity.Client.net.Classes.Environment
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
             client.RegisterEventHandler("curiosity:Client:Weather:Sync", new Action<string, bool, float, float, bool, bool>(WeatherSync));
-
-            client.RegisterTickHandler(TimeNetworkSync);
+            
             client.RegisterTickHandler(WeatherChecker);
         }
-
-
+        
         static async Task WeatherChecker()
         {
             while (true)
             {
-                bool trails = World.Weather == Weather.Christmas;
+                bool trails = CitizenFX.Core.World.Weather == Weather.Christmas;
                 API.SetForceVehicleTrails(trails);
                 API.SetForcePedFootstepsTracks(trails);
                 await Client.Delay(0);
@@ -41,16 +39,6 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             if (API.GetCurrentResourceName() != resourceName) return;
             Client.TriggerServerEvent("curiosity:Server:Weather:Sync");
-        }
-
-        static async Task TimeNetworkSync()
-        {
-            int hours = 0;
-            int minutes = 0;
-            int seconds = 0;
-            API.NetworkGetServerTime(ref hours, ref minutes, ref seconds);
-            API.NetworkOverrideClockTime(hours, minutes, 0);
-            await Task.FromResult(0);
         }
 
         static async void WeatherSync(string weather, bool wind, float windSpeed, float windHeading, bool isChristmas, bool isHalloween)
