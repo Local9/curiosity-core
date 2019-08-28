@@ -16,7 +16,7 @@ namespace Curiosity.World.Client.net.Classes.Environment
         private static bool FreezeTime = false;
 
         private static int minuteTimer = GetGameTimer();
-        private static int minuteClockSpeed = 2000;
+        private static int minuteClockSpeed = 10000;
 
         private static int currentServerHours = currentHours;
         private static int currentServerMinutes = currentMinutes;
