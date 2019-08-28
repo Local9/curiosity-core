@@ -77,8 +77,6 @@
     <Compile Include="Classes\Environment\Scoreboard.cs" />
     <Compile Include="Classes\Environment\TriggerEventForMultipule.cs" />
     <Compile Include="Classes\Environment\Vehicles.cs" />
-    <Compile Include="Classes\Environment\WeatherSystems.cs" />
-    <Compile Include="Classes\Environment\WorldTimeCycle.cs" />
     <Compile Include="Classes\Menu\Lists.cs" />
     <Compile Include="Classes\Menu\Player.cs" />
     <Compile Include="Classes\PlayerMethods.cs" />
@@ -102,7 +100,6 @@
     <Compile Include="Enums\Discord\DiscordColor.cs" />
     <Compile Include="Entity\DiscordWebhook.cs" />
     <Compile Include="Entity\VehicleData.cs" />
-    <Compile Include="Entity\WeatherData.cs" />
     <Compile Include="Enums\Discord\Webhook.cs" />
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\Request.cs" />

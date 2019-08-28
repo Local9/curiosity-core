@@ -13,7 +13,7 @@ namespace Curiosity.World.Server.net.Classes.Environment
 
         static private int currentHours = 9;
         static private int currentMinutes = 0;
-        static private readonly int minuteClockSpeed = 10000;
+        static private readonly int minuteClockSpeed = 10000; // TODO: Make a server variable
         static private long minuteTimer = GetGameTimer();
         static private long timeSyncCooldown = GetGameTimer();
         static private bool freezeTime = false;
