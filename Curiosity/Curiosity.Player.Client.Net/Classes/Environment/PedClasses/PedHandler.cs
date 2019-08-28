@@ -96,6 +96,15 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
 
                 await BaseScript.Delay(0);
+
+                API.SetPedVisualFieldCenterAngle(ped.Handle, 180f);
+                API.SetPedVisualFieldMaxAngle(ped.Handle, 180f);
+                API.SetPedVisualFieldMinAngle(ped.Handle, 75f);
+                API.SetPedVisualFieldMaxElevationAngle(ped.Handle, 90f);
+                API.SetPedVisualFieldMinElevationAngle(ped.Handle, 0f);
+                API.SetPedVisualFieldPeripheralRange(ped.Handle, 45f);
+
+                await BaseScript.Delay(0);
                 ped.RelationshipGroup = suspectGroup;
                 API.SetPedCombatMovement(ped.Handle, 2);
 
@@ -122,6 +131,8 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
                 await BaseScript.Delay(0);
 
+                ped.IsOnlyDamagedByPlayer = true;
+
                 Blip blip = ped.AttachBlip();
                 blip.Alpha = 0;
 
@@ -147,21 +158,21 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 List<Ped> pedsToRun = new List<Ped>(peds);
                 foreach(Ped ped in pedsToRun)
                 {
-                    await BaseScript.Delay(50);
+                    await BaseScript.Delay(2000);
 
                     if (ped.Exists())
                     {
 
                         if (ped.IsAlive)
                         {
-                            if (!ped.IsNearEntity(Game.PlayerPed, new Vector3(30.0f, 30.0f, 30.0f)))
+                            if (ped.Position.DistanceToSquared(Game.PlayerPed.Position) > 30.0f)
                             {
-                                ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 40.0f, 1074528293);
+                                ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 50.0f, 1074528293);
                                 IsFightingPlayer = false;
                             }
                             else
                             {
-                                if (ped.Position.DistanceToSquared(Game.PlayerPed.Position) < 30.0f && ped.IsInVehicle() && !IsFightingPlayer)
+                                if (ped.Position.DistanceToSquared(Game.PlayerPed.Position) < 40.0f && ped.IsInVehicle() && IsFightingPlayer)
                                 {
                                     ped.Task.LeaveVehicle();
                                 }
@@ -175,7 +186,6 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                             }
                         }
 
-                        await BaseScript.Delay(10);
                         if (ped.IsDead)
                         {
                             if (ped.CurrentVehicle.Exists())
