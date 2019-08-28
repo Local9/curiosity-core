@@ -13,7 +13,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
         // TODO: Move to config
         static bool preventVehicleFlip = true;
-        static int randomTireBurstInterval = 15;
         static float sundayDriverAcceleratorCurve = 7.5f;
         static float sundayDriverBrakeCurve = 5.0f;
         static float engineSafeGuard = 100.0f;
@@ -33,6 +32,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
         // TIRES
         static int tireBurstLuckyNumber;
+        static int randomTireBurstInterval = 300;
         static int tireBurstMaxNumber = randomTireBurstInterval * 1200;
 
         // DAMAGE AND FUCKERY
