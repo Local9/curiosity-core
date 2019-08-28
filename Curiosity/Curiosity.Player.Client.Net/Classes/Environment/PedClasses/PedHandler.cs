@@ -88,12 +88,12 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                     await BaseScript.Delay(0);
                 }
 
-                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
-                ped.Weapons.Give(WeaponHash.APPistol, 1000, true, true);
-                ped.Weapons.Give(WeaponHash.HeavyPistol, 1000, true, true);
-                ped.Weapons.Give(WeaponHash.HeavyShotgun, 1000, true, true);
-                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
-                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, true, true);
+                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, false, true);
+                ped.Weapons.Give(WeaponHash.APPistol, 1000, false, true);
+                ped.Weapons.Give(WeaponHash.HeavyPistol, 1000, false, true);
+                ped.Weapons.Give(WeaponHash.HeavyShotgun, 1000, false, true);
+                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, false, true);
+                ped.Weapons.Give((WeaponHash)weaponValues.GetValue(random.Next(weaponValues.Length)), 1000, false, true);
 
                 await BaseScript.Delay(0);
 
@@ -132,6 +132,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 await BaseScript.Delay(0);
 
                 ped.IsOnlyDamagedByPlayer = true;
+                ped.Task.FightAgainstHatedTargets(100.0f);
 
                 Blip blip = ped.AttachBlip();
                 blip.Alpha = 0;
@@ -158,32 +159,27 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 List<Ped> pedsToRun = new List<Ped>(peds);
                 foreach(Ped ped in pedsToRun)
                 {
-                    await BaseScript.Delay(2000);
+                    await BaseScript.Delay(50);
 
                     if (ped.Exists())
                     {
-
                         if (ped.IsAlive)
                         {
-                            if (ped.Position.DistanceToSquared(Game.PlayerPed.Position) > 30.0f)
+                            if (ped.Position.DistanceToSquared(Game.PlayerPed.Position) > 100f && ped.IsInVehicle())
                             {
-                                ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 50.0f, 1074528293);
-                                IsFightingPlayer = false;
+                                await Client.Delay(10000);
+                                ped.Task.EnterAnyVehicle(VehicleSeat.Driver, -1, 2f);
+                                ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 30.0f, (int)DrivingStyle.ShortestPath);
                             }
-                            else
+                            
+                            if (ped.Position.DistanceToSquared(Game.PlayerPed.Position) < 99.9f)
                             {
-                                if (ped.Position.DistanceToSquared(Game.PlayerPed.Position) < 40.0f && ped.IsInVehicle() && IsFightingPlayer)
-                                {
-                                    ped.Task.LeaveVehicle();
-                                }
-
-                                if (!IsFightingPlayer)
-                                {
-                                    API.SetPedSphereDefensiveArea(ped.Handle, ped.Position.X, ped.Position.Y, ped.Position.Z, 100f, false, false);
-                                    ped.Task.FightAgainstHatedTargets(100.0f);
-                                    IsFightingPlayer = true;
-                                }
+                                ped.Task.LeaveVehicle();
+                                await BaseScript.Delay(1000);
+                                ped.Task.FightAgainstHatedTargets(100.0f);
+                                await Client.Delay(10000);
                             }
+                            
                         }
 
                         if (ped.IsDead)
@@ -196,6 +192,9 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                             ped.Delete();
                             peds.Remove(ped);
                             client.DeregisterTickHandler(PedTick);
+
+                            IsDrivingToPlayer = false;
+                            IsFightingPlayer = false;
                         }
                     }
                 }
@@ -204,7 +203,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
             {
                 Debug.WriteLine($"[PedTick] -> {ex.Message}");
             }
-            await Client.Delay(1000);
+            await Client.Delay(50);
             await Task.FromResult(0);
         }
     }
