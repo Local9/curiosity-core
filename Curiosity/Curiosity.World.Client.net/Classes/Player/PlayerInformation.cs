@@ -14,10 +14,26 @@ namespace Curiosity.World.Client.net.Classes.Player
         public static Privilege privilege;
         static bool statsSet = false;
 
-        public static async void Init()
+        static string CurrentJob;
+
+        public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:Information", new Action(GetPlayerInfo));
+
+            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
+        }
+
+        static void OnDutyState(bool hasJob, bool jobActive, string job)
+        {
+            if (hasJob)
+            {
+                CurrentJob = job;
+            }
+            else
+            {
+                CurrentJob = string.Empty;
+            }
         }
 
         static async void GetPlayerInfo()

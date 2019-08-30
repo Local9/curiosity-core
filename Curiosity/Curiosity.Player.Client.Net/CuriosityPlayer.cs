@@ -167,6 +167,8 @@ namespace Curiosity.Client.net
             this.posY = user.PosY;
             this.posZ = user.PosZ;
             serverReady = true;
+
+            API.ClearBrief();
         }
 
         async Task SpawnTick()

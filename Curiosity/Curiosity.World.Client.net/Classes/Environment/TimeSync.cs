@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.World.Client.net.Classes.Environment
 {
@@ -25,6 +26,20 @@ namespace Curiosity.World.Client.net.Classes.Environment
         {
             client.RegisterEventHandler("curiosity:Player:World:SetTime", new Action<int, int, bool>(OnTimeSync));
             client.RegisterTickHandler(TimeSyncEvent);
+
+            client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
+        }
+
+        static private void OnPlayerSpawned(dynamic spawnData)
+        {
+            try
+            {
+                SetClockDate(DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
+            }
+            catch (InvalidTimeZoneException timeEx)
+            {
+                Log.Warn($"InvalidTimeZoneException: {timeEx.Message}");
+            }
         }
 
         static private async void OnTimeSync(int newHours, int newMinutes, bool freezeTime)
