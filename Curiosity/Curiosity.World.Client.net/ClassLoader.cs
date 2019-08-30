@@ -14,6 +14,7 @@ namespace Curiosity.World.Client.net
             Log.Verbose("Entering ClassLoader Init");
 
             Classes.Player.PlayerInformation.Init();
+            Classes.Player.LoadoutManagement.Init();
 
             Classes.Environment.TimeSync.Init();
             Classes.Environment.WeatherSystem.Init();

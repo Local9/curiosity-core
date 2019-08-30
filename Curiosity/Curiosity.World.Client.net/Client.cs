@@ -12,6 +12,7 @@ namespace Curiosity.World.Client.net
     public class Client : BaseScript
     {
         public static PlayerList players;
+        public static int PedHandle { get { return Game.PlayerPed.Handle; } }
 
         private static Client _instance;
 

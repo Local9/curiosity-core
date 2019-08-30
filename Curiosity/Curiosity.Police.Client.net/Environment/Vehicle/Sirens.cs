@@ -163,7 +163,10 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             }
             catch (Exception ex)
             {
-                Log.Error($"Siren event error: {ex.Message}");
+                if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+                {
+                    Log.Error($"Siren event error: {ex.Message}");
+                }
             }
         }
 
