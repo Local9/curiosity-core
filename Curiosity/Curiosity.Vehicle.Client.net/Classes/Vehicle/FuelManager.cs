@@ -296,6 +296,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
         {
             try
             {
+                CitizenFX.Core.Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
+
+                if (vehicle.Driver != Game.PlayerPed)
+                {
+                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Must be the driver to refuel vehicle.", 8);
+                    return;
+                }
+
                 if (refueling)
                     return;
 
@@ -321,14 +329,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
                 amount = Math.Max(0f, amount); // Selling gas to gas stations... Why not?
                 amount = Math.Min(100f - vehicleFuel, amount);
-                var NearbyVehicles = World.GetAllVehicles().Where(v => v.Bones["wheel_rr"].Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(PlayerToVehicleRefuelRange, 2)).OrderBy(v => v.Bones["wheel_rr"].Position.DistanceToSquared(Game.PlayerPed.Position));
-                if (!NearbyVehicles.Any())
-                {
-                    refueling = false;
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "You are not close enough to a vehicle.", 8);
-                    return;
-                }
-                CitizenFX.Core.Vehicle vehicle = NearbyVehicles.First();
 
                 var NearbyPumps = World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Where(o => o.Position.DistanceToSquared(vehicle.Position) < Math.Pow(FuelPumpRange, 2));
                 if (!NearbyPumps.Any())
@@ -349,12 +349,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     Vector3 startingPosition = vehicle.Position;
                     while (refueled < amount)
                     {
-                        Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Tank is filling", 20);
+                        // Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Tank is filling", 20);
+                        CitizenFX.Core.UI.Screen.ShowSubtitle("~s~Vehicle is ~g~refueling.");
                         vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, vehicle.Handle, "Vehicle.Fuel");
                         if (startingPosition != vehicle.Position)
                         {
                             refueling = false;
                             Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Your vehicle moved while refuelling. You can try refuelling again.", 8);
+                            CitizenFX.Core.UI.Screen.ShowSubtitle("~s~Vehicle is ~r~no longer refueling.");
                             Charge((int)(refueled));
                             return;
                         }
@@ -363,6 +365,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                         {
                             refueling = false;
                             Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Your vehicles engine started while refuelling.", 8);
+                            CitizenFX.Core.UI.Screen.ShowSubtitle("~s~Vehicle is ~r~no longer refueling.");
                             Charge((int)(refueled));
                             return;
                         }
@@ -376,6 +379,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     }
                     await BaseScript.Delay(0);
                     Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "You have finished refuelling.", 20);
+                    CitizenFX.Core.UI.Screen.ShowSubtitle("~s~Vehicle is ~r~no longer refueling.");
                     Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
                     refueling = false;
 

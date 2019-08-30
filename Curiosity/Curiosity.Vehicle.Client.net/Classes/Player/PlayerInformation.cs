@@ -1,4 +1,4 @@
-﻿using CitizenFX.Core;
+﻿using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using System;
@@ -11,20 +11,24 @@ namespace Curiosity.Vehicle.Client.net.Classes.Player
         public static PlayerInformationModel playerInfo = new PlayerInformationModel();
 
         public static Privilege privilege;
+
+        static bool IsSetup = false;
+
         public static async void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
-            await BaseScript.Delay(1000);
-            PeriodicCheck();
         }
 
-        static async void PlayerInfo(string json)
+        static void PlayerInfo(string json)
         {
             playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
-
             privilege = (Privilege)playerInfo.RoleId;
 
-            await BaseScript.Delay(0);
+            if (privilege == Privilege.DEVELOPER && !IsSetup)
+            {
+                Screen.ShowNotification("~g~Vehicle Playerinfo Received");
+                IsSetup = true;
+            }
         }
 
         public static bool IsStaff()
@@ -45,16 +49,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Player
         public static bool IsDeveloper()
         {
             return (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
-        }
-
-        static private async void PeriodicCheck()
-        {
-            await BaseScript.Delay(5000);
-            while (true)
-            {
-                BaseScript.TriggerServerEvent("curiosity:Server:Player:GetInformation");
-                await BaseScript.Delay(60000);
-            }
         }
     }
 }
