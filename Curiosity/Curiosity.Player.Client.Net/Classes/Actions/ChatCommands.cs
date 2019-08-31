@@ -550,6 +550,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
             Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
+            Client.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
             if (numberPlate == Environment.Vehicles.HSTAFF_LICENSE_PLATE || numberPlate == Environment.Vehicles.DEV_LICENSE_PLATE)
             {
                 Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);

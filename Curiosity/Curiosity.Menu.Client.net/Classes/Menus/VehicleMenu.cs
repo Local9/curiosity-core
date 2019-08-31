@@ -20,6 +20,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static VehicleLock lockState = VehicleLock.Unlocked;
         static bool lockBool = false;
         static bool carbootBool = false;
+        static bool carBackDoorsBool = false;
         static bool inVTOL = false;
 
         static List<VehicleWindowIndex> VehicleWindowValues = Enum.GetValues(typeof(VehicleWindowIndex)).OfType<VehicleWindowIndex>().Where(w => (int)w < 4).ToList();
@@ -64,19 +65,28 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             };
             menu.AddMenuItem(cruiseControlMenuItem);
 
+            if (Client.CurrentVehicle != null)
+            {
+                MenuCheckboxItem engineMenuItem = new MenuCheckboxItem("Engine")
+                {
+                    Checked = Game.PlayerPed.CurrentVehicle.IsEngineRunning,
+                    Description = "Turn the engine on/off",
+                    ItemData = ENGINE
+                };
+                menu.AddMenuItem(engineMenuItem);
+            }
+
+            if (Client.CurrentVehicle != null)
+            {
+                SetupWindowsMenu();
+                SetupDoorsMenu();
+            }
+
             if (Game.PlayerPed.IsInVehicle())
             {
 
                 if (Game.PlayerPed.CurrentVehicle.Driver.Handle == Game.PlayerPed.Handle)
                 {
-                    MenuCheckboxItem engineMenuItem = new MenuCheckboxItem("Engine")
-                    {
-                        Checked = Game.PlayerPed.CurrentVehicle.IsEngineRunning,
-                        Description = "Turn the engine on/off",
-                        ItemData = ENGINE
-                    };
-                    menu.AddMenuItem(engineMenuItem);
-
                     if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Planes)
                     {
                         Model model = new Model("avenger");
@@ -95,11 +105,11 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                         }
                         model.MarkAsNoLongerNeeded();
                     }
-
-                    SetupWindowsMenu();
-                    SetupDoorsMenu();
                 }
+            }
 
+            if (Client.CurrentVehicle != null)
+            {
                 if (Player.PlayerInformation.IsDeveloper()) DeveloperMenu();
             }
         }
@@ -150,6 +160,24 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             else
             {
                 API.SetVehicleDoorShut(vehicleId, 5, false);
+            }
+        }
+
+        static void OnToggleBackDoors()
+        {
+            if (Client.CurrentVehicle == null) return;
+
+            carBackDoorsBool = !carBackDoorsBool;
+
+            if (carBackDoorsBool)
+            {
+                API.SetVehicleDoorOpen(Client.CurrentVehicle.Handle, 2, false, false);
+                API.SetVehicleDoorOpen(Client.CurrentVehicle.Handle, 3, false, false);
+            }
+            else
+            {
+                API.SetVehicleDoorShut(Client.CurrentVehicle.Handle, 2, false);
+                API.SetVehicleDoorShut(Client.CurrentVehicle.Handle, 3, false);
             }
         }
 
@@ -234,11 +262,22 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             doors.ToList().ForEach(door =>
             {
                 if (!door.IsBroken)
+                {
                     doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open {door.Index.ToString().AddSpacesToCamelCase()}")
                     {
                         Checked = door.IsOpen,
                         ItemData = new MyDoor() { Type = 1, index = door.Index }
                     });
+
+                    if (door.Index == VehicleDoorIndex.BackLeftDoor)
+                    {
+                        doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open both back doors")
+                        {
+                            Checked = carBackDoorsBool,
+                            ItemData = new MyDoor() { Type = 3, index = VehicleDoorIndex.BackRightDoor }
+                        });
+                    }
+                }
             });
 
             if (Client.CurrentVehicle != null)
@@ -276,7 +315,14 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 if (menuItem.ItemData.Type == 2)
                     door = attachedVehicle.Doors[menuItem.ItemData.index];
 
-                if (menuItem.Checked) door.Open(); else door.Close((menuItem.ItemData.Type == 2));
+                if (menuItem.ItemData.Type == 3)
+                {
+                    OnToggleBackDoors();
+                }
+                else
+                {
+                    if (menuItem.Checked) door.Open(); else door.Close((menuItem.ItemData.Type == 2));
+                }
             };
 
             doorsMenu.OnMenuOpen += (_menu) =>

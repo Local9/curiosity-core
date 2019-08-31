@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using System;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus
 {
     class MenuBase
     {
+        private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
         static Client client = Client.GetInstance();
 
         public static Menu Menu = new Menu("Interaction Menu", "Interaction Menu");
@@ -16,6 +18,13 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
+
+            int existingVehicleId = GetResourceKvpInt(PERSONAL_VEHICLE_KEY);
+
+            if (existingVehicleId > 0)
+            {
+                OnVehicleId(existingVehicleId);
+            }
 
             //// Setting the menu alignment to be right aligned. This can be changed at any time and it'll update instantly.
             //// To test this, checkout one of the checkbox items in this example menu. Clicking it will toggle the menu alignment.
@@ -322,6 +331,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         public static void OnVehicleId(int vehicleId)
         {
+            SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
             Client.CurrentVehicle = new Vehicle(vehicleId);
         }
     }
