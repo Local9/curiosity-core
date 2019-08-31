@@ -13,7 +13,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
     {
         private const string VTOL = "vtol";
         static Client client = Client.GetInstance();
-        static Menu menu = new Menu("Vehicle", "Vehicle Settings and Options");
+        static Menu mainVehicleMenu = new Menu("Vehicle", "Vehicle Settings and Options");
 
         static string CRUISE_CONTROL = "CruiseControl";
         static string ENGINE = "Engine";
@@ -35,13 +35,13 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             client.RegisterEventHandler("curiosity:Client:Menu:CarLock", new Action<int>(OnToggleLockState));
             client.RegisterEventHandler("curiosity:Client:Menu:Carboot", new Action<int>(OnToggleCarbootState));
 
-            menu.OnMenuOpen += OnMainMenuOpen;
-            menu.OnMenuClose += OnMainMenuClose;
-            menu.OnListIndexChange += OnMainMenuListIndexChange;
-            menu.OnItemSelect += Menu_OnItemSelect;
-            menu.OnCheckboxChange += Menu_OnCheckboxChange;
+            mainVehicleMenu.OnMenuOpen += OnMainMenuOpen;
+            mainVehicleMenu.OnMenuClose += OnMainMenuClose;
+            mainVehicleMenu.OnListIndexChange += OnMainMenuListIndexChange;
+            mainVehicleMenu.OnItemSelect += Menu_OnItemSelect;
+            mainVehicleMenu.OnCheckboxChange += Menu_OnCheckboxChange;
 
-            MenuBase.AddSubMenu(menu);
+            MenuBase.AddSubMenu(mainVehicleMenu);
         }
 
         private static void OnMainMenuOpen(Menu menu)
@@ -50,12 +50,13 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
             {
-                menu.AddMenuItem(new MenuItem("DETINATE THE CAR") { ItemData = "KABOOM" });
+                mainVehicleMenu.AddMenuItem(new MenuItem("DETINATE VEHICLE") { ItemData = "KABOOM" });
             }
 
             List<string> vehicleLocking = Enum.GetNames(typeof(VehicleLock)).Select(d => d.AddSpacesToCamelCase()).ToList();
             MenuListItem mliVehicleLocks = new MenuListItem("Access Grant", vehicleLocking, (int)lockState, "Select to set vehicle access rights\n~r~Warning:~s~ Changing from a locked state to unlocked may cause your ped to break the window.") { ItemData = "VEHICLE_LOCK" };
-            menu.AddMenuItem(mliVehicleLocks);
+            mliVehicleLocks.Enabled = Client.CurrentVehicle != null;
+            mainVehicleMenu.AddMenuItem(mliVehicleLocks);
 
             MenuCheckboxItem cruiseControlMenuItem = new MenuCheckboxItem("Cruise Control")
             {
@@ -63,28 +64,21 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 Description = "Enables or disables the cruise control feature",
                 ItemData = CRUISE_CONTROL
             };
-            menu.AddMenuItem(cruiseControlMenuItem);
+            mainVehicleMenu.AddMenuItem(cruiseControlMenuItem);
 
-            if (Client.CurrentVehicle != null)
+            MenuCheckboxItem engineMenuItem = new MenuCheckboxItem("Engine")
             {
-                MenuCheckboxItem engineMenuItem = new MenuCheckboxItem("Engine")
-                {
-                    Checked = Game.PlayerPed.CurrentVehicle.IsEngineRunning,
-                    Description = "Turn the engine on/off",
-                    ItemData = ENGINE
-                };
-                menu.AddMenuItem(engineMenuItem);
-            }
+                Checked = Client.CurrentVehicle.IsEngineRunning,
+                Description = "Turn the engine on/off",
+                ItemData = ENGINE
+            };
+            mainVehicleMenu.AddMenuItem(engineMenuItem);
 
-            if (Client.CurrentVehicle != null)
-            {
-                SetupWindowsMenu();
-                SetupDoorsMenu();
-            }
+            SetupWindowsMenu();
+            SetupDoorsMenu();
 
             if (Game.PlayerPed.IsInVehicle())
             {
-
                 if (Game.PlayerPed.CurrentVehicle.Driver.Handle == Game.PlayerPed.Handle)
                 {
                     if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Planes)
@@ -101,17 +95,14 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                                 Description = "Turn VTOL on/off",
                                 ItemData = VTOL
                             };
-                            menu.AddMenuItem(vtol);
+                            mainVehicleMenu.AddMenuItem(vtol);
                         }
                         model.MarkAsNoLongerNeeded();
                     }
                 }
             }
 
-            if (Client.CurrentVehicle != null)
-            {
-                if (Player.PlayerInformation.IsDeveloper()) DeveloperMenu();
-            }
+            if (Player.PlayerInformation.IsDeveloper() && Game.PlayerPed.IsInVehicle()) DeveloperMenu();
         }
     
 
@@ -247,132 +238,148 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 }
             };
 
-            AddSubMenu(menu, developerMenu);
+            AddSubMenu(mainVehicleMenu, developerMenu);
         }
 
         private static void SetupDoorsMenu()
         {
             Menu doorsMenu = new Menu("Doors");
 
-            CitizenFX.Core.Vehicle attachedVehicle = null;
-
-            VehicleDoor[] doors = Game.PlayerPed.CurrentVehicle.Doors.GetAll();
-            VehicleDoor[] attachedDoors = null;
-
-            doors.ToList().ForEach(door =>
-            {
-                if (!door.IsBroken)
-                {
-                    doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open {door.Index.ToString().AddSpacesToCamelCase()}")
-                    {
-                        Checked = door.IsOpen,
-                        ItemData = new MyDoor() { Type = 1, index = door.Index }
-                    });
-
-                    if (door.Index == VehicleDoorIndex.BackLeftDoor)
-                    {
-                        doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open both back doors")
-                        {
-                            Checked = carBackDoorsBool,
-                            ItemData = new MyDoor() { Type = 3, index = VehicleDoorIndex.BackRightDoor }
-                        });
-                    }
-                }
-            });
-
             if (Client.CurrentVehicle != null)
             {
-                int trailerHandle = 0;
-                CitizenFX.Core.Native.API.GetVehicleTrailerVehicle(Client.CurrentVehicle.Handle, ref trailerHandle);
+                CitizenFX.Core.Vehicle attachedVehicle = null;
 
-                if (trailerHandle != 0)
+                VehicleDoor[] doors = Client.CurrentVehicle.Doors.GetAll();
+                VehicleDoor[] attachedDoors = null;
+                bool addBothBackDoors = false;
+
+                doors.ToList().ForEach(door =>
                 {
-                    attachedVehicle = new CitizenFX.Core.Vehicle(trailerHandle);
-                    attachedDoors = attachedVehicle.Doors.GetAll();
-
-                    attachedDoors.ToList().ForEach(door =>
+                    if (!door.IsBroken)
                     {
-                        if (!door.IsBroken)
-                            doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open {door.Index.ToString().AddSpacesToCamelCase()}")
-                            {
-                                Checked = door.IsOpen,
-                                ItemData = new MyDoor() { Type = 2, index = door.Index }
-                            });
+                        doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open {door.Index.ToString().AddSpacesToCamelCase()}")
+                        {
+                            Checked = door.IsOpen,
+                            ItemData = new MyDoor() { Type = 1, index = door.Index }
+                        });
+
+                        if (door.Index == VehicleDoorIndex.BackLeftDoor || door.Index == VehicleDoorIndex.BackRightDoor)
+                        {
+                            addBothBackDoors = true;
+                        }
+                    }
+                });
+
+                if (addBothBackDoors)
+                {
+                    doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open Both Back Doors")
+                    {
+                        Checked = carBackDoorsBool,
+                        ItemData = new MyDoor() { Type = 3, index = VehicleDoorIndex.BackRightDoor }
                     });
                 }
-                else
+
+                if (Client.CurrentVehicle != null)
                 {
-                    attachedVehicle = null;
+                    int trailerHandle = 0;
+                    CitizenFX.Core.Native.API.GetVehicleTrailerVehicle(Client.CurrentVehicle.Handle, ref trailerHandle);
+
+                    if (trailerHandle != 0)
+                    {
+                        attachedVehicle = new CitizenFX.Core.Vehicle(trailerHandle);
+                        attachedDoors = attachedVehicle.Doors.GetAll();
+
+                        attachedDoors.ToList().ForEach(door =>
+                        {
+                            if (!door.IsBroken)
+                                doorsMenu.AddMenuItem(new MenuCheckboxItem($"Open {door.Index.ToString().AddSpacesToCamelCase()}")
+                                {
+                                    Checked = door.IsOpen,
+                                    ItemData = new MyDoor() { Type = 2, index = door.Index }
+                                });
+                        });
+                    }
+                    else
+                    {
+                        attachedVehicle = null;
+                    }
                 }
+
+                doorsMenu.OnCheckboxChange += (Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState) =>
+                {
+                    VehicleDoor door = null;
+
+                    if (menuItem.ItemData.Type == 1)
+                        door = Client.CurrentVehicle.Doors[menuItem.ItemData.index];
+
+                    if (menuItem.ItemData.Type == 2)
+                        door = attachedVehicle.Doors[menuItem.ItemData.index];
+
+                    if (menuItem.ItemData.Type == 3)
+                    {
+                        OnToggleBackDoors();
+                    }
+                    else
+                    {
+                        if (menuItem.Checked) door.Open(); else door.Close((menuItem.ItemData.Type == 2));
+                    }
+                };
+
+                doorsMenu.OnMenuOpen += (_menu) =>
+                {
+                    MenuBase.MenuOpen(true);
+                };
+
+                doorsMenu.OnMenuClose += (_menu) =>
+                {
+                    MenuBase.MenuOpen(false);
+                    _menu.ClearMenuItems();
+                };
             }
 
-            doorsMenu.OnCheckboxChange += (Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState) => {
-                VehicleDoor door = null;
-
-                if (menuItem.ItemData.Type == 1)
-                    door = Game.PlayerPed.CurrentVehicle.Doors[menuItem.ItemData.index];
-
-                if (menuItem.ItemData.Type == 2)
-                    door = attachedVehicle.Doors[menuItem.ItemData.index];
-
-                if (menuItem.ItemData.Type == 3)
-                {
-                    OnToggleBackDoors();
-                }
-                else
-                {
-                    if (menuItem.Checked) door.Open(); else door.Close((menuItem.ItemData.Type == 2));
-                }
-            };
-
-            doorsMenu.OnMenuOpen += (_menu) =>
-            {
-                MenuBase.MenuOpen(true);
-            };
-
-            doorsMenu.OnMenuClose += (_menu) =>
-            {
-                MenuBase.MenuOpen(false);
-                _menu.ClearMenuItems();
-            };
-
-            AddSubMenu(menu, doorsMenu);
+            AddSubMenu(mainVehicleMenu, doorsMenu, Client.CurrentVehicle != null);
         }
 
         private static void SetupWindowsMenu()
         {
             Menu windowMenu = new Menu("Windows");
-            windowMenu.OnMenuOpen += (_menu) =>
+
+            if (Client.CurrentVehicle != null)
             {
-                MenuBase.MenuOpen(true);
-                if (windowStates != null)
-                    windowStates.Clear();
-
-                windowStates = VehicleWindowValues.ToDictionary(v => v, v => false);
-
-                VehicleWindowValues.Select((window, index) => new { window, index }).ToList().ForEach(o =>
+                windowMenu.OnMenuOpen += (_menu) =>
                 {
-                    var window = Game.PlayerPed.CurrentVehicle.Windows[o.window];
-                    windowMenu.AddMenuItem(new MenuCheckboxItem($"Roll Down {window.Index.ToString().AddSpacesToCamelCase()}") {
-                        Checked = windowStates[window.Index],
-                        ItemData = window.Index
+                    MenuBase.MenuOpen(true);
+                    if (windowStates != null)
+                        windowStates.Clear();
+
+                    windowStates = VehicleWindowValues.ToDictionary(v => v, v => false);
+
+                    VehicleWindowValues.Select((window, index) => new { window, index }).ToList().ForEach(o =>
+                    {
+                        var window = Client.CurrentVehicle.Windows[o.window];
+                        windowMenu.AddMenuItem(new MenuCheckboxItem($"Roll Down {window.Index.ToString().AddSpacesToCamelCase()}")
+                        {
+                            Checked = windowStates[window.Index],
+                            ItemData = window.Index
+                        });
                     });
-                });
-            };
+                };
 
-            windowMenu.OnCheckboxChange += (Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState) => {
-                VehicleWindow window = Game.PlayerPed.CurrentVehicle.Windows[menuItem.ItemData];
-                if (menuItem.Checked) window.RollDown(); else window.RollUp();
-                windowStates[(VehicleWindowIndex)menuItem.Index] = menuItem.Checked;
-            };
+                windowMenu.OnCheckboxChange += (Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState) =>
+                {
+                    VehicleWindow window = Client.CurrentVehicle.Windows[menuItem.ItemData];
+                    if (menuItem.Checked) window.RollDown(); else window.RollUp();
+                    windowStates[(VehicleWindowIndex)menuItem.Index] = menuItem.Checked;
+                };
 
-            windowMenu.OnMenuClose += (_menu) =>
-            {
-                MenuBase.MenuOpen(false);
-                _menu.ClearMenuItems();
-            };
+                windowMenu.OnMenuClose += (_menu) =>
+                {
+                    MenuBase.MenuOpen(false);
+                    _menu.ClearMenuItems();
+                };
+            }
 
-            AddSubMenu(menu, windowMenu);
+            AddSubMenu(mainVehicleMenu, windowMenu, Client.CurrentVehicle != null);
         }
 
         private static void Menu_OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
@@ -380,7 +387,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             if (menuItem.ItemData == CRUISE_CONTROL)
                 Client.TriggerEvent("curiosity:Player:Vehicle:CruiseControl");
             if (menuItem.ItemData == ENGINE)
-                Game.PlayerPed.CurrentVehicle.IsEngineRunning = menuItem.Checked;
+                Client.CurrentVehicle.IsEngineRunning = menuItem.Checked;
 
             if (menuItem.ItemData == VTOL)
             {
@@ -390,10 +397,10 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 
         }
 
-        public static void AddSubMenu(Menu menu, Menu submenu)
+        public static void AddSubMenu(Menu menu, Menu submenu, bool enabled = true)
         {
             MenuController.AddSubmenu(menu, submenu);
-            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = "→→→" };
+            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = "→→→", Enabled = enabled };
             menu.AddMenuItem(submenuButton);
             MenuController.BindMenuItem(menu, submenu, submenuButton);
         }

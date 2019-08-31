@@ -331,8 +331,16 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         public static void OnVehicleId(int vehicleId)
         {
-            SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
-            Client.CurrentVehicle = new Vehicle(vehicleId);
+            if (Client.CurrentVehicle == null)
+            {
+                SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                Client.CurrentVehicle = new Vehicle(vehicleId);
+            }
+            else if (Client.CurrentVehicle.Handle != vehicleId)
+            {
+                SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                Client.CurrentVehicle = new Vehicle(vehicleId);
+            }
         }
     }
 }

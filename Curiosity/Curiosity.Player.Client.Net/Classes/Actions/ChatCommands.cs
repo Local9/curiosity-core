@@ -9,6 +9,8 @@ using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net;
 
 namespace Curiosity.Client.net.Classes.Actions
 {
@@ -431,8 +433,16 @@ namespace Curiosity.Client.net.Classes.Actions
             await Client.Delay(1000);
             API.DeleteEntity(ref handle);
 
+            SendDeletionEvent($"{veh.NetworkId}");
 
             await BaseScript.Delay(0);
+        }
+
+        static void SendDeletionEvent(string vehicleNetworkId)
+        {
+            string encodedString = Encode.StringToBase64(vehicleNetworkId);
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));
+            BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
 
         static async void SaveCoords(int playerHandle, List<object> arguments, string raw)

@@ -15,8 +15,6 @@ namespace Curiosity.Client.net
         public static int PedHandle { get { return Game.PlayerPed.Handle; } }
         public static int PlayerHandle { get { return Game.Player.Handle; } }
         public static GlobalEntity.User User;
-        public static Vehicle CurrentVehicle = null;
-        public static Vehicle ownedVehicle = null;
         public static string PLAYER_GROUP = "PLAYER";
         public static RelationshipGroup PlayerRelationshipGroup;
 
@@ -67,26 +65,6 @@ namespace Curiosity.Client.net
             {
                 // UI.Render();
                 await UpdateFrameSettings();
-                if (Game.PlayerPed.IsInVehicle())
-                {
-                    if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
-                    {
-                        if (CurrentVehicle != Game.PlayerPed.CurrentVehicle)
-                        {
-                            CurrentVehicle = Game.PlayerPed.CurrentVehicle;
-                        }
-                    }
-                    else if (CurrentVehicle != Game.PlayerPed.CurrentVehicle)
-                    {
-                        if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
-                        {
-                            CurrentVehicle = Game.PlayerPed.CurrentVehicle;
-   
-                            if (!CurrentVehicle.PreviouslyOwnedByPlayer)
-                                API.SetVehicleExclusiveDriver(CurrentVehicle.Handle, Client.PedHandle);
-                        }
-                    }
-                }
             }
             catch (Exception ex)
             {

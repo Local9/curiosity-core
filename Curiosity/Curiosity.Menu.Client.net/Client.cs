@@ -18,7 +18,7 @@ namespace Curiosity.Menus.Client.net
 
         public static bool hasPlayerSpawned = false;
 
-        public static Vehicle CurrentVehicle;
+        public static Vehicle CurrentVehicle = null;
 
         public static Client GetInstance()
         {
@@ -28,6 +28,7 @@ namespace Curiosity.Menus.Client.net
         public Client()
         {
             _instance = this;
+            CurrentVehicle = null;
 
             players = Players;
 
