@@ -37,7 +37,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     }
                 }
 
-                await model.Request(10000);
+                await model.Request(15000);
 
                 var veh = await World.CreateVehicle(model, spawnPosition, heading);
 
@@ -128,6 +128,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             }
             catch (Exception ex)
             {
+                Log.Error($"SpawnVehicle -> {ex.Message}");
                 isSpawning = false;
                 return false;
             }

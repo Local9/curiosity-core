@@ -161,7 +161,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
             if (!await Vehicle.Spawn.SpawnVehicle(model, positionToSpawn, vehicleItem.SpawnHeading, vehicleItem.InstallSirens))
             {
-                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Please try again shortly.", string.Empty, 2);
+                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "It took too long to load the vehicle, please try again.", string.Empty, 2);
             }
         }
     }
