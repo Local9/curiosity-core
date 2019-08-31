@@ -71,7 +71,13 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
                 if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
                 {
-                    VehicleItem dev = vehicleItems[0];
+                    VehicleItem refVeh = vehicleItems[0];
+                    VehicleItem dev = new VehicleItem();
+                    dev.InstallSirens = false;
+                    dev.SpawnHeading = refVeh.SpawnHeading;
+                    dev.SpawnPositionX = refVeh.SpawnPositionX;
+                    dev.SpawnPositionY = refVeh.SpawnPositionY;
+                    dev.SpawnPositionZ = refVeh.SpawnPositionZ;
                     dev.VehicleHashString = "tezeract";
 
                     menu.AddMenuItem(new MenuItem("Developer Car") { ItemData = dev });
