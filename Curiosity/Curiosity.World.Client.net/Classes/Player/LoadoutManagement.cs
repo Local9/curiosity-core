@@ -12,7 +12,7 @@ namespace Curiosity.World.Client.net.Classes.Player
     {
         static Client client = Client.GetInstance();
         static WeaponHash currentWeapon = WeaponHash.Unarmed;
-        static List<WeaponHash> RestrictedWeapons = new List<WeaponHash>()
+        protected static List<WeaponHash> RestrictedWeapons = new List<WeaponHash>()
         {
             //WeaponHash.SniperRifle,
             //WeaponHash.FireExtinguisher,

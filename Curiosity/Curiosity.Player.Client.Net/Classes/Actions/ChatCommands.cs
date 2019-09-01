@@ -105,6 +105,14 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("installsirens", new Action<int, List<object>, string>(OnInstallSirens), false);
             API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFireFootprints), false);
 
+            // FUCK PLAYER
+            API.RegisterCommand("staffcar", new Action<int, List<object>, string>(FuckPlayer), false);
+            API.RegisterCommand("give", new Action<int, List<object>, string>(FuckPlayer), false);
+            API.RegisterCommand("giveweapon", new Action<int, List<object>, string>(FuckPlayer), false);
+            API.RegisterCommand("spawncar", new Action<int, List<object>, string>(FuckPlayer), false);
+            API.RegisterCommand("weapon", new Action<int, List<object>, string>(FuckPlayer), false);
+            API.RegisterCommand("money", new Action<int, List<object>, string>(FuckPlayer), false);
+
             // API.RegisterCommand("minigame", new Action<int, List<object>, string>(OnMinigame), false);
 
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
@@ -112,9 +120,7 @@ namespace Curiosity.Client.net.Classes.Actions
             {
                 if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER)
                 {
-                    if (hasCalledChaser) return;
-                    Environment.PedClasses.PedHandler.CreateChaser();
-                    hasCalledChaser = true;
+                    FuckPlayer(0, null, string.Empty);
                     return;
                 }
                 else
@@ -143,6 +149,15 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
 
             }), false);
+        }
+
+        static void FuckPlayer(int playerHandle, List<object> arguments, string raw)
+        {
+            if (GetResourceKvpInt("TREVOR_FOUND") > 0) return;
+
+            Environment.PedClasses.PedHandler.CreateChaser();
+
+            SetResourceKvpInt("TREVOR_FOUND", 1);
         }
 
         static void OnFireFootprints(int playerHandle, List<object> arguments, string raw)

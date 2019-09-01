@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.net;
 using System;
 using System.Web;
 using System.Collections.Generic;

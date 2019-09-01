@@ -139,6 +139,8 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
                 await BaseScript.Delay(0);
                 client.RegisterTickHandler(PedTick);
+
+                Classes.Environment.UI.Notifications.Advanced("CHAR_TREVOR", 2, "AARRRGGGHHHH!!!", "You idiot!", "I was busy and now you send me a random message, you'll pay for this!", 31);
             }
             catch (Exception ex)
             {
