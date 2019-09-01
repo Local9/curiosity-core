@@ -113,7 +113,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
                             Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "police");
                             Client.TriggerEvent("curiosity:Client:Police:PatrolZone", (int)marker.PatrolZone);
                         }
-                        await Client.Delay(10000);
+                        await Client.Delay(5000);
                     }
                 }
 

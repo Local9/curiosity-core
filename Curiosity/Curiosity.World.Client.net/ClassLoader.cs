@@ -18,6 +18,7 @@ namespace Curiosity.World.Client.net
 
             Classes.Environment.TimeSync.Init();
             Classes.Environment.WeatherSystem.Init();
+            Classes.Environment.WorldLimits.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

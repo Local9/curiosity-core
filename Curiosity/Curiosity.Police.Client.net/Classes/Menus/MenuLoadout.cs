@@ -34,7 +34,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         static MenuItem menuItemEquipExtras;
 
-        static long GameTimeNow = Game.GameTime;
+        static Vector3 positionMenuOpen;
+
         static long GameTimeResupplied;
 
         static public void Init()
@@ -43,7 +44,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             listPrimaryWeapons.Add("weapon_assaultshotgun");
             listPrimaryWeapons.Add("weapon_carbinerifle");
 
-            foreach(string str in listPrimaryWeapons)
+            foreach (string str in listPrimaryWeapons)
             {
                 listPrimaryNames.Add(ValidWeapons.weaponNames[str]);
             }
@@ -64,7 +65,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             {
                 if (IsDisabledControlJustPressed(0, (int)Control.VehicleHorn))
                 {
-                    if ((GameTimeNow - GameTimeResupplied) > 120000)
+                    if ((Game.GameTime - GameTimeResupplied) > 120000)
                     {
                         GameTimeResupplied = Game.GameTime;
 
@@ -85,35 +86,58 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                         {
                             SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(GetResourceKvpString(LOADOUT_SECONDARY_KEY)), 30);
                         }
+
+                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Ammunition Resupplied", "Please wait 2 minutes to resupply again.", 2);
                     }
                     else
                     {
                         Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Sorry....", "You resupplied within the last 2 minutes, please reserve your ammunition more.", 2);
                     }
+                    await Client.Delay(300);
                 }
+            }
+            await Task.FromResult(0);
+        }
+
+        static async Task CheckDistance()
+        {
+            if (positionMenuOpen.DistanceToSquared(Game.PlayerPed.Position) > 5f)
+            {
+                if (LoadoutMenu != null)
+                    LoadoutMenu.CloseMenu();
+
+                client.DeregisterTickHandler(CheckDistance);
             }
             await Task.FromResult(0);
         }
 
         static public void OpenMenu()
         {
+            MenuController.DontOpenAnyMenu = false;
             Game.PlayerPed.CanRagdoll = false;
             MenuBaseFunctions.MenuOpen();
+
+            MenuController.EnableMenuToggleKeyOnController = false;
+
+            positionMenuOpen = Game.PlayerPed.Position;
+
+            client.RegisterTickHandler(CheckDistance);
 
             if (LoadoutMenu == null)
             {
                 LoadoutMenu = new Menu("Loadout", "Select your weapons");
                 LoadoutMenu.OnMenuOpen += LoadoutMenu_OnMenuOpen;
+
+                LoadoutMenu.OnListItemSelect += LoadoutMenu_OnListItemSelect;
+                LoadoutMenu.OnItemSelect += LoadoutMenu_OnItemSelect;
+                LoadoutMenu.OnMenuClose += LoadoutMenu_OnMenuClose;
+
+                MenuController.AddMenu(LoadoutMenu);
+                MenuController.EnableMenuToggleKeyOnController = false;
             }
 
-            MenuController.AddMenu(LoadoutMenu);
-            MenuController.EnableMenuToggleKeyOnController = false;
-
+            LoadoutMenu.ClearMenuItems();
             LoadoutMenu.OpenMenu();
-
-            LoadoutMenu.OnListItemSelect += LoadoutMenu_OnListItemSelect;
-            LoadoutMenu.OnItemSelect += LoadoutMenu_OnItemSelect;
-            LoadoutMenu.OnMenuClose += LoadoutMenu_OnMenuClose;
         }
 
         private static void LoadoutMenu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
@@ -132,8 +156,11 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void LoadoutMenu_OnMenuClose(Menu menu)
         {
+            MenuController.DontOpenAnyMenu = true;
             Game.PlayerPed.CanRagdoll = true;
             MenuBaseFunctions.MenuClose();
+            LoadoutMenu.ClearMenuItems();
+            LoadoutMenu = null;
         }
 
         private static void LoadoutMenu_OnListItemSelect(Menu menu, MenuListItem listItem, int selectedIndex, int itemIndex)
@@ -171,7 +198,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 }
 
                 Game.PlayerPed.Weapons.Give((WeaponHash)GetHashKey(listSecondaryWeapons[selectedIndex]), 0, false, true);
-                SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(listSecondaryWeapons[selectedIndex]), 30);
+                SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(listSecondaryWeapons[selectedIndex]), 50);
 
                 SetResourceKvp(LOADOUT_SECONDARY_KEY, listSecondaryWeapons[selectedIndex]);
             }
@@ -179,7 +206,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void LoadoutMenu_OnMenuOpen(Menu menu)
         {
-            LoadoutMenu.ClearMenuItems();
+            LoadoutMenu.ClearMenuItems();;
 
             Game.PlayerPed.Weapons.RemoveAll();
 
