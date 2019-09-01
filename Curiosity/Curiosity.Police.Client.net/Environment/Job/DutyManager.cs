@@ -63,8 +63,9 @@ namespace Curiosity.Police.Client.net.Environment.Job
             }
 
             Game.PlayerPed.IsInvincible = false;
-
             Game.PlayerPed.Weapons.RemoveAll();
+
+            client.DeregisterTickHandler(Classes.Menus.MenuLoadout.OnWeaponTick);
 
             IsOnDuty = dutyState;
 
@@ -79,16 +80,11 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 Tasks.CalloutHandler.PlayerCanTakeCallout();
 
                 Game.PlayerPed.DropsWeaponsOnDeath = false;
-                Game.PlayerPed.Weapons.Give(WeaponHash.Nightstick, 1, false, false);
-                Game.PlayerPed.Weapons.Give(WeaponHash.StunGun, 1, false, false);
-                Game.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, false, false);
-
-                GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.CombatPistol, (uint)GetHashKey("COMPONENT_AT_PI_FLSH"));
 
                 Game.PlayerPed.Armor = 100;
 
                 Classes.Menus.MenuLoadout.OpenMenu();
-
+                client.RegisterTickHandler(Classes.Menus.MenuLoadout.OnWeaponTick);
             }
             else
             {

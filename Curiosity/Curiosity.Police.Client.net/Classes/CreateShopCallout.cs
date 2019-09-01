@@ -245,6 +245,7 @@ namespace Curiosity.Police.Client.net.Classes
                             {
                                 if (ped.Exists())
                                 {
+                                    API.SetEntityAsMissionEntity(ped.Handle, false, false);
                                     ped.MarkAsNoLongerNeeded();
                                 }
                             }
@@ -274,6 +275,7 @@ namespace Curiosity.Police.Client.net.Classes
                             {
                                 if (ped.Exists())
                                 {
+                                    API.SetEntityAsMissionEntity(ped.Handle, false, false);
                                     ped.MarkAsNoLongerNeeded();
                                 }
                             }
@@ -322,6 +324,7 @@ namespace Curiosity.Police.Client.net.Classes
                                 }
                             }
 
+                            API.SetEntityAsMissionEntity(ped.Handle, false, false);
                             ped.MarkAsNoLongerNeeded();
                             Suspects.Remove(ped);
                         }

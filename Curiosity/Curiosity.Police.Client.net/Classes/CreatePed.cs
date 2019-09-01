@@ -18,6 +18,8 @@ namespace Curiosity.Police.Client.net.Classes
             Ped createdPed = await World.CreatePed(suspectModel, suspectPosition, suspectHeading);
             API.SetNetworkIdCanMigrate(createdPed.NetworkId, true);
 
+            API.SetEntityAsMissionEntity(createdPed.Handle, true, true);
+
             await Client.Delay(0);
 
             Blip suspectBlip = createdPed.AttachBlip();
