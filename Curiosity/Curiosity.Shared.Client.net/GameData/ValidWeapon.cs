@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.World.Client.net.Classes.Environment
+namespace Curiosity.Shared.Client.net.GameData
 {
     /// <summary>
     /// https://github.com/TomGrobbe/vMenu/blob/master/vMenu/data/ValidWeapon.cs

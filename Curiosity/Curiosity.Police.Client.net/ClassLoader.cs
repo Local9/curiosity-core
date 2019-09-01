@@ -22,6 +22,8 @@ namespace Curiosity.Police.Client.net
             Environment.Job.DutyManager.Init();
             Environment.Tasks.CalloutHandler.Init();
 
+            Classes.Menus.MenuLoadout.Init(); // exists to make the instance exist
+
             Environment.Vehicle.Sirens.Init();
             Environment.BlipHandler.Init();
             Environment.Job.DutyMarkers.Init();

@@ -25,7 +25,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
         // Just placeholders for testing, feel free to change
         static Dictionary<VehicleClass, float> FuelConsumptionClassMultiplier = new Dictionary<VehicleClass, float>()
         {
-            [VehicleClass.Planes] = 1.4f,
+            [VehicleClass.Planes] = 10f,
             [VehicleClass.Helicopters] = 1.4f,
             [VehicleClass.Super] = 2.5f,
             [VehicleClass.Sports] = 1.8f
@@ -427,6 +427,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             {
                 return;
             }
+
+            float currentFuel = API.DecorGetFloat(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel");
+
+            Charge((int)(100f - currentFuel));
 
             Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
 

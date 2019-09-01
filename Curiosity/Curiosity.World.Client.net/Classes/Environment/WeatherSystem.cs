@@ -45,17 +45,18 @@ namespace Curiosity.World.Client.net.Classes.Environment
         {
             if (Player.PlayerInformation.IsDeveloper())
             {
-                Log.Verbose($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}, isChristmas: {isChristmas}");
+                Log.Verbose($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}, isChristmas: {isChristmas}, isHalloween: {isHalloween}");
             }
 
             await Client.Delay(0);
 
             API.ClearWeatherTypePersist();
 
+            API.SetForceVehicleTrails(isChristmas);
+            API.SetForcePedFootstepsTracks(isChristmas);
+
             if (isChristmas)
             {
-                API.SetForceVehicleTrails(isChristmas);
-                API.SetForcePedFootstepsTracks(isChristmas);
                 API.SetWeatherTypeOverTime("XMAS", 60.00f);
             }
             else if (isHalloween)

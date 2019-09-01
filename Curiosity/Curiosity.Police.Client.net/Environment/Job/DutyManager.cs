@@ -33,6 +33,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job == "error")
             {
+                Game.PlayerPed.Weapons.RemoveAll();
+
                 Log.Error("OnDutyState -> Error");
                 IsPoliceJobActive = false;
                 IsOnDuty = false;
@@ -43,6 +45,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job != "police")
             {
+                Game.PlayerPed.Weapons.RemoveAll();
+
                 if (Classes.Player.PlayerInformation.IsDeveloper())
                 {
                     Log.Info($"OnDutyState -> Job changed from police to {job}");
@@ -60,6 +64,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             Game.PlayerPed.IsInvincible = false;
 
+            Game.PlayerPed.Weapons.RemoveAll();
+
             IsOnDuty = dutyState;
 
             if (Classes.Player.PlayerInformation.IsDeveloper())
@@ -72,10 +78,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 IsPoliceJobActive = true;
                 Tasks.CalloutHandler.PlayerCanTakeCallout();
 
-                Game.PlayerPed.Weapons.RemoveAll();
-
                 Game.PlayerPed.DropsWeaponsOnDeath = false;
-                Game.PlayerPed.Weapons.Give(WeaponHash.CombatPistol, 240, false, false);
                 Game.PlayerPed.Weapons.Give(WeaponHash.Nightstick, 1, false, false);
                 Game.PlayerPed.Weapons.Give(WeaponHash.StunGun, 1, false, false);
                 Game.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, false, false);
@@ -83,6 +86,9 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.CombatPistol, (uint)GetHashKey("COMPONENT_AT_PI_FLSH"));
 
                 Game.PlayerPed.Armor = 100;
+
+                Classes.Menus.MenuLoadout.OpenMenu();
+
             }
             else
             {
@@ -90,7 +96,6 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 {
                     Classes.CreateShopCallout.EndCallout();
                 }
-                Game.PlayerPed.Weapons.RemoveAll();
                 IsPoliceJobActive = false;
                 Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
             }

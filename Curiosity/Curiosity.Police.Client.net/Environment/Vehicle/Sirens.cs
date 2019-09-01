@@ -38,6 +38,14 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
         static private async Task OnTick()
         {
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
+                {
+                    API.DisableControlAction(0, 86, true);
+                }
+            }
+
             if (!SirenActive && Game.PlayerPed.IsInVehicle()
                 && Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed
                 && (((Game.PlayerPed.CurrentVehicle.Model.IsCar
@@ -86,6 +94,12 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
                     while (Game.PlayerPed.IsInVehicle())
                     {
+
+                        if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
+                        {
+                            API.DisableControlAction(0, 86, true);
+                        }
+
                         await BaseScript.Delay(0);
                         if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade))
                         {
@@ -127,9 +141,11 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                             PlayCurrentPresetSound();
                         }
                     }
+
+                    Function.Call(Hash.DISABLE_VEHICLE_IMPACT_EXPLOSION_ACTIVATION, Game.PlayerPed.CurrentVehicle.Handle, false);
+                    Function.Call(Hash.SET_VEHICLE_SIREN, Game.PlayerPed.CurrentVehicle.Handle, false);
+                    Function.Call(Hash.SET_SIREN_WITH_NO_DRIVER, Game.PlayerPed.CurrentVehicle.Handle, false);
                     StopSound();
-                    // TODO: Figure out if this is needed
-                    //Function.Call(Hash.SET_VEHICLE_SIREN, Game.PlayerPed.CurrentVehicle.Handle, false);
                     SirenActive = false;
                 }
             }
@@ -165,7 +181,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             {
                 if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
                 {
-                    Log.Error($"Siren event error: {ex.Message}");
+                    // Log.Error($"Siren event error: {ex.Message}");
                 }
             }
         }
