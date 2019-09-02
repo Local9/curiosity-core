@@ -14,9 +14,14 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.MissionCreator
         static Client client = Client.GetInstance();
         static Menu menu = new Menu("Mission Maker", "WORK IN PROGRESS");
 
+        // Buttons
+
+
         public static void Init()
         {
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
+
+            
         }
 
         static void OnPlayerSpawned()

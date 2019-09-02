@@ -69,27 +69,37 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                     {
                         GameTimeResupplied = Game.GameTime;
 
+                        int primaryCost = 0;
+                        int secondaryCost = 0;
+
                         if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_PRIMARY_KEY)))
                         {
                             string primary = GetResourceKvpString(LOADOUT_PRIMARY_KEY);
                             if (primary == "weapon_assaultshotgun")
                             {
+                                int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
+                                primaryCost = 40 - currentAmmo;
                                 SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 40);
                             }
                             else
                             {
+                                int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
+                                primaryCost = 120 - currentAmmo;
                                 SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 120);
                             }
                         }
 
                         if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_SECONDARY_KEY)))
                         {
-                            SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(GetResourceKvpString(LOADOUT_SECONDARY_KEY)), 30);
+                            uint secondary = (uint)GetHashKey(GetResourceKvpString(LOADOUT_SECONDARY_KEY));
+                            int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, secondary);
+                            secondaryCost = 120 - currentAmmo;
+                            SetPedAmmo(Game.PlayerPed.Handle, secondary, 50);
                         }
 
                         Game.PlayerPed.Armor = 100;
 
-                        Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, 150);
+                        Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, ((primaryCost + secondaryCost) * 2) + 20);
 
                         Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Ammunition Resupplied", "Please wait 2 minutes to resupply again.", 2);
                     }

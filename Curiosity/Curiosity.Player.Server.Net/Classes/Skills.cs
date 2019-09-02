@@ -129,6 +129,10 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
+                float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+                experience = (int)(experience * experienceModifier);
+
                 Session session = SessionManager.PlayerList[player.Handle];
 
                 int characterId = session.User.CharacterId;
@@ -189,6 +193,10 @@ namespace Curiosity.Server.net.Classes
                 Session session = SessionManager.PlayerList[player.Handle];
 
                 int characterId = session.User.CharacterId;
+
+                float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+                experience = (int)(experience * experienceModifier);
 
                 if (!(characterId > 0))
                 {

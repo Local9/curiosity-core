@@ -99,9 +99,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
             client.RegisterTickHandler(PeriodicCheckRefuel);
             client.RegisterTickHandler(GasStationBlips);
-            UpdateSettings();
+
             CheckFuelPumpDistance();
             ShowHelpText();
+
+            client.RegisterEventHandler("playerSpawn", new Action<dynamic>(OnPlayerSpawn));
 
             client.RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
             client.RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
@@ -109,6 +111,20 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
             //DevRefuel
             client.RegisterEventHandler("curiosity:Client:Vehicle:DevRefuel", new Action(DevRefuel));
+        }
+
+        static void OnPlayerSpawn(dynamic dynData)
+        {
+            OnUpdateSettings();
+        }
+
+        static async void OnUpdateSettings()
+        {
+            while (true)
+            {
+                BaseScript.TriggerServerEvent("curiosity:Server:Settings:InstantRefuel");
+                await Client.Delay(1000 * 60);
+            }
         }
 
         static async Task GasStationBlips()
@@ -162,15 +178,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     currentGasBlip.IsShortRange = true;
                     currentGasBlip.Name = "Gas Station";
                 }
-            }
-        }
-
-        static async void UpdateSettings()
-        {
-            while (true)
-            {
-                BaseScript.TriggerServerEvent("curiosity:Server:Settings:InstantRefuel");
-                await BaseScript.Delay(60000);
             }
         }
 
