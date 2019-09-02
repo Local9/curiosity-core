@@ -129,9 +129,11 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
-                float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
-
-                experience = (int)(experience * experienceModifier);
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                {
+                    float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+                    experience = (int)(experience * experienceModifier);
+                }
 
                 Session session = SessionManager.PlayerList[player.Handle];
 
@@ -194,9 +196,11 @@ namespace Curiosity.Server.net.Classes
 
                 int characterId = session.User.CharacterId;
 
-                float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
-
-                experience = (int)(experience * experienceModifier);
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                {
+                    float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+                    experience = (int)(experience * experienceModifier);
+                }
 
                 if (!(characterId > 0))
                 {

@@ -51,6 +51,7 @@
     <Compile Include="Classes\Environment\TimeSync.cs" />
     <Compile Include="Classes\Environment\WeatherSystem.cs" />
     <Compile Include="Classes\Environment\WorldLimits.cs" />
+    <Compile Include="Classes\Environment\WorldScenarios.cs" />
     <Compile Include="Classes\Player\LoadoutManagement.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="ClassLoader.cs" />

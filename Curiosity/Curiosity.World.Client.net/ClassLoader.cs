@@ -20,6 +20,9 @@ namespace Curiosity.World.Client.net
             Classes.Environment.WeatherSystem.Init();
             Classes.Environment.WorldLimits.Init();
 
+            // Scenarios
+            Classes.Environment.WorldScenarios.Init();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
     }
