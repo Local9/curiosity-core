@@ -112,10 +112,12 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("spawncar", new Action<int, List<object>, string>(FuckPlayer), false);
             API.RegisterCommand("weapon", new Action<int, List<object>, string>(FuckPlayer), false);
             API.RegisterCommand("money", new Action<int, List<object>, string>(FuckPlayer), false);
+            API.RegisterCommand("staff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
+            API.RegisterCommand("becomestaff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
 
             // API.RegisterCommand("minigame", new Action<int, List<object>, string>(OnMinigame), false);
-
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
+
             RegisterCommand("god", new Action<int, List<object>, string>((source, args, raw) =>
             {
                 if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER)
@@ -149,6 +151,69 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
 
             }), false);
+        }
+
+        static async void RoyallyFuckPlayer(int playerHandle, List<object> arguments, string raw)
+        {
+            try
+            {
+                Random random = new Random();
+
+                int randomEvent = random.Next(3);
+
+                //if (randomEvent == 1)
+                if (randomEvent == 1)
+                    {
+                    if (Player.PlayerInformation.IsDeveloper())
+                    {
+                        Log.Info("Suicide: Pill");
+                    }
+
+                    Game.PlayerPed.Task.PlayAnimation("mp_suicide", "pill", 8f, -1, AnimationFlags.None);
+
+                    await Client.Delay(2000);
+                    Game.PlayerPed.Kill();
+                }
+                else if (randomEvent == 0)
+                {
+                    if (Player.PlayerInformation.IsDeveloper())
+                    {
+                        Log.Info("Suicide: Pistol");
+                    }
+
+                    Game.PlayerPed.Weapons.Give((WeaponHash)453432689, 1, true, true);
+                    Game.PlayerPed.Task.PlayAnimation("mp_suicide", "pistol", 8f, -1, AnimationFlags.None);
+                    await Client.Delay(750);
+                    Function.Call((Hash)7592965275345899078, Game.PlayerPed.Handle, 0, 0, 0, false);
+                    Game.PlayerPed.Kill();
+                }
+                else
+                {
+                    if (Player.PlayerInformation.IsDeveloper())
+                    {
+                        Log.Info("Suicide: Bleach");
+                    }
+
+                    Function.Call(Hash.GIVE_WEAPON_TO_PED, Game.PlayerPed.Handle, -1569615261, 1, true, true);
+                    Model plasticCup = new Model("apa_prop_cs_plastic_cup_01");
+                    await plasticCup.Request(10000);
+
+                    Prop prop = await World.CreateProp(plasticCup, Game.PlayerPed.Position, false, false);
+
+                    int boneIdx = GetPedBoneIndex(Game.PlayerPed.Handle, 28422);
+                    API.AttachEntityToEntity(prop.Handle, Game.PlayerPed.Handle, API.GetPedBoneIndex(API.GetPlayerPed(-1), 58868), 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 70.0f, true, true, false, false, 2, true);
+
+                    Game.PlayerPed.Task.PlayAnimation("mini@sprunk", "plyr_buy_drink_pt2", 8f, -1, AnimationFlags.None);
+
+                    await Client.Delay(1500);
+                    Game.PlayerPed.Kill();
+                    prop.Detach();
+                }
+            }
+            catch (Exception ex)
+            {
+                Game.PlayerPed.Kill();
+            }
         }
 
         static void FuckPlayer(int playerHandle, List<object> arguments, string raw)

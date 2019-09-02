@@ -159,6 +159,11 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         {
             try
             {
+                if (!Environment.Job.DutyManager.IsPoliceJobActive) {
+                    client.DeregisterTickHandler(SelectCallout);
+                    return;
+                }
+
                 if (random.Next(10) == 1) // 1/10 chance of being called out to the middle of the map
                 {
                     await GetRandomCallout(ClassLoader.RuralCallOuts, PatrolZone.Rural);
@@ -188,7 +193,13 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
         static async Task GetRandomCallout(Dictionary<int, Func<bool>> calloutDictionary, PatrolZone patrolZone)
         {
             try
-            { 
+            {
+                if (!Environment.Job.DutyManager.IsPoliceJobActive)
+                {
+                    client.DeregisterTickHandler(SelectCallout);
+                    return;
+                }
+
                 client.DeregisterTickHandler(SelectCallout);
                 int maxCallout = calloutDictionary.Count;
 
@@ -199,6 +210,8 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
                 while (!foundNewCallout)
                 {
+                    if (!Environment.Job.DutyManager.IsPoliceJobActive) return;
+
                     randomCalloutIndex = maxCallout == 1 ? 1 : random.Next(0, maxCallout);
                     calloutId = calloutDictionary.ElementAt(randomCalloutIndex).Key;
 
