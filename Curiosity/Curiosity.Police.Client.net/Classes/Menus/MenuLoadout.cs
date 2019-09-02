@@ -37,6 +37,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static Vector3 positionMenuOpen;
 
         static long GameTimeResupplied;
+        static long gameTimePressed = Game.GameTime;
 
         static public void Init()
         {
@@ -63,51 +64,58 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Environment.Job.DutyManager.IsOnDuty)
             {
-                if (IsDisabledControlJustPressed(0, (int)Control.VehicleHorn))
+                gameTimePressed = Game.GameTime;
+
+                while (IsDisabledControlPressed(0, (int)Control.VehicleHorn))
                 {
-                    if ((Game.GameTime - GameTimeResupplied) > 120000)
+                    if ((GetGameTimer() - gameTimePressed) > 1000)
                     {
-                        GameTimeResupplied = Game.GameTime;
-
-                        int primaryCost = 0;
-                        int secondaryCost = 0;
-
-                        if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_PRIMARY_KEY)))
+                        if ((Game.GameTime - GameTimeResupplied) > 120000)
                         {
-                            string primary = GetResourceKvpString(LOADOUT_PRIMARY_KEY);
-                            if (primary == "weapon_assaultshotgun")
-                            {
-                                int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
-                                primaryCost = 40 - currentAmmo;
-                                SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 40);
-                            }
-                            else
-                            {
-                                int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
-                                primaryCost = 120 - currentAmmo;
-                                SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 120);
-                            }
-                        }
+                            GameTimeResupplied = Game.GameTime;
 
-                        if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_SECONDARY_KEY)))
+                            int primaryCost = 0;
+                            int secondaryCost = 0;
+
+                            if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_PRIMARY_KEY)))
+                            {
+                                string primary = GetResourceKvpString(LOADOUT_PRIMARY_KEY);
+                                if (primary == "weapon_assaultshotgun")
+                                {
+                                    int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
+                                    primaryCost = 40 - currentAmmo;
+                                    SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 40);
+                                }
+                                else
+                                {
+                                    int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
+                                    primaryCost = 120 - currentAmmo;
+                                    SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 120);
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_SECONDARY_KEY)))
+                            {
+                                uint secondary = (uint)GetHashKey(GetResourceKvpString(LOADOUT_SECONDARY_KEY));
+                                int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, secondary);
+                                secondaryCost = 120 - currentAmmo;
+                                SetPedAmmo(Game.PlayerPed.Handle, secondary, 50);
+                            }
+
+                            Game.PlayerPed.Armor = 100;
+
+                            Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, ((primaryCost + secondaryCost) * 2) + 20);
+
+                            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Ammunition Resupplied", "Please wait 2 minutes to resupply again.", 2);
+
+                            await Client.Delay(500);
+                        }
+                        else
                         {
-                            uint secondary = (uint)GetHashKey(GetResourceKvpString(LOADOUT_SECONDARY_KEY));
-                            int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, secondary);
-                            secondaryCost = 120 - currentAmmo;
-                            SetPedAmmo(Game.PlayerPed.Handle, secondary, 50);
+                            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Sorry....", "You resupplied within the last 2 minutes, please reserve your ammunition more.", 2);
                         }
-
-                        Game.PlayerPed.Armor = 100;
-
-                        Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, ((primaryCost + secondaryCost) * 2) + 20);
-
-                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Ammunition Resupplied", "Please wait 2 minutes to resupply again.", 2);
                     }
-                    else
-                    {
-                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Sorry....", "You resupplied within the last 2 minutes, please reserve your ammunition more.", 2);
-                    }
-                    await Client.Delay(300);
+                    await Client.Delay(100);
                 }
             }
             await Task.FromResult(0);

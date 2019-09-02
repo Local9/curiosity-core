@@ -32,13 +32,15 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         static void OnPlayerSpawned(dynamic dynData)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
             SetupMenu();
         }
 
         static void SetupMenu()
         {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+
             if (menuSetup) return;
+
             menuSetup = true;
 
             MenuBase.AddSubMenu(menu, "WIP", false);

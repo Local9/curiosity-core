@@ -37,7 +37,7 @@ namespace Curiosity.Server.net.Classes
 
         static void WantedSettings([FromSource]CitizenFX.Core.Player player)
         {
-            IsWantedDisabled = API.GetConvar("police_wanted_disabled", "false") == "true";
+            IsWantedDisabled = API.GetConvar("police_wanted_disabled", "true") == "true";
             MaxWantedLevel = API.GetConvarInt("police_max_wanted_level", 5);
             player.TriggerEvent("curiosity:Client:Settings:WantedDisabled", IsWantedDisabled, MaxWantedLevel);
         }
