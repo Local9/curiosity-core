@@ -20,7 +20,7 @@ namespace Curiosity.Server.net.Classes
 
             IsWantedDisabled = API.GetConvar("police_wanted_disabled", "false") == "true";
             MaxWantedLevel = API.GetConvarInt("police_max_wanted_level", 5);
-            IsInstantRefuelDisabled = API.GetConvar("instant_refuel_disabled", "false") == "true";
+            IsInstantRefuelDisabled = API.GetConvar("instant_refuel_disabled", "true") == "true";
             IsInventoryDisabled = API.GetConvar("disable_inventory", "false") == "true";
 
             Log.Verbose($"ServerSettings -> IsWantedDisabled {IsWantedDisabled}");

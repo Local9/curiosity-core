@@ -314,11 +314,11 @@ namespace Curiosity.Police.Client.net.Classes
                                 if (killer.Handle == Game.PlayerPed.Handle)
                                 {
                                     Vector3 dmgPos = ped.Position;
-                                    int experience = 10;
+                                    int experience = random.Next(5, 11);
                                     if (ped.Bones.LastDamaged.Index == (int)Bone.SKEL_Head
                                         || ped.Bones.LastDamaged.Index == (int)Bone.IK_Head)
                                     {
-                                        experience = 20;
+                                        experience = 10;
                                     }
                                     Experience(dmgPos, experience, 2500, true);
                                 }
@@ -359,9 +359,8 @@ namespace Curiosity.Police.Client.net.Classes
                 }
                 
                 Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(100, 200));
-                Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(10, 16));
-                Game.PlayerPed.Weapons.Current.Ammo = Game.PlayerPed.Weapons.Current.Ammo + random.Next(24, 64);
-                Game.PlayerPed.Armor = random.Next(Game.PlayerPed.Armor, 100);
+                Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(5, 12));
+                Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(5, 8));
 
                 await Client.Delay(10);
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-26", $"Location is clear", string.Empty, 2);

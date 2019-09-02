@@ -63,8 +63,11 @@ $(document).ready(function () {
                         jobText = "Paramedic";
                         break;
                     default:
-                        $(".duty-job").text("job is unknown");
-                        $(".duty-state").text("not on active duty");
+                        $(".medic").hide();
+                        $(".police").hide();
+                        $(".fire").hide();
+                        $(".duty-job").text(event.data.job);
+                        $(".duty-state").text(event.data.dutyActive ? "active" : "on break");
                         break;
                 }
 

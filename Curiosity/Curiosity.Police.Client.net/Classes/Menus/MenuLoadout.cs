@@ -87,6 +87,10 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                             SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(GetResourceKvpString(LOADOUT_SECONDARY_KEY)), 30);
                         }
 
+                        Game.PlayerPed.Armor = 100;
+
+                        Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, 150);
+
                         Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Ammunition Resupplied", "Please wait 2 minutes to resupply again.", 2);
                     }
                     else

@@ -446,6 +446,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
         static void InstantRefuel(bool IsInstantRefuelDisabledSetting)
         {
             IsInstantRefuelDisabled = IsInstantRefuelDisabledSetting;
+
+            if (Player.PlayerInformation.IsDeveloper())
+            {
+                Debug.WriteLine($"IsInstantRefuelDisabled: {IsInstantRefuelDisabled}");
+            }
         }
 
         ///// <summary>

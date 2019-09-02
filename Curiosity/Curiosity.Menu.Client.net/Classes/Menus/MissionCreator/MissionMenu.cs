@@ -1,4 +1,11 @@
-﻿using MenuAPI;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Enums;
+using MenuAPI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus.MissionCreator
 {
@@ -9,11 +16,14 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.MissionCreator
 
         public static void Init()
         {
-            if (Player.PlayerInformation.IsDeveloper())
-            {
+            client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
+        }
 
-                MenuBase.AddSubMenu(menu);
-            }
+        static void OnPlayerSpawned()
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+
+            MenuBase.AddSubMenu(menu, "WIP");
         }
     }
 }

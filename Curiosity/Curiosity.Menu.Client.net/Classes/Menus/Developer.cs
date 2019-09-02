@@ -23,7 +23,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
 
-            MenuBase.AddSubMenu(menu);
+            MenuBase.AddSubMenu(menu, "WIP", false);
         }
     }
 }

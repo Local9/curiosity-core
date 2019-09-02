@@ -282,6 +282,10 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             Classes.Menus.PlayerInteractions.BanInteraction.Init();
             //// VEHICLE
             Classes.Menus.VehicleMenu.Init();
+
+            // Tools
+            Classes.Menus.Developer.Init();
+            Classes.Menus.MissionCreator.MissionMenu.Init();
         }
 
         public static void MenuOpen(bool isOpen)
@@ -313,10 +317,15 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             AddSubMenu(Menu, submenu);
         }
 
-        public static void AddSubMenu(Menu menu, Menu submenu)
+        public static void AddSubMenu(Menu submenu, string label, bool buttonEnabled = true)
+        {
+            AddSubMenu(Menu, submenu, label, buttonEnabled);
+        }
+
+        public static void AddSubMenu(Menu menu, Menu submenu, string label = "→→→", bool buttonEnabled = true)
         {
             MenuController.AddSubmenu(menu, submenu);
-            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = "→→→" };
+            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = label, Enabled = buttonEnabled };
             menu.AddMenuItem(submenuButton);
             MenuController.BindMenuItem(menu, submenu, submenuButton);
         }
