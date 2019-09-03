@@ -266,9 +266,20 @@ namespace Curiosity.Client.net
             API.NetworkResurrectLocalPlayer(402.668f, -1003.000f, -98.004f, 0.0f, true, false);
 
             float groundZ = z + 0.1f;
-            API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
-            Vector3 safeCoord = new Vector3(x, y, groundZ);
-            API.GetSafeCoordForPed(x, y, groundZ, true, ref safeCoord, 16);
+            Vector3 spawnPosition = new Vector3(x, y, groundZ);
+            
+
+            if (API.IsEntityInAir(Game.PlayerPed.Handle))
+            {
+                API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
+                Vector3 safeCoord = new Vector3(x, y, groundZ);
+                if (API.GetSafeCoordForPed(x, y, groundZ, true, ref safeCoord, 16))
+                {
+                    spawnPosition = safeCoord;
+                }
+            }
+            
+            
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
@@ -309,12 +320,12 @@ namespace Curiosity.Client.net
                 ClearScreen();
             }
 
-            if (safeCoord.IsZero)
+            if (spawnPosition.IsZero)
             {
-                safeCoord = World.GetNextPositionOnSidewalk(new Vector3(x, y, groundZ));
+                spawnPosition = World.GetNextPositionOnSidewalk(new Vector3(x, y, groundZ));
             }
 
-            Game.PlayerPed.Position = safeCoord;
+            Game.PlayerPed.Position = spawnPosition;
 
             int gameTimer = API.GetGameTimer();
 

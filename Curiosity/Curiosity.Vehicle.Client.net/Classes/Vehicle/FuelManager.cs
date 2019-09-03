@@ -424,7 +424,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
         static void DevRefuel()
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
-            Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
+            Function.Call(Hash._DECOR_SET_FLOAT, Client.CurrentVehicle, "Vehicle.Fuel", 100f);
             Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
         }
 

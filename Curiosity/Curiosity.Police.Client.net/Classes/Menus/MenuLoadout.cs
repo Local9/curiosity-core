@@ -41,6 +41,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         static public void Init()
         {
+            client.RegisterEventHandler("curiosity:Player:Loadout:Resupply", new Action(OnWeaponResupply));
+
             listPrimaryWeapons.Add("weapon_assaultsmg");
             listPrimaryWeapons.Add("weapon_assaultshotgun");
             listPrimaryWeapons.Add("weapon_carbinerifle");
@@ -60,65 +62,59 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             }
         }
 
-        static public async Task OnWeaponTick()
+        static async void OnWeaponResupply()
         {
-            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Environment.Job.DutyManager.IsOnDuty)
+            if (!Environment.Job.DutyManager.IsOnDuty)
             {
-                gameTimePressed = Game.GameTime;
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Must be On Duty", "", 2);
+                return;
+            };
 
-                while (IsDisabledControlPressed(0, (int)Control.VehicleHorn))
+            if ((Game.GameTime - GameTimeResupplied) > 120000)
+            {
+                GameTimeResupplied = Game.GameTime;
+
+                int primaryCost = 0;
+                int secondaryCost = 0;
+
+                if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_PRIMARY_KEY)))
                 {
-                    if ((GetGameTimer() - gameTimePressed) > 1000)
+                    string primary = GetResourceKvpString(LOADOUT_PRIMARY_KEY);
+                    if (primary == "weapon_assaultshotgun")
                     {
-                        if ((Game.GameTime - GameTimeResupplied) > 120000)
-                        {
-                            GameTimeResupplied = Game.GameTime;
-
-                            int primaryCost = 0;
-                            int secondaryCost = 0;
-
-                            if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_PRIMARY_KEY)))
-                            {
-                                string primary = GetResourceKvpString(LOADOUT_PRIMARY_KEY);
-                                if (primary == "weapon_assaultshotgun")
-                                {
-                                    int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
-                                    primaryCost = 40 - currentAmmo;
-                                    SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 40);
-                                }
-                                else
-                                {
-                                    int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
-                                    primaryCost = 120 - currentAmmo;
-                                    SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 120);
-                                }
-                            }
-
-                            if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_SECONDARY_KEY)))
-                            {
-                                uint secondary = (uint)GetHashKey(GetResourceKvpString(LOADOUT_SECONDARY_KEY));
-                                int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, secondary);
-                                secondaryCost = 50 - currentAmmo;
-                                SetPedAmmo(Game.PlayerPed.Handle, secondary, 50);
-                            }
-
-                            Game.PlayerPed.Armor = 100;
-
-                            Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, (primaryCost + secondaryCost) + 20);
-
-                            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Ammunition Resupplied", "Please wait 2 minutes to resupply again.", 2);
-
-                            await Client.Delay(500);
-                        }
-                        else
-                        {
-                            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Sorry....", "You resupplied within the last 2 minutes, please reserve your ammunition more.", 2);
-                        }
+                        int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
+                        primaryCost = 40 - currentAmmo;
+                        SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 40);
                     }
-                    await Client.Delay(100);
+                    else
+                    {
+                        int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
+                        primaryCost = 120 - currentAmmo;
+                        SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(primary), 120);
+                    }
                 }
+
+                if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_SECONDARY_KEY)))
+                {
+                    uint secondary = (uint)GetHashKey(GetResourceKvpString(LOADOUT_SECONDARY_KEY));
+                    int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, secondary);
+                    secondaryCost = 50 - currentAmmo;
+                    SetPedAmmo(Game.PlayerPed.Handle, secondary, 50);
+                }
+
+                Game.PlayerPed.Armor = 100;
+
+                Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, (primaryCost + secondaryCost) + 20);
+
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Ammunition Resupplied", "Please wait 2 minutes to resupply again.", 2);
+
+                await Client.Delay(500);
             }
-            await Task.FromResult(0);
+            else
+            {
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Sorry....", "You resupplied within the last 2 minutes, please reserve your ammunition more.", 2);
+            }
+                    
         }
 
         static async Task CheckDistance()

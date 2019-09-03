@@ -62,10 +62,9 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 return; // TODO: Refactor job code
             }
 
+            Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", false, string.Empty, string.Empty);
             Game.PlayerPed.IsInvincible = false;
             Game.PlayerPed.Weapons.RemoveAll();
-
-            client.DeregisterTickHandler(Classes.Menus.MenuLoadout.OnWeaponTick);
 
             IsOnDuty = dutyState;
 
@@ -76,6 +75,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (IsOnDuty)
             {
+                Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", true, "Resupply Ammo", "curiosity:Player:Loadout:Resupply");
                 IsPoliceJobActive = true;
                 Tasks.CalloutHandler.PlayerCanTakeCallout();
 
@@ -84,7 +84,6 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 Game.PlayerPed.Armor = 100;
 
                 Classes.Menus.MenuLoadout.OpenMenu();
-                client.RegisterTickHandler(Classes.Menus.MenuLoadout.OnWeaponTick);
             }
             else
             {
