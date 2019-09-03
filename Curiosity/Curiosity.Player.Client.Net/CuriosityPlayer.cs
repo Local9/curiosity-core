@@ -280,8 +280,6 @@ namespace Curiosity.Client.net
                     spawnPosition = safeCoord;
                 }
             }
-            
-            
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();

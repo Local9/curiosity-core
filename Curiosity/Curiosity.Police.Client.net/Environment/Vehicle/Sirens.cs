@@ -28,6 +28,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
         static Dictionary<int, int> SirenSoundIds = new Dictionary<int, int>();
 
         static bool SirenActive = false;
+        static bool LightsActive = false;
 
         static public void Init()
         {
@@ -36,8 +37,20 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             API.DecorRegister("Vehicle.SirensInstalled", 2);
         }
 
+        static private async Task HideHudComponent()
+        {
+            while (LightsActive)
+            {
+                API.HideHudComponentThisFrame(1); // Wanted Stars
+                await Client.Delay(0);
+            }
+            client.DeregisterTickHandler(HideHudComponent);
+            await Client.Delay(0);
+        }
+
         static private async Task OnTick()
         {
+
             if (Game.PlayerPed.IsInVehicle())
             {
                 if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
@@ -85,6 +98,10 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                 }
                 else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade)) // Preset on/off
                 {
+                    LightsActive = true;
+                    client.RegisterTickHandler(HideHudComponent);
+
+                    API.SetFakeWantedLevel(1);
                     Function.Call(Hash.DISABLE_VEHICLE_IMPACT_EXPLOSION_ACTIVATION, Game.PlayerPed.CurrentVehicle.Handle, true);
                     Function.Call(Hash.SET_VEHICLE_SIREN, Game.PlayerPed.CurrentVehicle.Handle, true);
                     Function.Call(Hash.SET_SIREN_WITH_NO_DRIVER, Game.PlayerPed.CurrentVehicle.Handle, true);
@@ -94,7 +111,6 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
                     while (Game.PlayerPed.IsInVehicle())
                     {
-
                         if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
                         {
                             API.DisableControlAction(0, 86, true);
@@ -103,6 +119,8 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         await BaseScript.Delay(0);
                         if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade))
                         {
+                            API.SetFakeWantedLevel(0);
+                            LightsActive = false;
                             break;
                         }
                         else if (ControlHelper.IsControlJustPressed(Control.MpTextChatTeam)) // Cycle presets
