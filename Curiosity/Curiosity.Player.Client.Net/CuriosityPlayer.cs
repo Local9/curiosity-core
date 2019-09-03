@@ -265,7 +265,7 @@ namespace Curiosity.Client.net
 
             API.NetworkResurrectLocalPlayer(402.668f, -1003.000f, -98.004f, 0.0f, true, false);
 
-            float groundZ = z + 0.1f;
+            float groundZ = z;
             Vector3 spawnPosition = new Vector3(x, y, groundZ);
             
 
