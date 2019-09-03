@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CommonFunctions.cs" />
+    <Compile Include="Classes\Data\PedScenarios.cs" />
     <Compile Include="Classes\Menus\Developer.cs" />
     <Compile Include="Classes\Menus\Inventory.cs" />
     <Compile Include="Classes\Menus\MenuBase.cs" />

@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Global.Shared.net.Enums;
 using MenuAPI;
+using Curiosity.Menus.Client.net.Classes.Data;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus
 {
@@ -9,6 +10,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static Client client = Client.GetInstance();
         static Menu menu = new Menu("Player", "Various player options and selections.");
 
+        static MenuListItem playerScenarios = new MenuListItem("Player Scenarios", PedScenarios.Scenarios, 0, "Select a scenario and hit enter to start it. Selecting another scenario will override the current scenario. If you're already playing the selected scenario, selecting it again will stop the scenario.");
+        static MenuItem stopScenario = new MenuItem("Force Stop Scenario", "This will force a playing scenario to stop immediately, without waiting for it to finish it's 'stopping' animation.");
+
         public static void Init()
         {
             MenuBase.AddSubMenu(menu);
@@ -16,6 +20,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.OnMenuOpen += (_menu) => {
 
                 MenuBase.MenuOpen(true);
+                menu.AddMenuItem(playerScenarios);
+                menu.AddMenuItem(stopScenario);
+                
                 //menu.AddMenuItem(new MenuItem("Open Skills", "View Skills") { ItemData = SkillType.Experience });
                 //menu.AddMenuItem(new MenuItem("Open Stats", "View Stats") { ItemData = SkillType.Statistic });
                 menu.AddMenuItem(new MenuCheckboxItem("Cinematic Mode", "Enable Cinematic Mode") { ItemData = "CINEMATIC", Checked = false });
@@ -40,6 +47,20 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
                 if ($"{_item.ItemData}" == "CINEMATICBARS")
                     Client.TriggerEvent("curiosity:Player:UI:BlackBarHeight");
+
+                if (_item == stopScenario)
+                {
+                    CommonFunctions.PlayScenario("forcestop");
+                }
+            };
+
+            // List selections
+            menu.OnListItemSelect += (sender, listItem, listIndex, itemIndex) =>
+            {
+                if (listItem == playerScenarios)
+                {
+                    CommonFunctions.PlayScenario(PedScenarios.ScenarioNames[PedScenarios.Scenarios[listIndex]]);
+                }
             };
 
             menu.OnMenuClose += (_menu) =>
@@ -51,7 +72,6 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.OnListIndexChange += (_menu, _listItem, _oldIndex, _newIndex, _itemIndex) =>
             {
                 // Code in here would get executed whenever the selected value of a list item changes (when left/right key is pressed).
-                Debug.WriteLine($"OnListIndexChange: [{_menu}, {_listItem}, {_oldIndex}, {_newIndex}, {_itemIndex}]");
             };
         }
     }
