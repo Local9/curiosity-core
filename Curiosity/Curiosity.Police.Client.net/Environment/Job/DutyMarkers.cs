@@ -80,7 +80,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 MarkersAll.Add(5, new Marker(new Vector3(-448.4843f, 6008.57f, 30.71637f), PatrolZone.Country)); // PALETO Bay
                 MarkersAll.Add(6, new Marker(new Vector3(368.8574f, -1610.202f, 28.29193f), PatrolZone.City));
                 MarkersAll.Add(7, new Marker(new Vector3(826.2648f, -1288.504f, 27.24066f), PatrolZone.City));
-                MarkersAll.Add(8, new Marker(new Vector3(-557.0663f, -130.1497f, 37.02512f), PatrolZone.City));
+                MarkersAll.Add(8, new Marker(new Vector3(-561.2444f, -132.6783f, 37.04274f), PatrolZone.City)); // ROCKFORD
 
                 if (BlipHandler.All.Count == 0)
                 {

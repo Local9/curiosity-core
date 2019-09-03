@@ -78,7 +78,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     || Game.PlayerPed.CurrentVehicle.Model.IsBike
                     || Game.PlayerPed.CurrentVehicle.Model.IsBoat)
                     && API.DecorGetBool(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.SirensInstalled"))
-                    || Game.PlayerPed.IsInPoliceVehicle))
+                    || Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency))
             {
                 if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift))
                 {
