@@ -352,6 +352,9 @@ namespace Curiosity.Client.net
                 }
             }
 
+            Game.PlayerPed.IsPositionFrozen = false;
+            Game.PlayerPed.IsInvincible = false;
+
             await Delay(0);
 
             API.SetNuiFocus(false, false);
@@ -378,9 +381,6 @@ namespace Curiosity.Client.net
             spawnInfo.model = Game.PlayerPed.Model.Hash;
 
             dynamic spawnInfodyn = spawnInfo;
-
-            Game.PlayerPed.IsInvincible = false;
-            Game.PlayerPed.IsPositionFrozen = false;
 
             await Delay(500);
 
@@ -414,11 +414,6 @@ namespace Curiosity.Client.net
                 return;
 
             float? posZ = playerPosition.Z;
-
-            if (Game.PlayerPed.IsInVehicle())
-            {
-                posZ = posZ + 1f;
-            }
 
             if (Game.PlayerPed.IsInAir)
             {
