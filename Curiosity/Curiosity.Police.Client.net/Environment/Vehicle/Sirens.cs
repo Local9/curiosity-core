@@ -43,6 +43,19 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             {
                 API.HideHudComponentThisFrame(1); // Wanted Stars
                 await Client.Delay(0);
+
+                if (Client.CurrentVehicle != null)
+                {
+                    if (Client.CurrentVehicle.Exists())
+                    {
+                        if (Client.CurrentVehicle.IsDead)
+                        {
+                            API.SetFakeWantedLevel(0);
+                            LightsActive = false;
+                            break;
+                        }
+                    }
+                }
             }
             client.DeregisterTickHandler(HideHudComponent);
             await Client.Delay(0);

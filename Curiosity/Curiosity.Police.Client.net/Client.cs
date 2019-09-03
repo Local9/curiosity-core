@@ -11,6 +11,9 @@ namespace Curiosity.Police.Client.net
         private static Client _instance;
         public static PlayerList players;
 
+        public static Vehicle CurrentVehicle;
+        private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
+
         public static uint PlayerGroupHash = 0;
         public static string PLAYER_GROUP = "PLAYER";
         public static RelationshipGroup PlayerRelationshipGroup;
@@ -25,12 +28,30 @@ namespace Curiosity.Police.Client.net
             _instance = this;
 
             PlayerRelationshipGroup = World.AddRelationshipGroup(PLAYER_GROUP);
+            CurrentVehicle = null;
+
+            RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
+
 
             players = Players;
 
             ClassLoader.Init();
 
             Log.Info("Curiosity.Mobile.Client.net loaded\n");
+        }
+
+        public static void OnVehicleId(int vehicleId)
+        {
+            if (CurrentVehicle == null)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                CurrentVehicle = new Vehicle(vehicleId);
+            }
+            else if (Client.CurrentVehicle.Handle != vehicleId)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                CurrentVehicle = new Vehicle(vehicleId);
+            }
         }
 
         /// <summary>
