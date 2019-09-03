@@ -206,18 +206,14 @@ namespace Curiosity.World.Client.net.Classes.Environment
                 {
                     Function.Call<bool>(Hash.SET_SCENARIO_GROUP_ENABLED, scenario, true);
                 }
-
-                if (DoesScenarioGroupExist(scenario) && !IsScenarioGroupEnabled(scenario))
-                    SetScenarioGroupEnabled(scenario, true);
+                Function.Call(Hash.RESET_SCENARIO_GROUPS_ENABLED);
             }
 
-            //foreach(string type in ScenarioTypes)
-            //{
-            //    Function.Call(Hash.SET_SCENARIO_TYPE_ENABLED, type);
-            //    SetScenarioTypeEnabled(type, true);
-            //}
-
-            //Function.Call(Hash.RESET_SCENARIO_TYPES_ENABLED);
+            foreach (string type in ScenarioTypes)
+            {
+                Function.Call(Hash.SET_SCENARIO_TYPE_ENABLED, type);
+                Function.Call(Hash.RESET_SCENARIO_TYPES_ENABLED);
+            }
 
             Debug.WriteLine("WorldScenarios -> Loaded");
 
