@@ -78,6 +78,9 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 MarkersAll.Add(3, new Marker(new Vector3(622.13f, 17.52761f, 86.86286f), PatrolZone.City));
                 MarkersAll.Add(4, new Marker(new Vector3(1851.431f, 3683.458f, 33.26704f), PatrolZone.Country)); // SANDY
                 MarkersAll.Add(5, new Marker(new Vector3(-448.4843f, 6008.57f, 30.71637f), PatrolZone.Country)); // PALETO Bay
+                MarkersAll.Add(6, new Marker(new Vector3(368.8574f, -1610.202f, 28.29193f), PatrolZone.City));
+                MarkersAll.Add(7, new Marker(new Vector3(826.2648f, -1288.504f, 27.24066f), PatrolZone.City));
+                MarkersAll.Add(8, new Marker(new Vector3(-557.0663f, -130.1497f, 37.02512f), PatrolZone.City));
 
                 if (BlipHandler.All.Count == 0)
                 {
