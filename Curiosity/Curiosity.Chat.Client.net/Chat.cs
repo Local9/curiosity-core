@@ -57,10 +57,12 @@ namespace Curiosity.Chat.Client.net
                 case "Community Manager":
                     role = "CM";
                     break;
+                case "Head Admin":
+                    role = "HA";
+                    break;
                 case "Moderator":
                 case "Administrator":
                 case "Senior Admin":
-                case "Head Admin":
                     role = "";
                     break;
                 case "Helper":

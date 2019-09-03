@@ -105,6 +105,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     await Client.Delay(1000);
                     Game.PlayerPed.IsPositionFrozen = false;
+                    Game.PlayerPed.DropsWeaponsOnDeath = false;
 
                     API.DoScreenFadeIn(1000);
 

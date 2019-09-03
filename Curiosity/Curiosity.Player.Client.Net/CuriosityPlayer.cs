@@ -267,6 +267,8 @@ namespace Curiosity.Client.net
 
             float groundZ = z;
             Vector3 spawnPosition = new Vector3(x, y, groundZ);
+
+            Game.PlayerPed.DropsWeaponsOnDeath = false;
             
 
             if (API.IsEntityInAir(Game.PlayerPed.Handle))
