@@ -20,6 +20,10 @@ namespace Curiosity.World.Client.net
             Classes.Environment.WeatherSystem.Init();
             Classes.Environment.WorldLimits.Init();
 
+            // Animals
+            Classes.Environment.AquaticSpawner.Init();
+            Classes.Environment.Birds.Init();
+
             // Scenarios
             Classes.Environment.WorldScenarios.Init();
 

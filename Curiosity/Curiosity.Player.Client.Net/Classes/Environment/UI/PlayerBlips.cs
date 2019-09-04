@@ -207,6 +207,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     API.SetBlipNameToPlayerName(blip, playerHandle);
                     API.SetBlipScale(blip, 0.85f);
                     API.SetBlipCategory(blip, 7);
+                    API.SetBlipPriority(blip, 11);
 
                     if (API.IsPauseMenuActive())
                     {

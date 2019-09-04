@@ -28,6 +28,13 @@ namespace Curiosity.World.Client.net
             ClassLoader.Init();
 
             RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
+            RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+        }
+
+        static void OnClientResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+            PlayerRelationshipGroup = CitizenFX.Core.World.AddRelationshipGroup("PLAYER");
         }
 
         static void OnPlayerSpawned(dynamic spawndata)
