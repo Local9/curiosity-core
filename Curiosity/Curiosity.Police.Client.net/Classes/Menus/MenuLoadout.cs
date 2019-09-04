@@ -228,8 +228,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             Game.PlayerPed.Weapons.RemoveAll();
 
-            menuListItemPrimary = new MenuListItem("Primary", listPrimaryNames, 0) { Description = "Press enter to select item." };
-            menuListItemSecondary = new MenuListItem("Secondary", listSecondaryNames, 0) { Description = "Press enter to select item." };
+            menuListItemPrimary = new MenuListItem("Primary", listPrimaryNames, 0) { Description = "Press ~r~ENTER~s~ to select item." };
+            menuListItemSecondary = new MenuListItem("Secondary", listSecondaryNames, 0) { Description = "Press ~r~ENTER~s~ to select item." };
 
             menuItemEquipExtras = new MenuItem("Add Tools");
 

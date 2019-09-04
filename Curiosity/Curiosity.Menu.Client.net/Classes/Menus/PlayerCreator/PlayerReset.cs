@@ -61,6 +61,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerCreator
                 API.SetPedPropIndex(playerPed, over.Key, over.Value.Item1, over.Value.Item2, false);
             }
 
+            Game.PlayerPed.Weapons.RemoveAll();
+
             await BaseScript.Delay(2000);
 
             resetBuffer = false;

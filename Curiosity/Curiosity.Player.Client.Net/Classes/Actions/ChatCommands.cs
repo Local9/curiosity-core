@@ -114,6 +114,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("money", new Action<int, List<object>, string>(FuckPlayer), false);
             API.RegisterCommand("staff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
             API.RegisterCommand("becomestaff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
+            API.RegisterCommand("rp", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
 
             // API.RegisterCommand("minigame", new Action<int, List<object>, string>(OnMinigame), false);
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
@@ -147,10 +148,16 @@ namespace Curiosity.Client.net.Classes.Actions
                         SetPedConfigFlag(Game.PlayerPed.Handle, 32, false);
                     }
 
-                    CitizenFX.Core.UI.Screen.ShowNotification($"GodeMode: {(Game.Player.IsInvincible ? "Active" : "Disabled")}");
+                    CitizenFX.Core.UI.Screen.ShowNotification($"GodMode: {(Game.Player.IsInvincible ? "Active" : "Disabled")}");
                 }
 
             }), false);
+        }
+
+        static async void RoyallyFuckPlayerRP(int playerHandle, List<object> arguments, string raw)
+        {
+            Environment.UI.Notifications.LifeV(1, "Role Playing?", $"NO FORCED RP", "This is not strictly a role playing server, all role play must be voluntary.", 2);
+            RoyallyFuckPlayer(playerHandle, arguments, raw);
         }
 
         static async void RoyallyFuckPlayer(int playerHandle, List<object> arguments, string raw)

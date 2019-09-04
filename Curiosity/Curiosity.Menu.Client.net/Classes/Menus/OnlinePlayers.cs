@@ -187,8 +187,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
                 if (genericData.IsSentByServer)
                 {
-                    Game.PlayerPed.IsPositionFrozen = !Game.PlayerPed.IsPositionFrozen;
-                    API.SetEnableHandcuffs(Game.PlayerPed.Handle, Game.PlayerPed.IsPositionFrozen);
+                    bool handcuff = !Game.PlayerPed.IsPositionFrozen;
+                    Game.PlayerPed.IsPositionFrozen = handcuff;
+                    API.SetEnableHandcuffs(Game.PlayerPed.Handle, handcuff);
                 }
             }
             catch (Exception ex)
