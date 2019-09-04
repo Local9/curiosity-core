@@ -102,10 +102,10 @@ namespace Curiosity.World.Server.net.Classes.Environment
                 weathers.Add("THUNDER", new List<string> { "RAIN", "CLEARING" });
                 weathers.Add("CLEARING", new List<string> { "CLEAR", "CLOUDS", "OVERCAST", "FOGGY", "SMOG" });
 
-                weathers.Add("HALLOWEEN", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
-                weathers.Add("SNOW", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
-                weathers.Add("BLIZZARD", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
-                weathers.Add("SNOWLIGHT", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
+                //weathers.Add("HALLOWEEN", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
+                //weathers.Add("SNOW", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
+                //weathers.Add("BLIZZARD", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
+                //weathers.Add("SNOWLIGHT", new List<string> { "CLEAR", "CLOUDS", "SMOG", "FOGGY", "RAIN", "CLEARING" });
             }
         }
 
