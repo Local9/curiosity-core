@@ -182,6 +182,8 @@ namespace Curiosity.Server.net.Business
 
                 GlobalEntity.User user = await Database.DatabaseUsers.GetUser(license, player);
 
+                await Server.Delay(10);
+
                 if (user.Banned)
                 {
                     string time = $"until {user.BannedUntil}";

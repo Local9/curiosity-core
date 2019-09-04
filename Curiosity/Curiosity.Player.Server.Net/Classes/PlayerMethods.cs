@@ -327,7 +327,13 @@ namespace Curiosity.Server.net.Classes
                 }
 
                 GlobalEntity.User user = await Business.BusinessUser.GetUserAsync(license, player);
-                await BaseScript.Delay(0);
+                await BaseScript.Delay(10);
+
+                if (user == null)
+                {
+                    player.Drop("Sorry there was an error when creating your account, please try again.");
+                    return;
+                }
 
                 player.TriggerEvent("curiosity:Client:Player:Setup", Newtonsoft.Json.JsonConvert.SerializeObject(user));
                 await BaseScript.Delay(0);
