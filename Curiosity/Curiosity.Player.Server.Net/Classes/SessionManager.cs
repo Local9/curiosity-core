@@ -43,7 +43,9 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                foreach (KeyValuePair<string, Session> playerItem in PlayerList)
+                Dictionary<string, Session> PlayerListCopy = new Dictionary<string, Session>(PlayerList);
+
+                foreach (KeyValuePair<string, Session> playerItem in PlayerListCopy)
                 {
                     Session session = playerItem.Value;
 
@@ -70,7 +72,9 @@ namespace Curiosity.Server.net.Classes
                     session.Player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
                     await BaseScript.Delay(0);
 
-                    await BaseScript.Delay(500);
+                    PlayerList[playerItem.Key] = session;
+
+                    await BaseScript.Delay(100);
                 }
             }
             catch (Exception ex)
