@@ -17,6 +17,8 @@ namespace Curiosity.Server.net.Business
         static string discordGuild;
         static string discordBotKey;
 
+        static bool isDiscordTimedOut = false;
+
         static ConcurrentDictionary<string, Privilege> privileges = new ConcurrentDictionary<string, Privilege>();
         static ConcurrentDictionary<long, DateTime> RanDiscord = new ConcurrentDictionary<long, DateTime>();
 
@@ -42,6 +44,7 @@ namespace Curiosity.Server.net.Business
             }
 
             CleanUp();
+            DiscordReset();
         }
 
         static async void CleanUp()
@@ -60,6 +63,15 @@ namespace Curiosity.Server.net.Business
             }
         }
 
+        static async void DiscordReset()
+        {
+            while (isDiscordTimedOut)
+            {
+                await Server.Delay((1000 * 60) * 30);
+                isDiscordTimedOut = false;
+            }
+        }
+
         static async Task<RequestResponse> DiscordRequest(string method, string endpoint, string jsonData)
         {
                 Dictionary<string, string> headers = new Dictionary<string, string>();
@@ -72,6 +84,11 @@ namespace Curiosity.Server.net.Business
         {
             try
             {
+                if (isDiscordTimedOut) {
+                    Helpers.Notifications.Advanced($"Discord", $"Hello ~g~{player.Name}~s~, Discord is currently not allowing connections, we cannot confirm your role.", 63, player, NotificationType.CHAR_LIFEINVADER);
+                    return privilegeIn;
+                }
+
                 if (RanDiscord.ContainsKey(discordId))
                 {
                     DateTime checkDate = RanDiscord[discordId];
@@ -129,7 +146,7 @@ namespace Curiosity.Server.net.Business
                 else if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
                 {
                     await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Warning", $"User was not found:\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Orange);
-                    Helpers.Notifications.Advanced($"Discord", $"Hello ~g~{player.Name}~s~, if you'd like to join our Discord please visit ~y~discord.gg/6xHuXwG", 63, player, NotificationType.CHAR_LIFEINVADER);
+                    Helpers.Notifications.Advanced($"Discord", $"Hello ~g~{player.Name}~s~, if you'd like to join our Discord please visit ~y~discord.lifev.net", 63, player, NotificationType.CHAR_LIFEINVADER);
                     Log.Verbose($"DiscordPrivilege -> User {player.Name} was not found on the Discord server.");
                     return Privilege.USER;
                 }
@@ -137,6 +154,12 @@ namespace Curiosity.Server.net.Business
                 {
                     await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"An error occured, please check the config:\nDiscord Response: {requestResponse.status}\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Orange);
                     Log.Warn($"DiscordPrivilege -> An error occured, please check the config: Error {requestResponse.status}");
+
+                    if ($"{requestResponse.status}" == "TooManyRequests")
+                    {
+                        isDiscordTimedOut = true;
+                    }
+
                     return privilege;
                 }
             }

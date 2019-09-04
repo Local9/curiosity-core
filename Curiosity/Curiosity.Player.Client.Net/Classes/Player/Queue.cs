@@ -18,7 +18,7 @@ namespace Curiosity.Client.net.Classes.Player
             {
                 while (!API.NetworkIsPlayerActive(API.PlayerId()))
                 {
-                    await Client.Delay(1000);
+                    await Client.Delay(5000);
                 }
                 Client.TriggerServerEvent("curiosity:Server:Queue:PlayerConnected");
                 API.SendNuiMessage($@"{{ ""resname"" : ""{API.GetCurrentResourceName()}"" }}");
