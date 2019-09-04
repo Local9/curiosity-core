@@ -18,6 +18,7 @@ namespace Curiosity.Server.net.Business
         static string discordBotKey;
 
         static ConcurrentDictionary<string, Privilege> privileges = new ConcurrentDictionary<string, Privilege>();
+        static ConcurrentDictionary<long, DateTime> RanDiscord = new ConcurrentDictionary<long, DateTime>();
 
         public static void Init()
         {
@@ -39,6 +40,24 @@ namespace Curiosity.Server.net.Business
             {
                 CheckDiscordSetup();
             }
+
+            CleanUp();
+        }
+
+        static async void CleanUp()
+        {
+            while (true)
+            {
+                await Server.Delay((1000 * 60) * 120);
+                ConcurrentDictionary<long, DateTime> RanDiscordToCheck = new ConcurrentDictionary<long, DateTime>(RanDiscord);
+                foreach (KeyValuePair<long, DateTime> keyValuePair in RanDiscordToCheck)
+                {
+                    if ((DateTime.Now - keyValuePair.Value).TotalMinutes > 90)
+                    {
+                        RanDiscord.TryRemove(keyValuePair.Key, out DateTime dateTime);
+                    }
+                }
+            }
         }
 
         static async Task<RequestResponse> DiscordRequest(string method, string endpoint, string jsonData)
@@ -53,6 +72,16 @@ namespace Curiosity.Server.net.Business
         {
             try
             {
+                if (RanDiscord.ContainsKey(discordId))
+                {
+                    DateTime checkDate = RanDiscord[discordId];
+                    DateTime dateNow = DateTime.Now;
+
+                    TimeSpan timeSpan = dateNow - checkDate;
+
+                    if (timeSpan.TotalMinutes <= 30) return privilegeIn;
+                }
+
                 RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{discordGuild}/members/{discordId}", string.Empty);
                 Privilege privilege = privilegeIn;
                 if (requestResponse.status == System.Net.HttpStatusCode.OK)
