@@ -130,13 +130,13 @@ namespace Curiosity.Server.net.Business
                 {
                     await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Warning", $"User was not found:\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Orange);
                     Helpers.Notifications.Advanced($"Discord", $"Hello ~g~{player.Name}~s~, if you'd like to join our Discord please visit ~y~discord.gg/6xHuXwG", 63, player, NotificationType.CHAR_LIFEINVADER);
-                    Log.Verbose($"User {player.Name} was not found on the Discord server.");
+                    Log.Verbose($"DiscordPrivilege -> User {player.Name} was not found on the Discord server.");
                     return Privilege.USER;
                 }
                 else
                 {
                     await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"An error occured, please check the config:\nDiscord Response: {requestResponse.status}\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Orange);
-                    Log.Warn($"An error occured, please check the config: Error {requestResponse.status}");
+                    Log.Warn($"DiscordPrivilege -> An error occured, please check the config: Error {requestResponse.status}");
                     return privilege;
                 }
             }
