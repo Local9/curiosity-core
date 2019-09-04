@@ -1,13 +1,14 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Client.net.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Client.net.Classes.Environment
+namespace Curiosity.World.Client.net.Classes.Environment
 {
     static class AquaticSpawner
     {
+        static Client client = Client.GetInstance();
+
         // TODO: Weighted spawn probabilities
         static List<PedHash> AquaticHashes = new List<PedHash>()
         {
@@ -21,16 +22,14 @@ namespace Curiosity.Client.net.Classes.Environment
         static float SpawnDepth = -3f;
         static float AggroDistanceOnSpawn = 200f;
 
-        static PedList PedList = new PedList();
-        static public async void Init()
+        static public void Init()
         {
-            // Because it seems to throw a fit if you do it at first load. Hm.
-            await BaseScript.Delay(600000);
-            PeriodicCheck();
+            client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
+        }
 
-            // Creates intriguing colored map area in the middle of the ocean.
-            // Blip blip = World.CreateBlip(Center, Radius);
-            // blip.Color = BlipColor.Red;
+        static void OnPlayerSpawned(dynamic spawnData)
+        {
+            PeriodicCheck();
         }
 
         static private async void PeriodicCheck()
@@ -39,13 +38,11 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 if (Game.PlayerPed.Position.DistanceToSquared(Center) < Math.Pow(Radius, 2))
                 {
-                    var AquaticLifeList = PedList.Select(p => new Ped(p)).Where(p => p.Exists() && AquaticHashes.Contains((PedHash)p.Model.Hash) && p.Position.DistanceToSquared(Center) < Math.Pow(Radius, 2));
-                    //Log.ToChat(AquaticLifeList.Count().ToString());
+                    var AquaticLifeList = CitizenFX.Core.World.GetAllPeds().Select(p => p).Where(p => p.Exists() && AquaticHashes.Contains((PedHash)p.Model.Hash) && p.Position.DistanceToSquared(Center) < Math.Pow(Radius, 2));
                     if (AquaticLifeList.Count() < MinimumCount)
                     {
                         Vector2 SpawnLocation = GetRandomPointAroundPlayer();
-                        Ped Ped = await World.CreatePed(AquaticHashes[new Random().Next(0, AquaticHashes.Count - 1)], new Vector3(SpawnLocation.X, SpawnLocation.Y, SpawnDepth));
-                        //Ped.Task.FightAgainst(Game.PlayerPed);
+                        Ped Ped = await CitizenFX.Core.World.CreatePed(AquaticHashes[new Random().Next(0, AquaticHashes.Count)], new Vector3(SpawnLocation.X, SpawnLocation.Y, SpawnDepth));
                     }
                 }
                 await BaseScript.Delay(1000);

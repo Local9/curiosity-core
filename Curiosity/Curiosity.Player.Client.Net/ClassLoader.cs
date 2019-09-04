@@ -71,13 +71,11 @@ namespace Curiosity.Client.net
             //Pvp.Init();
             WarpPoints.Init();
             Voip.Init();
-            AquaticSpawner.Init();
             VideoLoader.Init();
             //EmergencyServices.Init();
             Vehicles.Init();
             // DeleteProps.Init();
             Classes.Player.Sit.Init();
-            Birds.Init();
             SpawnManagement.Init();
             // InstancingChecker.Init();
             Classes.Environment.PedClasses.PedHandler.Init();

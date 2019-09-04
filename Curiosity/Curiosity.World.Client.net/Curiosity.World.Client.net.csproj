@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Environment\AquaticSpawner.cs" />
+    <Compile Include="Classes\Environment\Birds.cs" />
     <Compile Include="Classes\Environment\TimeSync.cs" />
     <Compile Include="Classes\Environment\WeatherSystem.cs" />
     <Compile Include="Classes\Environment\WorldLimits.cs" />

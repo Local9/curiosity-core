@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Curiosity.Client.net.Classes.Environment
+namespace Curiosity.World.Client.net.Classes.Environment
 {
     class Birds
     {
