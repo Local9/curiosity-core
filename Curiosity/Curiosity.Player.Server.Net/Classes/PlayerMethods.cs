@@ -125,6 +125,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "ReportingPlayer", $"{ex}");
                 Log.Error($"ReportingPlayer -> {ex.Message}");
             }
         }
@@ -185,6 +186,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "AdminKickPlayer", $"{ex}");
                 Log.Error($"AdminKickPlayer -> {ex.Message}");
             }
         }
@@ -251,33 +253,41 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "AdminBanPlayer", $"{ex}");
                 Log.Error($"AdminBanPlayer -> {ex.Message}");
             }
         }
 
         async static void GetInformation([FromSource]CitizenFX.Core.Player player)
         {
-            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
-            Session session = SessionManager.PlayerList[player.Handle];
+                Session session = SessionManager.PlayerList[player.Handle];
 
-            PlayerInformation playerInformation = new PlayerInformation();
-            playerInformation.Handle = session.NetId;
-            playerInformation.UserId = session.UserID;
-            playerInformation.CharacterId = session.User.CharacterId;
-            playerInformation.RoleId = (int)session.Privilege;
-            playerInformation.Wallet = session.Wallet;
-            playerInformation.BankAccount = session.BankAccount;
-            playerInformation.Skills = session.Skills;
+                PlayerInformation playerInformation = new PlayerInformation();
+                playerInformation.Handle = session.NetId;
+                playerInformation.UserId = session.UserID;
+                playerInformation.CharacterId = session.User.CharacterId;
+                playerInformation.RoleId = (int)session.Privilege;
+                playerInformation.Wallet = session.Wallet;
+                playerInformation.BankAccount = session.BankAccount;
+                playerInformation.Skills = session.Skills;
 
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
 
-            player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
-            await BaseScript.Delay(0);
-            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-            await BaseScript.Delay(0);
-            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
-            await BaseScript.Delay(0);
+                player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
+                await BaseScript.Delay(0);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                await BaseScript.Delay(0);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                await BaseScript.Delay(0);
+            }
+            catch (Exception ex)
+            {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetInformation", $"{ex}");
+            }
         }
 
         public async static void SendUpdatedInformation(Session session)
@@ -304,6 +314,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "SendUpdatedInformation", $"{ex}");
                 Log.Error($"SendUpdatedInformation -> {ex}");
             }
         }
@@ -365,7 +376,9 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "OnPlayerSetup", $"{ex}");
                 Log.Error($"OnPlayerSetup -> {ex.Message}");
+                player.Drop("Sorry there was a critical error when creating your account, please try again.");
             }
         }
 
@@ -384,6 +397,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "OnSaveLocation", $"{ex}");
                 Log.Error($"OnSaveLocation -> {ex.Message}");
             }
         }
@@ -409,6 +423,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetUserRole", $"{ex}");
                 Log.Error($"GetUserRole() -> {player.Name} - {ex.Message}");
             }
         }
@@ -435,6 +450,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetUserId", $"{ex}");
                 Log.Error($"GetUserId() -> {ex.Message}");
             }
         }

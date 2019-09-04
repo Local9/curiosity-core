@@ -219,6 +219,8 @@ namespace Curiosity.Server.net
                 }
                 catch (Exception ex)
                 {
+                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetServerId", $"{ex}");
+
                     Log.Error($"GetServerId EXCEPTION-> {ex.Message}");
                     if (ex.InnerException != null)
                         Log.Error($"GetServerId INNER EXCEPTION-> {ex.InnerException.Message}");
@@ -244,6 +246,7 @@ namespace Curiosity.Server.net
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "RegisterTickHandler", $"{ex}");
                 Log.Error($"RegisterTickHandler -> {ex.Message}");
             }
         }
@@ -261,6 +264,7 @@ namespace Curiosity.Server.net
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "DeregisterTickHandler", $"{ex}");
                 Log.Error($"RegisterTickHandler -> {ex.Message}");
             }
         }

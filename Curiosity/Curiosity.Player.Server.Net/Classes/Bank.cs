@@ -128,6 +128,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "IncreaseCash", $"{ex}");
                 Log.Error($"IncreaseCash -> {ex.Message}");
             }
         }
@@ -151,6 +152,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "DecreaseCash", $"{ex}");
                 Log.Error($"DecreaseCash -> {ex.Message}");
             }
 }
@@ -174,6 +176,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "IncreaseBank", $"{ex}");
                 Log.Error($"IncreaseBank -> {ex.Message}");
             }
         }
@@ -197,6 +200,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "DecreaseBank", $"{ex}");
                 Log.Error($"DecreaseBank -> {ex.Message}");
             }
         }
@@ -233,6 +237,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "TransferMoney", $"{ex}");
                 Log.Error($"TransferMoney -> {ex.Message}");
             }
         }

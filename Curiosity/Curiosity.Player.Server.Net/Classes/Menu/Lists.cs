@@ -32,6 +32,7 @@ namespace Curiosity.Server.net.Classes.Menu
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetReasons", $"{ex}");
                 Log.Error($"GetReasons() -> {ex.Message}");
             }
         }

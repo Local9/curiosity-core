@@ -64,6 +64,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetListData", $"{ex}");
                 Log.Error($"GetListData -> {ex}");
             }
         }
@@ -95,6 +96,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetUserSkills", $"{ex}");
                 Log.Error($"GetUserSkills -> {ex}");
             }
         }
@@ -178,6 +180,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "IncreaseSkill", $"{ex}");
                 Log.Error($"IncreaseSkill -> {ex.Message}");
             }
         }
@@ -241,6 +244,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "DecreaseSkill", $"{ex}");
                 Log.Error($"DecreaseSkill -> {ex.Message}");
             }
         }

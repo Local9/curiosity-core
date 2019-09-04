@@ -267,6 +267,7 @@ namespace Curiosity.Server.net.Business
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : PlayerConnecting", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : {ex.Message}");
                 deferrals.done($"{messages[Messages.Error]}"); return;
             }
@@ -299,8 +300,9 @@ namespace Curiosity.Server.net.Business
                     await Server.Delay(5000);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : StopHardcap", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : StopHardcap()");
             }
         }
@@ -319,8 +321,9 @@ namespace Curiosity.Server.net.Business
                     if (hostName != string.Empty) { API.SetConvar("sv_hostname", hostName); return; }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : OnResourceStop()", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : OnResourceStop()");
             }
         }
@@ -341,8 +344,9 @@ namespace Curiosity.Server.net.Business
                     BalanceReserved();
                     await Server.Delay(1000);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : QueueCycle", $"{ex}");
                     Log.Error($"Curiosity Queue Manager : QueueCycle()");
                 }
             }
@@ -411,8 +415,9 @@ namespace Curiosity.Server.net.Business
                     }
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : UpdateStates", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : UpdateStates()");
             }
         }
@@ -503,7 +508,11 @@ namespace Curiosity.Server.net.Business
                     }
                 });
             }
-            catch (Exception) { Log.Error($"Curiosity Queue Manager : BalanceReserved()"); }
+            catch (Exception ex)
+            {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : BalanceReserved", $"{ex}");
+                Log.Error($"Curiosity Queue Manager : BalanceReserved()");
+            }
         }
 
         static void UpdateHostName()
@@ -534,8 +543,9 @@ namespace Curiosity.Server.net.Business
                 }
                 lastCount = count;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : UpdateHostName", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : UpdateHostName()");
             }
         }
@@ -580,8 +590,9 @@ namespace Curiosity.Server.net.Business
                 queue = temp;
                 return queue.Count;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : QueueCount", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : QueueCount()"); return queue.Count;
             }
         }
@@ -600,8 +611,9 @@ namespace Curiosity.Server.net.Business
                 { NewLoading(license, Reserved.Public); return true; }
                 else { return false; }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : Loading", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : Loading()"); return false;
             }
         }
@@ -623,8 +635,9 @@ namespace Curiosity.Server.net.Business
                     if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : QUEUE -> LOADING -> ({Enum.GetName(typeof(Reserved), slotType)}) {license}"); }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : NewLoading", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : NewLoading()");
             }
         }
@@ -636,8 +649,9 @@ namespace Curiosity.Server.net.Business
                 if (!timer.ContainsKey(license)) { return false; }
                 return timer[license].AddMinutes(time) < DateTime.UtcNow;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : IsTimeUp", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : IsTimeUp()"); return false;
             }
         }
@@ -652,8 +666,9 @@ namespace Curiosity.Server.net.Business
                     index.TryUpdate(license, place, oldPlace);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : UpdatePlace", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : UpdatePlace()");
             }
         }
@@ -668,8 +683,9 @@ namespace Curiosity.Server.net.Business
                     timer.TryUpdate(license, DateTime.UtcNow, oldTime);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : UpdateTimer", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : UpdateTimer()");
             }
         }
@@ -713,8 +729,9 @@ namespace Curiosity.Server.net.Business
                 });
                 return priorityQueue.Count;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : PriorityQueueCount", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : PriorityQueueCount()"); return priorityQueue.Count;
             }
         }
@@ -745,8 +762,9 @@ namespace Curiosity.Server.net.Business
                     UpdateTimer(license);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : PlayerDropped", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : PlayerDropped()");
             }
         }
@@ -766,8 +784,9 @@ namespace Curiosity.Server.net.Business
                 session.TryUpdate(license, SessionState.Active, oldState);
                 if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> ACTIVE -> {license}"); }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : PlayerActivated", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : PlayerActivated()");
             }
         }
@@ -783,8 +802,9 @@ namespace Curiosity.Server.net.Business
                 if (doReserved) { reserved.TryRemove(license, out Reserved oldReserved); }
                 if (doSlot) { slotTaken.TryRemove(license, out Reserved oldSlot); }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : RemoveFrom", $"{ex}");
                 Log.Error($"Curiosity Queue Manager : RemoveFrom()");
             }
         }

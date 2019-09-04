@@ -33,6 +33,7 @@ namespace Curiosity.Server.net.Classes
                 }
                 catch (Exception ex)
                 {
+                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "UpdateSessions", $"{ex}");
                     Log.Error($"UpdateSessions() -> {ex.Message}");
                 }
             }
@@ -74,6 +75,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "UpdatePlayersInformation", $"{ex}");
                 Log.Warn($"UpdatePlayersInformation() -> {ex.Message}");
             }
         }
