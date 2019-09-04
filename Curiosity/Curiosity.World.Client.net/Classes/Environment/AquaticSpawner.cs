@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,9 @@ namespace Curiosity.World.Client.net.Classes.Environment
         static float SpawnDepth = -3f;
         static float AggroDistanceOnSpawn = 200f;
 
+        static string Relationship = "SHARKS";
+        static RelationshipGroup RelationshipGroupSharks;
+
         static public void Init()
         {
             client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
@@ -30,6 +34,7 @@ namespace Curiosity.World.Client.net.Classes.Environment
         static void OnPlayerSpawned(dynamic spawnData)
         {
             PeriodicCheck();
+            RelationshipGroupSharks = CitizenFX.Core.World.AddRelationshipGroup(Relationship);
         }
 
         static private async void PeriodicCheck()
@@ -43,6 +48,14 @@ namespace Curiosity.World.Client.net.Classes.Environment
                     {
                         Vector2 SpawnLocation = GetRandomPointAroundPlayer();
                         Ped Ped = await CitizenFX.Core.World.CreatePed(AquaticHashes[new Random().Next(0, AquaticHashes.Count)], new Vector3(SpawnLocation.X, SpawnLocation.Y, SpawnDepth));
+
+                        Ped.RelationshipGroup = RelationshipGroupSharks;
+                        Ped.RelationshipGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, CitizenFX.Core.Relationship.Hate, true);
+
+                        if (Ped.Position.DistanceToSquared(Game.PlayerPed.Position) < AggroDistanceOnSpawn)
+                        {
+                            Ped.Task.FightAgainstHatedTargets(AggroDistanceOnSpawn);
+                        }
                     }
                 }
                 await BaseScript.Delay(1000);

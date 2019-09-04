@@ -15,6 +15,7 @@ namespace Curiosity.World.Client.net
         public static int PedHandle { get { return Game.PlayerPed.Handle; } }
 
         private static Client _instance;
+        static public RelationshipGroup PlayerRelationshipGroup;
 
         public static Client GetInstance()
         {
@@ -25,6 +26,13 @@ namespace Curiosity.World.Client.net
         {
             _instance = this;
             ClassLoader.Init();
+
+            RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
+        }
+
+        static void OnPlayerSpawned(dynamic spawndata)
+        {
+            PlayerRelationshipGroup = CitizenFX.Core.World.AddRelationshipGroup("PLAYER");
         }
 
         /// <summary>
