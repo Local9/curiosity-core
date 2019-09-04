@@ -74,6 +74,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                 if (API.DecorIsRegisteredAsType("Vehicle.SirensInstalled", 2) && installSirens)
                 {
                     API.DecorSetBool(veh.Handle, "Vehicle.SirensInstalled", installSirens);
+                    Classes.Environment.ChatCommands.ShowSirenKeys();
                 }
 
                 await Client.Delay(0);
