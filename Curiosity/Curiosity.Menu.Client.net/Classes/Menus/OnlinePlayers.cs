@@ -186,7 +186,10 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 GenericData genericData = Newtonsoft.Json.JsonConvert.DeserializeObject<GenericData>(json);
 
                 if (genericData.IsSentByServer)
+                {
                     Game.PlayerPed.IsPositionFrozen = !Game.PlayerPed.IsPositionFrozen;
+                    API.SetEnableHandcuffs(Game.PlayerPed.Handle, Game.PlayerPed.IsPositionFrozen);
+                }
             }
             catch (Exception ex)
             {
