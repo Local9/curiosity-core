@@ -169,8 +169,11 @@ namespace Curiosity.Server.net.Classes
                     session.Skills.Add(skill, skills[skill]);
                     session.Skills[skill].Value = 0 + experience;
                 }
+                else
+                {
+                    session.Skills[skill].Value = session.Skills[skill].Value + experience;
+                }
 
-                session.Skills[skill].Value = session.Skills[skill].Value + experience;
                 PlayerMethods.SendUpdatedInformation(session);
 
                 if (!Server.isLive)
@@ -233,8 +236,11 @@ namespace Curiosity.Server.net.Classes
                     session.Skills.Add(skill, skills[skill]);
                     session.Skills[skill].Value = 0 - experience;
                 }
+                else
+                {
+                    session.Skills[skill].Value = session.Skills[skill].Value - experience;
+                }
 
-                session.Skills[skill].Value = session.Skills[skill].Value - experience;
                 PlayerMethods.SendUpdatedInformation(session);
 
                 if (!Server.isLive)
