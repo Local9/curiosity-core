@@ -43,8 +43,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             client.RegisterEventHandler("curiosity:Player:Loadout:Resupply", new Action(OnWeaponResupply));
 
-            listPrimaryWeapons.Add("weapon_assaultsmg");
-            listPrimaryWeapons.Add("weapon_assaultshotgun");
+            listPrimaryWeapons.Add("weapon_smg");
+            listPrimaryWeapons.Add("weapon_pumpshotgun");
             listPrimaryWeapons.Add("weapon_carbinerifle");
 
             foreach (string str in listPrimaryWeapons)
@@ -80,7 +80,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 if (!string.IsNullOrEmpty(GetResourceKvpString(LOADOUT_PRIMARY_KEY)))
                 {
                     string primary = GetResourceKvpString(LOADOUT_PRIMARY_KEY);
-                    if (primary == "weapon_assaultshotgun")
+                    if (primary == "weapon_pumpshotgun")
                     {
                         int currentAmmo = GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)GetHashKey(primary));
                         primaryCost = 40 - currentAmmo;
