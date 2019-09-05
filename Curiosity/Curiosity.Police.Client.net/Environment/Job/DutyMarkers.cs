@@ -100,7 +100,10 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 if (marker != null)
                 {
                     API.SetTextComponentFormat("STRING");
-                    API.AddTextComponentString($" Press ~INPUT_PICKUP~ to go on duty.");
+
+                    string dutyText = (!DutyManager.IsPoliceJobActive) ? "go on Duty" : "go off Duty";
+
+                    API.AddTextComponentString($"Press ~INPUT_PICKUP~ to {dutyText}.");
                     API.DisplayHelpTextFromStringLabel(0, false, true, -1);
 
                     if (Game.IsControlJustPressed(0, Control.Pickup) ||
