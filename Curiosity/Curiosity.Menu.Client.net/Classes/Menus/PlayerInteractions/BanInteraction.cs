@@ -30,7 +30,11 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerInteractions
             periodMenu.AddMenuItem(new MenuItem("7 Days") { ItemData = 7 });
             periodMenu.AddMenuItem(new MenuItem("14 Days") { ItemData = 14 });
             periodMenu.AddMenuItem(new MenuItem("28 Days") { ItemData = 28 });
-            periodMenu.AddMenuItem(new MenuItem("Permanent Ban") { ItemData = 0 });
+
+            if (Player.PlayerInformation.IsTrustedAdmin())
+            {
+                periodMenu.AddMenuItem(new MenuItem("Permanent Ban") { ItemData = 0 });
+            }
 
             periodMenu.OnMenuOpen += (_menu) =>
             {

@@ -45,6 +45,7 @@ namespace Curiosity.Server.net.Classes
                 case Privilege.PROJECTMANAGER:
                 case Privilege.SENIORADMIN:
                 case Privilege.HEADADMIN:
+                case Privilege.COMMUNITYMANAGER:
                     canKick = true;
                     break;
                 default:
