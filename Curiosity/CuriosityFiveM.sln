@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Server.net", "Curiosity.Player.Server.Net\Curiosity.Server.net.csproj", "{76BBCCE5-0E48-4AA0-9903-28474F2E5845}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{A0D62F10-DBC9-4C31-B3AB-7058530A87C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{1D33637F-66E3-4977-9B9E-5A524FAFE523}"
@@ -31,8 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GHMattiMySQL", "GHMattiMySQ
 		_Dependancies\server\GHMattiMySQL\System.Buffers.net.dll = _Dependancies\server\GHMattiMySQL\System.Buffers.net.dll
 		_Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll = _Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Client.net", "Curiosity.Player.Client.Net\Curiosity.Client.net.csproj", "{132046A7-08EC-4F6E-AFE1-08C264B1359D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Weather.Client.net", "Curiosity.Weather.Client.net\Curiosity.Weather.Client.net.csproj", "{0C2F45C5-8130-46C1-B9CA-3C9362C5800F}"
 EndProject
@@ -84,20 +80,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.World.Client.net"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.World.Server.net", "Curiosity.World.Server.net\Curiosity.World.Server.net.csproj", "{F3CBC98F-A17F-4240-BBE9-D28CF272E82B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Client.net", "Curiosity.Client.Net\Curiosity.Client.net.csproj", "{132046A7-08EC-4F6E-AFE1-08C264B1359D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Server.net", "Curiosity.Server.Net\Curiosity.Server.net.csproj", "{76BBCCE5-0E48-4AA0-9903-28474F2E5845}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.Build.0 = Release|Any CPU
-		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0C2F45C5-8130-46C1-B9CA-3C9362C5800F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0C2F45C5-8130-46C1-B9CA-3C9362C5800F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C2F45C5-8130-46C1-B9CA-3C9362C5800F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -186,16 +178,22 @@ Global
 		{F3CBC98F-A17F-4240-BBE9-D28CF272E82B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3CBC98F-A17F-4240-BBE9-D28CF272E82B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3CBC98F-A17F-4240-BBE9-D28CF272E82B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{76BBCCE5-0E48-4AA0-9903-28474F2E5845} = {A0D62F10-DBC9-4C31-B3AB-7058530A87C9}
 		{EF02F259-FF7B-41FB-8B0C-6A72DD1441E6} = {D9F07760-D804-47DE-98A7-BC5E47182A47}
 		{6CA7B9F3-882C-42D2-B81B-9D7AAA6C4B46} = {D9F07760-D804-47DE-98A7-BC5E47182A47}
 		{5AE38E6D-71AE-4964-AC70-D530AF1E97A5} = {6CA7B9F3-882C-42D2-B81B-9D7AAA6C4B46}
-		{132046A7-08EC-4F6E-AFE1-08C264B1359D} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
 		{0C2F45C5-8130-46C1-B9CA-3C9362C5800F} = {5CB9B26A-88FF-4B46-BBE4-4FF11C7FDFC8}
 		{3BB9557A-9250-4D2E-9746-BDAF08ACF649} = {5CB9B26A-88FF-4B46-BBE4-4FF11C7FDFC8}
 		{37F1F478-BE0B-4C2B-A062-24077F851B69} = {89A76DE7-5B27-4AEA-9C22-B0671FDC967A}
@@ -218,6 +216,8 @@ Global
 		{33A716E4-6313-458D-B7C4-0F79D8823A75} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
 		{B9C25C6A-A356-4469-B4B7-94FAF92BDEDF} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
 		{F3CBC98F-A17F-4240-BBE9-D28CF272E82B} = {A0D62F10-DBC9-4C31-B3AB-7058530A87C9}
+		{132046A7-08EC-4F6E-AFE1-08C264B1359D} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
+		{76BBCCE5-0E48-4AA0-9903-28474F2E5845} = {A0D62F10-DBC9-4C31-B3AB-7058530A87C9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
