@@ -119,13 +119,17 @@ namespace Curiosity.Police.Client.net.Classes
 
                 string group = "SUSPECT";
                 RelationshipGroup suspectGroup = World.AddRelationshipGroup(group);
-                suspectGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Hate, true);
+
+                suspectGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Neutral, true);
+                suspectGroup.SetRelationshipBetweenGroups(Environment.Job.DutyManager.PoliceRelationshipGroup, Relationship.Hate, true);
                 suspectGroup.SetRelationshipBetweenGroups(suspectGroup, Relationship.Respect, true);
 
                 await SuspectModel.Request(10000);
                 Ped ped = await CreatePed.Create(suspectModel, SuspectPosition, suspectHeading, suspectGroup);
                 SuspectModel.MarkAsNoLongerNeeded();
                 await Client.Delay(5);
+
+                API.GetPedAsGroupLeader(ped.Handle);
 
                 ped.Task.TurnTo(location);
                 Suspects.Add(ped);

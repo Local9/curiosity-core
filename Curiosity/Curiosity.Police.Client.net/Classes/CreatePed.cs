@@ -18,6 +18,8 @@ namespace Curiosity.Police.Client.net.Classes
             Ped createdPed = await World.CreatePed(suspectModel, suspectPosition, suspectHeading);
             API.SetNetworkIdCanMigrate(createdPed.NetworkId, true);
 
+            createdPed.NeverLeavesGroup = true;
+
             API.SetEntityAsMissionEntity(createdPed.Handle, true, true);
 
             await Client.Delay(0);
@@ -35,11 +37,13 @@ namespace Curiosity.Police.Client.net.Classes
 
             if (random.Next(2) == 1)
             {
-                createdPed.Weapons.Give(WeaponHash.Pistol, 30, true, true);
+                createdPed.Weapons.Give(WeaponHash.Pistol, 30, false, true);
+                createdPed.Weapons.Give(WeaponHash.SawnOffShotgun, 30, false, true);
             }
             else
             {
-                createdPed.Weapons.Give(WeaponHash.SawnOffShotgun, 30, true, true);
+                createdPed.Weapons.Give(WeaponHash.Pistol, 30, false, true);
+                createdPed.Weapons.Give(WeaponHash.MiniSMG, 30, false, true);
             }
 
             await Client.Delay(0);

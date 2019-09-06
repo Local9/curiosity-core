@@ -16,8 +16,12 @@ namespace Curiosity.Police.Client.net.Environment.Job
         public static bool IsOnCallout = false;
         public static PatrolZone PatrolZone = PatrolZone.City;
 
+        public static RelationshipGroup PoliceRelationshipGroup;
+
         public static void Init()
         {
+            PoliceRelationshipGroup = World.AddRelationshipGroup("POLICE_CALLOUTS");
+
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
             client.RegisterEventHandler("curiosity:Client:Police:SetCallOutStatus", new Action<bool>(OnSetCallOutStatus));
@@ -75,6 +79,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (IsOnDuty)
             {
+                Game.PlayerPed.RelationshipGroup = PoliceRelationshipGroup;
+
                 Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", true, "Resupply Ammo", "curiosity:Player:Loadout:Resupply");
                 IsPoliceJobActive = true;
                 Tasks.CalloutHandler.PlayerCanTakeCallout();
@@ -87,6 +93,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
             }
             else
             {
+                Game.PlayerPed.RelationshipGroup = Client.PlayerRelationshipGroup;
+
                 if (IsOnCallout)
                 {
                     Classes.CreateShopCallout.EndCallout();
