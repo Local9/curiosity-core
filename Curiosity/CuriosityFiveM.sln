@@ -84,6 +84,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Client.net", "Cur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Server.net", "Curiosity.Server.Net\Curiosity.Server.net.csproj", "{76BBCCE5-0E48-4AA0-9903-28474F2E5845}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Player.Client.net", "Curiosity.Player.Client.net\Curiosity.Player.Client.net.csproj", "{BF529EA2-D6D5-4487-8053-6B896ABBB797}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -186,6 +188,10 @@ Global
 		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76BBCCE5-0E48-4AA0-9903-28474F2E5845}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF529EA2-D6D5-4487-8053-6B896ABBB797}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF529EA2-D6D5-4487-8053-6B896ABBB797}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF529EA2-D6D5-4487-8053-6B896ABBB797}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF529EA2-D6D5-4487-8053-6B896ABBB797}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -218,6 +224,7 @@ Global
 		{F3CBC98F-A17F-4240-BBE9-D28CF272E82B} = {A0D62F10-DBC9-4C31-B3AB-7058530A87C9}
 		{132046A7-08EC-4F6E-AFE1-08C264B1359D} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
 		{76BBCCE5-0E48-4AA0-9903-28474F2E5845} = {A0D62F10-DBC9-4C31-B3AB-7058530A87C9}
+		{BF529EA2-D6D5-4487-8053-6B896ABBB797} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
