@@ -10,9 +10,28 @@ namespace Curiosity.Global.Shared.net.Entity
 {
     public class Mission
     {
-        public string name;
+        // CORE
+        public string title;
+        public string author;
+        public string description;
         public Vector3 location;
+        // Mission Settings
         public MissionType missionType;
         public MissionDifficulty missionDifficulty;
+        public ObjectiveType objectiveType;
+        // Objectives...
+
+        // Mission Actors
+        
+        // Mission Vehicles
+        
+        // Mission Props
+        
+        // Mission Pickups
+        
+        // Mission Messages
+        
+        // Mission Teleports
+
     }
 }

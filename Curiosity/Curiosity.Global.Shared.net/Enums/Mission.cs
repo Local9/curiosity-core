@@ -21,4 +21,17 @@ namespace Curiosity.Global.Shared.net.Enums
         Medium,
         Hard
     }
+
+    public enum ObjectiveType
+    {
+        Unknown = 0,
+        EnterVehicle,
+        Checkpoint,
+        CollectPickup,
+        DistanceSection,
+        LeaveArea,
+        ClearArea,
+        HealPed,
+        PutoutFire
+    }
 }

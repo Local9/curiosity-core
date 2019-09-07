@@ -127,7 +127,8 @@ namespace Curiosity.Server.net.Classes.Environment
                 timerCheck = API.GetGameTimer();
                 try
                 {
-                    foreach (int key in tempVehiclesToDelete)
+                    List<int> tempVehiclesToDeleteCopy = new List<int>(tempVehiclesToDelete);
+                    foreach (int key in tempVehiclesToDeleteCopy)
                     {
                         if (!Server.isLive)
                             Log.Verbose($"OnVehicleCheck() -> Remove deleted vehicles from list");
