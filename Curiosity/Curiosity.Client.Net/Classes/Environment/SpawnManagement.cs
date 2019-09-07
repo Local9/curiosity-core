@@ -114,6 +114,7 @@ namespace Curiosity.Client.net.Classes.Environment
                         await Client.Delay(0);
                     }
 
+                    API.SetFakeWantedLevel(0);
                     Client.TriggerServerEvent("curiosity:Server:Bank:MedicalFees");
                     UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You have been charged for your stay, please try to stay alive.", 132);
                 }

@@ -24,6 +24,7 @@ namespace Curiosity.Police.Client.net.Classes
         static protected int TIME_BETWEEN_PULLOVERS = 45000;
 
         static long LastPullover;
+        static bool TicketedPed = false;
 
         static public void Init()
         {
@@ -42,6 +43,8 @@ namespace Curiosity.Police.Client.net.Classes
             Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(10, 21));
             Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(2, 6));
             Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(2, 6));
+
+            TicketedPed = true;
 
             API.DecorSetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR, true);
 
@@ -78,7 +81,7 @@ namespace Curiosity.Police.Client.net.Classes
                     return;
                 }
 
-                if ((Game.GameTime - LastPullover) <= TIME_BETWEEN_PULLOVERS)
+                if ((Game.GameTime - LastPullover) <= TIME_BETWEEN_PULLOVERS && TicketedPed)
                 {
                     float timeToWait = (TIME_BETWEEN_PULLOVERS - (Game.GameTime - LastPullover)) / 1000;
 
@@ -113,6 +116,13 @@ namespace Curiosity.Police.Client.net.Classes
                     vehFound = (CitizenFX.Core.Vehicle)raycast.HitEntity;
                 }
 
+                if (!vehFound.Driver.Exists())
+                {
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Police Dept", $"", "You cannot pull over empty vehicles.", 2);
+                    vehFound = null;
+                    return;
+                }
+
                 if (API.DecorGetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR))
                 {
                     Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Police Dept", $"", "Has already been pulled over, you cannot harass pedestrians.", 2);
@@ -130,6 +140,7 @@ namespace Curiosity.Police.Client.net.Classes
 
                     if (API.NetworkHasControlOfEntity(vehFound.Handle))
                     {
+                        TicketedPed = false;
                         API.SetVehicleHalt(vehFound.Handle, 40f, 1, false);
                         API.DecorSetBool(vehFound.Handle, PULLED_OVER_DECOR, true);
                     }
