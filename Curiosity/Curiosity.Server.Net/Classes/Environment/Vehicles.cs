@@ -44,7 +44,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
             catch (Exception ex)
             {
-                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "OnGetVehicleList", $"{ex}");
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "OnGetVehicleList", $"SPAWNID: {spawnId}\nEXCEPTION:\n{ex}");
                 Log.Error($"OnGetVehicleList -> {ex.Message}");
             }
         }
