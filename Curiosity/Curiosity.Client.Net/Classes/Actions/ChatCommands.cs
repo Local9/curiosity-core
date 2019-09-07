@@ -92,6 +92,7 @@ namespace Curiosity.Client.net.Classes.Actions
             client.RegisterEventHandler("curiosity:Client:Command:OnFire", new Action<string>(OnFire));
 
             API.RegisterCommand("mod", new Action<int, List<object>, string>(ModVehicle), false);
+            API.RegisterCommand("donator", new Action<int, List<object>, string>(DonatorCheck), false);
             API.RegisterCommand("tp", new Action<int, List<object>, string>(Teleport), false);
             API.RegisterCommand("pos", new Action<int, List<object>, string>(SaveCoords), false);
             API.RegisterCommand("dv", new Action<int, List<object>, string>(DeleteVehicle), false);
@@ -154,7 +155,12 @@ namespace Curiosity.Client.net.Classes.Actions
             }), false);
         }
 
-        static async void RoyallyFuckPlayerRP(int playerHandle, List<object> arguments, string raw)
+        static void DonatorCheck(int playerHandle, List<object> arguments, string raw)
+        {
+            // Client.TriggerServerEvent("curiosity:Server:Player:DonationCheck");
+        }
+
+        static void RoyallyFuckPlayerRP(int playerHandle, List<object> arguments, string raw)
         {
             Environment.UI.Notifications.LifeV(1, "Role Playing?", $"NO FORCED RP", "This is not strictly a role playing server, all role play must be voluntary.", 2);
             RoyallyFuckPlayer(playerHandle, arguments, raw);

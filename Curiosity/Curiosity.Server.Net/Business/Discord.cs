@@ -99,6 +99,8 @@ namespace Curiosity.Server.net.Business
                     if (timeSpan.TotalMinutes <= 30) return privilegeIn;
                 }
 
+                RanDiscord.TryAdd(discordId, DateTime.Now);
+
                 RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{discordGuild}/members/{discordId}", string.Empty);
                 Privilege privilege = privilegeIn;
                 if (requestResponse.status == System.Net.HttpStatusCode.OK)
