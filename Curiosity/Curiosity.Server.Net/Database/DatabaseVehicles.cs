@@ -80,7 +80,7 @@ namespace Curiosity.Server.net.Database
                         VehicleHashString = $"{k["vehicleHash"]}",
                         UnlockRequiredSkill = $"{k["requiredSkill"]}",
                         UnlockRequiredSkillDescription = $"{k["requiredSkillDescription"]}",
-                        UnlockRequirementValue = int.Parse($"{k["vehicleUnlockRequirement"]}"),
+                        UnlockRequirementValue = long.Parse($"{k["vehicleUnlockRequirement"]}"),
                         SpawnPositionX = float.Parse($"{k["x"]}"),
                         SpawnPositionY = float.Parse($"{k["y"]}"),
                         SpawnPositionZ = float.Parse($"{k["z"]}"),

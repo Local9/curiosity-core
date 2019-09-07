@@ -8,7 +8,7 @@
         public float SpawnPositionY;
         public float SpawnPositionZ;
         public float SpawnHeading;
-        public int UnlockRequirementValue;
+        public long UnlockRequirementValue;
         public string UnlockRequiredSkill;
         public string UnlockRequiredSkillDescription;
         public bool InstallSirens;
