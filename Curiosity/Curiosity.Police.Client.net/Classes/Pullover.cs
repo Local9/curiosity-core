@@ -71,13 +71,13 @@ namespace Curiosity.Police.Client.net.Classes
             {
                 if (!Environment.Job.DutyManager.IsOnDuty)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Police Dept", $"", "Must be on active duty to pull over a pedestrian.", 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "Must be on active duty to pull over a pedestrian.", 2);
                     return;
                 }
 
                 if (Environment.Job.DutyManager.IsOnCallout)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Police Dept", $"", "You are currently on an active callout.", 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "You are currently on an active callout.", 2);
                     return;
                 }
 
@@ -91,7 +91,7 @@ namespace Curiosity.Police.Client.net.Classes
 
                     if (timeToWait <= 5) color = "~g~";
 
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Police Dept", $"Time Left: {color}{timeToWait}s", $"You can only do pull overs every ~b~{TIME_BETWEEN_PULLOVERS / 1000}~s~ seconds.", 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"Time Left: {color}{timeToWait}s", $"You can only do pull overs every ~b~{TIME_BETWEEN_PULLOVERS / 1000}~s~ seconds.", 2);
                     await Client.Delay(1000);
                     return;
                 }
@@ -102,7 +102,7 @@ namespace Curiosity.Police.Client.net.Classes
 
                 if (vehFound != null)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Police Dept", $"", "You still have an active pull over.", 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "You still have an active pull over.", 2);
                     return;
                 }
 
@@ -118,14 +118,14 @@ namespace Curiosity.Police.Client.net.Classes
 
                 if (!vehFound.Driver.Exists())
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Police Dept", $"", "You cannot pull over empty vehicles.", 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "You cannot pull over empty vehicles.", 2);
                     vehFound = null;
                     return;
                 }
 
                 if (API.DecorGetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR))
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Police Dept", $"", "Has already been pulled over, you cannot harass pedestrians.", 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "Has already been pulled over, you cannot harass pedestrians.", 2);
                     vehFound = null;
                     return;
                 }
@@ -134,7 +134,7 @@ namespace Curiosity.Police.Client.net.Classes
                 {
                     LastPullover = Game.GameTime;
 
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Notification", $"Plate: {vehFound.Mods.LicensePlate}", "Vehicle in front is stopping.", 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Notification", $"Plate: {vehFound.Mods.LicensePlate}", "Vehicle in front is stopping.", 2);
 
                     Ped ped = vehFound.Driver;
 
