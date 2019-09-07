@@ -29,8 +29,7 @@ a {
   text-decoration: none; }
 
 .crosshair,
-.menu-car,
-.menu-user {
+.menu {
   opacity: 0; }
 
 #cursorPointer {

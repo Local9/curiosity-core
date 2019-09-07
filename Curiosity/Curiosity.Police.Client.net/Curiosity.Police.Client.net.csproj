@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Pullover.cs" />
     <Compile Include="Classes\CreatePed.cs" />
     <Compile Include="Classes\CreateShopCallout.cs" />
     <Compile Include="Classes\Developer.cs" />

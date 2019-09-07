@@ -325,7 +325,7 @@ namespace Curiosity.Client.net
                 spawnPosition = World.GetNextPositionOnSidewalk(new Vector3(x, y, groundZ));
             }
 
-            Game.PlayerPed.Position = spawnPosition;
+            Game.PlayerPed.Position = spawnPosition + new Vector3(0f, 0f, -0.4f);
 
             int gameTimer = API.GetGameTimer();
 

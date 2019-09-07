@@ -23,7 +23,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             "VEHICLES_HORNS_SIREN_2"
         };
 
-        static string CurrentSirenPreset = SirenModes[1];
+        static string CurrentSirenPreset = SirenModes[0];
 
         static Dictionary<int, int> SirenSoundIds = new Dictionary<int, int>();
 

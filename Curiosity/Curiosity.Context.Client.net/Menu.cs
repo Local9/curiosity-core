@@ -51,7 +51,22 @@ namespace Curiosity.Context.Client.net
             RegisterNuiEventHandler("togglecarboot", new Action<dynamic>(OnOpenCarboot));
             RegisterNuiEventHandler("openDutyMenu", new Action<dynamic>(OnOpenDutyMenu));
 
+            RegisterNuiEventHandler("vpoTicket", new Action<dynamic>(OnVpoTicket));
+            RegisterNuiEventHandler("vpoRelease", new Action<dynamic>(OnVpoRelease));
+
             RegisterTickHandler(OnTick);
+        }
+
+        void OnVpoTicket(dynamic nui)
+        {
+            TriggerEvent("curiosity:Client:Police:ReleaseTicketedAI");
+            DisableNuiFocus(null);
+        }
+
+        void OnVpoRelease(dynamic nui)
+        {
+            TriggerEvent("curiosity:Client:Police:ReleaseAI");
+            DisableNuiFocus(null);
         }
 
         void OnDutyMenu(bool enable, string menuText, string eventToCall)
@@ -142,13 +157,24 @@ namespace Curiosity.Context.Client.net
 
                                 Vehicle vehicle = (Vehicle)ent;
 
-                                SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting
+                                if (API.DecorGetBool(vehicle.Handle, "curiosity:police:IsPulledOver"))
                                 {
-                                    menu = "vehicle",
-                                    showDutyMenu = (vehicle.ClassType == VehicleClass.Emergency && showDutyMenu),
-                                    dutyMenuText = dutyMenuText,
-                                    idEntity = ent.Handle
-                                }));
+                                    SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting
+                                    {
+                                        menu = "vehiclePulledOver",
+                                        idEntity = ent.Handle
+                                    }));
+                                }
+                                else
+                                {
+                                    SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting
+                                    {
+                                        menu = "vehicle",
+                                        showDutyMenu = (vehicle.ClassType == VehicleClass.Emergency && showDutyMenu),
+                                        dutyMenuText = dutyMenuText,
+                                        idEntity = ent.Handle
+                                    }));
+                                }
                             }
                         }
                         //else if (entityType == 1) // Ped

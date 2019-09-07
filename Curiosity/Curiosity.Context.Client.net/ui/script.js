@@ -40,6 +40,11 @@ $(document).ready(function () {
                 $(".openDutyMenu").hide();
             }
         }
+        if (event.data.menu == 'vehiclePulledOver') {
+            $(".crosshair").addClass('active');
+            $(".menu-car-pulled-over").addClass('fadeIn');
+            idEnt = event.data.idEntity;
+        }
         if (event.data.menu == 'user') {
             $(".crosshair").addClass('active');
             $(".menu-user").addClass('fadeIn');
@@ -90,6 +95,20 @@ $(document).ready(function () {
             id: idEnt
         }));
         $(this).find('.text').text($(this).find('.text').text() == 'Lock' ? 'Unlock' : 'Lock');
+    });
+
+    $('.ticket').on('click', function (e) {
+        e.preventDefault();
+        $.post('http://curiosity-context/vpoTicket', JSON.stringify({
+            id: idEnt
+        }));
+    });
+
+    $('.release').on('click', function (e) {
+        e.preventDefault();
+        $.post('http://curiosity-context/vpoRelease', JSON.stringify({
+            id: idEnt
+        }));
     });
 
     $('.openDutyMenu').on('click', function (e) {
