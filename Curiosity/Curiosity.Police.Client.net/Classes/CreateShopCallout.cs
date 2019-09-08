@@ -401,8 +401,11 @@ namespace Curiosity.Police.Client.net.Classes
                             ped.AttachedBlip.Delete();
                         }
                     }
+
+                    API.NetworkRequestControlOfNetworkId(ped.NetworkId);
+
                     ped.MarkAsNoLongerNeeded();
-                    peds.Remove(ped);
+                    ped.Delete();
                 }
 
                 if (ShopKeeper != null)

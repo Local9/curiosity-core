@@ -227,7 +227,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
 
-        static void PlaySound(int sourceServerId, string sound)
+        static public void PlaySound(int sourceServerId, string sound)
         {
             SirenSoundIds[Game.Player.ServerId] = Function.Call<int>(Hash.GET_SOUND_ID);
             Function.Call(Hash.PLAY_SOUND_FROM_ENTITY, SirenSoundIds[Game.Player.ServerId], sound, Game.PlayerPed.CurrentVehicle.Handle, 0, 0, 0);

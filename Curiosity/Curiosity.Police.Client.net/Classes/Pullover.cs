@@ -172,6 +172,8 @@ namespace Curiosity.Police.Client.net.Classes
 
                         Ped ped = vehFound.Driver;
 
+                        Function.Call(Hash.BLIP_SIREN, Game.PlayerPed.CurrentVehicle.Handle);
+
                         if (API.NetworkHasControlOfEntity(vehFound.Handle))
                         {
                             TicketedPed = false;
