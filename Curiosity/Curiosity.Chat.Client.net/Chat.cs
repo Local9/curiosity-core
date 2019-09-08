@@ -32,16 +32,36 @@ namespace Curiosity.Chat.Client.net
             SetTextChatEnabled(false);
 
             RegisterEventHandler("curiosity:Client:Player:Role", new Action<string>(UpdatePlayerRole));
-
             RegisterEventHandler("curiosity:Client:Chat:Message", new Action<string, string, string>(ChatMessage));
-
             RegisterEventHandler("curiosity:Client:Chat:EnableScroll", new Action<bool>(EnableChatScroll));
             RegisterEventHandler("curiosity:Client:Chat:EnableChatBox", new Action<bool>(EnableChatBox));
+
+            RegisterEventHandler("curiosity:Client:Chat:Side", new Action<string>(OnChatSide));
+
+            RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
 
             RegisterNuiCallbackType("chatResult");
             RegisterEventHandler("__cfx_nui:chatResult", new Action<System.Dynamic.ExpandoObject>(HandleChatResult));
 
             Tick += UpdateChat;
+        }
+
+        void OnClientResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            string chatPosition = API.GetResourceKvpString("curiosity:chat:position");
+
+            if (string.IsNullOrEmpty(chatPosition))
+                chatPosition = "chat-right";
+
+            OnChatSide(chatPosition);
+        }
+
+        void OnChatSide(string side)
+        {
+            API.SetResourceKvp("curiosity:chat:position", side);
+            SendNuiMessage($@"{{""class"": ""{side}""}}");
         }
 
         void UpdatePlayerRole(string roleIn)

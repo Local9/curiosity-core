@@ -44,7 +44,7 @@ $(document).ready(function () {
             $(".crosshair").addClass('active');
             $(".menu-car-pulled-over").addClass('fadeIn');
 
-            console.log(JSON.stringify(event.data));
+            // console.log(JSON.stringify(event.data));
 
             if (event.data.speeding) {
                 $(".speeding-ticket").show();
@@ -109,6 +109,13 @@ $(document).ready(function () {
     $('.ticket').on('click', function (e) {
         e.preventDefault();
         $.post('http://curiosity-context/vpoTicket', JSON.stringify({
+            id: idEnt
+        }));
+    });
+
+    $('.speeding-ticket').on('click', function (e) {
+        e.preventDefault();
+        $.post('http://curiosity-context/vpoSpeedingTicket', JSON.stringify({
             id: idEnt
         }));
     });

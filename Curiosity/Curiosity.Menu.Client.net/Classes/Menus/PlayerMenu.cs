@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
 using MenuAPI;
 using Curiosity.Menus.Client.net.Classes.Data;
+using System.Collections.Generic;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus
 {
@@ -13,6 +15,10 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static MenuListItem playerScenarios = new MenuListItem("Player Scenarios", PedScenarios.Scenarios, 0, "Select a scenario and hit enter to start it. Selecting another scenario will override the current scenario. If you're already playing the selected scenario, selecting it again will stop the scenario.");
         static MenuItem stopScenario = new MenuItem("Force Stop Scenario", "This will force a playing scenario to stop immediately, without waiting for it to finish it's 'stopping' animation.");
 
+        static List<string> chatPositions = new List<string>() { "Right", "Left" };
+
+        static MenuListItem chatSide = new MenuListItem("Chat Position", chatPositions, API.GetResourceKvpInt("curiosity:menu:chat:listIndex"), "Select chat position and press enter.");
+
         public static void Init()
         {
             MenuBase.AddSubMenu(menu);
@@ -22,9 +28,10 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 MenuBase.MenuOpen(true);
                 menu.AddMenuItem(playerScenarios);
                 menu.AddMenuItem(stopScenario);
-                
+
                 //menu.AddMenuItem(new MenuItem("Open Skills", "View Skills") { ItemData = SkillType.Experience });
                 //menu.AddMenuItem(new MenuItem("Open Stats", "View Stats") { ItemData = SkillType.Statistic });
+                menu.AddMenuItem(chatSide);
                 menu.AddMenuItem(new MenuCheckboxItem("Cinematic Mode", "Enable Cinematic Mode") { ItemData = "CINEMATIC", Checked = false });
                 menu.AddMenuItem(new MenuItem("Cinematic Bars", "Select to adjust Cinematic Bars") { ItemData = "CINEMATICBARS" });
 
@@ -57,6 +64,19 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             // List selections
             menu.OnListItemSelect += (sender, listItem, listIndex, itemIndex) =>
             {
+                if (listItem == chatSide)
+                {
+                    string cssClass = "chat-right";
+
+                    if (chatPositions[listIndex] == chatPositions[1])
+                        cssClass = "chat-left";
+
+                    API.SetResourceKvp("curiosity:menu:chat:position", cssClass);
+                    API.SetResourceKvpInt("curiosity:menu:chat:listIndex", listIndex);
+
+                    Client.TriggerEvent("curiosity:Client:Chat:Side", cssClass);
+                }
+
                 if (listItem == playerScenarios)
                 {
                     CommonFunctions.PlayScenario(PedScenarios.ScenarioNames[PedScenarios.Scenarios[listIndex]]);
