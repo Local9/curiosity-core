@@ -21,6 +21,7 @@ namespace Curiosity.Police.Client.net.Classes
 
         static protected string PULLED_OVER_DECOR = "curiosity:police:IsPulledOver";
         static protected string WAS_PULLED_OVER_DECOR = "curiosity:police:WasPulledOver";
+        static protected string SPEEDING_DECOR = "curiosity:police:Speeding";
         static protected int TIME_BETWEEN_PULLOVERS = 45000;
 
         static long LastPullover;
@@ -33,9 +34,30 @@ namespace Curiosity.Police.Client.net.Classes
 
             client.RegisterEventHandler("curiosity:Client:Police:ReleaseAI", new Action(OnReleaseAi));
             client.RegisterEventHandler("curiosity:Client:Police:ReleaseTicketedAI", new Action(OnReleaseAiTicket));
+            client.RegisterEventHandler("curiosity:Client:Police:ReleaseSpeedingTicketAI", new Action(OnReleaseAiSpeedingTicket));
+            client.RegisterEventHandler("curiosity:Client:Police:Speeding", new Action<int, bool>(OnVehicleSpeeding));
 
             API.DecorRegister(PULLED_OVER_DECOR, 3);
             API.DecorRegister(WAS_PULLED_OVER_DECOR, 3);
+            API.DecorRegister(SPEEDING_DECOR, 3);
+        }
+
+        static void OnVehicleSpeeding(int vehicleHandle, bool locked)
+        {
+            if (!locked) return;
+
+            Vehicle vehicle = new Vehicle(vehicleHandle);
+            API.DecorSetBool(vehicle.Handle, SPEEDING_DECOR, true);
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Speeding Violation", $"Plate: {vehicle.Mods.LicensePlate}", $"~b~Primary Color:~s~~n~ {vehicle.Mods.PrimaryColor}~n~~b~Secondary Color:~s~~n~ {vehicle.Mods.SecondaryColor}", 2);
+        }
+
+        static void OnReleaseAiSpeedingTicket()
+        {
+            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(20, 31));
+            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(2, 6));
+            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(2, 6));
+
+            OnReleaseTicketedAi();
         }
 
         static void OnReleaseAiTicket()
@@ -44,11 +66,21 @@ namespace Curiosity.Police.Client.net.Classes
             Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(2, 6));
             Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(2, 6));
 
-            TicketedPed = true;
+            OnReleaseTicketedAi();
+        }
 
+        static void OnReleaseTicketedAi()
+        {
+            TicketedPed = true;
             API.DecorSetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR, true);
 
-            OnReleaseAi();
+            if (vehFound != null)
+            {
+                if (vehFound.IsStopped)
+                {
+                    ReleasePed();
+                }
+            }
         }
 
         static void OnReleaseAi()

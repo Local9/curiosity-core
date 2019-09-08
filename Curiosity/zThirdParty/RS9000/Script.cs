@@ -26,26 +26,40 @@ namespace RS9000
 
         public Script()
         {
-            ResourceName = API.GetCurrentResourceName();
-            foreach (char c in ResourceName)
+            try
             {
-                if (char.IsUpper(c))
+                ResourceName = API.GetCurrentResourceName();
+                foreach (char c in ResourceName)
                 {
-                    throw new Exception("Resource name cannot contain uppercase characters");
+                    if (char.IsUpper(c))
+                    {
+                        throw new Exception("Resource name cannot contain uppercase characters");
+                    }
+                }
+
+                string configData = API.LoadResourceFile(ResourceName, "config.json");
+
+                if (string.IsNullOrEmpty(configData))
+                {
+                    Debug.WriteLine($"{ResourceName} -> Unable to load config file");
+                }
+                else
+                {
+                    Config = Config.Base;
+                    JsonConvert.PopulateObject(configData, Config);
+                    Config.Validate();
+
+                    Radar = new Radar(this);
+                    controller = new Controller(this, Radar);
+
+                    Tick += Update;
+                    Tick += CheckInputs;
                 }
             }
-
-            string configData = API.LoadResourceFile(ResourceName, "config.json");
-
-            Config = Config.Base;
-            JsonConvert.PopulateObject(configData, Config);
-            Config.Validate();
-
-            Radar = new Radar(this);
-            controller = new Controller(this, Radar);
-
-            Tick += Update;
-            Tick += CheckInputs;
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{ResourceName} -> {ex}");
+            }
         }
 
         public void RegisterEventHandler(string eventName, Delegate callback)
@@ -55,15 +69,22 @@ namespace RS9000
 
         public void RegisterNUICallback(string msg, Delegate callback)
         {
-            API.RegisterNuiCallbackType(msg);
-            EventHandlers[$"__cfx_nui:{msg}"] += new Func<ExpandoObject, CallbackDelegate, Task>(async (body, result) =>
+            try
             {
-                object rv = callback?.DynamicInvoke(body, result);
-                if (rv != null && rv is Task t)
+                API.RegisterNuiCallbackType(msg);
+                EventHandlers[$"__cfx_nui:{msg}"] += new Func<ExpandoObject, CallbackDelegate, Task>(async (body, result) =>
                 {
-                    await t;
-                }
-            });
+                    object rv = callback?.DynamicInvoke(body, result);
+                    if (rv != null && rv is Task t)
+                    {
+                        await t;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{ResourceName} -> {ex}");
+            }
         }
 
         public static Vehicle GetVehicleDriving(Ped ped)

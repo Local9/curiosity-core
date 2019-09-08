@@ -99,6 +99,11 @@ namespace RS9000
                     plate = locked ? value.Mods.LicensePlate : null,
                 });
 
+                if (locked)
+                {
+                    BaseScript.TriggerEvent("curiosity:Client:Police:Speeding", value.Handle, locked);
+                }
+
                 lockedTarget = value;
             }
         }
@@ -145,10 +150,6 @@ namespace RS9000
             {
                 max.Z = groundZ + 0.5f;
             }
-
-#if DEBUG
-            DrawLine(Radar.Vehicle.Position, max, 0xFF, 0x00, 0x00);
-#endif
 
             Vector3 src = Radar.Vehicle.Position;
 
@@ -212,13 +213,6 @@ namespace RS9000
             diff = Math.Abs(diff);
             return diff > 90;
         }
-
-#if DEBUG
-        private static void DrawLine(Vector3 from, Vector3 to, int r, int g, int b)
-        {
-            API.DrawLine(from.X, from.Y, from.Z, to.X, to.Y, to.Z, r, g, b, 0xFF);
-        }
-#endif
     }
 
     internal class FastLockedEventArgs : EventArgs

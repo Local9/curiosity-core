@@ -13,16 +13,16 @@ namespace RS9000
     internal class Config
     {
         [JsonProperty]
-        public string Units { get; set; }
+        public string Units { get; set; } = "mph";
 
         [JsonProperty]
-        public bool PlateReader { get; set; }
+        public bool PlateReader { get; set; } = true;
 
         [JsonProperty]
-        public bool Beep { get; set; }
+        public bool Beep { get; set; } = true;
 
         [JsonProperty]
-        public uint FastLimit { get; set; }
+        public uint FastLimit { get; set; } = 80;
 
         [JsonProperty]
         public ControlListConfig Controls { get; set; }

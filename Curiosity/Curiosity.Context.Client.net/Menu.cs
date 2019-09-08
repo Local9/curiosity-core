@@ -21,6 +21,7 @@ namespace Curiosity.Context.Client.net
     {
         public dynamic menu;
         public bool showDutyMenu;
+        public bool speeding;
         public string dutyMenuText;
         public int idEntity;
     }
@@ -52,9 +53,16 @@ namespace Curiosity.Context.Client.net
             RegisterNuiEventHandler("openDutyMenu", new Action<dynamic>(OnOpenDutyMenu));
 
             RegisterNuiEventHandler("vpoTicket", new Action<dynamic>(OnVpoTicket));
+            RegisterNuiEventHandler("vpoSpeedingTicket", new Action<dynamic>(OnVpoSpeedingTicket));
             RegisterNuiEventHandler("vpoRelease", new Action<dynamic>(OnVpoRelease));
 
             RegisterTickHandler(OnTick);
+        }
+
+        void OnVpoSpeedingTicket(dynamic nui)
+        {
+            TriggerEvent("curiosity:Client:Police:ReleaseSpeedingTicketedAI");
+            DisableNuiFocus(null);
         }
 
         void OnVpoTicket(dynamic nui)
@@ -162,8 +170,9 @@ namespace Curiosity.Context.Client.net
                                     SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting
                                     {
                                         menu = "vehiclePulledOver",
+                                        speeding = API.DecorGetBool(vehicle.Handle, "curiosity:police:Speeding"),
                                         idEntity = ent.Handle
-                                    }));
+                                    })); ;
                                 }
                                 else
                                 {

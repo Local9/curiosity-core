@@ -43,6 +43,15 @@ $(document).ready(function () {
         if (event.data.menu == 'vehiclePulledOver') {
             $(".crosshair").addClass('active');
             $(".menu-car-pulled-over").addClass('fadeIn');
+
+            console.log(JSON.stringify(event.data));
+
+            if (event.data.speeding) {
+                $(".speeding-ticket").show();
+            } else {
+                $(".speeding-ticket").hide();
+            }
+
             idEnt = event.data.idEntity;
         }
         if (event.data.menu == 'user') {
