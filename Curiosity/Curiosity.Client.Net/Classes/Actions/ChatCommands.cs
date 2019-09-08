@@ -107,12 +107,12 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFireFootprints), false);
 
             // FUCK PLAYER
-            API.RegisterCommand("staffcar", new Action<int, List<object>, string>(FuckPlayer), false);
-            API.RegisterCommand("give", new Action<int, List<object>, string>(FuckPlayer), false);
-            API.RegisterCommand("giveweapon", new Action<int, List<object>, string>(FuckPlayer), false);
-            API.RegisterCommand("spawncar", new Action<int, List<object>, string>(FuckPlayer), false);
-            API.RegisterCommand("weapon", new Action<int, List<object>, string>(FuckPlayer), false);
-            API.RegisterCommand("money", new Action<int, List<object>, string>(FuckPlayer), false);
+            API.RegisterCommand("staffcar", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
+            API.RegisterCommand("give", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
+            API.RegisterCommand("giveweapon", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
+            API.RegisterCommand("spawncar", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
+            API.RegisterCommand("weapon", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
+            API.RegisterCommand("money", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
             API.RegisterCommand("staff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
             API.RegisterCommand("becomestaff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
             API.RegisterCommand("rp", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
