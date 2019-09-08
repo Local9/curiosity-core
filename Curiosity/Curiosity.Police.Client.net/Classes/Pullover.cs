@@ -116,33 +116,36 @@ namespace Curiosity.Police.Client.net.Classes
                     vehFound = (CitizenFX.Core.Vehicle)raycast.HitEntity;
                 }
 
-                if (!vehFound.Driver.Exists())
-                {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "You cannot pull over empty vehicles.", 2);
-                    vehFound = null;
-                    return;
-                }
-
-                if (API.DecorGetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR))
-                {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "Has already been pulled over, you cannot harass pedestrians.", 2);
-                    vehFound = null;
-                    return;
-                }
-
                 if (vehFound != null)
                 {
-                    LastPullover = Game.GameTime;
-
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Notification", $"Plate: {vehFound.Mods.LicensePlate}", "Vehicle in front is stopping.", 2);
-
-                    Ped ped = vehFound.Driver;
-
-                    if (API.NetworkHasControlOfEntity(vehFound.Handle))
+                    if (vehFound.Driver != null)
                     {
-                        TicketedPed = false;
-                        API.SetVehicleHalt(vehFound.Handle, 40f, 1, false);
-                        API.DecorSetBool(vehFound.Handle, PULLED_OVER_DECOR, true);
+                        if (!vehFound.Driver.Exists())
+                        {
+                            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "You cannot pull over empty vehicles.", 2);
+                            vehFound = null;
+                            return;
+                        }
+
+                        if (API.DecorGetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR))
+                        {
+                            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "Has already been pulled over, you cannot harass pedestrians.", 2);
+                            vehFound = null;
+                            return;
+                        }
+
+                        LastPullover = Game.GameTime;
+
+                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Notification", $"Plate: {vehFound.Mods.LicensePlate}", "Vehicle in front is stopping.", 2);
+
+                        Ped ped = vehFound.Driver;
+
+                        if (API.NetworkHasControlOfEntity(vehFound.Handle))
+                        {
+                            TicketedPed = false;
+                            API.SetVehicleHalt(vehFound.Handle, 40f, 1, false);
+                            API.DecorSetBool(vehFound.Handle, PULLED_OVER_DECOR, true);
+                        }
                     }
                 }
 
