@@ -403,7 +403,6 @@ namespace Curiosity.Police.Client.net.Classes
                     }
 
                     API.NetworkRequestControlOfNetworkId(ped.NetworkId);
-
                     ped.MarkAsNoLongerNeeded();
                     ped.Delete();
                 }
