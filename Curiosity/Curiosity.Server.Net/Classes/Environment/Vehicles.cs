@@ -146,7 +146,11 @@ namespace Curiosity.Server.net.Classes.Environment
 
                     foreach (KeyValuePair<int, VehicleData> vehicle in vehiclesToCheck)
                     {
-                        if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
+                        if ((DateTime.Now - vehicle.Value.Updated).Minutes > 30)
+                        {
+                            tempVehicles.Remove(vehicle.Key);
+                        }
+                        else if (!SessionManager.PlayerList.ContainsKey(vehicle.Value.PlayerHandle))
                         {
                             Server.TriggerClientEvent("curiosity:Client:Vehicles:Remove", vehicle.Key);
                             sent++;
