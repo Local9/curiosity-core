@@ -97,6 +97,8 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("pos", new Action<int, List<object>, string>(SaveCoords), false);
             API.RegisterCommand("dv", new Action<int, List<object>, string>(DeleteVehicle), false);
             API.RegisterCommand("dvn", new Action<int, List<object>, string>(DeleteVehicleNuke), false);
+            API.RegisterCommand("don", new Action<int, List<object>, string>(DeleteObjectNuke), false);
+            API.RegisterCommand("dpn", new Action<int, List<object>, string>(DeletePedNuke), false);
             // test commands
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
@@ -464,6 +466,60 @@ namespace Curiosity.Client.net.Classes.Actions
             {
                 await BaseScript.Delay(1);
             }
+        }
+
+        static async void DeleteObjectNuke(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsStaff()) return;
+
+            int totalFound = 0;
+            int totalNotDeleted = 0;
+
+            foreach (int objectEntity in new Helpers.ObjectList())
+            {
+                await Client.Delay(0);
+                totalFound++;
+
+                int objectHandleToDelete = objectEntity;
+                int objectHandle = objectEntity;
+
+                if (API.DoesEntityExist(objectEntity))
+                {
+                    API.SetEntityAsNoLongerNeeded(ref objectHandle);
+                    API.DeleteEntity(ref objectHandleToDelete);
+                }
+
+                if (DoesEntityExist(objectEntity))
+                    totalNotDeleted++;
+            }
+            Environment.UI.Notifications.LifeV(7, "Server Information", "Object Nuke Info", $"Total Removed: {totalFound - totalNotDeleted:00} / {totalFound:00}", 2);
+        }
+
+        static async void DeletePedNuke(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsStaff()) return;
+
+            int totalFound = 0;
+            int totalNotDeleted = 0;
+
+            foreach (int pedEntity in new Helpers.PedList())
+            {
+                await Client.Delay(0);
+                totalFound++;
+
+                int pedHandleToDelete = pedEntity;
+                int pedHandle = pedEntity;
+
+                if (API.DoesEntityExist(pedHandle))
+                {
+                    API.SetEntityAsNoLongerNeeded(ref pedHandle);
+                    API.DeleteEntity(ref pedHandleToDelete);
+                }
+
+                if (DoesEntityExist(pedHandle))
+                    totalNotDeleted++;
+            }
+            Environment.UI.Notifications.LifeV(7, "Server Information", "Ped Nuke Info", $"Total Removed: {totalFound - totalNotDeleted:00} / {totalFound:00}", 2);
         }
 
         static async void DeleteVehicleNuke(int playerHandle, List<object> arguments, string raw)
