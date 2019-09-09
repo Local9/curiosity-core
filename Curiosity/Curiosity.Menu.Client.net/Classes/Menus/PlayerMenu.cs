@@ -2,7 +2,8 @@
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
 using MenuAPI;
-using Curiosity.Menus.Client.net.Classes.Data;
+using Curiosity.Shared.Client.net.Classes.Data;
+using Curiosity.Shared.Client.net.Classes;
 using System.Collections.Generic;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus

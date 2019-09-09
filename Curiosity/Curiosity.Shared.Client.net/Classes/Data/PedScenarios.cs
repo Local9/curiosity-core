@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Curiosity.Menus.Client.net.Classes.Data
+namespace Curiosity.Shared.Client.net.Classes.Data
 {
-    class PedScenarios
+    public class PedScenarios
     {
         public static List<string> PositionBasedScenarios = new List<string>()
         {

@@ -7,9 +7,9 @@ using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.Native;
 
-namespace Curiosity.Menus.Client.net.Classes
+namespace Curiosity.Shared.Client.net.Classes
 {
-    static class CommonFunctions
+    static public class CommonFunctions
     {
         private static string _currentScenario = "";
 
@@ -32,42 +32,42 @@ namespace Curiosity.Menus.Client.net.Classes
                 // Check if the player CAN play a scenario... 
                 if (IsPedRunning(Game.PlayerPed.Handle))
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are running.", 2);
+                    BaseScript.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are running.", 2);
                     canPlay = false;
                 }
                 if (IsEntityDead(Game.PlayerPed.Handle))
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are dead.", 2);
+                    BaseScript.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are dead.", 2);
                     canPlay = false;
                 }
                 if (IsPlayerInCutscene(Game.PlayerPed.Handle))
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are in a cutscene.", 2);
+                    BaseScript.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are in a cutscene.", 2);
                     canPlay = false;
                 }
                 if (IsPedFalling(Game.PlayerPed.Handle))
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are falling.", 2);
+                    BaseScript.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are falling.", 2);
                     canPlay = false;
                 }
                 if (IsPedRagdoll(Game.PlayerPed.Handle))
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are currently in a ragdoll state.", 2);
+                    BaseScript.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are currently in a ragdoll state.", 2);
                     canPlay = false;
                 }
                 if (!IsPedOnFoot(Game.PlayerPed.Handle))
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You must be on foot to start a scenario.", 2);
+                    BaseScript.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You must be on foot to start a scenario.", 2);
                     canPlay = false;
                 }
                 if (NetworkIsInSpectatorMode())
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are currently spectating.", 2);
+                    BaseScript.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are currently spectating.", 2);
                     canPlay = false;
                 }
                 if (GetEntitySpeed(Game.PlayerPed.Handle) > 5.0f)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are moving too fast.", 2);
+                    BaseScript.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Scenario Runner", string.Empty, "You can't start a scenario when you are moving too fast.", 2);
                     canPlay = false;
                 }
 

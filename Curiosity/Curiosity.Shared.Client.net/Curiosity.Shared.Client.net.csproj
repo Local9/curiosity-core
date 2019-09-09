@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CommonFunctions.cs" />
+    <Compile Include="Classes\Data\PedScenarios.cs" />
     <Compile Include="Enums\Blips.cs" />
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\NotificationCharacter.cs" />

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Classes;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 
@@ -69,18 +70,18 @@ namespace Curiosity.Police.Client.net.Classes
             OnReleaseTicketedAi();
         }
 
-        static void OnReleaseTicketedAi()
+        static async void OnReleaseTicketedAi()
         {
+            CommonFunctions.PlayScenario("WORLD_HUMAN_CLIPBOARD");
+
             TicketedPed = true;
             API.DecorSetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR, true);
 
-            if (vehFound != null)
-            {
-                if (vehFound.IsStopped)
-                {
-                    ReleasePed();
-                }
-            }
+            await Client.Delay(3000);
+
+            CommonFunctions.PlayScenario("forcestop");
+
+            OnReleaseAi();
         }
 
         static void OnReleaseAi()
