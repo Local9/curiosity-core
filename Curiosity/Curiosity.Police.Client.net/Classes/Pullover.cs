@@ -69,30 +69,42 @@ namespace Curiosity.Police.Client.net.Classes
 
         static void OnReleaseAiSpeedingTicket()
         {
-            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(16, 26));
-            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(3, 6));
-            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(3, 6));
+            if (vehFound.Driver != null)
+            {
+                if (vehDriver.IsAlive)
+                {
+                    Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(16, 26));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(3, 6));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(3, 6));
+                }
+            }
 
             IssuedTicket();
         }
 
         static void OnReleaseAiTicket()
         {
-            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(5, 16));
-            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(1, 3));
-            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(1, 3));
+            if (vehFound.Driver != null)
+            {
+                if (vehDriver.IsAlive)
+                {
+                    Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(5, 16));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(1, 3));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(1, 3));
+                }
+            }
 
             IssuedTicket();
         }
 
         static async void IssuedTicket()
         {
-            CommonFunctions.PlayScenario("WORLD_HUMAN_CLIPBOARD");
+            CommonFunctions.PlayScenario("CODE_HUMAN_MEDIC_TIME_OF_DEATH");
 
             TicketedPed = true;
             API.DecorSetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR, true);
 
-            await Client.Delay(3000);
+            await Client.Delay(10000);
 
             CommonFunctions.PlayScenario("forcestop");
 
@@ -172,7 +184,7 @@ namespace Curiosity.Police.Client.net.Classes
                 vehicle = Game.PlayerPed.CurrentVehicle;
 
                 Vector3 basePos = vehicle.Position;
-                RaycastResult raycast = World.Raycast(basePos, vehicle.GetOffsetPosition(new Vector3(0f, 7f, 0f)) + new Vector3(0f, 0f, -0.4f), (IntersectOptions)71, vehicle);
+                RaycastResult raycast = World.RaycastCapsule(basePos, vehicle.GetOffsetPosition(new Vector3(0f, 7f, 0f)) + new Vector3(0f, 0f, -0.4f), 1f, (IntersectOptions)71, vehicle);
 
                 if (raycast.DitHitEntity && raycast.HitEntity.Model.IsVehicle)
                 {
