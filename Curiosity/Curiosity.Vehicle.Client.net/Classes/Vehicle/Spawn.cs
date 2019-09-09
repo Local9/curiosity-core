@@ -32,7 +32,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     if (Client.CurrentVehicle.Exists())
                     {
                         fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Client.CurrentVehicle.Handle, "Vehicle.Fuel");
-
+                        API.DecorRemove(Client.CurrentVehicle.Handle, "Player_Vehicle");
+                        API.DecorRemove(Client.CurrentVehicle.Handle, "Vehicle.SirensInstalled");
                         SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
                     }
                 }

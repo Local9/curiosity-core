@@ -63,8 +63,12 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
             GenerateRandomCallout();
         }
 
-        public static void CalloutEnded()
+        public static void CalloutEnded(bool declined = false)
         {
+            if (declined)
+            {
+                FIVE_MINUTES = random.Next(60000, 180000);
+            }
             Client.TriggerServerEvent("curiosity:Server:Police:CalloutEnded", PreviousCallout);
         }
 

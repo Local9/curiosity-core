@@ -27,8 +27,8 @@ namespace Curiosity.Police.Client.net.Classes
         static Model ShopKeeperModel = PedHash.ShopKeep01;
         static Vector3 ShopKeeperPosition;
 
-        //static bool AcceptedCallout = false;
-        //static long GameTime = API.GetGameTimer();
+        static bool AcceptedCallout = false;
+        static long GameTime = API.GetGameTimer();
 
         public static async void StartCallout(string name, Vector3 location, Model suspectModel, Vector3 suspectLocation, float suspectHeading, Model shopkeeperModel, Vector3 shopkeeperLocation, float shopkeeperHeading)
         {
@@ -41,8 +41,42 @@ namespace Curiosity.Police.Client.net.Classes
                     if (LocationBlip.Exists())
                         LocationBlip.Delete();
                 }
-                //AcceptedCallout = false;
-                //GameTime = API.GetGameTimer();
+                AcceptedCallout = false;
+                GameTime = API.GetGameTimer();
+
+                // AN IDEA TO WORK ON
+                while (!AcceptedCallout)
+                {
+                    API.DisableControlAction(0, (int)Control.FrontendDelete, true);
+                    API.DisableControlAction(0, (int)Control.FrontendAccept, true);
+
+                    await Client.Delay(0);
+
+                    if ((API.GetGameTimer() - GameTime) > (1000 * 30))
+                    {
+                        Environment.Job.DutyManager.OnSetCallOutStatus(false);
+                        Environment.Tasks.CalloutHandler.CalloutEnded(true);
+                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", "", 2);
+                        return;
+                    }
+
+                    API.SetTextComponentFormat("STRING");
+                    API.AddTextComponentString($"Press ~INPUT_FRONTEND_ACCEPT~ to accept callout, ~INPUT_FRONTEND_DELETE~ to decline.");
+                    API.DisplayHelpTextFromStringLabel(0, false, true, -1);
+
+                    if (Game.IsDisabledControlPressed(0, Control.FrontendAccept))
+                    {
+                        AcceptedCallout = true;
+                    }
+
+                    if (Game.IsDisabledControlPressed(0, Control.FrontendDelete))
+                    {
+                        Environment.Job.DutyManager.OnSetCallOutStatus(false);
+                        Environment.Tasks.CalloutHandler.CalloutEnded(true);
+                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-4", $"Message received, understood", "Callout Declined", 2);
+                        return;
+                    }
+                }
 
                 Name = name;
                 Location = location;
@@ -52,32 +86,6 @@ namespace Curiosity.Police.Client.net.Classes
                 ShopKeeperPosition = shopkeeperLocation;
 
                 SetupLocationBlip();
-
-                // AN IDEA TO WORK ON
-                //while (!AcceptedCallout)
-                //{
-                //    await Client.Delay(0);
-
-                //    if ((API.GetGameTimer() - GameTime) > (1000 * 30))
-                //    {
-                //        Environment.Job.DutyManager.OnSetCallOutStatus(true);
-                //        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Code 4", $"No further assistance needed", "", 2);
-                //        return;
-                //    }
-
-                //    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "459S", $"{Name}", "~y~Accept: ~g~E~n~~y~Decline: ~g~BACKSPACE", 2);
-                //    if (Game.IsControlPressed(0, Control.CreatorAccept))
-                //    {
-                //        AcceptedCallout = true;
-                //    }
-
-                //    if (Game.IsControlPressed(0, Control.FrontendCancel))
-                //    {
-                //        Environment.Job.DutyManager.OnSetCallOutStatus(true);
-                //        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "10-4", $"Message received, understood", "Callout Declined", 2);
-                //        return;
-                //    }
-                //}
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "459S Burglar alarm, silent", $"{Name}", string.Empty, 2);
                 API.PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);

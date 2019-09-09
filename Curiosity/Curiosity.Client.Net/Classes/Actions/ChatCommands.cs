@@ -98,7 +98,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("dv", new Action<int, List<object>, string>(DeleteVehicle), false);
             API.RegisterCommand("dvn", new Action<int, List<object>, string>(DeleteVehicleNuke), false);
             API.RegisterCommand("don", new Action<int, List<object>, string>(DeleteObjectNuke), false);
-            API.RegisterCommand("dpn", new Action<int, List<object>, string>(DeletePedNuke), false);
+            API.RegisterCommand("nuke", new Action<int, List<object>, string>(Nuke), false);
             // test commands
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
@@ -119,6 +119,8 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("becomestaff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
             API.RegisterCommand("rp", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
 
+            API.RegisterCommand("report", new Action<int, List<object>, string>(ReportingNotification), false);
+
             // API.RegisterCommand("minigame", new Action<int, List<object>, string>(OnMinigame), false);
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
 
@@ -126,7 +128,7 @@ namespace Curiosity.Client.net.Classes.Actions
             {
                 if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER)
                 {
-                    FuckPlayer(0, null, string.Empty);
+                    RoyallyFuckPlayer(source, args, raw);
                     return;
                 }
                 else
@@ -155,6 +157,11 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
 
             }), false);
+        }
+
+        static void ReportingNotification(int playerHandle, List<object> arguments, string raw)
+        {
+            Environment.UI.Notifications.LifeV(1, "Live V Network", $"Reporting a player", "Reporting a player can now be done via the interactive menu.", 2);
         }
 
         static void DonatorCheck(int playerHandle, List<object> arguments, string raw)
@@ -470,56 +477,53 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static async void DeleteObjectNuke(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
-
-            int totalFound = 0;
-            int totalNotDeleted = 0;
-
-            foreach (int objectEntity in new Helpers.ObjectList())
+            try
             {
                 await Client.Delay(0);
-                totalFound++;
+                if (!Player.PlayerInformation.IsStaff()) return;
 
-                int objectHandleToDelete = objectEntity;
-                int objectHandle = objectEntity;
+                int totalFound = 0;
+                int totalNotDeleted = 0;
 
-                if (API.DoesEntityExist(objectEntity))
+                foreach (Prop objectEntity in World.GetAllProps().ToList())
                 {
-                    API.SetEntityAsNoLongerNeeded(ref objectHandle);
-                    API.DeleteEntity(ref objectHandleToDelete);
-                }
+                    await Client.Delay(0);
+                    totalFound++;
 
-                if (DoesEntityExist(objectEntity))
-                    totalNotDeleted++;
+                    int objectHandleToDelete = objectEntity.Handle;
+                    int objectHandle = objectEntity.Handle;
+
+                    if (API.DoesEntityExist(objectEntity.Handle))
+                    {
+                        API.SetEntityAsNoLongerNeeded(ref objectHandle);
+                        API.DeleteEntity(ref objectHandleToDelete);
+                    }
+
+                    if (DoesEntityExist(objectEntity.Handle))
+                        totalNotDeleted++;
+                }
+                Environment.UI.Notifications.LifeV(7, "Server Information", "Object Nuke Info", $"Total Removed: {totalFound - totalNotDeleted:00} / {totalFound:00}", 2);
             }
-            Environment.UI.Notifications.LifeV(7, "Server Information", "Object Nuke Info", $"Total Removed: {totalFound - totalNotDeleted:00} / {totalFound:00}", 2);
+            catch (Exception ex)
+            {
+                Log.Error($"DeleteObjectNuke -> {ex.Message}");
+            }
         }
 
-        static async void DeletePedNuke(int playerHandle, List<object> arguments, string raw)
+        static async void Nuke(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
-
-            int totalFound = 0;
-            int totalNotDeleted = 0;
-
-            foreach (int pedEntity in new Helpers.PedList())
+            try
             {
                 await Client.Delay(0);
-                totalFound++;
+                if (!Player.PlayerInformation.IsStaff()) return;
 
-                int pedHandleToDelete = pedEntity;
-                int pedHandle = pedEntity;
-
-                if (API.DoesEntityExist(pedHandle))
-                {
-                    API.SetEntityAsNoLongerNeeded(ref pedHandle);
-                    API.DeleteEntity(ref pedHandleToDelete);
-                }
-
-                if (DoesEntityExist(pedHandle))
-                    totalNotDeleted++;
+                Vector3 pos = Game.PlayerPed.Position;
+                API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 500f, false, false, false, false);
             }
-            Environment.UI.Notifications.LifeV(7, "Server Information", "Ped Nuke Info", $"Total Removed: {totalFound - totalNotDeleted:00} / {totalFound:00}", 2);
+            catch (Exception ex)
+            {
+                Log.Error($"Nuke -> {ex.Message}");
+            }
         }
 
         static async void DeleteVehicleNuke(int playerHandle, List<object> arguments, string raw)
