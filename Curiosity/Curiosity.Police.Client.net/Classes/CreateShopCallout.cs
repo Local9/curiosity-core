@@ -44,6 +44,8 @@ namespace Curiosity.Police.Client.net.Classes
                 AcceptedCallout = false;
                 GameTime = API.GetGameTimer();
 
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Required", $"", "Police required, are you able to respond?", 2);
+
                 // AN IDEA TO WORK ON
                 while (!AcceptedCallout)
                 {
