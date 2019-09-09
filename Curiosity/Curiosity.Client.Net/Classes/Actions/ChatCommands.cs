@@ -20,6 +20,7 @@ namespace Curiosity.Client.net.Classes.Actions
         static uint playerGroupHash = 0;
         static bool hasCalledChaser = false;
         static bool isPlayingEmote = false;
+        static Random random = new Random();
 
         static Dictionary<string, string> scenarios = new Dictionary<string, string>()
         {
@@ -90,6 +91,7 @@ namespace Curiosity.Client.net.Classes.Actions
             client.RegisterEventHandler("curiosity:Client:Command:SpawnWeapon", new Action<string>(SpawnWeapon));
             client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string, string>(SpawnCar));
             client.RegisterEventHandler("curiosity:Client:Command:OnFire", new Action<string>(OnFire));
+            client.RegisterEventHandler("curiosity:Client:Command:Chimp", new Action(ChimpSlap));
 
             API.RegisterCommand("mod", new Action<int, List<object>, string>(ModVehicle), false);
             API.RegisterCommand("donator", new Action<int, List<object>, string>(DonatorCheck), false);
@@ -157,6 +159,33 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
 
             }), false);
+        }
+
+        static async void ChimpSlap()
+        {
+            Model chimpModel = PedHash.Chimp;
+            await chimpModel.Request(10000);
+            await Client.Delay(0);
+            Ped chimp = await World.CreatePed(chimpModel, Game.PlayerPed.Position + new Vector3(0f, -5f, 0f), Game.PlayerPed.Heading);
+            chimpModel.MarkAsNoLongerNeeded();
+            await Client.Delay(0);
+            chimp.Weapons.Give(WeaponHash.Railgun, 1, true, true);
+            chimp.DropsWeaponsOnDeath = false;
+            API.TaskSetBlockingOfNonTemporaryEvents(chimp.Handle, true);
+            API.SetPedFleeAttributes(chimp.Handle, 0, false);
+            await Client.Delay(0);
+            chimp.Task.ShootAt(Game.PlayerPed, -1, FiringPattern.Default);
+
+            while (Game.PlayerPed.IsAlive)
+            {
+                if (chimp.IsDead)
+                    break;
+
+                await Client.Delay(100);
+            }
+
+            chimp.MarkAsNoLongerNeeded();
+            chimp.Delete();
         }
 
         static void ReportingNotification(int playerHandle, List<object> arguments, string raw)

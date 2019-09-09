@@ -37,6 +37,8 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("video", new Action<int, List<object>, string>(ChangeVideoURL), false);
             API.RegisterCommand("watch", new Action<int, List<object>, string>(RequestURL), false);
 
+            API.RegisterCommand("chimp", new Action<int, List<object>, string>(SpawnChimp), false);
+
             API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
             // API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
         }
@@ -51,6 +53,35 @@ namespace Curiosity.Server.net.Classes.Environment
 
         //    Server.TriggerClientEvent("curiosity:Client:Command:OnFire", session.NetId);
         //}
+
+        static void SpawnChimp(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (session.Privilege != Privilege.DEVELOPER) return;
+
+            if (arguments.Count < 0)
+            {
+                Helpers.Notifications.Advanced($"Agruments Missing", $"", 2, session.Player);
+                return;
+            }
+
+            int playerToChase = 0;
+            int.TryParse($"{arguments[0]}", out playerToChase);
+
+            if (!SessionManager.PlayerList.ContainsKey($"{playerToChase}"))
+            {
+                Helpers.Notifications.Advanced($"Player Missing", $"", 2, session.Player);
+                return;
+            }
+
+            Session sessionToChase = SessionManager.PlayerList[$"{playerToChase}"];
+            sessionToChase.Player.TriggerEvent("curiosity:Client:Command:Chimp");
+
+            Helpers.Notifications.Advanced($"Set Chimp", $"Shooting ~y~{sessionToChase.Player.Name}", 20, session.Player);
+        }
 
         static void OnChaser(int playerHandle, List<object> arguments, string raw)
         {
