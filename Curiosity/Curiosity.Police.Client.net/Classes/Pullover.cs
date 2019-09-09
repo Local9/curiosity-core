@@ -64,7 +64,7 @@ namespace Curiosity.Police.Client.net.Classes
 
             Vehicle vehicle = new Vehicle(vehicleHandle);
             API.DecorSetBool(vehicle.Handle, SPEEDING_DECOR, true);
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Speeding Violation", $"Plate: {vehicle.Mods.LicensePlate}", $"~b~Primary Color:~s~~n~ {vehicle.Mods.PrimaryColor}~n~~b~Secondary Color:~s~~n~ {vehicle.Mods.SecondaryColor}", 2);
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Speeding Violation", $"Plate: {vehicle.Mods.LicensePlate}", $"~b~Model: ~s~{vehicle.LocalizedName}~n~~b~1st Color:~s~~n~ {vehicle.Mods.PrimaryColor}~n~~b~2nd Color:~s~~n~ {vehicle.Mods.SecondaryColor}", 2);
         }
 
         static void OnReleaseAiSpeedingTicket()
