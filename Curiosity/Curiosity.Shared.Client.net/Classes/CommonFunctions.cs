@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.Native;
+using System.Drawing;
 
 namespace Curiosity.Shared.Client.net.Classes
 {
@@ -114,5 +115,32 @@ namespace Curiosity.Shared.Client.net.Classes
             }
 
         }
+
+        static public void DrawImage3D(string txdName, Vector3 pos, float width, float height, float rot, Color color)
+        {
+            float screenX = 0f;
+            float screenY = 0f;
+            if (World3dToScreen2d(pos.X, pos.Y, pos.Z, ref screenX, ref screenY))
+            {
+                Vector3 gameCam = GetGameplayCamCoord();
+                float distCamPos = GetDistanceBetweenCoords(gameCam.X, gameCam.Y, gameCam.Z, pos.X, pos.Y, pos.Z, true);
+
+                width = (1 / distCamPos) * width;
+                height = (1 / distCamPos) * height;
+                float fov = (1 / GetGameplayCamFov()) * 100;
+
+                width = width * fov;
+                height = height * fov;
+
+                Vector3 playerPos = Game.PlayerPed.Position;
+                RaycastResult raycastResult = World.Raycast(playerPos, pos, -1, IntersectOptions.Everything, Game.PlayerPed);
+                if (raycastResult.HitEntity == null)
+                {
+                    DrawSprite(txdName, txdName, screenX, screenY, width, height, rot, color.R, color.G, color.B, color.A);
+                }
+            }
+        }
+
+        
     }
 }

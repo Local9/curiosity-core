@@ -24,6 +24,10 @@ namespace Curiosity.World.Client.net
             Classes.Environment.AquaticSpawner.Init();
             Classes.Environment.Birds.Init();
 
+
+            // EE
+            Classes.Environment.EasterEggs.DeveloperWall.Init();
+
             // Scenarios
             Classes.Environment.WorldScenarios.Init();
 

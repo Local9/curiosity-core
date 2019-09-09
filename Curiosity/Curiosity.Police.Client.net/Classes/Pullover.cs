@@ -63,6 +63,9 @@ namespace Curiosity.Police.Client.net.Classes
             if (!locked) return;
 
             Vehicle vehicle = new Vehicle(vehicleHandle);
+
+            if (vehicle.Driver.IsPlayer) return;
+
             API.DecorSetBool(vehicle.Handle, SPEEDING_DECOR, true);
             Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Speeding Violation", $"Plate: {vehicle.Mods.LicensePlate}", $"~b~Model: ~s~{vehicle.LocalizedName}~n~~b~1st Color:~s~~n~ {vehicle.Mods.PrimaryColor}~n~~b~2nd Color:~s~~n~ {vehicle.Mods.SecondaryColor}", 2);
         }
@@ -71,7 +74,7 @@ namespace Curiosity.Police.Client.net.Classes
         {
             if (vehFound.Driver != null)
             {
-                if (vehDriver.IsAlive)
+                if (vehFound.Driver.IsAlive)
                 {
                     Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(16, 26));
                     Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(3, 6));
@@ -86,7 +89,7 @@ namespace Curiosity.Police.Client.net.Classes
         {
             if (vehFound.Driver != null)
             {
-                if (vehDriver.IsAlive)
+                if (vehFound.Driver.IsAlive)
                 {
                     Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(5, 16));
                     Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(1, 3));
@@ -190,6 +193,8 @@ namespace Curiosity.Police.Client.net.Classes
                 {
                     vehFound = (CitizenFX.Core.Vehicle)raycast.HitEntity;
                 }
+
+                if (vehFound.Driver.IsPlayer) return;
 
                 if (vehFound != null)
                 {
