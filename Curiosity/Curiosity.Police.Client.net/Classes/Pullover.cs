@@ -380,7 +380,7 @@ namespace Curiosity.Police.Client.net.Classes
             IsDriverFleeing = false;
             IsDriverOnFoot = false;
 
-            TicketedPed = true;
+            TicketedPed = giveAward;
 
             if (vehDriver != null)
             {
