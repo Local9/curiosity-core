@@ -174,6 +174,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                             if (currentBlipSprite != BlipSprite.Standard)
                             {
                                 API.SetBlipSprite(blip, (int)BlipSprite.Standard);
+
+                                // API.SetBlipFlashes(blip, API.IsVehicleSirenOn(vehicleHandle));
+
                                 API.ShowHeadingIndicatorOnBlip(blip, true);
                             }
                         }

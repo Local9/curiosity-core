@@ -564,7 +564,10 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         private static void Menu_OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
         {
             if (menuItem.ItemData == CRUISE_CONTROL)
+            {
+                menuItem.Checked = !menuItem.Checked;
                 Client.TriggerEvent("curiosity:Player:Vehicle:CruiseControl");
+            }
             if (menuItem.ItemData == ENGINE)
                 Client.CurrentVehicle.IsEngineRunning = menuItem.Checked;
 

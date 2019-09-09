@@ -34,7 +34,7 @@ namespace Curiosity.Police.Client.net.Classes
 
             client.RegisterEventHandler("curiosity:Client:Police:ReleaseAI", new Action(OnReleaseAi));
             client.RegisterEventHandler("curiosity:Client:Police:ReleaseTicketedAI", new Action(OnReleaseAiTicket));
-            client.RegisterEventHandler("curiosity:Client:Police:ReleaseSpeedingTicketAI", new Action(OnReleaseAiSpeedingTicket));
+            client.RegisterEventHandler("curiosity:Client:Police:ReleaseSpeedingTicketedAI", new Action(OnReleaseAiSpeedingTicket));
             client.RegisterEventHandler("curiosity:Client:Police:Speeding", new Action<int, bool>(OnVehicleSpeeding));
 
             API.DecorRegister(PULLED_OVER_DECOR, 3);
