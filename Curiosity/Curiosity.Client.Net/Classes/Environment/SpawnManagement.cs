@@ -7,6 +7,8 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -27,16 +29,24 @@ namespace Curiosity.Client.net.Classes.Environment
         static Random rnd = new Random();
         static Client client = Client.GetInstance();
         static bool hasPlayerSpawned = false;
+        static Vehicle CurrentVehicle = null;
 
         public static void Init()
         {
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
+            client.RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleIdUpdate));
             client.RegisterTickHandler(OnWastedCheck);
 
             foreach (Vector3 pos in hospitals)
             {
                 API.AddHospitalRestart(pos.X, pos.Y, pos.Z - 1.0f, 0.0f, 0);
             }
+        }
+
+        static void OnVehicleIdUpdate(int vehicleId)
+        {
+            if (API.IsAnEntity(vehicleId))
+                CurrentVehicle = new Vehicle(vehicleId);
         }
 
         static void OnPlayerSpawned()
@@ -107,6 +117,17 @@ namespace Curiosity.Client.net.Classes.Environment
                     Game.PlayerPed.IsPositionFrozen = false;
                     Game.PlayerPed.DropsWeaponsOnDeath = false;
 
+                    Client.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "No Job Active");
+
+                    if (CurrentVehicle != null)
+                    {
+                        if (CurrentVehicle.Exists())
+                        {
+                            SendDeletionEvent(CurrentVehicle.NetworkId);
+                            CurrentVehicle.Delete();
+                        }
+                    }
+
                     API.DoScreenFadeIn(1000);
 
                     while (!API.IsScreenFadedIn())
@@ -123,6 +144,12 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 Debug.WriteLine($"OnWastedCheck -> {ex.Message}");
             }
+        }
+        static void SendDeletionEvent(int vehicleNetworkId)
+        {
+            string encodedString = Encode.StringToBase64($"{vehicleNetworkId}");
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));
+            BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
     }
 

@@ -17,6 +17,7 @@ namespace Curiosity.Police.Client.net.Classes
 
         static Vehicle vehicle;
         static Vehicle vehFound = null;
+        static Ped vehDriver = null;
 
         static Random random = new Random();
 
@@ -27,11 +28,19 @@ namespace Curiosity.Police.Client.net.Classes
 
         static long LastPullover;
         static bool TicketedPed = false;
+        static bool IsDriverFleeing = false;
+        static bool IsDriverOnFoot = false;
+
+        static RelationshipGroup FleeingDriverRelationship;
 
         static public void Init()
         {
+            FleeingDriverRelationship = World.AddRelationshipGroup("FLEE");
+
             client.RegisterTickHandler(OnControlAction);
             client.RegisterTickHandler(OnDrawMarker);
+
+            client.RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
 
             client.RegisterEventHandler("curiosity:Client:Police:ReleaseAI", new Action(OnReleaseAi));
             client.RegisterEventHandler("curiosity:Client:Police:ReleaseTicketedAI", new Action(OnReleaseAiTicket));
@@ -41,6 +50,12 @@ namespace Curiosity.Police.Client.net.Classes
             API.DecorRegister(PULLED_OVER_DECOR, 3);
             API.DecorRegister(WAS_PULLED_OVER_DECOR, 3);
             API.DecorRegister(SPEEDING_DECOR, 3);
+        }
+
+        static void OnClientResourceStop(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+            AwardPlayer(false);
         }
 
         static void OnVehicleSpeeding(int vehicleHandle, bool locked)
@@ -54,23 +69,23 @@ namespace Curiosity.Police.Client.net.Classes
 
         static void OnReleaseAiSpeedingTicket()
         {
-            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(20, 31));
-            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(2, 6));
-            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(2, 6));
+            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(16, 26));
+            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(3, 6));
+            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(3, 6));
 
-            OnReleaseTicketedAi();
+            IssuedTicket();
         }
 
         static void OnReleaseAiTicket()
         {
-            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(10, 21));
-            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(2, 6));
-            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(2, 6));
+            Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(5, 16));
+            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(1, 3));
+            Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(1, 3));
 
-            OnReleaseTicketedAi();
+            IssuedTicket();
         }
 
-        static async void OnReleaseTicketedAi()
+        static async void IssuedTicket()
         {
             CommonFunctions.PlayScenario("WORLD_HUMAN_CLIPBOARD");
 
@@ -102,6 +117,21 @@ namespace Curiosity.Police.Client.net.Classes
                 && Game.PlayerPed.IsInVehicle()
                 && Game.PlayerPed.IsInPoliceVehicle)
             {
+
+                if (Player.PlayerInformation.playerInfo.Skills["policexp"].Value < 4500)
+                {
+
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Experience Requirement", $"~b~Remaining: ~s~{4500 - Player.PlayerInformation.playerInfo.Skills["policexp"].Value:#,##0}", "Sorry you require 4,500 experience to do a pull over.", 2);
+                    return;
+                }
+
+                if (Player.PlayerInformation.playerInfo.Skills["knowledge"].Value < 1000)
+                {
+
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Experience Requirement", $"~b~Remaining: ~s~{1000 - Player.PlayerInformation.playerInfo.Skills["knowledge"].Value:#,##0}", "Sorry you require 1,000 knowledge to do a pull over.", 2);
+                    return;
+                }
+
                 if (!Environment.Job.DutyManager.IsOnDuty)
                 {
                     Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "Must be on active duty to pull over a pedestrian.", 2);
@@ -169,17 +199,52 @@ namespace Curiosity.Police.Client.net.Classes
 
                         LastPullover = Game.GameTime;
 
-                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Notification", $"Plate: {vehFound.Mods.LicensePlate}", "Vehicle in front is stopping.", 2);
-
-                        Ped ped = vehFound.Driver;
-
                         Function.Call(Hash.BLIP_SIREN, Game.PlayerPed.CurrentVehicle.Handle);
 
                         if (API.NetworkHasControlOfEntity(vehFound.Handle))
                         {
-                            TicketedPed = false;
-                            API.SetVehicleHalt(vehFound.Handle, 40f, 1, false);
-                            API.DecorSetBool(vehFound.Handle, PULLED_OVER_DECOR, true);
+                            if (random.Next(5) == 1)
+                            {
+                                int driver = vehFound.Driver.Handle;
+                                int vehicle = vehFound.Handle;
+
+                                if (vehFound.Driver.IsAlive)
+                                {
+                                    vehDriver = vehFound.Driver;
+
+                                    vehDriver.RelationshipGroup = FleeingDriverRelationship;
+
+                                    FleeingDriverRelationship.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Dislike);
+
+                                    vehDriver.Task.FightAgainstHatedTargets(50f);
+
+                                    API.SetEntityAsMissionEntity(driver, true, true);
+                                    API.SetEntityAsMissionEntity(vehicle, true, true);
+
+                                    API.SetVehicleCanBeUsedByFleeingPeds(vehicle, true);
+                                    API.SetBlockingOfNonTemporaryEvents(driver, true);
+                                    API.SetPedFleeAttributes(driver, 2, true);
+                                    API.TaskReactAndFleePed(driver, Game.PlayerPed.Handle);
+                                    IsDriverFleeing = true;
+                                    IsDriverOnFoot = false;
+
+                                    TicketedPed = false;
+
+                                    if (!vehFound.IsStopped)
+                                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "~r~WARNING", $"", "They're getting away!", 2);
+
+                                    await Client.Delay(1000);
+
+                                    client.RegisterTickHandler(TickDriverFleeing);
+                                }
+                            }
+                            else
+                            {
+                                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Notification", $"Plate: {vehFound.Mods.LicensePlate}", "Vehicle in front is stopping.", 2);
+                                TicketedPed = false;
+                                API.SetVehicleHalt(vehFound.Handle, 40f, 1, false);
+                                API.DecorSetBool(vehFound.Handle, PULLED_OVER_DECOR, true);
+                            }
                         }
                     }
                 }
@@ -195,7 +260,7 @@ namespace Curiosity.Police.Client.net.Classes
             while (true)
             {
                 await Client.Delay(0);
-                if (vehFound != null)
+                if (vehFound != null && !IsDriverFleeing)
                 {
                     World.DrawMarker(MarkerType.UpsideDownCone, vehFound.Position + new Vector3(0f, 0f, 1.6f), Vector3.Zero, Vector3.Zero, new Vector3(0.3f, 0.3f, 0.3f), System.Drawing.Color.FromArgb(255, 255, 255, 255), true);
 
@@ -209,7 +274,76 @@ namespace Curiosity.Police.Client.net.Classes
                         ReleasePed();
                     }
                 }
+
+                if (IsDriverFleeing)
+                { 
+                    float distance = NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, vehDriver.Position);
+                    if (distance > 250f)
+                    {
+                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "They got away.", 2);
+                        AwardPlayer(false);
+                        IsDriverFleeing = false;
+                        client.DeregisterTickHandler(TickDriverFleeing);
+                    }
+                }
             }
+        }
+
+        static async Task TickDriverFleeing()
+        {
+            while (IsDriverFleeing)
+            {
+                await Client.Delay(100);
+
+                if (vehFound == null)
+                {
+                    break;
+                }
+
+                if (vehFound.IsStopped)
+                {
+                    if (vehFound.Driver.IsInVehicle())
+                    {
+                        vehDriver.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
+
+                        vehDriver.DropsWeaponsOnDeath = false;
+
+                        int driver = vehDriver.Handle;
+
+                        if (random.Next(10) == 1)
+                        {
+                            API.GiveWeaponToPed(driver, (uint)WeaponHash.PumpShotgun, 100, true, false);
+                        }
+
+                        if (random.Next(20) == 1)
+                        {
+                            API.GiveWeaponToPed(driver, (uint)WeaponHash.CarbineRifle, 100, true, false);
+                        }
+                    }
+                    else
+                    {
+                        if (!IsDriverOnFoot)
+                        {
+                            FleeingDriverRelationship.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Hate);
+                            vehDriver.Task.FightAgainst(Game.PlayerPed, -1);
+                            IsDriverOnFoot = true;
+                        }
+                    }
+                }
+
+                if (Game.PlayerPed.IsDead)
+                {
+                    AwardPlayer(false);
+                    break;
+                }
+
+                if (vehDriver.IsDead)
+                {
+                    AwardPlayer();
+                    break;
+                }
+            }
+            client.DeregisterTickHandler(TickDriverFleeing);
         }
 
         static void ReleasePed()
@@ -217,6 +351,48 @@ namespace Curiosity.Police.Client.net.Classes
             API.DecorSetBool(vehFound.Handle, PULLED_OVER_DECOR, false);
             vehFound.IsPositionFrozen = false;
             vehFound = null;
+        }
+
+        static void AwardPlayer(bool giveAward = true)
+        {
+            if (giveAward)
+            {
+                if (IsDriverFleeing && !IsDriverOnFoot)
+                {
+                    Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(50, 71));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(10, 30));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(3, 8));
+                }
+                else if (IsDriverFleeing && IsDriverOnFoot)
+                {
+                    Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(90, 111));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(30, 51));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(5, 11));
+                }
+                else
+                {
+                    Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(20, 31));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(4, 10));
+                    Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", random.Next(1, 3));
+                }
+            }
+
+            IsDriverFleeing = false;
+            IsDriverOnFoot = false;
+
+            TicketedPed = true;
+
+            if (vehDriver != null)
+            {
+                vehDriver.MarkAsNoLongerNeeded();
+                vehDriver = null;
+            }
+
+            if (vehFound != null)
+            {
+                vehFound.MarkAsNoLongerNeeded();
+                vehFound = null;
+            }
         }
     }
 }

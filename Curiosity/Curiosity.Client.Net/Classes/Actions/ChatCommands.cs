@@ -709,6 +709,19 @@ namespace Curiosity.Client.net.Classes.Actions
             API.SetNetworkIdExistsOnAllMachines(networkId, true);
             API.SetNetworkIdCanMigrate(networkId, true);
 
+            Blip blip = veh.AttachBlip();
+            blip.IsShortRange = false;
+            blip.Sprite = BlipSprite.PersonalVehicleCar;
+            blip.Priority = 100;
+            blip.Name = "Personal Vehicle";
+
+            if (API.DecorIsRegisteredAsType("Player_Vehicle", 3))
+            {
+                API.DecorSetInt(veh.Handle, "Player_Vehicle", Game.Player.ServerId);
+            }
+
+            API.SetVehicleHasBeenOwnedByPlayer(veh.Handle, true);
+
             API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
             API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
