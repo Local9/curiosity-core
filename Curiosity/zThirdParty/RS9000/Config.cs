@@ -22,7 +22,7 @@ namespace RS9000
         public bool Beep { get; set; } = true;
 
         [JsonProperty]
-        public uint FastLimit { get; set; } = 80;
+        public uint FastLimit { get; set; } = 55;
 
         [JsonProperty]
         public ControlListConfig Controls { get; set; }
@@ -52,7 +52,7 @@ namespace RS9000
             Units = "mph",
             PlateReader = true,
             Beep = true,
-            FastLimit = 80,
+            FastLimit = 55,
             Controls = new ControlListConfig()
             {
                 OpenControlPanel = new ControlConfig(-1, (int)Control.VehicleDuck),

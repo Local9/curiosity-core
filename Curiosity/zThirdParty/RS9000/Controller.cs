@@ -94,13 +94,20 @@ namespace RS9000
         {
             Visible = false;
             string input = await Game.GetUserInput(Radar.MaxSpeed.ToString().Length);
-            if (!uint.TryParse(input, out uint n) || n > Radar.MaxSpeed)
+            if (!uint.TryParse(input, out uint speed) || speed > Radar.MaxSpeed)
             {
                 return;
             }
-            radar.FastLimit = Radar.ConvertSpeedToMeters(script.Config.Units, n);
+            
+            if (speed < 50)
+            {
+                speed = 50;
+            }
+
+            radar.FastLimit = Radar.ConvertSpeedToMeters(script.Config.Units, speed);
+
             radar.ResetFast();
-            Screen.ShowSubtitle($"Fast limit set to ~y~{n} {script.Config.Units}");
+            Screen.ShowSubtitle($"Fast limit set to ~y~{speed} {script.Config.Units}");
         }
     }
 }
