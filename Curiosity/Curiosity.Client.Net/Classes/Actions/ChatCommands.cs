@@ -22,6 +22,9 @@ namespace Curiosity.Client.net.Classes.Actions
         static bool isPlayingEmote = false;
         static Random random = new Random();
 
+        static bool IsOnFoot = false;
+        static bool IsPackageInCar = false;
+
         static Dictionary<string, string> scenarios = new Dictionary<string, string>()
         {
             ["cheer"] = "WORLD_HUMAN_CHEERING",
@@ -163,25 +166,57 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static async void ChimpSlap()
         {
+            IsOnFoot = false;
+            IsPackageInCar = false;
+
             Model chimpModel = PedHash.Chimp;
             await chimpModel.Request(10000);
             await Client.Delay(0);
-            Ped chimp = await World.CreatePed(chimpModel, Game.PlayerPed.Position + new Vector3(0f, -5f, 0f), Game.PlayerPed.Heading);
+            Ped chimp = await World.CreatePed(chimpModel, Game.PlayerPed.Position + new Vector3(0f, -5f, -100f), Game.PlayerPed.Heading);
             chimpModel.MarkAsNoLongerNeeded();
-            await Client.Delay(0);
+
+            chimp.IsInvincible = true;
+            chimp.IsPositionFrozen = true;
+
+            while (Game.PlayerPed.IsInVehicle())
+            {
+                if (!IsPackageInCar)
+                {
+                    API.TaskWarpPedIntoVehicle(chimp.Handle, Game.PlayerPed.CurrentVehicle.Handle, -2);
+                    IsPackageInCar = chimp.IsInVehicle();
+                    chimp.IsInvincible = false;
+                }
+                await Client.Delay(0);
+            }
+
+            while (chimp.IsInVehicle())
+            {
+                chimp.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
+                await Client.Delay(50);
+            }
+
+            if (!IsPackageInCar)
+                chimp.Position = Game.PlayerPed.Position + new Vector3(-5f, -5f, 0f);
+
+            chimp.IsPositionFrozen = false;
+            chimp.IsInvincible = false;
+
+            API.TaskSetBlockingOfNonTemporaryEvents(chimp.Handle, true);
+
+            await Client.Delay(10);
             chimp.Weapons.Give(WeaponHash.Railgun, 1, true, true);
             chimp.DropsWeaponsOnDeath = false;
-            API.TaskSetBlockingOfNonTemporaryEvents(chimp.Handle, true);
             API.SetPedFleeAttributes(chimp.Handle, 0, false);
-            await Client.Delay(0);
-            chimp.Task.ShootAt(Game.PlayerPed, -1, FiringPattern.Default);
+            await Client.Delay(10);
 
             while (Game.PlayerPed.IsAlive)
             {
                 if (chimp.IsDead)
                     break;
 
-                await Client.Delay(100);
+                chimp.Task.ShootAt(Game.PlayerPed, -1, FiringPattern.Default);
+
+                await Client.Delay(500);
             }
 
             chimp.MarkAsNoLongerNeeded();

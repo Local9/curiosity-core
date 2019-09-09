@@ -270,15 +270,11 @@ namespace Curiosity.Client.net
 
             Game.PlayerPed.DropsWeaponsOnDeath = false;
             
-
-            if (API.IsEntityInAir(Game.PlayerPed.Handle))
+            API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
+            Vector3 safeCoord = new Vector3(x, y, groundZ);
+            if (API.GetSafeCoordForPed(x, y, groundZ, true, ref safeCoord, 16))
             {
-                API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
-                Vector3 safeCoord = new Vector3(x, y, groundZ);
-                if (API.GetSafeCoordForPed(x, y, groundZ, true, ref safeCoord, 16))
-                {
-                    spawnPosition = safeCoord;
-                }
+                spawnPosition = safeCoord;
             }
 
             API.ShutdownLoadingScreen();
@@ -325,7 +321,7 @@ namespace Curiosity.Client.net
                 spawnPosition = World.GetNextPositionOnSidewalk(new Vector3(x, y, groundZ));
             }
 
-            Game.PlayerPed.Position = spawnPosition + new Vector3(0f, 0f, -0.4f);
+            Game.PlayerPed.Position = spawnPosition + new Vector3(0f, 0f, -1f);
 
             int gameTimer = API.GetGameTimer();
 
