@@ -50,6 +50,7 @@
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Environment\UI\DutyIcons.cs" />
+    <Compile Include="Environment\UI\Forum.cs" />
     <Compile Include="Environment\UI\PlayerHeadshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

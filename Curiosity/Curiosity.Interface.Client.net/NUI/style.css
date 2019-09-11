@@ -4,6 +4,21 @@
     font-variant-caps: small-caps;
 }
 
+.forum {
+    width: 50vw;
+    height: 80vh;
+    margin: 30px auto;
+    padding: 1rem;
+    padding-bottom: 2rem;
+    background-color: #0000004D;
+}
+
+.forum-iframe {
+    width: 100%;
+    height: 100%;
+    background-color: #0000004D;
+}
+
 .icons {
     position: absolute;
     width: 2.8vw;

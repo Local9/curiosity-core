@@ -1,4 +1,10 @@
 $(document).ready(function () {
+
+    // setTimeout(() => {
+    //     var iframe = window.parent.document.getElementsByName("curiosity-interface")[0];
+    //     iframe.src = "https://forums.lifev.net";
+    // }, 500);
+
     // Mouse Controls
     var documentWidth = document.documentElement.clientWidth;
     var documentHeight = document.documentElement.clientHeight;
@@ -11,6 +17,8 @@ $(document).ready(function () {
     $(".medic").hide();
     $(".fire").hide();
 
+    $(".forum").hide();
+
     //function UpdateCursorPos() {
     //    $('#cursorPointer').css('left', cursorX);
     //    $('#cursorPointer').css('top', cursorY);
@@ -21,6 +29,13 @@ $(document).ready(function () {
     //    element.focus().click();
     //    return true;
     //}
+
+    $('.forum-close').on('click', function (e) {
+        e.preventDefault();
+        $.post('http://curiosity-interface/closeForum', JSON.stringify({
+            id: idEnt
+        }));
+    });
 
     // Listen for NUI Events
     window.addEventListener('message', function (event) {
@@ -33,6 +48,12 @@ $(document).ready(function () {
             } else {
                 $(".player-hud").show();
                 $(".icons").show();
+            }
+        } else if (event.data.hasOwnProperty("showForum")) {
+            if (event.data.showForum) {
+                $(".forum").show();
+            } else {
+                $(".forum").hide();
             }
         } else {
 
