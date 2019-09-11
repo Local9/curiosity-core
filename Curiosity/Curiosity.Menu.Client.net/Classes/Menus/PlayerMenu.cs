@@ -19,9 +19,13 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static List<string> chatPositions = new List<string>() { "Right", "Left" };
 
         static MenuListItem chatSide = new MenuListItem("Chat Position", chatPositions, API.GetResourceKvpInt("curiosity:menu:chat:listIndex"), "Select chat position and press enter.");
+        static MenuCheckboxItem setMinimapScale = new MenuCheckboxItem("Large Minimap", API.GetResourceKvpString("curiosity:minimap:scale") == "large");
 
         public static void Init()
         {
+            bool scale = API.GetResourceKvpString("curiosity:minimap:scale") == "large";
+            API.SetBigmapActive(scale, scale);
+
             MenuBase.AddSubMenu(menu);
 
             menu.OnMenuOpen += (_menu) => {
@@ -33,6 +37,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 //menu.AddMenuItem(new MenuItem("Open Skills", "View Skills") { ItemData = SkillType.Experience });
                 //menu.AddMenuItem(new MenuItem("Open Stats", "View Stats") { ItemData = SkillType.Statistic });
                 menu.AddMenuItem(chatSide);
+                menu.AddMenuItem(setMinimapScale);
                 menu.AddMenuItem(new MenuCheckboxItem("Cinematic Mode", "Enable Cinematic Mode") { ItemData = "CINEMATIC", Checked = false });
                 menu.AddMenuItem(new MenuItem("Cinematic Bars", "Select to adjust Cinematic Bars") { ItemData = "CINEMATICBARS" });
 
@@ -42,6 +47,11 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             {
                 if (_menuItem.ItemData == "CINEMATIC")
                     Client.TriggerEvent("curiosity:Player:UI:CinematicMode");
+
+                if (_menuItem == setMinimapScale)
+                {
+                    SetMapScale();
+                }
             };
 
             menu.OnItemSelect += (_menu, _item, _index) =>
@@ -94,6 +104,22 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             {
                 // Code in here would get executed whenever the selected value of a list item changes (when left/right key is pressed).
             };
+        }
+
+        static void SetMapScale()
+        {
+            bool isScaleSmall = API.GetResourceKvpString("curiosity:minimap:scale") == "small";
+
+            if (isScaleSmall)
+            {
+                API.SetResourceKvp("curiosity:minimap:scale", "large");
+            }
+            else
+            {
+                API.SetResourceKvp("curiosity:minimap:scale", "small");
+            }
+
+            Client.TriggerEvent("curiosity:Client:UI:SetMapScale", isScaleSmall);
         }
     }
 }

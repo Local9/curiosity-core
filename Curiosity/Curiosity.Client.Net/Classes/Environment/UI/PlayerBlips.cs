@@ -21,6 +21,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             OnTickShowPlayerBlips();
             client.RegisterTickHandler(OnControlPressed);
+            client.RegisterEventHandler("curiosity:Client:UI:SetMapScale", new Action<bool>(SetMapScale));
         }
 
         static internal bool ShouldShowBlip(CitizenFX.Core.Player player)
@@ -30,6 +31,18 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             if (!isSneaking && !isCurrentPlayer)
                 return true;
             return false;
+        }
+
+        static void SetMapScale(bool scale)
+        {
+            if (scale)
+            {
+                API.SetResourceKvp("curiosity:minimap:scale", "large");
+            }
+            else
+            {
+                API.SetResourceKvp("curiosity:minimap:scale", "small");
+            }
         }
 
         static internal async Task OnControlPressed()
@@ -45,7 +58,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                 {
                     await Client.Delay(5000);
                 }
-                API.SetRadarBigmapEnabled(false, false);
+                API.SetRadarBigmapEnabled(API.GetResourceKvpString("curiosity:minimap:scale") == "large", false);
                 IsRadarExtended = false;
             }
             await Task.FromResult(0);
