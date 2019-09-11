@@ -15,6 +15,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         public static Menu Menu = new Menu("Interaction Menu", "Interaction Menu");
         public static bool isMenuOpen = Menu.Visible;
 
+        public static MenuItem showForum = new MenuItem("Open Player Guides", "Select this to view our player guides");
+
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
@@ -210,7 +212,11 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             Menu.OnItemSelect += (_menu, _item, _index) =>
             {
-
+                if (_item == showForum)
+                {
+                    Client.TriggerEvent("curiosity:Client:Interface:ShowForum");
+                    _menu.CloseMenu();
+                }
             };
 
             //menu.OnIndexChange += (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>
@@ -264,6 +270,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             //    // Code in here would get executed whenever a dynamic list item is pressed.
             //    Debug.WriteLine($"OnDynamicListItemSelect: [{_menu}, {_dynamicListItem}, {_currentItem}]");
             //};
+
+            Menu.AddMenuItem(showForum);
 
             MenuController.AddMenu(Menu);
 
