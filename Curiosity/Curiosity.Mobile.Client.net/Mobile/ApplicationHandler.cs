@@ -108,7 +108,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 else
                 {
                     // CLEARS PREVIOUS ITEMS....
-                    API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "SET_DATA_SLOT_EMPTY");
+                    API.PushScaleformMovieFunction(MobilePhone.MobileScaleformHandle, "SET_DATA_SLOT_EMPTY");
                     API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
                     API.PopScaleformMovieFunctionVoid();
 
@@ -122,58 +122,59 @@ namespace Curiosity.Mobile.Client.net.Mobile
                         header = CurrentApp.GetName;
                     }
 
-                    API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "SET_HEADER");
-                    API.PushScaleformMovieFunctionParameterString(header);
-                    API.PopScaleformMovieFunctionVoid();
+                    MobilePhone.MobileScaleform.CallFunction("SET_HEADER", header);
 
-                    int i = 0;
-
-                    foreach(Item item in CurrentAppScreen.Items)
+                    for(var i = 0; i < CurrentAppScreen.Items.Count; i++)
                     {
-                        API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "SET_DATA_SLOT");
+                        API.PushScaleformMovieFunction(MobilePhone.MobileScaleformHandle, "SET_DATA_SLOT");
                         API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
                         API.PushScaleformMovieFunctionParameterInt(i);
-                        foreach(ItemData itemData in item.Data)
+                        foreach(ItemData itemData in CurrentAppScreen.Items[i].Data)
                         {
                             itemData.Push();
                         }
                         API.PopScaleformMovieFunctionVoid();
-                        i++;
                     }
 
-                    API.PushScaleformMovieFunction(MobilePhone.MobileScaleform, "DISPLAY_VIEW");
-                    API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
-                    API.PushScaleformMovieFunctionParameterInt(SelectedItem);
+                    MobilePhone.MobileScaleform.CallFunction("DISPLAY_VIEW", CurrentAppScreen.Type, SelectedItem);
 
-                    if (SelectedItem > CurrentAppScreen.Items.Count - 1)
+                    if (SelectedItem > CurrentAppScreen.Items.Count)
                         SelectedItem = CurrentAppScreen.Items.Count - 1;
 
                     bool navigated = true;
-                    if (Game.IsControlJustPressed(0, Control.FrontendUp) ||
-                            Game.IsDisabledControlJustPressed(0, Control.FrontendUp) ||
-                            Game.IsControlJustPressed(0, Control.PhoneScrollBackward) ||
-                            Game.IsDisabledControlJustPressed(0, Control.PhoneScrollBackward))
+                    if (Game.IsControlJustPressed(1, Control.PhoneUp))
                     {
-                        SelectedItem = SelectedItem - 1;
-                        if (SelectedItem < 0)
+                        API.MoveFinger(1);
+                        if (SelectedItem > 0)
+                        {
+                            SelectedItem--;
+                        }
+                        else
+                        {
                             SelectedItem = CurrentAppScreen.Items.Count - 1;
+                        }
                     }
-                    else if (Game.IsControlJustPressed(0, Control.FrontendDown) ||
-                            Game.IsDisabledControlJustPressed(0, Control.FrontendDown) ||
-                            Game.IsControlJustPressed(0, Control.PhoneScrollForward) ||
-                            Game.IsDisabledControlJustPressed(0, Control.PhoneScrollForward))
+                    else if (Game.IsControlJustPressed(1, Control.PhoneDown))
                     {
-                        SelectedItem = SelectedItem + 1;
-                        if (SelectedItem > CurrentAppScreen.Items.Count - 1)
+                        API.MoveFinger(2);
+                        if (SelectedItem < CurrentAppScreen.Items.Count - 1)
+                        {
+                            SelectedItem++;
+                        }
+                        else
+                        {
                             SelectedItem = 0;
+                        }
                     }
-                    else if (Game.IsControlJustPressed(0, Control.FrontendAccept))
+                    else if (Game.IsControlJustPressed(1, Control.PhoneSelect))
                     {
+                        API.MoveFinger(5);
                         Item item = CurrentAppScreen.Items[SelectedItem];
                         item.Select();
                     }
-                    else if (Game.IsControlJustPressed(0, Control.FrontendCancel))
+                    else if (Game.IsControlJustPressed(1, Control.PhoneCancel))
                     {
+                        API.MoveFinger(5);
                         if (PreviousScreens.Count > 0)
                         {
                             CurrentAppScreen = PreviousScreens[PreviousScreens.Count - 1];
