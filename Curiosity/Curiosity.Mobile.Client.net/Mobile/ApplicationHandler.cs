@@ -109,7 +109,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 {
                     // CLEARS PREVIOUS ITEMS....
                     API.PushScaleformMovieFunction(MobilePhone.MobileScaleformHandle, "SET_DATA_SLOT_EMPTY");
-                    API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
+                    API.PushScaleformMovieFunctionParameterInt((int)CurrentAppScreen.Type);
                     API.PopScaleformMovieFunctionVoid();
 
                     string header = string.Empty;
@@ -127,7 +127,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     for(var i = 0; i < CurrentAppScreen.Items.Count; i++)
                     {
                         API.PushScaleformMovieFunction(MobilePhone.MobileScaleformHandle, "SET_DATA_SLOT");
-                        API.PushScaleformMovieFunctionParameterInt(CurrentAppScreen.Type);
+                        API.PushScaleformMovieFunctionParameterInt((int)CurrentAppScreen.Type);
                         API.PushScaleformMovieFunctionParameterInt(i);
                         foreach(ItemData itemData in CurrentAppScreen.Items[i].Data)
                         {
@@ -136,7 +136,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                         API.PopScaleformMovieFunctionVoid();
                     }
 
-                    MobilePhone.MobileScaleform.CallFunction("DISPLAY_VIEW", CurrentAppScreen.Type, SelectedItem);
+                    MobilePhone.MobileScaleform.CallFunction("DISPLAY_VIEW", (int)CurrentAppScreen.Type, SelectedItem);
 
                     if (SelectedItem > CurrentAppScreen.Items.Count)
                         SelectedItem = CurrentAppScreen.Items.Count - 1;

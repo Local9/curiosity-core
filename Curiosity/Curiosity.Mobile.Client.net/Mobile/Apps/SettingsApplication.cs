@@ -13,7 +13,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         public static void Init()
         {
             App = new Application("Settings", Api.AppIcons.Settings, 7);
-            Screen screen = new Screen(App, "Settings", (int)View.Settings);
+            Screen screen = new Screen(App, "Settings", View.Settings);
             Screen theme = App.AddScreenType("Theme", View.Settings);
             Screen wallpaper = App.AddScreenType("Wallpaper", View.Settings);
 

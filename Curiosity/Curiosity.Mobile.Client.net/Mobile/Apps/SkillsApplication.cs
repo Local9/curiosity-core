@@ -22,7 +22,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         public static void Init()
         {
             App = new Application("Skills and Stats", Api.AppIcons.Games, 4);
-            Screen screen = new Screen(App, "Skills and Stats", (int)View.Settings);
+            Screen screen = new Screen(App, "Skills and Stats", View.Settings);
             App.LauncherScreen = screen;
             App.StartTask = StartTick;
             ApplicationHandler.Apps.Add(App); // Add the app to the loaded apps.

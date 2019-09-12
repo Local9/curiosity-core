@@ -1,19 +1,20 @@
 ﻿using Curiosity.Shared.Client.net;
 using System.Collections.Generic;
+using Curiosity.Global.Shared.net.Enums.Mobile;
 
 namespace Curiosity.Mobile.Client.net.Mobile.Api
 { 
     class Screen
     {
-        public static readonly int LIST = 13;
+        public static readonly View LIST = View.Settings;
 
         // Internal Data.
         protected int id;
         protected string header;
-        protected int type;
+        protected View type;
         protected List<Item> items = new List<Item>();
 
-        public Screen(Application parent, string header, int type)
+        public Screen(Application parent, string header, View type)
         {
             id = parent.Screens.Count; // Set it to the index it will be in the list when it is added.
             this.header = header;
@@ -30,7 +31,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Api
         {
             get { return header; }
         }
-        public int Type
+        public View Type
         {
             get { return type; }
         }

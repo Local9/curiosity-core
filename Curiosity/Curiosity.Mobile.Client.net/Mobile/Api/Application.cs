@@ -48,7 +48,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Api
 
         public Screen AddScreenType(string header, View view)
         {
-            Screen listScreen = new Screen(this, header, (int)view);
+            Screen listScreen = new Screen(this, header, view);
             AddScreen(listScreen);
             return listScreen;
         }

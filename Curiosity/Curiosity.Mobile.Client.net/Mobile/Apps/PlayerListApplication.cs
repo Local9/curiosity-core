@@ -25,7 +25,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         {
 
             App = new Application("Contacts", AppIcons.Contacts, 0);
-            screen = new Screen(App, "Contacts", (int)View.Contacts);
+            screen = new Screen(App, "Contacts", View.Contacts);
             App.LauncherScreen = screen;
             App.StartTask = StartTick;
             ApplicationHandler.Apps.Add(App); // Add the app to the loaded apps.
@@ -65,16 +65,6 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
 
                 Item towTruck = new Item(screen, Item.CreateData(2.0f, $"{PREFIX}Life V Towing", 0.0f, "CHAR_PROPERTY_TOWING_IMPOUND", "CELL_999", "CELL_2000"), ServiceNotAvailable, "Life V Towing");
                 screen.AddItem(towTruck);
-                Item towTruck1 = new Item(screen, Item.CreateData(2.0f, $"{PREFIX}Life V Towing1", 0.0f, "CHAR_PROPERTY_TOWING_IMPOUND", "CELL_999", "CELL_2000"), ServiceNotAvailable, "Life V Towing1");
-                screen.AddItem(towTruck1);
-                Item towTruck2 = new Item(screen, Item.CreateData(2.0f, $"{PREFIX}Life V Towing2", 0.0f, "CHAR_PROPERTY_TOWING_IMPOUND", "CELL_999", "CELL_2000"), ServiceNotAvailable, "Life V Towing2");
-                screen.AddItem(towTruck2);
-                Item towTruck3 = new Item(screen, Item.CreateData(2.0f, $"{PREFIX}Life V Towing3", 0.0f, "CHAR_PROPERTY_TOWING_IMPOUND", "CELL_999", "CELL_2000"), ServiceNotAvailable, "Life V Towing3");
-                screen.AddItem(towTruck3);
-                Item towTruck4 = new Item(screen, Item.CreateData(2.0f, $"{PREFIX}Life V Towing4", 0.0f, "CHAR_PROPERTY_TOWING_IMPOUND", "CELL_999", "CELL_2000"), ServiceNotAvailable, "Life V Towing4");
-                screen.AddItem(towTruck4);
-                Item towTruck5 = new Item(screen, Item.CreateData(2.0f, $"{PREFIX}Life V Towing5", 0.0f, "CHAR_PROPERTY_TOWING_IMPOUND", "CELL_999", "CELL_2000"), ServiceNotAvailable, "Life V Towing5");
-                screen.AddItem(towTruck5);
             }
             return true;
         }

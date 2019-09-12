@@ -155,13 +155,9 @@ namespace Curiosity.Mobile.Client.net.Mobile
             IsMenuOpen = isOpen;
         }
 
-        static void SetSoftKey(int scaleForm, SoftKey buttonId, Color color, SoftkeyIcon icon)
+        static void SetSoftKey(SoftKey buttonId, Color color, SoftkeyIcon icon)
         {
-            API.PushScaleformMovieFunction(scaleForm, "SET_SOFT_KEYS");
-            API.PushScaleformMovieFunctionParameterInt((int)buttonId);
-            API.PushScaleformMovieFunctionParameterBool(true);
-            API.PushScaleformMovieFunctionParameterInt((int)icon);
-            API.PopScaleformMovieFunctionVoid();
+            MobileScaleform.CallFunction("SET_SOFT_KEYS", (int)buttonId, 1, (int)icon);
 
             //API.PushScaleformMovieFunction(MobileScaleform, "SET_SOFT_KEYS_COLOUR");
             //API.PushScaleformMovieFunctionParameterInt(buttonId);
@@ -191,13 +187,13 @@ namespace Curiosity.Mobile.Client.net.Mobile
             }
 
             if (IsMobilePhoneOpen)
-            { 
-                float scale = 0;
+            {
+                Game.DisableControlThisFrame(0, Control.Sprint);
+
                 if (API.GetFollowPedCamViewMode() == 4)
-                    scale = 0f;
+                    API.SetMobilePhoneScale(0f);
                 else
-                    scale = 285f;
-                API.SetMobilePhoneScale(scale);
+                    API.SetMobilePhoneScale(285f);
 
                 if (!MobilePhone.IsLeaning)
                 {
@@ -209,42 +205,27 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     }
                 }
 
-                API.PushScaleformMovieFunction(MobileScaleformHandle, "SET_TITLEBAR_TIME");
-                API.PushScaleformMovieFunctionParameterInt(currentHours);
-                API.PushScaleformMovieFunctionParameterInt(currentMinutes);
-                API.PopScaleformMovieFunctionVoid();
-
-                API.PushScaleformMovieFunction(MobileScaleformHandle, "SET_SLEEP_MODE");
-                API.PushScaleformMovieFunctionParameterBool(InSleepMode);
-                API.PopScaleformMovieFunctionVoid();
-
-                API.PushScaleformMovieFunction(MobileScaleformHandle, "SET_THEME");
-                API.PushScaleformMovieFunctionParameterInt(phoneTheme);
-                API.PopScaleformMovieFunctionVoid();
-
-                API.PushScaleformMovieFunction(MobileScaleformHandle, "SET_BACKGROUND_IMAGE");
-                API.PushScaleformMovieFunctionParameterInt(phoneWallpaper);
-                API.PopScaleformMovieFunctionVoid();
+                MobileScaleform.CallFunction("SET_TITLEBAR_TIME", currentHours, currentMinutes);
+                MobileScaleform.CallFunction("SET_SLEEP_MODE", InSleepMode);
+                MobileScaleform.CallFunction("SET_THEME", phoneTheme);
+                MobileScaleform.CallFunction("SET_BACKGROUND_IMAGE", phoneWallpaper);
 
                 Vector3 pos = Game.PlayerPed.Position;
-                API.PushScaleformMovieFunction(MobileScaleformHandle, "SET_SIGNAL_STRENGTH");
+                MobileScaleform.CallFunction("SET_SIGNAL_STRENGTH", 0);
                 // API.PushScaleformMovieFunctionParameterInt(API.GetZoneScumminess(API.GetZoneAtCoords(pos.X, pos.Y, pos.Z)));
-                API.PushScaleformMovieFunctionParameterInt(0);
-                API.PopScaleformMovieFunctionVoid();
 
                 int renderID = 0;
                 API.GetMobilePhoneRenderId(ref renderID);
-
                 API.SetTextRenderId(renderID);
 
-                //SetSoftKey(MobileScaleform, SoftKey.Left, Color.White, SoftkeyIcon.Select);
+                //SetSoftKey(SoftKey.Left, Color.White, SoftkeyIcon.Select);
                 //SetSoftKey(MobileScaleform, 2, Color.White, 0);
                 //SetSoftKey(MobileScaleform, 3, Color.White, 0);
 
                 API.DrawScaleformMovie(MobileScaleformHandle, 0.0998f, 0.1775f, 0.1983f, 0.364f, 255, 255, 255, 255, 0);
                 API.SetTextRenderId(1);
             }
-            else if (ControlHelper.IsControlJustPressed(Control.Phone, false) && !IsMenuOpen)
+            else if (Game.IsControlJustPressed(1, Control.Phone) && !IsMenuOpen)
             {
                 if (Game.PlayerPed.Weapons.Current.Hash != WeaponHash.Unarmed)
                 {
@@ -252,31 +233,29 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     API.SetCurrentPedWeapon(Game.PlayerPed.Handle, (uint)WeaponHash.Unarmed, true);
                 }
 
-                API.PlaySoundFrontend(-1, "Pull_Out", "Phone_SoundSet_Default", true);
+                Game.PlaySound("Pull_Out", "Phone_SoundSet_Default");
                 MobileScaleform = new Scaleform("CELLPHONE_IFRUIT");
+
                 MobileScaleformHandle = MobileScaleform.Handle;
-                if (!API.HasScaleformMovieLoaded(MobileScaleformHandle))
-                {
+                if (!MobileScaleform.IsLoaded)
                     await Client.Delay(0);
-                }
+
+                API.CreateMobilePhone(0);
 
                 Game.PlayerPed.SetConfigFlag(242, false);
                 Game.PlayerPed.SetConfigFlag(243, false);
                 Game.PlayerPed.SetConfigFlag(244, true);
 
                 visibleAnimProgress = 21;
+                API.N_0x83a169eabcdb10a2(Game.PlayerPed.Handle, 4);
+
                 IsMobilePhoneOpen = true;
                 API.SetMobilePhonePosition(58.0f, -21.0f - visibleAnimProgress, -60.0f);
 
-                float scale = 0;
                 if (API.GetFollowPedCamViewMode() == 4)
-                    scale = 0f;
+                    API.SetMobilePhoneScale(0f);
                 else
-                    scale = 285f;
-                API.SetMobilePhoneScale(scale);
-
-                API.CreateMobilePhone(0);
-                API.N_0x83a169eabcdb10a2(Game.PlayerPed.Handle, 4);
+                    API.SetMobilePhoneScale(285f);
             }
 
             await Task.FromResult(0);
@@ -321,35 +300,18 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     int a = 0;
                     foreach(Application application in ApplicationHandler.Apps.OrderBy(x => x.GetPosition))
                     {
-                        API.PushScaleformMovieFunction(MobileScaleformHandle, "SET_DATA_SLOT");
-                        API.PushScaleformMovieFunctionParameterInt(1);
-                        API.PushScaleformMovieFunctionParameterInt(a);
-                        API.PushScaleformMovieFunctionParameterInt((int)application.GetIcon);
-                        API.PopScaleformMovieFunctionVoid();
+                        MobileScaleform.CallFunction("SET_DATA_SLOT", 1, a, (int)application.GetIcon);
                         a++;
                     }
 
                     // FILL
                     for (int i = ApplicationHandler.Apps.Count; i < TOTAL_APPS; i++)
                     {
-                        API.PushScaleformMovieFunction(MobileScaleformHandle, "SET_DATA_SLOT");
-                        API.PushScaleformMovieFunctionParameterInt(1);
-                        API.PushScaleformMovieFunctionParameterInt(i);
-                        API.PushScaleformMovieFunctionParameterInt((int)Api.AppIcons.Empty);
-                        API.PopScaleformMovieFunctionVoid();
+                        MobileScaleform.CallFunction("SET_DATA_SLOT", 1, i, (int)Api.AppIcons.Empty);
                     }
 
-                    API.PushScaleformMovieFunction(MobileScaleformHandle, "DISPLAY_VIEW");
-                    API.PushScaleformMovieFunctionParameterInt(1);
-                    API.PushScaleformMovieFunctionParameterInt(selectedItem);
-                    API.PopScaleformMovieFunctionVoid();
-
-                    for (int i = 0; i < TOTAL_APPS; i++)
-                    {
-                        API.PushScaleformMovieFunction(MobileScaleformHandle, "SET_HEADER");
-                        API.PushScaleformMovieFunctionParameterString("Life V");
-                        API.PopScaleformMovieFunctionVoid();
-                    }
+                    MobileScaleform.CallFunction("DISPLAY_VIEW", 1, selectedItem);
+                    MobileScaleform.CallFunction("SET_HEADER", "Life V");
 
                     bool changeNavigation = true;
 
@@ -407,37 +369,6 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 Debug.WriteLine($"OnMainAppTick -> {ex.ToString()}");
             }
             await Task.FromResult(0);
-        }
-
-        static bool IsDownPressed()
-        {
-            // Return false if the buttons are not currently enabled.
-            if (!IsMenuOpen)
-            {
-                return false;
-            }
-            // when the player is holding TAB, while not in a vehicle, and when the scrollwheel is being used, return false to prevent interferring with weapon selection.
-            if (!Game.PlayerPed.IsInVehicle())
-            {
-                if (Game.IsControlPressed(0, Control.SelectWeapon))
-                {
-                    if (Game.IsControlPressed(0, Control.SelectNextWeapon) || Game.IsControlPressed(0, Control.SelectPrevWeapon))
-                    {
-                        return false;
-                    }
-                }
-            }
-            // return true if the scrollwheel down or the arrow down key is being used at this frame.
-            if (Game.IsControlPressed(0, Control.FrontendDown) ||
-                Game.IsDisabledControlPressed(0, Control.FrontendDown) ||
-                Game.IsControlPressed(0, Control.PhoneScrollForward) ||
-                Game.IsDisabledControlPressed(0, Control.PhoneScrollForward))
-            {
-                return true;
-            }
-
-            // return false if none of the conditions matched.
-            return false;
         }
     }
 }

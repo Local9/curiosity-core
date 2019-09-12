@@ -21,7 +21,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         public static void Init()
         {
             App = new Application("Job Options", Api.AppIcons.Tasks, 2);
-            Screen screen = new Screen(App, "Job Options", (int)View.Settings);
+            Screen screen = new Screen(App, "Job Options", View.Settings);
             App.LauncherScreen = screen;
             App.StartTask = StartTick;
             ApplicationHandler.Apps.Add(App); // Add the app to the loaded apps.
