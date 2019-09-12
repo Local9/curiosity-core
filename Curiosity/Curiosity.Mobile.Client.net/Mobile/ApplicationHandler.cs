@@ -31,11 +31,6 @@ namespace Curiosity.Mobile.Client.net.Mobile
             }
         }
 
-        public static void PlaySound(string audio, string audioSet)
-        {
-            API.PlaySoundFrontend(-1, audio, audioSet, true);
-        }
-
         public static void Start(Application application)
         {
             if (application.LauncherScreen != null)
@@ -45,7 +40,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 PreviousScreens.Clear();
                 SelectedItem = 0;
                 IsInApp = true;
-                API.PlaySoundFrontend(-1, "Menu_Navigate", "Phone_SoundSet_Default", true);
+                Game.PlaySound("Menu_Navigate", "Phone_SoundSet_Default");
                 if (CurrentApp.StartTask != null)
                 {
                     CurrentApp.StartTask.Invoke();
@@ -71,7 +66,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
             CitizenFX.Core.Native.API.SetMobilePhoneRotation(0.0f, 0.0f, 0.0f, 0);
 
             CurrentApp = null;
-            API.PlaySoundFrontend(-1, "Hang_Up", "Phone_SoundSet_Michael", true);
+            Game.PlaySound("Hang_Up", "Phone_SoundSet_Michael");
             
             client.DeregisterTickHandler(CreateScreen);
         }
@@ -108,9 +103,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 else
                 {
                     // CLEARS PREVIOUS ITEMS....
-                    API.PushScaleformMovieFunction(MobilePhone.MobileScaleformHandle, "SET_DATA_SLOT_EMPTY");
-                    API.PushScaleformMovieFunctionParameterInt((int)CurrentAppScreen.Type);
-                    API.PopScaleformMovieFunctionVoid();
+                    MobilePhone.MobileScaleform.CallFunction("SET_DATA_SLOT_EMPTY", (int)CurrentAppScreen.Type);
 
                     string header = string.Empty;
                     if (!string.IsNullOrEmpty(CurrentAppScreen.Header))
@@ -195,7 +188,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
                     if (navigated)
                     {
-                        API.PlaySoundFrontend(-1, "Menu_Navigate", "Phone_SoundSet_Default", true);
+                        Game.PlaySound("Menu_Navigate", "Phone_SoundSet_Default");
                     }
                 }
                 await Client.Delay(0);

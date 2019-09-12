@@ -157,14 +157,8 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
         static void SetSoftKey(SoftKey buttonId, Color color, SoftkeyIcon icon)
         {
-            MobileScaleform.CallFunction("SET_SOFT_KEYS", (int)buttonId, 1, (int)icon);
-
-            //API.PushScaleformMovieFunction(MobileScaleform, "SET_SOFT_KEYS_COLOUR");
-            //API.PushScaleformMovieFunctionParameterInt(buttonId);
-            //API.PushScaleformMovieFunctionParameterInt(color.R);
-            //API.PushScaleformMovieFunctionParameterInt(color.G);
-            //API.PushScaleformMovieFunctionParameterInt(color.B);
-            //API.PopScaleformMovieFunctionVoid();
+            MobileScaleform.CallFunction("SET_SOFT_KEYS", (int)buttonId, true, icon);
+            MobileScaleform.CallFunction("SET_SOFT_KEYS_COLOUR", (int)buttonId, color.R, color.G, color.B);
         }
 
         public static async void LeanPhone(bool lean)
@@ -218,7 +212,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 API.GetMobilePhoneRenderId(ref renderID);
                 API.SetTextRenderId(renderID);
 
-                //SetSoftKey(SoftKey.Left, Color.White, SoftkeyIcon.Select);
+                // SetSoftKey(SoftKey.Left, Color.White, SoftkeyIcon.Select);
                 //SetSoftKey(MobileScaleform, 2, Color.White, 0);
                 //SetSoftKey(MobileScaleform, 3, Color.White, 0);
 

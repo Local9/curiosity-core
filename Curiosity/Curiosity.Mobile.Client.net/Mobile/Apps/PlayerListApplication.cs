@@ -15,6 +15,8 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         static Application App;
         static string PREFIX = "~l~";
 
+        static View ScreenView = View.Settings;
+
         static Screen screen;
 
         // public static Action<dynamic[]> CHANGE_THEME = new Action<dynamic[]>(ApplicationSettings.SetTheme);
@@ -25,7 +27,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         {
 
             App = new Application("Contacts", AppIcons.Contacts, 0);
-            screen = new Screen(App, "Contacts", View.Contacts);
+            screen = new Screen(App, "Contacts", ScreenView);
             App.LauncherScreen = screen;
             App.StartTask = StartTick;
             ApplicationHandler.Apps.Add(App); // Add the app to the loaded apps.
@@ -49,21 +51,21 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
 
                     // Add option to message the player.
 
-                    Item messageItem = new Item(playerOptionsMenu, Item.CreateData(2.0f, PREFIX + "Message", (int)ListIcons.Profile),
+                    Item messageItem = new Item(playerOptionsMenu, Item.CreateData(2, PREFIX + "Message", (int)ListIcons.Profile),
                         MessagePlayer, player);
 
                     playerOptionsMenu.AddItem(messageItem);
 
                     Item playerItem = new Item(screen, // Create an item that switches to the new screen.
-                        Item.CreateData(2.0f, PREFIX + player.Name, (int)ListIcons.Profile, 0.0f, "CHAR_MULTIPLAYER", "CELL_999", "CELL_2000"), // Item push data.
+                        Item.CreateData(0, PREFIX + player.Name), // Item push data.
                         ApplicationHandler.ChangeScreen, playerOptionsMenu); // Action callback and arguments.
                     screen.AddItem(playerItem); // Add the item to the launcher screen.
                 }
 
-                Item taxiServices = new Item(screen, Item.CreateData(2.0f, $"{PREFIX}Life V Taxi", 0.0f, "CHAR_TAXI", "CELL_999", "CELL_2000"), ServiceNotAvailable, "Life V Taxi", "CELL_999", "CELL_2000");
+                Item taxiServices = new Item(screen, Item.CreateData(0, $"{PREFIX}Life V Taxi"), ServiceNotAvailable, "Life V Taxi");
                 screen.AddItem(taxiServices);
 
-                Item towTruck = new Item(screen, Item.CreateData(2.0f, $"{PREFIX}Life V Towing", 0.0f, "CHAR_PROPERTY_TOWING_IMPOUND", "CELL_999", "CELL_2000"), ServiceNotAvailable, "Life V Towing");
+                Item towTruck = new Item(screen, Item.CreateData(0, $"{PREFIX}Life V Towing"), ServiceNotAvailable, "Life V Towing");
                 screen.AddItem(towTruck);
             }
             return true;
