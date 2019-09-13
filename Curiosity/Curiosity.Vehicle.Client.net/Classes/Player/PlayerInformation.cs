@@ -43,7 +43,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Player
 
         public static bool IsTrustedAdmin()
         {
-            return (privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+            return (privilege == Privilege.COMMUNITYMANAGER || privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         }
 
         public static bool IsDeveloper()
