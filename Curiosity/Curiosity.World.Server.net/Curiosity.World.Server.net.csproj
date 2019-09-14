@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Environment\RoamingPed.cs" />
     <Compile Include="Classes\Environment\WorldWeatherCycle.cs" />
     <Compile Include="Classes\Environment\WorldTimeCycle.cs" />
     <Compile Include="Server.cs" />
