@@ -72,6 +72,10 @@ namespace Curiosity.Police.Client.net.Classes
 
         static void OnReleaseAiSpeedingTicket()
         {
+            if (TicketedPed) return;
+
+            TicketedPed = true;
+
             if (vehFound.Driver != null)
             {
                 if (vehFound.Driver.IsAlive)
@@ -87,6 +91,10 @@ namespace Curiosity.Police.Client.net.Classes
 
         static void OnReleaseAiTicket()
         {
+            if (TicketedPed) return;
+
+            TicketedPed = true;
+
             if (vehFound.Driver != null)
             {
                 if (vehFound.Driver.IsAlive)
@@ -104,7 +112,6 @@ namespace Curiosity.Police.Client.net.Classes
         {
             CommonFunctions.PlayScenario("CODE_HUMAN_MEDIC_TIME_OF_DEATH");
 
-            TicketedPed = true;
             API.DecorSetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR, true);
 
             await Client.Delay(10000);
