@@ -12,7 +12,10 @@ namespace Curiosity.Player.Client.net
     public class Client : BaseScript
     {
         private static Client _instance;
+        public static Ped PlayerPed { get => Game.PlayerPed; }
         public static PlayerList players;
+        public static int PlayerServerId { get => Game.Player.ServerId; }
+        public static int PlayerPedId { get => Game.PlayerPed.Handle; }
 
         public static Client GetInstance()
         {

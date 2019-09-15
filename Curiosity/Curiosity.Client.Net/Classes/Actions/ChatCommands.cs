@@ -559,8 +559,11 @@ namespace Curiosity.Client.net.Classes.Actions
 
                     if (API.DoesEntityExist(objectEntity.Handle))
                     {
-                        API.SetEntityAsNoLongerNeeded(ref objectHandle);
-                        API.DeleteEntity(ref objectHandleToDelete);
+                        if (API.NetworkRequestControlOfEntity(objectHandle))
+                        {
+                            API.SetEntityAsNoLongerNeeded(ref objectHandle);
+                            API.DeleteEntity(ref objectHandleToDelete);
+                        }
                     }
 
                     if (DoesEntityExist(objectEntity.Handle))

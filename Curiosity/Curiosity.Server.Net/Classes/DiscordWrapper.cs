@@ -71,7 +71,7 @@ namespace Curiosity.Server.net.Classes
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}` - {API.GetConvar("sv_hostname", "Server Name Unknown")}";
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`\n`{API.GetConvar("sv_hostname", "Server Name Unknown")}`";
                 webhook.Username = "Staff";
 
                 Embed embed = new Embed();
@@ -114,7 +114,7 @@ namespace Curiosity.Server.net.Classes
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}` - {API.GetConvar("sv_hostname", "Server Name Unknown")}";
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`\n`{API.GetConvar("sv_hostname", "Server Name Unknown")}`";
                 webhook.Username = $"Report by {reporterName}";
 
                 Embed embed = new Embed();
@@ -150,7 +150,7 @@ namespace Curiosity.Server.net.Classes
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}` - {API.GetConvar("sv_hostname", "Server Name Unknown")}";
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`\n`{API.GetConvar("sv_hostname", "Server Name Unknown")}`";
                 webhook.Username = name;
 
                 Embed embed = new Embed();
@@ -180,7 +180,7 @@ namespace Curiosity.Server.net.Classes
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $@"`{DateTime.Now.ToString(DATE_FORMAT)}` - {API.GetConvar("sv_hostname", "Server Name Unknown")} > {name}: {message}";
+                webhook.Content = $@"`{DateTime.Now.ToString(DATE_FORMAT)}`\n`{API.GetConvar("sv_hostname", "Server Name Unknown")}` > {name}: {message}";
                 webhook.Username = username;
 
                 await Server.Delay(0);
