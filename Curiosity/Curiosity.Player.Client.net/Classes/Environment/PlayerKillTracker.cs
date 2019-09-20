@@ -69,7 +69,15 @@ namespace Curiosity.Player.Client.net.Classes.Environment
                         killerId = -1;
                     }
 
+                    Vector3 positionOfDeath = Game.PlayerPed.Position;
 
+                    Client.TriggerServerEvent("curiosity:Server:Player:LogDeath", killerId, killerType, killerInVehicle, killerVehicleName, positionOfDeath.X, positionOfDeath.Y, positionOfDeath.Z);
+                    HasPlayerDied = true;
+                }
+                else if (!IsPedFatallyInjured(playerPedId))
+                {
+                    IsPlayerDead = false;
+                    DiedAt = null;
                 }
             }
         }

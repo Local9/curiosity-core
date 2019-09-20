@@ -15,8 +15,8 @@ namespace Curiosity.Police.Client.net.Classes
     {
         static Client client = Client.GetInstance();
 
-        static Vehicle vehicle;
-        static Vehicle vehFound = null;
+        static Vehicle playerVehicle;
+        static Vehicle vehicleToInteract = null;
         static Ped vehDriver = null;
 
         static Random random = new Random();
@@ -76,9 +76,9 @@ namespace Curiosity.Police.Client.net.Classes
 
             TicketedPed = true;
 
-            if (vehFound.Driver != null)
+            if (vehicleToInteract.Driver != null)
             {
-                if (vehFound.Driver.IsAlive)
+                if (vehicleToInteract.Driver.IsAlive)
                 {
                     Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(16, 26));
                     Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(3, 6));
@@ -95,9 +95,9 @@ namespace Curiosity.Police.Client.net.Classes
 
             TicketedPed = true;
 
-            if (vehFound.Driver != null)
+            if (vehicleToInteract.Driver != null)
             {
-                if (vehFound.Driver.IsAlive)
+                if (vehicleToInteract.Driver.IsAlive)
                 {
                     Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Player.PlayerInformation.playerInfo.Wallet, random.Next(5, 16));
                     Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"{Enums.Skills.policexp}", random.Next(1, 3));
@@ -112,7 +112,7 @@ namespace Curiosity.Police.Client.net.Classes
         {
             CommonFunctions.PlayScenario("CODE_HUMAN_MEDIC_TIME_OF_DEATH");
 
-            API.DecorSetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR, true);
+            API.DecorSetBool(vehicleToInteract.Handle, WAS_PULLED_OVER_DECOR, true);
 
             await Client.Delay(10000);
 
@@ -123,9 +123,9 @@ namespace Curiosity.Police.Client.net.Classes
 
         static void OnReleaseAi()
         {
-            if (vehFound != null)
+            if (vehicleToInteract != null)
             {
-                if (vehFound.IsStopped)
+                if (vehicleToInteract.IsStopped)
                 {
                     ReleasePed();
                 }
@@ -185,39 +185,43 @@ namespace Curiosity.Police.Client.net.Classes
 
                 if (Game.PlayerPed.CurrentVehicle.Driver != Game.PlayerPed) return;
 
-                if (vehFound != null)
+                if (vehicleToInteract != null)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "You still have an active pull over.", 2);
-                    return;
+                    if (vehicleToInteract.Exists())
+                    {
+                        Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "You still have an active pull over.", 2);
+                        return;
+                    }
+                    vehicleToInteract = null;
                 }
 
-                vehicle = Game.PlayerPed.CurrentVehicle;
+                playerVehicle = Game.PlayerPed.CurrentVehicle;
 
-                Vector3 basePos = vehicle.Position;
-                RaycastResult raycast = World.RaycastCapsule(basePos, vehicle.GetOffsetPosition(new Vector3(0f, 7f, 0f)) + new Vector3(0f, 0f, -0.4f), 1f, (IntersectOptions)71, vehicle);
+                Vector3 basePos = playerVehicle.Position;
+                RaycastResult raycast = World.RaycastCapsule(basePos, playerVehicle.GetOffsetPosition(new Vector3(0f, 7f, 0f)) + new Vector3(0f, 0f, -0.4f), 1f, (IntersectOptions)71, playerVehicle);
 
                 if (raycast.DitHitEntity && raycast.HitEntity.Model.IsVehicle)
                 {
-                    vehFound = (CitizenFX.Core.Vehicle)raycast.HitEntity;
+                    vehicleToInteract = (CitizenFX.Core.Vehicle)raycast.HitEntity;
                 }
 
-                if (vehFound.Driver.IsPlayer) return;
+                if (vehicleToInteract.Driver.IsPlayer) return;
 
-                if (vehFound != null)
+                if (vehicleToInteract != null)
                 {
-                    if (vehFound.Driver != null)
+                    if (vehicleToInteract.Driver != null)
                     {
-                        if (!vehFound.Driver.Exists())
+                        if (!vehicleToInteract.Driver.Exists())
                         {
                             Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "You cannot pull over empty vehicles.", 2);
-                            vehFound = null;
+                            vehicleToInteract = null;
                             return;
                         }
 
-                        if (API.DecorGetBool(vehFound.Handle, WAS_PULLED_OVER_DECOR))
+                        if (API.DecorGetBool(vehicleToInteract.Handle, WAS_PULLED_OVER_DECOR))
                         {
                             Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "Has already been pulled over, you cannot harass pedestrians.", 2);
-                            vehFound = null;
+                            vehicleToInteract = null;
                             return;
                         }
 
@@ -225,16 +229,16 @@ namespace Curiosity.Police.Client.net.Classes
 
                         Function.Call(Hash.BLIP_SIREN, Game.PlayerPed.CurrentVehicle.Handle);
 
-                        if (API.NetworkHasControlOfEntity(vehFound.Handle))
+                        if (API.NetworkHasControlOfEntity(vehicleToInteract.Handle))
                         {
                             if (random.Next(5) == 1)
                             {
-                                int driver = vehFound.Driver.Handle;
-                                int vehicle = vehFound.Handle;
+                                int driver = vehicleToInteract.Driver.Handle;
+                                int vehicle = vehicleToInteract.Handle;
 
-                                if (vehFound.Driver.IsAlive)
+                                if (vehicleToInteract.Driver.IsAlive)
                                 {
-                                    vehDriver = vehFound.Driver;
+                                    vehDriver = vehicleToInteract.Driver;
 
                                     vehDriver.RelationshipGroup = FleeingDriverRelationship;
 
@@ -254,7 +258,7 @@ namespace Curiosity.Police.Client.net.Classes
 
                                     TicketedPed = false;
 
-                                    if (!vehFound.IsStopped)
+                                    if (!vehicleToInteract.IsStopped)
                                         Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "~r~WARNING", $"", "They're getting away!", 2);
 
                                     await Client.Delay(1000);
@@ -264,10 +268,10 @@ namespace Curiosity.Police.Client.net.Classes
                             }
                             else
                             {
-                                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Notification", $"Plate: {vehFound.Mods.LicensePlate}", "Vehicle in front is stopping.", 2);
+                                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Notification", $"Plate: {vehicleToInteract.Mods.LicensePlate}", "Vehicle in front is stopping.", 2);
                                 TicketedPed = false;
-                                API.SetVehicleHalt(vehFound.Handle, 40f, 1, false);
-                                API.DecorSetBool(vehFound.Handle, PULLED_OVER_DECOR, true);
+                                API.SetVehicleHalt(vehicleToInteract.Handle, 40f, 1, false);
+                                API.DecorSetBool(vehicleToInteract.Handle, PULLED_OVER_DECOR, true);
                             }
                         }
                     }
@@ -284,16 +288,16 @@ namespace Curiosity.Police.Client.net.Classes
             while (true)
             {
                 await Client.Delay(0);
-                if (vehFound != null && !IsDriverFleeing)
+                if (vehicleToInteract != null && !IsDriverFleeing)
                 {
-                    World.DrawMarker(MarkerType.UpsideDownCone, vehFound.Position + new Vector3(0f, 0f, 1.6f), Vector3.Zero, Vector3.Zero, new Vector3(0.3f, 0.3f, 0.3f), System.Drawing.Color.FromArgb(255, 255, 255, 255), true);
+                    World.DrawMarker(MarkerType.UpsideDownCone, vehicleToInteract.Position + new Vector3(0f, 0f, 1.6f), Vector3.Zero, Vector3.Zero, new Vector3(0.3f, 0.3f, 0.3f), System.Drawing.Color.FromArgb(255, 255, 255, 255), true);
 
-                    if (vehFound.IsStopped)
+                    if (vehicleToInteract.IsStopped)
                     {
-                        vehFound.IsPositionFrozen = true;
+                        vehicleToInteract.IsPositionFrozen = true;
                     }
 
-                    if (vehFound.IsStopped && Game.PlayerPed.Position.DistanceToSquared(vehFound.Position) > 200f)
+                    if (vehicleToInteract.IsStopped && Game.PlayerPed.Position.DistanceToSquared(vehicleToInteract.Position) > 200f)
                     {
                         ReleasePed();
                     }
@@ -319,14 +323,14 @@ namespace Curiosity.Police.Client.net.Classes
             {
                 await Client.Delay(100);
 
-                if (vehFound == null)
+                if (vehicleToInteract == null)
                 {
                     break;
                 }
 
-                if (vehFound.IsStopped)
+                if (vehicleToInteract.IsStopped)
                 {
-                    if (vehFound.Driver.IsInVehicle())
+                    if (vehicleToInteract.Driver.IsInVehicle())
                     {
                         vehDriver.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
 
@@ -372,9 +376,9 @@ namespace Curiosity.Police.Client.net.Classes
 
         static void ReleasePed()
         {
-            API.DecorSetBool(vehFound.Handle, PULLED_OVER_DECOR, false);
-            vehFound.IsPositionFrozen = false;
-            vehFound = null;
+            API.DecorSetBool(vehicleToInteract.Handle, PULLED_OVER_DECOR, false);
+            vehicleToInteract.IsPositionFrozen = false;
+            vehicleToInteract = null;
         }
 
         static void AwardPlayer(bool giveAward = true)
@@ -412,10 +416,10 @@ namespace Curiosity.Police.Client.net.Classes
                 vehDriver = null;
             }
 
-            if (vehFound != null)
+            if (vehicleToInteract != null)
             {
-                vehFound.MarkAsNoLongerNeeded();
-                vehFound = null;
+                vehicleToInteract.MarkAsNoLongerNeeded();
+                vehicleToInteract = null;
             }
         }
     }
