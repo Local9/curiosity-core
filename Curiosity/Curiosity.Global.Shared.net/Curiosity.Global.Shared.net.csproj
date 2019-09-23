@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\BlipData.cs" />
     <Compile Include="Data\MissionDataLists.cs" />
     <Compile Include="Data\Permissions.cs" />
     <Compile Include="Encode.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Entity\VehicleItem.cs" />
     <Compile Include="Entity\VehicleSpawnLocation.cs" />
     <Compile Include="Entity\WeatherData.cs" />
+    <Compile Include="Enums\Blips.cs" />
     <Compile Include="Enums\Job.cs" />
     <Compile Include="Enums\LogGroup.cs" />
     <Compile Include="Enums\Messages.cs" />

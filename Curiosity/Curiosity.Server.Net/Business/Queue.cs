@@ -18,6 +18,7 @@ namespace Curiosity.Server.net.Business
         // service requirements
         static Server server = Server.GetInstance();
         static Regex regex = new Regex(@"^[ A-Za-z0-9-_.#\[\]]{1,32}$");
+        static Regex blacklistedNames = new Regex(@"\b(admin|nigga|nigger|administrator|moderator|staff)\b");
         static string resourceName = API.GetCurrentResourceName();
         static string resourcePath = $"resources/{API.GetResourcePath(resourceName).Substring(API.GetResourcePath(resourceName).LastIndexOf("//") + 2)}";
         static Dictionary<Messages, string> messages = new Dictionary<Messages, string>();
@@ -179,6 +180,11 @@ namespace Curiosity.Server.net.Business
                 if (license == null) { deferrals.done($"{messages[Messages.License]}"); return; }
 
                 if (!regex.IsMatch(playerName)) { deferrals.done($"{messages[Messages.Symbols]}"); return; }
+
+                if (blacklistedNames.IsMatch(playerName)) {
+                    deferrals.done($"The username of '{playerName}' is blocked. Please note we can see the name from the FiveM settings options or Steam.");
+                    return;
+                }
 
                 GlobalEntity.User user = await Database.DatabaseUsers.GetUser(license, player);
 

@@ -1,12 +1,14 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net.Data;
+using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Shared.Client.net.Enums.Patrol;
+using Curiosity.Shared.Client.net.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Enums.Patrol;
+using static Curiosity.Global.Shared.net.Data.BlipHandler;
 
 namespace Curiosity.Police.Client.net.Environment.Job
 {
@@ -82,11 +84,11 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 MarkersAll.Add(7, new Marker(new Vector3(826.2648f, -1288.504f, 27.24066f), PatrolZone.City));
                 MarkersAll.Add(8, new Marker(new Vector3(-561.2444f, -132.6783f, 37.04274f), PatrolZone.City)); // ROCKFORD
 
-                if (BlipHandler.All.Count == 0)
+                if (AllBlips.Count == 0)
                 {
                     foreach (KeyValuePair<int, Marker> keyValuePair in MarkersAll)
                     {
-                        BlipHandler.Add(new BlipData(keyValuePair.Key, "Police Duty", keyValuePair.Value.Position, BlipSprite.PoliceStation, Shared.Client.net.Enums.BlipCategory.Unknown, BlipColor.Blue));
+                        AddBlip(new BlipData(keyValuePair.Key, "Police Duty", keyValuePair.Value.Position, BlipSprite.PoliceStation, BlipCategory.Unknown, BlipColor.Blue));
                     }
                 }
             }

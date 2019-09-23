@@ -25,7 +25,7 @@ namespace Curiosity.Police.Client.net
             Classes.Menus.MenuLoadout.Init(); // exists to make the instance exist
 
             Environment.Vehicle.Sirens.Init();
-            Environment.BlipHandler.Init();
+            Curiosity.Global.Shared.net.Data.BlipHandler.Init();
             Environment.Job.DutyMarkers.Init();
 
             // PULLOVER

@@ -13,6 +13,7 @@
         Error,
         Timeout,
         QueueCount,
-        Symbols
+        Symbols,
+        BlackListedName
     }
 }

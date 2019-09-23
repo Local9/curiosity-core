@@ -1,5 +1,6 @@
 ﻿using System;
 using CitizenFX.Core;
+using Curiosity.Shared.Client.net.Enums;
 
 namespace Curiosity.Shared.Client.net
 {
@@ -59,5 +60,9 @@ namespace Curiosity.Shared.Client.net
             BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#ffffff", message);
         }
 
+        public static void Notification(string title, string subject, string message)
+        {
+            BaseScript.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_LESTER_DEATHWISH}", 1, title, subject, message, 2);
+        }
     }
 }

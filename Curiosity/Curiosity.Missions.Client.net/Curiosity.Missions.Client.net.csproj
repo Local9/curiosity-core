@@ -47,6 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Environment\Builders\MissionBuilder.cs" />
+    <Compile Include="Classes\Environment\Interactions\BackupResponseHandler.cs" />
+    <Compile Include="Classes\Environment\Interactions\MissionResponseHandler.cs" />
+    <Compile Include="Classes\Environment\Parties\PartyHandler.cs" />
+    <Compile Include="Classes\Environment\Rage\BlipHandler.cs" />
+    <Compile Include="Classes\Environment\Rage\Classes\PedCreator.cs" />
+    <Compile Include="Classes\Environment\Rage\MarkerHandler.cs" />
+    <Compile Include="Classes\Environment\Rage\PedHandler.cs" />
     <Compile Include="Classes\PlayerClient\ClientInformation.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
@@ -69,8 +77,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Classes\Environment\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -15,6 +15,8 @@ namespace Curiosity.Missions.Client.net
         {
             Log.Verbose("Entering ClassLoader Init");
 
+            Classes.PlayerClient.ClientInformation.Init();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
     }
