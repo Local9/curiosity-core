@@ -186,6 +186,12 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
+                if (playerName.Contains(".com") || playerName.Contains(".net") || playerName.Contains(".org") || playerName.Contains(".co."))
+                {
+                    deferrals.done($"The username of '{playerName}' is blocked. Please note we can see the name from the FiveM settings options or Steam.");
+                    return;
+                }
+
                 GlobalEntity.User user = await Database.DatabaseUsers.GetUser(license, player);
 
                 await Server.Delay(10);

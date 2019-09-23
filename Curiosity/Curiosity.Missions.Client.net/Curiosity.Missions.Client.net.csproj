@@ -51,7 +51,6 @@
     <Compile Include="Classes\Environment\Interactions\BackupResponseHandler.cs" />
     <Compile Include="Classes\Environment\Interactions\MissionResponseHandler.cs" />
     <Compile Include="Classes\Environment\Parties\PartyHandler.cs" />
-    <Compile Include="Classes\Environment\Rage\BlipHandler.cs" />
     <Compile Include="Classes\Environment\Rage\Classes\PedCreator.cs" />
     <Compile Include="Classes\Environment\Rage\MarkerHandler.cs" />
     <Compile Include="Classes\Environment\Rage\PedHandler.cs" />
