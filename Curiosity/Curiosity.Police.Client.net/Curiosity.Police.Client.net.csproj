@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Menus\MenuPoliceOptions.cs" />
     <Compile Include="Classes\Pullover.cs" />
     <Compile Include="Classes\CreatePed.cs" />
     <Compile Include="Classes\CreateShopCallout.cs" />
