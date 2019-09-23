@@ -13,7 +13,7 @@ namespace Curiosity.Missions.Client.net.Classes.PlayerClient
 
         public static Privilege privilege;
 
-        public static async void Init()
+        public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
         }
