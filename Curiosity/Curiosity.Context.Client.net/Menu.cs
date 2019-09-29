@@ -211,9 +211,6 @@ namespace Curiosity.Context.Client.net
                         //}
                         else
                         {
-                            if (ent.IsPositionFrozen)
-                                FreezeEntityPosition(ent.Handle, false);
-
                             SetNuiFocus(false, false);
                             Crosshair(false);
                             SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = false }));

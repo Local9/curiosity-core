@@ -209,6 +209,7 @@ namespace Curiosity.Client.net
             Game.PlayerPed.IsInvincible = true;
             Game.PlayerPed.IsPositionFrozen = true;
             Game.PlayerPed.Position = new Vector3(402.668f, -1003.000f, -98.004f);
+            Game.PlayerPed.IsVisible = false;
 
             int playerPed = Game.PlayerPed.Handle;
 
@@ -255,15 +256,14 @@ namespace Curiosity.Client.net
 
             defaultModel.MarkAsNoLongerNeeded();
 
-            // API.RequestCollisionAtCoord(x, y, z);
-
-            //while(!API.HasCollisionLoadedAroundEntity(playerPed))
-            //{
-            //    Debug.WriteLine("Still requesting collision");
-            //    await Delay(0);
-            //}
+            API.SetEntityCoordsNoOffset(Game.PlayerPed.Handle, 402.668f, -1003.000f, -98.004f, false, false, true);
 
             API.NetworkResurrectLocalPlayer(402.668f, -1003.000f, -98.004f, 0.0f, true, false);
+
+            API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
+            API.RemoveAllPedWeapons(Game.PlayerPed.Handle, false);
+            API.ClearPlayerWantedLevel(Game.Player.Handle);
+            API.SetChar
 
             float groundZ = z;
             Vector3 spawnPosition = new Vector3(x, y, groundZ);
@@ -323,6 +323,8 @@ namespace Curiosity.Client.net
 
             Game.PlayerPed.Position = spawnPosition + new Vector3(0f, 0f, -1f);
 
+            API.RequestCollisionAtCoord(spawnPosition.X, spawnPosition.Y, spawnPosition.Z);
+
             int gameTimer = API.GetGameTimer();
 
             ToggleSound(false);
@@ -348,8 +350,15 @@ namespace Curiosity.Client.net
                 }
             }
 
+            while (!API.HasCollisionLoadedAroundEntity(Game.PlayerPed.Handle))
+            {
+                await Delay(0);
+            }
+
             Game.PlayerPed.IsPositionFrozen = false;
             Game.PlayerPed.IsInvincible = false;
+            Game.PlayerPed.IsCollisionEnabled = true;
+            Game.PlayerPed.IsVisible = true;
 
             await Delay(0);
 
