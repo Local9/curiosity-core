@@ -181,7 +181,7 @@ namespace Curiosity.Server.net.Business
 
                 if (!regex.IsMatch(playerName)) { deferrals.done($"{messages[Messages.Symbols]}"); return; }
 
-                if (blacklistedNames.IsMatch(playerName)) {
+                if (blacklistedNames.IsMatch(playerName.ToLower())) {
                     deferrals.done($"The username of '{playerName}' is blocked. Please note we can see the name from the FiveM settings options or Steam.");
                     return;
                 }
