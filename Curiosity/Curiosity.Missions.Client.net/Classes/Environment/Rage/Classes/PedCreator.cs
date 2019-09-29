@@ -26,6 +26,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
             Ped spawnedPed = await World.CreatePed(model, location, heading);
             model.MarkAsNoLongerNeeded();
             // API.TaskSetBlockingOfNonTemporaryEvents(spawnedPed.Handle, blockTempEvents);
+            API.SetPedFleeAttributes(spawnedPed.Handle, 0, false);
 
             _peds.Add(spawnedPed);
 
@@ -47,7 +48,13 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
         static private void EventWrapperOnDied(EntityEventWrapper sender, Entity entity)
         {
             _peds.Remove(entity as Ped);
-            CitizenFX.Core.UI.Screen.ShowNotification($"Ped Killed: {entity.Handle}");
+            Entity killerEnt = new Ped(entity.Handle).GetKiller();
+            Ped killerPed = new Ped(killerEnt.Handle);
+
+            if (killerPed.IsPlayer) {
+                CitizenFX.Core.UI.Screen.ShowNotification($"Ped {entity.Handle}");
+            }
+
             Blip currentBlip = entity.AttachedBlip;
             if (currentBlip != null)
             {

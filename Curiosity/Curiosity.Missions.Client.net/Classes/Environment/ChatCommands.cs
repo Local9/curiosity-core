@@ -58,6 +58,24 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
                 Ped pedChatter2 = await Rage.Classes.PedCreator.CreatePedAtLocation(PedHash.Factory01SMY, new Vector3(1659.94f, -44.33472f, 168.3291f), 275f);
                 pedChatter2.Task.PlayAnimation("missheist_agency2aig_3", "chat_b_worker2", 3f, -1, AnimationFlags.Loop);
+
+                Ped pedPatrol = await Rage.Classes.PedCreator.CreatePedAtLocation(PedHash.Lost01GMY, new Vector3(1673.406f, -48.60476f, 173.7747f), 6.851492f);
+                Ped pedPatrol2 = await Rage.Classes.PedCreator.CreatePedAtLocation(PedHash.Lost02GMY, new Vector3(1671.406f, -48.60476f, 173.7747f), 6.851492f);
+
+                List<Vector3> waypoints = new List<Vector3>()
+                {
+                    new Vector3(1670.834f, -25.44239f, 173.7747f),
+                    new Vector3(1662.12f, 2.022691f, 173.7747f),
+                    new Vector3(1641.186f, 22.5886f, 173.7743f),
+                };
+
+                // pedPatrol2.PedGroup.Add(pedPatrol, true);
+
+                MissionPeds.MissionPed mp = Scripts.MissionPedCreator.Ped(pedPatrol);
+                mp.Waypoints = waypoints;
+                MissionPeds.MissionPed mp2 = Scripts.MissionPedCreator.Ped(pedPatrol2);
+                mp2.Waypoints = waypoints;
+
             }
             catch (Exception ex)
             {

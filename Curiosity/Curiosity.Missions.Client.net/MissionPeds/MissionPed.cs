@@ -2,6 +2,7 @@
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
@@ -10,13 +11,13 @@ namespace Curiosity.Missions.Client.net.MissionPeds
     {
         public const int MovementUpdateInterval = 5;
 
-        public static int ZombieDamage;
+        public static int Damage;
 
         public static float SensingRange;
 
         public static float SilencerEffectiveRange;
 
-        public static float BehindZombieNoticeDistance;
+        public static float BehindNoticeDistance;
 
         public static float RunningNoticeDistance;
 
@@ -36,7 +37,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private bool _attackingTarget;
 
-        private DateTime _currentMovementUpdateTime;
+        public List<Vector3> Waypoints;
+
+        private int CurrentWaypoint = 0;
+
+        private int NextWaypoint = 1;
 
         public bool AttackingTarget
         {
@@ -118,10 +123,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         static MissionPed()
         {
-            MissionPed.ZombieDamage = 15;
+            MissionPed.Damage = 15;
             MissionPed.SensingRange = 120f;
             MissionPed.SilencerEffectiveRange = 15f;
-            MissionPed.BehindZombieNoticeDistance = 5f;
+            MissionPed.BehindNoticeDistance = 5f;
             MissionPed.RunningNoticeDistance = 25f;
             MissionPed.AttackRange = 1.2f;
             MissionPed.VisionDistance = 35f;
@@ -135,7 +140,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
-            this._currentMovementUpdateTime = DateTime.UtcNow;
+
             MissionPed MissionPed = this;
             this.GoToTarget += new MissionPed.OnGoingToTargetEvent(MissionPed.OnGoToTarget);
             MissionPed MissionPed1 = this;
@@ -232,7 +237,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private static bool IsBehindZombie(float distance)
         {
-            return distance < MissionPed.BehindZombieNoticeDistance;
+            return distance < MissionPed.BehindNoticeDistance;
         }
 
         private bool IsGoodTarget(Ped ped)
@@ -268,10 +273,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 currentBlip.Delete();
             }
-            //if ((!ZombieVehicleSpawner.Instance.IsInvalidZone(entity.get_Position()) ? false : ZombieVehicleSpawner.Instance.IsValidSpawn(entity.get_Position())))
-            //{
-            //    ZombieVehicleSpawner.Instance.SpawnBlocker.Add(entity.get_Position());
-            //}
         }
 
         public abstract void OnGoToTarget(Ped target);
@@ -281,12 +282,30 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             return v._ped;
         }
 
-        private void SetWalkStyle()
+        private void GotoWaypoint()
         {
-            if (DateTime.UtcNow > this._currentMovementUpdateTime)
+            if (Waypoints != null)
             {
-                this._ped.SetMovementAnimSet(this.MovementStyle);
-                this.UpdateTime();
+                if (Waypoints.Count > 0)
+                {
+                    if (CurrentWaypoint == 0)
+                    {
+                        this._ped.Task.GoTo(Waypoints[1]);
+                        CurrentWaypoint = 1;
+                        NextWaypoint = (Waypoints.Count > 1) ? 2 : 0;
+                    }
+                    else
+                    {
+                        Vector3 wp = Waypoints[NextWaypoint];
+                        this._ped.Task.GoTo(Waypoints[NextWaypoint]);
+
+                        if (wp.DistanceToSquared(this._ped.Position) < 2f)
+                        {
+                            CurrentWaypoint = NextWaypoint;
+                            NextWaypoint = (Waypoints.Count > CurrentWaypoint + 1) ? CurrentWaypoint + 1 : 0;
+                        }
+                    }
+                }
             }
         }
 
@@ -305,23 +324,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 base.Delete();
             }
-            if ((!this.PlayAudio ? false : this._ped.IsRunning))
-            {
-                this._ped.DisablePainAudio(false);
-                this._ped.PlayPain(8);
-                this._ped.PlayFacialAnim("facials@gen_male@base", "burning_1");
-            }
+
             this.GetTarget();
-            this.SetWalkStyle();
-            if ((!this._ped.IsOnFire ? false : !this._ped.IsDead))
-            {
-                this._ped.Kill();
-            }
-            this._ped.StopAmbientSpeechThisFrame();
-            if (!this.PlayAudio)
-            {
-                this._ped.StopSpeaking(true);
-            }
+
+            if (Waypoints != null)
+                this.GotoWaypoint();
+
             if (this.Target != null)
             {
                 if (this.Position.VDist(this.Target.Position) <= MissionPed.AttackRange)
@@ -335,11 +343,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     this.GoingToTarget = true;
                 }
             }
-        }
-
-        private void UpdateTime()
-        {
-            this._currentMovementUpdateTime = DateTime.UtcNow + new TimeSpan(0, 0, 0, 5);
         }
 
         public event MissionPed.OnAttackingTargetEvent AttackTarget;
