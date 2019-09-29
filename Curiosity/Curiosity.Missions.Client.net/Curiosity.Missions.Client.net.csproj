@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -39,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,7 +61,37 @@
     <Compile Include="Classes\PlayerClient\ClientInformation.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="DataClasses\ItemPreview.cs" />
+    <Compile Include="DataClasses\ParticleEffect.cs" />
+    <Compile Include="Extensions\Alertness.cs" />
+    <Compile Include="Extensions\CombatAbility.cs" />
+    <Compile Include="Extensions\CombatAttributes.cs" />
+    <Compile Include="Extensions\CombatMovement.cs" />
+    <Compile Include="Extensions\CombatRange.cs" />
+    <Compile Include="Extensions\ComponentId.cs" />
+    <Compile Include="Extensions\ConfigFlags.cs" />
+    <Compile Include="Extensions\DamagePack.cs" />
+    <Compile Include="Extensions\DoorState.cs" />
+    <Compile Include="Extensions\EntityExtended.cs" />
+    <Compile Include="Extensions\PedExtended.cs" />
+    <Compile Include="Extensions\PropExt.cs" />
+    <Compile Include="Extensions\RandomExtensions.cs" />
+    <Compile Include="Extensions\ScriptExtended.cs" />
+    <Compile Include="Extensions\SpeechModifier.cs" />
+    <Compile Include="Extensions\SubTask.cs" />
+    <Compile Include="Extensions\SystemExtended.cs" />
+    <Compile Include="Extensions\V3Extended.cs" />
+    <Compile Include="Extensions\WorldExtended.cs" />
+    <Compile Include="Extensions\FriendlyFireType.cs" />
+    <Compile Include="MissionPeds\MissionPed.cs" />
+    <Compile Include="Extensions\PlayerExtended.cs" />
+    <Compile Include="MissionPeds\ZombiePed.cs" />
+    <Compile Include="MissionPedTypes\ZombieRunner.cs" />
+    <Compile Include="MissionPedTypes\ZombieWalker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\ZombieCreator.cs" />
+    <Compile Include="Static\Relationships.cs" />
+    <Compile Include="Wrappers\EntityEventWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">

@@ -19,6 +19,9 @@ namespace Curiosity.Missions.Client.net
 
             Classes.Environment.ChatCommands.Init();
 
+            // Game Code
+            Static.Relationships.Init();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
     }

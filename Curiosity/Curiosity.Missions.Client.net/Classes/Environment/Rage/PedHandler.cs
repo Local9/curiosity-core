@@ -8,5 +8,6 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage
 {
     class PedHandler
     {
+        
     }
 }

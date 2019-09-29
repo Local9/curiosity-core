@@ -209,7 +209,6 @@ namespace Curiosity.Client.net
             Game.PlayerPed.IsInvincible = true;
             Game.PlayerPed.IsPositionFrozen = true;
             Game.PlayerPed.Position = new Vector3(402.668f, -1003.000f, -98.004f);
-            Game.PlayerPed.IsVisible = false;
 
             int playerPed = Game.PlayerPed.Handle;
 
@@ -263,7 +262,6 @@ namespace Curiosity.Client.net
             API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
             API.RemoveAllPedWeapons(Game.PlayerPed.Handle, false);
             API.ClearPlayerWantedLevel(Game.Player.Handle);
-            API.SetChar
 
             float groundZ = z;
             Vector3 spawnPosition = new Vector3(x, y, groundZ);

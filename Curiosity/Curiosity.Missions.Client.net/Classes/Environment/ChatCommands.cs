@@ -57,39 +57,17 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             Vector3 location = new Vector3(1662.625f, -27.41396f, 173.7747f);
             ClearAreaOfEverything(location.X, location.Y, location.Z, 250f, true, true, true, true);
 
-            // ped settings
-            Vector3 pedPainterLocation = new Vector3(1657.75f, -56.95895f, 167.1685f);
-            float pedPainterHeading = 252.3565f;
-            Model pedPainterModel = PedHash.Factory01SFY;
-            // functions
-            await pedPainterModel.Request(10000);
-            Ped painterPed = await World.CreatePed(pedPainterModel, pedPainterLocation, pedPainterHeading);
-            peds.Add(painterPed);
-            pedPainterModel.MarkAsNoLongerNeeded();
-            TaskSetBlockingOfNonTemporaryEvents(painterPed.Handle, true);
+            Ped painterPed = await Rage.Classes.PedCreator.CreatePedAtLocation(PedHash.Factory01SFY, new Vector3(1657.75f, -56.95895f, 167.1685f), 252.3565f);
             painterPed.Task.PlayAnimation("missheist_agency2aig_4", "look_plan_a_worker1", 3f, -1, AnimationFlags.Loop);
+            peds.Add(painterPed);
 
-            Vector3 pedChatter1Location = new Vector3(1660.557f, -42.35529f, 168.3279f);
-            float pedChatter1Heading = 250f;
-            Model pedChatter1Model = PedHash.Factory01SFY;
-            // functions
-            await pedChatter1Model.Request(10000);
-            Ped pedChatter1 = await World.CreatePed(pedChatter1Model, pedChatter1Location, pedChatter1Heading);
-            peds.Add(pedChatter1);
-            pedChatter1Model.MarkAsNoLongerNeeded();
-            TaskSetBlockingOfNonTemporaryEvents(pedChatter1.Handle, true);
+            Ped pedChatter1 = await Rage.Classes.PedCreator.CreatePedAtLocation(PedHash.Factory01SFY, new Vector3(1660.557f, -42.35529f, 168.3279f), 250f);
             pedChatter1.Task.PlayAnimation("missheist_agency2aig_3", "chat_b_worker1", 3f, -1, AnimationFlags.Loop);
+            peds.Add(pedChatter1);
 
-            Vector3 pedChatter2Location = new Vector3(1659.94f, -44.33472f, 168.3291f);
-            float pedChatter2Heading = 275f;
-            Model pedChatter2Model = PedHash.Factory01SMY;
-            // functions
-            await pedChatter2Model.Request(10000);
-            Ped pedChatter2 = await World.CreatePed(pedChatter2Model, pedChatter2Location, pedChatter2Heading);
-            peds.Add(pedChatter2);
-            pedChatter2Model.MarkAsNoLongerNeeded();
-            TaskSetBlockingOfNonTemporaryEvents(pedChatter2.Handle, true);
+            Ped pedChatter2 = await Rage.Classes.PedCreator.CreatePedAtLocation(PedHash.Factory01SMY, new Vector3(1659.94f, -44.33472f, 168.3291f), 275f);
             pedChatter2.Task.PlayAnimation("missheist_agency2aig_3", "chat_b_worker2", 3f, -1, AnimationFlags.Loop);
+            peds.Add(pedChatter2);
         }
     }
 }

@@ -23,6 +23,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static internal bool ShouldShowName(CitizenFX.Core.Player player)
         {
             bool isCloseEnough;
+
+            if (!player.Character.IsVisible) return false;
+
             if (!player.Character.IsInVehicle())
             {
                 isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < namePlateDistance;
@@ -75,6 +78,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 API.SetMpGamerTagVisibility(gamerTagId, 0, false);
             }
+            else if (!player.Character.IsVisible)
+            {
+                API.SetMpGamerTagVisibility(gamerTagId, 0, false);
+            }
             else if (CinematicMode.DoHideHud)
             {
                 API.SetMpGamerTagVisibility(gamerTagId, 0, false);
@@ -83,6 +90,14 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 API.SetMpGamerTagName(gamerTagId, player.Name);
                 API.SetMpGamerTagVisibility(gamerTagId, 0, true);
+
+                if (Player.PlayerInformation.IsStaff())
+                {
+                    if (Game.PlayerPed.IsInAir)
+                    {
+
+                    }
+                }
             }
             else
             {
