@@ -10,15 +10,28 @@ namespace Curiosity.World.Client.net.Classes.Environment
     {
         static Client client = Client.GetInstance();
 
+        static private bool IsChristmas = false;
+        static private bool IsHalloween = false;
+
         public static void Init()
         {
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
             client.RegisterEventHandler("curiosity:Client:Weather:Sync", new Action<string, bool, float, float, bool, bool>(WeatherSync));
-            
+
+            client.RegisterEventHandler("curiosity:Client:Weather:Check", new Action(WeatherCheckSync));
+
+            Client.TriggerServerEvent("curiosity:Server:Weather:Sync");
+
             client.RegisterTickHandler(WeatherChecker);
         }
-        
+
+        static void WeatherCheckSync()
+        {
+            BaseScript.TriggerEvent("curiosity:Client:Weather:CheckReturn", IsChristmas, IsHalloween);
+        }
+
+
         static async Task WeatherChecker()
         {
             while (true)
@@ -35,19 +48,17 @@ namespace Curiosity.World.Client.net.Classes.Environment
             Client.TriggerServerEvent("curiosity:Server:Weather:Sync");
         }
 
-        static void OnClientResourceStart(string resourceName)
+        static async void OnClientResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
+
+            await Client.Delay(2000);
+
             Client.TriggerServerEvent("curiosity:Server:Weather:Sync");
         }
 
         static async void WeatherSync(string weather, bool wind, float windSpeed, float windHeading, bool isChristmas, bool isHalloween)
         {
-            if (Player.PlayerInformation.IsDeveloper())
-            {
-                Log.Verbose($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}, isChristmas: {isChristmas}, isHalloween: {isHalloween}");
-            }
-
             await Client.Delay(0);
 
             API.ClearWeatherTypePersist();
@@ -55,18 +66,44 @@ namespace Curiosity.World.Client.net.Classes.Environment
             API.SetForceVehicleTrails(isChristmas);
             API.SetForcePedFootstepsTracks(isChristmas);
 
+            IsHalloween = isHalloween;
+            IsChristmas = isChristmas;
+
             if (isChristmas)
             {
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Verbose("WeatherSync -> Setting weather to XMAS");
+                }
+
+                API.ClearOverrideWeather();
                 API.SetWeatherTypeOverTime("XMAS", 60.00f);
             }
-            else if (isHalloween)
+            
+            
+            if (isHalloween)
             {
-                API.SetWeatherTypeOverTime("HALLOWEEN", 60.00f);
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Verbose("WeatherSync -> Setting weather to HALLOWEEN");
+                }
+
+                API.ClearOverrideWeather();
+                Function.Call(Hash.SET_WEATHER_TYPE_NOW, $"{Weather.Halloween}");
+
             }
-            else
+
+            if (!isHalloween && !isChristmas)
             {
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Verbose($"WeatherSync -> Setting weather to {weather}");
+                }
+
+                API.ClearOverrideWeather();
                 API.SetWeatherTypeOverTime(weather, 60.00f);
             }
+            
 
             await Client.Delay(0);
 
@@ -82,6 +119,12 @@ namespace Curiosity.World.Client.net.Classes.Environment
                 API.SetWindSpeed(0f);
             }
             await Client.Delay(0);
+            WeatherCheckSync();
+
+            if (Player.PlayerInformation.IsDeveloper())
+            {
+                Log.Verbose($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}, isChristmas: {isChristmas}, isHalloween: {isHalloween}");
+            }
         }
     }
 }

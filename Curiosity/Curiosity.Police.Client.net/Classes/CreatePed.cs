@@ -15,6 +15,13 @@ namespace Curiosity.Police.Client.net.Classes
 
             int collisionId = API.RequestCollisionAtCoord(suspectPosition.X, suspectPosition.Y, suspectPosition.Z);
 
+            if (Client.IsHalloween)
+            {
+                suspectModel.MarkAsNoLongerNeeded();
+                suspectModel = PedHash.Zombie01;
+            }
+
+
             Ped createdPed = await World.CreatePed(suspectModel, suspectPosition, suspectHeading);
             API.SetNetworkIdCanMigrate(createdPed.NetworkId, true);
 
@@ -35,22 +42,29 @@ namespace Curiosity.Police.Client.net.Classes
 
             createdPed.Armor = random.Next(100);
 
-            if (random.Next(2) == 1)
+            if (!Client.IsHalloween)
             {
-                createdPed.Weapons.Give(WeaponHash.Pistol, 30, false, true);
-                createdPed.Weapons.Give(WeaponHash.SawnOffShotgun, 30, false, true);
-            }
-            else
-            {
-                createdPed.Weapons.Give(WeaponHash.Pistol, 30, false, true);
-                createdPed.Weapons.Give(WeaponHash.MiniSMG, 30, false, true);
+                if (random.Next(2) == 1)
+                {
+                    createdPed.Weapons.Give(WeaponHash.Pistol, 30, false, true);
+                    createdPed.Weapons.Give(WeaponHash.SawnOffShotgun, 30, false, true);
+                }
+                else
+                {
+                    createdPed.Weapons.Give(WeaponHash.Pistol, 30, false, true);
+                    createdPed.Weapons.Give(WeaponHash.MiniSMG, 30, false, true);
+                }
             }
 
             await Client.Delay(0);
 
             createdPed.Accuracy = random.Next(30, 100);
             createdPed.DropsWeaponsOnDeath = false;
-            createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
+
+            if (!Client.IsHalloween)
+            {
+                createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
+            }
 
             API.SetPedHearingRange(createdPed.Handle, 100.0f);
             API.SetPedSeeingRange(createdPed.Handle, 100.0f);
@@ -69,15 +83,23 @@ namespace Curiosity.Police.Client.net.Classes
             createdPed.IsOnlyDamagedByPlayer = true;
 
             API.SetEntityAsMissionEntity(createdPed.Handle, true, true);
-            API.SetPedFleeAttributes(createdPed.Handle, 0, false);
+
+            if (Client.IsHalloween)
+            {
+                // API.SetPedCombatAttributes(createdPed.Handle, 17, true);
+            }
+            else
+            {
+                API.SetPedCombatAttributes(createdPed.Handle, 1, true); // can use vehicles
+                API.SetPedCombatMovement(createdPed.Handle, 2);
+            }
+
             API.SetPedCombatAttributes(createdPed.Handle, 5, true);
             API.SetPedCombatAttributes(createdPed.Handle, 16, true);
             API.SetPedCombatAttributes(createdPed.Handle, 46, true);
             API.SetPedCombatAttributes(createdPed.Handle, 26, true);
             API.SetPedCombatAttributes(createdPed.Handle, 3, false);
             API.SetPedCombatAttributes(createdPed.Handle, 2, true);
-            API.SetPedCombatAttributes(createdPed.Handle, 1, true); // can use vehicles
-            API.SetPedCombatMovement(createdPed.Handle, 2);
 
             await Client.Delay(0);
 
@@ -91,20 +113,31 @@ namespace Curiosity.Police.Client.net.Classes
                 await Client.Delay(0);
             }
 
-            API.SetPedFleeAttributes(createdPed.Handle, 0, false);
             API.TaskSetBlockingOfNonTemporaryEvents(createdPed.Handle, true);
+            API.SetPedFleeAttributes(createdPed.Handle, 0, false);
 
             await Client.Delay(0);
 
-            if (random.Next(0, 9) == 0)
+            if (Client.IsHalloween)
             {
-                createdPed.Accuracy = random.Next(30);
-                API.SetPedIsDrunk(createdPed.Handle, true);
                 if (!API.HasAnimSetLoaded("move_m@drunk@verydrunk"))
                 {
                     API.RequestAnimSet("move_m@drunk@verydrunk");
                 }
                 API.SetPedMovementClipset(createdPed.Handle, "move_m@drunk@verydrunk", 0x3E800000);
+            }
+            else
+            {
+                if (random.Next(0, 9) == 0)
+                {
+                    createdPed.Accuracy = random.Next(30);
+                    API.SetPedIsDrunk(createdPed.Handle, true);
+                    if (!API.HasAnimSetLoaded("move_m@drunk@verydrunk"))
+                    {
+                        API.RequestAnimSet("move_m@drunk@verydrunk");
+                    }
+                    API.SetPedMovementClipset(createdPed.Handle, "move_m@drunk@verydrunk", 0x3E800000);
+                }
             }
 
             await Client.Delay(0);

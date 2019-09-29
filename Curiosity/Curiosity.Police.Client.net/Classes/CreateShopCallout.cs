@@ -87,6 +87,8 @@ namespace Curiosity.Police.Client.net.Classes
                 ShopKeeperModel = shopkeeperModel;
                 ShopKeeperPosition = shopkeeperLocation;
 
+                API.ClearAreaOfPeds(location.X, location.Y, location.Z, 50f, 1);
+
                 SetupLocationBlip();
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "459S Burglar alarm, silent", $"{Name}", string.Empty, 2);
@@ -201,6 +203,22 @@ namespace Curiosity.Police.Client.net.Classes
                     {
                         if (pedCopy.Exists())
                         {
+                            if (Client.IsHalloween)
+                            {
+                                int handle = pedCopy.Handle;
+                                API.PlayFacialAnim(handle, "facials@gen_male@base", "burning_1");
+                                API.DisablePedPainAudio(handle, false);
+                                API.PlayPain(handle, 8, 0);
+
+                                API.SetPedFleeAttributes(handle, 0, false);
+
+                                if (NativeWrappers.GetDistanceBetween(Game.PlayerPed.Position, pedCopy.Position) < 3f)
+                                {
+                                    pedCopy.Task.PlayAnimation("rcmbarry", "bar_1_teleport_aln", 8f, 1000, 16);
+                                    Game.PlayerPed.ApplyDamage(5);
+                                }
+                            }
+
                             if (pedCopy.IsDead)
                             {
                                 numberDead++;
@@ -211,7 +229,7 @@ namespace Curiosity.Police.Client.net.Classes
                     if (numberDead == Suspects.Count)
                         return;
 
-                    await Client.Delay(50);
+                    await Client.Delay(100);
                 }
 
                 LocationBlip.ShowRoute = false;
@@ -454,6 +472,9 @@ namespace Curiosity.Police.Client.net.Classes
 
                 Suspects.Clear();
                 Environment.Tasks.CalloutHandler.CalloutEnded();
+
+                API.ClearAreaOfPeds(Location.X, Location.Y, Location.Z, 50f, 1);
+
             }
             catch (Exception ex)
             {

@@ -18,6 +18,9 @@ namespace Curiosity.Police.Client.net
         public static string PLAYER_GROUP = "PLAYER";
         public static RelationshipGroup PlayerRelationshipGroup;
 
+        public static bool IsChristmas = false;
+        public static bool IsHalloween = false;
+
         public static Client GetInstance()
         {
             return _instance;
@@ -31,13 +34,40 @@ namespace Curiosity.Police.Client.net
             CurrentVehicle = null;
 
             RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
+            RegisterEventHandler("curiosity:Client:Weather:CheckReturn", new Action<bool, bool>(WeatherSync));
 
+            RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
 
             players = Players;
 
             ClassLoader.Init();
 
             Log.Info("Curiosity.Mobile.Client.net loaded\n");
+        }
+
+        static void OnClientResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            TriggerEvent("curiosity:Client:Weather:Check");
+        }
+
+        static void WeatherSync(bool isChristmas, bool isHalloween)
+        {
+            IsChristmas = isChristmas;
+            IsHalloween = isHalloween;
+
+            if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+            {
+                if (IsHalloween)
+                {
+                    API.SetWeatherTypeNow("HALLOWEEN");
+                }
+
+                CitizenFX.Core.UI.Screen.ShowNotification($"Police Settings;\nXMAS: ~b~{IsChristmas}~s~\nHALLOWEEN: ~b~{IsHalloween}\n~s~Weather:\n~b~....");
+
+            }
+
         }
 
         public static void OnVehicleId(int vehicleId)

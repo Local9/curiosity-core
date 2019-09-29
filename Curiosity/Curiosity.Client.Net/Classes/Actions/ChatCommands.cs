@@ -104,6 +104,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("dvn", new Action<int, List<object>, string>(DeleteVehicleNuke), false);
             API.RegisterCommand("don", new Action<int, List<object>, string>(DeleteObjectNuke), false);
             API.RegisterCommand("nuke", new Action<int, List<object>, string>(Nuke), false);
+            API.RegisterCommand("weather", new Action<int, List<object>, string>(Weather), false);
             // test commands
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
@@ -226,6 +227,13 @@ namespace Curiosity.Client.net.Classes.Actions
         static void ReportingNotification(int playerHandle, List<object> arguments, string raw)
         {
             Environment.UI.Notifications.LifeV(1, "Live V Network", $"Reporting a player", "Reporting a player can now be done via the interactive menu.", 2);
+        }
+
+        static void Weather(int playerHandle, List<object> arguments, string raw)
+        {
+            if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER) return;
+
+            Client.TriggerEvent("curiosity:Client:Weather:Check");
         }
 
         static void DonatorCheck(int playerHandle, List<object> arguments, string raw)

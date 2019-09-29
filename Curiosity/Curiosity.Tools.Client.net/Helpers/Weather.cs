@@ -18,8 +18,11 @@ namespace Curiosity.Tools.Client.net.Helpers
 		Smog,
 		Foggy,
 		Xmas,
+        Snow,
+        Neutral,
 		SnowLight,
-		Blizzard
+		Blizzard,
+        Halloween
 	}
 
 	public enum CloudHatType

@@ -168,9 +168,7 @@ namespace Curiosity.Chat.Client.net
             }
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task UpdateChat()
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             try
             {
@@ -244,6 +242,7 @@ namespace Curiosity.Chat.Client.net
             {
                 Debug.WriteLine($"UpdateChat ERROR: ${ex.Message}");
             }
+            await Delay(0);
         }
 
         void RegisterEventHandler(string name, Delegate action)
