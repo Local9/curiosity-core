@@ -13,6 +13,12 @@ namespace Curiosity.Missions.Client.net.Static
         public static RelationshipGroup HostileRelationship;
         public static RelationshipGroup InfectedRelationship;
 
+        public static void SetRelationshipBothWays(Relationship rel, RelationshipGroup group1, RelationshipGroup group2)
+        {
+            group1.SetRelationshipBetweenGroups(group2, rel);
+            group2.SetRelationshipBetweenGroups(group1, rel);
+        }
+
         static public void Init()
         {
             // Player
@@ -20,10 +26,11 @@ namespace Curiosity.Missions.Client.net.Static
             Game.PlayerPed.RelationshipGroup = PlayerRelationship;
             // Other Peds
             HostileRelationship = World.AddRelationshipGroup("HOSTILE_RELATIONSHIP");
-            HostileRelationship.SetRelationshipBetweenGroups(PlayerRelationship, Relationship.Hate, true);
+            SetRelationshipBothWays(Relationship.Hate, HostileRelationship, PlayerRelationship);
             // Zombies
-            InfectedRelationship.SetRelationshipBetweenGroups(PlayerRelationship, Relationship.Hate, true);
-            InfectedRelationship.SetRelationshipBetweenGroups(HostileRelationship, Relationship.Hate, true);
+            InfectedRelationship = World.AddRelationshipGroup("INFECTED_RELATIONSHIP");
+            SetRelationshipBothWays(Relationship.Hate, InfectedRelationship, HostileRelationship);
+            SetRelationshipBothWays(Relationship.Hate, InfectedRelationship, PlayerRelationship);
         }
     }
 }

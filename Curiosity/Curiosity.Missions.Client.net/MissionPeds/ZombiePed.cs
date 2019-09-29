@@ -131,6 +131,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         protected ZombiePed(int handle) : base(handle)
         {
+            CitizenFX.Core.UI.Screen.ShowNotification("INFECTED ZOMBIE");
+
             this._ped = new Ped(handle);
             this._eventWrapper = new EntityEventWrapper(this._ped);
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
@@ -222,7 +224,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 if (target.Health <= target.MaxHealth / 4)
                 {
                     target.SetToRagdoll(3000);
-                    // ZombieCreator.InfectPed(target, this.get_MaxHealth(), true);
+                    Scripts.ZombieCreator.InfectPed(target, this.MaxHealth, true);
                     this.ForgetTarget();
                     target.LeaveGroup();
                     target.Weapons.RemoveAll();
@@ -269,6 +271,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 currentBlip.Delete();
             }
+
+            CitizenFX.Core.UI.Screen.ShowNotification("Killed Zombie");
+
             //if ((!ZombieVehicleSpawner.Instance.IsInvalidZone(entity.get_Position()) ? false : ZombieVehicleSpawner.Instance.IsValidSpawn(entity.get_Position())))
             //{
             //    ZombieVehicleSpawner.Instance.SpawnBlocker.Add(entity.get_Position());

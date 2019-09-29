@@ -14,6 +14,7 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
 
         public ZombieWalker(int handle) : base(handle)
         {
+            CitizenFX.Core.UI.Screen.ShowNotification($"Ped Walker: {handle}");
             this._ped = this;
         }
 

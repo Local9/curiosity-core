@@ -90,14 +90,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 API.SetMpGamerTagName(gamerTagId, player.Name);
                 API.SetMpGamerTagVisibility(gamerTagId, 0, true);
-
-                if (Player.PlayerInformation.IsStaff())
-                {
-                    if (Game.PlayerPed.IsInAir)
-                    {
-
-                    }
-                }
             }
             else
             {

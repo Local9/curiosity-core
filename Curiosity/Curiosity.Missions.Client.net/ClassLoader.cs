@@ -21,6 +21,7 @@ namespace Curiosity.Missions.Client.net
 
             // Game Code
             Static.Relationships.Init();
+            Classes.Environment.Rage.Classes.PedCreator.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

@@ -33,9 +33,6 @@ namespace Curiosity.Missions.Client.net.Wrappers
                     {
                         onDeathEvent(this, this.Entity);
                     }
-                    else
-                    {
-                    }
                 }
                 this._isDead = value;
             }
@@ -51,8 +48,6 @@ namespace Curiosity.Missions.Client.net.Wrappers
             this.Entity = ent;
 
             client.RegisterTickHandler(this.OnTick);
-            //ScriptEventHandler.Instance.RegisterWrapper(new EventHandler(this.OnTick));
-            //ScriptEventHandler.Instance.add_Aborted((object sender, EventArgs args) => this.Abort());
             EntityEventWrapper.Wrappers.Add(this);
         }
 
@@ -62,9 +57,6 @@ namespace Curiosity.Missions.Client.net.Wrappers
             if (onWrapperAbortedEvent != null)
             {
                 onWrapperAbortedEvent(this, this.Entity);
-            }
-            else
-            {
             }
         }
 
@@ -77,9 +69,6 @@ namespace Curiosity.Missions.Client.net.Wrappers
             if (onWrapperDisposedEvent != null)
             {
                 onWrapperDisposedEvent(this, this.Entity);
-            }
-            else
-            {
             }
         }
 
@@ -103,15 +92,12 @@ namespace Curiosity.Missions.Client.net.Wrappers
                 {
                     onWrapperUpdateEvent(this, this.Entity);
                 }
-                else
-                {
-                }
             }
             else
             {
                 this.Dispose();
             }
-            await Task.FromResult(0);
+            await Client.Delay(100);
         }
 
         public event EntityEventWrapper.OnWrapperAbortedEvent Aborted;

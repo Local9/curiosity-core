@@ -10,7 +10,7 @@ namespace Curiosity.Missions.Client.net
     {
         private static Client _instance;
         public static PlayerList players;
-        public static Random Random;
+        public static Random Random = new Random();
 
         public static Client GetInstance()
         {

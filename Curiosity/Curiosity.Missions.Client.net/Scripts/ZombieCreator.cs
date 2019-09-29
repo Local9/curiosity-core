@@ -14,15 +14,24 @@ namespace Curiosity.Missions.Client.net.Scripts
 {
     static class ZombieCreator
     {
+        private static bool _runners = false;
+
         public static bool Runners
         {
-            get;
-            set;
+            get
+            {
+                return _runners;
+            }
+            set
+            {
+                _runners = Convert.ToBoolean(value);
+            }
         }
 
         public static ZombiePed InfectPed(Ped ped, int health, bool overrideAsFastZombie = false)
         {
             ZombiePed walker;
+
             ped.CanPlayGestures = false;
             ped.SetCanPlayAmbientAnims(false);
             ped.SetCanEvasiveDive(false);
@@ -39,7 +48,7 @@ namespace Curiosity.Missions.Client.net.Scripts
             ped.Task.WanderAround(ped.Position, ZombiePed.WanderRadius);
             ped.AlwaysKeepTask = true;
             ped.BlockPermanentEvents = true;
-            ped.IsPersistent = false;
+
             Blip currentBlip = ped.AttachedBlip;
             if (currentBlip != null)
             {
@@ -57,6 +66,7 @@ namespace Curiosity.Missions.Client.net.Scripts
             {
                 single = 0.4f;
             }
+
             if ((!(Client.Random.NextDouble() < (double)single | overrideAsFastZombie) ? true : !ZombieCreator.Runners))
             {
                 int num = health;
@@ -69,6 +79,7 @@ namespace Curiosity.Missions.Client.net.Scripts
             {
                 walker = new ZombieRunner(ped.Handle);
             }
+
             return walker;
         }
 
