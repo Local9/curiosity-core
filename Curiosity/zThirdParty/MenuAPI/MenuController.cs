@@ -197,7 +197,12 @@ namespace MenuAPI
                     if (currentMenu.Visible && AreMenuButtonsEnabled)
                     {
                         // Select / Enter
-                        if (Game.IsDisabledControlJustReleased(0, Control.FrontendAccept) || Game.IsControlJustReleased(0, Control.FrontendAccept) || (Game.IsDisabledControlJustReleased(0, Control.VehicleMouseControlOverride) || Game.IsControlJustReleased(0, Control.VehicleMouseControlOverride)))
+                        if (
+                            Game.IsDisabledControlJustReleased(0, Control.FrontendAccept) ||
+                            Game.IsControlJustReleased(0, Control.FrontendAccept) ||
+                            Game.IsDisabledControlJustReleased(0, Control.VehicleMouseControlOverride) ||
+                            Game.IsControlJustReleased(0, Control.VehicleMouseControlOverride)
+                            )
                         {
                             if (currentMenu.Size > 0)
                             {
@@ -371,11 +376,6 @@ namespace MenuAPI
                     }
                 }
             }
-            //else
-            //{
-            //    await BaseScript.Delay(0);
-            //    //Debug.WriteLine($"IsPaused: {!Game.IsPaused}, !IsPauseMenuRestarting: {!IsPauseMenuRestarting()}, IsScreenFadedIn: {IsScreenFadedIn()}, !IsPlayerSwitchInProgress: {!IsPlayerSwitchInProgress()}, !IsDead: {!Game.Player.IsDead}, !DisableMenuButtons: {!DisableMenuButtons}");
-            //}
         }
 
         /// <summary>
@@ -576,7 +576,7 @@ namespace MenuAPI
                     }
 
                     // Close all menus when the player dies.
-                    if (Game.Player.IsDead)
+                    if (Game.PlayerPed.IsDead)
                     {
                         CloseAllMenus();
                     }
@@ -715,7 +715,7 @@ namespace MenuAPI
                     EndScaleformMovieMethod();
 
 
-                    
+
 
                     for (int i = 0; i < menu.InstructionalButtons.Count; i++)
                     {
