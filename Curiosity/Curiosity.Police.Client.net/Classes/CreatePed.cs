@@ -40,10 +40,10 @@ namespace Curiosity.Police.Client.net.Classes
 
             await Client.Delay(0);
 
-            createdPed.Armor = random.Next(100);
-
             if (!Client.IsHalloween)
             {
+                createdPed.Armor = random.Next(100);
+
                 if (random.Next(2) == 1)
                 {
                     createdPed.Weapons.Give(WeaponHash.Pistol, 30, false, true);
@@ -54,6 +54,12 @@ namespace Curiosity.Police.Client.net.Classes
                     createdPed.Weapons.Give(WeaponHash.Pistol, 30, false, true);
                     createdPed.Weapons.Give(WeaponHash.MiniSMG, 30, false, true);
                 }
+            }
+            else
+            {
+                createdPed.Health = 750;
+                createdPed.MaxHealth = 750;
+                createdPed.Armor = 100;
             }
 
             await Client.Delay(0);
@@ -66,17 +72,17 @@ namespace Curiosity.Police.Client.net.Classes
                 createdPed.AlwaysDiesOnLowHealth = random.Next(9) == 0;
             }
 
-            API.SetPedHearingRange(createdPed.Handle, 100.0f);
+            API.SetPedHearingRange(createdPed.Handle, 35.0f);
             API.SetPedSeeingRange(createdPed.Handle, 100.0f);
 
             await Client.Delay(0);
 
             API.SetPedVisualFieldCenterAngle(createdPed.Handle, 180f);
-            API.SetPedVisualFieldMaxAngle(createdPed.Handle, 180f);
-            API.SetPedVisualFieldMinAngle(createdPed.Handle, 75f);
+            API.SetPedVisualFieldMaxAngle(createdPed.Handle, 275f);
+            API.SetPedVisualFieldMinAngle(createdPed.Handle, 25f);
             API.SetPedVisualFieldMaxElevationAngle(createdPed.Handle, 90f);
             API.SetPedVisualFieldMinElevationAngle(createdPed.Handle, 0f);
-            API.SetPedVisualFieldPeripheralRange(createdPed.Handle, 45f);
+            API.SetPedVisualFieldPeripheralRange(createdPed.Handle, 180f);
 
             await Client.Delay(0);
 
@@ -84,22 +90,18 @@ namespace Curiosity.Police.Client.net.Classes
 
             API.SetEntityAsMissionEntity(createdPed.Handle, true, true);
 
-            if (Client.IsHalloween)
-            {
-                // API.SetPedCombatAttributes(createdPed.Handle, 17, true);
-            }
-            else
+            if (!Client.IsHalloween)
             {
                 API.SetPedCombatAttributes(createdPed.Handle, 1, true); // can use vehicles
                 API.SetPedCombatMovement(createdPed.Handle, 2);
+                API.SetPedCombatAttributes(createdPed.Handle, 26, true);
+                API.SetPedCombatAttributes(createdPed.Handle, 3, false);
+                API.SetPedCombatAttributes(createdPed.Handle, 2, true);
+                API.SetPedCombatAttributes(createdPed.Handle, 16, true);
             }
 
             API.SetPedCombatAttributes(createdPed.Handle, 5, true);
-            API.SetPedCombatAttributes(createdPed.Handle, 16, true);
             API.SetPedCombatAttributes(createdPed.Handle, 46, true);
-            API.SetPedCombatAttributes(createdPed.Handle, 26, true);
-            API.SetPedCombatAttributes(createdPed.Handle, 3, false);
-            API.SetPedCombatAttributes(createdPed.Handle, 2, true);
 
             await Client.Delay(0);
 
