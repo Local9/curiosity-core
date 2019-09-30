@@ -79,21 +79,8 @@ namespace Curiosity.World.Client.net.Classes.Environment
                 API.ClearOverrideWeather();
                 API.SetWeatherTypeOverTime("XMAS", 60.00f);
             }
-            
-            
-            if (isHalloween)
-            {
-                if (Player.PlayerInformation.IsDeveloper())
-                {
-                    Log.Verbose("WeatherSync -> Setting weather to HALLOWEEN");
-                }
 
-                API.ClearOverrideWeather();
-                Function.Call(Hash.SET_WEATHER_TYPE_NOW, $"{Weather.Halloween}");
-
-            }
-
-            if (!isHalloween && !isChristmas)
+            if (!isChristmas)
             {
                 if (Player.PlayerInformation.IsDeveloper())
                 {
