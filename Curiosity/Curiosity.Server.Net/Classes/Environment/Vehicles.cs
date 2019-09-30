@@ -44,8 +44,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
             catch (Exception ex)
             {
-                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "OnGetVehicleList", $"SPAWNID: {spawnId}\nEXCEPTION:\n{ex}");
-                Log.Error($"OnGetVehicleList -> {ex.Message}");
+                
             }
         }
 
@@ -61,8 +60,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
             catch (Exception ex)
             {
-                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "OnGetVehicleSpawnLocations", $"{ex}");
-                Log.Error($"OnGetVehicleSpawnLocations -> {ex.Message}");
+                
             }
         }
 
@@ -168,13 +166,11 @@ namespace Curiosity.Server.net.Classes.Environment
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "OnVehicleCheck:InvalidOperationException", $"{ex}");
-                    Log.Warn($"OnVehicleCheck() -> {ex.Message}");
+                    
                 }
                 catch (Exception ex)
                 {
-                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "OnVehicleCheck", $"{ex}");
-                    Log.Error($"OnVehicleCheck() -> {ex.Message}");
+                    
                 }
             }
             await Task.FromResult(0);
