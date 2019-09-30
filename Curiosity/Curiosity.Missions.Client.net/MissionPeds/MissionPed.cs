@@ -302,7 +302,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                         if (wp.DistanceToSquared(this._ped.Position) < 2f)
                         {
                             CurrentWaypoint = NextWaypoint;
-                            NextWaypoint = (Waypoints.Count > CurrentWaypoint + 1) ? CurrentWaypoint + 1 : 0;
+                            NextWaypoint = (CurrentWaypoint + 1 > Waypoints.Count) ? 0 : CurrentWaypoint + 1;
                         }
                     }
                 }
