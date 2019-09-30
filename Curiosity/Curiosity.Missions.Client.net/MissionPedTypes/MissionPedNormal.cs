@@ -10,6 +10,8 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
     {
         private readonly Ped _ped;
 
+        private bool IsHatingTarget = false;
+
         public MissionPedNormal(int handle) : base(handle)
         {
             this._ped = this;
@@ -17,7 +19,11 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
 
         public override void OnAttackTarget(Ped target)
         {
-            
+            if (!IsHatingTarget)
+            {
+                this._ped.Task.FightAgainstHatedTargets(50f);
+                IsHatingTarget = true;
+            }
         }
 
         public override void OnGoToTarget(Ped target)

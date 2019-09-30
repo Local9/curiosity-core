@@ -39,9 +39,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public List<Vector3> Waypoints;
 
-        private int CurrentWaypoint = 0;
-
-        private int NextWaypoint = 1;
+        private int NextWaypoint = 0;
 
         public bool AttackingTarget
         {
@@ -128,7 +126,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             MissionPed.SilencerEffectiveRange = 15f;
             MissionPed.BehindNoticeDistance = 5f;
             MissionPed.RunningNoticeDistance = 25f;
-            MissionPed.AttackRange = 1.2f;
+            MissionPed.AttackRange = 30f;
             MissionPed.VisionDistance = 35f;
             MissionPed.WanderRadius = 100f;
         }
@@ -219,22 +217,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
-        public void InfectTarget(Ped target)
-        {
-            if (!target.IsPlayer)
-            {
-                if (target.Health <= target.MaxHealth / 4)
-                {
-                    target.SetToRagdoll(3000);
-                    // ZombieCreator.InfectPed(target, this.get_MaxHealth(), true);
-                    this.ForgetTarget();
-                    target.LeaveGroup();
-                    target.Weapons.RemoveAll();
-                    EntityEventWrapper.Dispose(target);
-                }
-            }
-        }
-
         private static bool IsBehindZombie(float distance)
         {
             return distance < MissionPed.BehindNoticeDistance;
@@ -268,6 +250,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private void OnDied(EntityEventWrapper sender, Entity entity)
         {
+            Entity killerEnt = new Ped(entity.Handle).GetKiller();
+            Ped killerPed = new Ped(killerEnt.Handle);
+
+            if (killerPed.IsPlayer)
+            {
+                CitizenFX.Core.UI.Screen.ShowNotification($"Mission Ped {entity.Handle}");
+            }
+
             Blip currentBlip = base.AttachedBlip;
             if (currentBlip != null)
             {
@@ -284,25 +274,28 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private void GotoWaypoint()
         {
-            if (Waypoints != null)
+            if (this.Target != null)
             {
-                if (Waypoints.Count > 0)
+                
+            }
+            else
+            {
+                if (Waypoints != null)
                 {
-                    if (CurrentWaypoint == 0)
+                    if (Waypoints.Count > 0)
                     {
-                        this._ped.Task.GoTo(Waypoints[1]);
-                        CurrentWaypoint = 1;
-                        NextWaypoint = (Waypoints.Count > 1) ? 2 : 0;
-                    }
-                    else
-                    {
+
+                        if (NextWaypoint > Waypoints.Count - 1)
+                        {
+                            NextWaypoint = 0;
+                        }
+
                         Vector3 wp = Waypoints[NextWaypoint];
-                        this._ped.Task.GoTo(Waypoints[NextWaypoint]);
+                        this._ped.Task.GoTo(wp);
 
                         if (wp.DistanceToSquared(this._ped.Position) < 2f)
                         {
-                            CurrentWaypoint = NextWaypoint;
-                            NextWaypoint = (CurrentWaypoint + 1 > Waypoints.Count) ? 0 : CurrentWaypoint + 1;
+                            NextWaypoint++;
                         }
                     }
                 }

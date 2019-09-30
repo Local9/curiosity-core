@@ -131,13 +131,20 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
+                Session session = SessionManager.PlayerList[player.Handle];
+
                 if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
                 {
                     float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+
+                    if (experienceModifier > 1.0f && (session.IsStaff || session.Privilege == GlobalEnum.Privilege.DONATOR))
+                    {
+                        experienceModifier = experienceModifier + 0.1f;
+                    }
+
                     experience = (int)(experience * experienceModifier);
                 }
-
-                Session session = SessionManager.PlayerList[player.Handle];
 
                 int characterId = session.User.CharacterId;
 
@@ -205,6 +212,12 @@ namespace Curiosity.Server.net.Classes
                 if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
                 {
                     float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+                    if (experienceModifier > 1.0f && (session.IsStaff || session.Privilege == GlobalEnum.Privilege.DONATOR))
+                    {
+                        experienceModifier = experienceModifier + 0.1f;
+                    }
+
                     experience = (int)(experience * experienceModifier);
                 }
 

@@ -62,6 +62,9 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                 Ped pedPatrol = await Rage.Classes.PedCreator.CreatePedAtLocation(PedHash.Lost01GMY, new Vector3(1673.406f, -48.60476f, 173.7747f), 6.851492f);
                 Ped pedPatrol2 = await Rage.Classes.PedCreator.CreatePedAtLocation(PedHash.Lost02GMY, new Vector3(1671.406f, -48.60476f, 173.7747f), 6.851492f);
 
+                pedPatrol.Weapons.Give(WeaponHash.AssaultRifle, 1, true, true);
+                pedPatrol2.Weapons.Give(WeaponHash.AssaultRifle, 1, true, true);
+
                 List<Vector3> waypoints = new List<Vector3>()
                 {
                     new Vector3(1670.834f, -25.44239f, 173.7747f),
@@ -76,6 +79,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                 MissionPeds.MissionPed mp2 = Scripts.MissionPedCreator.Ped(pedPatrol2);
                 mp2.Waypoints = waypoints;
 
+                pedPatrol.Task.FightAgainstHatedTargets(100f);
             }
             catch (Exception ex)
             {

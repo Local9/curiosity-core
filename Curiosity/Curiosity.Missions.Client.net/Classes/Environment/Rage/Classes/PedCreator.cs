@@ -20,13 +20,14 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
             // only here to init the class
         }
 
-        static public async Task<Ped> CreatePedAtLocation(Model model, Vector3 location, float heading, bool blockTempEvents = true)
+        static public async Task<Ped> CreatePedAtLocation(Model model, Vector3 location, float heading, bool dropsWeaponsOnDeath = false)
         {
             await model.Request(10000);
             Ped spawnedPed = await World.CreatePed(model, location, heading);
             model.MarkAsNoLongerNeeded();
             // API.TaskSetBlockingOfNonTemporaryEvents(spawnedPed.Handle, blockTempEvents);
             API.SetPedFleeAttributes(spawnedPed.Handle, 0, false);
+            spawnedPed.DropsWeaponsOnDeath = dropsWeaponsOnDeath;
 
             _peds.Add(spawnedPed);
 
@@ -52,7 +53,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
             Ped killerPed = new Ped(killerEnt.Handle);
 
             if (killerPed.IsPlayer) {
-                CitizenFX.Core.UI.Screen.ShowNotification($"Ped {entity.Handle}");
+                CitizenFX.Core.UI.Screen.ShowNotification($"Civil Ped {entity.Handle}");
             }
 
             Blip currentBlip = entity.AttachedBlip;
