@@ -90,6 +90,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RS9000", "zThirdParty\RS900
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Missions.Client.net", "Curiosity.Missions.Client.net\Curiosity.Missions.Client.net.csproj", "{D9D6CDD2-D3CF-47BD-AB3B-BD7BAE469DE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Missions.Server.net", "Curiosity.Missions.Server.net\Curiosity.Missions.Server.net.csproj", "{62FEA3B1-5CC9-4DE0-8FFC-439555D457A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -204,6 +206,10 @@ Global
 		{D9D6CDD2-D3CF-47BD-AB3B-BD7BAE469DE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9D6CDD2-D3CF-47BD-AB3B-BD7BAE469DE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9D6CDD2-D3CF-47BD-AB3B-BD7BAE469DE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62FEA3B1-5CC9-4DE0-8FFC-439555D457A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62FEA3B1-5CC9-4DE0-8FFC-439555D457A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62FEA3B1-5CC9-4DE0-8FFC-439555D457A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62FEA3B1-5CC9-4DE0-8FFC-439555D457A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,6 +245,7 @@ Global
 		{BF529EA2-D6D5-4487-8053-6B896ABBB797} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
 		{BEA93BA8-6B45-41C8-BDF0-04D9B677A191} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{D9D6CDD2-D3CF-47BD-AB3B-BD7BAE469DE1} = {1D33637F-66E3-4977-9B9E-5A524FAFE523}
+		{62FEA3B1-5CC9-4DE0-8FFC-439555D457A4} = {A0D62F10-DBC9-4C31-B3AB-7058530A87C9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}

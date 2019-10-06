@@ -30,13 +30,11 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
         static void OnClientResourceStart(string resourceName)
         {
             if (GetCurrentResourceName() != resourceName) return;
-            Callout();
         }
 
         static void OnTestCallout(int playerHandle, List<object> arguments, string raw)
         {
-            Callout();
-            CitizenFX.Core.UI.Screen.ShowNotification("Called tcs");
+            Curiosity.Missions.Client.net.MissionScripts.Police.City.Store.ClintonAve.Init();
         }
 
         static async void Callout()

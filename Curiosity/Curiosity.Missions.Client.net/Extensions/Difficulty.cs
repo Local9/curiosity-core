@@ -8,7 +8,7 @@ namespace Curiosity.Missions.Client.net.Extensions
 {
     enum Difficulty
     {
-        Random,
+        Random = 0,
         BeGentle,
         BringItOn,
         IOwnThis,

@@ -90,6 +90,7 @@
     <Compile Include="MissionPedTypes\ZombieRunner.cs" />
     <Compile Include="MissionPedTypes\MissionPedNormal.cs" />
     <Compile Include="MissionPedTypes\ZombieWalker.cs" />
+    <Compile Include="MissionScripts\Police\City\Store\ClintonAve.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\MissionPedCreator.cs" />
     <Compile Include="Scripts\ZombieCreator.cs" />
@@ -113,5 +114,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

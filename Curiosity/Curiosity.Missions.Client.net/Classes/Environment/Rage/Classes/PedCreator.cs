@@ -23,6 +23,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
         static public async Task<Ped> CreatePedAtLocation(Model model, Vector3 location, float heading, bool dropsWeaponsOnDeath = false)
         {
             await model.Request(10000);
+            API.ClearAreaOfEverything(location.X, location.Y, location.Z, 2f, true, true, true, true);
             Ped spawnedPed = await World.CreatePed(model, location, heading);
             model.MarkAsNoLongerNeeded();
             // API.TaskSetBlockingOfNonTemporaryEvents(spawnedPed.Handle, blockTempEvents);

@@ -41,6 +41,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private int NextWaypoint = 0;
 
+        public float Experience;
+
         public bool AttackingTarget
         {
             get
@@ -126,18 +128,20 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             MissionPed.SilencerEffectiveRange = 15f;
             MissionPed.BehindNoticeDistance = 5f;
             MissionPed.RunningNoticeDistance = 25f;
-            MissionPed.AttackRange = 30f;
-            MissionPed.VisionDistance = 35f;
             MissionPed.WanderRadius = 100f;
         }
 
-        protected MissionPed(int handle) : base(handle)
+        protected MissionPed(int handle, float visionDistance = 35f, float experience = 10f) : base(handle)
         {
             this._ped = new Ped(handle);
             this._eventWrapper = new EntityEventWrapper(this._ped);
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
+
+            VisionDistance = visionDistance;
+            AttackRange = visionDistance;
+            Experience = experience;
 
             MissionPed MissionPed = this;
             this.GoToTarget += new MissionPed.OnGoingToTargetEvent(MissionPed.OnGoToTarget);
@@ -255,7 +259,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             if (killerPed.IsPlayer)
             {
-                CitizenFX.Core.UI.Screen.ShowNotification($"Mission Ped {entity.Handle}");
+                Player p = new Player(CitizenFX.Core.Native.API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
+                CitizenFX.Core.UI.Screen.ShowNotification($"Killer: {p.Name}:{p.ServerId}");
             }
 
             Blip currentBlip = base.AttachedBlip;

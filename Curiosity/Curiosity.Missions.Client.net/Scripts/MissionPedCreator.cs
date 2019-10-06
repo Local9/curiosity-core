@@ -15,8 +15,10 @@ namespace Curiosity.Missions.Client.net.Scripts
     static class MissionPedCreator
     {
 
-        public static MissionPed Ped(Ped ped, Alertness alertness = Alertness.Nuetral, Difficulty difficulty = Difficulty.Normal)
+        public static MissionPed Ped(Ped ped, Alertness alertness = Alertness.Nuetral, Difficulty difficulty = Difficulty.BringItOn, float visionDistance = 50f)
         {
+            MissionPed missionPed;
+
             ped.CanPlayGestures = true;
             ped.SetCanPlayAmbientAnims(true);
             ped.SetCanEvasiveDive(true);
@@ -39,7 +41,17 @@ namespace Curiosity.Missions.Client.net.Scripts
             ped.IsPersistent = true;
             ped.RelationshipGroup = Static.Relationships.HostileRelationship;
 
-            return new MissionPedNormal(ped.Handle);
+            switch (difficulty)
+            {
+                case Difficulty.BringItOn:
+                    missionPed = new MissionPedNormal(ped.Handle, visionDistance);
+                    break;
+                default:
+                    missionPed = new MissionPedNormal(ped.Handle, visionDistance);
+                    break;
+            }
+
+            return missionPed;
         }
 
         public static bool IsNightFall()
