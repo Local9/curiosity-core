@@ -29,12 +29,19 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
         static bool SirenActive = false;
         static bool LightsActive = false;
+        static bool IsMenuOpen = false;
 
         static public void Init()
         {
             client.RegisterTickHandler(OnTick);
             client.RegisterEventHandler("curiosity:Player:Vehicle:Siren:SoundEvent", new Action<string>(OnReceivedSourceEvent));
+            client.RegisterEventHandler("curiosity:Client:Menu:IsOpened", new Action<bool>(OnMenuStateChange));
             API.DecorRegister("Vehicle.SirensInstalled", 2);
+        }
+
+        static private void OnMenuStateChange(bool state)
+        {
+            IsMenuOpen = state;
         }
 
         static private async Task HideHudComponent()
@@ -63,6 +70,12 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
         static private async Task OnTick()
         {
+
+            if (IsMenuOpen)
+            {
+                await BaseScript.Delay(100);
+                return;
+            }
 
             if (Game.PlayerPed.IsInVehicle())
             {
