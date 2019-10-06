@@ -71,6 +71,7 @@
     <Compile Include="Extensions\ComponentId.cs" />
     <Compile Include="Extensions\ConfigFlags.cs" />
     <Compile Include="Extensions\DamagePack.cs" />
+    <Compile Include="Extensions\Difficulty.cs" />
     <Compile Include="Extensions\DoorState.cs" />
     <Compile Include="Extensions\EntityExtended.cs" />
     <Compile Include="Extensions\PedExtended.cs" />

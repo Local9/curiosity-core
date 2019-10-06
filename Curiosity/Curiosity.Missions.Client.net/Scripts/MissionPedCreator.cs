@@ -15,7 +15,7 @@ namespace Curiosity.Missions.Client.net.Scripts
     static class MissionPedCreator
     {
 
-        public static MissionPed Ped(Ped ped, Alertness alertness = Alertness.Nuetral)
+        public static MissionPed Ped(Ped ped, Alertness alertness = Alertness.Nuetral, Difficulty difficulty = Difficulty.Normal)
         {
             ped.CanPlayGestures = true;
             ped.SetCanPlayAmbientAnims(true);
