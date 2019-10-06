@@ -125,8 +125,7 @@ namespace Curiosity.Missions.Client.net.MissionScripts.Police.City.Store
                 {
                     if (createdSniperPed) return;
 
-                    //if (Client.Random.Next(10) == 1)
-                    if (true)
+                    if (Client.Random.Next(10) == 1)
                     {
                         createdSniperPed = true;
 
