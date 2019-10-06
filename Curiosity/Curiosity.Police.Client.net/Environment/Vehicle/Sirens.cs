@@ -69,6 +69,9 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                 if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
                 {
                     API.DisableControlAction(0, 86, true);
+                    API.DisableControlAction(0, (int)Control.VehicleCinCam, true);
+                    API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
+                    API.DisableControlAction(0, (int)Control.LookBehind, true);
                 }
             }
 
@@ -80,23 +83,25 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     && API.DecorGetBool(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.SirensInstalled"))
                     || Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency))
             {
-                if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift))
+                if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(0, (int)Control.VehicleCinCam))
                 {
                     SirenActive = true;
                     SendSoundEvent("SIRENS_AIRHORN");
-                    while (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) && Game.PlayerPed.IsInVehicle())
+                    while ((ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(0, (int)Control.VehicleCinCam)) && Game.PlayerPed.IsInVehicle())
                     {
+                        API.DisableControlAction(0, (int)Control.VehicleCinCam, true);
                         await BaseScript.Delay(0);
                     }
                     StopSound();
                     SirenActive = false;
                 }
-                else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl))
+                else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind))
                 {
                     SirenActive = true;
                     SendSoundEvent("VEHICLES_HORNS_POLICE_WARNING");
-                    while (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) && Game.PlayerPed.IsInVehicle())
+                    while ((ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind)) && Game.PlayerPed.IsInVehicle())
                     {
+                        API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
                         await BaseScript.Delay(0);
                     }
                     StopSound();
@@ -109,7 +114,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     await BaseScript.Delay(700);
                     SirenActive = false;
                 }
-                else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade)) // Preset on/off
+                else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsControlJustPressed(7, (int)Control.SniperZoomOutSecondary)) // Preset on/off
                 {
                     LightsActive = true;
                     client.RegisterTickHandler(HideHudComponent);
@@ -127,40 +132,46 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
                         {
                             API.DisableControlAction(0, 86, true);
+                            API.DisableControlAction(0, (int)Control.VehicleCinCam, true);
+                            API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
                         }
 
                         await BaseScript.Delay(0);
-                        if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade))
+                        if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsControlJustPressed(7, (int)Control.SniperZoomOutSecondary))
                         {
                             API.SetFakeWantedLevel(0);
                             LightsActive = false;
                             break;
                         }
-                        else if (ControlHelper.IsControlJustPressed(Control.MpTextChatTeam)) // Cycle presets
+                        else if (ControlHelper.IsControlJustPressed(Control.MpTextChatTeam) || API.IsControlJustPressed(16, (int)Control.VehicleFlyUnderCarriage)) // Cycle presets
                         {
                             StopSound();
                             CurrentSirenPreset = SirenModes[(SirenModes.IndexOf(CurrentSirenPreset) + 1) % SirenModes.Count];
                             PlayCurrentPresetSound();
                         }
-                        else if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift))
+                        else if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(0, (int)Control.VehicleCinCam))
                         {
                             StopSound();
                             SendSoundEvent("SIRENS_AIRHORN");
-                            while (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) && Game.PlayerPed.IsInVehicle())
+                            while ((ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(0, (int)Control.VehicleCinCam)) && Game.PlayerPed.IsInVehicle())
                             {
+                                API.DisableControlAction(0, (int)Control.VehicleCinCam, true);
                                 await BaseScript.Delay(0);
                             }
                             StopSound();
                             PlayCurrentPresetSound();
                         }
-                        else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl))
+                        else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind))
                         {
                             StopSound();
                             SendSoundEvent("VEHICLES_HORNS_POLICE_WARNING");
-                            while (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) && Game.PlayerPed.IsInVehicle())
+                            string internalPreset = CurrentSirenPreset;
+                            while ((ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind)) && Game.PlayerPed.IsInVehicle())
                             {
+                                API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
                                 await BaseScript.Delay(0);
                             }
+                            CurrentSirenPreset = internalPreset;
                             StopSound();
                             PlayCurrentPresetSound();
                         }
