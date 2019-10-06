@@ -30,21 +30,45 @@ namespace Curiosity.Missions.Client.net.MissionScripts.Police.City.Store
             // Clear the area before the player turns up
             ClearAreaOfEverything(location.X, location.Y, location.Z, 50f, true, true, true, true);
 
+            if (PedCreator.PedList.Count > 0)
+                EndMission();
+
             CreateMission();
 
             // INVOKE
             return true;
         }
 
+        static public bool EndMission()
+        {
+            while (PedCreator.PedList.Count > 0)
+            {
+                Ped ped = PedCreator.PedList[0];
+
+                if (NativeWrappers.DoesEntityExist(ped))
+                {
+                    ped.MarkAsNoLongerNeeded();
+                    ped.Delete();
+                }
+
+                PedCreator.PedList.Remove(ped);
+            }
+            return true;
+        }
+
         static async void CreateMission()
         {
+            createdBackupPed = false;
+            createdSniperPed = false;
+
             Ped thief1 = await PedCreator.CreatePedAtLocation(PedHash.ChiGoon01GMM, new Vector3(375.6602f, 325.6703f, 103.5664f), 255.8121f);
             thief1.Weapons.Give(WeaponHash.Pistol, 1, true, true);
-            thief1.Task.FightAgainstHatedTargets(hateRadius);
 
             Ped thief2 = await PedCreator.CreatePedAtLocation(PedHash.ChiGoon02GMM, new Vector3(381.166f, 327.2303f, 103.5664f), 109.4753f);
-            thief1.Weapons.Give(WeaponHash.Pistol, 1, true, true);
-            thief2.Task.FightAgainstHatedTargets(hateRadius);
+            thief2.Weapons.Give(WeaponHash.Pistol, 1, true, true);
+
+            //Scripts.ZombieCreator.InfectPed(thief1, 1000);
+            //Scripts.ZombieCreator.InfectPed(thief2, 1000);
 
             missionThief1 = Scripts.MissionPedCreator.Ped(thief1);
             missionThief2 = Scripts.MissionPedCreator.Ped(thief2);
@@ -55,57 +79,70 @@ namespace Curiosity.Missions.Client.net.MissionScripts.Police.City.Store
 
         static async Task CreateBackupPed()
         {
-            if (createdBackupPed)
+            try
             {
-                client.DeregisterTickHandler(CreateBackupPed);
-                return;
-            }
-
-            if (!NativeWrappers.IsEntityAlive(missionThief1) || !NativeWrappers.IsEntityAlive(missionThief2))
-            {
-                if (createdBackupPed) return;
-
-                if (Client.Random.Next(5) == 1)
+                if (createdBackupPed)
                 {
-                    createdBackupPed = true;
-
-                    float _visionDistance = 100f;
-
-                    Ped thiefBackdoor = await PedCreator.CreatePedAtLocation(PedHash.ChiGoon01GMM, new Vector3(381.946f, 358.5238f, 102.5128f), 84.95505f);
-                    thiefBackdoor.Weapons.Give(WeaponHash.Pistol, 1, true, true);
-                    MissionPeds.MissionPed missionThiefBackdoor = Scripts.MissionPedCreator.Ped(thiefBackdoor, Extensions.Alertness.FullyAlert, Extensions.Difficulty.BringItOn, _visionDistance);
+                    client.DeregisterTickHandler(CreateBackupPed);
+                    return;
                 }
 
-            }
+                if (missionThief1.IsDead || missionThief2.IsDead)
+                {
+                    if (createdBackupPed) return;
 
+                    if (Client.Random.Next(5) == 1)
+                    {
+                        createdBackupPed = true;
+
+                        float _visionDistance = 100f;
+
+                        Ped thiefBackdoor = await PedCreator.CreatePedAtLocation(PedHash.ChiGoon01GMM, new Vector3(381.946f, 358.5238f, 102.5128f), 84.95505f);
+                        thiefBackdoor.Weapons.Give(WeaponHash.Pistol, 1, true, true);
+                        MissionPeds.MissionPed missionThiefBackdoor = Scripts.MissionPedCreator.Ped(thiefBackdoor, Extensions.Alertness.FullyAlert, Extensions.Difficulty.BringItOn, _visionDistance);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                client.DeregisterTickHandler(CreateSniperPed);
+            }
             await BaseScript.Delay(100);
         }
 
         static async Task CreateSniperPed()
         {
-            if (createdSniperPed)
+            try
             {
-                client.DeregisterTickHandler(CreateSniperPed);
-                return;
-            }
-
-            if (!NativeWrappers.IsEntityAlive(missionThief1) || !NativeWrappers.IsEntityAlive(missionThief2))
-            {
-                if (createdSniperPed) return;
-
-                if (Client.Random.Next(10) == 1)
+                if (createdSniperPed)
                 {
-                    createdSniperPed = true;
+                    client.DeregisterTickHandler(CreateSniperPed);
+                    return;
+                }
 
-                    float _visionDistance = 500f;
+                if (missionThief1.IsDead || missionThief2.IsDead)
+                {
+                    if (createdSniperPed) return;
 
-                    Ped thiefSniper = await PedCreator.CreatePedAtLocation(PedHash.ChiGoon01GMM, new Vector3(365.0694f, 254.3395f, 112.8926f), 355.4359f);
-                    thiefSniper.Weapons.Give(WeaponHash.SniperRifle, 1, true, true);
-                    MissionPeds.MissionPed missionThiefSniper = Scripts.MissionPedCreator.Ped(thiefSniper, Extensions.Alertness.FullyAlert, Extensions.Difficulty.BringItOn, _visionDistance);
+                    //if (Client.Random.Next(10) == 1)
+                    if (true)
+                    {
+                        createdSniperPed = true;
+
+                        float _visionDistance = 500f;
+
+                        Ped thiefSniper = await PedCreator.CreatePedAtLocation(PedHash.ChiGoon01GMM, new Vector3(365.0694f, 254.3395f, 112.8926f), 355.4359f);
+                        thiefSniper.Weapons.Give(WeaponHash.SniperRifle, 1, true, true);
+
+                        MissionPeds.MissionPed missionThiefSniper = Scripts.MissionPedCreator.Ped(thiefSniper, Extensions.Alertness.FullyAlert, Extensions.Difficulty.BringItOn, _visionDistance);
+                    }
                 }
             }
-            
-
+            catch (Exception ex)
+            {
+                client.DeregisterTickHandler(CreateSniperPed);
+            }
             await BaseScript.Delay(100);
         }
     }

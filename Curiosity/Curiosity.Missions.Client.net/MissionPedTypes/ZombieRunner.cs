@@ -35,7 +35,6 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
                 this._ped.Task.Jump();
                 Ped ped = this._ped;
                 Vector3 position = target.Position - this.Position;
-                //ed.Heading = position.to;
                 this._jumpAttack = true;
                 target.SetToRagdoll(2000);
             }

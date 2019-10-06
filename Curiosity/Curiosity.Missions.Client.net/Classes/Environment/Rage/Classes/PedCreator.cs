@@ -13,7 +13,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
 {
     class PedCreator
     {
-        private static List<Ped> _peds = new List<Ped>();
+        public static List<Ped> PedList = new List<Ped>();
 
         static public void Init()
         {
@@ -30,7 +30,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
             API.SetPedFleeAttributes(spawnedPed.Handle, 0, false);
             spawnedPed.DropsWeaponsOnDeath = dropsWeaponsOnDeath;
 
-            _peds.Add(spawnedPed);
+            PedList.Add(spawnedPed);
 
             EntityEventWrapper entityEventWrapper = new EntityEventWrapper(spawnedPed);
             entityEventWrapper.Died += new EntityEventWrapper.OnDeathEvent(EventWrapperOnDied);
@@ -41,15 +41,15 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
 
         static private void EventWrapperOnDisposed(EntityEventWrapper sender, Entity entity)
         {
-            if (_peds.Contains(entity as Ped))
+            if (PedList.Contains(entity as Ped))
             {
-                _peds.Remove(entity as Ped);
+                PedList.Remove(entity as Ped);
             }
         }
 
         static private void EventWrapperOnDied(EntityEventWrapper sender, Entity entity)
         {
-            _peds.Remove(entity as Ped);
+            PedList.Remove(entity as Ped);
             Entity killerEnt = new Ped(entity.Handle).GetKiller();
             Ped killerPed = new Ped(killerEnt.Handle);
 

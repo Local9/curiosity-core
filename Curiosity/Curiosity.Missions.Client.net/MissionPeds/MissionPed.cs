@@ -261,6 +261,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 Player p = new Player(CitizenFX.Core.Native.API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
                 CitizenFX.Core.UI.Screen.ShowNotification($"Killer: {p.Name}:{p.ServerId}");
+
             }
 
             Blip currentBlip = base.AttachedBlip;
