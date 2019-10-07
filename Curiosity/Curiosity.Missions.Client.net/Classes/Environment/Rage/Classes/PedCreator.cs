@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-
 using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Shared.Client.net.Enums;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
 {
@@ -25,8 +21,9 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
             await model.Request(10000);
             API.ClearAreaOfEverything(location.X, location.Y, location.Z, 2f, true, true, true, true);
             Ped spawnedPed = await World.CreatePed(model, location, heading);
+            API.NetworkFadeInEntity(spawnedPed.Handle, false);
             model.MarkAsNoLongerNeeded();
-            // API.TaskSetBlockingOfNonTemporaryEvents(spawnedPed.Handle, blockTempEvents);
+
             API.SetPedFleeAttributes(spawnedPed.Handle, 0, false);
             spawnedPed.DropsWeaponsOnDeath = dropsWeaponsOnDeath;
 
@@ -49,12 +46,16 @@ namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
 
         static private void EventWrapperOnDied(EntityEventWrapper sender, Entity entity)
         {
-            PedList.Remove(entity as Ped);
-            Entity killerEnt = new Ped(entity.Handle).GetKiller();
-            Ped killerPed = new Ped(killerEnt.Handle);
+            Ped ped = entity as Ped;
+            PedList.Remove(ped);
+            Ped killerEnt = ped.GetKiller() as Ped;
 
-            if (killerPed.IsPlayer) {
-                CitizenFX.Core.UI.Screen.ShowNotification($"Civil Ped {entity.Handle}");
+            if (killerEnt.IsPlayer) {
+                if (ped.GetRelationshipWithPed(killerEnt) != Relationship.Hate)
+                {
+                    // KILLED A CLIVILIAN
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Civilian Killed", $"", string.Empty, 2);
+                }
             }
 
             Blip currentBlip = entity.AttachedBlip;

@@ -29,6 +29,8 @@ namespace Curiosity.Missions.Client.net.Scripts
             ped.SetCombatAttributes(CombatAttributes.AlwaysFight, true);
             Function.Call((Hash)8116279360099375049L, new InputArgument[] { ped.Handle, 0, 0 });
             ped.SetConfigFlag(281, true);
+
+            API.SetEntityAsMissionEntity(ped.Handle, false, false);
             
             ped.AlwaysKeepTask = true;
             ped.BlockPermanentEvents = true;

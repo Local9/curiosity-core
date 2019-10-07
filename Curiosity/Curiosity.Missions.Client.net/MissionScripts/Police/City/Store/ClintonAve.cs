@@ -16,7 +16,7 @@ namespace Curiosity.Missions.Client.net.MissionScripts.Police.City.Store
         static Client client = Client.GetInstance();
 
         static string name = "24/7, Clinton Ave";
-        static Vector3 location = new Vector3(1662.625f, -27.41396f, 173.7747f);
+        static Vector3 location = new Vector3(375.6602f, 325.6703f, 103.5664f);
 
         static float hateRadius = 75f;
         static bool createdBackupPed = false;
@@ -64,17 +64,17 @@ namespace Curiosity.Missions.Client.net.MissionScripts.Police.City.Store
             Ped thief1 = await PedCreator.CreatePedAtLocation(PedHash.ChiGoon01GMM, new Vector3(375.6602f, 325.6703f, 103.5664f), 255.8121f);
             thief1.Weapons.Give(WeaponHash.Pistol, 1, true, true);
 
-            Ped thief2 = await PedCreator.CreatePedAtLocation(PedHash.ChiGoon02GMM, new Vector3(381.166f, 327.2303f, 103.5664f), 109.4753f);
-            thief2.Weapons.Give(WeaponHash.Pistol, 1, true, true);
+            //Ped thief2 = await PedCreator.CreatePedAtLocation(PedHash.ChiGoon02GMM, new Vector3(381.166f, 327.2303f, 103.5664f), 109.4753f);
+            //thief2.Weapons.Give(WeaponHash.Pistol, 1, true, true);
 
-            //Scripts.ZombieCreator.InfectPed(thief1, 1000);
-            //Scripts.ZombieCreator.InfectPed(thief2, 1000);
+            ////Scripts.ZombieCreator.InfectPed(thief1, 1000);
+            ////Scripts.ZombieCreator.InfectPed(thief2, 1000);
 
             missionThief1 = Scripts.MissionPedCreator.Ped(thief1);
-            missionThief2 = Scripts.MissionPedCreator.Ped(thief2);
+            //missionThief2 = Scripts.MissionPedCreator.Ped(thief2);
 
-            client.RegisterTickHandler(CreateBackupPed);
-            client.RegisterTickHandler(CreateSniperPed);
+            //client.RegisterTickHandler(CreateBackupPed);
+            //client.RegisterTickHandler(CreateSniperPed);
         }
 
         static async Task CreateBackupPed()
