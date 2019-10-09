@@ -13,6 +13,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static public void Init()
         {
+            // City
             InitCityClintonAve();
             InitCityDavisAve();
             InitCityLittleSeoul();
@@ -22,6 +23,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             InitCitySanAndreasAve();
             InitCityStrawberry();
         }
+
+        #region City Missions
 
         static void InitCityClintonAve()
         {
@@ -392,5 +395,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 missionPeds = pedData
             });
         }
+
+        #endregion
+
+        #region Country Missions
+        #endregion
+
+        #region Rural Missions
+        #endregion
     }
 }
