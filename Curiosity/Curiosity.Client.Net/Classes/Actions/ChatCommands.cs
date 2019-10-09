@@ -96,6 +96,8 @@ namespace Curiosity.Client.net.Classes.Actions
             client.RegisterEventHandler("curiosity:Client:Command:OnFire", new Action<string>(OnFire));
             client.RegisterEventHandler("curiosity:Client:Command:Chimp", new Action(ChimpSlap));
 
+            client.RegisterEventHandler("curiosity:Client:Command:Nuke", new Action<float, float, float>(OnNuke));
+
             API.RegisterCommand("mod", new Action<int, List<object>, string>(ModVehicle), false);
             API.RegisterCommand("donator", new Action<int, List<object>, string>(DonatorCheck), false);
             API.RegisterCommand("tp", new Action<int, List<object>, string>(Teleport), false);
@@ -585,6 +587,19 @@ namespace Curiosity.Client.net.Classes.Actions
             }
         }
 
+        static async void OnNuke(float x, float y, float z)
+        {
+            try
+            {
+                await Client.Delay(0);
+                API.ClearAreaOfEverything(x, y, z, 500f, false, false, false, false);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Nuke -> {ex.Message}");
+            }
+        }
+
         static async void Nuke(int playerHandle, List<object> arguments, string raw)
         {
             try
@@ -593,7 +608,8 @@ namespace Curiosity.Client.net.Classes.Actions
                 if (!Player.PlayerInformation.IsStaff()) return;
 
                 Vector3 pos = Game.PlayerPed.Position;
-                API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 500f, false, false, false, false);
+
+                BaseScript.TriggerServerEvent("curiosity:Server:Command:NukeArea", pos.X, pos.Y, pos.Z);
             }
             catch (Exception ex)
             {

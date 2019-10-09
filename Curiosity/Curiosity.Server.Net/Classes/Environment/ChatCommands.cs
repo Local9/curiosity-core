@@ -27,6 +27,7 @@ namespace Curiosity.Server.net.Classes.Environment
         static public void Init()
         {
             server.RegisterEventHandler("curiosity:Server:Command:SavePosition", new Action<CitizenFX.Core.Player, string, float, float, float, float>(SavePosition));
+            server.RegisterEventHandler("curiosity:Server:Command:NukeArea", new Action<CitizenFX.Core.Player, float, float, float>(OnNuke));
 
             API.RegisterCommand("chase", new Action<int, List<object>, string>(OnChaser), false);
             API.RegisterCommand("announce", new Action<int, List<object>, string>(Announcement), false);
@@ -40,6 +41,7 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("chimp", new Action<int, List<object>, string>(SpawnChimp), false);
 
             API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
+
             // API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
         }
 
@@ -200,6 +202,15 @@ namespace Curiosity.Server.net.Classes.Environment
             {
                 Log.Error($"SaveCoords() -> {ex.Message}");
             }
+        }
+
+        static void OnNuke([FromSource]CitizenFX.Core.Player player, float x, float y, float z)
+        {
+            Session session = SessionManager.PlayerList[$"{player.Handle}"];
+
+            if (session.Privilege == Privilege.USER) return;
+
+            Server.TriggerClientEvent("curiosity:Client:Command:Nuke", x, y, z);
         }
 
         static void Announcement(int playerHandle, List<object> arguments, string raw)
