@@ -1,14 +1,12 @@
-﻿using System;
+﻿using CitizenFX.Core;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
 
-namespace Curiosity.Missions.Client.net.Scripts.Mission
+namespace Curiosity.Missions.Client.net.DataClasses.Mission
 {
     class PoliceStores
     {
+        static Client client = Client.GetInstance();
+
         static Dictionary<int, DataClasses.Mission.Store> storesCity = new Dictionary<int, DataClasses.Mission.Store>();
         static Dictionary<int, DataClasses.Mission.Store> storesCountry = new Dictionary<int, DataClasses.Mission.Store>();
         static Dictionary<int, DataClasses.Mission.Store> storesRural = new Dictionary<int, DataClasses.Mission.Store>();
@@ -450,7 +448,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     SpawnPoint = new Vector3(1196.343f, 2656.701f, 40.77607f),
                     Alertness = Extensions.Alertness.FullyAlert,
                     Difficulty = Extensions.Difficulty.BringItOn,
-                    Weapon = WeaponHash.SniperRifle
+                    Weapon = WeaponHash.SniperRifle,
+                    VisionDistance = 500f
                 },
             };
 
@@ -868,7 +867,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     SpawnPoint = new Vector3(-3180.201f, 1042.482f, 27.66457f),
                     Alertness = Extensions.Alertness.FullyAlert,
                     Difficulty = Extensions.Difficulty.BringItOn,
-                    Weapon = WeaponHash.SniperRifle
+                    Weapon = WeaponHash.SniperRifle,
+                    VisionDistance = 500f
                 },
             };
 

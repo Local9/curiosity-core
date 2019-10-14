@@ -12,10 +12,13 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
         static Client client = Client.GetInstance();
 
-        public static Menu Menu = new Menu("Interaction Menu", "Interaction Menu");
+        public static Menu Menu = new Menu("Interaction Menu", "Player Interaction Menu");
         public static bool isMenuOpen = Menu.Visible;
 
         public static MenuItem showForum = new MenuItem("Open Player Guides", "Select this to view our player guides");
+
+        public static MenuItem showPoliceMenu = new MenuItem("Police Options", "Options for the Police Activities");
+        static bool AddedPoliceOptions = false;
 
         public static void Init()
         {
@@ -217,6 +220,12 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                     Client.TriggerEvent("curiosity:Client:Interface:ShowForum");
                     _menu.CloseMenu();
                 }
+
+                if (_item == showPoliceMenu)
+                {
+                    Client.TriggerEvent("curiosity:Client:Police:ShowOptions");
+                    _menu.CloseMenu();
+                }
             };
 
             //menu.OnIndexChange += (_menu, _oldItem, _newItem, _oldIndex, _newIndex) =>
@@ -257,6 +266,18 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             {
                 Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
                 Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
+
+                if (Player.PlayerInformation.Job == Global.Shared.net.Enums.Job.PoliceOfficer && !AddedPoliceOptions)
+                {
+                    Menu.AddMenuItem(showPoliceMenu);
+                    AddedPoliceOptions = true;
+                }
+
+                if (Player.PlayerInformation.Job != Global.Shared.net.Enums.Job.PoliceOfficer)
+                {
+                    Menu.RemoveMenuItem(showPoliceMenu);
+                    AddedPoliceOptions = false;
+                }
             };
 
             //menu.OnDynamicListItemCurrentItemChange += (_menu, _dynamicListItem, _oldCurrentItem, _newCurrentItem) =>

@@ -21,7 +21,10 @@ namespace Curiosity.Missions.Client.net
 
             // Game Code
             Static.Relationships.Init();
-            Classes.Environment.Rage.Classes.PedCreator.Init();
+            Scripts.PedCreator.Init(); // For list handling
+
+            // DATA
+            DataClasses.Mission.PoliceStores.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

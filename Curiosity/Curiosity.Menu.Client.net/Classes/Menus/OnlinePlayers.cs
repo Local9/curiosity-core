@@ -41,7 +41,6 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
                     playerMenu.OnMenuClose += (_m) =>
                     {
-
                         MenuBase.MenuOpen(false);
                         _m.ClearMenuItems();
                     };
@@ -49,6 +48,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                     playerMenu.OnItemSelect += (_playerMenu, _menuItem, _itemIndex) => {
                         OnItemSelect(_playerMenu, _menuItem, _itemIndex);
                     };
+
+                    MenuItem messagePlayer = new MenuItem("Message") { Enabled = false, Description = "Coming Soon", RightIcon = MenuItem.Icon.LOCK };
+                    menu.AddMenuItem(messagePlayer);
 
                     Menu reportingOptions = PlayerInteractions.ReportInteraction.CreateMenu("Report", player);
                     AddSubMenu(playerMenu, reportingOptions);

@@ -43,17 +43,17 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
             if (pz == PatrolZone.Rural) // 50/50 chance of being called out to the middle of the map
             {
-                ClassLoader.RuralCallOuts[calloutId].Invoke();
+                // ClassLoader.RuralCallOuts[calloutId].Invoke();
             }
 
             if (pz == PatrolZone.City)
             {
-                ClassLoader.CityCallOuts[calloutId].Invoke();
+                // ClassLoader.CityCallOuts[calloutId].Invoke();
             }
 
             if (pz == PatrolZone.Country)
             {
-                ClassLoader.CountryCallOuts[calloutId].Invoke();
+                // ClassLoader.CountryCallOuts[calloutId].Invoke();
             }
         }
 
@@ -170,18 +170,18 @@ namespace Curiosity.Police.Client.net.Environment.Tasks
 
                 if (random.Next(10) == 1) // 1/10 chance of being called out to the middle of the map
                 {
-                    await GetRandomCallout(ClassLoader.RuralCallOuts, PatrolZone.Rural);
+                    // await GetRandomCallout(ClassLoader.RuralCallOuts, PatrolZone.Rural);
                     return;
                 }
 
                 if (Job.DutyManager.PatrolZone == PatrolZone.City)
                 {
-                    await GetRandomCallout(ClassLoader.CityCallOuts, PatrolZone.City);
+                    // await GetRandomCallout(ClassLoader.CityCallOuts, PatrolZone.City);
                 }
 
                 if (Job.DutyManager.PatrolZone == PatrolZone.Country)
                 {
-                    await GetRandomCallout(ClassLoader.CountryCallOuts, PatrolZone.Country);
+                    // await GetRandomCallout(ClassLoader.CountryCallOuts, PatrolZone.Country);
                 }
                 await Task.FromResult(0);
             }

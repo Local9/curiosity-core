@@ -1,8 +1,9 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net.Data;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
-using Curiosity.Global.Shared.net.Data;
 using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 
@@ -15,6 +16,8 @@ namespace Curiosity.Missions.Client.net.Classes.PlayerClient
 
         public static Privilege privilege;
         public static Job ClientJob;
+
+        public static PatrolZone patrolZone;
 
         public static bool IsPlayerCalloutActive = false;
 
@@ -33,8 +36,15 @@ namespace Curiosity.Missions.Client.net.Classes.PlayerClient
             client.RegisterEventHandler("curiosity:Client:Mission:IsPlayerJobActive", new Action(OnIsPlayerJobActive));
             client.RegisterEventHandler("curiosity:Client:Mission:IsPlayerOnActiveBackup", new Action(OnIsPlayerOnActiveBackup));
 
+            client.RegisterEventHandler("curiosity:Client:Mission:SetLocation", new Action<int>(OnSetMissionLocation));
+
             client.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+        }
+
+        static void OnSetMissionLocation(int location)
+        {
+            patrolZone = (PatrolZone)location;
         }
 
         static void OnIsPlayerCalloutActive()

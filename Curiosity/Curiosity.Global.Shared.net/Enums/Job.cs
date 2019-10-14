@@ -8,7 +8,8 @@ namespace Curiosity.Global.Shared.net.Enums
 {
     public enum Job
     {
-        Firefighter,
+        Unknown = 0,
+        Firefighter = 1,
         Paramedic,
         PoliceOfficer,
         Trucker,

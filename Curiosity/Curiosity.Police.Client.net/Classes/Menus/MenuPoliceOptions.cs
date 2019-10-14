@@ -18,19 +18,32 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static Client client = Client.GetInstance();
         static Menu MainMenu;
 
+        static PatrolZone _patrolZone = PatrolZone.City;
+        static bool _IsOnDuty = false;
+
+        static List<string> patrolAreas = new List<string>();
+
+        static MenuCheckboxItem menuDuty = new MenuCheckboxItem("On Duty", _IsOnDuty);
+        static MenuListItem menuListPatrolZone = new MenuListItem("Patrol Zone", patrolAreas, (int)_patrolZone);
+
         static public void Init()
         {
+            client.RegisterEventHandler("curiosity:Client:Police:ShowOptions", new Action(OpenMenu));
 
+            patrolAreas.Add($"{PatrolZone.City}");
+            patrolAreas.Add($"{PatrolZone.Country}");
         }
 
         static public void OpenMenu()
         {
+            MenuController.DontOpenAnyMenu = false;
             MenuBaseFunctions.MenuOpen();
             MenuController.EnableMenuToggleKeyOnController = false;
 
             if (MainMenu == null)
             {
                 MainMenu = new Menu("Police Options", "Additional options for Police");
+                
                 MainMenu.OnMenuOpen += OnMenuOpen;
                 MainMenu.OnListItemSelect += OnListItemSelect;
                 MainMenu.OnItemSelect += OnItemSelect;
@@ -40,7 +53,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 MenuController.EnableMenuToggleKeyOnController = false;
             }
 
-            MainMenu.ClearMenuItems();
+            // MainMenu.ClearMenuItems();
             MainMenu.OpenMenu();
         }
 
@@ -51,6 +64,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void OnMenuClose(Menu menu)
         {
+            MenuController.DontOpenAnyMenu = true;
             MenuBaseFunctions.MenuClose();
             MainMenu.ClearMenuItems();
             MainMenu = null;
@@ -64,6 +78,9 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         private static void OnMenuOpen(Menu menu)
         {
             MainMenu.ClearMenuItems();
+
+            MainMenu.AddMenuItem(menuDuty);
+            MainMenu.AddMenuItem(menuListPatrolZone);
         }
     }
 }

@@ -5,7 +5,7 @@ using Curiosity.Shared.Client.net.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.Classes.Environment.Rage.Classes
+namespace Curiosity.Missions.Client.net.Scripts
 {
     class PedCreator
     {

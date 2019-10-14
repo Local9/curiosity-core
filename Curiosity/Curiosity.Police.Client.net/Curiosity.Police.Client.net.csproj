@@ -63,26 +63,6 @@
     <Compile Include="Environment\Job\DutyManager.cs" />
     <Compile Include="Environment\Job\DutyMarkers.cs" />
     <Compile Include="Environment\Tasks\CalloutHandler.cs" />
-    <Compile Include="Environment\Tasks\Callouts\City\Shops\DavisAve.cs" />
-    <Compile Include="Environment\Tasks\Callouts\City\Shops\ClintonAve.cs" />
-    <Compile Include="Environment\Tasks\Callouts\City\Shops\Strawberry.cs" />
-    <Compile Include="Environment\Tasks\Callouts\City\Shops\ProsperityStreet.cs" />
-    <Compile Include="Environment\Tasks\Callouts\City\Shops\LittleSeoul.cs" />
-    <Compile Include="Environment\Tasks\Callouts\City\Shops\MurrietaHeights.cs" />
-    <Compile Include="Environment\Tasks\Callouts\City\Shops\SanAndreasAve.cs" />
-    <Compile Include="Environment\Tasks\Callouts\City\Shops\MirrorPark.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Country\Shops\MountChiliad.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Country\Shops\Grapeseed.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Country\Shops\SandyShoresLiquorAce.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Country\Shops\SandyShoresTwentyFour.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Country\Shops\GrandSenoraDesertTwentyFour.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Country\Shops\GrandSenoraDesertScoops.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Country\Shops\Harmony.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Rural\Shops\Chumash.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Rural\Shops\BanhamCanyonTwentyFour.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Rural\Shops\BanhamCanyonRobsLiquor.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Rural\Shops\RichmanGlen.cs" />
-    <Compile Include="Environment\Tasks\Callouts\Rural\Shops\TataviamMountains.cs" />
     <Compile Include="Environment\Vehicle\Sirens.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

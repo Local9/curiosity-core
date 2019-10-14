@@ -11,15 +11,37 @@ namespace Curiosity.Menus.Client.net.Classes.Player
         public static PlayerInformationModel playerInfo = new PlayerInformationModel();
 
         public static Privilege privilege;
+        public static Job Job;
+        public static bool IsOnDuty;
 
         public static async void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
 
+            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
+
             await Client.Delay(2000);
 
             Client.TriggerEvent("curiosity:Client:Player:Information");
+        }
+
+        static void OnDutyState(bool jobActive, bool dutyState, string job)
+        {
+            if (job == "error")
+            {
+                IsOnDuty = false;
+                return;
+            }
+
+            if (job == "police")
+            {
+                Job = Job.PoliceOfficer;
+            }
+            else
+            {
+                Job = Job.Unknown;
+            }
         }
 
         static async void PlayerInfo(string json)
