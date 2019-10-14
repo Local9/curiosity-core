@@ -148,6 +148,30 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
+        public void IncreaseSkill(string skill, GlobalEntity.Skills skills, int experience)
+        {
+            if (!Skills.ContainsKey(skill))
+            {
+                Skills.Add(skill, skills);
+                Skills[skill].Value = 0 + experience;
+            }
+            else
+            {
+                Skills[skill].Value = Skills[skill].Value + experience;
+            }
+        }
 
+        public void DecreaseSkill(string skill, GlobalEntity.Skills skills, int experience)
+        {
+            if (!Skills.ContainsKey(skill))
+            {
+                Skills.Add(skill, skills);
+                Skills[skill].Value = 0 - experience;
+            }
+            else
+            {
+                Skills[skill].Value = Skills[skill].Value - experience;
+            }
+        }
     }
 }
