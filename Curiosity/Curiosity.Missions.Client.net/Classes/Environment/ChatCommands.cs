@@ -34,7 +34,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
         static void OnTestCallout(int playerHandle, List<object> arguments, string raw)
         {
-            Curiosity.Missions.Client.net.MissionScripts.Police.City.Store.ClintonAve.Init();
+            
         }
 
         static async void Callout()
