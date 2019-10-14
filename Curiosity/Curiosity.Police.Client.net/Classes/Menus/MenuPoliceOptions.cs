@@ -18,13 +18,13 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static Client client = Client.GetInstance();
         static Menu MainMenu;
 
-        static PatrolZone _patrolZone = PatrolZone.City;
+        static int _patrolZone = 0;
         static bool _IsOnDuty = false;
 
         static List<string> patrolAreas = new List<string>();
 
         static MenuCheckboxItem menuDuty = new MenuCheckboxItem("On Duty", _IsOnDuty);
-        static MenuListItem menuListPatrolZone = new MenuListItem("Patrol Zone", patrolAreas, (int)_patrolZone);
+        static MenuListItem menuListPatrolZone = new MenuListItem("Patrol Zone", patrolAreas, _patrolZone);
 
         static public void Init()
         {
@@ -48,6 +48,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 MainMenu.OnListItemSelect += OnListItemSelect;
                 MainMenu.OnItemSelect += OnItemSelect;
                 MainMenu.OnMenuClose += OnMenuClose;
+                MainMenu.OnListIndexChange += OnListIndexChange;
+                MainMenu.OnCheckboxChange += OnCheckboxChange;
 
                 MenuController.AddMenu(MainMenu);
                 MenuController.EnableMenuToggleKeyOnController = false;
@@ -55,6 +57,22 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             // MainMenu.ClearMenuItems();
             MainMenu.OpenMenu();
+        }
+
+        private static void OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
+        {
+            if (menuItem == menuDuty)
+            {
+                _IsOnDuty = newCheckedState;
+            }
+        }
+
+        private static void OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
+        {
+            if (listItem == menuListPatrolZone)
+            {
+                _patrolZone = newSelectionIndex;
+            }
         }
 
         private static void OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
