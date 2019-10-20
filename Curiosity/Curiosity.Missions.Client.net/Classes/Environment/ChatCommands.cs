@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using static CitizenFX.Core.Native.API;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment
 {
@@ -14,6 +15,8 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
         {
             client.RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+
+            RegisterCommand("callout", new Action<int, List<object>, string>(OnTestCallout), false);
         }
 
         static void OnClientResourceStop(string resourceName)
@@ -28,7 +31,47 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
         static void OnTestCallout(int playerHandle, List<object> arguments, string raw)
         {
-            
+            if (PlayerClient.ClientInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER) return;
+
+            if (arguments.Count < 1)
+            {
+                Screen.ShowNotification("Not enough arguements");
+                return;
+            }
+
+            int mission = int.Parse($"{arguments[0]}");
+            int location = int.Parse($"{arguments[1]}");
+
+            Dictionary<int, DataClasses.Mission.Store> missions = null;
+
+            if (location == 1)
+            {
+                missions = DataClasses.Mission.PoliceStores.storesCity;
+            }
+
+            if (location == 2)
+            {
+                missions = DataClasses.Mission.PoliceStores.storesRural;
+            }
+
+            if (location == 3)
+            {
+                missions = DataClasses.Mission.PoliceStores.storesCountry;
+            }
+
+            if (missions == null)
+            {
+                Screen.ShowNotification("Mission location not set");
+                return;
+            }
+
+            if (!missions.ContainsKey(mission))
+            {
+                Screen.ShowNotification("Mission not found");
+                return;
+            }
+
+            Scripts.Mission.CreateStoreMission.Create(missions[mission]);
         }
 
         //static async void Callout()

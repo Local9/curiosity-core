@@ -19,7 +19,10 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static Menu MainMenu;
 
         static int _patrolZone = 0;
+
+        static bool _IsActive = false;
         static bool _IsOnDuty = false;
+        static string _ActiveJob;
 
         static List<string> patrolAreas = new List<string>();
 
@@ -30,8 +33,17 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             client.RegisterEventHandler("curiosity:Client:Police:ShowOptions", new Action(OpenMenu));
 
+            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
+
             patrolAreas.Add($"{PatrolZone.City}");
             patrolAreas.Add($"{PatrolZone.Country}");
+        }
+
+        static void OnDutyState(bool active, bool onduty, string job)
+        {
+            _IsActive = active;
+            _IsOnDuty = onduty;
+            _ActiveJob = job;
         }
 
         static public void OpenMenu()
@@ -64,6 +76,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             if (menuItem == menuDuty)
             {
                 _IsOnDuty = newCheckedState;
+                BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", _IsActive, _IsOnDuty, _ActiveJob);
             }
         }
 
@@ -72,6 +85,12 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             if (listItem == menuListPatrolZone)
             {
                 _patrolZone = newSelectionIndex;
+
+
+                string selectedItem = patrolAreas[_patrolZone];
+                Enum.TryParse(selectedItem, out PatrolZone patrolZone);
+
+                Client.TriggerEvent("curiosity:Client:Police:PatrolZone", (int)patrolZone);
             }
         }
 

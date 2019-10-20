@@ -118,11 +118,9 @@ namespace Curiosity.Server.net
             }
 
             API.SetConvarServerInfo("Map", $"Los Santos");
-            API.SetConvarServerInfo("Curiosity", $"v1.0.0.986");
+            API.SetConvarServerInfo("Curiosity", $"v1.0.0.");
 
-            System.Timers.Timer aTimer = new System.Timers.Timer(1000 * 60 * 10); // MAYBE JUST MAYBE Future Ant can see that marking this with a flag so other servers don't run it would of been a good idea...
-            int lastHour = DateTime.Now.Hour;
-            aTimer.Elapsed += new System.Timers.ElapsedEventHandler(Business.BusinessUser.BanManagement);
+            Business.BusinessUser.BanManagement();
 
             if (Server.isLive)
                 RegisterTickHandler(SentStartupMessage);

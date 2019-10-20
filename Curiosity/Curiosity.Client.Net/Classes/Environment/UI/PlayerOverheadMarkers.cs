@@ -42,8 +42,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public void Init()
         {
-            Client.GetInstance().RegisterTickHandler(DrawMarkers);
-            // Client.GetInstance().RegisterTickHandler(DrawCurrentlyTalking);
+            // Client.GetInstance().RegisterTickHandler(DrawMarkers);
+            Client.GetInstance().RegisterTickHandler(DrawCurrentlyTalking);
         }
 
         static internal bool ShouldShowMarker(CitizenFX.Core.Player player)

@@ -7,9 +7,9 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
     {
         static Client client = Client.GetInstance();
 
-        static Dictionary<int, DataClasses.Mission.Store> storesCity = new Dictionary<int, DataClasses.Mission.Store>();
-        static Dictionary<int, DataClasses.Mission.Store> storesCountry = new Dictionary<int, DataClasses.Mission.Store>();
-        static Dictionary<int, DataClasses.Mission.Store> storesRural = new Dictionary<int, DataClasses.Mission.Store>();
+        static public Dictionary<int, DataClasses.Mission.Store> storesCity = new Dictionary<int, DataClasses.Mission.Store>();
+        static public Dictionary<int, DataClasses.Mission.Store> storesCountry = new Dictionary<int, DataClasses.Mission.Store>();
+        static public Dictionary<int, DataClasses.Mission.Store> storesRural = new Dictionary<int, DataClasses.Mission.Store>();
 
         static public void Init()
         {

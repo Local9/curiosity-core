@@ -42,7 +42,7 @@ namespace Curiosity.Client.net
             CinematicMode.Init();
             HideReticle.Init();
             Location.Init();
-            // PlayerOverheadMarkers.Init();
+            PlayerOverheadMarkers.Init();
             PlayerNames.Init();
             PlayerBlips.Init();
             // Speedometer.Init();

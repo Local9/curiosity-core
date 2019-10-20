@@ -62,17 +62,13 @@ namespace Curiosity.Server.net.Business
             }
         }
 
-        public static void BanManagement(object source, ElapsedEventArgs e)
+        public static void BanManagement()
         {
-            if (lastHour < DateTime.Now.Hour || (lastHour == 23 && DateTime.Now.Hour == 0))
-            {
-                Log.Verbose("-----------------------------------------------------------------");
-                Log.Verbose("-> CURIOSITY SERVER PROCESSING BANS <----------------------------");
-                Log.Verbose("-----------------------------------------------------------------");
+            Log.Verbose("-----------------------------------------------------------------");
+            Log.Verbose("-> CURIOSITY SERVER PROCESSING BANS <----------------------------");
+            Log.Verbose("-----------------------------------------------------------------");
 
-                lastHour = DateTime.Now.Hour;
-                Database.DatabaseUsers.RemoveBans();
-            }
+            Database.DatabaseUsers.RemoveBans();
         }
     }
 }

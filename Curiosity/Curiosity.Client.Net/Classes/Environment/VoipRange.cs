@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper;
@@ -34,7 +35,7 @@ namespace Curiosity.Client.net.Classes.Environment
             if (ControlHelper.IsControlJustPressed(Control.EnterCheatCode, true))
             {
                 currentRange = voipRange.ElementAt((voipRange.Keys.ToList().IndexOf(currentRange.Key) + 1) % (voipRange.Count));
-                BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#AAFF99", $"VOIP range set to {currentRange.Value}.");
+                Screen.ShowNotification($"VOIP range set to ~b~{currentRange.Value}.");
                 Function.Call(Hash.NETWORK_SET_TALKER_PROXIMITY, currentRange.Key);
             }
 
