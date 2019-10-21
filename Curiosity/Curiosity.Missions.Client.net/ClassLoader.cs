@@ -21,7 +21,6 @@ namespace Curiosity.Missions.Client.net
 
             // Game Code
             Static.Relationships.Init();
-            Scripts.PedCreator.Init(); // For list handling
 
             // DATA
             DataClasses.Mission.PoliceStores.Init();

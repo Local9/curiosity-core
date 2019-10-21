@@ -1,9 +1,5 @@
-﻿using System;
+﻿using CitizenFX.Core;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
 
 namespace Curiosity.Missions.Client.net.DataClasses.Mission
 {
@@ -12,5 +8,6 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
         public string Name;
         public Vector3 Location;
         public List<MissionPedData> missionPeds;
+        public List<MissionPedData> hostages;
     }
 }

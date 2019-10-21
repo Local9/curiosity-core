@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
+using CitizenFX.Core;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment
 {

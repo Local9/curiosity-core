@@ -47,6 +47,10 @@
   <ItemGroup>
     <Compile Include="Classes\CommonFunctions.cs" />
     <Compile Include="Classes\Data\PedScenarios.cs" />
+    <Compile Include="Classes\Data\Position.cs" />
+    <Compile Include="Classes\Date.cs" />
+    <Compile Include="Classes\Environment\AnimationQueue.cs" />
+    <Compile Include="Classes\Environment\Experience.cs" />
     <Compile Include="Enums\Blips.cs" />
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\NotificationCharacter.cs" />
@@ -60,6 +64,7 @@
     <Compile Include="Extensions\ListExtension.cs" />
     <Compile Include="Extensions\NumberExtension.cs" />
     <Compile Include="Extensions\PointFExtension.cs" />
+    <Compile Include="Extensions\PositionExtenstion.cs" />
     <Compile Include="Extensions\StringExtension.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\VectorExtension.cs" />

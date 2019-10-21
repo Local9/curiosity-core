@@ -27,6 +27,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public static float WanderRadius;
 
+        public static bool IsHostage = false;
+
         private Ped _target;
 
         private readonly Ped _ped;
@@ -260,8 +262,15 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (killerPed.IsPlayer)
             {
                 Player p = new Player(CitizenFX.Core.Native.API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
-                CitizenFX.Core.UI.Screen.ShowNotification($"Killer: {p.Name}:{p.ServerId}");
 
+                if (IsHostage)
+                {
+                    
+                }
+                else
+                {
+                    Client.TriggerServerEvent("curiosity:Server:Mission:KilledMissionPed", p.ServerId);
+                }
             }
 
             Blip currentBlip = base.AttachedBlip;

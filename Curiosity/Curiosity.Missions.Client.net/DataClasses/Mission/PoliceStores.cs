@@ -80,11 +80,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCity.Add(1, new DataClasses.Mission.Store
             {
                 Name = "24/7, Clinton Ave",
                 Location = new Vector3(375.6602f, 325.6703f, 103.5664f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 

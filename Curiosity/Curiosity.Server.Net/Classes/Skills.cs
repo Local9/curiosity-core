@@ -267,5 +267,136 @@ namespace Curiosity.Server.net.Classes
             }
             session.Player.TriggerEvent(eventToTrigger, experience);
         }
+
+        static public void IncreaseSkill(string source, string skill, int experience)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey(source))
+                {
+                    Log.Error($"IncreaseSkill: Player session missing.");
+                    return;
+                }
+
+                Session session = SessionManager.PlayerList[source];
+
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                {
+                    float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+
+                    if (experienceModifier > 1.0f && (session.IsStaff || session.Privilege == GlobalEnum.Privilege.DONATOR))
+                    {
+                        experienceModifier = experienceModifier + 0.1f;
+                    }
+
+                    experience = (int)(experience * experienceModifier);
+                }
+
+                int characterId = session.User.CharacterId;
+
+                if (!(characterId > 0))
+                {
+                    Log.Error($"IncreaseSkill: characterId Missing");
+                    return;
+                }
+
+                if (!skills.ContainsKey(skill))
+                {
+                    Log.Error($"IncreaseSkill: Unknown Skill -> {skill}");
+                    Log.Error($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    return;
+                }
+
+                if (!Server.isLive)
+                {
+                    Log.Success($"IncreaseSkill: {skill} + {experience}");
+                }
+
+                Database.DatabaseUsersSkills.IncreaseSkill(characterId, skills[skill].Id, experience);
+
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                    UpdateLifeExperience(session, experience, false);
+
+                session.IncreaseSkill(skill, skills[skill], experience);
+
+                PlayerMethods.SendUpdatedInformation(session);
+
+                if (!Server.isLive)
+                {
+                    session.Player.TriggerEvent("curiosity:Client:Chat:Message", "SERVER", "#FF0000", $"IncreaseSkill: {skill} + {experience}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "IncreaseSkill", $"{ex}");
+                Log.Error($"IncreaseSkill -> {ex.Message}");
+            }
+        }
+
+        static public void DecreaseSkill(string source, string skill, int experience)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey(source))
+                {
+                    Log.Error($"DecreaseSkill: Player session missing.");
+                    return;
+                }
+
+                Session session = SessionManager.PlayerList[source];
+
+                int characterId = session.User.CharacterId;
+
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                {
+                    float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+                    if (experienceModifier > 1.0f && (session.IsStaff || session.Privilege == GlobalEnum.Privilege.DONATOR))
+                    {
+                        experienceModifier = experienceModifier + 0.1f;
+                    }
+
+                    experience = (int)(experience * experienceModifier);
+                }
+
+                if (!(characterId > 0))
+                {
+                    Log.Error($"DecreaseSkill: characterId Missing");
+                    return;
+                }
+
+                if (!skills.ContainsKey(skill))
+                {
+                    Log.Error($"DecreaseSkill: Unknown Skill -> {skill}");
+                    Log.Error($"DecreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    return;
+                }
+
+                if (!Server.isLive)
+                {
+                    Log.Success($"DecreaseSkill: {skill} - {experience}");
+                }
+
+                Database.DatabaseUsersSkills.DecreaseSkill(characterId, skills[skill].Id, experience);
+
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                    UpdateLifeExperience(session, experience, false);
+
+                session.DecreaseSkill(skill, skills[skill], experience);
+
+                PlayerMethods.SendUpdatedInformation(session);
+
+                if (!Server.isLive)
+                {
+                    session.Player.TriggerEvent("curiosity:Client:Chat:Message", "SERVER", "#FF0000", $"DecreaseSkill: {skill} - {experience}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "DecreaseSkill", $"{ex}");
+                Log.Error($"DecreaseSkill -> {ex.Message}");
+            }
+        }
     }
 }
