@@ -42,6 +42,8 @@ namespace Curiosity.Server.net.Classes.Environment
 
             API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
 
+            API.RegisterCommand("test", new Action<int, List<object>, string>(Test), false);
+
             // API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
         }
 
@@ -223,6 +225,18 @@ namespace Curiosity.Server.net.Classes.Environment
 
             List<string> args = arguments.Cast<string>().ToList();
             Server.TriggerClientEvent("curiosity:Client:Scalefrom:Announce", String.Join(" ", args));
+        }
+
+        static void Test(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (session.Privilege == Privilege.USER) return;
+
+            List<string> args = arguments.Cast<string>().ToList();
+            Server.TriggerClientEvent("curiosity:Client:Scalefrom:MissionComplete", String.Join(" ", args));
         }
 
         static void SpawnCar(int playerHandle, List<object> arguments, string raw)

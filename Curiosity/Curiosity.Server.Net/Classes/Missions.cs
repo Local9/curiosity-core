@@ -39,13 +39,15 @@ namespace Curiosity.Server.net.Classes
             {
                 // MONEY
                 // Show success screen
-
+                Bank.IncreaseCashInternally(player.Handle, 100);
             }
             else
             {
                 // LOSE MONEY
                 // Show success screen with fail
             }
+
+            player.TriggerEvent("curiosity:Client:Scalefrom:MissionComplete", "woop");
         }
 
         static void OnKilledPed([FromSource]CitizenFX.Core.Player player, string data)
