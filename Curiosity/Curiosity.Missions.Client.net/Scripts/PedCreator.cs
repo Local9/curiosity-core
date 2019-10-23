@@ -5,6 +5,9 @@ using Curiosity.Shared.Client.net.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Curiosity.Shared.Client.net.Classes.Environment;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using Newtonsoft.Json;
 
 namespace Curiosity.Missions.Client.net.Scripts
 {
@@ -42,7 +45,15 @@ namespace Curiosity.Missions.Client.net.Scripts
                 if (ped.GetRelationshipWithPed(killerPed) != Relationship.Hate)
                 {
                     Player p = new Player(API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
-                    Client.TriggerServerEvent("curiosity:Server:Mission:killedCivilian", p.ServerId);
+
+                    SkillMessage skillMessage = new SkillMessage();
+                    skillMessage.PlayerHandle = $"{p.ServerId}";
+                    skillMessage.MissionPed = false;
+                    skillMessage.Increase = false;
+
+                    string json = JsonConvert.SerializeObject(skillMessage);
+
+                    BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
                 }
             }
 

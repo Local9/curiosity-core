@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 
+
 namespace Curiosity.Missions.Client.net.Scripts.Mission
 {
     class CreateStoreMission
@@ -208,16 +209,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 position = new Position(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z);
             }
 
-            if (!HostageKilled)
-            {
-                Client.TriggerServerEvent("curiosity:Server:Bank:IncreaseCash", Classes.PlayerClient.ClientInformation.playerInfo.Wallet, Client.Random.Next(80, 100));
-                Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"policexp", Client.Random.Next(5, 10));
-                Client.TriggerServerEvent("curiosity:Server:Skills:Increase", $"knowledge", Client.Random.Next(5, 8));
-            }
-            else
-            {
-
-            }
+            Client.TriggerServerEvent("curiosity:Server:Missions:CompletedMission", !HostageKilled);
 
             Screen.DisplayHelpTextThisFrame($"Thank you");
 

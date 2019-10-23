@@ -71,6 +71,8 @@ namespace Curiosity.Server.net
             Database.DatabaseVehicles.Init();
             Database.Config.Init();
 
+            Classes.Missions.Init();
+
             // Session Manager
             Classes.SessionManager.Init();
 

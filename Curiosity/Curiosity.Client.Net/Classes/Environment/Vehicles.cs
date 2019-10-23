@@ -100,6 +100,10 @@ namespace Curiosity.Client.net.Classes.Environment
 
             if (API.DoesEntityExist(vehicle.Handle))
             {
+                vehicle.Position = new Vector3(-2000f, -6000f, 0f);
+                vehicle.IsPersistent = false;
+                vehicle.MarkAsNoLongerNeeded();
+
                 API.DeleteEntity(ref copyRef);
 
                 if (!API.DoesEntityExist(vehicle.Handle))

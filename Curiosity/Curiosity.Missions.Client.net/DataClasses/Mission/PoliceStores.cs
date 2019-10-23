@@ -1,4 +1,6 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using System;
 using System.Collections.Generic;
 
 namespace Curiosity.Missions.Client.net.DataClasses.Mission
@@ -13,6 +15,28 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
 
         static public void Init()
         {
+            client.RegisterEventHandler("playerSpawned", new Action(PlayerSpawned));
+            client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+        }
+
+        static void OnClientResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            SetupStores();
+        }
+
+        static void PlayerSpawned()
+        {
+            SetupStores();
+        }
+
+        static void SetupStores()
+        {
+            storesCity.Clear();
+            storesCountry.Clear();
+            storesRural.Clear();
+
             // City
             InitCityClintonAve();
             InitCityDavisAve();

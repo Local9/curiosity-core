@@ -4,6 +4,9 @@ using Curiosity.Missions.Client.net.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using Newtonsoft.Json;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -263,14 +266,25 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 Player p = new Player(CitizenFX.Core.Native.API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
 
+                SkillMessage skillMessage = new SkillMessage();
+                skillMessage.PlayerHandle = $"{p.ServerId}";
+
                 if (IsHostage)
                 {
-                    
+                    skillMessage.Skill = "policexp";
+                    skillMessage.MissionPed = true;
+                    skillMessage.Increase = false;
                 }
                 else
                 {
-                    Client.TriggerServerEvent("curiosity:Server:Mission:KilledMissionPed", p.ServerId);
+                    skillMessage.Skill = "policexp";
+                    skillMessage.MissionPed = true;
+                    skillMessage.Increase = true;
                 }
+
+                string json = JsonConvert.SerializeObject(skillMessage);
+
+                BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
             }
 
             Blip currentBlip = base.AttachedBlip;

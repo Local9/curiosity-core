@@ -9,4 +9,17 @@
         public string LabelDescription;
         public int Value;
     }
+
+    public class MissionCompleted
+    {
+        public bool Passed = false;
+    }
+
+    public class SkillMessage
+    {
+        public string PlayerHandle;
+        public string Skill;
+        public bool MissionPed;
+        public bool Increase;
+    }
 }

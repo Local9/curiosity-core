@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Curiosity.Shared.Server.net.Helpers;
 using CitizenFX.Core;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using Newtonsoft.Json;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -20,29 +23,59 @@ namespace Curiosity.Server.net.Classes
             // Is mission ped
             // increase or decrease
 
-            server.RegisterEventHandler("curiosity:Server:Missions:KilledPed", new Action<CitizenFX.Core.Player, string, string, bool, bool>(OnKilledPed));
-
+            server.RegisterEventHandler("curiosity:Server:Missions:KilledPed", new Action<CitizenFX.Core.Player, string>(OnKilledPed));
+            server.RegisterEventHandler("curiosity:Server:Missions:CompletedMission", new Action<CitizenFX.Core.Player, bool>(OnCompletedMission));
         }
 
-
-        static void OnKilledPed([FromSource]CitizenFX.Core.Player player, string source, string skill, bool missionPed, bool increase)
+        static void OnCompletedMission([FromSource]CitizenFX.Core.Player player, bool passed)
         {
-            if (!SessionManager.PlayerList.ContainsKey($"{source}"))
+            if (!SessionManager.PlayerList.ContainsKey($"{player.Handle}"))
             {
-                Log.Error($"IncreaseSkill: Player session missing.");
+                Log.Error($"OnCompletedMission: Player session missing.");
                 return;
             }
 
-            if (increase)
+            if (passed)
             {
-                Skills.IncreaseSkill(source, skill, random.Next(5, 10));
-                Skills.IncreaseSkill(source, "knowledge", random.Next(3, 6));
+                // MONEY
+                // Show success screen
+
+            }
+            else
+            {
+                // LOSE MONEY
+                // Show success screen with fail
+            }
+        }
+
+        static void OnKilledPed([FromSource]CitizenFX.Core.Player player, string data)
+        {
+
+            SkillMessage skillMessage = JsonConvert.DeserializeObject<SkillMessage>(Encode.BytesToStringConverted(Convert.FromBase64String(data)));
+
+            if (!SessionManager.PlayerList.ContainsKey(skillMessage.PlayerHandle))
+            {
+                Log.Error($"OnKilledPed: Player session missing.");
+                return;
             }
 
-            if (!increase)
+            if (!skillMessage.MissionPed)
             {
-                Skills.DecreaseSkill(source, skill, 5);
-                Skills.DecreaseSkill(source, "knowledge", 3);
+                Skills.DecreaseSkill(skillMessage.PlayerHandle, "policerep", 2);
+                return;
+            }
+
+            if (skillMessage.Increase)
+            {
+                Skills.IncreaseSkill(skillMessage.PlayerHandle, skillMessage.Skill, random.Next(8, 10));
+                Skills.IncreaseSkill(skillMessage.PlayerHandle, "knowledge", random.Next(3, 6));
+                Skills.IncreaseSkill(skillMessage.PlayerHandle, "policerep", 1);
+            }
+            else
+            {
+                Skills.DecreaseSkill(skillMessage.PlayerHandle, skillMessage.Skill, 5);
+                Skills.DecreaseSkill(skillMessage.PlayerHandle, "knowledge", 3);
+                Skills.DecreaseSkill(skillMessage.PlayerHandle, "policerep", 1);
             }
         }
     }
