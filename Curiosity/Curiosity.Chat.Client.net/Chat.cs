@@ -33,6 +33,7 @@ namespace Curiosity.Chat.Client.net
 
             RegisterEventHandler("curiosity:Client:Player:Role", new Action<string>(UpdatePlayerRole));
             RegisterEventHandler("curiosity:Client:Chat:Message", new Action<string, string, string>(ChatMessage));
+
             RegisterEventHandler("curiosity:Client:Chat:EnableScroll", new Action<bool>(EnableChatScroll));
             RegisterEventHandler("curiosity:Client:Chat:EnableChatBox", new Action<bool>(EnableChatBox));
 
@@ -226,6 +227,8 @@ namespace Curiosity.Chat.Client.net
 
                 if (isChatInputActive)
                 {
+                    if (!isChatInputActivating) return;
+
                     TriggerChatAction("focusChatBox");
                     DisableControlAction(0, Control.CursorScrollUp, true);
                     DisableControlAction(0, Control.CursorScrollDown, true);
