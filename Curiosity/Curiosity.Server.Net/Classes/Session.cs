@@ -22,6 +22,8 @@ namespace Curiosity.Server.net.Classes
         public Privilege Privilege { get; set; }
         public long LocationId { get; set; }
 
+        public bool IsCheater { get; set; }
+
         // Player states
         public bool HasSpawned { get; private set; }
         public bool IsLoggedIn { get { return UserID > 0; } private set { } }

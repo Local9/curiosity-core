@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Global.Shared.net.Entity
@@ -33,5 +28,34 @@ namespace Curiosity.Global.Shared.net.Entity
         
         // Mission Teleports
 
+    }
+
+    public class MissionMessage
+    {
+        int _missionCompleted = 0;
+        
+        public string MissionTitle;
+        
+        public int MissionCompleted
+        {
+            get
+            {
+                return _missionCompleted > 0 ? 1 : 0;
+            }
+            set
+            {
+                _missionCompleted = value > 0 ? 1 : 0;
+            }
+        }
+
+        public int HostagesRescued = 0;
+
+        public int MoneyEarnt;
+        public int MoneyLost;
+
+        public MissionMessage(string title)
+        {
+            this.MissionTitle = title;
+        }
     }
 }

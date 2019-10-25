@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 namespace Curiosity.Missions.Client.net.DataClasses.Mission
@@ -31,35 +32,60 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
             SetupStores();
         }
 
-        static void SetupStores()
+        static async void SetupStores()
         {
             storesCity.Clear();
             storesCountry.Clear();
             storesRural.Clear();
 
+            await Task.FromResult(0);
+            await BaseScript.Delay(1000);
+
             // City
             InitCityClintonAve();
+            await BaseScript.Delay(0);
             InitCityDavisAve();
+            await BaseScript.Delay(0);
             InitCityLittleSeoul();
+            await BaseScript.Delay(0);
             InitCityMurrietaHeights();
+            await BaseScript.Delay(0);
             InitCityWestMirrorDrive();
+            await BaseScript.Delay(0);
             InitCityProsperityStreet();
+            await BaseScript.Delay(0);
             InitCitySanAndreasAve();
+            await BaseScript.Delay(0);
             InitCityStrawberry();
+            await BaseScript.Delay(0);
             // County
             InitCountryGrandSenoraDesertScoops();
+            await BaseScript.Delay(0);
             InitCountryGrandSenoraDesertTwentyFour();
+            await BaseScript.Delay(0);
             InitCountryGrapeseed();
+            await BaseScript.Delay(0);
             InitCountryHarmony();
+            await BaseScript.Delay(0);
             InitCountryMountChiliad();
+            await BaseScript.Delay(0);
             InitCountrySandyShoresLiquorAce();
+            await BaseScript.Delay(0);
             InitCountrySandyShoresTwentyFour();
+            await BaseScript.Delay(0);
             // Rural
             InitRuralBanhamCanyonRobsLiquor();
+            await BaseScript.Delay(0);
             InitRuralBanhamCanyonTwentyFour();
+            await BaseScript.Delay(0);
             InitRuralChumash();
+            await BaseScript.Delay(0);
             InitRuralRichmanGlen();
+            await BaseScript.Delay(0);
             InitRuralTataviamMountains();
+            await BaseScript.Delay(0);
+
+            Debug.WriteLine("Mission Setup Completed");
         }
 
         #region City Missions

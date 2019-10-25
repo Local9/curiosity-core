@@ -3,6 +3,7 @@ using static CitizenFX.Core.Native.API;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Player
 {
@@ -13,13 +14,33 @@ namespace Curiosity.Client.net.Classes.Player
 
         public static Privilege privilege;
         static bool statsSet = false;
+        static int outIncidentId = 0;
 
         public static async void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:Information", new Action(GetPlayerInfo));
+            client.RegisterEventHandler("curiosity:Client:Player:UpdateFlags", new Action(OnFlagUpdate));
             await BaseScript.Delay(1000);
             PeriodicCheck();
+        }
+
+        static void OnFlagUpdate()
+        {
+            SetPoliceRadarBlips(false);
+            CreateIncidentWithEntity(14, Game.PlayerPed.Handle, 3, 3f, ref outIncidentId);
+            client.RegisterTickHandler(OnPlayerDeathCheck);
+        }
+
+        static async Task OnPlayerDeathCheck()
+        {
+            while(Game.PlayerPed.IsAlive)
+            {
+                await BaseScript.Delay(100);
+            }
+            DeleteIncident(outIncidentId);
+            outIncidentId = 0;
+            client.DeregisterTickHandler(OnPlayerDeathCheck);
         }
 
         static async void GetPlayerInfo()

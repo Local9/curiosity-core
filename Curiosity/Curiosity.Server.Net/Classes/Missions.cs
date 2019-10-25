@@ -16,6 +16,8 @@ namespace Curiosity.Server.net.Classes
         static Server server = Server.GetInstance();
         static Random random = new Random();
 
+        static Dictionary<string, int> activeMissions = new Dictionary<string, int>();
+
         public static void Init()
         {
             // Player who triggered it
@@ -25,9 +27,10 @@ namespace Curiosity.Server.net.Classes
 
             server.RegisterEventHandler("curiosity:Server:Missions:KilledPed", new Action<CitizenFX.Core.Player, string>(OnKilledPed));
             server.RegisterEventHandler("curiosity:Server:Missions:CompletedMission", new Action<CitizenFX.Core.Player, bool>(OnCompletedMission));
+            server.RegisterEventHandler("curiosity:Server:Missions:EndMission", new Action<CitizenFX.Core.Player>(OnEndMission));
         }
 
-        static void OnCompletedMission([FromSource]CitizenFX.Core.Player player, bool passed)
+        static void OnEndMission([FromSource]CitizenFX.Core.Player player)
         {
             if (!SessionManager.PlayerList.ContainsKey($"{player.Handle}"))
             {
@@ -35,19 +38,47 @@ namespace Curiosity.Server.net.Classes
                 return;
             }
 
+
+        }
+
+        static void OnCompletedMission([FromSource]CitizenFX.Core.Player player, bool passed)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle))
+            {
+                Log.Error($"OnCompletedMission: Player session missing.");
+                return;
+            }
+
+            // Check player has active mission
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            string title = passed ? "Completed" : "Failed";
+            MissionMessage missionMessage = new MissionMessage($"Mission {title}");
+
+            if (!activeMissions.ContainsKey(session.License) && !session.IsDeveloper)
+            {
+                session.IsCheater = true;
+                session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
+                return;
+            }
+
             if (passed)
             {
-                // MONEY
-                // Show success screen
-                Bank.IncreaseCashInternally(player.Handle, 100);
+                missionMessage.MissionCompleted = 1;
+                missionMessage.MoneyEarnt = 100;
+                missionMessage.HostagesRescued = 1;
+                Bank.IncreaseCashInternally(player.Handle, missionMessage.MoneyEarnt);
             }
             else
             {
-                // LOSE MONEY
-                // Show success screen with fail
+                missionMessage.MissionCompleted = 0;
+                missionMessage.MoneyLost = 100;
+                Bank.DecreaseCashInternally(player.Handle, missionMessage.MoneyLost);
             }
 
-            player.TriggerEvent("curiosity:Client:Scalefrom:MissionComplete", "woop");
+            string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(missionMessage));
+
+            player.TriggerEvent("curiosity:Client:Scalefrom:MissionComplete", encoded);
         }
 
         static void OnKilledPed([FromSource]CitizenFX.Core.Player player, string data)

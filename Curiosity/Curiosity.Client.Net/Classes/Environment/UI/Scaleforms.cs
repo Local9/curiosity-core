@@ -9,6 +9,9 @@ using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Helper;
 using System.Drawing;
+using Curiosity.Global.Shared.net;
+using Newtonsoft.Json;
+using Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
 {
@@ -28,15 +31,15 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             if (scaleformActive) return;
 
+            MissionMessage missionMessage = JsonConvert.DeserializeObject<MissionMessage>(Encode.BytesToStringConverted(Convert.FromBase64String(message)));
+
             Scaleform scaleform = await ScaleformWrapper.Request("MISSION_COMPLETE");
 
-            int handle = scaleform.Handle;
+            scaleform.CallFunction("SET_MISSION_TITLE", "", missionMessage.MissionTitle);
+            scaleform.CallFunction("SET_DATA_SLOT", 0, missionMessage.MissionCompleted, 5, missionMessage.HostagesRescued, 1, "Rescued Hostage");
 
-            scaleform.CallFunction("SET_MISSION_TITLE", "", "Mission Title Thing");
-            scaleform.CallFunction("SET_DATA_SLOT", 0, 0, 5, 0, 1, "Rescued Hostage");
-
-            scaleform.CallFunction("SET_DATA_SLOT", 1, 0, 6, "ESDOLLA", 100, "Paid");
-            scaleform.CallFunction("SET_DATA_SLOT", 2, 0, 6, "ESMINDOLLA", 100, "Pay loss");
+            scaleform.CallFunction("SET_DATA_SLOT", 1, 0, 6, "ESDOLLA", missionMessage.MoneyEarnt, "Paid");
+            scaleform.CallFunction("SET_DATA_SLOT", 2, 0, 6, "ESMINDOLLA", missionMessage.MoneyLost, "Pay loss");
 
             scaleform.CallFunction("SET_MISSION_TITLE_COLOUR", 255, 153, 51);
             scaleform.CallFunction("SET_MISSION_SUBTITLE_COLOUR", 0, 0, 0);

@@ -174,7 +174,26 @@ namespace Curiosity.Server.net.Classes
                 Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "DecreaseCash", $"{ex}");
                 Log.Error($"DecreaseCash -> {ex.Message}");
             }
-}
+        }
+
+        static public void DecreaseCashInternally(string source, int amount)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey(source)) return;
+
+                Session session = SessionManager.PlayerList[source];
+
+                Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, amount);
+                session.DecreaseWallet(amount);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+            }
+            catch (Exception ex)
+            {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "DecreaseCash", $"{ex}");
+                Log.Error($"DecreaseCash -> {ex.Message}");
+            }
+        }
 
         static void IncreaseBank([FromSource]CitizenFX.Core.Player player, int bankAccount, int amount)
         {
