@@ -66,6 +66,7 @@ namespace Curiosity.Server.net.Business
             server.RegisterEventHandler("playerConnecting", new Action<CitizenFX.Core.Player, string, dynamic, dynamic>(PlayerConnecting));
             server.RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(PlayerDropped));
             server.RegisterEventHandler("curiosity:Server:Queue:PlayerConnected", new Action<CitizenFX.Core.Player>(PlayerActivated));
+
             server.RegisterTickHandler(QueueCycle);
             server.RegisterTickHandler(SetupTimer);
 
@@ -355,6 +356,11 @@ namespace Curiosity.Server.net.Business
                     await Server.Delay(100);
                     BalanceReserved();
                     await Server.Delay(1000);
+
+                    //if (!Server.isLive)
+                    //{
+                    //    Log.Verbose($"Curiosity Queue Manager : QueueCycle()");
+                    //}
                 }
                 catch (Exception ex)
                 {

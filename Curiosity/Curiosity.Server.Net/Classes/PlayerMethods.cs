@@ -338,6 +338,12 @@ namespace Curiosity.Server.net.Classes
                     throw new Exception("LICENSE MISSING");
                 }
 
+                if (SessionManager.PlayerList.ContainsKey(license))
+                {
+                    player.Drop("Duplicate account detected.");
+                    return;
+                }
+
                 GlobalEntity.User user = await Business.BusinessUser.GetUserAsync(license, player);
                 await BaseScript.Delay(10);
 
