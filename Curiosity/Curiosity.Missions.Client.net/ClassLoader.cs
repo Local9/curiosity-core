@@ -17,13 +17,13 @@ namespace Curiosity.Missions.Client.net
 
             Classes.PlayerClient.ClientInformation.Init();
 
-            Classes.Environment.ChatCommands.Init();
-
             // Game Code
             Static.Relationships.Init();
 
             // DATA
             DataClasses.Mission.PoliceStores.Init();
+
+            Classes.Environment.ChatCommands.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

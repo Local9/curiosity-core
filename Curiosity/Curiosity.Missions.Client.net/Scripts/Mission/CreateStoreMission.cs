@@ -1,14 +1,16 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.DataClasses.Mission;
 using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Classes.Environment;
-using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Classes.Data;
+using Curiosity.Shared.Client.net.Classes.Environment;
+using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Helper;
+using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
-using CitizenFX.Core.UI;
 
 
 namespace Curiosity.Missions.Client.net.Scripts.Mission
@@ -38,37 +40,53 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static public async void Create(Store store)
         {
-            SetupLocationBlip(store.Location);
-
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "459S Burglar alarm, silent", $"{store.Name}", string.Empty, 2);
-            PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
-
-            while(Game.PlayerPed.Position.DistanceToSquared(store.Location) > 1000)
+            if (store == null)
             {
-                await BaseScript.Delay(0);
+                Debug.WriteLine("[Mission] Create called but store not supplied");
+                return;
             }
 
-
-            MissionPedData1 = store.missionPeds[0];
-            MissionPedData2 = store.missionPeds[1];
-            MissionPedData3 = store.missionPeds[2];
-            MissionPedData4 = store.missionPeds[3];
-
-            if (store.hostages.Count > 0)
+            try
             {
-                MissionHostage = store.hostages[0];
-                HostagePed = await PedCreator.CreatePedAtLocation(MissionHostage.Model, MissionHostage.SpawnPoint, MissionHostage.SpawnHeading);
-                SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
-                new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
+
+                SetupLocationBlip(store.Location);
+
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "459S Burglar alarm, silent", $"{store.Name}", string.Empty, 2);
+                PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
+
+                client.RegisterTickHandler(MissionCancelAsync);
+
+                while (Game.PlayerPed.Position.DistanceToSquared(store.Location) > 1000)
+                {
+                    await BaseScript.Delay(0);
+                }
+
+
+                MissionPedData1 = store.missionPeds[0];
+                MissionPedData2 = store.missionPeds[1];
+                MissionPedData3 = store.missionPeds[2];
+                MissionPedData4 = store.missionPeds[3];
+
+                if (store.hostages.Count > 0)
+                {
+                    MissionHostage = store.hostages[0];
+                    HostagePed = await PedCreator.CreatePedAtLocation(MissionHostage.Model, MissionHostage.SpawnPoint, MissionHostage.SpawnHeading);
+                    SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
+                    new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
+                }
+
+                MissionPed1 = await CreatePed(MissionPedData1);
+                MissionPed2 = await CreatePed(MissionPedData2);
+
+                client.RegisterTickHandler(SpawnBackupPedOne);
+                client.RegisterTickHandler(SpawnBackupPedTwo);
+
+                client.RegisterTickHandler(MissionCompletionChecks);
             }
-
-            MissionPed1 = await CreatePed(MissionPedData1);
-            MissionPed2 = await CreatePed(MissionPedData2);
-
-            client.RegisterTickHandler(SpawnBackupPedOne);
-            client.RegisterTickHandler(SpawnBackupPedTwo);
-
-            client.RegisterTickHandler(MissionCompletionChecks);
+            catch (Exception ex)
+            {
+                Log.Error("[CreateStoreMission] Mission filed creation");
+            }
         }
 
         static async Task SpawnBackupPedOne()
@@ -177,6 +195,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             }
         }
 
+        static async Task MissionCancelAsync()
+        {
+            await Task.FromResult(0);
+            if (Game.IsControlPressed(0, Control.FrontendDelete))
+            {
+                CleanUp(true);
+            }
+        }
+
         static void RemoveEntity(Entity ent)
         {
             if (ent.Exists())
@@ -186,11 +213,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             }
         }
 
-        static async void CleanUp()
+        static async void CleanUp(bool cancelMission = false)
         {
             client.DeregisterTickHandler(SpawnBackupPedOne);
             client.DeregisterTickHandler(SpawnBackupPedTwo);
             client.DeregisterTickHandler(MissionCompletionChecks);
+            client.DeregisterTickHandler(MissionCancelAsync);
 
             LocationBlip.ShowRoute = false;
             LocationBlip.Scale = 1.0f;
@@ -200,6 +228,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             RemoveEntity(MissionPed3);
             RemoveEntity(MissionPed4);
 
+            if (cancelMission)
+            {
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Cancelled", $"No Payout", string.Empty, 2);
+                PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
+            }
+            else
+            {
+                Client.TriggerServerEvent("curiosity:Server:Missions:CompletedMission", !HostageKilled);
+            }
+
             Position position = new Position(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z);
 
             while (Location.Distance(position) < 100f)
@@ -208,9 +246,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 Screen.DisplayHelpTextThisFrame($"Please leave the area");
                 position = new Position(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z);
             }
-
-            Client.TriggerServerEvent("curiosity:Server:Missions:CompletedMission", !HostageKilled);
-
             Screen.DisplayHelpTextThisFrame($"Thank you");
 
             HostageReleased = false;

@@ -30,37 +30,26 @@ namespace Curiosity.Police.Client.net.Classes
 
         static async void OnAudioTest(int playerHandle, List<object> arguments, string raw)
         {
-
             int handle = Game.PlayerPed.Handle;
 
             if (!Game.Player.Character.IsAmbientSpeechEnabled)
-                CitizenFX.Core.UI.Screen.ShowNotification($"ENABLE SPEECH");
+                CitizenFX.Core.UI.Screen.ShowNotification($"IsAmbientSpeechEnabled");
 
-            Game.PlayerPed.PlayAmbientSpeech("A_F_M_BEACH_01_WHITE_FULL_01", "BUMP_01", SpeechModifier.Standard);
-
-            //PlayAmbientSpeechWithVoice(Game.PlayerPed.Handle, "STOP_THE_CAR", "s_m_y_sheriff_01_white_full_01", "SPEECH_PARAMS_FORCE", false);
-
-            //Function.Call(Hash.TASK_START_SCENARIO_IN_PLACE, Game.Player.Character, "CODE_HUMAN_MEDIC_TIME_OF_DEATH", 0, 1);
-            //Function.Call(Hash._PLAY_AMBIENT_SPEECH_WITH_VOICE, Game.Player.Character, "GENERIC_INSULT_HIGH", "s_m_y_sheriff_01_white_full_01", "SPEECH_PARAMS_FORCE_SHOUTED", 0);
-            //await Client.Delay(5000);
-            //Function.Call(Hash.CLEAR_PED_TASKS_IMMEDIATELY, Game.Player.Character);
-
-            //List<SoundMessage> soundMessages = new List<SoundMessage>();
-            //soundMessages.Add(new SoundMessage("ATTENTION_ALL_UNITS/ATTENTION_ALL_UNITS_03", _audioVolume, 1080));
-            //soundMessages.Add(new SoundMessage("WE_HAVE/WE_HAVE_02", _audioVolume, 600));
-            //soundMessages.Add(new SoundMessage("CONJUNCTIVES/A_01", _audioVolume, 2300));
-            //soundMessages.Add(new SoundMessage("SUSPECTS/SUSPECTS_HEADING_02", _audioVolume, 1100));
-            //soundMessages.Add(new SoundMessage("CONJUNCTIVES/A_02", _audioVolume, 1800));
-            //soundMessages.Add(new SoundMessage("DIRECTION/DIRECTION_HEADING_EAST_01", _audioVolume, 600));
-            //soundMessages.Add(new SoundMessage("CONJUNCTIVES/ON_02", _audioVolume, 1300));
-            //soundMessages.Add(new SoundMessage("STREETS/STREET_GREAT_OCEAN_HWY_01", _audioVolume, 1100));
-            //await Client.Delay(10);
-            //foreach (SoundMessage soundMessage in soundMessages)
-            //{
-            //    SendNuiMessage(JsonConvert.SerializeObject(soundMessage));
-            //    await Client.Delay(soundMessage.delayAudio);
-            //}
-
+            List<SoundMessage> soundMessages = new List<SoundMessage>();
+            soundMessages.Add(new SoundMessage("ATTENTION_ALL_UNITS/ATTENTION_ALL_UNITS_03", _audioVolume, 1080));
+            soundMessages.Add(new SoundMessage("WE_HAVE/WE_HAVE_02", _audioVolume, 600));
+            soundMessages.Add(new SoundMessage("CONJUNCTIVES/A_01", _audioVolume, 2300));
+            soundMessages.Add(new SoundMessage("SUSPECTS/SUSPECTS_HEADING_02", _audioVolume, 1100));
+            soundMessages.Add(new SoundMessage("CONJUNCTIVES/A_02", _audioVolume, 1800));
+            soundMessages.Add(new SoundMessage("DIRECTION/DIRECTION_HEADING_EAST_01", _audioVolume, 600));
+            soundMessages.Add(new SoundMessage("CONJUNCTIVES/ON_02", _audioVolume, 1300));
+            soundMessages.Add(new SoundMessage("STREETS/STREET_GREAT_OCEAN_HWY_01", _audioVolume, 1100));
+            await Client.Delay(10);
+            foreach (SoundMessage soundMessage in soundMessages)
+            {
+                SendNuiMessage(JsonConvert.SerializeObject(soundMessage));
+                await Client.Delay(soundMessage.delayAudio);
+            }
         }
     }
 

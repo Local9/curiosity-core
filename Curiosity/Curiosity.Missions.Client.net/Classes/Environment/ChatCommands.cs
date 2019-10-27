@@ -9,30 +9,24 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 {
     class ChatCommands
     {
-        static Client client = Client.GetInstance();
-
-
         static public void Init()
         {
-            client.RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
-            client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
-
             RegisterCommand("callout", new Action<int, List<object>, string>(OnTestCallout), false);
+            RegisterCommand("missions", new Action<int, List<object>, string>(OnMissionCommand), false);
         }
 
-        static void OnClientResourceStop(string resourceName)
+        static void OnMissionCommand(int playerHandle, List<object> arguments, string raw)
         {
-            if (GetCurrentResourceName() != resourceName) return;
-        }
-
-        static void OnClientResourceStart(string resourceName)
-        {
-            if (GetCurrentResourceName() != resourceName) return;
+            Screen.ShowNotification($"Mission...");
         }
 
         static void OnTestCallout(int playerHandle, List<object> arguments, string raw)
         {
-            if (PlayerClient.ClientInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER) return;
+            if (PlayerClient.ClientInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER)
+            {
+                Debug.WriteLine("Not Enough Permissions");
+                return;
+            }
 
             if (arguments.Count < 1)
             {
@@ -72,7 +66,11 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                 return;
             }
 
-            Scripts.Mission.CreateStoreMission.Create(missions[mission]);
+            DataClasses.Mission.Store storeMission = missions[mission];
+
+            Screen.ShowNotification($"Mission {storeMission.Name}");
+
+            Scripts.Mission.CreateStoreMission.Create(storeMission);
         }
 
         //static async void Callout()

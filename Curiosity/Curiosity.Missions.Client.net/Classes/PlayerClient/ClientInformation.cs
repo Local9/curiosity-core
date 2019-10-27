@@ -40,6 +40,7 @@ namespace Curiosity.Missions.Client.net.Classes.PlayerClient
 
             client.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+            client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
         }
 
         static void OnSetMissionLocation(int location)
@@ -92,6 +93,12 @@ namespace Curiosity.Missions.Client.net.Classes.PlayerClient
 
             Client.TriggerEvent("curiosity:Client:Player:Information");
         }
+
+        static void OnPlayerSpawned()
+        {
+            Client.TriggerEvent("curiosity:Client:Player:Information");
+        }
+
 
         static async void PlayerInfo(string json)
         {
