@@ -88,8 +88,6 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 Game.PlayerPed.DropsWeaponsOnDeath = false;
 
                 Game.PlayerPed.Armor = 100;
-
-                Classes.Menus.MenuLoadout.OpenMenu();
             }
             else
             {

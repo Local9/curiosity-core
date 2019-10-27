@@ -73,6 +73,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
         {
+            MenuBaseFunctions.MenuOpen();
+
             if (menuItem == menuDuty)
             {
                 _IsOnDuty = newCheckedState;
@@ -82,6 +84,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
         {
+            MenuBaseFunctions.MenuOpen();
+
             if (listItem == menuListPatrolZone)
             {
                 _patrolZone = newSelectionIndex;
@@ -115,6 +119,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         private static void OnMenuOpen(Menu menu)
         {
             MainMenu.ClearMenuItems();
+
+            MenuBaseFunctions.MenuOpen();
 
             MainMenu.AddMenuItem(menuDuty);
             MainMenu.AddMenuItem(menuListPatrolZone);

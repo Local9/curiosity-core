@@ -11,7 +11,7 @@ namespace Curiosity.Global.Shared.net.Enums
         Unknown = 0,
         Firefighter = 1,
         Paramedic,
-        PoliceOfficer,
+        Police,
         Trucker,
         Pilot
     }
