@@ -64,7 +64,9 @@ namespace Curiosity.Missions.Client.net.DataClasses
                 Game.DisableControlThisFrame(2, (Control)172);
                 Game.DisableControlThisFrame(2, (Control)173);
                 Game.DisableControlThisFrame(2, (Control)21);
-                API.BlockWeaponWheelThisFrame();
+                API.BlockWeaponWheelThisFrame2();
+                
+                // API.BlockWeaponWheelThisFrame();
                 
                 if (!Game.IsDisabledControlPressed(2, (Control)25))
                 {

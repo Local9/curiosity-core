@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\CitizenFX.Core.Server.1.0.1626\lib\net45\CitizenFX.Core.Server.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Server.1.0.1663\lib\net45\CitizenFX.Core.Server.dll</HintPath>
     </Reference>
     <Reference Include="DiscordWebhook.net">
       <HintPath>..\..\..\Local FiveM\_dependencies\server\DiscordWebhook.net.dll</HintPath>

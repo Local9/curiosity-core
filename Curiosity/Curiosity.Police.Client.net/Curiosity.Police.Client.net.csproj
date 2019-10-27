@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1626\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1663\lib\net45\CitizenFX.Core.Client.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json.net">
       <HintPath>..\_Dependancies\Newtonsoft.Json.net.dll</HintPath>
@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ChatCommands.cs" />
     <Compile Include="Classes\Menus\MenuPoliceOptions.cs" />
     <Compile Include="Classes\Pullover.cs" />
     <Compile Include="Classes\CreatePed.cs" />
@@ -79,6 +80,11 @@
       <Project>{9c746601-9f3d-4b0d-877c-1c7bc493c5bc}</Project>
       <Name>MenuAPI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="html\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -14,6 +14,8 @@ namespace Curiosity.Police.Client.net
         {
             Log.Verbose("Entering ClassLoader Init");
 
+            Classes.ChatCommands.Init();
+
             Classes.Player.PlayerInformation.Init();
             Environment.Job.DutyManager.Init();
             Environment.Tasks.CalloutHandler.Init();
