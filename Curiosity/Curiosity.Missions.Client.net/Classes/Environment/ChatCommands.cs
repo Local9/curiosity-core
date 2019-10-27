@@ -9,15 +9,22 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 {
     class ChatCommands
     {
+        static Client client = Client.GetInstance();
+
         static public void Init()
         {
             RegisterCommand("callout", new Action<int, List<object>, string>(OnTestCallout), false);
-            RegisterCommand("missions", new Action<int, List<object>, string>(OnMissionCommand), false);
-        }
 
-        static void OnMissionCommand(int playerHandle, List<object> arguments, string raw)
+            RegisterCommand("volume", new Action<int, List<object>, string>(OnAudioVolume), false);
+        }
+        static void OnAudioVolume(int playerHandle, List<object> arguments, string raw)
         {
-            Screen.ShowNotification($"Mission...");
+            if (arguments.Count < 1) return;
+            float defaultValue = 0.5f;
+            float.TryParse($"{arguments[0]}", out defaultValue);
+            Scripts.SoundManager.AudioVolume = defaultValue;
+            
+            Screen.ShowNotification($"Volume Updated: {Scripts.SoundManager.AudioVolume}");
         }
 
         static void OnTestCallout(int playerHandle, List<object> arguments, string raw)

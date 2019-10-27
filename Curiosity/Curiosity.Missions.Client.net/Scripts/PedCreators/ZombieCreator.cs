@@ -10,7 +10,7 @@ using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.MissionPedTypes;
 
-namespace Curiosity.Missions.Client.net.Scripts
+namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 {
     static class ZombieCreator
     {

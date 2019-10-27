@@ -24,8 +24,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
-            client.RegisterEventHandler("curiosity:Client:Police:SetCallOutStatus", new Action<bool>(OnSetCallOutStatus));
-            client.RegisterEventHandler("curiosity:Client:Police:GetCallOutStatus", new Action(OnGetCallOutStatus));
+            // client.RegisterEventHandler("curiosity:Client:Police:SetCallOutStatus", new Action<bool>(OnSetCallOutStatus));
+            // client.RegisterEventHandler("curiosity:Client:Police:GetCallOutStatus", new Action(OnGetCallOutStatus));
         }
 
         static void OnDutyState(bool jobActive, bool dutyState, string job)
@@ -43,7 +43,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 IsPoliceJobActive = false;
                 IsOnDuty = false;
                 IsOnCallout = false;
-                Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
+                // Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
                 return;
             }
 
@@ -59,10 +59,10 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 IsOnDuty = false;
                 if (IsOnCallout)
                 {
-                    Classes.CreateShopCallout.EndCallout();
+                    // Classes.CreateShopCallout.EndCallout();
                 }
                 IsOnCallout = false;
-                Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
+                // Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
                 return; // TODO: Refactor job code
             }
 
@@ -83,7 +83,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
                 Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", true, "Resupply Ammo", "curiosity:Player:Loadout:Resupply");
                 IsPoliceJobActive = true;
-                Tasks.CalloutHandler.PlayerCanTakeCallout();
+                // Tasks.CalloutHandler.PlayerCanTakeCallout();
 
                 Game.PlayerPed.DropsWeaponsOnDeath = false;
 
@@ -95,10 +95,10 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
                 if (IsOnCallout)
                 {
-                    Classes.CreateShopCallout.EndCallout();
+                    // Classes.CreateShopCallout.EndCallout();
                 }
                 IsPoliceJobActive = false;
-                Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
+                // Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
             }
         }
 
@@ -117,15 +117,6 @@ namespace Curiosity.Police.Client.net.Environment.Job
             }
 
             IsOnCallout = status;
-
-            if (IsOnCallout)
-            {
-                Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
-            }
-            else
-            {
-                Tasks.CalloutHandler.PlayerCanTakeCallout();
-            }
         }
 
         static void OnGetCallOutStatus()

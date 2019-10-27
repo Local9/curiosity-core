@@ -267,13 +267,13 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
                 Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
 
-                if (Player.PlayerInformation.Job == Global.Shared.net.Enums.Job.PoliceOfficer && !AddedPoliceOptions)
+                if (Player.PlayerInformation.Job == Global.Shared.net.Enums.Job.Police && !AddedPoliceOptions)
                 {
                     Menu.AddMenuItem(showPoliceMenu);
                     AddedPoliceOptions = true;
                 }
 
-                if (Player.PlayerInformation.Job != Global.Shared.net.Enums.Job.PoliceOfficer)
+                if (Player.PlayerInformation.Job != Global.Shared.net.Enums.Job.Police)
                 {
                     Menu.RemoveMenuItem(showPoliceMenu);
                     AddedPoliceOptions = false;

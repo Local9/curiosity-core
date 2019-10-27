@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MenuAPI;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Shared.Client.net.GameData;
+﻿using CitizenFX.Core;
 using Curiosity.Shared.Client.net.Enums.Patrol;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net;
+using MenuAPI;
+using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Police.Client.net.Classes.Menus
 {
@@ -26,8 +19,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         static List<string> patrolAreas = new List<string>();
 
-        static MenuCheckboxItem menuDuty = new MenuCheckboxItem("On Duty", _IsOnDuty);
-        static MenuListItem menuListPatrolZone = new MenuListItem("Patrol Zone", patrolAreas, _patrolZone);
+        static MenuCheckboxItem menuDuty = new MenuCheckboxItem("On Active Duty", _IsOnDuty);
+        static MenuListItem menuListPatrolZone = new MenuListItem("Set Patrol Zone", patrolAreas, _patrolZone);
 
         static public void Init()
         {
@@ -71,30 +64,37 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             MainMenu.OpenMenu();
         }
 
-        private static void OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
+        private static async void OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
         {
             MenuBaseFunctions.MenuOpen();
 
             if (menuItem == menuDuty)
             {
+                menuItem.Enabled = false;
+
                 _IsOnDuty = newCheckedState;
                 BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", _IsActive, _IsOnDuty, _ActiveJob);
+
+                await Client.Delay(3000);
+                menuItem.Enabled = true;
             }
         }
 
-        private static void OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
+        private static async void OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
         {
             MenuBaseFunctions.MenuOpen();
 
             if (listItem == menuListPatrolZone)
             {
+                listItem.Enabled = false;
                 _patrolZone = newSelectionIndex;
-
 
                 string selectedItem = patrolAreas[_patrolZone];
                 Enum.TryParse(selectedItem, out PatrolZone patrolZone);
 
                 Client.TriggerEvent("curiosity:Client:Police:PatrolZone", (int)patrolZone);
+                await Client.Delay(3000);
+                listItem.Enabled = true;
             }
         }
 

@@ -58,4 +58,10 @@ namespace Curiosity.Global.Shared.net.Entity
             this.MissionTitle = title;
         }
     }
+
+    public class MissionCreate
+    {
+        public int MissionId;
+        public int PatrolZone;
+    }
 }

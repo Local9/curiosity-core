@@ -76,7 +76,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
                 case Job.Paramedic:
                     CurrentJob = "medic";
                     break;
-                case Job.PoliceOfficer:
+                case Job.Police:
                     CurrentJob = "police";
                     break;
                 default:

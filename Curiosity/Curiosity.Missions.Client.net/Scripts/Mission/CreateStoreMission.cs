@@ -11,6 +11,7 @@ using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
+using Curiosity.Shared.Client.net.Enums.Patrol;
 
 
 namespace Curiosity.Missions.Client.net.Scripts.Mission
@@ -49,6 +50,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             try
             {
 
+                RandomMissionHandler.SetIsOnActiveCallout(true);
+
                 SetupLocationBlip(store.Location);
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "459S Burglar alarm, silent", $"{store.Name}", string.Empty, 2);
@@ -70,7 +73,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 if (store.hostages.Count > 0)
                 {
                     MissionHostage = store.hostages[0];
-                    HostagePed = await PedCreator.CreatePedAtLocation(MissionHostage.Model, MissionHostage.SpawnPoint, MissionHostage.SpawnHeading);
+                    HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, MissionHostage.SpawnPoint, MissionHostage.SpawnHeading);
                     SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
                     new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
                 }
@@ -97,10 +100,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             {
                 if (AreMissionPedsDead() && Client.Random.Next(3) == 1)
                 {
-                    Ped backup = await PedCreator.CreatePedAtLocation(MissionPedData3.Model, MissionPedData3.SpawnPoint, MissionPedData3.SpawnHeading);
+                    Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData3.Model, MissionPedData3.SpawnPoint, MissionPedData3.SpawnHeading);
                     backup.Weapons.Give(MissionPedData3.Weapon, 1, true, true);
 
-                    MissionPed3 = MissionPedCreator.Ped(backup, MissionPedData3.Alertness, MissionPedData3.Difficulty, MissionPedData3.VisionDistance);
+                    MissionPed3 = PedCreators.MissionPedCreator.Ped(backup, MissionPedData3.Alertness, MissionPedData3.Difficulty, MissionPedData3.VisionDistance);
 
                     if (backup != null)
                     {
@@ -120,10 +123,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             {
                 if (AreMissionPedsDead() && Client.Random.Next(5) == 1)
                 {
-                    Ped backup = await PedCreator.CreatePedAtLocation(MissionPedData4.Model, MissionPedData4.SpawnPoint, MissionPedData4.SpawnHeading);
+                    Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData4.Model, MissionPedData4.SpawnPoint, MissionPedData4.SpawnHeading);
                     backup.Weapons.Give(MissionPedData4.Weapon, 1, true, true);
 
-                    MissionPed4 = MissionPedCreator.Ped(backup, MissionPedData4.Alertness, MissionPedData4.Difficulty, MissionPedData4.VisionDistance);
+                    MissionPed4 = PedCreators.MissionPedCreator.Ped(backup, MissionPedData4.Alertness, MissionPedData4.Difficulty, MissionPedData4.VisionDistance);
 
                     if (backup != null)
                     {
@@ -213,7 +216,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             }
         }
 
-        static async void CleanUp(bool cancelMission = false)
+        static public async void CleanUp(bool cancelMission = false)
         {
             client.DeregisterTickHandler(SpawnBackupPedOne);
             client.DeregisterTickHandler(SpawnBackupPedTwo);
@@ -246,7 +249,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 Screen.DisplayHelpTextThisFrame($"Please leave the area");
                 position = new Position(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z);
             }
-            Screen.DisplayHelpTextThisFrame($"Thank you");
 
             HostageReleased = false;
             HostageKilled = false;
@@ -268,13 +270,18 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     LocationBlip.Delete();
                 }
             }
+
+            RandomMissionHandler.SetIsOnActiveCallout(false);
+
+            if (RandomMissionHandler.IsOnDuty)
+                RandomMissionHandler.AllowNextMission();
         }
 
         static async Task<MissionPed> CreatePed(MissionPedData missionPedData)
         {
-            Ped backup = await PedCreator.CreatePedAtLocation(missionPedData.Model, missionPedData.SpawnPoint, missionPedData.SpawnHeading);
+            Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(missionPedData.Model, missionPedData.SpawnPoint, missionPedData.SpawnHeading);
             backup.Weapons.Give(missionPedData.Weapon, 1, true, true);
-            return MissionPedCreator.Ped(backup, missionPedData.Alertness, missionPedData.Difficulty, missionPedData.VisionDistance);
+            return PedCreators.MissionPedCreator.Ped(backup, missionPedData.Alertness, missionPedData.Difficulty, missionPedData.VisionDistance);
         }
 
         static bool AreMissionPedsDead()

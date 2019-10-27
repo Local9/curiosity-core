@@ -20,6 +20,11 @@ namespace Curiosity.Global.Shared.net
             }
         }
 
+        public static string Base64ToString(string message)
+        {
+            return BytesToStringConverted(Convert.FromBase64String(message));
+        }
+
         //public static T ConvertToObject<T>(this string json)
         //{
         //    string decoded = Encode.BytesToStringConverted(System.Convert.FromBase64String(json));

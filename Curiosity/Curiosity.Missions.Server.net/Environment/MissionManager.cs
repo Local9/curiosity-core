@@ -3,6 +3,9 @@ using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net;
+using Newtonsoft.Json;
 
 namespace Curiosity.Missions.Server.net.Environment
 {
@@ -14,8 +17,10 @@ namespace Curiosity.Missions.Server.net.Environment
 
         public static void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Mission:Available ", new Action<Player, int, int>(OnMissionAvailable));
-            server.RegisterEventHandler("curiosity:Server:Mission:Ended", new Action<Player, int>(OnMissionEnded));
+            server.RegisterEventHandler("playerDropped", new Action<Player, string>(OnPlayerDropped));
+
+            server.RegisterEventHandler("curiosity:Server:Missions:Available ", new Action<Player, string>(OnMissionAvailable));
+            server.RegisterEventHandler("curiosity:Server:Missions:Ended", new Action<Player, int>(OnMissionEnded));
         }
 
         static public void OnPlayerDropped([FromSource]Player player, string reason)
@@ -38,18 +43,20 @@ namespace Curiosity.Missions.Server.net.Environment
             }
         }
 
-        static async void OnMissionAvailable([FromSource]Player player, int calloutId, int patrolZone)
+        static async void OnMissionAvailable([FromSource]Player player, string missionMessage)
         {
             await RemovePlayerMission(player);
 
-            if (MissionsActive.ContainsKey(calloutId))
+            MissionCreate missionCreate = JsonConvert.DeserializeObject<MissionCreate>(Encode.Base64ToString(missionMessage));
+
+            if (MissionsActive.ContainsKey(missionCreate.MissionId))
             {
                 player.TriggerEvent("curiosity:Client:Mission:NotAvailable");
             }
             else
             {
-                MissionsActive.TryAdd(calloutId, new Tuple<string, int>(player.Handle, patrolZone));
-                player.TriggerEvent("curiosity:Client:Mission:Start", calloutId, patrolZone);
+                MissionsActive.TryAdd(missionCreate.MissionId, new Tuple<string, int>(player.Handle, missionCreate.PatrolZone));
+                player.TriggerEvent("curiosity:Client:Mission:Start", missionMessage);
             }
         }
 

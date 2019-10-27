@@ -224,7 +224,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 if (target.Health <= target.MaxHealth / 4)
                 {
                     target.SetToRagdoll(3000);
-                    Scripts.ZombieCreator.InfectPed(target, this.MaxHealth, true);
+                    Scripts.PedCreators.ZombieCreator.InfectPed(target, this.MaxHealth, true);
                     this.ForgetTarget();
                     target.LeaveGroup();
                     target.Weapons.RemoveAll();

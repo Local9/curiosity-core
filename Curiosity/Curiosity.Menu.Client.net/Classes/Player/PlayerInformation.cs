@@ -36,7 +36,7 @@ namespace Curiosity.Menus.Client.net.Classes.Player
 
             if (job == "police")
             {
-                Job = Job.PoliceOfficer;
+                Job = Job.Police;
             }
             else
             {

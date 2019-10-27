@@ -25,6 +25,9 @@ namespace Curiosity.Missions.Client.net
 
             Classes.Environment.ChatCommands.Init();
 
+            // MISSION HANDLER
+            Scripts.Mission.RandomMissionHandler.Init();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
     }

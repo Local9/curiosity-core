@@ -9,7 +9,7 @@ using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Newtonsoft.Json;
 
-namespace Curiosity.Missions.Client.net.Scripts
+namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 {
     class PedCreator
     {
