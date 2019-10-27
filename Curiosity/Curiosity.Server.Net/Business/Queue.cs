@@ -18,7 +18,7 @@ namespace Curiosity.Server.net.Business
         // service requirements
         static Server server = Server.GetInstance();
         static Regex regex = new Regex(@"^[ A-Za-z0-9-_.#\[\]]{1,32}$");
-        static Regex blacklistedNames = new Regex(@"\b(admin|nigga|nigger|administrator|moderator|staff)\b");
+        static Regex blacklistedNames = new Regex(@"\b(admin|nigga|nigger|administrator|moderator|staff|n1gg3|n1g|n1gg3r)\b");
         static string resourceName = API.GetCurrentResourceName();
         static string resourcePath = $"resources/{API.GetResourcePath(resourceName).Substring(API.GetResourcePath(resourceName).LastIndexOf("//") + 2)}";
         static Dictionary<Messages, string> messages = new Dictionary<Messages, string>();

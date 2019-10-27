@@ -50,6 +50,11 @@ namespace Curiosity.Chat.Server.net
                 message = wordFilter.Replace(message, "$!\"£^!@");
             }
 
+            if (IsAllUpper(message))
+            {
+                message = message.ToLower();
+            }
+
             switch (scope)
             {
                 default:
@@ -95,6 +100,16 @@ namespace Curiosity.Chat.Server.net
         void RegisterEventHandler(string name, Delegate action)
         {
             EventHandlers[name] += action;
+        }
+
+        bool IsAllUpper(string input)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (Char.IsLetter(input[i]) && !Char.IsUpper(input[i]))
+                    return false;
+            }
+            return true;
         }
     }
 }
