@@ -116,6 +116,11 @@ namespace Curiosity.Tools.Client.net.Controllers
 					}
 
 					DrawData( _trackingEntity );
+
+                    if (Game.IsControlPressed(0, Control.FrontendDelete))
+                    {
+                        _trackingEntity.Delete();
+                    }
 				}
 			}
 			catch( Exception ex ) {

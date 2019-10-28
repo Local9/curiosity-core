@@ -1,11 +1,13 @@
-﻿using Curiosity.Client.net.Helpers;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Client.net.Helpers;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Curiosity.Client.net.Classes.Player;
-using Curiosity.Global.Shared.net.Enums;
-using CitizenFX.Core;
+using System.Threading.Tasks;
+using System.Drawing;
+
 //using FamilyRP.Roleplay.SharedClasses;
 //using FamilyRP.Roleplay.Client.Classes.Environment.Controls;
 //using FamilyRP.Roleplay.Client.Helpers;
@@ -32,6 +34,7 @@ namespace Curiosity.Client.net.Classes.Environment
             try
             {
                 client.RegisterCommand("allweapons", new Action<int, List<object>, string>(GiveAllWeapons), false);
+                client.RegisterCommand("del", new Action<int, List<object>, string>(OnDeleteEntity), false);
 
                 //Client.GetInstance().ClientCommands.Register("/dev", Handle);
                 //Register("ui", ToggleDevUI);
@@ -1538,5 +1541,131 @@ namespace Curiosity.Client.net.Classes.Environment
         //    BaseScript.TriggerServerEvent("Chat.DevCommandEntered", command.CommandString);
         //    Log.Info($"Command '{command.CommandString}' not found on client, passing to server");
         //}
+
+
+        private static readonly Color DefaultCrosshair = Color.FromArgb(120, 120, 120);
+        private static readonly Color ActiveCrosshair = Color.FromArgb(255, 255, 255);
+        public static readonly Color DefaultColor = Color.FromArgb(255, 255, 255);
+
+        private static readonly Vector2 DefaultPos = new Vector2(0.6f, 0.5f);
+
+        public static bool IsEnabled { get; set; }
+
+        public static Entity _trackingEntity;
+        private static bool _track;
+
+        static void OnDeleteEntity(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsStaff()) return;
+
+            IsEnabled = !IsEnabled;
+            if (IsEnabled)
+            {
+                client.RegisterTickHandler(OnPropTask);
+            }
+            else
+            {
+                client.DeregisterTickHandler(OnPropTask);
+                API.EnableControlAction(2, (int)Control.Attack, true);
+                API.EnableControlAction(2, (int)Control.Aim, true);
+            }
+            CitizenFX.Core.UI.Screen.ShowNotification($"Entity Remover is now {(IsEnabled ? "~g~Enabled" : "~r~Disabled")}~s~.");
+        }
+
+        static async Task OnPropTask()
+        {
+            try
+            {
+                if (!IsEnabled)
+                {
+                    return;
+                }
+
+                API.DisableControlAction(2, (int)Control.Attack, true);
+                API.DisableControlAction(2, (int)Control.Aim, true);
+
+                var rightClick = Game.IsDisabledControlPressed(2, Control.Aim);
+
+                if (rightClick)
+                {
+                    _trackingEntity = GetEntityInCrosshair();
+                    if (_trackingEntity == null)
+                        _track = false;
+                }
+
+                if (_trackingEntity == null && !_track)
+                {
+                    _trackingEntity = GetEntityInCrosshair();
+                }
+
+
+                var color = DefaultCrosshair;
+                if (_trackingEntity != null)
+                {
+                    color = ActiveCrosshair;
+                }
+
+                DrawCrosshair(color);
+
+                if (_trackingEntity != null)
+                {
+                    if (rightClick)
+                    {
+                        _track = true;
+                    }
+                    var playerPos = Game.PlayerPed.Position;
+                    if (!_trackingEntity.Exists() || playerPos.DistanceToSquared(_trackingEntity.Position) > 1000f)
+                    {
+                        _track = false;
+                        _trackingEntity = null;
+                        return;
+                    }
+
+                    if (Game.IsDisabledControlJustPressed(2, Control.Attack))
+                    {
+                        _trackingEntity.Delete();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                await BaseScript.Delay(100);
+            }
+        }
+
+        public static void DrawCrosshair(Color? crosshairColor = null)
+        {
+            var color = crosshairColor ?? DefaultColor;
+            DrawRect(0.5f, 0.5f, 0.008333333f, 0.001851852f, color);
+            DrawRect(0.5f, 0.5f, 0.001041666f, 0.014814814f, color);
+        }
+        public static void DrawRect(float xPos, float yPos, float xScale, float yScale, Color color)
+        {
+            try
+            {
+                Function.Call(Hash.DRAW_RECT, xPos, yPos, xScale, yScale, color.R, color.G, color.B, color.A);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+            }
+        }
+
+        private static Vector3 CameraForwardVec()
+        {
+            var rotation = (float)(Math.PI / 180.0) * Function.Call<Vector3>(Hash.GET_GAMEPLAY_CAM_ROT, 2);
+            return Vector3.Normalize(new Vector3((float)-Math.Sin(rotation.Z) * (float)Math.Abs(Math.Cos(rotation.X)), (float)Math.Cos(rotation.Z) * (float)Math.Abs(Math.Cos(rotation.X)), (float)Math.Sin(rotation.X)));
+        }
+
+        private static Entity GetEntityInCrosshair()
+        {
+            var raycast = World.Raycast(GameplayCamera.Position, CameraForwardVec(), 100f, IntersectOptions.Everything, Game.PlayerPed);
+            if (!raycast.DitHit || !raycast.DitHitEntity || raycast.HitPosition == default(Vector3))
+            {
+                return null;
+            }
+            return raycast.HitEntity;
+        }
     }
 }

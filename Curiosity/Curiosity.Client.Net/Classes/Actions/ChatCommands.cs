@@ -91,6 +91,8 @@ namespace Curiosity.Client.net.Classes.Actions
         {
             API.AddRelationshipGroup("PLAYER", ref playerGroupHash);
 
+            client.RegisterEventHandler("curiosity:Player:Prop:Delete", new Action<string>(OnDeleteProp));
+
             client.RegisterEventHandler("curiosity:Client:Command:SpawnWeapon", new Action<string>(SpawnWeapon));
             client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string, string>(SpawnCar));
             client.RegisterEventHandler("curiosity:Client:Command:OnFire", new Action<string>(OnFire));
@@ -165,6 +167,30 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
 
             }), false);
+        }
+
+        static void OnDeleteProp(string message)
+        {
+            if (string.IsNullOrEmpty(message)) return;
+
+            string decryptedNetworkId = Encode.BytesToStringConverted(System.Convert.FromBase64String(message));
+
+            int propId = NetworkGetEntityFromNetworkId(int.Parse(decryptedNetworkId));
+
+            Entity entity = new Prop(propId);
+
+            if (entity == null) return;
+
+            int handle = entity.Handle;
+
+            entity.IsPersistent = false;
+            entity.IsPositionFrozen = false;
+            entity.Position = new Vector3(-2000f, -6000f, 0f);
+            entity.MarkAsNoLongerNeeded();
+
+            API.NetworkFadeOutEntity(entity.Handle, true, false);
+            entity.MarkAsNoLongerNeeded();
+            API.DeleteEntity(ref handle);
         }
 
         static async void ChimpSlap()
@@ -571,6 +597,11 @@ namespace Curiosity.Client.net.Classes.Actions
                     {
                         if (API.NetworkRequestControlOfEntity(objectHandle))
                         {
+                            objectEntity.IsPersistent = false;
+                            objectEntity.IsPositionFrozen = false;
+                            objectEntity.Position = new Vector3(-2000f, -6000f, 0f);
+                            objectEntity.MarkAsNoLongerNeeded();
+
                             API.SetEntityAsNoLongerNeeded(ref objectHandle);
                             API.DeleteEntity(ref objectHandleToDelete);
                         }
@@ -677,12 +708,19 @@ namespace Curiosity.Client.net.Classes.Actions
             await Client.Delay(1000);
             API.DeleteEntity(ref handle);
 
-            SendDeletionEvent($"{veh.NetworkId}");
+            SendVehicleDeletionEvent($"{veh.NetworkId}");
 
             await BaseScript.Delay(0);
         }
 
-        static void SendDeletionEvent(string vehicleNetworkId)
+        static void SendPropDeletionEvent(string propEntityId)
+        {
+            string encodedString = Encode.StringToBase64(propEntityId);
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Prop:Delete", encodedString));
+            BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
+        }
+
+        static void SendVehicleDeletionEvent(string vehicleNetworkId)
         {
             string encodedString = Encode.StringToBase64(vehicleNetworkId);
             string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));

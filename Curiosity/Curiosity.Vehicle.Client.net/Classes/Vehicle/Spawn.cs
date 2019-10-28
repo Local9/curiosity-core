@@ -38,7 +38,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     }
                 }
 
-                await model.Request(15000);
+                CitizenFX.Core.UI.Screen.ShowSubtitle("Trying to spawn requested vehicle, please wait...");
+
+                await model.Request(20000);
 
                 var veh = await World.CreateVehicle(model, spawnPosition, heading);
 
