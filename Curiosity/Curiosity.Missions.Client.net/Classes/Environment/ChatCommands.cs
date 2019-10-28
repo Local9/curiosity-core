@@ -53,12 +53,12 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
             if (location == 2)
             {
-                missions = DataClasses.Mission.PoliceStores.storesRural;
+                missions = DataClasses.Mission.PoliceStores.storesCountry;
             }
 
             if (location == 3)
             {
-                missions = DataClasses.Mission.PoliceStores.storesCountry;
+                missions = DataClasses.Mission.PoliceStores.storesRural;
             }
 
             if (missions == null)

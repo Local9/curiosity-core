@@ -178,8 +178,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 260.355f,
+                    SpawnPoint = new Vector3(-41.81285f, -1749.345f, 29.42101f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -237,8 +237,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 310.407f,
+                    SpawnPoint = new Vector3(-708.0243f, -904.0414f, 19.21559f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -296,8 +296,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 340.7079f,
+                    SpawnPoint = new Vector3(1161.371f, -313.7611f, 69.20514f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -355,8 +355,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 22.91358f,
+                    SpawnPoint = new Vector3(1126.472f, -980.517f, 45.41566f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -414,8 +414,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 42.99305f,
+                    SpawnPoint = new Vector3(-1484.027f, -375.3083f, 40.16343f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -473,8 +473,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 286.0046f,
+                    SpawnPoint = new Vector3(-1220.106f, -907.9452f, 12.32635f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -532,8 +532,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 359.4656f,
+                    SpawnPoint = new Vector3(29.65214f, -1343.586f, 29.49703f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -596,8 +596,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 352.3094f,
+                    SpawnPoint = new Vector3(1169.322f, 2714.104f, 38.15771f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -655,8 +655,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 24.69863f,
+                    SpawnPoint = new Vector3(2679.345f, 3288.867f, 55.24117f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -714,8 +714,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 78.98377f,
+                    SpawnPoint = new Vector3(1697.059f, 4923.034f, 42.06368f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -773,8 +773,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 153.3502f,
+                    SpawnPoint = new Vector3(547.7152f, 2663.135f, 42.15653f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -832,8 +832,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 57.55748f,
+                    SpawnPoint = new Vector3(1729.78f, 6418.804f, 35.03723f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -891,8 +891,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 358.3886f,
+                    SpawnPoint = new Vector3(1394.78f, 3613.35f, 34.98093f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -950,8 +950,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 295.6968f,
+                    SpawnPoint = new Vector3(1961.463f, 3749.31f, 32.34375f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -1013,8 +1013,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 340.6716f,
+                    SpawnPoint = new Vector3(-2965.421f, 392.5959f, 15.04331f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -1072,8 +1072,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 112.1929f,
+                    SpawnPoint = new Vector3(-3046.771f, 582.85f, 7.90893f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -1132,8 +1132,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 277.1693f,
+                    SpawnPoint = new Vector3(-3248.413f, 1002.209f, 12.83071f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -1191,8 +1191,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 26.31407f,
+                    SpawnPoint = new Vector3(-1825.169f, 800.7675f, 138.1038f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
@@ -1250,8 +1250,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 new MissionPedData
                 {
                     Model = PedHash.ShopKeep01,
-                    SpawnHeading = 257.2952f,
-                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    SpawnHeading = 0.9818109f,
+                    SpawnPoint = new Vector3(2550.074f, 386.6728f, 108.623f),
                     IsHostage = true,
                     Alertness = Extensions.Alertness.Nuetral
                 }
