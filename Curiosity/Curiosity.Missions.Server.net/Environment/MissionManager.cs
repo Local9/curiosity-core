@@ -56,7 +56,12 @@ namespace Curiosity.Missions.Server.net.Environment
             else
             {
                 MissionsActive.TryAdd(missionCreate.MissionId, new Tuple<string, int>(player.Handle, missionCreate.PatrolZone));
-                player.TriggerEvent("curiosity:Client:Mission:Start", missionMessage);
+
+                string json = JsonConvert.SerializeObject(missionCreate);
+
+                string encoded = Encode.StringToBase64(json);
+
+                player.TriggerEvent("curiosity:Client:Mission:Start", encoded);
             }
         }
 

@@ -47,7 +47,7 @@ namespace Curiosity.Missions.Client.net.Wrappers
         {
             this.Entity = ent;
 
-            client.RegisterTickHandler(this.OnTick);
+            client.RegisterTickHandler(this.EntityEventWrapperOnTick);
             EntityEventWrapper.Wrappers.Add(this);
         }
 
@@ -62,7 +62,7 @@ namespace Curiosity.Missions.Client.net.Wrappers
 
         public void Dispose()
         {
-            client.DeregisterTickHandler(this.OnTick);
+            client.DeregisterTickHandler(this.EntityEventWrapperOnTick);
 
             EntityEventWrapper.Wrappers.Remove(this);
             EntityEventWrapper.OnWrapperDisposedEvent onWrapperDisposedEvent = this.Disposed;
@@ -82,7 +82,7 @@ namespace Curiosity.Missions.Client.net.Wrappers
             EntityEventWrapper.Wrappers.Remove(entityEventWrapper);
         }
 
-        public async Task OnTick()
+        public async Task EntityEventWrapperOnTick()
         {
             if ((this.Entity == null ? false : this.Entity.Exists()))
             {

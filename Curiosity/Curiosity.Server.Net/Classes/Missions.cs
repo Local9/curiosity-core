@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Curiosity.Shared.Server.net.Helpers;
 using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Newtonsoft.Json;
@@ -26,9 +27,38 @@ namespace Curiosity.Server.net.Classes
             // Is mission ped
             // increase or decrease
 
+            API.RegisterCommand("mission", new Action<int, List<object>, string>(SendMission), false);
+
             server.RegisterEventHandler("curiosity:Server:Missions:KilledPed", new Action<CitizenFX.Core.Player, string>(OnKilledPed));
             server.RegisterEventHandler("curiosity:Server:Missions:CompletedMission", new Action<CitizenFX.Core.Player, bool>(OnCompletedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:EndMission", new Action<CitizenFX.Core.Player>(OnEndMission));
+        }
+
+        static void SendMission(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (!session.IsDeveloper) return;
+
+            if (arguments.Count < 2)
+            {
+                Helpers.Notifications.Advanced($"Agruments Missing", $"", 2, session.Player);
+                return;
+            }
+
+            MissionCreate missionCreate = new MissionCreate()
+            {
+                MissionId = int.Parse($"{arguments[0]}"),
+                PatrolZone = int.Parse($"{arguments[1]}")
+            };
+
+            string json = JsonConvert.SerializeObject(missionCreate);
+
+            string encoded = Encode.StringToBase64(json);
+
+            session.Player.TriggerEvent("curiosity:Client:Mission:Start", encoded);
         }
 
         static void OnEndMission([FromSource]CitizenFX.Core.Player player)

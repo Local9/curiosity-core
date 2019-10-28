@@ -159,6 +159,10 @@ namespace Curiosity.Shared.Client.net.Helper
 
         public static bool IsEntityAlive(Entity entity)
         {
+            if (entity == null)
+            {
+                return false;
+            }
             return IsEntityAlive(entity.Handle);
         }
 

@@ -38,7 +38,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static Blip LocationBlip;
         static Vector3 Location = new Vector3();
 
-        static public async void Create(Store store)
+        static public async Task Create(Store store)
         {
             if (store == null)
             {
@@ -49,23 +49,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             try
             {
 
-                RandomMissionHandler.SetIsOnActiveCallout(true);
-
                 SetupLocationBlip(store.Location);
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"{store.Name}", "459S Burglar alarm, silent", 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
 
-                client.RegisterTickHandler(MissionCancelAsync);
-
-                while (Game.PlayerPed.Position.Distance(store.Location) > 100f)
+                while (Game.PlayerPed.Position.Distance(store.Location) > 50f)
                 {
                     await BaseScript.Delay(0);
                 }
-
-                client.DeregisterTickHandler(MissionCancelAsync);
-
-                await BaseScript.Delay(100);
 
                 MissionPedData1 = store.missionPeds[0];
                 MissionPedData2 = store.missionPeds[1];
@@ -80,15 +72,23 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                         HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, MissionHostage.SpawnPoint, MissionHostage.SpawnHeading);
                         SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
                         new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
+                        SetPedScream(HostagePed.Handle);
                     }
                 }
 
-                await BaseScript.Delay(0);
+                await BaseScript.Delay(10);
 
-                MissionPed1 = await CreatePed(MissionPedData1);
-                MissionPed2 = await CreatePed(MissionPedData2);
-
+                Ped ped1 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData1.Model, MissionPedData1.SpawnPoint, MissionPedData1.SpawnHeading);
+                ped1.Weapons.Give(MissionPedData1.Weapon, 1, true, true);
+                MissionPed1 = PedCreators.MissionPedCreator.Ped(ped1, MissionPedData1.Alertness, MissionPedData1.Difficulty, MissionPedData1.VisionDistance);
+                
                 await BaseScript.Delay(0);
+                
+                Ped ped2 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData2.Model, MissionPedData2.SpawnPoint, MissionPedData2.SpawnHeading);
+                ped2.Weapons.Give(MissionPedData2.Weapon, 1, true, true);
+                MissionPed2 = PedCreators.MissionPedCreator.Ped(ped2, MissionPedData2.Alertness, MissionPedData2.Difficulty, MissionPedData2.VisionDistance);
+                
+                await BaseScript.Delay(500);
 
                 client.RegisterTickHandler(SpawnBackupPedOne);
                 client.RegisterTickHandler(SpawnBackupPedTwo);
@@ -125,7 +125,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                         running = false;
                     }
                 }
-                await BaseScript.Delay(500);
+                await BaseScript.Delay(1000);
             }
         }
 
@@ -148,13 +148,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                         running = false;
                     }
                 }
-                await BaseScript.Delay(500);
+                await BaseScript.Delay(1000);
             }
         }
 
         static async Task MissionCompletionChecks()
         {
             await Task.FromResult(0);
+
+            await Client.Delay(1000);
 
             if (MissionHostage != null)
             {
@@ -293,14 +295,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             RandomMissionHandler.SetIsOnActiveCallout(false);
 
             RandomMissionHandler.AllowNextMission();
-        }
-
-        static async Task<MissionPed> CreatePed(MissionPedData missionPedData)
-        {
-            Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(missionPedData.Model, missionPedData.SpawnPoint, missionPedData.SpawnHeading);
-            backup.Weapons.Give(missionPedData.Weapon, 1, true, true);
-
-            return PedCreators.MissionPedCreator.Ped(backup, missionPedData.Alertness, missionPedData.Difficulty, missionPedData.VisionDistance);
         }
 
         static bool AreMissionPedsDead()

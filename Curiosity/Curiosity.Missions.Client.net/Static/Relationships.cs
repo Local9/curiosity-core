@@ -9,6 +9,8 @@ namespace Curiosity.Missions.Client.net.Static
 {
     static class Relationships
     {
+        static Client client = Client.GetInstance();
+
         public static RelationshipGroup PlayerRelationship; 
         public static RelationshipGroup HostileRelationship;
         public static RelationshipGroup InfectedRelationship;
@@ -20,6 +22,13 @@ namespace Curiosity.Missions.Client.net.Static
         }
 
         static public void Init()
+        {
+            SetupRelationShips();
+
+            client.RegisterEventHandler("playerSpawned", new Action(SetupRelationShips));
+        }
+
+        static public void SetupRelationShips()
         {
             // Player
             PlayerRelationship = World.AddRelationshipGroup("PLAYER_RELATIONSHIP");

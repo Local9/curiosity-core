@@ -63,5 +63,10 @@ namespace Curiosity.Global.Shared.net.Entity
     {
         public int MissionId;
         public int PatrolZone;
+
+        public override string ToString()
+        {
+            return $"MissionId: {MissionId}, PatrolZone: {PatrolZone}";
+        }
     }
 }
