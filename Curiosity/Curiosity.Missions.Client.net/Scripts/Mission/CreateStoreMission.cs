@@ -292,8 +292,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
             RandomMissionHandler.SetIsOnActiveCallout(false);
 
-            if (RandomMissionHandler.IsOnDuty)
-                RandomMissionHandler.AllowNextMission();
+            RandomMissionHandler.AllowNextMission();
         }
 
         static async Task<MissionPed> CreatePed(MissionPedData missionPedData)

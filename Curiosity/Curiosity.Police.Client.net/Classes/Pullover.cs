@@ -140,10 +140,10 @@ namespace Curiosity.Police.Client.net.Classes
                 && Game.PlayerPed.IsInPoliceVehicle)
             {
 
-                if (Player.PlayerInformation.playerInfo.Skills["policexp"].Value < 4500)
+                if (Player.PlayerInformation.playerInfo.Skills["policexp"].Value < 2500)
                 {
 
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Experience Requirement", $"~b~Remaining: ~s~{4500 - Player.PlayerInformation.playerInfo.Skills["policexp"].Value:#,##0}", "Sorry you require 4,500 experience to do a pull over.", 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Experience Requirement", $"~b~Remaining: ~s~{2500 - Player.PlayerInformation.playerInfo.Skills["policexp"].Value:#,##0}", "Sorry you require 2,500 experience to do a pull over.", 2);
                     return;
                 }
 

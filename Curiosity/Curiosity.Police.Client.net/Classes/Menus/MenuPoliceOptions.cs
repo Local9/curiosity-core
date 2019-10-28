@@ -156,8 +156,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             if (!menuShowRadar.Enabled)
             {
                 string description = "~b~Require Additional;";
-                if (policexp < 4500)
-                    description += $"~n~- ~y~{4500 - policexp:#,##0} ~s~Police Experience";
+                if (policexp < 2500)
+                    description += $"~n~- ~y~{2500 - policexp:#,##0} ~s~Police Experience";
                 if (knowledge < 1000)
                     description += $"~n~- ~y~{1000 - knowledge:#,##0} ~s~Knowledge";
 
