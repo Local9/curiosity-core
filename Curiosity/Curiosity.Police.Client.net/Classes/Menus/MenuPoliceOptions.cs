@@ -35,14 +35,17 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static void OnDutyState(bool active, bool onduty, string job)
         {
             _IsActive = active;
-            _IsOnDuty = onduty;
             _ActiveJob = job;
+
+            if (_IsOnDuty != onduty)
+                _IsOnDuty = onduty;
         }
 
         static public void OpenMenu()
         {
-            MenuController.DontOpenAnyMenu = false;
             MenuBaseFunctions.MenuOpen();
+
+            MenuController.DontOpenAnyMenu = false;
             MenuController.EnableMenuToggleKeyOnController = false;
 
             if (MainMenu == null)
@@ -60,7 +63,6 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 MenuController.EnableMenuToggleKeyOnController = false;
             }
 
-            // MainMenu.ClearMenuItems();
             MainMenu.OpenMenu();
         }
 
@@ -116,14 +118,24 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             
         }
 
-        private static void OnMenuOpen(Menu menu)
+        private static async void OnMenuOpen(Menu menu)
         {
             MainMenu.ClearMenuItems();
 
             MenuBaseFunctions.MenuOpen();
 
+            menuDuty.Enabled = false;
+            menuListPatrolZone.Enabled = false;
+
             MainMenu.AddMenuItem(menuDuty);
             MainMenu.AddMenuItem(menuListPatrolZone);
+
+            await Client.Delay(100);
+
+            menuDuty.Enabled = true;
+            menuListPatrolZone.Enabled = true;
+
+            MenuBaseFunctions.MenuOpen();
         }
     }
 }

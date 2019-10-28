@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Curiosity.Shared.Client.net.Enums.Patrol;
+using Curiosity.Shared.Client.net;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
 using Newtonsoft.Json;
+using Curiosity.Missions.Client.net.Classes.PlayerClient;
 
 namespace Curiosity.Missions.Client.net.Scripts.Mission
 {
@@ -21,7 +23,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static long TimeStampOfLastCallout;
         static int RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);
-        static int PreviousMissionId;
+        static int PreviousMissionId = 0;
 
         static public bool IsOnDuty = false;
         static bool IsOnActiveCallout = false;
@@ -56,6 +58,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 if (IsOnActiveCallout)
                     CreateStoreMission.CleanUp(true);
 
+                Log.Info($"JOB: {job}");
+
                 return;
             }
 
@@ -67,7 +71,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
             IsOnDuty = onduty;
 
-            if (!IsOnDuty)
+            if (!onduty)
             {
                 if (PreviousMissionId > 0)
                     Client.TriggerServerEvent("curiosity:Server:Missions:Ended", PreviousMissionId);
@@ -75,14 +79,20 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 client.DeregisterTickHandler(OnGenerateRandomMission);
             }
 
-            if (!IsOnDuty && IsOnActiveCallout)
+            if (!onduty && IsOnActiveCallout)
             {
                 CreateStoreMission.CleanUp(true);
             }
             else
             {
-                IsRequestingCallout = false;
-                client.RegisterTickHandler(OnGenerateRandomMission);
+                if (onduty)
+                {
+                    IsRequestingCallout = false;
+                    IsOnActiveCallout = false;
+                    TimeStampOfLastCallout = GetGameTimer();
+                    client.RegisterTickHandler(OnGenerateRandomMission);
+                    Log.Info($"Player is on duty");
+                }
             }
 
             await Client.Delay(3000);
@@ -115,20 +125,23 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static async Task OnGenerateRandomMission()
         {
-            if (!IsOnDuty)
-            {
-                client.DeregisterTickHandler(OnGenerateRandomMission);
-                return;
-            }
-
             if (!IsOnActiveCallout)
             {
                 HasAcceptedCallout = false;
 
-                if ((GetGameTimer() - TimeStampOfLastCallout) < RandomTimeBetweenCallouts)
+                if (!ClientInformation.IsDeveloper())
                 {
-                    await Client.Delay(10000);
-                    return;
+                    if ((GetGameTimer() - TimeStampOfLastCallout) < RandomTimeBetweenCallouts)
+                    {
+                        if (ClientInformation.IsDeveloper())
+                        {
+                            Log.Info($"Waiting to create mission {RandomTimeBetweenCallouts}");
+                            Log.Info($"Waiting to create mission {(GetGameTimer() - TimeStampOfLastCallout)}");
+                        }
+
+                        await Client.Delay(10000);
+                        return;
+                    }
                 }
 
                 if (IsRequestingCallout)
@@ -189,6 +202,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 MissionId = missionId,
                 PatrolZone = (int)patrolZone
             };
+
+            if (ClientInformation.IsDeveloper())
+            {
+                Log.Info($"Requesting Mission");
+            }
 
             string message = Encode.StringToBase64(JsonConvert.SerializeObject(missionMessage));
 

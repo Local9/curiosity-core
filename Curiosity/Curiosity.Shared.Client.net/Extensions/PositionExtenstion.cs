@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Classes.Data;
 
@@ -29,6 +24,11 @@ namespace Curiosity.Shared.Client.net.Extensions
         public static Position ToPosition(this Vector3 vector)
         {
             return new Position(vector.X, vector.Y, vector.Z);
+        }
+
+        public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
+        {
+            return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
         }
 
         public static float Distance(this Position position, Position target, bool useZ = false)

@@ -17,9 +17,7 @@ namespace Curiosity.Missions.Server.net.Environment
 
         public static void Init()
         {
-            server.RegisterEventHandler("playerDropped", new Action<Player, string>(OnPlayerDropped));
-
-            server.RegisterEventHandler("curiosity:Server:Missions:Available ", new Action<Player, string>(OnMissionAvailable));
+            server.RegisterEventHandler("curiosity:Server:Missions:Available", new Action<Player, string>(OnMissionAvailable));
             server.RegisterEventHandler("curiosity:Server:Missions:Ended", new Action<Player, int>(OnMissionEnded));
         }
 
@@ -48,6 +46,8 @@ namespace Curiosity.Missions.Server.net.Environment
             await RemovePlayerMission(player);
 
             MissionCreate missionCreate = JsonConvert.DeserializeObject<MissionCreate>(Encode.Base64ToString(missionMessage));
+
+            Log.Info($"{player.Name}: MissionId[{missionCreate.MissionId}], Zone[{missionCreate.PatrolZone}]");
 
             if (MissionsActive.ContainsKey(missionCreate.MissionId))
             {

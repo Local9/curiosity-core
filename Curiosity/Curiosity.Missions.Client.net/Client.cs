@@ -71,7 +71,7 @@ namespace Curiosity.Missions.Client.net
         {
             try
             {
-                // Debug.WriteLine($"{action.Method.Name}");
+                // Debug.WriteLine($"REGISTERED: {action.Method.Name}");
                 Tick += action;
             }
             catch (Exception ex)
@@ -88,6 +88,7 @@ namespace Curiosity.Missions.Client.net
         {
             try
             {
+                // Debug.WriteLine($"DEREGISTERED: {action.Method.Name}");
                 Tick -= action;
             }
             catch (Exception ex)

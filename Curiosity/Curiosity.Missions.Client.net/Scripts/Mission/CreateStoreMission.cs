@@ -11,7 +11,6 @@ using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
-using Curiosity.Shared.Client.net.Enums.Patrol;
 
 
 namespace Curiosity.Missions.Client.net.Scripts.Mission
@@ -37,7 +36,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static bool HostageKilled = false;
 
         static Blip LocationBlip;
-        static Position Location = new Position();
+        static Vector3 Location = new Vector3();
 
         static public async void Create(Store store)
         {
@@ -59,7 +58,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 client.RegisterTickHandler(MissionCancelAsync);
 
-                while (Game.PlayerPed.Position.DistanceToSquared(store.Location) > 1000)
+                while (Game.PlayerPed.Position.Distance(store.Location) > 500f)
                 {
                     await BaseScript.Delay(0);
                 }
@@ -70,12 +69,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 MissionPedData3 = store.missionPeds[2];
                 MissionPedData4 = store.missionPeds[3];
 
-                if (store.hostages.Count > 0)
+                if (store.hostages != null)
                 {
-                    MissionHostage = store.hostages[0];
-                    HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, MissionHostage.SpawnPoint, MissionHostage.SpawnHeading);
-                    SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
-                    new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
+                    if (store.hostages.Count > 0)
+                    {
+                        MissionHostage = store.hostages[0];
+                        HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, MissionHostage.SpawnPoint, MissionHostage.SpawnHeading);
+                        SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
+                        new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
+                    }
                 }
 
                 MissionPed1 = await CreatePed(MissionPedData1);
@@ -88,7 +90,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             }
             catch (Exception ex)
             {
-                Log.Error("[CreateStoreMission] Mission filed creation");
+                Log.Error("[CreateStoreMission] Mission failed creation");
+
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                {
+                    Log.Error($"{ex}");
+                }
             }
         }
 
@@ -231,6 +238,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             RemoveEntity(MissionPed3);
             RemoveEntity(MissionPed4);
 
+            RemoveEntity(HostagePed);
+
             if (cancelMission)
             {
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Cancelled", $"No Payout", string.Empty, 2);
@@ -241,14 +250,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 Client.TriggerServerEvent("curiosity:Server:Missions:CompletedMission", !HostageKilled);
             }
 
-            Position position = new Position(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z);
+            Vector3 position = Game.PlayerPed.Position;
 
             while (Location.Distance(position) < 100f)
             {
                 await BaseScript.Delay(0);
                 Screen.DisplayHelpTextThisFrame($"Please leave the area");
-                position = new Position(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z);
+                position = Game.PlayerPed.Position;
             }
+
+            if (!cancelMission)
+                Screen.DisplayHelpTextThisFrame($"Thank you");
 
             HostageReleased = false;
             HostageKilled = false;
@@ -258,8 +270,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             MissionPedData3 = null;
             MissionPedData4 = null;
             MissionHostage = null;
-
-            RemoveEntity(HostagePed);
 
             ClearAreaOfPeds(LocationBlip.Position.X, LocationBlip.Position.Y, LocationBlip.Position.Z, 200f, 1);
 
@@ -291,9 +301,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static void SetupLocationBlip(Vector3 location)
         {
-            Location.X = location.X;
-            Location.Y = location.Y;
-            Location.Z = location.Z;
+            Location = Location;
 
             if (LocationBlip != null)
             {

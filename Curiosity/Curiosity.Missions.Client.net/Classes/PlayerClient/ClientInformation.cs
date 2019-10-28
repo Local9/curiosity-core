@@ -48,6 +48,11 @@ namespace Curiosity.Missions.Client.net.Classes.PlayerClient
             patrolZone = (PatrolZone)location;
         }
 
+        public static bool IsDeveloper()
+        {
+            return privilege == Privilege.DEVELOPER;
+        }
+
         static void OnIsPlayerCalloutActive()
         {
             Client.TriggerEvent("curiosity:Client:Mission:CalloutState", IsPlayerCalloutActive);
