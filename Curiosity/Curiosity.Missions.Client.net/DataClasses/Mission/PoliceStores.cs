@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.DataClasses.Mission
 {
