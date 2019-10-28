@@ -1,6 +1,11 @@
 ﻿using Curiosity.Client.net.Helpers;
 using Curiosity.Shared.Client.net;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Curiosity.Client.net.Classes.Player;
+using Curiosity.Global.Shared.net.Enums;
+using CitizenFX.Core;
 //using FamilyRP.Roleplay.SharedClasses;
 //using FamilyRP.Roleplay.Client.Classes.Environment.Controls;
 //using FamilyRP.Roleplay.Client.Helpers;
@@ -15,15 +20,19 @@ using System;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
-    public class DevCommands : CommandProcessor
+    class DevCommands : CommandProcessor
     {
         public static bool IsDevUIEnabled = false;
         public static bool IsDevEntityUIEnabled = false;
 
-        public DevCommands()
+        static Client client = Client.GetInstance();
+
+        public static void Init()
         {
             try
             {
+                client.RegisterCommand("allweapons", new Action<int, List<object>, string>(GiveAllWeapons), false);
+
                 //Client.GetInstance().ClientCommands.Register("/dev", Handle);
                 //Register("ui", ToggleDevUI);
                 //Register("eui", ToggleEntityUI);
@@ -122,16 +131,18 @@ namespace Curiosity.Client.net.Classes.Environment
         //    }
         //}
 
-        ////[RequiresPermissionFlags(Permissions.Dev)]
-        //private void GiveAllWeapons(Command command)
-        //{
-        //    Enum.GetValues(typeof(WeaponHash)).OfType<WeaponHash>().ToList().ForEach(w =>
-        //    {
-        //        Game.PlayerPed.Weapons.Give(w, 999, false, true);
-        //        //Game.PlayerPed.Weapons[w].InfiniteAmmo = true;
-        //        //Game.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
-        //    });
-        //}
+        // [RequiresPermissionFlags(Privilege.PROJECTMANAGER)]
+        private static void GiveAllWeapons(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+
+            Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
+            {
+                Game.PlayerPed.Weapons.Give(w, 999, false, true);
+                Game.PlayerPed.Weapons[w].InfiniteAmmo = true;
+                Game.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
+            });
+        }
 
         ////[RequiresPermissionFlags(Permissions.Dev)]
         //private async void CreateRandPed(Command command)

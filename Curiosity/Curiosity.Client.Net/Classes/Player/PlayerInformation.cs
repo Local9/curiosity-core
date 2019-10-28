@@ -3,6 +3,7 @@ using static CitizenFX.Core.Native.API;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using System;
+using System.Security;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Player
@@ -103,6 +104,15 @@ namespace Curiosity.Client.net.Classes.Player
                 BaseScript.TriggerServerEvent("curiosity:Server:Player:GetInformation");
                 await BaseScript.Delay(60000);
             }
+        }
+    }
+
+    class RequiresPermissionFlags : Attribute
+    {
+        public RequiresPermissionFlags(Privilege privilege)
+        {
+            if (Player.PlayerInformation.privilege != privilege)
+                throw new SecurityException("You don't have the access rights to perform this action");
         }
     }
 }

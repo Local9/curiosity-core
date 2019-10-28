@@ -53,16 +53,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 SetupLocationBlip(store.Location);
 
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "459S Burglar alarm, silent", $"{store.Name}", string.Empty, 2);
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"{store.Name}", "459S Burglar alarm, silent", 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
 
                 client.RegisterTickHandler(MissionCancelAsync);
 
-                while (Game.PlayerPed.Position.Distance(store.Location) > 500f)
+                while (Game.PlayerPed.Position.Distance(store.Location) > 250f)
                 {
                     await BaseScript.Delay(0);
                 }
 
+                client.DeregisterTickHandler(MissionCancelAsync);
+
+                await BaseScript.Delay(100);
 
                 MissionPedData1 = store.missionPeds[0];
                 MissionPedData2 = store.missionPeds[1];
@@ -80,8 +83,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     }
                 }
 
+                await BaseScript.Delay(0);
+
                 MissionPed1 = await CreatePed(MissionPedData1);
                 MissionPed2 = await CreatePed(MissionPedData2);
+
+                await BaseScript.Delay(0);
 
                 client.RegisterTickHandler(SpawnBackupPedOne);
                 client.RegisterTickHandler(SpawnBackupPedTwo);
@@ -153,7 +160,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             {
                 if (HostagePed.IsAlive)
                 {
-                    if (HostagePed.Position.DistanceToSquared(Game.PlayerPed.Position) < 2f && !HostageReleased)
+                    if (HostagePed.Position.Distance(Game.PlayerPed.Position) < 2f && !HostageReleased)
                     {
                         Screen.DisplayHelpTextThisFrame($"Press and hold ~INPUT_PICKUP~ to free the hostage.");
 
@@ -293,6 +300,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         {
             Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(missionPedData.Model, missionPedData.SpawnPoint, missionPedData.SpawnHeading);
             backup.Weapons.Give(missionPedData.Weapon, 1, true, true);
+
             return PedCreators.MissionPedCreator.Ped(backup, missionPedData.Alertness, missionPedData.Difficulty, missionPedData.VisionDistance);
         }
 
@@ -303,7 +311,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static void SetupLocationBlip(Vector3 location)
         {
-            Location = Location;
+            Location = location;
 
             if (LocationBlip != null)
             {

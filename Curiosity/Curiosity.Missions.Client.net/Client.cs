@@ -25,7 +25,7 @@ namespace Curiosity.Missions.Client.net
 
             ClassLoader.Init();
 
-            Log.Info("Curiosity.Mobile.Client.net loaded\n");
+            Log.Info("Curiosity.Missions.Client.net loaded\n");
         }
 
         /// <summary>

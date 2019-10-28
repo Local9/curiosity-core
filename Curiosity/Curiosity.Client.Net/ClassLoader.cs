@@ -130,6 +130,7 @@ namespace Curiosity.Client.net
             //EmotesManager.Init();
             //Stay.Init();
 
+            DevCommands.Init();
         }
     }
 }

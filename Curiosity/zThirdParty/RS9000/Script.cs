@@ -52,6 +52,8 @@ namespace RS9000
                     Radar = new Radar(this);
                     controller = new Controller(this, Radar);
 
+                    RegisterEventHandler("rs9000:ToggleRadar", new Action(OnToggleRadar));
+
                     Tick += Update;
                     Tick += CheckInputs;
                 }
@@ -124,16 +126,22 @@ namespace RS9000
                 Radar.IsDisplayed = true;
             }
 
-            if (ControlPressed(Config.Controls.OpenControlPanel) && inEmergencyVehicle)
-            {
-                controller.Visible = !controller.Visible;
-            }
-            else if (ControlPressed(Config.Controls.ResetLock) && inEmergencyVehicle)
+            //if (ControlPressed(Config.Controls.OpenControlPanel) && inEmergencyVehicle)
+            //{
+            //    controller.Visible = !controller.Visible;
+            //}
+
+            if (ControlPressed(Config.Controls.ResetLock) && inEmergencyVehicle)
             {
                 Radar.ResetFast();
             }
 
             await Task.FromResult(0);
+        }
+
+        private void OnToggleRadar()
+        {
+            controller.Visible = !controller.Visible;
         }
 
         private bool ControlPressed(ControlConfig config)

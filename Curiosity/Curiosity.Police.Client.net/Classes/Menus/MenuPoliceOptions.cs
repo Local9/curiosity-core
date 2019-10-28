@@ -19,8 +19,9 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         static List<string> patrolAreas = new List<string>();
 
-        static MenuCheckboxItem menuDuty = new MenuCheckboxItem("On Active Duty", _IsOnDuty);
-        static MenuListItem menuListPatrolZone = new MenuListItem("Set Patrol Zone", patrolAreas, _patrolZone);
+        static MenuCheckboxItem menuDuty = new MenuCheckboxItem("Accepting Dispatch Calls", _IsOnDuty);
+        static MenuListItem menuListPatrolZone = new MenuListItem("Area of Patrol", patrolAreas, _patrolZone);
+        static MenuItem menuShowRadar = new MenuItem("Open Radar");
 
         static public void Init()
         {
@@ -102,7 +103,12 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
         {
+            if (menuItem == menuShowRadar)
+            {
+                Client.TriggerEvent("rs9000:ToggleRadar");
 
+                MainMenu.CloseMenu();
+            }
         }
 
         private static void OnMenuClose(Menu menu)
@@ -130,12 +136,65 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             MainMenu.AddMenuItem(menuDuty);
             MainMenu.AddMenuItem(menuListPatrolZone);
 
+            bool canPullover = false;
+            int policexp = 0;
+            int knowledge = 0;
+
+            if (Player.PlayerInformation.playerInfo.Skills.ContainsKey("policexp"))
+            {
+                policexp = Player.PlayerInformation.playerInfo.Skills["policexp"].Value;
+
+                if (Player.PlayerInformation.playerInfo.Skills.ContainsKey("knowledge"))
+                {
+                    knowledge = Player.PlayerInformation.playerInfo.Skills["knowledge"].Value;
+                    canPullover = (policexp >= 4500 && knowledge >= 1000);
+                }
+            }
+
+            menuShowRadar.Enabled = canPullover;
+            
+            if (!menuShowRadar.Enabled)
+            {
+                string description = "~b~Require Additional;";
+                if (policexp < 4500)
+                    description += $"~n~- ~y~{4500 - policexp:#,##0} ~s~Police Experience";
+                if (knowledge < 1000)
+                    description += $"~n~- ~y~{1000 - knowledge:#,##0} ~s~Knowledge";
+
+                menuShowRadar.Description = description;
+            }
+            else
+            {
+                if (GetVehicleDriving(Game.PlayerPed) == null)
+                {
+                    menuShowRadar.Description = "Must be in an ~b~Emergency Vehicle~s~ to open.";
+                }
+                else
+                {
+                    menuShowRadar.Description = "Open Radar";
+                }
+            }
+
+            MainMenu.AddMenuItem(menuShowRadar);
+
             await Client.Delay(100);
 
             menuDuty.Enabled = true;
             menuListPatrolZone.Enabled = true;
 
             MenuBaseFunctions.MenuOpen();
+        }
+        public static Vehicle GetVehicleDriving(Ped ped)
+        {
+            Vehicle v = ped.CurrentVehicle;
+            bool driving = ped.SeatIndex == VehicleSeat.Driver;
+
+            if (v == null || !driving || v.ClassType != VehicleClass.Emergency)
+            {
+                return null;
+            }
+
+            return v;
         }
     }
 }

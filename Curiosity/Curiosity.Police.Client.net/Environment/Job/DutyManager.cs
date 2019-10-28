@@ -68,7 +68,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", false, string.Empty, string.Empty);
             Game.PlayerPed.IsInvincible = false;
-            Game.PlayerPed.Weapons.RemoveAll();
+            // Game.PlayerPed.Weapons.RemoveAll();
 
             IsOnDuty = dutyState;
 

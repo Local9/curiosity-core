@@ -96,6 +96,23 @@ namespace Curiosity.Client.net
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
+        public void RegisterCommand(string command, Delegate action, bool restricted)
+        {
+            try
+            {
+                API.RegisterCommand(command, action, restricted);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Registers a network event
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="action"></param>
         public void RegisterEventHandler(string name, Delegate action)
         {
             try

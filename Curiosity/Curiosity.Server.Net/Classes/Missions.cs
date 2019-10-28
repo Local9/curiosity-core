@@ -8,6 +8,7 @@ using CitizenFX.Core;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Newtonsoft.Json;
+using Curiosity.Server.net.Helpers;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -78,7 +79,11 @@ namespace Curiosity.Server.net.Classes
 
             string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(missionMessage));
 
-            player.TriggerEvent("curiosity:Client:Scalefrom:MissionComplete", encoded);
+            string subTitle = passed ? "Successful" : "Unsuccessful";
+
+            player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch Complete", subTitle, $"Hostages Saved: ~y~{missionMessage.MissionCompleted}");
+            
+            player.TriggerEvent("curiosity:Client:Missions:MissionComplete");
         }
 
         static void OnKilledPed([FromSource]CitizenFX.Core.Player player, string data)
