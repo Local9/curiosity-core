@@ -1,25 +1,102 @@
 <html>
-    <head>
-        <!-- Need to include jQuery! -->
-        <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
-        <script>
-            var audioPlayer = null;
-            // Listen for NUI Messages.
-            window.addEventListener('message', function(event) {
-                // Check for playSound transaction
-                if (event.data.transactionType == "playSound") {
-				
-                  if (audioPlayer != null) {
-                    audioPlayer.pause();
-                  }
 
-                  audioPlayer = new Howl({src: ["./audio/" + event.data.transactionFile + ".wav"]});
-                  audioPlayer.volume(event.data.transactionVolume);
-                  audioPlayer.play();
+<head>
+    <!-- Need to include jQuery! -->
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
+    <script>
+        var audioPlayer = null;
+		var playlist = null;
+		var index = null;
 
+        var Player = function (playlist) {
+            this.playlist = playlist;
+            this.index = 0;
+
+			console.log(JSON.stringify(this.playlist))
+        };
+
+        Player.prototype = {
+            /**
+             * Play a song in the playlist.
+             * @param  {Number} index Index of the song in the playlist (leave empty to play the first or current).
+             */
+            play: function (index) {
+                var self = this;
+                var sound;
+
+                index = typeof index === 'number' ? index : self.index;
+                var data = self.playlist[index];
+
+                // If we already loaded this track, use the current one.
+                // Otherwise, setup and load a new Howl.
+                if (data.howl) {
+                    sound = data.howl;
+                } else {
+                    sound = data.howl = new Howl({
+                        src: [data.file],
+						autoplay: true,
+                        onend: function () {
+                            self.skip('next');
+                        },
+                    });
                 }
-            });
-        </script>
-    </head>
+
+                // Begin playing the sound.
+                sound.play();
+                self.index = index;
+            },
+
+            /**
+             * Skip to the next or previous track.
+             * @param  {String} direction 'next' or 'prev'.
+             */
+            skip: function (direction) {
+                var self = this;
+
+                // Get the next track based on the direction of the track.
+                var index = 0;
+                if (direction === 'prev') {
+                    index = self.index - 1;
+                    if (index < 0) {
+                        index = self.playlist.length - 1;
+                    }
+                } else {
+                    index = self.index + 1;
+                    if (index >= self.playlist.length) {
+                        index = 0;
+                    }
+                }
+
+                self.skipTo(index);
+            }
+        };
+
+        // Listen for NUI Messages.
+        window.addEventListener('message', function (event) {
+            // Check for playSound transaction
+            if (event.data.transactionType == "playSound") {
+
+                if (audioPlayer != null) {
+                    audioPlayer.pause();
+                }
+
+				Howler.volume(event.data.transactionVolume);
+
+                if (event.data.audioQueue.length > 0) {
+					console.log("PLAY PLAYLIST");
+                    var player = new Player(event.data.audioQueue);
+					player.play();
+                } else {
+                    audioPlayer = new Howl({
+                        src: ["./audio/" + event.data.transactionFile + ".wav"]
+                    });
+                    audioPlayer.play();
+                }
+
+            }
+        });
+    </script>
+</head>
+
 </html>

@@ -13,6 +13,14 @@ namespace Curiosity.Missions.Client.net.DataClasses
         public float transactionVolume;
         public int delayAudio;
 
+        public List<string> audioQueue = new List<string>();
+
+        public SoundMessage(float vol)
+        {
+            transactionType = "playSound";
+            transactionVolume = vol;
+        }
+
         public SoundMessage(string file, float vol, int delay = 1000)
         {
             transactionFile = file;

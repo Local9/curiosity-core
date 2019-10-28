@@ -67,7 +67,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             StopSpam = true;
 
             if (IsOnDuty != onduty)
-                SoundManager.PlayAudioFile($"REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)}");
+            {
+                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)}");
+            }
 
             IsOnDuty = onduty;
 

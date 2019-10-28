@@ -173,11 +173,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCity.Add(2, new DataClasses.Mission.Store
             {
                 Name = "LTD Garage, Davis Ave",
                 Location = new Vector3(-53.7861f, -1757.661f, 29.43897f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -219,11 +232,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCity.Add(3, new DataClasses.Mission.Store
             {
                 Name = "LTD, Palomino Ave & Ginger St",
                 Location = new Vector3(-711.6313f, -918.0067f, 19.21452f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -265,11 +291,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCity.Add(4, new DataClasses.Mission.Store
             {
                 Name = "LTD, West Mirror Drive",
                 Location = new Vector3(1159.815f, -327.377f, 69.21338f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -311,11 +350,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCity.Add(5, new DataClasses.Mission.Store
             {
                 Name = "Rob's Liquor, Vespucci Blvd",
                 Location = new Vector3(1142.1f, -980.7694f, 46.20402f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -357,11 +409,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCity.Add(6, new DataClasses.Mission.Store
             {
                 Name = "Rob's Liquor, Prosperity St",
                 Location = new Vector3(-1491.354f, -384.2097f, 40.08645f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -403,11 +468,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCity.Add(7, new DataClasses.Mission.Store
             {
                 Name = "Rob's Liquor, San Andreas Ave",
                 Location = new Vector3(-1226.846f, -901.4744f, 12.28888f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -449,11 +527,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCity.Add(8, new DataClasses.Mission.Store
             {
                 Name = "24/7, Elgin Ave",
                 Location = new Vector3(29.32283f, -1349.734f, 29.32919f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -500,11 +591,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCountry.Add(9, new DataClasses.Mission.Store
             {
                 Name = "Scoops Liquor Barn",
                 Location = new Vector3(1166.458f, 2702.856f, 38.17914f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -546,11 +650,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCountry.Add(10, new DataClasses.Mission.Store
             {
                 Name = "24/7, Grand Senora Desert",
                 Location = new Vector3(2683.266f, 3281.896f, 55.24052f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -592,11 +709,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCountry.Add(11, new DataClasses.Mission.Store
             {
                 Name = "LTD Garage, Grapeseed",
                 Location = new Vector3(1698.641f, 4929.917f, 42.0781f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -638,11 +768,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCountry.Add(12, new DataClasses.Mission.Store
             {
                 Name = "24/7, Harmony",
                 Location = new Vector3(543.722f, 2674.618f, 42.15475f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -684,11 +827,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCountry.Add(13, new DataClasses.Mission.Store
             {
                 Name = "24/7, Mount Chiliad",
                 Location = new Vector3(1730.532f, 6410.807f, 35.00065f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -730,11 +886,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCountry.Add(14, new DataClasses.Mission.Store
             {
                 Name = "Liquor ACE, Sandy Shores",
                 Location = new Vector3(1394.598f, 3598.536f, 34.99088f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -776,11 +945,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesCountry.Add(15, new DataClasses.Mission.Store
             {
                 Name = "24/7, Sandy Shores",
                 Location = new Vector3(1965.68f, 3739.752f, 32.32018f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -826,11 +1008,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesRural.Add(16, new DataClasses.Mission.Store
             {
                 Name = "Rob's Liquor, Banham Canyon",
                 Location = new Vector3(-2974.973f, 390.8409f, 15.03081f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -872,11 +1067,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesRural.Add(17, new DataClasses.Mission.Store
             {
                 Name = "24/7, Banham Canyon",
                 Location = new Vector3(-3036.43f, 589.7015f, 7.811507f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -919,11 +1127,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesRural.Add(18, new DataClasses.Mission.Store
             {
                 Name = "24/7, Chumash",
                 Location = new Vector3(-3238.816f, 1004.304f, 12.45766f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -965,11 +1186,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesRural.Add(19, new DataClasses.Mission.Store
             {
                 Name = "24/7, Richman Glen",
                 Location = new Vector3(-1819.346f, 786.3083f, 137.9569f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 
@@ -1011,11 +1245,24 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 },
             };
 
+            List<MissionPedData> hostages = new List<MissionPedData>()
+            {
+                new MissionPedData
+                {
+                    Model = PedHash.ShopKeep01,
+                    SpawnHeading = 257.2952f,
+                    SpawnPoint = new Vector3(379.5025f,332.2108f,103.5664f),
+                    IsHostage = true,
+                    Alertness = Extensions.Alertness.Nuetral
+                }
+            };
+
             storesRural.Add(20, new DataClasses.Mission.Store
             {
                 Name = "24/7, Tataviam Mountains",
                 Location = new Vector3(2561.057f, 385.2407f, 108.6211f),
-                missionPeds = pedData
+                missionPeds = pedData,
+                hostages = hostages
             });
         }
 

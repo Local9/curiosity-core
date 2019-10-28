@@ -77,7 +77,14 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
             Screen.ShowNotification($"Mission {storeMission.Name}");
 
-            Scripts.Mission.CreateStoreMission.Create(storeMission);
+            if (arguments.Count > 2)
+            {
+                Game.PlayerPed.Position = storeMission.Location;
+            }
+            else
+            {
+                Scripts.Mission.CreateStoreMission.Create(storeMission);
+            }
         }
 
         //static async void Callout()

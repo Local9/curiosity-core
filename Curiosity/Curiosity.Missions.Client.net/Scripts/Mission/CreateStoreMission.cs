@@ -216,6 +216,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static void RemoveEntity(Entity ent)
         {
+            if (ent == null) return;
+
             if (ent.Exists())
             {
                 NetworkFadeOutEntity(ent.Handle, false, false);
