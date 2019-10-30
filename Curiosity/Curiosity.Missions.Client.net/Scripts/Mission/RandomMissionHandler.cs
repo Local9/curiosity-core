@@ -94,6 +94,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             if (!onduty && IsOnActiveCallout)
             {
                 CreateStoreMission.CleanUp(true);
+                client.DeregisterTickHandler(OnGenerateRandomMission);
             }
             else
             {
