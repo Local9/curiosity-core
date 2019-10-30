@@ -103,15 +103,16 @@ namespace Curiosity.Server.net.Classes
             else
             {
                 missionMessage.MissionCompleted = 0;
-                missionMessage.MoneyLost = 100;
-                Bank.DecreaseCashInternally(player.Handle, missionMessage.MoneyLost);
+                missionMessage.HostagesRescued = 0;
+                //missionMessage.MoneyLost = 100;
+                //Bank.DecreaseCashInternally(player.Handle, missionMessage.MoneyLost);
             }
 
             string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(missionMessage));
 
             string subTitle = passed ? "Successful" : "Unsuccessful";
 
-            player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch Complete", subTitle, $"Hostages Saved: ~y~{missionMessage.MissionCompleted}");
+            player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch Complete", subTitle, $"Hostages Saved: ~y~{missionMessage.HostagesRescued}");
             
             player.TriggerEvent("curiosity:Client:Missions:MissionComplete");
         }
