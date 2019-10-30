@@ -50,7 +50,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                     };
 
                     MenuItem messagePlayer = new MenuItem("Message") { Enabled = false, Description = "Coming Soon", RightIcon = MenuItem.Icon.LOCK };
-                    menu.AddMenuItem(messagePlayer);
+                    playerMenu.AddMenuItem(messagePlayer);
 
                     Menu reportingOptions = PlayerInteractions.ReportInteraction.CreateMenu("Report", player);
                     AddSubMenu(playerMenu, reportingOptions);
