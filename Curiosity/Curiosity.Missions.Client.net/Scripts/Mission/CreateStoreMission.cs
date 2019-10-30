@@ -46,10 +46,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 return;
             }
 
+            // SETUP/RESET
+            HostageReleased = false;
+            HostageKilled = false;
             Static.Relationships.SetupRelationShips();
 
             try
             {
+
+                HostageReleased = false;
 
                 SetupLocationBlip(store.Location);
 
@@ -197,7 +202,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                         }
                     }
 
-                    if (HostageReleased)
+                    if (HostageReleased && Game.PlayerPed.IsAlive)
                     {
                         HostagePed.Task.FleeFrom(HostagePed.Position);
                         Screen.DisplayHelpTextThisFrame($"Hostage has been freed");
@@ -214,7 +219,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 }
             }
 
-            if (HostageReleased)
+            if (HostageReleased && Game.PlayerPed.IsAlive)
             {
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Completed", $"Hostage Rescued", string.Empty, 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
