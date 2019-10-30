@@ -15,7 +15,7 @@ namespace Curiosity.Police.Client.net
         private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
 
         public static uint PlayerGroupHash = 0;
-        public static string PLAYER_GROUP = "PLAYER";
+        public static string PLAYER_GROUP = "PLAYER_RELATIONSHIP";
         public static RelationshipGroup PlayerRelationshipGroup;
 
         public static bool IsChristmas = false;

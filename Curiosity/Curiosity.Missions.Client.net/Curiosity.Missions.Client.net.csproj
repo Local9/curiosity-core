@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="DataClasses\SoundMessage.cs" />
+    <Compile Include="Scripts\MissionEvents.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />
     <Compile Include="Scripts\PedCreators\PedCreator.cs" />
     <Compile Include="Classes\PlayerClient\ClientInformation.cs" />

@@ -7,6 +7,7 @@ using System.Linq;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Newtonsoft.Json;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {

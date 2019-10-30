@@ -27,6 +27,7 @@ namespace Curiosity.Missions.Client.net
 
             // MISSION HANDLER
             Scripts.Mission.RandomMissionHandler.Init();
+            Scripts.MissionEvents.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

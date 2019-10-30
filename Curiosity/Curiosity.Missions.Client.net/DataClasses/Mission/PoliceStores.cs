@@ -45,29 +45,29 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
 
             await Task.FromResult(0);
 
-            // City
+            //// City
             InitCityClintonAve();
-            //InitCityDavisAve();
-            //InitCityLittleSeoul();
-            //InitCityMurrietaHeights();
-            //InitCityWestMirrorDrive();
-            //InitCityProsperityStreet();
-            //InitCitySanAndreasAve();
-            //InitCityStrawberry();
+            InitCityDavisAve();
+            InitCityLittleSeoul();
+            InitCityMurrietaHeights();
+            InitCityWestMirrorDrive();
+            InitCityProsperityStreet();
+            InitCitySanAndreasAve();
+            InitCityStrawberry();
             //// County
-            //InitCountryGrandSenoraDesertScoops();
-            //InitCountryGrandSenoraDesertTwentyFour();
-            //InitCountryGrapeseed();
-            //InitCountryHarmony();
-            //InitCountryMountChiliad();
-            //InitCountrySandyShoresLiquorAce();
-            //InitCountrySandyShoresTwentyFour();
+            InitCountryGrandSenoraDesertScoops();
+            InitCountryGrandSenoraDesertTwentyFour();
+            InitCountryGrapeseed();
+            InitCountryHarmony();
+            InitCountryMountChiliad();
+            InitCountrySandyShoresLiquorAce();
+            InitCountrySandyShoresTwentyFour();
             //// Rural
-            //InitRuralBanhamCanyonRobsLiquor();
-            //InitRuralBanhamCanyonTwentyFour();
-            //InitRuralChumash();
-            //InitRuralRichmanGlen();
-            //InitRuralTataviamMountains();
+            InitRuralBanhamCanyonRobsLiquor();
+            InitRuralBanhamCanyonTwentyFour();
+            InitRuralChumash();
+            InitRuralRichmanGlen();
+            InitRuralTataviamMountains();
 
             Debug.WriteLine("Mission Setup Completed");
         }

@@ -21,19 +21,11 @@ namespace Curiosity.Missions.Server.net.Environment
             server.RegisterEventHandler("curiosity:Server:Missions:Ended", new Action<Player, int>(OnMissionEnded));
         }
 
-        static public void OnPlayerDropped([FromSource]Player player, string reason)
+        static public async void OnPlayerDropped([FromSource]Player player, string reason)
         {
             try
             {
-                ConcurrentDictionary<int, Tuple<string, int>> listToRun = MissionsActive;
-                foreach (var keyValuePair in listToRun)
-                {
-                    if (keyValuePair.Value.Item1 == player.Handle)
-                    {
-                        Tuple<string, int> thing;
-                        MissionsActive.TryRemove(keyValuePair.Key, out thing);
-                    }
-                }
+                await RemovePlayerMission(player);
             }
             catch (Exception ex)
             {
@@ -80,6 +72,11 @@ namespace Curiosity.Missions.Server.net.Environment
 
         static async Task RemovePlayerMission(Player player)
         {
+            if (!Server.isLive)
+            {
+                Log.Info($"[RemovePlayerMission] Start {player.Name}");
+            }
+
             ConcurrentDictionary<int, Tuple<string, int>> listToRun = MissionsActive;
             foreach (var keyValuePair in listToRun)
             {
@@ -87,8 +84,19 @@ namespace Curiosity.Missions.Server.net.Environment
                 {
                     Tuple<string, int> thing;
                     MissionsActive.TryRemove(keyValuePair.Key, out thing);
+
+                    if (!Server.isLive)
+                    {
+                        Log.Info($"[RemovePlayerMission] Mission found and removed.");
+                    }
                 }
             }
+
+            if (!Server.isLive)
+            {
+                Log.Info($"[RemovePlayerMission] Mission Cache Count {MissionsActive.Count}");
+            }
+
             await Task.FromResult(0);
         }
     }

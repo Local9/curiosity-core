@@ -37,8 +37,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         {
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
-            
-            client.RegisterEventHandler("curiosity:Client:Mission:Start", new Action<string>(OnPlayerCanStartMission));
+           
             client.RegisterEventHandler("curiosity:Client:Mission:NotAvailable", new Action(OnMissionNotAvailable));
 
             client.RegisterEventHandler("curiosity:Client:Missions:MissionComplete", new Action(OnMissionComplete));
@@ -115,11 +114,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         internal static void SetIsOnActiveCallout(bool state)
         {
             IsOnActiveCallout = state;
-
-            if (IsOnActiveCallout)
-            {
-                client.DeregisterTickHandler(OnGenerateRandomMission);
-            }
         }
 
         static public void AllowNextMission()
@@ -175,12 +169,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                         if (Game.IsDisabledControlPressed(0, Control.FrontendAccept))
                         {
+
                             HasAcceptedCallout = true;
                             Screen.DisplayHelpTextThisFrame($"Callout Accepted");
-                            await ChoseRandomMissionArea();
+                            ChoseRandomMissionArea();
 
                             EnableControlAction(0, (int)Control.FrontendDelete, true);
                             EnableControlAction(0, (int)Control.FrontendAccept, true);
+
+                            client.DeregisterTickHandler(OnGenerateRandomMission);
 
                             return;
                         }
@@ -212,21 +209,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         {
             HasAcceptedCallout = true;
 
-            client.DeregisterTickHandler(OnGenerateRandomMission);
-
             if (Client.Random.Next(20) == 1 && DataClasses.Mission.PoliceStores.storesRural.Count > 0)
             {
-                await ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesRural);
+                ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesRural);
                 return;
             }
 
             switch (patrolZone)
             {
                 case PatrolZone.Country:
-                    await ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCountry);
+                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCountry);
                     break;
                 default: // CITY
-                    await ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCity);
+                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCity);
                     break;
             }
         }
@@ -238,7 +233,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
             bool foundNewCallout = false;
 
-            while (!foundNewCallout && PreviousMissionId > 0)
+            while (!foundNewCallout)
             {
                 if (!IsOnDuty) return;
                 randomMissionNumber = missions.Count == 1 ? 0 : Client.Random.Next(0, missions.Count);
@@ -268,42 +263,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             string message = Encode.StringToBase64(JsonConvert.SerializeObject(missionMessage));
 
             Client.TriggerServerEvent("curiosity:Server:Missions:Available", message);
-        }
-
-        static async void OnPlayerCanStartMission(string missionData)
-        {
-            client.DeregisterTickHandler(OnGenerateRandomMission);
-            
-            MissionCreate missionMessage = JsonConvert.DeserializeObject<MissionCreate>(Encode.Base64ToString(missionData));
-
-            if (ClientInformation.IsDeveloper())
-            {
-                Log.Info($"Mission Message {missionMessage}");
-            }
-
-            IsOnActiveCallout = true;
-            PatrolZone missionPatrolZone = (PatrolZone)missionMessage.PatrolZone;
-
-            Dictionary<int, DataClasses.Mission.Store> missions = new Dictionary<int, DataClasses.Mission.Store>();
-
-            switch (missionPatrolZone)
-            {
-                case PatrolZone.Rural:
-                    missions = DataClasses.Mission.PoliceStores.storesRural;
-                    break;
-                case PatrolZone.Country:
-                    missions = DataClasses.Mission.PoliceStores.storesCountry;
-                    break;
-                default: // CITY
-                    missions = DataClasses.Mission.PoliceStores.storesCity;
-                    break;
-            }
-
-            DataClasses.Mission.Store mission = missions[missionMessage.MissionId];
-
-            SetIsOnActiveCallout(true);
-
-            await CreateStoreMission.Create(mission);
         }
     }
 }

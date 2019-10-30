@@ -37,7 +37,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static Blip LocationBlip;
         static Vector3 Location = new Vector3();
-
+        
         static public async Task Create(Store store)
         {
             if (store == null)
@@ -45,6 +45,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 Debug.WriteLine("[Mission] Create called but store not supplied");
                 return;
             }
+
+            Static.Relationships.SetupRelationShips();
 
             try
             {
@@ -57,6 +59,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 while (Game.PlayerPed.Position.Distance(store.Location) > 50f)
                 {
                     await BaseScript.Delay(0);
+                }
+
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                {
+                    Log.Info($"SETUP: {store.Name}");
                 }
 
                 MissionPedData1 = store.missionPeds[0];
@@ -80,15 +87,25 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 Ped ped1 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData1.Model, MissionPedData1.SpawnPoint, MissionPedData1.SpawnHeading);
                 ped1.Weapons.Give(MissionPedData1.Weapon, 1, true, true);
+                await Client.Delay(0);
                 MissionPed1 = PedCreators.MissionPedCreator.Ped(ped1, MissionPedData1.Alertness, MissionPedData1.Difficulty, MissionPedData1.VisionDistance);
                 
                 await BaseScript.Delay(0);
                 
                 Ped ped2 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData2.Model, MissionPedData2.SpawnPoint, MissionPedData2.SpawnHeading);
                 ped2.Weapons.Give(MissionPedData2.Weapon, 1, true, true);
+                await Client.Delay(0);
                 MissionPed2 = PedCreators.MissionPedCreator.Ped(ped2, MissionPedData2.Alertness, MissionPedData2.Difficulty, MissionPedData2.VisionDistance);
                 
                 await BaseScript.Delay(500);
+
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                {
+                    Log.Info($"INITAL MISSION PEDS: {store.Name}");
+                    Log.Info($"PED1: {MissionPed1.Exists()}");
+                    Log.Info($"PED2: {MissionPed2.Exists()}");
+                    Log.Info($"---------------------------------");
+                }
 
                 client.RegisterTickHandler(SpawnBackupPedOne);
                 client.RegisterTickHandler(SpawnBackupPedTwo);
@@ -116,7 +133,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 {
                     Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData3.Model, MissionPedData3.SpawnPoint, MissionPedData3.SpawnHeading);
                     backup.Weapons.Give(MissionPedData3.Weapon, 1, true, true);
-
+                    await Client.Delay(0);
                     MissionPed3 = PedCreators.MissionPedCreator.Ped(backup, MissionPedData3.Alertness, MissionPedData3.Difficulty, MissionPedData3.VisionDistance);
 
                     if (backup != null)
@@ -139,7 +156,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 {
                     Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData4.Model, MissionPedData4.SpawnPoint, MissionPedData4.SpawnHeading);
                     backup.Weapons.Give(MissionPedData4.Weapon, 1, true, true);
-
+                    await Client.Delay(0);
                     MissionPed4 = PedCreators.MissionPedCreator.Ped(backup, MissionPedData4.Alertness, MissionPedData4.Difficulty, MissionPedData4.VisionDistance);
 
                     if (backup != null)
@@ -244,13 +261,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             LocationBlip.ShowRoute = false;
             LocationBlip.Scale = 1.0f;
 
-            RemoveEntity(MissionPed1);
-            RemoveEntity(MissionPed2);
-            RemoveEntity(MissionPed3);
-            RemoveEntity(MissionPed4);
-
-            RemoveEntity(HostagePed);
-
             if (cancelMission)
             {
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Cancelled", $"No Payout", string.Empty, 2);
@@ -272,6 +282,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
             if (!cancelMission)
                 Screen.DisplayHelpTextThisFrame($"Thank you");
+
+            RemoveEntity(MissionPed1);
+            RemoveEntity(MissionPed2);
+            RemoveEntity(MissionPed3);
+            RemoveEntity(MissionPed4);
+            RemoveEntity(HostagePed);
 
             HostageReleased = false;
             HostageKilled = false;

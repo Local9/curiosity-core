@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Shared.Server.net.Helpers;
+using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Server.net
 {
@@ -12,6 +10,7 @@ namespace Curiosity.Missions.Server.net
     {
         private static Server _server;
         public static PlayerList players;
+        public static bool isLive = false;
 
         public static Server GetInstance()
         {
@@ -21,6 +20,7 @@ namespace Curiosity.Missions.Server.net
         public Server()
         {
             players = Players;
+            isLive = API.GetConvar("server_live", "false") == "true";
 
             _server = this;
 
