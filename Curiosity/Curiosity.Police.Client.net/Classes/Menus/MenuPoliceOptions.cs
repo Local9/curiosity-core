@@ -105,9 +105,12 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             if (menuItem == menuShowRadar)
             {
-                Client.TriggerEvent("rs9000:ToggleRadar");
+                if (menuItem.Enabled)
+                {
+                    Client.TriggerEvent("rs9000:ToggleRadar");
 
-                MainMenu.CloseMenu();
+                    MainMenu.CloseMenu();
+                }
             }
         }
 
