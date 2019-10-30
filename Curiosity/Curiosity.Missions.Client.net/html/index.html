@@ -12,8 +12,6 @@
         var Player = function (playlist) {
             this.playlist = playlist;
             this.index = 0;
-
-			console.log(JSON.stringify(this.playlist))
         };
 
         Player.prototype = {
@@ -84,7 +82,6 @@
 				Howler.volume(event.data.transactionVolume);
 
                 if (event.data.audioQueue.length > 0) {
-					console.log("PLAY PLAYLIST");
                     var player = new Player(event.data.audioQueue);
 					player.play();
                 } else {
