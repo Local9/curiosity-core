@@ -61,10 +61,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"{store.Name}", "459S Burglar alarm, silent", 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
 
-                while (Game.PlayerPed.Position.Distance(store.Location) > 50f)
+                client.RegisterTickHandler(MissionCancelAsync);
+
+                while (Game.PlayerPed.Position.Distance(store.Location) > 100f)
                 {
                     await BaseScript.Delay(0);
                 }
+
+                client.DeregisterTickHandler(MissionCancelAsync);
 
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 {
@@ -241,6 +245,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             await Task.FromResult(0);
             if (Game.IsControlPressed(0, Control.FrontendDelete))
             {
+                client.DeregisterTickHandler(MissionCancelAsync);
                 CleanUp(true);
             }
         }
@@ -261,7 +266,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             client.DeregisterTickHandler(SpawnBackupPedOne);
             client.DeregisterTickHandler(SpawnBackupPedTwo);
             client.DeregisterTickHandler(MissionCompletionChecks);
-            client.DeregisterTickHandler(MissionCancelAsync);
 
             LocationBlip.ShowRoute = false;
             LocationBlip.Scale = 1.0f;
