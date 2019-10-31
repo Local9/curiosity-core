@@ -31,6 +31,33 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Player:Report", new Action<CitizenFX.Core.Player, string, string>(ReportingPlayer));
             server.RegisterEventHandler("curiosity:Server:Player:Ban", new Action<CitizenFX.Core.Player, string, string, bool, int>(AdminBanPlayer));
             server.RegisterEventHandler("curiosity:Server:Player:AfkKick", new Action<CitizenFX.Core.Player>(AfkKick));
+
+            ///////// JOBS //////////
+            server.RegisterEventHandler("curiosity:Server:Player:Backup", new Action<CitizenFX.Core.Player, int, string>(OnBackupRequest));
+        }
+
+        static void OnBackupRequest([FromSource]CitizenFX.Core.Player player, int code, string streetName)
+        {
+            if (code == 4)
+            {
+                Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"No further assistance required", $"Officer: ~b~{player.Name}~n~~s~Code: ~b~{code}~n~~s~Loc: ~b~{streetName}", 2);
+                return;
+            }
+
+            string codeDetails = "Could not obtain";
+
+            switch(code)
+            {
+                case 2:
+                    codeDetails = "~y~Urgent~s~ - Proceed immediately";
+                    break;
+                case 3:
+                    codeDetails = "~r~Emergency~s~ - Proceed immediately with lights and siren";
+                    break;
+            }
+
+            Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"Assistance Requested", $"Officer: ~b~{player.Name}~n~~s~Code: ~b~{code}", 2);
+            Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"Details ~b~{player.Name}", $"~s~Loc: ~b~{streetName}~n~{codeDetails}", 2);
         }
 
         static bool IsStaff(Privilege privilege)

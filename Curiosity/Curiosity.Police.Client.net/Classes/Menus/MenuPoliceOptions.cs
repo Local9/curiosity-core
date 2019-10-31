@@ -1,8 +1,14 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using MenuAPI;
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net;
+using Curiosity.Shared.Client.net.Enums;
 
 namespace Curiosity.Police.Client.net.Classes.Menus
 {
@@ -16,12 +22,20 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static bool _IsActive = false;
         static bool _IsOnDuty = false;
         static string _ActiveJob;
+        static bool HasRequestedBackup = false;
 
         static List<string> patrolAreas = new List<string>();
 
         static MenuCheckboxItem menuDuty = new MenuCheckboxItem("Accepting Dispatch Calls", _IsOnDuty);
         static MenuListItem menuListPatrolZone = new MenuListItem("Area of Patrol", patrolAreas, _patrolZone);
-        static MenuItem menuShowRadar = new MenuItem("Open Radar");
+        static MenuItem menuItemShowRadar = new MenuItem("Open Radar");
+
+        // Request
+        static private Menu menuRequestBackup;
+
+        static private MenuItem rbItemCode2 = new MenuItem("Code 2: Urgent - Proceed immediately");
+        static private MenuItem rbItemCode3 = new MenuItem("Code 3: Emergency");
+        static private MenuItem rbItemCode4 = new MenuItem("Code 4: No further assistance required");
 
         static public void Init()
         {
@@ -31,6 +45,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             patrolAreas.Add($"{PatrolZone.City}");
             patrolAreas.Add($"{PatrolZone.Country}");
+
+            client.RegisterTickHandler(OnTaskHasRequestedBackup);
         }
 
         static void OnDutyState(bool active, bool onduty, string job)
@@ -61,10 +77,97 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 MainMenu.OnCheckboxChange += OnCheckboxChange;
 
                 MenuController.AddMenu(MainMenu);
+
                 MenuController.EnableMenuToggleKeyOnController = false;
             }
 
             MainMenu.OpenMenu();
+        }
+
+        static async Task OnTaskHasRequestedBackup()
+        {
+            long gameTimer = GetGameTimer();
+            while(HasRequestedBackup)
+            {
+                if ((GetGameTimer() - gameTimer) > 30000)
+                {
+                    HasRequestedBackup = false;
+                    client.DeregisterTickHandler(OnTaskHasRequestedBackup);
+                }
+                await Client.Delay(1000);
+            }
+        }
+
+        private static void MenuRequestBackup_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
+        {
+            string streetName = "Unkown Location";
+
+            uint streetHash = 0;
+            uint streetCrossing = 0;
+
+            GetStreetNameAtCoord(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, ref streetHash, ref streetCrossing);
+
+            streetName = World.GetStreetName(Game.PlayerPed.Position);
+            string crossing = GetStreetNameFromHashKey(streetCrossing);
+            string localisedZone = World.GetZoneLocalizedName(Game.PlayerPed.Position);
+
+            if (!string.IsNullOrEmpty(localisedZone))
+            {
+                streetName = $"{streetName}, {localisedZone}";
+            }
+
+            if (HasRequestedBackup)
+            {
+                if (menuItem == rbItemCode4)
+                {
+                    BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 4, streetName);
+                    HasRequestedBackup = false;
+                    client.DeregisterTickHandler(OnTaskHasRequestedBackup);
+                    MenuController.CloseAllMenus();
+                }
+                else
+                {
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Please wait...", "Assistance has been requested.", 2);
+                }
+                return;
+            }
+
+            if (menuItem == rbItemCode2)
+            {
+                BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 2, streetName);
+            }
+
+            if (menuItem == rbItemCode3)
+            {
+                BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 3, streetName);
+            }
+
+            if (menuItem == rbItemCode4)
+            {
+                BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 4, streetName);
+            }
+
+            HasRequestedBackup = true;
+            client.RegisterTickHandler(OnTaskHasRequestedBackup);
+            MenuController.CloseAllMenus();
+        }
+
+        private static void MenuRequestBackup_OnMenuClose(Menu menu)
+        {
+            MenuController.DontOpenAnyMenu = true;
+            MenuBaseFunctions.MenuClose();
+        }
+
+        private static void MenuRequestBackup_OnMenuOpen(Menu menu)
+        {
+            MenuBaseFunctions.MenuOpen();
+
+            MenuController.DontOpenAnyMenu = false;
+            MenuController.EnableMenuToggleKeyOnController = false;
+
+            menu.AddMenuItem(rbItemCode2);
+            menu.AddMenuItem(rbItemCode3);
+            menu.AddMenuItem(rbItemCode4);
         }
 
         private static async void OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
@@ -103,7 +206,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
         {
-            if (menuItem == menuShowRadar)
+            if (menuItem == menuItemShowRadar)
             {
                 if (menuItem.Enabled)
                 {
@@ -118,8 +221,6 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             MenuController.DontOpenAnyMenu = true;
             MenuBaseFunctions.MenuClose();
-            MainMenu.ClearMenuItems();
-            MainMenu = null;
         }
 
         private static void OnListItemSelect(Menu menu, MenuListItem listItem, int selectedIndex, int itemIndex)
@@ -136,8 +237,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menuDuty.Enabled = false;
             menuListPatrolZone.Enabled = false;
 
-            MainMenu.AddMenuItem(menuDuty);
-            MainMenu.AddMenuItem(menuListPatrolZone);
+            menu.AddMenuItem(menuDuty);
+            menu.AddMenuItem(menuListPatrolZone);
 
             bool canPullover = false;
             int policexp = 0;
@@ -154,9 +255,9 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 }
             }
 
-            menuShowRadar.Enabled = canPullover;
+            menuItemShowRadar.Enabled = canPullover;
             
-            if (!menuShowRadar.Enabled)
+            if (!menuItemShowRadar.Enabled)
             {
                 string description = "~b~Require Additional;";
                 if (policexp < 2500)
@@ -164,21 +265,23 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 if (knowledge < 1000)
                     description += $"~n~- ~y~{1000 - knowledge:#,##0} ~s~Knowledge";
 
-                menuShowRadar.Description = description;
+                menuItemShowRadar.Description = description;
             }
             else
             {
                 if (GetVehicleDriving(Game.PlayerPed) == null)
                 {
-                    menuShowRadar.Description = "Must be in an ~b~Emergency Vehicle~s~ to open.";
+                    menuItemShowRadar.Description = "Must be in an ~b~Emergency Vehicle~s~ to open.";
                 }
                 else
                 {
-                    menuShowRadar.Description = "Open Radar";
+                    menuItemShowRadar.Description = "Open Radar";
                 }
             }
 
-            MainMenu.AddMenuItem(menuShowRadar);
+            menu.AddMenuItem(menuItemShowRadar);
+
+            SetupBackupMenu(menu);
 
             await Client.Delay(100);
 
@@ -198,6 +301,25 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             }
 
             return v;
+        }
+
+        static void SetupBackupMenu(Menu menu)
+        {
+            menuRequestBackup = new Menu("Request Assistance", "Call Dispatch for Assistance...");
+
+            menuRequestBackup.OnMenuOpen += MenuRequestBackup_OnMenuOpen;
+            menuRequestBackup.OnMenuClose += MenuRequestBackup_OnMenuClose;
+            menuRequestBackup.OnItemSelect += MenuRequestBackup_OnItemSelect;
+
+            AddSubMenu(menu, menuRequestBackup);
+        }
+
+        static void AddSubMenu(Menu menu, Menu submenu, bool enabled = true)
+        {
+            MenuController.AddSubmenu(menu, submenu);
+            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = "→→→", Enabled = enabled };
+            menu.AddMenuItem(submenuButton);
+            MenuController.BindMenuItem(menu, submenu, submenuButton);
         }
     }
 }

@@ -13,4 +13,14 @@
             Payload = data;
         }
     }
+    public class TriggerNotificationForAll
+    {
+        public int PlayerServerId;
+        public string EventName;
+
+        public TriggerNotificationForAll(string eventName, string data)
+        {
+            EventName = eventName;
+        }
+    }
 }
