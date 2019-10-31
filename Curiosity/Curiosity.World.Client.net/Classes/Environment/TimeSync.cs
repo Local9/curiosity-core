@@ -49,50 +49,62 @@ namespace Curiosity.World.Client.net.Classes.Environment
 
             }
 
-            currentServerHours = newHours;
-            currentServerMinutes = newMinutes;
-
-            bool IsTimeDifferenceTooSmall()
+            if (WeatherSystem.IsHalloween)
             {
-                var totalDifference = 0;
-                totalDifference += (newHours - currentHours) * 60;
-                totalDifference += (newMinutes - currentMinutes);
-
-                if (totalDifference < 15 && totalDifference > -120)
-                    return true;
-
-                return false;
-            }
-
-            FreezeTime = freezeTime;
-
-            if (SmoothTimeTransitionsEnabled && !IsTimeDifferenceTooSmall())
-            {
-                if (!DontDoTimeSyncRightNow)
-                {
-                    bool frozen = freezeTime;
-                    DontDoTimeSyncRightNow = true;
-                    FreezeTime = freezeTime;
-
-                    var oldSpeed = minuteClockSpeed;
-
-                    while (currentHours != currentServerHours || currentMinutes != currentServerMinutes)
-                    {
-                        FreezeTime = false;
-                        await Client.Delay(0);
-                        minuteClockSpeed = 1;
-                    }
-                    FreezeTime = freezeTime;
-
-                    minuteClockSpeed = oldSpeed;
-
-                    DontDoTimeSyncRightNow = false;
-                }
+                currentHours = 0;
+                currentMinutes = 0;
+                SetClockTime(0, 0, 0);
+                NetworkOverrideClockTime(0, 0, 0);
+                PauseClock(true);
             }
             else
             {
-                currentHours = currentServerHours;
-                currentMinutes = currentServerMinutes;
+
+                currentServerHours = newHours;
+                currentServerMinutes = newMinutes;
+
+                bool IsTimeDifferenceTooSmall()
+                {
+                    var totalDifference = 0;
+                    totalDifference += (newHours - currentHours) * 60;
+                    totalDifference += (newMinutes - currentMinutes);
+
+                    if (totalDifference < 15 && totalDifference > -120)
+                        return true;
+
+                    return false;
+                }
+
+                FreezeTime = freezeTime;
+
+                if (SmoothTimeTransitionsEnabled && !IsTimeDifferenceTooSmall())
+                {
+                    if (!DontDoTimeSyncRightNow)
+                    {
+                        bool frozen = freezeTime;
+                        DontDoTimeSyncRightNow = true;
+                        FreezeTime = freezeTime;
+
+                        var oldSpeed = minuteClockSpeed;
+
+                        while (currentHours != currentServerHours || currentMinutes != currentServerMinutes)
+                        {
+                            FreezeTime = false;
+                            await Client.Delay(0);
+                            minuteClockSpeed = 1;
+                        }
+                        FreezeTime = freezeTime;
+
+                        minuteClockSpeed = oldSpeed;
+
+                        DontDoTimeSyncRightNow = false;
+                    }
+                }
+                else
+                {
+                    currentHours = currentServerHours;
+                    currentMinutes = currentServerMinutes;
+                }
             }
         }
 
@@ -105,9 +117,16 @@ namespace Curiosity.World.Client.net.Classes.Environment
                 await Client.Delay(0);
                 NetworkOverrideClockTime(currentHours, currentMinutes, 0);
             }
+            else if (WeatherSystem.IsHalloween)
+            {
+                SetClockTime(0, 0, 0);
+                NetworkOverrideClockTime(0, 0, 0);
+                PauseClock(true);
+            }
             // Otherwise...
             else
             {
+                PauseClock(false);
                 if (minuteClockSpeed > 2000)
                 {
                     await Client.Delay(2000);
@@ -132,6 +151,7 @@ namespace Curiosity.World.Client.net.Classes.Environment
                 {
                     currentHours = 0;
                 }
+                SetClockTime(currentHours, currentMinutes, 0);
                 NetworkOverrideClockTime(currentHours, currentMinutes, 0);
             }
         }

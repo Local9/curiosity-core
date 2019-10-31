@@ -11,7 +11,7 @@ namespace Curiosity.World.Client.net.Classes.Environment
         static Client client = Client.GetInstance();
 
         static private bool IsChristmas = false;
-        static private bool IsHalloween = false;
+        static public bool IsHalloween = false;
 
         public static void Init()
         {
@@ -80,7 +80,23 @@ namespace Curiosity.World.Client.net.Classes.Environment
                 API.SetWeatherTypeOverTime("XMAS", 60.00f);
             }
 
-            if (!isChristmas)
+            if (IsHalloween)
+            {
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Verbose($"WeatherSync -> Setting weather to HALLOWEEN");
+                }
+
+                string weatherType = "HALLOWEEN";
+
+                API.ClearOverrideWeather();
+                API.SetWeatherTypePersist(weatherType);
+                API.SetWeatherTypeNowPersist(weatherType);
+                API.SetWeatherTypeNow(weatherType);
+                API.SetOverrideWeather(weatherType);
+            }
+
+            if (!isChristmas && !isHalloween)
             {
                 if (Player.PlayerInformation.IsDeveloper())
                 {

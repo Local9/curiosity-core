@@ -53,6 +53,7 @@
     <Compile Include="Classes\Environment\SafeZone.cs" />
     <Compile Include="Classes\Environment\VehicleSpawnMarkerHandler.cs" />
     <Compile Include="Classes\Menus\MenuBaseFunctions.cs" />
+    <Compile Include="Classes\Menus\VehicleSpawnedMenu.cs" />
     <Compile Include="Classes\Menus\VehicleSpawn.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="Classes\Vehicle\DeleteVehicle.cs" />

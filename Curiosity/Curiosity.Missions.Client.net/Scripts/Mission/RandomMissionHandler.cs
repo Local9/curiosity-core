@@ -115,6 +115,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         internal static void SetIsOnActiveCallout(bool state)
         {
             IsOnActiveCallout = state;
+            if (IsOnActiveCallout)
+                client.DeregisterTickHandler(OnGenerateRandomMission);
         }
 
         static public void AllowNextMission()
@@ -177,8 +179,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                             EnableControlAction(0, (int)Control.FrontendDelete, true);
                             EnableControlAction(0, (int)Control.FrontendAccept, true);
-
-                            client.DeregisterTickHandler(OnGenerateRandomMission);
 
                             return;
                         }

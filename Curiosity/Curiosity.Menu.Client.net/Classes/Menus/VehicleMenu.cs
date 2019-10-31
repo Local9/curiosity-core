@@ -83,6 +83,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             SetupWindowsMenu();
             SetupDoorsMenu();
+            SetupVehicleExtrasMenu();
 
             if (Game.PlayerPed.IsInVehicle())
             {
@@ -136,6 +137,132 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
                 if (Client.CurrentVehicle.IsDead)
                     Client.CurrentVehicle = null;
+            }
+
+            if (menuItem.Text == "Liveries")
+            {
+                // Get the player's vehicle.
+                Vehicle veh = Client.CurrentVehicle;
+                // If it exists, isn't dead and the player is in the drivers seat continue.
+                if (veh != null && veh.Exists() && !veh.IsDead)
+                {
+                    if (veh.Driver == Game.PlayerPed)
+                    {
+                        VehicleLiveriesMenu.ClearMenuItems();
+                        API.SetVehicleModKit(veh.Handle, 0);
+                        var liveryCount = veh.Mods.LiveryCount - 1;
+
+                        if (liveryCount > 0)
+                        {
+                            var liveryList = new List<string>();
+                            for (var i = 0; i < liveryCount; i++)
+                            {
+                                var livery = API.GetLiveryName(veh.Handle, i);
+                                livery = API.GetLabelText(livery) != "NULL" ? API.GetLabelText(livery) : $"Livery #{i}";
+                                liveryList.Add(livery);
+                            }
+                            MenuListItem liveryListItem = new MenuListItem("Set Livery", liveryList, API.GetVehicleLivery(veh.Handle), "Choose a livery for this vehicle.");
+                            VehicleLiveriesMenu.AddMenuItem(liveryListItem);
+                            VehicleLiveriesMenu.OnListIndexChange += (_menu, listItem, oldIndex, newIndex, itemIndexLiv) =>
+                            {
+                                if (listItem == liveryListItem)
+                                {
+                                    Game.PlayerPed.CurrentVehicle.Mods.Livery = newIndex;
+                                }
+                            };
+                            VehicleLiveriesMenu.RefreshIndex();
+                            //VehicleLiveriesMenu.UpdateScaleform();
+                        }
+                        else
+                        {
+                            MenuItem backBtn = new MenuItem("No Liveries Available :(", "Go back to the Vehicle Options menu.")
+                            {
+                                Label = "Go Back"
+                            };
+                            VehicleLiveriesMenu.AddMenuItem(backBtn);
+                            VehicleLiveriesMenu.OnItemSelect += (sender3, item3, index3) =>
+                            {
+                                VehicleLiveriesMenu.GoBack();
+                            };
+                        }
+                    }
+                    else
+                    {
+                        Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Menu", string.Empty, "You have to be the in the drivers seat.", 2);
+                    }
+                }
+                else
+                {
+                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Menu", string.Empty, "You must have a vehicle you own.", 2);
+                }
+            }
+
+            // If the components menu is opened.
+            if (menuItem.Text == "Extras")
+            {
+                // Empty the menu in case there were leftover buttons from another vehicle.
+                if (VehicleComponentsMenu.Size > 0)
+                {
+                    VehicleComponentsMenu.ClearMenuItems();
+                    vehicleExtras.Clear();
+                    VehicleComponentsMenu.RefreshIndex();
+                    //VehicleComponentsMenu.UpdateScaleform();
+                }
+
+                // Get the vehicle.
+                Vehicle veh = Client.CurrentVehicle;
+
+                // Check if the vehicle exists, it's actually a vehicle, it's not dead/broken and the player is in the drivers seat.
+                if (veh != null && veh.Exists() && !veh.IsDead && veh.Driver == Game.PlayerPed)
+                {
+                    //List<int> extraIds = new List<int>();
+                    // Loop through all possible extra ID's (AFAIK: 0-14).
+                    for (var extra = 0; extra < 14; extra++)
+                    {
+                        // If this extra exists...
+                        if (veh.ExtraExists(extra))
+                        {
+                            // Add it's ID to the list.
+                            //extraIds.Add(extra);
+
+                            // Create a checkbox for it.
+                            MenuCheckboxItem extraCheckbox = new MenuCheckboxItem($"Extra #{extra.ToString()}", extra.ToString(), veh.IsExtraOn(extra));
+                            // Add the checkbox to the menu.
+                            VehicleComponentsMenu.AddMenuItem(extraCheckbox);
+
+                            // Add it's ID to the dictionary.
+                            vehicleExtras[extraCheckbox] = extra;
+                        }
+                    }
+
+
+
+                    if (vehicleExtras.Count > 0)
+                    {
+                        MenuItem backBtn = new MenuItem("Go Back", "Go back to the Vehicle Options menu.");
+                        VehicleComponentsMenu.AddMenuItem(backBtn);
+                        VehicleComponentsMenu.OnItemSelect += (sender3, item3, index3) =>
+                        {
+                            VehicleComponentsMenu.GoBack();
+                        };
+                    }
+                    else
+                    {
+                        MenuItem backBtn = new MenuItem("No Extras Available :(", "Go back to the Vehicle Options menu.")
+                        {
+                            Label = "Go Back"
+                        };
+                        VehicleComponentsMenu.AddMenuItem(backBtn);
+                        VehicleComponentsMenu.OnItemSelect += (sender3, item3, index3) =>
+                        {
+                            VehicleComponentsMenu.GoBack();
+                        };
+                    }
+                    // And update the submenu to prevent weird glitches.
+                    VehicleComponentsMenu.RefreshIndex();
+                    //VehicleComponentsMenu.UpdateScaleform();
+
+                }
             }
         }
 
@@ -222,44 +349,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 {
                     _menu.AddMenuItem(new MenuItem("Repair", "Repair Vehicle") { ItemData = "VEHICLE_REPAIR" });
                     _menu.AddMenuItem(new MenuItem("Refuel", "Refuel Vehicle") { ItemData = "VEHICLE_REFUEL" });
-                    VehicleLiveriesMenu = new Menu("Liveries", "Vehicle Liveries");
-                    VehicleComponentsMenu = new Menu("Extras", "Vehicle Extras/Components");
-
-
-
-                    VehicleLiveriesMenu.OnMenuOpen += (_menu2) =>
-                    {
-                        MenuBase.MenuOpen(true);
-                    };
-
-                    VehicleLiveriesMenu.OnMenuClose += (_menu2) =>
-                    {
-                        MenuBase.MenuOpen(false);
-                    };
-
-                    VehicleComponentsMenu.OnMenuOpen += (_menu3) =>
-                    {
-                        MenuBase.MenuOpen(true);
-                    };
-
-                    VehicleComponentsMenu.OnMenuClose += (_menu3) =>
-                    {
-                        MenuBase.MenuOpen(false);
-                    };
-
-                    VehicleComponentsMenu.OnCheckboxChange += (sender, item, index, _checked) =>
-                    {
-                        // When a checkbox is checked/unchecked, get the selected checkbox item index and use that to get the component ID from the list.
-                        // Then toggle that extra.
-                        if (vehicleExtras.TryGetValue(item, out int extra))
-                        {
-                            Vehicle veh = Client.CurrentVehicle;
-                            veh.ToggleExtra(extra, _checked);
-                        }
-                    };
-
-                    AddSubMenu(_menu, VehicleComponentsMenu);
-                    AddSubMenu(_menu, VehicleLiveriesMenu);
+                    
                 };
 
                 developerMenu.OnMenuOpen += (_menu) =>
@@ -285,131 +375,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                         BaseScript.TriggerEvent("curiosity:Client:Vehicle:DevRefuel");
                     }
 
-                    if (menuItem.Text == "Liveries")
-                    {
-                        // Get the player's vehicle.
-                        Vehicle veh = Client.CurrentVehicle;
-                        // If it exists, isn't dead and the player is in the drivers seat continue.
-                        if (veh != null && veh.Exists() && !veh.IsDead)
-                        {
-                            if (veh.Driver == Game.PlayerPed)
-                            {
-                                VehicleLiveriesMenu.ClearMenuItems();
-                                API.SetVehicleModKit(veh.Handle, 0);
-                                var liveryCount = veh.Mods.LiveryCount - 1;
-
-                                if (liveryCount > 0)
-                                {
-                                    var liveryList = new List<string>();
-                                    for (var i = 0; i < liveryCount; i++)
-                                    {
-                                        var livery = API.GetLiveryName(veh.Handle, i);
-                                        livery = API.GetLabelText(livery) != "NULL" ? API.GetLabelText(livery) : $"Livery #{i}";
-                                        liveryList.Add(livery);
-                                    }
-                                    MenuListItem liveryListItem = new MenuListItem("Set Livery", liveryList, API.GetVehicleLivery(veh.Handle), "Choose a livery for this vehicle.");
-                                    VehicleLiveriesMenu.AddMenuItem(liveryListItem);
-                                    VehicleLiveriesMenu.OnListIndexChange += (_menu, listItem, oldIndex, newIndex, itemIndexLiv) =>
-                                    {
-                                        if (listItem == liveryListItem)
-                                        {
-                                            Game.PlayerPed.CurrentVehicle.Mods.Livery = newIndex;
-                                        }
-                                    };
-                                    VehicleLiveriesMenu.RefreshIndex();
-                                    //VehicleLiveriesMenu.UpdateScaleform();
-                                }
-                                else
-                                {
-                                    MenuItem backBtn = new MenuItem("No Liveries Available :(", "Go back to the Vehicle Options menu.")
-                                    {
-                                        Label = "Go Back"
-                                    };
-                                    VehicleLiveriesMenu.AddMenuItem(backBtn);
-                                    VehicleLiveriesMenu.OnItemSelect += (sender3, item3, index3) =>
-                                    {
-                                        VehicleLiveriesMenu.GoBack();
-                                    };
-                                }
-                            }
-                            else
-                            {
-                                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Menu", string.Empty, "You have to be the in the drivers seat.", 2);
-                            }
-                        }
-                        else
-                        {
-                            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Menu", string.Empty, "You must have a vehicle you own.", 2);
-                        }
-                    }
-
-                    // If the components menu is opened.
-                    if (menuItem.Text == "Extras")
-                    {
-                        // Empty the menu in case there were leftover buttons from another vehicle.
-                        if (VehicleComponentsMenu.Size > 0)
-                        {
-                            VehicleComponentsMenu.ClearMenuItems();
-                            vehicleExtras.Clear();
-                            VehicleComponentsMenu.RefreshIndex();
-                            //VehicleComponentsMenu.UpdateScaleform();
-                        }
-
-                        // Get the vehicle.
-                        Vehicle veh = Client.CurrentVehicle;
-
-                        // Check if the vehicle exists, it's actually a vehicle, it's not dead/broken and the player is in the drivers seat.
-                        if (veh != null && veh.Exists() && !veh.IsDead && veh.Driver == Game.PlayerPed)
-                        {
-                            //List<int> extraIds = new List<int>();
-                            // Loop through all possible extra ID's (AFAIK: 0-14).
-                            for (var extra = 0; extra < 14; extra++)
-                            {
-                                // If this extra exists...
-                                if (veh.ExtraExists(extra))
-                                {
-                                    // Add it's ID to the list.
-                                    //extraIds.Add(extra);
-
-                                    // Create a checkbox for it.
-                                    MenuCheckboxItem extraCheckbox = new MenuCheckboxItem($"Extra #{extra.ToString()}", extra.ToString(), veh.IsExtraOn(extra));
-                                    // Add the checkbox to the menu.
-                                    VehicleComponentsMenu.AddMenuItem(extraCheckbox);
-
-                                    // Add it's ID to the dictionary.
-                                    vehicleExtras[extraCheckbox] = extra;
-                                }
-                            }
-
-
-
-                            if (vehicleExtras.Count > 0)
-                            {
-                                MenuItem backBtn = new MenuItem("Go Back", "Go back to the Vehicle Options menu.");
-                                VehicleComponentsMenu.AddMenuItem(backBtn);
-                                VehicleComponentsMenu.OnItemSelect += (sender3, item3, index3) =>
-                                {
-                                    VehicleComponentsMenu.GoBack();
-                                };
-                            }
-                            else
-                            {
-                                MenuItem backBtn = new MenuItem("No Extras Available :(", "Go back to the Vehicle Options menu.")
-                                {
-                                    Label = "Go Back"
-                                };
-                                VehicleComponentsMenu.AddMenuItem(backBtn);
-                                VehicleComponentsMenu.OnItemSelect += (sender3, item3, index3) =>
-                                {
-                                    VehicleComponentsMenu.GoBack();
-                                };
-                            }
-                            // And update the submenu to prevent weird glitches.
-                            VehicleComponentsMenu.RefreshIndex();
-                            //VehicleComponentsMenu.UpdateScaleform();
-
-                        }
-                    }
+                    
                 };
 
                 AddSubMenu(mainVehicleMenu, developerMenu);
@@ -559,6 +525,46 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             }
 
             AddSubMenu(mainVehicleMenu, windowMenu, Client.CurrentVehicle != null);
+        }
+
+        static void SetupVehicleExtrasMenu()
+        {
+            VehicleLiveriesMenu = new Menu("Liveries", "Vehicle Liveries");
+            VehicleComponentsMenu = new Menu("Extras", "Vehicle Extras/Components");
+
+            VehicleLiveriesMenu.OnMenuOpen += (_menu2) =>
+            {
+                MenuBase.MenuOpen(true);
+            };
+
+            VehicleLiveriesMenu.OnMenuClose += (_menu2) =>
+            {
+                MenuBase.MenuOpen(false);
+            };
+
+            VehicleComponentsMenu.OnMenuOpen += (_menu3) =>
+            {
+                MenuBase.MenuOpen(true);
+            };
+
+            VehicleComponentsMenu.OnMenuClose += (_menu3) =>
+            {
+                MenuBase.MenuOpen(false);
+            };
+
+            VehicleComponentsMenu.OnCheckboxChange += (sender, item, index, _checked) =>
+            {
+                // When a checkbox is checked/unchecked, get the selected checkbox item index and use that to get the component ID from the list.
+                // Then toggle that extra.
+                if (vehicleExtras.TryGetValue(item, out int extra))
+                {
+                    Vehicle veh = Client.CurrentVehicle;
+                    veh.ToggleExtra(extra, _checked);
+                }
+            };
+
+            AddSubMenu(mainVehicleMenu, VehicleComponentsMenu, Client.CurrentVehicle != null);
+            AddSubMenu(mainVehicleMenu, VehicleLiveriesMenu, Client.CurrentVehicle != null);
         }
 
         private static void Menu_OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
