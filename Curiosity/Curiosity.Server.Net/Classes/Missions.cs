@@ -86,12 +86,12 @@ namespace Curiosity.Server.net.Classes
             string title = passed ? "Completed" : "Failed";
             MissionMessage missionMessage = new MissionMessage($"Mission {title}");
 
-            if (!activeMissions.ContainsKey(session.License) && !session.IsDeveloper)
-            {
-                session.IsCheater = true;
-                session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
-                return;
-            }
+            //if (!activeMissions.ContainsKey(session.License) && !session.IsDeveloper)
+            //{
+            //    session.IsCheater = true;
+            //    session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
+            //    return;
+            //}
 
             if (passed)
             {
@@ -112,9 +112,9 @@ namespace Curiosity.Server.net.Classes
 
             string subTitle = passed ? "Successful" : "Unsuccessful";
 
-            player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch Complete", subTitle, $"Hostages Saved: ~y~{missionMessage.HostagesRescued}");
-            
-            player.TriggerEvent("curiosity:Client:Missions:MissionComplete");
+            session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch Complete", subTitle, $"Hostages Saved: ~y~{missionMessage.HostagesRescued}");
+
+            session.Player.TriggerEvent("curiosity:Client:Missions:MissionComplete");
         }
 
         static void OnKilledPed([FromSource]CitizenFX.Core.Player player, string data)
