@@ -212,22 +212,22 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
             if (Client.Random.Next(20) == 1 && DataClasses.Mission.PoliceStores.storesRural.Count > 0)
             {
-                ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesRural);
+                ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesRural, PatrolZone.Rural);
                 return;
             }
 
             switch (patrolZone)
             {
                 case PatrolZone.Country:
-                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCountry);
+                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCountry, PatrolZone.Country);
                     break;
                 default: // CITY
-                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCity);
+                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCity, PatrolZone.City);
                     break;
             }
         }
 
-        static async Task ChooseRandomMissionAsync(Dictionary<int, DataClasses.Mission.Store> missions)
+        static async Task ChooseRandomMissionAsync(Dictionary<int, DataClasses.Mission.Store> missions, PatrolZone missionPatrolZone)
         {
             int randomMissionNumber = missions.Count == 1 ? 0 : Client.Random.Next(0, missions.Count);
             int missionId = missions.ElementAt(randomMissionNumber).Key;
@@ -253,7 +253,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             MissionCreate missionMessage = new MissionCreate()
             {
                 MissionId = missionId,
-                PatrolZone = (int)patrolZone
+                PatrolZone = (int)missionPatrolZone
             };
 
             if (ClientInformation.IsDeveloper())
