@@ -99,6 +99,7 @@ namespace Curiosity.Server.net.Classes
                 missionMessage.MoneyEarnt = 100;
                 missionMessage.HostagesRescued = 1;
                 Bank.IncreaseCashInternally(player.Handle, missionMessage.MoneyEarnt);
+                Skills.IncreaseSkill(player.Handle, "policexp", 15);
             }
             else
             {
