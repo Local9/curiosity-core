@@ -21,12 +21,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static Client client = Client.GetInstance();
 
         static bool StopSpam = false;
-        static bool HasAcceptedCallout = false;
+        static public bool HasAcceptedCallout = false;
         static bool IsRequestingCallout = false;
 
         static long TimeStampOfLastCallout;
-        static long GameTime;
-        static int RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);
+
+        static public int RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);
         static int PreviousMissionId = 0;
 
         static public bool IsOnDuty = false;
@@ -50,7 +50,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static void OnMissionNotAvailable()
         {
+            SetDispatchMessageRecieved(false);
+            RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);
+            TimeStampOfLastCallout = GetGameTimer();
+
             IsRequestingCallout = false;
+            HasAcceptedCallout = false;
         }
 
         static void OnPatrolZone(int zone)
@@ -114,7 +119,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             StopSpam = false;
         }
 
-        internal static void SetIsOnActiveCallout(bool state)
+        internal static void SetDispatchMessageRecieved(bool state)
         {
             IsOnActiveCallout = state;
             if (IsOnActiveCallout)
@@ -126,7 +131,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             if (PreviousMissionId > 0)
                 Client.TriggerServerEvent("curiosity:Server:Missions:Ended", PreviousMissionId);
 
-            SetIsOnActiveCallout(false);
+            SetDispatchMessageRecieved(false);
             RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);
             TimeStampOfLastCallout = GetGameTimer();
 
@@ -154,57 +159,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 if (IsRequestingCallout)
                 {
-                    GameTime = GetGameTimer();
-
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Response Required", $"", 2);
-
-                    while (!HasAcceptedCallout)
-                    {
-                        DisableControlAction(0, (int)Control.FrontendDelete, true);
-                        DisableControlAction(0, (int)Control.FrontendAccept, true);
-
-                        await Client.Delay(0);
-
-                        if ((GetGameTimer() - GameTime) > (1000 * 30))
-                        {
-                            IsRequestingCallout = false;
-                            RandomTimeBetweenCallouts = Client.Random.Next(60000, 120000);
-                            return;
-                        }
-
-                        if (Game.IsDisabledControlPressed(0, Control.FrontendAccept))
-                        {
-
-                            HasAcceptedCallout = true;
-                            Screen.DisplayHelpTextThisFrame($"Callout Accepted");
-                            ChoseRandomMissionArea();
-
-                            EnableControlAction(0, (int)Control.FrontendDelete, true);
-                            EnableControlAction(0, (int)Control.FrontendAccept, true);
-
-                            return;
-                        }
-
-                        if (Game.IsDisabledControlPressed(0, Control.FrontendDelete))
-                        {
-                            AllowNextMission();
-                            await Client.Delay(1000);
-                            return;
-                        }
-
-                        if (!HasAcceptedCallout)
-                            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_FRONTEND_ACCEPT~ to accept callout, ~INPUT_FRONTEND_DELETE~ to decline.");
-                    }
-
-                    EnableControlAction(0, (int)Control.FrontendDelete, true);
-                    EnableControlAction(0, (int)Control.FrontendAccept, true);
-
-                    return;
+                    ChoseRandomMissionArea();
                 }
-
                 IsRequestingCallout = true;
-
-                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} ASSISTANCE_REQUIRED/ASSISTANCE_REQUIRED_0{Client.Random.Next(1, 5)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Client.Random.Next(1, 3)}");
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,14 +21,95 @@ namespace Curiosity.Missions.Client.net.Scripts
     {
         static Client client = Client.GetInstance();
 
+        static long GameTime;
+        static bool HasAcceptedCallout = false;
+
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Mission:Start", new Action<string>(OnPlayerCanStartMission));
+            client.RegisterEventHandler("curiosity:Client:Mission:Dispatch", new Action<string>(OnDispatch));
+
+            RegisterCommand("dispatch", new Action(OnDispatchRequest), false);
         }
 
-        static void OnPlayerCanStartMission(string missionData)
+        static void OnDispatchRequest()
         {
+            Client.TriggerServerEvent("curiosity:Server:Missions:Dispatch");
+        }
+
+        static void OnDispatch(string missionData)
+        {
+            ConcurrentDictionary<int, Tuple<string, int>> MissionsActive = JsonConvert.DeserializeObject <ConcurrentDictionary<int, Tuple<string, int>>>(Encode.Base64ToString(missionData));
+            int CityDispatch = 0;
+            int RuralDispatch = 0;
+            int CountyDispatch = 0;
+
+            foreach(KeyValuePair<int, Tuple<string, int>> keyValuePair in MissionsActive)
+            {
+                PatrolZone patrolZone = (PatrolZone)keyValuePair.Value.Item2;
+                switch(patrolZone)
+                {
+                    case PatrolZone.City:
+                        CityDispatch++;
+                        break;
+                    case PatrolZone.Rural:
+                        RuralDispatch++;
+                        break;
+                    case PatrolZone.Country:
+                        CountyDispatch++;
+                        break;
+                }
+            }
+
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Current Active", $"~b~{CityDispatch} ~s~City~n~~b~{RuralDispatch} ~s~Rural~n~~b~{CountyDispatch} ~s~Country", 2);
+        }
+
+        static async void OnPlayerCanStartMission(string missionData)
+        {
+            HasAcceptedCallout = false;
+            GameTime = GetGameTimer();
+
+            Mission.RandomMissionHandler.SetDispatchMessageRecieved(true);
+
             MissionCreate missionMessage = JsonConvert.DeserializeObject<MissionCreate>(Encode.Base64ToString(missionData));
+
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Response Required", $"", 2);
+
+            while (!HasAcceptedCallout)
+            {
+                DisableControlAction(0, (int)Control.FrontendDelete, true);
+                DisableControlAction(0, (int)Control.FrontendAccept, true);
+
+                await Client.Delay(0);
+
+                if ((GetGameTimer() - GameTime) > (1000 * 30))
+                {
+                    DeclineMission(missionMessage.MissionId);
+                    return;
+                }
+
+                if (Game.IsDisabledControlPressed(0, Control.FrontendAccept))
+                {
+
+                    HasAcceptedCallout = true;
+                    Screen.DisplayHelpTextThisFrame($"Callout Accepted");
+
+                    EnableControlAction(0, (int)Control.FrontendDelete, true);
+                    EnableControlAction(0, (int)Control.FrontendAccept, true);
+                }
+
+                if (Game.IsDisabledControlPressed(0, Control.FrontendDelete))
+                {
+                    DeclineMission(missionMessage.MissionId);
+                    return;
+                }
+
+                if (!HasAcceptedCallout)
+                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_FRONTEND_ACCEPT~ to accept callout, ~INPUT_FRONTEND_DELETE~ to decline.");
+            }
+
+            EnableControlAction(0, (int)Control.FrontendDelete, true);
+            EnableControlAction(0, (int)Control.FrontendAccept, true);
 
             if (ClientInformation.IsDeveloper())
             {
@@ -53,9 +135,12 @@ namespace Curiosity.Missions.Client.net.Scripts
 
             DataClasses.Mission.Store mission = missions[missionMessage.MissionId];
 
-            Mission.RandomMissionHandler.SetIsOnActiveCallout(true);
-
             Mission.CreateStoreMission.Create(mission);
+        }
+
+        static void DeclineMission(int missionId)
+        {
+            Mission.RandomMissionHandler.AllowNextMission();
         }
     }
 }

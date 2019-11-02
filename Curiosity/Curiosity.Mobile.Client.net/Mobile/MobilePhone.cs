@@ -180,6 +180,12 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 return;
             }
 
+            if (IsMenuOpen)
+            {
+                await Task.FromResult(0);
+                return;
+            }
+
             if (IsMobilePhoneOpen)
             {
                 Game.DisableControlThisFrame(0, Control.Sprint);
@@ -218,6 +224,10 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
                 API.DrawScaleformMovie(MobileScaleformHandle, 0.0998f, 0.1775f, 0.1983f, 0.364f, 255, 255, 255, 255, 0);
                 API.SetTextRenderId(1);
+            }
+            else if (Game.IsControlJustPressed(0, Control.InteractionMenu))
+            {
+                IsMenuOpen = !IsMenuOpen;
             }
             else if (Game.IsControlJustPressed(1, Control.Phone) && !IsMenuOpen)
             {
@@ -289,7 +299,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
         {
             try
             {
-                if (IsMobilePhoneOpen && !ApplicationHandler.IsInApp)
+                if (IsMobilePhoneOpen && !ApplicationHandler.IsInApp && !IsMenuOpen)
                 {
                     int a = 0;
                     foreach(Application application in ApplicationHandler.Apps.OrderBy(x => x.GetPosition))

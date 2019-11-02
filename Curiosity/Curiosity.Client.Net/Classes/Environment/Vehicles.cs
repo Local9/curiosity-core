@@ -90,12 +90,12 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static async Task DeleteVehicle(Vehicle vehicle)
         {
+            if (vehicle.Driver.IsPlayer) return;
+
             API.SetVehicleHasBeenOwnedByPlayer(vehicle.Handle, false);
-            await Client.Delay(0);
             API.SetEntityAsMissionEntity(vehicle.Handle, false, false);
-            await Client.Delay(0);
             API.NetworkFadeOutEntity(vehicle.Handle, true, false);
-            await Client.Delay(0);
+            await Client.Delay(500);
             int copyRef = vehicle.Handle;
 
             if (API.DoesEntityExist(vehicle.Handle))

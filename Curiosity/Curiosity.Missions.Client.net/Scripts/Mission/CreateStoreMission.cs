@@ -60,6 +60,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"{store.Name}", "459S Burglar alarm, silent", 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
+                SoundManager.PlayAudioFile($"UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Client.Random.Next(1, 3)}");
 
                 client.RegisterTickHandler(MissionCancelAsync);
 
@@ -317,7 +318,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 }
             }
 
-            RandomMissionHandler.SetIsOnActiveCallout(false);
+            RandomMissionHandler.SetDispatchMessageRecieved(false);
 
             RandomMissionHandler.AllowNextMission();
         }

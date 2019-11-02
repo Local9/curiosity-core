@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
@@ -19,6 +21,16 @@ namespace Curiosity.Missions.Server.net.Environment
         {
             server.RegisterEventHandler("curiosity:Server:Missions:Available", new Action<Player, string>(OnMissionAvailable));
             server.RegisterEventHandler("curiosity:Server:Missions:Ended", new Action<Player, int>(OnMissionEnded));
+            server.RegisterEventHandler("curiosity:Server:Missions:Dispatch", new Action<Player>(OnDispatch));
+        }
+
+        static void OnDispatch([FromSource]Player player)
+        {
+            string json = JsonConvert.SerializeObject(MissionsActive);
+
+            string encoded = Encode.StringToBase64(json);
+
+            player.TriggerEvent("curiosity:Client:Mission:Dispatch", encoded);
         }
 
         static public async void OnPlayerDropped([FromSource]Player player, string reason)
