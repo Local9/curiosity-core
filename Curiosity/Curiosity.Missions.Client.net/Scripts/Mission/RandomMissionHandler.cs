@@ -69,6 +69,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     CreateStoreMission.CleanUp(true);
 
                 Log.Info($"JOB: {job}");
+                Police.ArrestPed.Dispose();
 
                 return;
             }
@@ -106,6 +107,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     client.RegisterTickHandler(OnGenerateRandomMission);
                     Log.Info($"Player is on duty");
                 }
+                Police.ArrestPed.Init();
             }
 
             await Client.Delay(3000);

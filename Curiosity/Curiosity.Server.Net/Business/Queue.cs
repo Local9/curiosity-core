@@ -206,6 +206,11 @@ namespace Curiosity.Server.net.Business
                     deferrals.done(string.Format($"{messages[Messages.Banned]}", time));
                 }
 
+                if ((user.RoleId == 1 || user.RoleId == 9) && !Server.isLive)
+                {
+                    deferrals.done($"Server is currently in maintaince.");
+                }
+
                 if (sentLoading.ContainsKey(license))
                 {
                     sentLoading.TryRemove(license, out Player oldPlayer);

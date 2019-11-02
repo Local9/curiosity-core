@@ -52,8 +52,11 @@
   <ItemGroup>
     <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="DataClasses\SoundMessage.cs" />
+    <Compile Include="MissionPeds\NormalPed.cs" />
+    <Compile Include="MissionPedTypes\PedNormal.cs" />
     <Compile Include="Scripts\MissionEvents.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />
+    <Compile Include="Scripts\PedCreators\NormalPedCreator.cs" />
     <Compile Include="Scripts\PedCreators\PedCreator.cs" />
     <Compile Include="Classes\PlayerClient\ClientInformation.cs" />
     <Compile Include="ClassLoader.cs" />
@@ -94,6 +97,7 @@
     <Compile Include="DataClasses\Mission\PoliceStores.cs" />
     <Compile Include="Scripts\Mission\CreateStoreMission.cs" />
     <Compile Include="Scripts\PedCreators\ZombieCreator.cs" />
+    <Compile Include="Scripts\Police\ArrestPed.cs" />
     <Compile Include="Scripts\SoundManager.cs" />
     <Compile Include="Static\Relationships.cs" />
     <Compile Include="Wrappers\EntityEventWrapper.cs" />

@@ -24,6 +24,11 @@ namespace Curiosity.Missions.Client.net.Extensions
             return API.CanPedHearPlayer(player.Handle, ped.Handle);
         }
 
+        public static bool IsHandsUp(this Ped ped)
+        {
+            return API.GetIsTaskActive(ped.Handle, 0);
+        }
+
         public static void ClearFleeAttributes(this Ped ped)
         {
             Function.Call((Hash)8116279360099375049L, new InputArgument[] { ped.Handle, 0, 0 });
@@ -119,6 +124,11 @@ namespace Curiosity.Missions.Client.net.Extensions
             API.PlayPain(ped.Handle, type, 0);
 
             //Function.Call((Hash)-4856321419903345428L, new InputArgument[] { ped.Handle, type, 0, 0 });
+        }
+
+        public static void Cuff(this Ped ped, bool cuff = false)
+        {
+            API.SetEnableHandcuffs(ped.Handle, cuff);
         }
 
         public static void Recruit(this Ped ped, Ped leader, bool canBeTargeted, bool invincible, int accuracy)
