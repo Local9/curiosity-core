@@ -71,12 +71,6 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
         static private async Task OnTick()
         {
 
-            if (IsMenuOpen)
-            {
-                await BaseScript.Delay(100);
-                return;
-            }
-
             if (Game.PlayerPed.IsInVehicle())
             {
                 if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
@@ -86,6 +80,12 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
                     API.DisableControlAction(0, (int)Control.LookBehind, true);
                 }
+            }
+
+            if (IsMenuOpen)
+            {
+                await BaseScript.Delay(100);
+                return;
             }
 
             if (!SirenActive && Game.PlayerPed.IsInVehicle()
