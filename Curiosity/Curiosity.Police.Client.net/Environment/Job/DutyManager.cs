@@ -37,6 +37,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job == "error")
             {
+                client.DeregisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
                 Game.PlayerPed.Weapons.RemoveAll();
 
                 Log.Error("OnDutyState -> Error");
@@ -49,6 +50,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job != "police")
             {
+                client.DeregisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
+
                 Game.PlayerPed.Weapons.RemoveAll();
 
                 if (Classes.Player.PlayerInformation.IsDeveloper())
@@ -69,6 +72,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
             Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", false, string.Empty, string.Empty);
             Game.PlayerPed.IsInvincible = false;
             // Game.PlayerPed.Weapons.RemoveAll();
+
+            client.RegisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
 
             IsOnDuty = dutyState;
 

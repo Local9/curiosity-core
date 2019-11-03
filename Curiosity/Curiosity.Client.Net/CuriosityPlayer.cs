@@ -29,6 +29,10 @@ namespace Curiosity.Client.net
         bool canSaveLocation = false;
         public bool isPlayerSpawned = false;
 
+        bool showScaleform = true;
+
+        Scaleform scaleform;
+
         Random rnd = new Random();
 
         public CuriosityPlayer()
@@ -43,6 +47,8 @@ namespace Curiosity.Client.net
             Tick += UpdatePlayerLocation;
             Tick += PlayerAndServerSettings;
             Tick += SpawnTick;
+
+            API.RegisterCommand("rules", new Action(ShowScaleformRules), false);
         }
 
         async void DisplayInfo(bool display)
@@ -353,6 +359,8 @@ namespace Curiosity.Client.net
                 await Delay(0);
             }
 
+            ShowScaleformRules();
+
             Game.PlayerPed.IsPositionFrozen = false;
             Game.PlayerPed.IsInvincible = false;
             Game.PlayerPed.IsCollisionEnabled = true;
@@ -429,6 +437,60 @@ namespace Curiosity.Client.net
             }
 
             TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, posZ);
+        }
+
+        async void ShowScaleformRules()
+        {
+            ScaleformTask();
+            await Client.Delay(10000);
+            scaleform.Dispose();
+        }
+
+        async void LoadDict(string dict)
+        {
+            API.RequestStreamedTextureDict(dict, false);
+            while (!API.HasStreamedTextureDictLoaded(dict))
+            {
+                await Client.Delay(0);
+            }
+        }
+
+        async void ScaleformTask()
+        {
+            scaleform = new Scaleform("GTAV_ONLINE");
+
+            while (!scaleform.IsLoaded)
+            {
+                await Client.Delay(0);
+            }
+
+            string description = "~r~We do not tolerate any form of racism.~s~~n~";
+            description += "~r~DO NOT~s~ try to kill or harass other players.~n~";
+            description += "~r~DO NOT~s~ Spam the chat.~n~";
+            description += "~r~DO NOT~s~ Force people to RP, it is voluntary.~n~";
+            description += "~r~DO NOT~s~ Abuse exploits, report them on the forums.~n~";
+            description += "~r~DO NOT~s~ Drive recklessly.~n~";
+            description += "~g~RESPECT ALL~s~ Players and Staff members.~n~";
+            description += "~g~USE ONLY~s~ English in the chat.~n~";
+            description += "~g~PvE ONLY~s~ do jobs and work together.~n~";
+            description += "Finally, keep it friendly and we'll all get along.~n~";
+            description += "~n~";
+            description += "~b~Forums~s~: forums.lifev.net / ~b~Discord~s~: discord.lifev.net";
+
+            scaleform.CallFunction("SETUP_TABS", 1, false);
+            const string dictTexture = "www_arenawar_tv";
+            LoadDict(dictTexture);
+            scaleform.CallFunction("SETUP_TABS", true);
+            scaleform.CallFunction("SET_BIGFEED_INFO", "Hello", description, 0, dictTexture, "bg_top_left", $"~y~SERVER RULES", "deprecated", $"Welcome To ~y~Life V~s~!", 0);
+            scaleform.CallFunction("SET_NEWS_CONTEXT", 0);
+
+            while (scaleform.IsLoaded)
+            {
+                await Client.Delay(0);
+                scaleform.Render2D();
+            }
+
+            API.SetStreamedTextureDictAsNoLongerNeeded(dictTexture);
         }
     }
 }
