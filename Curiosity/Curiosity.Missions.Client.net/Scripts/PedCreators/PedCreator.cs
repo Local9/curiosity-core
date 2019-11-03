@@ -23,6 +23,7 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 
             API.SetPedFleeAttributes(spawnedPed.Handle, 0, false);
             spawnedPed.DropsWeaponsOnDeath = dropsWeaponsOnDeath;
+            spawnedPed.IsPersistent = true;
 
             EntityEventWrapper entityEventWrapper = new EntityEventWrapper(spawnedPed);
             entityEventWrapper.Died += new EntityEventWrapper.OnDeathEvent(EventWrapperOnDied);

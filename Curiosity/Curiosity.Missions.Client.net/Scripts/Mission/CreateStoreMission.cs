@@ -88,6 +88,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                         MissionHostage = store.hostages[0];
                         HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, MissionHostage.SpawnPoint, MissionHostage.SpawnHeading);
                         SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
+                        await BaseScript.Delay(0);
                         new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
                         SetPedScream(HostagePed.Handle);
                     }
@@ -97,14 +98,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 Ped ped1 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData1.Model, MissionPedData1.SpawnPoint, MissionPedData1.SpawnHeading);
                 ped1.Weapons.Give(MissionPedData1.Weapon, 1, true, true);
-                await Client.Delay(0);
+                await BaseScript.Delay(0);
                 MissionPed1 = PedCreators.MissionPedCreator.Ped(ped1, MissionPedData1.Alertness, MissionPedData1.Difficulty, MissionPedData1.VisionDistance);
                 
                 await BaseScript.Delay(0);
                 
                 Ped ped2 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData2.Model, MissionPedData2.SpawnPoint, MissionPedData2.SpawnHeading);
                 ped2.Weapons.Give(MissionPedData2.Weapon, 1, true, true);
-                await Client.Delay(0);
+                await BaseScript.Delay(0);
                 MissionPed2 = PedCreators.MissionPedCreator.Ped(ped2, MissionPedData2.Alertness, MissionPedData2.Difficulty, MissionPedData2.VisionDistance);
                 
                 await BaseScript.Delay(500);
