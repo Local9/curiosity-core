@@ -61,7 +61,7 @@ namespace Curiosity.Missions.Client.net.Scripts
                 }
             }
 
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Current Active", $"~b~{CityDispatch} ~s~City~n~~b~{RuralDispatch} ~s~Rural~n~~b~{CountyDispatch} ~s~Country", 2);
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Current Active", $"~b~{CityDispatch}/{DataClasses.Mission.PoliceStores.storesCity.Count} ~s~City~n~~b~{RuralDispatch}/{DataClasses.Mission.PoliceStores.storesRural.Count} ~s~Rural~n~~b~{CountyDispatch}/{DataClasses.Mission.PoliceStores.storesCountry.Count} ~s~Country", 2);
         }
 
         static async void OnPlayerCanStartMission(string missionData)
