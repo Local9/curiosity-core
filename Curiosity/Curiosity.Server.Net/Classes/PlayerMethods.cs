@@ -33,31 +33,46 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Player:AfkKick", new Action<CitizenFX.Core.Player>(AfkKick));
 
             ///////// JOBS //////////
+            server.RegisterEventHandler("curiosity:Server:Player:Job", new Action<CitizenFX.Core.Player, int>(OnPlayerJob));
             server.RegisterEventHandler("curiosity:Server:Player:Backup", new Action<CitizenFX.Core.Player, int, string>(OnBackupRequest));
+        }
+
+        static void OnPlayerJob([FromSource]CitizenFX.Core.Player player, int job)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            session.SetJob((Job)job);
         }
 
         static void OnBackupRequest([FromSource]CitizenFX.Core.Player player, int code, string streetName)
         {
-            if (code == 4)
+            foreach (KeyValuePair<string, Session> keyValuePair in SessionManager.PlayerList)
             {
-                Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"No further assistance required", $"Officer: ~b~{player.Name}~n~~s~Code: ~b~{code}~n~~s~Loc: ~b~{streetName}", 2);
-                return;
+                if (keyValuePair.Value.job != Job.Police) return;
+
+                if (code == 4)
+                {
+                    Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"No further assistance required", $"Officer: ~b~{player.Name}~n~~s~Code: ~b~{code}~n~~s~Loc: ~b~{streetName}", 2);
+                    return;
+                }
+
+                string codeDetails = "Could not obtain";
+
+                switch (code)
+                {
+                    case 2:
+                        codeDetails = "~y~Urgent~s~ - Proceed immediately";
+                        break;
+                    case 3:
+                        codeDetails = "~r~Emergency~s~ - Proceed immediately with lights and siren";
+                        break;
+                }
+
+                Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"Assistance Requested", $"Officer: ~b~{player.Name}~n~~s~Code: ~b~{code}", 2);
+                Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"Details ~b~{player.Name}", $"~s~Loc: ~b~{streetName}~n~{codeDetails}", 2);
             }
-
-            string codeDetails = "Could not obtain";
-
-            switch(code)
-            {
-                case 2:
-                    codeDetails = "~y~Urgent~s~ - Proceed immediately";
-                    break;
-                case 3:
-                    codeDetails = "~r~Emergency~s~ - Proceed immediately with lights and siren";
-                    break;
-            }
-
-            Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"Assistance Requested", $"Officer: ~b~{player.Name}~n~~s~Code: ~b~{code}", 2);
-            Server.TriggerClientEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"Details ~b~{player.Name}", $"~s~Loc: ~b~{streetName}~n~{codeDetails}", 2);
         }
 
         static bool IsStaff(Privilege privilege)

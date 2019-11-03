@@ -24,8 +24,6 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
-            // client.RegisterEventHandler("curiosity:Client:Police:SetCallOutStatus", new Action<bool>(OnSetCallOutStatus));
-            // client.RegisterEventHandler("curiosity:Client:Police:GetCallOutStatus", new Action(OnGetCallOutStatus));
         }
 
         static void OnDutyState(bool jobActive, bool dutyState, string job)
@@ -37,6 +35,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job == "error")
             {
+                Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Unknown);
                 client.DeregisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
                 Game.PlayerPed.Weapons.RemoveAll();
 
@@ -50,6 +49,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job != "police")
             {
+                Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Unknown);
                 client.DeregisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
 
                 Game.PlayerPed.Weapons.RemoveAll();
@@ -70,6 +70,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
             }
 
             Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", false, string.Empty, string.Empty);
+            Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Police);
             Game.PlayerPed.IsInvincible = false;
             // Game.PlayerPed.Weapons.RemoveAll();
 

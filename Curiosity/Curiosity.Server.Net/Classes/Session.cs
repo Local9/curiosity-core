@@ -46,6 +46,8 @@ namespace Curiosity.Server.net.Classes
         public int Wallet { get; private set; }
         public int BankAccount { get; private set; }
 
+        public Job job { get; private set; }
+
         public Session(CitizenFX.Core.Player player)
         {
             Mutex = new SemaphoreSlim(1, 1);
@@ -72,6 +74,11 @@ namespace Curiosity.Server.net.Classes
             HasSpawned = false;
             Wallet = 0;
             BankAccount = 0;
+        }
+
+        public void SetJob(Job job)
+        {
+            this.job = job;
         }
 
         public void SetWallet(int amount)
