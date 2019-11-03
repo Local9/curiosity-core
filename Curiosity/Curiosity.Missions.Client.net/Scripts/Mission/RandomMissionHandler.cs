@@ -50,6 +50,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static void OnMissionNotAvailable()
         {
+            if (ClientInformation.IsDeveloper())
+            {
+                Log.Info($"Requesting Mission, none Available");
+            }
+
             SetDispatchMessageRecieved(false);
             RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);
             TimeStampOfLastCallout = GetGameTimer();
