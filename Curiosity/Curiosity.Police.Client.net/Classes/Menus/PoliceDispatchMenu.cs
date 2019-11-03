@@ -20,6 +20,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static private MenuItem rbItemCode4 = new MenuItem("Code 4: No further assistance required");
         // SETTINGS
         static bool HasRequestedBackup = false;
+        static bool IsMenuOpen = false;
 
         static public void Init()
         {
@@ -30,7 +31,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             if (ControlHelper.IsControlJustPressed(Control.Pickup, true, ControlModifier.Alt))
             {
-                OpenMenu();
+                if (!IsMenuOpen)
+                    OpenMenu();
             }
             await Task.FromResult(0);
         }
@@ -51,6 +53,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         static public void OpenMenu()
         {
+            IsMenuOpen = true;
+
             MenuBaseFunctions.MenuOpen();
 
             MenuController.DontOpenAnyMenu = false;
@@ -85,6 +89,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void OnMenuClose(Menu menu)
         {
+            IsMenuOpen = false;
             calloutMenu.ClearMenuItems();
             MenuController.DontOpenAnyMenu = true;
             MenuBaseFunctions.MenuClose();
