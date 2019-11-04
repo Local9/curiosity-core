@@ -154,9 +154,9 @@ namespace Curiosity.Police.Client.net.Classes
                     return;
                 }
 
-                if (!Environment.Job.DutyManager.IsOnDuty)
+                if (!Environment.Job.DutyManager.IsPoliceJobActive)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "Must be on active duty to pull over a pedestrian.", 2);
+                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 1, "Police Dept", $"", "Must be a police officer to pull over a pedestrian.", 2);
                     return;
                 }
 

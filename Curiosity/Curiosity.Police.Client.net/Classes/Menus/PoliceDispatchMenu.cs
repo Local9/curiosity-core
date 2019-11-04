@@ -51,6 +51,16 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             }
         }
 
+        static async Task OnMenuOpenControls()
+        {
+            await Task.FromResult(0);
+
+            DisableControlAction(0, 86, true);
+            DisableControlAction(0, (int)Control.VehicleCinCam, true);
+            DisableControlAction(0, (int)Control.VehicleLookBehind, true);
+            DisableControlAction(0, (int)Control.LookBehind, true);
+        }
+
         static public void OpenMenu()
         {
             IsMenuOpen = true;
@@ -78,6 +88,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void OnMenuOpen(Menu menu)
         {
+            client.RegisterTickHandler(OnMenuOpenControls);
+
             MenuBaseFunctions.MenuOpen();
             MenuController.DontOpenAnyMenu = false;
             MenuController.EnableMenuToggleKeyOnController = false;
@@ -93,6 +105,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             calloutMenu.ClearMenuItems();
             MenuController.DontOpenAnyMenu = true;
             MenuBaseFunctions.MenuClose();
+
+            client.DeregisterTickHandler(OnMenuOpenControls);
         }
 
         private static void OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
