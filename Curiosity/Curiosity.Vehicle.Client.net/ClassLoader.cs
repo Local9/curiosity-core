@@ -24,6 +24,7 @@ namespace Curiosity.Vehicle.Client.net
             Classes.Vehicle.FuelManager.Init();
             Classes.Vehicle.VehicleDamage.Init();
             Classes.Vehicle.DeleteVehicle.Init();
+            Classes.Vehicle.VehicleBlip.Init();
 
             // Environment
             Classes.Environment.VehicleSpawnMarkerHandler.Init();

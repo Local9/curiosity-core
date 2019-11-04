@@ -4,7 +4,7 @@ using System;
 
 namespace Curiosity.Shared.Client.net.Helpers
 {
-    class Game
+    public static class WorldExt
     {
         public static RaycastResult GetEntityInFrontOfPed(Ped ped, float maxDistance = 5.0f)
         {

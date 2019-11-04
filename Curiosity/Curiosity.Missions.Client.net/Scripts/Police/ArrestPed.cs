@@ -20,7 +20,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static Dictionary<int, Ped> arrestedPeds = new Dictionary<int, Ped>();
 
-        public static void Init()
+        public static void Setup()
         {
             // kill it incase it doubles
             //client.DeregisterTickHandler(OnTask);

@@ -94,7 +94,7 @@ namespace Curiosity.Client.net.Classes.Actions
             client.RegisterEventHandler("curiosity:Player:Prop:Delete", new Action<string>(OnDeleteProp));
 
             client.RegisterEventHandler("curiosity:Client:Command:SpawnWeapon", new Action<string>(SpawnWeapon));
-            client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string, string>(SpawnCar));
+            
             client.RegisterEventHandler("curiosity:Client:Command:OnFire", new Action<string>(OnFire));
             client.RegisterEventHandler("curiosity:Client:Command:Chimp", new Action(ChimpSlap));
 
@@ -737,138 +737,6 @@ namespace Curiosity.Client.net.Classes.Actions
             Client.TriggerServerEvent("curiosity:Server:Command:SavePosition", $"{arguments[0]}", pos.X, pos.Y, pos.Z, Game.PlayerPed.Heading);
 
             await BaseScript.Delay(0);
-        }
-
-        static async void SpawnCar(string car, string numberPlate)
-        {
-            try
-            {
-                if (!Player.PlayerInformation.IsStaff()) return;
-                if (string.IsNullOrEmpty(car)) return;
-
-                Model model = null;
-                var enumName = Enum.GetNames(typeof(VehicleHash)).FirstOrDefault(s => s.ToLower().StartsWith(car.ToLower())) ?? "";
-
-                var modelName = "";
-
-                if (int.TryParse(car, out var hash))
-                {
-                    model = new Model(hash);
-                    modelName = $"{hash}";
-                }
-                else if (!string.IsNullOrEmpty(enumName))
-                {
-                    var found = false;
-                    foreach (VehicleHash p in Enum.GetValues(typeof(VehicleHash)))
-                    {
-                        if (!(Enum.GetName(typeof(VehicleHash), p)?.Equals(enumName, StringComparison.InvariantCultureIgnoreCase) ??
-                              false))
-                        {
-                            continue;
-                        }
-
-                        model = new Model(p);
-                        modelName = enumName;
-                        found = true;
-                        break;
-                    }
-
-                    if (!found)
-                    {
-                        Screen.ShowNotification($"~r~ERROR~s~: Could not load model {car}");
-                        return;
-                    }
-                }
-                else
-                {
-                    model = new Model(car);
-                    modelName = car;
-                }
-
-                if (!await SpawnVehicle(model, numberPlate))
-                {
-                    Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Error", $"Could not load model {modelName}", 2);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-        }
-        
-        private static async Task<bool> SpawnVehicle(Model model, string numberPlate)
-        {
-            if (Game.PlayerPed.CurrentVehicle != null)
-            {
-                Game.PlayerPed.CurrentVehicle.Delete();
-            }
-
-            var veh = await World.CreateVehicle(model, Game.PlayerPed.Position, Game.PlayerPed.Heading);
-            if (veh == null)
-            {
-                return false;
-            }
-
-            model.MarkAsNoLongerNeeded();
-
-            API.NetworkFadeInEntity(veh.Handle, false);
-
-            Game.PlayerPed.Task.WarpIntoVehicle(veh, VehicleSeat.Driver);
-            veh.LockStatus = VehicleLockStatus.Unlocked;
-            veh.NeedsToBeHotwired = false;
-            veh.IsEngineRunning = true;
-            veh.Mods.LicensePlate = numberPlate;
-
-            veh.Mods.InstallModKit();
-            veh.Mods[VehicleModType.Engine].Index = veh.Mods[VehicleModType.Engine].ModCount - 1;
-            veh.Mods[VehicleModType.Brakes].Index = veh.Mods[VehicleModType.Brakes].ModCount - 1;
-            veh.Mods[VehicleModType.Transmission].Index = veh.Mods[VehicleModType.Transmission].ModCount - 1;
-            veh.Mods[VehicleModType.Suspension].Index = veh.Mods[VehicleModType.Suspension].ModCount - 1;
-
-            List<int> listOfExtras = new List<int>();
-
-            for(int i = 0; i < 255; i++)
-            {
-                if (veh.ExtraExists(i))
-                    listOfExtras.Add(i);
-            }
-
-            int networkId = API.VehToNet(veh.Handle);
-            API.SetNetworkIdExistsOnAllMachines(networkId, true);
-            API.SetNetworkIdCanMigrate(networkId, true);
-
-            Blip blip = veh.AttachBlip();
-            blip.IsShortRange = false;
-            blip.Sprite = BlipSprite.PersonalVehicleCar;
-            blip.Priority = 100;
-            blip.Name = "Personal Vehicle";
-
-            if (API.DecorIsRegisteredAsType("Player_Vehicle", 3))
-            {
-                API.DecorSetInt(veh.Handle, "Player_Vehicle", Game.Player.ServerId);
-            }
-
-            API.SetVehicleHasBeenOwnedByPlayer(veh.Handle, true);
-
-            API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
-            API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
-
-            Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
-            Client.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
-            if (numberPlate == Environment.Vehicles.HSTAFF_LICENSE_PLATE || numberPlate == Environment.Vehicles.DEV_LICENSE_PLATE)
-            {
-                Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
-                Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
-                if (listOfExtras.Count > 0)
-                {
-                    Debug.WriteLine($"Vehicle Extras: '/mod extra number true/false' avaiable: {string.Join(", ", listOfExtras)}");
-                }
-
-            }
-            Environment.UI.Notifications.Curiosity(1, "Curiosity", "Vehicle Spawned", $"~b~Engine: ~y~MAX~n~~b~Brakes: ~y~MAX~n~~b~Transmission: ~y~MAX", 2);
-
-            return true;
         }
 
         static void SpawnWeapon(string weapon)

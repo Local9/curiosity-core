@@ -58,6 +58,7 @@
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="Classes\Vehicle\DeleteVehicle.cs" />
     <Compile Include="Classes\Vehicle\Spawn.cs" />
+    <Compile Include="Classes\Vehicle\VehicleBlip.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Models\FuelPump.cs" />

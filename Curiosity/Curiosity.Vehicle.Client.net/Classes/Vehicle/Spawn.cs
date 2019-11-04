@@ -18,7 +18,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
         static bool isSpawning = false;
 
-        public static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading, bool installSirens = false)
+        public static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading, bool installSirens = false, bool staffSpawn = false, string numberPlate = "")
         {
             try
             {
@@ -109,7 +109,16 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
                 Blip blip = veh.AttachBlip();
                 blip.IsShortRange = false;
-                blip.Sprite = BlipSprite.PersonalVehicleCar;
+
+                if (veh.Model.IsBike || veh.Model.IsBicycle)
+                {
+                    blip.Sprite = BlipSprite.PersonalVehicleBike;
+                }
+                else
+                {
+                    blip.Sprite = BlipSprite.PersonalVehicleCar;
+                }
+
                 blip.Priority = 100;
                 blip.Name = "Personal Vehicle";
 
@@ -125,6 +134,28 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
                 Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", veh.NetworkId);
+
+                if (staffSpawn)
+                {
+                    List<int> listOfExtras = new List<int>();
+
+                    for (int i = 0; i < 255; i++)
+                    {
+                        if (veh.ExtraExists(i))
+                            listOfExtras.Add(i);
+                    }
+
+                    Client.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
+                    Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
+                    if (listOfExtras.Count > 0)
+                    {
+                        Debug.WriteLine($"Vehicle Extras: '/mod extra number true/false' avaiable: {string.Join(", ", listOfExtras)}");
+                    }
+                    Client.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"~b~Engine: ~y~MAX~n~~b~Brakes: ~y~MAX~n~~b~Transmission: ~y~MAX", 2);
+
+                    veh.Mods.LicensePlate = numberPlate;
+                    veh.Mods.LicensePlateStyle = LicensePlateStyle.YellowOnBlack;
+                }
 
                 isSpawning = false;
 
