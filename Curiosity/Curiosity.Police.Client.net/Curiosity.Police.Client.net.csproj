@@ -62,6 +62,7 @@
     <Compile Include="Client.cs" />
     <Compile Include="Enums\CalloutType.cs" />
     <Compile Include="Enums\Skills.cs" />
+    <Compile Include="Environment\Job\BackupMessages.cs" />
     <Compile Include="Environment\Job\DutyManager.cs" />
     <Compile Include="Environment\Job\DutyMarkers.cs" />
     <Compile Include="Environment\Tasks\CalloutHandler.cs" />

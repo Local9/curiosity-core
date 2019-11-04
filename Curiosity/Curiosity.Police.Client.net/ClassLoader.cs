@@ -24,6 +24,8 @@ namespace Curiosity.Police.Client.net
             Classes.Menus.MenuPoliceOptions.Init();
             Classes.Menus.PoliceDispatchMenu.Init();
 
+            Environment.Job.BackupMessages.Init();
+
             Environment.Vehicle.Sirens.Init();
             Curiosity.Global.Shared.net.Data.BlipHandler.Init();
             Environment.Job.DutyMarkers.Init();

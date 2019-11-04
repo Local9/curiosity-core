@@ -97,27 +97,13 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
         {
-            string streetName = "Unkown Location";
-
-            uint streetHash = 0;
-            uint streetCrossing = 0;
-
-            GetStreetNameAtCoord(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, ref streetHash, ref streetCrossing);
-
-            streetName = World.GetStreetName(Game.PlayerPed.Position);
-            string crossing = GetStreetNameFromHashKey(streetCrossing);
-            string localisedZone = World.GetZoneLocalizedName(Game.PlayerPed.Position);
-
-            if (!string.IsNullOrEmpty(localisedZone))
-            {
-                streetName = $"{streetName}, {localisedZone}";
-            }
+            Vector3 pos = Game.PlayerPed.Position;
 
             if (HasRequestedBackup)
             {
                 if (menuItem == rbItemCode4)
                 {
-                    BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 4, streetName);
+                    BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 4, pos.X, pos.Y, pos.Z);
                     HasRequestedBackup = false;
                     client.DeregisterTickHandler(OnTaskHasRequestedBackup);
                     MenuController.CloseAllMenus();
@@ -131,17 +117,17 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             if (menuItem == rbItemCode2)
             {
-                BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 2, streetName);
+                BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 2, pos.X, pos.Y, pos.Z);
             }
 
             if (menuItem == rbItemCode3)
             {
-                BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 3, streetName);
+                BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 3, pos.X, pos.Y, pos.Z);
             }
 
             if (menuItem == rbItemCode4)
             {
-                BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 4, streetName);
+                BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 4, pos.X, pos.Y, pos.Z);
             }
 
             HasRequestedBackup = true;

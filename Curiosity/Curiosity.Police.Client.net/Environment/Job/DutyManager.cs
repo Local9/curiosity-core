@@ -60,19 +60,13 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 }
                 IsPoliceJobActive = false;
                 IsOnDuty = false;
-                if (IsOnCallout)
-                {
-                    // Classes.CreateShopCallout.EndCallout();
-                }
                 IsOnCallout = false;
-                // Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
                 return; // TODO: Refactor job code
             }
 
             Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", false, string.Empty, string.Empty);
             Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Police);
             Game.PlayerPed.IsInvincible = false;
-            // Game.PlayerPed.Weapons.RemoveAll();
 
             client.RegisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
 
@@ -82,29 +76,15 @@ namespace Curiosity.Police.Client.net.Environment.Job
             {
                 Log.Info($"OnDutyState -> Player Duty State {IsOnDuty}");
             }
+            Game.PlayerPed.RelationshipGroup = PoliceRelationshipGroup;
+            Game.PlayerPed.DropsWeaponsOnDeath = false;
+
+            IsPoliceJobActive = true;
 
             if (IsOnDuty)
             {
-                Game.PlayerPed.RelationshipGroup = PoliceRelationshipGroup;
-
                 Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", true, "Resupply Ammo", "curiosity:Player:Loadout:Resupply");
-                IsPoliceJobActive = true;
-                // Tasks.CalloutHandler.PlayerCanTakeCallout();
-
-                Game.PlayerPed.DropsWeaponsOnDeath = false;
-
                 Game.PlayerPed.Armor = 100;
-            }
-            else
-            {
-                Game.PlayerPed.RelationshipGroup = Client.PlayerRelationshipGroup;
-
-                if (IsOnCallout)
-                {
-                    // Classes.CreateShopCallout.EndCallout();
-                }
-                IsPoliceJobActive = false;
-                // Tasks.CalloutHandler.PlayerIsOnActiveCalloutOrOffDuty();
             }
         }
 

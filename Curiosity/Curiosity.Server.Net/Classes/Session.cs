@@ -55,6 +55,8 @@ namespace Curiosity.Server.net.Classes
             NetId = player.Handle;
             Name = player.Name;
 
+            job = Job.Unknown;
+
             int numIdents = GetNumPlayerIdentifiers(NetId);
             List<string> idents = new List<string>();
 
