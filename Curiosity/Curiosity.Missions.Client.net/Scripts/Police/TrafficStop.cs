@@ -40,20 +40,25 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 if (TrafficStopVehicle != null && !AttemptedTrafficStop)
                 {
-                    Game.DisableControlThisFrame(0, Control.VehicleNextRadio);
-                    Game.DisableControlThisFrame(0, Control.VehiclePrevRadio);
-                    Game.DisableControlThisFrame(0, Control.VehicleRadioWheel);
+                    Game.DisableControlThisFrame(2, Control.VehicleNextRadio);
+                    Game.DisableControlThisFrame(2, Control.VehiclePrevRadio);
+                    Game.DisableControlThisFrame(2, Control.VehicleRadioWheel);
 
-                    if (Game.IsControlJustPressed(0, Control.Cover))
+                    if (Game.IsDisabledControlPressed(2, Control.VehicleRadioWheel))
                     {
-                        Game.DisableControlThisFrame(0, Control.VehicleNextRadio);
-                        Game.DisableControlThisFrame(0, Control.VehiclePrevRadio);
-                        Game.DisableControlThisFrame(0, Control.VehicleRadioWheel);
-
                         if (TrafficStopVehicleBlip.Exists())
                             TrafficStopVehicleBlip.Delete();
 
                         TrafficStopVehicle = null;
+
+                        while (Game.IsDisabledControlPressed(2, Control.VehicleRadioWheel))
+                        {
+                            await Client.Delay(0);
+
+                            Game.DisableControlThisFrame(2, Control.VehicleNextRadio);
+                            Game.DisableControlThisFrame(2, Control.VehiclePrevRadio);
+                            Game.DisableControlThisFrame(2, Control.VehicleRadioWheel);
+                        }
                     }
                     else if (Game.PlayerPed.Position.Distance(TrafficStopVehicle.Position) > 50f)
                     {
@@ -69,7 +74,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     }
                     else
                     {
-                        Screen.DisplayHelpTextThisFrame($"Vehicle in front has been ~b~blipped~s~. Press ~INPUT_PICKUP~ to start a ~b~Traffic Stop~s~ or press and hold ~INPUT_COVER~ to release.");
+                        Screen.DisplayHelpTextThisFrame($"Vehicle in front has been ~b~blipped~s~.~n~Press ~INPUT_PICKUP~ to start a ~b~Traffic Stop~s~~n~Press ~INPUT_COVER~ to ~b~Release");
                     }
 
 

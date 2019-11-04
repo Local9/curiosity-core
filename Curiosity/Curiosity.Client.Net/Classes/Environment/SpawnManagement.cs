@@ -31,6 +31,9 @@ namespace Curiosity.Client.net.Classes.Environment
         static bool hasPlayerSpawned = false;
         static Vehicle CurrentVehicle = null;
 
+        static int seconds = 120;
+        static long gameTime = API.GetGameTimer();
+
         public static void Init()
         {
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
@@ -54,6 +57,22 @@ namespace Curiosity.Client.net.Classes.Environment
             hasPlayerSpawned = true;
         }
 
+        static async Task ShowText()
+        {
+            long time = seconds - (int)((API.GetGameTimer() - gameTime) / 1000);
+            string messageText = $"Wait {time}s or press ~b~PICKUP~s~ to force respawn.";
+
+            NativeWrappers.Draw3DText(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z - 0.5f, messageText, 75f, 10f);
+
+            if (Player.PlayerInformation.IsDeveloper())
+            {
+                Debug.WriteLine(messageText);
+            }
+
+            if (Game.PlayerPed.IsAlive)
+                client.DeregisterTickHandler(ShowText);
+        }
+
         static async Task OnWastedCheck()
         {
             try
@@ -64,7 +83,34 @@ namespace Curiosity.Client.net.Classes.Environment
                     // Entity entity = Game.PlayerPed.GetKiller();
 
                     await Client.Delay(0);
+                    
+                    Screen.Effects.Start(ScreenEffect.DeathFailOut, 0);
+
                     UI.Scaleforms.Wasted();
+
+                    bool forceRespawn = false;
+
+                    seconds = 120;
+                    gameTime = API.GetGameTimer();
+
+                    client.RegisterTickHandler(ShowText);
+
+                    while (!forceRespawn)
+                    {
+                        await Client.Delay(0);
+
+                        if (Game.IsControlJustPressed(0, Control.Pickup))
+                        {
+                            forceRespawn = true;
+                        }
+
+                        if ((API.GetGameTimer() - gameTime) > (1000 * seconds))
+                        {
+                            break;
+                        }
+                    }
+
+                    client.DeregisterTickHandler(ShowText);
 
                     await Client.Delay(2000);
 
@@ -74,6 +120,8 @@ namespace Curiosity.Client.net.Classes.Environment
                     {
                         await Client.Delay(0);
                     }
+
+                    Screen.Effects.Stop(ScreenEffect.DeathFailOut);
 
                     //Game.Player.WantedLevel = 0;
                     //Game.PlayerPed.ClearBloodDamage();
@@ -136,8 +184,16 @@ namespace Curiosity.Client.net.Classes.Environment
                     }
 
                     API.SetFakeWantedLevel(0);
-                    Client.TriggerServerEvent("curiosity:Server:Bank:MedicalFees");
-                    UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You have been charged for your stay, please try to stay alive.", 132);
+                    Client.TriggerServerEvent("curiosity:Server:Bank:MedicalFees", forceRespawn);
+
+                    if (forceRespawn)
+                    {
+                        UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You have been charged for your stay, please try to stay alive.", 132);
+                    }
+                    else
+                    {
+                        UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You've been treated for you injuries.", 132);
+                    }
                 }
             }
             catch (Exception ex)

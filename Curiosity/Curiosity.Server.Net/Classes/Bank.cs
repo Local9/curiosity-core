@@ -23,7 +23,7 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Bank:IncreaseBank", new Action<CitizenFX.Core.Player, int, int>(IncreaseBank));
             server.RegisterEventHandler("curiosity:Server:Bank:DecreaseBank", new Action<CitizenFX.Core.Player, int, int>(DecreaseBank));
             server.RegisterEventHandler("curiosity:Server:Bank:TransferMoney", new Action<CitizenFX.Core.Player, int, bool>(TransferMoney));
-            server.RegisterEventHandler("curiosity:Server:Bank:MedicalFees", new Action<CitizenFX.Core.Player>(MedicalFees));
+            server.RegisterEventHandler("curiosity:Server:Bank:MedicalFees", new Action<CitizenFX.Core.Player, bool>(MedicalFees));
 
             timerCheck = API.GetGameTimer();
 
@@ -38,8 +38,10 @@ namespace Curiosity.Server.net.Classes
             server.RegisterTickHandler(BankInterest);
         }
         
-        static async void MedicalFees([FromSource]CitizenFX.Core.Player player)
+        static async void MedicalFees([FromSource]CitizenFX.Core.Player player, bool forcedRespawn)
         {
+            if (!forcedRespawn) return;
+
             if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
             Session session = SessionManager.PlayerList[player.Handle];

@@ -18,14 +18,22 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         static bool _IsActive = false;
         static bool _IsOnDuty = false;
+        static bool _IsTrafficStopsActive = false;
+        static bool _IsArrestsActive = false;
+        static bool _IsRandomEventsActive = false;
+
         static string _ActiveJob;
 
         static List<string> patrolAreas = new List<string>();
 
-        static MenuCheckboxItem menuDuty = new MenuCheckboxItem("Accepting Dispatch Calls", _IsOnDuty);
+        static MenuCheckboxItem menuCheckboxDuty = new MenuCheckboxItem("Accepting Dispatch Calls", _IsOnDuty);
         static MenuListItem menuListPatrolZone = new MenuListItem("Area of Patrol", patrolAreas, _patrolZone);
         static MenuItem menuItemShowRadar = new MenuItem("Open Radar");
         static MenuItem menuItemDispatch = new MenuItem("Dispatch");
+        static MenuItem menuItemBreaker = new MenuItem(":: Options ::") { Enabled = false };
+        static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
+        static MenuCheckboxItem menuCheckboxArrests = new MenuCheckboxItem("Enable Arrests", _IsArrestsActive) { Enabled = false, Description = "Coming Soon™" };
+        static MenuCheckboxItem menuCheckboxRandomEvents = new MenuCheckboxItem("Enable Random Events", _IsRandomEventsActive) { Enabled = false, Description = "Coming Soon™" };
 
         // Request
 
@@ -78,7 +86,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             MenuBaseFunctions.MenuOpen();
 
-            if (menuItem == menuDuty)
+            if (menuItem == menuCheckboxDuty)
             {
                 menuItem.Enabled = false;
 
@@ -87,6 +95,12 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
                 await Client.Delay(3000);
                 menuItem.Enabled = true;
+            }
+
+            if (menuItem == menuCheckboxTrafficStops)
+            {
+                _IsTrafficStopsActive = newCheckedState;
+                BaseScript.TriggerEvent("curiosity:Client:Mission:TrafficStops", _IsTrafficStopsActive);
             }
         }
 
@@ -145,10 +159,10 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             MenuBaseFunctions.MenuOpen();
 
-            menuDuty.Enabled = false;
+            menuCheckboxDuty.Enabled = false;
             menuListPatrolZone.Enabled = false;
 
-            menu.AddMenuItem(menuDuty);
+            menu.AddMenuItem(menuCheckboxDuty);
             menu.AddMenuItem(menuListPatrolZone);
 
             bool canPullover = false;
@@ -162,12 +176,13 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 if (Player.PlayerInformation.playerInfo.Skills.ContainsKey("knowledge"))
                 {
                     knowledge = Player.PlayerInformation.playerInfo.Skills["knowledge"].Value;
-                    canPullover = (policexp >= 4500 && knowledge >= 1000);
+                    canPullover = (policexp >= 2500 && knowledge >= 1000);
                 }
             }
 
             menuItemShowRadar.Enabled = canPullover;
-            
+            menuCheckboxTrafficStops.Enabled = canPullover;
+
             if (!menuItemShowRadar.Enabled)
             {
                 string description = "~b~Require Additional;";
@@ -193,9 +208,17 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menu.AddMenuItem(menuItemShowRadar);
             menu.AddMenuItem(menuItemDispatch);
 
+            if (Classes.Player.PlayerInformation.IsDeveloper())
+            {
+                menu.AddMenuItem(menuItemBreaker);
+                menu.AddMenuItem(menuCheckboxTrafficStops);
+                menu.AddMenuItem(menuCheckboxArrests);
+                menu.AddMenuItem(menuCheckboxRandomEvents);
+            }
+
             await Client.Delay(100);
 
-            menuDuty.Enabled = true;
+            menuCheckboxDuty.Enabled = true;
             menuListPatrolZone.Enabled = true;
 
             MenuBaseFunctions.MenuOpen();

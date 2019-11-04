@@ -20,29 +20,40 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
         static async Task OnTask()
         {
             await Task.FromResult(0);
-            if (Game.PlayerPed.IsInVehicle())
+            try
             {
-                if (Game.PlayerPed.CurrentVehicle.Driver.Handle == Game.PlayerPed.Handle)
+                if (Game.PlayerPed.IsInVehicle())
                 {
-                    if (Game.PlayerPed.CurrentVehicle.Handle == Client.CurrentVehicle.Handle)
+                    if (Game.PlayerPed.CurrentVehicle.Driver.Handle == Game.PlayerPed.Handle)
                     {
-                        Client.CurrentVehicle.AttachedBlip.Alpha = 0;
+                        if (Game.PlayerPed.CurrentVehicle.Handle == Client.CurrentVehicle.Handle)
+                        {
+                            Client.CurrentVehicle.AttachedBlip.Alpha = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    if (Client.CurrentVehicle != null)
+                    {
+                        if (Client.CurrentVehicle.IsAlive)
+                        {
+                            if (Client.CurrentVehicle.AttachedBlip.Exists())
+                                Client.CurrentVehicle.AttachedBlip.Alpha = 255;
+                        }
+                        else
+                        {
+                            if (Client.CurrentVehicle.AttachedBlip.Exists())
+                                Client.CurrentVehicle.AttachedBlip.Delete();
+                        }
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                if (Client.CurrentVehicle != null)
+                if (Player.PlayerInformation.IsDeveloper())
                 {
-                    if (Client.CurrentVehicle.IsAlive)
-                    {
-                        Client.CurrentVehicle.AttachedBlip.Alpha = 255;
-                    }
-                    else
-                    {
-                        if (Client.CurrentVehicle.AttachedBlip.Exists())
-                            Client.CurrentVehicle.AttachedBlip.Delete();
-                    }
+                    Debug.WriteLine($"{ex}");
                 }
             }
         }

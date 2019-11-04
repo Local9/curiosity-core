@@ -36,11 +36,39 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static public void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
+
+            client.RegisterEventHandler("curiosity:Client:Mission:TrafficStops", new Action<bool>(OnTrafficStops));
+            client.RegisterEventHandler("curiosity:Client:Mission:Arrests", new Action<bool>(OnArrests));
+
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
            
             client.RegisterEventHandler("curiosity:Client:Mission:NotAvailable", new Action(OnMissionNotAvailable));
 
             client.RegisterEventHandler("curiosity:Client:Missions:MissionComplete", new Action(OnMissionComplete));
+        }
+
+        static void OnArrests(bool state)
+        {
+            if (state)
+            {
+                Police.ArrestPed.Setup();
+            }
+            else
+            {
+                Police.ArrestPed.Dispose();
+            }
+        }
+
+        static void OnTrafficStops(bool state)
+        {
+            if (state)
+            {
+                Police.TrafficStop.Setup();
+            }
+            else
+            {
+                Police.TrafficStop.Dispose();
+            }
         }
 
         static void OnMissionComplete()
@@ -79,14 +107,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     CreateStoreMission.CleanUp(true);
 
                 Log.Info($"JOB: {job}");
-                //Police.ArrestPed.Dispose();
-                //Police.TrafficStop.Dispose();
+                Police.ArrestPed.Dispose();
+                Police.TrafficStop.Dispose();
 
                 return;
             }
-
-            //Police.TrafficStop.Setup();
-            //Police.ArrestPed.Setup();
 
             if (StopSpam) return;
             StopSpam = true;

@@ -192,6 +192,7 @@ namespace Curiosity.Client.net
 
         async void SpawnPlayer(long userId, int roleId, string role, float x, float y, float z)
         {
+            Screen.Effects.Stop(ScreenEffect.DeathFailOut);
             Screen.Fading.FadeOut(500);
             Setup();
 
@@ -397,6 +398,7 @@ namespace Curiosity.Client.net
 
             try
             {
+                Screen.Effects.Stop(ScreenEffect.DeathFailOut);
                 TriggerEvent("playerSpawned", spawnInfodyn);
             }
             catch (Exception ex)

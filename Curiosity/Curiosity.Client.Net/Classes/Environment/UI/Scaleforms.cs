@@ -71,9 +71,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         public static async void Wasted()
         {
             if (scaleformActive) return;
-
             Game.PlaySound("Bed", "WastedSounds");
-            Screen.Effects.Start(ScreenEffect.DeathFailMpDark, 3000);
             Scaleform scaleform = await ScaleformWrapper.Request("mp_big_message_freemode");
             scaleform.CallFunction("SHOW_SHARD_WASTED_MP_MESSAGE", "~r~WASTED", "", 1);
             ShowScaleform(scaleform, 3000);
