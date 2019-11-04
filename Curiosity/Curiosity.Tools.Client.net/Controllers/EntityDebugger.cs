@@ -66,7 +66,8 @@ namespace Curiosity.Tools.Client.net.Controllers
 				list["Position"] = $"{pos.X:n5} {pos.Y:n5} {pos.Z:n5}";
 				list["Rotation"] = $"{rot.X:n5} {rot.Y:n5} {rot.Z:n5}";
 				list["Velocity"] = $"{vel.X:n5} {vel.Y:n5} {vel.Z:n5}";
-			}
+                list["Visible"] = $"{entity.IsVisible}";
+            }
 			catch( Exception ex ) {
 				Log.Error( ex );
 			}

@@ -26,9 +26,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                 {
                     if (Game.PlayerPed.CurrentVehicle.Driver.Handle == Game.PlayerPed.Handle)
                     {
-                        if (Game.PlayerPed.CurrentVehicle.Handle == Client.CurrentVehicle.Handle)
+                        if (Game.PlayerPed.CurrentVehicle != null && Client.CurrentVehicle != null)
                         {
-                            Client.CurrentVehicle.AttachedBlip.Alpha = 0;
+                            if (Game.PlayerPed.CurrentVehicle.Handle == Client.CurrentVehicle.Handle)
+                            {
+                                if (Client.CurrentVehicle.AttachedBlip != null)
+                                    if (Client.CurrentVehicle.AttachedBlip.Exists())
+                                        Client.CurrentVehicle.AttachedBlip.Alpha = 0;
+                            }
                         }
                     }
                 }
@@ -38,13 +43,15 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     {
                         if (Client.CurrentVehicle.IsAlive)
                         {
-                            if (Client.CurrentVehicle.AttachedBlip.Exists())
-                                Client.CurrentVehicle.AttachedBlip.Alpha = 255;
+                            if (Client.CurrentVehicle.AttachedBlip != null)
+                                if (Client.CurrentVehicle.AttachedBlip.Exists())
+                                    Client.CurrentVehicle.AttachedBlip.Alpha = 255;
                         }
                         else
                         {
-                            if (Client.CurrentVehicle.AttachedBlip.Exists())
-                                Client.CurrentVehicle.AttachedBlip.Delete();
+                            if (Client.CurrentVehicle.AttachedBlip != null)
+                                if (Client.CurrentVehicle.AttachedBlip.Exists())
+                                    Client.CurrentVehicle.AttachedBlip.Delete();
                         }
                     }
                 }

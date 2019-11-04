@@ -64,7 +64,19 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                         model = new Model(p);
                         modelName = enumName;
                         found = true;
+
+                        if (Classes.Player.PlayerInformation.IsDeveloper())
+                        {
+                            Screen.ShowNotification($"~r~Info~s~:~n~Model Valid: {model.IsValid}~n~Model: {modelName}");
+                        }
+
                         break;
+                    }
+
+                    if (!model.IsValid)
+                    {
+                        Screen.ShowNotification($"~r~ERROR~s~: Could not model {car}");
+                        return;
                     }
 
                     if (!found)

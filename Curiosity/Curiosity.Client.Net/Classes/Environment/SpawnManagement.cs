@@ -31,7 +31,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static bool hasPlayerSpawned = false;
         static Vehicle CurrentVehicle = null;
 
-        static int seconds = 120;
+        static int seconds = 300;
         static long gameTime = API.GetGameTimer();
 
         public static void Init()
@@ -82,6 +82,8 @@ namespace Curiosity.Client.net.Classes.Environment
                 {
                     // Entity entity = Game.PlayerPed.GetKiller();
 
+                    API.SetResourceKvpInt("DEATH", 1);
+
                     await Client.Delay(0);
                     
                     Screen.Effects.Start(ScreenEffect.DeathFailOut, 0);
@@ -90,7 +92,6 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     bool forceRespawn = false;
 
-                    seconds = 120;
                     gameTime = API.GetGameTimer();
 
                     client.RegisterTickHandler(ShowText);
@@ -111,6 +112,8 @@ namespace Curiosity.Client.net.Classes.Environment
                     }
 
                     client.DeregisterTickHandler(ShowText);
+
+                    API.SetResourceKvpInt("DEATH", 0);
 
                     await Client.Delay(2000);
 

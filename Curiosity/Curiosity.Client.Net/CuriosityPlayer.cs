@@ -398,6 +398,15 @@ namespace Curiosity.Client.net
 
             try
             {
+                int deathCheck = API.GetResourceKvpInt("DEATH");
+
+                if (deathCheck > 0)
+                {
+                    API.SetResourceKvpInt("DEATH", 0);
+                    Client.TriggerServerEvent("curiosity:Server:Bank:MedicalFees", true);
+                    Classes.Environment.UI.Notifications.LifeV(1, "EMS", "Medical Fees", "Charged for trying to dodge medical fees.", 132);
+                }
+
                 Screen.Effects.Stop(ScreenEffect.DeathFailOut);
                 TriggerEvent("playerSpawned", spawnInfodyn);
             }

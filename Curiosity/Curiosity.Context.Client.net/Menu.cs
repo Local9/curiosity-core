@@ -35,6 +35,7 @@ namespace Curiosity.Context.Client.net
         bool playingEmote = false;
         bool toggleCarboot = false;
         bool isChatInputActive = false;
+        bool isCinematicMode = false;
 
         string dutyMenuText;
         string dutyEventToCall;
@@ -44,6 +45,7 @@ namespace Curiosity.Context.Client.net
             _instance = this;
 
             RegisterEventHandler("curiosity:Client:Chat:ChatboxActive", new Action<bool>(OnChatboxActive));
+            RegisterEventHandler("curiosity:Player:UI:CinematicMode", new Action(OnCinematicMode));
 
             RegisterEventHandler("curiosity:Client:Context:ShowDutyMenu", new Action<bool, string, string>(OnDutyMenu));
 
@@ -57,6 +59,12 @@ namespace Curiosity.Context.Client.net
             RegisterNuiEventHandler("vpoRelease", new Action<dynamic>(OnVpoRelease));
 
             RegisterTickHandler(OnTick);
+        }
+
+        void OnCinematicMode()
+        {
+            isCinematicMode = !isCinematicMode;
+            isChatInputActive = isCinematicMode;
         }
 
         void OnVpoSpeedingTicket(dynamic nui)

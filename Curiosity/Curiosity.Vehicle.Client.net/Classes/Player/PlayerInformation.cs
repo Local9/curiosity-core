@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.UI;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using System;
@@ -16,7 +17,13 @@ namespace Curiosity.Vehicle.Client.net.Classes.Player
 
         public static async void Init()
         {
+            client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
+            client.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
+        }
+        static void OnPlayerSpawned()
+        {
+            Client.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         static void PlayerInfo(string json)

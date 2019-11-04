@@ -25,7 +25,42 @@ namespace Curiosity.Vehicle.Client.net
 
             ClassLoader.Init();
 
+            RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+            RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
+
             Log.Info("Curiosity.Vehicle.Client.net loaded\n");
+        }
+
+        static void OnClientResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            Client.TriggerEvent("curiosity:Client:Player:Information");
+
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
+                {
+                    CurrentVehicle = Game.PlayerPed.CurrentVehicle;
+                    float fuel = API.GetResourceKvpFloat("VR_FUEL");
+                    API.DecorSetFloat(CurrentVehicle.Handle, "Vehicle.Fuel", fuel);
+                    CurrentVehicle.IsEngineRunning = true;
+                }
+            }
+        }
+
+        static void OnClientResourceStop(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
+                {
+                    float fuel = API.DecorGetFloat(Client.CurrentVehicle.Handle, "Vehicle.Fuel");
+                    API.SetResourceKvpFloat("VR_FUEL", fuel);
+                }
+            }
         }
 
         /// <summary>

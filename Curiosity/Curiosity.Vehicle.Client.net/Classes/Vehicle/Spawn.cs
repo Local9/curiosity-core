@@ -51,8 +51,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
                 await Client.Delay(0);
 
-                model.MarkAsNoLongerNeeded();
-
                 API.SetEntityLoadCollisionFlag(veh.Handle, true);
 
                 API.NetworkDoesNetworkIdExist(veh.NetworkId);
@@ -121,6 +119,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
                 blip.Priority = 100;
                 blip.Name = "Personal Vehicle";
+                
+                await Client.Delay(0);
 
                 API.SetVehicleHasBeenOwnedByPlayer(veh.Handle, true);
 
@@ -130,10 +130,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
                 Client.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
 
+                await Client.Delay(0);
+
                 API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
                 Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", veh.NetworkId);
+
+                await Client.Delay(0);
 
                 if (staffSpawn)
                 {
@@ -157,7 +161,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                     veh.Mods.LicensePlateStyle = LicensePlateStyle.YellowOnBlack;
                 }
 
+                await Client.Delay(0);
+
                 isSpawning = false;
+
+                veh.IsVisible = true;
+                veh.IsInvincible = false;
+
+                model.MarkAsNoLongerNeeded();
 
                 return true;
             }
