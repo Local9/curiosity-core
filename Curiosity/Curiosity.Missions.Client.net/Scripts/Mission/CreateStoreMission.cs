@@ -289,6 +289,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 await BaseScript.Delay(0);
                 Screen.DisplayHelpTextThisFrame($"Please leave the area");
                 position = Game.PlayerPed.Position;
+
+                if (!RandomMissionHandler.IsOnDuty)
+                {
+                    Screen.DisplayHelpTextThisFrame($"Mission Cancelled");
+                    break;
+                }
             }
 
             if (!cancelMission)

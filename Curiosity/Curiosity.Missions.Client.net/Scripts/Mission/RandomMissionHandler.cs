@@ -161,6 +161,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static public void AllowNextMission()
         {
+            if (!IsOnDuty) return;
+
             if (PreviousMissionId > 0)
                 Client.TriggerServerEvent("curiosity:Server:Missions:Ended", PreviousMissionId);
 
@@ -187,6 +189,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     }
 
                     await Client.Delay(10000);
+
+                    if (!IsOnDuty)
+                    {
+                        SetDispatchMessageRecieved(false);
+
+                        IsRequestingCallout = false;
+                        HasAcceptedCallout = false;
+
+                        client.DeregisterTickHandler(OnGenerateRandomMission);
+                    }
+
                     return;
                 }
 

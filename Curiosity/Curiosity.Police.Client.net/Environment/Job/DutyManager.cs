@@ -84,7 +84,6 @@ namespace Curiosity.Police.Client.net.Environment.Job
             if (IsOnDuty)
             {
                 Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", true, "Resupply Ammo", "curiosity:Player:Loadout:Resupply");
-                Game.PlayerPed.Armor = 100;
             }
         }
 
