@@ -33,6 +33,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static MenuListItem menuListItemSecondary;
 
         static MenuItem menuItemEquipExtras;
+        static MenuItem menuItemEquipArmor;
 
         static Vector3 positionMenuOpen;
 
@@ -170,6 +171,11 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                     GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.CombatPistol, (uint)GetHashKey("COMPONENT_AT_PI_FLSH"));
                 }
             }
+
+            if (menuItem == menuItemEquipArmor)
+            {
+                Game.PlayerPed.Armor = 100;
+            }
         }
 
         private static void LoadoutMenu_OnMenuClose(Menu menu)
@@ -232,10 +238,12 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menuListItemSecondary = new MenuListItem("Collect Secondary", listSecondaryNames, 0) { Description = "Press ~r~ENTER~s~ to equip secondary." };
 
             menuItemEquipExtras = new MenuItem("Collect Tools") { Description = "Press ~r~ENTER~s~ to equip tools." };
+            menuItemEquipArmor = new MenuItem("Equip Armor") { Description = "Press ~r~ENTER~s~ to equip armor." };
 
             LoadoutMenu.AddMenuItem(menuListItemPrimary);
             LoadoutMenu.AddMenuItem(menuListItemSecondary);
             LoadoutMenu.AddMenuItem(menuItemEquipExtras);
+            LoadoutMenu.AddMenuItem(menuItemEquipArmor);
 
         }
     }
