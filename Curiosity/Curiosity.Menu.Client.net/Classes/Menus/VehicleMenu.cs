@@ -559,7 +559,16 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 if (vehicleExtras.TryGetValue(item, out int extra))
                 {
                     Vehicle veh = Client.CurrentVehicle;
+
+                    int health = veh.Health;
+                    float bodyHealth = veh.BodyHealth;
+                    float engineHealth = veh.EngineHealth;
+
                     veh.ToggleExtra(extra, _checked);
+
+                    veh.Health = health;
+                    veh.EngineHealth = engineHealth;
+                    veh.BodyHealth = bodyHealth;
                 }
             };
 
