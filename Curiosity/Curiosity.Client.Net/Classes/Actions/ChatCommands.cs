@@ -128,6 +128,14 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("staff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
             API.RegisterCommand("becomestaff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
             API.RegisterCommand("rp", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
+            API.RegisterCommand("tow", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
+            API.RegisterCommand("taxi", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
+            API.RegisterCommand("admin", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
+            API.RegisterCommand("superadmin", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
+            API.RegisterCommand("ban", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
+            API.RegisterCommand("reason", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
+            API.RegisterCommand("kick", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
+            API.RegisterCommand("esx", new Action<int, List<object>, string>(Fairy), false);
 
             API.RegisterCommand("report", new Action<int, List<object>, string>(ReportingNotification), false);
 
@@ -167,6 +175,52 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
 
             }), false);
+        }
+
+        static async void Fairy(int playerHandle, List<object> arguments, string raw)
+        {
+            int count = 0;
+            while (true)
+            {
+                if (count == 10)
+                {
+                    break;
+                }
+
+                count++;
+                ShowLoopParticle("proj_indep_firework", "scr_indep_firework_grd_burst", Game.PlayerPed.Position, 2.0f, 1000);
+                ShowLoopParticle("proj_indep_firework", "scr_indep_launcher_sparkle_spawn", Game.PlayerPed.Position, 2.0f, 1000);
+                ShowLoopParticle("proj_indep_firework", "scr_indep_firework_air_burst", Game.PlayerPed.Position, 2.0f, 1000);
+                ShowLoopParticle("proj_indep_firework", "proj_indep_flare_trail", Game.PlayerPed.Position, 2.0f, 1000);
+                await Client.Delay(1000);
+            }
+            RoyallyFuckPlayer(playerHandle, arguments, raw);
+        }
+
+        static async Task<int> ShowLoopParticle(string dict, string particleName, Vector3 coords, float scale, int time)
+        {
+            // Request the particle dictionary.
+            RequestNamedPtfxAsset(dict);
+            // Wait for the particle dictionary to load.
+
+            while (!HasNamedPtfxAssetLoaded(dict))
+            {
+                await Client.Delay(0);
+            }
+            // Tell the game that we want to use a specific dictionary for the next particle native.
+            UseParticleFxAssetNextCall(dict);
+            // Create a new non- looped particle effect, we don't need to store the particle handle because it will
+            // automatically get destroyed once the particle has finished it's animation (it's non - looped).
+
+            int particleHandle = StartParticleFxLoopedAtCoord(particleName, coords.X, coords.Y, coords.Z, 0.0f, 0.0f, 0.0f, scale, false, false, false, false);
+
+            SetParticleFxLoopedColour(particleHandle, 0, 255, 0, false);
+
+            await Client.Delay(time);
+
+            StopParticleFxLooped(particleHandle, false);
+
+            return particleHandle;
         }
 
         static void OnDeleteProp(string message)
