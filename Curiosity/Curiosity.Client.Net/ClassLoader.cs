@@ -131,7 +131,7 @@ namespace Curiosity.Client.net
             //Stay.Init();
 
             MarqueeMessages.Init();
-
+            ChatService.Init();
             DevCommands.Init();
         }
     }

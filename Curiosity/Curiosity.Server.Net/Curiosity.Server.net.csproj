@@ -72,6 +72,7 @@
     <Compile Include="Classes\Character.cs" />
     <Compile Include="Classes\DiscordWrapper.cs" />
     <Compile Include="Classes\Environment\ChatCommands.cs" />
+    <Compile Include="Classes\Environment\ChatService.cs" />
     <Compile Include="Classes\Environment\InstanceChecker.cs" />
     <Compile Include="Classes\Environment\Scoreboard.cs" />
     <Compile Include="Classes\Environment\TriggerEventForMultipule.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Entity\DiscordWebhook.cs" />
     <Compile Include="Entity\VehicleData.cs" />
     <Compile Include="Enums\Discord\Webhook.cs" />
+    <Compile Include="Extensions\ProfanityFilter.cs" />
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
