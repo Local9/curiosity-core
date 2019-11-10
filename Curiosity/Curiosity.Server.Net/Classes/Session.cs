@@ -140,7 +140,7 @@ namespace Curiosity.Server.net.Classes
 
             SessionManager.PlayerList[NetId] = this;
 
-            ChatLog.SendLogMessage($"Connected: {Name}");
+            ChatLog.SendLogMessage($"Connected: [{Player.Handle}] {Name} (Ping: {Ping}ms)");
 
             return true;
         }
