@@ -802,14 +802,55 @@ namespace Curiosity.Client.net.Classes.Actions
         static void Teleport(int playerHandle, List<object> arguments, string raw)
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
-            if (arguments.Count < 3) return;
 
-            float posX = float.Parse(arguments[0].ToString());
-            float posY = float.Parse(arguments[1].ToString());
-            float posZ = float.Parse(arguments[2].ToString());
+            float posX = 0;
+            float posY = 0;
+            float posZ = 0;
 
+            if (arguments.Count < 3)
+            {
+                int blip = API.GetFirstBlipInfoId((int)BlipSprite.Waypoint);
+                if (DoesBlipExist(blip))
+                {
+                    Vector3 pos = GetBlipInfoIdCoord(blip);
+                    Vector3 safePos = World.GetSafeCoordForPed(pos, true, 16);
+
+                    if (!safePos.IsZero)
+                    {
+                        pos = safePos;
+                    }
+                    else
+                    {
+                        float ground = pos.Z;
+                        if (GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z + 200f, ref ground, false))
+                        {
+                            pos.Z = ground;
+                        }
+                    }
+
+                    posX = pos.X;
+                    posY = pos.Y;
+                    posZ = pos.Z;                    
+                }
+                else
+                {
+                    Screen.ShowNotification("No waypoint marker found, you fecking pleb");
+                }
+            }
+            else
+            {
+                posX = float.Parse(arguments[0].ToString());
+                posY = float.Parse(arguments[1].ToString());
+                posZ = float.Parse(arguments[2].ToString());
+            }
+            
             API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
+            
             Game.PlayerPed.Position = new Vector3(posX, posY, posZ);
+
+            PlaceObjectOnGroundProperly(Game.PlayerPed.Handle);
+            PlaceObjectOnGroundProperly_2(Game.PlayerPed.Handle);
+
             API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
         }
 

@@ -194,6 +194,7 @@ namespace Curiosity.Client.net
         {
             Screen.Effects.Stop(ScreenEffect.DeathFailOut);
             Screen.Fading.FadeOut(500);
+            Screen.LoadingPrompt.Show("Loading...");
             Setup();
 
             PedHash myPedModelToLoad = PedHash.FreemodeMale01;

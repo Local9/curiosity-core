@@ -57,7 +57,9 @@
     <Compile Include="Classes\Environment\DeleteProps.cs" />
     <Compile Include="Classes\Environment\DevCommands.cs" />
     <Compile Include="Classes\Environment\InstancingChecker.cs" />
-    <Compile Include="Classes\Environment\IPL\Nightclub.cs" />
+    <Compile Include="Classes\Environment\IPL\NightclubBase.cs" />
+    <Compile Include="Classes\Environment\IPL\Nightclub\EffectsManager.cs" />
+    <Compile Include="Classes\Environment\IPL\Nightclub\IplManager.cs" />
     <Compile Include="Classes\Environment\MarkerHandler.cs" />
     <Compile Include="Classes\Environment\MarqueeMessages.cs" />
     <Compile Include="Classes\Environment\PedClasses\PedHandler.cs" />

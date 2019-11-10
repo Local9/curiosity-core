@@ -28,7 +28,9 @@ namespace Curiosity.Client.net
             ChatCommands.Init();
 
             // IPLs
-            // Classes.Environment.IPL.Nightclub.Init();
+            Classes.Environment.IPL.NightclubBase.Init();
+            Classes.Environment.IPL.Nightclub.IplManager.Init();
+            Classes.Environment.IPL.Nightclub.EffectsManager.Init();
 
             // Emotes
             //EmotesManager.Init();

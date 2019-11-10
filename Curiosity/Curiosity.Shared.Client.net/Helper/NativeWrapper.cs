@@ -22,6 +22,28 @@ namespace Curiosity.Shared.Client.net.Helper
             DisplayHelpTextFromStringLabel(0, false, true, -1);
         }
 
+        public static int CreateNamedRenderTargetForModel(string name, uint model)
+        {
+            int handle = 0;
+
+            if (!API.IsNamedRendertargetRegistered(name))
+            {
+                RegisterNamedRendertarget(name, false);
+            }
+
+            if (!API.IsNamedRendertargetLinked(model))
+            {
+                LinkNamedRendertarget(model);
+            }
+
+            if (IsNamedRendertargetRegistered(name))
+            {
+                handle = GetNamedRendertargetRenderId(name);
+            }
+
+            return handle;
+        }
+
         public static bool NetworkIsSessionStarted()
         {
             return Function.Call<bool>(Hash.NETWORK_IS_SESSION_STARTED, new InputArgument[0]);
