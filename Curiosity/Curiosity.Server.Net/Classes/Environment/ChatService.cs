@@ -57,7 +57,7 @@ namespace Curiosity.Server.net.Classes.Environment
             chatMessage.role = $"{session.Privilege}";
             chatMessage.list = "chat";
             chatMessage.message = message;
-            chatMessage.roleClass = $"{session.Privilege}".ToLower();
+            chatMessage.roleClass = $"{session.Privilege}";
             chatMessage.name = session.Player.Name;
             chatMessage.job = $"{session.job}";
 
