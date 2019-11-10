@@ -98,18 +98,23 @@ namespace Curiosity.Server.net.Classes
 
         public void IncreaseWallet(int amount)
         {
+            if (this.Wallet > 0)
+                ChatLog.SendLogMessage($"Cash Gain: ${amount:#,###,##0.00}", Player);
+
             this.Wallet = this.Wallet + amount;
         }
 
         public void DecreaseWallet(int amount)
         {
             this.Wallet = this.Wallet - amount;
+
+            ChatLog.SendLogMessage($"Cash Loss: ${amount:#,###,##0.00}", Player);
         }
 
         public void IncreaseBankAccount(int amount)
         {
             if (this.BankAccount > 0)
-                ChatLog.SendLogMessage($"Financial Gain: ${amount:F}", Player);
+                ChatLog.SendLogMessage($"Bank Gain: ${amount:#,###,##0.00}", Player);
 
             this.BankAccount = this.BankAccount + amount;
         }
@@ -118,7 +123,7 @@ namespace Curiosity.Server.net.Classes
         {
             this.BankAccount = this.BankAccount - amount;
 
-            ChatLog.SendLogMessage($"Financial Loss: ${amount:F}", Player);
+            ChatLog.SendLogMessage($"Bank Loss: ${amount:#,###,##0.00}", Player);
         }
 
         public void UpdatePrivilege(Privilege privilegeIn)

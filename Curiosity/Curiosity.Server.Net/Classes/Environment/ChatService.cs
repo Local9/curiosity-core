@@ -40,6 +40,11 @@ namespace Curiosity.Server.net.Classes.Environment
                 return;
             }
 
+            if (message.Length == 0 || message.Length > 240)
+            {
+                message = message.Substring(0, 240);
+            }
+
             if (message.ContainsProfanity())
             {
                 Regex wordFilter = new Regex($"({string.Join("|", ProfanityFilter.ProfanityArray())})");
