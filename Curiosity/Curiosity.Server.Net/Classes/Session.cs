@@ -1,4 +1,5 @@
 ﻿using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,8 @@ namespace Curiosity.Server.net.Classes
             HasSpawned = false;
             Wallet = 0;
             BankAccount = 0;
+
+            ChatLog.SendLogMessage($"Connecting: {Name}");
         }
 
         public void SetJob(Job job)
@@ -105,12 +108,17 @@ namespace Curiosity.Server.net.Classes
 
         public void IncreaseBankAccount(int amount)
         {
+            if (this.BankAccount > 0)
+                ChatLog.SendLogMessage($"Financial Gain: ${amount:F}", Player);
+
             this.BankAccount = this.BankAccount + amount;
         }
 
         public void DecreaseBankAccount(int amount)
         {
             this.BankAccount = this.BankAccount - amount;
+
+            ChatLog.SendLogMessage($"Financial Loss: ${amount:F}", Player);
         }
 
         public void UpdatePrivilege(Privilege privilegeIn)
@@ -132,6 +140,8 @@ namespace Curiosity.Server.net.Classes
 
             SessionManager.PlayerList[NetId] = this;
 
+            ChatLog.SendLogMessage($"Connected: {Name}");
+
             return true;
         }
 
@@ -151,6 +161,8 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
+                ChatLog.SendLogMessage($"Dropped: {Name} -> {reason}");
+
                 SessionManager.PlayerList.Remove(NetId);
             }
             catch (Exception ex)
@@ -170,6 +182,10 @@ namespace Curiosity.Server.net.Classes
             {
                 Skills[skill].Value = Skills[skill].Value + experience;
             }
+
+            string skillLabel = Skills[skill].Label;
+
+            ChatLog.SendLogMessage($"{skillLabel} Gain: {experience}", Player);
         }
 
         public void DecreaseSkill(string skill, GlobalEntity.Skills skills, int experience)
@@ -183,6 +199,10 @@ namespace Curiosity.Server.net.Classes
             {
                 Skills[skill].Value = Skills[skill].Value - experience;
             }
+
+            string skillLabel = Skills[skill].Label;
+
+            ChatLog.SendLogMessage($"{skillLabel} Loss: {experience}", Player);
         }
     }
 }

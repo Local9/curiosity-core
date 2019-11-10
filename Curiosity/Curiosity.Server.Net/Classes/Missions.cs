@@ -116,6 +116,8 @@ namespace Curiosity.Server.net.Classes
             session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch Complete", subTitle, $"Hostages Saved: ~y~{missionMessage.HostagesRescued}");
 
             session.Player.TriggerEvent("curiosity:Client:Missions:MissionComplete");
+            
+            ChatLog.SendLogMessage($"Mission Completed: {subTitle}", session.Player);
         }
 
         static void OnKilledPed([FromSource]CitizenFX.Core.Player player, string data)

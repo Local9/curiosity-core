@@ -103,6 +103,7 @@
     <Compile Include="Entity\VehicleData.cs" />
     <Compile Include="Enums\Discord\Webhook.cs" />
     <Compile Include="Extensions\ProfanityFilter.cs" />
+    <Compile Include="Helpers\ChatLog.cs" />
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
