@@ -12,6 +12,12 @@ using Newtonsoft.Json;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
+    class ChatPosition
+    {
+        public int x;
+        public int y;
+    }
+
     class ChatService
     {
         static Client client = Client.GetInstance();
@@ -20,16 +26,32 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static public void Init()
         {
-
             client.RegisterEventHandler("curiosity:Client:Chat:Message", new Action<string>(OnChatMessage));
 
             RegisterNuiCallbackType("SendChatMessage");
             client.RegisterEventHandler("__cfx_nui:SendChatMessage", new Action<System.Dynamic.ExpandoObject>(HandleChatResult));
 
+            RegisterNuiCallbackType("ChatPosition");
+            client.RegisterEventHandler("__cfx_nui:ChatPosition", new Action<System.Dynamic.ExpandoObject>(StoreChatPosition));
+
             RegisterNuiCallbackType("CloseChatMessage");
             client.RegisterEventHandler("__cfx_nui:CloseChatMessage", new Action(OnCloseChat));
 
             client.RegisterTickHandler(OnChatTask);
+
+            client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
+        }
+
+        static void OnPlayerSpawned()
+        {
+            int x = API.GetResourceKvpInt("CHAT_X");
+            int y = API.GetResourceKvpInt("CHAT_Y");
+
+            if (x == 0)
+                x = 1920;
+
+            ChatPosition chatPosition = new ChatPosition() { x = x, y = y };
+            API.SendNuiMessage(JsonConvert.SerializeObject(chatPosition));
         }
 
         static void OnCloseChat()
@@ -39,6 +61,24 @@ namespace Curiosity.Client.net.Classes.Environment
             SetPedCanSwitchWeapon(Game.PlayerPed, true);
             SetNuiFocus(false);
             PreviousChatboxState = false;
+        }
+
+        static void StoreChatPosition(System.Dynamic.ExpandoObject data)
+        {
+            try
+            {
+                IDictionary<string, object> result = data;
+
+                string x = (string)result["x"];
+                string y = (string)result["y"];
+
+                API.SetResourceKvpInt("CHAT_X", int.Parse(x));
+                API.SetResourceKvpInt("CHAT_Y", int.Parse(y));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"StoreChatPosition ERROR: {ex.Message}");
+            }
         }
 
         static void OnChatMessage(string encodedMessage)
