@@ -145,6 +145,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     TimeStampOfLastCallout = GetGameTimer();
                     client.RegisterTickHandler(OnGenerateRandomMission);
                     Log.Info($"Player is on duty");
+                    Static.Relationships.Init();
                 }
             }
 
