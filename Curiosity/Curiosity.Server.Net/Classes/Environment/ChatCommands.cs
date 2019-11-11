@@ -40,7 +40,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             API.RegisterCommand("chimp", new Action<int, List<object>, string>(SpawnChimp), false);
 
-            API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
+            // API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
 
             API.RegisterCommand("test", new Action<int, List<object>, string>(Test), false);
 

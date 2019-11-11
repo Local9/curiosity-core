@@ -83,8 +83,15 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static void OnChatMessage(string encodedMessage)
         {
-            string json = Encode.Base64ToString(encodedMessage);
-            API.SendNuiMessage(json);
+            try
+            {
+                string json = Encode.Base64ToString(encodedMessage);
+                API.SendNuiMessage(json);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{ex}");
+            }
         }
 
         static void HandleChatResult(System.Dynamic.ExpandoObject data)
