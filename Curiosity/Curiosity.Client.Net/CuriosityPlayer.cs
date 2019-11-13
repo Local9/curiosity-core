@@ -270,18 +270,7 @@ namespace Curiosity.Client.net
             API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
             API.RemoveAllPedWeapons(Game.PlayerPed.Handle, false);
             API.ClearPlayerWantedLevel(Game.Player.Handle);
-
-            float groundZ = z;
-            Vector3 spawnPosition = new Vector3(x, y, groundZ);
-
-            Game.PlayerPed.DropsWeaponsOnDeath = false;
-            
-            API.GetGroundZFor_3dCoord(x, y, z, ref groundZ, false);
-            Vector3 safeCoord = new Vector3(x, y, groundZ);
-            if (API.GetSafeCoordForPed(x, y, groundZ, true, ref safeCoord, 16))
-            {
-                spawnPosition = safeCoord;
-            }
+            Vector3 spawnPosition = new Vector3(x, y, z);
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
@@ -322,14 +311,7 @@ namespace Curiosity.Client.net
                 ClearScreen();
             }
 
-            if (spawnPosition.IsZero)
-            {
-                spawnPosition = World.GetNextPositionOnSidewalk(new Vector3(x, y, groundZ));
-            }
-
-            Game.PlayerPed.Position = spawnPosition + new Vector3(0f, 0f, -1f);
-
-            API.RequestCollisionAtCoord(spawnPosition.X, spawnPosition.Y, spawnPosition.Z);
+            Game.PlayerPed.Position = await spawnPosition.Ground();
 
             int gameTimer = API.GetGameTimer();
 
@@ -386,9 +368,9 @@ namespace Curiosity.Client.net
             Classes.Environment.UI.Notifications.LifeV(1, $"Welcome...", $"~y~{Game.Player.Name}~s~!", $"~b~Life V ID: ~y~{userId}~n~~b~Role: ~y~{role}", 2);
 
             Curiosity.Shared.Client.net.GameData.SpawnInfo spawnInfo = new Shared.Client.net.GameData.SpawnInfo();
-            spawnInfo.z = groundZ;
-            spawnInfo.y = y;
-            spawnInfo.x = x;
+            spawnInfo.z = Game.PlayerPed.Position.Z;
+            spawnInfo.y = Game.PlayerPed.Position.Y;
+            spawnInfo.x = Game.PlayerPed.Position.Z;
             spawnInfo.heading = Game.PlayerPed.Heading;
             spawnInfo.idx = 0;
             spawnInfo.model = Game.PlayerPed.Model.Hash;
@@ -431,23 +413,7 @@ namespace Curiosity.Client.net
 
         async void SaveLocation()
         {
-            Vector3 playerPosition = Game.PlayerPed.Position;
-
-            if (playerPosition.IsZero)
-                return;
-
-            float? posZ = playerPosition.Z;
-
-            if (Game.PlayerPed.IsInAir)
-            {
-                Vector2 v2 = new Vector2(playerPosition.X, playerPosition.Y);
-
-                float? gpz = await Helpers.WorldProbe.FindGroundZ(v2);
-
-                if (gpz != null)
-                    posZ = gpz;
-            }
-
+            Vector3 playerPosition = await Game.PlayerPed.Position.Ground();
             TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, posZ);
         }
 

@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Classes.Data;
+using System.Threading.Tasks;
 
 namespace Curiosity.Shared.Client.net.Extensions
 {
@@ -34,6 +35,25 @@ namespace Curiosity.Shared.Client.net.Extensions
         public static float Distance(this Position position, Position target, bool useZ = false)
         {
             return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
+        }
+
+        public async static Task<Vector3> Ground(this Vector3 position)
+        {
+            float posZ = 0.0f;
+
+            for(int i = 800; i > 0 ; --i)
+            {
+                await BaseScript.Delay(0);
+                API.RequestCollisionAtCoord(position.X, position.Y, i + 0.0f);
+                if (API.GetGroundZFor_3dCoord(position.X, position.Y, i + 0.0f, ref posZ, false))
+                {
+                    break;
+                }
+            }
+
+            position.Z = posZ;
+
+            return position;
         }
     }
 }
