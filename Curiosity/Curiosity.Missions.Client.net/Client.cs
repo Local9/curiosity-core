@@ -12,6 +12,9 @@ namespace Curiosity.Missions.Client.net
         public static PlayerList players;
         public static Random Random = new Random();
 
+        public static Vehicle CurrentVehicle;
+        private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
+
         public static Client GetInstance()
         {
             return _instance;
@@ -22,10 +25,27 @@ namespace Curiosity.Missions.Client.net
             _instance = this;
 
             players = Players;
+            CurrentVehicle = null;
+
+            RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
 
             ClassLoader.Init();
 
             Log.Info("Curiosity.Missions.Client.net loaded\n");
+        }
+
+        public static void OnVehicleId(int vehicleId)
+        {
+            if (Client.CurrentVehicle == null)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                Client.CurrentVehicle = new Vehicle(vehicleId);
+            }
+            else if (Client.CurrentVehicle.Handle != vehicleId)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                Client.CurrentVehicle = new Vehicle(vehicleId);
+            }
         }
 
         /// <summary>

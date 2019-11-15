@@ -253,11 +253,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             if (_currentSpectate != null && _currentSpectate == player)
             {
-
+                Client.TriggerEvent("curioisty:UI:IsSpectating", false);
                 API.NetworkSetInSpectatorMode(false, playerPedId);
 
-                // API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
-                API.SetEntityCollision(Game.PlayerPed.Handle, true, true);
                 Game.Player.IsInvincible = false;
                 Game.PlayerPed.IsVisible = true;
 
@@ -281,15 +279,17 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             _currentSpectate = player;
 
-            // API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
-            API.SetEntityCollision(Game.PlayerPed.Handle, false, true);
             Game.Player.IsInvincible = true;
             Game.PlayerPed.IsVisible = false;
+
+            Game.PlayerPed.Position = Vector3.Zero; // Fucking hide them
 
             Vector3 entityCords = API.GetEntityCoords(playerPedId, true);
 
             API.RequestCollisionAtCoord(entityCords.X, entityCords.Y, entityCords.Z);
             API.NetworkSetInSpectatorMode(true, playerPedId);
+
+            Client.TriggerEvent("curioisty:UI:IsSpectating", true);
 
             API.DoScreenFadeIn(200);
             await BaseScript.Delay(50);

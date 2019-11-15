@@ -10,18 +10,37 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 {
     static class PlayerNames
     {
+        static Client client = Client.GetInstance();
+
         static internal IEnumerable<CitizenFX.Core.Player> MarkerPlayers;
         static internal float namePlateDistance = 250;
         static internal float namePlateVehicleDistance = 250;
 
+        static bool isSpectating = false;
+
         static public void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnTick);
+            client.RegisterEventHandler("curioisty:UI:IsSpectating", new Action<bool>(OnIsSpectating));
             //Client.GetInstance().RegisterEventHandler("onClientResourceStop", new Action<string>(OnCientResourceStop));
+
+
+        }
+
+        static void OnIsSpectating(bool isSpec)
+        {
+            if (!Player.PlayerInformation.IsStaff()) return;
+
+            isSpectating = isSpec;
         }
 
         static internal bool ShouldShowName(CitizenFX.Core.Player player)
         {
+            if (isSpectating)
+            {
+                return true;
+            }
+
             bool isCloseEnough;
 
             if (!player.Character.IsVisible) return false;

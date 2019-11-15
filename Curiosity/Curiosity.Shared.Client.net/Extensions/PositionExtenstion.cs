@@ -47,11 +47,10 @@ namespace Curiosity.Shared.Client.net.Extensions
                 API.RequestCollisionAtCoord(position.X, position.Y, i + 0.0f);
                 if (API.GetGroundZFor_3dCoord(position.X, position.Y, i + 0.0f, ref posZ, false))
                 {
+                    position.Z = posZ;
                     break;
                 }
             }
-
-            position.Z = posZ;
 
             return position;
         }

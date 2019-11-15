@@ -206,21 +206,29 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                     if (!Game.PlayerPed.IsInVehicle() && Game.PlayerPed.Position.Distance(driver.Position) < 2.5f)
                     {
-                        if (Client.Random.Next(10) == 1)
+                        if (Client.Random.Next(20) == 1)
                         {
                             driver.IsPositionFrozen = false;
                             TrafficStopVehicle.IsPositionFrozen = false;
 
+                            Static.Relationships.SetupRelationShips();
                             driver.RelationshipGroup = Static.Relationships.HostileRelationship;
 
                             driver.Weapons.Give(WeaponHash.Pistol, 500, true, true);
                             driver.Task.ShootAt(Game.PlayerPed);
 
-                            await Client.Delay(3000);
+                            await Client.Delay(5000);
 
-                            driver.Task.FightAgainstHatedTargets(30f);
                             driver.Task.FleeFrom(Game.PlayerPed);
 
+                            client.DeregisterTickHandler(TrafficStopInitiated);
+                        }
+
+                        Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to ~b~speak with the suspect.");
+
+                        if (Game.IsControlJustPressed(0, Control.Pickup))
+                        {
+                            // MENU!
                             client.DeregisterTickHandler(TrafficStopInitiated);
                         }
                     }
