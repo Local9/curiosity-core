@@ -22,9 +22,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             client.RegisterTickHandler(OnTick);
             client.RegisterEventHandler("curioisty:UI:IsSpectating", new Action<bool>(OnIsSpectating));
-            //Client.GetInstance().RegisterEventHandler("onClientResourceStop", new Action<string>(OnCientResourceStop));
-
-
         }
 
         static void OnIsSpectating(bool isSpec)
