@@ -61,6 +61,7 @@ namespace Curiosity.Client.net.Classes.Environment
             SetPedCanSwitchWeapon(Game.PlayerPed, true);
             SetNuiFocus(false);
             PreviousChatboxState = false;
+            Client.TriggerEvent("curiosity:Client:Chat:ChatboxActive", false);
         }
 
         static void StoreChatPosition(System.Dynamic.ExpandoObject data)
@@ -175,14 +176,11 @@ namespace Curiosity.Client.net.Classes.Environment
                     if (PreviousChatboxState)
                     {
                         SetNuiFocus(true, true);
+                        Client.TriggerEvent("curiosity:Client:Chat:ChatboxActive", true);
                     }
                     else
                     {
-                        EnableControlAction(0, Control.CursorScrollUp, true);
-                        EnableControlAction(0, Control.CursorScrollDown, true);
-                        SetPedCanSwitchWeapon(Game.PlayerPed, true);
-
-                        SetNuiFocus(false);
+                        OnCloseChat();
                     }
                 }
             }

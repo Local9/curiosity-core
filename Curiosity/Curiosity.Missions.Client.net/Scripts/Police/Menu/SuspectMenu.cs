@@ -12,32 +12,32 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
     {
         static Client client = Client.GetInstance();
 
-        static Ped suspect;
+        static Vehicle suspectVehicle;
 
         static Menu menu;
 
         // Buttons
-        static MenuItem miRunName = new MenuItem("Request ID & Run name");
-        static MenuItem miRelease = new MenuItem("Release");
+        static MenuItem mItemRunName = new MenuItem("Request ID & Run name");
+        static MenuItem mItemRelease = new MenuItem("Release");
         // Core
-        static MenuItem miLeaveVehicle = new MenuItem("Leave Vehicle");
-        static MenuItem miFollow = new MenuItem("Follow") { Enabled = false };
+        static MenuItem mItemLeaveVehicle = new MenuItem("Leave Vehicle");
+        static MenuItem mItemFollow = new MenuItem("Follow") { Enabled = false };
         // Options
-        static MenuItem miBreathalyzer = new MenuItem("Breathalyzer");
-        static MenuItem miDrugTest = new MenuItem("Drug Test");
-        static MenuItem miSearch = new MenuItem("Search");
+        static MenuItem mItemBreathalyzer = new MenuItem("Breathalyzer");
+        static MenuItem mItemDrugTest = new MenuItem("Drug Test");
+        static MenuItem mItemSearch = new MenuItem("Search");
         // Arrest
-        static MenuItem miArrest = new MenuItem("Arrest") { Enabled = false };
-        static MenuItem miEnterVehicle = new MenuItem("Put in car") { Enabled = false, Description = "Put ped in the back of the police car" };
+        static MenuItem mItemArrest = new MenuItem("Arrest") { Enabled = false };
+        static MenuItem mItemEnterVehicle = new MenuItem("Put in car") { Enabled = false, Description = "Put ped in the back of the police car" };
 
-        static public void Open(Ped ped)
+        static public void Open(Vehicle suspectVehicle)
         {
-            if (ped == null)
+            if (suspectVehicle == null)
             {
                 throw new ArgumentNullException();
             }
 
-            suspect = ped;
+            SuspectMenu.suspectVehicle = suspectVehicle;
 
             MenuController.DisableBackButton = true;
             MenuController.DontOpenAnyMenu = false;
@@ -49,13 +49,43 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                 menu = new Menu("Suspect Menu", "Please use the options below");
 
                 menu.OnMenuClose += Menu_OnMenuClose;
+                menu.OnMenuOpen += Menu_OnMenuOpen;
+
+                menu.OnItemSelect += Menu_OnItemSelect;
             }
+
+            menu.OpenMenu();
+        }
+
+        private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
+        {
+            if (menuItem == mItemRelease)
+            {
+                suspectVehicle.IsPositionFrozen = false;
+
+                suspectVehicle.Driver.Task.ClearAll();
+                suspectVehicle = null;
+                menu.CloseMenu();
+            }
+        }
+
+        private static void Menu_OnMenuOpen(Menu menu)
+        {
+            menu.ClearMenuItems();
+            Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
+            Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
+
+            menu.AddMenuItem(mItemRunName);
+            menu.AddMenuItem(mItemRelease);
         }
 
         private static void Menu_OnMenuClose(Menu menu)
         {
-            suspect.Task.ClearAll();
-            suspect.MarkAsNoLongerNeeded();
+            Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
+            Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
+
+            suspectVehicle.Driver.Task.ClearAll();
+            suspectVehicle.MarkAsNoLongerNeeded();
 
             MenuController.DontOpenAnyMenu = true;
         }
@@ -64,7 +94,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         {
             try
             {
-                if (suspect == null)
+                if (suspectVehicle.IsDead)
+                {
+
+                }
+
+                if (suspectVehicle == null)
                 {
                     client.DeregisterTickHandler(OnTask);
                 }

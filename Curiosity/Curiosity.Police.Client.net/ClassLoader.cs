@@ -31,7 +31,7 @@ namespace Curiosity.Police.Client.net
             Environment.Job.DutyMarkers.Init();
 
             // PULLOVER
-            // Classes.Pullover.Init();
+            Classes.Pullover.Init();
 
             // Developer
             Classes.Developer.Init();

@@ -96,18 +96,21 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     client.RegisterTickHandler(ShowText);
 
-                    while (!forceRespawn)
+                    if (!Player.PlayerInformation.IsStaff())
                     {
-                        await Client.Delay(0);
-
-                        if (Game.IsControlJustPressed(0, Control.Pickup))
+                        while (!forceRespawn)
                         {
-                            forceRespawn = true;
-                        }
+                            await Client.Delay(0);
 
-                        if ((API.GetGameTimer() - gameTime) > (1000 * seconds))
-                        {
-                            break;
+                            if (Game.IsControlJustPressed(0, Control.Pickup))
+                            {
+                                forceRespawn = true;
+                            }
+
+                            if ((API.GetGameTimer() - gameTime) > (1000 * seconds))
+                            {
+                                break;
+                            }
                         }
                     }
 

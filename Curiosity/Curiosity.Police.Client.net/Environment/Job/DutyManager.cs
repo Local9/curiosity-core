@@ -3,6 +3,7 @@ using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net;
 using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Police.Client.net.Environment.Job
@@ -22,8 +23,17 @@ namespace Curiosity.Police.Client.net.Environment.Job
         {
             PoliceRelationshipGroup = World.AddRelationshipGroup("POLICE_CALLOUTS");
 
+            API.RegisterCommand("duty", new Action(OnPoliceDuty), false);
+
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
+        }
+
+        static void OnPoliceDuty()
+        {
+            if (!Classes.Player.PlayerInformation.IsDeveloper()) return;
+
+            Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "police");
         }
 
         static void OnDutyState(bool jobActive, bool dutyState, string job)

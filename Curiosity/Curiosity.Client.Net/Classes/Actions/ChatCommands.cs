@@ -514,6 +514,9 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static void OnEmote(int playerHandle, List<object> arguments, string raw)
         {
+            Screen.ShowNotification("Emotes have been moved to the menu, under Player");
+            return;
+
             try
             {
                 if (arguments.Count == 0) return;

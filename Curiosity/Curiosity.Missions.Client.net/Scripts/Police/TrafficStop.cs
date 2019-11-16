@@ -157,7 +157,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 Ped driver = TrafficStopVehicle.Driver;
                 driver.BlockPermanentEvents = true;
 
-                if (Client.Random.Next(5) == 1 && !HasTrafficStoppedVehicleParked)
+                if (Client.Random.Next(20) == 1 && !HasTrafficStoppedVehicleParked)
                 {
                     driver.IsPositionFrozen = false;
                     TrafficStopVehicle.IsPositionFrozen = false;
@@ -182,31 +182,32 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         HasTrafficStoppedVehicleParked = true;
                     }
 
-                    if (TrafficStopVehicle.IsStopped)
+                    if (TrafficStopVehicle.IsStopped && Game.PlayerPed.IsInVehicle())
                     {
                         if (Game.PlayerPed.IsInVehicle())
                             Screen.DisplayHelpTextThisFrame($"Vehicle has stopped.~n~Press ~INPUT_PICKUP~ to ~b~move the suspect.~s~~n~Press ~INPUT_COVER~ to ~b~release.~n~~s~Walk up the the driver to talk.");
 
                         TrafficStopVehicle.IsPositionFrozen = true;
+
+
+                        if (Game.IsControlJustPressed(0, Control.Pickup) && Game.PlayerPed.IsInVehicle())
+                        {
+                            HasTrafficStoppedVehicleParked = false;
+                        }
+
+                        if (Game.IsDisabledControlPressed(2, Control.VehicleRadioWheel) && Game.PlayerPed.IsInVehicle())
+                        {
+                            Game.DisableControlThisFrame(2, Control.VehicleNextRadio);
+                            Game.DisableControlThisFrame(2, Control.VehiclePrevRadio);
+                            Game.DisableControlThisFrame(2, Control.VehicleRadioWheel);
+
+                            Reset();
+                        }
                     }
-
-                    if (Game.IsControlJustPressed(0, Control.Pickup) && Game.PlayerPed.IsInVehicle())
+                    
+                    if (!Game.PlayerPed.IsInVehicle() && Game.PlayerPed.Position.Distance(driver.Position) <= 2.5f)
                     {
-                        HasTrafficStoppedVehicleParked = false;
-                    }
-
-                    if (Game.IsDisabledControlPressed(2, Control.VehicleRadioWheel) && Game.PlayerPed.IsInVehicle())
-                    {
-                        Game.DisableControlThisFrame(2, Control.VehicleNextRadio);
-                        Game.DisableControlThisFrame(2, Control.VehiclePrevRadio);
-                        Game.DisableControlThisFrame(2, Control.VehicleRadioWheel);
-
-                        Reset();
-                    }
-
-                    if (!Game.PlayerPed.IsInVehicle() && Game.PlayerPed.Position.Distance(driver.Position) < 2.5f)
-                    {
-                        if (Client.Random.Next(20) == 1)
+                        if (Client.Random.Next(500) == 1)
                         {
                             driver.IsPositionFrozen = false;
                             TrafficStopVehicle.IsPositionFrozen = false;
@@ -217,9 +218,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             driver.Weapons.Give(WeaponHash.Pistol, 500, true, true);
                             driver.Task.ShootAt(Game.PlayerPed);
 
-                            await Client.Delay(5000);
-
-                            driver.Task.FleeFrom(Game.PlayerPed);
+                            driver.Task.FightAgainstHatedTargets(20f);
 
                             client.DeregisterTickHandler(TrafficStopInitiated);
                         }
@@ -230,7 +229,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         {
                             // MENU!
                             client.DeregisterTickHandler(TrafficStopInitiated);
+                            MenuHandler.SuspectMenu.Open(TrafficStopVehicle);
                         }
+                    }
+
+                    if (driver.IsDead)
+                    {
+                        Reset();
                     }
                 }
 
