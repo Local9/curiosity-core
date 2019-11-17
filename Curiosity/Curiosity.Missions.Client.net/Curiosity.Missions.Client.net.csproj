@@ -51,7 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Environment\ChatCommands.cs" />
+    <Compile Include="DataClasses\PedNames.cs" />
     <Compile Include="DataClasses\SoundMessage.cs" />
+    <Compile Include="DataClasses\Zones.cs" />
     <Compile Include="MissionPeds\NormalPed.cs" />
     <Compile Include="MissionPedTypes\PedNormal.cs" />
     <Compile Include="Scripts\MissionEvents.cs" />

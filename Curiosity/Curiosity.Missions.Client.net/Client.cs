@@ -12,7 +12,28 @@ namespace Curiosity.Missions.Client.net
         public static PlayerList players;
         public static Random Random = new Random();
 
-        public static Vehicle CurrentVehicle;
+
+        private static Vehicle _currentVehicle;
+        public static Vehicle CurrentVehicle
+        {
+            get
+            {
+                if (_currentVehicle == null)
+                {
+                    if (Game.PlayerPed.IsInVehicle())
+                    {
+                        if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
+                            _currentVehicle = Game.PlayerPed.CurrentVehicle;
+                    }
+                }
+                return _currentVehicle;
+            }
+            set
+            {
+                _currentVehicle = value;
+            }
+        }
+
         private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
 
         public static Client GetInstance()
@@ -45,6 +66,14 @@ namespace Curiosity.Missions.Client.net
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
                 Client.CurrentVehicle = new Vehicle(vehicleId);
+            }
+
+            if (CurrentVehicle == null)
+            {
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    CurrentVehicle = Game.PlayerPed.CurrentVehicle;
+                }
             }
         }
 

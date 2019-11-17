@@ -24,7 +24,24 @@ namespace Curiosity.Shared.Client.net.Helpers
             {
                 Log.Info($"{ex.Message}");
             }
-            return null;
+            return default(CitizenFX.Core.Entity);
+        }
+
+        public static CitizenFX.Core.Vehicle GetVehicleInDirection(this Vehicle vehicle, float distance = 5f)
+        {
+            try
+            {
+                RaycastResult raycast = World.Raycast(vehicle.Position, vehicle.GetOffsetPosition(new Vector3(0f, distance, 0f)), (IntersectOptions)71, vehicle);
+                if (raycast.DitHitEntity && raycast.HitEntity.Model.IsVehicle)
+                {
+                    return (CitizenFX.Core.Vehicle)raycast.HitEntity;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Info($"GetVehicleInDirection -> {ex}");
+            }
+            return default(CitizenFX.Core.Vehicle);
         }
     }
 }
