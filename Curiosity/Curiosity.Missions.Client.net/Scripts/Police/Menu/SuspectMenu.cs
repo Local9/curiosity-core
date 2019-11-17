@@ -52,6 +52,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                 menu.OnMenuOpen += Menu_OnMenuOpen;
 
                 menu.OnItemSelect += Menu_OnItemSelect;
+
+                MenuController.MainMenu = menu;
             }
 
             menu.OpenMenu();

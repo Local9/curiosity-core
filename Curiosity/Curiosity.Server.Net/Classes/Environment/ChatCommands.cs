@@ -111,7 +111,16 @@ namespace Curiosity.Server.net.Classes.Environment
             }
 
             Session sessionToChase = SessionManager.PlayerList[$"{playerToChase}"];
-            sessionToChase.Player.TriggerEvent("curiosity:Client:Command:SpawnChaser");
+
+            if (sessionToChase.IsDeveloper)
+            {
+                session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
+                Helpers.Notifications.Advanced($"You fucked up...", $"Run....", 20, session.Player);
+            }
+            else
+            {
+                sessionToChase.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
+            }
 
             Helpers.Notifications.Advanced($"Set Chaser", $"Chasing ~y~{sessionToChase.Player.Name}", 20, session.Player);
         }
