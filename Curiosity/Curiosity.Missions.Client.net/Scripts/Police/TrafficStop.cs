@@ -40,6 +40,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static bool IsDriverFollowing = false;
         static bool HasVehicleBeenStolen = false;
         static bool CanDriverBeArrested = false;
+        static public bool VehicleDriverReverseWithPlayer = true;
 
         // Ped Data
         static int DriverBloodAlcaholLimit;
@@ -186,64 +187,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
         }
 
-        internal static async void InteractionRelease()
-        {
-            if (Client.speechType == SpeechType.NORMAL)
-            {
-                ShowOfficerSubtitle("Alright, you're free to go.");
-            }
-            else
-            {
-                ShowOfficerSubtitle("Get out of here before I change my mind.");
-            }
-            List<string> DriverResponse = new List<string>() { "Okay, thanks.", "Thanks.", "Thank you officer, have a nice day!", "Thanks, bye!", "I'm free to go? Okay, bye!" };
-            if (DriverAttitude >= 50 && DriverAttitude < 80)
-            {
-                DriverResponse = new List<string>() { "Alright.", "Okay.", "Good.", "Okay, bye.", "Okay, goodbye officer.", "Later.", "Bye bye.", "Until next time." };
-            }
-            else if (DriverAttitude >= 80 && DriverAttitude < 95)
-            {
-                DriverResponse = new List<string>() { "Bye, asshole...", "Ugh.. Finally.", "Damn cops...", "Until next time.", "Its about time, pig" };
-            }
-            await Client.Delay(2000);
-            ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
-            Reset();
-        }
-
-        internal static async void InteractionIssueWarning()
-        {
-            List<string> OfficerResponse;
-            List<string> DriverResponse = new List<string>() { "Thanks.", "Thank you officer.", "Okay, thank you.", "Okay, thank you officer.", "Thank you so much!", "Alright, thanks!", "Yay! Thank you!", "I'll be more careful next time!", "Sorry about that!" }; ;
-            
-            if (Client.speechType == SpeechType.NORMAL)
-            {
-                OfficerResponse = new List<string>() { "You can go, but don't do it again.", "Don't make me pull you over again!", "Have a good day. Be a little more careful next time.", "I'll let you off with a warning this time." };
-            }
-            else
-            {
-                OfficerResponse = new List<string>() { "Don't do that again.", "Don't make me pull you over again!", "I'll let you go this time.", "I'll let you off with a warning this time." };
-            }
-
-            if (DriverAttitude >= 50 && DriverAttitude < 80)
-            {
-                DriverResponse = new List<string>() { "Thanks... I guess...", "Yeah, whatever.", "Finally.", "Ugh..", };
-            }
-            else if (DriverAttitude >= 80 && DriverAttitude < 95)
-            {
-                DriverResponse = new List<string>() { "Uh huh, bye.", "Yeah, whatever.", "Finally.", "Ugh..", "Prick." };
-            }
-            else if (DriverAttitude >= 95)
-            {
-                DriverResponse = new List<string>() { "Troublesum said fuck you too buddy!", "Yea, well don't kill yourself trying" };
-            }
-
-            ShowOfficerSubtitle(OfficerResponse[Client.Random.Next(OfficerResponse.Count)]);
-            await Client.Delay(2000);
-            ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
-            await Client.Delay(2000);
-            Reset();
-        }
-
         // If the IsVehicleStopped flag is set to true, then stop the vehicle
         static async Task OnTrafficStopStateTask()
         {
@@ -266,14 +209,27 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     }
                 }
 
+                // Mimick
                 if (IsVehicleStopped && Game.PlayerPed.IsInVehicle() && !IsVehicleDriverMimicking)
                 {
                     Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to move the ~b~Vehicle");
+
+                    if (Game.IsControlJustPressed(0, Control.Cover))
+                    {
+                        EnableMimicking();
+                        await Client.Delay(100);
+                    }
                 }
 
-                if (IsVehicleStopped && Game.PlayerPed.IsInVehicle() && IsVehicleDriverMimicking)
+                if (!IsVehicleStopped && Game.PlayerPed.IsInVehicle() && IsVehicleDriverMimicking)
                 {
                     Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to ~b~stop moving the Vehicle");
+                    
+                    if (Game.IsControlJustPressed(0, Control.Cover))
+                    {
+                        DisableMimick();
+                        await Client.Delay(100);
+                    }
                 }
 
                 if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) >= 300f)
@@ -288,6 +244,70 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 Debug.WriteLine($"OnTrafficStopStateTask -> {ex}");
             }
+        }
+
+        static async void EnableMimicking()
+        {
+            IsVehicleDriverMimicking = true;
+            IsVehicleStopped = false;
+
+            string animationDict = "misscarsteal3pullover";
+
+            RequestAnimDict(animationDict);
+            while (!HasAnimDictLoaded(animationDict))
+            {
+                await Client.Delay(0);
+            }
+
+            Screen.ShowNotification($"The ~r~{GetLabelText(GetDisplayNameFromVehicleModel((uint)TargetVehicle.Model.Hash))} ~w~is now mimicking you.");
+            Game.PlayerPed.Task.PlayAnimation(animationDict, "pull_over_left", 8.0f, -1, (AnimationFlags)49);
+            await Client.Delay(1100);
+            Game.PlayerPed.Task.ClearSecondary();
+            SetPedIntoVehicle(StoppedDriver.Handle, TargetVehicle.Handle, 0);
+            await Client.Delay(10);
+
+            Vector3 mimicStartPosition = Game.PlayerPed.Position;
+
+            while (IsVehicleDriverMimicking)
+            {
+                if (mimicStartPosition.Distance(Game.PlayerPed.Position) > 20f)
+                {
+                    DisableMimick();
+                }
+
+                await Client.Delay(0);
+                Vector3 speedVect = GetEntitySpeedVector(Game.PlayerPed.CurrentVehicle.Handle, true);
+
+                if (speedVect.Y > 0f && VehicleDriverReverseWithPlayer)
+                {
+                    SetVehicleForwardSpeed(TargetVehicle.Handle, Game.PlayerPed.CurrentVehicle.Speed);
+                }
+                else if (speedVect.Y < 0f && VehicleDriverReverseWithPlayer)
+                {
+                    SetVehicleForwardSpeed(TargetVehicle.Handle, -1 * Game.PlayerPed.CurrentVehicle.Speed);
+                }
+                TargetVehicle.SteeringAngle = Game.PlayerPed.CurrentVehicle.SteeringAngle;
+
+                if (!StoppedDriver.IsInVehicle() && !TargetVehicle.IsDriveable)
+                {
+                    DisableMimick();
+                }
+
+                while (TargetVehicle.IsInAir)
+                {
+                    await Client.Delay(0);
+                }
+            }
+        }
+
+        static public async void DisableMimick()
+        {
+            IsVehicleDriverMimicking = false;
+            await Client.Delay(100);
+            Screen.ShowNotification($"The ~r~{GetLabelText(GetDisplayNameFromVehicleModel((uint)TargetVehicle.Model.Hash))} ~w~is no longer mimicking you.");
+            IsVehicleStopped = true;
+            await Client.Delay(2000);
+            SetPedIntoVehicle(StoppedDriver.Handle, TargetVehicle.Handle, -1);
         }
 
         static public void Reset()
@@ -601,6 +621,64 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 Debug.WriteLine($"TrafficStopVehicleFlee -> {ex}");
             }
+        }
+
+        internal static async void InteractionRelease()
+        {
+            if (Client.speechType == SpeechType.NORMAL)
+            {
+                ShowOfficerSubtitle("Alright, you're free to go.");
+            }
+            else
+            {
+                ShowOfficerSubtitle("Get out of here before I change my mind.");
+            }
+            List<string> DriverResponse = new List<string>() { "Okay, thanks.", "Thanks.", "Thank you officer, have a nice day!", "Thanks, bye!", "I'm free to go? Okay, bye!" };
+            if (DriverAttitude >= 50 && DriverAttitude < 80)
+            {
+                DriverResponse = new List<string>() { "Alright.", "Okay.", "Good.", "Okay, bye.", "Okay, goodbye officer.", "Later.", "Bye bye.", "Until next time." };
+            }
+            else if (DriverAttitude >= 80 && DriverAttitude < 95)
+            {
+                DriverResponse = new List<string>() { "Bye, asshole...", "Ugh.. Finally.", "Damn cops...", "Until next time.", "Its about time, pig" };
+            }
+            await Client.Delay(2000);
+            ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            Reset();
+        }
+
+        internal static async void InteractionIssueWarning()
+        {
+            List<string> OfficerResponse;
+            List<string> DriverResponse = new List<string>() { "Thanks.", "Thank you officer.", "Okay, thank you.", "Okay, thank you officer.", "Thank you so much!", "Alright, thanks!", "Yay! Thank you!", "I'll be more careful next time!", "Sorry about that!" }; ;
+
+            if (Client.speechType == SpeechType.NORMAL)
+            {
+                OfficerResponse = new List<string>() { "You can go, but don't do it again.", "Don't make me pull you over again!", "Have a good day. Be a little more careful next time.", "I'll let you off with a warning this time." };
+            }
+            else
+            {
+                OfficerResponse = new List<string>() { "Don't do that again.", "Don't make me pull you over again!", "I'll let you go this time.", "I'll let you off with a warning this time." };
+            }
+
+            if (DriverAttitude >= 50 && DriverAttitude < 80)
+            {
+                DriverResponse = new List<string>() { "Thanks... I guess...", "Yeah, whatever.", "Finally.", "Ugh..", };
+            }
+            else if (DriverAttitude >= 80 && DriverAttitude < 95)
+            {
+                DriverResponse = new List<string>() { "Uh huh, bye.", "Yeah, whatever.", "Finally.", "Ugh..", "Prick." };
+            }
+            else if (DriverAttitude >= 95)
+            {
+                DriverResponse = new List<string>() { "Troublesum said fuck you too buddy!", "Yea, well don't kill yourself trying" };
+            }
+
+            ShowOfficerSubtitle(OfficerResponse[Client.Random.Next(OfficerResponse.Count)]);
+            await Client.Delay(2000);
+            ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            await Client.Delay(2000);
+            Reset();
         }
 
         static public async void InteractionRequestPedIdentification()
