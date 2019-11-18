@@ -83,7 +83,6 @@
     <Compile Include="Extensions\PropExt.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\ScriptExtended.cs" />
-    <Compile Include="Extensions\SpeechModifier.cs" />
     <Compile Include="Extensions\SubTask.cs" />
     <Compile Include="Extensions\SystemExtended.cs" />
     <Compile Include="Extensions\V3Extended.cs" />
@@ -101,7 +100,8 @@
     <Compile Include="Scripts\Mission\CreateStoreMission.cs" />
     <Compile Include="Scripts\PedCreators\ZombieCreator.cs" />
     <Compile Include="Scripts\Police\ArrestPed.cs" />
-    <Compile Include="Scripts\Police\Menu\SuspectMenu.cs" />
+    <Compile Include="Scripts\Police\MenuHandler\Submenu\TrafficStopQuestions.cs" />
+    <Compile Include="Scripts\Police\MenuHandler\SuspectMenu.cs" />
     <Compile Include="Scripts\Police\Pullover\Events.cs" />
     <Compile Include="Scripts\Police\TrafficStop.cs" />
     <Compile Include="Scripts\SoundManager.cs" />

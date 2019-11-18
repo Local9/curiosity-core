@@ -12,6 +12,67 @@ using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Environment
 {
+
+    class SafeZonePlayer
+    {
+        Client client = Client.GetInstance();
+        CitizenFX.Core.Player _player;
+
+        public SafeZonePlayer(CitizenFX.Core.Player player)
+        {
+            _player = player;
+            client.RegisterTickHandler(DisableCollision);
+            
+            _player.Character.Opacity = 180;
+
+            if (_player.Character.IsInVehicle())
+                _player.Character.CurrentVehicle.Opacity = 180;
+        }
+
+        async Task DisableCollision()
+        {
+            await Client.Delay(0);
+
+            _player.Character.SetNoCollision(Game.PlayerPed, false);
+            Game.Player.Character.SetNoCollision(_player.Character, false);
+
+            if (_player.Character.IsInVehicle())
+            {
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    _player.Character.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
+                }
+                else
+                {
+                    _player.Character.CurrentVehicle.SetNoCollision(Game.PlayerPed, false);
+                }
+            }
+        }
+
+        public void EnableCollision()
+        {
+            client.DeregisterTickHandler(DisableCollision);
+
+            _player.Character.ResetOpacity();
+
+            _player.Character.SetNoCollision(Game.PlayerPed, true);
+            Game.Player.Character.SetNoCollision(_player.Character, true);
+
+            if (_player.Character.IsInVehicle())
+            {
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    _player.Character.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
+                }
+                else
+                {
+                    _player.Character.CurrentVehicle.SetNoCollision(Game.PlayerPed, true);
+                }
+                _player.Character.CurrentVehicle.ResetOpacity();
+            }
+        }
+    }
+
     class SafeZone
     {
         static Client client = Client.GetInstance();
@@ -20,12 +81,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static Vector3 pos2 = new Vector3(-1033.078f, -840.2169f, 10f);
 
         static AreaBox areaBox = new AreaBox();
-        static List<CitizenFX.Core.Vehicle> vehicles = new List<CitizenFX.Core.Vehicle>();
-        static List<CitizenFX.Core.Player> playerPeds = new List<CitizenFX.Core.Player>();
         static int Opacity = 180;
 
+        static Dictionary<int, SafeZonePlayer> safeZonePlayer = new Dictionary<int, SafeZonePlayer>();
+
         static bool IsInArea = false;
-        static bool IsInOwnVehicle = false;
 
         static Dictionary<Vector3, AreaBox> safeZones = new Dictionary<Vector3, AreaBox>();
 
@@ -52,64 +112,26 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
                 if (Game.PlayerPed.IsInVehicle())
                 {
-                    //if (Game.PlayerPed.CurrentVehicle.Driver.Handle == Game.PlayerPed.Handle)
-                    //{
-                    //    if (!Game.PlayerPed.CurrentVehicle.PreviouslyOwnedByPlayer)
-                    //        Client.CurrentVehicle = Game.PlayerPed.CurrentVehicle;
-                    //}
-
                     Game.PlayerPed.CurrentVehicle.Opacity = Opacity;
                 }
 
-                try
+                List<CitizenFX.Core.Player> playerPeds = Client.players.ToList().Select(m => m).Where(m => m.Character.Position.DistanceToSquared(Game.PlayerPed.Position) < 15f).ToList();
+
+                foreach (CitizenFX.Core.Player pedInSafeZone in playerPeds)
                 {
-                    playerPeds = Client.players.ToList().Select(m => m).Where(m => m.Character.Position.DistanceToSquared(Game.PlayerPed.Position) < 15f).ToList();
-                    playerPeds.Remove(Game.Player);
-
-                    foreach (CitizenFX.Core.Player pedInSafeZone in playerPeds)
-                    {
-                        pedInSafeZone.Character.Opacity = Opacity;
-                        API.SetEntityNoCollisionEntity(PlayerHandle, pedInSafeZone.Character.Handle, false);
-
-                        if (pedInSafeZone.Character.IsInVehicle())
-                        {
-                            pedInSafeZone.Character.CurrentVehicle.Opacity = Opacity;
-                            API.SetEntityNoCollisionEntity(PlayerHandle, pedInSafeZone.Character.CurrentVehicle.Handle, false);
-                        }
-
-                        if (Game.PlayerPed.IsInVehicle())
-                        {
-                            API.SetEntityNoCollisionEntity(Game.PlayerPed.CurrentVehicle.Handle, pedInSafeZone.Character.Handle, false);
-
-                            if (pedInSafeZone.Character.IsInVehicle())
-                                API.SetEntityNoCollisionEntity(Game.PlayerPed.CurrentVehicle.Handle, pedInSafeZone.Character.CurrentVehicle.Handle, false);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"SAFEZONE -> {ex.Message}");
+                    if (pedInSafeZone == Game.Player) continue;
+                    if (safeZonePlayer.ContainsKey(pedInSafeZone.Handle)) continue;
+                    safeZonePlayer.Add(pedInSafeZone.Handle, new SafeZonePlayer(pedInSafeZone));
                 }
             }
 
-            foreach (CitizenFX.Core.Player pedInSafeZone in Client.players)
+            foreach (CitizenFX.Core.Player player in Client.players)
             {
-                pedInSafeZone.Character.ResetOpacity();
-                API.SetEntityNoCollisionEntity(Game.PlayerPed.Handle, pedInSafeZone.Character.Handle, true);
-
-                if (pedInSafeZone.Character.IsInVehicle())
+                if (player == Game.Player) continue;
+                if (safeZonePlayer.ContainsKey(player.Handle))
                 {
-                    pedInSafeZone.Character.CurrentVehicle.ResetOpacity();
-                    API.SetEntityNoCollisionEntity(Game.PlayerPed.Handle, pedInSafeZone.Character.CurrentVehicle.Handle, true);
-                }
-
-                if (Game.PlayerPed.IsInVehicle())
-                {
-                    API.SetEntityNoCollisionEntity(Game.PlayerPed.CurrentVehicle.Handle, pedInSafeZone.Character.Handle, true);
-
-                    if (pedInSafeZone.Character.IsInVehicle())
-                        API.SetEntityNoCollisionEntity(Game.PlayerPed.CurrentVehicle.Handle, pedInSafeZone.Character.CurrentVehicle.Handle, true);
-                }
+                    safeZonePlayer[player.Handle].EnableCollision();
+                };
             }
 
             Game.PlayerPed.ResetOpacity();
@@ -141,24 +163,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 }
             }
         }
-
-        //static async Task IsLeavingCar()
-        //{
-        //    await Task.FromResult(0);
-        //    if (IsInOwnVehicle)
-        //    {
-        //        if (API.IsPedInAnyVehicle(Game.PlayerPed.Handle, false))
-        //        {
-        //            API.NetworkFadeOutEntity(Client.CurrentVehicle.Handle, false, true);
-
-        //            await Client.Delay(1000);
-
-        //            Client.CurrentVehicle.Delete();
-
-        //            Client.CurrentVehicle = null;
-        //        }
-        //    }
-        //}
 
         public static void OnEnter()
         {

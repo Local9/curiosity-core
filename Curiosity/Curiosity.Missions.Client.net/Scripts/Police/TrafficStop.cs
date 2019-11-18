@@ -33,7 +33,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         // states for menu
         static bool CanSearchVehicle = false;
         static bool IsDriverUnderTheInfluence = false;
-        static bool HasDriverBeenQuestioned = false;
+        static bool HasDriverBeenAskedForID = false;
         static bool IsVehicleDriverMimicking = false;
         static bool IsVehicleDriverFollowing = false;
         static bool IsDriverFollowing = false;
@@ -44,6 +44,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static int DriverBloodAlcaholLimit;
         static int DriverLostIdChance;
         static int DriverAttitude;
+
+        static int DriverCannabisChance;
+        static int DriverCocaineChance;
 
         // Vehicle Data
         static string VehicleRegisterationYear;
@@ -160,6 +163,64 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
         }
 
+        internal static async void InteractionRelease()
+        {
+            if (Client.speechType == SpeechType.NORMAL)
+            {
+                ShowOfficerSubtitle("Alright, you're free to go.");
+            }
+            else
+            {
+                ShowOfficerSubtitle("Get out of here before I change my mind.");
+            }
+            List<string> DriverResponse = new List<string>() { "Okay, thanks.", "Thanks.", "Thank you officer, have a nice day!", "Thanks, bye!", "I'm free to go? Okay, bye!" };
+            if (DriverAttitude >= 50 && DriverAttitude < 80)
+            {
+                DriverResponse = new List<string>() { "Alright.", "Okay.", "Good.", "Okay, bye.", "Okay, goodbye officer.", "Later.", "Bye bye.", "Until next time." };
+            }
+            else if (DriverAttitude >= 80 && DriverAttitude < 95)
+            {
+                DriverResponse = new List<string>() { "Bye, asshole...", "Ugh.. Finally.", "Damn cops...", "Until next time.", "Its about time, pig" };
+            }
+            await Client.Delay(2000);
+            ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            Reset();
+        }
+
+        internal static async void InteractionIssueWarning()
+        {
+            List<string> OfficerResponse;
+            List<string> DriverResponse = new List<string>() { "Thanks.", "Thank you officer.", "Okay, thank you.", "Okay, thank you officer.", "Thank you so much!", "Alright, thanks!", "Yay! Thank you!", "I'll be more careful next time!", "Sorry about that!" }; ;
+            
+            if (Client.speechType == SpeechType.NORMAL)
+            {
+                OfficerResponse = new List<string>() { "You can go, but don't do it again.", "Don't make me pull you over again!", "Have a good day. Be a little more careful next time.", "I'll let you off with a warning this time." };
+            }
+            else
+            {
+                OfficerResponse = new List<string>() { "Don't do that again.", "Don't make me pull you over again!", "I'll let you go this time.", "I'll let you off with a warning this time." };
+            }
+
+            if (DriverAttitude >= 50 && DriverAttitude < 80)
+            {
+                DriverResponse = new List<string>() { "Thanks... I guess...", "Yeah, whatever.", "Finally.", "Ugh..", };
+            }
+            else if (DriverAttitude >= 80 && DriverAttitude < 95)
+            {
+                DriverResponse = new List<string>() { "Uh huh, bye.", "Yeah, whatever.", "Finally.", "Ugh..", "Prick." };
+            }
+            else if (DriverAttitude >= 95)
+            {
+                DriverResponse = new List<string>() { "Troublesum said fuck you too buddy!", "Yea, well don't kill yourself trying" };
+            }
+
+            ShowOfficerSubtitle(OfficerResponse[Client.Random.Next(OfficerResponse.Count)]);
+            await Client.Delay(2000);
+            ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            await Client.Delay(2000);
+            Reset();
+        }
+
         // If the IsVehicleStopped flag is set to true, then stop the vehicle
         static async Task OnTrafficStopStateTask()
         {
@@ -184,7 +245,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                 if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) >= 300f)
                 {
-                    ShowNotification("Dispatch", "~r~They got away...", string.Empty);
+                    if (TargetVehicle.AttachedBlip != null)
+                        ShowNotification("Dispatch", "~r~They got away...", string.Empty);
+
                     Reset();
                 }
             }
@@ -224,7 +287,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             NotificationFlagCannabis = "~g~Negative";
             NotificationFlagCocaine = "~g~Negative";
 
-            HasDriverBeenQuestioned = false;
+            HasDriverBeenAskedForID = false;
             IsDriverUnderTheInfluence = false;
             CanSearchVehicle = false;
             HasVehicleBeenStolen = false;
@@ -268,14 +331,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             string firstname;
             if (StoppedDriver.Gender == Gender.Female)
             {
-                firstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count - 1)];
+                firstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count)];
             }
             else
             {
-                firstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count - 1)];
+                firstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count)];
             }
 
-            string surname = PedNames.Surname[Client.Random.Next(PedNames.Surname.Count - 1)];
+            string surname = PedNames.Surname[Client.Random.Next(PedNames.Surname.Count)];
             // Generate a date of birth
             DateTime StartDateForDriverDoB = new DateTime(1949, 1, 1);
             double Range = (DateTime.Today - StartDateForDriverDoB).TotalDays;
@@ -317,14 +380,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 string stolenFirstname;
                 if (StoppedDriver.Gender == Gender.Female)
                 {
-                    stolenFirstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count - 1)];
+                    stolenFirstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count)];
                 }
                 else
                 {
-                    stolenFirstname = PedNames.FirstNameFemale[Client.Random.Next(PedNames.FirstNameFemale.Count - 1)];
+                    stolenFirstname = PedNames.FirstNameFemale[Client.Random.Next(PedNames.FirstNameFemale.Count)];
                 }
 
-                string stolenSurname = PedNames.Surname[Client.Random.Next(PedNames.Surname.Count - 1)];
+                string stolenSurname = PedNames.Surname[Client.Random.Next(PedNames.Surname.Count)];
                 // Generate a date of birth
                 DateTime StolenStartDateForDriverDoB = new DateTime(1949, 1, 1);
                 double StolenRange = (DateTime.Today - StolenStartDateForDriverDoB).TotalDays;
@@ -359,20 +422,18 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
 
             // Driver Under the Influence
-            int DriverCannabisChance = Client.Random.Next(100);
-            int DriverCocaineChance = Client.Random.Next(100);
+            DriverCannabisChance = Client.Random.Next(100);
+            DriverCocaineChance = Client.Random.Next(100);
 
             if (DriverCannabisChance > 85)
             {
                 NotificationFlagCannabis = "~r~Positive";
-                IsDriverUnderTheInfluence = true;
                 DriverChanceOfFlee = Client.Random.Next(18, 30);
             }
 
             if (DriverCocaineChance > 90)
             {
                 NotificationFlagCannabis = "~r~Positive";
-                IsDriverUnderTheInfluence = true;
                 DriverChanceOfFlee = Client.Random.Next(18, 30);
             }
 
@@ -385,7 +446,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 DriverLostIdChance = Client.Random.Next(70, 100);
             }
 
-            HasDriverBeenQuestioned = false;
+            HasDriverBeenAskedForID = false;
 
             // Drunk Flags
             if (IsDriverUnderTheInfluence)
@@ -454,6 +515,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static void TrafficStopVehicleStop(Vehicle vehicle)
         {
             IsVehicleStopped = true;
+
             client.RegisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
             API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, true);
             ALPR(vehicle);
@@ -463,6 +525,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             IsVehicleStopped = false;
             ped.IsPersistent = true;
+
             ped.Weapons.Give(WeaponHash.CombatPistol, 30, false, true);
             ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
             await Client.Delay(1000);
@@ -474,7 +537,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             try
             {
                 API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, false);
-
+                
                 IsVehicleStopped = false;
                 IsVehicleFleeing = true;
                 vehicle.IsEngineRunning = true;
@@ -505,7 +568,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
         }
 
-        static public async void RequestPedIdentification()
+        static public async void InteractionRequestPedIdentification()
         {
             if (StoppedDriver == null)
             {
@@ -518,11 +581,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 string officerSubtitle = string.Empty;
                 if (Client.speechType == SpeechType.NORMAL)
                 {
-                    officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes[Client.Random.Next(DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes.Count - 1)];
+                    officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes[Client.Random.Next(DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes.Count)];
                 }
                 else
                 {
-                    officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes[Client.Random.Next(DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes.Count - 1)];
+                    officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes[Client.Random.Next(DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes.Count)];
                 }
                 Screen.ShowSubtitle($"~o~Officer: ~w~{officerSubtitle}");
                 
@@ -537,15 +600,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     string driverResponse = string.Empty;
                     if (DriverAttitude < 50)
                     {
-                        driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity.Count - 1)];
+                        driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity.Count)];
                     }
                     else if (DriverAttitude >= 50 && DriverAttitude < 80)
                     {
-                        driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity.Count - 1)];
+                        driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity.Count)];
                     }
                     else if (DriverAttitude >= 80)
                     {
-                        driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity.Count - 1)];
+                        driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity.Count)];
                     }
                     Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
 
@@ -561,7 +624,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                     ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{IdentityName}\n~w~DOB: ~y~{IdentityDateOfBirth}");
                     
-                    HasDriverBeenQuestioned = true;
+                    HasDriverBeenAskedForID = true;
                 }
             }
             else
@@ -570,9 +633,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
         }
 
-        static public async void RunPedIdentification()
+        static public async void InteractionRunPedIdentification()
         {
-            if (!HasDriverBeenQuestioned)
+            if (!HasDriverBeenAskedForID)
             {
                 Screen.ShowNotification("~r~You have to ask for the ~o~Driver's ID~r~ first!");
                 return;
@@ -592,20 +655,99 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (OffenseChance >= 75)
             {
                 CanDriverBeArrested = true;
-                NotificationFlagOffense = $"~r~{Offense[Client.Random.Next(Offense.Count - 1)]}";
+                NotificationFlagOffense = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
             }
 
-            ShowNotification("Dispatch", $"LSPD Database", $"~y~{IdentityName}~w~ | ~b~{StoppedDriver.Gender}~w~ | ~b~{IdentityDateOfBirth}\n~w~Citations: {NotificationFlagCitations}\n~w~Flags: {NotificationFlagOffense}");
+            ShowNotification("Dispatch", $"LSPD Database", $"~w~Name: ~y~{IdentityName}~w~\nGender: ~b~{StoppedDriver.Gender}~w~\nDOB: ~b~{IdentityDateOfBirth}");
+            ShowNotification("Dispatch", $"LSPD Database", $"~w~Citations: {NotificationFlagCitations}\n~w~Flags: {NotificationFlagOffense}");
         }
 
+        static public async void InteractionHello()
+        {
+            LoadAnimation("gestures@m@sitting@generic@casual");
 
+            if (Client.speechType == SpeechType.NORMAL)
+            {
+                PlayAmbientSpeechWithVoice(StoppedDriver.Handle, "KIFFLOM_GREET", "s_m_y_sheriff_01_white_full_01", "SPEECH_PARAMS_FORCE_SHOUTED", false);
+                Game.PlayerPed.Task.PlayAnimation("gestures@m@standing@casual", "gesture_hello", 8.0f, -1, (AnimationFlags)49);
+            }
+            else
+            {
+                PlayAmbientSpeechWithVoice(StoppedDriver.Handle, "GENERIC_INSULT_HIGH", "s_m_y_sheriff_01_white_full_01", "SPEECH_PARAMS_FORCE_SHOUTED", false);
+                Game.PlayerPed.Task.PlayAnimation("gestures@m@standing@casual", "gesture_what_hard", 8.0f, -1, (AnimationFlags)49);
+            }
+            await Client.Delay(1000);
+            Game.PlayerPed.Task.ClearAll();
+        }
 
-        static public async void RunVehicleNumberPlate()
+        static public async void InteractionRunVehicleNumberPlate()
         {
             AnimationRadio();
             ShowNotification("Dispatch", $"Running ~o~{TargetVehicle.Mods.LicensePlate}", string.Empty);
             await Client.Delay(2000);
             ShowNotification("Dispatch", $"LSPD Database", $"~w~Reg.Owner: ~y~{VehicleRegisterationDriversName}~w~\nReg.Year: ~y~{VehicleRegisterationYear}~w~\nFlags: ~y~{NotificationFlagVehicle}");
+        }
+
+        static public void InteractionDrunk()
+        {
+            ShowOfficerSubtitle("Have you had anything to drink today?");
+            List<string> response;
+            if (IsDriverUnderTheInfluence)
+            {
+                response = new List<string>() { "*Burp*", "What's a drink?", "No.", "You'll never catch me alive!", "Never", "Nope, i don't drink Ossifer", "Maybe?", "Just a few." };
+            }
+            else
+            {
+                response = new List<string>() { "No, sir", "I dont drink.", "Nope.", "No.", "Only 1.", "Yes... a water and 2 orange juices." };
+            }
+            ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
+        }
+
+        static public void InteractionDrug()
+        {
+            ShowOfficerSubtitle("Have you consumed any drugs recently?");
+            List<string> response;
+            if (DriverCocaineChance >= 90 || DriverCannabisChance >= 85)
+            {
+                response = new List<string>() { "What is life?", "Who is me?", "NoOOOooo.", "Is that a UNICORN?!", "If I've done the what?", "WHAT DRUGS? I DONT KNOW KNOW ANYTHING ABOUT DRUGS.", "What's a drug?" };
+            }
+            else
+            {
+                response = new List<string>() { "No, sir", "I don't do that stuff.", "Nope.", "No.", "Nah" };
+            }
+            ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
+        }
+
+        static public void InteractionIllegal()
+        {
+            ShowOfficerSubtitle("Is there anything illegal in the vehicle?");
+            List<string> response = new List<string>() { "No, sir", "Not that I know of.", "Nope.", "No.", "Apart from the 13 dead hookers in the back.. No.", "Maybe? But most probably not.", "I sure hope not" };
+            ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
+        }
+
+        static public void InteractionSearch()
+        {
+            ShowOfficerSubtitle("Would you mind if i search your vehicle?");
+            List<string> response;
+            if (CanSearchVehicle)
+            {
+                response = new List<string>() { "I'd prefer you not to...", "I'll have to pass on that", "Uuuh... Y- No..", "Go ahead. For the record its not my car", "Yeah, why not.." };
+            }
+            else
+            {
+                response = new List<string>() { "Go ahead", "Shes all yours", "I'd prefer you not to", "I don't have anything to hide, go for it." };
+            }
+            ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
+        }
+
+        static void ShowOfficerSubtitle(string subtitle)
+        {
+            Screen.ShowSubtitle($"~o~Officer:~w~ {subtitle}");
+        }
+
+        static void ShowDriverSubtitle(string subtitle)
+        {
+            Screen.ShowSubtitle($"~b~Driver:~w~ {subtitle}");
         }
 
         static public void ShowRegistration()
@@ -630,7 +772,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static async void AnimationRadio()
         {
-            await LoadAnimation("random@arrests");
+            LoadAnimation("random@arrests");
             Game.PlayerPed.Task.PlayAnimation("random@arrests", "generic_radio_enter", 1.5f, 2.0f, -1, (AnimationFlags)50, 2.0f);
             await Client.Delay(6000);
             Game.PlayerPed.Task.ClearAll();
