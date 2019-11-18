@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using MenuAPI;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Enums.Patrol;
 using CitizenFX.Core.UI;
 using CitizenFX.Core.Native;
 
@@ -18,21 +19,31 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         static Menu menu;
         static bool IsMenuOpen = false;
 
-        // Buttons
-        static MenuItem mItemRequestId = new MenuItem("Request ID");
+        static List<string> CitationPrices = new List<string>() { "$50", "$100", "$150", "$200", "$250", "$500", "$1000" };
+
+        // Initial Menu
+        static MenuListItem mListItemSpeech = new MenuListItem("Speech", Enum.GetNames(typeof(SpeechType)).ToList(), 0);
+        static MenuItem mItemHello = new MenuItem("Hello");
+        static MenuItem mItemRequestId = new MenuItem("Ask for Identification");
+        static Menu submenuQuestionDriver = new Menu("Question Driver");
+        static Menu submenuIssueTicket = new Menu("Issue Ticket");
+        static MenuItem mItemLeaveVehicle = new MenuItem("Order out of Vehicle");
+        static MenuItem mItemRelease = new MenuItem("Release");
+
+
         static MenuItem mItemRunName = new MenuItem("Run Name");
         static MenuItem mItemRunPlate = new MenuItem("Run Plate");
-        // Options
+        static MenuListItem mItemIssueTicket = new MenuListItem("Issue Ticket", CitationPrices, 0) { Description = "~w~Press ~r~ENTER ~w~to issue the ~b~Citation~w~." };
+        static MenuItem mItemIssueWarning = new MenuItem("Run Plate");
         static MenuItem mItemBreathalyzer = new MenuItem("Breathalyzer");
         static MenuItem mItemDrugTest = new MenuItem("Drug Test");
-        static MenuItem mItemSearch = new MenuItem("Search");
-        // Arrest
-        static MenuItem mItemLeaveVehicle = new MenuItem("Leave Vehicle");
+        static MenuItem mItemSearch = new MenuItem("Search");        
         static MenuItem mItemFollow = new MenuItem("Follow") { Enabled = false };
         static MenuItem mItemArrest = new MenuItem("Arrest") { Enabled = false };
-        static MenuItem mItemEnterVehicle = new MenuItem("Put in car") { Enabled = false, Description = "Put ped in the back of the police car" };
+        static MenuItem mItemOrderBackInCar = new MenuItem("Order back in Vehicle");
 
-        static MenuItem mItemRelease = new MenuItem("Release");
+        // static MenuItem mItemEnterVehicle = new MenuItem("Put in car") { Enabled = false, Description = "Put ped in the back of the police car" };
+
 
         static public void Open()
         {
@@ -47,11 +58,20 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                 menu.OnMenuOpen += Menu_OnMenuOpen;
 
                 menu.OnItemSelect += Menu_OnItemSelect;
+                menu.OnListIndexChange += Menu_OnListIndexChange;
 
                 MenuController.AddMenu(menu);
             }
 
             menu.OpenMenu();
+        }
+
+        private static void Menu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
+        {
+            if (listItem == mListItemSpeech)
+            {
+                Client.speechType = (SpeechType)newSelectionIndex;
+            }
         }
 
         private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
@@ -86,21 +106,25 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
             IsMenuOpen = true;
 
-            // initial interactions
+            menu.AddMenuItem(mListItemSpeech);
+            menu.AddMenuItem(mItemHello);
             menu.AddMenuItem(mItemRequestId);
-            menu.AddMenuItem(mItemRunName);
-            menu.AddMenuItem(mItemRunPlate);
-            // release the ped
+
+            AddSubMenu(menu, submenuQuestionDriver);
+            AddSubMenu(menu, submenuIssueTicket);
+
+            menu.AddMenuItem(mItemIssueWarning);
+
+            if (TrafficStop.StoppedDriver.IsInVehicle())
+            {
+                menu.AddMenuItem(mItemLeaveVehicle);
+            }
+            else
+            {
+                menu.AddMenuItem(mItemOrderBackInCar);
+            }
+            
             menu.AddMenuItem(mItemRelease);
-            // Interactions
-            menu.AddMenuItem(mItemBreathalyzer);
-            menu.AddMenuItem(mItemDrugTest);
-            menu.AddMenuItem(mItemSearch);
-            // Ask Ped to leave vehicle
-            menu.AddMenuItem(mItemLeaveVehicle);
-            menu.AddMenuItem(mItemFollow);
-            menu.AddMenuItem(mItemArrest);
-            menu.AddMenuItem(mItemEnterVehicle);
         }
 
         private static void Menu_OnMenuClose(Menu menu)
@@ -135,6 +159,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                 menu.CloseMenu();
             }
             await BaseScript.Delay(0);
+        }
+
+        public static void AddSubMenu(Menu menu, Menu submenu, string label = "→→→", bool buttonEnabled = true)
+        {
+            MenuController.AddSubmenu(menu, submenu);
+            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = label, Enabled = buttonEnabled };
+            menu.AddMenuItem(submenuButton);
+            MenuController.BindMenuItem(menu, submenu, submenuButton);
         }
     }
 }

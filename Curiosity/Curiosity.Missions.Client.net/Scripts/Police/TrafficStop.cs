@@ -587,7 +587,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             CanDriverBeArrested = false;
             NotificationFlagOffense = "~g~NONE";
 
-            NotificationFlagCitations = $"{Client.Random.Next(-4, 7)}";
+            NotificationFlagCitations = $"{Client.Random.Next(8)}";
 
             if (OffenseChance >= 75)
             {
