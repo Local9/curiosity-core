@@ -22,16 +22,16 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             _player = player;
             client.RegisterTickHandler(DisableCollision);
-            
-            _player.Character.Opacity = 180;
-
-            if (_player.Character.IsInVehicle())
-                _player.Character.CurrentVehicle.Opacity = 180;
         }
 
         async Task DisableCollision()
         {
             await Client.Delay(0);
+
+            _player.Character.Opacity = 180;
+
+            if (_player.Character.IsInVehicle())
+                _player.Character.CurrentVehicle.Opacity = 180;
 
             _player.Character.SetNoCollision(Game.PlayerPed, false);
             Game.Player.Character.SetNoCollision(_player.Character, false);
@@ -131,6 +131,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 if (safeZonePlayer.ContainsKey(player.Handle))
                 {
                     safeZonePlayer[player.Handle].EnableCollision();
+                    safeZonePlayer.Remove(player.Handle);
                 };
             }
 
@@ -140,6 +141,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 Game.PlayerPed.CurrentVehicle.ResetOpacity();
 
             client.DeregisterTickHandler(SafeZonePeds);
+            safeZonePlayer.Clear();
         }
 
         static async Task IsInSafeZone()

@@ -26,7 +26,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         static MenuItem mItemHello = new MenuItem("Hello");
         static MenuItem mItemRequestId = new MenuItem("Ask for Identification");
 
-        static MenuItem mItemLeaveVehicle = new MenuItem("Order out of Vehicle");
         static MenuItem mItemRelease = new MenuItem("Release");
 
 
@@ -127,17 +126,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             menu.AddMenuItem(mItemRunPlate);
 
             Submenu.TrafficStopQuestions.SetupMenu();
+            Submenu.TrafficStopInteractions.SetupMenu();
 
             menu.AddMenuItem(mItemIssueWarning);
-
-            if (TrafficStop.StoppedDriver.IsInVehicle())
-            {
-                menu.AddMenuItem(mItemLeaveVehicle);
-            }
-            else
-            {
-                menu.AddMenuItem(mItemOrderBackInCar);
-            }
             
             menu.AddMenuItem(mItemRelease);
         }

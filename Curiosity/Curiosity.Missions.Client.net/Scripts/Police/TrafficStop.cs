@@ -19,6 +19,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
     class TrafficStop
     {
         static Client client = Client.GetInstance();
+        static bool IsScenarioPlaying = false;
 
         static float DistanceToCheck = 10.0f;
 
@@ -70,6 +71,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 client.RegisterTickHandler(OnTrafficStopTask);
                 client.RegisterTickHandler(OnTrafficStopStateTask);
+                client.RegisterTickHandler(OnEmoteCheck);
                 Screen.ShowNotification("~b~Traffic Stops~s~: ~g~Enabled");
             }
         }
@@ -80,7 +82,26 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 client.DeregisterTickHandler(OnTrafficStopTask);
                 client.DeregisterTickHandler(OnTrafficStopStateTask);
+                client.DeregisterTickHandler(OnEmoteCheck);
                 Screen.ShowNotification("~b~Traffic Stops~s~: ~r~Disabled");
+            }
+        }
+
+        static async Task OnEmoteCheck()
+        {
+            await Client.Delay(0);
+            if (IsScenarioPlaying)
+            {
+                if (
+                    Game.IsControlPressed(0, Control.MoveDown)
+                    || Game.IsControlPressed(0, Control.MoveUp)
+                    || Game.IsControlPressed(0, Control.MoveLeft)
+                    || Game.IsControlPressed(0, Control.MoveRight)
+                    )
+                {
+                    Game.PlayerPed.Task.ClearAll();
+                    IsScenarioPlaying = false;
+                }
             }
         }
 
@@ -120,6 +141,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             AwaitingPullover = true;
                             while (AwaitingPullover)
                             {
+                                SetUserRadioControlEnabled(false);
+
                                 await Client.Delay(0);
                                 Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to initiate a ~b~Traffic Stop");
 
@@ -233,7 +256,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     return;
                 } // Check every 500ms, don't spam the client
 
-                if (IsVehicleStopped && TargetVehicle.IsEngineRunning)
+                if (IsVehicleStopped && TargetVehicle.IsEngineRunning && !IsVehicleDriverMimicking)
                 {
                     TargetVehicle.IsEngineRunning = false;
 
@@ -241,6 +264,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     {
                         TargetVehicle.Windows.RollDownAllWindows();
                     }
+                }
+
+                if (IsVehicleStopped && Game.PlayerPed.IsInVehicle() && !IsVehicleDriverMimicking)
+                {
+                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to move the ~b~Vehicle");
+                }
+
+                if (IsVehicleStopped && Game.PlayerPed.IsInVehicle() && IsVehicleDriverMimicking)
+                {
+                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to ~b~stop moving the Vehicle");
                 }
 
                 if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) >= 300f)
@@ -259,6 +292,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static public void Reset()
         {
+            SetUserRadioControlEnabled(true);
+
             if (TargetVehicle != null)
             {
                 if (TargetVehicle.AttachedBlip != null)
@@ -776,6 +811,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             Game.PlayerPed.Task.PlayAnimation("random@arrests", "generic_radio_enter", 1.5f, 2.0f, -1, (AnimationFlags)50, 2.0f);
             await Client.Delay(6000);
             Game.PlayerPed.Task.ClearAll();
+        }
+
+        static async void AnimationTicket()
+        {
+            string ticketScenario = "CODE_HUMAN_MEDIC_TIME_OF_DEATH";
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                TaskStartScenarioInPlace(Game.PlayerPed.Handle, ticketScenario, 0, true);
+                IsScenarioPlaying = true;
+            }
         }
 
         static async Task<bool> LoadAnimation(string dict)
