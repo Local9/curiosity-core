@@ -174,17 +174,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                 if (IsVehicleStopped && TargetVehicle.IsEngineRunning)
                 {
-                    SetVehicleEngineOn(TargetVehicle.Handle, false, false, true);
+                    TargetVehicle.IsEngineRunning = false;
 
-                    if (GetEntitySpeed(TargetVehicle.Handle) <= 1f)
+                    if (TargetVehicle.Speed <= 1f)
                     {
-                        RollDownWindows(TargetVehicle.Handle);
+                        TargetVehicle.Windows.RollDownAllWindows();
                     }
                 }
 
                 if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) >= 300f)
                 {
-                    ShowNotification("Dispatch", "They got away", string.Empty);
+                    ShowNotification("Dispatch", "~r~They got away...", string.Empty);
                     Reset();
                 }
             }
@@ -477,7 +477,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                 IsVehicleStopped = false;
                 IsVehicleFleeing = true;
-                SetVehicleEngineOn(vehicle.Handle, true, false, true);
+                vehicle.IsEngineRunning = true;
                 SetVehicleCanBeUsedByFleeingPeds(vehicle.Handle, true);
 
                 if (vehicle.Driver == null)
@@ -617,11 +617,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static async void ALPR(Vehicle vehicle)
         {
             VehicleHash vehicleHash = (VehicleHash)vehicle.Model.Hash;
-            string NumberPlate = vehicle.Mods.LicensePlate;
 
             ShowNotification("Dispatch", "Getting Information", string.Empty);
             await Client.Delay(0);
-            ShowNotification("Dispatch", "LSPD Database", $"~w~Plate: ~y~{NumberPlate}~w~\nRegistration: ~y~{VehicleRegisterationYear}~w~\nModel: ~y~{GetLabelText(GetDisplayNameFromVehicleModel((uint)vehicleHash))}~w~\nVehicle Class: {vehicle.ClassType}");
+            ShowNotification("Dispatch", "LSPD Database", $"~w~Plate: ~y~{vehicle.Mods.LicensePlate}~w~\nModel: ~y~{GetLabelText(GetDisplayNameFromVehicleModel((uint)vehicleHash))}~w~\nVehicle Class: {vehicle.ClassType}");
         }
 
         static void ShowNotification(string title, string subtitle, string message, NotificationCharacter notificationCharacter = NotificationCharacter.CHAR_CALL911)
