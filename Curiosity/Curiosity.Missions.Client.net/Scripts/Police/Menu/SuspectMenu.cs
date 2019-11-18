@@ -21,16 +21,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         // Buttons
         static MenuItem mItemRequestId = new MenuItem("Request ID");
         static MenuItem mItemRunName = new MenuItem("Run Name");
-        
         static MenuItem mItemRunPlate = new MenuItem("Run Plate");
-        // Core
-        static MenuItem mItemLeaveVehicle = new MenuItem("Leave Vehicle");
-        static MenuItem mItemFollow = new MenuItem("Follow") { Enabled = false };
         // Options
         static MenuItem mItemBreathalyzer = new MenuItem("Breathalyzer");
         static MenuItem mItemDrugTest = new MenuItem("Drug Test");
         static MenuItem mItemSearch = new MenuItem("Search");
         // Arrest
+        static MenuItem mItemLeaveVehicle = new MenuItem("Leave Vehicle");
+        static MenuItem mItemFollow = new MenuItem("Follow") { Enabled = false };
         static MenuItem mItemArrest = new MenuItem("Arrest") { Enabled = false };
         static MenuItem mItemEnterVehicle = new MenuItem("Put in car") { Enabled = false, Description = "Put ped in the back of the police car" };
 
@@ -88,11 +86,21 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
             IsMenuOpen = true;
 
+            // initial interactions
             menu.AddMenuItem(mItemRequestId);
             menu.AddMenuItem(mItemRunName);
             menu.AddMenuItem(mItemRunPlate);
-
+            // release the ped
             menu.AddMenuItem(mItemRelease);
+            // Interactions
+            menu.AddMenuItem(mItemBreathalyzer);
+            menu.AddMenuItem(mItemDrugTest);
+            menu.AddMenuItem(mItemSearch);
+            // Ask Ped to leave vehicle
+            menu.AddMenuItem(mItemLeaveVehicle);
+            menu.AddMenuItem(mItemFollow);
+            menu.AddMenuItem(mItemArrest);
+            menu.AddMenuItem(mItemEnterVehicle);
         }
 
         private static void Menu_OnMenuClose(Menu menu)
