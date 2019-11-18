@@ -28,5 +28,11 @@
             Highway,
             Rural
         }
+
+        public enum SpeechType
+        {
+            NORMAL,
+            AGGRESSIVE
+        }
     }
 }

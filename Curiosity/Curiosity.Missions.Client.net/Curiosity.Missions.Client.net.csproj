@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="DataClasses\PedNames.cs" />
+    <Compile Include="DataClasses\Police\LinesOfSpeech.cs" />
     <Compile Include="DataClasses\SoundMessage.cs" />
     <Compile Include="DataClasses\Zones.cs" />
     <Compile Include="MissionPeds\NormalPed.cs" />
@@ -130,7 +131,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataClasses\Police\" />
     <Folder Include="Scripts\Menu\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

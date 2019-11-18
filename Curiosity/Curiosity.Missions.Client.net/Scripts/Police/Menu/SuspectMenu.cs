@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using MenuAPI;
+using Curiosity.Shared.Client.net.Extensions;
+using CitizenFX.Core.UI;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 {
@@ -12,13 +15,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
     {
         static Client client = Client.GetInstance();
 
-        static Vehicle suspectVehicle;
-
         static Menu menu;
+        static bool IsMenuOpen = false;
 
         // Buttons
-        static MenuItem mItemRunName = new MenuItem("Request ID & Run name");
-        static MenuItem mItemRelease = new MenuItem("Release");
+        static MenuItem mItemRequestId = new MenuItem("Request ID");
+        static MenuItem mItemRunName = new MenuItem("Run Name");
+        
+        static MenuItem mItemRunPlate = new MenuItem("Run Plate");
         // Core
         static MenuItem mItemLeaveVehicle = new MenuItem("Leave Vehicle");
         static MenuItem mItemFollow = new MenuItem("Follow") { Enabled = false };
@@ -30,19 +34,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         static MenuItem mItemArrest = new MenuItem("Arrest") { Enabled = false };
         static MenuItem mItemEnterVehicle = new MenuItem("Put in car") { Enabled = false, Description = "Put ped in the back of the police car" };
 
-        static public void Open(Vehicle suspectVehicle)
+        static MenuItem mItemRelease = new MenuItem("Release");
+
+        static public void Open()
         {
-            if (suspectVehicle == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            SuspectMenu.suspectVehicle = suspectVehicle;
-
             MenuController.DisableBackButton = true;
             MenuController.DontOpenAnyMenu = false;
-
-            client.RegisterTickHandler(OnTask);
 
             if (menu == null)
             {
@@ -53,7 +50,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
                 menu.OnItemSelect += Menu_OnItemSelect;
 
-                MenuController.MainMenu = menu;
+                MenuController.AddMenu(menu);
             }
 
             menu.OpenMenu();
@@ -63,11 +60,23 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         {
             if (menuItem == mItemRelease)
             {
-                suspectVehicle.IsPositionFrozen = false;
-
-                suspectVehicle.Driver.Task.ClearAll();
-                suspectVehicle = null;
+                TrafficStop.Reset();
                 menu.CloseMenu();
+            }
+
+            if (menuItem == mItemRequestId)
+            {
+                TrafficStop.RequestPedIdentification();
+            }
+
+            if (menuItem == mItemRunName)
+            {
+                TrafficStop.RunPedIdentification();
+            }
+
+            if (menuItem == mItemRunPlate)
+            {
+                TrafficStop.RunVehicleNumberPlate();
             }
         }
 
@@ -77,7 +86,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
             Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
 
+            IsMenuOpen = true;
+
+            menu.AddMenuItem(mItemRequestId);
             menu.AddMenuItem(mItemRunName);
+            menu.AddMenuItem(mItemRunPlate);
+
             menu.AddMenuItem(mItemRelease);
         }
 
@@ -85,30 +99,32 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         {
             Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
             Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
-
-            suspectVehicle.Driver.Task.ClearAll();
-            suspectVehicle.MarkAsNoLongerNeeded();
-
             MenuController.DontOpenAnyMenu = true;
+
+            IsMenuOpen = false;
         }
 
-        static async Task OnTask()
+        static public async Task OnMenuTask()
         {
             try
             {
-                if (suspectVehicle.IsDead)
+                if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen)
                 {
+                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to talk with the ~b~Driver");
 
+                    if (Game.IsControlJustPressed(0, Control.Pickup))
+                    {
+                        Open();
+                    }
                 }
-
-                if (suspectVehicle == null)
+                else if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) > 3 && IsMenuOpen)
                 {
-                    client.DeregisterTickHandler(OnTask);
+                    menu.CloseMenu();
                 }
             }
             catch (Exception ex)
             {
-                client.DeregisterTickHandler(OnTask);
+                menu.CloseMenu();
             }
             await BaseScript.Delay(0);
         }

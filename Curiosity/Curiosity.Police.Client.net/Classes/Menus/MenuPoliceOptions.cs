@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using MenuAPI;
@@ -21,16 +22,19 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static bool _IsTrafficStopsActive = false;
         static bool _IsArrestsActive = false;
         static bool _IsRandomEventsActive = false;
+        static bool _IsBackupActive = false;
 
         static string _ActiveJob;
 
         static List<string> patrolAreas = new List<string>();
 
-        static MenuCheckboxItem menuCheckboxDuty = new MenuCheckboxItem("Accepting Dispatch Calls", _IsOnDuty);
         static MenuListItem menuListPatrolZone = new MenuListItem("Area of Patrol", patrolAreas, _patrolZone);
         static MenuItem menuItemShowRadar = new MenuItem("Open Radar");
         static MenuItem menuItemDispatch = new MenuItem("Dispatch");
         static MenuItem menuItemBreaker = new MenuItem(":: Options ::") { Enabled = false };
+
+        static MenuCheckboxItem menuCheckboxDuty = new MenuCheckboxItem("Accepting Dispatch Calls", _IsOnDuty);
+        static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive);
         static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
         static MenuCheckboxItem menuCheckboxArrests = new MenuCheckboxItem("Enable Arrests", _IsArrestsActive) { Enabled = false, Description = "Coming Soon™" };
         static MenuCheckboxItem menuCheckboxRandomEvents = new MenuCheckboxItem("Enable Random Events", _IsRandomEventsActive) { Enabled = false, Description = "Coming Soon™" };
@@ -102,6 +106,20 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 _IsTrafficStopsActive = newCheckedState;
                 BaseScript.TriggerEvent("curiosity:Client:Mission:TrafficStops", _IsTrafficStopsActive);
             }
+
+            if (menuItem == menuCheckboxBackup)
+            {
+                _IsBackupActive = newCheckedState;
+                Environment.Job.BackupMessages.IsAcceptingBackupCalls = _IsBackupActive;
+                if (_IsBackupActive)
+                {
+                    Screen.ShowNotification("~g~Accepting Backup Calls");
+                }
+                else
+                {
+                    Screen.ShowNotification("~r~No longer accepting Backup Calls");
+                }
+            }
         }
 
         private static async void OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
@@ -162,7 +180,6 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menuCheckboxDuty.Enabled = false;
             menuListPatrolZone.Enabled = false;
 
-            menu.AddMenuItem(menuCheckboxDuty);
             menu.AddMenuItem(menuListPatrolZone);
 
             bool canPullover = false;
@@ -207,10 +224,13 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             menu.AddMenuItem(menuItemShowRadar);
             menu.AddMenuItem(menuItemDispatch);
+            menu.AddMenuItem(menuItemBreaker);
+            menu.AddMenuItem(menuCheckboxDuty);
+            menu.AddMenuItem(menuCheckboxBackup);
 
             if (Classes.Player.PlayerInformation.IsDeveloper())
             {
-                menu.AddMenuItem(menuItemBreaker);
+                
                 menu.AddMenuItem(menuCheckboxTrafficStops);
                 menu.AddMenuItem(menuCheckboxArrests);
                 menu.AddMenuItem(menuCheckboxRandomEvents);

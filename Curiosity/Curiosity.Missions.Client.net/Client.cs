@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Threading.Tasks;
+using Curiosity.Shared.Client.net.Enums.Patrol;
 
 namespace Curiosity.Missions.Client.net
 {
@@ -10,10 +11,11 @@ namespace Curiosity.Missions.Client.net
     {
         private static Client _instance;
         public static PlayerList players;
-        public static Random Random = new Random();
-
+        public static Random Random;
 
         private static Vehicle _currentVehicle;
+        public static SpeechType speechType;
+
         public static Vehicle CurrentVehicle
         {
             get
@@ -38,6 +40,11 @@ namespace Curiosity.Missions.Client.net
 
         public static Client GetInstance()
         {
+            if (Random == null)
+            {
+                Random = new Random();
+            }
+
             return _instance;
         }
 
@@ -49,10 +56,16 @@ namespace Curiosity.Missions.Client.net
             CurrentVehicle = null;
 
             RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
+            RegisterEventHandler("curiosity:Player:Mission:SpeechType", new Action<int>(OnSpeechType));
 
             ClassLoader.Init();
 
             Log.Info("Curiosity.Missions.Client.net loaded\n");
+        }
+
+        static void OnSpeechType(int speech)
+        {
+            speechType = (SpeechType)speech;
         }
 
         public static void OnVehicleId(int vehicleId)

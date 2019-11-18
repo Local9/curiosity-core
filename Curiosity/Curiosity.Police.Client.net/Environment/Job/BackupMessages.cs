@@ -12,6 +12,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
     {
         static Client client = Client.GetInstance();
 
+        static public bool IsAcceptingBackupCalls = false;
+
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:BackupNotification", new Action<string, int, float, float, float>(BackupResponseMessage));
@@ -20,6 +22,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
         static void BackupResponseMessage(string playerName, int code, float x, float y, float z)
         {
             if (!DutyManager.IsPoliceJobActive) return;
+            if (!IsAcceptingBackupCalls) return;
 
             string streetName = "Unkown Location";
 
