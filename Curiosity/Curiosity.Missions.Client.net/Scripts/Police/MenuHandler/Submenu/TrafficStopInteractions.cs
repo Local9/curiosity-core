@@ -24,13 +24,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
         {
             if (menu == null)
             {
-                menu = new Menu("Order out of Vehicle", "Interact with the driver");
+                menu = new Menu("Interactions", "Interactions");
 
                 menu.OnMenuOpen += Menu_OnMenuOpen;
                 menu.OnMenuClose += Menu_OnMenuClose;
                 menu.OnItemSelect += Menu_OnItemSelect;
             }
-
+            menu.MenuTitle = "Interactions";
             SuspectMenu.AddSubMenu(SuspectMenu.TrafficStopMenu, menu);
         }
 

@@ -25,7 +25,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         static MenuListItem mListItemSpeech = new MenuListItem("Speech", Enum.GetNames(typeof(SpeechType)).ToList(), 0);
         static MenuItem mItemHello = new MenuItem("Hello");
         static MenuItem mItemRequestId = new MenuItem("Ask for Identification");
-
+        static MenuItem mItemCoroner = new MenuItem("Coroner");
         static MenuItem mItemRelease = new MenuItem("Release");
 
 
@@ -33,15 +33,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         static MenuItem mItemRunPlate = new MenuItem("Run Plate");
         static MenuListItem mItemIssueTicket = new MenuListItem("Issue Ticket", CitationPrices, 0) { Description = "~w~Press ~r~ENTER ~w~to issue the ~b~Citation~w~." };
         static MenuItem mItemIssueWarning = new MenuItem("Issue Warning");
-        static MenuItem mItemBreathalyzer = new MenuItem("Breathalyzer");
-        static MenuItem mItemDrugTest = new MenuItem("Drug Test");
-        static MenuItem mItemSearch = new MenuItem("Search");
-        static MenuItem mItemFollow = new MenuItem("Follow") { Enabled = false };
-        static MenuItem mItemArrest = new MenuItem("Arrest") { Enabled = false };
-        static MenuItem mItemOrderBackInCar = new MenuItem("Order back in Vehicle");
-
-        // static MenuItem mItemEnterVehicle = new MenuItem("Put in car") { Enabled = false, Description = "Put ped in the back of the police car" };
-
 
         static public void Open()
         {
@@ -50,7 +41,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
             if (TrafficStopMenu == null)
             {
-                TrafficStopMenu = new Menu("", "Suspect Interactions") { };
+                TrafficStopMenu = new Menu("", "Suspect Menu") { };
 
                 TrafficStopMenu.OnMenuClose += Menu_OnMenuClose;
                 TrafficStopMenu.OnMenuOpen += Menu_OnMenuOpen;
@@ -59,7 +50,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
                 MenuController.AddMenu(TrafficStopMenu);
             }
-
             TrafficStopMenu.OpenMenu();
         }
 
@@ -116,21 +106,28 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
             IsMenuOpen = true;
 
-            menu.AddMenuItem(mListItemSpeech);
-            menu.AddMenuItem(mItemHello);
-            menu.AddMenuItem(mItemRequestId);
-            
-            mItemRunName.Enabled = false;
+            if (TrafficStop.StoppedDriver.IsDead)
+            {
 
-            menu.AddMenuItem(mItemRunName);
-            menu.AddMenuItem(mItemRunPlate);
+            }
+            else
+            {
+                menu.AddMenuItem(mListItemSpeech);
+                menu.AddMenuItem(mItemHello);
+                menu.AddMenuItem(mItemRequestId);
 
-            Submenu.TrafficStopQuestions.SetupMenu();
-            Submenu.TrafficStopInteractions.SetupMenu();
+                mItemRunName.Enabled = false;
 
-            menu.AddMenuItem(mItemIssueWarning);
-            
-            menu.AddMenuItem(mItemRelease);
+                menu.AddMenuItem(mItemRunName);
+                menu.AddMenuItem(mItemRunPlate);
+
+                Submenu.TrafficStopQuestions.SetupMenu();
+                Submenu.TrafficStopInteractions.SetupMenu();
+
+                menu.AddMenuItem(mItemIssueWarning);
+
+                menu.AddMenuItem(mItemRelease);
+            }
         }
 
         private static void Menu_OnMenuClose(Menu menu)
@@ -144,6 +141,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         {
             try
             {
+                // If ped is dead then coroner option
+                // If vehicle is empty and ped is dead or arrested, allow tow
+                // else interact with the ped
+
                 if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen && !Game.PlayerPed.IsInVehicle())
                 {
                     Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to talk with the ~b~Driver");
@@ -157,11 +158,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                 {
                     TrafficStopMenu.CloseMenu();
                     IsMenuOpen = false;
-                }
-
-                if (TrafficStop.StoppedDriver.IsDead)
-                {
-                    client.DeregisterTickHandler(OnMenuTask);
                 }
             }
             catch (Exception ex)
