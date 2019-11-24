@@ -111,6 +111,7 @@
     <Compile Include="Scripts\SoundManager.cs" />
     <Compile Include="Static\Relationships.cs" />
     <Compile Include="Wrappers\EntityEventWrapper.cs" />
+    <Compile Include="Wrappers\Helpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">

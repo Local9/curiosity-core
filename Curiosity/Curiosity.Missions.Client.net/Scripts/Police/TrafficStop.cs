@@ -13,6 +13,7 @@ using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Enums.Patrol;
+using Curiosity.Missions.Client.net.Wrappers;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {
@@ -238,7 +239,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) >= 300f)
                 {
                     if (TargetVehicle.AttachedBlip != null)
-                        ShowNotification("Dispatch", "~r~They got away...", string.Empty);
+                        Helpers.ShowNotification("Dispatch", "~r~They got away...", string.Empty);
 
                     Reset();
                 }
@@ -751,7 +752,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             if (StoppedDriver == null)
             {
-                ShowNotification("No No No", "Traffic Stop Required", string.Empty, NotificationCharacter.CHAR_LESTER);
+                Helpers.ShowNotification("No No No", "Traffic Stop Required", string.Empty, NotificationCharacter.CHAR_LESTER);
                 return;
             }
 
@@ -801,7 +802,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         IdentityDateOfBirth = StolenDriverDateOfBirth;
                     }
 
-                    ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{IdentityName}\n~w~DOB: ~y~{IdentityDateOfBirth}");
+                    Helpers.ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{IdentityName}\n~w~DOB: ~y~{IdentityDateOfBirth}");
                     
                     HasDriverBeenAskedForID = true;
                 }
@@ -819,8 +820,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 Screen.ShowNotification("~r~You have to ask for the ~o~Driver's ID~r~ first!");
                 return;
             }
-            AnimationRadio();
-            ShowNotification("Dispatch", $"Running ~o~{IdentityName}", string.Empty);
+            Helpers.AnimationRadio();
+            Helpers.ShowNotification("Dispatch", $"Running ~o~{IdentityName}", string.Empty);
             await Client.Delay(2000);
             List<string> Offense = new List<string>() { "WANTED BY LSPD", "WANTED FOR ASSAULT", "WANTED FOR UNPAID FINES", "WANTED FOR RUNNING FROM THE POLICE", "WANTED FOR EVADING LAW", "WANTED FOR HIT AND RUN", "WANTED FOR DUI" };
 
@@ -837,13 +838,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 NotificationFlagOffense = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
             }
 
-            ShowNotification("Dispatch", $"LSPD Database", $"~w~Name: ~y~{IdentityName}~w~\nGender: ~b~{StoppedDriver.Gender}~w~\nDOB: ~b~{IdentityDateOfBirth}");
-            ShowNotification("Dispatch", $"LSPD Database", $"~w~Citations: {NotificationFlagCitations}\n~w~Flags: {NotificationFlagOffense}");
+            Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Name: ~y~{IdentityName}~w~\nGender: ~b~{StoppedDriver.Gender}~w~\nDOB: ~b~{IdentityDateOfBirth}");
+            Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Citations: {NotificationFlagCitations}\n~w~Flags: {NotificationFlagOffense}");
         }
 
         static public async void InteractionHello()
         {
-            LoadAnimation("gestures@m@sitting@generic@casual");
+            Helpers.LoadAnimation("gestures@m@sitting@generic@casual");
 
             if (Client.speechType == SpeechType.NORMAL)
             {
@@ -861,10 +862,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static public async void InteractionRunVehicleNumberPlate()
         {
-            AnimationRadio();
-            ShowNotification("Dispatch", $"Running ~o~{TargetVehicle.Mods.LicensePlate}", string.Empty);
+            Helpers.AnimationRadio();
+            Helpers.ShowNotification("Dispatch", $"Running ~o~{TargetVehicle.Mods.LicensePlate}", string.Empty);
             await Client.Delay(2000);
-            ShowNotification("Dispatch", $"LSPD Database", $"~w~Reg.Owner: ~y~{VehicleRegisterationDriversName}~w~\nReg.Year: ~y~{VehicleRegisterationYear}~w~\nFlags: ~y~{NotificationFlagVehicle}");
+            Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Reg.Owner: ~y~{VehicleRegisterationDriversName}~w~\nReg.Year: ~y~{VehicleRegisterationYear}~w~\nFlags: ~y~{NotificationFlagVehicle}");
         }
 
         static public void InteractionDrunk()
@@ -950,18 +951,18 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (runBreathalyzerChecks)
             {
                 AnimationSearch();
-                ShowSimpleNotification("~w~Performing ~b~Breathalyzer~w~ test...");
+                Helpers.ShowSimpleNotification("~w~Performing ~b~Breathalyzer~w~ test...");
                 await Client.Delay(3000);
                 string bac = $"~g~0.{DriverBloodAlcaholLimit}";
                 if (DriverBloodAlcaholLimit >= 8)
                 {
                     bac = $"~r~0.{DriverBloodAlcaholLimit}";
                 }
-                ShowSimpleNotification($"~b~BAC ~w~Level: {bac}");
+                Helpers.ShowSimpleNotification($"~b~BAC ~w~Level: {bac}");
             }
             else
             {
-                ShowSimpleNotification($"~r~Must be facing the suspect.");
+                Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
             }
         }
 
@@ -996,13 +997,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (runDrugChecks)
             {
                 AnimationSearch();
-                ShowSimpleNotification("~w~Performing ~b~Drugalyzer~w~ test...");
+                Helpers.ShowSimpleNotification("~w~Performing ~b~Drugalyzer~w~ test...");
                 await Client.Delay(3000);
-                ShowSimpleNotification($"~w~Results:\n~b~  Cannabis~w~: {NotificationFlagCannabis}\n~b~  Cocaine~w~: {NotificationFlagCocaine}");
+                Helpers.ShowSimpleNotification($"~w~Results:\n~b~  Cannabis~w~: {NotificationFlagCannabis}\n~b~  Cocaine~w~: {NotificationFlagCocaine}");
             }
             else
             {
-                ShowSimpleNotification($"~r~Must be facing the suspect.");
+                Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
             }
         }
 
@@ -1018,7 +1019,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 {
                     AnimationSearch();
                     // TODO: Add a method for randomly arrested peds also
-                    ShowSimpleNotification("~b~Searching~w~ the subject...");
+                    Helpers.ShowSimpleNotification("~b~Searching~w~ the subject...");
                     hasSearchedSuspect = true;
                 }
             }
@@ -1028,7 +1029,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 if (vehicleInFront.Exists())
                 {
                     AnimationSearch();
-                    ShowSimpleNotification("~b~Searching~w~ the vehicle...");
+                    Helpers.ShowSimpleNotification("~b~Searching~w~ the vehicle...");
                     hasSearchedSuspect = true;
                     VehicleDoor[] vehicleDoors = TargetVehicle.Doors.GetAll();
                     foreach(VehicleDoor vehicleDoor in vehicleDoors)
@@ -1047,7 +1048,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 if (CanSearchVehicle)
                 {
-                    ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Client.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
+                    Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Client.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
                     if (IsDriverGoingToFleeChance == 9)
                     {
                         SetVehicleCanBeUsedByFleeingPeds(TargetVehicle.Handle, false);
@@ -1057,12 +1058,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
                 else
                 {
-                    ShowSimpleNotification($"~w~Found ~g~nothing of interest.");
+                    Helpers.ShowSimpleNotification($"~w~Found ~g~nothing of interest.");
                 }
             }
             else
             {
-                ShowSimpleNotification($"~r~Must be facing the suspect or vehicle.");
+                Helpers.ShowSimpleNotification($"~r~Must be facing the suspect or vehicle.");
             }
         }
 
@@ -1081,34 +1082,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static public void ShowRegistration()
         {
             // \n~w~Reg. Year: ~y~{VehicleRegisterationYear}
-            ShowNotification("Dispatch", "LSPD Database", $"~w~Reg. Owner: ~y~{VehicleRegisterationDriversName}\n~w~Flags: ~y~{NotificationFlagVehicle}");
+            Helpers.ShowNotification("Dispatch", "LSPD Database", $"~w~Reg. Owner: ~y~{VehicleRegisterationDriversName}\n~w~Flags: ~y~{NotificationFlagVehicle}");
         }
 
         static async void ALPR(Vehicle vehicle)
         {
             VehicleHash vehicleHash = (VehicleHash)vehicle.Model.Hash;
 
-            ShowNotification("Dispatch", "Getting Information", string.Empty);
+            Helpers.ShowNotification("Dispatch", "Getting Information", string.Empty);
             await Client.Delay(0);
-            ShowNotification("Dispatch", "LSPD Database", $"~w~Plate: ~y~{vehicle.Mods.LicensePlate}~w~\nModel: ~y~{GetLabelText(GetDisplayNameFromVehicleModel((uint)vehicleHash))}~w~\nVehicle Class: {vehicle.ClassType}");
-        }
-
-        static void ShowSimpleNotification(string message)
-        {
-            Screen.ShowNotification(message);
-        }
-
-        static void ShowNotification(string title, string subtitle, string message, NotificationCharacter notificationCharacter = NotificationCharacter.CHAR_CALL911)
-        {
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{notificationCharacter}", 2, title, subtitle, message, 2);
-        }
-
-        static async void AnimationRadio()
-        {
-            LoadAnimation("random@arrests");
-            Game.PlayerPed.Task.PlayAnimation("random@arrests", "generic_radio_enter", 1.5f, 2.0f, -1, (AnimationFlags)50, 2.0f);
-            await Client.Delay(6000);
-            Game.PlayerPed.Task.ClearAll();
+            Helpers.ShowNotification("Dispatch", "LSPD Database", $"~w~Plate: ~y~{vehicle.Mods.LicensePlate}~w~\nModel: ~y~{GetLabelText(GetDisplayNameFromVehicleModel((uint)vehicleHash))}~w~\nVehicle Class: {vehicle.ClassType}");
         }
 
         static async void AnimationTicket()
@@ -1130,16 +1113,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 await Client.Delay(5000);
                 Game.PlayerPed.Task.ClearAll();
             }
-        }
-
-        static async Task<bool> LoadAnimation(string dict)
-        {
-            while (!HasAnimDictLoaded(dict))
-            {
-                await Client.Delay(0);
-                RequestAnimDict(dict);
-            }
-            return true;
         }
     }
 }

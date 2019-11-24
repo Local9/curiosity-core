@@ -20,6 +20,12 @@
 
     namespace Patrol
     {
+        public enum MenuType
+        {
+            Normal,
+            Vehicle,
+            DeadPed
+        }
         public enum PatrolZone
         {
             City = 1,

@@ -68,6 +68,7 @@
     <Compile Include="Extensions\StringExtension.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\VectorExtension.cs" />
+    <Compile Include="Extensions\VehicleExtention.cs" />
     <Compile Include="GameData\SpawnInfo.cs" />
     <Compile Include="GameData\ValidWeapon.cs" />
     <Compile Include="Helper\Area\AreaBase.cs" />
