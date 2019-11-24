@@ -97,7 +97,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                         while (isServiceEnroute)
                         {
                             await Client.Delay(100);
-                            float currentDistance = CoronerVehicle.Position.Distance(Game.PlayerPed.Position);
+                            float currentDistance = PedToRecover.Position.Distance(CoronerVehicle.Position);
 
                             if (currentDistance <= 180f && !isServiceClose)
                             {
@@ -105,7 +105,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                                 isServiceClose = true;
                             }
 
-                            if (currentDistance < 20f && !isServiceOnScene)
+                            if (currentDistance < 30f && !isServiceOnScene)
                             {
                                 Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Update", $"Is on scene.");
                                 TaskVehicleTempAction(CoronerDriver.Handle, CoronerVehicle.Handle, 27, 2000);
@@ -183,7 +183,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
         static void DistanceEta()
         {
-            float currentDistance = CoronerVehicle.Position.Distance(Game.PlayerPed.Position);
+            float currentDistance = PedToRecover.Position.Distance(CoronerVehicle.Position);
             string etaMessage = string.Empty;
             switch (currentDistance)
             {

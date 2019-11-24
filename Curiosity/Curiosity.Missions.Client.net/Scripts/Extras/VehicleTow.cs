@@ -92,7 +92,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                     while (isServiceEnroute)
                     {
                         await Client.Delay(100);
-                        float currentDistance = TowVehicle.Position.Distance(Game.PlayerPed.Position);
+                        float currentDistance = VehicleToRecover.Position.Distance(TowVehicle.Position);
 
                         if (currentDistance <= 180f && !isServiceClose)
                         {
@@ -100,7 +100,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                             isServiceClose = true;
                         }
 
-                        if (currentDistance < 20f && !isServiceOnScene)
+                        if (currentDistance < 30f && !isServiceOnScene)
                         {
                             Wrappers.Helpers.ShowNotification("City Impound", "Is now on scene", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
                             TaskVehicleTempAction(TowDriver.Handle, TowVehicle.Handle, 27, 2000);
@@ -120,7 +120,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                                 await Client.Delay(100);
                                 currentDistance = VehicleToRecover.Position.Distance(TowDriver.Position);
 
-                                if (currentDistance <= 10)
+                                if (currentDistance <= 5)
                                 {
                                     isTowDriverRunningToVehicle = false;
                                     isServiceEnroute = false;
@@ -158,7 +158,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
         static void DistanceEta()
         {
-            float currentDistance = TowVehicle.Position.Distance(Game.PlayerPed.Position);
+            float currentDistance = VehicleToRecover.Position.Distance(TowVehicle.Position);
             string etaMessage = string.Empty;
             switch (currentDistance)
             {
