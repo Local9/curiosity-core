@@ -158,6 +158,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                     TrafficStopMenu.CloseMenu();
                     IsMenuOpen = false;
                 }
+
+                if (TrafficStop.StoppedDriver.IsDead)
+                {
+                    client.DeregisterTickHandler(OnMenuTask);
+                }
             }
             catch (Exception ex)
             {
