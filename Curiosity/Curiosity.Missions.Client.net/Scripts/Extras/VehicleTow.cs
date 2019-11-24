@@ -3,12 +3,18 @@ using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Enums;
 using System;
 using static CitizenFX.Core.Native.API;
+using Curiosity.Shared.Client.net.Helpers;
 
 namespace Curiosity.Missions.Client.net.Scripts.Extras
 {
     class VehicleTow
     {
         static Client client = Client.GetInstance();
+
+        static public void Init()
+        {
+            RegisterCommand("tow", new Action(RequestService), false);
+        }
 
         // STATE
         static bool IsServiceActive = false;
@@ -27,6 +33,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
         {
             try
             {
+                Debug.WriteLine($"TOW-RequestService->Started");
+
                 if (IsServiceActive)
                 {
                     Wrappers.Helpers.ShowNotification("City Impound", "Service Unavailable", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
@@ -34,107 +42,111 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 }
 
                 int spawnDistance = Client.Random.Next(300, 800);
-                RaycastResult raycastResult = World.RaycastCapsule(Game.PlayerPed.Position, Game.PlayerPed.Position, 5.0f, IntersectOptions.Peds1, Game.Player.Character);
-                if (raycastResult.DitHitEntity)
-                {
-                    if (raycastResult.HitEntity.Model.IsVehicle)
-                    {
-                        VehicleToRecover = raycastResult.HitEntity as Vehicle;
 
-                        if (!VehicleToRecover.Exists())
+                VehicleToRecover = Game.PlayerPed.GetVehicleInFront();
+
+                if (VehicleToRecover != null)
+                {
+                    if (!VehicleToRecover.Exists())
+                    {
+                        Wrappers.Helpers.ShowNotification("City Impound", "What...", "Where the fuck did it go?", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
+                        Reset();
+                        return;
+                    }
+
+                    Model towModel = TowDriverHash;
+                    Model towVehicleModel = TowVehicleHash;
+
+                    await towModel.Request(10000);
+                    await towVehicleModel.Request(10000);
+
+                    Vector3 closestVehicleNode = new Vector3();
+                    Vector3 playerPosition = Game.PlayerPed.Position;
+                    GetNthClosestVehicleNode(playerPosition.X, playerPosition.Y, playerPosition.Z, spawnDistance, ref closestVehicleNode, 0, 0, 0);
+
+                    TowVehicle = await World.CreateVehicle(towVehicleModel, closestVehicleNode, 0f);
+                    TowDriver = await TowVehicle.CreatePedOnSeat(VehicleSeat.Driver, towModel);
+
+                    TowVehicle.IsInvincible = true;
+                    TowVehicle.IsSirenActive = true;
+
+                    TowDriver.IsInvincible = true;
+                    TowDriver.IsPersistent = true;
+
+                    TowDriver.Task.DriveTo(TowVehicle, playerPosition, 5f, 18f, (int)DrivingStyle.Normal);
+                    TowVehicle.PlaceOnGround();
+                    TowVehicle.IsPersistent = true;
+
+                    TowVehicle.AttachBlip();
+                    TowVehicle.AttachedBlip.Color = BlipColor.Blue;
+                    TowVehicle.AttachedBlip.IsFlashing = true;
+
+                    DistanceEta();
+
+                    IsServiceActive = true;
+
+                    bool isServiceEnroute = true;
+                    bool isServiceClose = false;
+                    bool isServiceOnScene = false;
+
+                    while (isServiceEnroute)
+                    {
+                        await Client.Delay(100);
+                        float currentDistance = TowVehicle.Position.Distance(Game.PlayerPed.Position);
+
+                        if (currentDistance <= 180f && !isServiceClose)
                         {
-                            Wrappers.Helpers.ShowNotification("City Impound", "What...", "Where the fuck did it go?", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
-                            Reset();
-                            return;
+                            Wrappers.Helpers.ShowNotification("City Impound", "Closing on your position", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
+                            isServiceClose = true;
                         }
 
-                        Model towModel = TowDriverHash;
-                        Model towVehicleModel = TowVehicleHash;
-
-                        await towModel.Request(10000);
-                        await towVehicleModel.Request(10000);
-
-                        Vector3 closestVehicleNode = new Vector3();
-                        Vector3 playerPosition = Game.PlayerPed.Position;
-                        GetNthClosestVehicleNode(playerPosition.X, playerPosition.Y, playerPosition.Z, spawnDistance, ref closestVehicleNode, 0, 0, 0);
-
-                        TowVehicle = await World.CreateVehicle(towVehicleModel, closestVehicleNode, 0f);
-                        TowDriver = await TowVehicle.CreatePedOnSeat(VehicleSeat.Driver, towModel);
-
-                        TowVehicle.IsInvincible = true;
-                        TowVehicle.IsSirenActive = true;
-
-                        TowDriver.IsInvincible = true;
-                        TowDriver.IsPersistent = true;
-
-                        TowDriver.Task.DriveTo(TowVehicle, playerPosition, 5f, 18f, (int)DrivingStyle.Rushed);
-                        TowVehicle.PlaceOnGround();
-                        TowVehicle.IsPersistent = true;
-
-                        TowVehicle.AttachBlip();
-                        TowVehicle.AttachedBlip.Color = BlipColor.Blue;
-                        TowVehicle.AttachedBlip.IsFlashing = true;
-
-                        DistanceEta();
-
-                        IsServiceActive = true;
-
-                        bool isServiceEnroute = true;
-                        bool isServiceClose = false;
-                        bool isServiceOnScene = false;
-
-                        while (isServiceEnroute)
+                        if (currentDistance < 20f && !isServiceOnScene)
                         {
-                            await Client.Delay(100);
-                            float currentDistance = TowVehicle.Position.Distance(Game.PlayerPed.Position);
+                            Wrappers.Helpers.ShowNotification("City Impound", "Is now on scene", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
+                            TowVehicle.SetVehicleIndicators(true);
+                            TowVehicle.IsSirenSilent = true;
+                            TowDriver.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
+                            isServiceOnScene = true;
+                        }
 
-                            if (currentDistance <= 180f && !isServiceClose)
+                        if (isServiceOnScene)
+                        {
+                            TowDriver.Task.GoTo(VehicleToRecover);
+                            bool isTowDriverRunningToVehicle = true;
+
+                            while (isTowDriverRunningToVehicle)
                             {
-                                Wrappers.Helpers.ShowNotification("City Impound", "Closing on your position", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
-                                isServiceClose = true;
-                            }
+                                await Client.Delay(100);
+                                currentDistance = VehicleToRecover.Position.Distance(TowDriver.Position);
 
-                            if (currentDistance < 8f && !isServiceOnScene)
-                            {
-                                Wrappers.Helpers.ShowNotification("City Impound", "Is now on scene", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
-                                TowVehicle.SetVehicleIndicators(true);
-                                TowVehicle.IsSirenSilent = true;
-                                TowDriver.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
-                                isServiceOnScene = true;
-                            }
-
-                            if (isServiceOnScene)
-                            {
-                                TowDriver.Task.GoTo(VehicleToRecover);
-                                bool isCoronerRunningToPed = true;
-
-                                while (isCoronerRunningToPed)
+                                if (currentDistance <= 10)
                                 {
-                                    await Client.Delay(100);
-                                    currentDistance = TowVehicle.Position.Distance(Game.PlayerPed.Position);
+                                    isTowDriverRunningToVehicle = false;
+                                    isServiceEnroute = false;
 
-                                    if (currentDistance <= 5)
-                                    {
-                                        isCoronerRunningToPed = false;
-                                        isServiceEnroute = false;
-                                    }
+                                    CleanUpVehicle();
                                 }
-
-                                CleanUpVehicle();
                             }
                         }
                     }
+
+                    
+                }
+                else
+                {
+                    Debug.WriteLine($"TOW-RequestService->VehicleNotFound");
                 }
             }
             catch (Exception ex)
             {
+                Debug.WriteLine($"TOW-RequestService-> {ex}");
                 IsServiceActive = false;
             }
         }
 
         static async void CleanUpVehicle()
         {
-            VehicleToRecover.AttachTo(TowVehicle.Bones[20], new Vector3(-0.5f, -5.0f, 1.0f), Vector3.Zero);
+            AttachEntityToEntity(VehicleToRecover.Handle, TowVehicle.Handle, 20, -0.5f, -5.0f, 1.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 20, true);
             await Client.Delay(1000);
             TowDriver.DrivingStyle = DrivingStyle.Normal;
             TaskVehicleDriveWander(TowDriver.Handle, TowVehicle.Handle, 17.0f, (int)DrivingStyle.Normal);
@@ -204,7 +216,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
             if (validCleanup)
             {
-                Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Leaving", $"");
+                Wrappers.Helpers.ShowNotification("City Impound", "Now leaving...", $"", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
             }
 
             int countdownCounter = 60;
@@ -215,7 +227,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 await Client.Delay(1000);
             }
 
-            Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Available", $"");
+            Wrappers.Helpers.ShowNotification("City Impound", "Is now available", $"", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
             IsServiceActive = false;
         }
     }

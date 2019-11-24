@@ -128,8 +128,6 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("staff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
             API.RegisterCommand("becomestaff", new Action<int, List<object>, string>(RoyallyFuckPlayer), false);
             API.RegisterCommand("rp", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
-            API.RegisterCommand("tow", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
-            API.RegisterCommand("taxi", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
             API.RegisterCommand("admin", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
             API.RegisterCommand("superadmin", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
             API.RegisterCommand("ban", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);

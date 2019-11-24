@@ -25,6 +25,10 @@ namespace Curiosity.Missions.Client.net
 
             Classes.Environment.ChatCommands.Init();
 
+            // extras
+            Scripts.Extras.Coroner.Init();
+            Scripts.Extras.VehicleTow.Init();
+
             // MISSION HANDLER
             Scripts.Mission.RandomMissionHandler.Init();
             Scripts.MissionEvents.Init();

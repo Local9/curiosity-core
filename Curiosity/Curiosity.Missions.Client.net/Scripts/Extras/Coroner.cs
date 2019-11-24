@@ -9,6 +9,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
     {
         static Client client = Client.GetInstance();
 
+        static public void Init()
+        {
+            RegisterCommand("ems", new Action(RequestService), false);
+        }
+
         // STATE
         static bool IsServiceActive = false;
         
@@ -100,7 +105,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                                 isServiceClose = true;
                             }
 
-                            if (currentDistance < 8f && !isServiceOnScene)
+                            if (currentDistance < 20f && !isServiceOnScene)
                             {
                                 Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Update", $"Is on scene.");
                                 CoronerVehicle.SetVehicleIndicators(true);
@@ -117,7 +122,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                                 while (isCoronerRunningToPed)
                                 {
                                     await Client.Delay(100);
-                                    currentDistance = CoronerVehicle.Position.Distance(Game.PlayerPed.Position);
+                                    currentDistance = PedToRecover.Position.Distance(CoronerDriver.Position);
                                     
                                     if (currentDistance <= 5)
                                     {
@@ -125,10 +130,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                                         isServiceEnroute = false;
                                     }
                                 }
-
-                                CleanUpPed();
                             }
                         }
+
+                        CleanUpPed();
                     }
                 }
             }
@@ -151,7 +156,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
             await Client.Delay(10000);
 
-            PedToRecover.Delete();
+            if (PedToRecover.IsPlayer)
+            {
+                Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Update", $"Sorry, this one is lost.");
+            }
+            else
+            {
+                PedToRecover.Delete();
+            }
 
             CoronerDriver.Task.ClearAnimation(animationDict, "enter");
 

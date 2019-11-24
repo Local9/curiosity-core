@@ -31,7 +31,7 @@ namespace Curiosity.Shared.Client.net.Helpers
         {
             try
             {
-                RaycastResult raycast = World.Raycast(vehicle.Position, vehicle.GetOffsetPosition(new Vector3(0f, distance, 0f)), (IntersectOptions)71, vehicle);
+                RaycastResult raycast = World.Raycast(vehicle.Position, vehicle.GetOffsetPosition(new Vector3(0f, distance, 0f)), (IntersectOptions)10, vehicle);
                 if (raycast.DitHitEntity && raycast.HitEntity.Model.IsVehicle)
                 {
                     return (CitizenFX.Core.Vehicle)raycast.HitEntity;
@@ -48,7 +48,7 @@ namespace Curiosity.Shared.Client.net.Helpers
         {
             try
             {
-                RaycastResult raycast = World.Raycast(ped.Position, ped.GetOffsetPosition(new Vector3(0f, distance, 0f)), (IntersectOptions)71, ped);
+                RaycastResult raycast = World.Raycast(ped.Position, ped.GetOffsetPosition(new Vector3(0f, distance, 0f)), (IntersectOptions)10, ped);
                 if (raycast.DitHitEntity && raycast.HitEntity.Model.IsVehicle)
                 {
                     return (CitizenFX.Core.Vehicle)raycast.HitEntity;

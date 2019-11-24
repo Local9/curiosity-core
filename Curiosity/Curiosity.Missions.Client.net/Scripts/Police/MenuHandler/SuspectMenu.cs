@@ -150,6 +150,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
             Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
             MenuController.DontOpenAnyMenu = true;
+            IsMenuOpen = false;
         }
 
         static public async Task OnMenuTask()
