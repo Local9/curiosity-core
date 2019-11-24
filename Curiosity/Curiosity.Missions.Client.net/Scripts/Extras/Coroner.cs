@@ -108,6 +108,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                             if (currentDistance < 20f && !isServiceOnScene)
                             {
                                 Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Update", $"Is on scene.");
+                                TaskVehicleTempAction(CoronerDriver.Handle, CoronerVehicle.Handle, 27, 2000);
                                 CoronerVehicle.SetVehicleIndicators(true);
                                 CoronerVehicle.IsSirenSilent = true;
                                 CoronerDriver.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);

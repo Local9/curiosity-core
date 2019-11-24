@@ -103,6 +103,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                         if (currentDistance < 20f && !isServiceOnScene)
                         {
                             Wrappers.Helpers.ShowNotification("City Impound", "Is now on scene", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
+                            TaskVehicleTempAction(TowDriver.Handle, TowVehicle.Handle, 27, 2000);
                             TowVehicle.SetVehicleIndicators(true);
                             TowVehicle.IsSirenSilent = true;
                             TowDriver.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
