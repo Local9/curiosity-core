@@ -79,7 +79,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
             if (menuItem == mItemGoBack)
             {
                 menu.CloseMenu();
-                SuspectMenu.Open();
+                SuspectMenu.Open(Shared.Client.net.Enums.Patrol.MenuType.Normal);
             }
         }
 
