@@ -11,10 +11,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
     {
         static Menu menu;
 
-        static MenuItem mItemFollow = new MenuItem("Follow");
+        static bool IsCharacterFollowing = false;
+
         static MenuItem mItemBreathalyzer = new MenuItem("Breathalyzer");
         static MenuItem mItemDrugTest = new MenuItem("Drug test");
         static MenuItem mItemSearch = new MenuItem("Search");
+        static MenuItem mItemLeaveVehicle = new MenuItem("Leave Vehicle");
+        static MenuItem mItemReturnToVehicle = new MenuItem("Return to Vehicle");
         static MenuItem mItemGoBack = new MenuItem("Go Back");
 
         static public void SetupMenu()
@@ -26,23 +29,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
                 menu.OnMenuOpen += Menu_OnMenuOpen;
                 menu.OnMenuClose += Menu_OnMenuClose;
                 menu.OnItemSelect += Menu_OnItemSelect;
-
-                menu.AddMenuItem(mItemFollow);
-
-                menu.AddMenuItem(mItemBreathalyzer);
-                menu.AddMenuItem(mItemDrugTest);
-                menu.AddMenuItem(mItemSearch);
-
-                menu.AddMenuItem(mItemGoBack);
-            }
-
-            if (TrafficStop.StoppedDriver.IsInVehicle())
-            {
-                menu.MenuTitle = "Order out of Vehicle";
-            }
-            else
-            {
-                menu.MenuTitle = "Interact with the Driver";
             }
 
             SuspectMenu.AddSubMenu(SuspectMenu.TrafficStopMenu, menu);
@@ -59,16 +45,37 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
         {
             if (menuItem == mItemBreathalyzer)
             {
+                TrafficStop.InteractionBreathalyzer();
             }
+
             if (menuItem == mItemDrugTest)
             {
+                TrafficStop.InteractionDrugTest();
             }
+
             if (menuItem == mItemSearch)
             {
+                TrafficStop.InteractionSearching();
             }
-            if (menuItem == mItemFollow)
+
+            if (menuItem == mItemLeaveVehicle)
             {
+                if (TrafficStop.StoppedDriver.IsInVehicle())
+                {
+                    TrafficStop.LeaveVehicle();
+                    UpdateButtons();
+                }
             }
+
+            if (menuItem == mItemReturnToVehicle)
+            {
+                if (!TrafficStop.StoppedDriver.IsInVehicle())
+                {
+                    TrafficStop.ReturnToVehicle();
+                    UpdateButtons();
+                }
+            }
+
             if (menuItem == mItemGoBack)
             {
                 menu.CloseMenu();
@@ -83,6 +90,26 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
             menu.MenuTitle = "";
             MenuController.DontOpenAnyMenu = false;
             SuspectMenu.IsMenuOpen = true;
+
+            menu.ClearMenuItems();
+
+            menu.AddMenuItem(mItemBreathalyzer);
+            menu.AddMenuItem(mItemDrugTest);
+            menu.AddMenuItem(mItemSearch);
+
+            UpdateButtons();
+
+            menu.AddMenuItem(mItemLeaveVehicle);
+            menu.AddMenuItem(mItemReturnToVehicle);
+
+            menu.AddMenuItem(mItemGoBack);
+
+        }
+
+        static void UpdateButtons()
+        {
+            mItemLeaveVehicle.Enabled = TrafficStop.StoppedDriver.IsInVehicle();
+            mItemReturnToVehicle.Enabled = !TrafficStop.StoppedDriver.IsInVehicle();
         }
     }
 }

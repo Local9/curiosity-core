@@ -38,7 +38,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static bool IsVehicleDriverMimicking = false;
         static bool IsVehicleDriverFollowing = false;
         static bool IsDriverFollowing = false;
-        static bool HasVehicleBeenStolen = false;
+        static bool IsVehicleBeenStolen = false;
         static bool CanDriverBeArrested = false;
         static public bool VehicleDriverReverseWithPlayer = true;
 
@@ -49,6 +49,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static int DriverCannabisChance;
         static int DriverCocaineChance;
+
+        static bool IsDriverGoingToFlee = false;
+        static int IsDriverGoingToFleeChance;
 
         // Vehicle Data
         static string VehicleRegisterationYear;
@@ -121,7 +124,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         // If we are doing a pull over, don't run any more...
                         if (IsConductingPullover) return;
 
-                        TargetVehicle = Client.CurrentVehicle.GetVehicleInDirection(DistanceToCheck);
+                        TargetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
 
                         if (TargetVehicle == null) return;
 
@@ -137,7 +140,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             await Client.Delay(0);
                         }
                         // If the vehicle matches then we will mark the vehicle and start checking for player inputs
-                        if (TargetVehicle == Client.CurrentVehicle.GetVehicleInDirection(DistanceToCheck))
+                        if (TargetVehicle == Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck))
                         {
                             AwaitingPullover = true;
                             while (AwaitingPullover)
@@ -246,6 +249,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
         }
 
+        // MIMICKING
         static async void EnableMimicking()
         {
             IsVehicleDriverMimicking = true;
@@ -270,7 +274,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             while (IsVehicleDriverMimicking)
             {
-                if (mimicStartPosition.Distance(Game.PlayerPed.Position) > 20f)
+                if (mimicStartPosition.Distance(Game.PlayerPed.Position) > 30f)
+                {
+                    DisableMimick();
+                }
+
+                if ((Game.PlayerPed.CurrentVehicle.Speed * 2.237) > 15f)
                 {
                     DisableMimick();
                 }
@@ -310,6 +319,63 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             SetPedIntoVehicle(StoppedDriver.Handle, TargetVehicle.Handle, -1);
         }
 
+        // FOLLOW
+        static public void FollowPlayer()
+        {
+            
+        }
+
+        // GetOutOfCar
+        static public async void LeaveVehicle()
+        {
+            if (IsVehicleStopped)
+            {
+                if (Client.speechType == SpeechType.NORMAL)
+                {
+                    ShowOfficerSubtitle("Can you step out of the car for me, please?");
+                }
+                else
+                {
+                    ShowOfficerSubtitle("Get the fuck out of the car.");
+                }
+                int resistExitChance = Client.Random.Next(30);
+                if (IsVehicleBeenStolen)
+                {
+                    resistExitChance = Client.Random.Next(27, 30);
+                }
+                IsDriverGoingToFleeChance = Client.Random.Next(10);
+                if (resistExitChance == 25 || resistExitChance == 29 || IsDriverGoingToFlee)
+                {
+                    IsVehicleStopped = false;
+                    IsVehicleDriverMimicking = false;
+                    TargetVehicle.IsEngineRunning = true;
+                    await Client.Delay(500);
+                    List<string> driverResponse = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!", "You'll never take me alive, pig!" };
+                    ShowDriverSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                    await Client.Delay(3000);
+                    TrafficStopVehicleFlee(TargetVehicle, StoppedDriver);
+                }
+                else
+                {
+                    List<string> driverResponse = new List<string>() { "What's the problem?", "What seems to be the problem, officer?", "Yeah, sure.", "Okay.", "Fine.", "What now?", "Whats up?", "Ummm... O-okay.", "This is ridiculous...", "I'm kind of in a hurry right now.", "Oh what now?!", "No problem.", "Am I being detained?", "Yeah, okay... One moment.", "Okay.", "Uh huh.", "Yep." };
+                    ShowDriverSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                    StoppedDriver.Task.LeaveVehicle(LeaveVehicleFlags.None);
+                    StoppedDriver.PedGroup.Add(Game.PlayerPed, true);
+                }
+            }
+        }
+
+        static public void ReturnToVehicle()
+        {
+            if (IsVehicleStopped)
+            {
+                ShowOfficerSubtitle("Get back in the car, please.");
+                StoppedDriver.LeaveGroup();
+                StoppedDriver.Task.EnterVehicle(TargetVehicle, VehicleSeat.Driver, -1, 2f, 0);
+            }
+        }
+
+        // RESET
         static public void Reset()
         {
             SetUserRadioControlEnabled(true);
@@ -345,7 +411,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             HasDriverBeenAskedForID = false;
             IsDriverUnderTheInfluence = false;
             CanSearchVehicle = false;
-            HasVehicleBeenStolen = false;
+            IsVehicleBeenStolen = false;
 
             client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
             API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, false);
@@ -407,12 +473,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             int RegisteredRand = Client.Random.Next(13);
             int StolenRand = Client.Random.Next(25);
 
-            HasVehicleBeenStolen = false;
+            IsVehicleBeenStolen = false;
 
             if (StolenRand == 24)
             {
                 NotificationFlagVehicle = "~r~STOLEN";
-                HasVehicleBeenStolen = true;
+                IsVehicleBeenStolen = true;
             } 
             else if (RegisteredRand == 12)
             {
@@ -430,7 +496,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             int DriverDifferentName = Client.Random.Next(100);
 
             // Update ped data if vehicle is stolen or the driver is not the registered driver
-            if (HasVehicleBeenStolen || DriverDifferentName >= 95)
+            if (IsVehicleBeenStolen || DriverDifferentName >= 95)
             {
                 string stolenFirstname;
                 if (StoppedDriver.Gender == Gender.Female)
@@ -516,7 +582,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
             }
             // Break window
-            if (HasVehicleBeenStolen)
+            if (IsVehicleBeenStolen)
             {
                 int BrokenWindow = Client.Random.Next(3);
                 if (BrokenWindow == 2)
@@ -546,7 +612,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
                 else
                 {
-                    bool IsDriverGoingToFlee = true;
+                    IsDriverGoingToFlee = true;
                     TrafficStopVehicleStop(stoppedVehicle);
                     // Wait for the player to get close, then run
                     while (IsDriverGoingToFlee)
@@ -729,7 +795,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     IdentityName = VehicleRegisterationDriversName;
                     IdentityDateOfBirth = VehicleRegisterationDriversDateOfBirth;
 
-                    if (HasVehicleBeenStolen)
+                    if (IsVehicleBeenStolen)
                     {
                         IdentityName = StolenDriverName;
                         IdentityDateOfBirth = StolenDriverDateOfBirth;
@@ -853,6 +919,155 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
         }
 
+        static public async void InteractionBreathalyzer()
+        {
+            // check ped is in front of the player
+            Ped pedInFront = Game.PlayerPed.GetPedInFront();
+            Vehicle vehicleInFront = Game.PlayerPed.GetVehicleInFront();
+            bool runBreathalyzerChecks = false;
+            if (pedInFront != null)
+            {
+                if (pedInFront.Exists() && pedInFront.IsAlive)
+                {
+                    // TODO: Add a method for randomly arrested peds also
+                    StoppedDriver.Task.TurnTo(Game.PlayerPed, 6000);
+                    runBreathalyzerChecks = true;
+                }
+            }
+
+            if (vehicleInFront != null)
+            {
+                if (vehicleInFront.Exists())
+                {
+                    // must be the driver we stopped
+                    if (vehicleInFront.Driver == StoppedDriver)
+                    {
+                        runBreathalyzerChecks = true;
+                    }
+                }
+            }
+
+            if (runBreathalyzerChecks)
+            {
+                AnimationSearch();
+                ShowSimpleNotification("~w~Performing ~b~Breathalyzer~w~ test...");
+                await Client.Delay(3000);
+                string bac = $"~g~0.{DriverBloodAlcaholLimit}";
+                if (DriverBloodAlcaholLimit >= 8)
+                {
+                    bac = $"~r~0.{DriverBloodAlcaholLimit}";
+                }
+                ShowSimpleNotification($"~b~BAC ~w~Level: {bac}");
+            }
+            else
+            {
+                ShowSimpleNotification($"~r~Must be facing the suspect.");
+            }
+        }
+
+        static public async void InteractionDrugTest()
+        {
+            // check ped is in front of the player
+            Ped pedInFront = Game.PlayerPed.GetPedInFront();
+            Vehicle vehicleInFront = Game.PlayerPed.GetVehicleInFront();
+            bool runDrugChecks = false;
+            if (pedInFront != null)
+            {
+                if (pedInFront.Exists() && pedInFront.IsAlive)
+                {
+                    // TODO: Add a method for randomly arrested peds also
+                    StoppedDriver.Task.TurnTo(Game.PlayerPed, 6000);
+                    runDrugChecks = true;
+                }
+            }
+
+            if (vehicleInFront != null)
+            {
+                if (vehicleInFront.Exists())
+                {
+                    // must be the driver we stopped
+                    if (vehicleInFront.Driver == StoppedDriver)
+                    {
+                        runDrugChecks = true;
+                    }
+                }
+            }
+
+            if (runDrugChecks)
+            {
+                AnimationSearch();
+                ShowSimpleNotification("~w~Performing ~b~Drugalyzer~w~ test...");
+                await Client.Delay(3000);
+                ShowSimpleNotification($"~w~Results:\n~b~  Cannabis~w~: {NotificationFlagCannabis}\n~b~  Cocaine~w~: {NotificationFlagCocaine}");
+            }
+            else
+            {
+                ShowSimpleNotification($"~r~Must be facing the suspect.");
+            }
+        }
+
+        static public async void InteractionSearching()
+        {
+            // check ped is in front of the player
+            Ped pedInFront = Game.PlayerPed.GetPedInFront();
+            Vehicle vehicleInFront = Game.PlayerPed.GetVehicleInFront();
+            bool hasSearchedSuspect = false;
+            if (pedInFront != null)
+            {
+                if (pedInFront.Exists() && pedInFront.IsAlive)
+                {
+                    AnimationSearch();
+                    // TODO: Add a method for randomly arrested peds also
+                    ShowSimpleNotification("~b~Searching~w~ the subject...");
+                    hasSearchedSuspect = true;
+                }
+            }
+
+            if (vehicleInFront != null)
+            {
+                if (vehicleInFront.Exists())
+                {
+                    AnimationSearch();
+                    ShowSimpleNotification("~b~Searching~w~ the vehicle...");
+                    hasSearchedSuspect = true;
+                    VehicleDoor[] vehicleDoors = TargetVehicle.Doors.GetAll();
+                    foreach(VehicleDoor vehicleDoor in vehicleDoors)
+                    {
+                        vehicleDoor.Open();
+                    }
+                    await Client.Delay(6000);
+                    foreach (VehicleDoor vehicleDoor in vehicleDoors)
+                    {
+                        vehicleDoor.Close();
+                    }
+                }
+            }
+
+            if (hasSearchedSuspect)
+            {
+                if (CanSearchVehicle)
+                {
+                    ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Client.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
+                    if (IsDriverGoingToFleeChance == 9)
+                    {
+                        SetVehicleCanBeUsedByFleeingPeds(TargetVehicle.Handle, false);
+                        StoppedDriver.LeaveGroup();
+                        StoppedDriver.Task.ReactAndFlee(Game.PlayerPed);
+                    }
+                }
+                else
+                {
+                    ShowSimpleNotification($"~w~Found ~g~nothing of interest.");
+                }
+            }
+            else
+            {
+                ShowSimpleNotification($"~r~Must be facing the suspect or vehicle.");
+            }
+        }
+
+
+        // internal methods
         static void ShowOfficerSubtitle(string subtitle)
         {
             Screen.ShowSubtitle($"~o~Officer:~w~ {subtitle}");
@@ -878,6 +1093,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             ShowNotification("Dispatch", "LSPD Database", $"~w~Plate: ~y~{vehicle.Mods.LicensePlate}~w~\nModel: ~y~{GetLabelText(GetDisplayNameFromVehicleModel((uint)vehicleHash))}~w~\nVehicle Class: {vehicle.ClassType}");
         }
 
+        static void ShowSimpleNotification(string message)
+        {
+            Screen.ShowNotification(message);
+        }
+
         static void ShowNotification(string title, string subtitle, string message, NotificationCharacter notificationCharacter = NotificationCharacter.CHAR_CALL911)
         {
             Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{notificationCharacter}", 2, title, subtitle, message, 2);
@@ -893,11 +1113,22 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static async void AnimationTicket()
         {
-            string ticketScenario = "CODE_HUMAN_MEDIC_TIME_OF_DEATH";
+            string scenario = "CODE_HUMAN_MEDIC_TIME_OF_DEATH";
             if (!Game.PlayerPed.IsInVehicle())
             {
-                TaskStartScenarioInPlace(Game.PlayerPed.Handle, ticketScenario, 0, true);
+                TaskStartScenarioInPlace(Game.PlayerPed.Handle, scenario, 0, true);
                 IsScenarioPlaying = true;
+            }
+        }
+
+        static async void AnimationSearch()
+        {
+            string scenario = "PROP_HUMAN_BUM_BIN";
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                TaskStartScenarioInPlace(Game.PlayerPed.Handle, scenario, 0, true);
+                await Client.Delay(5000);
+                Game.PlayerPed.Task.ClearAll();
             }
         }
 
