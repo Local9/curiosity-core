@@ -395,6 +395,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (StoppedDriver != null)
             {
                 StoppedDriver.IsPersistent = false;
+                API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, false);
             }
 
             IsVehicleStopped = false;
@@ -414,7 +415,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             IsVehicleBeenStolen = false;
 
             client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
-            API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, false);
         }
 
         static async void Pullover(Vehicle stoppedVehicle)
