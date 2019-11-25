@@ -14,13 +14,6 @@ namespace Curiosity.Police.Client.net
         public static Vehicle CurrentVehicle;
         private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
 
-        public static uint PlayerGroupHash = 0;
-        public static string PLAYER_GROUP = "PLAYER_RELATIONSHIP";
-        public static RelationshipGroup PlayerRelationshipGroup;
-
-        public static bool IsChristmas = false;
-        public static bool IsHalloween = false;
-
         public static Client GetInstance()
         {
             return _instance;
@@ -30,7 +23,6 @@ namespace Curiosity.Police.Client.net
         {
             _instance = this;
 
-            PlayerRelationshipGroup = World.AddRelationshipGroup(PLAYER_GROUP);
             CurrentVehicle = null;
 
             RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));

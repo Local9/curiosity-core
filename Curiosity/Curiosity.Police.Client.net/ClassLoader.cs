@@ -30,9 +30,6 @@ namespace Curiosity.Police.Client.net
             Curiosity.Global.Shared.net.Data.BlipHandler.Init();
             Environment.Job.DutyMarkers.Init();
 
-            // PULLOVER
-            // Classes.Pullover.Init();
-
             // Developer
             Classes.Developer.Init();
 
