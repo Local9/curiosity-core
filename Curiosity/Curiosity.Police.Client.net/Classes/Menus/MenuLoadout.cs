@@ -65,12 +65,6 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         static async void OnWeaponResupply()
         {
-            if (!Environment.Job.DutyManager.IsOnDuty)
-            {
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Must be On Duty", "", 2);
-                return;
-            };
-
             if ((Game.GameTime - GameTimeResupplied) > 120000)
             {
                 GameTimeResupplied = Game.GameTime;

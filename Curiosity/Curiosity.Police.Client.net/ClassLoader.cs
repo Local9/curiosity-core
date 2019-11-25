@@ -18,8 +18,7 @@ namespace Curiosity.Police.Client.net
 
             Classes.Player.PlayerInformation.Init();
             Environment.Job.DutyManager.Init();
-            // Environment.Tasks.CalloutHandler.Init();
-
+            
             Classes.Menus.MenuLoadout.Init(); // exists to make the instance exist
             Classes.Menus.MenuPoliceOptions.Init();
             Classes.Menus.PoliceDispatchMenu.Init();
