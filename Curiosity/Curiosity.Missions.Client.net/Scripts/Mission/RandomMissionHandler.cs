@@ -169,7 +169,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             if (!IsOnDuty) return;
 
             if (PreviousMissionId > 0)
+            {
+                Client.TriggerServerEvent("curiosity:Server:Missions:EndMission");
                 Client.TriggerServerEvent("curiosity:Server:Missions:Ended", PreviousMissionId);
+            }
 
             SetDispatchMessageRecieved(false);
             RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);

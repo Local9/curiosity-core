@@ -135,6 +135,8 @@ namespace Curiosity.Missions.Client.net.Scripts
 
             DataClasses.Mission.Store mission = missions[missionMessage.MissionId];
 
+            Client.TriggerServerEvent("curiosity:Server:Missions:StartedMission", missionMessage.MissionId);
+
             Mission.CreateStoreMission.Create(mission);
         }
 

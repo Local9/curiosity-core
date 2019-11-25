@@ -31,6 +31,7 @@ namespace Curiosity.Server.net.Classes
 
             server.RegisterEventHandler("curiosity:Server:Missions:KilledPed", new Action<CitizenFX.Core.Player, string>(OnKilledPed));
             server.RegisterEventHandler("curiosity:Server:Missions:CompletedMission", new Action<CitizenFX.Core.Player, bool>(OnCompletedMission));
+            server.RegisterEventHandler("curiosity:Server:Missions:StartedMission", new Action<CitizenFX.Core.Player, int>(OnStartedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:EndMission", new Action<CitizenFX.Core.Player>(OnEndMission));
         }
 
@@ -69,7 +70,30 @@ namespace Curiosity.Server.net.Classes
                 return;
             }
 
+            Session session = SessionManager.PlayerList[player.Handle];
 
+            if (activeMissions.ContainsKey(session.License))
+            {
+                activeMissions.Remove(session.License);
+            }
+        }
+
+        static void OnStartedMission([FromSource]CitizenFX.Core.Player player, int missionId)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{player.Handle}"))
+            {
+                Log.Error($"OnCompletedMission: Player session missing.");
+                return;
+            }
+
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            if (activeMissions.ContainsKey(session.License))
+            {
+                activeMissions.Remove(session.License);
+            }
+
+            activeMissions.Add(session.License, missionId);
         }
 
         static void OnCompletedMission([FromSource]CitizenFX.Core.Player player, bool passed)
@@ -86,12 +110,12 @@ namespace Curiosity.Server.net.Classes
             string title = passed ? "Completed" : "Failed";
             MissionMessage missionMessage = new MissionMessage($"Mission {title}");
 
-            //if (!activeMissions.ContainsKey(session.License) && !session.IsDeveloper)
-            //{
-            //    session.IsCheater = true;
-            //    session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
-            //    return;
-            //}
+            if (!activeMissions.ContainsKey(session.License) && !session.IsDeveloper)
+            {
+                session.IsCheater = true;
+                session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
+                return;
+            }
 
             if (passed)
             {
