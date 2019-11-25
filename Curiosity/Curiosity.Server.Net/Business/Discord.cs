@@ -131,9 +131,9 @@ namespace Curiosity.Server.net.Business
                                     return privilege;
                                 }
 
-                                await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Role Update",
-                                    $"Player: {player.Name}\nDiscord: {discordId}\nPriviledgeIn: {privilegeIn}\nPriviledgeMatch: {privilege}\nJSON: {JsonConvert.SerializeObject(member)}",
-                                    Enums.Discord.DiscordColor.Blue);
+                                //await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Role Update",
+                                //    $"Player: {player.Name}\nDiscord: {discordId}\nPriviledgeIn: {privilegeIn}\nPriviledgeMatch: {privilege}\nJSON: {JsonConvert.SerializeObject(member)}",
+                                //    Enums.Discord.DiscordColor.Blue);
                                 break;
                             }
                             else
@@ -147,14 +147,14 @@ namespace Curiosity.Server.net.Business
                 }
                 else if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
                 {
-                    await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Warning", $"User was not found:\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Orange);
+                    //await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Warning", $"User was not found:\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Orange);
                     Helpers.Notifications.Advanced($"Discord", $"Hello ~g~{player.Name}~s~, if you'd like to join our Discord please visit ~y~discord.lifev.net", 63, player, NotificationType.CHAR_LIFEINVADER);
                     Log.Verbose($"DiscordPrivilege -> User {player.Name} was not found on the Discord server.");
                     return Privilege.USER;
                 }
                 else
                 {
-                    await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"An error occured, please check the config:\nDiscord Response: {requestResponse.status}\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Orange);
+                    //await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"An error occured, please check the config:\nDiscord Response: {requestResponse.status}\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Orange);
                     Log.Warn($"DiscordPrivilege -> An error occured, please check the config: Error {requestResponse.status}");
 
                     if ($"{requestResponse.status}" == "TooManyRequests")
@@ -167,7 +167,7 @@ namespace Curiosity.Server.net.Business
             }
             catch (Exception ex)
             {
-                await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"DiscordPrivilege() -> {ex.Message}\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Red);
+                //await Classes.DiscordWrapper.SendDiscordEmbededMessage(Enums.Discord.WebhookChannel.ServerLog, API.GetConvar("server_message_name", "SERVERNAME_MISSING"), "Discord Error", $"DiscordPrivilege() -> {ex.Message}\nName: {player.Name}\nDiscord: {discordId}\nRole: {privilegeIn}", Enums.Discord.DiscordColor.Red);
                 Log.Error($"DiscordPrivilege() -> {ex.Message}");
                 return privilegeIn;
             }
