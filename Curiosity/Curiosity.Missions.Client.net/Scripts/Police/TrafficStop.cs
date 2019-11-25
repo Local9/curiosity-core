@@ -132,13 +132,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         // If we are doing a pull over, don't run any more...
                         if (IsConductingPullover) return;
 
-                        if (IsCooldownActive)
-                        {
-                            Helpers.ShowSimpleNotification("~b~Traffic Stops: ~r~Cooldown Active");
-                            await Client.Delay(15000);
-                            return;
-                        }
-
                         TargetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
 
                         bool hasBeenPulledOver = DecorGetBool(TargetVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED);
@@ -162,6 +155,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         {
                             await Client.Delay(0);
                         }
+
+                        if (IsCooldownActive)
+                        {
+                            TargetVehicle = null;
+                            Helpers.ShowSimpleNotification("~b~Traffic Stops: ~r~Cooldown Active");
+                            return;
+                        }
+
                         // If the vehicle matches then we will mark the vehicle and start checking for player inputs
                         if (TargetVehicle == Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck))
                         {
