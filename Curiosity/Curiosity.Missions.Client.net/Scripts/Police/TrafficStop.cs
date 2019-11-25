@@ -72,24 +72,27 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         public static void Setup()
         {
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+            int policeXp = Classes.PlayerClient.ClientInformation.playerInfo.Skills["policexp"].Value;
+            int knowledge = Classes.PlayerClient.ClientInformation.playerInfo.Skills["knowledge"].Value;
+            if (policeXp >= 2500 && knowledge >= 1000)
             {
                 client.RegisterTickHandler(OnTrafficStopTask);
                 client.RegisterTickHandler(OnTrafficStopStateTask);
                 client.RegisterTickHandler(OnEmoteCheck);
                 Screen.ShowNotification("~b~Traffic Stops~s~: ~g~Enabled");
             }
+            else
+            {
+                Screen.ShowNotification($"~b~Traffic Stops~s~: ~o~Missing Req\n~b~Remaining:\n  ~b~PoliceXp: ~w~{2500 - policeXp}\n  ~b~Knowledge: ~w~{1000 - knowledge}");
+            }
         }
 
         public static void Dispose()
         {
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
-            {
-                client.DeregisterTickHandler(OnTrafficStopTask);
-                client.DeregisterTickHandler(OnTrafficStopStateTask);
-                client.DeregisterTickHandler(OnEmoteCheck);
-                Screen.ShowNotification("~b~Traffic Stops~s~: ~r~Disabled");
-            }
+            client.DeregisterTickHandler(OnTrafficStopTask);
+            client.DeregisterTickHandler(OnTrafficStopStateTask);
+            client.DeregisterTickHandler(OnEmoteCheck);
+            Screen.ShowNotification("~b~Traffic Stops~s~: ~r~Disabled");
         }
 
         static async Task OnEmoteCheck()
