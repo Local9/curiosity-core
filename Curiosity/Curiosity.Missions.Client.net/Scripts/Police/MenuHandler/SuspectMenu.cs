@@ -122,6 +122,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
             if (menuTypeToOpen == MenuType.Normal)
             {
+                MenuController.DisableBackButton = true;
                 menu.AddMenuItem(mListItemSpeech);
                 menu.AddMenuItem(mItemHello);
                 menu.AddMenuItem(mItemRequestId);
@@ -136,11 +137,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
             if (menuTypeToOpen == MenuType.Vehicle)
             {
+                MenuController.DisableBackButton = false;
                 menu.AddMenuItem(mItemTowService);
             }
 
             if (menuTypeToOpen == MenuType.DeadPed)
             {
+                MenuController.DisableBackButton = false;
                 menu.AddMenuItem(mItemCoroner);
             }
         }
