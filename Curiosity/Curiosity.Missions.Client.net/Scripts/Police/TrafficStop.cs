@@ -418,6 +418,48 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
         }
 
+        static public void ResetPed()
+        {
+            if (StoppedDriver != null)
+            {
+                StoppedDriver.IsPersistent = false;
+                API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, false);
+            }
+        }
+
+        static public void ResetVehicle()
+        {
+            SetUserRadioControlEnabled(true);
+
+            if (TargetVehicle != null)
+            {
+                if (TargetVehicle.AttachedBlip != null)
+                {
+                    if (TargetVehicle.AttachedBlip.Exists())
+                    {
+                        TargetVehicle.AttachedBlip.Delete();
+                    }
+                }
+                TargetVehicle.IsPersistent = false;
+            }
+
+            IsVehicleStopped = false;
+            IsVehicleFleeing = false;
+
+            IsConductingPullover = false;
+
+            TargetVehicle = null;
+
+            NotificationFlagVehicle = "~g~NONE";
+            NotificationFlagCannabis = "~g~Negative";
+            NotificationFlagCocaine = "~g~Negative";
+
+            CanSearchVehicle = false;
+            IsVehicleBeenStolen = false;
+
+            client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
+        }
+
         static async void Pullover(Vehicle stoppedVehicle)
         {
             IsConductingPullover = true; // Flag that a pullover has started

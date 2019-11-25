@@ -11,7 +11,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
         static public void Init()
         {
-            RegisterCommand("ems", new Action(RequestService), false);
+            // RegisterCommand("ems", new Action(RequestService), false);
         }
 
         // STATE
@@ -247,7 +247,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
             int countdownCounter = 60;
 
-            while (countdownCounter > 60)
+            while (countdownCounter > 0)
             {
                 countdownCounter--;
                 await Client.Delay(1000);

@@ -13,7 +13,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
         static public void Init()
         {
-            RegisterCommand("tow", new Action(RequestService), false);
+            // RegisterCommand("tow", new Action(RequestService), false);
         }
 
         // STATE
@@ -154,6 +154,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
             TowVehicle.IsSirenActive = true;
             await Client.Delay(10000);
             Reset(true);
+
+            Police.TrafficStop.ResetVehicle();
         }
 
         static void DistanceEta()
@@ -222,7 +224,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
             int countdownCounter = 60;
 
-            while (countdownCounter > 60)
+            while (countdownCounter > 0)
             {
                 countdownCounter--;
                 await Client.Delay(1000);

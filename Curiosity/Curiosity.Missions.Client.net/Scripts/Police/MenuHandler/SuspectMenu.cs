@@ -165,7 +165,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                 {
                     if (TrafficStop.TargetVehicle.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen)
                     {
-                        Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to open ~b~interaction menu");
+                        Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to open ~b~vehicle interaction menu");
 
                         if (Game.IsControlJustPressed(0, Control.Pickup))
                         {
@@ -174,7 +174,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                     }
                     else if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen)
                     {
-                        Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to open ~b~interaction menu");
+                        Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to open ~b~ped interaction menu");
 
                         if (Game.IsControlJustPressed(0, Control.Pickup))
                         {
