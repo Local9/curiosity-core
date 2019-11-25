@@ -37,12 +37,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static bool IsCooldownActive = false;
         // states for menu
         static bool CanSearchVehicle = false;
-        static bool IsDriverUnderTheInfluence = false;
+        static public bool IsDriverUnderTheInfluence = false;
         static bool HasDriverBeenAskedForID = false;
         static bool IsVehicleDriverMimicking = false;
         static bool IsVehicleDriverFollowing = false;
         static bool IsDriverFollowing = false;
-        static bool HasVehicleBeenStolen = false;
+        static public bool HasVehicleBeenStolen = false;
         static bool CanDriverBeArrested = false;
         static public bool VehicleDriverReverseWithPlayer = true;
         static bool HasRanDriverID = false;
@@ -356,11 +356,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 if (Client.speechType == SpeechType.NORMAL)
                 {
-                    ShowOfficerSubtitle("Can you step out of the car for me, please?");
+                    Helpers.ShowOfficerSubtitle("Can you step out of the car for me, please?");
                 }
                 else
                 {
-                    ShowOfficerSubtitle("Get the fuck out of the car.");
+                    Helpers.ShowOfficerSubtitle("Get the fuck out of the car.");
                 }
                 int resistExitChance = Client.Random.Next(30);
                 if (HasVehicleBeenStolen)
@@ -375,14 +375,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     TargetVehicle.IsEngineRunning = true;
                     await Client.Delay(500);
                     List<string> driverResponse = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!", "You'll never take me alive, pig!" };
-                    ShowDriverSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                    Helpers.ShowDriverSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
                     await Client.Delay(3000);
                     TrafficStopVehicleFlee(TargetVehicle, StoppedDriver);
                 }
                 else
                 {
                     List<string> driverResponse = new List<string>() { "What's the problem?", "What seems to be the problem, officer?", "Yeah, sure.", "Okay.", "Fine.", "What now?", "Whats up?", "Ummm... O-okay.", "This is ridiculous...", "I'm kind of in a hurry right now.", "Oh what now?!", "No problem.", "Am I being detained?", "Yeah, okay... One moment.", "Okay.", "Uh huh.", "Yep." };
-                    ShowDriverSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                    Helpers.ShowDriverSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
                     StoppedDriver.Task.LeaveVehicle(LeaveVehicleFlags.None);
                     StoppedDriver.PedGroup.Add(Game.PlayerPed, true);
                 }
@@ -393,7 +393,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             if (IsVehicleStopped)
             {
-                ShowOfficerSubtitle("Get back in the car, please.");
+                Helpers.ShowOfficerSubtitle("Get back in the car, please.");
                 StoppedDriver.LeaveGroup();
                 StoppedDriver.Task.EnterVehicle(TargetVehicle, VehicleSeat.Driver, -1, 2f, 0);
             }
@@ -732,6 +732,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             client.RegisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
             API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, true);
+            StoppedDriver.SetConfigFlag(292, true);
             ALPR(vehicle);
         }
 
@@ -739,18 +740,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             IsVehicleStopped = false;
             ped.IsPersistent = true;
-
+            StoppedDriver.SetConfigFlag(292, false);
             ped.Weapons.Give(WeaponHash.CombatPistol, 30, false, true);
             ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
             await Client.Delay(1000);
             ped.Task.ShootAt(Game.PlayerPed, 10000000, FiringPattern.FullAuto);
         }
 
-        static async void TrafficStopVehicleFlee(Vehicle vehicle, Ped ped)
+        static public async void TrafficStopVehicleFlee(Vehicle vehicle, Ped ped)
         {
             try
             {
                 API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, false);
+                StoppedDriver.SetConfigFlag(292, false);
                 
                 IsVehicleStopped = false;
                 IsVehicleFleeing = true;
@@ -786,11 +788,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             if (Client.speechType == SpeechType.NORMAL)
             {
-                ShowOfficerSubtitle("Alright, you're free to go.");
+                Helpers.ShowOfficerSubtitle("Alright, you're free to go.");
             }
             else
             {
-                ShowOfficerSubtitle("Get out of here before I change my mind.");
+                Helpers.ShowOfficerSubtitle("Get out of here before I change my mind.");
             }
             List<string> DriverResponse = new List<string>() { "Okay, thanks.", "Thanks.", "Thank you officer, have a nice day!", "Thanks, bye!", "I'm free to go? Okay, bye!" };
             if (DriverAttitude >= 50 && DriverAttitude < 80)
@@ -802,7 +804,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 DriverResponse = new List<string>() { "Bye, asshole...", "Ugh.. Finally.", "Damn cops...", "Until next time.", "Its about time, pig" };
             }
             await Client.Delay(2000);
-            ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            Helpers.ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             Reset(true);
         }
 
@@ -833,9 +835,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 DriverResponse = new List<string>() { "Troublesum said fuck you too buddy!", "Yea, well don't kill yourself trying" };
             }
 
-            ShowOfficerSubtitle(OfficerResponse[Client.Random.Next(OfficerResponse.Count)]);
+            Helpers.ShowOfficerSubtitle(OfficerResponse[Client.Random.Next(OfficerResponse.Count)]);
             await Client.Delay(2000);
-            ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            Helpers.ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             await Client.Delay(2000);
             Reset(true);
         }
@@ -968,7 +970,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static public void InteractionDrunk()
         {
-            ShowOfficerSubtitle("Have you had anything to drink today?");
+            Helpers.ShowOfficerSubtitle("Have you had anything to drink today?");
             List<string> response;
             if (IsDriverUnderTheInfluence)
             {
@@ -978,12 +980,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 response = new List<string>() { "No, sir", "I dont drink.", "Nope.", "No.", "Only 1.", "Yes... a water and 2 orange juices." };
             }
-            ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
+            Helpers.ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
         }
 
         static public void InteractionDrug()
         {
-            ShowOfficerSubtitle("Have you consumed any drugs recently?");
+            Helpers.ShowOfficerSubtitle("Have you consumed any drugs recently?");
             List<string> response;
             if (DriverCocaineChance >= 90 || DriverCannabisChance >= 85)
             {
@@ -993,19 +995,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 response = new List<string>() { "No, sir", "I don't do that stuff.", "Nope.", "No.", "Nah" };
             }
-            ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
+            Helpers.ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
         }
 
         static public void InteractionIllegal()
         {
-            ShowOfficerSubtitle("Is there anything illegal in the vehicle?");
+            Helpers.ShowOfficerSubtitle("Is there anything illegal in the vehicle?");
             List<string> response = new List<string>() { "No, sir", "Not that I know of.", "Nope.", "No.", "Apart from the 13 dead hookers in the back.. No.", "Maybe? But most probably not.", "I sure hope not" };
-            ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
+            Helpers.ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
         }
 
         static public void InteractionSearch()
         {
-            ShowOfficerSubtitle("Would you mind if i search your vehicle?");
+            Helpers.ShowOfficerSubtitle("Would you mind if i search your vehicle?");
             List<string> response;
             if (CanSearchVehicle)
             {
@@ -1015,7 +1017,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 response = new List<string>() { "Go ahead", "Shes all yours", "I'd prefer you not to", "I don't have anything to hide, go for it." };
             }
-            ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
+            Helpers.ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
         }
 
         static public async void InteractionBreathalyzer()
@@ -1163,18 +1165,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 Helpers.ShowSimpleNotification($"~r~Must be facing the suspect or vehicle.");
             }
-        }
-
-
-        // internal methods
-        static void ShowOfficerSubtitle(string subtitle)
-        {
-            Screen.ShowSubtitle($"~o~Officer:~w~ {subtitle}");
-        }
-
-        static void ShowDriverSubtitle(string subtitle)
-        {
-            Screen.ShowSubtitle($"~b~Driver:~w~ {subtitle}");
         }
 
         static public void ShowRegistration()

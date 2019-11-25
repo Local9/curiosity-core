@@ -35,5 +35,17 @@ namespace Curiosity.Missions.Client.net.Wrappers
             }
             return true;
         }
+
+
+        // internal methods
+        static public void ShowOfficerSubtitle(string subtitle)
+        {
+            Screen.ShowSubtitle($"~o~Officer:~w~ {subtitle}");
+        }
+
+        static public void ShowDriverSubtitle(string subtitle)
+        {
+            Screen.ShowSubtitle($"~b~Driver:~w~ {subtitle}");
+        }
     }
 }
