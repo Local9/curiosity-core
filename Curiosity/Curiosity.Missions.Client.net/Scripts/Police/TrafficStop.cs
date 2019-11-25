@@ -19,6 +19,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 {
     class TrafficStop
     {
+        public const string VEHICLE_HAS_BEEN_STOPPED = "curiosity::VehicleStopped";
+
         static Client client = Client.GetInstance();
         static bool IsScenarioPlaying = false;
 
@@ -32,6 +34,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         // states
         static bool IsVehicleFleeing = false;
         static bool IsVehicleStopped = false;
+        static bool IsCooldownActive = false;
         // states for menu
         static bool CanSearchVehicle = false;
         static bool IsDriverUnderTheInfluence = false;
@@ -39,9 +42,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static bool IsVehicleDriverMimicking = false;
         static bool IsVehicleDriverFollowing = false;
         static bool IsDriverFollowing = false;
-        static bool IsVehicleBeenStolen = false;
+        static bool HasVehicleBeenStolen = false;
         static bool CanDriverBeArrested = false;
         static public bool VehicleDriverReverseWithPlayer = true;
+        static bool HasRanDriverID = false;
 
         // Ped Data
         static int DriverBloodAlcaholLimit;
@@ -128,7 +132,22 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         // If we are doing a pull over, don't run any more...
                         if (IsConductingPullover) return;
 
+                        if (IsCooldownActive)
+                        {
+                            Helpers.ShowSimpleNotification("~b~Traffic Stops: ~r~Cooldown Active");
+                            await Client.Delay(15000);
+                            return;
+                        }
+
                         TargetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
+
+                        bool hasBeenPulledOver = DecorGetBool(TargetVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED);
+
+                        if (hasBeenPulledOver)
+                        {
+                            Screen.DisplayHelpTextThisFrame($"You have already pulled over this vehicle.");
+                            return;
+                        }
 
                         if (TargetVehicle == null) return;
 
@@ -343,7 +362,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     ShowOfficerSubtitle("Get the fuck out of the car.");
                 }
                 int resistExitChance = Client.Random.Next(30);
-                if (IsVehicleBeenStolen)
+                if (HasVehicleBeenStolen)
                 {
                     resistExitChance = Client.Random.Next(27, 30);
                 }
@@ -380,7 +399,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         }
 
         // RESET
-        static public void Reset()
+        static public void Reset(bool issueExperience = false)
         {
             SetUserRadioControlEnabled(true);
 
@@ -416,9 +435,26 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             HasDriverBeenAskedForID = false;
             IsDriverUnderTheInfluence = false;
             CanSearchVehicle = false;
-            IsVehicleBeenStolen = false;
+            HasVehicleBeenStolen = false;
 
             client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
+            client.RegisterTickHandler(OnCooldownTask);
+
+            if (issueExperience)
+                Client.TriggerServerEvent("curiosity:Server:Missions:TrafficStop", string.Empty);
+        }
+
+        static async Task OnCooldownTask()
+        {
+            IsCooldownActive = true;
+            int timer = 60;
+            while (timer > 0)
+            {
+                await Client.Delay(1000);
+                timer--;
+            }
+            IsCooldownActive = false;
+            client.DeregisterTickHandler(OnCooldownTask);
         }
 
         static public void ResetPed()
@@ -458,14 +494,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             NotificationFlagCocaine = "~g~Negative";
 
             CanSearchVehicle = false;
-            IsVehicleBeenStolen = false;
+            HasVehicleBeenStolen = false;
 
             client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
         }
 
         static async void Pullover(Vehicle stoppedVehicle)
         {
+            DecorSetBool(TargetVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED, true);
+
             IsConductingPullover = true; // Flag that a pullover has started
+            HasRanDriverID = false;
 
             StoppedDriver = stoppedVehicle.Driver;
             // make sure the driver has full health
@@ -519,12 +558,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             int RegisteredRand = Client.Random.Next(13);
             int StolenRand = Client.Random.Next(25);
 
-            IsVehicleBeenStolen = false;
+            HasVehicleBeenStolen = false;
 
             if (StolenRand == 24)
             {
                 NotificationFlagVehicle = "~r~STOLEN";
-                IsVehicleBeenStolen = true;
+                HasVehicleBeenStolen = true;
+
+                CanDriverBeArrested = true;
             } 
             else if (RegisteredRand == 12)
             {
@@ -542,8 +583,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             int DriverDifferentName = Client.Random.Next(100);
 
             // Update ped data if vehicle is stolen or the driver is not the registered driver
-            if (IsVehicleBeenStolen || DriverDifferentName >= 95)
+            if (HasVehicleBeenStolen || DriverDifferentName >= 95)
             {
+                CanDriverBeArrested = true;
                 string stolenFirstname;
                 if (StoppedDriver.Gender == Gender.Female)
                 {
@@ -577,6 +619,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 DriverBloodAlcaholLimit = Client.Random.Next(1, 7);
                 if (DriverBreathalyzer > 88)
                 {
+                    CanDriverBeArrested = true;
                     DriverBloodAlcaholLimit = Client.Random.Next(8, 10);
                     IsDriverUnderTheInfluence = true;
                     DriverChanceOfFlee = Client.Random.Next(25, 30);
@@ -594,12 +637,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             if (DriverCannabisChance > 85)
             {
+                CanDriverBeArrested = true;
                 NotificationFlagCannabis = "~r~Positive";
                 DriverChanceOfFlee = Client.Random.Next(18, 30);
             }
 
             if (DriverCocaineChance > 90)
             {
+                CanDriverBeArrested = true;
                 NotificationFlagCannabis = "~r~Positive";
                 DriverChanceOfFlee = Client.Random.Next(18, 30);
             }
@@ -628,8 +673,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
             }
             // Break window
-            if (IsVehicleBeenStolen)
+            if (HasVehicleBeenStolen)
             {
+                CanDriverBeArrested = true;
                 int BrokenWindow = Client.Random.Next(3);
                 if (BrokenWindow == 2)
                 {
@@ -756,7 +802,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
             await Client.Delay(2000);
             ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
-            Reset();
+            Reset(true);
         }
 
         internal static async void InteractionIssueWarning()
@@ -790,7 +836,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             await Client.Delay(2000);
             ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             await Client.Delay(2000);
-            Reset();
+            Reset(true);
         }
 
         static public async void InteractionRequestPedIdentification()
@@ -841,7 +887,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     IdentityName = VehicleRegisterationDriversName;
                     IdentityDateOfBirth = VehicleRegisterationDriversDateOfBirth;
 
-                    if (IsVehicleBeenStolen)
+                    if (HasVehicleBeenStolen)
                     {
                         IdentityName = StolenDriverName;
                         IdentityDateOfBirth = StolenDriverDateOfBirth;
@@ -865,22 +911,28 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 Screen.ShowNotification("~r~You have to ask for the ~o~Driver's ID~r~ first!");
                 return;
             }
+
             Helpers.AnimationRadio();
             Helpers.ShowNotification("Dispatch", $"Running ~o~{IdentityName}", string.Empty);
             await Client.Delay(2000);
-            List<string> Offense = new List<string>() { "WANTED BY LSPD", "WANTED FOR ASSAULT", "WANTED FOR UNPAID FINES", "WANTED FOR RUNNING FROM THE POLICE", "WANTED FOR EVADING LAW", "WANTED FOR HIT AND RUN", "WANTED FOR DUI" };
 
-            int OffenseChance = Client.Random.Next(100);
-
-            CanDriverBeArrested = false;
-            NotificationFlagOffense = "~g~NONE";
-
-            NotificationFlagCitations = $"{Client.Random.Next(8)}";
-
-            if (OffenseChance >= 75)
+            if (!HasRanDriverID)
             {
-                CanDriverBeArrested = true;
-                NotificationFlagOffense = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
+                HasRanDriverID = true;
+                List<string> Offense = new List<string>() { "WANTED BY LSPD", "WANTED FOR ASSAULT", "WANTED FOR UNPAID FINES", "WANTED FOR RUNNING FROM THE POLICE", "WANTED FOR EVADING LAW", "WANTED FOR HIT AND RUN", "WANTED FOR DUI" };
+
+                int OffenseChance = Client.Random.Next(100);
+
+                CanDriverBeArrested = false;
+                NotificationFlagOffense = "~g~NONE";
+
+                NotificationFlagCitations = $"{Client.Random.Next(8)}";
+
+                if (OffenseChance >= 75)
+                {
+                    CanDriverBeArrested = true;
+                    NotificationFlagOffense = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
+                }
             }
 
             Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Name: ~y~{IdentityName}~w~\nGender: ~b~{StoppedDriver.Gender}~w~\nDOB: ~b~{IdentityDateOfBirth}");

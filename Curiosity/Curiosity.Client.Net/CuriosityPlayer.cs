@@ -311,7 +311,16 @@ namespace Curiosity.Client.net
                 ClearScreen();
             }
 
-            Game.PlayerPed.Position = await spawnPosition.Ground();
+            Vector3 groundSpawn = await spawnPosition.Ground();
+            Vector3 safeSpawn = groundSpawn;
+
+            if (API.GetSafeCoordForPed(groundSpawn.X, groundSpawn.Y, groundSpawn.Z, true, ref safeSpawn, 16))
+            {
+                groundSpawn = await safeSpawn.Ground();
+            }
+
+            Game.PlayerPed.Position = groundSpawn;
+
 
             int gameTimer = API.GetGameTimer();
 

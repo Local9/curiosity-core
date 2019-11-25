@@ -20,6 +20,8 @@ namespace Curiosity.Server.net.Classes
 
         static Dictionary<string, int> activeMissions = new Dictionary<string, int>();
 
+        static Dictionary<string, DateTime> timestampLastTrafficStop = new Dictionary<string, DateTime>();
+
         public static void Init()
         {
             // Player who triggered it
@@ -29,10 +31,36 @@ namespace Curiosity.Server.net.Classes
 
             API.RegisterCommand("mission", new Action<int, List<object>, string>(SendMission), false);
 
+            server.RegisterEventHandler("curiosity:Server:Missions:TrafficStop", new Action<CitizenFX.Core.Player, string>(OnTrafficStop));
+
             server.RegisterEventHandler("curiosity:Server:Missions:KilledPed", new Action<CitizenFX.Core.Player, string>(OnKilledPed));
             server.RegisterEventHandler("curiosity:Server:Missions:CompletedMission", new Action<CitizenFX.Core.Player, bool>(OnCompletedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:StartedMission", new Action<CitizenFX.Core.Player, int>(OnStartedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:EndMission", new Action<CitizenFX.Core.Player>(OnEndMission));
+        }
+
+        static void OnTrafficStop([FromSource]CitizenFX.Core.Player player, string encodedData)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            if (timestampLastTrafficStop.ContainsKey(player.Handle))
+            {
+                DateTime dateTimeOfLastTrafficStop = timestampLastTrafficStop[player.Handle];
+                double minsSinceLast = (DateTime.Now - dateTimeOfLastTrafficStop).TotalSeconds;
+                if (minsSinceLast < 59)
+                {
+                    session.IsCheater = true;
+                    session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
+                    return;
+                }
+            }
+
+            Skills.IncreaseSkill(player.Handle, "policexp", random.Next(8, 10));
+            Skills.IncreaseSkill(player.Handle, "knowledge", random.Next(3, 6));
+            Skills.IncreaseSkill(player.Handle, "policerep", 1);
+            Bank.IncreaseCashInternally(player.Handle, 25);
+            timestampLastTrafficStop[player.Handle] = DateTime.Now;
         }
 
         static void SendMission(int playerHandle, List<object> arguments, string raw)
@@ -132,8 +160,6 @@ namespace Curiosity.Server.net.Classes
                 //missionMessage.MoneyLost = 100;
                 //Bank.DecreaseCashInternally(player.Handle, missionMessage.MoneyLost);
             }
-
-            string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(missionMessage));
 
             string subTitle = passed ? "Successful" : "Unsuccessful";
 

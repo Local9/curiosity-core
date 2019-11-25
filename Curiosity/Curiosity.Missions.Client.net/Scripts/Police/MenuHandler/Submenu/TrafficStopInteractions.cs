@@ -63,7 +63,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
                 if (TrafficStop.StoppedDriver.IsInVehicle())
                 {
                     TrafficStop.LeaveVehicle();
-                    UpdateButtons();
+
+                    mItemLeaveVehicle.Enabled = false;
+                    mItemReturnToVehicle.Enabled = true;
                 }
             }
 
@@ -72,7 +74,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
                 if (!TrafficStop.StoppedDriver.IsInVehicle())
                 {
                     TrafficStop.ReturnToVehicle();
-                    UpdateButtons();
+
+                    mItemLeaveVehicle.Enabled = true;
+                    mItemReturnToVehicle.Enabled = false;
                 }
             }
 
