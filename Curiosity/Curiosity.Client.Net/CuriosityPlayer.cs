@@ -271,8 +271,8 @@ namespace Curiosity.Client.net
             API.RemoveAllPedWeapons(Game.PlayerPed.Handle, false);
             API.ClearPlayerWantedLevel(Game.Player.Handle);
 
-            int randomRangeX = rnd.Next(100, 500);
-            int randomRangeY = rnd.Next(100, 500);
+            int randomRangeX = rnd.Next(20, 50);
+            int randomRangeY = rnd.Next(20, 50);
 
             Vector3 spawnPosition = new Vector3(x + randomRangeX, y + randomRangeY, z);
 

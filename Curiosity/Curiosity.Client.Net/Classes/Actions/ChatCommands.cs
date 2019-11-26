@@ -24,6 +24,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static bool IsOnFoot = false;
         static bool IsPackageInCar = false;
+        static bool SuckCooldownActive = false;
 
         static Dictionary<string, string> scenarios = new Dictionary<string, string>()
         {
@@ -109,6 +110,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("don", new Action<int, List<object>, string>(DeleteObjectNuke), false);
             API.RegisterCommand("nuke", new Action<int, List<object>, string>(Nuke), false);
             API.RegisterCommand("weather", new Action<int, List<object>, string>(Weather), false);
+            API.RegisterCommand("stuck", new Action<int, List<object>, string>(OnStuck), false);
             // test commands
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);
             API.RegisterCommand("fire", new Action<int, List<object>, string>(Fire), false);
@@ -302,6 +304,32 @@ namespace Curiosity.Client.net.Classes.Actions
 
             chimp.MarkAsNoLongerNeeded();
             chimp.Delete();
+        }
+
+        static async void OnStuck(int playerHandle, List<object> arguments, string raw)
+        {
+            if (Game.PlayerPed.IsDead) return;
+
+            if (SuckCooldownActive)
+            {
+                Screen.ShowNotification("~b~Stuck Cooldown: ~r~Active");
+                return;
+            }
+
+            Game.PlayerPed.Position = new Vector3(17.86131f, 638.567f, 210.5947f);
+            Game.PlayerPed.Heading = 192.4753f;
+
+            long gametimer = API.GetGameTimer();
+
+            SuckCooldownActive = true;
+
+            while ((API.GetGameTimer() - gametimer) < 30000)
+            {
+                await Client.Delay(1000);
+            }
+
+            Screen.ShowNotification("~b~Stuck Cooldown: ~g~Ended");
+            SuckCooldownActive = false;
         }
 
         static void ReportingNotification(int playerHandle, List<object> arguments, string raw)
