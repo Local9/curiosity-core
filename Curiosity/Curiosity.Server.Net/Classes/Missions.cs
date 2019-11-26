@@ -56,10 +56,10 @@ namespace Curiosity.Server.net.Classes
                 }
             }
 
-            Skills.IncreaseSkill(player.Handle, "policexp", random.Next(8, 10));
-            Skills.IncreaseSkill(player.Handle, "knowledge", random.Next(3, 6));
+            Skills.IncreaseSkill(player.Handle, "policexp", random.Next(1, 6));
+            Skills.IncreaseSkill(player.Handle, "knowledge", random.Next(1, 4));
             Skills.IncreaseSkill(player.Handle, "policerep", 1);
-            Bank.IncreaseCashInternally(player.Handle, 25);
+            Bank.IncreaseCashInternally(player.Handle, 15);
             timestampLastTrafficStop[player.Handle] = DateTime.Now;
         }
 

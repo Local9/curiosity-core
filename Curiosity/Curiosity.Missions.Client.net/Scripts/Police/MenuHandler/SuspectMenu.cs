@@ -1,14 +1,12 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
+using Curiosity.Shared.Client.net.Enums.Patrol;
+using Curiosity.Shared.Client.net.Extensions;
+using MenuAPI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using MenuAPI;
-using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Shared.Client.net.Enums.Patrol;
-using CitizenFX.Core.UI;
-using CitizenFX.Core.Native;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 {
@@ -29,6 +27,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         static MenuItem mItemCoroner = new MenuItem("Coroner");
         static MenuItem mItemTowService = new MenuItem("Tow Service");
         static MenuItem mItemRelease = new MenuItem("Release");
+
+        static MenuItem mItemRemoveHandcuff = new MenuItem("Remove Handcuffs");
+        static MenuItem mItemHandcuff = new MenuItem("Handcuff");
+        static MenuItem mItemGrab = new MenuItem("Grab Suspect");
 
         static MenuItem mItemRunName = new MenuItem("Run Name");
         static MenuItem mItemRunPlate = new MenuItem("Run Plate");
@@ -109,6 +111,25 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                 TrafficStop.InteractionIssueWarning();
                 menu.CloseMenu();
             }
+
+            if (menuItem == mItemHandcuff)
+            {
+                ArrestPed.InteractionHandcuff();
+                mItemRemoveHandcuff.Enabled = ArrestPed.IsPedCuffed;
+                mItemGrab.Enabled = ArrestPed.IsPedCuffed;
+            }
+
+            if (menuItem == mItemRemoveHandcuff)
+            {
+                ArrestPed.InteractionHandcuff();
+                mItemRemoveHandcuff.Enabled = ArrestPed.IsPedCuffed;
+                mItemGrab.Enabled = ArrestPed.IsPedCuffed;
+            }
+
+            if (menuItem == mItemGrab)
+            {
+                ArrestPed.InteractionGrab();
+            }
         }
 
         private static void Menu_OnMenuOpen(Menu menu)
@@ -124,6 +145,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             {
                 MenuController.DisableBackButton = true;
                 menu.AddMenuItem(mListItemSpeech);
+
+                if (ArrestPed.IsPedBeingArrested)
+                {
+                    menu.AddMenuItem(mItemHandcuff);
+                    mItemRemoveHandcuff.Enabled = ArrestPed.IsPedCuffed;
+                    menu.AddMenuItem(mItemRemoveHandcuff);
+                    mItemGrab.Enabled = ArrestPed.IsPedCuffed;
+                    menu.AddMenuItem(mItemGrab);
+                }
+
                 menu.AddMenuItem(mItemHello);
                 menu.AddMenuItem(mItemRequestId);
                 mItemRunName.Enabled = false;
