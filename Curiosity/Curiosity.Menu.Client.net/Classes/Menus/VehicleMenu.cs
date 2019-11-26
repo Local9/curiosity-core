@@ -31,7 +31,6 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Menu:CarLock", new Action<int>(OnToggleLockState));
-            // client.RegisterEventHandler("curiosity:Client:Menu:Carboot", new Action<int>(OnToggleCarbootState));
 
             MainVehicleMenu.OnMenuOpen += OnMainMenuOpen;
             MainVehicleMenu.OnMenuClose += OnMainMenuClose;
