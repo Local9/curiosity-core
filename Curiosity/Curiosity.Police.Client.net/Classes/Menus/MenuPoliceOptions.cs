@@ -29,14 +29,14 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static List<string> patrolAreas = new List<string>();
 
         static MenuListItem menuListPatrolZone = new MenuListItem("Area of Patrol", patrolAreas, _patrolZone);
-        static MenuItem menuItemShowRadar = new MenuItem("Open Radar");
+        static MenuItem menuItemShowRadar = new MenuItem("Open RS9000");
         static MenuItem menuItemDispatch = new MenuItem("Dispatch");
         static MenuItem menuItemBreaker = new MenuItem(":: Options ::") { Enabled = false };
 
         static MenuCheckboxItem menuCheckboxDuty = new MenuCheckboxItem("Accepting Dispatch Calls", _IsOnDuty);
         static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive);
         static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
-        static MenuCheckboxItem menuCheckboxArrests = new MenuCheckboxItem("Enable Arrests", _IsArrestsActive) { Enabled = false, Description = "Coming Soon™" };
+        static MenuCheckboxItem menuCheckboxArrests = new MenuCheckboxItem("Enable Arrests", _IsArrestsActive);
         static MenuCheckboxItem menuCheckboxRandomEvents = new MenuCheckboxItem("Enable Random Events", _IsRandomEventsActive) { Enabled = false, Description = "Coming Soon™" };
 
         // Request
@@ -105,6 +105,12 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             {
                 _IsTrafficStopsActive = newCheckedState;
                 BaseScript.TriggerEvent("curiosity:Client:Mission:TrafficStops", _IsTrafficStopsActive);
+            }
+
+            if (menuItem == menuCheckboxArrests)
+            {
+                _IsArrestsActive = newCheckedState;
+                BaseScript.TriggerEvent("curiosity:Client:Mission:Arrests", _IsArrestsActive);
             }
 
             if (menuItem == menuCheckboxBackup)
@@ -224,15 +230,17 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             menu.AddMenuItem(menuItemShowRadar);
             menu.AddMenuItem(menuItemDispatch);
+            
             menu.AddMenuItem(menuItemBreaker);
+            
             menu.AddMenuItem(menuCheckboxDuty);
             menu.AddMenuItem(menuCheckboxBackup);
 
+            menu.AddMenuItem(menuCheckboxTrafficStops);
+            menu.AddMenuItem(menuCheckboxArrests);
+
             if (Classes.Player.PlayerInformation.IsDeveloper())
             {
-                
-                menu.AddMenuItem(menuCheckboxTrafficStops);
-                menu.AddMenuItem(menuCheckboxArrests);
                 menu.AddMenuItem(menuCheckboxRandomEvents);
             }
 

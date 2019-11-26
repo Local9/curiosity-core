@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Curiosity.Missions.Client.net.Scripts.PedCreators;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using CitizenFX.Core;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
@@ -21,8 +22,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static Client client = Client.GetInstance();
         
         static Ped ArrestedPed;
+        static Ped PedInHandcuffs;
         static public bool IsPedBeingArrested = false;
-        static public bool IsPedHandcuffed = false;
+        static public bool IsPedCuffed = false;
+        static public bool IsPedGrabbed = false;
 
         public static void Setup()
         {
@@ -30,11 +33,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             // kill it incase it doubles
             client.DeregisterTickHandler(OnTask);
             client.RegisterTickHandler(OnTask);
+
+            Screen.ShowNotification("~b~Arrests~s~: ~g~Enabled");
         }
 
         public static void Dispose()
         {
             client.DeregisterTickHandler(OnTask);
+
+            Screen.ShowNotification("~b~Arrests~s~: ~r~Disabled");
         }
 
         static async Task OnTask()
@@ -57,6 +64,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
 
                 if (ArrestedPed == null) return;
+                if (ArrestedPed.IsDead) return;
 
                 IsPedBeingArrested = true;
 
@@ -168,35 +176,91 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
             await Client.Delay(0);
-            Ped pedInFront = Game.PlayerPed.GetPedInFront();
-            if (pedInFront == null) return;
-            if (pedInFront.IsPlayingAnim("random@arrests@busted", "idle_a")) // if kneeling... then cuff them
+            PedInHandcuffs = Game.PlayerPed.GetPedInFront();
+            if (PedInHandcuffs == null) return;
+            if (PedInHandcuffs.IsPlayingAnim("random@arrests@busted", "idle_a")) // if kneeling... then cuff them
             {
                 Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
-                pedInFront.Task.PlayAnimation("mp_arresting", "idle", 8.0f, -1, (AnimationFlags)49);
-                API.AttachEntityToEntity(pedInFront.Handle, Game.PlayerPed.Handle, 11816, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
+                PedInHandcuffs.Task.PlayAnimation("mp_arresting", "idle", 8.0f, -1, (AnimationFlags)49);
+                API.AttachEntityToEntity(PedInHandcuffs.Handle, Game.PlayerPed.Handle, 11816, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
                 await Client.Delay(2000);
-                pedInFront.Detach();
+                PedInHandcuffs.Detach();
                 Game.PlayerPed.Task.ClearSecondary();
-                pedInFront.Task.PlayAnimation("random@arrests@busted", "exit", 8.0f, -1, AnimationFlags.StayInEndFrame);
+                PedInHandcuffs.Task.PlayAnimation("random@arrests@busted", "exit", 8.0f, -1, AnimationFlags.StayInEndFrame);
                 await Client.Delay(1000);
-                pedInFront.Task.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
-                API.SetPedAsGroupMember(pedInFront.Handle, playerGroupId);
-                API.SetEnableHandcuffs(pedInFront.Handle, true);
-                API.SetPedCanTeleportToGroupLeader(pedInFront.Handle, playerGroupId, true);
-                IsPedHandcuffed = true;
+                PedInHandcuffs.Task.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
+                API.SetPedAsGroupMember(PedInHandcuffs.Handle, playerGroupId);
+                API.SetEnableHandcuffs(PedInHandcuffs.Handle, true);
+                API.SetPedCanTeleportToGroupLeader(PedInHandcuffs.Handle, playerGroupId, true);
+                IsPedCuffed = true;
             }
-            else if (pedInFront != null)
+            else if (PedInHandcuffs != null)
             {
-
+                PedInHandcuffs.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
+                API.AttachEntityToEntity(PedInHandcuffs.Handle, Game.PlayerPed.Handle, 11816, 0.0f, 0.65f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
+                await Client.Delay(2000);
+                PedInHandcuffs.LeaveGroup();
+                PedInHandcuffs.Detach();
+                PedInHandcuffs.Task.ClearSecondary();
+                Game.PlayerPed.Task.ClearSecondary();
+                PedInHandcuffs.Task.ClearAll();
+                PedInHandcuffs.CanRagdoll = false;
+                API.SetBlockingOfNonTemporaryEvents(PedInHandcuffs.Handle, false);
+            }
+            else
+            {
+                Helpers.ShowSimpleNotification("~r~You must be looking at the suspect.");
+                while (IsPedCuffed)
+                {
+                    await Client.Delay(0);
+                    if (PedInHandcuffs == null)
+                    {
+                        IsPedCuffed = false;
+                    }
+                    else
+                    {
+                        if (PedInHandcuffs.IsAlive && IsPedCuffed)
+                        {
+                            PedInHandcuffs.Task.PlayAnimation("mp_arresting", "idle", 8.0f, -1, (AnimationFlags)49);
+                        }
+                    }
+                }
             }
         }
 
         // Secure In Players Vehicle
+        static void InteractionPutInVehicle()
+        {
+            
+        }
         // Remove from Players Vehicle
+        static void InteractionRemoveFromVehicle()
+        {
+
+        }
 
         // Grab Ped
+        static void InteractionGrab()
+        {
+            Ped grabbedPed = Game.PlayerPed.GetPedInFront();
+
+            if (!IsPedGrabbed)
+            {
+                IsPedGrabbed = true;
+                API.AttachEntityToEntity(grabbedPed.Handle, Game.PlayerPed.Handle, 11816, -0.3f, 0.4f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
+            }
+            else if (IsPedGrabbed)
+            {
+                grabbedPed.Detach();
+                IsPedGrabbed = false;
+            }
+        }
+
         // Make Ped Kneel
+        static void InteractionKneel()
+        {
+
+        }
 
     }
 }

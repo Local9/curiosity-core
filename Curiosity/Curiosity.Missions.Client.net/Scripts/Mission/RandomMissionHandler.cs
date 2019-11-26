@@ -49,8 +49,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static void OnArrests(bool state)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
-
             if (state)
             {
                 Police.ArrestPed.Setup();
@@ -63,8 +61,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static void OnTrafficStops(bool state)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
-
             if (state)
             {
                 Police.TrafficStop.Setup();

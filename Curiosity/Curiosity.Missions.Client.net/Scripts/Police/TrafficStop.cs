@@ -93,6 +93,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         public static void Dispose()
         {
+            Reset();
             client.DeregisterTickHandler(OnTrafficStopTask);
             client.DeregisterTickHandler(OnTrafficStopStateTask);
             client.DeregisterTickHandler(OnEmoteCheck);
@@ -134,6 +135,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                         TargetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
 
+                        if (TargetVehicle == null) return;
+
+                        // if no driver, don't do anything
+                        if (TargetVehicle.Driver == null) return;
+                        // if the driver is dead, don't do anything
+                        if (TargetVehicle.Driver.IsDead) return;
+
                         bool hasBeenPulledOver = DecorGetBool(TargetVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED);
 
                         if (hasBeenPulledOver)
@@ -141,13 +149,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             Screen.DisplayHelpTextThisFrame($"You have already pulled over this vehicle.");
                             return;
                         }
-
-                        if (TargetVehicle == null) return;
-
-                        // if no driver, don't do anything
-                        if (TargetVehicle.Driver == null) return;
-                        // if the driver is dead, don't do anything
-                        if (TargetVehicle.Driver.IsDead) return;
 
                         // 5 second timer so we don't try attaching to a bunch of vehicles
                         long gameTime = GetGameTimer();
@@ -439,10 +440,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             HasVehicleBeenStolen = false;
 
             client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
-            client.RegisterTickHandler(OnCooldownTask);
 
             if (issueExperience)
+            {
                 Client.TriggerServerEvent("curiosity:Server:Missions:TrafficStop", string.Empty);
+                client.RegisterTickHandler(OnCooldownTask);
+            }
         }
 
         static async Task OnCooldownTask()
@@ -732,7 +735,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             client.RegisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
             API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, true);
-            StoppedDriver.SetConfigFlag(292, true);
+            
             ALPR(vehicle);
         }
 
