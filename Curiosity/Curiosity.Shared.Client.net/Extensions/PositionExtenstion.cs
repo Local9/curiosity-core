@@ -46,7 +46,7 @@ namespace Curiosity.Shared.Client.net.Extensions
                 await BaseScript.Delay(0);
                 API.RequestCollisionAtCoord(position.X, position.Y, i + 0.0f);
                 if (API.GetGroundZFor_3dCoord(position.X, position.Y, i + 0.0f, ref posZ, false))
-                {
+                { 
                     position.Z = posZ;
                     break;
                 }

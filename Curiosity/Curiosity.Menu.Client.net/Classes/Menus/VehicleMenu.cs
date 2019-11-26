@@ -25,7 +25,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static MenuListItem mListItemVehicleLocks = new MenuListItem("Access Grant", VehicleLockStateList, (int)VehicleLockState, "Select to set vehicle access rights\n~r~Warning:~s~ Changing from a locked state to unlocked may cause your ped to break the window.") { Enabled = Client.CurrentVehicle != null };
         // HeadLights
         static List<string> HeadlightColors = new List<string>() { "White", "Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Rose", "Sombre" };
-        static MenuListItem mItemHeadLights = new MenuListItem("Headlights", HeadlightColors, _selectedHeadlight);
+        static MenuListItem mItemHeadLights = new MenuListItem("Headlights", HeadlightColors, _selectedHeadlight) { Description = "Colors are 50/50 on if they'll work" };
         static int _selectedHeadlight = 0;
 
         public static void Init()
@@ -80,11 +80,12 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 if (Client.CurrentVehicle == null) return;
 
                 _selectedHeadlight = newSelectionIndex;
+                Client.CurrentVehicle.Mods.InstallModKit();
                 API.ToggleVehicleMod(Client.CurrentVehicle.Handle, 22, true);
 
                 int headlightColor = 0;
 
-                switch (HeadlightColors[newSelectionIndex])
+                switch ($"{HeadlightColors[newSelectionIndex]}")
                 {
                     case "White":
                         headlightColor = 0;
@@ -113,6 +114,11 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                     case "Sombre":
                         headlightColor = 12;
                         break;
+                }
+
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Debug.WriteLine($"OnMainMenuListIndexChange -> {HeadlightColors[newSelectionIndex]}, {headlightColor}");
                 }
 
                 API.SetVehicleHeadlightsColour(Client.CurrentVehicle.Handle, headlightColor);

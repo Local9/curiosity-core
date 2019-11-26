@@ -11,6 +11,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.Submenus.VehicleSubMenu
         static Dictionary<MenuItem, int> VehicleExtraItems = new Dictionary<MenuItem, int>();
         static Menu VehicleExtrasMenu;
 
+        static MenuItem mItemGoBack = new MenuItem("Go Back", "Go back to the Vehicle Options menu.");
+        static MenuItem mItemGoBackNoItems = new MenuItem("No Extras Available :(", "Go back to the Vehicle Options menu.");
+
         static public void SetupMenu()
         {
             if (VehicleExtrasMenu == null)
@@ -20,8 +23,17 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.Submenus.VehicleSubMenu
                 VehicleExtrasMenu.OnMenuOpen += VehicleExtrasMenu_OnMenuOpen;
                 VehicleExtrasMenu.OnMenuClose += VehicleExtrasMenu_OnMenuClose;
                 VehicleExtrasMenu.OnCheckboxChange += VehicleExtrasMenu_OnCheckboxChange;
+                VehicleExtrasMenu.OnItemSelect += VehicleExtrasMenu_OnItemSelect;
             }
             VehicleMenu.AddSubMenu(VehicleExtrasMenu, Client.CurrentVehicle != null);
+        }
+
+        private static void VehicleExtrasMenu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
+        {
+            if (menuItem == mItemGoBackNoItems || menuItem == mItemGoBack)
+            {
+                VehicleExtrasMenu.GoBack();
+            }
         }
 
         private static void VehicleExtrasMenu_OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
@@ -68,6 +80,15 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.Submenus.VehicleSubMenu
                         VehicleExtraItems[menuCheckboxItem] = extra;
                     }
                 }
+            }
+
+            if (VehicleExtraItems.Count == 0)
+            {
+                VehicleExtrasMenu.AddMenuItem(mItemGoBackNoItems);
+            }
+            else
+            {
+                VehicleExtrasMenu.AddMenuItem(mItemGoBack);
             }
 
             VehicleExtrasMenu.RefreshIndex();
