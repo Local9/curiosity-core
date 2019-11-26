@@ -15,15 +15,28 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
     class Spawn
     {
         static Random random = new Random();
+        static Client client = Client.GetInstance();
 
         static bool isSpawning = false;
+        static int numberOfVehiclesSpawned = 0;
+
+        static public void Init()
+        {
+            // just to create an instance
+        }
 
         public static async Task<bool> SpawnVehicle(Model model, Vector3 spawnPosition, float heading, bool installSirens = false, bool staffSpawn = false, string numberPlate = "")
         {
             try
             {
-                if (isSpawning) return false;
+                if (isSpawning)
+                {
+                    CitizenFX.Core.UI.Screen.ShowNotification("~b~Vehicle Spawn:\n~r~Cooldown Active");
+                    return false;
+                }
+
                 isSpawning = true;
+                client.RegisterTickHandler(OnCooldown);
 
                 float fuelLevel = random.Next(60, 100);
 
@@ -163,12 +176,12 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
                 await Client.Delay(0);
 
-                isSpawning = false;
-
                 veh.IsVisible = true;
                 veh.IsInvincible = false;
 
                 model.MarkAsNoLongerNeeded();
+
+                numberOfVehiclesSpawned = numberOfVehiclesSpawned + 1;
 
                 return true;
             }
@@ -176,8 +189,34 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
             {
                 Log.Error($"SpawnVehicle -> {ex.Message}");
                 isSpawning = false;
+                client.DeregisterTickHandler(OnCooldown);
                 return false;
             }
+        }
+
+        static async Task OnCooldown()
+        {
+            long gameTime = API.GetGameTimer();
+
+            long timerToWait = 5000 * numberOfVehiclesSpawned;
+
+            if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DONATOR)
+            {
+                timerToWait = 2500 * numberOfVehiclesSpawned;
+            }
+
+            if (Player.PlayerInformation.IsStaff())
+            {
+                timerToWait = 1000;
+            }
+
+            while ((API.GetGameTimer() - gameTime) < timerToWait)
+            {
+                await Client.Delay(1000);
+            }
+            CitizenFX.Core.UI.Screen.ShowNotification("~b~Vehicle Spawn:\n~g~Cooldown Ended");
+            client.DeregisterTickHandler(OnCooldown);
+            isSpawning = false;
         }
 
         static void SendDeletionEvent(string vehicleNetworkId)

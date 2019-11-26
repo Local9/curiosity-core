@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Client.net;
@@ -120,57 +121,85 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
         private static async void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
         {
-            Model model = null;
-            VehicleItem vehicleItem = menuItem.ItemData;
-            string car = vehicleItem.VehicleHashString;
-            var enumName = Enum.GetNames(typeof(VehicleHash)).FirstOrDefault(s => s.ToLower().StartsWith(car.ToLower())) ?? "";
-
-            if (Player.PlayerInformation.IsDeveloper())
+            try
             {
-                Log.Info(vehicleItem.ToString());
-            }
+                Model model = null;
+                VehicleItem vehicleItem = menuItem.ItemData;
+                string car = vehicleItem.VehicleHashString;
+                var enumName = Enum.GetNames(typeof(VehicleHash)).FirstOrDefault(s => s.ToLower().StartsWith(car.ToLower())) ?? "";
 
-            var modelName = "";
-
-            if (int.TryParse(car, out var hash))
-            {
-                model = new Model(hash);
-                modelName = $"{hash}";
-            }
-            else if (!string.IsNullOrEmpty(enumName))
-            {
-                var found = false;
-                foreach (VehicleHash p in Enum.GetValues(typeof(VehicleHash)))
+                if (Player.PlayerInformation.IsDeveloper())
                 {
-                    if (!(Enum.GetName(typeof(VehicleHash), p)?.Equals(enumName, StringComparison.InvariantCultureIgnoreCase) ??
-                          false))
+                    Log.Info(vehicleItem.ToString());
+                }
+
+                var modelName = "";
+
+                if (int.TryParse(car, out var hash))
+                {
+                    model = new Model(hash);
+                    modelName = $"{hash}";
+
+                    if (Player.PlayerInformation.IsDeveloper())
                     {
-                        continue;
+                        Log.Info("INT TryParse Valid");
+                    }
+                }
+                else if (!string.IsNullOrEmpty(enumName))
+                {
+                    var found = false;
+                    foreach (VehicleHash p in Enum.GetValues(typeof(VehicleHash)))
+                    {
+                        if (!(Enum.GetName(typeof(VehicleHash), p)?.Equals(enumName, StringComparison.InvariantCultureIgnoreCase) ?? false))
+                        {
+                            continue;
+                        }
+
+                        model = new Model(p);
+                        modelName = enumName;
+                        found = true;
+
+                        if (Classes.Player.PlayerInformation.IsDeveloper())
+                        {
+                            Screen.ShowNotification($"~r~Info~s~:~n~Model Valid: {model.IsValid}~n~Model: {modelName}");
+                        }
+
+                        break;
                     }
 
-                    model = new Model(p);
-                    modelName = enumName;
-                    found = true;
-                    break;
-                }
+                    if (!model.IsValid)
+                    {
+                        Screen.ShowNotification($"~r~ERROR~s~: Could not model {car}");
+                        return;
+                    }
 
-                if (!found)
+                    if (!found)
+                    {
+                        Screen.ShowNotification($"~r~ERROR~s~: Could not load model {car}");
+                        return;
+                    }
+                }
+                else
                 {
-                    return;
+                    model = new Model(car);
+                    modelName = car;
+                }
+
+                Vector3 positionToSpawn = new Vector3(vehicleItem.SpawnPositionX, vehicleItem.SpawnPositionY, vehicleItem.SpawnPositionZ);
+
+                bool spawnSuccess = await Vehicle.Spawn.SpawnVehicle(model, positionToSpawn, vehicleItem.SpawnHeading, vehicleItem.InstallSirens);
+
+                if (!spawnSuccess)
+                {
+                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Sorry...", "It took too long to load the vehicle or a cooldown is active, please try again later.", 2);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                model = new Model(car);
-                modelName = car;
-            }
-
-            Vector3 positionToSpawn = new Vector3(vehicleItem.SpawnPositionX, vehicleItem.SpawnPositionY, vehicleItem.SpawnPositionZ);
-
-
-            if (!await Vehicle.Spawn.SpawnVehicle(model, positionToSpawn, vehicleItem.SpawnHeading, vehicleItem.InstallSirens))
-            {
-                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Sorry...", "It took too long to load the vehicle, please try again.", 2);
+                if (Classes.Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Error($"Menu_OnItemSelect -> {ex.Message}");
+                }
             }
         }
     }

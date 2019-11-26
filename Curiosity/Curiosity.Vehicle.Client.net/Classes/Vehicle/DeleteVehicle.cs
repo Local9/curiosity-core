@@ -35,6 +35,20 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                             vehicle.AttachedBlip.Delete();
                         }
 
+                        if (NetworkRequestControlOfEntity(vehicle.Handle))
+                        {
+                            vehicle.IsPersistent = false;
+                            vehicle.IsPositionFrozen = false;
+                            vehicle.Position = new Vector3(-2000f, -6000f, 0f);
+                            vehicle.MarkAsNoLongerNeeded();
+
+                            int objectHandle = vehicle.Handle;
+                            int objectHandleToDelete = vehicle.Handle;
+
+                            SetEntityAsNoLongerNeeded(ref objectHandle);
+                            DeleteEntity(ref objectHandleToDelete);
+                        }
+
                         NetworkFadeOutEntity(vehicleId, true, false);
                         vehicle.IsEngineRunning = false;
                         vehicle.MarkAsNoLongerNeeded();

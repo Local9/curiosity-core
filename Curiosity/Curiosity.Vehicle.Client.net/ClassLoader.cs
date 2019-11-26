@@ -32,6 +32,9 @@ namespace Curiosity.Vehicle.Client.net
             Classes.Environment.SafeZone.Init();
             Classes.Environment.ChatCommands.Init();
 
+            // Instances
+            Classes.Vehicle.Spawn.Init();
+
             // MENU
             Classes.Menus.VehicleSpawn.Init();
 

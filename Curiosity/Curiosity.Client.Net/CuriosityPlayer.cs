@@ -451,18 +451,26 @@ namespace Curiosity.Client.net
                 await Client.Delay(0);
             }
 
-            string description = "~r~We do not tolerate any form of racism.~s~~n~";
-            description += "~r~DO NOT~s~ Try to kill or harass other players.~n~";
-            description += "~r~DO NOT~s~ Spam the chat.~n~";
-            description += "~r~DO NOT~s~ Force people to RP, it is voluntary.~n~";
-            description += "~r~DO NOT~s~ Abuse exploits, report them on the forums.~n~";
-            description += "~r~DO NOT~s~ Drive recklessly.~n~";
-            description += "~g~RESPECT ALL~s~ Players and Staff members.~n~";
-            description += "~g~USE ONLY~s~ English in the chat.~n~";
-            description += "~g~PvE ONLY~s~ Do jobs and work together.~n~";
-            description += "Finally, keep it friendly and we'll all get along.~n~";
-            description += "~o~Press ~b~M~o~ to get started!~w~~n~";
-            description += "~b~Forums~s~: forums.lifev.net / ~b~Discord~s~: discord.lifev.net";
+            string description = "~r~We do not tolerate any form of racism.~w~\n";
+            description += "~r~DO NOT~w~ Try to kill or harass other players.\n";
+            description += "~r~DO NOT~w~ Spam the chat.\n";
+            description += "~r~DO NOT~w~ Force people to RP, it is voluntary.\n";
+            description += "~r~DO NOT~w~ Abuse exploits, report them on the forums.\n";
+            description += "~r~DO NOT~w~ Drive recklessly.\n";
+            description += "~g~RESPECT ALL~w~ Players and Staff members.\n";
+            description += "~g~USE ONLY~w~ English in the chat.\n";
+            description += "~g~PvE ONLY~w~ Do jobs and work together.\n";
+            description += "Finally, keep it friendly and we'll all get along.\n";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑\n";
+            description += "~o~Press ~b~M~o~ to ~r~read the guides~o~ and get started!~w~\n";
+            description += "~b~Forums~w~: forums.lifev.net / ~b~Discord~w~: discord.lifev.net";
 
             scaleform.CallFunction("SETUP_TABS", 1, false);
             const string dictTexture = "www_arenawar_tv";
