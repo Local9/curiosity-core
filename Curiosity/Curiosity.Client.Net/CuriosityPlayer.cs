@@ -270,7 +270,11 @@ namespace Curiosity.Client.net
             API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
             API.RemoveAllPedWeapons(Game.PlayerPed.Handle, false);
             API.ClearPlayerWantedLevel(Game.Player.Handle);
-            Vector3 spawnPosition = new Vector3(x, y, z);
+
+            int randomRangeX = rnd.Next(100, 500);
+            int randomRangeY = rnd.Next(100, 500);
+
+            Vector3 spawnPosition = new Vector3(x + randomRangeX, y + randomRangeY, z);
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
@@ -320,7 +324,29 @@ namespace Curiosity.Client.net
             }
 
             Game.PlayerPed.Position = groundSpawn;
+            float countX = 0.0f, countY = 0.0f;
 
+            int interiorId = API.GetInteriorFromEntity(Game.PlayerPed.Handle);
+
+            Debug.WriteLine($"{interiorId}");
+
+            while (interiorId > 0)
+            {
+                await Delay(10);
+
+                countX = countX + 10f;
+                countY = countY + 10f;
+
+                if (API.GetSafeCoordForPed(groundSpawn.X + countX, groundSpawn.Y + countY, groundSpawn.Z, true, ref safeSpawn, 16))
+                {
+                    groundSpawn = await safeSpawn.Ground();
+                }
+
+                Game.PlayerPed.Position = groundSpawn;
+                interiorId = API.GetInteriorFromEntity(Game.PlayerPed.Handle);
+
+                Debug.WriteLine($"{interiorId}");
+            }
 
             int gameTimer = API.GetGameTimer();
 
