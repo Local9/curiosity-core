@@ -87,7 +87,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                 {
                     MenuItem item = new MenuItem(vehicle.Name) { ItemData = vehicle };
 
-                    if (vehicle.UnlockRequirementValue == 0)
+                    if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+                    {
+                        item.Enabled = true;
+                    }
+                    else if (vehicle.UnlockRequirementValue == 0)
                     {
                         item.Enabled = true;
                     }
@@ -120,6 +124,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             VehicleItem vehicleItem = menuItem.ItemData;
             string car = vehicleItem.VehicleHashString;
             var enumName = Enum.GetNames(typeof(VehicleHash)).FirstOrDefault(s => s.ToLower().StartsWith(car.ToLower())) ?? "";
+
+            if (Player.PlayerInformation.IsDeveloper())
+            {
+                Log.Info(vehicleItem.ToString());
+            }
 
             var modelName = "";
 
@@ -161,7 +170,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
             if (!await Vehicle.Spawn.SpawnVehicle(model, positionToSpawn, vehicleItem.SpawnHeading, vehicleItem.InstallSirens))
             {
-                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "It took too long to load the vehicle, please try again.", string.Empty, 2);
+                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Sorry...", "It took too long to load the vehicle, please try again.", 2);
             }
         }
     }

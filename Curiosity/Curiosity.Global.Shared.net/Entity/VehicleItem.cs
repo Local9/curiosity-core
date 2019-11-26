@@ -12,5 +12,10 @@
         public string UnlockRequiredSkill;
         public string UnlockRequiredSkillDescription;
         public bool InstallSirens;
+
+        public override string ToString()
+        {
+            return $"Name: {Name}, Hash: {VehicleHashString}, Skill: {UnlockRequiredSkill}, Req: {UnlockRequirementValue}";
+        }
     }
 }
