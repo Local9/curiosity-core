@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>L:\GTA\FXServer\curiosity\resources\curiosity-menu\client\</OutputPath>
+    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity-menu\client\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -63,6 +63,10 @@
     <Compile Include="Classes\Menus\PlayerInteractions\KickInteraction.cs" />
     <Compile Include="Classes\Menus\PlayerInteractions\ReportInteraction.cs" />
     <Compile Include="Classes\Menus\PlayerMenu.cs" />
+    <Compile Include="Classes\Menus\Submenus\VehicleSubMenu\VehicleDoors.cs" />
+    <Compile Include="Classes\Menus\Submenus\VehicleSubMenu\VehicleExtras.cs" />
+    <Compile Include="Classes\Menus\Submenus\VehicleSubMenu\VehicleLiveries.cs" />
+    <Compile Include="Classes\Menus\Submenus\VehicleSubMenu\VehicleWindows.cs" />
     <Compile Include="Classes\Menus\VehicleMenu.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="ClassLoader.cs" />

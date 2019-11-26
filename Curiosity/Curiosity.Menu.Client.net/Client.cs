@@ -37,7 +37,7 @@ namespace Curiosity.Menus.Client.net
             RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
             RegisterEventHandler("curiosity:Client:Player:Setup", new Action<string>(OnPlayerSetup));
 
-            Log.Info("Curiosity.Mobile.Client.net loaded\n");
+            Log.Info("Curiosity.Menus.Client.net loaded\n");
         }
 
         async void OnPlayerSetup(string jsonUser)

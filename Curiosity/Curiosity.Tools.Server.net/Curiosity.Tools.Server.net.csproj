@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>L:\GTA\FXServer\curiosity\resources\curiosity-tools\server\</OutputPath>
+    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity-tools\server\</OutputPath>
     <DefineConstants>TRACE;DEBUG;SERVER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
