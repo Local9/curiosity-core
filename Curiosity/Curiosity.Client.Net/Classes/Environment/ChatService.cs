@@ -111,6 +111,7 @@ namespace Curiosity.Client.net.Classes.Environment
                     return;
 
                 string message = (String)chatResult["msg"];
+                string chatChannel = (String)chatResult["chat"];
 
                 var spaceSplit = message.Split(' ');
 
@@ -120,7 +121,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 }
                 else
                 {
-                    Client.TriggerServerEvent("curiosity:Server:Chat:Message", message);
+                    Client.TriggerServerEvent("curiosity:Server:Chat:Message", message, chatChannel);
                 }
             }
             catch (Exception ex)

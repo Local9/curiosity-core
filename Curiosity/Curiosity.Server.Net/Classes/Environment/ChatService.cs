@@ -19,10 +19,10 @@ namespace Curiosity.Server.net.Classes.Environment
 
         public static void Init()
         {
-            server.RegisterEventHandler("curiosity:Server:Chat:Message", new Action<CitizenFX.Core.Player, string>(ProcessMessage));
+            server.RegisterEventHandler("curiosity:Server:Chat:Message", new Action<CitizenFX.Core.Player, string, string>(ProcessMessage));
         }
 
-        static void ProcessMessage([FromSource]CitizenFX.Core.Player player, string message)
+        static void ProcessMessage([FromSource]CitizenFX.Core.Player player, string message, string chatChannel)
         {
             if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
@@ -60,7 +60,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             chatMessage.color = $"{session.Privilege}".ToLower();
             chatMessage.role = $"{session.Privilege}";
-            chatMessage.list = "chat";
+            chatMessage.list = chatChannel;
             chatMessage.message = message;
             chatMessage.roleClass = $"{session.Privilege}";
             chatMessage.name = session.Player.Name;
