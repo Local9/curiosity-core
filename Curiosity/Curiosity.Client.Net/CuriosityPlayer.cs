@@ -271,8 +271,8 @@ namespace Curiosity.Client.net
             API.RemoveAllPedWeapons(Game.PlayerPed.Handle, false);
             API.ClearPlayerWantedLevel(Game.Player.Handle);
 
-            int randomRangeX = rnd.Next(20, 50);
-            int randomRangeY = rnd.Next(20, 50);
+            int randomRangeX = rnd.Next(5, 10);
+            int randomRangeY = rnd.Next(5, 10);
 
             Vector3 spawnPosition = new Vector3(x + randomRangeX, y + randomRangeY, z);
 
@@ -510,6 +510,8 @@ namespace Curiosity.Client.net
                 await Client.Delay(0);
                 scaleform.Render2D();
             }
+
+            Screen.ShowNotification("~w~If you are stuck, use ~b~/stuck~w~ to respawn safely.");
 
             API.SetStreamedTextureDictAsNoLongerNeeded(dictTexture);
         }

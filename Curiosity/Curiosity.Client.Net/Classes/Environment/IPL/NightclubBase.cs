@@ -21,9 +21,9 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
 
         public static void Init()
         {
-            new BlipData(clubEntrance, (BlipSprite)614, Shared.Client.net.Enums.BlipCategory.Unknown, BlipColor.Blue, true).Create();
-            client.RegisterTickHandler(TeleportToClub);
+            new BlipData(clubEntrance, (BlipSprite)614, Shared.Client.net.Enums.BlipCategory.Unknown, BlipColor.Blue, true);
 
+            client.RegisterTickHandler(TeleportToClub);
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
         }
 
