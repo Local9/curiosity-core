@@ -18,6 +18,8 @@ using Curiosity.Global.Shared.net.Data;
 using Curiosity.Shared.Client.net.Models;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net;
+using Newtonsoft.Json;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {
@@ -120,7 +122,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                     if (!IsPedCuffed)
                     {
-                        List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", "~o~Handcuff them you idoit!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", "Cuff them, fecking muppet!" };
+                        List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", "~o~Handcuff them you idoit!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", "~r~Cuff them, fecking muppet!" };
                         Screen.ShowNotification(vs[Client.Random.Next(vs.Count)]);
                         return;
                     }
@@ -134,7 +136,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     arrestedPedData.IsDrivingStolenCar = TrafficStop.HasVehicleBeenStolen;
                     arrestedPedData.IsCarryingIllegalItems = TrafficStop.IsCarryingIllegalItems;
 
+                    string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(arrestedPedData));
 
+                    Client.TriggerServerEvent("curiosity:Server:Missions:ArrestedPed", encoded);
                 }
             }
         }
