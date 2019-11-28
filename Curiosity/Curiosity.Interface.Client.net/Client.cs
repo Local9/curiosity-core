@@ -38,7 +38,7 @@ namespace Curiosity.Interface.Client.net
 
         async void OnSessionActive()
         {
-            BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
+            // BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
             await Delay(1000);
             isSessionActive = true;
         }

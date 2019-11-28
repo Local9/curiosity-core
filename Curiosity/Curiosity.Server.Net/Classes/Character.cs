@@ -17,7 +17,7 @@ namespace Curiosity.Server.net.Classes
         {
 
             server.RegisterEventHandler("curiosity:Server:Inventory:GetItems", new Action<CitizenFX.Core.Player>(GetActiveCharacterInventory));
-            server.RegisterEventHandler("curiosity:Server:Character:RoleCheck", new Action<CitizenFX.Core.Player>(CharacterRoleCheck));
+            // server.RegisterEventHandler("curiosity:Server:Character:RoleCheck", new Action<CitizenFX.Core.Player>(CharacterRoleCheck));
             server.RegisterEventHandler("curiosity:Server:Character:Save", new Action<CitizenFX.Core.Player, string>(CharacterSave));
         }
         static void CharacterSave([FromSource]CitizenFX.Core.Player player, string characterData)
@@ -39,13 +39,15 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static async void CharacterRoleCheck([FromSource]CitizenFX.Core.Player player)
+        static public async void CharacterRoleCheck([FromSource]CitizenFX.Core.Player player)
         {
             try
             {
                 if (!SessionManager.SessionExists(player.Handle)) return;
 
                 Session session = SessionManager.PlayerList[player.Handle];
+
+                session.UpdateLastDonationCheck();
 
                 if (session.IsStaff)
                 {

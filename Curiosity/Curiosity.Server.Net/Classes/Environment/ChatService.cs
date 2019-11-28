@@ -69,9 +69,9 @@ namespace Curiosity.Server.net.Classes.Environment
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
             string encoded = Encode.StringToBase64(json);
 
-            Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
-
             Server.TriggerEvent("curiosity:Server:Discord:ChatMessage", player.Name, message);
+
+            Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
         }
     }
 }

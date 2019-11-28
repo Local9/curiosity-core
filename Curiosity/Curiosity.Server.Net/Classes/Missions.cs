@@ -21,6 +21,7 @@ namespace Curiosity.Server.net.Classes
         static Dictionary<string, int> activeMissions = new Dictionary<string, int>();
 
         static Dictionary<string, DateTime> timestampLastTrafficStop = new Dictionary<string, DateTime>();
+        static Dictionary<string, DateTime> timestampLastArrest = new Dictionary<string, DateTime>();
 
         public static void Init()
         {
@@ -32,11 +33,69 @@ namespace Curiosity.Server.net.Classes
             API.RegisterCommand("mission", new Action<int, List<object>, string>(SendMission), false);
 
             server.RegisterEventHandler("curiosity:Server:Missions:TrafficStop", new Action<CitizenFX.Core.Player, string>(OnTrafficStop));
+            server.RegisterEventHandler("curiosity:Server:Missions:ArrestedPed", new Action<CitizenFX.Core.Player, string>(OnArrestedPed));
 
             server.RegisterEventHandler("curiosity:Server:Missions:KilledPed", new Action<CitizenFX.Core.Player, string>(OnKilledPed));
             server.RegisterEventHandler("curiosity:Server:Missions:CompletedMission", new Action<CitizenFX.Core.Player, bool>(OnCompletedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:StartedMission", new Action<CitizenFX.Core.Player, int>(OnStartedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:EndMission", new Action<CitizenFX.Core.Player>(OnEndMission));
+        }
+
+        static void OnArrestedPed([FromSource]CitizenFX.Core.Player player, string encodedData)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            ArrestedPed arrestedPed = JsonConvert.DeserializeObject<ArrestedPed>(Encode.Base64ToString(encodedData));
+
+            if (timestampLastArrest.ContainsKey(player.Handle))
+            {
+                DateTime dateTimeOfLastTrafficStop = timestampLastTrafficStop[player.Handle];
+                double secondsSinceLastArrest = (DateTime.Now - dateTimeOfLastTrafficStop).TotalSeconds;
+                if (secondsSinceLastArrest < 10)
+                {
+                    session.IsCheater = true;
+                    session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
+                    return;
+                }
+            }
+
+            float experienceMultiplier = 1.0f; // Base value
+            float moneyMultiplier = 1.0f; // Base value
+
+            if (arrestedPed.IsCarryingIllegalItems)
+            {
+                experienceMultiplier = 1.1f;
+                moneyMultiplier = 1.2f;
+            }
+
+            if (arrestedPed.IsDrugged || arrestedPed.IsDrunk)
+            {
+                experienceMultiplier = 1.25f;
+                moneyMultiplier = 1.5f;
+            }
+
+            if (arrestedPed.IsDrivingStolenCar)
+            {
+                experienceMultiplier = 2f;
+                moneyMultiplier = 3f;
+            }
+
+            if (!arrestedPed.IsAllowedToBeArrested)
+            {
+                experienceMultiplier = 0.25f;
+                moneyMultiplier = 0.1f;
+            }
+
+            int experienceEarn = (int)(random.Next(1, 10) * experienceMultiplier);
+            int knowledgeEarn = (int)(random.Next(1, 4) * experienceMultiplier);
+            int moneyEarn = (int)(random.Next(25, 100) * moneyMultiplier);
+
+            Skills.IncreaseSkill(player.Handle, "policexp", experienceEarn);
+            Skills.IncreaseSkill(player.Handle, "knowledge", knowledgeEarn);
+            Skills.IncreaseSkill(player.Handle, "policerep", 1);
+            Bank.IncreaseCashInternally(player.Handle, moneyEarn);
+            timestampLastTrafficStop[player.Handle] = DateTime.Now;
         }
 
         static void OnTrafficStop([FromSource]CitizenFX.Core.Player player, string encodedData)
@@ -47,8 +106,8 @@ namespace Curiosity.Server.net.Classes
             if (timestampLastTrafficStop.ContainsKey(player.Handle))
             {
                 DateTime dateTimeOfLastTrafficStop = timestampLastTrafficStop[player.Handle];
-                double minsSinceLast = (DateTime.Now - dateTimeOfLastTrafficStop).TotalSeconds;
-                if (minsSinceLast < 59)
+                double secondsSinceLastTrafficStop = (DateTime.Now - dateTimeOfLastTrafficStop).TotalSeconds;
+                if (secondsSinceLastTrafficStop < 59)
                 {
                     session.IsCheater = true;
                     session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");

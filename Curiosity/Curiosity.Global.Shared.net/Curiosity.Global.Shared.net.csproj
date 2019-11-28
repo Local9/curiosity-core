@@ -49,7 +49,9 @@
     <Compile Include="Data\MissionDataLists.cs" />
     <Compile Include="Data\Permissions.cs" />
     <Compile Include="Encode.cs" />
+    <Compile Include="Entity\ArrestedPed.cs" />
     <Compile Include="Entity\ChatMessage.cs" />
+    <Compile Include="Entity\GlobalPlayerList.cs" />
     <Compile Include="Entity\Mission.cs" />
     <Compile Include="Entity\GamePed\PedObject.cs" />
     <Compile Include="Entity\GenericData.cs" />

@@ -232,14 +232,24 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         }
 
         // Secure In Players Vehicle
-        static void InteractionPutInVehicle()
+        static public void InteractionPutInVehicle()
         {
-            
+            Ped ped = ArrestedPed ?? Game.PlayerPed.GetPedInFront();
+            if (ped.Position.Distance(Game.PlayerPed.Position) > 3) return;
+
+            if (ped.IsInVehicle()) return;
+
+            ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.Passenger);
         }
         // Remove from Players Vehicle
-        static void InteractionRemoveFromVehicle()
+        static public void InteractionRemoveFromVehicle()
         {
+            Ped ped = ArrestedPed ?? Game.PlayerPed.GetPedInFront();
+            if (ped.Position.Distance(Game.PlayerPed.Position) > 3) return;
 
+            if (!ped.IsInVehicle()) return;
+
+            ped.Task.LeaveVehicle();
         }
 
         // Grab Ped

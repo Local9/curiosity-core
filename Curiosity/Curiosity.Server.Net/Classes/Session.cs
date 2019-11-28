@@ -49,6 +49,13 @@ namespace Curiosity.Server.net.Classes
 
         public Job job { get; private set; }
 
+        public DateTime LastDonationCheck { get; private set; }
+
+        internal void UpdateLastDonationCheck()
+        {
+            this.LastDonationCheck = DateTime.Now;
+        }
+
         public Session(CitizenFX.Core.Player player)
         {
             Mutex = new SemaphoreSlim(1, 1);

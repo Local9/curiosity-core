@@ -11,11 +11,20 @@ namespace Curiosity.Server.net.Classes
 {
     static class SessionManager
     {
+        static Server server = Server.GetInstance();
+
         public static Dictionary<string, Session> PlayerList = new Dictionary<string, Session>();
 
         public static void Init()
         {
-            Server.GetInstance().RegisterTickHandler(UpdateSessions);
+            server.RegisterTickHandler(UpdateSessions);
+
+            server.RegisterEventHandler("curiosity:Server:SessionManager:GetSessions", new Action(OnGetSessions));
+        }
+
+        static void OnGetSessions()
+        {
+
         }
 
         static async Task UpdateSessions()

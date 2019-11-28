@@ -35,9 +35,6 @@
     <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\CitizenFX.Core.Server.1.0.1715\lib\net45\CitizenFX.Core.Server.dll</HintPath>
     </Reference>
-    <Reference Include="DiscordWebhook.net">
-      <HintPath>..\..\..\Local FiveM\_dependencies\server\DiscordWebhook.net.dll</HintPath>
-    </Reference>
     <Reference Include="GHMattiMySQL.net">
       <HintPath>..\_Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll</HintPath>
       <Private>True</Private>
@@ -45,14 +42,17 @@
     <Reference Include="MySqlConnector.net">
       <HintPath>..\_Dependancies\server\GHMattiMySQL\MySqlConnector.net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.net">
-      <HintPath>..\_Dependancies\Newtonsoft.Json.net.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers.net">
       <HintPath>..\_Dependancies\server\GHMattiMySQL\System.Buffers.net.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Threading.Tasks.Extensions.net">
       <HintPath>..\_Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll</HintPath>
     </Reference>
@@ -110,6 +110,7 @@
     <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="settings.xml.example">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

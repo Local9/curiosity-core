@@ -1170,6 +1170,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
         }
 
+        // Hand in
+
+
         static public void ShowRegistration()
         {
             // \n~w~Reg. Year: ~y~{VehicleRegisterationYear}

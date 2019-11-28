@@ -16,8 +16,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
         static MenuItem mItemBreathalyzer = new MenuItem("Breathalyzer");
         static MenuItem mItemDrugTest = new MenuItem("Drug test");
         static MenuItem mItemSearch = new MenuItem("Search");
-        static MenuItem mItemLeaveVehicle = new MenuItem("Leave Vehicle");
-        static MenuItem mItemReturnToVehicle = new MenuItem("Return to Vehicle");
+
+        static MenuItem mItemLeaveVehicle = new MenuItem("Leave Vehicle") { Description = "This will request the suspect to leave their own vehicle." };
+        static MenuItem mItemReturnToVehicle = new MenuItem("Return to Vehicle") { Description = "This will request the suspect to get back in their own vehicle." };
+
+        static MenuItem mItemPutInOwnCar = new MenuItem("Put in own Vehicle") { Description = "This will request the suspect to enter your own vehicle." };
+        static MenuItem mItemRemoveFromOwnCar = new MenuItem("Remove from own Vehicle") { Description = "This will request the suspect to leave your own vehicle." };
+
         static MenuItem mItemGoBack = new MenuItem("Go Back");
 
         static public void SetupMenu()
@@ -80,6 +85,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
                 }
             }
 
+            if (menuItem == mItemPutInOwnCar)
+            {
+                ArrestPed.InteractionPutInVehicle();
+            }
+
+            if (menuItem == mItemRemoveFromOwnCar)
+            {
+                ArrestPed.InteractionRemoveFromVehicle();
+            }
+
             if (menuItem == mItemGoBack)
             {
                 menu.CloseMenu();
@@ -105,6 +120,21 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
 
             menu.AddMenuItem(mItemLeaveVehicle);
             menu.AddMenuItem(mItemReturnToVehicle);
+
+            if (ArrestPed.IsPedCuffed)
+            {
+                if (!ArrestPed.PedInHandcuffs.IsInVehicle())
+                    menu.AddMenuItem(mItemPutInOwnCar);
+
+                if (ArrestPed.PedInHandcuffs.IsInVehicle())
+                {
+                    if (ArrestPed.PedInHandcuffs.CurrentVehicle == Client.CurrentVehicle)
+                    {
+                        menu.AddMenuItem(mItemLeaveVehicle);
+                    }
+                }
+                    
+            }
 
             menu.AddMenuItem(mItemGoBack);
 

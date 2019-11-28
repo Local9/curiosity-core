@@ -29,6 +29,8 @@ namespace Curiosity.Server.net.Classes.Environment
             server.RegisterEventHandler("curiosity:Server:Command:SavePosition", new Action<CitizenFX.Core.Player, string, float, float, float, float>(SavePosition));
             server.RegisterEventHandler("curiosity:Server:Command:NukeArea", new Action<CitizenFX.Core.Player, float, float, float>(OnNuke));
 
+            API.RegisterCommand("donator", new Action<int, List<object>, string>(OnDonationCheck), false);
+
             API.RegisterCommand("chase", new Action<int, List<object>, string>(OnChaser), false);
             API.RegisterCommand("announce", new Action<int, List<object>, string>(Announcement), false);
             API.RegisterCommand("spawn", new Action<int, List<object>, string>(Spawn), false);
@@ -57,6 +59,22 @@ namespace Curiosity.Server.net.Classes.Environment
 
         //    Server.TriggerClientEvent("curiosity:Client:Command:OnFire", session.NetId);
         //}
+
+        static void OnDonationCheck(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if ((DateTime.Now - session.LastDonationCheck).TotalMinutes < 30)
+            {
+                Helpers.Notifications.Advanced($"Donation Check", $"You tried checking in the last 30 mins, please try again later.", 2, session.Player);
+            }
+            else
+            {
+                Classes.Character.CharacterRoleCheck(session.Player);
+            }
+        }
 
         static void SpawnChimp(int playerHandle, List<object> arguments, string raw)
         {
