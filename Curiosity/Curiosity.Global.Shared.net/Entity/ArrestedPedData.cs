@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Global.Shared.net.Entity
 {
-    public class ArrestedPed
+    public class ArrestedPedData
     {
         public bool IsAllowedToBeArrested;
         public bool IsDrunk;

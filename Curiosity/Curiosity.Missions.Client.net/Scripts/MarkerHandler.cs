@@ -67,7 +67,7 @@ namespace Curiosity.Missions.Client.net.Scripts
             return Task.FromResult(0);
         }
 
-        static Marker GetActiveMarker()
+        public static Marker GetActiveMarker()
         {
             try
             {

@@ -17,6 +17,7 @@ using Curiosity.Shared.Client.net.Helpers;
 using Curiosity.Global.Shared.net.Data;
 using Curiosity.Shared.Client.net.Models;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {
@@ -43,8 +44,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             await Client.Delay(100);
             // kill it incase it doubles
-            client.DeregisterTickHandler(OnTask);
-            client.RegisterTickHandler(OnTask);
+            client.DeregisterTickHandler(OnTaskArrestPed);
+            client.RegisterTickHandler(OnTaskArrestPed);
+
+            client.DeregisterTickHandler(OnTaskJailPed);
+            client.RegisterTickHandler(OnTaskJailPed);
 
             await Client.Delay(100);
             SetupJailHouses();
@@ -59,7 +63,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             jailHouseBlips.ForEach(m => BlipHandler.RemoveBlip(m.BlipId));
 
-            client.DeregisterTickHandler(OnTask);
+            client.DeregisterTickHandler(OnTaskArrestPed);
+            client.DeregisterTickHandler(OnTaskJailPed);
             Screen.ShowNotification("~b~Arrests~s~: ~r~Disabled");
         }
 
@@ -95,7 +100,46 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
         }
 
-        static async Task OnTask()
+        static async Task OnTaskJailPed()
+        {
+            await Task.FromResult(0);
+            Marker marker = MarkerHandler.GetActiveMarker();
+            if (marker == null)
+            {
+                await Client.Delay(500);
+            }
+            else
+            {
+                if (Game.IsControlJustPressed(0, Control.Context))
+                {
+                    if (ArrestedPed == null)
+                    {
+                        Screen.ShowNotification($"~o~You have no one to arrest, don't waste my time.");
+                        return;
+                    }
+
+                    if (!IsPedCuffed)
+                    {
+                        List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", "~o~Handcuff them you idoit!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", "Cuff them, fecking muppet!" };
+                        Screen.ShowNotification(vs[Client.Random.Next(vs.Count)]);
+                        return;
+                    }
+
+
+                    ArrestedPedData arrestedPedData = new ArrestedPedData();
+                    arrestedPedData.IsAllowedToBeArrested = TrafficStop.CanDriverBeArrested;
+
+                    arrestedPedData.IsDrunk = TrafficStop.IsDriverUnderTheInfluence;
+                    arrestedPedData.IsDrugged = TrafficStop.IsDriverUnderTheInfluenceOfDrugs;
+                    arrestedPedData.IsDrivingStolenCar = TrafficStop.HasVehicleBeenStolen;
+                    arrestedPedData.IsCarryingIllegalItems = TrafficStop.IsCarryingIllegalItems;
+
+
+                }
+            }
+        }
+
+        static async Task OnTaskArrestPed()
         {
             await Task.FromResult(0);
             if (Game.IsControlJustPressed(0, Control.Context))

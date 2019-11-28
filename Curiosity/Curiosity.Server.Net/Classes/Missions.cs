@@ -46,7 +46,7 @@ namespace Curiosity.Server.net.Classes
             if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
             Session session = SessionManager.PlayerList[player.Handle];
 
-            ArrestedPed arrestedPed = JsonConvert.DeserializeObject<ArrestedPed>(Encode.Base64ToString(encodedData));
+            ArrestedPedData arrestedPed = JsonConvert.DeserializeObject<ArrestedPedData>(Encode.Base64ToString(encodedData));
 
             if (timestampLastArrest.ContainsKey(player.Handle))
             {

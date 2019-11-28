@@ -36,15 +36,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static bool IsVehicleStopped = false;
         static bool IsCooldownActive = false;
         // states for menu
-        static bool CanSearchVehicle = false;
         static public bool IsDriverUnderTheInfluence = false;
+        static public bool IsDriverUnderTheInfluenceOfDrugs = false;
+        static public bool HasVehicleBeenStolen = false;
+        static public bool CanDriverBeArrested = false;
+        static public bool IsCarryingIllegalItems = false;
+
+        static public bool VehicleDriverReverseWithPlayer = true;
+
+        static bool CanSearchVehicle = false;
         static bool HasDriverBeenAskedForID = false;
         static bool IsVehicleDriverMimicking = false;
         static bool IsVehicleDriverFollowing = false;
         static bool IsDriverFollowing = false;
-        static public bool HasVehicleBeenStolen = false;
-        static bool CanDriverBeArrested = false;
-        static public bool VehicleDriverReverseWithPlayer = true;
         static bool HasRanDriverID = false;
 
         // Ped Data
@@ -436,6 +440,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             HasDriverBeenAskedForID = false;
             IsDriverUnderTheInfluence = false;
+            IsDriverUnderTheInfluenceOfDrugs = false;
+            IsCarryingIllegalItems = false;
+            CanDriverBeArrested = false;
+
             CanSearchVehicle = false;
             HasVehicleBeenStolen = false;
 
@@ -642,6 +650,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (DriverCannabisChance > 85)
             {
                 CanDriverBeArrested = true;
+                IsDriverUnderTheInfluenceOfDrugs = true;
                 NotificationFlagCannabis = "~r~Positive";
                 DriverChanceOfFlee = Client.Random.Next(18, 30);
             }
@@ -649,6 +658,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (DriverCocaineChance > 90)
             {
                 CanDriverBeArrested = true;
+                IsDriverUnderTheInfluenceOfDrugs = true;
                 NotificationFlagCannabis = "~r~Positive";
                 DriverChanceOfFlee = Client.Random.Next(18, 30);
             }
@@ -1149,8 +1159,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             if (hasSearchedSuspect)
             {
+                IsCarryingIllegalItems = false;
                 if (CanSearchVehicle)
                 {
+                    IsCarryingIllegalItems = true;
                     Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Client.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
                     if (IsDriverGoingToFleeChance == 9)
                     {
