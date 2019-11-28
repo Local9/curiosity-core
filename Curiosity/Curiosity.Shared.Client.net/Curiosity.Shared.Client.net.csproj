@@ -82,6 +82,7 @@
     <Compile Include="Helper\WorldExt.cs" />
     <Compile Include="Helper\NativeWrapper.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Models\Marker.cs" />
     <Compile Include="Models\PedHeadOverlay.cs" />
     <Compile Include="Models\PointEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

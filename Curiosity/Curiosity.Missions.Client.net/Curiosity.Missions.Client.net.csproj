@@ -103,6 +103,7 @@
     <Compile Include="Scripts\Mission\CreateStoreMission.cs" />
     <Compile Include="Scripts\PedCreators\ZombieCreator.cs" />
     <Compile Include="Scripts\Police\ArrestPed.cs" />
+    <Compile Include="Scripts\MarkerHandler.cs" />
     <Compile Include="Scripts\Police\MenuHandler\Submenu\TrafficStopInteractions.cs" />
     <Compile Include="Scripts\Police\MenuHandler\Submenu\TrafficStopQuestions.cs" />
     <Compile Include="Scripts\Police\MenuHandler\SuspectMenu.cs" />
@@ -134,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Scripts\Menu\" />
+    <Folder Include="Scripts\Police\Department\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

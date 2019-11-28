@@ -14,6 +14,9 @@ using Curiosity.Missions.Client.net.MissionPedTypes;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
 using Curiosity.Shared.Client.net.Helpers;
+using Curiosity.Global.Shared.net.Data;
+using Curiosity.Shared.Client.net.Models;
+using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {
@@ -27,21 +30,67 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static public bool IsPedCuffed = false;
         static public bool IsPedGrabbed = false;
 
-        public static void Setup()
+        static List<BlipData> jailHouseBlips = new List<BlipData>();
+        static List<Marker> jailHouseMarkers = new List<Marker>();
+
+        public static async void Setup()
         {
+            MarkerHandler.Init();
+            MarkerHandler.HideAllMarkers = false;
+            
+            await Client.Delay(100);
             Static.Relationships.SetupRelationShips();
+
+            await Client.Delay(100);
             // kill it incase it doubles
             client.DeregisterTickHandler(OnTask);
             client.RegisterTickHandler(OnTask);
 
-            Screen.ShowNotification("~b~Arrests~s~: ~g~Enabled");
+            await Client.Delay(100);
+            SetupJailHouses();
+
+            Screen.ShowNotification($"~b~Arrests~s~: ~g~Enabled");
         }
 
         public static void Dispose()
         {
-            client.DeregisterTickHandler(OnTask);
+            MarkerHandler.HideAllMarkers = true;
+            MarkerHandler.Dispose();
 
+            client.DeregisterTickHandler(OnTask);
             Screen.ShowNotification("~b~Arrests~s~: ~r~Disabled");
+        }
+
+        static async void SetupJailHouses()
+        {
+            if (jailHouseMarkers.Count > 0)
+                jailHouseMarkers.Clear();
+
+            System.Drawing.Color c = System.Drawing.Color.FromArgb(255, 65, 105, 225);
+
+            jailHouseMarkers.Add(new Marker("~b~Bolingbroke Penitentiary\n~w~Jail Arrested Ped", new Vector3(1690.975f, 2592.581f, 44.71336f), c));
+            jailHouseMarkers.Add(new Marker("~b~Paleto Bay PD\n~w~Jail Arrested Ped", new Vector3(-449.3008f, 6012.623f, 30.71638f), c));
+            jailHouseMarkers.Add(new Marker("~b~Vespucci PD\n~w~Jail Arrested Ped", new Vector3(-1113.08f, -848.6609f, 12.4414f), c));
+            jailHouseMarkers.Add(new Marker("~b~Eastbourn PD\n~w~Jail Arrested Ped", new Vector3(-583.1123f, -146.7518f, 38.23016f), c));
+            jailHouseMarkers.Add(new Marker("~b~La Mesa\n~w~Jail Arrested Ped", new Vector3(830.4728f, -1310.793f, 27.13673f), c));
+            jailHouseMarkers.Add(new Marker("~b~Rancho\n~w~Jail Arrested Ped", new Vector3(370.3031f, -1608.2098f, 28.2919f), c));
+            jailHouseMarkers.Add(new Marker("~b~LSPD\n~w~Jail Arrested Ped", new Vector3(458.9393f, -1001.6194f, 23.9148f), c));
+            jailHouseMarkers.Add(new Marker("~b~LSPD\n~w~Jail Arrested Ped", new Vector3(458.9213f, -997.9607f, 23.9148f), c));
+            jailHouseMarkers.Add(new Marker("~b~LSPD\n~w~Jail Arrested Ped", new Vector3(460.7617f, -994.2283f, 23.9148f), c));
+
+            await Client.Delay(100);
+
+            foreach(Marker m in jailHouseMarkers)
+            {
+                int id = jailHouseBlips.Count + 1;
+                jailHouseBlips.Add(new BlipData(id, "Jail", m.Position, BlipSprite.Handcuffs, BlipCategory.Unknown, BlipColor.Blue, false));
+                MarkerHandler.MarkersAll.Add(m);
+            }
+
+            foreach (BlipData b in jailHouseBlips)
+            {
+                BlipHandler.AddBlip(b);
+            }
         }
 
         static async Task OnTask()
