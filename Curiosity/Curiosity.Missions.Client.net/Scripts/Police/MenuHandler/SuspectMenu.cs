@@ -73,6 +73,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             {
                 TrafficStop.InteractionRelease();
                 menu.CloseMenu();
+                client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
             }
 
             if (menuItem == mItemTowService)
@@ -112,6 +113,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             {
                 TrafficStop.InteractionIssueWarning();
                 menu.CloseMenu();
+                client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
             }
 
             if (menuItem == mItemHandcuff)
