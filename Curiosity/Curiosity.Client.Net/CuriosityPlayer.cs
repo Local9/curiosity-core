@@ -275,6 +275,9 @@ namespace Curiosity.Client.net
             int randomRangeY = rnd.Next(5, 10);
 
             Vector3 spawnPosition = new Vector3(x + randomRangeX, y + randomRangeY, z);
+            int nodeId = 0;
+
+            API.GetRandomVehicleNode(x + randomRangeX, y + randomRangeY, z, 200f, false, false, false, ref spawnPosition, ref nodeId);
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
