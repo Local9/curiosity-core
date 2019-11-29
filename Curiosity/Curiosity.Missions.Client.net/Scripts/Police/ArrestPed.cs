@@ -153,9 +153,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     if (ArrestedPed != null)
                     {
                         ArrestedPed.IsPositionFrozen = false;
-                        ArrestedPed.SetConfigFlag(292, false);
-                        ArrestedPed.Task.LeaveVehicle();
-                        ArrestedPed.Fade(false);
+                        if (ArrestedPed.IsInVehicle())
+                        {
+                            ArrestedPed.SetConfigFlag(292, false);
+                            ArrestedPed.Task.LeaveVehicle();
+                        }
+                        ArrestedPed.Fade(true);
                         await Client.Delay(5000);
                         ArrestedPed.Delete();
                     }
@@ -163,9 +166,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     if (TrafficStop.StoppedDriver != null)
                     {
                         TrafficStop.StoppedDriver.IsPositionFrozen = false;
-                        TrafficStop.StoppedDriver.SetConfigFlag(292, false);
-                        TrafficStop.StoppedDriver.Task.LeaveVehicle();
-                        TrafficStop.StoppedDriver.Fade(false);
+                        if (TrafficStop.StoppedDriver.IsInVehicle())
+                        {
+                            TrafficStop.StoppedDriver.SetConfigFlag(292, false);
+                            TrafficStop.StoppedDriver.Task.LeaveVehicle();
+                        }
+                        TrafficStop.StoppedDriver.Fade(true);
                         await Client.Delay(5000);
                         TrafficStop.StoppedDriver.Delete();
                     }
