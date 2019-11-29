@@ -108,7 +108,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
             if (TrafficStop.StoppedDriver.IsInVehicle() && TrafficStop.StoppedDriver.CurrentVehicle == TrafficStop.TargetVehicle)
                 menu.AddMenuItem(mItemLeaveVehicle);
 
-            if (!TrafficStop.StoppedDriver.IsInVehicle() && TrafficStop.StoppedDriver.CurrentVehicle == TrafficStop.TargetVehicle)
+            if (!TrafficStop.StoppedDriver.IsInVehicle())
                 menu.AddMenuItem(mItemReturnToVehicle);
 
             if (ArrestPed.IsPedCuffed)
