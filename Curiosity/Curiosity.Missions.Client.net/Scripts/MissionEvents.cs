@@ -22,7 +22,7 @@ namespace Curiosity.Missions.Client.net.Scripts
         static Client client = Client.GetInstance();
 
         static long GameTime;
-        static bool HasAcceptedCallout = false;
+        static public bool HasAcceptedCallout = false;
 
         public static void Init()
         {

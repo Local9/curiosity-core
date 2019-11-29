@@ -186,7 +186,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static async Task OnTaskArrestPed()
         {
             await Task.FromResult(0);
-            if (Game.PlayerPed.IsAiming)
+            if (Game.PlayerPed.IsAiming && !MissionEvents.HasAcceptedCallout && !Game.PlayerPed.IsInVehicle())
             {
                 int entityHandle = 0;
                 if (API.GetEntityPlayerIsFreeAimingAt(Game.Player.Handle, ref entityHandle))
