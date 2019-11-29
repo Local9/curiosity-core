@@ -127,7 +127,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         return;
                     }
 
-
                     ArrestedPedData arrestedPedData = new ArrestedPedData();
                     arrestedPedData.IsAllowedToBeArrested = TrafficStop.CanDriverBeArrested;
 

@@ -316,12 +316,13 @@ namespace Curiosity.Client.net.Classes.Actions
                 return;
             }
 
-            API.DisableAllControlActions(0);
+            Game.PlayerPed.IsPositionFrozen = true;
+
             Screen.Fading.FadeOut(1000);
             while(Screen.Fading.IsFadingOut)
             {
                 await Client.Delay(100);
-            }
+            }            
 
             Game.PlayerPed.Position = new Vector3(17.86131f, 638.567f, 210.5947f);
             Game.PlayerPed.Heading = 192.4753f;
@@ -331,11 +332,13 @@ namespace Curiosity.Client.net.Classes.Actions
             SuckCooldownActive = true;
 
             Screen.Fading.FadeIn(500);
+            
             while (Screen.Fading.IsFadingIn)
             {
                 await Client.Delay(100);
             }
-            API.EnableAllControlActions(0);
+
+            Game.PlayerPed.IsPositionFrozen = false;
 
             while ((API.GetGameTimer() - gametimer) < 30000)
             {
