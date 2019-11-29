@@ -39,7 +39,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static public bool HasVehicleBeenStolen = false;
         static public bool CanDriverBeArrested = false;
         static public bool IsCarryingIllegalItems = false;
-
+        static public bool HasSearchedSuspect = false;
+        static bool IsInteractionActive = false;
         static public bool VehicleDriverReverseWithPlayer = true;
 
         static bool CanSearchVehicle = false;
@@ -434,6 +435,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             IsVehicleStopped = false;
             IsVehicleFleeing = false;
+            HasSearchedSuspect = false;
 
             IsConductingPullover = false;
 
@@ -1061,6 +1063,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static public async void InteractionBreathalyzer()
         {
+            if (IsInteractionActive) return;
+            IsInteractionActive = true;
+
             // check ped is in front of the player
             Ped pedInFront = Game.PlayerPed.GetPedInFront();
             Vehicle vehicleInFront = Game.PlayerPed.GetVehicleInFront();
@@ -1104,10 +1109,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
             }
+            IsInteractionActive = false;
         }
 
         static public async void InteractionDrugTest()
         {
+            if (IsInteractionActive) return;
+            IsInteractionActive = true;
             // check ped is in front of the player
             Ped pedInFront = Game.PlayerPed.GetPedInFront();
             Vehicle vehicleInFront = Game.PlayerPed.GetVehicleInFront();
@@ -1145,14 +1153,21 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
             }
+            IsInteractionActive = false;
         }
 
         static public async void InteractionSearching()
         {
+            if (IsInteractionActive) return;
+            IsInteractionActive = true;
+
             // check ped is in front of the player
             Ped pedInFront = Game.PlayerPed.GetPedInFront();
             Vehicle vehicleInFront = Game.PlayerPed.GetVehicleInFront();
-            bool hasSearchedSuspect = false;
+            HasSearchedSuspect = false;
+
+            if (HasSearchedSuspect) return;
+
             if (pedInFront != null)
             {
                 if (pedInFront.Exists() && pedInFront.IsAlive)
@@ -1160,7 +1175,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     AnimationSearch();
                     // TODO: Add a method for randomly arrested peds also
                     Helpers.ShowSimpleNotification("~b~Searching~w~ the subject...");
-                    hasSearchedSuspect = true;
+                    HasSearchedSuspect = true;
                 }
             }
 
@@ -1170,7 +1185,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 {
                     AnimationSearch();
                     Helpers.ShowSimpleNotification("~b~Searching~w~ the vehicle...");
-                    hasSearchedSuspect = true;
+                    HasSearchedSuspect = true;
                     VehicleDoor[] vehicleDoors = TargetVehicle.Doors.GetAll();
                     foreach(VehicleDoor vehicleDoor in vehicleDoors)
                     {
@@ -1184,7 +1199,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
             }
 
-            if (hasSearchedSuspect)
+            if (HasSearchedSuspect)
             {
                 IsCarryingIllegalItems = false;
                 if (CanSearchVehicle)
@@ -1209,6 +1224,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 Helpers.ShowSimpleNotification($"~r~Must be facing the suspect or vehicle.");
             }
+            IsInteractionActive = false;
         }
 
         // Hand in

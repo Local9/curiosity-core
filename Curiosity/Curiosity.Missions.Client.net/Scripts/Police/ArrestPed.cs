@@ -27,8 +27,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
     {
         static Client client = Client.GetInstance();
         
-        static public Ped ArrestedPed;
-        static public Ped PedInHandcuffs;
+        static public Ped ArrestedPed = null;
+        static public Ped PedInHandcuffs = null;
         static public bool IsPedBeingArrested = false;
         static public bool IsPedCuffed = false;
         static public bool IsPedGrabbed = false;
@@ -207,7 +207,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 if (ArrestedPed == null) return;
                 if (ArrestedPed.IsDead) return;
 
-                if (ArrestedPed.Position.Distance(Game.PlayerPed.Position) > 20) return;
+                if (ArrestedPed.Position.Distance(Game.PlayerPed.Position) > 50) return;
 
                 if (ArrestedPed != TrafficStop.StoppedDriver)
                 {
