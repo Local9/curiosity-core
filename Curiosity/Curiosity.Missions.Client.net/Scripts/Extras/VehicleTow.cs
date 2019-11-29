@@ -13,7 +13,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
         static public void Init()
         {
-            // RegisterCommand("tow", new Action(RequestService), false);
+            RegisterCommand("tow", new Action(RequestService), false);
         }
 
         // STATE
@@ -44,6 +44,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 int spawnDistance = Client.Random.Next(300, 800);
 
                 VehicleToRecover = Game.PlayerPed.GetVehicleInFront();
+
+                if (Police.TrafficStop.TargetVehicle != null && VehicleToRecover == null)
+                    VehicleToRecover = Police.TrafficStop.TargetVehicle;
 
                 if (VehicleToRecover != null)
                 {

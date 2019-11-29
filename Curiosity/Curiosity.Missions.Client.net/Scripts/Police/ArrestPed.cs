@@ -335,14 +335,34 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         }
 
         // Secure In Players Vehicle
-        static public void InteractionPutInVehicle()
+        static public async void InteractionPutInVehicle()
         {
             Ped ped = ArrestedPed ?? Game.PlayerPed.GetPedInFront();
             if (ped.Position.Distance(Game.PlayerPed.Position) > 3) return;
 
             if (ped.IsInVehicle()) return;
 
-            ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.Passenger);
+            if (Client.CurrentVehicle.PassengerCount >= 2)
+            {
+                Screen.ShowNotification("~r~Too many passengers.");
+                return;
+            }
+
+            if (Client.CurrentVehicle.PassengerCount == 1)
+            {
+                ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.RightRear);
+            }
+            else
+            {
+                ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.LeftRear);
+            }
+
+            while(!ped.IsInVehicle())
+            {
+                await Client.Delay(0);
+            }
+            ped.SetConfigFlag(292, true);
+            
         }
         // Remove from Players Vehicle
         static public void InteractionRemoveFromVehicle()
@@ -353,6 +373,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (!ped.IsInVehicle()) return;
 
             ped.Task.LeaveVehicle();
+            ped.SetConfigFlag(292, false);
         }
 
         // Grab Ped

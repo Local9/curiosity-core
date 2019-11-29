@@ -231,6 +231,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     return;
                 } // Check every 500ms, don't spam the client
 
+                if (TargetVehicle.Driver == null)
+                {
+                    await Client.Delay(500);
+                    return;
+                }
+
                 if (IsVehicleStopped && TargetVehicle.IsEngineRunning && !IsVehicleDriverMimicking)
                 {
                     TargetVehicle.IsEngineRunning = false;
@@ -425,6 +431,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 StoppedDriver.IsPersistent = false;
                 API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, false);
+                API.SetEnableHandcuffs(StoppedDriver.Handle, false);
             }
 
             IsVehicleStopped = false;
@@ -507,8 +514,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             CanSearchVehicle = false;
             HasVehicleBeenStolen = false;
-
-            client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
         }
 
         static async void Pullover(Vehicle stoppedVehicle)

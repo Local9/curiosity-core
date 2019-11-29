@@ -11,7 +11,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
         static public void Init()
         {
-            // RegisterCommand("ems", new Action(RequestService), false);
+            RegisterCommand("ems", new Action(RequestService), false);
         }
 
         // STATE

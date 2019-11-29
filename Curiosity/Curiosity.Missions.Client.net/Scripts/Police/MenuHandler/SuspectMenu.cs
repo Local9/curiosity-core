@@ -37,6 +37,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
         static MenuListItem mItemIssueTicket = new MenuListItem("Issue Ticket", CitationPrices, 0) { Description = "~w~Press ~r~ENTER ~w~to issue the ~b~Citation~w~." };
         static MenuItem mItemIssueWarning = new MenuItem("Issue Warning");
 
+        static MenuItem mItemCloseMenu = new MenuItem("Close Menu");
+
         static public void Open(MenuType menuType)
         {
             menuTypeToOpen = menuType;
@@ -130,6 +132,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             {
                 ArrestPed.InteractionGrab();
             }
+
+            if (menuItem == mItemCloseMenu)
+            {
+                MenuController.CloseAllMenus();
+            }
         }
 
         private static void Menu_OnMenuOpen(Menu menu)
@@ -164,6 +171,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                 Submenu.TrafficStopInteractions.SetupMenu();
                 menu.AddMenuItem(mItemIssueWarning);
                 menu.AddMenuItem(mItemRelease);
+                menu.AddMenuItem(mItemCloseMenu);
             }
 
             if (menuTypeToOpen == MenuType.Vehicle)
@@ -195,43 +203,57 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                 // If vehicle is empty and ped is dead or arrested, allow tow
                 // else interact with the ped
 
-                if (TrafficStop.StoppedDriver.IsDead)
+                if (TrafficStop.TargetVehicle.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen && (TrafficStop.StoppedDriver.IsDead || TrafficStop.TargetVehicle.IsDead))
                 {
-                    if (TrafficStop.TargetVehicle.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen)
-                    {
-                        Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to open ~b~vehicle interaction menu");
 
-                        if (Game.IsControlJustPressed(0, Control.Pickup))
-                        {
-                            Open(MenuType.Vehicle);
-                        }
-                    }
-                    else if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen)
-                    {
-                        Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to open ~b~ped interaction menu");
+                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to open ~b~vehicle interaction menu");
 
-                        if (Game.IsControlJustPressed(0, Control.Pickup))
-                        {
-                            Open(MenuType.DeadPed);
-                        }
+                    if (Game.IsControlJustPressed(0, Control.Context))
+                    {
+                        Open(MenuType.Vehicle);
                     }
                 }
-                else
+                
+                if (TrafficStop.TargetVehicle.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen && ArrestPed.IsPedCuffed && TrafficStop.StoppedDriver.CurrentVehicle == Client.CurrentVehicle)
                 {
-                    if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen && !Game.PlayerPed.IsInVehicle())
-                    {
-                        Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to talk with the ~b~Driver");
+                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to open ~b~vehicle interaction menu");
 
-                        if (Game.IsControlJustPressed(0, Control.Pickup))
-                        {
-                            Open(MenuType.Normal);
-                        }
-                    }
-                    else if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) >= 4 && IsMenuOpen)
+                    if (Game.IsControlJustPressed(0, Control.Context))
                     {
-                        TrafficStopMenu.CloseMenu();
-                        IsMenuOpen = false;
+                        Open(MenuType.Vehicle);
                     }
+                }
+                
+                if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen && TrafficStop.StoppedDriver.IsDead)
+                {
+                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to open ~b~ped interaction menu");
+
+                    if (Game.IsControlJustPressed(0, Control.Context))
+                    {
+                        Open(MenuType.DeadPed);
+                    }
+                }
+                
+                if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen && !Game.PlayerPed.IsInVehicle())
+                {
+                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to talk with the ~b~Driver");
+
+                    if (Game.IsControlJustPressed(0, Control.Context))
+                    {
+                        Open(MenuType.Normal);
+                    }
+                }
+                
+                if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) >= 4 && IsMenuOpen)
+                {
+                    TrafficStopMenu.CloseMenu();
+                    IsMenuOpen = false;
+                }
+
+                if (TrafficStop.StoppedDriver == null)
+                {
+                    IsMenuOpen = false;
+                    client.DeregisterTickHandler(OnMenuTask);
                 }
             }
             catch (Exception ex)
