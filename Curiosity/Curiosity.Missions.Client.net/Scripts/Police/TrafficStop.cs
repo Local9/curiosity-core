@@ -257,7 +257,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     }
                 }
 
-                if (!IsVehicleStopped && Game.PlayerPed.IsInVehicle() && IsVehicleDriverMimicking && TargetVehicle.Driver != null && !ArrestPed.IsPedCuffed)
+                if (!IsVehicleStopped && Game.PlayerPed.IsInVehicle() && IsVehicleDriverMimicking)
                 {
                     Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to ~b~stop moving the Vehicle");
                     
