@@ -115,6 +115,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                         await Client.Delay(100);
                         float currentDistance = TowVehicle.Position.Distance(VehicleToRecover.Position);
 
+                        if (VehicleToRecover == null)
+                            Reset();
+
                         if (currentDistance <= 180f && !isServiceClose)
                         {
                             Wrappers.Helpers.ShowNotification("City Impound", "Closing on your position", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
@@ -138,6 +141,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
                             while (isTowDriverRunningToVehicle)
                             {
+                                if (VehicleToRecover == null)
+                                    Reset();
+
                                 await Client.Delay(100);
                                 currentDistance = TowDriver.Position.Distance(VehicleToRecover.Position);
 
@@ -205,7 +211,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
             Wrappers.Helpers.ShowNotification("City Impound", "I'm enroute", $"~b~ETA: ~w~{etaMessage}", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
         }
 
-        static async void Reset(bool validCleanup = false)
+        static public async void Reset(bool validCleanup = false)
         {
             if (VehicleToRecover != null)
             {

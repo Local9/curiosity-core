@@ -212,6 +212,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                         if (Game.IsControlJustPressed(0, Control.Context))
                         {
                             Open(MenuType.Vehicle);
+                            await Client.Delay(100);
                         }
                     }
 
@@ -222,6 +223,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                         if (Game.IsControlJustPressed(0, Control.Context))
                         {
                             Open(MenuType.Vehicle);
+                            await Client.Delay(100);
                         }
                     }
                 }
@@ -235,6 +237,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                         if (Game.IsControlJustPressed(0, Control.Context))
                         {
                             Open(MenuType.DeadPed);
+                            await Client.Delay(100);
                         }
                     }
 
@@ -245,6 +248,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                         if (Game.IsControlJustPressed(0, Control.Context))
                         {
                             Open(MenuType.Normal);
+                            await Client.Delay(100);
                         }
                     }
 

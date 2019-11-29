@@ -22,7 +22,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static Client client = Client.GetInstance();
         static bool IsScenarioPlaying = false;
 
-        static float DistanceToCheck = 10.0f;
+        static float DistanceToCheck = 15.0f;
 
         static public Vehicle TargetVehicle;
         static public Ped StoppedDriver;

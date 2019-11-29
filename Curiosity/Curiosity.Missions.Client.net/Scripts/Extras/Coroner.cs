@@ -203,7 +203,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
             Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Enroute", $"~b~ETA:~w~ {etaMessage}");
         }
 
-        static async void Reset(bool validCleanup = false)
+        static public async void Reset(bool validCleanup = false)
         {
             if (PedToRecover != null)
             {

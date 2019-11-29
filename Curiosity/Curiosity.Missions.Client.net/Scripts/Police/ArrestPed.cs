@@ -114,7 +114,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to book the ped.");
 
-                if (Game.IsControlJustPressed(0, Control.Context))
+                if (Game.IsControlJustPressed(0, Control.Pickup))
                 {
                     if (ArrestedPed == null)
                     {
@@ -210,9 +210,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                 if (IsPedBeingArrested) return;
 
-                Screen.DisplayHelpTextThisFrame("Press ~INPUT_PICKUP~ to demand the suspect to exit their vehicle.");
+                Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to demand the suspect to exit their vehicle.");
 
-                if (Game.IsControlJustPressed(0, Control.Pickup))
+                if (Game.IsControlJustPressed(0, Control.Cover))
                 {
                     IsPedBeingArrested = true;
 

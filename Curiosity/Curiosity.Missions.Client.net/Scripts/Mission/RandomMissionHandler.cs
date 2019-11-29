@@ -110,6 +110,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 Police.ArrestPed.Dispose();
                 Police.TrafficStop.Dispose();
 
+                Scripts.Extras.VehicleTow.Reset();
+                Scripts.Extras.Coroner.Reset();
+
                 return;
             }
 
