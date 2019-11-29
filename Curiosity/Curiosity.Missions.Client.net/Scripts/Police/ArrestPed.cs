@@ -191,7 +191,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             await Task.FromResult(0);
             if (Game.PlayerPed.IsAiming && !MissionEvents.HasAcceptedCallout && !Game.PlayerPed.IsInVehicle())
             {
-                if (ArrestedPed != null) return;
+                if (IsPedBeingArrested) return;
 
                 int entityHandle = 0;
                 if (API.GetEntityPlayerIsFreeAimingAt(Game.Player.Handle, ref entityHandle))
@@ -214,8 +214,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     Screen.ShowNotification($"Can only arrest suspects from traffic stops currently.");
                     return;
                 }
-
-                if (IsPedBeingArrested) return;
 
                 if (ArrestedPed.IsInVehicle())
                 {
