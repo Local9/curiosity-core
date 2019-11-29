@@ -130,7 +130,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
                 {
                     if (ArrestPed.PedInHandcuffs.CurrentVehicle == Client.CurrentVehicle)
                     {
-                        menu.AddMenuItem(mItemLeaveVehicle);
+                        menu.AddMenuItem(mItemRemoveFromOwnCar);
                     }
                 }
                     
