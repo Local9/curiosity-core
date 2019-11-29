@@ -1095,6 +1095,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 string bac = $"~g~0.{DriverBloodAlcaholLimit}";
                 if (DriverBloodAlcaholLimit >= 8)
                 {
+                    CanDriverBeArrested = true;
                     bac = $"~r~0.{DriverBloodAlcaholLimit}";
                 }
                 Helpers.ShowSimpleNotification($"~b~BAC ~w~Level: {bac}");

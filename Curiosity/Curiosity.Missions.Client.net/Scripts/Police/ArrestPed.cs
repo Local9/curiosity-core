@@ -27,7 +27,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
     {
         static Client client = Client.GetInstance();
         
-        static Ped ArrestedPed;
+        static public Ped ArrestedPed;
         static public Ped PedInHandcuffs;
         static public bool IsPedBeingArrested = false;
         static public bool IsPedCuffed = false;
@@ -137,6 +137,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     arrestedPedData.IsDrivingStolenCar = TrafficStop.HasVehicleBeenStolen;
                     arrestedPedData.IsCarryingIllegalItems = TrafficStop.IsCarryingIllegalItems;
 
+                    arrestedPedData.IsAllowedToBeArrested = (arrestedPedData.IsDrunk || arrestedPedData.IsDrugged || arrestedPedData.IsDrivingStolenCar || arrestedPedData.IsCarryingIllegalItems);
+
                     string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(arrestedPedData));
 
                     Client.TriggerServerEvent("curiosity:Server:Missions:ArrestedPed", encoded);
@@ -161,6 +163,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         API.NetworkFadeOutEntity(ArrestedPed.Handle, true, false);
                         await Client.Delay(5000);
                         ArrestedPed.Delete();
+                        ArrestedPed = null;
                     }
 
                     if (TrafficStop.StoppedDriver != null)
@@ -188,6 +191,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             await Task.FromResult(0);
             if (Game.PlayerPed.IsAiming && !MissionEvents.HasAcceptedCallout && !Game.PlayerPed.IsInVehicle())
             {
+                if (ArrestedPed != null) return;
+
                 int entityHandle = 0;
                 if (API.GetEntityPlayerIsFreeAimingAt(Game.Player.Handle, ref entityHandle))
                 {
@@ -201,6 +206,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                 if (ArrestedPed == null) return;
                 if (ArrestedPed.IsDead) return;
+
+                if (ArrestedPed.Position.Distance(Game.PlayerPed.Position) > 20) return;
 
                 if (ArrestedPed != TrafficStop.StoppedDriver)
                 {
@@ -427,12 +434,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static public void InteractionRemoveFromVehicle()
         {
             Ped ped = ArrestedPed ?? TrafficStop.StoppedDriver ?? Game.PlayerPed.GetPedInFront();
-            if (ped.Position.Distance(Game.PlayerPed.Position) > 3)
-            {
-                Screen.ShowNotification($"~r~You need be closer to the suspect.");
-                return;
-            }
-
+            
             if (!ped.IsInVehicle()) return;
 
             ped.SetConfigFlag(292, false);
