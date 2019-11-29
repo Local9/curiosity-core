@@ -91,6 +91,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                         await BaseScript.Delay(0);
                         new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
                         SetPedScream(HostagePed.Handle);
+                        HostagePed.IsPositionFrozen = true;
                     }
                 }
 
@@ -202,6 +203,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                                 Screen.DisplayHelpTextThisFrame($"Holding ~INPUT_PICKUP~ [{((GetGameTimer() - gameTime) / 1000) - 5}]");
 
                                 HostageReleased = (GetGameTimer() - gameTime) > 5000;
+
+                                if (HostageReleased)
+                                    HostagePed.IsPositionFrozen = false;
 
                                 await BaseScript.Delay(0);
                             }

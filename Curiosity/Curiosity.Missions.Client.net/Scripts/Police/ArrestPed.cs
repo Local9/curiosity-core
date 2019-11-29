@@ -138,6 +138,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(arrestedPedData));
 
                     Client.TriggerServerEvent("curiosity:Server:Missions:ArrestedPed", encoded);
+
+                    TrafficStop.StoppedDriver.Fade(true);
+                    TrafficStop.StoppedDriver.IsPositionFrozen = true;
+                    await Client.Delay(5000);
+                    TrafficStop.Reset(true); // total reset
                 }
             }
         }
