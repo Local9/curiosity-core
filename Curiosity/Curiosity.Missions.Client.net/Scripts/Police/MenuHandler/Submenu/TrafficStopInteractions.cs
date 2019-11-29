@@ -68,9 +68,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
                 if (TrafficStop.StoppedDriver.IsInVehicle())
                 {
                     TrafficStop.LeaveVehicle();
-
-                    mItemLeaveVehicle.Enabled = false;
-                    mItemReturnToVehicle.Enabled = true;
                 }
             }
 
@@ -79,9 +76,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
                 if (!TrafficStop.StoppedDriver.IsInVehicle())
                 {
                     TrafficStop.ReturnToVehicle();
-
-                    mItemLeaveVehicle.Enabled = true;
-                    mItemReturnToVehicle.Enabled = false;
                 }
             }
 
@@ -116,10 +110,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
             menu.AddMenuItem(mItemDrugTest);
             menu.AddMenuItem(mItemSearch);
 
-            UpdateButtons();
+            if (TrafficStop.StoppedDriver.IsInVehicle() && TrafficStop.StoppedDriver.CurrentVehicle == TrafficStop.TargetVehicle)
+                menu.AddMenuItem(mItemLeaveVehicle);
 
-            menu.AddMenuItem(mItemLeaveVehicle);
-            menu.AddMenuItem(mItemReturnToVehicle);
+            if (!TrafficStop.StoppedDriver.IsInVehicle() && TrafficStop.StoppedDriver.CurrentVehicle == TrafficStop.TargetVehicle)
+                menu.AddMenuItem(mItemReturnToVehicle);
 
             if (ArrestPed.IsPedCuffed)
             {
