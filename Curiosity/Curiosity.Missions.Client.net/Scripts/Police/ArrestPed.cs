@@ -158,10 +158,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             ArrestedPed.SetConfigFlag(292, false);
                             ArrestedPed.Task.LeaveVehicle();
                         }
-                        ArrestedPed.Fade(false);
-
                         API.NetworkFadeOutEntity(ArrestedPed.Handle, true, false);
-
                         await Client.Delay(5000);
                         ArrestedPed.Delete();
                     }
@@ -344,6 +341,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             if (PedInHandcuffs.IsPlayingAnim("random@arrests@busted", "idle_a")) // if kneeling... then cuff them
             {
+                Game.PlayerPed.IsPositionFrozen = true;
                 Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
                 PedInHandcuffs.Task.PlayAnimation("mp_arresting", "idle", 8.0f, -1, (AnimationFlags)49);
                 API.AttachEntityToEntity(PedInHandcuffs.Handle, Game.PlayerPed.Handle, 11816, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
@@ -357,9 +355,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 API.SetEnableHandcuffs(PedInHandcuffs.Handle, true);
                 API.SetPedCanTeleportToGroupLeader(PedInHandcuffs.Handle, playerGroupId, true);
                 IsPedCuffed = true;
+                Game.PlayerPed.IsPositionFrozen = false;
             }
             else if (PedInHandcuffs != null)
             {
+                Game.PlayerPed.IsPositionFrozen = true;
                 PedInHandcuffs.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
                 API.AttachEntityToEntity(PedInHandcuffs.Handle, Game.PlayerPed.Handle, 11816, 0.0f, 0.65f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
                 await Client.Delay(2000);
@@ -370,6 +370,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 PedInHandcuffs.Task.ClearAll();
                 PedInHandcuffs.CanRagdoll = false;
                 API.SetBlockingOfNonTemporaryEvents(PedInHandcuffs.Handle, false);
+                Game.PlayerPed.IsPositionFrozen = false;
             }
             else
             {

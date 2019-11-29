@@ -87,18 +87,27 @@ namespace Curiosity.Server.net.Classes
 
             if (!arrestedPed.IsAllowedToBeArrested)
             {
-                experienceMultiplier = 0.25f;
+                experienceMultiplier = 0.1f;
                 moneyMultiplier = 0.1f;
+
+                Skills.DecreaseSkill(player.Handle, "policerep", 2);
+            }
+            else
+            {
+                Skills.IncreaseSkill(player.Handle, "policerep", 1);
             }
 
-            int experienceEarn = (int)(random.Next(1, 10) * experienceMultiplier);
-            int knowledgeEarn = (int)(random.Next(1, 4) * experienceMultiplier);
-            int moneyEarn = (int)(random.Next(25, 100) * moneyMultiplier);
+            int exp = random.Next(10, 30);
+            int knowledge = random.Next(1, 4);
+            int money = random.Next(25, 100);
 
-            Skills.IncreaseSkill(player.Handle, "policexp", experienceEarn);
-            Skills.IncreaseSkill(player.Handle, "knowledge", knowledgeEarn);
-            Skills.IncreaseSkill(player.Handle, "policerep", 1);
-            Bank.IncreaseCashInternally(player.Handle, moneyEarn);
+            int experienceEarnAdditional = (int)(exp * experienceMultiplier);
+            int knowledgeEarnAdditional = (int)(knowledge * experienceMultiplier);
+            int moneyEarnAdditional = (int)(money * moneyMultiplier);
+
+            Skills.IncreaseSkill(player.Handle, "policexp", experienceEarnAdditional);
+            Skills.IncreaseSkill(player.Handle, "knowledge", knowledgeEarnAdditional);
+            Bank.IncreaseCashInternally(player.Handle, moneyEarnAdditional);
             timestampLastArrest[player.Handle] = DateTime.Now;
         }
 
