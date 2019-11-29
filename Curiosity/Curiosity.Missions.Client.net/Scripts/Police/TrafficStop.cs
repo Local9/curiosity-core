@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Shared.Client.net.Helpers;
-using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Extensions;
+using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.DataClasses;
+using Curiosity.Missions.Client.net.Extensions;
+using Curiosity.Missions.Client.net.Wrappers;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Enums.Patrol;
-using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {
