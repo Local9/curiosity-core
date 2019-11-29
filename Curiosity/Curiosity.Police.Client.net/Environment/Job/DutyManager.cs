@@ -45,6 +45,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job == "error")
             {
+                Vehicle.LoadoutPosition.Dispose();
                 Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Unknown);
                 client.DeregisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
                 Game.PlayerPed.Weapons.RemoveAll();
@@ -59,6 +60,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job != "police")
             {
+                Vehicle.LoadoutPosition.Dispose();
                 Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Unknown);
                 client.DeregisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
 
@@ -74,26 +76,24 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 return; // TODO: Refactor job code
             }
 
-            Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", false, string.Empty, string.Empty);
-            Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Police);
-            Game.PlayerPed.IsInvincible = false;
 
-            client.RegisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
-
-            IsOnDuty = dutyState;
-
-            if (Classes.Player.PlayerInformation.IsDeveloper())
+            if (job == "police")
             {
-                Log.Info($"OnDutyState -> Player Duty State {IsOnDuty}");
-            }
-            Game.PlayerPed.RelationshipGroup = PoliceRelationshipGroup;
-            Game.PlayerPed.DropsWeaponsOnDeath = false;
+                Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Police);
+                Game.PlayerPed.IsInvincible = false;
 
-            IsPoliceJobActive = true;
+                client.RegisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
 
-            if (IsOnDuty)
-            {
-                Client.TriggerEvent("curiosity:Client:Context:ShowDutyMenu", true, "Resupply Ammo", "curiosity:Player:Loadout:Resupply");
+                IsOnDuty = dutyState;
+
+                if (Classes.Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Info($"OnDutyState -> Player Duty State {IsOnDuty}");
+                }
+                Game.PlayerPed.RelationshipGroup = PoliceRelationshipGroup;
+                Game.PlayerPed.DropsWeaponsOnDeath = false;
+                Vehicle.LoadoutPosition.Init();
+                IsPoliceJobActive = true;
             }
         }
 

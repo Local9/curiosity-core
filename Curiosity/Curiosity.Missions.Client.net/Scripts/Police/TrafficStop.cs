@@ -248,7 +248,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
 
                 // Mimick
-                if (IsVehicleStopped && Game.PlayerPed.IsInVehicle() && !IsVehicleDriverMimicking)
+                if (IsVehicleStopped && Game.PlayerPed.IsInVehicle() && !IsVehicleDriverMimicking && TargetVehicle.Driver != null)
                 {
                     Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to move the ~b~Vehicle");
 
@@ -259,7 +259,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     }
                 }
 
-                if (!IsVehicleStopped && Game.PlayerPed.IsInVehicle() && IsVehicleDriverMimicking)
+                if (!IsVehicleStopped && Game.PlayerPed.IsInVehicle() && IsVehicleDriverMimicking && TargetVehicle.Driver != null)
                 {
                     Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to ~b~stop moving the Vehicle");
                     
@@ -454,6 +454,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             CanSearchVehicle = false;
             HasVehicleBeenStolen = false;
 
+            MenuHandler.SuspectMenu.LogMessage("Closing menu, Reset has been called");
+
             client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
 
             if (issueExperience)
@@ -476,12 +478,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             client.DeregisterTickHandler(OnCooldownTask);
         }
 
-        static public void ResetPed()
+        static public async void ResetPed(bool delete = false)
         {
             if (StoppedDriver != null)
             {
                 StoppedDriver.IsPersistent = false;
                 API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, false);
+
+                if (delete)
+                {
+                    StoppedDriver.Fade(false);
+                    await Client.Delay(1000);
+                    StoppedDriver.Delete();
+                }
             }
         }
 

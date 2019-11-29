@@ -63,7 +63,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             }
         }
 
-        static async void OnWeaponResupply()
+        static public async void OnWeaponResupply()
         {
             if ((Game.GameTime - GameTimeResupplied) > 120000)
             {

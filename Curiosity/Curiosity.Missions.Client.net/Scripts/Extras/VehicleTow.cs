@@ -2,6 +2,7 @@
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Enums;
 using System;
+using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net.Helpers;
 
@@ -29,11 +30,22 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
         static PedHash TowDriverHash = PedHash.WinClean01SMY;
         static VehicleHash TowVehicleHash = VehicleHash.Flatbed;
 
+        static async Task OnVehicleExistsTask()
+        {
+            await Task.FromResult(0);
+            if (Police.TrafficStop.TargetVehicle == null)
+            {
+                Reset();
+                client.DeregisterTickHandler(OnVehicleExistsTask);
+            }
+        }
+
         static public async void RequestService()
         {
             try
             {
                 Debug.WriteLine($"TOW-RequestService->Started");
+                client.DeregisterTickHandler(OnVehicleExistsTask);
 
                 if (IsServiceActive)
                 {

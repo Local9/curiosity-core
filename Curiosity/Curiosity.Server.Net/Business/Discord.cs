@@ -72,6 +72,14 @@ namespace Curiosity.Server.net.Business
             }
         }
 
+        static public async Task<RequestResponse> DiscordWebsocket(string method, string url, string jsonData)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Content-Type", "application/json");
+            headers.Add("Authorization", $"Bot {discordBotKey}");
+            return await request.Http($"{url}", method, jsonData, headers);
+        }
+
         static async Task<RequestResponse> DiscordRequest(string method, string endpoint, string jsonData)
         {
                 Dictionary<string, string> headers = new Dictionary<string, string>();

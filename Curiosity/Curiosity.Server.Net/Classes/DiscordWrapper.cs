@@ -4,6 +4,7 @@ using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Curiosity.Server.net.Helpers;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -240,14 +241,15 @@ namespace Curiosity.Server.net.Classes
             {
                 Entity.DiscordWebhook discordWebhook = webhooks[webhookChannel];
 
-                //Webhook webhook = new Webhook(discordWebhook.Url);
+                ////Webhook webhook = new Webhook(discordWebhook.Url);
 
-                //webhook.AvatarUrl = discordWebhook.Avatar;
-                //webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`\n{name}: {message}";
-                //webhook.Username = username;
-
+                ////webhook.AvatarUrl = discordWebhook.Avatar;
+                ////webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`\n{name}: {message}";
+                ////webhook.Username = username;
+                
+                //string json = "";
                 //await Server.Delay(0);
-                //GHMatti.Http.RequestResponse requestResponse = await webhook.Send();
+                //RequestResponse requestResponse = await Business.Discord.DiscordWebsocket(discordWebhook.Url, "POST", json);
 
                 //if (requestResponse.status == (System.Net.HttpStatusCode)429)
                 //{
@@ -266,6 +268,11 @@ namespace Curiosity.Server.net.Classes
             {
                 Log.Error($"SendDiscordSimpleMessage() -> {ex.Message}");
             }
+        }
+
+        class WebhookMessage
+        {
+
         }
     }
 }

@@ -205,7 +205,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
                 if (TrafficStop.TargetVehicle.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen && (TrafficStop.StoppedDriver.IsDead || TrafficStop.TargetVehicle.IsDead))
                 {
-
                     Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to open ~b~vehicle interaction menu");
 
                     if (Game.IsControlJustPressed(0, Control.Context))
@@ -234,7 +233,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                     }
                 }
                 
-                if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen && !Game.PlayerPed.IsInVehicle())
+                if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) < 3 && !IsMenuOpen && !Game.PlayerPed.IsInVehicle() && TrafficStop.StoppedDriver.IsAlive)
                 {
                     Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to talk with the ~b~Driver");
 
@@ -243,8 +242,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                         Open(MenuType.Normal);
                     }
                 }
-                
-                if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) >= 4 && IsMenuOpen)
+
+                if (TrafficStop.StoppedDriver.Position.Distance(Game.PlayerPed.Position) >= 30 && IsMenuOpen)
                 {
                     TrafficStopMenu.CloseMenu();
                     IsMenuOpen = false;
@@ -252,8 +251,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
                 if (TrafficStop.StoppedDriver == null)
                 {
+                    LogMessage("Closing menu, both Driver is null");
                     IsMenuOpen = false;
                     client.DeregisterTickHandler(OnMenuTask);
+                }
+
+                if (TrafficStop.StoppedDriver == null && TrafficStop.TargetVehicle == null)
+                {
+                    LogMessage("Closing menu, both Driver and Vehicle are null");
+                    IsMenuOpen = false;
+                    client.DeregisterTickHandler(OnMenuTask);
+                    TrafficStop.Reset();
                 }
             }
             catch (Exception ex)
@@ -269,6 +277,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = label, Enabled = buttonEnabled };
             menu.AddMenuItem(submenuButton);
             MenuController.BindMenuItem(menu, submenu, submenuButton);
+        }
+
+        static public void LogMessage(string msg)
+        {
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+            {
+                Debug.WriteLine($"[LOG] -> {msg}");
+            }
         }
     }
 }

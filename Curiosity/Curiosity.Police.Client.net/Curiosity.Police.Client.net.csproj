@@ -63,6 +63,7 @@
     <Compile Include="Environment\Job\DutyManager.cs" />
     <Compile Include="Environment\Job\DutyMarkers.cs" />
     <Compile Include="Environment\Tasks\CalloutHandler.cs" />
+    <Compile Include="Environment\Vehicle\LoadoutPosition.cs" />
     <Compile Include="Environment\Vehicle\Sirens.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

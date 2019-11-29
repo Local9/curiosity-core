@@ -113,8 +113,15 @@ namespace Curiosity.Police.Client.net.Environment.Job
                     {
                         Classes.Menus.MenuLoadout.OpenMenu();
 
-                        Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "police");
-                        Client.TriggerEvent("curiosity:Client:Police:PatrolZone", (int)marker.PatrolZone);
+                        if (!DutyManager.IsPoliceJobActive)
+                        {
+                            Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "police");
+                            Client.TriggerEvent("curiosity:Client:Police:PatrolZone", (int)marker.PatrolZone);
+                        }
+                        else
+                        {
+                            Client.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "jobless");
+                        }
                         await Client.Delay(5000);
                     }
                 }
