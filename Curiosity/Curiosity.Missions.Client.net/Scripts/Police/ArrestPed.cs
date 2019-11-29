@@ -158,7 +158,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             ArrestedPed.SetConfigFlag(292, false);
                             ArrestedPed.Task.LeaveVehicle();
                         }
-                        ArrestedPed.Fade(true);
+                        ArrestedPed.Fade(false);
+
+                        API.NetworkFadeOutEntity(ArrestedPed.Handle, true, false);
+
                         await Client.Delay(5000);
                         ArrestedPed.Delete();
                     }
@@ -171,7 +174,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             TrafficStop.StoppedDriver.SetConfigFlag(292, false);
                             TrafficStop.StoppedDriver.Task.LeaveVehicle();
                         }
-                        TrafficStop.StoppedDriver.Fade(true);
+                        API.NetworkFadeOutEntity(TrafficStop.StoppedDriver.Handle, true, false);
                         await Client.Delay(5000);
                         TrafficStop.StoppedDriver.Delete();
                     }
@@ -210,9 +213,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                 if (IsPedBeingArrested) return;
 
-                Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to demand the suspect to exit their vehicle.");
+                if (ArrestedPed.IsInVehicle())
+                {
+                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_CONTEXT~ to demand the suspect to exit their vehicle.");
+                }
+                else
+                {
+                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_CONTEXT~ to demand the suspect to get on their knees.");
+                }
 
-                if (Game.IsControlJustPressed(0, Control.Cover))
+                if (Game.IsControlJustPressed(0, Control.Context))
                 {
                     IsPedBeingArrested = true;
 
