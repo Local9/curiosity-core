@@ -454,10 +454,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             CanSearchVehicle = false;
             HasVehicleBeenStolen = false;
 
+            ArrestPed.IsPedBeingArrested = false;
+
             // Extras.PoliceArrestVehicle.HasPedBeenPickedUp = false;
 
             MenuHandler.SuspectMenu.LogMessage("Closing menu, Reset has been called");
-
             client.DeregisterTickHandler(MenuHandler.SuspectMenu.OnMenuTask);
 
             if (issueExperience)

@@ -404,7 +404,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static public void InteractionRemoveFromVehicle()
         {
             Ped ped = ArrestedPed ?? TrafficStop.StoppedDriver ?? Game.PlayerPed.GetPedInFront();
-            if (ped.Position.Distance(Game.PlayerPed.Position) > 3) return;
+            if (ped.Position.Distance(Game.PlayerPed.Position) > 3)
+            {
+                Screen.ShowNotification($"~r~You need be closer to the suspect.");
+                return;
+            }
 
             if (!ped.IsInVehicle()) return;
 
@@ -417,7 +421,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             Ped grabbedPed = ArrestedPed ?? TrafficStop.StoppedDriver ?? Game.PlayerPed.GetPedInFront();
 
-            if (grabbedPed.Position.Distance(Game.PlayerPed.Position) > 3) return;
+            if (grabbedPed.Position.Distance(Game.PlayerPed.Position) > 3)
+            {
+                Screen.ShowNotification($"~r~You need be closer to the suspect.");
+                return;
+            }
 
             if (!IsPedGrabbed)
             {
