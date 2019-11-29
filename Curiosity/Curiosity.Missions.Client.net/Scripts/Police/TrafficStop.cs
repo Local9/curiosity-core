@@ -248,7 +248,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
 
                 // Mimick
-                if (IsVehicleStopped && Game.PlayerPed.IsInVehicle() && !IsVehicleDriverMimicking && TargetVehicle.Driver != null)
+                if (IsVehicleStopped && Game.PlayerPed.IsInVehicle() && !IsVehicleDriverMimicking && TargetVehicle.Driver != null && !ArrestPed.IsPedCuffed)
                 {
                     Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to move the ~b~Vehicle");
 
@@ -259,7 +259,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     }
                 }
 
-                if (!IsVehicleStopped && Game.PlayerPed.IsInVehicle() && IsVehicleDriverMimicking && TargetVehicle.Driver != null)
+                if (!IsVehicleStopped && Game.PlayerPed.IsInVehicle() && IsVehicleDriverMimicking && TargetVehicle.Driver != null && !ArrestPed.IsPedCuffed)
                 {
                     Screen.DisplayHelpTextThisFrame("Press ~INPUT_COVER~ to ~b~stop moving the Vehicle");
                     
