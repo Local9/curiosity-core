@@ -138,6 +138,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                         TargetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
 
+                        if (TargetVehicle.Driver.IsPlayer) return;
+
                         if (TargetVehicle == null) return;
 
                         // if no driver, don't do anything
@@ -274,6 +276,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         DisableMimick();
                         await Client.Delay(100);
                     }
+                }
+
+                if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) > 30f && TargetVehicle.Position.Distance(Game.PlayerPed.Position) < 40f)
+                {
+                    Helpers.ShowNotification("Dispatch", "~r~Please stay on scene...", string.Empty);
                 }
 
                 if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) >= 300f)
@@ -435,9 +442,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             if (StoppedDriver != null)
             {
+                API.SetEnableHandcuffs(StoppedDriver.Handle, false);
+                StoppedDriver.SetConfigFlag(292, false);
+                StoppedDriver.LeaveGroup();
+                StoppedDriver.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
                 StoppedDriver.IsPersistent = false;
                 API.TaskSetBlockingOfNonTemporaryEvents(StoppedDriver.Handle, false);
-                API.SetEnableHandcuffs(StoppedDriver.Handle, false);
             }
 
             IsVehicleStopped = false;
