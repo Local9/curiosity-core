@@ -126,6 +126,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         static public void OpenMenu()
         {
+            if (!Environment.Job.DutyManager.IsPoliceJobActive) return;
+
             MenuController.DontOpenAnyMenu = false;
             Game.PlayerPed.CanRagdoll = false;
             MenuBaseFunctions.MenuOpen();

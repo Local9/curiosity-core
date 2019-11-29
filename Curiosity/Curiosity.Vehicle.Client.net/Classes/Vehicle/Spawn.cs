@@ -148,6 +148,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
                 API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
+                veh.LockStatus = VehicleLockStatus.Unlocked;
+
                 Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", veh.NetworkId);
 
                 await Client.Delay(0);
