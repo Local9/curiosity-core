@@ -122,6 +122,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         return;
                     }
 
+                    API.NetworkRequestControlOfEntity(ArrestedPed.Handle);
+
                     if (!IsPedCuffed)
                     {
                         List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", "~o~Handcuff them you idoit!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", "~r~Cuff them, fecking muppet!" };

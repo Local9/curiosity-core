@@ -223,6 +223,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             try
             {
+
                 await Client.Delay(0);
                 if (TargetVehicle == null)
                 {
@@ -235,6 +236,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     await Client.Delay(500);
                     return;
                 }
+
+                if (TargetVehicle != null)
+                    API.NetworkRequestControlOfEntity(TargetVehicle.Handle);
+
+                if (StoppedDriver != null)
+                    API.NetworkRequestControlOfEntity(StoppedDriver.Handle);
 
                 if (IsVehicleStopped && TargetVehicle.IsEngineRunning && !IsVehicleDriverMimicking)
                 {
