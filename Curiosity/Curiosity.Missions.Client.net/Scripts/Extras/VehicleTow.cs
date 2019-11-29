@@ -113,7 +113,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                     while (isServiceEnroute)
                     {
                         await Client.Delay(100);
-                        float currentDistance = VehicleToRecover.Position.Distance(TowVehicle.Position);
+                        float currentDistance = TowVehicle.Position.Distance(VehicleToRecover.Position);
 
                         if (currentDistance <= 180f && !isServiceClose)
                         {
@@ -139,7 +139,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                             while (isTowDriverRunningToVehicle)
                             {
                                 await Client.Delay(100);
-                                currentDistance = VehicleToRecover.Position.Distance(TowDriver.Position);
+                                currentDistance = TowDriver.Position.Distance(VehicleToRecover.Position);
 
                                 if (currentDistance <= 5)
                                 {
@@ -147,6 +147,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                                     isServiceEnroute = false;
 
                                     CleanUpVehicle();
+                                }
+                                else
+                                {
+                                    TowDriver.Task.GoTo(VehicleToRecover);
                                 }
                             }
                         }
