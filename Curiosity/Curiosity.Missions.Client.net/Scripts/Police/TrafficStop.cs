@@ -1189,6 +1189,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 if (CanSearchVehicle)
                 {
                     IsCarryingIllegalItems = true;
+                    CanDriverBeArrested = true;
+
                     Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Client.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
                     if (IsDriverGoingToFleeChance == 9)
                     {
