@@ -261,13 +261,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                     }
                 }
 
-                if (TrafficStop.StoppedDriver == null)
-                {
-                    LogMessage("Closing menu, both Driver is null");
-                    IsMenuOpen = false;
-                    client.DeregisterTickHandler(OnMenuTask);
-                }
-
                 if (TrafficStop.StoppedDriver == null && TrafficStop.TargetVehicle == null)
                 {
                     LogMessage("Closing menu, both Driver and Vehicle are null");
