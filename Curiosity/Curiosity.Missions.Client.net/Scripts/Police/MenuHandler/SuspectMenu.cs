@@ -119,15 +119,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             if (menuItem == mItemHandcuff)
             {
                 ArrestPed.InteractionHandcuff();
-                mItemRemoveHandcuff.Enabled = ArrestPed.IsPedCuffed;
-                mItemGrab.Enabled = ArrestPed.IsPedCuffed;
+                mItemRemoveHandcuff.Enabled = true;
+                mItemGrab.Enabled = true;
             }
 
             if (menuItem == mItemRemoveHandcuff)
             {
                 ArrestPed.InteractionHandcuff();
-                mItemRemoveHandcuff.Enabled = ArrestPed.IsPedCuffed;
-                mItemGrab.Enabled = ArrestPed.IsPedCuffed;
+                mItemRemoveHandcuff.Enabled = false;
+                mItemGrab.Enabled = false;
             }
 
             if (menuItem == mItemGrab)
