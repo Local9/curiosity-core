@@ -202,7 +202,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 if (ArrestedPed == null) return;
                 if (ArrestedPed.IsDead) return;
 
-                if (!ArrestedPed.IsInVehicle())
+                if (ArrestedPed != TrafficStop.StoppedDriver)
                 {
                     Screen.ShowNotification($"Can only arrest suspects from traffic stops currently.");
                     return;
