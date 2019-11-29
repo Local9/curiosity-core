@@ -456,6 +456,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             ArrestPed.IsPedBeingArrested = false;
             ArrestPed.IsPedCuffed = false;
+            ArrestPed.ArrestedPed = null;
+            ArrestPed.IsPedGrabbed = false;
+            ArrestPed.PedInHandcuffs = null;
 
             // Extras.PoliceArrestVehicle.HasPedBeenPickedUp = false;
 
