@@ -53,6 +53,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                     return;
                 }
 
+                //if (!PoliceArrestVehicle.HasPedBeenPickedUp)
+                //{
+                //    Wrappers.Helpers.ShowNotification("Dispatch", "Suspect not Arrested", string.Empty, NotificationCharacter.CHAR_CALL911);
+                //    return;
+                //}
+
                 int spawnDistance = Client.Random.Next(300, 800);
 
                 VehicleToRecover = Game.PlayerPed.GetVehicleInFront();
