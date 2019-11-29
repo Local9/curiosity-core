@@ -50,7 +50,7 @@ namespace Curiosity.Server.net.Classes
 
             if (timestampLastArrest.ContainsKey(player.Handle))
             {
-                DateTime dateTimeOfLastTrafficStop = timestampLastTrafficStop[player.Handle];
+                DateTime dateTimeOfLastTrafficStop = timestampLastArrest[player.Handle];
                 double secondsSinceLastArrest = (DateTime.Now - dateTimeOfLastTrafficStop).TotalSeconds;
                 if (secondsSinceLastArrest < 10)
                 {
@@ -58,6 +58,10 @@ namespace Curiosity.Server.net.Classes
                     session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
                     return;
                 }
+            }
+            else
+            {
+                timestampLastArrest.Add(player.Handle, DateTime.Now);
             }
 
             float experienceMultiplier = 1.0f; // Base value
@@ -95,7 +99,7 @@ namespace Curiosity.Server.net.Classes
             Skills.IncreaseSkill(player.Handle, "knowledge", knowledgeEarn);
             Skills.IncreaseSkill(player.Handle, "policerep", 1);
             Bank.IncreaseCashInternally(player.Handle, moneyEarn);
-            timestampLastTrafficStop[player.Handle] = DateTime.Now;
+            timestampLastArrest[player.Handle] = DateTime.Now;
         }
 
         static void OnTrafficStop([FromSource]CitizenFX.Core.Player player, string encodedData)

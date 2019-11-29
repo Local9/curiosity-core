@@ -3,6 +3,7 @@ using static CitizenFX.Core.Native.API;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using System;
+using System.Collections.Generic;
 using System.Security;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace Curiosity.Client.net.Classes.Player
 
         public static Privilege privilege;
         static bool statsSet = false;
-        static int outIncidentId = 0;
+        static List<int> listOfIncidents = new List<int>();
 
         public static async void Init()
         {
@@ -29,8 +30,18 @@ namespace Curiosity.Client.net.Classes.Player
         static void OnFlagUpdate()
         {
             SetPoliceRadarBlips(false);
-            CreateIncidentWithEntity(14, Game.PlayerPed.Handle, 3, 3f, ref outIncidentId);
-            client.RegisterTickHandler(OnPlayerDeathCheck);
+            int outIncidentId = 0;
+            if (CreateIncidentWithEntity(14, Game.PlayerPed.Handle, 3, 3f, ref outIncidentId))
+            {
+                SetIncidentRequestedUnits(outIncidentId, 14, 3);
+
+                if (outIncidentId > 0)
+                {
+                    listOfIncidents.Add(outIncidentId);
+                }
+
+                client.RegisterTickHandler(OnPlayerDeathCheck);
+            }
         }
 
         static async Task OnPlayerDeathCheck()
@@ -39,8 +50,14 @@ namespace Curiosity.Client.net.Classes.Player
             {
                 await BaseScript.Delay(100);
             }
-            DeleteIncident(outIncidentId);
-            outIncidentId = 0;
+
+            listOfIncidents.ForEach(incidentId =>
+            {
+                DeleteIncident(incidentId);
+            });
+
+            listOfIncidents.Clear();
+            
             client.DeregisterTickHandler(OnPlayerDeathCheck);
         }
 
