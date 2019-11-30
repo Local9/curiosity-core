@@ -278,7 +278,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     }
                 }
 
-                if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) > 30f && TargetVehicle.Position.Distance(Game.PlayerPed.Position) < 40f)
+                if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) > 30f && TargetVehicle.Position.Distance(Game.PlayerPed.Position) < 40f && IsVehicleStopped)
                 {
                     Helpers.ShowNotification("Dispatch", "~r~Please stay on scene...", string.Empty);
                 }
