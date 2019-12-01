@@ -2,7 +2,7 @@
 using CitizenFX.Core.Native;
 using System;
 
-namespace Curiosity.Shared.Client.net.Helpers
+namespace Curiosity.Shared.Client.net.Extensions
 {
     public static class WorldExt
     {

@@ -255,19 +255,23 @@ namespace Curiosity.Client.net.Classes.Actions
             Model chimpModel = PedHash.Chimp;
             await chimpModel.Request(10000);
             await Client.Delay(0);
+            // One will always exist
             Ped chimp = await World.CreatePed(chimpModel, Game.PlayerPed.Position + new Vector3(0f, -5f, -100f), Game.PlayerPed.Heading);
+            Ped chimp2 = await World.CreatePed(chimpModel, Game.PlayerPed.Position + new Vector3(0f, 5f, -100f), Game.PlayerPed.Heading);
+            Ped chimp3 = await World.CreatePed(chimpModel, Game.PlayerPed.Position + new Vector3(5f, 0f, -100f), Game.PlayerPed.Heading);
             chimpModel.MarkAsNoLongerNeeded();
 
             chimp.IsInvincible = true;
             chimp.IsPositionFrozen = true;
 
             while (Game.PlayerPed.IsInVehicle())
-            {
+            { 
                 if (!IsPackageInCar)
                 {
                     API.TaskWarpPedIntoVehicle(chimp.Handle, Game.PlayerPed.CurrentVehicle.Handle, -2);
-                    IsPackageInCar = chimp.IsInVehicle();
-                    chimp.IsInvincible = false;
+                    API.TaskWarpPedIntoVehicle(chimp2.Handle, Game.PlayerPed.CurrentVehicle.Handle, -2);
+                    API.TaskWarpPedIntoVehicle(chimp3.Handle, Game.PlayerPed.CurrentVehicle.Handle, -2);
+                    IsPackageInCar = chimp.IsInVehicle() && chimp2.IsInVehicle() && chimp3.IsInVehicle();
                 }
                 await Client.Delay(0);
             }
@@ -275,14 +279,24 @@ namespace Curiosity.Client.net.Classes.Actions
             while (chimp.IsInVehicle())
             {
                 chimp.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
+                chimp2.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
+                chimp3.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
                 await Client.Delay(50);
             }
 
             if (!IsPackageInCar)
+            {
                 chimp.Position = Game.PlayerPed.Position + new Vector3(-5f, -5f, 0f);
+                chimp2.Position = Game.PlayerPed.Position + new Vector3(5f, -5f, 0f);
+                chimp3.Position = Game.PlayerPed.Position + new Vector3(-5f, 5f, 0f);
+            }
 
             chimp.IsPositionFrozen = false;
             chimp.IsInvincible = false;
+            chimp2.IsPositionFrozen = false;
+            chimp2.IsInvincible = false;
+            chimp3.IsPositionFrozen = false;
+            chimp3.IsInvincible = false;
 
             API.TaskSetBlockingOfNonTemporaryEvents(chimp.Handle, true);
 
@@ -291,19 +305,39 @@ namespace Curiosity.Client.net.Classes.Actions
             chimp.DropsWeaponsOnDeath = false;
             API.SetPedFleeAttributes(chimp.Handle, 0, false);
             await Client.Delay(10);
+            chimp2.Weapons.Give(WeaponHash.RPG, 1, true, true);
+            chimp2.DropsWeaponsOnDeath = false;
+            API.SetPedFleeAttributes(chimp2.Handle, 0, false);
+            await Client.Delay(10);
+            chimp3.Weapons.Give(WeaponHash.GrenadeLauncher, 1, true, true);
+            chimp3.DropsWeaponsOnDeath = false;
+            API.SetPedFleeAttributes(chimp3.Handle, 0, false);
+            await Client.Delay(10);
 
             while (Game.PlayerPed.IsAlive)
             {
                 if (chimp.IsDead)
                     break;
+                if (chimp2.IsDead)
+                    break;
+                if (chimp3.IsDead)
+                    break;
 
                 chimp.Task.ShootAt(Game.PlayerPed, -1, FiringPattern.Default);
+                chimp2.Task.ShootAt(Game.PlayerPed, -1, FiringPattern.Default);
+                chimp3.Task.ShootAt(Game.PlayerPed, -1, FiringPattern.Default);
 
                 await Client.Delay(500);
             }
 
             chimp.MarkAsNoLongerNeeded();
             chimp.Delete();
+
+            chimp2.MarkAsNoLongerNeeded();
+            chimp2.Delete();
+
+            chimp3.MarkAsNoLongerNeeded();
+            chimp3.Delete();
         }
 
         static async void OnStuck(int playerHandle, List<object> arguments, string raw)

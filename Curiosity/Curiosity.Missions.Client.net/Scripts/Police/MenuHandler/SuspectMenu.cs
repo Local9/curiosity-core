@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
@@ -258,6 +259,21 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
                     {
                         TrafficStopMenu.CloseMenu();
                         IsMenuOpen = false;
+                    }
+                }
+                else
+                {
+                    if (TrafficStop.StoppedDriver == null)
+                    {
+                        // If Ped goes missing
+                        Ped ped = Game.PlayerPed.GetPedInFront();
+                        if (DecorExistOn(ped.Handle, TrafficStop.IS_TRAFFIC_STOPPED_PED))
+                        {
+                            if (DecorGetBool(ped.Handle, TrafficStop.IS_TRAFFIC_STOPPED_PED))
+                            {
+                                TrafficStop.StoppedDriver = ped;
+                            }
+                        }
                     }
                 }
 

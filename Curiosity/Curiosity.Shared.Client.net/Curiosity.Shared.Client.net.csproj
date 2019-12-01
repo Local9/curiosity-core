@@ -79,7 +79,7 @@
     <Compile Include="Helper\Area\AreaSphere.cs" />
     <Compile Include="Helper\Area\AreaType.cs" />
     <Compile Include="Helper\ControlHelper.cs" />
-    <Compile Include="Helper\WorldExt.cs" />
+    <Compile Include="Extensions\WorldExt.cs" />
     <Compile Include="Helper\NativeWrapper.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Models\Marker.cs" />

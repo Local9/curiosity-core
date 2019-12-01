@@ -5,7 +5,7 @@ using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Extras
 {
-    class PoliceArrestVehicle
+    class PrisonerTransport
     {
         // STATE
         static bool IsServiceActive = false;

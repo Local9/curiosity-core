@@ -59,7 +59,7 @@
     <Compile Include="MissionPeds\NormalPed.cs" />
     <Compile Include="MissionPedTypes\PedNormal.cs" />
     <Compile Include="Scripts\Extras\Coroner.cs" />
-    <Compile Include="Scripts\Extras\PoliceArrestVehicle.cs" />
+    <Compile Include="Scripts\Extras\PrisonerTransport.cs" />
     <Compile Include="Scripts\Extras\VehicleTow.cs" />
     <Compile Include="Scripts\MissionEvents.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />

@@ -13,7 +13,6 @@ using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.MissionPedTypes;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
-using Curiosity.Shared.Client.net.Helpers;
 using Curiosity.Global.Shared.net.Data;
 using Curiosity.Shared.Client.net.Models;
 using Curiosity.Global.Shared.net.Enums;

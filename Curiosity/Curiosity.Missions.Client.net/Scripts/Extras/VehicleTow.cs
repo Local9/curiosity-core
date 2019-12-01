@@ -4,7 +4,6 @@ using Curiosity.Shared.Client.net.Enums;
 using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
-using Curiosity.Shared.Client.net.Helpers;
 
 namespace Curiosity.Missions.Client.net.Scripts.Extras
 {
@@ -49,7 +48,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
                 if (IsServiceActive)
                 {
-                    Wrappers.Helpers.ShowNotification("City Impound", "Service Unavailable", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
+                    Wrappers.Helpers.ShowNotification("City Impound", "Service is Unavailable", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
                     return;
                 }
 
@@ -59,7 +58,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 //    return;
                 //}
 
-                int spawnDistance = Client.Random.Next(300, 800);
+                int spawnDistance = Client.Random.Next(100, 200);
 
                 VehicleToRecover = Game.PlayerPed.GetVehicleInFront();
 
@@ -157,6 +156,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                                 else
                                 {
                                     TowDriver.Task.GoTo(VehicleToRecover);
+                                    await Client.Delay(100);
                                 }
                             }
                         }
@@ -213,12 +213,67 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
         static public async void Reset(bool validCleanup = false)
         {
+            if (validCleanup)
+            {
+                Wrappers.Helpers.ShowNotification("City Impound", "Now leaving...", $"", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
+            }
+
+            if (TowVehicle != null)
+            {
+                if (TowVehicle.Exists())
+                {
+                    if (TowVehicle.AttachedBlip != null)
+                    {
+                        if (TowVehicle.AttachedBlip.Exists())
+                        {
+                            TowVehicle.AttachedBlip.Delete();
+                        }
+                    }
+                }
+            }
+
+            if (VehicleToRecover != null)
+            {
+                if (VehicleToRecover.Exists())
+                {
+                    if (VehicleToRecover.AttachedBlip != null)
+                    {
+                        if (VehicleToRecover.AttachedBlip.Exists())
+                        {
+                            VehicleToRecover.AttachedBlip.Delete();
+                        }
+                    }
+                }
+            }
+
+            client.RegisterTickHandler(OnCooldownTask);
+        }
+
+        static async Task OnCooldownTask()
+        {
+            await Task.FromResult(0);
+            int countdown = 60000;
+
+            long gameTime = GetGameTimer();
+
+            while ((GetGameTimer() - gameTime) < countdown)
+            {
+                await Client.Delay(500);
+            }
+
+            IsServiceActive = false;
+            client.DeregisterTickHandler(OnCooldownTask);
+            Wrappers.Helpers.ShowNotification("City Impound", "Impound Available", $"", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
+
             if (VehicleToRecover != null)
             {
                 if (VehicleToRecover.Exists())
                 {
                     VehicleToRecover.MarkAsNoLongerNeeded();
                     VehicleToRecover.IsPersistent = false;
+                    NetworkFadeOutEntity(VehicleToRecover.Handle, true, false);
+                    await Client.Delay(5000);
+                    VehicleToRecover.Delete();
                 }
             }
 
@@ -235,34 +290,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
             {
                 if (TowVehicle.Exists())
                 {
-                    if (TowVehicle.AttachedBlip != null)
-                    {
-                        if (TowVehicle.AttachedBlip.Exists())
-                        {
-                            TowVehicle.AttachedBlip.Delete();
-                        }
-                    }
-
                     TowVehicle.MarkAsNoLongerNeeded();
                     TowVehicle.IsPersistent = false;
+                    NetworkFadeOutEntity(VehicleToRecover.Handle, true, false);
+                    NetworkFadeOutEntity(TowDriver.Handle, true, false);
+                    await Client.Delay(5000);
+                    VehicleToRecover.Delete();
+                    TowVehicle.Delete();
                 }
             }
-
-            if (validCleanup)
-            {
-                Wrappers.Helpers.ShowNotification("City Impound", "Now leaving...", $"", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
-            }
-
-            int countdownCounter = 60;
-
-            while (countdownCounter > 0)
-            {
-                countdownCounter--;
-                await Client.Delay(1000);
-            }
-
-            Wrappers.Helpers.ShowNotification("City Impound", "Is now available", $"", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
-            IsServiceActive = false;
         }
     }
 }

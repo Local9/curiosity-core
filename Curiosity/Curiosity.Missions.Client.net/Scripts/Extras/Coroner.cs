@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
+using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Extras
@@ -37,7 +38,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                     return;
                 }
 
-                int spawnDistance = Client.Random.Next(300, 800);
+                int spawnDistance = Client.Random.Next(100, 200);
                 RaycastResult raycastResult = World.RaycastCapsule(Game.PlayerPed.Position, Game.PlayerPed.Position, 5.0f, IntersectOptions.Peds1, Game.Player.Character);
                 if (raycastResult.DitHitEntity)
                 {
@@ -253,8 +254,24 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 await Client.Delay(1000);
             }
 
-            Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Available", $"");
+            client.RegisterTickHandler(OnCooldownTask);
+        }
+
+        static async Task OnCooldownTask()
+        {
+            await Task.FromResult(0);
+            int countdown = 60000;
+
+            long gameTime = GetGameTimer();
+
+            while ((GetGameTimer() - gameTime) < countdown)
+            {
+                await Client.Delay(500);
+            }
+
             IsServiceActive = false;
+            client.DeregisterTickHandler(OnCooldownTask);
+            Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Available", $"");
         }
     }
 }

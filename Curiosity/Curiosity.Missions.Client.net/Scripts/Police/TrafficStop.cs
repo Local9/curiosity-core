@@ -7,7 +7,6 @@ using Curiosity.Missions.Client.net.Wrappers;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Shared.Client.net.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,6 +17,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
     class TrafficStop
     {
         public const string VEHICLE_HAS_BEEN_STOPPED = "curiosity::VehicleStopped";
+        public const string IS_TRAFFIC_STOPPED_PED = "curiosity::PedIsTrafficStopped";
 
         static Client client = Client.GetInstance();
         static bool IsScenarioPlaying = false;
@@ -137,10 +137,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         if (IsConductingPullover) return;
 
                         TargetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
-
-                        if (TargetVehicle.Driver.IsPlayer) return;
-
+                        
                         if (TargetVehicle == null) return;
+                        if (TargetVehicle.Driver.IsPlayer) return;
 
                         // if no driver, don't do anything
                         if (TargetVehicle.Driver == null) return;
@@ -240,10 +239,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
 
                 if (TargetVehicle != null)
-                    API.NetworkRequestControlOfEntity(TargetVehicle.Handle);
+                    API.NetworkRequestControlOfEntity(TargetVehicle.NetworkId);
 
                 if (StoppedDriver != null)
-                    API.NetworkRequestControlOfEntity(StoppedDriver.Handle);
+                    API.NetworkRequestControlOfEntity(StoppedDriver.NetworkId);
 
                 if (IsVehicleStopped && TargetVehicle.IsEngineRunning && !IsVehicleDriverMimicking)
                 {
@@ -559,7 +558,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             IsConductingPullover = true; // Flag that a pullover has started
             HasRanDriverID = false;
 
-            StoppedDriver = stoppedVehicle.Driver;
+            StoppedDriver = new Ped(stoppedVehicle.Driver.Handle); // Make a new reference of the driver
+            if (!DecorGetBool(StoppedDriver.Handle, IS_TRAFFIC_STOPPED_PED))
+            {
+                DecorSetBool(StoppedDriver.Handle, IS_TRAFFIC_STOPPED_PED, true);
+            }
             // make sure the driver has full health
             StoppedDriver.Health = 200;
             // Make sure they are set not to be removed
