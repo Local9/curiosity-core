@@ -67,7 +67,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             client.DeregisterTickHandler(OnTaskArrestPed);
             client.DeregisterTickHandler(OnTaskJailPed);
-            Screen.ShowNotification("~b~Arrests~s~: ~r~Disabled");
+            // Screen.ShowNotification("~b~Arrests~s~: ~r~Disabled");
         }
 
         static async void SetupJailHouses()

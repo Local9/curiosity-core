@@ -100,7 +100,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             client.DeregisterTickHandler(OnTrafficStopTask);
             client.DeregisterTickHandler(OnTrafficStopStateTask);
             client.DeregisterTickHandler(OnEmoteCheck);
-            Screen.ShowNotification("~b~Traffic Stops~s~: ~r~Disabled");
+            // Screen.ShowNotification("~b~Traffic Stops~s~: ~r~Disabled");
         }
 
         static async Task OnEmoteCheck()
@@ -286,7 +286,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) >= 300f)
                 {
                     if (TargetVehicle.AttachedBlip != null)
-                        Helpers.ShowNotification("Dispatch", "~r~They got away...", string.Empty);
+                        Helpers.ShowNotification("Dispatch", "~r~Traffic Stop Reset", string.Empty);
 
                     Reset();
                 }
@@ -476,6 +476,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             ArrestPed.ArrestedPed = null;
             ArrestPed.IsPedGrabbed = false;
             ArrestPed.PedInHandcuffs = null;
+
+            Extras.VehicleTow.Reset();
+            Extras.Coroner.Reset();
 
             // Extras.PoliceArrestVehicle.HasPedBeenPickedUp = false;
 
