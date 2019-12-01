@@ -9,18 +9,19 @@ using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Helper.Area;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Environment
 {
 
-    class SafeZonePlayer
+    class SafeZoneVehicle
     {
         Client client = Client.GetInstance();
-        CitizenFX.Core.Player _player;
+        CitizenFX.Core.Vehicle _vehicle;
 
-        public SafeZonePlayer(CitizenFX.Core.Player player)
+        public SafeZoneVehicle(CitizenFX.Core.Vehicle vehicle)
         {
-            _player = player;
+            _vehicle = vehicle;
             client.RegisterTickHandler(DisableCollision);
         }
 
@@ -28,24 +29,15 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             await Client.Delay(0);
 
-            _player.Character.Opacity = 180;
+            _vehicle.Opacity = 200;
 
-            if (_player.Character.IsInVehicle())
-                _player.Character.CurrentVehicle.Opacity = 180;
+            _vehicle.SetNoCollision(Game.PlayerPed, false);
+            Game.Player.Character.SetNoCollision(_vehicle, false);
 
-            _player.Character.SetNoCollision(Game.PlayerPed, false);
-            Game.Player.Character.SetNoCollision(_player.Character, false);
-
-            if (_player.Character.IsInVehicle())
+            if (Game.PlayerPed.IsInVehicle())
             {
-                if (Game.PlayerPed.IsInVehicle())
-                {
-                    _player.Character.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
-                }
-                else
-                {
-                    _player.Character.CurrentVehicle.SetNoCollision(Game.PlayerPed, false);
-                }
+                _vehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
+                Game.PlayerPed.CurrentVehicle.SetNoCollision(_vehicle, false);
             }
         }
 
@@ -53,22 +45,15 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             client.DeregisterTickHandler(DisableCollision);
 
-            _player.Character.ResetOpacity();
+            _vehicle.ResetOpacity();
 
-            _player.Character.SetNoCollision(Game.PlayerPed, true);
-            Game.Player.Character.SetNoCollision(_player.Character, true);
+            _vehicle.SetNoCollision(Game.PlayerPed, true);
+            Game.Player.Character.SetNoCollision(_vehicle, true);
 
-            if (_player.Character.IsInVehicle())
+            if (Game.PlayerPed.IsInVehicle())
             {
-                if (Game.PlayerPed.IsInVehicle())
-                {
-                    _player.Character.CurrentVehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
-                }
-                else
-                {
-                    _player.Character.CurrentVehicle.SetNoCollision(Game.PlayerPed, true);
-                }
-                _player.Character.CurrentVehicle.ResetOpacity();
+                _vehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
+                Game.PlayerPed.CurrentVehicle.SetNoCollision(_vehicle, true);
             }
         }
     }
@@ -77,24 +62,29 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
     {
         static Client client = Client.GetInstance();
 
-        static Vector3 pos1 = new Vector3(-1095.472f, -880.6858f, -1f);
-        static Vector3 pos2 = new Vector3(-1033.078f, -840.2169f, 10f);
+        static List<AreaBox> safeZones = new List<AreaBox>();
+        
+        static int Opacity = 200;
 
-        static AreaBox areaBox = new AreaBox();
-        static int Opacity = 180;
+        static Dictionary<int, SafeZoneVehicle> safeZoneVehicles = new Dictionary<int, SafeZoneVehicle>();
 
-        static Dictionary<int, SafeZonePlayer> safeZonePlayer = new Dictionary<int, SafeZonePlayer>();
-
-        static bool IsInArea = false;
-
-        static Dictionary<Vector3, AreaBox> safeZones = new Dictionary<Vector3, AreaBox>();
+        static bool IsInsideSafeZone = false;
 
         public static void Init()
         {
+            AreaBox areaBox = new AreaBox();
             areaBox.Angle = 10f;
-            areaBox.Pos1 = pos1;
-            areaBox.Pos2 = pos2;
+            areaBox.Pos1 = new Vector3(-1095.472f, -880.6858f, -1f);
+            areaBox.Pos2 = new Vector3(-1033.078f, -840.2169f, 100f);
             areaBox.Identifier = $"{SpawnLocations.VespucciPD}";
+            safeZones.Add(areaBox);
+
+            AreaBox areaBox2 = new AreaBox();
+            areaBox2.Angle = 0f;
+            areaBox2.Pos1 = new Vector3(392.5307f, -1027.381f, -1f);
+            areaBox2.Pos2 = new Vector3(454.7709f, -966.1293f, 100f);
+            areaBox2.Identifier = $"MissionRow";
+            safeZones.Add(areaBox2);
 
             client.RegisterEventHandler("curiosity:Client:Player:Environment:OnEnterArea", new Action(OnEnter));
             client.RegisterEventHandler("curiosity:Client:Player:Environment:OnExitArea", new Action(OnExit));
@@ -104,44 +94,16 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         static async Task SafeZonePeds()
         {
-            while (IsInArea)
+            await Client.Delay(0);
+            int PlayerHandle = Game.PlayerPed.Handle;
+
+            List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(Game.PlayerPed.Position) < 30f).ToList();
+
+            foreach (CitizenFX.Core.Vehicle vehicle in vehicles)
             {
-                await Client.Delay(0);
-                int PlayerHandle = Game.PlayerPed.Handle;
-                Game.PlayerPed.Opacity = Opacity;
-
-                if (Game.PlayerPed.IsInVehicle())
-                {
-                    Game.PlayerPed.CurrentVehicle.Opacity = Opacity;
-                }
-
-                List<CitizenFX.Core.Player> playerPeds = Client.players.ToList().Select(m => m).Where(m => m.Character.Position.DistanceToSquared(Game.PlayerPed.Position) < 15f).ToList();
-
-                foreach (CitizenFX.Core.Player pedInSafeZone in playerPeds)
-                {
-                    if (pedInSafeZone == Game.Player) continue;
-                    if (safeZonePlayer.ContainsKey(pedInSafeZone.Handle)) continue;
-                    safeZonePlayer.Add(pedInSafeZone.Handle, new SafeZonePlayer(pedInSafeZone));
-                }
+                if (safeZoneVehicles.ContainsKey(vehicle.Handle)) continue;
+                safeZoneVehicles.Add(vehicle.Handle, new SafeZoneVehicle(vehicle));
             }
-
-            foreach (CitizenFX.Core.Player player in Client.players)
-            {
-                if (player == Game.Player) continue;
-                if (safeZonePlayer.ContainsKey(player.Handle))
-                {
-                    safeZonePlayer[player.Handle].EnableCollision();
-                    safeZonePlayer.Remove(player.Handle);
-                };
-            }
-
-            Game.PlayerPed.ResetOpacity();
-
-            if (Game.PlayerPed.IsInVehicle())
-                Game.PlayerPed.CurrentVehicle.ResetOpacity();
-
-            client.DeregisterTickHandler(SafeZonePeds);
-            safeZonePlayer.Clear();
         }
 
         static async Task IsInSafeZone()
@@ -149,31 +111,71 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             await Task.FromResult(0);
             if (Game.Player.IsAlive)
             {
-                areaBox.Check();
-
-                bool registeredTick = false;
-
-                while (IsInArea)
+                foreach (AreaBox areaBox in safeZones)
                 {
-                    await Client.Delay(0);
-                    if (!registeredTick)
-                    {
-                        client.RegisterTickHandler(SafeZonePeds);
-                        registeredTick = true;
-                    }
                     areaBox.Check();
                 }
+            }
+
+            if (IsInsideSafeZone)
+            {
+                Game.PlayerPed.Opacity = Opacity;
+
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    Game.PlayerPed.CurrentVehicle.Opacity = Opacity;
+                }
+            }
+            else
+            {
+                Game.PlayerPed.ResetOpacity();
+
+                if (Game.PlayerPed.IsInVehicle())
+                    Game.PlayerPed.CurrentVehicle.ResetOpacity();
+
+                if (Client.CurrentVehicle != null)
+                    Client.CurrentVehicle.ResetOpacity();
             }
         }
 
         public static void OnEnter()
         {
-            IsInArea = true;
+            client.RegisterTickHandler(SafeZonePeds);
+            IsInsideSafeZone = true;
+
+            if (Player.PlayerInformation.IsDeveloper())
+            {
+                Log.Info("Entered Safezone");
+            }
         }
 
-        public static void OnExit()
+        public static async void OnExit()
         {
-            IsInArea = false;
+            client.DeregisterTickHandler(SafeZonePeds);
+            IsInsideSafeZone = false;
+
+            List<CitizenFX.Core.Vehicle> vehs = World.GetAllVehicles().ToList();
+
+            foreach (CitizenFX.Core.Vehicle vehicle in vehs)
+            {
+                await Client.Delay(0);
+                if (vehicle.Exists())
+                {
+                    vehicle.ResetOpacity();
+                    if (safeZoneVehicles.ContainsKey(vehicle.Handle))
+                    {
+                        safeZoneVehicles[vehicle.Handle].EnableCollision();
+                        safeZoneVehicles.Remove(vehicle.Handle);
+                    };
+                }
+            }
+
+            safeZoneVehicles.Clear();
+
+            if (Player.PlayerInformation.IsDeveloper())
+            {
+                Log.Info("Left Safezone");
+            }
         }
     }
 }
