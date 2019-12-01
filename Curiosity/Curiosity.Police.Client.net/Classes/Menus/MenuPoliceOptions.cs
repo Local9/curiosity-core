@@ -215,6 +215,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                     description += $"~n~- ~y~{1000 - knowledge:#,##0} ~s~Knowledge";
 
                 menuItemShowRadar.Description = description;
+                menuCheckboxTrafficStops.Description = description;
             }
             else
             {
