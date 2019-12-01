@@ -17,7 +17,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
         }
 
         // STATE
-        static bool IsServiceActive = false;
+        static public bool IsServiceActive = false;
 
         // ENTITIES
         static Vehicle VehicleToRecover;

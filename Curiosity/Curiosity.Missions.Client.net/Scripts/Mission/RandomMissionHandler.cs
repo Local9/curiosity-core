@@ -33,6 +33,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static bool IsOnActiveCallout = false;
         static public PatrolZone patrolZone = PatrolZone.City;
 
+        static bool _IsArrestActive = false;
+        static bool _IsTrafficStopActive = false;
+
         static public void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
@@ -49,6 +52,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static void OnArrests(bool state)
         {
+            _IsArrestActive = state;
             if (state)
             {
                 Police.ArrestPed.Setup();
@@ -61,6 +65,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static void OnTrafficStops(bool state)
         {
+            _IsTrafficStopActive = state;
             if (state)
             {
                 Police.TrafficStop.Setup();
@@ -107,11 +112,18 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     CreateStoreMission.CleanUp(true);
 
                 Log.Info($"JOB: {job}");
-                Police.ArrestPed.Dispose();
-                Police.TrafficStop.Dispose();
 
-                Scripts.Extras.VehicleTow.Reset();
-                Scripts.Extras.Coroner.Reset();
+                if (_IsArrestActive)
+                    Police.ArrestPed.Dispose();
+
+                if (_IsTrafficStopActive)
+                    Police.TrafficStop.Dispose();
+
+                if (Extras.VehicleTow.IsServiceActive)
+                    Scripts.Extras.VehicleTow.Reset();
+
+                if (Extras.Coroner.IsServiceActive)
+                    Scripts.Extras.Coroner.Reset();
 
                 return;
             }
