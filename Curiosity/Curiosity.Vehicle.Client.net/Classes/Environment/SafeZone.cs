@@ -19,9 +19,12 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         Client client = Client.GetInstance();
         CitizenFX.Core.Vehicle _vehicle;
 
+        float maxSpeed;
+
         public SafeZoneVehicle(CitizenFX.Core.Vehicle vehicle)
         {
             _vehicle = vehicle;
+            maxSpeed = API.GetVehicleModelMaxSpeed((uint)_vehicle.Model.Hash);
             client.RegisterTickHandler(DisableCollision);
         }
 
@@ -36,6 +39,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
             if (Game.PlayerPed.IsInVehicle())
             {
+                _vehicle.MaxSpeed = 10f;
+
                 _vehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
                 Game.PlayerPed.CurrentVehicle.SetNoCollision(_vehicle, false);
             }
@@ -46,6 +51,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             client.DeregisterTickHandler(DisableCollision);
 
             _vehicle.ResetOpacity();
+            _vehicle.MaxSpeed = maxSpeed;
 
             _vehicle.SetNoCollision(Game.PlayerPed, true);
             Game.Player.Character.SetNoCollision(_vehicle, true);
@@ -69,6 +75,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static Dictionary<int, SafeZoneVehicle> safeZoneVehicles = new Dictionary<int, SafeZoneVehicle>();
 
         static bool IsInsideSafeZone = false;
+        static bool DebugAreas = false;
 
         public static void Init()
         {
@@ -89,10 +96,19 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             client.RegisterEventHandler("curiosity:Client:Player:Environment:OnEnterArea", new Action(OnEnter));
             client.RegisterEventHandler("curiosity:Client:Player:Environment:OnExitArea", new Action(OnExit));
 
+            client.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action(OnDrawAreas));
+
             client.RegisterTickHandler(IsInSafeZone);
         }
 
-        static async Task SafeZonePeds()
+        static void OnDrawAreas()
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+
+            DebugAreas = !DebugAreas;
+        }
+
+        static async Task SafeZoneVehicles()
         {
             await Client.Delay(0);
             int PlayerHandle = Game.PlayerPed.Handle;
@@ -114,6 +130,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 foreach (AreaBox areaBox in safeZones)
                 {
                     areaBox.Check();
+
+                    if (DebugAreas)
+                        areaBox.Draw();
                 }
             }
 
@@ -140,7 +159,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         public static void OnEnter()
         {
-            client.RegisterTickHandler(SafeZonePeds);
+            client.RegisterTickHandler(SafeZoneVehicles);
             IsInsideSafeZone = true;
 
             if (Player.PlayerInformation.IsDeveloper())
@@ -151,7 +170,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         public static async void OnExit()
         {
-            client.DeregisterTickHandler(SafeZonePeds);
+            client.DeregisterTickHandler(SafeZoneVehicles);
             IsInsideSafeZone = false;
 
             List<CitizenFX.Core.Vehicle> vehs = World.GetAllVehicles().ToList();

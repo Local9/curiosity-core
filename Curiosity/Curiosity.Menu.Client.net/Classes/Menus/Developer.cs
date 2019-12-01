@@ -8,12 +8,16 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
     {
         static bool menuSetup = false;
 
+        static bool _debugSafezones = false;
+
         static Client client = Client.GetInstance();
-        static Menu menu = new Menu("Developer Menu", "Dev tools, what else did you expect?~n~~n~Why does this exist now, BECAUSE FUCK WEATHER!!");
+        static Menu menu = new Menu("Developer Menu", "Various Settings or options");
 
         // Vehicle Options
         static MenuItem mItemRepair = new MenuItem("Repair Vehicle");
         static MenuItem mItemRefuel = new MenuItem("Refuel Vehicle");
+        // Debuging
+        static MenuCheckboxItem menuCheckboxItemDebugAreas = new MenuCheckboxItem("Draw Safezones", _debugSafezones);
 
         public static void Init()
         {
@@ -42,10 +46,20 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.OnMenuClose += Menu_OnMenuClose;
 
             menu.OnItemSelect += Menu_OnItemSelect;
+            menu.OnCheckboxChange += Menu_OnCheckboxChange;
 
             menuSetup = true;
 
             MenuBase.AddSubMenu(menu);
+        }
+
+        private static void Menu_OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
+        {
+            if (menuItem == menuCheckboxItemDebugAreas)
+            {
+                _debugSafezones = newCheckedState;
+                Client.TriggerEvent("curiosity:Client:Player:Environment:DrawAreas");
+            }
         }
 
         private static void Menu_OnMenuClose(Menu menu)
@@ -64,6 +78,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.AddMenuItem(mItemRefuel);
             mItemRepair.Enabled = enableVehicleOptions;
             menu.AddMenuItem(mItemRepair);
+
+            menu.AddMenuItem(menuCheckboxItemDebugAreas);
         }
 
         private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
