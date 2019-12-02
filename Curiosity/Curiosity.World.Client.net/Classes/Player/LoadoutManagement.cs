@@ -14,7 +14,7 @@ namespace Curiosity.World.Client.net.Classes.Player
         static WeaponHash currentWeapon = WeaponHash.Unarmed;
         protected static List<WeaponHash> RestrictedWeapons = new List<WeaponHash>()
         {
-            WeaponHash.SniperRifle,
+            //WeaponHash.SniperRifle,
             //WeaponHash.FireExtinguisher,
             WeaponHash.CompactGrenadeLauncher,
             //WeaponHash.Snowball,

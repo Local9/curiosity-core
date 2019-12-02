@@ -186,7 +186,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     TargetVehicle.AttachedBlip.Color = BlipColor.Red;
                                 }
 
-                                if (Game.IsControlJustReleased(0, Control.Pickup))
+                                if (Game.IsControlJustPressed(0, Control.Pickup))
                                 {
                                     BlipSiren(Client.CurrentVehicle.Handle);
                                     Pullover(TargetVehicle);
