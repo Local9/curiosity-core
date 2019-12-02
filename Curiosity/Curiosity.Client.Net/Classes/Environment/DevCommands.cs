@@ -36,6 +36,8 @@ namespace Curiosity.Client.net.Classes.Environment
                 client.RegisterCommand("allweapons", new Action<int, List<object>, string>(GiveAllWeapons), false);
                 client.RegisterCommand("del", new Action<int, List<object>, string>(OnDeleteEntity), false);
 
+                API.RegisterCommand("bones", new Action<int, List<object>, string>(OnBones), false);
+
                 //Client.GetInstance().ClientCommands.Register("/dev", Handle);
                 //Register("ui", ToggleDevUI);
                 //Register("eui", ToggleEntityUI);
@@ -133,6 +135,21 @@ namespace Curiosity.Client.net.Classes.Environment
         //        Log.Error($"ReviveMe Error: {ex.Message}");
         //    }
         //}
+
+        private static void OnBones(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (Client.CurrentVehicle == null) return;
+
+            string bones = string.Empty;
+
+            Client.CurrentVehicle.Bones.ToList().ForEach(bone =>
+            {
+                bones += $"{(Bone)bone.Index},";
+            });
+
+            Log.Info(bones);
+        }
 
         // [RequiresPermissionFlags(Privilege.PROJECTMANAGER)]
         private static void GiveAllWeapons(int playerHandle, List<object> arguments, string raw)

@@ -23,8 +23,34 @@ namespace Curiosity.Client.net.Classes.Player
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:Information", new Action(GetPlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:UpdateFlags", new Action(OnFlagUpdate));
+            client.RegisterEventHandler("curiosity:Client:Player:UpdateExtraFlags", new Action(UpdateExtraFlags));
             await BaseScript.Delay(1000);
             PeriodicCheck();
+        }
+
+        static void UpdateExtraFlags()
+        {
+            SetPoliceRadarBlips(false);
+            int outIncidentId = 0;
+            if (CreateIncidentWithEntity(14, Game.PlayerPed.Handle, 3, 3f, ref outIncidentId))
+            {
+                SetIncidentRequestedUnits(outIncidentId, 14, 3);
+
+                if (outIncidentId > 0)
+                {
+                    listOfIncidents.Add(outIncidentId);
+                }
+            }
+            int outIncidentId2 = 0;
+            if (CreateIncidentWithEntity(11, Game.PlayerPed.Handle, 6, 3f, ref outIncidentId2))
+            {
+                SetIncidentRequestedUnits(outIncidentId2, 11, 6);
+
+                if (outIncidentId2 > 0)
+                {
+                    listOfIncidents.Add(outIncidentId2);
+                }
+            }
         }
 
         static void OnFlagUpdate()

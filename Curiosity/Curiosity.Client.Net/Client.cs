@@ -16,7 +16,10 @@ namespace Curiosity.Client.net
         public static int PlayerHandle { get { return Game.Player.Handle; } }
         public static GlobalEntity.User User;
         public static string PLAYER_GROUP = "PLAYER";
+        private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
         public static RelationshipGroup PlayerRelationshipGroup;
+
+        public static CitizenFX.Core.Vehicle CurrentVehicle;
 
         public static bool isSessionActive = false;
 
@@ -43,9 +46,24 @@ namespace Curiosity.Client.net
             ClassLoader.Init();
             RegisterTickHandler(OnTick);
             RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action(OnSessionActive));
+            RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
 
             //RegisterEventHandler("TriggerEventNearPoint", new Action<string>(HandleLocalEvent));
             //Client.GetInstance().PointEventHandlers["Communication.LocalChat"] = new Func<PointEvent, Task>(HandleLocalChat);
+        }
+
+        public static void OnVehicleId(int vehicleId)
+        {
+            if (CurrentVehicle == null)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                CurrentVehicle = new Vehicle(vehicleId);
+            }
+            else if (Client.CurrentVehicle.Handle != vehicleId)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                CurrentVehicle = new Vehicle(vehicleId);
+            }
         }
 
         async void OnSessionActive()
