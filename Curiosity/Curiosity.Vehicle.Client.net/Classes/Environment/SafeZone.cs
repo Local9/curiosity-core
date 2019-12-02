@@ -189,6 +189,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 }
             }
 
+            if (Game.PlayerPed.IsInVehicle())
+                Game.PlayerPed.CurrentVehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)Game.PlayerPed.CurrentVehicle.Model.Hash);
+
             safeZoneVehicles.Clear();
 
             if (Player.PlayerInformation.IsDeveloper())
