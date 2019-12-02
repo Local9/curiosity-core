@@ -50,14 +50,15 @@ namespace Curiosity.World.Client.net.Classes.Environment
                     if (!Game.PlayerPed.Weapons.HasWeapon(WeaponHash.Snowball))
                     {
                         Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
-                        Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, false, false);
+                        Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
                     }
                     else if (Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo < 10)
                     {
                         Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
                         Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo++;
-                        await Client.Delay(1000);
+                        Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
                     }
+                    await Client.Delay(1000);
                 }
             }
         }
