@@ -40,6 +40,25 @@ namespace Curiosity.World.Client.net.Classes.Environment
                 API.SetForceVehicleTrails(trails);
                 API.SetForcePedFootstepsTracks(trails);
                 await Client.Delay(0);
+
+                if (trails
+                    && (Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Unarmed || Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Snowball)
+                    && Game.IsControlPressed(0, Control.ThrowGrenade))
+                {
+                    API.RequestAnimDict("anim@mp_snowball");
+
+                    if (!Game.PlayerPed.Weapons.HasWeapon(WeaponHash.Snowball))
+                    {
+                        Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
+                        Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, false, false);
+                    }
+                    else if (Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo < 10)
+                    {
+                        Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
+                        Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo++;
+                        await Client.Delay(1000);
+                    }
+                }
             }
         }
 
