@@ -43,7 +43,8 @@ namespace Curiosity.World.Client.net.Classes.Environment
 
                 if (trails
                     && (Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Unarmed || Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Snowball)
-                    && Game.IsControlPressed(0, Control.ThrowGrenade))
+                    && Game.IsControlPressed(0, Control.ThrowGrenade)
+                    && !Game.PlayerPed.IsInVehicle())
                 {
                     API.RequestAnimDict("anim@mp_snowball");
 
