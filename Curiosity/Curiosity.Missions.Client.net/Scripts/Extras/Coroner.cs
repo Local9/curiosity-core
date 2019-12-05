@@ -39,7 +39,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 }
 
                 int spawnDistance = Client.Random.Next(100, 200);
-                RaycastResult raycastResult = World.RaycastCapsule(Game.PlayerPed.Position, Game.PlayerPed.Position, 5.0f, IntersectOptions.Peds1, Game.Player.Character);
+                RaycastResult raycastResult = World.RaycastCapsule(Game.PlayerPed.Position, Game.PlayerPed.Position, 2.0f, IntersectOptions.Peds1, Game.Player.Character);
                 if (raycastResult.DitHitEntity)
                 {
                     if (raycastResult.HitEntity.Model.IsPed)
@@ -59,6 +59,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                             Reset();
                             return;
                         }
+
+                        Client.TriggerEvent("curiosity:interaction:coroner", PedToRecover.NetworkId); // PED UPDATE
 
                         Model coronerModel = CoronerDriverHash;
                         Model coronerVehicleModel = CoronerVehicleHash;

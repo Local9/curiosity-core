@@ -133,7 +133,9 @@ namespace Curiosity.Missions.Client.net
         {
             try
             {
-                // Debug.WriteLine($"REGISTERED: {action.Method.Name}");
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                    Debug.WriteLine($"REGISTERED: {action.Method.Name}");
+
                 Tick += action;
             }
             catch (Exception ex)
@@ -150,7 +152,9 @@ namespace Curiosity.Missions.Client.net
         {
             try
             {
-                // Debug.WriteLine($"DEREGISTERED: {action.Method.Name}");
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                    Debug.WriteLine($"DEREGISTERED: {action.Method.Name}");
+
                 Tick -= action;
             }
             catch (Exception ex)

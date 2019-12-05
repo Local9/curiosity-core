@@ -40,7 +40,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                 }
 
                 Screen.ShowNotification("~g~Creating Interactive Ped");
-                Vector3 spawnPosition = await Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 5f, 0f)).Ground();
+                Vector3 spawnPosition = await Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 2f, 0f)).Ground();
 
                 Model model = PedHash.Abigail;
                 await model.Request(10000);

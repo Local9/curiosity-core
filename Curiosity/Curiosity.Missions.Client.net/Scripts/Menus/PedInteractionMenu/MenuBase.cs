@@ -1,6 +1,9 @@
 ﻿using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
 using System;
+using System.Threading.Tasks;
+using CitizenFX.Core;
 
 namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 {
@@ -17,6 +20,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 
         // Dead Interactions
         static MenuItem mItemCpr = new MenuItem("CPR");
+        static MenuItem mItemCallCoroner = new MenuItem("Call Coroner");
 
         static public void Open(InteractivePed interactivePed)
         {
@@ -38,12 +42,21 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 
                 MenuController.AddMenu(MainMenu);
             }
+            client.RegisterTickHandler(OnDistanceTask);
             MainMenu.OpenMenu();
+        }
+
+        static async Task OnDistanceTask()
+        {
+            await Task.FromResult(0);
+
+            if (_interactivePed.Position.Distance(Game.PlayerPed.Position) > 4)
+                MainMenu.CloseMenu();
         }
 
         private static void MainMenu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
         {
-            throw new NotImplementedException();
+            
         }
 
         private async static void MainMenu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
@@ -52,11 +65,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
             if (menuItem == mItemCpr)
             {
                 Scripts.PedInteractions.Cpr.Init();
-
                 await Client.Delay(1000);
-
-                _interactivePed.IsPerformingCpr = true;
                 PedInteractions.Cpr.InteractionCPR(_interactivePed);
+                MainMenu.CloseMenu();
+            }
+            if (menuItem == mItemCallCoroner)
+            {
+                Extras.Coroner.RequestService();
                 MainMenu.CloseMenu();
             }
             // ALIVE
@@ -71,7 +86,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
             if (_interactivePed.IsDead)
             {
                 // CPR / Coroner
-                MainMenu.AddMenuItem(mItemCpr);
+                if (!_interactivePed.HasCprFailed)
+                    MainMenu.AddMenuItem(mItemCpr);
+
+                MainMenu.AddMenuItem(mItemCallCoroner);
             }
             else
             {
@@ -86,7 +104,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 
         private static void MainMenu_OnMenuClose(Menu menu)
         {
-            _interactivePed.IsPerformingCpr = true;
+            client.DeregisterTickHandler(OnDistanceTask);
         }
     }
 }

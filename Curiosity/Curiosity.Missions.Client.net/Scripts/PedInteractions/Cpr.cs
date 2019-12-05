@@ -70,6 +70,13 @@ namespace Curiosity.Missions.Client.net.Scripts.PedInteractions
             if (HasAnimDictLoaded("mini@cpr@char_b@cpr_def"))
                 RemoveAnimDict("mini@cpr@char_b@cpr_def");
 
+            Client.TriggerEvent("curiosity:interaction:cpr", _victim.NetworkId, false);
+
+            if (!_hasSucceeded)
+            {
+                Client.TriggerEvent("curiosity:interaction:cpr:failed", _victim.NetworkId);
+            }
+
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
             {
                 Debug.WriteLine("Initiated CPR -> Dispose");
@@ -78,6 +85,8 @@ namespace Curiosity.Missions.Client.net.Scripts.PedInteractions
 
         public static void InteractionCPR(InteractivePed interactivePed)
         {
+            Client.TriggerEvent("curiosity:interaction:cpr", interactivePed.NetworkId, true);
+
             _cprStart = _seconds;
             _performingCpr = true;
             _cprFinished = false;
@@ -221,6 +230,10 @@ namespace Curiosity.Missions.Client.net.Scripts.PedInteractions
             if (!_hasSucceeded)
             {
                 Screen.ShowNotification("~r~The person has died.");
+            }
+            else
+            {
+                _victim.Resurrect();
             }
             _hasSucceeded = false;
             _victim.IsPositionFrozen = false;
