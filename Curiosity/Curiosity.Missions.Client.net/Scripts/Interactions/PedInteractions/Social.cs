@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.PedInteractions
+namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 {
     class Social
     {

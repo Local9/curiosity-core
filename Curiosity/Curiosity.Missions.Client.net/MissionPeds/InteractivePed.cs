@@ -1,10 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using CitizenFX.Core.Native;
 using Curiosity.Missions.Client.net.Wrappers;
 using System;
 using System.Threading.Tasks;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Extensions;
+// INTERACTIONS
+using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -14,7 +17,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public const int MovementUpdateInterval = 5;
 
-        private readonly Ped _ped;
+        public readonly Ped Ped;
         private Ped _target;
         // MENU STATES
         public bool IsMenuVisible = false;
@@ -27,6 +30,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         // Evil
         public bool CanBeArrested;
         public bool IsHandcuffed;
+        public bool IsArrested;
         // Arrested States
         public bool IsUnderTheInfluence;
         public bool IsCarryingIllegalItems;
@@ -48,19 +52,20 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         protected InteractivePed(int handle) : base(handle)
         {
-            this._ped = new Ped(handle);
+            this.Ped = new Ped(handle);
 
             IsMenuVisible = false;
             IsPerformingCpr = false;
             IsCoronerCalled = false;
             HasCprFailed = false;
+            IsArrested = false;
 
             Create();
         }
 
         private void Create()
         {
-            this._eventWrapper = new EntityEventWrapper(this._ped);
+            this._eventWrapper = new EntityEventWrapper(this.Ped);
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
@@ -78,7 +83,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         protected bool Equals(InteractivePed other)
         {
-            return (!base.Equals(other) ? false : object.Equals(this._ped, other._ped));
+            return (!base.Equals(other) ? false : object.Equals(this.Ped, other.Ped));
         }
 
         public override bool Equals(object obj)
@@ -97,17 +102,17 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public bool Equals(Ped other)
         {
-            return object.Equals(this._ped, other);
+            return object.Equals(this.Ped, other);
         }
 
         public static implicit operator Ped(InteractivePed v)
         {
-            return v._ped;
+            return v.Ped;
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() * 397 ^ (this._ped != null ? this._ped.GetHashCode() : 0);
+            return base.GetHashCode() * 397 ^ (this.Ped != null ? this.Ped.GetHashCode() : 0);
         }
 
         private async Task OnShowHelpTextTask()
@@ -154,6 +159,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             await Task.FromResult(0);
             helpText = string.Empty;
+
+            if (Scripts.MissionEvents.HasAcceptedCallout) return; // Should also check at the traffic stop
+
             if (this.Position.VDist(Game.PlayerPed.Position) <= 120f)
             {
                 if (this.Position.Distance(Game.PlayerPed.Position) <= 2f && CanDisplayMenu())
@@ -164,6 +172,44 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     {
                         helpText = string.Empty;
                         Scripts.Menus.PedInteractionMenu.MenuBase.Open(this);
+                    }
+                }
+
+                if (Game.PlayerPed.IsAiming && Ped.IsAlive) {
+                    if (this.Position.Distance(Game.PlayerPed.Position) > 4f && this.Position.Distance(Game.PlayerPed.Position) <= 20f && !IsArrested)
+                    {
+                        int entityHandle = 0;
+                        Ped pedBeingAimedAt = null;
+                        if (API.GetEntityPlayerIsFreeAimingAt(Game.Player.Handle, ref entityHandle))
+                        {
+                            if (entityHandle == 0) return;
+
+                            if (API.GetEntityType(entityHandle) == 1 && API.GetPedType(entityHandle) != 28)
+                            {
+                                pedBeingAimedAt = new Ped(entityHandle);
+                            }
+                        }
+
+                        if (pedBeingAimedAt != null)
+                        {
+                            if (Ped == pedBeingAimedAt)
+                            {
+                                if (Ped.IsInVehicle())
+                                {
+                                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_CONTEXT~ to demand the suspect to exit their vehicle.");
+                                }
+                                else
+                                {
+                                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_CONTEXT~ to demand the suspect to get on their knees.");
+                                }
+
+                                if (Game.IsControlJustPressed(0, Control.Context))
+                                {
+                                    IsArrested = true;
+                                    ArrestInteractions.InteractionArrestInit(this);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -177,18 +223,18 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 Screen.ShowSubtitle($"Menu: {IsMenuVisible}, CPR: {IsPerformingCpr}");
 
-            return !IsMenuVisible && !IsPerformingCpr && !IsCoronerCalled;
+            return !IsMenuVisible && !IsPerformingCpr && !IsCoronerCalled && !Game.PlayerPed.IsInVehicle();
         }
 
         private void OnCpr(int networkId, bool state)
         {
-            if (_ped.NetworkId == networkId)
+            if (Ped.NetworkId == networkId)
                 IsPerformingCpr = state;
         }
 
         private void OnCprFailed(int networkId)
         {
-            if (_ped.NetworkId == networkId)
+            if (Ped.NetworkId == networkId)
             {
                 IsPerformingCpr = false;
                 HasCprFailed = true;
@@ -197,7 +243,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private void OnCoronerCalled(int networkId)
         {
-            if (_ped.NetworkId == networkId)
+            if (Ped.NetworkId == networkId)
                 IsCoronerCalled = true;
         }
 
