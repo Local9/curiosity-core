@@ -127,7 +127,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 
                 if (_interactivePed.IsTrafficStop)
                 {
-
+                    // MURDER CHECKS
                 }
             }
         }
