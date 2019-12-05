@@ -107,6 +107,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 currentBlip.Delete();
             }
+            client.DeregisterTickHandler(OnMenuTask);
         }
 
         public void Update(EntityEventWrapper entityEventWrapper, Entity entity)
@@ -129,6 +130,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         public void Abort(EntityEventWrapper sender, Entity entity)
         {
             base.Delete();
+            client.DeregisterTickHandler(OnMenuTask);
         }
 
         private async Task OnMenuTask()
