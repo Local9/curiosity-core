@@ -15,7 +15,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
     {
         static Client client = Client.GetInstance();
 
-        static public Menu TrafficStopMenu;
+        static public MenuAPI.Menu TrafficStopMenu;
         static public bool IsMenuOpen = false;
         static MenuType menuTypeToOpen;
 
@@ -48,7 +48,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
 
             if (TrafficStopMenu == null)
             {
-                TrafficStopMenu = new Menu("", "Suspect Menu") { };
+                TrafficStopMenu = new MenuAPI.Menu("", "Suspect Menu") { };
 
                 TrafficStopMenu.OnMenuClose += Menu_OnMenuClose;
                 TrafficStopMenu.OnMenuOpen += Menu_OnMenuOpen;
@@ -60,7 +60,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             TrafficStopMenu.OpenMenu();
         }
 
-        private static void Menu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
+        private static void Menu_OnListIndexChange(MenuAPI.Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
         {
             if (listItem == mListItemSpeech)
             {
@@ -68,7 +68,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             }
         }
 
-        private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
+        private static void Menu_OnItemSelect(MenuAPI.Menu menu, MenuItem menuItem, int itemIndex)
         {
             if (menuItem == mItemRelease)
             {
@@ -142,7 +142,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             }
         }
 
-        private static void Menu_OnMenuOpen(Menu menu)
+        private static void Menu_OnMenuOpen(MenuAPI.Menu menu)
         {
             menu.ClearMenuItems();
 
@@ -190,7 +190,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             }
         }
 
-        private static void Menu_OnMenuClose(Menu menu)
+        private static void Menu_OnMenuClose(MenuAPI.Menu menu)
         {
             Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
             Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
@@ -292,7 +292,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler
             await BaseScript.Delay(0);
         }
 
-        public static void AddSubMenu(Menu menu, Menu submenu, string label = "→→→", bool buttonEnabled = true)
+        public static void AddSubMenu(MenuAPI.Menu menu, MenuAPI.Menu submenu, string label = "→→→", bool buttonEnabled = true)
         {
             MenuController.AddSubmenu(menu, submenu);
             MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = label, Enabled = buttonEnabled };

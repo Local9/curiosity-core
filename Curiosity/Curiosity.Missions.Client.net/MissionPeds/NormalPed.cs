@@ -380,26 +380,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private async void CheckIfArrested()
         {
-            if (this._ped.IsHandsUp())
-            {
-                if (Game.PlayerPed.Position.Distance(this.Position) <= 3f)
-                {
-                    helpText = $"Press ~INPUT_PICKUP~ to cuff the ~b~suspect~s~.";
-
-                    while (Game.IsControlPressed(0, Control.Pickup))
-                    {
-                        helpText = "Cuffing ~b~suspect.";
-
-                        this._ped.Cuff(true);
-
-                        await Client.Delay(0);
-                    }
-                }
-                else
-                {
-                    helpText = string.Empty;
-                }
-            }
+            
         }
 
         private static async Task ShowHelpText()

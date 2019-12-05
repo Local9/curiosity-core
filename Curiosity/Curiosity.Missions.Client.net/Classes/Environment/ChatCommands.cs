@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Curiosity.Shared.Client.net.Extensions;
 using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using CitizenFX.Core;
@@ -14,9 +14,54 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
         static public void Init()
         {
             RegisterCommand("callout", new Action<int, List<object>, string>(OnTestCallout), false);
-
             RegisterCommand("volume", new Action<int, List<object>, string>(OnAudioVolume), false);
+
+            RegisterCommand("create", new Action<int, List<object>, string>(OnCreateCommand), false);
         }
+
+        static async void OnCreateCommand(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!PlayerClient.ClientInformation.IsDeveloper())
+            {
+                Screen.ShowNotification("~r~Method Protected");
+            }
+
+            if (arguments.Count < 1) return;
+
+            string type = $"{arguments[0]}";
+
+            if (type == "ped")
+            {
+                bool killPed = false;
+                if (arguments.Count == 2)
+                {
+                    if ($"{arguments[1]}" == "dead")
+                        killPed = true;
+                }
+
+                Screen.ShowNotification("~g~Creating Interactive Ped");
+                Vector3 spawnPosition = await Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 5f, 0f)).Ground();
+
+                Model model = PedHash.Abigail;
+                await model.Request(10000);
+
+                Ped ped = await World.CreatePed(model, spawnPosition);
+
+                model.MarkAsNoLongerNeeded();
+
+                if (ped != null)
+                {
+                    MissionPeds.InteractivePed interactivePed = Scripts.PedCreators.InteractivePedCreator.Ped(ped);
+                    
+                    if (killPed)
+                    {
+                        Ped p = interactivePed;
+                        p.Kill();
+                    }
+                }
+            }
+        }
+
         static void OnAudioVolume(int playerHandle, List<object> arguments, string raw)
         {
             if (arguments.Count < 1) return;

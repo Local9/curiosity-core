@@ -56,13 +56,17 @@
     <Compile Include="DataClasses\Police\LinesOfSpeech.cs" />
     <Compile Include="DataClasses\SoundMessage.cs" />
     <Compile Include="DataClasses\Zones.cs" />
+    <Compile Include="MissionPeds\InteractivePed.cs" />
     <Compile Include="MissionPeds\NormalPed.cs" />
+    <Compile Include="MissionPedTypes\InteractablePed.cs" />
     <Compile Include="MissionPedTypes\PedNormal.cs" />
     <Compile Include="Scripts\Extras\Coroner.cs" />
     <Compile Include="Scripts\Extras\PrisonerTransport.cs" />
     <Compile Include="Scripts\Extras\VehicleTow.cs" />
+    <Compile Include="Scripts\Menus\PedInteractionMenu\MenuBase.cs" />
     <Compile Include="Scripts\MissionEvents.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />
+    <Compile Include="Scripts\PedCreators\InteractivePedCreator.cs" />
     <Compile Include="Scripts\PedCreators\NormalPedCreator.cs" />
     <Compile Include="Scripts\PedCreators\PedCreator.cs" />
     <Compile Include="Classes\PlayerClient\ClientInformation.cs" />
@@ -103,6 +107,8 @@
     <Compile Include="DataClasses\Mission\PoliceStores.cs" />
     <Compile Include="Scripts\Mission\CreateStoreMission.cs" />
     <Compile Include="Scripts\PedCreators\ZombieCreator.cs" />
+    <Compile Include="Scripts\PedInteractions\Cpr.cs" />
+    <Compile Include="Scripts\PedInteractions\Social.cs" />
     <Compile Include="Scripts\Police\ArrestPed.cs" />
     <Compile Include="Scripts\MarkerHandler.cs" />
     <Compile Include="Scripts\Police\MenuHandler\Submenu\TrafficStopInteractions.cs" />
@@ -135,7 +141,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Scripts\Menu\" />
+    <Folder Include="Scripts\Menus\PedInteractionMenu\SubMenus\" />
     <Folder Include="Scripts\Police\Department\" />
   </ItemGroup>
   <ItemGroup>

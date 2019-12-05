@@ -86,7 +86,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     if (store.hostages.Count > 0)
                     {
                         MissionHostage = store.hostages[0];
-                        HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, MissionHostage.SpawnPoint, MissionHostage.SpawnHeading);
+
+                        Vector3 spawnpoint = await GetSpawnPoint(MissionHostage.SpawnPoint);
+
+                        HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, spawnpoint, MissionHostage.SpawnHeading);
                         SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
                         await BaseScript.Delay(0);
                         new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
@@ -96,15 +99,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 }
 
                 await BaseScript.Delay(10);
-
-                Ped ped1 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData1.Model, MissionPedData1.SpawnPoint, MissionPedData1.SpawnHeading);
+                Vector3 mpd1Spawnpoint = await GetSpawnPoint(MissionPedData1.SpawnPoint);
+                Ped ped1 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData1.Model, mpd1Spawnpoint, MissionPedData1.SpawnHeading);
                 ped1.Weapons.Give(MissionPedData1.Weapon, 1, true, true);
                 await BaseScript.Delay(0);
                 MissionPed1 = PedCreators.MissionPedCreator.Ped(ped1, MissionPedData1.Alertness, MissionPedData1.Difficulty, MissionPedData1.VisionDistance);
                 
                 await BaseScript.Delay(0);
-                
-                Ped ped2 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData2.Model, MissionPedData2.SpawnPoint, MissionPedData2.SpawnHeading);
+
+                Vector3 mpd2Spawnpoint = await GetSpawnPoint(MissionPedData2.SpawnPoint);
+                Ped ped2 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData2.Model, mpd2Spawnpoint, MissionPedData2.SpawnHeading);
                 ped2.Weapons.Give(MissionPedData2.Weapon, 1, true, true);
                 await BaseScript.Delay(0);
                 MissionPed2 = PedCreators.MissionPedCreator.Ped(ped2, MissionPedData2.Alertness, MissionPedData2.Difficulty, MissionPedData2.VisionDistance);
@@ -135,6 +139,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             }
         }
 
+        static async Task<Vector3> GetSpawnPoint(Vector3 position)
+        {
+            return await position.Ground();
+        }
+
         static async Task SpawnBackupPedOne()
         {
             await Task.FromResult(0);
@@ -143,7 +152,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             {
                 if (AreMissionPedsDead() && Client.Random.Next(3) == 1)
                 {
-                    Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData3.Model, MissionPedData3.SpawnPoint, MissionPedData3.SpawnHeading);
+                    Vector3 spawnpoint = await GetSpawnPoint(MissionPedData3.SpawnPoint);
+                    Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData3.Model, spawnpoint, MissionPedData3.SpawnHeading);
                     backup.Weapons.Give(MissionPedData3.Weapon, 1, true, true);
                     await Client.Delay(0);
                     MissionPed3 = PedCreators.MissionPedCreator.Ped(backup, MissionPedData3.Alertness, MissionPedData3.Difficulty, MissionPedData3.VisionDistance);
@@ -166,7 +176,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             {
                 if (AreMissionPedsDead() && Client.Random.Next(5) == 1)
                 {
-                    Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData4.Model, MissionPedData4.SpawnPoint, MissionPedData4.SpawnHeading);
+                    Vector3 spawnpoint = await GetSpawnPoint(MissionPedData4.SpawnPoint);
+                    Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData4.Model, spawnpoint, MissionPedData4.SpawnHeading);
                     backup.Weapons.Give(MissionPedData4.Weapon, 1, true, true);
                     await Client.Delay(0);
                     MissionPed4 = PedCreators.MissionPedCreator.Ped(backup, MissionPedData4.Alertness, MissionPedData4.Difficulty, MissionPedData4.VisionDistance);
