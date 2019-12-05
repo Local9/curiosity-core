@@ -58,18 +58,6 @@ namespace Curiosity.Missions.Client.net.Scripts.PedInteractions
         {
             client.DeregisterTickHandler(OnTask);
 
-            if (HasAnimDictLoaded("mini@cpr@char_a@cpr_str"))
-                RemoveAnimDict("mini@cpr@char_a@cpr_str");
-
-            if (HasAnimDictLoaded("mini@cpr@char_b@cpr_str"))
-                RemoveAnimDict("mini@cpr@char_b@cpr_str");
-
-            if (HasAnimDictLoaded("mini@cpr@char_a@cpr_def"))
-                RemoveAnimDict("mini@cpr@char_a@cpr_def");
-
-            if (HasAnimDictLoaded("mini@cpr@char_b@cpr_def"))
-                RemoveAnimDict("mini@cpr@char_b@cpr_def");
-
             Client.TriggerEvent("curiosity:interaction:cpr", _victim.NetworkId, false);
 
             if (!_hasSucceeded)
@@ -81,20 +69,23 @@ namespace Curiosity.Missions.Client.net.Scripts.PedInteractions
             {
                 Debug.WriteLine("Initiated CPR -> Dispose");
             }
+
+            _cprStart = _seconds;
+            _performingCpr = true;
+            _cprFinished = false;
+            _hasSucceeded = false;
+            _chance = _seconds - _cprStart + 4;
         }
 
         public static void InteractionCPR(InteractivePed interactivePed)
         {
             Client.TriggerEvent("curiosity:interaction:cpr", interactivePed.NetworkId, true);
 
-            _cprStart = _seconds;
-            _performingCpr = true;
-            _cprFinished = false;
-            _chance = _seconds - -1 + 4;
-
+            _chance = _seconds - _cprStart + 4;
+            // START
             _victim = interactivePed;
-            Function.Call(Hash.SET_ENTITY_NO_COLLISION_ENTITY, new InputArgument[] { Game.PlayerPed, interactivePed, false });
-            Function.Call(Hash.SET_ENTITY_NO_COLLISION_ENTITY, new InputArgument[] { interactivePed, Game.PlayerPed, false });
+            Game.PlayerPed.SetNoCollision(interactivePed, false);
+            interactivePed.SetNoCollision(Game.PlayerPed, false);
             Function.Call((Hash)8195582117541601333L, new InputArgument[] { _victim.Handle });
             _victim.Health = 200;
             Vector3 vector3 = new Vector3((float)Math.Cos((double)Game.PlayerPed.Heading * 0.0174532923847437 + 70), (float)Math.Sin((double)Game.PlayerPed.Heading * 0.0174532923847437 + 70), 0f);
@@ -176,8 +167,8 @@ namespace Curiosity.Missions.Client.net.Scripts.PedInteractions
             if (Game.IsControlJustReleased(0, Control.FrontendCancel) && !_hasSucceeded && !_cprFinished)
             {
                 _performingCpr = false;
-                Function.Call(Hash.SET_ENTITY_NO_COLLISION_ENTITY, new InputArgument[] { Game.PlayerPed, _victim, true });
-                Function.Call(Hash.SET_ENTITY_NO_COLLISION_ENTITY, new InputArgument[] { _victim, Game.PlayerPed, true });
+                Game.PlayerPed.SetNoCollision(_victim, true);
+                _victim.SetNoCollision(Game.PlayerPed, true);
                 _hasSucceeded = false;
                 _victim.IsPositionFrozen = false;
                 _victim.Kill();
@@ -201,13 +192,7 @@ namespace Curiosity.Missions.Client.net.Scripts.PedInteractions
                     else if (_hasSucceeded)
                     {
                         Game.PlayerPed.Task.PerformSequence(_pumpAndSuccessMedic);
-                    }
-                    if (_hasSucceeded)
-                    {
                         _victim.Task.PerformSequence(_pumpAndSuccessVictim);
-                    }
-                    if (_hasSucceeded)
-                    {
                         _cprFinished = true;
                     }
                 }
@@ -225,8 +210,9 @@ namespace Curiosity.Missions.Client.net.Scripts.PedInteractions
             }
 
             _performingCpr = false;
-            Function.Call(Hash.SET_ENTITY_NO_COLLISION_ENTITY, new InputArgument[] { Game.PlayerPed, _victim, true });
-            Function.Call(Hash.SET_ENTITY_NO_COLLISION_ENTITY, new InputArgument[] { _victim, Game.PlayerPed, true });
+            Game.PlayerPed.SetNoCollision(_victim, true);
+            _victim.SetNoCollision(Game.PlayerPed, true);
+
             if (!_hasSucceeded)
             {
                 Screen.ShowNotification("~r~The person has died.");

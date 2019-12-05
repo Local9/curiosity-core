@@ -3,6 +3,7 @@ using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
+using Curiosity.Missions.Client.net.Wrappers;
 
 namespace Curiosity.Missions.Client.net.Scripts.Extras
 {
@@ -32,6 +33,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
         {
             try
             {
+                Helpers.AnimationRadio();
+
                 if (IsServiceActive)
                 {
                     Wrappers.Helpers.ShowNotification("Coroner", "Service Unavailable", string.Empty);
