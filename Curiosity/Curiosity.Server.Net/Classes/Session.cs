@@ -27,6 +27,8 @@ namespace Curiosity.Server.net.Classes
 
         // Player states
         public bool HasSpawned { get; private set; }
+        public DateTime LastEntityEvent { get; private set; }
+        public DateTime LastExplosionEvent { get; private set; }
         public bool IsLoggedIn { get { return UserID > 0; } private set { } }
         // public bool IsPlaying { get { return Character != null; } private set { } }
 
@@ -86,6 +88,16 @@ namespace Curiosity.Server.net.Classes
             BankAccount = 0;
 
             ChatLog.SendLogMessage($"Connecting: {Name}");
+        }
+
+        public void SetLastEntityEvent()
+        {
+            this.LastEntityEvent = DateTime.Now;
+        }
+
+        public void SetLastExplosionEvent()
+        {
+            this.LastEntityEvent = DateTime.Now;
         }
 
         public void SetJob(Job job)

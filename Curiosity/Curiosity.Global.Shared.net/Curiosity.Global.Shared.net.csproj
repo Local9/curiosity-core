@@ -68,6 +68,7 @@
     <Compile Include="Entity\VehicleSpawnLocation.cs" />
     <Compile Include="Entity\WeatherData.cs" />
     <Compile Include="Enums\Blips.cs" />
+    <Compile Include="Enums\ExplosionTypes.cs" />
     <Compile Include="Enums\Job.cs" />
     <Compile Include="Enums\LogGroup.cs" />
     <Compile Include="Enums\Messages.cs" />

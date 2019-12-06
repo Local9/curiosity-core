@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Server.net.Extensions;
+using Curiosity.Server.net.Helpers;
+using Curiosity.Shared.Server.net.Helpers;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
+using Newtonsoft.Json;
+using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Server.net.Classes.Environment
 {
@@ -20,6 +24,104 @@ namespace Curiosity.Server.net.Classes.Environment
         public static void Init()
         {
             server.RegisterEventHandler("curiosity:Server:Chat:Message", new Action<CitizenFX.Core.Player, string, string>(ProcessMessage));
+
+             server.RegisterEventHandler("entityCreated", new Action<dynamic>(OnEntityCreated));
+            // server.RegisterEventHandler("entityCreating", new Action<dynamic>(OnEntityCreating));
+            server.RegisterEventHandler("explosionEvent", new Action<int, dynamic>(OnExplosionEvent));
+        }
+
+        static void OnExplosionEvent(int sender, dynamic explosionData)
+        {
+            List<Session> sessions = SessionManager.PlayerList.Select(m => m.Value).Where(w => w.IsStaff).ToList();
+            Session senderSession = SessionManager.PlayerList[$"{sender}"];
+
+            if (explosionData.ownerNetId == 0) return;
+
+            Session explosionSession = SessionManager.PlayerList[$"{explosionData.ownerNetId}"];
+
+            double secondsSince = (DateTime.Now - senderSession.LastEntityEvent).TotalSeconds;
+
+            ExplosionTypes explosionType = (ExplosionTypes)explosionData.explosionType;
+            
+            if (secondsSince > 3)
+            {
+                senderSession.SetLastExplosionEvent();
+                return;
+            }
+            senderSession.SetLastExplosionEvent();
+
+            sessions.ForEach(session =>
+            {
+                ChatLog.SendLogMessage($"Event Sender: {senderSession.Name},\n\rExplosion Owner: {explosionSession.Name} - {explosionType}", session.Player);
+            });
+        }
+
+        static void OnEntityCreating(int entity)
+        {
+            List<Session> sessions = SessionManager.PlayerList.Select(m => m.Value).Where(w => w.IsStaff).ToList();
+            sessions.ForEach(session =>
+            {
+
+                ChatLog.SendLogMessage($"CREATING: {JsonConvert.SerializeObject(entity)}");
+            });
+        }
+
+        static void OnEntityCreated(dynamic entity)
+        {
+            try
+            {
+                List<Session> sessions = SessionManager.PlayerList.Select(m => m.Value).Where(w => w.IsStaff).ToList();
+
+                int entityId = 0;
+
+                if (!int.TryParse($"{entity}", out entityId)) return;
+
+                if (!API.DoesEntityExist(entityId)) return;
+
+                int entityType = API.GetEntityType(entityId);
+
+                if (entityType == 0 || entityType == 1) return; // Ignore no entity, ped
+
+                Vehicle vehicle = null;
+
+                if (entityType == 2)
+                {
+                    vehicle = new Vehicle(entityId);
+                }
+
+                if (vehicle == null)
+                {
+                    return;
+                }
+
+                CitizenFX.Core.Entity entityObject = vehicle;
+
+                int populationTypeId = API.GetEntityPopulationType(entityId);
+
+                if (populationTypeId == 1 || populationTypeId == 2 || populationTypeId == 3 || populationTypeId == 4 || populationTypeId == 5) return; // Ignore random population
+
+                Session entityOwnerSession = SessionManager.PlayerList[entityObject.Owner.Handle];
+
+                if (entityOwnerSession.IsStaff) return; // IGNORE STAFF
+
+                double secondsSince = (DateTime.Now - entityOwnerSession.LastEntityEvent).TotalSeconds;
+
+                if (secondsSince > 3)
+                {
+                    entityOwnerSession.SetLastEntityEvent();
+                    return;
+                }
+                entityOwnerSession.SetLastEntityEvent();
+
+                sessions.ForEach(session =>
+                {
+                    ChatLog.SendLogMessage($"{entityOwnerSession.Name} - Is creating entities very quickly");
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+            }
         }
 
         static void ProcessMessage([FromSource]CitizenFX.Core.Player player, string message, string chatChannel)
