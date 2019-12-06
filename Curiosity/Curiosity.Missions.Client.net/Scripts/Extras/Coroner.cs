@@ -123,7 +123,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
                             if (isServiceOnScene)
                             {
-                                CoronerDriver.Task.GoTo(PedToRecover);
+                                TaskFollowNavMeshToCoord(CoronerDriver.Handle, PedToRecover.Position.X, PedToRecover.Position.Y, PedToRecover.Position.Z, 5f, 20000, 2f, false, 1193033728);
                                 bool isCoronerRunningToPed = true;
                                 
                                 while (isCoronerRunningToPed)
@@ -131,7 +131,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                                     await Client.Delay(100);
                                     currentDistance = PedToRecover.Position.Distance(CoronerDriver.Position);
                                     
-                                    if (currentDistance <= 5)
+                                    if (currentDistance <= 3)
                                     {
                                         isCoronerRunningToPed = false;
                                         isServiceEnroute = false;

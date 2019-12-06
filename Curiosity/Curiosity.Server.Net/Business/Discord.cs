@@ -17,7 +17,8 @@ namespace Curiosity.Server.net.Business
         static string discordGuild;
         static string discordBotKey;
 
-        static bool isDiscordTimedOut = false;
+        static bool discordTimedOut = false;
+        static int discordRateLimitSeconds = 2;
 
         static ConcurrentDictionary<string, Privilege> privileges = new ConcurrentDictionary<string, Privilege>();
         static ConcurrentDictionary<long, DateTime> RanDiscord = new ConcurrentDictionary<long, DateTime>();
@@ -65,10 +66,10 @@ namespace Curiosity.Server.net.Business
 
         static async void DiscordReset()
         {
-            while (isDiscordTimedOut)
+            while (discordTimedOut)
             {
-                await Server.Delay((1000 * 60) * 30);
-                isDiscordTimedOut = false;
+                await Server.Delay(discordRateLimitSeconds * 1000);
+                discordTimedOut = false;
             }
         }
 
@@ -92,24 +93,20 @@ namespace Curiosity.Server.net.Business
         {
             try
             {
-                if (isDiscordTimedOut) {
+                if (discordTimedOut) {
                     Helpers.Notifications.Advanced($"Discord", $"Hello ~g~{player.Name}~s~, Discord is currently not allowing connections, we cannot confirm your role.", 63, player, NotificationType.CHAR_LIFEINVADER);
                     return privilegeIn;
                 }
 
-                if (RanDiscord.ContainsKey(discordId))
+                RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{discordGuild}/members/{discordId}", string.Empty);
+                int rateLimitRemaining = int.Parse(requestResponse.headers["X-RateLimit-Remaining"]);
+
+                if (rateLimitRemaining <= 2)
                 {
-                    DateTime checkDate = RanDiscord[discordId];
-                    DateTime dateNow = DateTime.Now;
-
-                    TimeSpan timeSpan = dateNow - checkDate;
-
-                    if (timeSpan.TotalMinutes <= 30) return privilegeIn;
+                    discordTimedOut = true;
+                    discordRateLimitSeconds = int.Parse(requestResponse.headers["X-RateLimit-Reset-After"]);
                 }
 
-                RanDiscord.TryAdd(discordId, DateTime.Now);
-
-                RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{discordGuild}/members/{discordId}", string.Empty);
                 Privilege privilege = privilegeIn;
                 if (requestResponse.status == System.Net.HttpStatusCode.OK)
                 {
@@ -167,7 +164,8 @@ namespace Curiosity.Server.net.Business
 
                     if ($"{requestResponse.status}" == "TooManyRequests")
                     {
-                        isDiscordTimedOut = true;
+                        discordTimedOut = true;
+                        discordRateLimitSeconds = 60;
                     }
 
                     return privilege;
@@ -213,5 +211,10 @@ namespace Curiosity.Server.net.Business
                 Log.Error($"DiscordRequest() -> {ex.Message}");
             }
         }
+    }
+
+    class DiscordWebhook
+    {
+
     }
 }

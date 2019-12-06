@@ -5,6 +5,8 @@ using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using MenuAPI;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus
@@ -25,14 +27,16 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.OnMenuOpen += (_menu) => {
                 MenuBase.MenuOpen(true);
 
-                foreach (CitizenFX.Core.Player player in Client.players)
+                PlayerList players = Client.players;
+
+                foreach (CitizenFX.Core.Player player in players.OrderBy(p => p.Name))
                 {
                     if (!Player.PlayerInformation.IsDeveloper())
                     {
                         if (player.ServerId == Game.Player.ServerId) continue;
                     }
 
-                    Menu playerMenu = new Menu(player.Name, "Player Interactions");
+                    Menu playerMenu = new Menu($"[{player.ServerId}] {player.Name}", "Player Interactions");
 
                     playerMenu.OnMenuOpen += (_m) =>
                     {
