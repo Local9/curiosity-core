@@ -77,7 +77,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
         private static void MainMenu_OnMenuClose(Menu menu)
         {
             MenuState(false);
-            client.DeregisterTickHandler(OnDistanceTask);
         }
 
         public static void AddSubMenu(Menu menu, Menu submenu, string label = "→→→", bool buttonEnabled = true)

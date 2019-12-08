@@ -17,6 +17,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
 
         static MenuItem mItemHandcuffs = new MenuItem("Apply Handcuffs");
         static MenuItem mItemDetainInCurrentVehicle = new MenuItem("Detain in Vehicle");
+        // tests
+        static MenuItem mItemBreathalyzer = new MenuItem("Suspect: Breathalyzer");
+        static MenuItem mItemSearch = new MenuItem("Suspect: Search");
+        static MenuItem mItemDrugTest = new MenuItem("Suspect: Drug test");
+        
         // Dead Interactions
         static MenuItem mItemCallCoroner = new MenuItem("Call Coroner");
         static MenuItem mItemCpr = new MenuItem("CPR");
@@ -69,6 +74,22 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 mItemDetainInCurrentVehicle.Enabled = CanDetainPed();
                 mItemDetainInCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() ? "Remove from Vehicle" : "Detain in Vehicle";
             }
+
+            // Main Interactions
+            if (menuItem == mItemBreathalyzer)
+            {
+                Generic.InteractionBreathalyzer(_interactivePed);
+            }
+
+            if (menuItem == mItemDrugTest)
+            {
+                Generic.InteractionDrugTest(_interactivePed);
+            }
+
+            if (menuItem == mItemSearch)
+            {
+                Generic.InteractionSearch(_interactivePed);
+            }
         }
 
         private static void Menu_OnMenuOpen(Menu menu)
@@ -98,6 +119,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 mItemDetainInCurrentVehicle.Enabled = CanDetainPed();
                 mItemDetainInCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() ? "Remove from Vehicle" : "Detain in Vehicle";
                 menu.AddMenuItem(mItemDetainInCurrentVehicle);
+
+                menu.AddMenuItem(mItemBreathalyzer);
+                menu.AddMenuItem(mItemDrugTest);
+                menu.AddMenuItem(mItemSearch);
             }
         }
 

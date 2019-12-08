@@ -101,6 +101,8 @@ namespace Curiosity.Client.net.Classes.Actions
 
             client.RegisterEventHandler("curiosity:Client:Command:Nuke", new Action<float, float, float>(OnNuke));
 
+            API.RegisterCommand("voice", new Action<int, List<object>, string>(OnVoiceChange), false);
+
             API.RegisterCommand("mod", new Action<int, List<object>, string>(ModVehicle), false);
             API.RegisterCommand("donator", new Action<int, List<object>, string>(DonatorCheck), false);
             API.RegisterCommand("tp", new Action<int, List<object>, string>(Teleport), false);
@@ -175,6 +177,30 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
 
             }), false);
+        }
+
+        static void OnVoiceChange(int playerHandle, List<object> arguments, string raw)
+        {
+            float x;
+            float y;
+            float z;
+
+            if (arguments.Count == 3)
+            {
+                float.TryParse($"{arguments[0]}", out x);
+                float.TryParse($"{arguments[1]}", out y);
+                float.TryParse($"{arguments[2]}", out z);
+            }
+            else
+            {
+                float.TryParse($"{arguments[0]}", out x);
+                y = x;
+                z = x;
+            }
+
+            if (arguments.Count < 1) return;
+
+            NetworkApplyVoiceProximityOverride(x, y, z);
         }
 
         static async void Fairy(int playerHandle, List<object> arguments, string raw)

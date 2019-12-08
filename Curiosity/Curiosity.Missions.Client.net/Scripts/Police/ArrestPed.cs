@@ -232,14 +232,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     if (ArrestedPed.Position.Distance(Game.PlayerPed.Position) <= 15)
                     {
                         API.RequestAnimDict("mp_arresting");
-                        Helpers.LoadAnimation("random@arrests");
-                        Helpers.LoadAnimation("random@arrests@busted");
+                        Helpers.Animations.LoadAnimation("random@arrests");
+                        Helpers.Animations.LoadAnimation("random@arrests@busted");
 
                         if (ArrestedPed.Handle == TrafficStop.StoppedDriver.Handle)
                         {
                             ArrestedPed = TrafficStop.StoppedDriver;
 
-                            Helpers.ShowOfficerSubtitle("Out of the vehicle! Now!");
+                            Wrappers.Helpers.ShowOfficerSubtitle("Out of the vehicle! Now!");
                             int resistExitChance = Client.Random.Next(30);
 
                             if (TrafficStop.IsDriverUnderTheInfluence)
@@ -255,7 +255,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             if (resistExitChance >= 25)
                             {
                                 List<string> resp = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!" };
-                                Helpers.ShowSuspectSubtitle(resp[Client.Random.Next(resp.Count)]);
+                                Wrappers.Helpers.ShowSuspectSubtitle(resp[Client.Random.Next(resp.Count)]);
                                 await Client.Delay(1000);
                                 TrafficStop.TrafficStopVehicleFlee(TrafficStop.TargetVehicle, TrafficStop.StoppedDriver);
                             }
@@ -380,7 +380,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             }
             else
             {
-                Helpers.ShowSimpleNotification("~r~You must be looking at the suspect.");
+                Wrappers.Helpers.ShowSimpleNotification("~r~You must be looking at the suspect.");
                 while (IsPedCuffed)
                 {
                     await Client.Delay(0);

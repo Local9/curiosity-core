@@ -26,7 +26,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
         {
             try
             {
-                Helpers.AnimationRadio();
+                Helpers.Animations.AnimationRadio();
 
                 if (IsServiceActive)
                 {

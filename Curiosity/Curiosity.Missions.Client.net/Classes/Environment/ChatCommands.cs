@@ -39,7 +39,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                         killPed = true;
                 }
 
-                Screen.ShowNotification("~g~Creating Interactive Ped");
+                Screen.ShowNotification("~g~Spawning an Interactive Ped");
                 Vector3 spawnPosition = await Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 2f, 0f)).Ground();
 
                 Model model = PedHash.Abigail;
@@ -59,6 +59,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                         p.Kill();
                     }
                 }
+                Screen.ShowNotification("~g~Spawned an Interactive Ped");
             }
         }
 

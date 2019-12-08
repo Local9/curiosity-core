@@ -56,6 +56,7 @@
     <Compile Include="DataClasses\Police\LinesOfSpeech.cs" />
     <Compile Include="DataClasses\SoundMessage.cs" />
     <Compile Include="DataClasses\Zones.cs" />
+    <Compile Include="Helpers\Animations.cs" />
     <Compile Include="MissionPeds\InteractivePed.cs" />
     <Compile Include="MissionPeds\NormalPed.cs" />
     <Compile Include="MissionPedTypes\InteractablePed.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Scripts\Extras\Coroner.cs" />
     <Compile Include="Scripts\Extras\PrisonerTransport.cs" />
     <Compile Include="Scripts\Extras\VehicleTow.cs" />
+    <Compile Include="Scripts\Interactions\PedInteractions\Generic.cs" />
     <Compile Include="Scripts\Interactions\VehicleInteractions\TrafficStopInteractions.cs" />
     <Compile Include="Scripts\Menus\PedInteractionMenu\MenuBase.cs" />
     <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuDispatch.cs" />

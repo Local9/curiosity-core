@@ -18,25 +18,6 @@ namespace Curiosity.Missions.Client.net.Wrappers
             Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{notificationCharacter}", 2, title, subtitle, message, 2);
         }
 
-        static public async void AnimationRadio()
-        {
-            LoadAnimation("random@arrests");
-            Game.PlayerPed.Task.PlayAnimation("random@arrests", "generic_radio_enter", 1.5f, 2.0f, -1, (AnimationFlags)50, 2.0f);
-            await Client.Delay(6000);
-            Game.PlayerPed.Task.ClearAll();
-        }
-
-        static public async Task<bool> LoadAnimation(string dict)
-        {
-            while (!HasAnimDictLoaded(dict))
-            {
-                await Client.Delay(0);
-                RequestAnimDict(dict);
-            }
-            return true;
-        }
-
-
         // internal methods
         static public void ShowOfficerSubtitle(string subtitle)
         {

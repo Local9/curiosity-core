@@ -164,7 +164,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         if (IsCooldownActive)
                         {
                             TargetVehicle = null;
-                            Helpers.ShowSimpleNotification("~b~Traffic Stops: ~r~Cooldown Active");
+                            Wrappers.Helpers.ShowSimpleNotification("~b~Traffic Stops: ~r~Cooldown Active");
                             return;
                         }
 
@@ -279,13 +279,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                 if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) > 30f && TargetVehicle.Position.Distance(Game.PlayerPed.Position) < 40f && IsVehicleStopped)
                 {
-                    Helpers.ShowNotification("Dispatch", "~r~Please stay on scene...", string.Empty);
+                    Wrappers.Helpers.ShowNotification("Dispatch", "~r~Please stay on scene...", string.Empty);
                 }
 
                 if (TargetVehicle.Position.Distance(Game.PlayerPed.Position) >= 300f)
                 {
                     if (TargetVehicle.AttachedBlip != null)
-                        Helpers.ShowNotification("Dispatch", "~r~Traffic Stop Reset", string.Empty);
+                        Wrappers.Helpers.ShowNotification("Dispatch", "~r~Traffic Stop Reset", string.Empty);
 
                     Reset();
                 }
@@ -379,11 +379,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 if (Client.speechType == SpeechType.NORMAL)
                 {
-                    Helpers.ShowOfficerSubtitle("Can you step out of the car for me, please?");
+                    Wrappers.Helpers.ShowOfficerSubtitle("Can you step out of the car for me, please?");
                 }
                 else
                 {
-                    Helpers.ShowOfficerSubtitle("Get the fuck out of the car.");
+                    Wrappers.Helpers.ShowOfficerSubtitle("Get the fuck out of the car.");
                 }
                 int resistExitChance = Client.Random.Next(30);
                 if (HasVehicleBeenStolen)
@@ -398,14 +398,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     TargetVehicle.IsEngineRunning = true;
                     await Client.Delay(500);
                     List<string> driverResponse = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!", "You'll never take me alive, pig!" };
-                    Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                    Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
                     await Client.Delay(3000);
                     TrafficStopVehicleFlee(TargetVehicle, StoppedDriver);
                 }
                 else
                 {
                     List<string> driverResponse = new List<string>() { "What's the problem?", "What seems to be the problem, officer?", "Yeah, sure.", "Okay.", "Fine.", "What now?", "Whats up?", "Ummm... O-okay.", "This is ridiculous...", "I'm kind of in a hurry right now.", "Oh what now?!", "No problem.", "Am I being detained?", "Yeah, okay... One moment.", "Okay.", "Uh huh.", "Yep." };
-                    Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                    Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
                     StoppedDriver.Task.LeaveVehicle(LeaveVehicleFlags.None);
                     StoppedDriver.PedGroup.Add(Game.PlayerPed, true);
                 }
@@ -416,7 +416,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             if (IsVehicleStopped)
             {
-                Helpers.ShowOfficerSubtitle("Get back in the car, please.");
+                Wrappers.Helpers.ShowOfficerSubtitle("Get back in the car, please.");
                 StoppedDriver.LeaveGroup();
                 StoppedDriver.Task.EnterVehicle(TargetVehicle, VehicleSeat.Driver, -1, 2f, 0);
             }
@@ -845,11 +845,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             if (Client.speechType == SpeechType.NORMAL)
             {
-                Helpers.ShowOfficerSubtitle("Alright, you're free to go.");
+                Wrappers.Helpers.ShowOfficerSubtitle("Alright, you're free to go.");
             }
             else
             {
-                Helpers.ShowOfficerSubtitle("Get out of here before I change my mind.");
+                Wrappers.Helpers.ShowOfficerSubtitle("Get out of here before I change my mind.");
             }
             List<string> DriverResponse = new List<string>() { "Okay, thanks.", "Thanks.", "Thank you officer, have a nice day!", "Thanks, bye!", "I'm free to go? Okay, bye!" };
             if (DriverAttitude >= 50 && DriverAttitude < 80)
@@ -861,7 +861,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 DriverResponse = new List<string>() { "Bye, asshole...", "Ugh.. Finally.", "Damn cops...", "Until next time.", "Its about time, pig" };
             }
             await Client.Delay(2000);
-            Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             Reset(true);
         }
 
@@ -892,9 +892,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 DriverResponse = new List<string>() { "Troublesum said fuck you too buddy!", "Yea, well don't kill yourself trying" };
             }
 
-            Helpers.ShowOfficerSubtitle(OfficerResponse[Client.Random.Next(OfficerResponse.Count)]);
+            Wrappers.Helpers.ShowOfficerSubtitle(OfficerResponse[Client.Random.Next(OfficerResponse.Count)]);
             await Client.Delay(2000);
-            Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             await Client.Delay(2000);
             Reset(true);
         }
@@ -903,7 +903,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             if (StoppedDriver == null)
             {
-                Helpers.ShowNotification("No No No", "Traffic Stop Required", string.Empty, NotificationCharacter.CHAR_LESTER);
+                Wrappers.Helpers.ShowNotification("No No No", "Traffic Stop Required", string.Empty, NotificationCharacter.CHAR_LESTER);
                 return;
             }
 
@@ -953,7 +953,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         IdentityDateOfBirth = StolenDriverDateOfBirth;
                     }
 
-                    Helpers.ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{IdentityName}\n~w~DOB: ~y~{IdentityDateOfBirth}");
+                    Wrappers.Helpers.ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{IdentityName}\n~w~DOB: ~y~{IdentityDateOfBirth}");
                     
                     HasDriverBeenAskedForID = true;
                 }
@@ -972,8 +972,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 return;
             }
 
-            Helpers.AnimationRadio();
-            Helpers.ShowNotification("Dispatch", $"Running ~o~{IdentityName}", string.Empty);
+            Helpers.Animations.AnimationRadio();
+            Wrappers.Helpers.ShowNotification("Dispatch", $"Running ~o~{IdentityName}", string.Empty);
             await Client.Delay(2000);
 
             if (!HasRanDriverID)
@@ -995,13 +995,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
             }
 
-            Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Name: ~y~{IdentityName}~w~\nGender: ~b~{StoppedDriver.Gender}~w~\nDOB: ~b~{IdentityDateOfBirth}");
-            Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Citations: {NotificationFlagCitations}\n~w~Flags: {NotificationFlagOffense}");
+            Wrappers.Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Name: ~y~{IdentityName}~w~\nGender: ~b~{StoppedDriver.Gender}~w~\nDOB: ~b~{IdentityDateOfBirth}");
+            Wrappers.Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Citations: {NotificationFlagCitations}\n~w~Flags: {NotificationFlagOffense}");
         }
 
         static public async void InteractionHello()
         {
-            Helpers.LoadAnimation("gestures@m@sitting@generic@casual");
+            Helpers.Animations.LoadAnimation("gestures@m@sitting@generic@casual");
 
             if (Client.speechType == SpeechType.NORMAL)
             {
@@ -1029,10 +1029,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static public async void InteractionRunVehicleNumberPlate()
         {
-            Helpers.AnimationRadio();
-            Helpers.ShowNotification("Dispatch", $"Running ~o~{TargetVehicle.Mods.LicensePlate}", string.Empty);
+            Helpers.Animations.AnimationRadio();
+            Wrappers.Helpers.ShowNotification("Dispatch", $"Running ~o~{TargetVehicle.Mods.LicensePlate}", string.Empty);
             await Client.Delay(2000);
-            Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Reg.Owner: ~y~{VehicleRegisterationDriversName}~w~\nReg.Year: ~y~{VehicleRegisterationYear}~w~\nFlags: ~y~{NotificationFlagVehicle}");
+            Wrappers.Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Reg.Owner: ~y~{VehicleRegisterationDriversName}~w~\nReg.Year: ~y~{VehicleRegisterationYear}~w~\nFlags: ~y~{NotificationFlagVehicle}");
         }
 
         
@@ -1071,7 +1071,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (runBreathalyzerChecks)
             {
                 AnimationSearch();
-                Helpers.ShowSimpleNotification("~w~Performing ~b~Breathalyzer~w~ test...");
+                Wrappers.Helpers.ShowSimpleNotification("~w~Performing ~b~Breathalyzer~w~ test...");
                 await Client.Delay(3000);
                 string bac = $"~g~0.{DriverBloodAlcaholLimit}";
                 if (DriverBloodAlcaholLimit >= 8)
@@ -1079,11 +1079,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     CanDriverBeArrested = true;
                     bac = $"~r~0.{DriverBloodAlcaholLimit}";
                 }
-                Helpers.ShowSimpleNotification($"~b~BAC ~w~Level: {bac}");
+                Wrappers.Helpers.ShowSimpleNotification($"~b~BAC ~w~Level: {bac}");
             }
             else
             {
-                Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
+                Wrappers.Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
             }
             IsInteractionActive = false;
         }
@@ -1121,13 +1121,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (runDrugChecks)
             {
                 AnimationSearch();
-                Helpers.ShowSimpleNotification("~w~Performing ~b~Drugalyzer~w~ test...");
+                Wrappers.Helpers.ShowSimpleNotification("~w~Performing ~b~Drugalyzer~w~ test...");
                 await Client.Delay(3000);
-                Helpers.ShowSimpleNotification($"~w~Results:\n~b~  Cannabis~w~: {NotificationFlagCannabis}\n~b~  Cocaine~w~: {NotificationFlagCocaine}");
+                Wrappers.Helpers.ShowSimpleNotification($"~w~Results:\n~b~  Cannabis~w~: {NotificationFlagCannabis}\n~b~  Cocaine~w~: {NotificationFlagCocaine}");
             }
             else
             {
-                Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
+                Wrappers.Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
             }
             IsInteractionActive = false;
         }
@@ -1150,7 +1150,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 {
                     AnimationSearch();
                     // TODO: Add a method for randomly arrested peds also
-                    Helpers.ShowSimpleNotification("~b~Searching~w~ the subject...");
+                    Wrappers.Helpers.ShowSimpleNotification("~b~Searching~w~ the subject...");
                     HasSearchedSuspect = true;
                 }
             }
@@ -1160,7 +1160,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 if (vehicleInFront.Exists())
                 {
                     AnimationSearch();
-                    Helpers.ShowSimpleNotification("~b~Searching~w~ the vehicle...");
+                    Wrappers.Helpers.ShowSimpleNotification("~b~Searching~w~ the vehicle...");
                     HasSearchedSuspect = true;
                     VehicleDoor[] vehicleDoors = TargetVehicle.Doors.GetAll();
                     foreach(VehicleDoor vehicleDoor in vehicleDoors)
@@ -1183,7 +1183,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     IsCarryingIllegalItems = true;
                     CanDriverBeArrested = true;
 
-                    Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Client.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
+                    Wrappers.Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Client.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
                     if (IsDriverGoingToFleeChance == 9)
                     {
                         SetVehicleCanBeUsedByFleeingPeds(TargetVehicle.Handle, false);
@@ -1193,12 +1193,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 }
                 else
                 {
-                    Helpers.ShowSimpleNotification($"~w~Found ~g~nothing of interest.");
+                    Wrappers.Helpers.ShowSimpleNotification($"~w~Found ~g~nothing of interest.");
                 }
             }
             else
             {
-                Helpers.ShowSimpleNotification($"~r~Must be facing the suspect or vehicle.");
+                Wrappers.Helpers.ShowSimpleNotification($"~r~Must be facing the suspect or vehicle.");
             }
             IsInteractionActive = false;
         }
@@ -1209,16 +1209,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static public void ShowRegistration()
         {
             // \n~w~Reg. Year: ~y~{VehicleRegisterationYear}
-            Helpers.ShowNotification("Dispatch", "LSPD Database", $"~w~Reg. Owner: ~y~{VehicleRegisterationDriversName}\n~w~Flags: ~y~{NotificationFlagVehicle}");
+            Wrappers.Helpers.ShowNotification("Dispatch", "LSPD Database", $"~w~Reg. Owner: ~y~{VehicleRegisterationDriversName}\n~w~Flags: ~y~{NotificationFlagVehicle}");
         }
 
         static async void ALPR(Vehicle vehicle)
         {
             VehicleHash vehicleHash = (VehicleHash)vehicle.Model.Hash;
 
-            Helpers.ShowNotification("Dispatch", "Getting Information", string.Empty);
+            Wrappers.Helpers.ShowNotification("Dispatch", "Getting Information", string.Empty);
             await Client.Delay(0);
-            Helpers.ShowNotification("Dispatch", "LSPD Database", $"~w~Plate: ~y~{vehicle.Mods.LicensePlate}~w~\nModel: ~y~{GetLabelText(GetDisplayNameFromVehicleModel((uint)vehicleHash))}~w~\nVehicle Class: {vehicle.ClassType}");
+            Wrappers.Helpers.ShowNotification("Dispatch", "LSPD Database", $"~w~Plate: ~y~{vehicle.Mods.LicensePlate}~w~\nModel: ~y~{GetLabelText(GetDisplayNameFromVehicleModel((uint)vehicleHash))}~w~\nVehicle Class: {vehicle.ClassType}");
         }
 
         static async void AnimationTicket()

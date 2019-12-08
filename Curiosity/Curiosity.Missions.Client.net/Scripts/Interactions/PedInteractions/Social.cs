@@ -20,7 +20,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
     {
         static public async void InteractionHello(InteractivePed interactivePed)
         {
-            await Helpers.LoadAnimation("gestures@m@sitting@generic@casual");
+            await Helpers.Animations.LoadAnimation("gestures@m@sitting@generic@casual");
 
             if (Client.speechType == SpeechType.NORMAL)
             {
@@ -81,7 +81,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 }
                 Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
 
-                Helpers.ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{interactivePed.Name}\n~w~DOB: ~y~{interactivePed.DateOfBirth}");
+                Wrappers.Helpers.ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{interactivePed.Name}\n~w~DOB: ~y~{interactivePed.DateOfBirth}");
 
                 Client.TriggerEvent("curiosity:interaction:idRequesed", interactivePed.NetworkId);
             }
@@ -89,7 +89,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
         static public void InteractionDrunk(InteractivePed interactivePed)
         {
-            Helpers.ShowOfficerSubtitle("Have you had anything to drink today?");
+            Wrappers.Helpers.ShowOfficerSubtitle("Have you had anything to drink today?");
             List<string> response;
             if (interactivePed.IsUnderTheInfluence)
             {
@@ -99,12 +99,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             {
                 response = new List<string>() { "No, sir", "I dont drink.", "Nope.", "No.", "Only 1.", "Yes... a water and 2 orange juices." };
             }
-            Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
         }
 
         static public void InteractionDrug(InteractivePed interactivePed)
         {
-            Helpers.ShowOfficerSubtitle("Have you consumed any drugs recently?");
+            Wrappers.Helpers.ShowOfficerSubtitle("Have you consumed any drugs recently?");
             List<string> response;
             if (interactivePed.IsUsingCannabis || interactivePed.IsUsingCocaine)
             {
@@ -114,25 +114,25 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             {
                 response = new List<string>() { "No, sir", "I don't do that stuff.", "Nope.", "No.", "Nah" };
             }
-            Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
         }
 
         static public void InteractionIllegal(InteractivePed interactivePed)
         {
             bool isInVehicle = interactivePed.Ped.IsInVehicle();
             string checkScript = isInVehicle ? "in the vehicle" : "I might find on you";
-            Helpers.ShowOfficerSubtitle($"Is there anything illegal {checkScript}?");
+            Wrappers.Helpers.ShowOfficerSubtitle($"Is there anything illegal {checkScript}?");
             List<string> response = new List<string>() { "No, sir", "Not that I know of.", "Nope.", "No.", "Maybe? But most probably not.", "I sure hope not" };
             if (isInVehicle)
             {
                 response = new List<string>() { "No, sir", "Not that I know of.", "Nope.", "No.", "Apart from the 13 dead hookers in the back.. No.", "Maybe? But most probably not.", "I sure hope not" };
             }
-            Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
         }
 
         static public void InteractionSearch(InteractivePed interactivePed)
         {
-            Helpers.ShowOfficerSubtitle("Would you mind if I search you?");
+            Wrappers.Helpers.ShowOfficerSubtitle("Would you mind if I search you?");
             List<string> response;
             if (interactivePed.IsAllowedToBeSearched)
             {
@@ -142,7 +142,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             {
                 response = new List<string>() { "Go ahead", "Shes all yours", "I'd prefer you not to", "I don't have anything to hide, go for it." };
             }
-            Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
         }
 
         //static public void InteractionSearchVehicle()

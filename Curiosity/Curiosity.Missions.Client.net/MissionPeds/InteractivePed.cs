@@ -43,6 +43,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         public bool IsAllowedToBeSearched;
         public bool HasLostId;
         public bool HasAskedForId;
+        public bool HasBeenSearched;
         // MENU STATES
         private bool IsCoronerCalled;
         // Settings
@@ -80,6 +81,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
+        public int BloodAlcaholLimit
+        {
+            get
+            {
+                return _BloodAlcaholLimit;
+            }
+        }
+
         static InteractivePed()
         {
         }
@@ -98,6 +107,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             IsUsingCannabis = false;
             IsUsingCocaine = false;
             HasLostId = false;
+            HasBeenSearched = false;
 
             _ChanceOfFlee = 0;
             _ChanceOfShootAndFlee = 0;
@@ -128,6 +138,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             int breathlyzerLimit = Client.Random.Next(100);
             _BloodAlcaholLimit = 0;
             IsUnderTheInfluence = false;
+            IsAllowedToBeSearched = false;
 
             if (breathlyzerLimit >= 60)
             {
@@ -135,6 +146,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 if (breathlyzerLimit >= 88)
                 {
                     IsUnderTheInfluence = true;
+                    IsAllowedToBeSearched = true;
+                    CanBeArrested = true;
                     _BloodAlcaholLimit = Client.Random.Next(8, 10);
                     _ChanceOfFlee = Client.Random.Next(25, 30);
 
@@ -148,17 +161,26 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             if (Client.Random.Next(100) >= 85)
             {
-                IsUsingCannabis = true;
+                IsUsingCannabis = true; // Its weed ffs
+                IsAllowedToBeSearched = true;
             }
 
             if (Client.Random.Next(100) >= 90)
             {
                 IsUsingCocaine = true;
+                CanBeArrested = true;
+                IsAllowedToBeSearched = true;
             }
 
             if (Client.Random.Next(100) >= 95)
             {
                 HasLostId = true;
+                IsAllowedToBeSearched = true;
+            }
+
+            if (Client.Random.Next(100) >= 95)
+            {
+                IsAllowedToBeSearched = true;
             }
 
             Create();
@@ -175,6 +197,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
             client.RegisterEventHandler("curiosity:interaction:cpr:failed", new Action<int>(OnCprFailed));
             client.RegisterEventHandler("curiosity:interaction:coroner", new Action<int>(OnCoronerCalled));
+            client.RegisterEventHandler("curiosity:interaction:searched", new Action<int, bool>(OnPedHasBeenSearched));
 
             client.DeregisterTickHandler(OnMenuTask);
             client.DeregisterTickHandler(OnShowHelpTextTask);
@@ -409,6 +432,15 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (Ped.NetworkId == networkId)
                 HasAskedForId = true;
+        }
+
+        public void OnPedHasBeenSearched(int networkId, bool illegalItems)
+        {
+            if (Ped.NetworkId == networkId)
+            {
+                HasBeenSearched = true;
+                IsCarryingIllegalItems = illegalItems;
+            }
         }
 
         public event InteractivePed.OnAttackingTargetEvent AttackTarget;
