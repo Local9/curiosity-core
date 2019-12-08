@@ -37,18 +37,32 @@ namespace Curiosity.Shared.Client.net.Extensions
             return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
         }
 
-        public async static Task<Vector3> Ground(this Vector3 position)
+        public async static Task<Vector3> Ground(this Vector3 position, bool vehicleNodeCheck = true)
         {
             float posZ = 0.0f;
 
             for(int i = 0; i < 800 ; i++)
             {
                 await BaseScript.Delay(0);
-                API.RequestCollisionAtCoord(position.X, position.Y, i + 0.0f);
-                if (API.GetGroundZFor_3dCoord(position.X, position.Y, i + 0.0f, ref posZ, false))
-                { 
+
+                Vector3 vehicleNode = position;
+                int nodeId = 0;
+
+                if (API.GetGroundZFor_3dCoord(position.X, position.Y, position.Z, ref posZ, false))
+                {
                     position.Z = posZ;
-                    break;
+                }
+                else
+                {
+                    if (vehicleNodeCheck)
+                        API.GetRandomVehicleNode(position.X, position.Y, i + 0.0f, 5f, false, false, false, ref vehicleNode, ref nodeId);
+
+                    API.RequestCollisionAtCoord(vehicleNode.X, vehicleNode.Y, i + 0.0f);
+                    if (API.GetGroundZFor_3dCoord(vehicleNode.X, vehicleNode.Y, i + 0.0f, ref posZ, false))
+                    {
+                        position.Z = posZ;
+                        break;
+                    }
                 }
             }
 

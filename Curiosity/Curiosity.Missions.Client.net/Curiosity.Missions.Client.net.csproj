@@ -65,6 +65,9 @@
     <Compile Include="Scripts\Extras\VehicleTow.cs" />
     <Compile Include="Scripts\Interactions\VehicleInteractions\TrafficStopInteractions.cs" />
     <Compile Include="Scripts\Menus\PedInteractionMenu\MenuBase.cs" />
+    <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuDispatch.cs" />
+    <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuQuestions.cs" />
+    <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuInteraction.cs" />
     <Compile Include="Scripts\MissionEvents.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />
     <Compile Include="Scripts\PedCreators\InteractivePedCreator.cs" />
@@ -143,7 +146,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Scripts\Menus\PedInteractionMenu\SubMenus\" />
     <Folder Include="Scripts\Police\Department\" />
   </ItemGroup>
   <ItemGroup>

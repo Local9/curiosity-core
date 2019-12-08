@@ -23,6 +23,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static Client client = Client.GetInstance();
 
         static bool PreviousChatboxState = false;
+        static bool PlayerSpawned = false;
 
         static public void Init()
         {
@@ -35,7 +36,7 @@ namespace Curiosity.Client.net.Classes.Environment
             client.RegisterEventHandler("__cfx_nui:ChatPosition", new Action<System.Dynamic.ExpandoObject>(StoreChatPosition));
 
             RegisterNuiCallbackType("CloseChatMessage");
-            client.RegisterEventHandler("__cfx_nui:CloseChatMessage", new Action(OnCloseChat));
+            client.RegisterEventHandler("__cfx_nui:CloseChatMessage", new Action(OnNuiCloseChat));
 
             client.RegisterTickHandler(OnChatTask);
 
@@ -44,6 +45,8 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static void OnPlayerSpawned()
         {
+            PlayerSpawned = true;
+
             int x = API.GetResourceKvpInt("CHAT_X");
             int y = API.GetResourceKvpInt("CHAT_Y");
 
@@ -54,13 +57,17 @@ namespace Curiosity.Client.net.Classes.Environment
             API.SendNuiMessage(JsonConvert.SerializeObject(chatPosition));
         }
 
+        static void OnNuiCloseChat()
+        {
+            EnableChatbox(false);
+        }
+
         static void OnCloseChat()
         {
             EnableControlAction(0, Control.CursorScrollUp, true);
             EnableControlAction(0, Control.CursorScrollDown, true);
             SetPedCanSwitchWeapon(Game.PlayerPed, true);
             SetNuiFocus(false);
-            PreviousChatboxState = false;
             Client.TriggerEvent("curiosity:Client:Chat:ChatboxActive", false);
         }
 
@@ -145,7 +152,8 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 if (Game.IsControlPressed(0, Control.MpTextChatAll))
                 {
-                    EnableChatbox(true);
+                    if (PlayerSpawned)
+                        EnableChatbox(true);
                 }
 
                 if (PreviousChatboxState)

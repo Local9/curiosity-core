@@ -141,7 +141,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static async Task<Vector3> GetSpawnPoint(Vector3 position)
         {
-            return await position.Ground();
+            return await position.Ground(false);
         }
 
         static async Task SpawnBackupPedOne()

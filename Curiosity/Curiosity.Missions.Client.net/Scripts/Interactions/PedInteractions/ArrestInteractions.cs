@@ -39,7 +39,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 Helpers.ShowOfficerSubtitle("Out of the vehicle! Now!");
                 if (resistExitChance >= 25)
                 {
-                    Helpers.ShowDriverSubtitle(resp[Client.Random.Next(resp.Count)]);
+                    Helpers.ShowSuspectSubtitle(resp[Client.Random.Next(resp.Count)]);
                     await Client.Delay(1000);
                     interactivePed.Ped.CurrentVehicle.TrafficStopVehicleFlee(interactivePed.Ped);
                 }
@@ -72,7 +72,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             {
                 if (resistExitChance >= 28)
                 {
-                    Helpers.ShowDriverSubtitle(resp[Client.Random.Next(resp.Count)]);
+                    Helpers.ShowSuspectSubtitle(resp[Client.Random.Next(resp.Count)]);
                     interactivePed.Ped.Weapons.Give(WeaponHash.Pistol, 10, true, true);
                     interactivePed.Ped.DropsWeaponsOnDeath = false;
                     interactivePed.Ped.Task.ShootAt(Game.PlayerPed);
@@ -81,7 +81,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 }
                 else if (resistExitChance >= 25)
                 {
-                    Helpers.ShowDriverSubtitle(resp[Client.Random.Next(resp.Count)]);
+                    Helpers.ShowSuspectSubtitle(resp[Client.Random.Next(resp.Count)]);
                     interactivePed.Ped.Task.FleeFrom(Game.PlayerPed);
                 }
                 else
@@ -146,6 +146,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 API.SetPedAsGroupMember(interactivePed.Handle, playerGroupId);
                 API.SetEnableHandcuffs(interactivePed.Handle, true);
                 API.SetPedCanTeleportToGroupLeader(interactivePed.Handle, playerGroupId, true);
+
+                interactivePed.Ped.PedGroup.FormationType = FormationType.Line;
 
                 interactivePed.IsHandcuffed = true;
                 Game.PlayerPed.IsPositionFrozen = false;

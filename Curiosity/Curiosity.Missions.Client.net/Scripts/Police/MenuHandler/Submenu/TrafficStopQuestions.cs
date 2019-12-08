@@ -48,19 +48,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
         {
             if (menuItem == mItemQuestionDrunk)
             {
-                TrafficStop.InteractionDrunk();
+                // TrafficStop.InteractionDrunk();
             }
             if (menuItem == mItemQuestionDrugs)
             {
-                TrafficStop.InteractionDrug();
+                // TrafficStop.InteractionDrug();
             }
             if (menuItem == mItemQuestionIllegal)
             {
-                TrafficStop.InteractionIllegal();
+                // TrafficStop.InteractionIllegal();
             }
             if (menuItem == mItemQuestionSearchVehicle)
             {
-                TrafficStop.InteractionSearch();
+                // TrafficStop.InteractionSearch();
             }
             if (menuItem == mItemGoBack)
             {

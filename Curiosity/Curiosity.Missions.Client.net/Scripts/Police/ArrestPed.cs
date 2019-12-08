@@ -255,7 +255,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             if (resistExitChance >= 25)
                             {
                                 List<string> resp = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!" };
-                                Helpers.ShowDriverSubtitle(resp[Client.Random.Next(resp.Count)]);
+                                Helpers.ShowSuspectSubtitle(resp[Client.Random.Next(resp.Count)]);
                                 await Client.Delay(1000);
                                 TrafficStop.TrafficStopVehicleFlee(TrafficStop.TargetVehicle, TrafficStop.StoppedDriver);
                             }

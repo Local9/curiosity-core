@@ -24,41 +24,54 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
                 int vehicleId = NetworkGetEntityFromNetworkId(int.Parse(decryptedNetworkId));
 
-                CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(vehicleId);
-
-                if (vehicle != null)
+                if (vehicleId > 0)
                 {
-                    if (vehicle.Exists())
+
+                    if (DoesEntityExist(vehicleId))
                     {
-                        if (vehicle.AttachedBlip.Exists())
-                        {
-                            vehicle.AttachedBlip.Delete();
-                        }
-
-                        if (NetworkRequestControlOfEntity(vehicle.Handle))
-                        {
-                            vehicle.IsPersistent = false;
-                            vehicle.IsPositionFrozen = false;
-                            vehicle.Position = new Vector3(-2000f, -6000f, 0f);
-                            vehicle.MarkAsNoLongerNeeded();
-
-                            int objectHandle = vehicle.Handle;
-                            int objectHandleToDelete = vehicle.Handle;
-
-                            SetEntityAsNoLongerNeeded(ref objectHandle);
-                            DeleteEntity(ref objectHandleToDelete);
-                        }
-
+                        FreezeEntityPosition(vehicleId, true);
+                        SetEntityAsMissionEntity(vehicleId, false, false);
+                        
                         NetworkFadeOutEntity(vehicleId, true, false);
-                        vehicle.IsEngineRunning = false;
-                        vehicle.MarkAsNoLongerNeeded();
-                        vehicle.Delete();
-
-                        if (vehicle.Exists())
-                        {
-                            DeleteEntity(ref vehicleId);
-                        }
+                        SetEntityCoords(vehicleId, -2000f, -6000f, 0f, false, false, false, true);
+                        
+                        SetEntityAsNoLongerNeeded(ref vehicleId);
+                        DeleteEntity(ref vehicleId);
                     }
+
+                    //if (vehicle.Exists())
+                    //{
+                    //    if (vehicle.AttachedBlip.Exists())
+                    //    {
+                    //        vehicle.AttachedBlip.Delete();
+                    //    }
+
+                    //    if (NetworkRequestControlOfEntity(vehicle.Handle))
+                    //    {
+                    //        vehicle.IsPersistent = false;
+                    //        vehicle.IsPositionFrozen = false;
+                    //        vehicle.Position = new Vector3(-2000f, -6000f, 0f);
+
+                    //        int objectHandle = vehicle.Handle;
+                    //        int objectHandleToDelete = vehicle.Handle;
+
+                    //        SetEntityAsNoLongerNeeded(ref objectHandle);
+                    //        DeleteEntity(ref objectHandleToDelete);
+
+                    //        if (vehicle.Exists())
+                    //            vehicle.Delete();
+                    //    }
+
+                    //    NetworkFadeOutEntity(vehicleId, true, false);
+                    //    vehicle.IsEngineRunning = false;
+                    //    vehicle.Delete();
+                    //    vehicle.MarkAsNoLongerNeeded();
+
+                    //    if (vehicle.Exists())
+                    //    {
+                    //        DeleteEntity(ref vehicleId);
+                    //    }
+                    //}
                 }
             }
             catch (Exception ex)

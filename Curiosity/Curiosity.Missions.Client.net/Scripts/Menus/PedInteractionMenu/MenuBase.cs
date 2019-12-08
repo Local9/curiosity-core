@@ -14,20 +14,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
         static public Menu MainMenu;
         static InteractivePed _interactivePed;
 
-        // Options
-
         // buttons
         static MenuItem mItemHello = new MenuItem("Hello");
-        static MenuItem mItemHandcuffs = new MenuItem("Apply Handcuffs");
-        static MenuItem mItemCurrentVehicle = new MenuItem("Detain in Vehicle");
-
-        // Dead Interactions
-        static MenuItem mItemCpr = new MenuItem("CPR");
-        static MenuItem mItemCallCoroner = new MenuItem("Call Coroner");
 
         static public void Open(InteractivePed interactivePed)
         {
-            MenuController.DontOpenAnyMenu = false;
+            MenuState(true);
             _interactivePed = interactivePed;
 
             if (MainMenu == null)
@@ -45,6 +37,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 
                 MenuController.AddMenu(MainMenu);
             }
+
             client.RegisterTickHandler(OnDistanceTask);
             MainMenu.OpenMenu();
         }
@@ -54,7 +47,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
             await Task.FromResult(0);
 
             if (_interactivePed.Position.Distance(Game.PlayerPed.Position) > 4)
-                MainMenu.CloseMenu();
+                MenuController.CloseAllMenus();
+
+            if (!MenuController.IsAnyMenuOpen())
+                client.DeregisterTickHandler(OnDistanceTask);
         }
 
         private static void MainMenu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
@@ -62,80 +58,46 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
             
         }
 
-        private async static void MainMenu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
+        private static void MainMenu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
         {
-            // DEAD
-            if (menuItem == mItemCpr)
-            {
-                Cpr.Init();
-                await Client.Delay(1000);
-                Cpr.InteractionCPR(_interactivePed);
-                MainMenu.CloseMenu();
-            }
-            if (menuItem == mItemCallCoroner)
-            {
-                Extras.Coroner.RequestService();
-                MainMenu.CloseMenu();
-            }
             // ALIVE
             if (menuItem == mItemHello)
-                Social.Hello(_interactivePed);
-
-            if (menuItem == mItemHandcuffs)
-            {
-                ArrestInteractions.InteractionHandcuff(_interactivePed);
-                mItemHandcuffs.Enabled = false;
-                await Client.Delay(4000);
-                mItemHandcuffs.Text = _interactivePed.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
-                mItemHandcuffs.Enabled = true;
-                mItemCurrentVehicle.Enabled = _interactivePed.IsHandcuffed;
-            }
-
-            if (menuItem == mItemCurrentVehicle)
-            {
-                ArrestInteractions.InteractionPutInVehicle(_interactivePed);
-                mItemCurrentVehicle.Enabled = false;
-                await Client.Delay(4000);
-                mItemCurrentVehicle.Enabled = _interactivePed.IsHandcuffed;
-                mItemCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() ? "Remove from Vehicle" : "Detain in Vehicle";
-            }
+                Social.InteractionHello(_interactivePed);
         }
 
         private static void MainMenu_OnMenuOpen(Menu menu)
-        {
+        { 
             MainMenu.ClearMenuItems();
 
-            if (_interactivePed.IsDead)
-            {
-                // CPR / Coroner
-                if (!_interactivePed.HasCprFailed)
-                    MainMenu.AddMenuItem(mItemCpr);
-
-                MainMenu.AddMenuItem(mItemCallCoroner);
-            }
-            else
-            {
-                MainMenu.AddMenuItem(mItemHello);
-
-                mItemHandcuffs.Text = _interactivePed.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
-                mItemHandcuffs.Enabled = !_interactivePed.Ped.IsInVehicle();
-                MainMenu.AddMenuItem(mItemHandcuffs);
-
-                mItemCurrentVehicle.Enabled = _interactivePed.IsHandcuffed;
-                mItemCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() ? "Remove from Vehicle" : "Detain in Vehicle";
-                MainMenu.AddMenuItem(mItemCurrentVehicle);
-
-                if (_interactivePed.IsTrafficStop)
-                {
-                    // MURDER CHECKS
-                }
-            }
+            SubMenus.MenuQuestions.SetupMenu(_interactivePed);
+            SubMenus.MenuInteraction.SetupMenu(_interactivePed);
+            SubMenus.MenuDispatch.SetupMenu(_interactivePed);
         }
 
         private static void MainMenu_OnMenuClose(Menu menu)
         {
+            MenuState(false);
             client.DeregisterTickHandler(OnDistanceTask);
-            MenuController.DontOpenAnyMenu = true;
+        }
+
+        public static void AddSubMenu(Menu menu, Menu submenu, string label = "→→→", bool buttonEnabled = true)
+        {
+            MenuController.AddSubmenu(menu, submenu);
+            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = label, Enabled = buttonEnabled };
+            menu.AddMenuItem(submenuButton);
+            MenuController.BindMenuItem(menu, submenu, submenuButton);
+        }
+
+        public static void MenuState(bool IsOpen)
+        {
+            MenuController.DontOpenAnyMenu = !IsOpen;
+            Client.TriggerEvent("curiosity:Client:UI:LocationHide", IsOpen);
+            Client.TriggerEvent("curiosity:Client:Menu:IsOpened", IsOpen);
+        }
+
+        public static bool AnyMenuVisible()
+        {
+            return MenuController.IsAnyMenuOpen();
         }
     }
 }

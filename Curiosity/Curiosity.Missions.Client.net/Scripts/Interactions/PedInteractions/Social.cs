@@ -11,38 +11,153 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
+using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
+using Curiosity.Missions.Client.net.MissionPeds;
 
 namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 {
     class Social
     {
-        static public async void Hello(Ped ped)
+        static public async void InteractionHello(InteractivePed interactivePed)
         {
             await Helpers.LoadAnimation("gestures@m@sitting@generic@casual");
 
             if (Client.speechType == SpeechType.NORMAL)
             {
                 string voiceName = "s_f_y_cop_01_white_full_01";
-                if (ped.Gender == Gender.Male)
+                if (interactivePed.Ped.Gender == Gender.Male)
                 {
                     voiceName = "s_m_y_cop_01_white_full_01";
                 }
                 List<string> hello = new List<string>() { "GENERIC_HI", "KIFFLOM_GREET" };
-                PlayAmbientSpeechWithVoice(ped.Handle, hello[Client.Random.Next(hello.Count)], voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
+                PlayAmbientSpeechWithVoice(interactivePed.Ped.Handle, hello[Client.Random.Next(hello.Count)], voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
                 Game.PlayerPed.Task.PlayAnimation("gestures@m@standing@casual", "gesture_hello", 8.0f, -1, (AnimationFlags)49);
             }
             else
             {
                 string voiceName = "s_f_y_cop_01_white_full_01";
-                if (ped.Gender == Gender.Male)
+                if (interactivePed.Ped.Gender == Gender.Male)
                 {
                     voiceName = "s_m_y_cop_01_white_full_01";
                 }
-                PlayAmbientSpeechWithVoice(ped.Handle, "GENERIC_INSULT_HIGH", voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
+                PlayAmbientSpeechWithVoice(interactivePed.Ped.Handle, "GENERIC_INSULT_HIGH", voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
                 Game.PlayerPed.Task.PlayAnimation("gestures@m@standing@casual", "gesture_what_hard", 8.0f, -1, (AnimationFlags)49);
             }
             await Client.Delay(1000);
             Game.PlayerPed.Task.ClearAll();
         }
+
+        internal static async void InteractionPresentIdentification(InteractivePed interactivePed)
+        {
+            string officerSubtitle = string.Empty;
+            if (Client.speechType == SpeechType.NORMAL)
+            {
+                officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes[Client.Random.Next(DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes.Count)];
+            }
+            else
+            {
+                officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes[Client.Random.Next(DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes.Count)];
+            }
+            Screen.ShowSubtitle($"~o~Officer: ~w~{officerSubtitle}");
+            await Client.Delay(2000);
+            if (interactivePed.HasLostId)
+            {
+                Screen.ShowSubtitle($"~b~Driver: ~w~Sorry officer, I don't have it on me...");
+            }
+            else
+            {
+                string driverResponse = string.Empty;
+                if (interactivePed.Attitude < 50)
+                {
+                    driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity.Count)];
+                }
+                else if (interactivePed.Attitude >= 50 && interactivePed.Attitude < 80)
+                {
+                    driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity.Count)];
+                }
+                else if (interactivePed.Attitude >= 80)
+                {
+                    driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity.Count)];
+                }
+                Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
+
+                Helpers.ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{interactivePed.Name}\n~w~DOB: ~y~{interactivePed.DateOfBirth}");
+
+                Client.TriggerEvent("curiosity:interaction:idRequesed", interactivePed.NetworkId);
+            }
+        }
+
+        static public void InteractionDrunk(InteractivePed interactivePed)
+        {
+            Helpers.ShowOfficerSubtitle("Have you had anything to drink today?");
+            List<string> response;
+            if (interactivePed.IsUnderTheInfluence)
+            {
+                response = new List<string>() { "*Burp*", "What's a drink?", "No.", "You'll never catch me alive!", "Never", "Nope, i don't drink Ossifer", "Maybe?", "Just a few." };
+            }
+            else
+            {
+                response = new List<string>() { "No, sir", "I dont drink.", "Nope.", "No.", "Only 1.", "Yes... a water and 2 orange juices." };
+            }
+            Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
+        }
+
+        static public void InteractionDrug(InteractivePed interactivePed)
+        {
+            Helpers.ShowOfficerSubtitle("Have you consumed any drugs recently?");
+            List<string> response;
+            if (interactivePed.IsUsingCannabis || interactivePed.IsUsingCocaine)
+            {
+                response = new List<string>() { "What is life?", "Who is me?", "NoOOOooo.", "Is that a UNICORN?!", "If I've done the what?", "WHAT DRUGS? I DONT KNOW KNOW ANYTHING ABOUT DRUGS.", "What's a drug?" };
+            }
+            else
+            {
+                response = new List<string>() { "No, sir", "I don't do that stuff.", "Nope.", "No.", "Nah" };
+            }
+            Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
+        }
+
+        static public void InteractionIllegal(InteractivePed interactivePed)
+        {
+            bool isInVehicle = interactivePed.Ped.IsInVehicle();
+            string checkScript = isInVehicle ? "in the vehicle" : "I might find on you";
+            Helpers.ShowOfficerSubtitle($"Is there anything illegal {checkScript}?");
+            List<string> response = new List<string>() { "No, sir", "Not that I know of.", "Nope.", "No.", "Maybe? But most probably not.", "I sure hope not" };
+            if (isInVehicle)
+            {
+                response = new List<string>() { "No, sir", "Not that I know of.", "Nope.", "No.", "Apart from the 13 dead hookers in the back.. No.", "Maybe? But most probably not.", "I sure hope not" };
+            }
+            Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
+        }
+
+        static public void InteractionSearch(InteractivePed interactivePed)
+        {
+            Helpers.ShowOfficerSubtitle("Would you mind if I search you?");
+            List<string> response;
+            if (interactivePed.IsAllowedToBeSearched)
+            {
+                response = new List<string>() { "I'd prefer you not to...", "I'll have to pass on that", "Uuuh... Y- No..", "Go ahead. For the record its not my car", "Yeah, why not.." };
+            }
+            else
+            {
+                response = new List<string>() { "Go ahead", "Shes all yours", "I'd prefer you not to", "I don't have anything to hide, go for it." };
+            }
+            Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
+        }
+
+        //static public void InteractionSearchVehicle()
+        //{
+        //    Helpers.ShowOfficerSubtitle("Would you mind if i search your vehicle?");
+        //    List<string> response;
+        //    if (CanSearchVehicle)
+        //    {
+        //        response = new List<string>() { "I'd prefer you not to...", "I'll have to pass on that", "Uuuh... Y- No..", "Go ahead. For the record its not my car", "Yeah, why not.." };
+        //    }
+        //    else
+        //    {
+        //        response = new List<string>() { "Go ahead", "Shes all yours", "I'd prefer you not to", "I don't have anything to hide, go for it." };
+        //    }
+        //    Helpers.ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
+        //}
     }
 }

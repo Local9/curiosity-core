@@ -398,14 +398,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     TargetVehicle.IsEngineRunning = true;
                     await Client.Delay(500);
                     List<string> driverResponse = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!", "You'll never take me alive, pig!" };
-                    Helpers.ShowDriverSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                    Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
                     await Client.Delay(3000);
                     TrafficStopVehicleFlee(TargetVehicle, StoppedDriver);
                 }
                 else
                 {
                     List<string> driverResponse = new List<string>() { "What's the problem?", "What seems to be the problem, officer?", "Yeah, sure.", "Okay.", "Fine.", "What now?", "Whats up?", "Ummm... O-okay.", "This is ridiculous...", "I'm kind of in a hurry right now.", "Oh what now?!", "No problem.", "Am I being detained?", "Yeah, okay... One moment.", "Okay.", "Uh huh.", "Yep." };
-                    Helpers.ShowDriverSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                    Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
                     StoppedDriver.Task.LeaveVehicle(LeaveVehicleFlags.None);
                     StoppedDriver.PedGroup.Add(Game.PlayerPed, true);
                 }
@@ -861,7 +861,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 DriverResponse = new List<string>() { "Bye, asshole...", "Ugh.. Finally.", "Damn cops...", "Until next time.", "Its about time, pig" };
             }
             await Client.Delay(2000);
-            Helpers.ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             Reset(true);
         }
 
@@ -894,7 +894,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             Helpers.ShowOfficerSubtitle(OfficerResponse[Client.Random.Next(OfficerResponse.Count)]);
             await Client.Delay(2000);
-            Helpers.ShowDriverSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             await Client.Delay(2000);
             Reset(true);
         }
@@ -1035,57 +1035,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Reg.Owner: ~y~{VehicleRegisterationDriversName}~w~\nReg.Year: ~y~{VehicleRegisterationYear}~w~\nFlags: ~y~{NotificationFlagVehicle}");
         }
 
-        static public void InteractionDrunk()
-        {
-            Helpers.ShowOfficerSubtitle("Have you had anything to drink today?");
-            List<string> response;
-            if (IsDriverUnderTheInfluence)
-            {
-                response = new List<string>() { "*Burp*", "What's a drink?", "No.", "You'll never catch me alive!", "Never", "Nope, i don't drink Ossifer", "Maybe?", "Just a few." };
-            }
-            else
-            {
-                response = new List<string>() { "No, sir", "I dont drink.", "Nope.", "No.", "Only 1.", "Yes... a water and 2 orange juices." };
-            }
-            Helpers.ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
-        }
-
-        static public void InteractionDrug()
-        {
-            Helpers.ShowOfficerSubtitle("Have you consumed any drugs recently?");
-            List<string> response;
-            if (DriverCocaineChance >= 90 || DriverCannabisChance >= 85)
-            {
-                response = new List<string>() { "What is life?", "Who is me?", "NoOOOooo.", "Is that a UNICORN?!", "If I've done the what?", "WHAT DRUGS? I DONT KNOW KNOW ANYTHING ABOUT DRUGS.", "What's a drug?" };
-            }
-            else
-            {
-                response = new List<string>() { "No, sir", "I don't do that stuff.", "Nope.", "No.", "Nah" };
-            }
-            Helpers.ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
-        }
-
-        static public void InteractionIllegal()
-        {
-            Helpers.ShowOfficerSubtitle("Is there anything illegal in the vehicle?");
-            List<string> response = new List<string>() { "No, sir", "Not that I know of.", "Nope.", "No.", "Apart from the 13 dead hookers in the back.. No.", "Maybe? But most probably not.", "I sure hope not" };
-            Helpers.ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
-        }
-
-        static public void InteractionSearch()
-        {
-            Helpers.ShowOfficerSubtitle("Would you mind if i search your vehicle?");
-            List<string> response;
-            if (CanSearchVehicle)
-            {
-                response = new List<string>() { "I'd prefer you not to...", "I'll have to pass on that", "Uuuh... Y- No..", "Go ahead. For the record its not my car", "Yeah, why not.." };
-            }
-            else
-            {
-                response = new List<string>() { "Go ahead", "Shes all yours", "I'd prefer you not to", "I don't have anything to hide, go for it." };
-            }
-            Helpers.ShowDriverSubtitle(response[Client.Random.Next(response.Count)]);
-        }
+        
 
         static public async void InteractionBreathalyzer()
         {

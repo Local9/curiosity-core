@@ -43,9 +43,9 @@ namespace Curiosity.Missions.Client.net.Wrappers
             Screen.ShowSubtitle($"~o~Officer:~w~ {subtitle}");
         }
 
-        static public void ShowDriverSubtitle(string subtitle)
+        static public void ShowSuspectSubtitle(string subtitle)
         {
-            Screen.ShowSubtitle($"~b~Driver:~w~ {subtitle}");
+            Screen.ShowSubtitle($"~b~Suspect:~w~ {subtitle}");
         }
     }
 }
