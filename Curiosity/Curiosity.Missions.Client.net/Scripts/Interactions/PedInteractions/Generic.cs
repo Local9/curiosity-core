@@ -96,7 +96,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             IsAnInteractionActive = false;
         }
 
-        static public async void InteractionSearch(InteractivePed interactivePed)
+        static public void InteractionSearch(InteractivePed interactivePed)
         {
             if (IsAnInteractionActive) return;
 

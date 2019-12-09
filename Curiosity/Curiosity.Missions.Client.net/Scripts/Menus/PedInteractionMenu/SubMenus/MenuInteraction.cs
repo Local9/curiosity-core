@@ -102,6 +102,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             MenuBase.MenuState(true);
             menu.ClearMenuItems();
 
+            bool IsInVehicle = _interactivePed.Ped.IsInVehicle();
+
             if (_interactivePed.IsDead)
             {
                 // CPR / Coroner
@@ -113,15 +115,18 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             else
             {
                 mItemHandcuffs.Text = _interactivePed.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
-                mItemHandcuffs.Enabled = !_interactivePed.Ped.IsInVehicle();
+                mItemHandcuffs.Enabled = !IsInVehicle;
                 menu.AddMenuItem(mItemHandcuffs);
 
                 mItemDetainInCurrentVehicle.Enabled = CanDetainPed();
-                mItemDetainInCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() ? "Remove from Vehicle" : "Detain in Vehicle";
+                mItemDetainInCurrentVehicle.Text = IsInVehicle ? "Remove from Vehicle" : "Detain in Vehicle";
                 menu.AddMenuItem(mItemDetainInCurrentVehicle);
 
                 menu.AddMenuItem(mItemBreathalyzer);
                 menu.AddMenuItem(mItemDrugTest);
+
+                mItemSearch.Enabled = !IsInVehicle;
+                mItemSearch.Description = IsInVehicle ? "Suspect must be removed from the vehicle before searching." : string.Empty;
                 menu.AddMenuItem(mItemSearch);
             }
         }
