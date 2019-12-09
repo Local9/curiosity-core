@@ -11,6 +11,7 @@ using Curiosity.Missions.Client.net.DataClasses;
 // INTERACTIONS
 using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net;
+using System.Collections.Generic;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -27,6 +28,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         public bool IsTrafficStop;
         public bool IsPerformingCpr = false;
         public bool HasCprFailed = false;
+        public bool HasIdentifcationBeenRan;
         // Safe
         public bool IsVictim;
         public bool IsHostage;
@@ -55,8 +57,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private static string helpText;
 
-        private string _Firstname, _Surname, _DateOfBirth;
-        private int _Attitude, _BloodAlcaholLimit, _ChanceOfFlee, _ChanceOfShootAndFlee;
+        private string _Firstname, _Surname, _DateOfBirth, _Offence;
+        private int _Attitude, _BloodAlcaholLimit, _ChanceOfFlee, _ChanceOfShootAndFlee, _NumberOfCitations;
 
         // PED INFORMATION
         public string Name
@@ -89,6 +91,22 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
+        public int NumberOfCitations
+        {
+            get
+            {
+                return _NumberOfCitations;
+            }
+        }
+
+        public string Offence
+        {
+            get
+            {
+                return _Offence;
+            }
+        }
+
         static InteractivePed()
         {
         }
@@ -108,6 +126,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             IsUsingCocaine = false;
             HasLostId = false;
             HasBeenSearched = false;
+            HasIdentifcationBeenRan = false;
 
             _ChanceOfFlee = 0;
             _ChanceOfShootAndFlee = 0;
@@ -183,6 +202,16 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 IsAllowedToBeSearched = true;
             }
 
+            _NumberOfCitations = Client.Random.Next(8);
+
+            _Offence = "~g~NONE";
+            if (Client.Random.Next(100) >= 75)
+            {
+                List<string> Offense = new List<string>() { "WANTED BY LSPD", "WANTED FOR ASSAULT", "WANTED FOR UNPAID FINES", "WANTED FOR RUNNING FROM THE POLICE", "WANTED FOR EVADING LAW", "WANTED FOR HIT AND RUN", "WANTED FOR DUI" };
+                _Offence = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
+                CanBeArrested = true;
+            }
+
             Create();
         }
 
@@ -194,6 +223,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
             client.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
+            client.RegisterEventHandler("curiosity:interaction:idRan", new Action<int>(OnIdRan));
+
             client.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
             client.RegisterEventHandler("curiosity:interaction:cpr:failed", new Action<int>(OnCprFailed));
             client.RegisterEventHandler("curiosity:interaction:coroner", new Action<int>(OnCoronerCalled));
@@ -276,6 +307,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (!string.IsNullOrEmpty(helpText))
                 Screen.DisplayHelpTextThisFrame(helpText);
         }
+
         private void OnDied(EntityEventWrapper sender, Entity entity)
         {
             Blip currentBlip = base.AttachedBlip;
@@ -440,6 +472,15 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 HasBeenSearched = true;
                 IsCarryingIllegalItems = illegalItems;
+                CanBeArrested = illegalItems;
+            }
+        }
+
+        public void OnIdRan(int networkId)
+        {
+            if (Ped.NetworkId == networkId)
+            {
+                HasIdentifcationBeenRan = true;
             }
         }
 

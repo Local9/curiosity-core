@@ -61,9 +61,11 @@
     <Compile Include="MissionPeds\NormalPed.cs" />
     <Compile Include="MissionPedTypes\InteractablePed.cs" />
     <Compile Include="MissionPedTypes\PedNormal.cs" />
+    <Compile Include="MissionVehicles\InteractiveVehicle.cs" />
     <Compile Include="Scripts\Extras\Coroner.cs" />
     <Compile Include="Scripts\Extras\PrisonerTransport.cs" />
     <Compile Include="Scripts\Extras\VehicleTow.cs" />
+    <Compile Include="Scripts\Interactions\DispatchInteractions\DispatchCenter.cs" />
     <Compile Include="Scripts\Interactions\PedInteractions\Generic.cs" />
     <Compile Include="Scripts\Interactions\VehicleInteractions\TrafficStopInteractions.cs" />
     <Compile Include="Scripts\Menus\PedInteractionMenu\MenuBase.cs" />
@@ -148,7 +150,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MissionVehicles\" />
     <Folder Include="MissionVehicleTypes\" />
     <Folder Include="Scripts\Police\Department\" />
   </ItemGroup>

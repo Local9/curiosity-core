@@ -15,6 +15,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
         static Menu menu;
         static InteractivePed _interactivePed;
 
+        static MenuItem mItemRunIdentifcation = new MenuItem("Run Name Check");
+
         static public void SetupMenu(InteractivePed interactivePed)
         {
             if (menu == null)
@@ -23,7 +25,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 menu.OnMenuClose += Menu_OnMenuClose;
                 menu.OnMenuOpen += Menu_OnMenuOpen;
                 menu.OnItemSelect += Menu_OnItemSelect;
-                menu.OnListIndexChange += Menu_OnListIndexChange;
                 menu.EnableInstructionalButtons = true;
             }
             menu.MenuTitle = MENU_TITLE;
@@ -31,14 +32,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             MenuBase.AddSubMenu(MenuBase.MainMenu, menu);
         }
 
-        private static void Menu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
-        {
-            throw new NotImplementedException();
-        }
-
         private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
         {
-            throw new NotImplementedException();
+            if (menuItem == mItemRunIdentifcation)
+                Interactions.DispatchInteractions.DispatchCenter.InteractionRunPedIdentification(_interactivePed);
         }
 
         private static void Menu_OnMenuOpen(Menu menu)
@@ -46,6 +43,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             menu.MenuTitle = "";
             menu.MenuSubtitle = MENU_TITLE;
             MenuBase.MenuState(true);
+
+            menu.ClearMenuItems();
+
+            mItemRunIdentifcation.Enabled = _interactivePed.HasAskedForId && !_interactivePed.HasLostId;
+            mItemRunIdentifcation.Description = _interactivePed.HasAskedForId && !_interactivePed.HasLostId ? "" : "Must have the suspects ID";
+            menu.AddMenuItem(mItemRunIdentifcation);
         }
 
         private static void Menu_OnMenuClose(Menu menu)
