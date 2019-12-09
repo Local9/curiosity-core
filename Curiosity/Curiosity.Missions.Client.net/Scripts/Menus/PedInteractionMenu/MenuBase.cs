@@ -69,9 +69,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
         { 
             MainMenu.ClearMenuItems();
 
-            SubMenus.MenuQuestions.SetupMenu(_interactivePed);
+            if (_interactivePed.IsAlive)
+                SubMenus.MenuQuestions.SetupMenu(_interactivePed);
+
             SubMenus.MenuInteraction.SetupMenu(_interactivePed);
-            SubMenus.MenuDispatch.SetupMenu(_interactivePed);
+
+            if (_interactivePed.IsAlive)
+                SubMenus.MenuDispatch.SetupMenu(_interactivePed);
         }
 
         private static void MainMenu_OnMenuClose(Menu menu)

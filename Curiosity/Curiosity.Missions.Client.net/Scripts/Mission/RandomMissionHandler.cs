@@ -66,6 +66,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static void OnTrafficStops(bool state)
         {
             _IsTrafficStopActive = state;
+
+            if (Client.CurrentVehicle == null)
+            {
+                Screen.ShowNotification("~b~Traffic Stops: ~r~You currently do not have a Personal Vehicle for Traffic Stops.");
+                return;
+            }
+
+            if (Game.PlayerPed.CurrentVehicle != Client.CurrentVehicle)
+            {
+                Screen.ShowNotification("~b~Traffic Stops: ~r~This vehicle is not your personal vehicle.");
+                return;
+            }
+
             if (state)
             {
                 Police.TrafficStop.Setup();

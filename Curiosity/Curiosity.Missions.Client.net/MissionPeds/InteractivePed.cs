@@ -21,6 +21,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public const int MovementUpdateInterval = 5;
         private const string MOVEMENT_ANIMATION_SET_DRUNK = "MOVE_M@DRUNK@VERYDRUNK";
+        private const string NPC_WAS_RELEASED = "NPC_WAS_RELEASED";
         public readonly Ped Ped;
         private Ped _target;
         // MENU STATES
@@ -113,6 +114,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         protected InteractivePed(int handle) : base(handle)
         {
+            if (DecorGetBool(handle, NPC_WAS_RELEASED))
+            {
+                Screen.ShowNotification("~r~This pedestrian was recently released.");
+                return;
+            }
+
             this.Ped = new Ped(handle);
 
             IsMenuVisible = false;
@@ -502,8 +509,27 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (this.NetworkId == networkId)
             {
+                if (this.Ped.IsInVehicle())
+                {
+                    this.Ped.SetConfigFlag(292, false);
+                    this.Ped.LeaveGroup();
+                    this.Ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
+                }
+
+                this.Ped.Task.ClearAllImmediately();
                 this.Ped.MarkAsNoLongerNeeded();
                 this.Ped.IsPersistent = false;
+                this.Ped.LeaveGroup();
+
+                API.TaskSetBlockingOfNonTemporaryEvents(this.Ped.Handle, false);
+
+                DecorSetBool(this.Ped.Handle, NPC_WAS_RELEASED, true);
+
+                client.DeregisterTickHandler(OnMenuTask);
+                client.DeregisterTickHandler(OnShowHelpTextTask);
+
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperUiEnabled)
+                    client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
         }
 

@@ -136,6 +136,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         // If we are doing a pull over, don't run any more...
                         if (IsConductingPullover) return;
 
+                        if (Game.PlayerPed.CurrentVehicle != Client.CurrentVehicle)
+                        {
+                            Screen.ShowNotification($"~b~Traffic Stop: ~w~Must be using a personal vehicle from the garage.");
+                            return;
+                        }
+
                         TargetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
                         
                         if (TargetVehicle == null) return;
@@ -209,6 +215,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     return;
                                 }
                             }
+                        }
+                    }
+                    else
+                    {
+                        if (Game.PlayerPed.IsInVehicle())
+                        {
+                            Screen.ShowNotification($"~b~Traffic Stop: ~w~Current vehicle type of ~r~{Game.PlayerPed.CurrentVehicle.ClassType} ~w~is not valid.");
                         }
                     }
                 }

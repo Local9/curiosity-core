@@ -142,6 +142,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 mItemSearch.Enabled = !IsInVehicle;
                 mItemSearch.Description = IsInVehicle ? "Suspect must be removed from the vehicle before searching." : string.Empty;
                 menu.AddMenuItem(mItemSearch);
+
+                menu.AddMenuItem(mItemWarn);
+
+                menu.AddMenuItem(mItemRelease);
             }
         }
 
