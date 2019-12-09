@@ -44,7 +44,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         public bool IsUsingCocaine;
         public bool IsAllowedToBeSearched;
         public bool HasLostId;
-        public bool HasAskedForId;
+        public bool HasProvidedId;
         public bool HasBeenSearched;
         // MENU STATES
         private bool IsCoronerCalled;
@@ -120,7 +120,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             IsCoronerCalled = false;
             HasCprFailed = false;
             IsArrested = false;
-            HasAskedForId = false;
+            HasProvidedId = false;
 
             IsUsingCannabis = false;
             IsUsingCocaine = false;
@@ -224,17 +224,19 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             client.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
             client.RegisterEventHandler("curiosity:interaction:idRan", new Action<int>(OnIdRan));
-
+            client.RegisterEventHandler("curiosity:interaction:handcuffs", new Action<int, bool>(OnHandcuffs));
             client.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
             client.RegisterEventHandler("curiosity:interaction:cpr:failed", new Action<int>(OnCprFailed));
             client.RegisterEventHandler("curiosity:interaction:coroner", new Action<int>(OnCoronerCalled));
             client.RegisterEventHandler("curiosity:interaction:searched", new Action<int, bool>(OnPedHasBeenSearched));
 
-            client.DeregisterTickHandler(OnMenuTask);
-            client.DeregisterTickHandler(OnShowHelpTextTask);
+            client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
 
             client.RegisterTickHandler(OnShowHelpTextTask);
             client.RegisterTickHandler(OnMenuTask);
+
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperUiEnabled)
+                client.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
             if (_ChanceOfShootAndFlee == 4)
             {
@@ -358,6 +360,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             client.DeregisterTickHandler(OnMenuTask);
             client.DeregisterTickHandler(OnShowHelpTextTask);
+
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperUiEnabled)
+                client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
         }
 
         private async Task OnMenuTask()
@@ -463,7 +468,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         public void OnIdRequested(int networkId)
         {
             if (Ped.NetworkId == networkId)
-                HasAskedForId = true;
+                HasProvidedId = true;
         }
 
         public void OnPedHasBeenSearched(int networkId, bool illegalItems)
@@ -476,6 +481,15 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
+        public void OnHandcuffs(int networkId, bool state)
+        {
+            if (Ped.NetworkId == networkId)
+            {
+                IsHandcuffed = state;
+                IsArrested = state;
+            }
+        }
+
         public void OnIdRan(int networkId)
         {
             if (Ped.NetworkId == networkId)
@@ -484,7 +498,52 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
+        private void OnPedHasBeenReleased(int networkId)
+        {
+            if (this.NetworkId == networkId)
+            {
+                this.Ped.MarkAsNoLongerNeeded();
+                this.Ped.IsPersistent = false;
+            }
+        }
+
         public event InteractivePed.OnAttackingTargetEvent AttackTarget;
         public delegate void OnAttackingTargetEvent(Ped target);
+
+        private async Task OnShowDeveloperOverlayTask()
+        {
+            await Task.FromResult(0);
+
+            if (this.Position.Distance(Game.PlayerPed.Position) >= 6) return;
+
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+
+            keyValuePairs.Add("Name", this.Name);
+            keyValuePairs.Add("DoB", this.DateOfBirth);
+            keyValuePairs.Add("Health", $"{this.Health} / {this.MaxHealth}");
+            keyValuePairs.Add("-", "");
+            keyValuePairs.Add("_ChanceOfFlee", $"{this._ChanceOfFlee}");
+            keyValuePairs.Add("_ChanceOfShootAndFlee", $"{this._ChanceOfShootAndFlee}");
+            keyValuePairs.Add("--", "");
+            keyValuePairs.Add("IsArrested", $"{this.IsArrested}");
+            keyValuePairs.Add("IsHandcuffed", $"{this.IsHandcuffed}");
+            keyValuePairs.Add("HasProvidedId", $"{this.HasProvidedId}");
+            keyValuePairs.Add("HasLostId", $"{this.HasLostId}");
+            keyValuePairs.Add("HasBeenSearched", $"{this.HasBeenSearched}");
+            keyValuePairs.Add("---", "");
+            keyValuePairs.Add("CanBeArrested", $"{this.CanBeArrested}");
+            keyValuePairs.Add("IsAllowedToBeSearched", $"{this.IsAllowedToBeSearched}");
+            keyValuePairs.Add("IsUsingCannabis", $"{this.IsUsingCannabis}");
+            keyValuePairs.Add("IsUsingCocaine", $"{this.IsUsingCocaine}");
+            keyValuePairs.Add("IsCarryingIllegalItems", $"{this.IsCarryingIllegalItems}");
+            keyValuePairs.Add("IsUnderTheInfluence", $"{this.IsUnderTheInfluence}");
+            keyValuePairs.Add("----", "");
+            keyValuePairs.Add("BloodAlcaholLimit", $"{this.BloodAlcaholLimit}");
+            keyValuePairs.Add("Attitude", $"{this.Attitude}");
+            keyValuePairs.Add("NumberOfCitations", $"{this.NumberOfCitations}");
+            keyValuePairs.Add("Offence", $"{this.Offence}");
+
+            Wrappers.Helpers.DrawData(this, keyValuePairs);
+        }
     }
 }

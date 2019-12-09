@@ -19,7 +19,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.DispatchInteraction
     {
         static public async void InteractionRunPedIdentification(InteractivePed interactivePed)
         {
-            if (!interactivePed.HasAskedForId)
+            if (!interactivePed.HasProvidedId)
             {
                 Screen.ShowNotification("~r~You have to ask for the ~o~Driver's ID~r~ first!");
                 return;

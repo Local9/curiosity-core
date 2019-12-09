@@ -8,7 +8,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
     {
         static bool menuSetup = false;
 
-        static bool _debugSafezones = false;
+        static bool _debugSafezones = false, _developerUiEnable = false;
 
         static Client client = Client.GetInstance();
         static Menu menu = new Menu("Developer Menu", "Various Settings or options");
@@ -18,6 +18,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static MenuItem mItemRefuel = new MenuItem("Refuel Vehicle");
         // Debuging
         static MenuCheckboxItem menuCheckboxItemDebugAreas = new MenuCheckboxItem("Draw Safezones", _debugSafezones);
+        static MenuCheckboxItem menuCheckboxItemDeveloperUiEnable = new MenuCheckboxItem("Show Developer UIs", _debugSafezones);
 
         public static void Init()
         {
@@ -60,6 +61,12 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 _debugSafezones = newCheckedState;
                 Client.TriggerEvent("curiosity:Client:Player:Environment:DrawAreas");
             }
+
+            if (menuItem == menuCheckboxItemDeveloperUiEnable)
+            {
+                _developerUiEnable = newCheckedState;
+                Client.TriggerEvent("curiosity:Player:Mission:ShowDeveloperUI", _developerUiEnable);
+            }
         }
 
         private static void Menu_OnMenuClose(Menu menu)
@@ -80,6 +87,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.AddMenuItem(mItemRepair);
 
             menu.AddMenuItem(menuCheckboxItemDebugAreas);
+            menu.AddMenuItem(menuCheckboxItemDeveloperUiEnable);
         }
 
         private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)

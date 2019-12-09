@@ -147,10 +147,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 API.SetEnableHandcuffs(interactivePed.Handle, true);
                 API.SetPedCanTeleportToGroupLeader(interactivePed.Handle, playerGroupId, true);
 
-                interactivePed.Ped.PedGroup.FormationType = FormationType.Line;
+                interactivePed.Ped.PedGroup.FormationType = FormationType.Default;
 
                 interactivePed.IsHandcuffed = true;
                 Game.PlayerPed.IsPositionFrozen = false;
+
+                Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.NetworkId, true);
             }
             else if (interactivePed != null)
             {
@@ -167,6 +169,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 API.SetBlockingOfNonTemporaryEvents(interactivePed.Handle, false);
                 Game.PlayerPed.IsPositionFrozen = false;
                 interactivePed.IsHandcuffed = false;
+
+                Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.NetworkId, false);
             }
             else
             {
@@ -222,6 +226,64 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 }
                 interactivePed.Ped.SetConfigFlag(292, true);
             }
+        }
+
+        internal static async void InteractionRelease(InteractivePed interactivePed)
+        {
+            if (Client.speechType == SpeechType.NORMAL)
+            {
+                Wrappers.Helpers.ShowOfficerSubtitle("Alright, you're free to go.");
+            }
+            else
+            {
+                Wrappers.Helpers.ShowOfficerSubtitle("Get out of here before I change my mind.");
+            }
+            List<string> DriverResponse = new List<string>() { "Okay, thanks.", "Thanks.", "Thank you officer, have a nice day!", "Thanks, bye!", "I'm free to go? Okay, bye!" };
+            if (interactivePed.Attitude >= 50 && interactivePed.Attitude < 80)
+            {
+                DriverResponse = new List<string>() { "Alright.", "Okay.", "Good.", "Okay, bye.", "Okay, goodbye officer.", "Later.", "Bye bye.", "Until next time." };
+            }
+            else if (interactivePed.Attitude >= 80 && interactivePed.Attitude < 95)
+            {
+                DriverResponse = new List<string>() { "Bye, asshole...", "Ugh.. Finally.", "Damn cops...", "Until next time.", "Its about time, pig" };
+            }
+            await Client.Delay(2000);
+            Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            Client.TriggerEvent("curiosity:interaction:released", interactivePed.NetworkId);
+        }
+
+        internal static async void InteractionIssueWarning(InteractivePed interactivePed)
+        {
+            List<string> OfficerResponse;
+            List<string> DriverResponse = new List<string>() { "Thanks.", "Thank you officer.", "Okay, thank you.", "Okay, thank you officer.", "Thank you so much!", "Alright, thanks!", "Yay! Thank you!", "I'll be more careful next time!", "Sorry about that!" }; ;
+
+            if (Client.speechType == SpeechType.NORMAL)
+            {
+                OfficerResponse = new List<string>() { "You can go, but don't do it again.", "Don't make me pull you over again!", "Have a good day. Be a little more careful next time.", "I'll let you off with a warning this time." };
+            }
+            else
+            {
+                OfficerResponse = new List<string>() { "Don't do that again.", "Don't make me pull you over again!", "I'll let you go this time.", "I'll let you off with a warning this time." };
+            }
+
+            if (interactivePed.Attitude >= 50 && interactivePed.Attitude < 80)
+            {
+                DriverResponse = new List<string>() { "Thanks... I guess...", "Yeah, whatever.", "Finally.", "Ugh..", };
+            }
+            else if (interactivePed.Attitude >= 80 && interactivePed.Attitude < 95)
+            {
+                DriverResponse = new List<string>() { "Uh huh, bye.", "Yeah, whatever.", "Finally.", "Ugh..", "Prick." };
+            }
+            else if (interactivePed.Attitude >= 95)
+            {
+                DriverResponse = new List<string>() { "Troublesum said fuck you too buddy!", "Yea, well don't kill yourself trying" };
+            }
+
+            Wrappers.Helpers.ShowOfficerSubtitle(OfficerResponse[Client.Random.Next(OfficerResponse.Count)]);
+            await Client.Delay(2000);
+            Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+            await Client.Delay(2000);
+            Client.TriggerEvent("curiosity:interaction:released", interactivePed.NetworkId);
         }
     }
 }

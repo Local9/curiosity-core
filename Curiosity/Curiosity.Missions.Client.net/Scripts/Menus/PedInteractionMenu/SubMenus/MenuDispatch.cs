@@ -46,8 +46,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
 
             menu.ClearMenuItems();
 
-            mItemRunIdentifcation.Enabled = _interactivePed.HasAskedForId && !_interactivePed.HasLostId;
-            mItemRunIdentifcation.Description = _interactivePed.HasAskedForId && !_interactivePed.HasLostId ? "" : "Must have the suspects ID";
+            mItemRunIdentifcation.Enabled = _interactivePed.HasProvidedId && !_interactivePed.HasLostId;
+            mItemRunIdentifcation.Description = _interactivePed.HasProvidedId && !_interactivePed.HasLostId ? "" : "Must have the suspects ID";
             menu.AddMenuItem(mItemRunIdentifcation);
         }
 

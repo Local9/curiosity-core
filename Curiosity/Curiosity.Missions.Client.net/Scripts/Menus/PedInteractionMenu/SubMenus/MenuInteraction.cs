@@ -18,10 +18,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
         static MenuItem mItemHandcuffs = new MenuItem("Apply Handcuffs");
         static MenuItem mItemDetainInCurrentVehicle = new MenuItem("Detain in Vehicle");
         // tests
+        static MenuItem mItemSuspectVehicle = new MenuItem("Suspect: Leave Vehicle");
         static MenuItem mItemBreathalyzer = new MenuItem("Suspect: Breathalyzer");
         static MenuItem mItemSearch = new MenuItem("Suspect: Search");
         static MenuItem mItemDrugTest = new MenuItem("Suspect: Drug test");
-        
+
+        static MenuItem mItemWarn = new MenuItem("Suspect: Warn");
+        static MenuItem mItemRelease = new MenuItem("Suspect: Release");
+
         // Dead Interactions
         static MenuItem mItemCallCoroner = new MenuItem("Call Coroner");
         static MenuItem mItemCpr = new MenuItem("CPR");
@@ -89,6 +93,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             if (menuItem == mItemSearch)
             {
                 Generic.InteractionSearch(_interactivePed);
+            }
+
+            if (menuItem == mItemWarn)
+            {
+                ArrestInteractions.InteractionIssueWarning(_interactivePed);
+            }
+
+            if (menuItem == mItemRelease)
+            {
+                ArrestInteractions.InteractionRelease(_interactivePed);
             }
         }
 
