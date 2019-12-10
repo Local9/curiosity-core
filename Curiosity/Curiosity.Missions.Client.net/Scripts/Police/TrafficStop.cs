@@ -38,6 +38,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static bool IsCooldownActive = false;
 
         static Vehicle _vehicle;
+        static Ped _ped;
 
         // states
 
@@ -213,6 +214,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     targetVehicle.AttachedBlip.IsFlashing = false;
                                     awaitingPullover = false;
                                     isConductingPullover = true;
+
+                                    _ped = targetVehicle.Driver;
+                                    _vehicle = targetVehicle;
+
                                     Scripts.VehicleCreators.CreateVehicles.TrafficStop(targetVehicle);
                                     Screen.LoadingPrompt.Hide();
                                 }

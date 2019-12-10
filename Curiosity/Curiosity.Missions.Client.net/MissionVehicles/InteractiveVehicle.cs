@@ -266,6 +266,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
             if (Game.PlayerPed.Position.Distance(this.Vehicle.Position) >= 300f)
             {
+                Client.TriggerEvent("curiosity:interaction:released", this.Vehicle.Driver.NetworkId);
+
                 this.Delete();
 
                 client.DeregisterTickHandler(OnShowHelpTextTask);
