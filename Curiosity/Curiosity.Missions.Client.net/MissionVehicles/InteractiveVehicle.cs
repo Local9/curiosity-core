@@ -14,7 +14,9 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         public readonly Vehicle Vehicle;
         private EntityEventWrapper _eventWrapper;
 
-        private string helpText;
+        private string helpText = string.Empty;
+
+        // Vehicle States
 
         public InteractiveVehicle(int handle) : base(handle)
         {
@@ -29,6 +31,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
+
+            client.RegisterTickHandler(OnShowHelpTextTask);
         }
 
         protected bool Equals(InteractiveVehicle other)
@@ -89,6 +93,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         public void Abort(EntityEventWrapper sender, Entity entity)
         {
             base.Delete();
+            
+            client.DeregisterTickHandler(OnShowHelpTextTask);
         }
     }
 }

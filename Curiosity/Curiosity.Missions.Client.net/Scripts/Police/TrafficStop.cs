@@ -55,6 +55,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             client.DeregisterTickHandler(OnEmoteCheck);
 
             client.DeregisterTickHandler(OnDeveloperData);
+            IsConductingPullover = false;
 
             Screen.ShowNotification("~b~Traffic Stops~s~: ~r~Disabled");
             Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
@@ -104,8 +105,21 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 await BaseScript.Delay(0);
 
+                if (IsConductingPullover)
+                {
+                    await BaseScript.Delay(60000);
+                    return;
+                }
+
                 if (Game.PlayerPed.IsInVehicle() && Client.CurrentVehicle != null)
                 {
+                    if (Game.PlayerPed.CurrentVehicle != Client.CurrentVehicle)
+                    {
+                        Screen.ShowNotification($"~b~Traffic Stop: ~w~Must be using a Personal Vehicle from the garage.");
+                        await BaseScript.Delay(60000);
+                        return;
+                    }
+
                     if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency)
                     {
                         Vehicle targetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
@@ -130,10 +144,20 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             }
                         }
 
+                        Screen.LoadingPrompt.Show("Vehicle: Detected");
+
                         long gameTime = GetGameTimer();
                         while ((API.GetGameTimer() - gameTime) < 5000)
                         {
-                            await Client.Delay(0);
+                            if (Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck) == null)
+                            {
+                                Screen.LoadingPrompt.Show("Vehicle: Lost");
+                                await BaseScript.Delay(2000);
+                                Screen.LoadingPrompt.Hide();
+                                return;
+                            }
+
+                            await BaseScript.Delay(0);
                         }
 
                         if (IsCooldownActive)
@@ -143,14 +167,24 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             return;
                         }
 
+                        bool hasBeenPulledOver = DecorGetBool(targetVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED);
+
+                        if (hasBeenPulledOver)
+                        {
+                            Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~You have already pulled over this vehicle.");
+                            return;
+                        }
+
                         bool awaitingPullover = true;
                         if (targetVehicle == Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck))
                         {
+                            Screen.LoadingPrompt.Show("Awaiting Confirmation", LoadingSpinnerType.SocialClubSaving);
+
                             while (awaitingPullover)
                             {
                                 API.SetUserRadioControlEnabled(false);
 
-                                await Client.Delay(0);
+                                await BaseScript.Delay(0);
                                 Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to initiate a ~b~Traffic Stop~w~.\nPress ~INPUT_COVER~ to cancel.");
 
                                 if (targetVehicle.AttachedBlip == null)
@@ -165,131 +199,52 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                 {
                                     targetVehicle.AttachedBlip.IsFlashing = false;
                                     awaitingPullover = false;
+                                    Screen.LoadingPrompt.Hide();
                                 }
 
                                 if (Game.IsControlJustPressed(0, Control.Cover))
                                 {
-                                    targetVehicle.AttachedBlip.IsFlashing = false;
                                     awaitingPullover = false;
 
                                     if (targetVehicle.AttachedBlip != null)
                                         targetVehicle.AttachedBlip.Delete();
 
-                                    targetVehicle.IsPositionFrozen = false;
-
                                     DecorSetBool(targetVehicle.Handle, NPC_VEHICLE_IGNORE, true);
+                                    Screen.LoadingPrompt.Hide();
+                                }
+
+                                if (targetVehicle.Position.Distance(Client.CurrentVehicle.Position) > 40f)
+                                {
+                                    awaitingPullover = false;
+
+                                    if (targetVehicle.AttachedBlip != null)
+                                        targetVehicle.AttachedBlip.Delete();
+
+                                    Screen.LoadingPrompt.Hide();
                                 }
                             }
                         }
+                        else
+                        {
+                            Screen.LoadingPrompt.Hide();
+                        }
                     }
-
-                    //    if (Game.PlayerPed.CurrentVehicle != Client.CurrentVehicle && TargetVehicle == null)
-                    //    {
-                    //        Screen.ShowNotification($"~b~Traffic Stop: ~w~Must be using a Personal Vehicle from the garage.");
-                    //        return;
-                    //    }
-
-                    //    // Don't run any of the code if the TargetVehicle is still in control
-                    //    if (TargetVehicle != null) return;
-                    //    // If we are doing a pull over, don't run any more...
-                    //    if (IsConductingPullover) return;
-
-                    //    TargetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
-
-                    //    if (TargetVehicle == null) return;
-                    //    if (TargetVehicle.Driver.IsPlayer) return;
-
-                    //    // if no driver, don't do anything
-                    //    if (TargetVehicle.Driver == null) return;
-                    //    // if the driver is dead, don't do anything
-                    //    if (TargetVehicle.Driver.IsDead) return;
-
-                    //    bool hasBeenPulledOver = DecorGetBool(TargetVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED);
-
-                    //    if (hasBeenPulledOver)
-                    //    {
-                    //        Screen.DisplayHelpTextThisFrame($"You have already pulled over this vehicle.");
-                    //        return;
-                    //    }
-
-                    //    // 5 second timer so we don't try attaching to a bunch of vehicles
-                    //    long gameTime = GetGameTimer();
-                    //    while ((API.GetGameTimer() - gameTime) < 5000)
-                    //    {
-                    //        await Client.Delay(0);
-                    //    }
-
-                    //    if (IsCooldownActive)
-                    //    {
-                    //        TargetVehicle = null;
-                    //        Wrappers.Helpers.ShowSimpleNotification("~b~Traffic Stops: ~r~Cooldown Active");
-                    //        return;
-                    //    }
-
-                    //    // If the vehicle matches then we will mark the vehicle and start checking for player inputs
-                    //    if (TargetVehicle == Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck))
-                    //    {
-                    //        AwaitingPullover = true;
-                    //        while (AwaitingPullover)
-                    //        {
-                    //            SetUserRadioControlEnabled(false);
-
-                    //            await Client.Delay(0);
-                    //            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to initiate a ~b~Traffic Stop");
-
-                    //            if (TargetVehicle.AttachedBlip == null)
-                    //            {
-                    //                TargetVehicle.AttachBlip();
-                    //                TargetVehicle.AttachedBlip.Sprite = BlipSprite.Standard;
-                    //                TargetVehicle.AttachedBlip.Color = BlipColor.Red;
-                    //            }
-
-                    //            if (Game.IsControlJustPressed(0, Control.Pickup))
-                    //            {
-                    //                BlipSiren(Client.CurrentVehicle.Handle);
-                    //                Pullover(TargetVehicle);
-                    //                AwaitingPullover = false;
-                    //                return;
-                    //            }
-
-                    //            if (TargetVehicle.Position.Distance(Client.CurrentVehicle.Position) > 20f)
-                    //            {
-                    //                if (TargetVehicle.AttachedBlip != null)
-                    //                {
-                    //                    if (TargetVehicle.AttachedBlip.Exists())
-                    //                    {
-                    //                        TargetVehicle.AttachedBlip.Delete();
-                    //                    }
-                    //                }
-
-                    //                TargetVehicle = null;
-                    //                return;
-                    //            }
-                    //        }
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (Game.PlayerPed.IsInVehicle())
-                    //    {
-                    //        Screen.ShowNotification($"~b~Traffic Stop: ~w~Current vehicle type of ~r~{Game.PlayerPed.CurrentVehicle.ClassType} ~w~is not valid.");
-                    //        await Client.Delay(2000);
-                    //        Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
-                    //        Dispose();
-                    //    }
-                    //}
+                    else
+                    {
+                        if (Game.PlayerPed.IsInVehicle())
+                        {
+                            Screen.ShowNotification($"~b~Traffic Stop: ~w~Current vehicle type of ~r~{Game.PlayerPed.CurrentVehicle.ClassType} ~w~is not valid.");
+                            await Client.Delay(2000);
+                            Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
+                            Dispose();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"OnTrafficStopTask -> {ex}");
             }
-        }
-
-        // FOLLOW
-        static public void FollowPlayer()
-        {
-            
         }
 
         // RESET
@@ -311,7 +266,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             DecorSetBool(stoppedVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED, true);
             IsConductingPullover = true; // Flag that a pullover has started
-            
+
+            if (stoppedVehicle.AttachedBlip != null)
+                stoppedVehicle.AttachedBlip.IsFlashing = false;
+
         }
 
 

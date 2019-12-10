@@ -245,6 +245,19 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperUiEnabled)
                 client.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
+            if (IsUnderTheInfluence)
+            {
+                if (!HasAnimSetLoaded(MOVEMENT_ANIMATION_SET_DRUNK))
+                {
+                    RequestAnimSet(MOVEMENT_ANIMATION_SET_DRUNK);
+                    while (!HasAnimSetLoaded(MOVEMENT_ANIMATION_SET_DRUNK))
+                    {
+                        await Client.Delay(0);
+                    }
+                }
+                this.Ped.MovementAnimationSet = MOVEMENT_ANIMATION_SET_DRUNK;
+            }
+
             if (_ChanceOfShootAndFlee == 4)
             {
                 WeaponHash weaponHash = WeaponHash.Pistol;
@@ -260,19 +273,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             else if (_ChanceOfFlee >= 28)
             {
                 this.Ped.Task.FleeFrom(Game.PlayerPed);
-            }
-
-            if (IsUnderTheInfluence)
-            {
-                if (!HasAnimSetLoaded(MOVEMENT_ANIMATION_SET_DRUNK))
-                {
-                    RequestAnimSet(MOVEMENT_ANIMATION_SET_DRUNK);
-                    while (!HasAnimSetLoaded(MOVEMENT_ANIMATION_SET_DRUNK))
-                    {
-                        await Client.Delay(0);
-                    }
-                }
-                this.Ped.MovementAnimationSet = MOVEMENT_ANIMATION_SET_DRUNK;
             }
         }
 
