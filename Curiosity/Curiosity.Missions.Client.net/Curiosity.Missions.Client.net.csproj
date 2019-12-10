@@ -62,6 +62,7 @@
     <Compile Include="MissionPedTypes\InteractablePed.cs" />
     <Compile Include="MissionPedTypes\PedNormal.cs" />
     <Compile Include="MissionVehicles\InteractiveVehicle.cs" />
+    <Compile Include="MissionVehicleTypes\TrafficStopVehicle.cs" />
     <Compile Include="Scripts\Extras\Coroner.cs" />
     <Compile Include="Scripts\Extras\PrisonerTransport.cs" />
     <Compile Include="Scripts\Extras\VehicleTow.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Scripts\Police\Pullover\Events.cs" />
     <Compile Include="Scripts\Police\TrafficStop.cs" />
     <Compile Include="Scripts\SoundManager.cs" />
+    <Compile Include="Scripts\VehicleCreators\CreateVehicles.cs" />
     <Compile Include="Static\Relationships.cs" />
     <Compile Include="Wrappers\EntityEventWrapper.cs" />
     <Compile Include="Wrappers\Helpers.cs" />
@@ -150,7 +152,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MissionVehicleTypes\" />
     <Folder Include="Scripts\Police\Department\" />
   </ItemGroup>
   <ItemGroup>

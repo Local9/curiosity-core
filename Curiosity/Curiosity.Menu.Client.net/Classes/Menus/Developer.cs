@@ -8,7 +8,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
     {
         static bool menuSetup = false;
 
-        static bool _debugSafezones = false, _developerUiEnable = false;
+        static bool _debugSafezones = false, _developerNpcUiEnable = false, __developerVehicleUiEnable = false;
 
         static Client client = Client.GetInstance();
         static Menu menu = new Menu("Developer Menu", "Various Settings or options");
@@ -18,7 +18,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static MenuItem mItemRefuel = new MenuItem("Refuel Vehicle");
         // Debuging
         static MenuCheckboxItem menuCheckboxItemDebugAreas = new MenuCheckboxItem("Draw Safezones", _debugSafezones);
-        static MenuCheckboxItem menuCheckboxItemDeveloperUiEnable = new MenuCheckboxItem("Show Developer UIs", _debugSafezones);
+        static MenuCheckboxItem menuCheckboxItemDeveloperNpcUi = new MenuCheckboxItem("Show Interactive NPC UI", _developerNpcUiEnable);
+        static MenuCheckboxItem menuCheckboxItemDeveloperVehUi = new MenuCheckboxItem("Show Interactive Veh UI", __developerVehicleUiEnable);
 
         public static void Init()
         {
@@ -62,10 +63,16 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 Client.TriggerEvent("curiosity:Client:Player:Environment:DrawAreas");
             }
 
-            if (menuItem == menuCheckboxItemDeveloperUiEnable)
+            if (menuItem == menuCheckboxItemDeveloperNpcUi)
             {
-                _developerUiEnable = newCheckedState;
-                Client.TriggerEvent("curiosity:Player:Mission:ShowDeveloperUI", _developerUiEnable);
+                _developerNpcUiEnable = newCheckedState;
+                Client.TriggerEvent("curiosity:Player:Mission:ShowDeveloperNpcUI", _developerNpcUiEnable);
+            }
+
+            if (menuItem == menuCheckboxItemDeveloperVehUi)
+            {
+                __developerVehicleUiEnable = newCheckedState;
+                Client.TriggerEvent("curiosity:Player:Mission:ShowDeveloperVehUI", __developerVehicleUiEnable);
             }
         }
 
@@ -87,7 +94,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.AddMenuItem(mItemRepair);
 
             menu.AddMenuItem(menuCheckboxItemDebugAreas);
-            menu.AddMenuItem(menuCheckboxItemDeveloperUiEnable);
+            menu.AddMenuItem(menuCheckboxItemDeveloperNpcUi);
+            menu.AddMenuItem(menuCheckboxItemDeveloperVehUi);
         }
 
         private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)

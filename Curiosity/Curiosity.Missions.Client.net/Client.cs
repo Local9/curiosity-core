@@ -15,7 +15,7 @@ namespace Curiosity.Missions.Client.net
 
         private static Vehicle _currentVehicle;
         public static SpeechType speechType;
-        public static bool DeveloperUiEnabled;
+        public static bool DeveloperNpcUiEnabled, DeveloperVehUiEnabled;
 
         public static Vehicle CurrentVehicle
         {
@@ -58,7 +58,8 @@ namespace Curiosity.Missions.Client.net
 
             RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
             RegisterEventHandler("curiosity:Player:Mission:SpeechType", new Action<int>(OnSpeechType));
-            RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperUI", new Action<bool>(OnShowDeveloperUi));
+            RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperNpcUI", new Action<bool>(OnShowDeveloperNpcUi));
+            RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperVehUI", new Action<bool>(OnShowDeveloperVehUi));
 
             ClassLoader.Init();
 
@@ -70,9 +71,14 @@ namespace Curiosity.Missions.Client.net
             speechType = (SpeechType)speech;
         }
 
-        static void OnShowDeveloperUi(bool state)
+        static void OnShowDeveloperNpcUi(bool state)
         {
-            DeveloperUiEnabled = state;
+            DeveloperNpcUiEnabled = state;
+        }
+
+        static void OnShowDeveloperVehUi(bool state)
+        {
+            DeveloperVehUiEnabled = state;
         }
 
         public static void OnVehicleId(int vehicleId)

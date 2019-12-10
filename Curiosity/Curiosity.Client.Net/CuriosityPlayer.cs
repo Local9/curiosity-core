@@ -358,6 +358,12 @@ namespace Curiosity.Client.net
             Screen.LoadingPrompt.Show("Found Safe Position...", LoadingSpinnerType.RegularClockwise);
 
             Game.PlayerPed.Position = World.GetNextPositionOnSidewalk(finalCheck);
+
+            if (Game.PlayerPed.Position == Vector3.Zero)
+            {
+                Game.PlayerPed.Position = finalCheck;
+            }
+
             Game.PlayerPed.IsPositionFrozen = false;
 
             int gameTimer = API.GetGameTimer();

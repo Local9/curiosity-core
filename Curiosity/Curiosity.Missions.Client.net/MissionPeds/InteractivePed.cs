@@ -58,29 +58,29 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private static string helpText;
 
-        private string _Firstname, _Surname, _DateOfBirth, _Offence;
-        private int _Attitude, _BloodAlcaholLimit, _ChanceOfFlee, _ChanceOfShootAndFlee, _NumberOfCitations;
+        private string _firstname, _surname, _dateOfBirth, _offence;
+        private int _attitude, _bloodAlcaholLimit, _chanceOfFlee, _chanceOfShootAndFlee, _numberOfCitations;
 
         // PED INFORMATION
         public string Name
         {
             get
             {
-                return $"{_Firstname} {_Surname}";
+                return $"{_firstname} {_surname}";
             }
         }
         public string DateOfBirth
         {
             get
             {
-                return _DateOfBirth;
+                return _dateOfBirth;
             }
         }
         public int Attitude
         {
             get
             {
-                return _Attitude;
+                return _attitude;
             }
         }
 
@@ -88,7 +88,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return _BloodAlcaholLimit;
+                return _bloodAlcaholLimit;
             }
         }
 
@@ -96,7 +96,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return _NumberOfCitations;
+                return _numberOfCitations;
             }
         }
 
@@ -104,7 +104,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return _Offence;
+                return _offence;
             }
         }
 
@@ -135,52 +135,52 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             HasBeenSearched = false;
             HasIdentifcationBeenRan = false;
 
-            _ChanceOfFlee = 0;
-            _ChanceOfShootAndFlee = 0;
+            _chanceOfFlee = 0;
+            _chanceOfShootAndFlee = 0;
 
             this.Ped.Health = 200;
             this.Ped.IsPersistent = true;
 
-            _Firstname = string.Empty;
-            _Surname = string.Empty;
+            _firstname = string.Empty;
+            _surname = string.Empty;
 
             if (this.Ped.Gender == Gender.Female)
             {
-                _Firstname = PedNames.FirstNameFemale[Client.Random.Next(PedNames.FirstNameFemale.Count)];
+                _firstname = PedNames.FirstNameFemale[Client.Random.Next(PedNames.FirstNameFemale.Count)];
             }
             else
             {
-                _Firstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count)];
+                _firstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count)];
             }
-            _Surname = PedNames.Surname[Client.Random.Next(PedNames.Surname.Count)];
+            _surname = PedNames.Surname[Client.Random.Next(PedNames.Surname.Count)];
 
             DateTime StartDateForDriverDoB = new DateTime(1949, 1, 1);
             double Range = (DateTime.Today - StartDateForDriverDoB).TotalDays;
             Range = Range - 6570; // MINUS 18 YEARS
-            _DateOfBirth = StartDateForDriverDoB.AddDays(Client.Random.Next((int)Range)).ToString("yyyy-MM-dd");
+            _dateOfBirth = StartDateForDriverDoB.AddDays(Client.Random.Next((int)Range)).ToString("yyyy-MM-dd");
 
-            _Attitude = Client.Random.Next(100);
+            _attitude = Client.Random.Next(100);
 
             int breathlyzerLimit = Client.Random.Next(100);
-            _BloodAlcaholLimit = 0;
+            _bloodAlcaholLimit = 0;
             IsUnderTheInfluence = false;
             IsAllowedToBeSearched = false;
 
             if (breathlyzerLimit >= 60)
             {
-                _BloodAlcaholLimit = Client.Random.Next(1, 7);
+                _bloodAlcaholLimit = Client.Random.Next(1, 7);
                 if (breathlyzerLimit >= 88)
                 {
                     IsUnderTheInfluence = true;
                     IsAllowedToBeSearched = true;
                     CanBeArrested = true;
-                    _BloodAlcaholLimit = Client.Random.Next(8, 10);
-                    _ChanceOfFlee = Client.Random.Next(25, 30);
+                    _bloodAlcaholLimit = Client.Random.Next(8, 10);
+                    _chanceOfFlee = Client.Random.Next(25, 30);
 
                     if (breathlyzerLimit >= 95)
                     {
-                        _BloodAlcaholLimit = Client.Random.Next(10, 20);
-                        _ChanceOfShootAndFlee = Client.Random.Next(1, 5);
+                        _bloodAlcaholLimit = Client.Random.Next(10, 20);
+                        _chanceOfShootAndFlee = Client.Random.Next(1, 5);
                     }
                 }
             }
@@ -209,13 +209,13 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 IsAllowedToBeSearched = true;
             }
 
-            _NumberOfCitations = Client.Random.Next(8);
+            _numberOfCitations = Client.Random.Next(8);
 
-            _Offence = "~g~NONE";
+            _offence = "~g~NONE";
             if (Client.Random.Next(100) >= 75)
             {
                 List<string> Offense = new List<string>() { "WANTED BY LSPD", "WANTED FOR ASSAULT", "WANTED FOR UNPAID FINES", "WANTED FOR RUNNING FROM THE POLICE", "WANTED FOR EVADING LAW", "WANTED FOR HIT AND RUN", "WANTED FOR DUI" };
-                _Offence = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
+                _offence = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
                 CanBeArrested = true;
             }
 
@@ -230,6 +230,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
             client.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
+            
             client.RegisterEventHandler("curiosity:interaction:idRan", new Action<int>(OnIdRan));
             client.RegisterEventHandler("curiosity:interaction:handcuffs", new Action<int, bool>(OnHandcuffs));
             client.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
@@ -238,11 +239,13 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterEventHandler("curiosity:interaction:searched", new Action<int, bool>(OnPedHasBeenSearched));
 
             client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
+            // car stolen
+            client.RegisterEventHandler("curiosity:interaction:hasLostId", new Action<int>(OnHasLostId));
 
             client.RegisterTickHandler(OnShowHelpTextTask);
             client.RegisterTickHandler(OnMenuTask);
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperUiEnabled)
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
                 client.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
             if (IsUnderTheInfluence)
@@ -258,21 +261,24 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 this.Ped.MovementAnimationSet = MOVEMENT_ANIMATION_SET_DRUNK;
             }
 
-            if (_ChanceOfShootAndFlee == 4)
+            if (!this.Ped.IsInVehicle()) // Ignore this if they are in a vehicle
             {
-                WeaponHash weaponHash = WeaponHash.Pistol;
-                if (Client.Random.Next(5) == 4)
+                if (_chanceOfShootAndFlee == 4)
                 {
-                    weaponHash = WeaponHash.SawnOffShotgun;
+                    WeaponHash weaponHash = WeaponHash.Pistol;
+                    if (Client.Random.Next(5) == 4)
+                    {
+                        weaponHash = WeaponHash.SawnOffShotgun;
+                    }
+                    this.Ped.Weapons.Give(weaponHash, 1, true, true);
+                    this.Ped.Task.ShootAt(Game.PlayerPed);
+                    await Client.Delay(3000);
+                    this.Ped.Task.FleeFrom(Game.PlayerPed);
                 }
-                this.Ped.Weapons.Give(weaponHash, 1, true, true);
-                this.Ped.Task.ShootAt(Game.PlayerPed);
-                await Client.Delay(3000);
-                this.Ped.Task.FleeFrom(Game.PlayerPed);
-            }
-            else if (_ChanceOfFlee >= 28)
-            {
-                this.Ped.Task.FleeFrom(Game.PlayerPed);
+                else if (_chanceOfFlee >= 28)
+                {
+                    this.Ped.Task.FleeFrom(Game.PlayerPed);
+                }
             }
         }
 
@@ -379,7 +385,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.DeregisterTickHandler(OnMenuTask);
             client.DeregisterTickHandler(OnShowHelpTextTask);
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperUiEnabled)
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
         }
 
@@ -508,6 +514,20 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
+        public void OnHasLostId(int networkId)
+        {
+            if (HasProvidedId) return;
+
+            if (Ped.NetworkId == networkId)
+            {
+                if (Client.Random.Next(80, 100) >= 95)
+                {
+                    HasLostId = true;
+                    IsAllowedToBeSearched = true;
+                }
+            }
+        }
+
         public void OnIdRan(int networkId)
         {
             if (Ped.NetworkId == networkId)
@@ -539,7 +559,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 client.DeregisterTickHandler(OnMenuTask);
                 client.DeregisterTickHandler(OnShowHelpTextTask);
 
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperUiEnabled)
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
                     client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
         }
@@ -559,8 +579,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             keyValuePairs.Add("DoB", this.DateOfBirth);
             keyValuePairs.Add("Health", $"{this.Health} / {this.MaxHealth}");
             keyValuePairs.Add("-", "");
-            keyValuePairs.Add("_ChanceOfFlee", $"{this._ChanceOfFlee}");
-            keyValuePairs.Add("_ChanceOfShootAndFlee", $"{this._ChanceOfShootAndFlee}");
+            keyValuePairs.Add("_ChanceOfFlee", $"{this._chanceOfFlee}");
+            keyValuePairs.Add("_ChanceOfShootAndFlee", $"{this._chanceOfShootAndFlee}");
             keyValuePairs.Add("--", "");
             keyValuePairs.Add("IsArrested", $"{this.IsArrested}");
             keyValuePairs.Add("IsHandcuffed", $"{this.IsHandcuffed}");

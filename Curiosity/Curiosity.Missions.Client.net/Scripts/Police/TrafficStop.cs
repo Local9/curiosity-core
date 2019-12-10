@@ -25,7 +25,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static float DistanceToCheck = 20.0f;
 
         static bool AwaitingPullover = true;
-        static bool IsConductingPullover = false;
+        static bool isConductingPullover = false;
         static bool IsCooldownActive = false;
 
         // states
@@ -55,7 +55,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             client.DeregisterTickHandler(OnEmoteCheck);
 
             client.DeregisterTickHandler(OnDeveloperData);
-            IsConductingPullover = false;
+            isConductingPullover = false;
 
             Screen.ShowNotification("~b~Traffic Stops~s~: ~r~Disabled");
             Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
@@ -82,7 +82,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static async Task OnDeveloperData()
         {
             await Task.FromResult(0);
-            if (Client.DeveloperUiEnabled)
+            if (Client.DeveloperVehUiEnabled)
             {
                 try
                 {
@@ -105,7 +105,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 await BaseScript.Delay(0);
 
-                if (IsConductingPullover)
+                if (isConductingPullover)
                 {
                     await BaseScript.Delay(60000);
                     return;
@@ -180,7 +180,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         {
                             Screen.LoadingPrompt.Show("Awaiting Confirmation", LoadingSpinnerType.SocialClubSaving);
 
-                            while (awaitingPullover)
+                            while (awaitingPullover && !isConductingPullover)
                             {
                                 API.SetUserRadioControlEnabled(false);
 
@@ -199,6 +199,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                 {
                                     targetVehicle.AttachedBlip.IsFlashing = false;
                                     awaitingPullover = false;
+                                    isConductingPullover = true;
+                                    Scripts.VehicleCreators.CreateVehicles.TrafficStop(targetVehicle);
                                     Screen.LoadingPrompt.Hide();
                                 }
 
@@ -265,7 +267,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static async void Pullover(Vehicle stoppedVehicle)
         {
             DecorSetBool(stoppedVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED, true);
-            IsConductingPullover = true; // Flag that a pullover has started
+            isConductingPullover = true; // Flag that a pullover has started
 
             if (stoppedVehicle.AttachedBlip != null)
                 stoppedVehicle.AttachedBlip.IsFlashing = false;
