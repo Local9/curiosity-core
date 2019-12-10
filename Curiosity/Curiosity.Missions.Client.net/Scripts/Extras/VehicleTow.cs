@@ -50,13 +50,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 {
                     if (vehToRemove.Driver != null)
                     {
-                        CitizenFX.Core.UI.Screen.ShowNotification($"~r~Driver must be removed");
-                        return;
+                        if (vehToRemove.Driver.Exists())
+                        {
+                            CitizenFX.Core.UI.Screen.ShowNotification($"~r~Driver must be removed");
+                            return;
+                        }
                     }
 
                     bool IsPlayerRelated = false;
 
-                    if (vehToRemove.PreviouslyOwnedByPlayer) IsPlayerRelated = true;
+                    if (DecorGetBool(vehToRemove.Handle, Client.PLAYER_VEHICLE)) IsPlayerRelated = true;
                     if (vehToRemove == Client.CurrentVehicle) IsPlayerRelated = true;
 
                     if (DecorExistOn(vehToRemove.Handle, "Player_Vehicle"))

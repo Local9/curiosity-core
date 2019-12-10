@@ -249,6 +249,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             }
             await Client.Delay(2000);
             Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
+
+            if (interactivePed.Ped.IsInGroup)
+                interactivePed.Ped.LeaveGroup();
+
             Client.TriggerEvent("curiosity:interaction:released", interactivePed.NetworkId);
         }
 
@@ -283,6 +287,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             await Client.Delay(2000);
             Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             await Client.Delay(2000);
+            
+            if (interactivePed.Ped.IsInGroup)
+                interactivePed.Ped.LeaveGroup();
+
             Client.TriggerEvent("curiosity:interaction:released", interactivePed.NetworkId);
         }
     }

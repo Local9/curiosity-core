@@ -14,7 +14,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 {
     class Generic
     {
-        public const string NPC_CURRENT_VEHICLE = "NPC_CURRENT_VEHICLE";
         static bool IsAnInteractionActive = false;
 
         static public async void InteractionBreathalyzer(InteractivePed interactivePed)
@@ -154,9 +153,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
         public static void InteractionEnterVehicle(InteractivePed interactivePed)
         {
-            if (!DecorExistOn(interactivePed.Ped.Handle, NPC_CURRENT_VEHICLE)) return;
+            if (!DecorExistOn(interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE)) return;
 
-            int vehicleHandle = DecorGetInt(interactivePed.Ped.Handle, NPC_CURRENT_VEHICLE);
+            if (interactivePed.Ped.IsInVehicle()) return;
+
+            int vehicleHandle = DecorGetInt(interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE);
             Vehicle vehicle = new Vehicle(vehicleHandle);
             interactivePed.Ped.LeaveGroup();
             interactivePed.Ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver);
@@ -166,7 +167,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
         {
             int resistExitChance = Client.Random.Next(30);
 
-            DecorSetInt(interactivePed.Ped.Handle, NPC_CURRENT_VEHICLE, interactivePed.Ped.CurrentVehicle.Handle);
+            if (!interactivePed.Ped.IsInVehicle()) return;
+
+            DecorSetInt(interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE, interactivePed.Ped.CurrentVehicle.Handle);
 
             if (resistExitChance == 25 || resistExitChance == 29)
             {
@@ -187,9 +190,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             {
                 List<string> driverResponse = new List<string>() { "What's the problem?", "What seems to be the problem, officer?", "Yeah, sure.", "Okay.", "Fine.", "What now?", "Whats up?", "Ummm... O-okay.", "This is ridiculous...", "I'm kind of in a hurry right now.", "Oh what now?!", "No problem.", "Am I being detained?", "Yeah, okay... One moment.", "Okay.", "Uh huh.", "Yep." };
                 Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                
                 interactivePed.Ped.Task.LeaveVehicle(LeaveVehicleFlags.None);
-                interactivePed.Ped.PedGroup.Add(Game.PlayerPed, true);
-
+                
+                await BaseScript.Delay(100);
+                int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle);
+                SetPedAsGroupMember(interactivePed.Handle, playerGroupId);
+                SetPedCanTeleportToGroupLeader(interactivePed.Handle, playerGroupId, true);
             }
         }
     }

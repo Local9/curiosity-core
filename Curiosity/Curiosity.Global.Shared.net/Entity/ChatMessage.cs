@@ -4,7 +4,7 @@ namespace Curiosity.Global.Shared.net.Entity
 {
     public class ChatState
     {
-        public bool display;
+        public bool showChat;
     }
     public class ChatMessage
     {

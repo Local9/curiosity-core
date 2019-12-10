@@ -67,7 +67,7 @@ namespace Curiosity.Client.net.Classes.Environment
             EnableControlAction(0, Control.CursorScrollUp, true);
             EnableControlAction(0, Control.CursorScrollDown, true);
             SetPedCanSwitchWeapon(Game.PlayerPed, true);
-            SetNuiFocus(false);
+            API.SetNuiFocus(false, false);
             Client.TriggerEvent("curiosity:Client:Chat:ChatboxActive", false);
         }
 
@@ -106,11 +106,9 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             try
             {
-                EnableControlAction(0, Control.CursorScrollUp, true);
-                EnableControlAction(0, Control.CursorScrollDown, true);
-                SetPedCanSwitchWeapon(Game.PlayerPed, true);
-                SetNuiFocus(false);
-                PreviousChatboxState = false;
+                EnableChatbox(false);
+
+                API.SetNuiFocus(false, false);
 
                 IDictionary<string, object> chatResult = data;
 
@@ -149,8 +147,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 {
                     EnableChatbox(false);
                 }
-
-                if (Game.IsControlPressed(0, Control.MpTextChatAll))
+                else if (Game.IsControlJustPressed(0, Control.MpTextChatAll) || Game.IsControlJustReleased(0, Control.MpTextChatAll))
                 {
                     if (PlayerSpawned)
                         EnableChatbox(true);
@@ -177,18 +174,19 @@ namespace Curiosity.Client.net.Classes.Environment
                 if (PreviousChatboxState != state)
                 {
                     ChatState chatState = new ChatState();
-                    chatState.display = state;
+                    chatState.showChat = state;
                     API.SendNuiMessage(JsonConvert.SerializeObject(chatState));
 
                     PreviousChatboxState = state;
 
                     if (PreviousChatboxState)
                     {
-                        SetNuiFocus(true, true);
+                        API.SetNuiFocus(true, true);
                         Client.TriggerEvent("curiosity:Client:Chat:ChatboxActive", true);
                     }
                     else
                     {
+                        API.SetNuiFocus(false, false);
                         OnCloseChat();
                     }
                 }

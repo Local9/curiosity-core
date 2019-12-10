@@ -21,9 +21,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public const int MovementUpdateInterval = 5;
         private const string MOVEMENT_ANIMATION_SET_DRUNK = "MOVE_M@DRUNK@VERYDRUNK";
-        private const string NPC_WAS_RELEASED = "NPC_WAS_RELEASED";
         public readonly Ped Ped;
         private Ped _target;
+        private Vehicle Vehicle;
         // MENU STATES
         public bool IsMenuVisible = false;
         public bool IsTrafficStop;
@@ -114,13 +114,21 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         protected InteractivePed(int handle) : base(handle)
         {
-            if (DecorGetBool(handle, NPC_WAS_RELEASED))
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+            {
+                Screen.ShowNotification($"~r~[~g~D~b~E~y~V~o~]~w~ Creating Interactive Ped");
+            }
+
+            if (DecorGetBool(handle, Client.NPC_WAS_RELEASED))
             {
                 Screen.ShowNotification("~r~This pedestrian was recently released.");
                 return;
             }
 
             this.Ped = new Ped(handle);
+
+            if (this.Ped.IsInVehicle())
+                this.Vehicle = this.Ped.CurrentVehicle;
 
             IsMenuVisible = false;
             IsPerformingCpr = false;
@@ -540,10 +548,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (this.NetworkId == networkId)
             {
-                if (this.Ped.IsInVehicle())
+                if (this.Ped.IsInVehicle() && this.Ped.CurrentVehicle == Client.CurrentVehicle)
                 {
                     this.Ped.SetConfigFlag(292, false);
-                    this.Ped.LeaveGroup();
                     this.Ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
                 }
 
@@ -554,7 +561,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 API.TaskSetBlockingOfNonTemporaryEvents(this.Ped.Handle, false);
 
-                DecorSetBool(this.Ped.Handle, NPC_WAS_RELEASED, true);
+                DecorSetBool(this.Ped.Handle, Client.NPC_WAS_RELEASED, true);
 
                 client.DeregisterTickHandler(OnMenuTask);
                 client.DeregisterTickHandler(OnShowHelpTextTask);
@@ -606,8 +613,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             keyValuePairs.Add("NumberOfCitations", $"{this.NumberOfCitations}");
             keyValuePairs.Add("Offence", $"{this.Offence}");
             keyValuePairs.Add("-----", "");
-            keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(this.Ped.Handle, Generic.NPC_CURRENT_VEHICLE)}");
-
+            keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(this.Ped.Handle, Client.NPC_CURRENT_VEHICLE)}");
+            keyValuePairs.Add("Local Vehicle", $"{this.Vehicle.Handle}");
 
             Wrappers.Helpers.DrawData(this, keyValuePairs);
         }

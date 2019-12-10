@@ -25,9 +25,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
     class TrafficStop
     {
-        public const string VEHICLE_HAS_BEEN_STOPPED = "curiosity::VehicleStopped";
-        public const string IS_TRAFFIC_STOPPED_PED = "curiosity::PedIsTrafficStopped";
-        private const string NPC_VEHICLE_IGNORE = "NPC_VEHICLE_IGNORE";
         static Client client = Client.GetInstance();
         static bool IsScenarioPlaying = false;
 
@@ -40,6 +37,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static Vehicle _vehicle;
         static Ped _ped;
 
+        private static string loadingMessage = string.Empty;
+
         // states
 
         public static void Setup()
@@ -50,7 +49,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 client.RegisterTickHandler(OnTrafficStopTask);
                 client.RegisterTickHandler(OnEmoteCheck);
-
+                client.RegisterTickHandler(OnShowLoading);
                 client.RegisterTickHandler(OnDeveloperData);
 
                 client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
@@ -67,6 +66,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             client.DeregisterTickHandler(OnTrafficStopTask);
             client.DeregisterTickHandler(OnEmoteCheck);
+            client.DeregisterTickHandler(OnShowLoading);
 
             client.DeregisterTickHandler(OnDeveloperData);
             isConductingPullover = false;
@@ -143,31 +143,31 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         if (targetVehicle.Driver == null) return;
                         if (targetVehicle.Driver.IsDead) return;
 
-                        if (DecorExistOn(targetVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED) || DecorExistOn(targetVehicle.Handle, NPC_VEHICLE_IGNORE))
+                        if (DecorExistOn(targetVehicle.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED) || DecorExistOn(targetVehicle.Handle, Client.VEHICLE_IGNORE))
                         {
-                            if (DecorGetBool(targetVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED))
+                            if (DecorGetBool(targetVehicle.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
                             {
                                 Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle has already been stopped.");
                                 return;
                             }
 
-                            if (DecorGetBool(targetVehicle.Handle, NPC_VEHICLE_IGNORE))
+                            if (DecorGetBool(targetVehicle.Handle, Client.VEHICLE_IGNORE))
                             {
                                 Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle is being ignored.");
                                 return;
                             }
                         }
 
-                        Screen.LoadingPrompt.Show("Vehicle: Detected");
+                        loadingMessage = "Vehicle: Detected";
 
                         long gameTime = GetGameTimer();
                         while ((API.GetGameTimer() - gameTime) < 5000)
                         {
                             if (Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck) == null)
                             {
-                                Screen.LoadingPrompt.Show("Vehicle: Lost");
+                                loadingMessage = "Vehicle: Lost";
                                 await BaseScript.Delay(2000);
-                                Screen.LoadingPrompt.Hide();
+                                loadingMessage = string.Empty;
                                 return;
                             }
 
@@ -181,7 +181,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             return;
                         }
 
-                        bool hasBeenPulledOver = DecorGetBool(targetVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED);
+                        bool hasBeenPulledOver = DecorGetBool(targetVehicle.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED);
 
                         if (hasBeenPulledOver)
                         {
@@ -192,7 +192,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         bool awaitingPullover = true;
                         if (targetVehicle == Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck))
                         {
-                            Screen.LoadingPrompt.Show("Awaiting Confirmation", LoadingSpinnerType.SocialClubSaving);
+                            loadingMessage = "Awaiting Confirmation";
 
                             while (awaitingPullover && !isConductingPullover)
                             {
@@ -219,7 +219,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     _vehicle = targetVehicle;
 
                                     Scripts.VehicleCreators.CreateVehicles.TrafficStop(targetVehicle);
-                                    Screen.LoadingPrompt.Hide();
+                                    loadingMessage = string.Empty;
                                 }
 
                                 if (Game.IsControlJustPressed(0, Control.Cover))
@@ -229,8 +229,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     if (targetVehicle.AttachedBlip != null)
                                         targetVehicle.AttachedBlip.Delete();
 
-                                    DecorSetBool(targetVehicle.Handle, NPC_VEHICLE_IGNORE, true);
-                                    Screen.LoadingPrompt.Hide();
+                                    DecorSetBool(targetVehicle.Handle, Client.VEHICLE_IGNORE, true);
+                                    loadingMessage = string.Empty;
                                 }
 
                                 if (targetVehicle.Position.Distance(Client.CurrentVehicle.Position) > 40f)
@@ -240,13 +240,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     if (targetVehicle.AttachedBlip != null)
                                         targetVehicle.AttachedBlip.Delete();
 
-                                    Screen.LoadingPrompt.Hide();
+                                    loadingMessage = string.Empty;
                                 }
                             }
                         }
                         else
                         {
-                            Screen.LoadingPrompt.Hide();
+                            loadingMessage = string.Empty;
                         }
                     }
                     else
@@ -257,7 +257,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             await Client.Delay(2000);
                             Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
                             Dispose();
+                            loadingMessage = string.Empty;
                         }
+                        loadingMessage = string.Empty;
                     }
                 }
             }
@@ -268,6 +270,23 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         }
 
         // RESET
+        static async Task OnShowLoading()
+        {
+            await BaseScript.Delay(0);
+            string currentMessage = string.Empty;
+            if (!string.IsNullOrEmpty(loadingMessage))
+            {
+                if (currentMessage != loadingMessage)
+                {
+                    currentMessage = loadingMessage;
+                    Screen.LoadingPrompt.Show(currentMessage, LoadingSpinnerType.SocialClubSaving);
+                }
+            }
+            else
+            {
+                Screen.LoadingPrompt.Hide();
+            }
+        }
 
         static async Task OnCooldownTask()
         {
@@ -275,10 +294,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             int timer = 60;
             while (timer > 0)
             {
+                loadingMessage = $"Traffic Stop: Active in {timer}s";
                 await Client.Delay(1000);
                 timer--;
             }
+            loadingMessage = string.Empty;
             IsCooldownActive = false;
+            isConductingPullover = false;
             client.DeregisterTickHandler(OnCooldownTask);
         }
 
@@ -286,6 +308,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             if (_vehicle.Driver.NetworkId == networkId)
             {
+                client.RegisterTickHandler(OnCooldownTask);
                 isConductingPullover = false;
                 _vehicle.Driver.LeaveGroup();
             }

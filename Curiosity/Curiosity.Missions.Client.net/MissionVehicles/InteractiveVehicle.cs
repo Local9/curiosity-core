@@ -81,6 +81,11 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
         public InteractiveVehicle(int handle) : base(handle)
         {
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+            {
+                Screen.ShowNotification($"~r~[~g~D~b~E~y~V~o~]~w~ Creating Interactive Vehicle");
+            }
+
             this.Vehicle = new Vehicle(handle);
 
             this.InteractivePed = Scripts.PedCreators.InteractivePedCreator.Ped(this.Vehicle.Driver);
@@ -300,7 +305,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         {
             TaskSetBlockingOfNonTemporaryEvents(this.InteractivePed.Handle, true);
             _vehicleStopped = true;
-            DecorSetBool(this.Vehicle.Handle, "curiosity::VehicleStopped", true);
+            DecorSetBool(this.Vehicle.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, true);
         }
 
         private async void TaskShootAtPlayer()
@@ -366,6 +371,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (this.InteractivePed.NetworkId == networkId)
             {
                 client.DeregisterTickHandler(OnShowHelpTextTask);
+                this.InteractivePed.Ped.LeaveGroup();
 
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
                     client.DeregisterTickHandler(OnShowDeveloperOverlayTask);

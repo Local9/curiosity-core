@@ -17,6 +17,15 @@ namespace Curiosity.Missions.Client.net
         public static SpeechType speechType;
         public static bool DeveloperNpcUiEnabled, DeveloperVehUiEnabled;
 
+        // DECOR HANDLES
+        public const string NPC_CURRENT_VEHICLE = "curiosity::npc::vehicle";
+        public const string NPC_WAS_RELEASED = "curiosity::npc::released";
+        public const string NPC_ACTIVE_TRAFFIC_STOP = "curiosity::npc::released";
+
+        public const string VEHICLE_HAS_BEEN_TRAFFIC_STOPPED = "curiosity::vehicle::trafficStop";
+        public const string VEHICLE_IGNORE = "curiosity::vehicle::ignore";
+        public const string PLAYER_VEHICLE = "Player_Vehicle";
+
         public static Vehicle CurrentVehicle
         {
             get
@@ -61,6 +70,13 @@ namespace Curiosity.Missions.Client.net
             RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperNpcUI", new Action<bool>(OnShowDeveloperNpcUi));
             RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperVehUI", new Action<bool>(OnShowDeveloperVehUi));
 
+            API.DecorRegister(NPC_CURRENT_VEHICLE, 3); // int
+            API.DecorRegister(NPC_WAS_RELEASED, 2);
+            API.DecorRegister(NPC_ACTIVE_TRAFFIC_STOP, 2);
+            API.DecorRegister(VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, 2);
+            API.DecorRegister(VEHICLE_IGNORE, 2);
+            API.DecorRegister(PLAYER_VEHICLE, 2);
+
             ClassLoader.Init();
 
             Log.Info("Curiosity.Missions.Client.net loaded\n");
@@ -87,11 +103,13 @@ namespace Curiosity.Missions.Client.net
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
                 Client.CurrentVehicle = new Vehicle(vehicleId);
+                API.DecorSetBool(Client.CurrentVehicle.Handle, PLAYER_VEHICLE, true);
             }
             else if (Client.CurrentVehicle.Handle != vehicleId)
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
                 Client.CurrentVehicle = new Vehicle(vehicleId);
+                API.DecorSetBool(Client.CurrentVehicle.Handle, PLAYER_VEHICLE, true);
             }
 
             if (CurrentVehicle == null)
@@ -99,6 +117,7 @@ namespace Curiosity.Missions.Client.net
                 if (Game.PlayerPed.IsInVehicle())
                 {
                     CurrentVehicle = Game.PlayerPed.CurrentVehicle;
+                    API.DecorSetBool(Client.CurrentVehicle.Handle, PLAYER_VEHICLE, true);
                 }
             }
         }

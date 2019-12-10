@@ -61,6 +61,30 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                 }
                 Screen.ShowNotification("~g~Spawned an Interactive Ped");
             }
+
+            if (type == "veh")
+            {
+                Screen.ShowNotification("~g~Spawning Traffic Stop");
+                Vector3 spawnPosition = await Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 2f, 0f)).Ground();
+                Vector3 vehSpawn = await Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 6f, 0f)).Ground();
+
+                Model model = PedHash.Abigail;
+                await model.Request(10000);
+
+                Ped ped = await World.CreatePed(model, spawnPosition);
+
+                model.MarkAsNoLongerNeeded();
+                Model vehmod = VehicleHash.Adder;
+                await vehmod.Request(10000);
+                Vehicle vehicle = await World.CreateVehicle(vehmod, vehSpawn, Game.PlayerPed.Heading);
+                vehmod.MarkAsNoLongerNeeded();
+
+                ped.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+
+                vehicle.IsPositionFrozen = true;
+
+                Screen.ShowNotification("~g~Spawned Traffic Stop");
+            }
         }
 
         static void OnAudioVolume(int playerHandle, List<object> arguments, string raw)

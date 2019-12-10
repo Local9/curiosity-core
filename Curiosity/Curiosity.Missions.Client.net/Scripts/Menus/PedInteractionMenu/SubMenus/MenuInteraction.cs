@@ -115,7 +115,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 mItemSuspectVehicle.Enabled = true;
             }
 
-            if (menuItem == mItemSuspectVehicle && !_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Generic.NPC_CURRENT_VEHICLE))
+            if (menuItem == mItemSuspectVehicle && !_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE))
             {
                 Generic.InteractionEnterVehicle(_interactivePed);
                 mItemSuspectVehicle.Enabled = false;
@@ -148,7 +148,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             else
             {
                 mItemSuspectVehicle.Text = "Suspect: Ask to Leave Vehicle";
-                if (!_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Generic.NPC_CURRENT_VEHICLE))
+                if (!_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE))
                 {
                     mItemSuspectVehicle.Text = "Suspect: Return to Vehicle";
                 }
