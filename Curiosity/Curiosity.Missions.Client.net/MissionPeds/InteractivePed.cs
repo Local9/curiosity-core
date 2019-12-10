@@ -339,6 +339,17 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 }
             }
 
+            if (this.Ped.Health < 100)
+            {
+                this.Ped.Health = 100; // stop them from dying
+
+                if (Client.Random.Next(5) >= 3 && !IsArrested)
+                {
+                    IsArrested = true;
+                    ArrestInteractions.InteractionArrestInit(this);
+                }
+            }
+
             if (this.Ped.Position.Distance(Game.PlayerPed.Position) >= 20f && IsArrested && !this.Ped.IsInVehicle())
             {
                 IsArrested = false;
