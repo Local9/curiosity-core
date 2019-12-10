@@ -7,12 +7,14 @@ using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net;
 using Curiosity.Missions.Client.net.MissionPeds;
 using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 {
     class Generic
     {
+        public const string NPC_CURRENT_VEHICLE = "NPC_CURRENT_VEHICLE";
         static bool IsAnInteractionActive = false;
 
         static public async void InteractionBreathalyzer(InteractivePed interactivePed)
@@ -148,6 +150,47 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 Wrappers.Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
             }
             IsAnInteractionActive = false;
+        }
+
+        public static void InteractionEnterVehicle(InteractivePed interactivePed)
+        {
+            if (!DecorExistOn(interactivePed.Ped.Handle, NPC_CURRENT_VEHICLE)) return;
+
+            int vehicleHandle = DecorGetInt(interactivePed.Ped.Handle, NPC_CURRENT_VEHICLE);
+            Vehicle vehicle = new Vehicle(vehicleHandle);
+            interactivePed.Ped.LeaveGroup();
+            interactivePed.Ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver);
+        }
+
+        public static async void InteractionLeaveVehicle(InteractivePed interactivePed)
+        {
+            int resistExitChance = Client.Random.Next(30);
+
+            DecorSetInt(interactivePed.Ped.Handle, NPC_CURRENT_VEHICLE, interactivePed.Ped.CurrentVehicle.Handle);
+
+            if (resistExitChance == 25 || resistExitChance == 29)
+            {
+                await Client.Delay(500);
+                List<string> driverResponse = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!", "You'll never take me alive, pig!" };
+                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                await Client.Delay(3000);
+
+                int willRam = Client.Random.Next(5);
+                if (willRam == 4)
+                    TaskVehicleTempAction(interactivePed.Ped.Handle, interactivePed.Ped.CurrentVehicle.Handle, 28, 3000);
+
+                await Client.Delay(2000);
+                TaskVehicleTempAction(interactivePed.Ped.Handle, interactivePed.Ped.CurrentVehicle.Handle, 32, 30000);
+                interactivePed.Ped.Task.FleeFrom(Game.PlayerPed);
+            }
+            else
+            {
+                List<string> driverResponse = new List<string>() { "What's the problem?", "What seems to be the problem, officer?", "Yeah, sure.", "Okay.", "Fine.", "What now?", "Whats up?", "Ummm... O-okay.", "This is ridiculous...", "I'm kind of in a hurry right now.", "Oh what now?!", "No problem.", "Am I being detained?", "Yeah, okay... One moment.", "Okay.", "Uh huh.", "Yep." };
+                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                interactivePed.Ped.Task.LeaveVehicle(LeaveVehicleFlags.None);
+                interactivePed.Ped.PedGroup.Add(Game.PlayerPed, true);
+
+            }
         }
     }
 }

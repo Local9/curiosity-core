@@ -23,17 +23,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
         static public void RequestService()
         {
-            if (!Police.ArrestPed.IsPedCuffed)
-            {
-                Wrappers.Helpers.ShowNotification("Dispatch", "Must be in cuffs", string.Empty);
-                return;
-            }
+            //if (!Police.ArrestPed.IsPedCuffed)
+            //{
+            //    Wrappers.Helpers.ShowNotification("Dispatch", "Must be in cuffs", string.Empty);
+            //    return;
+            //}
 
-            if (Police.TrafficStop.StoppedDriver.CurrentVehicle != Client.CurrentVehicle)
-            {
-                Wrappers.Helpers.ShowNotification("Dispatch", "Must be detained", string.Empty);
-                return;
-            }
+            //if (Police.TrafficStop.StoppedDriver.CurrentVehicle != Client.CurrentVehicle)
+            //{
+            //    Wrappers.Helpers.ShowNotification("Dispatch", "Must be detained", string.Empty);
+            //    return;
+            //}
 
             if (IsServiceActive)
             {

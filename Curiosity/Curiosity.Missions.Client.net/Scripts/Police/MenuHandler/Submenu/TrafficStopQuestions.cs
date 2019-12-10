@@ -34,7 +34,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
                 menu.AddMenuItem(mItemGoBack);
             }
             menu.MenuTitle = "Question the driver";
-            SuspectMenu.AddSubMenu(SuspectMenu.TrafficStopMenu, menu);
+            //SuspectMenu.AddSubMenu(SuspectMenu.TrafficStopMenu, menu);
         }
 
         private static void Menu_OnMenuClose(Menu menu)
@@ -65,7 +65,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
             if (menuItem == mItemGoBack)
             {
                 menu.CloseMenu();
-                SuspectMenu.Open(Shared.Client.net.Enums.Patrol.MenuType.Normal);
+                //SuspectMenu.Open(Shared.Client.net.Enums.Patrol.MenuType.Normal);
             }
         }
 
@@ -75,7 +75,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police.MenuHandler.Submenu
             Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
             menu.MenuTitle = "";
             MenuController.DontOpenAnyMenu = false;
-            SuspectMenu.IsMenuOpen = true;
+            //SuspectMenu.IsMenuOpen = true;
         }
     }
 }

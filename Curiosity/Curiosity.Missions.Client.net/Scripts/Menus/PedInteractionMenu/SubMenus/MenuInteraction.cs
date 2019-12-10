@@ -4,6 +4,7 @@ using MenuAPI;
 using System;
 using System.Threading.Tasks;
 using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net;
 
@@ -18,7 +19,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
         static MenuItem mItemHandcuffs = new MenuItem("Apply Handcuffs");
         static MenuItem mItemDetainInCurrentVehicle = new MenuItem("Detain in Vehicle");
         // tests
-        static MenuItem mItemSuspectVehicle = new MenuItem("Suspect: Leave Vehicle");
+        static MenuItem mItemSuspectVehicle = new MenuItem("Suspect: Ask to Leave Vehicle");
         static MenuItem mItemBreathalyzer = new MenuItem("Suspect: Breathalyzer");
         static MenuItem mItemSearch = new MenuItem("Suspect: Search");
         static MenuItem mItemDrugTest = new MenuItem("Suspect: Drug test");
@@ -104,6 +105,24 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             {
                 ArrestInteractions.InteractionRelease(_interactivePed);
             }
+
+            if (menuItem == mItemSuspectVehicle && _interactivePed.Ped.IsInVehicle())
+            {
+                Generic.InteractionLeaveVehicle(_interactivePed);
+                mItemSuspectVehicle.Enabled = false;
+                await Client.Delay(2000);
+                mItemSuspectVehicle.Text = "Suspect: Return to Vehicle";
+                mItemSuspectVehicle.Enabled = true;
+            }
+
+            if (menuItem == mItemSuspectVehicle && !_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Generic.NPC_CURRENT_VEHICLE))
+            {
+                Generic.InteractionEnterVehicle(_interactivePed);
+                mItemSuspectVehicle.Enabled = false;
+                await Client.Delay(2000);
+                mItemSuspectVehicle.Text = "Suspect: Ask to Leave Vehicle";
+                mItemSuspectVehicle.Enabled = true;
+            }
         }
 
         private static void Menu_OnMenuOpen(Menu menu)
@@ -128,6 +147,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             }
             else
             {
+                mItemSuspectVehicle.Text = "Suspect: Ask to Leave Vehicle";
+                if (!_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Generic.NPC_CURRENT_VEHICLE))
+                {
+                    mItemSuspectVehicle.Text = "Suspect: Return to Vehicle";
+                }
+                menu.AddMenuItem(mItemSuspectVehicle);
+
+
                 mItemHandcuffs.Text = _interactivePed.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
                 mItemHandcuffs.Enabled = !IsInVehicle;
                 menu.AddMenuItem(mItemHandcuffs);

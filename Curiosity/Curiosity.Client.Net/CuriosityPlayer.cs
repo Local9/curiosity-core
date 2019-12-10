@@ -194,7 +194,7 @@ namespace Curiosity.Client.net
         {
             Screen.Effects.Stop(ScreenEffect.DeathFailOut);
             Screen.Fading.FadeOut(500);
-            Screen.LoadingPrompt.Show("Loading...");
+            Screen.LoadingPrompt.Show("Loading...", LoadingSpinnerType.RegularClockwise);
             Setup();
 
             PedHash myPedModelToLoad = PedHash.FreemodeMale01;
@@ -282,7 +282,7 @@ namespace Curiosity.Client.net
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
 
-            Screen.LoadingPrompt.Show("Loading Player");
+            Screen.LoadingPrompt.Show("Loading...", LoadingSpinnerType.RegularClockwise);
 
             await Delay(0);
 
@@ -321,6 +321,8 @@ namespace Curiosity.Client.net
             Vector3 groundSpawn = await spawnPosition.Ground();
             Vector3 safeSpawn = groundSpawn;
 
+            Screen.LoadingPrompt.Show("Finding Safe Position...", LoadingSpinnerType.RegularClockwise);
+
             if (API.GetSafeCoordForPed(groundSpawn.X, groundSpawn.Y, groundSpawn.Z, true, ref safeSpawn, 16))
             {
                 groundSpawn = await safeSpawn.Ground();
@@ -351,13 +353,23 @@ namespace Curiosity.Client.net
                 Debug.WriteLine($"{interiorId}");
             }
 
+            Vector3 finalCheck = await Game.PlayerPed.Position.Ground();
+
+            Screen.LoadingPrompt.Show("Found Safe Position...", LoadingSpinnerType.RegularClockwise);
+
+            Game.PlayerPed.Position = World.GetNextPositionOnSidewalk(finalCheck);
+            Game.PlayerPed.IsPositionFrozen = false;
+
             int gameTimer = API.GetGameTimer();
 
             ToggleSound(false);
 
             this.userId = userId;
 
-            await Delay(0);
+            await Delay(1000);
+            Game.PlayerPed.IsPositionFrozen = true;
+
+            Screen.LoadingPrompt.Show("Loading...", LoadingSpinnerType.RegularClockwise);
 
             while (true)
             {
@@ -383,10 +395,10 @@ namespace Curiosity.Client.net
 
             ShowScaleformRules();
 
-            Game.PlayerPed.IsPositionFrozen = false;
             Game.PlayerPed.IsInvincible = false;
             Game.PlayerPed.IsCollisionEnabled = true;
             Game.PlayerPed.IsVisible = true;
+            Game.PlayerPed.IsPositionFrozen = false;
 
             await Delay(0);
 

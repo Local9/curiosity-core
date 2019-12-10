@@ -27,11 +27,11 @@ namespace Curiosity.Shared.Client.net.Extensions
             return default(CitizenFX.Core.Entity);
         }
 
-        public static CitizenFX.Core.Vehicle GetVehicleInFront(this Vehicle vehicle, float distance = 5f)
+        public static CitizenFX.Core.Vehicle GetVehicleInFront(this Vehicle vehicle, float distance = 5f, float radius = 1f)
         {
             try
             {
-                RaycastResult raycast = World.Raycast(vehicle.Position, vehicle.GetOffsetPosition(new Vector3(0f, distance, 0f)), (IntersectOptions)10, vehicle);
+                RaycastResult raycast = World.RaycastCapsule(vehicle.Position, vehicle.GetOffsetPosition(new Vector3(0f, distance, 0f)), radius, (IntersectOptions)10, vehicle);
                 if (raycast.DitHitEntity && raycast.HitEntity.Model.IsVehicle)
                 {
                     return (CitizenFX.Core.Vehicle)raycast.HitEntity;
@@ -76,6 +76,30 @@ namespace Curiosity.Shared.Client.net.Extensions
                 Log.Info($"GetPedInDirection -> {ex}");
             }
             return default(CitizenFX.Core.Ped);
+        }
+
+        public static void DrawEntityHit(this Vehicle vehicle, float distance = 10f, float radius = 1f)
+        {
+            try
+            {
+                int r = 255;
+                int g = 0;
+
+                if (Game.IsControlPressed(0, Control.Pickup))
+                {
+                    r = 0;
+                    g = 255;
+                }
+
+                RaycastResult raycast = World.RaycastCapsule(vehicle.Position, vehicle.GetOffsetPosition(new Vector3(0f, distance, 0f)), radius, (IntersectOptions)10, vehicle);
+
+                if (raycast.DitHitEntity && raycast.HitEntity.Model.IsVehicle)
+                    API.DrawLine(vehicle.Position.X, vehicle.Position.Y, vehicle.Position.Z, raycast.HitPosition.X, raycast.HitPosition.Y, raycast.HitPosition.Z, r, g, 0, 255);
+            }
+            catch (Exception ex)
+            {
+                Log.Info($"DrawView -> {ex}");
+            }
         }
     }
 }

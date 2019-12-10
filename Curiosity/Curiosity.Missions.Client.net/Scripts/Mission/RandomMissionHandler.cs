@@ -70,12 +70,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             if (Client.CurrentVehicle == null)
             {
                 Screen.ShowNotification("~b~Traffic Stops: ~r~You currently do not have a Personal Vehicle for Traffic Stops.");
+                Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
                 return;
             }
 
             if (Game.PlayerPed.CurrentVehicle != Client.CurrentVehicle)
             {
                 Screen.ShowNotification("~b~Traffic Stops: ~r~This vehicle is not your personal vehicle.");
+                Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
                 return;
             }
 
@@ -127,7 +129,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 Log.Info($"JOB: {job}");
 
                 if (_IsArrestActive)
-                    Police.ArrestPed.Dispose();
+                    //Police.ArrestPed.Dispose();
 
                 if (_IsTrafficStopActive)
                     Police.TrafficStop.Dispose();

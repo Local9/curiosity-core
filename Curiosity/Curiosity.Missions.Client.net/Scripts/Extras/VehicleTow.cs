@@ -27,11 +27,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
         static async Task OnVehicleExistsTask()
         {
             await Task.FromResult(0);
-            if (Police.TrafficStop.TargetVehicle == null)
-            {
-                Reset();
-                client.DeregisterTickHandler(OnVehicleExistsTask);
-            }
         }
 
         static public void RequestService()
@@ -50,9 +45,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 int spawnDistance = Client.Random.Next(100, 200);
 
                 vehToRemove = Game.PlayerPed.GetVehicleInFront();
-
-                if (Police.TrafficStop.TargetVehicle != null && vehToRemove == null)
-                    vehToRemove = Police.TrafficStop.TargetVehicle;
 
                 if (vehToRemove != null)
                 {

@@ -47,6 +47,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             client.RegisterEventHandler("curiosity:Client:Police:ShowOptions", new Action(OpenMenu));
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
 
+            client.RegisterEventHandler("curiosity:Client:Police:TrafficStops", new Action<bool>(OnTrafficStopState));
+
             patrolAreas.Add($"{PatrolZone.City}");
             patrolAreas.Add($"{PatrolZone.Country}");
         }
@@ -58,6 +60,12 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             if (_IsOnDuty != onduty)
                 _IsOnDuty = onduty;
+        }
+
+        static void OnTrafficStopState(bool state)
+        {
+            _IsTrafficStopsActive = state;
+            menuCheckboxTrafficStops.Checked = state;
         }
 
         static public void OpenMenu()

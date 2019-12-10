@@ -32,28 +32,35 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static void OnExplosionEvent(int sender, dynamic explosionData)
         {
-            List<Session> sessions = SessionManager.PlayerList.Select(m => m.Value).Where(w => w.IsStaff).ToList();
-            Session senderSession = SessionManager.PlayerList[$"{sender}"];
-
-            if (explosionData.ownerNetId == 0) return;
-
-            Session explosionSession = SessionManager.PlayerList[$"{explosionData.ownerNetId}"];
-
-            double secondsSince = (DateTime.Now - senderSession.LastEntityEvent).TotalSeconds;
-
-            ExplosionTypes explosionType = (ExplosionTypes)explosionData.explosionType;
-            
-            if (secondsSince > 3)
+            try
             {
+                List<Session> sessions = SessionManager.PlayerList.Select(m => m.Value).Where(w => w.IsStaff).ToList();
+                Session senderSession = SessionManager.PlayerList[$"{sender}"];
+
+                if (explosionData.ownerNetId == 0) return;
+
+                Session explosionSession = SessionManager.PlayerList[$"{explosionData.ownerNetId}"];
+
+                double secondsSince = (DateTime.Now - senderSession.LastEntityEvent).TotalSeconds;
+
+                ExplosionTypes explosionType = (ExplosionTypes)explosionData.explosionType;
+
+                if (secondsSince > 3)
+                {
+                    senderSession.SetLastExplosionEvent();
+                    return;
+                }
                 senderSession.SetLastExplosionEvent();
-                return;
-            }
-            senderSession.SetLastExplosionEvent();
 
-            sessions.ForEach(session =>
+                sessions.ForEach(session =>
+                {
+                    ChatLog.SendLogMessage($"Event Sender: {senderSession.Name},\n\rExplosion Owner: {explosionSession.Name} - {explosionType}", session.Player);
+                });
+            }
+            catch (Exception ex)
             {
-                ChatLog.SendLogMessage($"Event Sender: {senderSession.Name},\n\rExplosion Owner: {explosionSession.Name} - {explosionType}", session.Player);
-            });
+                Log.Verbose($"OnExplosionEvent -> {ex.Message}");
+            }
         }
 
         static void OnEntityCreating(int entity)
@@ -120,7 +127,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Verbose($"OnEntityCreated -> {ex.Message}");
             }
         }
 
