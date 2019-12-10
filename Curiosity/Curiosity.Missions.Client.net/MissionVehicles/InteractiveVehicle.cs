@@ -308,7 +308,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         private void TaskStopVehicle()
         {
             TaskSetBlockingOfNonTemporaryEvents(this.InteractivePed.Handle, true);
-            _vehicleStolen = true;
+            _vehicleStopped = true;
         }
 
         private async void TaskShootAtPlayer()
