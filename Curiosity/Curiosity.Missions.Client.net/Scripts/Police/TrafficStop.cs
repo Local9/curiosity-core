@@ -14,6 +14,15 @@ using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {
+    /*
+     * Current Bugs;
+     * Lost Vehicle Hud Sign needs to hide
+     * Ped cannot get back into vehicle
+     * Ped doesn't leave group
+     * 
+     */
+
+
     class TrafficStop
     {
         public const string VEHICLE_HAS_BEEN_STOPPED = "curiosity::VehicleStopped";
@@ -28,6 +37,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static bool isConductingPullover = false;
         static bool IsCooldownActive = false;
 
+        static Vehicle _vehicle;
+
         // states
 
         public static void Setup()
@@ -40,6 +51,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 client.RegisterTickHandler(OnEmoteCheck);
 
                 client.RegisterTickHandler(OnDeveloperData);
+
+                client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
 
                 Screen.ShowNotification("~b~Traffic Stops~s~: ~g~Enabled");
             }
@@ -264,16 +277,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             client.DeregisterTickHandler(OnCooldownTask);
         }
 
-        static async void Pullover(Vehicle stoppedVehicle)
+        private static void OnPedHasBeenReleased(int networkId)
         {
-            DecorSetBool(stoppedVehicle.Handle, VEHICLE_HAS_BEEN_STOPPED, true);
-            isConductingPullover = true; // Flag that a pullover has started
-
-            if (stoppedVehicle.AttachedBlip != null)
-                stoppedVehicle.AttachedBlip.IsFlashing = false;
-
+            if (_vehicle.Driver.NetworkId == networkId)
+            {
+                isConductingPullover = false;
+            }
         }
-
-
     }
 }
