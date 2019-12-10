@@ -1,24 +1,13 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Missions.Client.net.Wrappers;
+using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.DataClasses;
-using System;
-using System.Threading.Tasks;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using CitizenFX.Core;
-using CitizenFX.Core.UI;
-using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.Wrappers;
-using System;
-using System.Threading.Tasks;
-using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Missions.Client.net.DataClasses;
-// INTERACTIONS
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
-using Curiosity.Shared.Client.net;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.MissionVehicles
 {
@@ -309,6 +298,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         {
             TaskSetBlockingOfNonTemporaryEvents(this.InteractivePed.Handle, true);
             _vehicleStopped = true;
+            DecorSetBool(this.Vehicle.Handle, "curiosity::VehicleStopped", true);
         }
 
         private async void TaskShootAtPlayer()
@@ -386,7 +376,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
             if (Client.DeveloperVehUiEnabled)
             {
-                if (this.Position.Distance(Game.PlayerPed.Position) >= 6) return;
+                if (this.Position.Distance(Game.PlayerPed.Position) >= 30) return;
 
                 Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
 
@@ -402,6 +392,10 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 keyValuePairs.Add("_vehicleInsured", $"{this._vehicleInsured}");
                 keyValuePairs.Add("_vehicleRegistered", $"{this._vehicleRegistered}");
                 keyValuePairs.Add("_canSearchVehicle", $"{this._canSearchVehicle}");
+                keyValuePairs.Add("---", $"");
+                keyValuePairs.Add("VEHICLE_HAS_BEEN_STOPPED", $"{DecorGetBool(this.Vehicle.Handle, "curiosity::VehicleStopped")}");
+                keyValuePairs.Add("IS_TRAFFIC_STOPPED_PED", $"{DecorGetBool(this.Vehicle.Handle, "curiosity::PedIsTrafficStopped")}");
+                keyValuePairs.Add("NPC_VEHICLE_IGNORE", $"{DecorGetBool(this.Vehicle.Handle, "NPC_VEHICLE_IGNORE")}");
 
                 Wrappers.Helpers.DrawData(this, keyValuePairs);
             }

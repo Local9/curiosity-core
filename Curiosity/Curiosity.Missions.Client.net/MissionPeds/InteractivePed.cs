@@ -245,7 +245,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterTickHandler(OnShowHelpTextTask);
             client.RegisterTickHandler(OnMenuTask);
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 client.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
             if (IsUnderTheInfluence)
@@ -385,7 +385,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.DeregisterTickHandler(OnMenuTask);
             client.DeregisterTickHandler(OnShowHelpTextTask);
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
         }
 
@@ -559,7 +559,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 client.DeregisterTickHandler(OnMenuTask);
                 client.DeregisterTickHandler(OnShowHelpTextTask);
 
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                     client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
         }
@@ -570,6 +570,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         private async Task OnShowDeveloperOverlayTask()
         {
             await Task.FromResult(0);
+
+            if (!Client.DeveloperNpcUiEnabled)
+            {
+                await BaseScript.Delay(1000);
+                return;
+            }
 
             if (this.Position.Distance(Game.PlayerPed.Position) >= 6) return;
 
@@ -599,6 +605,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             keyValuePairs.Add("Attitude", $"{this.Attitude}");
             keyValuePairs.Add("NumberOfCitations", $"{this.NumberOfCitations}");
             keyValuePairs.Add("Offence", $"{this.Offence}");
+            keyValuePairs.Add("-----", "");
+            keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(this.Ped.Handle, Generic.NPC_CURRENT_VEHICLE)}");
+
 
             Wrappers.Helpers.DrawData(this, keyValuePairs);
         }

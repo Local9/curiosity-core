@@ -282,6 +282,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (_vehicle.Driver.NetworkId == networkId)
             {
                 isConductingPullover = false;
+                _vehicle.Driver.LeaveGroup();
             }
         }
     }
