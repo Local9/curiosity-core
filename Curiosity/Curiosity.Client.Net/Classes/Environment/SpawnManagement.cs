@@ -34,16 +34,24 @@ namespace Curiosity.Client.net.Classes.Environment
         static int seconds = 300;
         static long gameTime = API.GetGameTimer();
 
+        static private string _currentJob = "Unknown";
+
         public static void Init()
         {
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
             client.RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleIdUpdate));
+            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDuty));
             client.RegisterTickHandler(OnWastedCheck);
 
             foreach (Vector3 pos in hospitals)
             {
                 API.AddHospitalRestart(pos.X, pos.Y, pos.Z - 1.0f, 0.0f, 0);
             }
+        }
+
+        static void OnDuty(bool active, bool onDuty, string job)
+        {
+            _currentJob = job;
         }
 
         static void OnVehicleIdUpdate(int vehicleId)
@@ -156,22 +164,18 @@ namespace Curiosity.Client.net.Classes.Environment
                         UI.Notifications.LifeV(1, "EMS", "", "Looks like you had a bad coma...", 132);
                     }
 
-                    float groundZ = pos.Z;
-                    API.GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z, ref groundZ, false);
-
                     Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, pos.Z - 1.0f);
 
                     Game.PlayerPed.IsPositionFrozen = true;
-                    //Game.PlayerPed.Health = 200;
-                    //Game.PlayerPed.Resurrect();
                     API.NetworkResurrectLocalPlayer(pos.X, pos.Y, pos.Z - 1.0f, 0.0f, false, false);
-                    //API.ResurrectPed(Game.PlayerPed.Handle);
 
                     await Client.Delay(1000);
                     Game.PlayerPed.IsPositionFrozen = false;
                     Game.PlayerPed.DropsWeaponsOnDeath = false;
 
-                    Client.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "No Job Active");
+                    Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, _currentJob);
+
+                    await Client.Delay(500);
 
                     if (CurrentVehicle != null)
                     {
