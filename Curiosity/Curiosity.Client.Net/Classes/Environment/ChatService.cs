@@ -100,7 +100,10 @@ namespace Curiosity.Client.net.Classes.Environment
             }
             catch (Exception ex)
             {
+                if (!Player.PlayerInformation.IsDeveloper()) return;
+
                 Debug.WriteLine($"{ex.Message}");
+                Debug.WriteLine($"{encodedMessage}");
             }
         }
 
