@@ -93,12 +93,14 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             try
             {
+                if (string.IsNullOrEmpty(encodedMessage)) return;
+
                 string json = Encode.Base64ToString(encodedMessage);
                 API.SendNuiMessage(json);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{ex}");
+                Debug.WriteLine($"{ex.Message}");
             }
         }
 

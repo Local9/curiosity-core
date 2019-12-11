@@ -12,6 +12,9 @@ using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net;
 using System.Collections.Generic;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net;
+using Newtonsoft.Json;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -19,7 +22,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
     {
         private static Client client = Client.GetInstance();
 
-        public const int MovementUpdateInterval = 5;
+        public const int MovementUpdateInterval = 10;
         private const string MOVEMENT_ANIMATION_SET_DRUNK = "MOVE_M@DRUNK@VERYDRUNK";
         public readonly Ped Ped;
         private Ped _target;
@@ -54,12 +57,13 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         public virtual bool PlayAudio { get; set; }
         // Events
         private EntityEventWrapper _eventWrapper;
-        private bool _IsAttackingTarget, _hasBeenReleased;
+        private bool _IsAttackingTarget, _hasBeenReleased, _stolenCar;
 
         private static string helpText;
 
         private string _firstname, _surname, _dateOfBirth, _offence;
         private int _attitude, _bloodAlcaholLimit, _chanceOfFlee, _chanceOfShootAndFlee, _numberOfCitations;
+        private DateTime _currentMovementUpdateTime;
 
         // PED INFORMATION
         public string Name
@@ -240,17 +244,16 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
             client.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
-            
+            client.RegisterEventHandler("curiosity:interaction:arrest", new Action<int>(OnArrest));
             client.RegisterEventHandler("curiosity:interaction:idRan", new Action<int>(OnIdRan));
             client.RegisterEventHandler("curiosity:interaction:handcuffs", new Action<int, bool>(OnHandcuffs));
             client.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
             client.RegisterEventHandler("curiosity:interaction:cpr:failed", new Action<int>(OnCprFailed));
             client.RegisterEventHandler("curiosity:interaction:coroner", new Action<int>(OnCoronerCalled));
             client.RegisterEventHandler("curiosity:interaction:searched", new Action<int, bool>(OnPedHasBeenSearched));
-
             client.RegisterEventHandler("curiosity:interaction:leaveAllGroups", new Action<int>(OnPedLeaveGroups));
-
             client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
+            client.RegisterEventHandler("curiosity:interaction:stolencar", new Action<int>(OnStolenCar));
             // car stolen
             client.RegisterEventHandler("curiosity:interaction:hasLostId", new Action<int>(OnHasLostId));
 
@@ -360,6 +363,19 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public void Update(EntityEventWrapper entityEventWrapper, Entity entity)
         {
+            if (this.Ped == null)
+            {
+                base.Delete();
+
+                client.DeregisterTickHandler(OnMenuTask);
+                client.DeregisterTickHandler(OnShowHelpTextTask);
+
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                    client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+
+                return;
+            }
+
             if (this.Ped.IsBeingStunned)
             {
                 this.Ped.Health = 200;
@@ -388,11 +404,40 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 }
             }
 
-            if (this.Ped.Position.Distance(Game.PlayerPed.Position) >= 20f && IsArrested && !this.Ped.IsInVehicle())
+            if (this.Ped.IsOccluded)
+            {
+                if (Ped.AttachedBlip.Alpha == 255)
+                    Ped.AttachedBlip.Alpha = 0;
+            }
+            else
+            {
+                if (Ped.AttachedBlip.Alpha == 0)
+                    Ped.AttachedBlip.Alpha = 255;
+            }
+
+            if (this.Ped.Position.Distance(Game.PlayerPed.Position) >= 20f && !this.Ped.IsInVehicle())
             {
                 IsArrested = false;
                 this.Ped.LeaveGroup();
+                
+                if (Ped.IsInGroup)
+                    Ped.PedGroup.Delete();
+
                 this.Ped.Task.FleeFrom(Game.PlayerPed);
+
+                if (Ped.AttachedBlip != null)
+                    Ped.AttachedBlip.Color = BlipColor.Red;
+            }
+            else if (Ped.Position.Distance(Game.PlayerPed.Position) >= 200f)
+            {
+                OnPedLeaveGroups(Ped.Handle);
+                OnPedHasBeenReleased(Ped.Handle);
+            }
+
+            if (_hasBeenReleased)
+            {
+                OnPedLeaveGroups(Ped.Handle);
+                OnPedHasBeenReleased(Ped.Handle);
             }
         }
 
@@ -529,6 +574,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 IsHandcuffed = state;
                 IsArrested = state;
+                DecorSetBool(Handle, Client.NPC_ARRESTED, state);
             }
         }
 
@@ -551,6 +597,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Handle == handle)
             {
                 HasIdentifcationBeenRan = true;
+            }
+        }
+
+        public void OnStolenCar(int handle)
+        {
+            if (Handle == handle)
+            {
+                _stolenCar = true;
             }
         }
 
@@ -615,6 +669,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 Ped.IsPersistent = false;
                 Ped.LeaveGroup();
 
+                if (Ped.IsInGroup)
+                {
+                    if (Ped.PedGroup.Exists())
+                        Ped.PedGroup.Delete();
+                }
+
                 API.TaskSetBlockingOfNonTemporaryEvents(Ped.Handle, false);
 
                 DecorSetBool(Ped.Handle, Client.NPC_WAS_RELEASED, true);
@@ -629,6 +689,58 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public event InteractivePed.OnAttackingTargetEvent AttackTarget;
         public delegate void OnAttackingTargetEvent(Ped target);
+
+        private async void OnArrest(int handle)
+        {
+            if (Handle != handle)
+            {
+                base.Delete();
+
+                client.DeregisterTickHandler(OnMenuTask);
+                client.DeregisterTickHandler(OnShowHelpTextTask);
+
+                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                    client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+
+                return;
+            }
+
+            if (!IsHandcuffed)
+            {
+                List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", "~o~Handcuff them you idoit!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", "~r~Cuff them, fecking muppet!" };
+                Screen.ShowNotification(vs[Client.Random.Next(vs.Count)]);
+                return;
+            }
+
+            ArrestedPedData arrestedPedData = new ArrestedPedData();
+            arrestedPedData.IsAllowedToBeArrested = CanBeArrested;
+
+            arrestedPedData.IsDrunk = IsUnderTheInfluence;
+            arrestedPedData.IsDrugged = IsUsingCocaine || IsUsingCannabis;
+            arrestedPedData.IsDrivingStolenCar = _stolenCar;
+            arrestedPedData.IsCarryingIllegalItems = IsCarryingIllegalItems;
+
+            arrestedPedData.IsAllowedToBeArrested = (arrestedPedData.IsDrunk || arrestedPedData.IsDrugged || arrestedPedData.IsDrivingStolenCar || arrestedPedData.IsCarryingIllegalItems);
+
+            string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(arrestedPedData));
+
+            Client.TriggerServerEvent("curiosity:Server:Missions:ArrestedPed", encoded);
+
+            if (CanBeArrested)
+            {
+                Screen.ShowNotification($"~g~They've been booked.");
+            }
+
+            Ped.IsPositionFrozen = false;
+            if (Ped.IsInVehicle())
+            {
+                Ped.SetConfigFlag(292, false);
+                Ped.Task.LeaveVehicle();
+            }
+            API.NetworkFadeOutEntity(Handle, true, false);
+            await Client.Delay(5000);
+            Ped.Delete();
+        }
 
         private async Task OnShowDeveloperOverlayTask()
         {

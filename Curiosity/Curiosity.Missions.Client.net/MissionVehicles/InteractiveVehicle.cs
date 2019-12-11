@@ -122,6 +122,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (chanceOfStolen == 24)
             {
                 _vehicleStolen = true;
+                Client.TriggerEvent("curiosity:interaction:stolencar", InteractivePed.Handle);
                 // generate new registration name
                 _firstname = string.Empty;
                 _surname = string.Empty;

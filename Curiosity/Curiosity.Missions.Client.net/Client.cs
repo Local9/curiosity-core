@@ -20,7 +20,8 @@ namespace Curiosity.Missions.Client.net
         // DECOR HANDLES
         public const string NPC_CURRENT_VEHICLE = "curiosity::npc::vehicle";
         public const string NPC_WAS_RELEASED = "curiosity::npc::released";
-        public const string NPC_ACTIVE_TRAFFIC_STOP = "curiosity::npc::released";
+        public const string NPC_ACTIVE_TRAFFIC_STOP = "curiosity::npc::trafficStopActive";
+        public const string NPC_ARRESTED = "curiosity::npc::arrested";
 
         public const string VEHICLE_HAS_BEEN_TRAFFIC_STOPPED = "curiosity::vehicle::trafficStop";
         public const string VEHICLE_IGNORE = "curiosity::vehicle::ignore";
@@ -71,6 +72,7 @@ namespace Curiosity.Missions.Client.net
             RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperVehUI", new Action<bool>(OnShowDeveloperVehUi));
 
             API.DecorRegister(NPC_CURRENT_VEHICLE, 3); // int
+            API.DecorRegister(NPC_ARRESTED, 2); // bool
             API.DecorRegister(NPC_WAS_RELEASED, 2);
             API.DecorRegister(NPC_ACTIVE_TRAFFIC_STOP, 2);
             API.DecorRegister(VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, 2);

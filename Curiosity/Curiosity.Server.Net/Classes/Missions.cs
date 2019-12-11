@@ -52,10 +52,8 @@ namespace Curiosity.Server.net.Classes
             {
                 DateTime dateTimeOfLastTrafficStop = timestampLastArrest[player.Handle];
                 double secondsSinceLastArrest = (DateTime.Now - dateTimeOfLastTrafficStop).TotalSeconds;
-                if (secondsSinceLastArrest < 10)
+                if (secondsSinceLastArrest < 40)
                 {
-                    session.IsCheater = true;
-                    session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
                     return;
                 }
             }

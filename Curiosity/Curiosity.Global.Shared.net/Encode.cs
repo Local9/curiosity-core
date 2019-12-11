@@ -22,7 +22,14 @@ namespace Curiosity.Global.Shared.net
 
         public static string Base64ToString(string message)
         {
-            return BytesToStringConverted(Convert.FromBase64String(message));
+            try
+            {
+                return BytesToStringConverted(Convert.FromBase64String(message));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error Decoding Message");
+            }
         }
 
         //public static T ConvertToObject<T>(this string json)
