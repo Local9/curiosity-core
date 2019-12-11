@@ -2,8 +2,11 @@
 using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 
 namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
@@ -20,6 +23,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
         static public void Init()
         {
             client.RegisterEventHandler("curiosity:interaction:closeMenu", new Action(OnCloseMenus));
+
         }
 
         static void OnCloseMenus()

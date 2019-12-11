@@ -438,6 +438,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 OnPedLeaveGroups(Ped.Handle);
                 OnPedHasBeenReleased(Ped.Handle);
+
+                if (Ped.IsInGroup)
+                    Ped.PedGroup.Delete();
             }
         }
 
@@ -575,6 +578,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 IsHandcuffed = state;
                 IsArrested = state;
                 DecorSetBool(Handle, Client.NPC_ARRESTED, state);
+
+                if (!IsArrested)
+                {
+                    if (Ped.IsInGroup)
+                        Ped.PedGroup.Delete();
+                }
             }
         }
 
@@ -639,6 +648,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Handle == handle)
             {
                 _hasBeenReleased = true;
+
+                DecorSetBool(handle, Client.NPC_ARRESTED, false);
+
                 Ped.SetConfigFlag(292, false);
                 Ped.SetConfigFlag(301, false);
 
@@ -670,14 +682,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 Ped.LeaveGroup();
 
                 if (Ped.IsInGroup)
-                {
-                    if (Ped.PedGroup.Exists())
-                        Ped.PedGroup.Delete();
-                }
+                    Ped.PedGroup.Delete();
 
                 API.TaskSetBlockingOfNonTemporaryEvents(Ped.Handle, false);
 
-                DecorSetBool(Ped.Handle, Client.NPC_WAS_RELEASED, true);
+                DecorSetBool(Handle, Client.NPC_WAS_RELEASED, true);
 
                 client.DeregisterTickHandler(OnMenuTask);
                 client.DeregisterTickHandler(OnShowHelpTextTask);

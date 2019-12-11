@@ -108,6 +108,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 ArrestInteractions.InteractionIssueWarning(_interactivePed);
                 MenuController.CloseAllMenus();
                 Client.TriggerEvent("curiosity:interaction:closeMenu");
+                await BaseScript.Delay(0);
+                Client.TriggerEvent("curiosity:interaction:released", _interactivePed.Handle);
+                await BaseScript.Delay(0);
+                Client.TriggerEvent("curiosity:interaction:leaveAllGroups", _interactivePed.Handle);
                 return;
             }
 
@@ -116,6 +120,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 ArrestInteractions.InteractionRelease(_interactivePed);
                 MenuController.CloseAllMenus();
                 Client.TriggerEvent("curiosity:interaction:closeMenu");
+                await BaseScript.Delay(0);
+                Client.TriggerEvent("curiosity:interaction:released", _interactivePed.Handle);
+                await BaseScript.Delay(0);
+                Client.TriggerEvent("curiosity:interaction:leaveAllGroups", _interactivePed.Handle);
                 return;
             }
 

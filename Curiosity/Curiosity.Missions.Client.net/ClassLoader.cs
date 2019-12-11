@@ -1,5 +1,11 @@
 ﻿using Curiosity.Shared.Client.net;
 using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
+using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Missions.Client.net
 {
@@ -34,8 +40,31 @@ namespace Curiosity.Missions.Client.net
             Scripts.MissionEvents.Init();
 
             Scripts.Menus.PedInteractionMenu.MenuBase.Init();
+            client.RegisterTickHandler(OnCleanup);
 
             Log.Verbose("Leaving ClassLoader Init");
+        }
+
+        static async Task OnCleanup()
+        {
+            await Task.FromResult(0);
+            List<Ped> peds = World.GetAllPeds().Where(x => x.Position.Distance(Game.PlayerPed.Position) < 20f).Select(p => p).ToList();
+
+            peds.ForEach(async p =>
+            {
+                if (DecorExistOn(p.Handle, Client.NPC_WAS_RELEASED))
+                {
+                    if (DecorGetBool(p.Handle, Client.NPC_WAS_RELEASED))
+                    {
+                        p.MarkAsNoLongerNeeded();
+                        p.IsPersistent = false;
+                        NetworkFadeOutEntity(p.Handle, true, false);
+                        await BaseScript.Delay(2000);
+                        p.Delete();
+                    }
+
+                }
+            });
         }
     }
 }

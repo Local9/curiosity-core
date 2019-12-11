@@ -252,11 +252,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             await Client.Delay(2000);
             Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
 
-            if (interactivePed.Ped.IsInGroup)
-                interactivePed.Ped.LeaveGroup();
 
-            Client.TriggerEvent("curiosity:interaction:released", interactivePed.Handle);
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
+            if (interactivePed.Ped.IsInGroup)
+            {
+                interactivePed.Ped.LeaveGroup();
+                interactivePed.Ped.PedGroup.Delete();
+            }
+
+            await Client.Delay(0);
+            Client.TriggerEvent("curiosity:interaction:released", interactivePed.Ped.Handle);
+            await Client.Delay(0);
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Ped.Handle);
         }
 
         internal static async void InteractionIssueWarning(InteractivePed interactivePed)
@@ -290,13 +296,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             await Client.Delay(2000);
             Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             await Client.Delay(2000);
-            
-            if (interactivePed.Ped.IsInGroup)
-                interactivePed.Ped.LeaveGroup();
 
-            Client.TriggerServerEvent("curiosity:Server:Missions:TrafficStop");
-            Client.TriggerEvent("curiosity:interaction:released", interactivePed.Handle);
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
+            if (interactivePed.Ped.IsInGroup)
+            {
+                interactivePed.Ped.LeaveGroup();
+                interactivePed.Ped.PedGroup.Delete();
+            }
+
+            await Client.Delay(0);
+            Client.TriggerEvent("curiosity:interaction:released", interactivePed.Ped.Handle);
+            await Client.Delay(0);
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Ped.Handle);
         }
     }
 }
