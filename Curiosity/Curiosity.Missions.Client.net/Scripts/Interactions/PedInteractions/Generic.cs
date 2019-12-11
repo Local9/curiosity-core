@@ -159,6 +159,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
             int vehicleHandle = DecorGetInt(interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE);
             Vehicle vehicle = new Vehicle(vehicleHandle);
+
+            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+            {
+                CitizenFX.Core.UI.Screen.ShowNotification($"Vehicle: {vehicle.Handle}");
+            }
+
             interactivePed.Ped.LeaveGroup();
             interactivePed.Ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver);
         }
@@ -194,7 +200,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 interactivePed.Ped.Task.LeaveVehicle(LeaveVehicleFlags.None);
                 
                 await BaseScript.Delay(100);
-                int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle);
+                int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle)
+
                 SetPedAsGroupMember(interactivePed.Handle, playerGroupId);
                 SetPedCanTeleportToGroupLeader(interactivePed.Handle, playerGroupId, true);
             }

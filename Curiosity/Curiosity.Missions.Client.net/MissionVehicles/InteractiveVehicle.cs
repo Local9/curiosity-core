@@ -263,6 +263,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         {
             if (_vehicleStopped && this.Vehicle.IsEngineRunning)
             {
+                this.InteractivePed.Ped.SetConfigFlag(301, true);
                 this.Vehicle.IsEngineRunning = false;
 
                 if (this.Vehicle.Speed <= 1f)
@@ -311,6 +312,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         private async void TaskShootAtPlayer()
         {
             _vehicleStopped = false;
+            this.InteractivePed.Ped.SetConfigFlag(301, false);
             this.InteractivePed.Ped.SetConfigFlag(292, false);
 
             WeaponHash weaponHash = WeaponHash.Pistol;
@@ -338,6 +340,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             {
                 TaskSetBlockingOfNonTemporaryEvents(this.InteractivePed.Ped.Handle, false);
                 this.InteractivePed.Ped.SetConfigFlag(292, false);
+                this.InteractivePed.Ped.SetConfigFlag(301, false);
 
                 _vehicleStopped = false;
                 this.Vehicle.IsEngineRunning = true;
@@ -368,10 +371,31 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
         private void OnPedHasBeenReleased(int networkId)
         {
+            if (this.NetworkId == networkId)
+            {
+                if (this.Vehicle.AttachedBlip.Exists())
+                    this.Vehicle.AttachedBlip.Delete();
+
+                this.Vehicle.IsPositionFrozen = false;
+
+                if (this.Vehicle.Driver.IsInGroup)
+                    this.Vehicle.Driver.LeaveGroup();
+
+                this.Vehicle.IsPersistent = false;
+                this.Vehicle.Driver.Task.ClearAll();
+                this.Vehicle.MarkAsNoLongerNeeded();
+
+                this.Vehicle.Driver.SetConfigFlag(292, false);
+                this.Vehicle.Driver.SetConfigFlag(301, false);
+            }
+
             if (this.InteractivePed.NetworkId == networkId)
             {
                 client.DeregisterTickHandler(OnShowHelpTextTask);
                 this.InteractivePed.Ped.LeaveGroup();
+
+                this.InteractivePed.Ped.SetConfigFlag(292, false);
+                this.InteractivePed.Ped.SetConfigFlag(301, false);
 
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
                     client.DeregisterTickHandler(OnShowDeveloperOverlayTask);

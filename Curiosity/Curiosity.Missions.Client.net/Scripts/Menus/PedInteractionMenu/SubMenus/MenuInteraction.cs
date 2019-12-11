@@ -55,11 +55,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 await Client.Delay(1000);
                 Cpr.InteractionCPR(_interactivePed);
                 menu.CloseMenu();
+                return;
             }
             if (menuItem == mItemCallCoroner)
             {
                 Extras.Coroner.RequestService();
                 menu.CloseMenu();
+                return;
             }
             // ALIVE
             if (menuItem == mItemHandcuffs)
@@ -70,6 +72,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 mItemHandcuffs.Text = _interactivePed.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
                 mItemHandcuffs.Enabled = true;
                 mItemDetainInCurrentVehicle.Enabled = CanDetainPed();
+                return;
             }
             if (menuItem == mItemDetainInCurrentVehicle)
             {
@@ -78,32 +81,40 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 await Client.Delay(4000);
                 mItemDetainInCurrentVehicle.Enabled = CanDetainPed();
                 mItemDetainInCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() ? "Remove from Vehicle" : "Detain in Vehicle";
+                return;
             }
 
             // Main Interactions
             if (menuItem == mItemBreathalyzer)
             {
                 Generic.InteractionBreathalyzer(_interactivePed);
+                return;
             }
 
             if (menuItem == mItemDrugTest)
             {
                 Generic.InteractionDrugTest(_interactivePed);
+                return;
             }
 
             if (menuItem == mItemSearch)
             {
                 Generic.InteractionSearch(_interactivePed);
+                return;
             }
 
             if (menuItem == mItemWarn)
             {
                 ArrestInteractions.InteractionIssueWarning(_interactivePed);
+                menu.CloseMenu();
+                return;
             }
 
             if (menuItem == mItemRelease)
             {
                 ArrestInteractions.InteractionRelease(_interactivePed);
+                menu.CloseMenu();
+                return;
             }
 
             if (menuItem == mItemSuspectVehicle && _interactivePed.Ped.IsInVehicle())
@@ -113,6 +124,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 await Client.Delay(2000);
                 mItemSuspectVehicle.Text = "Suspect: Return to Vehicle";
                 mItemSuspectVehicle.Enabled = true;
+                return;
             }
 
             if (menuItem == mItemSuspectVehicle && !_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE))
@@ -122,6 +134,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 await Client.Delay(2000);
                 mItemSuspectVehicle.Text = "Suspect: Ask to Leave Vehicle";
                 mItemSuspectVehicle.Enabled = true;
+
+                if (_interactivePed.Ped.IsInGroup)
+                    _interactivePed.Ped.LeaveGroup();
+
+                return;
             }
         }
 

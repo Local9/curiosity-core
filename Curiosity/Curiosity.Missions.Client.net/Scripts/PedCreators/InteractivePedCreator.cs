@@ -35,6 +35,8 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
             ped.BlockPermanentEvents = true;
             ped.IsPersistent = true;
 
+            ped.NeverLeavesGroup = false;
+
             interactivePed = new InteractablePed(ped.Handle);
 
             return interactivePed;

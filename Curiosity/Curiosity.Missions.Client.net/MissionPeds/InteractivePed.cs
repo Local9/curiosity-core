@@ -359,8 +359,16 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (Client.Random.Next(5) >= 3 && !IsArrested)
                 {
-                    IsArrested = true;
-                    ArrestInteractions.InteractionArrestInit(this);
+                    if (Client.Random.Next(30) == 28)
+                    {
+                        this.Ped.SetConfigFlag(187, true);
+                    }
+                    else
+                    {
+                        this.Ped.SetConfigFlag(166, true);
+                        IsArrested = true;
+                        ArrestInteractions.InteractionArrestInit(this);
+                    }
                 }
             }
 
@@ -370,20 +378,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 this.Ped.LeaveGroup();
                 this.Ped.Task.FleeFrom(Game.PlayerPed);
             }
-
-            //bool flag;
-            //if (this.Position.VDist(Game.PlayerPed.Position) <= 120f)
-            //{
-            //    flag = false;
-            //}
-            //else
-            //{
-            //    flag = (!base.IsOnScreen ? true : base.IsDead);
-            //}
-            //if (flag)
-            //{
-            //    base.Delete();
-            //}
         }
 
         public void Abort(EntityEventWrapper sender, Entity entity)
@@ -548,13 +542,16 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (this.NetworkId == networkId)
             {
+                this.Ped.SetConfigFlag(292, false);
+                this.Ped.SetConfigFlag(301, false);
+
                 if (this.Ped.IsInVehicle() && this.Ped.CurrentVehicle == Client.CurrentVehicle)
                 {
-                    this.Ped.SetConfigFlag(292, false);
+                    
                     this.Ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
                 }
 
-                this.Ped.Task.ClearAllImmediately();
+                this.Ped.Task.ClearAll();
                 this.Ped.MarkAsNoLongerNeeded();
                 this.Ped.IsPersistent = false;
                 this.Ped.LeaveGroup();
@@ -607,6 +604,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             keyValuePairs.Add("IsUsingCocaine", $"{this.IsUsingCocaine}");
             keyValuePairs.Add("IsCarryingIllegalItems", $"{this.IsCarryingIllegalItems}");
             keyValuePairs.Add("IsUnderTheInfluence", $"{this.IsUnderTheInfluence}");
+            keyValuePairs.Add("IsInGroup", $"{this.Ped.IsInGroup}");
             keyValuePairs.Add("----", "");
             keyValuePairs.Add("BloodAlcaholLimit", $"{this.BloodAlcaholLimit}");
             keyValuePairs.Add("Attitude", $"{this.Attitude}");

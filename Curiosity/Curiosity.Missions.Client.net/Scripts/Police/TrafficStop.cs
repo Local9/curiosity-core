@@ -37,6 +37,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static Vehicle _vehicle;
         static Ped _ped;
 
+        static string currentMessage = string.Empty;
+
         private static string loadingMessage = string.Empty;
 
         // states
@@ -273,7 +275,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static async Task OnShowLoading()
         {
             await BaseScript.Delay(0);
-            string currentMessage = string.Empty;
             if (!string.IsNullOrEmpty(loadingMessage))
             {
                 if (currentMessage != loadingMessage)
