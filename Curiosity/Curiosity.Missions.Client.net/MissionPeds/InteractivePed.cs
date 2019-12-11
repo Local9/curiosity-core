@@ -246,6 +246,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterEventHandler("curiosity:interaction:coroner", new Action<int>(OnCoronerCalled));
             client.RegisterEventHandler("curiosity:interaction:searched", new Action<int, bool>(OnPedHasBeenSearched));
 
+            client.RegisterEventHandler("curiosity:interaction:leaveAllGroups", new Action<int>(OnPedLeaveGroups));
+
             client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
             // car stolen
             client.RegisterEventHandler("curiosity:interaction:hasLostId", new Action<int>(OnHasLostId));
@@ -353,10 +355,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 }
             }
 
-            if (this.Ped.Health < 100)
+            if (this.Ped.IsInjured)
             {
-                this.Ped.Health = 100; // stop them from dying
-
                 if (Client.Random.Next(5) >= 3 && !IsArrested)
                 {
                     if (Client.Random.Next(30) == 28)
@@ -538,6 +538,17 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
+        void OnPedLeaveGroups(int networkId)
+        {
+            if (Ped.NetworkId == networkId)
+            {
+                this.Ped.NeverLeavesGroup = false;
+                this.Ped.PedGroup.Remove(this.Ped);
+                this.Ped.LeaveGroup();
+                API.RemovePedFromGroup(this.Ped.Handle);
+            }
+        }
+
         private void OnPedHasBeenReleased(int networkId)
         {
             if (this.NetworkId == networkId)
@@ -547,8 +558,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (this.Ped.IsInVehicle() && this.Ped.CurrentVehicle == Client.CurrentVehicle)
                 {
-                    
                     this.Ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
+                }
+
+                if (this.Ped.CurrentVehicle != null)
+                {
+                    this.Ped.CurrentVehicle.IsPositionFrozen = false;
                 }
 
                 this.Ped.Task.ClearAll();

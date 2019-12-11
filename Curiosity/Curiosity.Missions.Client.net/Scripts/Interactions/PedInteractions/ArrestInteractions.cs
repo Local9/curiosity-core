@@ -114,6 +114,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             await Client.Delay(3000);
             ped.Task.ClearSecondary();
             ped.CanRagdoll = true;
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", ped.NetworkId);
         }
 
         static public async void InteractionHandcuff(InteractivePed interactivePed)
@@ -171,6 +172,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 interactivePed.IsHandcuffed = false;
 
                 Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.NetworkId, false);
+                Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
             }
             else
             {
@@ -254,6 +256,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 interactivePed.Ped.LeaveGroup();
 
             Client.TriggerEvent("curiosity:interaction:released", interactivePed.NetworkId);
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
         }
 
         internal static async void InteractionIssueWarning(InteractivePed interactivePed)
@@ -292,6 +295,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 interactivePed.Ped.LeaveGroup();
 
             Client.TriggerEvent("curiosity:interaction:released", interactivePed.NetworkId);
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
         }
     }
 }

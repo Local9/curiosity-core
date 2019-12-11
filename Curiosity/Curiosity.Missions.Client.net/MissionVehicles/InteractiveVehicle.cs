@@ -378,8 +378,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
                 this.Vehicle.IsPositionFrozen = false;
 
-                if (this.Vehicle.Driver.IsInGroup)
-                    this.Vehicle.Driver.LeaveGroup();
+                this.Vehicle.Driver.LeaveGroup();
 
                 this.Vehicle.IsPersistent = false;
                 this.Vehicle.Driver.Task.ClearAll();
@@ -392,6 +391,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (this.InteractivePed.NetworkId == networkId)
             {
                 client.DeregisterTickHandler(OnShowHelpTextTask);
+                
                 this.InteractivePed.Ped.LeaveGroup();
 
                 this.InteractivePed.Ped.SetConfigFlag(292, false);
@@ -400,6 +400,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
                     client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
+
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", networkId);
         }
 
         private async Task OnShowDeveloperOverlayTask()

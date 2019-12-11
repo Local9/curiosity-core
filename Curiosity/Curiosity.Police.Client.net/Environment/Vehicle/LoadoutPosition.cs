@@ -24,6 +24,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             await Task.FromResult(0);
 
             if (Client.CurrentVehicle == null) return;
+            if (Client.CurrentVehicle.IsDead) return;
 
             EntityBone entityBone = Client.CurrentVehicle.Bones["boot"];
             if (entityBone.Position.Distance(Game.PlayerPed.Position) < 1.5 && !Game.PlayerPed.IsInVehicle())

@@ -48,14 +48,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
                 if (vehToRemove != null)
                 {
-                    if (vehToRemove.Driver != null)
-                    {
-                        if (vehToRemove.Driver.Exists())
-                        {
-                            CitizenFX.Core.UI.Screen.ShowNotification($"~r~Driver must be removed");
-                            return;
-                        }
-                    }
 
                     bool IsPlayerRelated = false;
 
@@ -71,6 +63,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                     {
                         CitizenFX.Core.UI.Screen.ShowNotification($"~r~Vehicle is owned by a Player.");
                         return;
+                    }
+
+                    if (vehToRemove.Driver != null)
+                    {
+                        if (vehToRemove.Driver.Exists())
+                        {
+                            int pedId = vehToRemove.Driver.Handle;
+                            RemovePedElegantly(ref pedId);
+                        }
                     }
 
                     NetworkRequestControlOfEntity(vehToRemove.Handle);

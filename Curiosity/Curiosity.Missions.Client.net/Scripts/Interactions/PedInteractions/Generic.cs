@@ -139,6 +139,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                         });
 
                         interactivePed.Ped.LeaveGroup();
+                        Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
+
                         interactivePed.Ped.Task.ReactAndFlee(Game.PlayerPed);
                     }
                     Client.TriggerEvent("curiosity:interaction:searched", interactivePed.NetworkId, true);
@@ -167,6 +169,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
             interactivePed.Ped.LeaveGroup();
             interactivePed.Ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver);
+
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
         }
 
         public static async void InteractionLeaveVehicle(InteractivePed interactivePed)

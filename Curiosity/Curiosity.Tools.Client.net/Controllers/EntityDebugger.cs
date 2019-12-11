@@ -41,25 +41,34 @@ namespace Curiosity.Tools.Client.net.Controllers
 				list[""] = "";
 
 				var player = players.FirstOrDefault( p => p.Character == entity );
-				if( player != null ) {
-					list["Player Name"] = player.Name;
-					list["Server ID"] = $"{player.ServerId}";
-					list["Is Talking"] = $"{(Function.Call<bool>( Hash.NETWORK_IS_PLAYER_TALKING, player ) ? "~g~True" : "~r~False")}~s~";
-					list["  "] = "";
-					list["Health"] = $"{player.Character.Health} / {player.Character.MaxHealth}";
-					list["Invincible"] = $"{(player.IsInvincible ? "~g~True" : "~r~False")}~s~";
-				}
-				else if( entity is Vehicle veh ) {
-					list["Engine Health"] = $"{veh.EngineHealth:n1} / 1,000.0";
-					list["Body Health"] = $"{veh.BodyHealth:n1} / 1,000.0";
-					list["Speed"] = $"{veh.Speed / 0.621371f:n3} MP/H";
-					list["RPM"] = $"{veh.CurrentRPM:n3}";
-					list["Current Gear"] = $"{veh.CurrentGear}";
-					list["Acceleration"] = $"{veh.Acceleration:n3}";
-				}
-				else {
-					list["Health"] = $"{entity.Health} / {entity.MaxHealth}";
-				}
+                if (player != null)
+                {
+                    list["Player Name"] = player.Name;
+                    list["Server ID"] = $"{player.ServerId}";
+                    list["Is Talking"] = $"{(Function.Call<bool>(Hash.NETWORK_IS_PLAYER_TALKING, player) ? "~g~True" : "~r~False")}~s~";
+                    list["  "] = "";
+                    list["Health"] = $"{player.Character.Health} / {player.Character.MaxHealth}";
+                    list["Invincible"] = $"{(player.IsInvincible ? "~g~True" : "~r~False")}~s~";
+                }
+                else if (entity is Vehicle veh)
+                {
+                    list["Engine Health"] = $"{veh.EngineHealth:n1} / 1,000.0";
+                    list["Body Health"] = $"{veh.BodyHealth:n1} / 1,000.0";
+                    list["Speed"] = $"{veh.Speed / 0.621371f:n3} MP/H";
+                    list["RPM"] = $"{veh.CurrentRPM:n3}";
+                    list["Current Gear"] = $"{veh.CurrentGear}";
+                    list["Acceleration"] = $"{veh.Acceleration:n3}";
+                }
+                else if (entity is Ped ped)
+                {
+                    list["Health"] = $"{ped.Health} / {ped.MaxHealth}";
+                    list["GroupId"] = $"{ped.PedGroup.Handle}";
+                    list["Player GroupID"] = $"{Game.PlayerPed.PedGroup.Handle}";
+                }
+                else
+                {
+                    list["Health"] = $"{entity.Health} / {entity.MaxHealth}";
+                }
 				list[" "] = "";
 				list["Distance"] = $"{Math.Sqrt( Game.PlayerPed.Position.DistanceToSquared( entity.Position ) ):n3} Meters";
 				list["Heading"] = $"{entity.Heading:n3}";
@@ -84,6 +93,17 @@ namespace Curiosity.Tools.Client.net.Controllers
 				if( !IsEnabled ) {
 					return;
 				}
+
+                if (Game.IsControlJustPressed(0, Control.FrontendSocialClub))
+                {
+                    if (_trackingEntity != null)
+                    {
+                        if (_trackingEntity is Ped ped)
+                        {
+                            ped.LeaveGroup();
+                        }
+                    }
+                }
 
 				var rightClick = Game.IsControlPressed( 2, Control.Aim );
 
