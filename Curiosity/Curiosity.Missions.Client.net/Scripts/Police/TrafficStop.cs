@@ -235,6 +235,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     loadingMessage = string.Empty;
                                 }
 
+                                //if (Game.IsControlJustPressed(0, Control.Duck))
+                                //{
+                                //    Vector3 offset = new Vector3(2.5f, 20f, 0f);
+                                //    targetVehicle.Driver.Task.DriveTo(targetVehicle, targetVehicle.GetOffsetPosition(offset), 5f, 5f);
+                                //}
+
                                 if (targetVehicle.Position.Distance(Client.CurrentVehicle.Position) > 40f)
                                 {
                                     awaitingPullover = false;
@@ -307,6 +313,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         private static void OnPedHasBeenReleased(int handle)
         {
+            API.SetUserRadioControlEnabled(true);
+
             if (_vehicle.Driver.Handle == handle)
             {
                 client.RegisterTickHandler(OnCooldownTask);

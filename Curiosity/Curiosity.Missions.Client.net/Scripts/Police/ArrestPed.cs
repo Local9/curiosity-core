@@ -25,7 +25,7 @@
 //    class ArrestPed
 //    {
 //        static Client client = Client.GetInstance();
-        
+
 //        static public Ped ArrestedPed = null;
 //        static public Ped PedInHandcuffs = null;
 //        static public bool IsPedBeingArrested = false;
@@ -39,7 +39,7 @@
 //        {
 //            MarkerHandler.Init();
 //            MarkerHandler.HideAllMarkers = false;
-            
+
 //            await Client.Delay(100);
 //            Static.Relationships.SetupRelationShips();
 
@@ -88,7 +88,7 @@
 
 //            await Client.Delay(100);
 
-//            foreach(Marker m in jailHouseMarkers)
+//            foreach (Marker m in jailHouseMarkers)
 //            {
 //                int id = jailHouseBlips.Count + 1;
 //                jailHouseBlips.Add(new BlipData(id, "Jail", m.Position, BlipSprite.Handcuffs, BlipCategory.Unknown, BlipColor.Blue, true));
@@ -115,6 +115,9 @@
 
 //                if (Game.IsControlJustPressed(0, Control.Pickup))
 //                {
+//                    /// MOVE INTO INTERACTIE PED
+
+
 //                    if (ArrestedPed == null)
 //                    {
 //                        Screen.ShowNotification($"~o~You have no one to arrest, don't waste my time.");
@@ -180,293 +183,9 @@
 //                        TrafficStop.StoppedDriver.Delete();
 //                    }
 
-//                    TrafficStop.Reset(true); // total reset
-
 //                    await Client.Delay(5000);
 //                }
 //            }
-//        }
-
-//        static async Task OnTaskArrestPed()
-//        {
-//            await Task.FromResult(0);
-//            if (Game.PlayerPed.IsAiming && !MissionEvents.HasAcceptedCallout && !Game.PlayerPed.IsInVehicle())
-//            {
-//                if (IsPedBeingArrested) return;
-
-//                int entityHandle = 0;
-//                if (API.GetEntityPlayerIsFreeAimingAt(Game.Player.Handle, ref entityHandle))
-//                {
-//                    if (entityHandle == 0) return;
-
-//                    if (API.GetEntityType(entityHandle) == 1 && API.GetPedType(entityHandle) != 28)
-//                    {
-//                        ArrestedPed = new Ped(entityHandle);
-//                    }
-//                }
-
-//                if (ArrestedPed == null) return;
-//                if (ArrestedPed.IsDead) return;
-
-//                if (ArrestedPed.Position.Distance(Game.PlayerPed.Position) > 50) return;
-
-//                if (ArrestedPed != TrafficStop.StoppedDriver)
-//                {
-//                    Screen.ShowNotification($"Can only arrest suspects from traffic stops currently.");
-//                    return;
-//                }
-
-//                if (ArrestedPed.IsInVehicle())
-//                {
-//                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_CONTEXT~ to demand the suspect to exit their vehicle.");
-//                }
-//                else
-//                {
-//                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_CONTEXT~ to demand the suspect to get on their knees.");
-//                }
-
-//                if (Game.IsControlJustPressed(0, Control.Context))
-//                {
-//                    IsPedBeingArrested = true;
-
-//                    if (ArrestedPed.Position.Distance(Game.PlayerPed.Position) <= 15)
-//                    {
-//                        API.RequestAnimDict("mp_arresting");
-//                        Helpers.Animations.LoadAnimation("random@arrests");
-//                        Helpers.Animations.LoadAnimation("random@arrests@busted");
-
-//                        if (ArrestedPed.Handle == TrafficStop.StoppedDriver.Handle)
-//                        {
-//                            ArrestedPed = TrafficStop.StoppedDriver;
-
-//                            Wrappers.Helpers.ShowOfficerSubtitle("Out of the vehicle! Now!");
-//                            int resistExitChance = Client.Random.Next(30);
-
-//                            if (TrafficStop.IsDriverUnderTheInfluence)
-//                            {
-//                                resistExitChance = Client.Random.Next(15, 30);
-//                            }
-
-//                            if (TrafficStop.HasVehicleBeenStolen)
-//                            {
-//                                resistExitChance = Client.Random.Next(25, 30);
-//                            }
-
-//                            if (resistExitChance >= 25)
-//                            {
-//                                List<string> resp = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!" };
-//                                Wrappers.Helpers.ShowSuspectSubtitle(resp[Client.Random.Next(resp.Count)]);
-//                                await Client.Delay(1000);
-//                                TrafficStop.TrafficStopVehicleFlee(TrafficStop.TargetVehicle, TrafficStop.StoppedDriver);
-//                            }
-//                            else
-//                            {
-//                                while (ArrestedPed.IsInVehicle())
-//                                {
-//                                    ArrestedPed.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
-//                                    await Client.Delay(100);
-//                                }
-//                                // ARREST
-//                                ArrestingPed();
-//                            }
-//                        }
-//                        else
-//                        {
-//                            while (ArrestedPed.IsInVehicle())
-//                            {
-//                                ArrestedPed.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
-//                                await Client.Delay(100);
-//                            }
-//                            // ARREST
-//                            ArrestingPed();
-//                        }
-//                    }
-//                    else if (
-//                        ArrestedPed.IsPlayingAnim("random@arrests", "idle_2_hands_up")
-//                        || ArrestedPed.IsPlayingAnim("random@arrests", "kneeling_arrest_idle")
-//                        || ArrestedPed.IsPlayingAnim("random@arrests", "kneeling_arrest_get_up")
-//                        || ArrestedPed.IsPlayingAnim("random@arrests@busted", "enter")
-//                        || ArrestedPed.IsPlayingAnim("random@arrests@busted", "exit")
-//                        || ArrestedPed.IsPlayingAnim("random@arrests@busted", "exit")
-//                        )
-//                    {
-//                        // do nothing
-//                    }
-//                    else if (ArrestedPed.IsPlayingAnim("random@arrests@busted", "idle_a"))
-//                    {
-//                        // free
-//                        FreeingPed();
-//                    }
-//                    else
-//                    {
-//                        // arrest
-//                        ArrestingPed();
-//                    }
-//                }
-//            }
-//        }
-
-//        static async void ArrestingPed()
-//        {
-//            await Client.Delay(0);
-//            if (ArrestedPed == null) return;
-
-//            API.SetBlockingOfNonTemporaryEvents(ArrestedPed.Handle, true);
-//            ArrestedPed.CanRagdoll = true;
-//            ArrestedPed.Task.PlayAnimation("random@arrests", "idle_2_hands_up", 8.0f, -1, AnimationFlags.StayInEndFrame);
-//            await Client.Delay(4000);
-//            ArrestedPed.Task.PlayAnimation("random@arrests", "kneeling_arrest_idle", 8.0f, -1, AnimationFlags.StayInEndFrame);
-//            ArrestedPed.Weapons.RemoveAll();
-//            ArrestedPed.Task.PlayAnimation("random@arrests@busted", "enter", 8.0f, -1, AnimationFlags.StayInEndFrame);
-//            await Client.Delay(500);
-//            ArrestedPed.Task.PlayAnimation("random@arrests@busted", "idle_a", 8.0f, -1, (AnimationFlags)9);
-//        }
-
-//        static async void FreeingPed()
-//        {
-//            await Client.Delay(0);
-//            if (ArrestedPed == null) return;
-//            ArrestedPed.Task.PlayAnimation("random@arrests@busted", "exit", 8.0f, -1, AnimationFlags.StayInEndFrame);
-//            await Client.Delay(2000);
-//            ArrestedPed.Task.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
-//            await Client.Delay(3000);
-//            ArrestedPed.Task.ClearSecondary();
-//            ArrestedPed.CanRagdoll = true;
-//        }
-
-//        // MENU INTERACTIONS
-//        // Handcuff
-//        static public async void InteractionHandcuff()
-//        {
-//            int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
-//            await Client.Delay(0);
-//            PedInHandcuffs = ArrestedPed ?? TrafficStop.StoppedDriver ?? Game.PlayerPed.GetPedInFront();
-//            if (PedInHandcuffs == null) return;
-
-//            if (PedInHandcuffs.Position.Distance(Game.PlayerPed.Position) > 3) return;
-
-//            if (PedInHandcuffs.IsPlayingAnim("random@arrests@busted", "idle_a")) // if kneeling... then cuff them
-//            {
-//                Game.PlayerPed.IsPositionFrozen = true;
-//                Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
-//                PedInHandcuffs.Task.PlayAnimation("mp_arresting", "idle", 8.0f, -1, (AnimationFlags)49);
-//                API.AttachEntityToEntity(PedInHandcuffs.Handle, Game.PlayerPed.Handle, 11816, 0.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
-//                await Client.Delay(2000);
-//                PedInHandcuffs.Detach();
-//                Game.PlayerPed.Task.ClearSecondary();
-//                PedInHandcuffs.Task.PlayAnimation("random@arrests@busted", "exit", 8.0f, -1, AnimationFlags.StayInEndFrame);
-//                await Client.Delay(1000);
-//                PedInHandcuffs.Task.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
-//                API.SetPedAsGroupMember(PedInHandcuffs.Handle, playerGroupId);
-//                API.SetEnableHandcuffs(PedInHandcuffs.Handle, true);
-//                API.SetPedCanTeleportToGroupLeader(PedInHandcuffs.Handle, playerGroupId, true);
-//                IsPedCuffed = true;
-//                Game.PlayerPed.IsPositionFrozen = false;
-//            }
-//            else if (PedInHandcuffs != null)
-//            {
-//                Game.PlayerPed.IsPositionFrozen = true;
-//                PedInHandcuffs.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
-//                API.AttachEntityToEntity(PedInHandcuffs.Handle, Game.PlayerPed.Handle, 11816, 0.0f, 0.65f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
-//                await Client.Delay(2000);
-//                PedInHandcuffs.LeaveGroup();
-//                PedInHandcuffs.Detach();
-//                PedInHandcuffs.Task.ClearSecondary();
-//                Game.PlayerPed.Task.ClearSecondary();
-//                PedInHandcuffs.Task.ClearAll();
-//                PedInHandcuffs.CanRagdoll = false;
-//                API.SetBlockingOfNonTemporaryEvents(PedInHandcuffs.Handle, false);
-//                Game.PlayerPed.IsPositionFrozen = false;
-//            }
-//            else
-//            {
-//                Wrappers.Helpers.ShowSimpleNotification("~r~You must be looking at the suspect.");
-//                while (IsPedCuffed)
-//                {
-//                    await Client.Delay(0);
-//                    if (PedInHandcuffs == null)
-//                    {
-//                        IsPedCuffed = false;
-//                    }
-//                    else
-//                    {
-//                        if (PedInHandcuffs.IsAlive && IsPedCuffed)
-//                        {
-//                            PedInHandcuffs.Task.PlayAnimation("mp_arresting", "idle", 8.0f, -1, (AnimationFlags)49);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
-//        // Secure In Players Vehicle
-//        static public async void InteractionPutInVehicle()
-//        {
-//            Ped ped = ArrestedPed ?? TrafficStop.StoppedDriver ?? Game.PlayerPed.GetPedInFront();
-//            if (ped.Position.Distance(Game.PlayerPed.Position) > 3) return;
-
-//            if (ped.IsInVehicle()) return;
-
-//            if (Client.CurrentVehicle.PassengerCount >= 2)
-//            {
-//                Screen.ShowNotification("~r~Too many passengers.");
-//                return;
-//            }
-
-//            if (Client.CurrentVehicle.PassengerCount == 1)
-//            {
-//                ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.RightRear);
-//            }
-//            else
-//            {
-//                ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.LeftRear);
-//            }
-
-//            while(!ped.IsInVehicle())
-//            {
-//                await Client.Delay(0);
-//            }
-//            ped.SetConfigFlag(292, true);
-            
-//        }
-//        // Remove from Players Vehicle
-//        static public void InteractionRemoveFromVehicle()
-//        {
-//            Ped ped = ArrestedPed ?? TrafficStop.StoppedDriver ?? Game.PlayerPed.GetPedInFront();
-            
-//            if (!ped.IsInVehicle()) return;
-
-//            ped.SetConfigFlag(292, false);
-//            ped.Task.LeaveVehicle();
-//        }
-
-//        // Grab Ped
-//        static public void InteractionGrab()
-//        {
-//            Ped grabbedPed = ArrestedPed ?? TrafficStop.StoppedDriver ?? Game.PlayerPed.GetPedInFront();
-
-//            if (grabbedPed.Position.Distance(Game.PlayerPed.Position) > 3)
-//            {
-//                Screen.ShowNotification($"~r~You need be closer to the suspect.");
-//                return;
-//            }
-
-//            if (!IsPedGrabbed)
-//            {
-//                IsPedGrabbed = true;
-//                API.AttachEntityToEntity(grabbedPed.Handle, Game.PlayerPed.Handle, 11816, -0.3f, 0.4f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
-//            }
-//            else if (IsPedGrabbed)
-//            {
-//                grabbedPed.Detach();
-//                IsPedGrabbed = false;
-//            }
-//        }
-
-//        // Make Ped Kneel
-//        static void InteractionKneel()
-//        {
-
 //        }
 
 //    }

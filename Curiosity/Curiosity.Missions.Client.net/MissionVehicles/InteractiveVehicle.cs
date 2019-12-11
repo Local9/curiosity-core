@@ -21,7 +21,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
         private string helpText = string.Empty;
 
-        private bool _vehicleStolen, _vehicleInsured, _vehicleRegistered, _canSearchVehicle, _vehicleStopped;
+        private bool _vehicleStolen, _vehicleInsured, _vehicleRegistered, _canSearchVehicle, _vehicleStopped, _vehicleReleased;
         public bool IsVehicleStolen
         {
             get
@@ -163,6 +163,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 Client.TriggerEvent("curiosity:interaction:hasLostId", this.InteractivePed.Ped.NetworkId);
             }
 
+            _vehicleReleased = false;
+
             Create();
         }
 
@@ -259,9 +261,36 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 Screen.DisplayHelpTextThisFrame(helpText);
         }
 
-        public void Update(EntityEventWrapper entityEventWrapper, Entity entity)
+        public async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
         {
-            if (_vehicleStopped && this.Vehicle.IsEngineRunning)
+            if (Game.IsControlPressed(0, Control.Duck) && Game.PlayerPed.IsInVehicle() && _vehicleStopped && !_vehicleReleased)
+            {
+                if (!_vehicleStopped) return;
+
+                _vehicleStopped = false;
+
+                Vector3 offset = new Vector3(2.5f, 40f, 0f);
+                Vector3 sidewalk = World.GetSafeCoordForPed(this.Vehicle.GetOffsetPosition(offset));
+
+                if (sidewalk == Vector3.Zero)
+                {
+                    sidewalk = this.Vehicle.GetOffsetPosition(offset);
+                }
+
+                this.InteractivePed.Ped.Task.DriveTo(this.Vehicle, sidewalk, 4f, 5f);
+
+                Screen.ShowNotification("Vehicle moving to a new location");
+
+                while (this.Vehicle.Position.Distance(sidewalk) >= 5f)
+                {
+                    await BaseScript.Delay(10);
+                }
+
+                _vehicleStopped = true;
+            }
+
+
+            if (_vehicleStopped && this.Vehicle.IsEngineRunning && !_vehicleReleased)
             {
                 this.InteractivePed.Ped.SetConfigFlag(301, true);
                 this.Vehicle.IsEngineRunning = false;
@@ -388,6 +417,9 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 this.Vehicle.Driver.SetConfigFlag(301, false);
 
                 _vehicleStopped = false;
+                _vehicleReleased = true;
+                client.DeregisterTickHandler(OnShowHelpTextTask);
+                client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
 
             if (this.InteractivePed.Handle == handle)
@@ -398,11 +430,16 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
                 this.InteractivePed.Ped.SetConfigFlag(292, false);
                 this.InteractivePed.Ped.SetConfigFlag(301, false);
+                this.InteractivePed.Ped.IsPersistent = false;
+                this.InteractivePed.Ped.Task.ClearAll();
+                this.InteractivePed.Ped.MarkAsNoLongerNeeded();
+                this.InteractivePed.Ped.IsPositionFrozen = false;
 
                 _vehicleStopped = false;
+                _vehicleReleased = true;
 
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
-                    client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+                client.DeregisterTickHandler(OnShowHelpTextTask);
+                client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
 
             Client.TriggerEvent("curiosity:interaction:leaveAllGroups", handle);
