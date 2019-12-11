@@ -195,6 +195,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 await Client.Delay(2000);
                 TaskVehicleTempAction(interactivePed.Ped.Handle, interactivePed.Ped.CurrentVehicle.Handle, 32, 30000);
                 interactivePed.Ped.Task.FleeFrom(Game.PlayerPed);
+
+                Client.TriggerEvent("curiosity:interaction:veh:flee", interactivePed.Handle);
             }
             else
             {

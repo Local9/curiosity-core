@@ -33,6 +33,8 @@ namespace Curiosity.Missions.Client.net
             Scripts.Mission.RandomMissionHandler.Init();
             Scripts.MissionEvents.Init();
 
+            Scripts.Menus.PedInteractionMenu.MenuBase.Init();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
     }

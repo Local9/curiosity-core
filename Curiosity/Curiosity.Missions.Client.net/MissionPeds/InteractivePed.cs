@@ -54,7 +54,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         public virtual bool PlayAudio { get; set; }
         // Events
         private EntityEventWrapper _eventWrapper;
-        private bool _IsAttackingTarget;
+        private bool _IsAttackingTarget, _hasBeenReleased;
 
         private static string helpText;
 
@@ -227,6 +227,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 CanBeArrested = true;
             }
 
+            _hasBeenReleased = false;
+
             Create();
         }
 
@@ -258,6 +260,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 client.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
+            if (Ped.AttachedBlip == null)
+            {
+                Ped.AttachBlip();
+                Ped.AttachedBlip.Color = BlipColor.TrevorOrange;
+                Ped.AttachedBlip.Sprite = BlipSprite.Standard;
+                Ped.AttachedBlip.Scale = 0.5f;
+            }
+
             if (IsUnderTheInfluence)
             {
                 if (!HasAnimSetLoaded(MOVEMENT_ANIMATION_SET_DRUNK))
@@ -284,10 +294,16 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     this.Ped.Task.ShootAt(Game.PlayerPed);
                     await Client.Delay(3000);
                     this.Ped.Task.FleeFrom(Game.PlayerPed);
+
+                    if (Ped.AttachedBlip != null)
+                        Ped.AttachedBlip.Color = BlipColor.Red;
                 }
                 else if (_chanceOfFlee >= 28)
                 {
                     this.Ped.Task.FleeFrom(Game.PlayerPed);
+
+                    if (Ped.AttachedBlip != null)
+                        Ped.AttachedBlip.Color = BlipColor.Red;
                 }
             }
         }
@@ -411,7 +427,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     }
                 }
 
-                if (Game.PlayerPed.IsAiming && Ped.IsAlive && !IsArrested) {
+                if (Game.PlayerPed.IsAiming && Ped.IsAlive && !IsArrested && !Game.PlayerPed.IsInVehicle()) {
                     if (this.Position.Distance(Game.PlayerPed.Position) > 2f && this.Position.Distance(Game.PlayerPed.Position) <= 20f)
                     {
                         int entityHandle = 0;
@@ -461,7 +477,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 //if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 //    Screen.ShowSubtitle($"Menu: {IsMenuVisible}, CPR: {IsPerformingCpr}");
 
-                return !IsMenuVisible && !IsPerformingCpr && !IsCoronerCalled && !Game.PlayerPed.IsInVehicle();
+                return !IsMenuVisible && !IsPerformingCpr && !IsCoronerCalled && !Game.PlayerPed.IsInVehicle() && !_hasBeenReleased;
             }
             catch (Exception ex)
             {
@@ -568,6 +584,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (Handle == handle)
             {
+                _hasBeenReleased = true;
                 Ped.SetConfigFlag(292, false);
                 Ped.SetConfigFlag(301, false);
 
@@ -585,6 +602,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                         if (Ped.CurrentVehicle.AttachedBlip.Exists())
                             Ped.CurrentVehicle.AttachedBlip.Delete();
                     }
+                }
+
+                if (Ped.AttachedBlip != null)
+                {
+                    if (Ped.AttachedBlip.Exists())
+                        Ped.AttachedBlip.Delete();
                 }
 
                 Ped.Task.ClearAll();

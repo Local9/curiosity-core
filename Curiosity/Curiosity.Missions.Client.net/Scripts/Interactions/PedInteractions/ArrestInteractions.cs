@@ -294,6 +294,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             if (interactivePed.Ped.IsInGroup)
                 interactivePed.Ped.LeaveGroup();
 
+            Client.TriggerServerEvent("curiosity:Server:Missions:TrafficStop");
             Client.TriggerEvent("curiosity:interaction:released", interactivePed.Handle);
             Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
         }

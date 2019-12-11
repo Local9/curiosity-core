@@ -107,6 +107,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             {
                 ArrestInteractions.InteractionIssueWarning(_interactivePed);
                 MenuController.CloseAllMenus();
+                Client.TriggerEvent("curiosity:interaction:closeMenu");
                 return;
             }
 
@@ -114,6 +115,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             {
                 ArrestInteractions.InteractionRelease(_interactivePed);
                 MenuController.CloseAllMenus();
+                Client.TriggerEvent("curiosity:interaction:closeMenu");
                 return;
             }
 

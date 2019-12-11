@@ -176,6 +176,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
             client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
+            client.RegisterEventHandler("curiosity:interaction:veh:flee", new Action<int>(OnFlee));
 
             client.RegisterTickHandler(OnShowHelpTextTask);
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
@@ -299,6 +300,11 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                     this.Vehicle.Windows.RollDownAllWindows();
             }
 
+            if (!_vehicleStopped && !_vehicleReleased)
+            {
+                this.InteractivePed.Ped.SetConfigFlag(301, false);
+            }
+
             if (Game.PlayerPed.Position.Distance(this.Vehicle.Position) >= 300f)
             {
                 Client.TriggerEvent("curiosity:interaction:released", this.Vehicle.Driver.Handle);
@@ -391,6 +397,12 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
                 TaskVehicleTempAction(this.Vehicle.Driver.Handle, this.Vehicle.Handle, 32, 30000);
                 this.Vehicle.Driver.Task.FleeFrom(Game.PlayerPed);
+
+                if (this.Vehicle.AttachedBlip != null)
+                    this.Vehicle.AttachedBlip.Color = BlipColor.Red;
+
+                if (this.InteractivePed.AttachedBlip != null)
+                    this.InteractivePed.AttachedBlip.Color = BlipColor.Red;
             }
             catch (Exception ex)
             {
@@ -416,8 +428,15 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 this.Vehicle.Driver.SetConfigFlag(292, false);
                 this.Vehicle.Driver.SetConfigFlag(301, false);
 
+                if (Vehicle.AttachedBlip != null)
+                {
+                    if (Vehicle.AttachedBlip.Exists())
+                        Vehicle.AttachedBlip.Delete();
+                }
+
                 _vehicleStopped = false;
                 _vehicleReleased = true;
+
                 client.DeregisterTickHandler(OnShowHelpTextTask);
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
@@ -438,11 +457,23 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 _vehicleStopped = false;
                 _vehicleReleased = true;
 
+                if (InteractivePed.AttachedBlip != null)
+                {
+                    if (InteractivePed.AttachedBlip.Exists())
+                        InteractivePed.AttachedBlip.Delete();
+                }
+
                 client.DeregisterTickHandler(OnShowHelpTextTask);
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
 
             Client.TriggerEvent("curiosity:interaction:leaveAllGroups", handle);
+        }
+
+        void OnFlee(int handle)
+        {
+            if (InteractivePed.Handle != handle) return;
+            _vehicleStopped = false;
         }
 
         private async Task OnShowDeveloperOverlayTask()

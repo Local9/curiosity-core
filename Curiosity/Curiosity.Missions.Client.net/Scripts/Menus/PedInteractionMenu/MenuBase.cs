@@ -17,6 +17,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
         // buttons
         static MenuItem mItemHello = new MenuItem("Hello");
 
+        static public void Init()
+        {
+            client.RegisterEventHandler("curiosity:interaction:closeMenu", new Action(OnCloseMenus));
+        }
+
+        static void OnCloseMenus()
+        {
+            if (MenuController.IsAnyMenuOpen())
+            {
+                MenuController.CloseAllMenus();
+            }
+        }
+
         static public void Open(InteractivePed interactivePed)
         {
             MenuState(true);
