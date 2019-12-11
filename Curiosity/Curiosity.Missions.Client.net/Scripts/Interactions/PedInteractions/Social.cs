@@ -83,7 +83,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
                 Wrappers.Helpers.ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{interactivePed.Name}\n~w~DOB: ~y~{interactivePed.DateOfBirth}");
 
-                Client.TriggerEvent("curiosity:interaction:idRequesed", interactivePed.NetworkId);
+                Client.TriggerEvent("curiosity:interaction:idRequesed", interactivePed.Handle);
             }
         }
 

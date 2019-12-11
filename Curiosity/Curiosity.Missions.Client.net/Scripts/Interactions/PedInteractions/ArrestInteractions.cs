@@ -114,7 +114,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             await Client.Delay(3000);
             ped.Task.ClearSecondary();
             ped.CanRagdoll = true;
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", ped.NetworkId);
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", ped.Handle);
         }
 
         static public async void InteractionHandcuff(InteractivePed interactivePed)
@@ -132,7 +132,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
                 interactivePed.Ped.Task.PlayAnimation("mp_arresting", "idle", 8.0f, -1, (AnimationFlags)49);
                 float position = interactivePed.Ped.IsPlayingAnim("random@arrests@busted", "idle_a") ? 0.3f : 0.65f;
-                API.AttachEntityToEntity(interactivePed.Handle, Game.PlayerPed.Handle, 11816, 0.0f, position, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
+                API.AttachEntityToEntity(interactivePed.Ped.Handle, Game.PlayerPed.Handle, 11816, 0.0f, position, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
                 await Client.Delay(2000);
                 interactivePed.Detach();
                 Game.PlayerPed.Task.ClearSecondary();
@@ -144,8 +144,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                     interactivePed.Ped.Task.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
                 }
 
-                API.SetPedAsGroupMember(interactivePed.Handle, playerGroupId);
-                API.SetEnableHandcuffs(interactivePed.Handle, true);
+                API.SetPedAsGroupMember(interactivePed.Ped.Handle, playerGroupId);
+                API.SetEnableHandcuffs(interactivePed.Ped.Handle, true);
                 API.SetPedCanTeleportToGroupLeader(interactivePed.Handle, playerGroupId, true);
 
                 interactivePed.Ped.PedGroup.FormationType = FormationType.Default;
@@ -153,7 +153,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 interactivePed.IsHandcuffed = true;
                 Game.PlayerPed.IsPositionFrozen = false;
 
-                Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.NetworkId, true);
+                Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.Handle, true);
             }
             else if (interactivePed != null)
             {
@@ -167,12 +167,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 Game.PlayerPed.Task.ClearSecondary();
                 interactivePed.Ped.Task.ClearAll();
                 interactivePed.Ped.CanRagdoll = false;
-                API.SetBlockingOfNonTemporaryEvents(interactivePed.Handle, false);
+                API.SetBlockingOfNonTemporaryEvents(interactivePed.Ped.Handle, false);
                 Game.PlayerPed.IsPositionFrozen = false;
                 interactivePed.IsHandcuffed = false;
 
-                Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.NetworkId, false);
-                Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
+                Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.Handle, false);
+                Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
             }
             else
             {
@@ -255,8 +255,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             if (interactivePed.Ped.IsInGroup)
                 interactivePed.Ped.LeaveGroup();
 
-            Client.TriggerEvent("curiosity:interaction:released", interactivePed.NetworkId);
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
+            Client.TriggerEvent("curiosity:interaction:released", interactivePed.Handle);
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
         }
 
         internal static async void InteractionIssueWarning(InteractivePed interactivePed)
@@ -294,8 +294,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             if (interactivePed.Ped.IsInGroup)
                 interactivePed.Ped.LeaveGroup();
 
-            Client.TriggerEvent("curiosity:interaction:released", interactivePed.NetworkId);
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
+            Client.TriggerEvent("curiosity:interaction:released", interactivePed.Handle);
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
         }
     }
 }

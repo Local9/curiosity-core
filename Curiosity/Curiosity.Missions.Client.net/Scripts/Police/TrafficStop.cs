@@ -305,9 +305,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             client.DeregisterTickHandler(OnCooldownTask);
         }
 
-        private static void OnPedHasBeenReleased(int networkId)
+        private static void OnPedHasBeenReleased(int handle)
         {
-            if (_vehicle.Driver.NetworkId == networkId)
+            if (_vehicle.Driver.Handle == handle)
             {
                 client.RegisterTickHandler(OnCooldownTask);
                 isConductingPullover = false;

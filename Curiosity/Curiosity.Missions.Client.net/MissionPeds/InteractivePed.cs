@@ -470,36 +470,36 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
-        private void OnCpr(int networkId, bool state)
+        private void OnCpr(int handle, bool state)
         {
-            if (Ped.NetworkId == networkId)
+            if (Handle == handle)
                 IsPerformingCpr = state;
         }
 
-        private void OnCprFailed(int networkId)
+        private void OnCprFailed(int handle)
         {
-            if (Ped.NetworkId == networkId)
+            if (Handle == handle)
             {
                 IsPerformingCpr = false;
                 HasCprFailed = true;
             }
         }
 
-        private void OnCoronerCalled(int networkId)
+        private void OnCoronerCalled(int handle)
         {
-            if (Ped.NetworkId == networkId)
+            if (Handle == handle)
                 IsCoronerCalled = true;
         }
 
-        public void OnIdRequested(int networkId)
+        public void OnIdRequested(int handle)
         {
-            if (Ped.NetworkId == networkId)
+            if (Handle == handle)
                 HasProvidedId = true;
         }
 
-        public void OnPedHasBeenSearched(int networkId, bool illegalItems)
+        public void OnPedHasBeenSearched(int handle, bool illegalItems)
         {
-            if (Ped.NetworkId == networkId)
+            if (Handle == handle)
             {
                 HasBeenSearched = true;
                 IsCarryingIllegalItems = illegalItems;
@@ -507,20 +507,20 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
-        public void OnHandcuffs(int networkId, bool state)
+        public void OnHandcuffs(int handle, bool state)
         {
-            if (Ped.NetworkId == networkId)
+            if (Handle == handle)
             {
                 IsHandcuffed = state;
                 IsArrested = state;
             }
         }
 
-        public void OnHasLostId(int networkId)
+        public void OnHasLostId(int handle)
         {
             if (HasProvidedId) return;
 
-            if (Ped.NetworkId == networkId)
+            if (Handle == handle)
             {
                 if (Client.Random.Next(80, 100) >= 95)
                 {
@@ -530,50 +530,67 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
-        public void OnIdRan(int networkId)
+        public void OnIdRan(int handle)
         {
-            if (Ped.NetworkId == networkId)
+            if (Handle == handle)
             {
                 HasIdentifcationBeenRan = true;
             }
         }
 
-        void OnPedLeaveGroups(int networkId)
+        async void OnPedLeaveGroups(int handle)
         {
-            if (Ped.NetworkId == networkId)
+            await BaseScript.Delay(100);
+
+                if (Client.DeveloperNpcUiEnabled)
+                {
+                    Screen.ShowNotification("~b~NPC: ~w~OnPedLeaveGroups");
+                }
+
+            if (Ped.NetworkId == handle)
             {
-                this.Ped.NeverLeavesGroup = false;
-                this.Ped.PedGroup.Remove(this.Ped);
-                this.Ped.LeaveGroup();
-                API.RemovePedFromGroup(this.Ped.Handle);
+                Ped.NeverLeavesGroup = false;
+                Ped.LeaveGroup();
+                API.RemovePedFromGroup(Ped.Handle);
+
+                if (Client.DeveloperNpcUiEnabled)
+                {
+                    Screen.ShowNotification("~b~NPC: ~w~OnPedLeaveGroups");
+                }
             }
         }
 
-        private void OnPedHasBeenReleased(int networkId)
+        private void OnPedHasBeenReleased(int handle)
         {
-            if (this.NetworkId == networkId)
+            if (Handle == handle)
             {
-                this.Ped.SetConfigFlag(292, false);
-                this.Ped.SetConfigFlag(301, false);
+                Ped.SetConfigFlag(292, false);
+                Ped.SetConfigFlag(301, false);
 
-                if (this.Ped.IsInVehicle() && this.Ped.CurrentVehicle == Client.CurrentVehicle)
+                if (Ped.IsInVehicle() && Ped.CurrentVehicle == Client.CurrentVehicle)
                 {
-                    this.Ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
+                    Ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
                 }
 
-                if (this.Ped.CurrentVehicle != null)
+                if (Ped.CurrentVehicle != null)
                 {
-                    this.Ped.CurrentVehicle.IsPositionFrozen = false;
+                    Ped.CurrentVehicle.IsPositionFrozen = false;
+
+                    if (Ped.CurrentVehicle.AttachedBlip != null)
+                    {
+                        if (Ped.CurrentVehicle.AttachedBlip.Exists())
+                            Ped.CurrentVehicle.AttachedBlip.Delete();
+                    }
                 }
 
-                this.Ped.Task.ClearAll();
-                this.Ped.MarkAsNoLongerNeeded();
-                this.Ped.IsPersistent = false;
-                this.Ped.LeaveGroup();
+                Ped.Task.ClearAll();
+                Ped.MarkAsNoLongerNeeded();
+                Ped.IsPersistent = false;
+                Ped.LeaveGroup();
 
-                API.TaskSetBlockingOfNonTemporaryEvents(this.Ped.Handle, false);
+                API.TaskSetBlockingOfNonTemporaryEvents(Ped.Handle, false);
 
-                DecorSetBool(this.Ped.Handle, Client.NPC_WAS_RELEASED, true);
+                DecorSetBool(Ped.Handle, Client.NPC_WAS_RELEASED, true);
 
                 client.DeregisterTickHandler(OnMenuTask);
                 client.DeregisterTickHandler(OnShowHelpTextTask);
@@ -596,38 +613,38 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 return;
             }
 
-            if (this.Position.Distance(Game.PlayerPed.Position) >= 6) return;
+            if (Position.Distance(Game.PlayerPed.Position) >= 6) return;
 
             Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
 
-            keyValuePairs.Add("Name", this.Name);
-            keyValuePairs.Add("DoB", this.DateOfBirth);
-            keyValuePairs.Add("Health", $"{this.Health} / {this.MaxHealth}");
+            keyValuePairs.Add("Name", Name);
+            keyValuePairs.Add("DoB", DateOfBirth);
+            keyValuePairs.Add("Health", $"{Health} / {MaxHealth}");
             keyValuePairs.Add("-", "");
-            keyValuePairs.Add("_ChanceOfFlee", $"{this._chanceOfFlee}");
-            keyValuePairs.Add("_ChanceOfShootAndFlee", $"{this._chanceOfShootAndFlee}");
+            keyValuePairs.Add("_ChanceOfFlee", $"{_chanceOfFlee}");
+            keyValuePairs.Add("_ChanceOfShootAndFlee", $"{_chanceOfShootAndFlee}");
             keyValuePairs.Add("--", "");
-            keyValuePairs.Add("IsArrested", $"{this.IsArrested}");
-            keyValuePairs.Add("IsHandcuffed", $"{this.IsHandcuffed}");
-            keyValuePairs.Add("HasProvidedId", $"{this.HasProvidedId}");
-            keyValuePairs.Add("HasLostId", $"{this.HasLostId}");
-            keyValuePairs.Add("HasBeenSearched", $"{this.HasBeenSearched}");
+            keyValuePairs.Add("IsArrested", $"{IsArrested}");
+            keyValuePairs.Add("IsHandcuffed", $"{IsHandcuffed}");
+            keyValuePairs.Add("HasProvidedId", $"{HasProvidedId}");
+            keyValuePairs.Add("HasLostId", $"{HasLostId}");
+            keyValuePairs.Add("HasBeenSearched", $"{HasBeenSearched}");
             keyValuePairs.Add("---", "");
-            keyValuePairs.Add("CanBeArrested", $"{this.CanBeArrested}");
-            keyValuePairs.Add("IsAllowedToBeSearched", $"{this.IsAllowedToBeSearched}");
-            keyValuePairs.Add("IsUsingCannabis", $"{this.IsUsingCannabis}");
-            keyValuePairs.Add("IsUsingCocaine", $"{this.IsUsingCocaine}");
-            keyValuePairs.Add("IsCarryingIllegalItems", $"{this.IsCarryingIllegalItems}");
-            keyValuePairs.Add("IsUnderTheInfluence", $"{this.IsUnderTheInfluence}");
-            keyValuePairs.Add("IsInGroup", $"{this.Ped.IsInGroup}");
+            keyValuePairs.Add("CanBeArrested", $"{CanBeArrested}");
+            keyValuePairs.Add("IsAllowedToBeSearched", $"{IsAllowedToBeSearched}");
+            keyValuePairs.Add("IsUsingCannabis", $"{IsUsingCannabis}");
+            keyValuePairs.Add("IsUsingCocaine", $"{IsUsingCocaine}");
+            keyValuePairs.Add("IsCarryingIllegalItems", $"{IsCarryingIllegalItems}");
+            keyValuePairs.Add("IsUnderTheInfluence", $"{IsUnderTheInfluence}");
+            keyValuePairs.Add("IsInGroup", $"{Ped.IsInGroup}");
             keyValuePairs.Add("----", "");
-            keyValuePairs.Add("BloodAlcaholLimit", $"{this.BloodAlcaholLimit}");
-            keyValuePairs.Add("Attitude", $"{this.Attitude}");
-            keyValuePairs.Add("NumberOfCitations", $"{this.NumberOfCitations}");
-            keyValuePairs.Add("Offence", $"{this.Offence}");
+            keyValuePairs.Add("BloodAlcaholLimit", $"{BloodAlcaholLimit}");
+            keyValuePairs.Add("Attitude", $"{Attitude}");
+            keyValuePairs.Add("NumberOfCitations", $"{NumberOfCitations}");
+            keyValuePairs.Add("Offence", $"{Offence}");
             keyValuePairs.Add("-----", "");
-            keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(this.Ped.Handle, Client.NPC_CURRENT_VEHICLE)}");
-            keyValuePairs.Add("Local Vehicle", $"{this.Vehicle.Handle}");
+            keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(Ped.Handle, Client.NPC_CURRENT_VEHICLE)}");
+            keyValuePairs.Add("Local Vehicle", $"{Vehicle.Handle}");
 
             Wrappers.Helpers.DrawData(this, keyValuePairs);
         }

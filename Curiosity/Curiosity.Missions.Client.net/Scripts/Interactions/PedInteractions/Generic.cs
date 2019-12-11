@@ -139,11 +139,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                         });
 
                         interactivePed.Ped.LeaveGroup();
-                        Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
+                        Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
 
                         interactivePed.Ped.Task.ReactAndFlee(Game.PlayerPed);
                     }
-                    Client.TriggerEvent("curiosity:interaction:searched", interactivePed.NetworkId, true);
+                    Client.TriggerEvent("curiosity:interaction:searched", interactivePed.Handle, true);
                 }
             }
             else
@@ -170,7 +170,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             interactivePed.Ped.LeaveGroup();
             interactivePed.Ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver);
 
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.NetworkId);
+            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
         }
 
         public static async void InteractionLeaveVehicle(InteractivePed interactivePed)
@@ -206,8 +206,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 await BaseScript.Delay(100);
                 int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle);
 
-                SetPedAsGroupMember(interactivePed.Handle, playerGroupId);
-                SetPedCanTeleportToGroupLeader(interactivePed.Handle, playerGroupId, true);
+                SetPedAsGroupMember(interactivePed.Ped.Handle, playerGroupId);
+                SetPedCanTeleportToGroupLeader(interactivePed.Ped.Handle, playerGroupId, true);
             }
         }
     }

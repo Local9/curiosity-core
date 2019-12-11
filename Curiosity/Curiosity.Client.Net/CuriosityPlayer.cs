@@ -357,11 +357,20 @@ namespace Curiosity.Client.net
 
             Screen.LoadingPrompt.Show("Found Safe Position...", LoadingSpinnerType.RegularClockwise);
 
-            Game.PlayerPed.Position = World.GetNextPositionOnSidewalk(finalCheck);
+            Vector3 sidewalk = World.GetNextPositionOnSidewalk(finalCheck);
 
-            if (Game.PlayerPed.Position == Vector3.Zero)
+            if (sidewalk == Vector3.Zero)
             {
-                Game.PlayerPed.Position = finalCheck;
+                Game.PlayerPed.Position = safeSpawn;
+            }
+            else
+            {
+                Game.PlayerPed.Position = sidewalk;
+            }
+
+            if (roleId == 4)
+            {
+                Screen.ShowNotification($"Spawn Loc: {Game.PlayerPed.Position}\nspawnPosition: {spawnPosition}");
             }
 
             Game.PlayerPed.IsPositionFrozen = false;

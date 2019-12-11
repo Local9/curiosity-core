@@ -58,11 +58,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
         {
             client.DeregisterTickHandler(OnTask);
 
-            Client.TriggerEvent("curiosity:interaction:cpr", _victim.NetworkId, false);
+            Client.TriggerEvent("curiosity:interaction:cpr", _victim.Handle, false);
 
             if (!_hasSucceeded)
             {
-                Client.TriggerEvent("curiosity:interaction:cpr:failed", _victim.NetworkId);
+                Client.TriggerEvent("curiosity:interaction:cpr:failed", _victim.Handle);
             }
 
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
@@ -79,7 +79,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
         public static void InteractionCPR(InteractivePed interactivePed)
         {
-            Client.TriggerEvent("curiosity:interaction:cpr", interactivePed.NetworkId, true);
+            Client.TriggerEvent("curiosity:interaction:cpr", interactivePed.Handle, true);
 
             _chance = _seconds - _cprStart + 4;
             // START
