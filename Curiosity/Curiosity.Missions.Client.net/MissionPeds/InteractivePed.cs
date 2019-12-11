@@ -542,20 +542,24 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             await BaseScript.Delay(100);
 
-                if (Client.DeveloperNpcUiEnabled)
-                {
-                    Screen.ShowNotification("~b~NPC: ~w~OnPedLeaveGroups");
-                }
+            if (Client.DeveloperNpcUiEnabled)
+            {
+                Screen.ShowNotification("~b~NPC: ~w~OnPedLeaveGroups");
+                Screen.ShowNotification($"~b~NPC: ~w~{Handle}\nEvent: {handle}");
+            }
 
-            if (Ped.NetworkId == handle)
+            if (Handle == handle)
             {
                 Ped.NeverLeavesGroup = false;
                 Ped.LeaveGroup();
-                API.RemovePedFromGroup(Ped.Handle);
+                API.RemovePedFromGroup(Handle);
+
+                if (Ped.IsInGroup)
+                    Ped.PedGroup.Delete();
 
                 if (Client.DeveloperNpcUiEnabled)
                 {
-                    Screen.ShowNotification("~b~NPC: ~w~OnPedLeaveGroups");
+                    Screen.ShowNotification("~b~NPC: ~w~OnPedLeaveGroups: ~r~Success");
                 }
             }
         }

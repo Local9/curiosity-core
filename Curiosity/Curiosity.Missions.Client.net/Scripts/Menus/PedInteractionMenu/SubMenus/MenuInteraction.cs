@@ -54,13 +54,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 Cpr.Init();
                 await Client.Delay(1000);
                 Cpr.InteractionCPR(_interactivePed);
-                menu.CloseMenu();
+                MenuController.CloseAllMenus();
                 return;
             }
             if (menuItem == mItemCallCoroner)
             {
                 Extras.Coroner.RequestService();
-                menu.CloseMenu();
+                MenuController.CloseAllMenus();
                 return;
             }
             // ALIVE
@@ -106,14 +106,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             if (menuItem == mItemWarn)
             {
                 ArrestInteractions.InteractionIssueWarning(_interactivePed);
-                menu.CloseMenu();
+                MenuController.CloseAllMenus();
                 return;
             }
 
             if (menuItem == mItemRelease)
             {
                 ArrestInteractions.InteractionRelease(_interactivePed);
-                menu.CloseMenu();
+                MenuController.CloseAllMenus();
                 return;
             }
 

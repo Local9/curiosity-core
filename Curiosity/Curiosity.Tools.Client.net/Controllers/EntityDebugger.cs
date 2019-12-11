@@ -62,8 +62,11 @@ namespace Curiosity.Tools.Client.net.Controllers
                 else if (entity is Ped ped)
                 {
                     list["Health"] = $"{ped.Health} / {ped.MaxHealth}";
-                    list["GroupId"] = $"{ped.PedGroup.Handle}";
-                    list["Player GroupID"] = $"{Game.PlayerPed.PedGroup.Handle}";
+                    if (ped.IsInGroup)
+                    {
+                        list["GroupId"] = $"{ped.PedGroup.Handle}";
+                        list["Player GroupID"] = $"{Game.PlayerPed.PedGroup.Handle}";
+                    }
                 }
                 else
                 {
