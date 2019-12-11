@@ -200,7 +200,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 interactivePed.Ped.Task.LeaveVehicle(LeaveVehicleFlags.None);
                 
                 await BaseScript.Delay(100);
-                int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle)
+                int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle);
 
                 SetPedAsGroupMember(interactivePed.Handle, playerGroupId);
                 SetPedCanTeleportToGroupLeader(interactivePed.Handle, playerGroupId, true);
