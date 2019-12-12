@@ -309,6 +309,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             IsCooldownActive = false;
             isConductingPullover = false;
             client.DeregisterTickHandler(OnCooldownTask);
+            Client.TriggerEvent("curiosity:Client:Context:TrafficStopActive", false);
         }
 
         private static void OnPedHasBeenReleased(int handle)
