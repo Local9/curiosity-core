@@ -40,6 +40,8 @@ namespace Curiosity.Context.Client.net
         string dutyMenuText;
         string dutyEventToCall;
 
+        bool trafficStopActive = false;
+
         public Menu()
         {
             _instance = this;
@@ -48,6 +50,7 @@ namespace Curiosity.Context.Client.net
             RegisterEventHandler("curiosity:Player:UI:CinematicMode", new Action(OnCinematicMode));
 
             RegisterEventHandler("curiosity:Client:Context:ShowDutyMenu", new Action<bool, string, string>(OnDutyMenu));
+            RegisterEventHandler("curiosity:Client:Context:TrafficStopActive", new Action<bool>(OnTrafficStopActive));
 
             RegisterNuiEventHandler("disablenuifocus", new Action<dynamic>(DisableNuiFocus));
             RegisterNuiEventHandler("togglelock", new Action<dynamic>(OnToggleLockStatus));
@@ -59,6 +62,11 @@ namespace Curiosity.Context.Client.net
             RegisterNuiEventHandler("vpoRelease", new Action<dynamic>(OnVpoRelease));
 
             RegisterTickHandler(OnTick);
+        }
+
+        void OnTrafficStopActive(bool state)
+        {
+            trafficStopActive = state;
         }
 
         void OnCinematicMode()
@@ -132,6 +140,18 @@ namespace Curiosity.Context.Client.net
         {
             try
             {
+                if (trafficStopActive)
+                {
+                    SetNuiFocus(false, false);
+                    Crosshair(false);
+                    
+                    if (showMenu)
+                        SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = false }));
+
+                    showMenu = false;
+                    return;
+                }
+
                 Entity playerPed = Game.PlayerPed;
 
                 if (Game.PlayerPed.IsAiming || Game.PlayerPed.IsAimingFromCover)
