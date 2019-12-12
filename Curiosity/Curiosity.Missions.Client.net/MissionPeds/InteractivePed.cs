@@ -254,6 +254,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterEventHandler("curiosity:interaction:leaveAllGroups", new Action<int>(OnPedLeaveGroups));
             client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
             client.RegisterEventHandler("curiosity:interaction:stolencar", new Action<int>(OnStolenCar));
+            client.RegisterEventHandler("curiosity:interaction:flagRelease", new Action<int>(OnFlagRelease));
 
             client.RegisterEventHandler("curiosity:setting:group:join", new Action<int>(OnGroupJoin));
             client.RegisterEventHandler("curiosity:setting:group:leave", new Action<int>(OnGroupLeave));
@@ -654,6 +655,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
+        public void OnFlagRelease(int handle)
+        {
+            if (Handle == handle)
+            {
+                _hasBeenReleased = true;
+            }
+        }
+
         async void OnPedLeaveGroups(int handle)
         {
             await BaseScript.Delay(100);
@@ -816,6 +825,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 Ped.Task.LeaveVehicle();
             }
             API.NetworkFadeOutEntity(Handle, true, false);
+            _hasBeenReleased = true;
             await Client.Delay(5000);
             Ped.Delete();
         }
