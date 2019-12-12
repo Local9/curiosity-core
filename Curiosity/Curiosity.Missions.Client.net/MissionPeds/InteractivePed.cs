@@ -254,6 +254,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterEventHandler("curiosity:interaction:leaveAllGroups", new Action<int>(OnPedLeaveGroups));
             client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
             client.RegisterEventHandler("curiosity:interaction:stolencar", new Action<int>(OnStolenCar));
+
+            client.RegisterEventHandler("curiosity:setting:group:join", new Action<int>(OnGroupJoin));
+            client.RegisterEventHandler("curiosity:setting:group:leave", new Action<int>(OnGroupLeave));
             // car stolen
             client.RegisterEventHandler("curiosity:interaction:hasLostId", new Action<int>(OnHasLostId));
 
@@ -361,8 +364,28 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
-        public void Update(EntityEventWrapper entityEventWrapper, Entity entity)
+        public async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
         {
+            if (_hasBeenReleased)
+            {
+                OnPedLeaveGroups(Ped.Handle);
+                OnPedHasBeenReleased(Ped.Handle);
+
+                if (Ped.IsInGroup)
+                    Ped.PedGroup.Delete();
+
+                Ped.LeaveGroup();
+
+                await Client.Delay(100);
+
+                Ped.Task.WanderAround();
+
+                if (Ped.IsOccluded)
+                    base.Delete();
+
+                return;
+            }
+
             if (this.Ped == null)
             {
                 base.Delete();
@@ -432,15 +455,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 OnPedLeaveGroups(Ped.Handle);
                 OnPedHasBeenReleased(Ped.Handle);
-            }
-
-            if (_hasBeenReleased)
-            {
-                OnPedLeaveGroups(Ped.Handle);
-                OnPedHasBeenReleased(Ped.Handle);
-
-                if (Ped.IsInGroup)
-                    Ped.PedGroup.Delete();
             }
         }
 
@@ -617,6 +631,29 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
+        public void OnGroupJoin(int handle)
+        {
+            if (Handle == handle)
+            {
+                int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
+                SetPedAsGroupMember(handle, playerGroupId);
+                SetPedCanTeleportToGroupLeader(handle, playerGroupId, true);
+            }
+        }
+
+        public async void OnGroupLeave(int handle)
+        {
+            await BaseScript.Delay(0);
+            if (Handle == handle)
+            {
+                Ped.Task.ClearAll();
+                Ped.Task.ClearSecondary();
+                Game.PlayerPed.Task.ClearSecondary();
+
+                Ped.LeaveGroup();
+            }
+        }
+
         async void OnPedLeaveGroups(int handle)
         {
             await BaseScript.Delay(100);
@@ -629,6 +666,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             if (Handle == handle)
             {
+                Ped.Task.ClearAll();
+                Ped.Task.ClearSecondary();
+                Game.PlayerPed.Task.ClearSecondary();
+
                 Ped.NeverLeavesGroup = false;
                 Ped.LeaveGroup();
                 API.RemovePedFromGroup(Handle);
@@ -643,7 +684,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
-        private void OnPedHasBeenReleased(int handle)
+        private async void OnPedHasBeenReleased(int handle)
         {
             if (Handle == handle)
             {
@@ -676,6 +717,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                         Ped.AttachedBlip.Delete();
                 }
 
+                Ped.Task.ClearSecondary();
+                Game.PlayerPed.Task.ClearSecondary();
+
                 Ped.Task.ClearAll();
                 Ped.MarkAsNoLongerNeeded();
                 Ped.IsPersistent = false;
@@ -686,13 +730,38 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 API.TaskSetBlockingOfNonTemporaryEvents(Ped.Handle, false);
 
-                DecorSetBool(Handle, Client.NPC_WAS_RELEASED, true);
+                DecorSetBool(Handle, Client.NPC_WAS_RELEASED, _hasBeenReleased);
 
                 client.DeregisterTickHandler(OnMenuTask);
                 client.DeregisterTickHandler(OnShowHelpTextTask);
 
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                     client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+
+                int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
+                RemoveGroup(playerGroupId);
+
+                if (DecorExistOn(Handle, Client.NPC_CURRENT_VEHICLE))
+                {
+                    int vehId = DecorGetInt(Handle, Client.NPC_CURRENT_VEHICLE);
+                    if (DoesEntityExist(vehId))
+                    {
+                        Vehicle vehicle = new Vehicle(vehId);
+                        Ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver, 5000, 5f);
+                        await Client.Delay(5000);
+                        Ped.Task.WanderAround(Ped.Position, 1000f);
+
+                        if (vehicle.AttachedBlip != null)
+                        {
+                            if (vehicle.AttachedBlip.Exists())
+                                vehicle.AttachedBlip.Delete();
+                        }
+                    }
+                }
+                else
+                {
+                    Ped.Task.WanderAround(Ped.Position, 1000f);
+                }
             }
         }
 

@@ -138,8 +138,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                             CitizenFX.Core.Native.API.SetVehicleCanBeUsedByFleeingPeds(v.Handle, false);
                         });
 
-                        interactivePed.Ped.LeaveGroup();
-                        Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
+                        Client.TriggerEvent("curiosity:setting:group:leave", interactivePed.Ped.Handle);
 
                         interactivePed.Ped.Task.ReactAndFlee(Game.PlayerPed);
                     }
@@ -153,7 +152,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             IsAnInteractionActive = false;
         }
 
-        public static void InteractionEnterVehicle(InteractivePed interactivePed)
+        public async static void InteractionEnterVehicle(InteractivePed interactivePed)
         {
             if (!DecorExistOn(interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE)) return;
 
@@ -167,10 +166,18 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 CitizenFX.Core.UI.Screen.ShowNotification($"Vehicle: {vehicle.Handle}");
             }
 
+            interactivePed.Ped.Task.ClearAll();
+            interactivePed.Ped.Task.ClearSecondary();
+
             interactivePed.Ped.LeaveGroup();
             interactivePed.Ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver);
 
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
+            while(!interactivePed.Ped.IsInVehicle())
+            {
+                await BaseScript.Delay(0);
+            }
+            interactivePed.Ped.SetConfigFlag(292, true);
+            interactivePed.Ped.CurrentVehicle.Doors.GetAll().ToList<VehicleDoor>().ForEach(d => d.Close());
         }
 
         public static async void InteractionLeaveVehicle(InteractivePed interactivePed)
@@ -202,14 +209,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             {
                 List<string> driverResponse = new List<string>() { "What's the problem?", "What seems to be the problem, officer?", "Yeah, sure.", "Okay.", "Fine.", "What now?", "Whats up?", "Ummm... O-okay.", "This is ridiculous...", "I'm kind of in a hurry right now.", "Oh what now?!", "No problem.", "Am I being detained?", "Yeah, okay... One moment.", "Okay.", "Uh huh.", "Yep." };
                 Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
-                
+
+                interactivePed.Ped.SetConfigFlag(292, false);
+
                 interactivePed.Ped.Task.LeaveVehicle(LeaveVehicleFlags.None);
                 
                 await BaseScript.Delay(100);
-                int playerGroupId = GetPedGroupIndex(Game.PlayerPed.Handle);
 
-                SetPedAsGroupMember(interactivePed.Ped.Handle, playerGroupId);
-                SetPedCanTeleportToGroupLeader(interactivePed.Ped.Handle, playerGroupId, true);
+                Client.TriggerEvent("curiosity:setting:group:join", interactivePed.Ped.Handle);
             }
         }
     }

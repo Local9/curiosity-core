@@ -1,18 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Wrappers;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Enums.Patrol;
-using Curiosity.Shared.Client.net.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Scripts.Interactions.VehicleInteractions;
+using Curiosity.Shared.Client.net.Enums.Patrol;
+using Curiosity.Shared.Client.net.Extensions;
+using System.Collections.Generic;
 
 namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 {
@@ -114,12 +108,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             await Client.Delay(3000);
             ped.Task.ClearSecondary();
             ped.CanRagdoll = true;
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", ped.Handle);
+            Client.TriggerEvent("curiosity:setting:group:leave", ped.Handle, Game.PlayerPed.PedGroup.Handle);
         }
 
         static public async void InteractionHandcuff(InteractivePed interactivePed)
         {
-            int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
             await Client.Delay(0);
 
             if (interactivePed == null) return;
@@ -144,16 +137,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                     interactivePed.Ped.Task.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
                 }
 
-                API.SetPedAsGroupMember(interactivePed.Ped.Handle, playerGroupId);
                 API.SetEnableHandcuffs(interactivePed.Ped.Handle, true);
-                API.SetPedCanTeleportToGroupLeader(interactivePed.Handle, playerGroupId, true);
-
-                interactivePed.Ped.PedGroup.FormationType = FormationType.Default;
 
                 interactivePed.IsHandcuffed = true;
                 Game.PlayerPed.IsPositionFrozen = false;
 
                 Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.Handle, true);
+                Client.TriggerEvent("curiosity:setting:group:join", interactivePed.Ped.Handle);
             }
             else if (interactivePed != null)
             {
@@ -161,18 +151,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
                 API.AttachEntityToEntity(interactivePed.Handle, Game.PlayerPed.Handle, 11816, 0.0f, 0.65f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
                 await Client.Delay(2000);
-                interactivePed.Ped.LeaveGroup();
                 interactivePed.Detach();
                 interactivePed.Ped.Task.ClearSecondary();
                 Game.PlayerPed.Task.ClearSecondary();
                 interactivePed.Ped.Task.ClearAll();
-                interactivePed.Ped.CanRagdoll = false;
+                interactivePed.Ped.CanRagdoll = true;
                 API.SetBlockingOfNonTemporaryEvents(interactivePed.Ped.Handle, false);
                 Game.PlayerPed.IsPositionFrozen = false;
                 interactivePed.IsHandcuffed = false;
 
                 Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.Handle, false);
-                Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Handle);
+                Client.TriggerEvent("curiosity:setting:group:leave", interactivePed.Ped.Handle);
             }
             else
             {
@@ -252,17 +241,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             await Client.Delay(2000);
             Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
 
-
-            if (interactivePed.Ped.IsInGroup)
-            {
-                interactivePed.Ped.LeaveGroup();
-                interactivePed.Ped.PedGroup.Delete();
-            }
-
             await Client.Delay(0);
             Client.TriggerEvent("curiosity:interaction:released", interactivePed.Ped.Handle);
-            await Client.Delay(0);
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Ped.Handle);
         }
 
         internal static async void InteractionIssueWarning(InteractivePed interactivePed)
@@ -297,16 +277,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Client.Random.Next(DriverResponse.Count)]);
             await Client.Delay(2000);
 
-            if (interactivePed.Ped.IsInGroup)
-            {
-                interactivePed.Ped.LeaveGroup();
-                interactivePed.Ped.PedGroup.Delete();
-            }
-
             await Client.Delay(0);
             Client.TriggerEvent("curiosity:interaction:released", interactivePed.Ped.Handle);
-            await Client.Delay(0);
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", interactivePed.Ped.Handle);
         }
     }
 }

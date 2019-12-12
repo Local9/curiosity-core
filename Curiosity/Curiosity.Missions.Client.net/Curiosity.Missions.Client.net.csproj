@@ -121,10 +121,6 @@
     <Compile Include="Scripts\Interactions\PedInteractions\Social.cs" />
     <Compile Include="Scripts\Police\ArrestPed.cs" />
     <Compile Include="Scripts\MarkerHandler.cs" />
-    <Compile Include="Scripts\Police\MenuHandler\Submenu\TrafficStopInteractions.cs" />
-    <Compile Include="Scripts\Police\MenuHandler\Submenu\TrafficStopQuestions.cs" />
-    <Compile Include="Scripts\Police\MenuHandler\SuspectMenu.cs" />
-    <Compile Include="Scripts\Police\Pullover\Events.cs" />
     <Compile Include="Scripts\Police\TrafficStop.cs" />
     <Compile Include="Scripts\SoundManager.cs" />
     <Compile Include="Scripts\VehicleCreators\CreateVehicles.cs" />
@@ -151,9 +147,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Scripts\Police\Department\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
