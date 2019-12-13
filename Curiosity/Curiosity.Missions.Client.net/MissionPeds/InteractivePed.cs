@@ -50,6 +50,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         public bool HasLostId;
         public bool HasProvidedId;
         public bool HasBeenSearched;
+        public bool HasBeenGrabbed;
         // MENU STATES
         private bool IsCoronerCalled;
         // Settings
@@ -255,6 +256,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
             client.RegisterEventHandler("curiosity:interaction:stolencar", new Action<int>(OnStolenCar));
             client.RegisterEventHandler("curiosity:interaction:flagRelease", new Action<int>(OnFlagRelease));
+            client.RegisterEventHandler("curiosity:interaction:grab", new Action<int>(OnGrabPed));
 
             client.RegisterEventHandler("curiosity:setting:group:join", new Action<int>(OnGroupJoin));
             client.RegisterEventHandler("curiosity:setting:group:leave", new Action<int>(OnGroupLeave));
@@ -784,6 +786,24 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public event InteractivePed.OnAttackingTargetEvent AttackTarget;
         public delegate void OnAttackingTargetEvent(Ped target);
+
+        void OnGrabPed(int handle)
+        {
+            if (handle != Handle) return;
+
+            if (HasBeenGrabbed)
+            {
+                Ped.Detach();
+                HasBeenGrabbed = false;
+            }
+            else if (!HasBeenGrabbed)
+            {
+                Vector3 attachedPos = new Vector3(-0.3f, 0.4f, 0.0f);
+                Ped.AttachTo(Game.PlayerPed, attachedPos);
+                SetBlockingOfNonTemporaryEvents(handle, true);
+                HasBeenGrabbed = true;
+            }
+        }
 
         private async void OnArrest(int handle)
         {

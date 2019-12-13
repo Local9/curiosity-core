@@ -24,6 +24,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
         static MenuItem mItemSearch = new MenuItem("Suspect: Search");
         static MenuItem mItemDrugTest = new MenuItem("Suspect: Drug test");
 
+        static MenuItem mItemGrabPed = new MenuItem("Suspect: Grab");
+
         static MenuItem mItemWarn = new MenuItem("Suspect: Warn");
         static MenuItem mItemRelease = new MenuItem("Suspect: Release");
 
@@ -102,6 +104,20 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             if (menuItem == mItemSearch)
             {
                 Generic.InteractionSearch(_interactivePed);
+                return;
+            }
+
+            if (menuItem == mItemGrabPed)
+            {
+                if (_interactivePed.Position.Distance(Game.PlayerPed.Position) > 2)
+                {
+                    CitizenFX.Core.UI.Screen.ShowNotification("~r~Must be closer to grab the ped");
+                    return;
+                }
+                Client.TriggerEvent("curiosity:interaction:grab", _interactivePed.Handle);
+
+                MenuController.CloseAllMenus();
+                Client.TriggerEvent("curiosity:interaction:closeMenu");
                 return;
             }
 
@@ -201,6 +217,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 mItemSearch.Enabled = !IsInVehicle;
                 mItemSearch.Description = IsInVehicle ? "Suspect must be removed from the vehicle before searching." : string.Empty;
                 menu.AddMenuItem(mItemSearch);
+
+                mItemGrabPed.Text = _interactivePed.HasBeenGrabbed ? "Suspect: Stop Holding" : "Suspect: Grab";
+                menu.AddMenuItem(mItemGrabPed);
 
                 menu.AddMenuItem(mItemWarn);
 
