@@ -142,13 +142,13 @@ namespace Curiosity.Context.Client.net
             {
                 if (trafficStopActive)
                 {
-                    SetNuiFocus(false, false);
                     Crosshair(false);
                     
                     if (showMenu)
                         SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = false }));
 
                     showMenu = false;
+
                     return;
                 }
 
