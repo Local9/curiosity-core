@@ -637,6 +637,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Handle == handle)
             {
                 int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
+
+                if (playerGroupId < 0)
+                {
+                    playerGroupId = API.CreateGroup(0);
+                    SetPedAsGroupMember(playerGroupId, Game.PlayerPed.Handle);
+                    SetPedAsGroupLeader(Game.PlayerPed.Handle, playerGroupId);
+                }
+
                 SetPedAsGroupMember(handle, playerGroupId);
                 SetPedCanTeleportToGroupLeader(handle, playerGroupId, true);
             }
