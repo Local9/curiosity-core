@@ -72,7 +72,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "CharacterRoleCheck", $"{ex}");
+                // Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "CharacterRoleCheck", $"{ex}");
                 Log.Error($"GetActiveCharacterInventory -> {ex.Message}");
             }
         }
@@ -91,7 +91,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch(Exception ex)
             {
-                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetActiveCharacterInventory", $"{ex}");
+                // Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetActiveCharacterInventory", $"{ex}");
                 Log.Error($"GetActiveCharacterInventory -> {ex.Message}");
             }
         }
