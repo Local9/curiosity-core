@@ -52,7 +52,7 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             try
             {
-                List<VehicleSpawnLocation> loc = await Database.DatabaseVehicles.GetVehicleSpawns();
+                List<VehicleSpawnLocation> loc = await Database.DatabaseVehicles.GetVehicleSpawns(Server.serverId);
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(loc);
                 string encodedJson = Encode.StringToBase64(json);
 

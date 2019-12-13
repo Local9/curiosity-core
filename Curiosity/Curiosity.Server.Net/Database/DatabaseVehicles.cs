@@ -17,13 +17,15 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static async Task<List<VehicleSpawnLocation>> GetVehicleSpawns()
+        public static async Task<List<VehicleSpawnLocation>> GetVehicleSpawns(int serverId)
         {
             List<VehicleSpawnLocation> vehicleSpawnLocations = new List<VehicleSpawnLocation>();
 
-            string sql = "CALL curiosity.selVehicleSpawnPoints();";
+            string sql = "CALL curiosity.selVehicleSpawnPoints(@serverId);";
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@serverId", serverId);
 
-            using (var result = mySql.QueryResult(sql))
+            using (var result = mySql.QueryResult(sql, myParams))
             {
                 ResultSet keyValuePairs = await result;
                 await Delay(0);
