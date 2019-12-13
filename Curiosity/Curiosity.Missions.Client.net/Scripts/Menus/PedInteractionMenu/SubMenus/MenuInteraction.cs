@@ -82,7 +82,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 mItemDetainInCurrentVehicle.Enabled = false;
                 await Client.Delay(4000);
                 mItemDetainInCurrentVehicle.Enabled = CanDetainPed();
-                mItemDetainInCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() ? "Remove from Vehicle" : "Detain in Vehicle";
+                mItemDetainInCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() && _interactivePed.Ped.CurrentVehicle == Client.CurrentVehicle ? "Remove from Vehicle" : "Detain in Vehicle";
                 return;
             }
 
