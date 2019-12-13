@@ -83,10 +83,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
             if (state)
             {
+                Client.TriggerEvent("curiosity:Client:Context:TrafficStopActive", true);
                 Police.TrafficStop.Setup();
             }
             else
             {
+                Client.TriggerEvent("curiosity:Client:Context:TrafficStopActive", false);
                 Police.TrafficStop.Dispose();
             }
         }

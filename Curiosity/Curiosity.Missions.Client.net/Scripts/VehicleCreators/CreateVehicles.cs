@@ -21,8 +21,6 @@ namespace Curiosity.Missions.Client.net.Scripts.VehicleCreators
         {
             Screen.ShowNotification($"~b~Traffic Stop: ~w~Initiated");
 
-            Client.TriggerEvent("curiosity:Client:Context:TrafficStopActive", true);
-
             InteractiveVehicle interactiveVehicle;
 
             vehicle.Driver.SetConfigFlag(281, true);
