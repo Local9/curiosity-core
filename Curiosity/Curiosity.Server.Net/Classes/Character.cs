@@ -17,7 +17,7 @@ namespace Curiosity.Server.net.Classes
         {
 
             server.RegisterEventHandler("curiosity:Server:Inventory:GetItems", new Action<CitizenFX.Core.Player>(GetActiveCharacterInventory));
-            // server.RegisterEventHandler("curiosity:Server:Character:RoleCheck", new Action<CitizenFX.Core.Player>(CharacterRoleCheck));
+            server.RegisterEventHandler("curiosity:Server:Character:RoleCheck", new Action<CitizenFX.Core.Player>(CharacterRoleCheck));
             server.RegisterEventHandler("curiosity:Server:Character:Save", new Action<CitizenFX.Core.Player, string>(CharacterSave));
         }
         static void CharacterSave([FromSource]CitizenFX.Core.Player player, string characterData)
