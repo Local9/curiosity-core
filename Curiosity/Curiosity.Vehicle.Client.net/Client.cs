@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Threading.Tasks;
@@ -11,6 +12,9 @@ namespace Curiosity.Vehicle.Client.net
         private static Client _instance;
         public static PlayerList players;
         public static CitizenFX.Core.Vehicle CurrentVehicle;
+
+        // decor
+        public const string PLAYER_VEHICLE = "Player_Vehicle";
 
         public static Client GetInstance()
         {
@@ -29,6 +33,10 @@ namespace Curiosity.Vehicle.Client.net
             RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
 
             Log.Info("Curiosity.Vehicle.Client.net loaded\n");
+
+
+            // Register DECOR
+            DecorRegister(PLAYER_VEHICLE, 3);
         }
 
         static void OnClientResourceStart(string resourceName)

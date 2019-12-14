@@ -19,12 +19,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         Client client = Client.GetInstance();
         CitizenFX.Core.Vehicle _vehicle;
 
-        float maxSpeed;
-
         public SafeZoneVehicle(CitizenFX.Core.Vehicle vehicle)
         {
             _vehicle = vehicle;
-            maxSpeed = API.GetVehicleModelMaxSpeed((uint)_vehicle.Model.Hash);
             client.RegisterTickHandler(DisableCollision);
         }
 
@@ -51,7 +48,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             client.DeregisterTickHandler(DisableCollision);
 
             _vehicle.ResetOpacity();
-            _vehicle.MaxSpeed = maxSpeed;
+            _vehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)_vehicle.Model.Hash);
 
             _vehicle.SetNoCollision(Game.PlayerPed, true);
             Game.Player.Character.SetNoCollision(_vehicle, true);
@@ -82,14 +79,14 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             AreaBox areaBox = new AreaBox();
             areaBox.Angle = 10f;
             areaBox.Pos1 = new Vector3(-1095.472f, -880.6858f, -1f);
-            areaBox.Pos2 = new Vector3(-1033.078f, -840.2169f, 100f);
+            areaBox.Pos2 = new Vector3(-1033.078f, -840.2169f, 50f);
             areaBox.Identifier = $"{SpawnLocations.VespucciPD}";
             safeZones.Add(areaBox);
 
             AreaBox areaBox2 = new AreaBox();
             areaBox2.Angle = 0f;
             areaBox2.Pos1 = new Vector3(392.5307f, -1027.381f, -1f);
-            areaBox2.Pos2 = new Vector3(454.7709f, -966.1293f, 100f);
+            areaBox2.Pos2 = new Vector3(454.7709f, -966.1293f, 50f);
             areaBox2.Identifier = $"MissionRow";
             safeZones.Add(areaBox2);
 

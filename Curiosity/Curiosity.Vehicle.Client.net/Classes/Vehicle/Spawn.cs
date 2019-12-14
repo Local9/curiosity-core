@@ -80,9 +80,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
 
                 await Client.Delay(0);
 
-                if (API.DecorIsRegisteredAsType("Player_Vehicle", 3))
+                if (API.DecorIsRegisteredAsType(Client.PLAYER_VEHICLE, 3))
                 {
-                    API.DecorSetInt(veh.Handle, "Player_Vehicle", Game.Player.ServerId);
+                    API.DecorSetInt(veh.Handle, Client.PLAYER_VEHICLE, Game.Player.ServerId);
                 }
 
                 if (API.DecorIsRegisteredAsType("Vehicle.SirensInstalled", 2) && installSirens)

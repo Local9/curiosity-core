@@ -15,7 +15,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Player
 
         static bool IsSetup = false;
 
-        public static async void Init()
+        public static void Init()
         {
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));

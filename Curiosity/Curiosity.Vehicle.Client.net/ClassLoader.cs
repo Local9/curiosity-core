@@ -1,5 +1,6 @@
 ﻿using Curiosity.Shared.Client.net;
 using System;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Vehicle.Client.net
 {
@@ -34,6 +35,7 @@ namespace Curiosity.Vehicle.Client.net
 
             // Instances
             Classes.Vehicle.Spawn.Init();
+
 
             // MENU
             Classes.Menus.VehicleSpawn.Init();
