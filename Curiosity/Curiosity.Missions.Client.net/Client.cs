@@ -27,6 +27,8 @@ namespace Curiosity.Missions.Client.net
         public const string VEHICLE_IGNORE = "curiosity::vehicle::ignore";
         public const string PLAYER_VEHICLE = "Player_Vehicle";
 
+        public const string TRAFFIC_STOP_VEHICLE_HANDLE = "curiosity::traffic_stop::vehicle_handle";
+
         public static Vehicle CurrentVehicle
         {
             get
@@ -72,6 +74,7 @@ namespace Curiosity.Missions.Client.net
             RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperVehUI", new Action<bool>(OnShowDeveloperVehUi));
 
             API.DecorRegister(NPC_CURRENT_VEHICLE, 3); // int
+            API.DecorRegister(TRAFFIC_STOP_VEHICLE_HANDLE, 3);
             API.DecorRegister(NPC_ARRESTED, 2); // bool
             API.DecorRegister(NPC_WAS_RELEASED, 2);
             API.DecorRegister(NPC_ACTIVE_TRAFFIC_STOP, 2);

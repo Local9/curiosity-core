@@ -49,21 +49,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 if (vehToRemove != null)
                 {
 
-                    bool IsPlayerRelated = false;
+                    int tfVehHandle = DecorGetInt(vehToRemove.Handle, Client.TRAFFIC_STOP_VEHICLE_HANDLE);
 
-                    if (DecorGetBool(vehToRemove.Handle, Client.PLAYER_VEHICLE)) IsPlayerRelated = true;
-                    if (vehToRemove == Client.CurrentVehicle) IsPlayerRelated = true;
-
-                    if (DecorExistOn(vehToRemove.Handle, "Player_Vehicle"))
-                    {
-                        if (DecorGetBool(vehToRemove.Handle, "Player_Vehicle")) IsPlayerRelated = true;
-                    }
-
-                    if (IsPlayerRelated)
-                    {
-                        CitizenFX.Core.UI.Screen.ShowNotification($"~r~Vehicle is owned by a Player.");
-                        return;
-                    }
+                    if (vehToRemove.Handle != tfVehHandle) return;
 
                     if (vehToRemove.Driver != null)
                     {

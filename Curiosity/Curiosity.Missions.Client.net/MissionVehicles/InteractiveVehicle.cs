@@ -183,6 +183,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 client.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
+            DecorSetInt(Handle, Client.TRAFFIC_STOP_VEHICLE_HANDLE, Handle);
+
             // Should we do anything?
             if (_chanceOfFlee == 29)
             {
