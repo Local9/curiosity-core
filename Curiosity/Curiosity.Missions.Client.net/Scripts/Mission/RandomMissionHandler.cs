@@ -131,7 +131,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 Log.Info($"JOB: {job}");
 
                 if (_IsArrestActive)
-                    //Police.ArrestPed.Dispose();
+                    Police.ArrestPed.Dispose();
 
                 if (_IsTrafficStopActive)
                     Police.TrafficStop.Dispose();
