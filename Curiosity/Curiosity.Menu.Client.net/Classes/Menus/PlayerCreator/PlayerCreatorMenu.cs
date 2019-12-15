@@ -214,7 +214,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerCreator
                 }
             };
 
-            MenuBase.AddSubMenu(menu);
+            MenuBase.AddSubMenu(menu, leftIcon: MenuItem.Icon.INV_PERSON);
 
             MenuSetup = true;
         }

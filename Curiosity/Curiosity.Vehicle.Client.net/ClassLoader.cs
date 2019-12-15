@@ -18,14 +18,14 @@ namespace Curiosity.Vehicle.Client.net
 
             Classes.Player.PlayerInformation.Init();
 
-            Classes.Vehicle.BrakeSignals.Init();
-            Classes.Vehicle.CruiseControl.Init();
+            Classes.CuriosityVehicle.BrakeSignals.Init();
+            Classes.CuriosityVehicle.CruiseControl.Init();
             // Classes.Vehicle.DisableAirControls.Init();
-            Classes.Vehicle.EngineManager.Init();
-            Classes.Vehicle.FuelManager.Init();
-            Classes.Vehicle.VehicleDamage.Init();
-            Classes.Vehicle.DeleteVehicle.Init();
-            Classes.Vehicle.VehicleBlip.Init();
+            Classes.CuriosityVehicle.EngineManager.Init();
+            Classes.CuriosityVehicle.FuelManager.Init();
+            Classes.CuriosityVehicle.VehicleDamage.Init();
+            Classes.CuriosityVehicle.DeleteVehicle.Init();
+            Classes.CuriosityVehicle.VehicleBlip.Init();
 
             // Environment
             Classes.Environment.VehicleSpawnMarkerHandler.Init();
@@ -34,7 +34,7 @@ namespace Curiosity.Vehicle.Client.net
             Classes.Environment.ChatCommands.Init();
 
             // Instances
-            Classes.Vehicle.Spawn.Init();
+            Classes.CuriosityVehicle.Spawn.Init();
 
             // MENU
             Classes.Menus.VehicleSpawn.Init();

@@ -3,7 +3,7 @@ using Curiosity.Global.Shared.net;
 using System;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
+namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 {
     class DeleteVehicle
     {

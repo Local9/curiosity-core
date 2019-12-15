@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using CitizenFX.Core;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
+namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 {
     class VehicleBlip
     {

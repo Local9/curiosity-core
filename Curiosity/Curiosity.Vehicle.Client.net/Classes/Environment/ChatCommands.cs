@@ -7,7 +7,7 @@ using CitizenFX.Core.UI;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using static CitizenFX.Core.Native.API;
-using Curiosity.Vehicle.Client.net.Classes.Vehicle;
+using Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Environment
 {

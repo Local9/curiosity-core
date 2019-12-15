@@ -56,6 +56,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                     mitem.Description = description;
                     mitem.Label = "→→→";
                     mitem.RightIcon = MenuItem.Icon.NONE;
+                    mitem.LeftIcon = MenuItem.Icon.STAR;
                 };
             });            
         }

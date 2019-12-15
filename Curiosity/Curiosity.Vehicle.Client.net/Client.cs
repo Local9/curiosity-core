@@ -13,6 +13,9 @@ namespace Curiosity.Vehicle.Client.net
         public static PlayerList players;
         public static CitizenFX.Core.Vehicle CurrentVehicle;
 
+        public static RelationshipGroup PlayerRelationshipGroup;
+        public static RelationshipGroup MechanicRelationshipGroup;
+
         // decor
         public const string PLAYER_VEHICLE = "Player_Vehicle";
 
@@ -29,6 +32,9 @@ namespace Curiosity.Vehicle.Client.net
 
             ClassLoader.Init();
 
+            PlayerRelationshipGroup = World.AddRelationshipGroup("PLAYER");
+            MechanicRelationshipGroup = World.AddRelationshipGroup("MECH");
+
             RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
             RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
 
@@ -44,6 +50,8 @@ namespace Curiosity.Vehicle.Client.net
             if (API.GetCurrentResourceName() != resourceName) return;
 
             Client.TriggerEvent("curiosity:Client:Player:Information");
+
+            Game.PlayerPed.RelationshipGroup = PlayerRelationshipGroup;
 
             if (Game.PlayerPed.IsInVehicle())
             {

@@ -195,6 +195,8 @@ namespace Curiosity.Server.net.Business
 
                 GlobalEntity.User user = await Database.DatabaseUsers.GetUser(license, player);
 
+                Log.Info($"Queue Player Connecting: {player.Name} ({user.RoleId})");
+
                 await Server.Delay(10);
 
                 if (user.Banned)
@@ -207,7 +209,7 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
-                if ((user.RoleId == 1 || user.RoleId == 9) && !Server.isLive)
+                if (user.QueuePriority == 0 && !Server.isLive)
                 {
                     deferrals.done($"Server is currently in maintaince.");
                     return;

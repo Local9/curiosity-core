@@ -56,20 +56,20 @@
     <Compile Include="Classes\Menus\MenuBaseFunctions.cs" />
     <Compile Include="Classes\Menus\VehicleSpawn.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
-    <Compile Include="Classes\Vehicle\DeleteVehicle.cs" />
-    <Compile Include="Classes\Vehicle\Spawn.cs" />
-    <Compile Include="Classes\Vehicle\VehicleBlip.cs" />
+    <Compile Include="Classes\CuriosityVehicle\DeleteVehicle.cs" />
+    <Compile Include="Classes\CuriosityVehicle\Spawn.cs" />
+    <Compile Include="Classes\CuriosityVehicle\VehicleBlip.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Models\FuelPump.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\Vehicle\BrakeSignals.cs" />
-    <Compile Include="Classes\Vehicle\CruiseControl.cs" />
-    <Compile Include="Classes\Vehicle\DisableAirControls.cs" />
-    <Compile Include="Classes\Vehicle\EngineManager.cs" />
-    <Compile Include="Classes\Vehicle\FuelManager.cs" />
-    <Compile Include="Classes\Vehicle\VehicleDamage.cs" />
-    <Compile Include="Classes\Vehicle\VehiclePack.cs" />
+    <Compile Include="Classes\CuriosityVehicle\BrakeSignals.cs" />
+    <Compile Include="Classes\CuriosityVehicle\CruiseControl.cs" />
+    <Compile Include="Classes\CuriosityVehicle\DisableAirControls.cs" />
+    <Compile Include="Classes\CuriosityVehicle\EngineManager.cs" />
+    <Compile Include="Classes\CuriosityVehicle\FuelManager.cs" />
+    <Compile Include="Classes\CuriosityVehicle\VehicleDamage.cs" />
+    <Compile Include="Classes\CuriosityVehicle\VehiclePack.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">

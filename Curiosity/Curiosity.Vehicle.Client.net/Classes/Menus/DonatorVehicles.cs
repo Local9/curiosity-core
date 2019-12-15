@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Client.net;
@@ -7,6 +8,8 @@ using MenuAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle;
+using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Menus
 {
@@ -14,6 +17,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
     {
         static Menu donatorVehicleMenu;
         static Client client = Client.GetInstance();
+
+        static Random random = new Random();
 
         public static void Init()
         {
@@ -105,6 +110,17 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         {
             try
             {
+                menu.CloseMenu();
+
+                if (Client.CurrentVehicle != null)
+                {
+                    if (Client.CurrentVehicle.Exists() && Client.CurrentVehicle.Position.Distance(Game.PlayerPed.Position) < 300f)
+                    {
+                        Screen.ShowNotification("~r~Sorry, you currently have a vehicle out or close by.");
+                        return;
+                    }
+                }
+
                 Model model = null;
                 VehicleItem vehicleItem = menuItem.ItemData;
                 string car = vehicleItem.VehicleHashString;
@@ -167,18 +183,71 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                     modelName = car;
                 }
 
+                
 
-
-                Vector3 positionToSpawn = new Vector3(vehicleItem.SpawnPositionX, vehicleItem.SpawnPositionY, vehicleItem.SpawnPositionZ);
-
-                bool spawnSuccess = await Vehicle.Spawn.SpawnVehicle(model, positionToSpawn, vehicleItem.SpawnHeading, vehicleItem.InstallSirens);
-
-                if (!spawnSuccess)
+                Vector3 outPos = new Vector3();
+                if (GetNthClosestVehicleNode(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, 3, ref outPos, 0, 0, 0))
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Sorry...", "It took too long to load the vehicle or a cooldown is active, please try again later.", 2);
-                    return;
-                }
+                    Vector3 spawningPosition = new Vector3();
+                    float heading = 0f;
+                    int u = 0;
 
+                    if (GetNthClosestVehicleNodeWithHeading(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, random.Next(200, 300), ref spawningPosition, ref heading, ref u, 9, 3.0f, 2.5f))
+                    {
+                        Vector3 safespaceOut = new Vector3();
+                        if (GetSafeCoordForPed(spawningPosition.X, spawningPosition.Y, spawningPosition.Z, true, ref safespaceOut, 16))
+                        {
+                            spawningPosition = safespaceOut;
+                        }
+
+                        CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, spawningPosition, vehicleItem.SpawnHeading, vehicleItem.InstallSirens);
+
+                        Model mechanic = PedHash.Xmech01SMY;
+                        await mechanic.Request(10000);
+                        Ped ped = await World.CreatePed(mechanic, spawningPosition + new Vector3(0f, 0f, 5f));
+                        mechanic.MarkAsNoLongerNeeded();
+
+                        TaskSetBlockingOfNonTemporaryEvents(ped.Handle, true);
+
+                        ped.RelationshipGroup = Client.MechanicRelationshipGroup;
+
+                        ped.RelationshipGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Like, true);
+
+                        ped.Task.ClearAll();
+
+                        ped.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
+                        TaskVehiclePark(ped.Handle, spawnedVechicle.Handle, outPos.X, outPos.Y, outPos.Z, 0f, 3, 60f, true);
+
+                        await BaseScript.Delay(10000);
+
+                        while (spawnedVechicle.Position.Distance(outPos) >= 3f)
+                        {
+                            await BaseScript.Delay(0);
+
+                            if (Game.PlayerPed.Position.Distance(spawnedVechicle.Position) < 5f)
+                                break;
+                        }
+
+                        SetVehicleHalt(spawnedVechicle.Handle, 3f, 0, false);
+
+                        spawnedVechicle.SoundHorn(250);
+                        await BaseScript.Delay(250);
+                        spawnedVechicle.SoundHorn(250);
+                        await BaseScript.Delay(250);
+
+                        spawnedVechicle.IsPositionFrozen = true;
+                        TaskLeaveVehicle(ped.Handle, spawnedVechicle.Handle, 1);
+
+                        await BaseScript.Delay(200);
+                        spawnedVechicle.IsPositionFrozen = false;
+                        spawnedVechicle.IsStolen = false;
+                        spawnedVechicle.IsWanted = false;
+
+                        ped.Task.WanderAround();
+
+                        ped.MarkAsNoLongerNeeded();
+                    }
+                }               
 
             }
             catch (Exception ex)

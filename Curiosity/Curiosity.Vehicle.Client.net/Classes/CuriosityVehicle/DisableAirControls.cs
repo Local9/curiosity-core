@@ -2,7 +2,7 @@
 using Curiosity.Shared.Client.net.Helper;
 using System.Threading.Tasks;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
+namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 {
     static class DisableAirControls
     {

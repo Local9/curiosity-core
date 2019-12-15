@@ -7,6 +7,7 @@ using MenuAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Menus
 {
@@ -189,7 +190,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
                 Vector3 positionToSpawn = new Vector3(vehicleItem.SpawnPositionX, vehicleItem.SpawnPositionY, vehicleItem.SpawnPositionZ);
 
-                bool spawnSuccess = await Vehicle.Spawn.SpawnVehicle(model, positionToSpawn, vehicleItem.SpawnHeading, vehicleItem.InstallSirens);
+                bool spawnSuccess = await Spawn.SpawnVehicle(model, positionToSpawn, vehicleItem.SpawnHeading, vehicleItem.InstallSirens);
 
                 if (!spawnSuccess)
                 {

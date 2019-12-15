@@ -7,7 +7,7 @@ using Curiosity.Shared.Client.net.Helper;
 using CitizenFX.Core;
 using CitizenFX.Core.UI;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Vehicle
+namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 {
     class CruiseControl
     {
