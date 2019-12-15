@@ -16,6 +16,11 @@ namespace Curiosity.Vehicle.Client.net
         public static RelationshipGroup PlayerRelationshipGroup;
         public static RelationshipGroup MechanicRelationshipGroup;
 
+        public static string STAFF_LICENSE_PLATE = "LV0STAFF";
+        public static string HSTAFF_LICENSE_PLATE = "LV0HSTAF";
+        public static string DEV_LICENSE_PLATE = "LIFEVDEV";
+        public const string TROUBLE_LICENSE_PLATE = "TROUBLES";
+
         // decor
         public const string PLAYER_VEHICLE = "Player_Vehicle";
 

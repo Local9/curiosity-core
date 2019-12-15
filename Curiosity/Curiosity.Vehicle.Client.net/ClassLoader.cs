@@ -32,6 +32,7 @@ namespace Curiosity.Vehicle.Client.net
             Classes.Environment.BlipHandler.Init();
             Classes.Environment.SafeZone.Init();
             Classes.Environment.ChatCommands.Init();
+            Classes.Environment.VehicleTicks.Init();
 
             // Instances
             Classes.CuriosityVehicle.Spawn.Init();
