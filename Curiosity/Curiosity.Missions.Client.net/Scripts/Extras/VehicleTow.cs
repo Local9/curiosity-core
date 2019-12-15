@@ -49,9 +49,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                 if (vehToRemove != null)
                 {
 
-                    int tfVehHandle = DecorGetInt(vehToRemove.Handle, Client.TRAFFIC_STOP_VEHICLE_HANDLE);
+                    int tfVehHandle = 0;
+                    
+                    if (DecorIsRegisteredAsType(Client.NPC_ACTIVE_TRAFFIC_STOP, 3))
+                        tfVehHandle = DecorGetInt(vehToRemove.Handle, Client.TRAFFIC_STOP_VEHICLE_HANDLE);
 
-                    if (vehToRemove.Handle != tfVehHandle) return;
+                    if (tfVehHandle == 0)
+                    {
+                        CitizenFX.Core.UI.Screen.ShowNotification("~o~Vehicle was not found or wasn't in a traffic stop.");
+                        return;
+                    }
 
                     if (vehToRemove.Driver != null)
                     {
