@@ -121,7 +121,7 @@ namespace Curiosity.Server.net
             }
 
             API.SetConvarServerInfo("Map", $"Los Santos");
-            API.SetConvarServerInfo("Curiosity", $"v1.0.0.");
+            API.SetConvarServerInfo("Curiosity", $"v1.0.0.1548");
 
             Business.BusinessUser.BanManagement();
 
