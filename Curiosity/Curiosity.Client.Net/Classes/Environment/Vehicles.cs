@@ -19,7 +19,7 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             client.RegisterEventHandler("curiosity:Client:Vehicles:Remove", new Action<int>(OnVehicleRemove));
             client.RegisterTickHandler(OnVehicleEnterTick);
-            // client.RegisterTickHandler(InsideVehicleTick);
+            client.RegisterTickHandler(InsideVehicleTick);
         }
 
         static async void OnVehicleRemove(int vehicleHandle)
@@ -127,7 +127,7 @@ namespace Curiosity.Client.net.Classes.Environment
             await Task.FromResult(0);
         }
 
-        static async Task InsideVehicleTick() // No longer required
+        static async Task InsideVehicleTick()
         {
             await Task.FromResult(0);
             if (Game.PlayerPed.IsInVehicle())
