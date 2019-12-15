@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core.UI;
 using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Vehicle.Client.net.Classes.Vehicle;
 
@@ -19,6 +20,26 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string, string>(SpawnCar));
 
             RegisterCommand("sirens", new Action<int, List<object>, string>(SirensCommand), false);
+            RegisterCommand("vf", new Action<int, List<object>, string>(OnVehicleForceSpawn), false);
+        }
+
+        static async void OnVehicleForceSpawn(int playerHandle, List<object> arguments, string raw)
+        {
+            try
+            {
+                if (!Player.PlayerInformation.IsDeveloper()) return;
+
+                string prop = "xs_prop_arena_drone_01";
+
+                Model model = new Model(prop);
+                await model.Request(10000);
+                await World.CreateProp(model, Game.PlayerPed.Position + new Vector3(0f, 5f, 0f), true, true);
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{ex}");
+            }
         }
 
 
