@@ -42,7 +42,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
             if (!player.Character.IsVisible) return false;
 
-            if (API.IsEntityVisible(player.Character.Handle)) return false;
+            if (!API.IsEntityVisible(player.Character.Handle)) return false;
 
             if (!player.Character.IsInVehicle())
             {
