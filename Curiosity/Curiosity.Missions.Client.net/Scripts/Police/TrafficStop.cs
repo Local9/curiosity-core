@@ -56,7 +56,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 client.RegisterTickHandler(OnShowLoading);
                 client.RegisterTickHandler(OnDeveloperData);
 
-                client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
+                client.RegisterEventHandler("curiosity:interaction:vehicle:towed", new Action<int>(OnVehicleHasBeenTowed));
 
                 Screen.ShowNotification("~b~Traffic Stops~s~: ~g~Enabled");
             }
@@ -217,6 +217,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                                 if (Game.IsControlJustPressed(0, Control.Pickup))
                                 {
+                                    if (!NetworkRequestControlOfEntity(targetVehicle.Handle)) return;
+
                                     targetVehicle.AttachedBlip.IsFlashing = false;
                                     awaitingPullover = false;
                                     isConductingPullover = true;
@@ -315,15 +317,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             client.DeregisterTickHandler(OnCooldownTask);
         }
 
-        private static void OnPedHasBeenReleased(int handle)
+        private static void OnVehicleHasBeenTowed(int handle)
         {
             API.SetUserRadioControlEnabled(true);
 
-            if (_vehicle.Driver.Handle == handle)
+            if (_vehicle.Handle == handle)
             {
                 client.RegisterTickHandler(OnCooldownTask);
-                isConductingPullover = false;
-                _vehicle.Driver.LeaveGroup();
             }
         }
     }

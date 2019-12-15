@@ -91,7 +91,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
             string encodedString = Encode.StringToBase64($"{vehToRemove.NetworkId}");
             string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
-
+            BaseScript.TriggerEvent("curiosity:interaction:vehicle:towed", vehToRemove.Handle);
             Reset(true);
         }
 
