@@ -275,10 +275,10 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
                 Vector3 outPos = new Vector3();
                 Screen.ShowNotification("The NPC will find a suitable place to park and then stop, please wait.");
-                if (GetNthClosestVehicleNode(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, 3, ref outPos, 0, 0, 0))
+                if (GetNthClosestVehicleNode(InteractivePed.Position.X, InteractivePed.Position.Y, InteractivePed.Position.Z, 3, ref outPos, 0, 0, 0))
                 {
-                    ClearPedTasks(Game.PlayerPed.Handle);
-                    TaskVehiclePark(Game.PlayerPed.Handle, Handle, outPos.X, outPos.Y, outPos.Z, Game.PlayerPed.Heading, 3, 60f, true);
+                    ClearPedTasks(InteractivePed.Handle);
+                    TaskVehiclePark(InteractivePed.Handle, Handle, outPos.X, outPos.Y, outPos.Z, InteractivePed.Heading, 3, 60f, true);
                     while (Vehicle.Position.DistanceToSquared2D(outPos) > 3f)
                     {
                         await BaseScript.Delay(0);
@@ -341,10 +341,10 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         private async void TaskStopVehicle()
         {
             Vector3 outPos = new Vector3();
-            if (GetNthClosestVehicleNode(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, 3, ref outPos, 0, 0, 0))
+            if (GetNthClosestVehicleNode(InteractivePed.Position.X, InteractivePed.Position.Y, InteractivePed.Position.Z, 3, ref outPos, 0, 0, 0))
             {
-                ClearPedTasks(Game.PlayerPed.Handle);
-                TaskVehiclePark(Game.PlayerPed.Handle, Handle, outPos.X, outPos.Y, outPos.Z, Game.PlayerPed.Heading, 3, 60f, true);
+                ClearPedTasks(InteractivePed.Handle);
+                TaskVehiclePark(InteractivePed.Handle, Handle, outPos.X, outPos.Y, outPos.Z, InteractivePed.Heading, 3, 60f, true);
                 while (Vehicle.Position.DistanceToSquared2D(outPos) > 3f)
                 {
                     await BaseScript.Delay(0);
