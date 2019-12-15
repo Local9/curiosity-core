@@ -94,5 +94,36 @@ namespace Curiosity.Server.net.Database
             }
             return vehicleItems;
         }
+
+        public static async Task<List<VehicleItem>> GetVehiclesForDonators()
+        {
+            List<VehicleItem> vehicleItems = new List<VehicleItem>();
+
+            string sql = "CALL curiosity.selVehiclesForDonators(@serverId);";
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@serverId", Server.serverId);
+
+            using (var result = mySql.QueryResult(sql, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+                await Delay(0);
+                if (keyValuePairs.Count == 0)
+                {
+                    return vehicleItems;
+                }
+
+                foreach (Dictionary<string, object> k in keyValuePairs)
+                {
+                    VehicleItem vehicleItem = new VehicleItem
+                    {
+                        Name = $"{k["vehicleLabel"]}",
+                        VehicleHashString = $"{k["vehicleHash"]}",
+                        InstallSirens = $"{k["installSirens"]}" == "1"
+                    };
+                    vehicleItems.Add(vehicleItem);
+                }
+            }
+            return vehicleItems;
+        }
     }
 }

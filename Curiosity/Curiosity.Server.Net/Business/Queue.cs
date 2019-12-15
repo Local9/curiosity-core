@@ -204,11 +204,13 @@ namespace Curiosity.Server.net.Business
                         time = "permanently.";
 
                     deferrals.done(string.Format($"{messages[Messages.Banned]}", time));
+                    return;
                 }
 
                 if ((user.RoleId == 1 || user.RoleId == 9) && !Server.isLive)
                 {
                     deferrals.done($"Server is currently in maintaince.");
+                    return;
                 }
 
                 if (sentLoading.ContainsKey(license))
