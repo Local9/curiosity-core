@@ -24,7 +24,8 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static bool IsOnFoot = false;
         static bool IsPackageInCar = false;
-        static bool SuckCooldownActive = false;
+        static bool StuckCooldownActive = false;
+        static bool TennisMode = false;
 
         static Dictionary<string, string> scenarios = new Dictionary<string, string>()
         {
@@ -141,6 +142,8 @@ namespace Curiosity.Client.net.Classes.Actions
 
             API.RegisterCommand("report", new Action<int, List<object>, string>(ReportingNotification), false);
 
+            API.RegisterCommand("tennis", new Action<int, List<object>, string>(OnTennisMode), false);
+
             // API.RegisterCommand("minigame", new Action<int, List<object>, string>(OnMinigame), false);
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
 
@@ -178,6 +181,30 @@ namespace Curiosity.Client.net.Classes.Actions
 
             }), false);
         }
+
+        static void OnTennisMode(int playerHandle, List<object> arguments, string raw)
+        {
+            if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER) return;
+
+            TennisMode = !TennisMode;
+            EnableTennisMode(Game.PlayerPed.Handle, TennisMode, Game.PlayerPed.Gender == Gender.Female);
+        }
+
+        //static async Task OnTennisModeTask()
+        //{
+        //    await Task.FromResult(0);
+        //    //if (!TennisMode) return;
+
+        //    //if (Game.IsControlJustPressed(0, Control.ScriptRDown)) // left mouse button
+        //    //{
+        //    //    PlayTennisSwingAnim(Game.PlayerPed.Task, "TENNIS_PLYR_FOREARM_MASTER", "TENNIS_NPC_FOREARM_MASTER", );
+        //    //}
+
+        //    //if (Game.IsControlJustPressed(0, Control.ScriptRRight)) // right mouse button
+        //    //{
+        //    //    PlayTennisDiveAnim(Game.PlayerPed.Handle, )
+        //    //}
+        //}
 
         static void OnVoiceChange(int playerHandle, List<object> arguments, string raw)
         {
@@ -370,7 +397,7 @@ namespace Curiosity.Client.net.Classes.Actions
         {
             if (Game.PlayerPed.IsDead) return;
 
-            if (SuckCooldownActive)
+            if (StuckCooldownActive)
             {
                 Screen.ShowNotification("~b~Stuck Cooldown: ~r~Active");
                 return;
@@ -389,7 +416,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
             long gametimer = API.GetGameTimer();
 
-            SuckCooldownActive = true;
+            StuckCooldownActive = true;
 
             Screen.Fading.FadeIn(500);
             
@@ -406,7 +433,7 @@ namespace Curiosity.Client.net.Classes.Actions
             }
 
             Screen.ShowNotification("~b~Stuck Cooldown: ~g~Ended");
-            SuckCooldownActive = false;
+            StuckCooldownActive = false;
         }
 
         static void ReportingNotification(int playerHandle, List<object> arguments, string raw)
