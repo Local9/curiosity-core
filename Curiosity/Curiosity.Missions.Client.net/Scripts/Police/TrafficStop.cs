@@ -45,6 +45,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         public static void Setup()
         {
+            loadingMessage = string.Empty; // Because it showed some wierd shit.
+
             int policeXp = Classes.PlayerClient.ClientInformation.playerInfo.Skills["policexp"].Value;
             int knowledge = Classes.PlayerClient.ClientInformation.playerInfo.Skills["knowledge"].Value;
             if (policeXp >= 2500 && knowledge >= 1000)
@@ -72,6 +74,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             client.DeregisterTickHandler(OnDeveloperData);
             isConductingPullover = false;
+
+            loadingMessage = string.Empty;
 
             Screen.ShowNotification("~b~Traffic Stops~s~: ~r~Disabled");
             Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
