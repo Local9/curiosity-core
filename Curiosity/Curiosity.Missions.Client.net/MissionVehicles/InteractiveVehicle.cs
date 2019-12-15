@@ -273,21 +273,19 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
                 _vehicleStopped = false;
 
-                Vector3 offset = new Vector3(2.5f, 40f, 0f);
-                Vector3 sidewalk = World.GetSafeCoordForPed(this.Vehicle.GetOffsetPosition(offset));
-
-                if (sidewalk == Vector3.Zero)
+                Vector3 outPos = new Vector3();
+                Screen.ShowNotification("The NPC will find a suitable place to park and then stop, please wait.");
+                if (GetNthClosestVehicleNode(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, 3, ref outPos, 0, 0, 0))
                 {
-                    sidewalk = this.Vehicle.GetOffsetPosition(offset);
-                }
-
-                this.InteractivePed.Ped.Task.DriveTo(this.Vehicle, sidewalk, 4f, 5f);
-
-                Screen.ShowNotification("Vehicle moving to a new location");
-
-                while (this.Vehicle.Position.Distance(sidewalk) >= 5f)
-                {
-                    await BaseScript.Delay(10);
+                    ClearPedTasks(Game.PlayerPed.Handle);
+                    TaskVehiclePark(Game.PlayerPed.Handle, Handle, outPos.X, outPos.Y, outPos.Z, Game.PlayerPed.Heading, 3, 60f, true);
+                    while (Vehicle.Position.DistanceToSquared2D(outPos) > 3f)
+                    {
+                        await BaseScript.Delay(0);
+                    }
+                    SetVehicleHalt(Handle, 3f, 0, false);
+                    ClearPedTasks(InteractivePed.Handle);
+                    Screen.ShowNotification("The NPC has stopped moving.");
                 }
 
                 _vehicleStopped = true;
