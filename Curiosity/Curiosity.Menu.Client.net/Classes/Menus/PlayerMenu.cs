@@ -23,7 +23,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             bool scale = API.GetResourceKvpString("curiosity:minimap:scale") == "large";
             API.SetBigmapActive(scale, scale);
 
-            MenuBase.AddSubMenu(menu);
+            MenuBase.AddSubMenu(menu, leftIcon: MenuItem.Icon.INV_PERSON);
 
             menu.OnMenuOpen += (_menu) => {
 

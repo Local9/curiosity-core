@@ -237,11 +237,6 @@ namespace Curiosity.Client.net.Classes.Environment
                         Log.Verbose("Vehicle trying to enter is not the drivers seat");
                 }
             }
-            else
-            {
-                if (Player.PlayerInformation.IsDeveloper())
-                    Log.Verbose("Vehicle trying to enter did not return a handle");
-            }
         }
 
         static void SentNotification()

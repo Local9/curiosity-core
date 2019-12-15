@@ -38,7 +38,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             MainVehicleMenu.OnItemSelect += OnMainMenuOnItemSelect;
             MainVehicleMenu.OnCheckboxChange += OnMainMenuOnCheckboxChange;
 
-            MenuBase.AddSubMenu(MainVehicleMenu);
+            MenuBase.AddSubMenu(MainVehicleMenu, leftIcon: MenuItem.Icon.INV_CAR);
         }
 
         private static void OnMainMenuOpen(Menu menu)

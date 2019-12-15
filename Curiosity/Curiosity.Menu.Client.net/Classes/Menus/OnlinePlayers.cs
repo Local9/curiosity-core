@@ -83,7 +83,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 _menu.ClearMenuItems();
             };
 
-            MenuBase.AddSubMenu(menu);
+            MenuBase.AddSubMenu(menu, leftIcon: MenuItem.Icon.INV_PERSON);
         }
 
         private static void OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)

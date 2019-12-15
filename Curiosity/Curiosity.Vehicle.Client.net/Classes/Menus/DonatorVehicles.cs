@@ -10,47 +10,54 @@ using System.Linq;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Menus
 {
-    class VehicleSpawn
+    class DonatorVehicles
     {
-        static Menu menu;
+        static Menu donatorVehicleMenu;
         static Client client = Client.GetInstance();
-        static Random random = new Random();
 
         public static void Init()
         {
-            client.RegisterEventHandler("curiosity:Client:Vehicle:VehicleList", new Action<string>(OnUpdateMenu));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:OpenDonatorVehicles", new Action(OpenMenu));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:DonatorVehicleList", new Action<string>(OnUpdateMenu));
+            
+            MenuController.DontOpenAnyMenu = true;
         }
 
-        public static void OpenMenu(int spawnId)
+        public static void OpenMenu()
         {
             MenuController.DontOpenAnyMenu = false;
-            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleList", spawnId);
 
-            if (menu == null)
+            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetDonatorVehicleList");
+
+            if (donatorVehicleMenu == null)
             {
-                menu = new Menu("Vehicle Spawn", "Select a vehicle");
-                menu.OnMenuOpen += Menu_OnMenuOpen;
-                menu.OnMenuClose += Menu_OnMenuClose;
-                menu.OnItemSelect += Menu_OnItemSelect;
+                donatorVehicleMenu = new Menu("Donator Vehicles", "Select a vehicle");
+                donatorVehicleMenu.OnMenuOpen += Menu_OnMenuOpen;
+                donatorVehicleMenu.OnMenuClose += Menu_OnMenuClose;
+                donatorVehicleMenu.OnItemSelect += Menu_OnItemSelect;
 
-                MenuController.AddMenu(menu);
                 MenuController.EnableMenuToggleKeyOnController = false;
                 MenuController.EnableManualGCs = false;
+
+                MenuController.AddMenu(donatorVehicleMenu);
             }
 
-            menu.ClearMenuItems();
-            menu.OpenMenu();
+            donatorVehicleMenu.ClearMenuItems();
+            donatorVehicleMenu.OpenMenu();
         }
+
+
 
         public static void CloseMenu()
         {
-            if (menu != null)
-                menu.CloseMenu();
+            if (donatorVehicleMenu != null)
+                donatorVehicleMenu.CloseMenu();
         }
 
         private static void Menu_OnMenuClose(Menu menu)
         {
             MenuController.DontOpenAnyMenu = true;
+
             menu.ClearMenuItems();
             MenuBaseFunctions.MenuClose();
         }
@@ -67,7 +74,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             string skillDesc = string.Empty;
             try
             {
-                menu.ClearMenuItems();
+                donatorVehicleMenu.ClearMenuItems();
 
                 string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
                 List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
@@ -77,47 +84,20 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                     VehicleItem refVeh = vehicleItems[0];
                     VehicleItem dev = new VehicleItem();
                     dev.InstallSirens = false;
-                    dev.SpawnHeading = refVeh.SpawnHeading;
-                    dev.SpawnPositionX = refVeh.SpawnPositionX;
-                    dev.SpawnPositionY = refVeh.SpawnPositionY;
-                    dev.SpawnPositionZ = refVeh.SpawnPositionZ;
                     dev.VehicleHashString = "tezeract";
 
-                    menu.AddMenuItem(new MenuItem("Developer Car") { ItemData = dev });
+                    donatorVehicleMenu.AddMenuItem(new MenuItem("Developer Car") { ItemData = dev });
                 }
 
                 foreach (VehicleItem vehicle in vehicleItems)
                 {
                     MenuItem item = new MenuItem(vehicle.Name) { ItemData = vehicle };
-
-                    if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
-                    {
-                        item.Enabled = true;
-                    }
-                    else if (vehicle.UnlockRequirementValue == 0)
-                    {
-                        item.Enabled = true;
-                    }
-                    else
-                    {
-                        if (!Player.PlayerInformation.playerInfo.Skills.ContainsKey(vehicle.UnlockRequiredSkill))
-                        {
-                            item.Enabled = false;
-                        }
-                        else
-                        {
-                            item.Enabled = (Player.PlayerInformation.playerInfo.Skills[vehicle.UnlockRequiredSkill].Value >= vehicle.UnlockRequirementValue);
-                        }
-                    }
-
-                    item.Description = $"Requires: {vehicle.UnlockRequiredSkillDescription} >= {vehicle.UnlockRequirementValue}";
-                    skillDesc = vehicle.UnlockRequiredSkillDescription;
-                    menu.AddMenuItem(item);
+                    donatorVehicleMenu.AddMenuItem(item);
                 }
             }
             catch (Exception ex)
             {
-                Log.Error($"Error getting list, possible that you have no experience in the required skill. Skill Required: {skillDesc}");
+                Log.Error($"Error getting list, possible that you have no experience in the required skill.");
             }
         }
 
@@ -187,6 +167,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                     modelName = car;
                 }
 
+
+
                 Vector3 positionToSpawn = new Vector3(vehicleItem.SpawnPositionX, vehicleItem.SpawnPositionY, vehicleItem.SpawnPositionZ);
 
                 bool spawnSuccess = await Vehicle.Spawn.SpawnVehicle(model, positionToSpawn, vehicleItem.SpawnHeading, vehicleItem.InstallSirens);
@@ -194,7 +176,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                 if (!spawnSuccess)
                 {
                     Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Sorry...", "It took too long to load the vehicle or a cooldown is active, please try again later.", 2);
+                    return;
                 }
+
+
             }
             catch (Exception ex)
             {

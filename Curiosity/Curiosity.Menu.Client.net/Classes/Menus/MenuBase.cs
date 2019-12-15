@@ -15,9 +15,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         public static Menu Menu = new Menu("Interaction Menu", "Player Interaction Menu");
         public static bool isMenuOpen = Menu.Visible;
 
-        public static MenuItem showForum = new MenuItem("Open Player Guides", "Select this to view our player guides");
+        public static MenuItem showForum = new MenuItem("Open Player Guides", "Select this to view our player guides") { LeftIcon = MenuItem.Icon.GLOBE_BLUE };
 
-        public static MenuItem showPoliceMenu = new MenuItem("Police Options", "Options for the Police Activities");
+        public static MenuItem showPoliceMenu = new MenuItem("Police Options", "Options for the Police Activities") { LeftIcon = MenuItem.Icon.MISSION_STAR };
         static bool AddedPoliceOptions = false;
 
         public static void Init()
@@ -312,6 +312,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             Classes.Menus.PlayerInteractions.BanInteraction.Init();
             //// VEHICLE
             Classes.Menus.VehicleMenu.Init();
+            // DONATOR
+            Classes.Menus.Donator.Init();
 
             // Tools
             Classes.Menus.Developer.Init();
@@ -347,15 +349,19 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             AddSubMenu(Menu, submenu);
         }
 
-        public static void AddSubMenu(Menu submenu, string label, bool buttonEnabled = true)
+        public static void AddSubMenu(Menu submenu, string label = "→→→", bool buttonEnabled = true, string description = "", MenuItem.Icon leftIcon = MenuItem.Icon.NONE, MenuItem.Icon rightIcon = MenuItem.Icon.NONE)
         {
-            AddSubMenu(Menu, submenu, label, buttonEnabled);
+            AddSubMenu(Menu, submenu, label, buttonEnabled, description, leftIcon, rightIcon);
         }
 
-        public static void AddSubMenu(Menu menu, Menu submenu, string label = "→→→", bool buttonEnabled = true)
+        public static void AddSubMenu(Menu menu, Menu submenu, string label = "→→→", bool buttonEnabled = true, string description = "", MenuItem.Icon leftIcon = MenuItem.Icon.NONE, MenuItem.Icon rightIcon = MenuItem.Icon.NONE)
         {
             MenuController.AddSubmenu(menu, submenu);
-            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = label, Enabled = buttonEnabled };
+            MenuItem submenuButton = new MenuItem(submenu.MenuTitle, submenu.MenuSubtitle) { Label = label, LeftIcon = leftIcon, RightIcon = rightIcon };
+            if (!buttonEnabled)
+            {
+                submenuButton = new MenuItem(submenu.MenuTitle, description) { Enabled = buttonEnabled, RightIcon = MenuItem.Icon.LOCK };
+            }
             menu.AddMenuItem(submenuButton);
             MenuController.BindMenuItem(menu, submenu, submenuButton);
         }

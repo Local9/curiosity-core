@@ -34,10 +34,18 @@ namespace Curiosity.Menus.Client.net
 
             ClassLoader.Init();
 
+            RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+
             RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
             RegisterEventHandler("curiosity:Client:Player:Setup", new Action<string>(OnPlayerSetup));
 
             Log.Info("Curiosity.Menus.Client.net loaded\n");
+        }
+
+        static void OnClientResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+            Client.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         async void OnPlayerSetup(string jsonUser)
@@ -53,6 +61,7 @@ namespace Curiosity.Menus.Client.net
         void OnPlayerSpawned(dynamic spawnedPlayer)
         {
             hasPlayerSpawned = true;
+            Client.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         /// <summary>

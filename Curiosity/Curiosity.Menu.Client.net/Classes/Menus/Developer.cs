@@ -25,6 +25,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         {
             client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+            SetupMenu();
         }
 
         static void OnClientResourceStart(string resourceName)

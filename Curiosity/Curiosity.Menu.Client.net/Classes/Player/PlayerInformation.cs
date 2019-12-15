@@ -14,6 +14,8 @@ namespace Curiosity.Menus.Client.net.Classes.Player
         public static Job Job;
         public static bool IsOnDuty;
 
+        private static bool startup;
+
         public static async void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
@@ -53,7 +55,20 @@ namespace Curiosity.Menus.Client.net.Classes.Player
                 privilege = (Privilege)playerInfo.RoleId;
             }
 
+            if (!startup)
+            {
+                startup = true;
+                // MENU 2.0
+                Classes.Menus.MenuBase.Init();
+                Classes.Menus.Donator.Init();
+            }
+
             await BaseScript.Delay(0);
+        }
+
+        public static bool IsDonator()
+        {
+            return (privilege == Privilege.DONATOR);
         }
 
         public static bool IsStaff()

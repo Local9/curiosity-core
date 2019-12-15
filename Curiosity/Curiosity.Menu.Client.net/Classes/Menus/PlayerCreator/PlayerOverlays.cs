@@ -97,12 +97,15 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerCreator
                     PlayerCreatorMenu.StoreOverlay(_listItem.ItemData.ID, _newSelectionIndex);
                     await BaseScript.Delay(0);
                     PlayerCreatorMenu.StoreOverlayColor(_listItem.ItemData.ID, _listItem.ItemData.colorType, currentColor);
+                    return;
                 }
 
                 if (_listItem.ItemData.OverlayType == "OVERLAY_TYPE_COLOR")
                 {
                     currentColor = _newSelectionIndex;
+                    PlayerCreatorMenu.StoreOverlayColor(_listItem.ItemData.ID, _listItem.ItemData.colorType, currentColor);
                     Function.Call(Hash._SET_PED_HEAD_OVERLAY_COLOR, Client.PedHandle, _listItem.ItemData.ID, _listItem.ItemData.colorType, _newSelectionIndex, _newSelectionIndex);
+                    return;
                 }
             };
 

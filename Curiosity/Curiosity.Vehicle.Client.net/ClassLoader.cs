@@ -36,9 +36,9 @@ namespace Curiosity.Vehicle.Client.net
             // Instances
             Classes.Vehicle.Spawn.Init();
 
-
             // MENU
             Classes.Menus.VehicleSpawn.Init();
+            Classes.Menus.DonatorVehicles.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

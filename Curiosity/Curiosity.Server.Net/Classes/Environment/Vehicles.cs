@@ -25,6 +25,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             server.RegisterEventHandler("curiosity:Server:Vehicle:GetVehicleSpawnLocations", new Action<CitizenFX.Core.Player>(OnGetVehicleSpawnLocations));
             server.RegisterEventHandler("curiosity:Server:Vehicle:GetVehicleList", new Action<CitizenFX.Core.Player, int>(OnGetVehicleList));
+            server.RegisterEventHandler("curiosity:Server:Vehicle:GetDonatorVehicleList", new Action<CitizenFX.Core.Player>(OnGetDonatorVehicleList));
 
             server.RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(OnPlayerDropped));
             server.RegisterTickHandler(OnVehicleCheck);
@@ -45,6 +46,30 @@ namespace Curiosity.Server.net.Classes.Environment
             catch (Exception ex)
             {
                 
+            }
+        }
+        static async void OnGetDonatorVehicleList([FromSource]CitizenFX.Core.Player player)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                bool canAccessList = (session.IsDonator || session.IsDeveloper);
+
+                if (!canAccessList) return;
+
+                List<VehicleItem> vehicles = await Database.DatabaseVehicles.GetVehiclesForDonators();
+
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicles);
+                string encodedJson = Encode.StringToBase64(json);
+
+                player.TriggerEvent("curiosity:Client:Vehicle:DonatorVehicleList", encodedJson);
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
