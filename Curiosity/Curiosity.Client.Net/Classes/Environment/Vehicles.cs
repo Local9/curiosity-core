@@ -2,6 +2,7 @@
 using CitizenFX.Core;
 using System;
 using System.Threading.Tasks;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -18,7 +19,7 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             client.RegisterEventHandler("curiosity:Client:Vehicles:Remove", new Action<int>(OnVehicleRemove));
             client.RegisterTickHandler(OnVehicleEnterTick);
-            client.RegisterTickHandler(InsideVehicleTick);
+            // client.RegisterTickHandler(InsideVehicleTick);
         }
 
         static async void OnVehicleRemove(int vehicleHandle)
@@ -126,7 +127,7 @@ namespace Curiosity.Client.net.Classes.Environment
             await Task.FromResult(0);
         }
 
-        static async Task InsideVehicleTick()
+        static async Task InsideVehicleTick() // No longer required
         {
             await Task.FromResult(0);
             if (Game.PlayerPed.IsInVehicle())
@@ -163,10 +164,16 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             await Task.FromResult(0);
             int veh = API.GetVehiclePedIsTryingToEnter(Game.PlayerPed.Handle);
+
             if (veh != 0)
             {
                 CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(veh);
-                if (API.GetSeatPedIsTryingToEnter(Game.PlayerPed.Handle) == -1)
+
+                if (API.GetSeatPedIsTryingToEnter(Game.PlayerPed.Handle) != (int)VehicleSeat.Driver)
+                {
+
+                }
+                else if (API.GetSeatPedIsTryingToEnter(Game.PlayerPed.Handle) == (int)VehicleSeat.Driver)
                 {
                     if (
                         vehicle.Mods.LicensePlate.Trim() == STAFF_LICENSE_PLATE
@@ -223,6 +230,17 @@ namespace Curiosity.Client.net.Classes.Environment
                     API.SetNetworkIdCanMigrate(networkId, true);
                     BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
                 }
+                else
+                {
+
+                    if (Player.PlayerInformation.IsDeveloper())
+                        Log.Verbose("Vehicle trying to enter is not the drivers seat");
+                }
+            }
+            else
+            {
+                if (Player.PlayerInformation.IsDeveloper())
+                    Log.Verbose("Vehicle trying to enter did not return a handle");
             }
         }
 

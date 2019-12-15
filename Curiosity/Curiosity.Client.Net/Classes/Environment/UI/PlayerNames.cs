@@ -42,6 +42,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
             if (!player.Character.IsVisible) return false;
 
+            if (API.IsEntityVisible(player.Character.Handle)) return false;
+
             if (!player.Character.IsInVehicle())
             {
                 isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < namePlateDistance;
@@ -50,9 +52,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < namePlateVehicleDistance;
             }
-            bool isSneaking = player.Character.IsInStealthMode || player.Character.IsInCover() || Function.Call<bool>(Hash.IS_PED_USING_SCENARIO, player.Character.Handle, "WORLD_HUMAN_SMOKING") /*|| (player.Character.IsInVehicle() && player.Character.CurrentVehicle.Speed < 3.0)*/;
             bool isCurrentPlayer = (Game.Player == player);
-            if (isCloseEnough && !isSneaking && !isCurrentPlayer)
+            if (isCloseEnough && !isCurrentPlayer)
                 return true;
             return false;
         }
@@ -91,6 +92,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                 API.SetMpGamerTagVisibility(gamerTagId, 0, false);
             }
             else if (player.Character.Opacity == 0)
+            {
+                API.SetMpGamerTagVisibility(gamerTagId, 0, false);
+            }
+            else if (!API.IsEntityVisible(player.Character.Handle))
             {
                 API.SetMpGamerTagVisibility(gamerTagId, 0, false);
             }

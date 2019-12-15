@@ -112,6 +112,14 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     API.SetBlipAlpha(blip, 0);
                 }
             }
+            else if (!API.IsEntityVisible(player.Character.Handle))
+            {
+                API.SetMpGamerTagVisibility(playerGamerTag, 0, false);
+                if (API.DoesBlipExist(blip))
+                {
+                    API.SetBlipAlpha(blip, 0);
+                }
+            }
             else
             {
 
