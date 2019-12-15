@@ -267,6 +267,14 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
         public async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
         {
+            if (!NetworkHasControlOfEntity(Handle))
+            {
+                while (!API.NetworkRequestControlOfEntity(Handle))
+                {
+                    await BaseScript.Delay(0);
+                }
+            }
+
             if (Game.IsControlPressed(0, Control.Duck) && Game.PlayerPed.IsInVehicle() && _vehicleStopped && !_vehicleReleased)
             {
                 if (!_vehicleStopped) return;

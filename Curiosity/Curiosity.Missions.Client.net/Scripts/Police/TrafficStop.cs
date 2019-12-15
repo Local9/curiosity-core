@@ -217,8 +217,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                                 if (Game.IsControlJustPressed(0, Control.Pickup))
                                 {
-                                    if (!NetworkRequestControlOfEntity(targetVehicle.Handle)) return;
-
                                     targetVehicle.AttachedBlip.IsFlashing = false;
                                     awaitingPullover = false;
                                     isConductingPullover = true;
