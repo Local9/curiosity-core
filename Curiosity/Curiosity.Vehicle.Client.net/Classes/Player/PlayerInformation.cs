@@ -38,6 +38,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Player
             }
         }
 
+        public static bool IsDonator()
+        {
+            return (privilege == Privilege.DONATOR);
+        }
+
         public static bool IsStaff()
         {
             return (privilege == Privilege.COMMUNITYMANAGER || privilege == Privilege.MODERATOR || privilege == Privilege.ADMINISTRATOR || privilege == Privilege.SENIORADMIN || privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);

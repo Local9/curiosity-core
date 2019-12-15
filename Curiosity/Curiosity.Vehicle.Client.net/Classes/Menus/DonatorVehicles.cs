@@ -30,6 +30,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
         public static void OpenMenu()
         {
+            bool canActivate = (Player.PlayerInformation.IsStaff() || Player.PlayerInformation.IsDonator());
+
+            if (!canActivate) return;
+
             MenuController.DontOpenAnyMenu = false;
 
             Client.TriggerServerEvent("curiosity:Server:Vehicle:GetDonatorVehicleList");

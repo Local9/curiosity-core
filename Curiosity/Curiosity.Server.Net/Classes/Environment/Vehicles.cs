@@ -56,7 +56,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 Session session = SessionManager.PlayerList[player.Handle];
 
-                bool canAccessList = (session.IsDonator || session.IsDeveloper);
+                bool canAccessList = (session.IsDonator || session.IsStaff);
 
                 if (!canAccessList) return;
 
