@@ -192,7 +192,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                     float heading = 0f;
                     int u = 0;
 
-                    if (GetNthClosestVehicleNodeWithHeading(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, random.Next(200, 300), ref spawningPosition, ref heading, ref u, 9, 3.0f, 2.5f))
+                    if (GetNthClosestVehicleNodeWithHeading(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, random.Next(100, 150), ref spawningPosition, ref heading, ref u, 9, 3.0f, 2.5f))
                     {
                         Vector3 safespaceOut = new Vector3();
                         if (GetSafeCoordForPed(spawningPosition.X, spawningPosition.Y, spawningPosition.Z, true, ref safespaceOut, 16))
@@ -204,8 +204,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
                         Model mechanic = PedHash.Xmech01SMY;
                         await mechanic.Request(10000);
-                        Ped ped = await World.CreatePed(mechanic, spawningPosition + new Vector3(0f, 0f, 5f));
+                        Ped ped = await World.CreatePed(mechanic, spawningPosition + new Vector3(0f, 0f, 2f));
+                        ped.IsPositionFrozen = true;
                         mechanic.MarkAsNoLongerNeeded();
+                        ped.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
+                        ped.IsPositionFrozen = false;
 
                         TaskSetBlockingOfNonTemporaryEvents(ped.Handle, true);
 
@@ -215,20 +218,28 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
                         ped.Task.ClearAll();
 
-                        ped.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
-                        TaskVehiclePark(ped.Handle, spawnedVechicle.Handle, outPos.X, outPos.Y, outPos.Z, 0f, 3, 60f, true);
+                        ped.DrivingStyle = DrivingStyle.IgnoreLights;
 
-                        await BaseScript.Delay(10000);
+                        if (outPos.Distance(Game.PlayerPed.Position) >= 20f)
+                        {
+                            outPos = Game.PlayerPed.Position;
+                        }
+                            
+                        TaskVehiclePark(ped.Handle, spawnedVechicle.Handle, outPos.X, outPos.Y, outPos.Z, 0f, 3, 20f, true);
 
-                        while (spawnedVechicle.Position.Distance(outPos) >= 3f)
+                        while (spawnedVechicle.Position.Distance(outPos) >= 5f)
                         {
                             await BaseScript.Delay(0);
 
-                            if (Game.PlayerPed.Position.Distance(spawnedVechicle.Position) < 5f)
+                            if (spawnedVechicle.Position.Distance(Game.PlayerPed.Position) < 50f && spawnedVechicle.IsStopped && spawnedVechicle.Position.Distance(outPos) < 50f)
                                 break;
                         }
 
                         SetVehicleHalt(spawnedVechicle.Handle, 3f, 0, false);
+
+                        ped.SetConfigFlag(122, true);
+                        ped.SetConfigFlag(314, true);
+                        SetEnableHandcuffs(ped.Handle, true);
 
                         spawnedVechicle.SoundHorn(250);
                         await BaseScript.Delay(250);
@@ -245,7 +256,12 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
                         ped.Task.WanderAround();
 
-                        ped.MarkAsNoLongerNeeded();
+                        while (!ped.IsOccluded)
+                        {
+                            await BaseScript.Delay(0);
+                            ped.MarkAsNoLongerNeeded();
+                            ped.Delete();
+                        }
                     }
                 }               
 
