@@ -239,6 +239,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private async void Create()
         {
+            while (!API.NetworkRequestControlOfEntity(Handle))
+            {
+                await BaseScript.Delay(0);
+            }
+
             this._eventWrapper = new EntityEventWrapper(this.Ped);
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);

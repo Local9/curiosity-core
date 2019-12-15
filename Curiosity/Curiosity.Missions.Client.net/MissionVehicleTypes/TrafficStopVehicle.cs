@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.MissionVehicles;
 
 namespace Curiosity.Missions.Client.net.MissionVehicleTypes
