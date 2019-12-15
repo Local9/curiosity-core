@@ -810,6 +810,11 @@ namespace Curiosity.Server.net.Business
                 session.TryGetValue(license, out SessionState oldState);
                 session.TryUpdate(license, SessionState.Active, oldState);
                 if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> ACTIVE -> {license}"); }
+
+                Classes.Session curiSession = Classes.SessionManager.PlayerList[source.Handle];
+
+                if (curiSession.IsDeveloper)
+                    Server.TriggerEvent("curiosity:Client:Player:Developer:Online");
             }
             catch (Exception ex)
             {

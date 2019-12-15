@@ -24,8 +24,14 @@ namespace Curiosity.Client.net.Classes.Player
             client.RegisterEventHandler("curiosity:Client:Player:Information", new Action(GetPlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:UpdateFlags", new Action(OnFlagUpdate));
             client.RegisterEventHandler("curiosity:Client:Player:UpdateExtraFlags", new Action(UpdateExtraFlags));
+            client.RegisterEventHandler("curiosity:Client:Player:Developer:Online", new Action(DeveloperOnline));
             await BaseScript.Delay(1000);
             PeriodicCheck();
+        }
+
+        static void DeveloperOnline()
+        {
+            ForceLightningFlash();
         }
 
         static void UpdateExtraFlags()
