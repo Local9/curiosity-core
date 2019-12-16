@@ -46,6 +46,25 @@ namespace Curiosity.Discord.Bot.Models
             }
         }
 
+        public async Task<List<User>> GetTopUsers()
+        {
+            try
+            {
+                using var connection = await Database.DatabaseConfig.GetDatabaseConnection();
+                await connection.OpenAsync();
+                using var cmd = connection.CreateCommand();
+
+                cmd.CommandText = @"call selStatsTopUsers();";
+                var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
+                return result.Count > 0 ? result : null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"FindUserAsync -> {ex}");
+                return default;
+            }
+        }
+
         private async Task<List<User>> ReadAllAsync(DbDataReader reader)
         {
             var users = new List<User>();

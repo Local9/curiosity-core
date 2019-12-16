@@ -196,7 +196,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                     float heading = 0f;
                     int u = 0;
 
-                    if (GetNthClosestVehicleNodeWithHeading(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, random.Next(100, 150), ref spawningPosition, ref heading, ref u, 9, 3.0f, 2.5f))
+                    if (GetNthClosestVehicleNodeWithHeading(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, 3, ref spawningPosition, ref heading, ref u, 9, 3.0f, 2.5f))
                     {
                         Vector3 safespaceOut = new Vector3();
                         if (GetSafeCoordForPed(spawningPosition.X, spawningPosition.Y, spawningPosition.Z, true, ref safespaceOut, 16))
@@ -204,68 +204,68 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                             spawningPosition = safespaceOut;
                         }
 
-                        CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, spawningPosition, vehicleItem.SpawnHeading, vehicleItem.InstallSirens);
+                        CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, spawningPosition, heading, vehicleItem.InstallSirens);
 
-                        Model mechanic = PedHash.Xmech01SMY;
-                        await mechanic.Request(10000);
-                        Ped ped = await World.CreatePed(mechanic, spawningPosition + new Vector3(0f, 0f, 2f));
-                        ped.IsPositionFrozen = true;
-                        mechanic.MarkAsNoLongerNeeded();
-                        ped.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
-                        ped.IsPositionFrozen = false;
+                        //Model mechanic = PedHash.Xmech01SMY;
+                        //await mechanic.Request(10000);
+                        //Ped ped = await World.CreatePed(mechanic, spawningPosition + new Vector3(0f, 0f, 2f));
+                        //ped.IsPositionFrozen = true;
+                        //mechanic.MarkAsNoLongerNeeded();
+                        //ped.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
+                        //ped.IsPositionFrozen = false;
 
-                        TaskSetBlockingOfNonTemporaryEvents(ped.Handle, true);
+                        //TaskSetBlockingOfNonTemporaryEvents(ped.Handle, true);
 
-                        ped.RelationshipGroup = Client.MechanicRelationshipGroup;
+                        //ped.RelationshipGroup = Client.MechanicRelationshipGroup;
 
-                        ped.RelationshipGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Like, true);
+                        //ped.RelationshipGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Like, true);
 
-                        ped.Task.ClearAll();
+                        //ped.Task.ClearAll();
 
-                        ped.DrivingStyle = DrivingStyle.IgnoreLights;
+                        //ped.DrivingStyle = DrivingStyle.IgnoreLights;
 
-                        if (outPos.Distance(Game.PlayerPed.Position) >= 20f)
-                        {
-                            outPos = Game.PlayerPed.Position;
-                        }
+                        //if (outPos.Distance(Game.PlayerPed.Position) >= 20f)
+                        //{
+                        //    outPos = Game.PlayerPed.Position;
+                        //}
                             
-                        TaskVehiclePark(ped.Handle, spawnedVechicle.Handle, outPos.X, outPos.Y, outPos.Z, 0f, 3, 20f, true);
+                        //TaskVehiclePark(ped.Handle, spawnedVechicle.Handle, outPos.X, outPos.Y, outPos.Z, 0f, 3, 20f, true);
 
-                        while (spawnedVechicle.Position.Distance(outPos) >= 5f)
-                        {
-                            await BaseScript.Delay(0);
+                        //while (spawnedVechicle.Position.Distance(outPos) >= 5f)
+                        //{
+                        //    await BaseScript.Delay(0);
 
-                            if (spawnedVechicle.Position.Distance(Game.PlayerPed.Position) < 50f && spawnedVechicle.IsStopped && spawnedVechicle.Position.Distance(outPos) < 50f)
-                                break;
-                        }
+                        //    if (spawnedVechicle.Position.Distance(Game.PlayerPed.Position) < 50f && spawnedVechicle.IsStopped && spawnedVechicle.Position.Distance(outPos) < 50f)
+                        //        break;
+                        //}
 
-                        SetVehicleHalt(spawnedVechicle.Handle, 3f, 0, false);
+                        //SetVehicleHalt(spawnedVechicle.Handle, 3f, 0, false);
 
-                        ped.SetConfigFlag(122, true);
-                        ped.SetConfigFlag(314, true);
-                        SetEnableHandcuffs(ped.Handle, true);
+                        //ped.SetConfigFlag(122, true);
+                        //ped.SetConfigFlag(314, true);
+                        //SetEnableHandcuffs(ped.Handle, true);
 
-                        spawnedVechicle.SoundHorn(250);
-                        await BaseScript.Delay(250);
-                        spawnedVechicle.SoundHorn(250);
-                        await BaseScript.Delay(250);
+                        //spawnedVechicle.SoundHorn(250);
+                        //await BaseScript.Delay(250);
+                        //spawnedVechicle.SoundHorn(250);
+                        //await BaseScript.Delay(250);
 
-                        spawnedVechicle.IsPositionFrozen = true;
-                        TaskLeaveVehicle(ped.Handle, spawnedVechicle.Handle, 1);
+                        //spawnedVechicle.IsPositionFrozen = true;
+                        //TaskLeaveVehicle(ped.Handle, spawnedVechicle.Handle, 1);
 
-                        await BaseScript.Delay(200);
-                        spawnedVechicle.IsPositionFrozen = false;
-                        spawnedVechicle.IsStolen = false;
-                        spawnedVechicle.IsWanted = false;
+                        //await BaseScript.Delay(200);
+                        //spawnedVechicle.IsPositionFrozen = false;
+                        //spawnedVechicle.IsStolen = false;
+                        //spawnedVechicle.IsWanted = false;
 
-                        ped.Task.WanderAround();
+                        //ped.Task.WanderAround();
 
-                        while (!ped.IsOccluded)
-                        {
-                            await BaseScript.Delay(0);
-                            ped.MarkAsNoLongerNeeded();
-                            ped.Delete();
-                        }
+                        //while (!ped.IsOccluded)
+                        //{
+                        //    await BaseScript.Delay(0);
+                        //    ped.MarkAsNoLongerNeeded();
+                        //    ped.Delete();
+                        //}
                     }
                 }               
 

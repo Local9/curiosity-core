@@ -137,7 +137,7 @@ namespace Curiosity.Discord.Bot.Modules
             if (user == null)
                 user = Context.User;
 
-            Models.User dbUser = await new Models.User().FindUserAsync(user.Id);
+            List<Models.User> dbUser = await new Models.User().GetTopUsers();
 
             if (dbUser == null)
             {
@@ -148,10 +148,7 @@ namespace Curiosity.Discord.Bot.Modules
                 EmbedBuilder builder = new EmbedBuilder();
 
                 builder
-                    .AddField("Player", $"{dbUser.Username}", true)
-                    .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}")
-                    .AddField("Server First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
-                    .AddField("Server Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)
+                    .AddField("Top Players", $"")
                     .WithColor(Color.Blue)
                         .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
                         .WithCurrentTimestamp()
