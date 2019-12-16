@@ -155,27 +155,20 @@ namespace Curiosity.Discord.Bot.Modules
                 }
                 else
                 {
-                    EmbedBuilder builder = new EmbedBuilder();
-
-                    string topUsers = "```";
+                    string topUsers = "```autohotkey";
+                    topUsers += "\nRank | Name";
                     int count = 1;
 
                     dbUsers.ForEach(user =>
                     {
-                        topUsers += $"\n{count}. {user.Username} - {user.LifeExperience:#,###,##0}xp";
+                        topUsers += $"\n[{count:00}]    > {user.Username}";
+                        topUsers += $"\n        Total Experience: {user.LifeExperience:#,###,##0}";
                         count++;
                     });
 
                     topUsers += "```";
 
-                    builder
-                        .AddField("Top Players", $"{topUsers}")
-                        .WithColor(Color.Blue)
-                            .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
-                            .WithCurrentTimestamp()
-                            .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
-
-                    await ReplyAsync("", false, builder.Build());
+                    await ReplyAsync($"{topUsers}", false);
                 }
             }
             catch (Exception ex)
