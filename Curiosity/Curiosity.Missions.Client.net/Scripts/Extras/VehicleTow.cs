@@ -44,7 +44,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
                 int spawnDistance = Client.Random.Next(100, 200);
 
-                vehToRemove = Game.PlayerPed.GetVehicleInFront();
+                vehToRemove = Game.PlayerPed.GetVehicleInFront(5f, 1f);
 
                 if (vehToRemove != null)
                 {
