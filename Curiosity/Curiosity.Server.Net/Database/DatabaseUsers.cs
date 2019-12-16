@@ -19,14 +19,15 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static async Task<GlobalEntity.User> GetUser(string license, Player player)
+        public static async Task<GlobalEntity.User> GetUser(string license, Player player, long discordId)
         {
             GlobalEntity.User user = new GlobalEntity.User();
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@license", license);
             myParams.Add("@username", player.Name);
+            myParams.Add("@discordId", discordId);
 
-            string selectQuery = "CALL curiosity.spGetUser(@license, @username);";
+            string selectQuery = "CALL curiosity.spGetUser(@license, @username, @discordId);";
 
             using (var result = mySql.QueryResult(selectQuery, myParams))
             {

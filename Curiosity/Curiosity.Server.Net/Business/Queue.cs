@@ -177,6 +177,7 @@ namespace Curiosity.Server.net.Business
                 deferrals.update($"{messages[Messages.Gathering]}");
 
                 string license = player.Identifiers["license"];
+                string discordId = player.Identifiers["discord"];
 
                 if (license == null) { deferrals.done($"{messages[Messages.License]}"); return; }
 
@@ -193,7 +194,12 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
-                GlobalEntity.User user = await Database.DatabaseUsers.GetUser(license, player);
+                long discordIdLong = 0;
+
+                if (!string.IsNullOrEmpty(discordId))
+                    discordIdLong = long.Parse(discordId);
+
+                GlobalEntity.User user = await Database.DatabaseUsers.GetUser(license, player, discordIdLong);
 
                 Log.Info($"Queue Player Connecting: {player.Name} ({user.RoleId})");
 
