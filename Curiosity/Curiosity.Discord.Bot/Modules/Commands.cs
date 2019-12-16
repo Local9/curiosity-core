@@ -27,13 +27,13 @@ namespace Curiosity.Discord.Bot.Modules
                 return;
             }
 
-            if (user.Id == 191686898450825217)
+            if (user.Id != 191686898450825217)
             {
-                await ReplyAsync("Hi boss");
+                await ReplyAsync("And who the hell are you?!");
                 return;
             }
 
-            await ReplyAsync($"pong");
+            await ReplyAsync($"Hi boss, all is doing well.");
         }
 
         [Command("server")]
@@ -42,38 +42,46 @@ namespace Curiosity.Discord.Bot.Modules
             try
             {
                 string result = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/players.json");
-                string serverInformation = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/info.json");
 
-                List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
-                CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
-
-                int countOfPlayers = lst.Count;
-
-                EmbedBuilder builder = new EmbedBuilder();
-
-                string playersOnline = "```";
-
-                lst.ForEach(item =>
+                if (result == null)
                 {
-                    playersOnline += $"{item.Name}, ";
-                });
+                    await ReplyAsync("Server did not respond, it might be offline?!");
+                }
+                else
+                {
+                    string serverInformation = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/info.json");
+                    List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
 
-                playersOnline = playersOnline.Substring(0, playersOnline.Length - 2);
+                    CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
 
-                playersOnline += "```";
+                    int countOfPlayers = lst.Count;
+
+                    EmbedBuilder builder = new EmbedBuilder();
+
+                    string playersOnline = "```";
+
+                    lst.ForEach(item =>
+                    {
+                        playersOnline += $"{item.Name}, ";
+                    });
+
+                    playersOnline = playersOnline.Substring(0, playersOnline.Length - 2);
+
+                    playersOnline += "```";
 
 
-                builder
-                    .AddField("Emergency Life V", "5.9.0.85:30120")
-                    .AddField("Server Uptime", $"{info.Variables["Uptime"]}", true)
-                    .AddField("Player Count", $"{countOfPlayers}", true)
-                    .AddField("Players", $"{playersOnline}", false)
-                    .WithColor(Color.Blue)
-                    .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
-                    .WithCurrentTimestamp()
-                    .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+                    builder
+                        .AddField("Emergency Life V", "5.9.0.85:30120")
+                        .AddField("Server Uptime", $"{info.Variables["Uptime"]}", true)
+                        .AddField("Player Count", $"{countOfPlayers}", true)
+                        .AddField("Players", $"{playersOnline}", false)
+                        .WithColor(Color.Blue)
+                        .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
+                        .WithCurrentTimestamp()
+                        .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
 
-                await ReplyAsync("", false, builder.Build());
+                    await ReplyAsync("", false, builder.Build());
+                }
             }
             catch (Exception ex)
             {
@@ -154,7 +162,7 @@ namespace Curiosity.Discord.Bot.Modules
 
                     dbUsers.ForEach(user =>
                     {
-                        topUsers += $"{count}. {user.Username} - {user.LifeExperience:#,###,##0}xp";
+                        topUsers += $"\n{count}. {user.Username} - {user.LifeExperience:#,###,##0}xp";
                         count++;
                     });
 

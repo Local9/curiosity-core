@@ -1,11 +1,11 @@
-﻿using Curiosity.Discord.Bot.Database;
-using Curiosity.Discord.Bot.Entities;
+﻿using Curiosity.Discord.Bot.Entities;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -44,7 +44,12 @@ namespace Curiosity.Discord.Bot
 
             await RegisterCommandsAsync();
 
-            await _client.LoginAsync(TokenType.Bot, discordConfiguration.BotSettings["Token"], true);
+            
+            bool testing = Convert.ToBoolean(discordConfiguration.BotSettings["Testing"]);
+
+            string discordToken = testing ? discordConfiguration.BotSettings["TokenBeta"] : discordConfiguration.BotSettings["TokenLive"];
+
+            await _client.LoginAsync(TokenType.Bot, discordToken, true);
 
             await _client.StartAsync();
 
@@ -68,10 +73,19 @@ namespace Curiosity.Discord.Bot
         {
             var message = arg as SocketUserMessage;
             var context = new SocketCommandContext(_client, message);
-            if (message.Author.IsBot) return;
+            if (message is null || message.Author.IsBot) return;
 
             int argPos = 0;
-            if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
+
+            if (message.MentionedUsers.Select(u => u).Where(x => x.IsBot && x.Id == _client.CurrentUser.Id).ToList().Count > 0)
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+
+                builder.WithImageUrl("https://cdn.discordapp.com/attachments/138522037181349888/438774275546152960/Ping_Discordapp_GIF-downsized_large.gif");
+
+                await context.Channel.SendMessageAsync("", false, builder.Build());
+            }
+            else if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
             {
                 var result = await _commands.ExecuteAsync(context, argPos, _services);
                 if (!result.IsSuccess)
