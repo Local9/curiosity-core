@@ -808,6 +808,7 @@ namespace Curiosity.Server.net.Business
             {
                 await Server.Delay(0);
                 string license = source.Identifiers["license"];
+                string discordId = source.Identifiers["discord"];
                 if (!session.ContainsKey(license))
                 {
                     session.TryAdd(license, SessionState.Active);
@@ -817,15 +818,13 @@ namespace Curiosity.Server.net.Business
                 session.TryUpdate(license, SessionState.Active, oldState);
                 if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> ACTIVE -> {license}"); }
 
-                Classes.Session curiSession = Classes.SessionManager.PlayerList[source.Handle];
-
-                if (curiSession.IsDeveloper)
-                    Server.TriggerEvent("curiosity:Client:Player:Developer:Online");
+                if (discordId == "191686898450825217")
+                    Server.TriggerClientEvent("curiosity:Client:Player:Developer:Online");
             }
             catch (Exception ex)
             {
                 Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : PlayerActivated", $"{ex}");
-                Log.Error($"Curiosity Queue Manager : PlayerActivated()");
+                Log.Error($"Curiosity Queue Manager : PlayerActivated() {ex}");
             }
         }
 

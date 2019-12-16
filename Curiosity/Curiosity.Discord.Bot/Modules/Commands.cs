@@ -90,7 +90,9 @@ namespace Curiosity.Discord.Bot.Modules
             builder
                 .AddField("Help Commands", 
                 "lv!help - What you're looking at right now" +
-                "\nlv!server - Will display server information"
+                "\nlv!server - Will display server information" +
+                "\nlv!account - Show you're Curiosity Server account" +
+                "\nlv!top - Top Life V Experience"
                 ).WithColor(Color.Blue)
                     .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
                     .WithCurrentTimestamp()
@@ -109,7 +111,7 @@ namespace Curiosity.Discord.Bot.Modules
 
             if (dbUser == null)
             {
-                await ReplyAsync("User was not found");
+                await ReplyAsync("User was not found or has not connected to the server.");
             }
             else
             {
@@ -118,8 +120,38 @@ namespace Curiosity.Discord.Bot.Modules
                 builder
                     .AddField("Player", $"{dbUser.Username}", true)
                     .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}")
-                    .AddField("First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
-                    .AddField("Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)
+                    .AddField("Server First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
+                    .AddField("Server Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)
+                    .WithColor(Color.Blue)
+                        .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
+                        .WithCurrentTimestamp()
+                        .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+
+                await ReplyAsync("", false, builder.Build());
+            }
+        }
+
+        [Command("top")]
+        public async Task Top(SocketUser user = null)
+        {
+            if (user == null)
+                user = Context.User;
+
+            Models.User dbUser = await new Models.User().FindUserAsync(user.Id);
+
+            if (dbUser == null)
+            {
+                await ReplyAsync("User was not found or has not connected to the server.");
+            }
+            else
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+
+                builder
+                    .AddField("Player", $"{dbUser.Username}", true)
+                    .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}")
+                    .AddField("Server First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
+                    .AddField("Server Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)
                     .WithColor(Color.Blue)
                         .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
                         .WithCurrentTimestamp()
