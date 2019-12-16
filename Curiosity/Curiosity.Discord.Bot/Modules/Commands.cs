@@ -117,9 +117,9 @@ namespace Curiosity.Discord.Bot.Modules
 
                 builder
                     .AddField("Player", $"{dbUser.Username}", true)
-                    .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}", true)
-                    .AddField("First Joined", $"{dbUser.DateCreated}", true)
-                    .AddField("Last Seen", $"{dbUser.LastSeen}", true)
+                    .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}")
+                    .AddField("First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
+                    .AddField("Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)
                     .WithColor(Color.Blue)
                         .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
                         .WithCurrentTimestamp()

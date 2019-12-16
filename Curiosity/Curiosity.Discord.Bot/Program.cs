@@ -38,7 +38,6 @@ namespace Curiosity.Discord.Bot
             _services = new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
-                .AddTransient<AppDb>(_ => new AppDb(discordConfiguration.ConnectionStrings["DefaultConnection"]))
                 .BuildServiceProvider();
 
             _client.Log += Client_Log;

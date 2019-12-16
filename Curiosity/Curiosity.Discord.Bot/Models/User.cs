@@ -19,27 +19,31 @@ namespace Curiosity.Discord.Bot.Models
         public bool BannedPerm;
         public DateTime? BannedUntil;
 
-        internal AppDb Db { get; set; }
-
         public User() { }
-
-        internal User(AppDb db)
-        {
-            Db = db;
-        }
 
         public async Task<User> FindUserAsync(ulong discordId)
         {
-            using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"call selUserByDiscordId(@discordId);";
-            cmd.Parameters.Add(new MySqlParameter
+            try
             {
-                ParameterName = "@discordId",
-                DbType = DbType.Int64,
-                Value = discordId
-            });
-            var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
-            return result.Count > 0 ? result[0] : null;
+                using var connection = await Database.DatabaseConfig.GetDatabaseConnection();
+                await connection.OpenAsync();
+                using var cmd = connection.CreateCommand();
+
+                cmd.CommandText = @"call selUserByDiscordId(@discordId);";
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@discordId",
+                    DbType = DbType.Int64,
+                    Value = discordId
+                });
+                var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
+                return result.Count > 0 ? result[0] : null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"FindUserAsync -> {ex}");
+                return default;
+            }
         }
 
         private async Task<List<User>> ReadAllAsync(DbDataReader reader)
@@ -49,7 +53,7 @@ namespace Curiosity.Discord.Bot.Models
             {
                 while (await reader.ReadAsync())
                 {
-                    var user = new User(Db)
+                    var user = new User()
                     {
                         UserId = reader.GetFieldValue<long>("userId"),
                         Username = reader.GetFieldValue<string>("username"),
@@ -57,9 +61,12 @@ namespace Curiosity.Discord.Bot.Models
                         LifeExperience = reader.GetFieldValue<long>("lifeExperience"),
                         DateCreated = reader.GetFieldValue<DateTime>("dateCreated"),
                         LastSeen = reader.GetFieldValue<DateTime>("lastSeen"),
-                        BannedPerm = reader.GetFieldValue<bool>("bannedPerm"),
-                        BannedUntil = reader.GetFieldValue<DateTime>("bannedUntil"),
+                        BannedPerm = reader.GetFieldValue<bool>("bannedPerm")
                     };
+
+                    if (!DBNull.Value.Equals(reader["bannedUntil"]))
+                        user.BannedUntil = reader.GetFieldValue<DateTime>("bannedUntil");
+
                     users.Add(user);
                 }
             }

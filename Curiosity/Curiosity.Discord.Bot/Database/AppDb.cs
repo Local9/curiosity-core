@@ -3,7 +3,7 @@ using System;
 
 namespace Curiosity.Discord.Bot.Database
 {
-    class AppDb : IDisposable
+    public class AppDb : IDisposable
     {
         public MySqlConnection Connection { get; }
 
