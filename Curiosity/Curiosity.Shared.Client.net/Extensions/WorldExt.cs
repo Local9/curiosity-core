@@ -48,24 +48,7 @@ namespace Curiosity.Shared.Client.net.Extensions
         {
             try
             {
-                RaycastResult raycast = World.RaycastCapsule(vehicle.Position, vehicle.GetOffsetPosition(new Vector3(0f, distance, 0f)), radius, (IntersectOptions)10, ped);
-                if (raycast.DitHitEntity && raycast.HitEntity.Model.IsVehicle)
-                {
-                    return (CitizenFX.Core.Vehicle)raycast.HitEntity;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Info($"GetVehicleInDirection -> {ex}");
-            }
-            return default(CitizenFX.Core.Vehicle);
-        }
-
-        public static CitizenFX.Core.Vehicle GetVehicleInFront(this Ped ped, float distance = 5f)
-        {
-            try
-            {
-                RaycastResult raycast = World.Raycast(ped.Position, ped.GetOffsetPosition(new Vector3(0f, distance, 0f)), (IntersectOptions)10, ped);
+                RaycastResult raycast = World.RaycastCapsule(ped.Position, ped.GetOffsetPosition(new Vector3(0f, distance, 0f)), radius, (IntersectOptions)10, ped);
                 if (raycast.DitHitEntity && raycast.HitEntity.Model.IsVehicle)
                 {
                     return (CitizenFX.Core.Vehicle)raycast.HitEntity;

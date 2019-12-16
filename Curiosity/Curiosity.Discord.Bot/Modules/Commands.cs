@@ -21,9 +21,21 @@ namespace Curiosity.Discord.Bot.Modules
                 user = Context.User;
 
 
-            if (user.Id == 307265731333062656)
+            if (user.Id == 307265731333062656) // Trouble
             {
-                await ReplyAsync("Leave me alone mate...");
+
+                List<string> responses = new List<string>() { "Leave me alone...", "Bug off...", "I'll smack ya..." };
+                Random random = new Random();
+
+                await ReplyAsync(responses[random.Next(responses.Count)]);
+                return;
+            }
+
+            if (user.Id == 250431901674897409) // luna
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+                builder.WithImageUrl("https://tenor.com/view/tom-and-jerry-ping-pong-in-pain-gif-15478835");
+                await ReplyAsync("", false, builder.Build());
                 return;
             }
 
@@ -100,7 +112,7 @@ namespace Curiosity.Discord.Bot.Modules
                 "lv!help - What you're looking at right now" +
                 "\nlv!server - Will display server information" +
                 "\nlv!account - Show you're Curiosity Server account" +
-                "\nlv!top - Top Life V Experience"
+                "\nlv!top - Top 10 Players by Life V Experience"
                 ).WithColor(Color.Blue)
                     .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
                     .WithCurrentTimestamp()
