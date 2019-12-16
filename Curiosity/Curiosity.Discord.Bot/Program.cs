@@ -1,9 +1,14 @@
-﻿using Discord;
+﻿using Curiosity.Discord.Bot.Database;
+using Curiosity.Discord.Bot.Entities;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Discord.Bot
@@ -14,25 +19,33 @@ namespace Curiosity.Discord.Bot
         private CommandService _commands;
         private IServiceProvider _services;
 
-        private const string BOT_TOKEN = "NTkwMTI2OTMwMDY2NDA3NDI0.XfaXaw.Xr3GyRt2YGMC6Pidx4Tlurz2n34";
+        private DiscordConfiguration discordConfiguration;
 
         static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
 
         private async Task RunBotAsync()
         {
+            var json = "";
+            using (var fs = File.OpenRead("appsettings.json"))
+            using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
+                json = await sr.ReadToEndAsync();
+
+            discordConfiguration = JsonConvert.DeserializeObject<DiscordConfiguration>(json);
+
             _client = new DiscordSocketClient();
             _commands = new CommandService();
 
             _services = new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
+                .AddTransient<AppDb>(_ => new AppDb(discordConfiguration.ConnectionStrings["DefaultConnection"]))
                 .BuildServiceProvider();
 
             _client.Log += Client_Log;
 
             await RegisterCommandsAsync();
 
-            await _client.LoginAsync(TokenType.Bot, BOT_TOKEN, true);
+            await _client.LoginAsync(TokenType.Bot, discordConfiguration.BotSettings["Token"], true);
 
             await _client.StartAsync();
 
@@ -59,7 +72,7 @@ namespace Curiosity.Discord.Bot
             if (message.Author.IsBot) return;
 
             int argPos = 0;
-            if (message.HasStringPrefix("lv!", ref argPos))
+            if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
             {
                 var result = await _commands.ExecuteAsync(context, argPos, _services);
                 if (!result.IsSuccess)

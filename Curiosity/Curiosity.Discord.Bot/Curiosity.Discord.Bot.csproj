@@ -17,11 +17,13 @@
 
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.0" />
     <PackageReference Include="MySqlConnector" Version="0.61.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Database\" />
+    <Folder Include="Entities\Generic\" />
+    <Folder Include="Entities\Curiosity\" />
   </ItemGroup>
 
 </Project>

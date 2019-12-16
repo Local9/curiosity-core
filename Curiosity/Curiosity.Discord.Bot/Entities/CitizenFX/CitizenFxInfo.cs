@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Curiosity.Discord.Bot.Entities
+namespace Curiosity.Discord.Bot.Entities.CitizenFX
 {
     struct CitizenFxInfo
     {

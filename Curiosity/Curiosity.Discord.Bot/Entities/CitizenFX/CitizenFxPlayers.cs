@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Curiosity.Discord.Bot.Entities
+namespace Curiosity.Discord.Bot.Entities.CitizenFX
 {
     struct CitizenFxPlayers
     {

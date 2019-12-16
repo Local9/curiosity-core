@@ -1,11 +1,10 @@
-﻿using Discord;
+﻿using Curiosity.Discord.Bot.Entities.CitizenFX;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 
@@ -45,8 +44,8 @@ namespace Curiosity.Discord.Bot.Modules
                 string result = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/players.json");
                 string serverInformation = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/info.json");
 
-                List<Entities.CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<Entities.CitizenFxPlayers>>(result);
-                Entities.CitizenFxInfo info = JsonConvert.DeserializeObject<Entities.CitizenFxInfo>(serverInformation);
+                List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
+                CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
 
                 int countOfPlayers = lst.Count;
 
@@ -98,6 +97,36 @@ namespace Curiosity.Discord.Bot.Modules
                     .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
 
             await ReplyAsync("", false, builder.Build());
+        }
+
+        [Command("account")]
+        public async Task Account(SocketUser user = null)
+        {
+            if (user == null)
+                user = Context.User;
+
+            Models.User dbUser = await new Models.User().FindUserAsync(user.Id);
+
+            if (dbUser == null)
+            {
+                await ReplyAsync("User was not found");
+            }
+            else
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+
+                builder
+                    .AddField("Player", $"{dbUser.Username}", true)
+                    .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}", true)
+                    .AddField("First Joined", $"{dbUser.DateCreated}", true)
+                    .AddField("Last Seen", $"{dbUser.LastSeen}", true)
+                    .WithColor(Color.Blue)
+                        .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
+                        .WithCurrentTimestamp()
+                        .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+
+                await ReplyAsync("", false, builder.Build());
+            }
         }
     }
 }
