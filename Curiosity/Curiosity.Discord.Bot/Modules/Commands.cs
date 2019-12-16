@@ -73,7 +73,7 @@ namespace Curiosity.Discord.Bot.Modules
                     .WithCurrentTimestamp()
                     .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
 
-                await ReplyAsync("", false, builder.Build());   
+                await ReplyAsync("", false, builder.Build());
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace Curiosity.Discord.Bot.Modules
             EmbedBuilder builder = new EmbedBuilder();
 
             builder
-                .AddField("Help Commands", 
+                .AddField("Help Commands",
                 "lv!help - What you're looking at right now" +
                 "\nlv!server - Will display server information" +
                 "\nlv!account - Show you're Curiosity Server account" +
@@ -134,39 +134,48 @@ namespace Curiosity.Discord.Bot.Modules
         [Command("top")]
         public async Task Top(SocketUser user = null)
         {
-            if (user == null)
-                user = Context.User;
-
-            List<Models.User> dbUsers = await new Models.User().GetTopUsers();
-
-            if (dbUsers == null)
+            try
             {
-                await ReplyAsync("User was not found or has not connected to the server.");
-            }
-            else
-            {
-                EmbedBuilder builder = new EmbedBuilder();
+                if (user == null)
+                    user = Context.User;
 
-                string topUsers = "```";
-                int count = 1;
+                List<Models.User> dbUsers = await new Models.User().GetTopUsers();
 
-                dbUsers.ForEach(user =>
+                if (dbUsers == null)
                 {
-                    topUsers += $"#{count}. {user.Username} - {user.LifeExperience:#,###,##0}";
-                    count++;
-                });
+                    await ReplyAsync("No information was returned.");
+                }
+                else
+                {
+                    EmbedBuilder builder = new EmbedBuilder();
 
-                topUsers += "```";
+                    string topUsers = "```";
+                    int count = 1;
 
-                builder
-                    .AddField("Top Players", $"")
-                    .WithColor(Color.Blue)
-                        .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
-                        .WithCurrentTimestamp()
-                        .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+                    dbUsers.ForEach(user =>
+                    {
+                        topUsers += $"{count}. {user.Username} - {user.LifeExperience:#,###,##0}xp";
+                        count++;
+                    });
 
-                await ReplyAsync("", false, builder.Build());
+                    topUsers += "```";
+
+                    builder
+                        .AddField("Top Players", $"{topUsers}")
+                        .WithColor(Color.Blue)
+                            .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
+                            .WithCurrentTimestamp()
+                            .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+
+                    await ReplyAsync("", false, builder.Build());
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Top -> {ex}");
+                throw;
+            }
+
         }
     }
 }

@@ -82,6 +82,7 @@ namespace Curiosity.Discord.Bot
                         return;
                     }
                     Console.WriteLine(result.Error);
+                    Console.WriteLine(result.ErrorReason);
                 }
             }
         }
