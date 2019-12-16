@@ -26,7 +26,7 @@ namespace Curiosity.Discord.Bot
         private async Task RunBotAsync()
         {
             var json = "";
-            using (var fs = File.OpenRead("appsettings.json"))
+            using (var fs = File.OpenRead(@"config\appsettings.json"))
             using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
                 json = await sr.ReadToEndAsync();
 
