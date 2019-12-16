@@ -9,66 +9,26 @@
 		var playlist = null;
 		var index = null;
 
-        var Player = function (playlist) {
-            this.playlist = playlist;
-            this.index = 0;
-        };
-
-        Player.prototype = {
-            /**
-             * Play a song in the playlist.
-             * @param  {Number} index Index of the song in the playlist (leave empty to play the first or current).
-             */
-            play: function (index) {
-                var self = this;
-                var sound;
-
-                index = typeof index === 'number' ? index : self.index;
-                var data = self.playlist[index];
-
-                // If we already loaded this track, use the current one.
-                // Otherwise, setup and load a new Howl.
-                if (data.howl) {
-                    sound = data.howl;
-                } else {
-                    sound = data.howl = new Howl({
-                        src: [data.file],
-						autoplay: true,
-                        onend: function () {
-                            self.skip('next');
-                        },
-                    });
-                }
-
-                // Begin playing the sound.
-                sound.play();
-                self.index = index;
-            },
-
-            /**
-             * Skip to the next or previous track.
-             * @param  {String} direction 'next' or 'prev'.
-             */
-            skip: function (direction) {
-                var self = this;
-
-                // Get the next track based on the direction of the track.
-                var index = 0;
-                if (direction === 'prev') {
-                    index = self.index - 1;
-                    if (index < 0) {
-                        index = self.playlist.length - 1;
-                    }
-                } else {
-                    index = self.index + 1;
-                    if (index >= self.playlist.length) {
-                        index = 0;
-                    }
-                }
-
-                self.skipTo(index);
-            }
-        };
+        function autoplay(i, list, finalCycle, currentCycle) {
+			currentCycle = currentCycle || 1;	
+			finalCycle   = finalCycle   || 'infinite repeat'; // [1-n]: numeral value expected.
+			var sound = new Howl({
+				src: [list[i]],
+				preload: true,
+				onend: function () {
+					if ((i + 1) == list.length) {
+						autoplay(0, list, finalCycle, currentCycle)
+					} else {
+						autoplay(i + 1, list, finalCycle, currentCycle)
+					}
+				}
+			})
+			currentCycle===finalCycle+1 && i===0? sound.stop(): sound.play();
+			console.log('currentCycle: ',currentCycle,
+    					'finalCycle: ',finalCycle,
+						'Objet number: ',i)
+			if(i==list.length-1){ currentCycle++ }
+		}
 
         // Listen for NUI Messages.
         window.addEventListener('message', function (event) {
@@ -82,8 +42,7 @@
 				Howler.volume(event.data.transactionVolume);
 
                 if (event.data.audioQueue.length > 0) {
-                    var player = new Player(event.data.audioQueue);
-					player.play();
+                    autoplay(0, event.data.audioQueue, 1);
                 } else {
                     audioPlayer = new Howl({
                         src: ["./audio/" + event.data.transactionFile + ".wav"]

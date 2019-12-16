@@ -4,6 +4,9 @@ using Curiosity.Shared.Client.net.Extensions;
 using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using CitizenFX.Core;
+using System.Media;
+using System.IO;
+using Curiosity.Missions.Client.net.Scripts;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment
 {
@@ -17,6 +20,29 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             RegisterCommand("volume", new Action<int, List<object>, string>(OnAudioVolume), false);
 
             RegisterCommand("create", new Action<int, List<object>, string>(OnCreateCommand), false);
+
+            RegisterCommand("playSound", new Action<int, List<object>, string>(OnPlaySound), false);
+        }
+
+        static async void OnPlaySound(int playerHandle, List<object> arguments, string raw)
+        {
+            await BaseScript.Delay(0);
+            if (!PlayerClient.ClientInformation.IsDeveloper()) return;
+
+            string sending = $"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)}";
+
+            if (arguments.Count > 0)
+            {
+                if ($"{arguments[0]}" == "1")
+                {
+                    sending = $"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{Client.Random.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{Client.Random.Next(1, 5)} " +
+                        $"CONJUNCTIVES/IN_0{Client.Random.Next(1, 6)} AREAS/AREA_DAVIS_01 UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Client.Random.Next(1, 3)}";
+                }
+            }
+
+            Screen.ShowNotification(sending);
+
+            SoundManager.PlayAudio(sending);
         }
 
         static async void OnCreateCommand(int playerHandle, List<object> arguments, string raw)

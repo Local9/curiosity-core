@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using static CitizenFX.Core.Native.API;
 using System;
 using CitizenFX.Core;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.Missions.Client.net.Scripts
 {
@@ -17,9 +18,11 @@ namespace Curiosity.Missions.Client.net.Scripts
             SoundMessage soundMessage = new SoundMessage(AudioVolume);
             foreach (string audioFile in audioFiles.Split(' '))
             {
-                soundMessage.audioQueue.Add($"./audio/{audioFile}.wav");
+                string file = $"./audio/{audioFile}.wav";
+                soundMessage.audioQueue.Add(file);
             }
-            SendNuiMessage(JsonConvert.SerializeObject(soundMessage));
+            string message = JsonConvert.SerializeObject(soundMessage);
+            SendNuiMessage(message);
         }
 
         static public void PlayAudioFile(string audioFile)
