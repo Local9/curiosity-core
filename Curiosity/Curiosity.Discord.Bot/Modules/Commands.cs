@@ -137,15 +137,26 @@ namespace Curiosity.Discord.Bot.Modules
             if (user == null)
                 user = Context.User;
 
-            List<Models.User> dbUser = await new Models.User().GetTopUsers();
+            List<Models.User> dbUsers = await new Models.User().GetTopUsers();
 
-            if (dbUser == null)
+            if (dbUsers == null)
             {
                 await ReplyAsync("User was not found or has not connected to the server.");
             }
             else
             {
                 EmbedBuilder builder = new EmbedBuilder();
+
+                string topUsers = "```";
+                int count = 1;
+
+                dbUsers.ForEach(user =>
+                {
+                    topUsers += $"#{count}. {user.Username} - {user.LifeExperience:#,###,##0}";
+                    count++;
+                });
+
+                topUsers += "```";
 
                 builder
                     .AddField("Top Players", $"")
