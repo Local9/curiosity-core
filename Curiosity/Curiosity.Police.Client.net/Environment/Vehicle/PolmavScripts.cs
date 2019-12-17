@@ -30,7 +30,23 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
         static Client client = Client.GetInstance();
 
         private const double MATH_PI = 3.14159265358979323846264338327950288;
+
         private const string DECOR_TARGET = "curiosity:spotlight:target";
+        private const string DECOR_SPOTLIGHT_X = "curiosity:spotlight:vector:X";
+        private const string DECOR_SPOTLIGHT_Y = "curiosity:spotlight:vector:Y";
+        private const string DECOR_SPOTLIGHT_Z = "curiosity:spotlight:vector:Z";
+
+        private const string POLMAV_SPOTLIGHT_PAUSE = "curiosity:police:spotlight:pause";
+        private const string POLMAV_SPOTLIGHT_MANUAL = "curiosity:police:spotlight:manual";
+        private const string POLMAV_SPOTLIGHT_TOGGLE = "curiosity:police:spotlight:toggle";
+        private const string POLMAV_SPOTLIGHT_FORWARD = "curiosity:police:spotlight:forward";
+        private const string POLMAV_SPOTLIGHT_TRACKING = "curiosity:police:spotlight:tracking";
+        private const string POLMAV_SPOTLIGHT_TRACKING_TOGGLE = "curiosity:police:spotlight:tracking:toggle";
+        private const string POLMAV_SPOTLIGHT_BRIGHTNESS_UP = "curiosity:police:spotlight:light:up";
+        private const string POLMAV_SPOTLIGHT_BRIGHTNESS_DOWN = "curiosity:police:spotlight:light:down";
+        private const string POLMAV_SPOTLIGHT_RADIUS_UP = "curiosity:police:spotlight:radius:up";
+        private const string POLMAV_SPOTLIGHT_RADIUS_DOWN = "curiosity:police:spotlight:radius:down";
+
         static float _fovMax = 80.0f;
         static float _fovMin = 5.0f;
         static float _zoomspeed = 3.0f;
@@ -65,31 +81,30 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
         static bool _trackingSpotlight_pause = false;
         static int _trackingSpotlight_target;
 
-        
-        static bool _fSpotlight_state = false;
+        static bool _forwardSpotlight_state = false;
         static bool _manualSpotlight_toggle = false;
 
         public static void Init()
         {
-            DecorRegister("curiosity:spotlight:vector:X", 3);
-            DecorRegister("curiosity:spotlight:vector:Y", 3);
-            DecorRegister("curiosity:spotlight:vector:Z", 3);
+            DecorRegister(DECOR_SPOTLIGHT_X, 3);
+            DecorRegister(DECOR_SPOTLIGHT_Y, 3);
+            DecorRegister(DECOR_SPOTLIGHT_Z, 3);
             DecorRegister(DECOR_TARGET, 3);
 
             client.RegisterTickHandler(OnMainTaskAsync);
 
-            client.RegisterEventHandler("curiosity:police:spotlight:pause", new Action<bool>(OnPauseTrackingSpotlight));
-            client.RegisterEventHandler("curiosity:police:spotlight:manual", new Action<int>(OnManualSpotlight));
-            client.RegisterEventHandler("curiosity:police:spotlight:toggle", new Action<int>(OnManualSpotlightToggle));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_PAUSE, new Action<bool>(OnPauseTrackingSpotlight));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_MANUAL, new Action<int>(OnManualSpotlight));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_TOGGLE, new Action<int>(OnManualSpotlightToggle));
 
-            client.RegisterEventHandler("curiosity:police:spotlight:forward", new Action<int, bool>(OnForwardSpotlight));
-            client.RegisterEventHandler("curiosity:police:spotlight:tracking", new Action<int, int, string, float, float, float>(OnTrackingSpotLight));
-            client.RegisterEventHandler("curiosity:police:spotlight:tracking:toggle", new Action<int, bool>(OnTrackingSpotLightToggle));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_FORWARD, new Action<int, bool>(OnForwardSpotlight));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_TRACKING, new Action<int, int, string, float, float, float>(OnTrackingSpotLight));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_TRACKING_TOGGLE, new Action<int, bool>(OnTrackingSpotLightToggle));
 
-            client.RegisterEventHandler("curiosity:police:spotlight:light:up", new Action(OnSpotlightLightUp));
-            client.RegisterEventHandler("curiosity:police:spotlight:light:down", new Action(OnSpotlightLightDown));
-            client.RegisterEventHandler("curiosity:police:spotlight:radius:up", new Action(OnSpotlightRadiusUp));
-            client.RegisterEventHandler("curiosity:police:spotlight:radius:down", new Action(OnSpotlightRadiusDown));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_BRIGHTNESS_UP, new Action(OnSpotlightLightUp));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_BRIGHTNESS_DOWN, new Action(OnSpotlightLightDown));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_RADIUS_UP, new Action(OnSpotlightRadiusUp));
+            client.RegisterEventHandler(POLMAV_SPOTLIGHT_RADIUS_DOWN, new Action(OnSpotlightRadiusDown));
         }
 
         static async Task OnMainTaskAsync()
@@ -133,27 +148,27 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                             if (!_trackingSpotlight_pause)
                             {
                                 _trackingSpotlight_pause = true;
-                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:pause", _trackingSpotlight_pause);
+                                BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_PAUSE, _trackingSpotlight_pause);
                             }
                             else
                             {
                                 _trackingSpotlight_pause = false;
-                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:pause", _trackingSpotlight_pause);
+                                BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_PAUSE, _trackingSpotlight_pause);
                             }
                             PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
                         }
                         else
                         {
-                            if (_fSpotlight_state)
+                            if (_forwardSpotlight_state)
                             {
-                                _fSpotlight_state = false;
-                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:forward", Game.Player.ServerId, _fSpotlight_state);
+                                _forwardSpotlight_state = false;
+                                BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_FORWARD, Game.Player.ServerId, _forwardSpotlight_state);
                             }
 
                             _trackingSpotlight_pause = false;
                             _trackingSpotlight = true;
 
-                            BaseScript.TriggerServerEvent("curiosity:police:spotlight:tracking", _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
+                            BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TRACKING, _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
 
                             PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
                         }
@@ -164,10 +179,10 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         {
                             _trackingSpotlight_pause = false;
                             _trackingSpotlight = false;
-                            BaseScript.TriggerServerEvent("curiosity:police:spotlight:tracking:toggle");
+                            BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TRACKING_TOGGLE);
                         }
-                        _fSpotlight_state = !_fSpotlight_state;
-                        BaseScript.TriggerServerEvent("curiosity:police:spotlight:forward", _fSpotlight_state);
+                        _forwardSpotlight_state = !_forwardSpotlight_state;
+                        BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_FORWARD, _forwardSpotlight_state);
                         PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
                     }
 
@@ -184,7 +199,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                             DecorRemove(_targetVehicle.Handle, DECOR_TARGET);
                             if (_trackingSpotlight)
                             {
-                                Client.TriggerServerEvent("curiosity:police:spotlight:tracking:toggle");
+                                Client.TriggerServerEvent(POLMAV_SPOTLIGHT_TRACKING_TOGGLE);
                             }
                             
                             _trackingSpotlight = false;
@@ -224,12 +239,12 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                                 PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
                                 if (_manualSpotlight && _targetVehicle != null)
                                 {
-                                    Client.TriggerServerEvent("curiosity:police:spotlight:toggle");
+                                    Client.TriggerServerEvent(POLMAV_SPOTLIGHT_TOGGLE);
 
                                     _trackingSpotlight_pause = false;
                                     _trackingSpotlight = true;
 
-                                    BaseScript.TriggerServerEvent("curiosity:police:spotlight:tracking", Game.Player.ServerId, _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
+                                    BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TRACKING, Game.Player.ServerId, _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
                                     PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
                                 }
                                 _manualSpotlight = false;
@@ -247,36 +262,36 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                                 if (_trackingSpotlight)
                                 {
                                     _trackingSpotlight_pause = true;
-                                    BaseScript.TriggerServerEvent("curiosity:police:spotlight:pause", _trackingSpotlight_pause);
+                                    BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_PAUSE, _trackingSpotlight_pause);
                                     _manualSpotlight = !_manualSpotlight;
                                     if (_manualSpotlight)
                                     {
                                         Vector3 rotation = GetCamRot(cam, 2);
                                         Vector3 forwardVector = RotAnglesToVec(rotation);
-                                        DecorSetInt(playerPed, "curiosity:spotlight:vector:X", (int)forwardVector.X);
-                                        DecorSetInt(playerPed, "curiosity:spotlight:vector:Y", (int)forwardVector.Y);
-                                        DecorSetInt(playerPed, "curiosity:spotlight:vector:Z", (int)forwardVector.Z);
+                                        DecorSetInt(playerPed, DECOR_SPOTLIGHT_X, (int)forwardVector.X);
+                                        DecorSetInt(playerPed, DECOR_SPOTLIGHT_Y, (int)forwardVector.Y);
+                                        DecorSetInt(playerPed, DECOR_SPOTLIGHT_Z, (int)forwardVector.Z);
                                         PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                        BaseScript.TriggerServerEvent("curiosity:police:spotlight:manual", Game.Player.ServerId);
+                                        BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_MANUAL, Game.Player.ServerId);
                                     }
                                     else
                                     {
-                                        BaseScript.TriggerServerEvent("curiosity:police:spotlight:toggle");
+                                        BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TOGGLE);
                                     }
                                 }
-                                else if (_fSpotlight_state)
+                                else if (_forwardSpotlight_state)
                                 {
-                                    _fSpotlight_state = false;
-                                    BaseScript.TriggerServerEvent("curiosity:police:spotlight:forward", _fSpotlight_state);
+                                    _forwardSpotlight_state = false;
+                                    BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_FORWARD, _forwardSpotlight_state);
                                     _manualSpotlight = !_manualSpotlight;
                                     if (_manualSpotlight)
                                     {
                                         PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                        BaseScript.TriggerServerEvent("curiosity:police:spotlight:manual", Game.Player.ServerId);
+                                        BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_MANUAL, Game.Player.ServerId);
                                     }
                                     else
                                     {
-                                        BaseScript.TriggerServerEvent("curiosity:police:spotlight:toggle");
+                                        BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TOGGLE);
                                     }
                                 }
                                 else
@@ -285,33 +300,33 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                                     if (_manualSpotlight)
                                     {
                                         PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                        BaseScript.TriggerServerEvent("curiosity:police:spotlight:manual", Game.Player.ServerId);
+                                        BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_MANUAL, Game.Player.ServerId);
                                     }
                                     else
                                     {
-                                        BaseScript.TriggerServerEvent("curiosity:police:spotlight:toggle");
+                                        BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TOGGLE);
                                     }
                                 }
                             }
 
                             if (Game.IsControlJustPressed(0, _keyTurnLightUp))
                             {
-                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:light:up");
+                                BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_BRIGHTNESS_UP);
                             }
 
                             if (Game.IsControlJustPressed(0, _keyTurnLightDown))
                             {
-                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:light:down");
+                                BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_BRIGHTNESS_DOWN);
                             }
 
                             if (Game.IsControlJustPressed(0, _keyTurnLightRadiusUp))
                             {
-                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:radius:up");
+                                BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_RADIUS_UP);
                             }
 
                             if (Game.IsControlJustPressed(0, _keyTurnLightRadiusDown))
                             {
-                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:radius:down");
+                                BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_RADIUS_DOWN);
                             }
 
                             if (Game.IsControlJustPressed(0, _toggleDisplay))
@@ -335,7 +350,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                                         if (_trackingSpotlight)
                                         {
                                             _trackingSpotlight = false;
-                                            BaseScript.TriggerServerEvent("curiosity:police:spotlight:tracking:toggle");
+                                            BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TRACKING_TOGGLE);
                                         }
 
                                         _targetVehicle = null;
@@ -387,7 +402,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                                                     _trackingSpotlight = true;
                                                     PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
 
-                                                    BaseScript.TriggerServerEvent("curiosity:police:spotlight:tracking", _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
+                                                    BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TRACKING, _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
                                                 }
                                                 else
                                                 {
@@ -395,7 +410,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                                                     _trackingSpotlight = false;
                                                 }
 
-                                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:tracking:toggle", _trackingSpotlight);
+                                                BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TRACKING_TOGGLE, _trackingSpotlight);
                                             }
                                         }
                                     }
@@ -412,14 +427,14 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                             {
                                 Vector3 rotation = GetCamRot(cam, 2);
                                 Vector3 forwardVector = RotAnglesToVec(rotation);
-                                DecorSetInt(playerPed, "curiosity:spotlight:vector:X", (int)forwardVector.X);
-                                DecorSetInt(playerPed, "curiosity:spotlight:vector:Y", (int)forwardVector.Y);
-                                DecorSetInt(playerPed, "curiosity:spotlight:vector:Z", (int)forwardVector.Z);
+                                DecorSetInt(playerPed, DECOR_SPOTLIGHT_X, (int)forwardVector.X);
+                                DecorSetInt(playerPed, DECOR_SPOTLIGHT_Y, (int)forwardVector.Y);
+                                DecorSetInt(playerPed, DECOR_SPOTLIGHT_Z, (int)forwardVector.Z);
                                 DrawSpotLight(camera.Position.X, camera.Position.Y, camera.Position.Z, forwardVector.X, forwardVector.Y, forwardVector.Z, 255, 255, 255, 800.0f, _brightness, 10.0f, _spotRadius, 1.0f);
                             }
                             else
                             {
-                                Client.TriggerServerEvent("curiosity:police:spotlight:toggle");
+                                Client.TriggerServerEvent(POLMAV_SPOTLIGHT_TOGGLE);
                             }
 
                         } // WHILE LOOP END
@@ -427,7 +442,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         if (_manualSpotlight)
                         {
                             _manualSpotlight = false;
-                            Client.TriggerServerEvent("curiosity:police:spotlight:toggle");
+                            Client.TriggerServerEvent(POLMAV_SPOTLIGHT_TOGGLE);
                         }
                         _helicam = false;
                         ClearTimecycleModifier();
@@ -522,7 +537,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     DecorRemove(_trackingSpotlight_target, DECOR_TARGET);
                     _targetVehicle = null;
                     _trackingSpotlight = false;
-                    BaseScript.TriggerServerEvent("curiosity:police:spotlight:tracking:toggle");
+                    BaseScript.TriggerServerEvent(POLMAV_SPOTLIGHT_TRACKING_TOGGLE);
                     _trackingSpotlight_target = 0;
                     break;
                 }
@@ -544,18 +559,18 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     await BaseScript.Delay(0);
                     Vector3 coords = GetEntityCoords(heli, true);
                     Vector3 spotlightOffset = coords + new Vector3(0f, 0f, -1.5f);
-                    int SpotvectorX = DecorGetInt(playerPedId, "curiosity:spotlight:vector:X");
-                    int SpotvectorY = DecorGetInt(playerPedId, "curiosity:spotlight:vector:Y");
-                    int SpotvectorZ = DecorGetInt(playerPedId, "curiosity:spotlight:vector:Z");
+                    int SpotvectorX = DecorGetInt(playerPedId, DECOR_SPOTLIGHT_X);
+                    int SpotvectorY = DecorGetInt(playerPedId, DECOR_SPOTLIGHT_Y);
+                    int SpotvectorZ = DecorGetInt(playerPedId, DECOR_SPOTLIGHT_Z);
                     if (SpotvectorX > 0)
                     {
                         DrawSpotLight(SpotvectorX, SpotvectorY, SpotvectorZ, SpotvectorX, SpotvectorY, SpotvectorZ, 255, 255, 255, 800.0f, _brightness, 10.0f, _spotRadius, 1.0f);
                     }
                 }
                 _manualSpotlight_toggle = false;
-                DecorSetInt(playerPedId, "curiosity:spotlight:vector:X", 0);
-                DecorSetInt(playerPedId, "curiosity:spotlight:vector:Y", 0);
-                DecorSetInt(playerPedId, "curiosity:spotlight:vector:Z", 0);
+                DecorSetInt(playerPedId, DECOR_SPOTLIGHT_X, 0);
+                DecorSetInt(playerPedId, DECOR_SPOTLIGHT_Y, 0);
+                DecorSetInt(playerPedId, DECOR_SPOTLIGHT_Z, 0);
             }
         }
 

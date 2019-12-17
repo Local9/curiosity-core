@@ -11,6 +11,7 @@ using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
+using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Client.net.Classes.Actions
 {
@@ -932,7 +933,7 @@ namespace Curiosity.Client.net.Classes.Actions
             
         }
 
-        static void Teleport(int playerHandle, List<object> arguments, string raw)
+        static async void Teleport(int playerHandle, List<object> arguments, string raw)
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
 
@@ -946,20 +947,8 @@ namespace Curiosity.Client.net.Classes.Actions
                 if (DoesBlipExist(blip))
                 {
                     Vector3 pos = GetBlipInfoIdCoord(blip);
-                    Vector3 safePos = World.GetSafeCoordForPed(pos, true, 16);
 
-                    if (!safePos.IsZero)
-                    {
-                        pos = safePos;
-                    }
-                    else
-                    {
-                        float ground = pos.Z;
-                        if (GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z + 200f, ref ground, false))
-                        {
-                            pos.Z = ground;
-                        }
-                    }
+                    pos = await pos.Ground();
 
                     posX = pos.X;
                     posY = pos.Y;

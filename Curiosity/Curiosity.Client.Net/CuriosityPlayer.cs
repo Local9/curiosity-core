@@ -369,6 +369,9 @@ namespace Curiosity.Client.net
                 Screen.ShowNotification($"Spawn Loc: {Game.PlayerPed.Position}\nspawnPosition: {spawnPosition}");
             }
 
+            API.PlaceObjectOnGroundProperly(Game.PlayerPed.Handle);
+            API.PlaceObjectOnGroundProperly_2(Game.PlayerPed.Handle);
+
             Game.PlayerPed.IsPositionFrozen = false;
 
             int gameTimer = API.GetGameTimer();
