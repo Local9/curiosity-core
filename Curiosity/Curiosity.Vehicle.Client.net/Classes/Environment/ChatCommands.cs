@@ -50,7 +50,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         static public void ShowSirenKeys()
         {
-            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Sirens", "How To Keyboard...", "Enable Sirens: ~b~G~n~~s~Change Siren: ~b~Y~n~~s~Horn: ~b~CTRL~n~~s~Blip Siren: ~b~B", 2);
+            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Sirens", "How To Keyboard...", "Enable Sirens: ~b~G/L-ALT~n~~s~Change Siren: ~b~Y~n~~s~Horn: ~b~CTRL~n~~s~Blip Siren: ~b~B", 2);
             Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Sirens", "How To XBOX Controls...", "Enable Sirens: ~b~DPAD Down~n~~s~Change Siren: ~b~L3~n~~s~Horn: ~b~B~n~~s~Blip Siren: ~b~R3", 2);
         }
 

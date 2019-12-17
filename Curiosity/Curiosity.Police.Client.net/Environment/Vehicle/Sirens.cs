@@ -79,6 +79,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     API.DisableControlAction(0, (int)Control.VehicleCinCam, true);
                     API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
                     API.DisableControlAction(0, (int)Control.LookBehind, true);
+                    API.DisableControlAction(0, (int)Control.SniperZoomOutSecondary, true);
                 }
             }
 
@@ -127,7 +128,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     await BaseScript.Delay(700);
                     SirenActive = false;
                 }
-                else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsControlJustPressed(7, (int)Control.SniperZoomOutSecondary)) // Preset on/off
+                else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(17, (int)Control.CharacterWheel)) // Preset on/off
                 {
                     LightsActive = true;
                     client.RegisterTickHandler(HideHudComponent);
@@ -150,7 +151,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         }
 
                         await BaseScript.Delay(0);
-                        if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsControlJustPressed(7, (int)Control.SniperZoomOutSecondary))
+                        if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(17, (int)Control.CharacterWheel))
                         {
                             API.SetFakeWantedLevel(0);
                             LightsActive = false;
