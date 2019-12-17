@@ -26,7 +26,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static internal bool ShouldShowBlip(CitizenFX.Core.Player player)
         {
-            bool isSneaking = player.Character.IsInStealthMode || player.Character.IsInCover() || Function.Call<bool>(Hash.IS_PED_USING_SCENARIO, player.Character.Handle, "WORLD_HUMAN_SMOKING") /*|| (player.Character.IsInVehicle() && player.Character.CurrentVehicle.Speed < 3.0)*/;
+            bool isSneaking = player.Character.IsInStealthMode || player.Character.IsInCover() || Function.Call<bool>(Hash.IS_PED_USING_SCENARIO, player.Character.Handle, "WORLD_HUMAN_SMOKING");
             bool isCurrentPlayer = (Game.Player == player);
             if (!isSneaking && !isCurrentPlayer)
                 return true;
@@ -97,22 +97,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             int playerGamerTag = API.CreateMpGamerTag(playerHandle, player.Name, false, false, "", 0);
 
             if (!API.NetworkIsPlayerActive(player.Handle))
-            {
-                API.SetMpGamerTagVisibility(playerGamerTag, 0, false);
-                if (API.DoesBlipExist(blip))
-                {
-                    API.SetBlipAlpha(blip, 0);
-                }
-            }
-            else if (player.Character.Opacity == 0)
-            {
-                API.SetMpGamerTagVisibility(playerGamerTag, 0, false);
-                if (API.DoesBlipExist(blip))
-                {
-                    API.SetBlipAlpha(blip, 0);
-                }
-            }
-            else if (!API.IsEntityVisible(player.Character.Handle))
             {
                 API.SetMpGamerTagVisibility(playerGamerTag, 0, false);
                 if (API.DoesBlipExist(blip))
