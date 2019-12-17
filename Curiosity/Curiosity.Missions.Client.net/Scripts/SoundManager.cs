@@ -24,6 +24,17 @@ namespace Curiosity.Missions.Client.net.Scripts
             string message = JsonConvert.SerializeObject(soundMessage);
             SendNuiMessage(message);
         }
+        static public void PlaySFX(string audioFiles)
+        {
+            SoundMessage soundMessage = new SoundMessage(AudioVolume);
+            foreach (string audioFile in audioFiles.Split(' '))
+            {
+                string file = $"./sfx/{audioFile}.wav";
+                soundMessage.audioQueue.Add(file);
+            }
+            string message = JsonConvert.SerializeObject(soundMessage);
+            SendNuiMessage(message);
+        }
 
         static public void PlayAudioFile(string audioFile)
         {

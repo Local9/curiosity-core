@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
 using Newtonsoft.Json;
+using Curiosity.Missions.Client.net.Scripts;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -601,6 +602,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (Handle == handle)
             {
+                SoundManager.PlayAudio($"sfx/CUFFS_TIGHTEN_01");
+
                 IsHandcuffed = state;
                 IsArrested = state;
                 DecorSetBool(Handle, Client.NPC_ARRESTED, state);
