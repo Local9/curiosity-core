@@ -10,6 +10,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Curiosity.Discord.Bot
 {
@@ -52,6 +53,18 @@ namespace Curiosity.Discord.Bot
             await _client.LoginAsync(TokenType.Bot, discordToken, true);
 
             await _client.StartAsync();
+
+            await _client.SetStatusAsync(UserStatus.Online);
+
+            List<string> startupScripts = new List<string>() {
+                "Happy Troublesum? happy are now?",
+                "Troublesum wanted me to say something",
+                "Don't ping me",
+                "I have a million ideas. They all point to certain death.",
+                "It hated me because I talked to it.",
+                "I’d give you advice, but you wouldn’t listen. No one ever does."
+            };
+            await _client.SetGameAsync(startupScripts[new Random().Next(startupScripts.Count)]);
 
             await Task.Delay(-1);
         }

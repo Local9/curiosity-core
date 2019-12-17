@@ -83,7 +83,7 @@ namespace Curiosity.Discord.Bot.Modules
 
 
                     builder
-                        .AddField("Emergency Life V", "5.9.0.85:30120")
+                        .WithTitle("Emergency Life V")
                         .AddField("Server Uptime", $"{info.Variables["Uptime"]}", true)
                         .AddField("Player Count", $"{countOfPlayers}", true)
                         .AddField("Players", $"{playersOnline}", false)
@@ -91,6 +91,8 @@ namespace Curiosity.Discord.Bot.Modules
                         .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
                         .WithCurrentTimestamp()
                         .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+
+                    // builder.Url = "fivem://connect/5.9.0.85:30120";
 
                     await ReplyAsync("", false, builder.Build());
                 }
