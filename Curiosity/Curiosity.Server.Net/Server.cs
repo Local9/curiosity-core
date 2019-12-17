@@ -15,9 +15,17 @@ namespace Curiosity.Server.net
         public static bool serverActive = false;
         public static int startingLocationId = 0;
 
+        const string CURIOSITY_VERSION = "v1.0.0.1550";
         public static string LICENSE_IDENTIFIER = "license";
         public static string DISCORD_IDENTIFIER = "discord";
-        public static bool isLive = false;
+        public static bool isLive
+        {
+            get
+            {
+                return API.GetConvar("server_live", "false") == "true";
+            }   
+        }
+
         public static PlayerList players;
 
         static DateTime serverStarted;
@@ -36,7 +44,6 @@ namespace Curiosity.Server.net
 
             _server = this;
 
-            isLive = API.GetConvar("server_live", "false") == "true";
             startingLocationId = API.GetConvarInt("starting_location_id", 1);
 
             API.SetConvar("sv_authMaxVariance", "");
@@ -121,7 +128,7 @@ namespace Curiosity.Server.net
             }
 
             API.SetConvarServerInfo("Map", $"Los Santos");
-            API.SetConvarServerInfo("Curiosity", $"v1.0.0.1548");
+            API.SetConvarServerInfo("Curiosity", CURIOSITY_VERSION);
 
             Business.BusinessUser.BanManagement();
 

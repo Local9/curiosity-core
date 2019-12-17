@@ -381,8 +381,6 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
                                             if (_trackingSpotlight)
                                             {
-                                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:tracking:toggle");
-
                                                 if (!_trackingSpotlight_pause)
                                                 {
                                                     _trackingSpotlight_pause = false;
@@ -396,6 +394,8 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                                                     _trackingSpotlight_pause = false;
                                                     _trackingSpotlight = false;
                                                 }
+
+                                                BaseScript.TriggerServerEvent("curiosity:police:spotlight:tracking:toggle", _trackingSpotlight);
                                             }
                                         }
                                     }

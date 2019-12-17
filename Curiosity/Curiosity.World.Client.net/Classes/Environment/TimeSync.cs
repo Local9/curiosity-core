@@ -119,8 +119,8 @@ namespace Curiosity.World.Client.net.Classes.Environment
             }
             else if (WeatherSystem.IsHalloween)
             {
-                SetClockTime(0, 0, 0);
-                NetworkOverrideClockTime(0, 0, 0);
+                SetClockTime(0, 1, 0);
+                NetworkOverrideClockTime(0, 1, 0);
                 PauseClock(true);
             }
             // Otherwise...
@@ -136,7 +136,7 @@ namespace Curiosity.World.Client.net.Classes.Environment
                     await Client.Delay(minuteClockSpeed);
                 }
                 // only add a minute if the timer has reached the configured duration (2000ms (2s) by default).
-                if (GetGameTimer() - minuteTimer > minuteClockSpeed)
+                if ((GetGameTimer() - minuteTimer) > minuteClockSpeed)
                 {
                     currentMinutes++;
                     minuteTimer = GetGameTimer();
@@ -151,6 +151,7 @@ namespace Curiosity.World.Client.net.Classes.Environment
                 {
                     currentHours = 0;
                 }
+
                 SetClockTime(currentHours, currentMinutes, 0);
                 NetworkOverrideClockTime(currentHours, currentMinutes, 0);
             }
