@@ -136,6 +136,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (this.Ped.IsInVehicle())
                 this.Vehicle = this.Ped.CurrentVehicle;
 
+            NetworkRequestControlOfEntity(Ped.Handle);
+            SetNetworkIdCanMigrate(Ped.NetworkId, true);
+            NetworkRegisterEntityAsNetworked(Ped.NetworkId);
+            SetNetworkIdExistsOnAllMachines(Ped.NetworkId, true);
+
+            if (!IsEntityAMissionEntity(Ped.Handle))
+                SetEntityAsMissionEntity(Ped.Handle, true, true);
+
             IsMenuVisible = false;
             IsPerformingCpr = false;
             IsCoronerCalled = false;

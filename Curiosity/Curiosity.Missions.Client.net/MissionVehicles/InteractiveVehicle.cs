@@ -88,6 +88,14 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
             this.Vehicle = new Vehicle(handle);
 
+            NetworkRequestControlOfEntity(Vehicle.Handle);
+            SetNetworkIdCanMigrate(Vehicle.NetworkId, true);
+            NetworkRegisterEntityAsNetworked(Vehicle.NetworkId);
+            SetNetworkIdExistsOnAllMachines(Vehicle.NetworkId, true);
+
+            if (!IsEntityAMissionEntity(Vehicle.Handle))
+                SetEntityAsMissionEntity(Vehicle.Handle, true, true);
+
             this.InteractivePed = Scripts.PedCreators.InteractivePedCreator.Ped(this.Vehicle.Driver);
 
             _chanceOfFlee = 0;
