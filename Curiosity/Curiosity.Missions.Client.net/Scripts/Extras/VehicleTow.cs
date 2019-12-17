@@ -48,6 +48,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
                 if (vehToRemove != null)
                 {
+                    if (DecorGetInt(vehToRemove.Handle, Client.PLAYER_VEHICLE) > 0)
+                    {
+                        CitizenFX.Core.UI.Screen.ShowNotification("~o~Player Vehicle");
+                        return;
+                    }
 
                     int tfVehHandle = 0;
                     
