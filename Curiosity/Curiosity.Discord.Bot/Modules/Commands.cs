@@ -70,7 +70,7 @@ namespace Curiosity.Discord.Bot.Modules
 
                     EmbedBuilder builder = new EmbedBuilder();
 
-                    string playersOnline = "```";
+                    string playersOnline = "";
 
                     lst.ForEach(item =>
                     {
@@ -78,9 +78,6 @@ namespace Curiosity.Discord.Bot.Modules
                     });
 
                     playersOnline = playersOnline.Substring(0, playersOnline.Length - 2);
-
-                    playersOnline += "```";
-
 
                     builder
                         .WithTitle("Emergency Life V")
@@ -94,7 +91,7 @@ namespace Curiosity.Discord.Bot.Modules
 
                     // builder.Url = "fivem://connect/5.9.0.85:30120";
 
-                    await ReplyAsync("", false, builder.Build());
+                    await ReplyAsync("`connect server.lifev.net:30120`", false, builder.Build());
                 }
             }
             catch (Exception ex)
