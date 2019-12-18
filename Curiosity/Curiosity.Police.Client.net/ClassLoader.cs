@@ -29,6 +29,8 @@ namespace Curiosity.Police.Client.net
             Curiosity.Global.Shared.net.Data.BlipHandler.Init();
             Environment.Job.DutyMarkers.Init();
 
+            Environment.Vehicle.PolmavScripts.Init();
+
             // Developer
             Classes.Developer.Init();
 

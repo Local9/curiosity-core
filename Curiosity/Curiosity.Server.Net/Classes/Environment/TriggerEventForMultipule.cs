@@ -12,6 +12,48 @@ namespace Curiosity.Server.net.Classes.Environment
         static public void Init()
         {
             server.RegisterEventHandler("curiosity:Server:Event:ForAll", new Action<CitizenFX.Core.Player, string>(TriggerEventForAll));
+            server.RegisterEventHandler("curiosity:Server:Event:ForAllPlayers", new Action<CitizenFX.Core.Player, string, object[]>(TriggerEventForAllPlayers));
+        }
+
+        static void TriggerEventForAllPlayers([FromSource]CitizenFX.Core.Player player, string eventName, params object[] args)
+        {
+            try
+            {
+                switch (args.Length)
+                {
+                    case 1:
+                        Server.TriggerClientEvent(eventName, args[0]);
+                        break;
+                    case 2:
+                        Server.TriggerClientEvent(eventName, args[0], args[1]);
+                        break;
+                    case 3:
+                        Server.TriggerClientEvent(eventName, args[0], args[1], args[2]);
+                        break;
+                    case 4:
+                        Server.TriggerClientEvent(eventName, args[0], args[1], args[2], args[3]);
+                        break;
+                    case 5:
+                        Server.TriggerClientEvent(eventName, args[0], args[1], args[2], args[3], args[4]);
+                        break;
+                    case 6:
+                        Server.TriggerClientEvent(eventName, args[0], args[1], args[2], args[3], args[4], args[5]);
+                        break;
+                    case 7:
+                        Server.TriggerClientEvent(eventName, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                        break;
+                    case 8:
+                        Server.TriggerClientEvent(eventName, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+                        break;
+                    default:
+                        Server.TriggerClientEvent(eventName);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[TriggerEventForAllPlayers] ERROR: {ex.Message}");
+            }
         }
 
         static void TriggerEventForAll([FromSource]CitizenFX.Core.Player player, string serializedModel)

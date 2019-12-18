@@ -140,5 +140,10 @@ namespace Curiosity.Police.Client.net
         {
             Exports.Add(name, action);
         }
+
+        public void TriggerEventForAll(string eventName, params object[] args)
+        {
+            TriggerServerEvent("curiosity:Server:Event:ForAllPlayers", eventName, args);
+        }
     }
 }
