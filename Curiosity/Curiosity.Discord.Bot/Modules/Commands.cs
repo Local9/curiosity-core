@@ -20,13 +20,12 @@ namespace Curiosity.Discord.Bot.Modules
             if (user == null)
                 user = Context.User;
 
+            Random random = new Random();
 
             if (user.Id == 307265731333062656) // Trouble
             {
 
                 List<string> responses = new List<string>() { "Leave me alone...", "Bug off...", "I'll smack ya..." };
-                Random random = new Random();
-
                 await ReplyAsync(responses[random.Next(responses.Count)]);
                 return;
             }
@@ -34,14 +33,24 @@ namespace Curiosity.Discord.Bot.Modules
             if (user.Id == 250431901674897409) // luna
             {
                 EmbedBuilder builder = new EmbedBuilder();
-                builder.WithImageUrl("https://tenor.com/view/tom-and-jerry-ping-pong-in-pain-gif-15478835");
+                List<string> responses = new List<string>() {
+                    "https://antonycook.uk/gif/pong.gif",
+                    "https://antonycook.uk/gif/pong2.gif",
+                    "https://antonycook.uk/gif/pong3.gif",
+                };
+                builder.WithImageUrl(responses[random.Next(responses.Count)]);
                 await ReplyAsync("", false, builder.Build());
                 return;
             }
 
             if (user.Id != 191686898450825217)
             {
-                await ReplyAsync("And who the hell are you?!");
+                List<string> responses = new List<string>() {
+                    "pong.... I guess",
+                    $"I'm not here for your own enjoyment {user.Username}",
+                    "I'll smack ya..."
+                };
+                await ReplyAsync(responses[random.Next(responses.Count)]);
                 return;
             }
 
