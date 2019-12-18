@@ -53,31 +53,34 @@ namespace Curiosity.Discord.Bot.Modules
         {
             try
             {
-                string result = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/players.json");
+                string serverInformation = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/info.json");
 
-                if (result == null)
+                if (string.IsNullOrEmpty(serverInformation))
                 {
                     await ReplyAsync("Server did not respond, it might be offline?!");
                 }
                 else
                 {
-                    string serverInformation = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/info.json");
+                    string result = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/players.json");
                     List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
-
                     CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
 
                     int countOfPlayers = lst.Count;
 
                     EmbedBuilder builder = new EmbedBuilder();
 
-                    string playersOnline = "";
+                    string playersOnline = "No players online";
 
-                    lst.ForEach(item =>
+                    if (countOfPlayers > 0)
                     {
-                        playersOnline += $"{item.Name}, ";
-                    });
+                        playersOnline = "";
+                        lst.ForEach(item =>
+                        {
+                            playersOnline += $"{item.Name}, ";
+                        });
 
-                    playersOnline = playersOnline.Substring(0, playersOnline.Length - 2);
+                        playersOnline = playersOnline.Substring(0, playersOnline.Length - 2);
+                    }
 
                     builder
                         .WithTitle("Emergency Life V")
@@ -96,6 +99,7 @@ namespace Curiosity.Discord.Bot.Modules
             }
             catch (Exception ex)
             {
+                await ReplyAsync("Sorry, something went wrong when trying to communicate with the server.", false);
                 Console.WriteLine($"Server: {ex}");
                 throw;
             }
