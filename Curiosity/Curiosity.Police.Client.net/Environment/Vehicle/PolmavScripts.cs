@@ -52,12 +52,12 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
         static float _zoomspeed = 3.0f;
         static float _speedLR = 4.0f;
         static float _speedUD = 4.0f;
-        static Control _toggleHelicam = Control.Context;
-        static Control _toggleVision = Control.Aim;
-        static Control _toggleRappel = Control.Duck;
-        static Control _toggleSpotlight = Control.PhoneCameraGrid;
-        static Control _toggleLockOn = Control.Sprint;
-        static Control _toggleDisplay = Control.Cover;
+        static Control _ctrToggleHelicam = Control.Context; // E (passenger)
+        static Control _ctrToggleVision = Control.Aim; // RIGHT CLICK
+        static Control _ctrToggleRappel = Control.Duck; // LCTRL
+        static Control _ctrToggleSpotlight = Control.PhoneCameraGrid; // G
+        static Control _ctrToggleLockOn = Control.Sprint; // SHIFT
+        static Control _ctrToggleDisplay = Control.Cover; // Q
         static Control _keyTurnLightUp = Control.PhoneUp;
         static Control _keyTurnLightDown = Control.PhoneDown;
         static Control _keyTurnLightRadiusDown = Control.PhoneLeft;
@@ -117,13 +117,13 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
                 if (IsHeliHighEnough())
                 {
-                    if (Game.IsControlJustPressed(0, _toggleHelicam))
+                    if (Game.IsControlJustPressed(0, _ctrToggleHelicam))
                     {
                         PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
                         _helicam = true;
                     }
 
-                    if (Game.IsControlJustPressed(0, _toggleRappel))
+                    if (Game.IsControlJustPressed(0, _ctrToggleRappel))
                     {
                         if (GetPedInVehicleSeat(heli, 1) == playerPed
                             || GetPedInVehicleSeat(heli, 2) == playerPed)
@@ -139,7 +139,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     }
                 }
 
-                if (!_helicam && GetPedInVehicleSeat(heli, -1) == playerPed && Game.IsControlJustPressed(0, _toggleSpotlight))
+                if (!_helicam && GetPedInVehicleSeat(heli, -1) == playerPed && Game.IsControlJustPressed(0, _ctrToggleSpotlight))
                 {
                     if (_targetVehicle != null)
                     {
@@ -186,7 +186,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
                     }
 
-                    if (Game.IsControlJustPressed(0, _toggleDisplay) && GetPedInVehicleSeat(heli, -1) == playerPed)
+                    if (Game.IsControlJustPressed(0, _ctrToggleDisplay) && GetPedInVehicleSeat(heli, -1) == playerPed)
                     {
                         ChangeDisplay();
                     }
@@ -194,14 +194,14 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     if (_targetVehicle != null && GetPedInVehicleSeat(heli, -1) == playerPed)
                     {
                         float targetDistance = Game.PlayerPed.CurrentVehicle.Position.Distance(_targetVehicle.Position);
-                        if (Game.IsControlJustPressed(0, _toggleLockOn) || targetDistance > _maxTargetDistance)
+                        if (Game.IsControlJustPressed(0, _ctrToggleLockOn) || targetDistance > _maxTargetDistance)
                         {
                             DecorRemove(_targetVehicle.Handle, DECOR_TARGET);
                             if (_trackingSpotlight)
                             {
                                 client.TriggerEventForAll(POLMAV_SPOTLIGHT_TRACKING_TOGGLE);
                             }
-                            
+
                             _trackingSpotlight = false;
                             _trackingSpotlight_pause = false;
                             _targetVehicle = null;
@@ -209,254 +209,254 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                             PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
                         }
                     }
+                }
+                if (_helicam)
+                {
+                    SetTimecycleModifier("heliGunCam");
+                    SetTimecycleModifierStrength(0.3f);
+                    Scaleform scaleform = new Scaleform("HELI_CAM");
 
-                    if (_helicam)
+                    while (!scaleform.IsLoaded)
                     {
-                        SetTimecycleModifier("heliGunCam");
-                        SetTimecycleModifierStrength(0.3f);
-                        Scaleform scaleform = new Scaleform("HELI_CAM");
+                        await BaseScript.Delay(0);
+                    }
 
-                        while (!scaleform.IsLoaded)
+                    Vector3 cameraRotation = new Vector3(0f, 0f, Game.PlayerPed.CurrentVehicle.Heading);
+                    int cam = CreateCam("DEFAULT_SCRIPTED_FLY_CAMERA", true);
+                    Camera camera = new Camera(cam);
+                    camera.Rotation = cameraRotation;
+                    camera.FieldOfView = _fov;
+                    camera.AttachTo(Game.PlayerPed.CurrentVehicle, new Vector3(0f, 0f, -1.5f));
+                    RenderScriptCams(true, false, 0, true, false);
+                    scaleform.CallFunction("SET_CAM_LOGO", 0);
+
+                    CitizenFX.Core.Vehicle lockedOnVehicle = null;
+
+                    while (_helicam && Game.PlayerPed.IsAlive && IsPlayerInPolmav() && IsHeliHighEnough())
+                    {
+                        if (Game.IsControlJustPressed(0, _ctrToggleHelicam))
                         {
-                            await BaseScript.Delay(0);
+                            PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
+                            if (_manualSpotlight && _targetVehicle != null)
+                            {
+                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
+
+                                _trackingSpotlight_pause = false;
+                                _trackingSpotlight = true;
+
+                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_TRACKING, Game.Player.ServerId, _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
+                                PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
+                            }
+                            _manualSpotlight = false;
+                            _helicam = false;
                         }
 
-                        Vector3 cameraRotation = new Vector3(0f, 0f, Game.PlayerPed.CurrentVehicle.Heading);
-                        int cam = CreateCam("DEFAULT_SCRIPTED_FLY_CAMERA", true);
-                        Camera camera = new Camera(cam);
-                        camera.Rotation = cameraRotation;
-                        camera.FieldOfView = _fov;
-                        camera.AttachTo(Game.PlayerPed.CurrentVehicle, new Vector3(0f, 0f, -1.5f));
-                        RenderScriptCams(true, false, 0, true, false);
-                        scaleform.CallFunction("SET_CAM_LOGO", 0);
-
-                        CitizenFX.Core.Vehicle lockedOnVehicle = null;
-
-                        while (_helicam && Game.PlayerPed.IsAlive && IsPlayerInPolmav() && IsHeliHighEnough())
+                        if (Game.IsControlJustPressed(0, _ctrToggleVision))
                         {
-                            if (Game.IsControlJustPressed(0, _toggleHelicam))
+                            PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
+                            ChangeVision();
+                        }
+
+                        if (Game.IsControlJustPressed(0, _ctrToggleSpotlight))
+                        {
+                            if (_trackingSpotlight)
                             {
-                                PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                if (_manualSpotlight && _targetVehicle != null)
+                                _trackingSpotlight_pause = true;
+                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_PAUSE, _trackingSpotlight_pause);
+                                _manualSpotlight = !_manualSpotlight;
+                                if (_manualSpotlight)
                                 {
-                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
-
-                                    _trackingSpotlight_pause = false;
-                                    _trackingSpotlight = true;
-
-                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_TRACKING, Game.Player.ServerId, _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
+                                    Vector3 rotation = GetCamRot(cam, 2);
+                                    Vector3 forwardVector = RotAnglesToVec(rotation);
+                                    DecorSetInt(playerPed, DECOR_SPOTLIGHT_X, (int)forwardVector.X);
+                                    DecorSetInt(playerPed, DECOR_SPOTLIGHT_Y, (int)forwardVector.Y);
+                                    DecorSetInt(playerPed, DECOR_SPOTLIGHT_Z, (int)forwardVector.Z);
                                     PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                }
-                                _manualSpotlight = false;
-                                _helicam = false;
-                            }
-
-                            if (Game.IsControlJustPressed(0, _toggleVision))
-                            {
-                                PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                ChangeVision();
-                            }
-
-                            if (Game.IsControlJustPressed(0, _toggleSpotlight))
-                            {
-                                if (_trackingSpotlight)
-                                {
-                                    _trackingSpotlight_pause = true;
-                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_PAUSE, _trackingSpotlight_pause);
-                                    _manualSpotlight = !_manualSpotlight;
-                                    if (_manualSpotlight)
-                                    {
-                                        Vector3 rotation = GetCamRot(cam, 2);
-                                        Vector3 forwardVector = RotAnglesToVec(rotation);
-                                        DecorSetInt(playerPed, DECOR_SPOTLIGHT_X, (int)forwardVector.X);
-                                        DecorSetInt(playerPed, DECOR_SPOTLIGHT_Y, (int)forwardVector.Y);
-                                        DecorSetInt(playerPed, DECOR_SPOTLIGHT_Z, (int)forwardVector.Z);
-                                        PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                        client.TriggerEventForAll(POLMAV_SPOTLIGHT_MANUAL, Game.Player.ServerId);
-                                    }
-                                    else
-                                    {
-                                        client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
-                                    }
-                                }
-                                else if (_forwardSpotlight_state)
-                                {
-                                    _forwardSpotlight_state = false;
-                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_FORWARD, _forwardSpotlight_state);
-                                    _manualSpotlight = !_manualSpotlight;
-                                    if (_manualSpotlight)
-                                    {
-                                        PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                        client.TriggerEventForAll(POLMAV_SPOTLIGHT_MANUAL, Game.Player.ServerId);
-                                    }
-                                    else
-                                    {
-                                        client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
-                                    }
+                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_MANUAL, Game.Player.ServerId);
                                 }
                                 else
                                 {
-                                    _manualSpotlight = !_manualSpotlight;
-                                    if (_manualSpotlight)
-                                    {
-                                        PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                        client.TriggerEventForAll(POLMAV_SPOTLIGHT_MANUAL, Game.Player.ServerId);
-                                    }
-                                    else
-                                    {
-                                        client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
-                                    }
+                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
                                 }
                             }
-
-                            if (Game.IsControlJustPressed(0, _keyTurnLightUp))
+                            else if (_forwardSpotlight_state)
                             {
-                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_BRIGHTNESS_UP);
-                            }
-
-                            if (Game.IsControlJustPressed(0, _keyTurnLightDown))
-                            {
-                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_BRIGHTNESS_DOWN);
-                            }
-
-                            if (Game.IsControlJustPressed(0, _keyTurnLightRadiusUp))
-                            {
-                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_RADIUS_UP);
-                            }
-
-                            if (Game.IsControlJustPressed(0, _keyTurnLightRadiusDown))
-                            {
-                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_RADIUS_DOWN);
-                            }
-
-                            if (Game.IsControlJustPressed(0, _toggleDisplay))
-                            {
-                                ChangeDisplay();
-                            }
-
-                            if (lockedOnVehicle != null)
-                            {
-                                if (lockedOnVehicle.Exists())
+                                _forwardSpotlight_state = false;
+                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_FORWARD, _forwardSpotlight_state);
+                                _manualSpotlight = !_manualSpotlight;
+                                if (_manualSpotlight)
                                 {
-                                    camera.PointAt(lockedOnVehicle);
-                                    RenderVehicleInfo(lockedOnVehicle);
+                                    PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
+                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_MANUAL, Game.Player.ServerId);
+                                }
+                                else
+                                {
+                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
+                                }
+                            }
+                            else
+                            {
+                                _manualSpotlight = !_manualSpotlight;
+                                if (_manualSpotlight)
+                                {
+                                    PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
+                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_MANUAL, Game.Player.ServerId);
+                                }
+                                else
+                                {
+                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
+                                }
+                            }
+                        }
 
-                                    float targetDistance = Game.PlayerPed.CurrentVehicle.Position.Distance(_targetVehicle.Position);
-                                    if (Game.IsControlJustPressed(0, _toggleLockOn) || targetDistance > _maxTargetDistance)
+                        if (Game.IsControlJustPressed(0, _keyTurnLightUp))
+                        {
+                            client.TriggerEventForAll(POLMAV_SPOTLIGHT_BRIGHTNESS_UP);
+                        }
+
+                        if (Game.IsControlJustPressed(0, _keyTurnLightDown))
+                        {
+                            client.TriggerEventForAll(POLMAV_SPOTLIGHT_BRIGHTNESS_DOWN);
+                        }
+
+                        if (Game.IsControlJustPressed(0, _keyTurnLightRadiusUp))
+                        {
+                            client.TriggerEventForAll(POLMAV_SPOTLIGHT_RADIUS_UP);
+                        }
+
+                        if (Game.IsControlJustPressed(0, _keyTurnLightRadiusDown))
+                        {
+                            client.TriggerEventForAll(POLMAV_SPOTLIGHT_RADIUS_DOWN);
+                        }
+
+                        if (Game.IsControlJustPressed(0, _ctrToggleDisplay))
+                        {
+                            ChangeDisplay();
+                        }
+
+                        if (lockedOnVehicle != null)
+                        {
+                            if (lockedOnVehicle.Exists())
+                            {
+                                camera.PointAt(lockedOnVehicle);
+                                RenderVehicleInfo(lockedOnVehicle);
+
+                                float targetDistance = Game.PlayerPed.CurrentVehicle.Position.Distance(_targetVehicle.Position);
+                                if (Game.IsControlJustPressed(0, _ctrToggleLockOn) || targetDistance > _maxTargetDistance)
+                                {
+                                    PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
+                                    DecorRemove(_targetVehicle.Handle, DECOR_TARGET);
+
+                                    if (_trackingSpotlight)
+                                    {
+                                        _trackingSpotlight = false;
+                                        client.TriggerEventForAll(POLMAV_SPOTLIGHT_TRACKING_TOGGLE);
+                                    }
+
+                                    _targetVehicle = null;
+                                    lockedOnVehicle = null;
+
+                                    camera.StopPointing();
+                                }
+                            }
+                            else
+                            {
+                                lockedOnVehicle = null;
+                                _targetVehicle = null;
+                            }
+                        }
+                        else
+                        {
+                            _zoomvalue = (float)(1.0 / (_fovMax - _fovMin)) * (_fov - _fovMin);
+                            CheckInputRotation(cam, _zoomvalue);
+                            CitizenFX.Core.Vehicle vehicleDetected = GetVehicleInView(cam);
+                            if (vehicleDetected != null)
+                            {
+                                if (vehicleDetected.Exists())
+                                {
+                                    RenderVehicleInfo(vehicleDetected);
+
+                                    if (Game.IsControlJustPressed(0, _ctrToggleLockOn))
                                     {
                                         PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                        DecorRemove(_targetVehicle.Handle, DECOR_TARGET);
+                                        lockedOnVehicle = vehicleDetected;
+
+                                        if (_targetVehicle != null)
+                                        {
+                                            DecorRemove(_targetVehicle.Handle, DECOR_TARGET);
+                                        }
+
+                                        _targetVehicle = lockedOnVehicle;
+                                        NetworkRequestControlOfEntity(_targetVehicle.Handle);
+                                        SetNetworkIdCanMigrate(_targetVehicle.NetworkId, true);
+                                        NetworkRegisterEntityAsNetworked(_targetVehicle.NetworkId);
+                                        SetNetworkIdExistsOnAllMachines(_targetVehicle.NetworkId, true);
+                                        SetEntityAsMissionEntity(_targetVehicle.Handle, true, true);
+                                        DecorSetInt(_targetVehicle.Handle, DECOR_TARGET, 2);
 
                                         if (_trackingSpotlight)
                                         {
-                                            _trackingSpotlight = false;
-                                            client.TriggerEventForAll(POLMAV_SPOTLIGHT_TRACKING_TOGGLE);
-                                        }
-
-                                        _targetVehicle = null;
-                                        lockedOnVehicle = null;
-
-                                        camera.StopPointing();
-                                    }
-                                }
-                                else
-                                {
-                                    lockedOnVehicle = null;
-                                    _targetVehicle = null;
-                                }
-                            }
-                            else
-                            {
-                                _zoomvalue = (float)(1.0 / (_fovMax - _fovMin)) * (_fov - _fovMin);
-                                CheckInputRotation(cam, _zoomvalue);
-                                CitizenFX.Core.Vehicle vehicleDetected = GetVehicleInView(cam);
-                                if (vehicleDetected != null)
-                                {
-                                    if (vehicleDetected.Exists())
-                                    {
-                                        RenderVehicleInfo(vehicleDetected);
-
-                                        if (Game.IsControlJustPressed(0, _toggleLockOn))
-                                        {
-                                            PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-                                            lockedOnVehicle = vehicleDetected;
-
-                                            if (_targetVehicle != null)
+                                            if (!_trackingSpotlight_pause)
                                             {
-                                                DecorRemove(_targetVehicle.Handle, DECOR_TARGET);
+                                                _trackingSpotlight_pause = false;
+                                                _trackingSpotlight = true;
+                                                PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
+
+                                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_TRACKING, _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
+                                            }
+                                            else
+                                            {
+                                                _trackingSpotlight_pause = false;
+                                                _trackingSpotlight = false;
                                             }
 
-                                            _targetVehicle = lockedOnVehicle;
-                                            NetworkRequestControlOfEntity(_targetVehicle.Handle);
-                                            SetNetworkIdCanMigrate(_targetVehicle.NetworkId, true);
-                                            NetworkRegisterEntityAsNetworked(_targetVehicle.NetworkId);
-                                            SetNetworkIdExistsOnAllMachines(_targetVehicle.NetworkId, true);
-                                            SetEntityAsMissionEntity(_targetVehicle.Handle, true, true);
-                                            DecorSetInt(_targetVehicle.Handle, DECOR_TARGET, 2);
-
-                                            if (_trackingSpotlight)
-                                            {
-                                                if (!_trackingSpotlight_pause)
-                                                {
-                                                    _trackingSpotlight_pause = false;
-                                                    _trackingSpotlight = true;
-                                                    PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false);
-
-                                                    client.TriggerEventForAll(POLMAV_SPOTLIGHT_TRACKING, _targetVehicle.NetworkId, _targetVehicle.Mods.LicensePlate, _targetVehicle.Position.X, _targetVehicle.Position.Y, _targetVehicle.Position.Z);
-                                                }
-                                                else
-                                                {
-                                                    _trackingSpotlight_pause = false;
-                                                    _trackingSpotlight = false;
-                                                }
-
-                                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_TRACKING_TOGGLE, _trackingSpotlight);
-                                            }
+                                            client.TriggerEventForAll(POLMAV_SPOTLIGHT_TRACKING_TOGGLE, _trackingSpotlight);
                                         }
                                     }
                                 }
                             }
+                        }
 
-                            HandleZoom(cam);
-                            HideHudthisFrame();
-                            scaleform.CallFunction("SET_ALT_FOV_HEADING", Game.PlayerPed.CurrentVehicle.Position.Z, _zoomvalue, camera.Rotation.Z);
-                            scaleform.Render2D();
-                            await BaseScript.Delay(0);
-
-                            if (_manualSpotlight)
-                            {
-                                Vector3 rotation = GetCamRot(cam, 2);
-                                Vector3 forwardVector = RotAnglesToVec(rotation);
-                                DecorSetInt(playerPed, DECOR_SPOTLIGHT_X, (int)forwardVector.X);
-                                DecorSetInt(playerPed, DECOR_SPOTLIGHT_Y, (int)forwardVector.Y);
-                                DecorSetInt(playerPed, DECOR_SPOTLIGHT_Z, (int)forwardVector.Z);
-                                DrawSpotLight(camera.Position.X, camera.Position.Y, camera.Position.Z, forwardVector.X, forwardVector.Y, forwardVector.Z, 255, 255, 255, 800.0f, _brightness, 10.0f, _spotRadius, 1.0f);
-                            }
-                            else
-                            {
-                                client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
-                            }
-
-                        } // WHILE LOOP END
+                        HandleZoom(cam);
+                        HideHudthisFrame();
+                        scaleform.CallFunction("SET_ALT_FOV_HEADING", Game.PlayerPed.CurrentVehicle.Position.Z, _zoomvalue, camera.Rotation.Z);
+                        scaleform.Render2D();
+                        await BaseScript.Delay(0);
 
                         if (_manualSpotlight)
                         {
-                            _manualSpotlight = false;
+                            Vector3 rotation = GetCamRot(cam, 2);
+                            Vector3 forwardVector = RotAnglesToVec(rotation);
+                            DecorSetInt(playerPed, DECOR_SPOTLIGHT_X, (int)forwardVector.X);
+                            DecorSetInt(playerPed, DECOR_SPOTLIGHT_Y, (int)forwardVector.Y);
+                            DecorSetInt(playerPed, DECOR_SPOTLIGHT_Z, (int)forwardVector.Z);
+                            DrawSpotLight(camera.Position.X, camera.Position.Y, camera.Position.Z, forwardVector.X, forwardVector.Y, forwardVector.Z, 255, 255, 255, 800.0f, _brightness, 10.0f, _spotRadius, 1.0f);
+                        }
+                        else
+                        {
                             client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
                         }
-                        _helicam = false;
-                        ClearTimecycleModifier();
-                        _fov = (float)((_fovMax + _fovMin) * 0.5);
-                        RenderScriptCams(false, false, 0, true, false);
-                        scaleform.Dispose();
-                        camera.Delete();
-                        SetNightvision(false);
-                        SetSeethrough(false);
-                    }
 
-                    if (IsPlayerInPolmav() && _targetVehicle != null && !_helicam && _vehicleDisplay != VehicleDisplay.TURNED_OFF) {
-                        RenderVehicleInfo(_targetVehicle);
+                    } // WHILE LOOP END
+
+                    if (_manualSpotlight)
+                    {
+                        _manualSpotlight = false;
+                        client.TriggerEventForAll(POLMAV_SPOTLIGHT_TOGGLE);
                     }
+                    _helicam = false;
+                    ClearTimecycleModifier();
+                    _fov = (float)((_fovMax + _fovMin) * 0.5);
+                    RenderScriptCams(false, false, 0, true, false);
+                    scaleform.Dispose();
+                    camera.Delete();
+                    SetNightvision(false);
+                    SetSeethrough(false);
+                }
+
+                if (IsPlayerInPolmav() && _targetVehicle != null && !_helicam && _vehicleDisplay != VehicleDisplay.TURNED_OFF)
+                {
+                    RenderVehicleInfo(_targetVehicle);
                 }
             }
         }

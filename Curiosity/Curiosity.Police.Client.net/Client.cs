@@ -143,6 +143,7 @@ namespace Curiosity.Police.Client.net
 
         public void TriggerEventForAll(string eventName, params object[] args)
         {
+            Debug.WriteLine(eventName);
             TriggerServerEvent("curiosity:Server:Event:ForAllPlayers", eventName, args);
         }
     }
