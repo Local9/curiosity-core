@@ -12,7 +12,7 @@ namespace Curiosity.Server.net.Classes.Environment
         static public void Init()
         {
             server.RegisterEventHandler("curiosity:Server:Event:ForAll", new Action<CitizenFX.Core.Player, string>(TriggerEventForAll));
-            server.RegisterEventHandler("curiosity:Server:Event:ForAllPlayers", new Action<CitizenFX.Core.Player, string, object[]>(TriggerEventForAllPlayers));
+            // server.RegisterEventHandler("curiosity:Server:Event:ForAllPlayers", new Action<CitizenFX.Core.Player, string, object[]>(TriggerEventForAllPlayers));
         }
 
         static void TriggerEventForAllPlayers([FromSource]CitizenFX.Core.Player player, string eventName, params object[] args)
