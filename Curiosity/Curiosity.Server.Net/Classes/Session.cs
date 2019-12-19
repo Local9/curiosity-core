@@ -3,6 +3,7 @@ using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading;
 using static CitizenFX.Core.Native.API;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
@@ -45,7 +46,7 @@ namespace Curiosity.Server.net.Classes
         public CitizenFX.Core.Player Player { get; private set; }
         public SemaphoreSlim Mutex { get; private set; }
         public GlobalEntity.User User { get; set; }
-        public Dictionary<string, GlobalEntity.Skills> Skills = new Dictionary<string, GlobalEntity.Skills>();
+        public ConcurrentDictionary<string, GlobalEntity.Skills> Skills = new ConcurrentDictionary<string, GlobalEntity.Skills>();
 
         public int Wallet { get; private set; }
         public int BankAccount { get; private set; }
@@ -198,15 +199,22 @@ namespace Curiosity.Server.net.Classes
 
         public void IncreaseSkill(string skill, GlobalEntity.Skills skills, int experience)
         {
-            if (!Skills.ContainsKey(skill))
-            {
-                Skills.Add(skill, skills);
-                Skills[skill].Value = 0 + experience;
+            GlobalEntity.Skills skill = this.Skills.GetOrAdd(skill, key => skills);
+            lock (skill) {
+                skill.value = skill.value + experience;
             }
-            else
-            {
-                Skills[skill].Value = Skills[skill].Value + experience;
-            }
+
+            // this.Skills.AddOrUpdate(skill, skills, (key, oldValue) => oldValue.Value = oldValue.Value + experience);
+
+            // if (!Skills.ContainsKey(skill))
+            // {
+            //     Skills.Add(skill, skills);
+            //     Skills[skill].Value = 0 + experience;
+            // }
+            // else
+            // {
+            //     Skills[skill].Value = Skills[skill].Value + experience;
+            // }
 
             string skillLabel = Skills[skill].Label;
 
@@ -215,15 +223,22 @@ namespace Curiosity.Server.net.Classes
 
         public void DecreaseSkill(string skill, GlobalEntity.Skills skills, int experience)
         {
-            if (!Skills.ContainsKey(skill))
-            {
-                Skills.Add(skill, skills);
-                Skills[skill].Value = 0 - experience;
+            GlobalEntity.Skills skill = this.Skills.GetOrAdd(skill, key => skills);
+            lock (skill) {
+                skill.value = skill.value - experience;
             }
-            else
-            {
-                Skills[skill].Value = Skills[skill].Value - experience;
-            }
+
+            // this.Skills.AddOrUpdate(skill, skills, (key, oldValue) => oldValue.Value = oldValue.Value - experience);
+
+            // if (!Skills.ContainsKey(skill))
+            // {
+            //     Skills.Add(skill, skills);
+            //     Skills[skill].Value = 0 - experience;
+            // }
+            // else
+            // {
+            //     Skills[skill].Value = Skills[skill].Value - experience;
+            // }
 
             string skillLabel = Skills[skill].Label;
 
