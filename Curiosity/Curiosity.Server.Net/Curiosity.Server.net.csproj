@@ -74,6 +74,7 @@
     <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="Classes\Environment\ChatService.cs" />
     <Compile Include="Classes\Environment\InstanceChecker.cs" />
+    <Compile Include="Classes\Environment\PolmavEvents.cs" />
     <Compile Include="Classes\Environment\Scoreboard.cs" />
     <Compile Include="Classes\Environment\TriggerEventForMultipule.cs" />
     <Compile Include="Classes\Environment\Vehicles.cs" />
