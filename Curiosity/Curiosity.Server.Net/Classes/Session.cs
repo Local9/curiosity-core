@@ -202,7 +202,7 @@ namespace Curiosity.Server.net.Classes
             GlobalEntity.Skills skill = this.Skills.GetOrAdd(skill, key => skills);
             lock (skill) {
                 skill.value = skill.value + experience;
-            }
+            };
 
             // this.Skills.AddOrUpdate(skill, skills, (key, oldValue) => oldValue.Value = oldValue.Value + experience);
 
@@ -226,7 +226,7 @@ namespace Curiosity.Server.net.Classes
             GlobalEntity.Skills skill = this.Skills.GetOrAdd(skill, key => skills);
             lock (skill) {
                 skill.value = skill.value - experience;
-            }
+            };
 
             // this.Skills.AddOrUpdate(skill, skills, (key, oldValue) => oldValue.Value = oldValue.Value - experience);
 
