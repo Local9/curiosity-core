@@ -199,9 +199,9 @@ namespace Curiosity.Server.net.Classes
 
         public void IncreaseSkill(string skill, GlobalEntity.Skills skills, int experience)
         {
-            GlobalEntity.Skills skill = this.Skills.GetOrAdd(skill, key => skills);
-            lock (skill) {
-                skill.Value = skill.Value + experience;
+            GlobalEntity.Skills skillObj = this.Skills.GetOrAdd(skill, key => skills);
+            lock (skillObj) {
+                skillObj.Value = skillObj.Value + experience;
             };
 
             // this.Skills.AddOrUpdate(skill, skills, (key, oldValue) => oldValue.Value = oldValue.Value + experience);
@@ -223,9 +223,9 @@ namespace Curiosity.Server.net.Classes
 
         public void DecreaseSkill(string skill, GlobalEntity.Skills skills, int experience)
         {
-            GlobalEntity.Skills skill = this.Skills.GetOrAdd(skill, key => skills);
-            lock (skill) {
-                skill.Value = skill.Value - experience;
+            GlobalEntity.Skills skillObj = this.Skills.GetOrAdd(skill, key => skills);
+            lock (skillObj) {
+                skillObj.Value = skillObj.Value - experience;
             };
 
             // this.Skills.AddOrUpdate(skill, skills, (key, oldValue) => oldValue.Value = oldValue.Value - experience);

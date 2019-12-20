@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using System.Collections.Concurrent;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -489,6 +490,6 @@ namespace Curiosity.Server.net.Classes
         public int RoleId;
         public int Wallet;
         public int BankAccount;
-        public Dictionary<string, GlobalEntity.Skills> Skills;
+        public ConcurrentDictionary<string, GlobalEntity.Skills> Skills;
     }
 }

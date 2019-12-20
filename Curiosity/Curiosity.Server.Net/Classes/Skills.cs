@@ -8,6 +8,7 @@ using Curiosity.Shared.Server.net.Helpers;
 
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 using GlobalEnum = Curiosity.Global.Shared.net.Enums;
+using System.Collections.Concurrent;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -74,11 +75,11 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                Dictionary<string, GlobalEntity.Skills> skills = new Dictionary<string, GlobalEntity.Skills>();
+                ConcurrentDictionary<string, GlobalEntity.Skills> skills = new ConcurrentDictionary<string, GlobalEntity.Skills>();
 
                 if (!SessionManager.PlayerList.ContainsKey(player.Handle))
                 {
-                    skills.Add("Session Loading...", new GlobalEntity.Skills { Id = 0, TypeId = 0, Description = "Loading", Label = "Loading" });
+                    skills.GetOrAdd("Session Loading...", new GlobalEntity.Skills { Id = 0, TypeId = 0, Description = "Loading", Label = "Loading" });
                 }
                 else
                 {

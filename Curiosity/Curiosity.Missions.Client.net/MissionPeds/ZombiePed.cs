@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
 using System;
@@ -131,8 +132,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         protected ZombiePed(int handle) : base(handle)
         {
-            CitizenFX.Core.UI.Screen.ShowNotification("INFECTED ZOMBIE");
-
             this._ped = new Ped(handle);
             this._eventWrapper = new EntityEventWrapper(this._ped);
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
@@ -143,6 +142,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this.GoToTarget += new ZombiePed.OnGoingToTargetEvent(zombiePed.OnGoToTarget);
             ZombiePed zombiePed1 = this;
             this.AttackTarget += new ZombiePed.OnAttackingTargetEvent(zombiePed1.OnAttackTarget);
+
+            NetworkRequestControlOfEntity(this._ped.Handle);
+            SetNetworkIdCanMigrate(this._ped.NetworkId, true);
+            NetworkRegisterEntityAsNetworked(this._ped.NetworkId);
+            SetNetworkIdExistsOnAllMachines(this._ped.NetworkId, true);
+
+            if (!IsEntityAMissionEntity(this._ped.Handle))
+                SetEntityAsMissionEntity(this._ped.Handle, true, true);
         }
 
         public void Abort(EntityEventWrapper sender, Entity entity)

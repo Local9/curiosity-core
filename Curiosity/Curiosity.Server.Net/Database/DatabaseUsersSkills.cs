@@ -2,6 +2,7 @@
 using Curiosity.Shared.Server.net.Helpers;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
@@ -53,9 +54,9 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public static async Task<Dictionary<string, GlobalEntity.Skills>> GetSkills(int characterId)
+        public static async Task<ConcurrentDictionary<string, GlobalEntity.Skills>> GetSkills(int characterId)
         {
-            Dictionary<string, GlobalEntity.Skills> skillsDictionary = new Dictionary<string, GlobalEntity.Skills>();
+            ConcurrentDictionary<string, GlobalEntity.Skills> skillsDictionary = new ConcurrentDictionary<string, GlobalEntity.Skills>();
 
             string query = "select skill.skillId, skill.skillTypeId, skill.description, skill.label, skill.labelDescription, character_skill.experience from curiosity.character_skill inner join skill on character_skill.skillId = skill.skillId where character_skill.characterId = @characterId order by skill.skillTypeId;";
 
@@ -71,7 +72,7 @@ namespace Curiosity.Server.net.Database
                 if (keyValuePairs.Count == 0)
                 {
                     // Log.Warn($"SKILLS -> No skills found for user {userId}, possible they are new.");
-                    return new Dictionary<string, GlobalEntity.Skills>();
+                    return new ConcurrentDictionary<string, GlobalEntity.Skills>();
                 }
 
                 foreach (Dictionary<string, object> keyValues in keyValuePairs)
@@ -85,7 +86,7 @@ namespace Curiosity.Server.net.Database
                         LabelDescription = $"{keyValues["labelDescription"]}",
                         Value = int.Parse($"{keyValues["experience"]}")
                     };
-                    skillsDictionary.Add($"{keyValues["description"]}", skills);
+                    skillsDictionary.GetOrAdd($"{keyValues["description"]}", skills);
                 }
 
                 return skillsDictionary;

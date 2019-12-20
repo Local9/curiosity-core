@@ -8,6 +8,7 @@ using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Newtonsoft.Json;
 using Curiosity.Shared.Client.net;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -153,6 +154,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this.GoToTarget += new MissionPed.OnGoingToTargetEvent(MissionPed.OnGoToTarget);
             MissionPed MissionPed1 = this;
             this.AttackTarget += new MissionPed.OnAttackingTargetEvent(MissionPed1.OnAttackTarget);
+
+            NetworkRequestControlOfEntity(this._ped.Handle);
+            SetNetworkIdCanMigrate(this._ped.NetworkId, true);
+            NetworkRegisterEntityAsNetworked(this._ped.NetworkId);
+            SetNetworkIdExistsOnAllMachines(this._ped.NetworkId, true);
+
+            if (!IsEntityAMissionEntity(this._ped.Handle))
+                SetEntityAsMissionEntity(this._ped.Handle, true, true);
         }
 
         public void Abort(EntityEventWrapper sender, Entity entity)
