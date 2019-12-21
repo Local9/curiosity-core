@@ -57,6 +57,7 @@
     <Compile Include="DataClasses\SoundMessage.cs" />
     <Compile Include="DataClasses\Zones.cs" />
     <Compile Include="Helpers\Animations.cs" />
+    <Compile Include="MissionPeds\WorldPed.cs" />
     <Compile Include="MissionPeds\InteractivePed.cs" />
     <Compile Include="MissionPeds\NormalPed.cs" />
     <Compile Include="MissionPedTypes\InteractablePed.cs" />

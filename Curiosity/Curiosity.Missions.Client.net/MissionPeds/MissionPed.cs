@@ -146,6 +146,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
+            // 1/10 chance of armor
+            if (Client.Random.Next(10) == 9)
+                this._ped.Armor = Client.Random.Next(100);
+
             VisionDistance = visionDistance;
             AttackRange = visionDistance;
             Experience = experience;
