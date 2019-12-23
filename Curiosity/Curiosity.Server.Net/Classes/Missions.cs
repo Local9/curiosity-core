@@ -23,6 +23,10 @@ namespace Curiosity.Server.net.Classes
         static Dictionary<string, DateTime> timestampLastTrafficStop = new Dictionary<string, DateTime>();
         static Dictionary<string, DateTime> timestampLastArrest = new Dictionary<string, DateTime>();
 
+        // Special Events
+        static bool IsEventActive;
+        static int PlayerHandleEventRegistered;
+
         public static void Init()
         {
             // Player who triggered it
@@ -39,6 +43,8 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Missions:CompletedMission", new Action<CitizenFX.Core.Player, bool>(OnCompletedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:StartedMission", new Action<CitizenFX.Core.Player, int>(OnStartedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:EndMission", new Action<CitizenFX.Core.Player>(OnEndMission));
+
+
         }
 
         static void OnArrestedPed([FromSource]CitizenFX.Core.Player player, string encodedData)
@@ -121,7 +127,7 @@ namespace Curiosity.Server.net.Classes
                 if (secondsSinceLastTrafficStop < 59)
                 {
                     session.IsCheater = true;
-                    session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
+                    session.Player.TriggerEvent("curiosity:Client:Player:UpdateExtraFlags");
                     return;
                 }
             }
@@ -274,13 +280,13 @@ namespace Curiosity.Server.net.Classes
 
             if (skillMessage.Increase)
             {
-                Skills.IncreaseSkill(skillMessage.PlayerHandle, skillMessage.Skill, random.Next(8, 10));
+                Skills.IncreaseSkill(skillMessage.PlayerHandle, "policexp", random.Next(8, 10));
                 Skills.IncreaseSkill(skillMessage.PlayerHandle, "knowledge", random.Next(3, 6));
                 Skills.IncreaseSkill(skillMessage.PlayerHandle, "policerep", 1);
             }
             else
             {
-                Skills.DecreaseSkill(skillMessage.PlayerHandle, skillMessage.Skill, 5);
+                Skills.DecreaseSkill(skillMessage.PlayerHandle, "policexp", 5);
                 Skills.DecreaseSkill(skillMessage.PlayerHandle, "knowledge", 3);
                 Skills.DecreaseSkill(skillMessage.PlayerHandle, "policerep", 1);
             }

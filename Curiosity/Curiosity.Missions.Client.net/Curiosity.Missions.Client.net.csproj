@@ -75,6 +75,7 @@
     <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuQuestions.cs" />
     <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuInteraction.cs" />
     <Compile Include="Scripts\MissionEvents.cs" />
+    <Compile Include="Scripts\Mission\PoliceMissions\HumainLabs.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />
     <Compile Include="Scripts\PedCreators\InteractivePedCreator.cs" />
     <Compile Include="Scripts\PedCreators\NormalPedCreator.cs" />

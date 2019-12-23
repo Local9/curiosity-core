@@ -32,6 +32,7 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("donator", new Action<int, List<object>, string>(OnDonationCheck), false);
 
             API.RegisterCommand("chase", new Action<int, List<object>, string>(OnChaser), false);
+            API.RegisterCommand("chase2", new Action<int, List<object>, string>(OnChaserTwo), false);
             API.RegisterCommand("announce", new Action<int, List<object>, string>(Announcement), false);
             API.RegisterCommand("spawn", new Action<int, List<object>, string>(Spawn), false);
             API.RegisterCommand("sc", new Action<int, List<object>, string>(SpawnCar), false);
@@ -105,6 +106,37 @@ namespace Curiosity.Server.net.Classes.Environment
             Helpers.Notifications.Advanced($"Set Chimp", $"Shooting ~y~{sessionToChase.Player.Name}", 20, session.Player);
         }
 
+        static void OnChaserTwo(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (!session.IsDeveloper) return;
+
+            if (arguments.Count < 0)
+            {
+                Helpers.Notifications.Advanced($"Agruments Missing", $"", 2, session.Player);
+                return;
+            }
+
+            int playerToChase = 0;
+            int.TryParse($"{arguments[0]}", out playerToChase);
+
+            if (!SessionManager.PlayerList.ContainsKey($"{playerToChase}"))
+            {
+                Helpers.Notifications.Advanced($"Player Missing", $"", 2, session.Player);
+                return;
+            }
+
+            Session sessionToChase = SessionManager.PlayerList[$"{playerToChase}"];
+
+            sessionToChase.Player.TriggerEvent("curiosity:Client:Player:UpdateExtraFlags");
+
+            Helpers.Notifications.Advanced($"Set Chaser", $"Chasing ~y~{sessionToChase.Player.Name}", 20, session.Player);
+            Helpers.Notifications.Advanced($"Server System Activated", $"I recommend you leave...", 20, sessionToChase.Player);
+        }
+
         static void OnChaser(int playerHandle, List<object> arguments, string raw)
         {
             if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
@@ -133,7 +165,7 @@ namespace Curiosity.Server.net.Classes.Environment
             if (sessionToChase.IsDeveloper)
             {
                 session.Player.TriggerEvent("curiosity:Client:Player:UpdateFlags");
-                Helpers.Notifications.Advanced($"You fucked up...", $"Run....", 20, session.Player);
+                Helpers.Notifications.Advanced($"You fucked up...", $"Cannot chase a developer", 20, session.Player);
             }
             else
             {

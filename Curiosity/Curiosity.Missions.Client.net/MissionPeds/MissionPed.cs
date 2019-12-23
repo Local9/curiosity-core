@@ -65,9 +65,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     {
                         onAttackingTargetEvent(this.Target);
                     }
-                    else
-                    {
-                    }
                 }
                 this._attackingTarget = value;
             }
@@ -176,7 +173,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         private bool CanHearPed(Ped ped)
         {
             float single = ped.Position.VDist(this.Position);
-            return (!MissionPed.IsWeaponWellSilenced(ped, single) || MissionPed.IsBehindZombie(single) ? true : MissionPed.IsRunningNoticed(ped, single));
+            return (!MissionPed.IsWeaponWellSilenced(ped, single) || MissionPed.IsBehind(single) ? true : MissionPed.IsRunningNoticed(ped, single));
         }
 
         protected bool Equals(MissionPed other)
@@ -240,7 +237,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
-        private static bool IsBehindZombie(float distance)
+        private static bool IsBehind(float distance)
         {
             return distance < MissionPed.BehindNoticeDistance;
         }
@@ -285,13 +282,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (IsHostage)
                 {
-                    skillMessage.Skill = "policexp";
                     skillMessage.MissionPed = true;
                     skillMessage.Increase = false;
                 }
                 else
                 {
-                    skillMessage.Skill = "policexp";
                     skillMessage.MissionPed = true;
                     skillMessage.Increase = true;
                 }
@@ -377,6 +372,20 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 {
                     this.AttackingTarget = false;
                     this.GoingToTarget = true;
+                }
+
+                if (this.AttackingTarget)
+                {
+                    if (this._ped.AttachedBlip == null)
+                    {
+                        Blip b = this._ped.AttachBlip();
+                        b.Color = BlipColor.Red;
+                        b.Sprite = BlipSprite.Enemy;
+                    }
+                    else
+                    {
+                        this._ped.AttachedBlip.Delete();
+                    }
                 }
             }
         }
