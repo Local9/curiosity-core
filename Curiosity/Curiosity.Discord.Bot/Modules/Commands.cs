@@ -58,52 +58,77 @@ namespace Curiosity.Discord.Bot.Modules
         }
 
         [Command("server")]
-        public async Task Server(SocketUser user = null)
+        public async Task Server(params string[] args)
         {
             try
             {
-                string serverInformation = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/info.json");
-
-                if (string.IsNullOrEmpty(serverInformation))
+                if (args.Length == 0)
                 {
-                    await ReplyAsync("Server did not respond, it might be offline?!");
+                    await ReplyAsync("Missing server param, please use as so: lv!server elv|dlv", false);
                 }
                 else
                 {
-                    string result = await Tools.HttpTools.GetUrlResultAsync("http://5.9.0.85:30120/players.json");
-                    List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
-                    CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
 
-                    int countOfPlayers = lst.Count;
+                    Dictionary<string, (string, string, string)> servers = new Dictionary<string, (string, string, string)>();
+                    servers.Add("elv", ("Emergency Life V", "5.9.0.85", "30120"));
+                    servers.Add("dlv", ("Drugs Life V", "5.9.0.85", "30121"));
 
-                    EmbedBuilder builder = new EmbedBuilder();
+                    string serverKey = args[0];
 
-                    string playersOnline = "No players online";
-
-                    if (countOfPlayers > 0)
+                    if (!servers.ContainsKey(serverKey))
                     {
-                        playersOnline = "";
-                        lst.ForEach(item =>
-                        {
-                            playersOnline += $"{item.Name}, ";
-                        });
-
-                        playersOnline = playersOnline.Substring(0, playersOnline.Length - 2);
+                        await ReplyAsync("Servers available: elv, dlv", false);
                     }
+                    else
+                    {
+                        string serverName = servers[serverKey].Item1;
+                        string serverUri = servers[serverKey].Item2;
+                        string serverPort = servers[serverKey].Item3;
 
-                    builder
-                        .WithTitle("Emergency Life V")
-                        .AddField("Server Uptime", $"{info.Variables["Uptime"]}", true)
-                        .AddField("Player Count", $"{countOfPlayers}", true)
-                        .AddField("Players", $"{playersOnline}", false)
-                        .WithColor(Color.Blue)
-                        .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
-                        .WithCurrentTimestamp()
-                        .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+                        string serverInformation = await Tools.HttpTools.GetUrlResultAsync($"http://{serverUri}:{serverPort}/info.json");
 
-                    // builder.Url = "fivem://connect/5.9.0.85:30120";
+                        if (string.IsNullOrEmpty(serverInformation))
+                        {
+                            await ReplyAsync("Server did not respond, it might be offline.");
+                        }
+                        else
+                        {
+                            string result = await Tools.HttpTools.GetUrlResultAsync($"http://{serverUri}:{serverPort}/players.json");
+                            List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
+                            CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
 
-                    await ReplyAsync("`connect server.lifev.net:30120`", false, builder.Build());
+                            int countOfPlayers = lst.Count;
+
+                            EmbedBuilder builder = new EmbedBuilder();
+
+                            string playersOnline = "No players online";
+
+                            if (countOfPlayers > 0)
+                            {
+                                playersOnline = "";
+                                lst.ForEach(item =>
+                                {
+                                    playersOnline += $"{item.Name}, ";
+                                });
+
+                                playersOnline = playersOnline.Substring(0, playersOnline.Length - 2);
+                            }
+
+                            builder
+                                .WithTitle($"{serverName}")
+                                .AddField("Server Uptime", $"{info.Variables["Uptime"]}", true)
+                                .AddField("Player Count", $"{countOfPlayers}", true)
+                                .AddField("Players", $"{playersOnline}", false)
+                                .WithColor(Color.Blue)
+                                .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
+                                .WithCurrentTimestamp()
+                                .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+
+                            // builder.Url = "fivem://connect/5.9.0.85:30120";
+
+                            await ReplyAsync($"`connect server.lifev.net:{serverPort}`", false, builder.Build());
+                        }
+                    }
                 }
             }
             catch (Exception ex)
