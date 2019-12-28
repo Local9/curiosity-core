@@ -9,6 +9,9 @@ using static Curiosity.Shared.Client.net.Helper.NativeWrappers;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
 using Newtonsoft.Json;
+using Curiosity.Shared.Client.net;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -112,7 +115,6 @@ namespace Curiosity.Client.net.Classes.Environment
             try
             {
                 EnableChatbox(false);
-
                 API.SetNuiFocus(false, false);
 
                 IDictionary<string, object> chatResult = data;
@@ -123,6 +125,11 @@ namespace Curiosity.Client.net.Classes.Environment
                 string message = (String)chatResult["msg"];
                 string chatChannel = (String)chatResult["chat"];
 
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Verbose($"{chatChannel} - {message}");
+                }
+
                 var spaceSplit = message.Split(' ');
 
                 if (message.Substring(0, 1) == "/" && message.Length >= 2)
@@ -131,6 +138,8 @@ namespace Curiosity.Client.net.Classes.Environment
                 }
                 else
                 {
+                    // message = DecodeEncodedNonAsciiCharacters(message);
+
                     Client.TriggerServerEvent("curiosity:Server:Chat:Message", message, chatChannel);
                 }
             }
@@ -138,6 +147,16 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 Debug.WriteLine($"HandleChatResult ERROR: ${ex.Message}");
             }
+        }
+
+        private static string DecodeEncodedNonAsciiCharacters(string value)
+        {
+            return Regex.Replace(
+                value,
+                @"\\u(?<Value>[a-zA-Z0-9]{4})",
+                m => {
+                    return ((char)int.Parse(m.Groups["Value"].Value, NumberStyles.HexNumber)).ToString();
+                });
         }
 
         static async Task OnChatTask()

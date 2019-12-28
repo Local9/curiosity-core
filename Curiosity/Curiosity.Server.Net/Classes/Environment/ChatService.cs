@@ -25,12 +25,13 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             server.RegisterEventHandler("curiosity:Server:Chat:Message", new Action<CitizenFX.Core.Player, string, string>(ProcessMessage));
 
-             server.RegisterEventHandler("entityCreated", new Action<dynamic>(OnEntityCreated));
+            // TODO : MOVE THESE
+            server.RegisterEventHandler("entityCreated", new Action<dynamic>(OnEntityCreated));
             // server.RegisterEventHandler("entityCreating", new Action<dynamic>(OnEntityCreating));
             server.RegisterEventHandler("explosionEvent", new Action<int, dynamic>(OnExplosionEvent));
         }
 
-        static void OnExplosionEvent(int sender, dynamic explosionData)
+        static void OnExplosionEvent(int sender, dynamic explosionData) // TODO : MOVE
         {
             try
             {
@@ -63,7 +64,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
         }
 
-        static void OnEntityCreating(int entity)
+        static void OnEntityCreating(int entity) // TODO : MOVE
         {
             List<Session> sessions = SessionManager.PlayerList.Select(m => m.Value).Where(w => w.IsStaff).ToList();
             sessions.ForEach(session =>
@@ -73,7 +74,7 @@ namespace Curiosity.Server.net.Classes.Environment
             });
         }
 
-        static void OnEntityCreated(dynamic entity)
+        static void OnEntityCreated(dynamic entity) // TODO : MOVE
         {
             try
             {
@@ -133,54 +134,62 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static void ProcessMessage([FromSource]CitizenFX.Core.Player player, string message, string chatChannel)
         {
-            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
-
-            Session session = SessionManager.PlayerList[player.Handle];
-
-            if (string.IsNullOrWhiteSpace(message))
+            try
             {
-                API.CancelEvent();
-                return;
-            }
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
-            if (!regex.Match(message).Success)
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    API.CancelEvent();
+                    return;
+                }
+
+                if (!regex.Match(message).Success)
+                {
+                    API.CancelEvent();
+                    return;
+                }
+
+                if (message.Length == 0 || message.Length > 240)
+                {
+                    message = message.Substring(0, 240);
+                }
+
+                if (message.ContainsProfanity())
+                {
+                    Regex wordFilter = new Regex($"({string.Join("|", ProfanityFilter.ProfanityArray())})");
+                    message = wordFilter.Replace(message, "$!\"£^!@");
+                }
+
+                if (message.IsAllUpper())
+                {
+                    message.ToLower();
+                }
+
+                ChatMessage chatMessage = new ChatMessage();
+
+                chatMessage.color = $"{session.Privilege}".ToLower();
+                chatMessage.role = $"{session.Privilege}";
+                chatMessage.list = chatChannel;
+                chatMessage.message = message;
+                chatMessage.roleClass = $"{session.Privilege}";
+                chatMessage.name = session.Player.Name;
+                chatMessage.job = $"{session.job}";
+
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
+                string encoded = Encode.StringToBase64(json);
+
+                Log.Verbose($"{player.Name} - {message}");
+
+                Server.TriggerEvent("curiosity:Server:Discord:ChatMessage", player.Name, message);
+                Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
+            }
+            catch (Exception ex)
             {
-                API.CancelEvent();
-                return;
+                Log.Error($"ProcessMessage -> {ex.Message}");
             }
-
-            if (message.Length == 0 || message.Length > 240)
-            {
-                message = message.Substring(0, 240);
-            }
-
-            if (message.ContainsProfanity())
-            {
-                Regex wordFilter = new Regex($"({string.Join("|", ProfanityFilter.ProfanityArray())})");
-                message = wordFilter.Replace(message, "$!\"£^!@");
-            }
-
-            if (message.IsAllUpper())
-            {
-                message.ToLower();
-            }
-
-            ChatMessage chatMessage = new ChatMessage();
-
-            chatMessage.color = $"{session.Privilege}".ToLower();
-            chatMessage.role = $"{session.Privilege}";
-            chatMessage.list = chatChannel;
-            chatMessage.message = message;
-            chatMessage.roleClass = $"{session.Privilege}";
-            chatMessage.name = session.Player.Name;
-            chatMessage.job = $"{session.job}";
-
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
-            string encoded = Encode.StringToBase64(json);
-
-            Server.TriggerEvent("curiosity:Server:Discord:ChatMessage", player.Name, message);
-
-            Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
         }
     }
 }

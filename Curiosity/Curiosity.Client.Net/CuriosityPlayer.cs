@@ -317,7 +317,7 @@ namespace Curiosity.Client.net
             Vector3 groundSpawn = await spawnPosition.Ground();
             Vector3 safeSpawn = groundSpawn;
 
-            Screen.LoadingPrompt.Show("Finding Safe Position...", LoadingSpinnerType.RegularClockwise);
+            Screen.LoadingPrompt.Show("Finding Position...", LoadingSpinnerType.RegularClockwise);
 
             if (API.GetSafeCoordForPed(groundSpawn.X, groundSpawn.Y, groundSpawn.Z, true, ref safeSpawn, 16))
             {
@@ -351,23 +351,23 @@ namespace Curiosity.Client.net
 
             Vector3 finalCheck = await Game.PlayerPed.Position.Ground();
 
-            Screen.LoadingPrompt.Show("Found Safe Position...", LoadingSpinnerType.RegularClockwise);
+            Screen.LoadingPrompt.Show("Found Position...", LoadingSpinnerType.RegularClockwise);
 
             Vector3 sidewalk = World.GetNextPositionOnSidewalk(finalCheck);
 
             if (sidewalk == Vector3.Zero)
             {
-                Game.PlayerPed.Position = safeSpawn;
+                Game.PlayerPed.Position = finalCheck;
             }
             else
             {
                 Game.PlayerPed.Position = sidewalk;
             }
 
-            if (roleId == 4)
-            {
-                Screen.ShowNotification($"Spawn Loc: {Game.PlayerPed.Position}\nspawnPosition: {spawnPosition}");
-            }
+            // if (roleId == 4)
+            // {
+            //    Screen.ShowNotification($"Spawn Loc: {Game.PlayerPed.Position}\nspawnPosition: {spawnPosition}");
+            // }
 
             API.PlaceObjectOnGroundProperly(Game.PlayerPed.Handle);
             API.PlaceObjectOnGroundProperly_2(Game.PlayerPed.Handle);
