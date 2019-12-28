@@ -64,9 +64,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 client.RegisterTickHandler(MissionCancelAsync);
 
-                while (Game.PlayerPed.Position.Distance(store.Location) > 100f)
+                while (Game.PlayerPed.Position.Distance(store.Location) > 200f)
                 {
-                    await BaseScript.Delay(0);
+                    await BaseScript.Delay(10);
                 }
 
                 client.DeregisterTickHandler(MissionCancelAsync);
@@ -105,7 +105,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 await BaseScript.Delay(0);
                 MissionPed1 = PedCreators.MissionPedCreator.Ped(ped1, MissionPedData1.Alertness, MissionPedData1.Difficulty, MissionPedData1.VisionDistance);
                 
-                await BaseScript.Delay(0);
+                await BaseScript.Delay(10);
 
                 Vector3 mpd2Spawnpoint = await GetSpawnPoint(MissionPedData2.SpawnPoint);
                 Ped ped2 = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData2.Model, mpd2Spawnpoint, MissionPedData2.SpawnHeading);
@@ -113,7 +113,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 await BaseScript.Delay(0);
                 MissionPed2 = PedCreators.MissionPedCreator.Ped(ped2, MissionPedData2.Alertness, MissionPedData2.Difficulty, MissionPedData2.VisionDistance);
                 
-                await BaseScript.Delay(500);
+                await BaseScript.Delay(10);
 
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 {

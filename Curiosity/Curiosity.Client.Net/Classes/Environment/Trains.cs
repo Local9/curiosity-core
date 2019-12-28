@@ -37,6 +37,14 @@ namespace Curiosity.Client.net.Classes.Environment
             CreatePedInsideVehicle(metroTrain2, 26, (uint)PedHash.Lsmetro01SMM, -1, true, true);
             SetEntityAsMissionEntity(metroTrain, true, true);
             SetEntityAsMissionEntity(metroTrain2, true, true);
+            // SPEED
+            SetTrainCruiseSpeed(metroTrain, 20f);
+            SetTrainCruiseSpeed(metroTrain2, 20f);
+            SetTrainSpeed(metroTrain, 20f);
+            SetTrainSpeed(metroTrain2, 20f);
+            // LOD
+            SetEntityLodDist(metroTrain, 500);
+            SetEntityLodDist(metroTrain2, 500);
 
             Log.Verbose("Train service active");
         }
