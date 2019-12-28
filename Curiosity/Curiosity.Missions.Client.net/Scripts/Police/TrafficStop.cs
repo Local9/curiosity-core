@@ -215,6 +215,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     targetVehicle.AttachedBlip.IsFlashing = true;
                                 }
 
+                                NetworkRequestControlOfEntity(targetVehicle.Handle);
+                                SetNetworkIdCanMigrate(targetVehicle.NetworkId, true);
+                                NetworkRegisterEntityAsNetworked(targetVehicle.NetworkId);
+                                SetNetworkIdExistsOnAllMachines(targetVehicle.NetworkId, true);
+
+                                if (!IsEntityAMissionEntity(targetVehicle.Handle))
+                                    SetEntityAsMissionEntity(targetVehicle.Handle, true, true);
+
                                 if (Game.IsControlJustPressed(0, Control.Pickup))
                                 {
                                     targetVehicle.AttachedBlip.IsFlashing = false;
