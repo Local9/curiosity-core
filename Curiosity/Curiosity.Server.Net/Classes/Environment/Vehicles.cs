@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Server.net.Entity;
+using Curiosity.Server.net.Extensions;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
@@ -56,11 +57,19 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 Session session = SessionManager.PlayerList[player.Handle];
 
-                bool canAccessList = (session.IsDonator || session.IsStaff);
+                List<VehicleItem> vehicles = await Database.DatabaseVehicles.GetVehiclesForDonators(session.UserID);
 
-                if (!canAccessList) return;
-
-                List<VehicleItem> vehicles = await Database.DatabaseVehicles.GetVehiclesForDonators();
+                if (vehicles != null)
+                {
+                    if (vehicles.Count == 1)
+                    {
+                        if (vehicles[0].VehicleHashString == "notdonator")
+                        {
+                            player.NotificationCuriosity("System Message", "Sorry, this is a donator service");
+                            return;
+                        }
+                    }
+                }
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicles);
                 string encodedJson = Encode.StringToBase64(json);

@@ -95,13 +95,14 @@ namespace Curiosity.Server.net.Database
             return vehicleItems;
         }
 
-        public static async Task<List<VehicleItem>> GetVehiclesForDonators()
+        public static async Task<List<VehicleItem>> GetVehiclesForDonators(int userID)
         {
             List<VehicleItem> vehicleItems = new List<VehicleItem>();
 
-            string sql = "CALL curiosity.selVehiclesForDonators(@serverId);";
+            string sql = "CALL curiosity.selVehiclesForDonators(@serverId, @userId);";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@serverId", Server.serverId);
+            myParams.Add("@userId", userID);
 
             using (var result = mySql.QueryResult(sql, myParams))
             {

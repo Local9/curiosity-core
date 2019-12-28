@@ -48,7 +48,7 @@ namespace Curiosity.Discord.Bot.Modules
                 List<string> responses = new List<string>() {
                     "pong.... I guess",
                     $"I'm not here for your own enjoyment {user.Username}",
-                    "I'll smack ya..."
+                    "Just leave me alone..."
                 };
                 await ReplyAsync(responses[random.Next(responses.Count)]);
                 return;
@@ -147,7 +147,7 @@ namespace Curiosity.Discord.Bot.Modules
             builder
                 .AddField("Help Commands",
                 "lv!help - What you're looking at right now" +
-                "\nlv!server - Will display server information" +
+                "\nlv!server dlv|elv - Will display server information" +
                 "\nlv!account - Show you're Curiosity Server account" +
                 "\nlv!top - Top 10 Players by Life V Experience"
                 ).WithColor(Color.Blue)
