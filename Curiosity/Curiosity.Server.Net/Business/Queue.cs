@@ -820,6 +820,8 @@ namespace Curiosity.Server.net.Business
 
                 if (discordId == "191686898450825217")
                     Server.TriggerClientEvent("curiosity:Client:Player:Developer:Online");
+
+                Server.TriggerEvent("environment:train:activate");
             }
             catch (Exception ex)
             {

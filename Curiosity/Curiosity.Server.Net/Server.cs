@@ -105,6 +105,7 @@ namespace Curiosity.Server.net
             Classes.Environment.ChatService.Init();
             Classes.Environment.PolmavEvents.Init();
             // Classes.Environment.InstanceChecker.Init();
+            Classes.Environment.Trains.Init();
 
             // menu options
             Classes.Menu.Player.Init();
