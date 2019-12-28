@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -36,6 +37,8 @@ namespace Curiosity.Client.net.Classes.Environment
             CreatePedInsideVehicle(metroTrain2, 26, (uint)PedHash.Lsmetro01SMM, -1, true, true);
             SetEntityAsMissionEntity(metroTrain, true, true);
             SetEntityAsMissionEntity(metroTrain2, true, true);
+
+            Log.Verbose("Train service active");
         }
     }
 }

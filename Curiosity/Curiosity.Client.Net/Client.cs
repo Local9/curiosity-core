@@ -43,6 +43,8 @@ namespace Curiosity.Client.net
             players = Players;
             PlayerRelationshipGroup = World.AddRelationshipGroup(PLAYER_GROUP);
 
+            API.DecorRegister("DEATH", 3);
+
             ClassLoader.Init();
             RegisterTickHandler(OnTick);
             RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action(OnSessionActive));

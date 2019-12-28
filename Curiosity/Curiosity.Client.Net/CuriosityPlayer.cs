@@ -456,6 +456,7 @@ namespace Curiosity.Client.net
 
                 Screen.Effects.Stop(ScreenEffect.DeathFailOut);
                 TriggerEvent("playerSpawned", spawnInfodyn);
+                Client.TriggerServerEvent("environment:train:activate");
             }
             catch (Exception ex)
             {
