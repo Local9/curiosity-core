@@ -195,6 +195,24 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             return;
                         }
 
+                        if (DecorExistOn(targetVehicle.Handle, Client.VEHICLE_DETECTED_BY))
+                        {
+                            int playerIdOnDetectedVehicle = DecorGetInt(targetVehicle.Handle, Client.VEHICLE_DETECTED_BY);
+
+                            if (playerIdOnDetectedVehicle != Game.Player.ServerId) return; // No point showing anything.
+                        }
+
+                        DecorSetInt(targetVehicle.Handle, Client.VEHICLE_DETECTED_BY, Game.Player.ServerId);
+
+                        // request network control
+                        NetworkRequestControlOfEntity(targetVehicle.Handle);
+                        SetNetworkIdCanMigrate(targetVehicle.NetworkId, true);
+                        NetworkRegisterEntityAsNetworked(targetVehicle.NetworkId);
+                        SetNetworkIdExistsOnAllMachines(targetVehicle.NetworkId, true);
+
+                        if (!IsEntityAMissionEntity(targetVehicle.Handle))
+                            SetEntityAsMissionEntity(targetVehicle.Handle, true, true);
+
                         bool awaitingPullover = true;
                         if (targetVehicle == Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck))
                         {
@@ -206,6 +224,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                                 await BaseScript.Delay(0);
                                 Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to initiate a ~b~Traffic Stop~w~.\nPress ~INPUT_COVER~ to cancel.");
+                               
 
                                 if (targetVehicle.AttachedBlip == null)
                                 {
@@ -214,14 +233,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     targetVehicle.AttachedBlip.Color = BlipColor.TrevorOrange;
                                     targetVehicle.AttachedBlip.IsFlashing = true;
                                 }
-
-                                NetworkRequestControlOfEntity(targetVehicle.Handle);
-                                SetNetworkIdCanMigrate(targetVehicle.NetworkId, true);
-                                NetworkRegisterEntityAsNetworked(targetVehicle.NetworkId);
-                                SetNetworkIdExistsOnAllMachines(targetVehicle.NetworkId, true);
-
-                                if (!IsEntityAMissionEntity(targetVehicle.Handle))
-                                    SetEntityAsMissionEntity(targetVehicle.Handle, true, true);
 
                                 if (Game.IsControlJustPressed(0, Control.Pickup))
                                 {

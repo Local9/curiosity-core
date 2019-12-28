@@ -499,7 +499,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             if (this.Position.VDist(Game.PlayerPed.Position) <= 120f)
             {
-                if (this.Position.Distance(Game.PlayerPed.Position) <= 2f && CanDisplayMenu())
+                if (CanDisplayMenu())
                 {
                     helpText = "Press ~INPUT_CONTEXT~ to open the ~b~Interaction Menu";
 
@@ -560,7 +560,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 //if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 //    Screen.ShowSubtitle($"Menu: {IsMenuVisible}, CPR: {IsPerformingCpr}");
 
-                return !IsMenuVisible && !IsPerformingCpr && !IsCoronerCalled && !Game.PlayerPed.IsInVehicle() && !_hasBeenReleased;
+                if (this.Ped.IsInVehicle())
+                {
+                    return this.Position.Distance(Game.PlayerPed.Position) <= 4f && !IsMenuVisible && !IsPerformingCpr && !IsCoronerCalled && !Game.PlayerPed.IsInVehicle() && !_hasBeenReleased;
+                }
+
+                return this.Position.Distance(Game.PlayerPed.Position) <= 2f && !IsMenuVisible && !IsPerformingCpr && !IsCoronerCalled && !Game.PlayerPed.IsInVehicle() && !_hasBeenReleased;
             }
             catch (Exception ex)
             {
