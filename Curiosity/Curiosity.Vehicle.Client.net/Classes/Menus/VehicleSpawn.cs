@@ -126,6 +126,12 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         {
             try
             {
+                if (Spawn.IsSpawning)
+                {
+                    Screen.ShowNotification("~b~Vehicle Spawn:\n~r~Cooldown currently active.");
+                    return;
+                }
+
                 Model model = null;
                 VehicleItem vehicleItem = menuItem.ItemData;
                 string car = vehicleItem.VehicleHashString;

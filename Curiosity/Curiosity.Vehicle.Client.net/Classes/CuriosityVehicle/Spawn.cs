@@ -17,7 +17,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
         static Random random = new Random();
         static Client client = Client.GetInstance();
 
-        static bool isSpawning = false;
+        static public bool IsSpawning = false;
         static int numberOfVehiclesSpawned = 0;
 
         static public void Init()
@@ -29,13 +29,12 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
         {
             try
             {
-                if (isSpawning)
+                if (IsSpawning)
                 {
                     CitizenFX.Core.UI.Screen.ShowNotification("~b~Vehicle Spawn:\n~r~Cooldown Active");
                     return false;
                 }
 
-                isSpawning = true;
                 client.RegisterTickHandler(OnCooldown);
 
                 float fuelLevel = random.Next(60, 100);
@@ -198,7 +197,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
             catch (Exception ex)
             {
                 Log.Error($"SpawnVehicle -> {ex.Message}");
-                isSpawning = false;
+                IsSpawning = false;
                 client.DeregisterTickHandler(OnCooldown);
                 return false;
             }
@@ -210,13 +209,12 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
         {
             try
             {
-                if (isSpawning)
+                if (IsSpawning)
                 {
                     CitizenFX.Core.UI.Screen.ShowNotification("~b~Vehicle Spawn:\n~r~Cooldown Active");
                     return default;
                 }
 
-                isSpawning = true;
                 client.RegisterTickHandler(OnCooldown);
 
                 float fuelLevel = random.Next(60, 100);
@@ -383,7 +381,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
             catch (Exception ex)
             {
                 Log.Error($"SpawnVehicle -> {ex.Message}");
-                isSpawning = false;
+                IsSpawning = false;
                 client.DeregisterTickHandler(OnCooldown);
                 return default;
             }
@@ -391,6 +389,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 
         static async Task OnCooldown()
         {
+            IsSpawning = true;
             long gameTime = API.GetGameTimer();
 
             long timerToWait = 5000 * numberOfVehiclesSpawned;
@@ -405,13 +404,18 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
                 timerToWait = 1000;
             }
 
+            if (timerToWait >= 30000)
+            {
+                timerToWait = 30000;
+            }
+
             while ((API.GetGameTimer() - gameTime) < timerToWait)
             {
                 await Client.Delay(1000);
             }
             CitizenFX.Core.UI.Screen.ShowNotification("~b~Vehicle Spawn:\n~g~Cooldown Ended");
             client.DeregisterTickHandler(OnCooldown);
-            isSpawning = false;
+            IsSpawning = false;
         }
 
         static void SendDeletionEvent(string vehicleNetworkId)
