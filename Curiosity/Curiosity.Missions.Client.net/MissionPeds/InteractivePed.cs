@@ -144,6 +144,14 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (!IsEntityAMissionEntity(Ped.Handle))
                 SetEntityAsMissionEntity(Ped.Handle, true, true);
 
+            API.SetPedFleeAttributes(Ped.Handle, 0, false);
+            API.SetBlockingOfNonTemporaryEvents(Ped.Handle, true);
+            API.TaskSetBlockingOfNonTemporaryEvents(Ped.Handle, true);
+            API.SetPedDiesInWater(Ped.Handle, false);
+            API.SetPedDiesWhenInjured(Ped.Handle, false);
+            API.SetPedDiesInstantlyInWater(Ped.Handle, true);
+            Ped.SetCombatAttributes((CombatAttributes)17, false);
+
             IsMenuVisible = false;
             IsPerformingCpr = false;
             IsCoronerCalled = false;
@@ -616,6 +624,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Handle == handle)
             {
                 SoundManager.PlayAudio($"sfx/CUFFS_TIGHTEN_01");
+                
+                API.SetPedFleeAttributes(Handle, 0, false);
+                API.SetBlockingOfNonTemporaryEvents(Handle, true);
+                API.TaskSetBlockingOfNonTemporaryEvents(Handle, true);
 
                 IsHandcuffed = state;
                 IsArrested = state;
@@ -768,6 +780,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 Ped.MarkAsNoLongerNeeded();
                 Ped.IsPersistent = false;
                 Ped.LeaveGroup();
+
+                API.SetPedFleeAttributes(Handle, 0, true);
+                API.SetBlockingOfNonTemporaryEvents(Handle, false);
 
                 if (Ped.IsInGroup)
                     Ped.PedGroup.Delete();

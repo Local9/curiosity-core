@@ -17,6 +17,8 @@ namespace Curiosity.Interface.Client.net
             Environment.UI.DutyIcons.Init();
             Environment.UI.Forum.Init();
 
+            // Environment.MouseRaycast.Init();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
     }

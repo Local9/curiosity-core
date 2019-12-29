@@ -51,6 +51,7 @@
     <Compile Include="Classes\Date.cs" />
     <Compile Include="Classes\Environment\AnimationQueue.cs" />
     <Compile Include="Classes\Environment\Experience.cs" />
+    <Compile Include="Classes\Environment\ScreenToWorld.cs" />
     <Compile Include="Enums\Blips.cs" />
     <Compile Include="Enums\Controls.cs" />
     <Compile Include="Enums\NotificationCharacter.cs" />
