@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Security;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Curiosity.Shared.Client.net.Models;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Client.net.Classes.Player
 {
@@ -101,7 +104,16 @@ namespace Curiosity.Client.net.Classes.Player
 
         static async void PlayerInfo(string json)
         {
-            playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
+            playerInfo = JsonConvert.DeserializeObject<PlayerInformationModel>(json);
+
+            UiPlayerCharacter uiPlayer = new UiPlayerCharacter();
+            uiPlayer.UserId = playerInfo.UserId;
+            uiPlayer.Username = Game.Player.Name;
+            uiPlayer.Finance.Cash = playerInfo.Wallet;
+            uiPlayer.Finance.Bank = playerInfo.BankAccount;
+
+            string nuiData = JsonConvert.SerializeObject(uiPlayer);
+            API.SendNuiMessage(nuiData);
 
             privilege = (Privilege)playerInfo.RoleId;
 
