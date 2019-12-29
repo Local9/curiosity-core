@@ -434,7 +434,13 @@ namespace Curiosity.Client.net
         async void SaveLocation()
         {
             Vector3 playerPosition = await Game.PlayerPed.Position.Ground();
-            TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, posZ);
+
+            Vector3 sidewalk = World.GetNextPositionOnSidewalk(playerPosition);
+
+            if (!sidewalk.IsZero)
+                playerPosition = sidewalk;
+
+            TriggerServerEvent("curiosity:Server:Player:SaveLocation", playerPosition.X, playerPosition.Y, playerPosition.Z);
         }
 
         async void ShowScaleformRules()
