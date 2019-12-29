@@ -226,7 +226,6 @@ namespace Curiosity.Client.net
 
             API.SetPedHairColor(playerPed, user.Skin.HairColor, user.Skin.HairSecondaryColor);
 
-
             int randomNumber = rnd.Next(10);
 
             if (user.Skin.Components.Count == 0) // Set some random defaults
@@ -267,14 +266,6 @@ namespace Curiosity.Client.net
             API.RemoveAllPedWeapons(Game.PlayerPed.Handle, false);
             API.ClearPlayerWantedLevel(Game.Player.Handle);
 
-            int randomRangeX = rnd.Next(5, 10);
-            int randomRangeY = rnd.Next(5, 10);
-
-            Vector3 spawnPosition = new Vector3(x + randomRangeX, y + randomRangeY, z);
-            int nodeId = 0;
-
-            API.GetRandomVehicleNode(x + randomRangeX, y + randomRangeY, z, 200f, false, false, false, ref spawnPosition, ref nodeId);
-
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
 
@@ -314,60 +305,19 @@ namespace Curiosity.Client.net
                 ClearScreen();
             }
 
-            Vector3 groundSpawn = await spawnPosition.Ground();
-            Vector3 safeSpawn = groundSpawn;
+            Vector3 spawn = new Vector3(x, y, z);
 
-            Screen.LoadingPrompt.Show("Finding Position...", LoadingSpinnerType.RegularClockwise);
-
-            if (API.GetSafeCoordForPed(groundSpawn.X, groundSpawn.Y, groundSpawn.Z, true, ref safeSpawn, 16))
-            {
-                groundSpawn = await safeSpawn.Ground();
-            }
-
-            Game.PlayerPed.Position = groundSpawn;
-            float countX = 0.0f, countY = 0.0f;
-
-            int interiorId = API.GetInteriorFromEntity(Game.PlayerPed.Handle);
-
-            Debug.WriteLine($"{interiorId}");
-
-            while (interiorId > 0)
-            {
-                await Delay(10);
-
-                countX = countX + 10f;
-                countY = countY + 10f;
-
-                if (API.GetSafeCoordForPed(groundSpawn.X + countX, groundSpawn.Y + countY, groundSpawn.Z, true, ref safeSpawn, 16))
-                {
-                    groundSpawn = await safeSpawn.Ground();
-                }
-
-                Game.PlayerPed.Position = groundSpawn;
-                interiorId = API.GetInteriorFromEntity(Game.PlayerPed.Handle);
-
-                Debug.WriteLine($"{interiorId}");
-            }
-
-            Vector3 finalCheck = await Game.PlayerPed.Position.Ground();
-
-            Screen.LoadingPrompt.Show("Found Position...", LoadingSpinnerType.RegularClockwise);
-
-            Vector3 sidewalk = World.GetNextPositionOnSidewalk(finalCheck);
+            Vector3 ground = await spawn.Ground();
+            Vector3 sidewalk = World.GetNextPositionOnSidewalk(ground);
 
             if (sidewalk == Vector3.Zero)
             {
-                Game.PlayerPed.Position = finalCheck;
+                Game.PlayerPed.Position = spawn;
             }
             else
             {
                 Game.PlayerPed.Position = sidewalk;
             }
-
-            // if (roleId == 4)
-            // {
-            //    Screen.ShowNotification($"Spawn Loc: {Game.PlayerPed.Position}\nspawnPosition: {spawnPosition}");
-            // }
 
             API.PlaceObjectOnGroundProperly(Game.PlayerPed.Handle);
             API.PlaceObjectOnGroundProperly_2(Game.PlayerPed.Handle);
