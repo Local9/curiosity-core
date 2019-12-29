@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net.Models;
 using Curiosity.Global.Shared.net.Enums;
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,16 @@ namespace Curiosity.Client.net.Classes.Player
             client.RegisterEventHandler("curiosity:Client:Player:UpdateFlags", new Action(OnFlagUpdate));
             client.RegisterEventHandler("curiosity:Client:Player:UpdateExtraFlags", new Action(UpdateExtraFlags));
             client.RegisterEventHandler("curiosity:Client:Player:Developer:Online", new Action(DeveloperOnline));
+
+            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(SetDutyIcon));
+
             await BaseScript.Delay(1000);
             PeriodicCheck();
+        }
+
+        static void SetDutyIcon(bool onDuty, bool active, string job)
+        {
+            API.SendNuiMessage(JsonConvert.SerializeObject(new DutyMessage { duty = onDuty, dutyActive = active, job = job }));
         }
 
         static void DeveloperOnline()

@@ -86,6 +86,7 @@
     <Compile Include="Extensions\WorldExt.cs" />
     <Compile Include="Helper\NativeWrapper.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="Models\DutyMessage.cs" />
     <Compile Include="Models\Marker.cs" />
     <Compile Include="Models\PedHeadOverlay.cs" />
     <Compile Include="Models\UiPlayerCharacter.cs" />

@@ -110,11 +110,16 @@ namespace Curiosity.Server.net.Classes
         public void SetWallet(int amount)
         {
             this.Wallet = amount;
+
+            if (this.HasSpawned)
+                PlayerMethods.SendUpdatedInformation(this);
         }
 
         public void SetBankAccount(int amount)
         {
             this.BankAccount = amount;
+            if (this.HasSpawned)
+                PlayerMethods.SendUpdatedInformation(this);
         }
 
         public void IncreaseWallet(int amount)
@@ -123,6 +128,9 @@ namespace Curiosity.Server.net.Classes
                 ChatLog.SendLogMessage($"Cash Gain: ${amount:#,###,##0.00}", Player);
 
             this.Wallet = this.Wallet + amount;
+
+            if (this.HasSpawned)
+                PlayerMethods.SendUpdatedInformation(this);
         }
 
         public void DecreaseWallet(int amount)
@@ -130,6 +138,9 @@ namespace Curiosity.Server.net.Classes
             this.Wallet = this.Wallet - amount;
 
             ChatLog.SendLogMessage($"Cash Loss: ${amount:#,###,##0.00}", Player);
+
+            if (this.HasSpawned)
+                PlayerMethods.SendUpdatedInformation(this);
         }
 
         public void IncreaseBankAccount(int amount)
@@ -138,6 +149,9 @@ namespace Curiosity.Server.net.Classes
                 ChatLog.SendLogMessage($"Bank Gain: ${amount:#,###,##0.00}", Player);
 
             this.BankAccount = this.BankAccount + amount;
+
+            if (this.HasSpawned)
+                PlayerMethods.SendUpdatedInformation(this);
         }
 
         public void DecreaseBankAccount(int amount)
@@ -145,11 +159,17 @@ namespace Curiosity.Server.net.Classes
             this.BankAccount = this.BankAccount - amount;
 
             ChatLog.SendLogMessage($"Bank Loss: ${amount:#,###,##0.00}", Player);
+
+            if (this.HasSpawned)
+                PlayerMethods.SendUpdatedInformation(this);
         }
 
         public void UpdatePrivilege(Privilege privilegeIn)
         {
             this.Privilege = privilegeIn;
+
+            if (this.HasSpawned)
+                PlayerMethods.SendUpdatedInformation(this);
         }
 
         public override string ToString()
@@ -163,6 +183,8 @@ namespace Curiosity.Server.net.Classes
             {
                 return false;
             }
+
+            HasSpawned = true;
 
             SessionManager.PlayerList[NetId] = this;
 

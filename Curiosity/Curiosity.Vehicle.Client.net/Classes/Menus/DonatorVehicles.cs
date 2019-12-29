@@ -206,6 +206,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
                         CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, spawningPosition, heading, vehicleItem.InstallSirens);
 
+                        Game.PlayerPed.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
+
                         //Model mechanic = PedHash.Xmech01SMY;
                         //await mechanic.Request(10000);
                         //Ped ped = await World.CreatePed(mechanic, spawningPosition + new Vector3(0f, 0f, 2f));
@@ -228,7 +230,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                         //{
                         //    outPos = Game.PlayerPed.Position;
                         //}
-                            
+
                         //TaskVehiclePark(ped.Handle, spawnedVechicle.Handle, outPos.X, outPos.Y, outPos.Z, 0f, 3, 20f, true);
 
                         //while (spawnedVechicle.Position.Distance(outPos) >= 5f)
