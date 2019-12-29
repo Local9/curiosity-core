@@ -224,7 +224,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                                 await BaseScript.Delay(0);
                                 Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to initiate a ~b~Traffic Stop~w~.\nPress ~INPUT_COVER~ to cancel.");
-                               
+
 
                                 if (targetVehicle.AttachedBlip == null)
                                 {
@@ -274,6 +274,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     loadingMessage = string.Empty;
                                 }
                             }
+                            API.SetUserRadioControlEnabled(false);
                         }
                         else
                         {
