@@ -43,12 +43,19 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
                 {
                     if (Client.CurrentVehicle.Exists())
                     {
+                        if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Client.CurrentVehicle)
+                        {
+                            Game.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+                        }
+
                         fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Client.CurrentVehicle.Handle, "Vehicle.Fuel");
                         API.DecorRemove(Client.CurrentVehicle.Handle, "Player_Vehicle");
                         API.DecorRemove(Client.CurrentVehicle.Handle, "Vehicle.SirensInstalled");
                         SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
                     }
                 }
+
+                await BaseScript.Delay(500);
 
                 CitizenFX.Core.UI.Screen.ShowSubtitle("Trying to spawn requested vehicle, please wait...");
 
@@ -234,6 +241,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
                         SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
                     }
                 }
+
+                await BaseScript.Delay(500);
 
                 CitizenFX.Core.UI.Screen.ShowSubtitle("Trying to spawn requested vehicle, please wait...");
 
