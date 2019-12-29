@@ -197,6 +197,8 @@ namespace Curiosity.Client.net
             Screen.LoadingPrompt.Show("Loading...", LoadingSpinnerType.RegularClockwise);
             Setup();
 
+            this.userId = userId;
+
             PedHash myPedModelToLoad = PedHash.FreemodeMale01;
 
             if (user.Skin.Model == "mp_f_freemode_01")
@@ -328,7 +330,10 @@ namespace Curiosity.Client.net
 
             ToggleSound(false);
 
-            this.userId = userId;
+            if (Game.PlayerPed.IsInAir)
+            {
+                Game.PlayerPed.Position = await spawn.Ground();
+            }
 
             await Delay(1000);
             Game.PlayerPed.IsPositionFrozen = true;
