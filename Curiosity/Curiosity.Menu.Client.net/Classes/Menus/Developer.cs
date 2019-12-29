@@ -8,7 +8,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
     {
         static bool menuSetup = false;
 
-        static bool _debugSafezones = false, _developerNpcUiEnable = false, __developerVehicleUiEnable = false;
+        static bool _debugAreas = false, _developerNpcUiEnable = false, __developerVehicleUiEnable = false;
 
         static Client client = Client.GetInstance();
         static Menu menu = new Menu("Developer Menu", "Various Settings or options");
@@ -17,7 +17,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static MenuItem mItemRepair = new MenuItem("Repair Vehicle");
         static MenuItem mItemRefuel = new MenuItem("Refuel Vehicle");
         // Debuging
-        static MenuCheckboxItem menuCheckboxItemDebugAreas = new MenuCheckboxItem("Draw Safezones", _debugSafezones);
+        static MenuCheckboxItem menuCheckboxItemDebugAreas = new MenuCheckboxItem("Draw Area Debug", _debugAreas);
         static MenuCheckboxItem menuCheckboxItemDeveloperNpcUi = new MenuCheckboxItem("Show Interactive NPC UI", _developerNpcUiEnable);
         static MenuCheckboxItem menuCheckboxItemDeveloperVehUi = new MenuCheckboxItem("Show Interactive Veh UI", __developerVehicleUiEnable);
 
@@ -60,8 +60,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         {
             if (menuItem == menuCheckboxItemDebugAreas)
             {
-                _debugSafezones = newCheckedState;
-                Client.TriggerEvent("curiosity:Client:Player:Environment:DrawAreas");
+                _debugAreas = newCheckedState;
+                Client.TriggerEvent("curiosity:Client:Player:Environment:DrawAreas", _debugAreas);
             }
 
             if (menuItem == menuCheckboxItemDeveloperNpcUi)

@@ -42,6 +42,8 @@ namespace Curiosity.Missions.Client.net
             Scripts.Menus.PedInteractionMenu.MenuBase.Init();
             client.RegisterTickHandler(OnCleanup);
 
+            Scripts.Mission.PoliceMissions.HumainLabs.Init();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
 

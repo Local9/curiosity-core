@@ -22,6 +22,11 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
             {
                 this._ped.Task.FightAgainstHatedTargets(_visionDistance);
                 IsHatingTarget = true;
+
+                this._ped.AttachBlip();
+                this._ped.AttachedBlip.Color = (BlipColor)1;
+                this._ped.AttachedBlip.Sprite = BlipSprite.Enemy;
+                this._ped.AttachedBlip.Scale = 0.5f;
             }
         }
 

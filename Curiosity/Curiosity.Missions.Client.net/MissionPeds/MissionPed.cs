@@ -373,20 +373,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     this.AttackingTarget = false;
                     this.GoingToTarget = true;
                 }
-
-                if (this.AttackingTarget)
-                {
-                    if (this._ped.AttachedBlip == null)
-                    {
-                        Blip b = this._ped.AttachBlip();
-                        b.Color = BlipColor.Red;
-                        b.Sprite = BlipSprite.Enemy;
-                    }
-                    else
-                    {
-                        this._ped.AttachedBlip.Delete();
-                    }
-                }
             }
         }
 

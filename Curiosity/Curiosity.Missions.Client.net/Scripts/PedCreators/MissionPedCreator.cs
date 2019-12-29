@@ -45,6 +45,10 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 
             switch (difficulty)
             {
+                case Difficulty.HurtMePlenty:
+                    missionPed = new MissionPedNormal(ped.Handle, visionDistance);
+                    missionPed.Health = 300;
+                    break;
                 case Difficulty.BringItOn:
                     missionPed = new MissionPedNormal(ped.Handle, visionDistance);
                     break;
@@ -54,21 +58,6 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
             }
 
             return missionPed;
-        }
-
-        public static bool IsNightFall()
-        {
-            bool flag;
-            if (ZombieCreator.Runners)
-            {
-                TimeSpan currentDayTime = World.CurrentDayTime;
-                flag = (currentDayTime.Hours >= 20 ? true : currentDayTime.Hours <= 3);
-            }
-            else
-            {
-                flag = false;
-            }
-            return flag;
         }
     }
 }

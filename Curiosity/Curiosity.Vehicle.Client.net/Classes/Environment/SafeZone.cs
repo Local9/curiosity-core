@@ -63,6 +63,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
     class SafeZone
     {
+        private const string SAFE_ZONE = "safezone";
         static Client client = Client.GetInstance();
 
         static List<AreaBox> safeZones = new List<AreaBox>();
@@ -80,18 +81,18 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             areaBox.Angle = 10f;
             areaBox.Pos1 = new Vector3(-1095.472f, -880.6858f, -1f);
             areaBox.Pos2 = new Vector3(-1033.078f, -840.2169f, 50f);
-            areaBox.Identifier = $"{SpawnLocations.VespucciPD}";
+            areaBox.Identifier = $"safezone";
             safeZones.Add(areaBox);
 
             AreaBox areaBox2 = new AreaBox();
             areaBox2.Angle = 0f;
             areaBox2.Pos1 = new Vector3(392.5307f, -1027.381f, -1f);
             areaBox2.Pos2 = new Vector3(454.7709f, -966.1293f, 50f);
-            areaBox2.Identifier = $"MissionRow";
+            areaBox2.Identifier = $"safezone";
             safeZones.Add(areaBox2);
 
-            client.RegisterEventHandler("curiosity:Client:Player:Environment:OnEnterArea", new Action(OnEnter));
-            client.RegisterEventHandler("curiosity:Client:Player:Environment:OnExitArea", new Action(OnExit));
+            client.RegisterEventHandler("curiosity:Client:Player:Environment:OnEnterArea", new Action<string, dynamic>(OnEnter));
+            client.RegisterEventHandler("curiosity:Client:Player:Environment:OnExitArea", new Action<string, dynamic>(OnExit));
 
             client.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action(OnDrawAreas));
 
@@ -154,8 +155,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             }
         }
 
-        public static void OnEnter()
+        public static void OnEnter(string identifier, dynamic data)
         {
+            if (identifier != SAFE_ZONE) return;
+
             client.RegisterTickHandler(SafeZoneVehicles);
             IsInsideSafeZone = true;
 
@@ -165,8 +168,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             }
         }
 
-        public static async void OnExit()
+        public static async void OnExit(string identifier, dynamic data)
         {
+            if (identifier != SAFE_ZONE) return;
+
             client.DeregisterTickHandler(SafeZoneVehicles);
             IsInsideSafeZone = false;
 

@@ -61,6 +61,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 
                 await model.Request(20000);
 
+                while (!model.IsLoaded)
+                {
+                    await BaseScript.Delay(0);
+                }
+
                 var veh = await World.CreateVehicle(model, spawnPosition, heading);
 
                 if (veh == null)
@@ -247,6 +252,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
                 CitizenFX.Core.UI.Screen.ShowSubtitle("Trying to spawn requested vehicle, please wait...");
 
                 await model.Request(20000);
+
+                while (!model.IsLoaded)
+                {
+                    await BaseScript.Delay(0);
+                }
 
                 var veh = await World.CreateVehicle(model, spawnPosition, heading);
 
