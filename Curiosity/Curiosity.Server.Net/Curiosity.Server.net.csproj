@@ -86,6 +86,7 @@
     <Compile Include="Classes\Menu\Player.cs" />
     <Compile Include="Classes\Missions.cs" />
     <Compile Include="Classes\PlayerMethods.cs" />
+    <Compile Include="Classes\Player\PartyHandler.cs" />
     <Compile Include="Classes\Player\Sit.cs" />
     <Compile Include="Classes\ServerSettings.cs" />
     <Compile Include="Classes\Session.cs" />

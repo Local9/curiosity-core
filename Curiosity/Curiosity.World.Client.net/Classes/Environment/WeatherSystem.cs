@@ -98,7 +98,10 @@ namespace Curiosity.World.Client.net.Classes.Environment
                 }
 
                 API.ClearOverrideWeather();
-                API.SetWeatherTypeOverTime("XMAS", 60.00f);
+                API.SetWeatherTypePersist(weather);
+                API.SetWeatherTypeNowPersist(weather);
+                API.SetWeatherTypeNow(weather);
+                API.SetOverrideWeather(weather);
             }
 
             if (IsHalloween)

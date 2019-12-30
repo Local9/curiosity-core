@@ -71,6 +71,7 @@
     <Compile Include="Classes\Environment\UI\Location.cs" />
     <Compile Include="Classes\Environment\UI\Notifications.cs" />
     <Compile Include="Classes\Environment\UI\NuiEventHandler.cs" />
+    <Compile Include="Classes\Environment\UI\PartyHandler.cs" />
     <Compile Include="Classes\Environment\UI\PlayerBlips.cs" />
     <Compile Include="Classes\Environment\UI\PlayerNames.cs" />
     <Compile Include="Classes\Environment\UI\PlayerOverheadMarkers.cs" />

@@ -48,8 +48,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
         public static void Init()
         {
             API.RegisterCommand("hlmission", new Action<int, List<object>, string>(CommandHlMission), false);
-            API.RegisterCommand("item", new Action<int, List<object>, string>(StartItemPreview), false);
-            API.RegisterCommand("boss", new Action<int, List<object>, string>(BossTest), false);
+            // API.RegisterCommand("item", new Action<int, List<object>, string>(StartItemPreview), false);
+            // API.RegisterCommand("boss", new Action<int, List<object>, string>(BossTest), false);
 
             client.RegisterEventHandler("curiosity:missions:player:spawn", new Action(CreateMission));
             client.RegisterEventHandler("curiosity:missions:player:invalid", new Action(InvalidMission));
@@ -291,7 +291,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
                     _missionTriggers.TryRemove(TRIGGER9, out AreaSphere areaSphere); // REMOVE IT, NO NEED TO TRIGGER IT AGAIN
                 }
 
-                if (identifier == TRIGGER9)
+                if (identifier == TRIGGER10)
                 {
                     CheckTriggerIsRemoved(TRIGGER1);
                     CheckTriggerIsRemoved(TRIGGER2);
@@ -302,6 +302,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
                     CheckTriggerIsRemoved(TRIGGER7);
                     CheckTriggerIsRemoved(TRIGGER8);
                     CheckTriggerIsRemoved(TRIGGER9);
+
+                    await CreatePed(3524.206f, 3711.529f, 20.99178f, 171.4173f, API.GetHashKey("u_m_y_juggernaut_01"));
+                    await CreatePed(3528.076f, 3711.494f, 20.99179f, 180.5266f);
+                    await CreatePed(3521.714f, 3712.648f, 20.99179f, 200.29f);
 
                     _missionTriggers.TryRemove(TRIGGER10, out AreaSphere areaSphere); // REMOVE IT, NO NEED TO TRIGGER IT AGAIN
                 }
@@ -338,7 +342,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             if (_missionTriggers.ContainsKey(TRIGGER10))
                 _missionTriggers.TryRemove(TRIGGER10, out AreaSphere t10);
 
-            ClearAreaOfEverything(_location.X, _location.Y, _location.Z, 300f, true, true, true, true);
+            ClearAreaOfPeds(_location.X, _location.Y, _location.Z, 300f, 1);
+            ClearAreaOfCops(_location.X, _location.Y, _location.Z, 300f, 0);
+            ClearAreaOfProjectiles(_location.X, _location.Y, _location.Z, 300f, true);
 
             if (teleportPlayers)
             {
@@ -403,6 +409,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
 
             _location = new Vector3(3611.552f, 3720.873f, 29.68941f);
 
+            ClearAreaOfPeds(_location.X, _location.Y, _location.Z, 300f, 1);
+            ClearAreaOfCops(_location.X, _location.Y, _location.Z, 300f, 0);
+            ClearAreaOfProjectiles(_location.X, _location.Y, _location.Z, 300f, true);
+
             AddTrigger(MISSIONTRIGGER, _location, Color.FromArgb(0, 255, 0), 250f);
 
             AddTrigger(TRIGGER1, new Vector3(3611.552f, 3720.873f, 29.68941f), Color.FromArgb(0, 0, 255));
@@ -414,6 +424,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             AddTrigger(TRIGGER7, new Vector3(3547.526f, 3645.309f, 28.12189f), Color.FromArgb(0, 0, 255));
             AddTrigger(TRIGGER8, new Vector3(3529.248f, 3654.237f, 27.52158f), Color.FromArgb(0, 0, 255));
             AddTrigger(TRIGGER9, new Vector3(3540.52f, 3675.612f, 20.99179f), Color.FromArgb(0, 0, 255));
+            AddTrigger(TRIGGER10, new Vector3(3524.037f, 3690.067f, 20.9918f), Color.FromArgb(0, 0, 255));
 
             Alert();
             CreateMissionBlip();
@@ -478,6 +489,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
 
         private static async Task CreatePed(float x, float y, float z, float heading)
         {
+            Model model = Client.Random.Next(2) == 1 ? PedHash.Lost01GMY : Client.Random.Next(2) == 1 ? PedHash.Lost03GMY : PedHash.Lost02GMY;
+            await CreatePed(x, y, z, heading, model);
+        }
+
+        private static async Task CreatePed(float x, float y, float z, float heading, Model selectedModel)
+        {
             await BaseScript.Delay(10);
             if (DebugAreas)
             {
@@ -486,7 +503,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             }
 
             Vector3 position = new Vector3(x, y, z);
-            Model model = Client.Random.Next(2) == 1 ? PedHash.Lost01GMY : Client.Random.Next(2) == 1 ? PedHash.Lost03GMY : PedHash.Lost02GMY;
+            Model model = selectedModel;
             await model.Request(10000);
 
             while (!model.IsLoaded)
@@ -497,9 +514,21 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             Ped spawnedPed = await World.CreatePed(model, position, heading);
             // settings
             WeaponHash weaponHash = Client.Random.Next(2) == 1 ? WeaponHash.SawnOffShotgun : Client.Random.Next(2) == 1 ? WeaponHash.AssaultRifle : WeaponHash.MicroSMG;
+            spawnedPed.Armor = 100;
+
+            if (spawnedPed.Model.Hash == API.GetHashKey("u_m_y_juggernaut_01"))
+            {
+                spawnedPed.Health = 2000;
+                spawnedPed.CanRagdoll = false;
+                spawnedPed.CanSufferCriticalHits = false;
+                spawnedPed.FiringPattern = FiringPattern.FullAuto;
+
+                weaponHash = WeaponHash.Minigun;
+                
+            }
+
             spawnedPed.Weapons.Give(weaponHash, 999, true, true);
             spawnedPed.DropsWeaponsOnDeath = false;
-            spawnedPed.Armor = 100;
             // mission maker
             MissionPedCreator.Ped(spawnedPed, Extensions.Alertness.FullyAlert, Extensions.Difficulty.HurtMePlenty);
             model.MarkAsNoLongerNeeded();

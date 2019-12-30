@@ -17,23 +17,28 @@ namespace Curiosity.Shared.Client.net.Classes.Environment
             API.GetNuiCursorPosition(ref cursorX, ref cursorY);
 
             Vector3 camPos = API.GetGameplayCamCoord();
-            Vector2 processedCoords = ProcessCoordinates(cursorX, cursorY);
-            Vector3 targetVector = S2W(camPos, processedCoords);
 
-            // Screen.ShowSubtitle($"{cursorX} - {cursorY}\n{camPos}\n{processedCoords}\n{targetVector}");
+            double relX = 0, relY = 0;
+            ProcessCoordinates(cursorX, cursorY, ref relX, ref relY);
+
+            Vector3 targetVector = S2W(camPos, relX, relY);
+
+            // World.DrawMarker(MarkerType.ChevronUpx1, targetVector, Vector3.Zero, Vector3.Zero, Vector3.One, System.Drawing.Color.FromArgb(255, 255, 255, 255));
+
+            // Screen.ShowSubtitle($"{cursorX} - {cursorY}\n{camPos}\n{relX}-{relY}\n{targetVector}");
 
             Vector3 direction = SubVector(targetVector, camPos);
             Vector3 from = AddVector(camPos, MulNumber(direction, 0.05));
             Vector3 to = AddVector(camPos, MulNumber(direction, 300));
 
-            Screen.ShowSubtitle($"{direction}\n{from}\n{to}");
+            // Screen.ShowSubtitle($"{direction}\n{from}\n{to}");
 
             return World.Raycast(from, to, flags, ignore);
         }
 
-        private static Vector3 S2W(Vector3 camPos, Vector2 processedCoords)
+        private static Vector3 S2W(Vector3 camPos, double relX, double relY)
         {
-            Vector3 camRot = API.GetGameplayCamRot(0);
+            Vector3 camRot = API.GetGameplayCamRot(3);
             Vector3 camForward = RotationToDirection(camRot);
             Vector3 rotUp = AddVector(camRot, new Vector3(10f, 0f, 0f));
             Vector3 rotDown = AddVector(camRot, new Vector3(-10f, 0f, 0f));
@@ -70,17 +75,19 @@ namespace Curiosity.Shared.Client.net.Classes.Environment
                 return AddVector(camPos, MulNumber(camForward, 10.0));
             }
 
-            float scaleX = (processedCoords.X - point2dZero.X) / (point2d.X - point2dZero.X);
-            float scaleY = (processedCoords.Y - point2dZero.Y) / (point2d.Y - point2dZero.Y);
-            Vector3 point3Dret = AddVector(
-                AddVector(
-                    AddVector(camPos, MulNumber(camForward, 10.0)),
-                    MulNumber(camRightRoll, scaleX)
-                ),
-                MulNumber(camUpRoll, scaleY)
-            );
+            double scaleX = ((float)relX - point2dZero.X) / (point2d.X - point2dZero.X);
+            double scaleY = ((float)relY - point2dZero.Y) / (point2d.Y - point2dZero.Y);
 
-            return point3Dret;
+            Vector3 v1 = AddVector(camPos, MulNumber(camForward, 10.0));
+            Vector3 v2 = AddVector(v1, MulNumber(camRightRoll, scaleX));
+
+            Vector3 point3Dret = AddVector(v2, MulNumber(camUpRoll, scaleY));
+
+            World.DrawMarker(MarkerType.ChevronUpx1, point3Dret, Vector3.Zero, Vector3.Zero, Vector3.One, System.Drawing.Color.FromArgb(255, 255, 255, 255));
+            Screen.ShowSubtitle($"{v1}\n{v2}\n{point3Dret}");
+            Screen.ShowSubtitle($"{point2dZero}\n{point2d}\n{scaleX} - {scaleY}");
+
+            return point3Dret; // Currently the mouse doesn't match target location
         }
 
         private static Vector2 W2S(Vector3 point3d)
@@ -133,7 +140,7 @@ namespace Curiosity.Shared.Client.net.Classes.Environment
             return result;
         }
 
-        private static Vector2 ProcessCoordinates(int x, int y)
+        private static void ProcessCoordinates(int x, int y, ref double relX, ref double relY)
         {
             int screenX = 0, screenY = 0;
             API.GetScreenActiveResolution(ref screenX, ref screenY);
@@ -149,6 +156,8 @@ namespace Curiosity.Shared.Client.net.Classes.Environment
                 relativeX = Math.Abs(relativeX);
             }
 
+            relX = relativeX;
+
             if (relativeY > 0.0)
             {
                 relativeY = -relativeY;
@@ -157,10 +166,10 @@ namespace Curiosity.Shared.Client.net.Classes.Environment
             {
                 relativeY = Math.Abs(relativeY);
             }
+            
+            relY = relativeY;
 
-            // Screen.ShowSubtitle($"{x} - {y}\n{screenX} - {screenY}\n{relativeX} - {relativeY}");
-
-            return new Vector2((float)relativeX, (float)relativeY);
+            // Screen.ShowSubtitle($"{x} - {y}\n{screenX} - {screenY}\n{relX} - {relY}\n{relativeX} - {relativeY}");
         }
 
         static public double RadFromDeg(double degrees)

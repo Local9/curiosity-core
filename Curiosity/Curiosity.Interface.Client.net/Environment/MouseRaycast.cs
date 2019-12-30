@@ -30,7 +30,7 @@ namespace Curiosity.Interface.Client.net.Environment
             {
                 await BaseScript.Delay(0);
 
-                API.ShowCursorThisFrame();
+                API.SetNuiFocus(false, true);
 
                 Game.DisableControlThisFrame(0, Control.Aim);
                 Game.DisableControlThisFrame(0, Control.Attack);
@@ -47,10 +47,12 @@ namespace Curiosity.Interface.Client.net.Environment
                     RaycastResult raycastResult = ScreenToWorld.Screen2World((IntersectOptions)22, Game.PlayerPed);
 
                     if (raycastResult.DitHitEntity)
+                    {
                         raycastEntity = raycastResult.HitEntity;
+                    }
                 }
             }
-
+            API.SetNuiFocus(false, false);
             raycastEntity = null;
         }
     }

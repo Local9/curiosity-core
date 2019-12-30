@@ -41,9 +41,7 @@ namespace Curiosity.Server.net.Classes.Environment
             SetupWindWeather();
             SetupWeathers();
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             SetupWeather();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             server.RegisterEventHandler("curiosity:Server:Weather:Sync", new Action<CitizenFX.Core.Player>(ClientSyncWeather));
             server.RegisterEventHandler("curiosity:server:weather:setWeather", new Action<CitizenFX.Core.Player, string>(SetWeather));
@@ -59,14 +57,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             string newWeather = weather.ToUpper();
 
-            Log.Verbose($"Developer Weather Update: {newWeather}");
-
-            float windSpeed = Server.random.Next(2);
-
-            if (!weathers.ContainsKey(weather))
-                newWeather = "EXTRASUNNY";
-
-            weatherData.CurrentWeather = weathers[newWeather].OrderBy(s => Guid.NewGuid()).First();
+            weatherData.CurrentWeather = newWeather;
 
             if (Server.random.Next(2) == 0)
             {
@@ -74,24 +65,19 @@ namespace Curiosity.Server.net.Classes.Environment
                 weatherData.WindHeading = Server.random.Next(360);
             }
 
+            float windSpeed = Server.random.Next(2);
             if (!weatherData.Wind)
-            {
                 windSpeed = Server.random.Next(2);
-            }
 
             if (weatherData.CurrentWeather == "THUNDER")
-            {
                 windSpeed = Server.random.Next(2, 4);
-                weatherData.WindSpeed = windSpeed;
-            }
 
-            isChristmas = (weatherData.CurrentWeather == "XMAS");
+            weatherData.WindSpeed = windSpeed;
+
+            isChristmas = (weatherData.CurrentWeather == "XMAS" || weatherData.CurrentWeather == "BLIZZARD" || weatherData.CurrentWeather == "SNOW" || weatherData.CurrentWeather == "SNOWLIGHT");
             isHalloween = (weatherData.CurrentWeather == "HALLOWEEN");
 
-            if (!isChristmas && (weatherData.CurrentWeather == "XMAS" || weatherData.CurrentWeather == "BLIZZARD" || weatherData.CurrentWeather == "SNOW" || weatherData.CurrentWeather == "SNOWLIGHT"))
-            {
-                weatherData.CurrentWeather = weathers["CLEAR"].OrderBy(s => Guid.NewGuid()).First();
-            }
+            Log.Verbose($"Developer Weather Update: {weatherData.CurrentWeather}, Wind: {weatherData.Wind} : s {weatherData.WindSpeed} : h {weatherData.WindHeading}, isChristmas: {isChristmas}, isHalloween: {isHalloween}");
 
             Server.TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading, isChristmas, isHalloween);
         }
@@ -110,7 +96,9 @@ namespace Curiosity.Server.net.Classes.Environment
             windWeathers.Add("CLEARING", false);
             windWeathers.Add("BLIZZARD", isChristmas);
             windWeathers.Add("XMAS", isChristmas);
+            windWeathers.Add("SNOWLIGHT", isChristmas);
             windWeathers.Add("SNOW", isChristmas);
+            windWeathers.Add("HALLOWEEN", isHalloween);
         }
 
         static void SetupWeathers()
@@ -212,6 +200,12 @@ namespace Curiosity.Server.net.Classes.Environment
                 {
                     weatherData.CurrentWeather = weathers["CLEAR"].OrderBy(s => Guid.NewGuid()).First();
                 }
+
+                if (isChristmas)
+                    weatherData.CurrentWeather = "XMAS";
+
+                if (isHalloween)
+                    weatherData.CurrentWeather = "HALLOWEEN";
 
                 Server.TriggerClientEvent("curiosity:Client:Weather:Sync", weatherData.CurrentWeather, weatherData.Wind, weatherData.WindSpeed, weatherData.WindHeading, isChristmas, isHalloween);
 

@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using static CitizenFX.Core.Native.API;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net.Data;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -54,6 +55,8 @@ namespace Curiosity.Server.net.Classes
         public Job job { get; private set; }
 
         public DateTime LastDonationCheck { get; private set; }
+
+        public PartyData Party = new PartyData();
 
         internal void UpdateLastDonationCheck()
         {

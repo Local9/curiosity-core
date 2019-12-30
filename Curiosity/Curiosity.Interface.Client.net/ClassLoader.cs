@@ -14,7 +14,7 @@ namespace Curiosity.Interface.Client.net
             Log.Verbose("Entering ClassLoader Init");
 
             // Environment.UI.PlayerHeadshot.Init();
-            Environment.UI.DutyIcons.Init();
+            // Environment.UI.DutyIcons.Init();
             Environment.UI.Forum.Init();
 
             // Environment.MouseRaycast.Init();

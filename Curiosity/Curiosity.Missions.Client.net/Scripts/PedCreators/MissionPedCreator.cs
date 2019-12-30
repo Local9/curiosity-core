@@ -47,7 +47,8 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
             {
                 case Difficulty.HurtMePlenty:
                     missionPed = new MissionPedNormal(ped.Handle, visionDistance);
-                    missionPed.Health = 300;
+                    if (missionPed.Health == 100)
+                        missionPed.Health = 300;
                     break;
                 case Difficulty.BringItOn:
                     missionPed = new MissionPedNormal(ped.Handle, visionDistance);
