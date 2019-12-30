@@ -49,6 +49,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
         {
             API.RegisterCommand("hlmission", new Action<int, List<object>, string>(CommandHlMission), false);
             API.RegisterCommand("item", new Action<int, List<object>, string>(StartItemPreview), false);
+            API.RegisterCommand("boss", new Action<int, List<object>, string>(BossTest), false);
 
             client.RegisterEventHandler("curiosity:missions:player:spawn", new Action(CreateMission));
             client.RegisterEventHandler("curiosity:missions:player:invalid", new Action(InvalidMission));
@@ -58,6 +59,61 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             client.RegisterEventHandler("curiosity:Client:Player:Environment:OnExitArea", new Action<string, dynamic>(OnAreaExit));
 
             client.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action<bool>(OnDrawAreas));
+        }
+
+        private static async void BossTest(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+
+            Vector3 offset = Game.PlayerPed.Position + new Vector3(0f, 3f, 0f);
+
+            Model model = API.GetHashKey("u_m_y_juggernaut_01");
+            await model.Request(10000);
+            Ped ped = await World.CreatePed(model, offset);
+            model.MarkAsNoLongerNeeded();
+
+            int type = 1;
+
+            if (arguments.Count > 0)
+                type = int.Parse($"{arguments[0]}");
+
+            if (type == 1)
+            {
+                SetPedPropIndex(ped.Handle, 0, 0, 0, false);
+                SetPedComponentVariation(ped.Handle, 0, 0, 1, 0);
+                SetPedComponentVariation(ped.Handle, 3, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 4, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 5, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 8, 0, 1, 0);
+                SetPedComponentVariation(ped.Handle, 10, 0, 1, 0);
+                return;
+            }
+
+            if (type == 2)
+            {
+                SetPedPropIndex(ped.Handle, 0, 0, 0, false);
+                SetPedComponentVariation(ped.Handle, 0, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 3, 0, 1, 0);
+                SetPedComponentVariation(ped.Handle, 4, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 5, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 8, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 10, 0, 0, 0);
+                return;
+            }
+
+            if (type == 3)
+            {
+                ClearPedProp(ped.Handle, 0);
+                SetPedComponentVariation(ped.Handle, 0, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 3, 0, 1, 0);
+                SetPedComponentVariation(ped.Handle, 4, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 5, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 8, 0, 0, 0);
+                SetPedComponentVariation(ped.Handle, 10, 0, 0, 0);
+                return;
+            }
+
+
         }
 
         private static void StartItemPreview(int playerHandle, List<object> arguments, string raw)

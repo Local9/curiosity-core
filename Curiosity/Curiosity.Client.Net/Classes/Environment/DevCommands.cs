@@ -38,6 +38,9 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 API.RegisterCommand("bones", new Action<int, List<object>, string>(OnBones), false);
 
+                API.RegisterCommand("time", new Action<int, List<object>, string>(SetTime), false);
+                API.RegisterCommand("weather", new Action<int, List<object>, string>(SetWeather), false);
+
                 //Client.GetInstance().ClientCommands.Register("/dev", Handle);
                 //Register("ui", ToggleDevUI);
                 //Register("eui", ToggleEntityUI);
@@ -135,6 +138,39 @@ namespace Curiosity.Client.net.Classes.Environment
         //        Log.Error($"ReviveMe Error: {ex.Message}");
         //    }
         //}
+
+        private static void SetTime(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+
+            int hour = 9, minute = 0;
+
+            if (arguments.Count > 0)
+            {
+                int.TryParse($"{arguments[0]}", out hour);
+            }
+
+            if (arguments.Count > 1)
+            {
+                int.TryParse($"{arguments[1]}", out minute);
+            }
+
+            BaseScript.TriggerServerEvent("curiosity:server:weather:setTime", hour, minute);
+        }
+
+        private static void SetWeather(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Player.PlayerInformation.IsDeveloper()) return;
+
+            string weather = "EXTRASUNNY";
+
+            if (arguments.Count > 0)
+            {
+                weather = $"{arguments[0]}";
+            }
+
+            BaseScript.TriggerServerEvent("curiosity:server:weather:setWeather", weather);
+        }
 
         private static void OnBones(int playerHandle, List<object> arguments, string raw)
         {

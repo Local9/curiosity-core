@@ -10,6 +10,8 @@ namespace Curiosity.Server.net
     {
         private static Server _server;
 
+        public static Random random = new Random(Guid.NewGuid().GetHashCode());
+
         static string serverKeyString;
         public static int serverId = 0;
         public static bool serverActive = false;
@@ -106,6 +108,9 @@ namespace Curiosity.Server.net
             Classes.Environment.PolmavEvents.Init();
             // Classes.Environment.InstanceChecker.Init();
             Classes.Environment.Trains.Init();
+            // weather and time
+            Classes.Environment.WeatherSystems.Init();
+            Classes.Environment.WorldTimeCycle.Init();
 
             // menu options
             Classes.Menu.Player.Init();
