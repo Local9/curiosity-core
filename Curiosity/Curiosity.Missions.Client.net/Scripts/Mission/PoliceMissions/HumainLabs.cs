@@ -62,7 +62,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
 
         private static void StartItemPreview(int playerHandle, List<object> arguments, string raw)
         {
-            ItemPreview.StartPreview("prop_tool_pickaxe", new Vector3(0f, 0f, 1f), false);
+            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+
+            string prop = "prop_bin_beach_01d";
+
+            if (arguments.Count > 0)
+                prop = $"{arguments[0]}";
+
+            ItemPreview.StartPreview(prop, new Vector3(0f, 0f, 1f), false);
         }
 
         private static void CommandHlMission(int playerHandle, List<object> arguments, string raw)
