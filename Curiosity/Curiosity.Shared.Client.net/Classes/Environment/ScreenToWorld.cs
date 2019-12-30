@@ -120,7 +120,7 @@ namespace Curiosity.Shared.Client.net.Classes.Environment
             return result;
         }
 
-        private static Vector3 RotationToDirection(Vector3 camRot)
+        public static Vector3 RotationToDirection(Vector3 camRot)
         {
             float z = (float)RadFromDeg(camRot.Z);
             float x = (float)RadFromDeg(camRot.X);

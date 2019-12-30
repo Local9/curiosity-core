@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Shared.Client.net.Classes.Environment;
 
 namespace Curiosity.Missions.Client.net.DataClasses
 {
@@ -13,32 +14,27 @@ namespace Curiosity.Missions.Client.net.DataClasses
     {
         static Client client = Client.GetInstance();
 
-        private Vector3 _currentOffset;
+        private static Vector3 _currentOffset;
 
-        private Prop _currentPreview;
+        private static Prop _currentPreview;
 
-        private Prop _resultProp;
+        private static Prop _resultProp;
 
-        private bool _preview;
+        private static bool _preview;
 
-        private bool _isDoor;
+        private static bool _isDoor;
 
-        private string _currnetPropHash;
+        private static string _currnetPropHash;
 
-        public bool PreviewComplete
+        public static bool PreviewComplete
         {
             get;
             private set;
         }
 
-        public ItemPreview()
+        public static void Abort()
         {
-            client.RegisterTickHandler(this.OnTick);
-        }
-
-        public void Abort()
-        {
-            Prop prop = this._currentPreview;
+            Prop prop = _currentPreview;
             if (prop != null)
             {
                 prop.Delete();
@@ -48,98 +44,116 @@ namespace Curiosity.Missions.Client.net.DataClasses
             }
         }
 
-        private async void CreateItemPreview()
+        private static async void CreateItemPreview()
         {
-            if (this._currentPreview != null)
+            if (_currentPreview != null)
             {
                 Screen.DisplayHelpTextThisFrame("Press ~INPUT_AIM~ to cancel.\nPress ~INPUT_ATTACK~ to place the item.");
 
-                Game.DisableControlThisFrame(2, (Control)25);
-                Game.DisableControlThisFrame(2, (Control)24);
-                Game.DisableControlThisFrame(2, (Control)257);
-                Game.DisableControlThisFrame(2, (Control)152);
-                Game.DisableControlThisFrame(2, (Control)153);
-                Game.DisableControlThisFrame(2, (Control)44);
-                Game.DisableControlThisFrame(2, (Control)27);
-                Game.DisableControlThisFrame(2, (Control)172);
-                Game.DisableControlThisFrame(2, (Control)173);
-                Game.DisableControlThisFrame(2, (Control)21);
-                API.BlockWeaponWheelThisFrame2();
-                
-                // API.BlockWeaponWheelThisFrame();
-                
-                if (!Game.IsDisabledControlPressed(2, (Control)25))
+                Game.DisableControlThisFrame(2, Control.Aim);
+                Game.DisableControlThisFrame(2, Control.Attack);
+                Game.DisableControlThisFrame(2, Control.Attack2);
+                Game.DisableControlThisFrame(2, Control.ParachuteBrakeLeft);
+                Game.DisableControlThisFrame(2, Control.ParachuteBrakeRight);
+                Game.DisableControlThisFrame(2, Control.Cover);
+                Game.DisableControlThisFrame(2, Control.Phone);
+                Game.DisableControlThisFrame(2, Control.PhoneUp);
+                Game.DisableControlThisFrame(2, Control.PhoneDown);
+                Game.DisableControlThisFrame(2, Control.Sprint);
+                API.HideHudComponentThisFrame(19);
+                //API.BlockWeaponWheelThisFrame2();
+
+                if (!Game.IsDisabledControlPressed(2, Control.Aim))
                 {
                     Vector3 position = GameplayCamera.Position;
-                    Vector3 direction = GameplayCamera.Direction;
+                    
+                    Vector3 camRot = API.GetGameplayCamRot(0);
+
+                    Vector3 direction = ScreenToWorld.RotationToDirection(camRot);
+
                     RaycastResult raycastResult = World.Raycast(position, position + (direction * 15f), IntersectOptions.Everything, Game.PlayerPed);
                     Vector3 hitCoords = raycastResult.HitPosition;
                     if ((hitCoords == Vector3.Zero ? true : hitCoords.DistanceToSquared(Game.PlayerPed.Position) <= 1.5f))
                     {
-                        this._currentPreview.IsVisible = false;
+                        _currentPreview.IsVisible = false;
                     }
                     else
                     {
                         ItemPreview.DrawScaleForms();
-                        float single = (Game.IsControlPressed(2, (Control)21) ? 1.5f : 1f);
-                        if (Game.IsControlPressed(2, (Control)152))
+                        float single = (Game.IsDisabledControlPressed(2, Control.Sprint) ? 3f : 1f);
+
+                        if (Game.IsDisabledControlPressed(2, Control.ParachuteBrakeLeft))
                         {
-                            Vector3 rotation = this._currentPreview.Rotation;
+                            Vector3 rotation = _currentPreview.Rotation;
                             float z = rotation.Z;
                             z = z + Game.LastFrameTime * 50f * single;
-                            this._currentPreview.Rotation = rotation;
+                            rotation.Z = z;
+                            _currentPreview.Rotation = rotation;
                         }
-                        else if (Game.IsControlPressed(2, (Control)153))
+                        else if (Game.IsDisabledControlPressed(2, Control.ParachuteBrakeRight))
                         {
-                            Vector3 vector3 = this._currentPreview.Rotation;
+                            Vector3 vector3 = _currentPreview.Rotation;
                             float lastFrameTime = vector3.Z;
                             lastFrameTime = lastFrameTime - Game.LastFrameTime * 50f * single;
-                            this._currentPreview.Rotation = vector3;
+                            vector3.Z = lastFrameTime;
+                            _currentPreview.Rotation = vector3;
                         }
-                        if (Game.IsControlPressed(2, (Control)172))
+
+                        if (Game.IsDisabledControlPressed(2, Control.PhoneUp))
                         {
-                            float singlePointer = this._currentOffset.Z;
+                            float singlePointer = _currentOffset.Z;
                             singlePointer = singlePointer + Game.LastFrameTime * single;
+                            _currentOffset.Z = singlePointer;
                         }
-                        else if (Game.IsControlPressed(2, (Control)173))
+                        else if (Game.IsDisabledControlPressed(2, Control.PhoneDown))
                         {
-                            float z1 = this._currentOffset.Z;
+                            float z1 = _currentOffset.Z;
                             z1 = z1 - Game.LastFrameTime * single;
+                            _currentOffset.Z = z1;
                         }
-                        this._currentPreview.Position = (hitCoords + this._currentOffset);
-                        this._currentPreview.IsVisible = true;
-                        if (!Game.IsDisabledControlJustPressed(2, (Control)24))
+
+                        _currentPreview.Position = (hitCoords + _currentOffset);
+                        _currentPreview.IsVisible = true;
+
+                        if (!Game.IsDisabledControlJustPressed(2, Control.Attack))
                         {
                             return;
                         }
-                        this._currentPreview.ResetOpacity();
-                        this._resultProp = this._currentPreview;
-                        this._resultProp.IsCollisionEnabled = true;
-                        this._resultProp.IsPositionFrozen = !this._isDoor;
-                        this._preview = false;
-                        this._currentPreview = null;
-                        this._currnetPropHash = string.Empty;
-                        this.PreviewComplete = true;
-                        client.DeregisterTickHandler(this.OnTick);
+
+                        _currentPreview.ResetOpacity();
+                        _resultProp = _currentPreview;
+                        _resultProp.IsCollisionEnabled = true;
+                        _resultProp.IsPositionFrozen = !_isDoor;
+                        _preview = false;
+                        _currentPreview = null;
+                        _currnetPropHash = string.Empty;
+                        PreviewComplete = true;
+                        client.DeregisterTickHandler(OnTick);
+
+                        Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
+                        Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
                     }
                 }
                 else
                 {
-                    this._currentPreview.Delete();
+                    _currentPreview.Delete();
                     object obj = null;
                     Prop prop = (Prop)obj;
-                    this._resultProp = (Prop)obj;
-                    this._currentPreview = prop;
-                    this._preview = false;
-                    this.PreviewComplete = true;
-                    client.DeregisterTickHandler(this.OnTick);
+                    _resultProp = (Prop)obj;
+                    _currentPreview = prop;
+                    _preview = false;
+                    PreviewComplete = true;
+                    client.DeregisterTickHandler(OnTick);
+
+                    Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
+                    Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
                 }
             }
             else
             {
-                this.PreviewComplete = false;
-                this._currentOffset = Vector3.Zero;
-                Model model = this._currnetPropHash;
+                PreviewComplete = false;
+                _currentOffset = Vector3.Zero;
+                Model model = _currnetPropHash;
                 Vector3 vector31 = new Vector3();
                 Vector3 vector32 = vector31;
                 vector31 = new Vector3();
@@ -147,17 +161,23 @@ namespace Curiosity.Missions.Client.net.DataClasses
                 if (prop1 != null)
                 {
                     prop1.IsCollisionEnabled = false;
-                    this._currentPreview = prop1;
-                    this._currentPreview.Opacity = 150;
+                    _currentPreview = prop1;
+                    _currentPreview.Opacity = 150;
                     Game.PlayerPed.Weapons.Select(unchecked((WeaponHash)(-1569615261)), true);
-                    this._resultProp = null;
+                    _resultProp = null;
                 }
                 else
                 {
-                    Screen.DisplayHelpTextThisFrame(string.Format("Failed to load prop, even after request.\nProp Name: {0}", this._currnetPropHash));
-                    this._resultProp = null;
-                    this._preview = false;
-                    this.PreviewComplete = true;
+                    Screen.DisplayHelpTextThisFrame($"Failed to load prop, even after request.\nProp Name: {_currnetPropHash}");
+                    _resultProp = null;
+                    _preview = false;
+                    PreviewComplete = true;
+                }
+
+                if (PreviewComplete)
+                {
+                    Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
+                    Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
                 }
             }
         }
@@ -192,27 +212,32 @@ namespace Curiosity.Missions.Client.net.DataClasses
             scaleform.Render2D();
         }
 
-        public Prop GetResult()
+        public static Prop GetResult()
         {
-            return this._resultProp;
+            return _resultProp;
         }
 
-        public async Task OnTick()
+        public static async Task OnTick()
         {
-            if (this._preview)
+            if (_preview)
             {
-                this.CreateItemPreview();
+                CreateItemPreview();
             }
             await Task.FromResult(0);
         }
 
-        public void StartPreview(string propHash, Vector3 offset, bool isDoor)
+        public static void StartPreview(string propHash, Vector3 offset, bool isDoor)
         {
-            if (!this._preview)
+            if (!_preview)
             {
-                this._preview = true;
-                this._currnetPropHash = propHash;
-                this._isDoor = isDoor;
+                _preview = true;
+                _currnetPropHash = propHash;
+                _isDoor = isDoor;
+
+                client.RegisterTickHandler(OnTick);
+
+                Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
+                Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
             }
         }
     }
