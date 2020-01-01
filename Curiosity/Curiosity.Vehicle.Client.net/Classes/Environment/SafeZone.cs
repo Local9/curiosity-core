@@ -172,6 +172,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             if (identifier != SAFE_ZONE) return;
 
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                Game.PlayerPed.CurrentVehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)Game.PlayerPed.CurrentVehicle.Model.Hash);
+            }
+
             client.DeregisterTickHandler(SafeZoneVehicles);
             IsInsideSafeZone = false;
 
@@ -190,9 +195,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                     };
                 }
             }
-
-            if (Game.PlayerPed.IsInVehicle())
-                Game.PlayerPed.CurrentVehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)Game.PlayerPed.CurrentVehicle.Model.Hash);
 
             safeZoneVehicles.Clear();
 

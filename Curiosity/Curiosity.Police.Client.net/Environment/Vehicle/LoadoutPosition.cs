@@ -27,7 +27,12 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             if (Client.CurrentVehicle.IsDead) return;
 
             EntityBone entityBone = Client.CurrentVehicle.Bones["boot"];
-            if (entityBone.Position.Distance(Game.PlayerPed.Position) < 1.5 && !Game.PlayerPed.IsInVehicle())
+            if (
+                (entityBone.Position.Distance(Game.PlayerPed.Position) < 1.5
+                 || (Client.CurrentVehicle.Model.IsBike && Client.CurrentVehicle.Position.Distance(Game.PlayerPed.Position) < 1.5))
+                 && !Game.PlayerPed.IsInVehicle()
+                 && Client.CurrentVehicle.ClassType == VehicleClass.Emergency
+                 )
             {
                 Screen.DisplayHelpTextThisFrame("Press ~INPUT_PICKUP~ to ~b~rearm.");
 

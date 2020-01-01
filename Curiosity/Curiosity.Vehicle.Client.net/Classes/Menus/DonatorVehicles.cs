@@ -30,45 +30,46 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
         public static void OpenMenu()
         {
-            bool canActivate = (Player.PlayerInformation.IsStaff() || Player.PlayerInformation.IsDonator());
-
-            if (!canActivate) return;
+            Log.Info("Donator menu opening");
 
             MenuController.DontOpenAnyMenu = false;
+
+            bool canActivate = (Player.PlayerInformation.IsStaff() || Player.PlayerInformation.IsDonator());
+            if (!canActivate)
+            {
+                Log.Info("Donators Only!");
+                return;
+            }
 
             Client.TriggerServerEvent("curiosity:Server:Vehicle:GetDonatorVehicleList");
 
             if (donatorVehicleMenu == null)
             {
+
                 donatorVehicleMenu = new Menu("Donator Vehicles", "Select a vehicle");
                 donatorVehicleMenu.OnMenuOpen += Menu_OnMenuOpen;
                 donatorVehicleMenu.OnMenuClose += Menu_OnMenuClose;
                 donatorVehicleMenu.OnItemSelect += Menu_OnItemSelect;
 
+                MenuController.AddMenu(donatorVehicleMenu);
                 MenuController.EnableMenuToggleKeyOnController = false;
                 MenuController.EnableManualGCs = false;
-
-                MenuController.AddMenu(donatorVehicleMenu);
             }
 
             donatorVehicleMenu.ClearMenuItems();
             donatorVehicleMenu.OpenMenu();
         }
 
-
-
         public static void CloseMenu()
         {
-            if (donatorVehicleMenu != null)
+            if (donatorVehicleMenu != null && donatorVehicleMenu.Visible)
                 donatorVehicleMenu.CloseMenu();
         }
 
         private static void Menu_OnMenuClose(Menu menu)
         {
             MenuController.DontOpenAnyMenu = true;
-
             menu.ClearMenuItems();
-            MenuBaseFunctions.MenuClose();
         }
 
         private static void Menu_OnMenuOpen(Menu menu)
@@ -80,10 +81,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         private static void OnUpdateMenu(string encodedJson)
         {
 
-            string skillDesc = string.Empty;
             try
             {
                 donatorVehicleMenu.ClearMenuItems();
+                Log.Info("Data returned");
 
                 string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
                 List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
@@ -96,12 +97,22 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                     dev.VehicleHashString = "tezeract";
 
                     donatorVehicleMenu.AddMenuItem(new MenuItem("Developer Car") { ItemData = dev });
+
+                    Log.Info($"Data Added: {dev}");
                 }
 
                 foreach (VehicleItem vehicle in vehicleItems)
                 {
                     MenuItem item = new MenuItem(vehicle.Name) { ItemData = vehicle };
                     donatorVehicleMenu.AddMenuItem(item);
+
+                    Log.Info($"Data Added: {vehicle}");
+                }
+
+                if (!donatorVehicleMenu.Visible)
+                {
+                    MenuController.DontOpenAnyMenu = false;
+                    donatorVehicleMenu.OpenMenu();
                 }
             }
             catch (Exception ex)
@@ -115,6 +126,16 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
             try
             {
                 menu.CloseMenu();
+
+                if (Classes.Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Info($"~r~Info~s~:~n~Trying to spawn {menuItem.ItemData}");
+                }
+
+                if (!Player.PlayerInformation.IsDonator() || !Player.PlayerInformation.IsStaff())
+                {
+                    Log.Info("Donator Only!");
+                }
 
                 if (Client.CurrentVehicle != null)
                 {
@@ -163,7 +184,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
                         if (Classes.Player.PlayerInformation.IsDeveloper())
                         {
-                            Screen.ShowNotification($"~r~Info~s~:~n~Model Valid: {model.IsValid}~n~Model: {modelName}");
+                            Log.Info($"~r~Info~s~:~n~Model Valid: {model.IsValid}~n~Model: {modelName}");
                         }
 
                         break;
@@ -171,13 +192,13 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
                     if (!model.IsValid)
                     {
-                        Screen.ShowNotification($"~r~ERROR~s~: Could not model {car}");
+                        Log.Info($"~r~ERROR~s~: Could not model {car}");
                         return;
                     }
 
                     if (!found)
                     {
-                        Screen.ShowNotification($"~r~ERROR~s~: Could not load model {car}");
+                        Log.Info($"~r~ERROR~s~: Could not load model {car}");
                         return;
                     }
                 }
@@ -187,7 +208,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                     modelName = car;
                 }
 
-                
+                if (Classes.Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Info($"~r~Info~s~:~n~Model found");
+                }
 
                 Vector3 outPos = new Vector3();
                 if (GetNthClosestVehicleNode(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, 3, ref outPos, 0, 0, 0))
@@ -204,73 +228,30 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                             spawningPosition = safespaceOut;
                         }
 
+                        if (Classes.Player.PlayerInformation.IsDeveloper())
+                        {
+                            Log.Info($"~r~Info~s~:~n~Found a safe location");
+                        }
+
                         CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, spawningPosition, heading, vehicleItem.InstallSirens);
 
                         Game.PlayerPed.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
-
-                        //Model mechanic = PedHash.Xmech01SMY;
-                        //await mechanic.Request(10000);
-                        //Ped ped = await World.CreatePed(mechanic, spawningPosition + new Vector3(0f, 0f, 2f));
-                        //ped.IsPositionFrozen = true;
-                        //mechanic.MarkAsNoLongerNeeded();
-                        //ped.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
-                        //ped.IsPositionFrozen = false;
-
-                        //TaskSetBlockingOfNonTemporaryEvents(ped.Handle, true);
-
-                        //ped.RelationshipGroup = Client.MechanicRelationshipGroup;
-
-                        //ped.RelationshipGroup.SetRelationshipBetweenGroups(Client.PlayerRelationshipGroup, Relationship.Like, true);
-
-                        //ped.Task.ClearAll();
-
-                        //ped.DrivingStyle = DrivingStyle.IgnoreLights;
-
-                        //if (outPos.Distance(Game.PlayerPed.Position) >= 20f)
-                        //{
-                        //    outPos = Game.PlayerPed.Position;
-                        //}
-
-                        //TaskVehiclePark(ped.Handle, spawnedVechicle.Handle, outPos.X, outPos.Y, outPos.Z, 0f, 3, 20f, true);
-
-                        //while (spawnedVechicle.Position.Distance(outPos) >= 5f)
-                        //{
-                        //    await BaseScript.Delay(0);
-
-                        //    if (spawnedVechicle.Position.Distance(Game.PlayerPed.Position) < 50f && spawnedVechicle.IsStopped && spawnedVechicle.Position.Distance(outPos) < 50f)
-                        //        break;
-                        //}
-
-                        //SetVehicleHalt(spawnedVechicle.Handle, 3f, 0, false);
-
-                        //ped.SetConfigFlag(122, true);
-                        //ped.SetConfigFlag(314, true);
-                        //SetEnableHandcuffs(ped.Handle, true);
-
-                        //spawnedVechicle.SoundHorn(250);
-                        //await BaseScript.Delay(250);
-                        //spawnedVechicle.SoundHorn(250);
-                        //await BaseScript.Delay(250);
-
-                        //spawnedVechicle.IsPositionFrozen = true;
-                        //TaskLeaveVehicle(ped.Handle, spawnedVechicle.Handle, 1);
-
-                        //await BaseScript.Delay(200);
-                        //spawnedVechicle.IsPositionFrozen = false;
-                        //spawnedVechicle.IsStolen = false;
-                        //spawnedVechicle.IsWanted = false;
-
-                        //ped.Task.WanderAround();
-
-                        //while (!ped.IsOccluded)
-                        //{
-                        //    await BaseScript.Delay(0);
-                        //    ped.MarkAsNoLongerNeeded();
-                        //    ped.Delete();
-                        //}
                     }
-                }               
-
+                    else
+                    {
+                        Game.PlayerPed.IsInvincible = true;
+                        CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, Game.PlayerPed.Position, Game.PlayerPed.Heading, vehicleItem.InstallSirens);
+                        Game.PlayerPed.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
+                        Game.PlayerPed.IsInvincible = false;
+                    }
+                }
+                else
+                {
+                    Game.PlayerPed.IsInvincible = true;
+                    CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, Game.PlayerPed.Position, Game.PlayerPed.Heading, vehicleItem.InstallSirens);
+                    Game.PlayerPed.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
+                    Game.PlayerPed.IsInvincible = false;
+                }
             }
             catch (Exception ex)
             {

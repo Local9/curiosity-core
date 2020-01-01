@@ -45,7 +45,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
 
         public static void CloseMenu()
         {
-            if (menu != null)
+            if (menu != null && menu.Visible)
                 menu.CloseMenu();
         }
 
@@ -53,7 +53,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         {
             MenuController.DontOpenAnyMenu = true;
             menu.ClearMenuItems();
-            MenuBaseFunctions.MenuClose();
         }
 
         private static void Menu_OnMenuOpen(Menu menu)
