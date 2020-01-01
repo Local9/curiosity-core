@@ -10,6 +10,7 @@ using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Helper.Area;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Shared.Client.net;
+using Newtonsoft.Json;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Environment
 {
@@ -159,6 +160,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             if (identifier != SAFE_ZONE) return;
 
+            API.SendNuiMessage(JsonConvert.SerializeObject(new SafeZoneMessage() { safezone = true }));
+
             client.RegisterTickHandler(SafeZoneVehicles);
             IsInsideSafeZone = true;
 
@@ -171,6 +174,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         public static async void OnExit(string identifier, dynamic data)
         {
             if (identifier != SAFE_ZONE) return;
+
+            API.SendNuiMessage(JsonConvert.SerializeObject(new SafeZoneMessage() { safezone = false }));
 
             if (Game.PlayerPed.IsInVehicle())
             {
@@ -203,5 +208,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 Log.Info("Left Safezone");
             }
         }
+    }
+
+    public class SafeZoneMessage
+    {
+        public bool safezone;
     }
 }
