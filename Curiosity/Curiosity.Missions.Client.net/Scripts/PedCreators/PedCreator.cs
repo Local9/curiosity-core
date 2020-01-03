@@ -20,7 +20,10 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
                 await model.Request(1000);
             }
 
-            API.ClearAreaOfEverything(location.X, location.Y, location.Z - 1f, 2f, true, true, true, true);
+            API.RequestCollisionAtCoord(location.X, location.Y, location.Z);
+
+            API.ClearAreaOfEverything(location.X, location.Y, location.Z, 3f, true, true, true, true);
+
             Ped spawnedPed = await World.CreatePed(model, location, heading);
             API.NetworkFadeInEntity(spawnedPed.Handle, false);
             model.MarkAsNoLongerNeeded();

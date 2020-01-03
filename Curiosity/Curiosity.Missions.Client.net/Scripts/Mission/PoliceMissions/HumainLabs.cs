@@ -44,6 +44,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
 
         static bool DebugAreas = false;
         static bool MissionActive = false;
+        static bool HasSpawnedInitialNpcs = false;
 
         public static void Init()
         {
@@ -160,6 +161,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
                 if (identifier == MISSIONTRIGGER)
                 {
                     // _missionTriggers.TryRemove(MISSIONTRIGGER, out AreaSphere areaSphere); // REMOVE IT, NO NEED TO TRIGGER IT AGAIN
+
+                    if (HasSpawnedInitialNpcs) return;
+                    HasSpawnedInitialNpcs = true;
 
                     await CreatePed(3611.027f, 3728.94f, 29.68939f, 308.7826f);
                     await CreatePed(3623.014f, 3728.33f, 28.69011f, 355.1138f);
@@ -511,6 +515,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
                 await BaseScript.Delay(0);
             }
 
+            API.RequestCollisionAtCoord(x, y, z);
+
             Ped spawnedPed = await World.CreatePed(model, position, heading);
             // settings
             WeaponHash weaponHash = Client.Random.Next(2) == 1 ? WeaponHash.SawnOffShotgun : Client.Random.Next(2) == 1 ? WeaponHash.AssaultRifle : WeaponHash.MicroSMG;
@@ -522,6 +528,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
                 spawnedPed.CanRagdoll = false;
                 spawnedPed.CanSufferCriticalHits = false;
                 spawnedPed.FiringPattern = FiringPattern.FullAuto;
+                spawnedPed.IsMeleeProof = true;
 
                 weaponHash = WeaponHash.Minigun;
                 
