@@ -4,6 +4,7 @@ using CitizenFX.Core.Native;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.Wrappers;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Extensions;
@@ -16,6 +17,7 @@ using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
 using Newtonsoft.Json;
 using Curiosity.Missions.Client.net.Scripts;
+using Curiosity.Missions.Client.net.Classes.PlayerClient;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -67,7 +69,17 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         private int _attitude, _bloodAlcaholLimit, _chanceOfFlee, _chanceOfShootAndFlee, _numberOfCitations;
         private DateTime _currentMovementUpdateTime;
 
+        // fighting information
+        private bool _goingToTarget;
+        private bool _attackingTarget;
+        public static float SensingRange;
+        public static float SilencerEffectiveRange;
+        public static float BehindNoticeDistance;
+        public static float RunningNoticeDistance;
         // PED INFORMATION
+        public static float WanderRadius;
+        public static float VisionDistance;
+
         public string Name
         {
             get
@@ -111,6 +123,69 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             get
             {
                 return _offence;
+            }
+        }
+
+        public bool AttackingTarget
+        {
+            get
+            {
+                return this._attackingTarget;
+            }
+            set
+            {
+                if ((!value || this.Ped.IsRagdoll || base.IsDead || this.Ped.IsClimbing || this.Ped.IsFalling || this.Ped.IsBeingStunned ? false : !this.Ped.IsGettingUp))
+                {
+                    InteractivePed.OnAttackingTargetEvent onAttackingTargetEvent = this.AttackTarget;
+                    if (onAttackingTargetEvent != null)
+                    {
+                        onAttackingTargetEvent(this.Target);
+                    }
+                }
+                this._attackingTarget = value;
+            }
+        }
+
+        public Ped Target
+        {
+            get
+            {
+                return this._target;
+            }
+            private set
+            {
+                if ((value != null ? false : this._target != null))
+                {
+                    this.Ped.Task.WanderAround(this.Position, InteractivePed.WanderRadius);
+                    int num = 0;
+                    bool flag = num == 1;
+                    this.AttackingTarget = num == 1;
+                    this.GoingToTarget = flag;
+                }
+                this._target = value;
+            }
+        }
+
+        public bool GoingToTarget
+        {
+            get
+            {
+                return this._goingToTarget;
+            }
+            set
+            {
+                if ((!value ? false : !this._goingToTarget))
+                {
+                    InteractivePed.OnGoingToTargetEvent onGoingToTargetEvent = this.GoToTarget;
+                    if (onGoingToTargetEvent != null)
+                    {
+                        onGoingToTargetEvent(this.Target);
+                    }
+                    else
+                    {
+                    }
+                }
+                this._goingToTarget = value;
             }
         }
 
@@ -170,6 +245,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             this.Ped.Health = 200;
             this.Ped.IsPersistent = true;
+
+            VisionDistance = 50f;
 
             _firstname = string.Empty;
             _surname = string.Empty;
@@ -262,6 +339,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
+
+            InteractivePed MissionPed = this;
+            this.GoToTarget += new InteractivePed.OnGoingToTargetEvent(MissionPed.OnGoToTarget);
+            InteractivePed MissionPed1 = this;
+            this.AttackTarget += new InteractivePed.OnAttackingTargetEvent(MissionPed1.OnAttackTarget);
+
             client.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
             client.RegisterEventHandler("curiosity:interaction:arrest", new Action<int>(OnArrest));
             client.RegisterEventHandler("curiosity:interaction:idRan", new Action<int>(OnIdRan));
@@ -275,7 +358,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterEventHandler("curiosity:interaction:stolencar", new Action<int>(OnStolenCar));
             client.RegisterEventHandler("curiosity:interaction:flagRelease", new Action<int>(OnFlagRelease));
             client.RegisterEventHandler("curiosity:interaction:grab", new Action<int>(OnGrabPed));
-
+            // group management
             client.RegisterEventHandler("curiosity:setting:group:join", new Action<int>(OnGroupJoin));
             client.RegisterEventHandler("curiosity:setting:group:leave", new Action<int>(OnGroupLeave));
             // car stolen
@@ -284,7 +367,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterTickHandler(OnShowHelpTextTask);
             client.RegisterTickHandler(OnMenuTask);
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+            if (ClientInformation.IsDeveloper())
                 client.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
             if (Ped.AttachedBlip == null)
@@ -308,7 +391,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 this.Ped.MovementAnimationSet = MOVEMENT_ANIMATION_SET_DRUNK;
             }
 
-            if (!this.Ped.IsInVehicle()) // Ignore this if they are in a vehicle
+            if (!this.Ped.IsInVehicle() && !this.Ped.IsInGroup) // Ignore this if they are in a vehicle
             {
                 if (_chanceOfShootAndFlee == 4)
                 {
@@ -334,6 +417,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 }
             }
         }
+
+        public abstract void OnGoToTarget(Ped target);
+        public abstract void OnAttackTarget(Ped target);
 
         protected bool Equals(InteractivePed other)
         {
@@ -385,106 +471,173 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
+        private bool IsGoodTarget(Ped ped)
+        {
+            return ped.GetRelationshipWithPed(this.Ped) == Relationship.Hate;
+        }
+
+        private static bool IsBehind(float distance)
+        {
+            return distance < InteractivePed.BehindNoticeDistance;
+        }
+
+        private static bool IsRunningNoticed(Ped ped, float distance)
+        {
+            return (!ped.IsSprinting ? false : distance < InteractivePed.RunningNoticeDistance);
+        }
+
+        private static bool IsWeaponWellSilenced(Ped ped, float distance)
+        {
+            bool flag;
+            if (ped.IsShooting)
+            {
+                flag = (!ped.IsCurrentWeaponSileced() ? false : distance > InteractivePed.SilencerEffectiveRange);
+            }
+            else
+            {
+                flag = true;
+            }
+            return flag;
+        }
+
+        private bool CanHearPed(Ped ped)
+        {
+            float single = ped.Position.VDist(this.Position);
+            return (!InteractivePed.IsWeaponWellSilenced(ped, single) || InteractivePed.IsBehind(single) ? true : InteractivePed.IsRunningNoticed(ped, single));
+        }
+
+        private void GetTarget()
+        {
+            bool flag;
+            Ped[] array = World.GetAllPeds().Where<Ped>(new Func<Ped, bool>(this.IsGoodTarget)).ToArray<Ped>();
+            Ped closest = World.GetClosest<Ped>(this.Position, array);
+            if (closest == null)
+            {
+                flag = false;
+            }
+            else
+            {
+                flag = (this.Ped.HasClearLineOfSight(closest, InteractivePed.VisionDistance) ? true : this.CanHearPed(closest));
+            }
+            if (flag)
+            {
+                this.Target = closest;
+            }
+            else if ((!(this.Target != null) || this.IsGoodTarget(this.Target) ? closest != this.Target : true))
+            {
+                this.Target = null;
+            }
+        }
+
         public async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
         {
-            if (!NetworkHasControlOfEntity(Handle))
+            try
             {
-                while (!API.NetworkRequestControlOfEntity(Handle))
+                if (this.Ped == null)
                 {
-                    await BaseScript.Delay(0);
-                }
-            }
-
-            if (_hasBeenReleased)
-            {
-                OnPedLeaveGroups(Ped.Handle);
-                OnPedHasBeenReleased(Ped.Handle);
-
-                if (Ped.IsInGroup)
-                    Ped.PedGroup.Delete();
-
-                Ped.LeaveGroup();
-
-                await Client.Delay(100);
-
-                Ped.Task.WanderAround();
-
-                if (Ped.IsOccluded)
                     base.Delete();
 
-                return;
-            }
+                    client.DeregisterTickHandler(OnMenuTask);
+                    client.DeregisterTickHandler(OnShowHelpTextTask);
 
-            if (this.Ped == null)
-            {
-                base.Delete();
+                    if (ClientInformation.IsDeveloper())
+                        client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
 
-                client.DeregisterTickHandler(OnMenuTask);
-                client.DeregisterTickHandler(OnShowHelpTextTask);
-
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
-                    client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
-
-                return;
-            }
-
-            if (this.Ped.IsBeingStunned)
-            {
-                this.Ped.Health = 200;
-
-                if (Client.Random.Next(5) >= 3 && !IsArrested)
-                {
-                    IsArrested = true;
-                    ArrestInteractions.InteractionArrestInit(this);
+                    return;
                 }
-            }
 
-            if (this.Ped.IsInjured)
-            {
-                if (Client.Random.Next(5) >= 3 && !IsArrested)
+                this.GetTarget();
+
+                if (_hasBeenReleased)
                 {
-                    if (Client.Random.Next(30) == 28)
+                    OnPedLeaveGroups(Ped.Handle);
+                    OnPedHasBeenReleased(Ped.Handle);
+
+                    if (Ped.IsInGroup)
+                        Ped.PedGroup.Delete();
+
+                    Ped.LeaveGroup();
+
+                    await Client.Delay(100);
+
+                    Ped.Task.WanderAround();
+
+                    if (Ped.IsOccluded)
+                        base.Delete();
+
+                    return;
+                }
+
+                if (this.Ped.IsBeingStunned || this.Ped.HasBeenDamagedByMelee() || this.Ped.HasBeenDamagedByAnyMeleeWeapon())
+                {
+                    this.Ped.Health = 200;
+
+                    if (Client.Random.Next(5) >= 3 && !IsArrested)
                     {
-                        this.Ped.SetConfigFlag(187, true);
-                    }
-                    else
-                    {
-                        this.Ped.SetConfigFlag(166, true);
                         IsArrested = true;
                         ArrestInteractions.InteractionArrestInit(this);
                     }
                 }
-            }
 
-            if (this.Ped.IsOccluded)
-            {
-                if (Ped.AttachedBlip.Alpha == 255)
-                    Ped.AttachedBlip.Alpha = 0;
-            }
-            else
-            {
-                if (Ped.AttachedBlip.Alpha == 0)
-                    Ped.AttachedBlip.Alpha = 255;
-            }
+                if (this.Ped.IsInjured)
+                {
+                    if (Client.Random.Next(5) >= 3 && !IsArrested)
+                    {
+                        if (Client.Random.Next(30) == 28)
+                        {
+                            this.Ped.SetConfigFlag(187, true);
+                        }
+                        else
+                        {
+                            this.Ped.SetConfigFlag(166, true);
+                            IsArrested = true;
+                            ArrestInteractions.InteractionArrestInit(this);
+                        }
+                    }
+                }
 
-            if (this.Ped.Position.Distance(Game.PlayerPed.Position) >= 20f && !this.Ped.IsInVehicle())
-            {
-                IsArrested = false;
-                this.Ped.LeaveGroup();
-                
-                if (Ped.IsInGroup)
-                    Ped.PedGroup.Delete();
+                if (this.Ped.IsOccluded)
+                {
+                    if (Ped.AttachedBlip.Alpha == 255)
+                        Ped.AttachedBlip.Alpha = 0;
+                }
+                else
+                {
+                    if (Ped.AttachedBlip.Alpha == 0)
+                        Ped.AttachedBlip.Alpha = 255;
+                }
 
-                this.Ped.Task.FleeFrom(Game.PlayerPed);
+                if (IsArrested)
+                {
+                    if (this.Ped.Position.Distance(Game.PlayerPed.Position) >= 20f && !this.Ped.IsInVehicle())
+                    {
+                        IsArrested = false;
+                        this.Ped.LeaveGroup();
 
-                if (Ped.AttachedBlip != null)
-                    Ped.AttachedBlip.Color = BlipColor.Red;
+                        if (Ped.IsInGroup)
+                            Ped.PedGroup.Delete();
+
+                        this.Ped.Task.FleeFrom(Game.PlayerPed);
+
+                        if (Ped.AttachedBlip != null)
+                            Ped.AttachedBlip.Color = BlipColor.Red;
+                    }
+                }
+
+                if (Ped.Position.Distance(Game.PlayerPed.Position) >= 200f)
+                {
+                    OnPedHasBeenReleased(Ped.Handle);
+                }
             }
-            else if (Ped.Position.Distance(Game.PlayerPed.Position) >= 200f)
+            catch (Exception ex)
             {
-                OnPedLeaveGroups(Ped.Handle);
-                OnPedHasBeenReleased(Ped.Handle);
+                Debug.WriteLine($"{ex}");
             }
+        }
+
+        public void SetRelationship(RelationshipGroup relationshipGroup)
+        {
+            this.Ped.RelationshipGroup = relationshipGroup;
         }
 
         public void Abort(EntityEventWrapper sender, Entity entity)
@@ -564,9 +717,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 if (Scripts.Menus.PedInteractionMenu.MenuBase.MainMenu != null)
                     IsMenuVisible = Scripts.Menus.PedInteractionMenu.MenuBase.AnyMenuVisible();
-
-                //if (Classes.PlayerClient.ClientInformation.IsDeveloper())
-                //    Screen.ShowSubtitle($"Menu: {IsMenuVisible}, CPR: {IsPerformingCpr}");
 
                 if (this.Ped.IsInVehicle())
                 {
@@ -826,6 +976,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public event InteractivePed.OnAttackingTargetEvent AttackTarget;
         public delegate void OnAttackingTargetEvent(Ped target);
+        public event InteractivePed.OnGoingToTargetEvent GoToTarget;
+        public delegate void OnGoingToTargetEvent(Ped target);
 
         void OnGrabPed(int handle)
         {
@@ -932,14 +1084,22 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             keyValuePairs.Add("IsCarryingIllegalItems", $"{IsCarryingIllegalItems}");
             keyValuePairs.Add("IsUnderTheInfluence", $"{IsUnderTheInfluence}");
             keyValuePairs.Add("IsInGroup", $"{Ped.IsInGroup}");
+            
+            if (Ped.IsInGroup)
+                keyValuePairs.Add("Group", $"{Ped.RelationshipGroup}");
+
             keyValuePairs.Add("----", "");
             keyValuePairs.Add("BloodAlcaholLimit", $"{BloodAlcaholLimit}");
             keyValuePairs.Add("Attitude", $"{Attitude}");
             keyValuePairs.Add("NumberOfCitations", $"{NumberOfCitations}");
             keyValuePairs.Add("Offence", $"{Offence}");
-            keyValuePairs.Add("-----", "");
-            keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(Ped.Handle, Client.NPC_CURRENT_VEHICLE)}");
-            keyValuePairs.Add("Local Vehicle", $"{Vehicle.Handle}");
+            
+            if (Vehicle != null)
+            {
+                keyValuePairs.Add("-----", "");
+                keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(Ped.Handle, Client.NPC_CURRENT_VEHICLE)}");
+                keyValuePairs.Add("Local Vehicle", $"{Vehicle.Handle}");
+            }
 
             Wrappers.Helpers.DrawData(this, keyValuePairs);
         }

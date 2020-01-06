@@ -16,6 +16,9 @@ namespace Curiosity.Missions.Client.net.Static
         public static RelationshipGroup ArrestedRelationship;
         public static RelationshipGroup InfectedRelationship;
 
+        static public RelationshipGroup Fighter1Relationship;
+        static public RelationshipGroup Fighter2Relationship;
+
         public static void SetRelationshipBothWays(Relationship rel, RelationshipGroup group1, RelationshipGroup group2)
         {
             group1.SetRelationshipBetweenGroups(group2, rel);
@@ -44,6 +47,14 @@ namespace Curiosity.Missions.Client.net.Static
             // Arrested
             ArrestedRelationship = World.AddRelationshipGroup("ARRESTED_RELATIONSHIP");
             SetRelationshipBothWays(Relationship.Like, ArrestedRelationship, PlayerRelationship);
+
+            // Fighters
+            Fighter1Relationship = World.AddRelationshipGroup("FIGHTER_1");
+            Fighter2Relationship = World.AddRelationshipGroup("FIGHTER_2");
+            SetRelationshipBothWays(Relationship.Hate, Fighter1Relationship, Fighter2Relationship);
+            SetRelationshipBothWays(Relationship.Hate, PlayerRelationship, Fighter1Relationship);
+            SetRelationshipBothWays(Relationship.Hate, PlayerRelationship, Fighter2Relationship);
+
         }
     }
 }

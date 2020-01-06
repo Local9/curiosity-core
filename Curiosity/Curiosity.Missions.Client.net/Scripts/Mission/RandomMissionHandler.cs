@@ -39,14 +39,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static public void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
-
             client.RegisterEventHandler("curiosity:Client:Mission:TrafficStops", new Action<bool>(OnTrafficStops));
             client.RegisterEventHandler("curiosity:Client:Mission:Arrests", new Action<bool>(OnArrests));
-
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
-           
             client.RegisterEventHandler("curiosity:Client:Mission:NotAvailable", new Action(OnMissionNotAvailable));
-
             client.RegisterEventHandler("curiosity:Client:Missions:MissionComplete", new Action(OnMissionComplete));
         }
 

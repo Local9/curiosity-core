@@ -124,6 +124,7 @@
     <Compile Include="Scripts\Interactions\PedInteractions\Social.cs" />
     <Compile Include="Scripts\Police\ArrestPed.cs" />
     <Compile Include="Scripts\MarkerHandler.cs" />
+    <Compile Include="Scripts\Police\RandomCallouts.cs" />
     <Compile Include="Scripts\Police\TrafficStop.cs" />
     <Compile Include="Scripts\SoundManager.cs" />
     <Compile Include="Scripts\VehicleCreators\CreateVehicles.cs" />

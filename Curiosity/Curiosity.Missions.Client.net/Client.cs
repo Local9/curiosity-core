@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 
@@ -68,6 +69,7 @@ namespace Curiosity.Missions.Client.net
             _instance = this;
 
             players = Players;
+
             CurrentVehicle = null;
 
             RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));

@@ -36,6 +36,7 @@ namespace Curiosity.Missions.Client.net
             Scripts.Extras.VehicleTow.Init();
 
             // MISSION HANDLER
+            Scripts.Police.RandomCallouts.Init();
             Scripts.Mission.RandomMissionHandler.Init();
             Scripts.MissionEvents.Init();
 

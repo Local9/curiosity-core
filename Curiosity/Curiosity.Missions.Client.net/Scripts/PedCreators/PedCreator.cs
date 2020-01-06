@@ -25,7 +25,7 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
             API.ClearAreaOfEverything(location.X, location.Y, location.Z, 3f, true, true, true, true);
 
             Ped spawnedPed = await World.CreatePed(model, location, heading);
-            API.NetworkFadeInEntity(spawnedPed.Handle, false);
+            API.NetworkFadeInEntity(spawnedPed.Handle, true);
             model.MarkAsNoLongerNeeded();
 
             API.SetPedFleeAttributes(spawnedPed.Handle, 0, false);

@@ -140,6 +140,11 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 Session session = SessionManager.PlayerList[player.Handle];
 
+                if (!Server.isLive)
+                {
+                    Log.Verbose($"[ProcessMessage] {message}");
+                }
+
                 if (string.IsNullOrWhiteSpace(message))
                 {
                     API.CancelEvent();
