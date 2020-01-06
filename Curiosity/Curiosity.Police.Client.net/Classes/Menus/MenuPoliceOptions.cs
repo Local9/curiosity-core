@@ -241,7 +241,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menu.AddMenuItem(menuCheckboxDuty);
             menu.AddMenuItem(menuCheckboxBackup);
             menu.AddMenuItem(menuCheckboxTrafficStops);
-            menu.AddMenuItem(menuCheckboxRandomEvents);
+            // menu.AddMenuItem(menuCheckboxRandomEvents);
 
             await Client.Delay(100);
 

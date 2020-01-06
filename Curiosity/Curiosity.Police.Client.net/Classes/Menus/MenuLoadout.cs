@@ -99,7 +99,14 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
                 Game.PlayerPed.Armor = 100;
 
-                Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, (primaryCost + secondaryCost) + 20);
+                int amtToPay = (primaryCost + secondaryCost);
+
+                if (amtToPay < 100)
+                {
+                    amtToPay = 100;
+                }
+
+                Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", Player.PlayerInformation.playerInfo.Wallet, amtToPay + 20);
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Ammunition Resupplied", "Please wait 2 minutes to resupply again.", 2);
 

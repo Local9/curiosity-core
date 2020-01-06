@@ -14,8 +14,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         static public void Init()
         {
-            client.RegisterTickHandler(OnVehicleEnterTick);
-            client.RegisterTickHandler(InsideVehicleTick);
+            //client.RegisterTickHandler(OnVehicleEnterTick);
+            //client.RegisterTickHandler(InsideVehicleTick);
+
             client.RegisterTickHandler(OnExitingVehicleTask);
         }
 
@@ -134,7 +135,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             await Task.FromResult(0);
             if (!Game.PlayerPed.IsInVehicle()) return;
 
-            if (Game.IsControlPressed(2, Control.VehicleExit) && Game.PlayerPed.IsAlive)
+            if (Game.IsControlPressed(2, Control.VehicleExit) && Game.PlayerPed.IsAlive && (Game.PlayerPed.CurrentVehicle.Model.IsCar || Game.PlayerPed.CurrentVehicle.Model.IsBike))
             {
                 await BaseScript.Delay(150);
                 if (Game.PlayerPed.IsInVehicle() && Game.IsControlPressed(2, Control.VehicleExit) && Game.PlayerPed.IsAlive)

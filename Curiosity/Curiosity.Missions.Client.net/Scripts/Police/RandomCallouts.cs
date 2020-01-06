@@ -11,12 +11,16 @@ using Curiosity.Missions.Client.net.Classes.PlayerClient;
 using Curiosity.Missions.Client.net.Scripts.PedCreators;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Enums;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {
     class RandomCallouts
     {
         static Client client = Client.GetInstance();
+
+        static bool AreEventsActive = false;
+
         static Blip _location;
         static bool IsCalloutActive = false;
 
@@ -30,16 +34,21 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         private static void OnRandomEventCompleted()
         {
             IsCalloutActive = false;
+            AreEventsActive = false;
             client.RegisterTickHandler(OnRandomEventHandler);
         }
 
         internal static void Setup()
         {
+            if (AreEventsActive) return;
+            AreEventsActive = true;
+
             client.RegisterTickHandler(OnRandomEventHandler);
         }
 
         internal static void Dispose()
         {
+            AreEventsActive = false;
             client.DeregisterTickHandler(OnRandomEventHandler);
         }
 
@@ -55,15 +64,34 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 await BaseScript.Delay(10000);
             }
 
-            if (!IsCalloutActive)
+            gameTime = GetGameTimer();
+
+            while ((GetGameTimer() - gameTime) < 30000)
             {
-                int randomRunner = Client.Random.Next(2);
+                await BaseScript.Delay(0);
+                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to accept event, ~INPUT_FRONTENDCANCEL~ to decline.");
 
-                Static.Relationships.SetupRelationShips();
-
-                if (randomRunner == 1)
+                if (Game.IsControlPressed(0, Control.Pickup))
                 {
-                    CreateFight();
+                    if (!IsCalloutActive)
+                    {
+                        int randomRunner = Client.Random.Next(2);
+
+                        Static.Relationships.SetupRelationShips();
+
+                        if (randomRunner == 1)
+                        {
+                            CreateFight();
+                        }
+                    }
+
+                    break;
+                }
+
+                if (Game.IsControlPressed(0, Control.FrontendCancel))
+                {
+                    SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)} RESIDENT/OUTRO_0{Client.Random.Next(1, 4)}");
+                    return;
                 }
             }
         }
