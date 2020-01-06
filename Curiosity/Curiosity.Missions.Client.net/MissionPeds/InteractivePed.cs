@@ -79,6 +79,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         // PED INFORMATION
         public static float WanderRadius;
         public static float VisionDistance;
+        public static float AttackRange;
 
         public string Name
         {
@@ -225,7 +226,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             API.SetPedDiesInWater(Ped.Handle, false);
             API.SetPedDiesWhenInjured(Ped.Handle, false);
             API.SetPedDiesInstantlyInWater(Ped.Handle, true);
+
             Ped.SetCombatAttributes((CombatAttributes)17, false);
+            Ped.SetCombatAttributes((CombatAttributes)46, false);
+            Ped.SetCombatAttributes((CombatAttributes)5, false);
 
             IsMenuVisible = false;
             IsPerformingCpr = false;
@@ -247,6 +251,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this.Ped.IsPersistent = true;
 
             VisionDistance = 50f;
+            AttackRange = 50f;
 
             _firstname = string.Empty;
             _surname = string.Empty;
@@ -547,6 +552,20 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 }
 
                 this.GetTarget();
+
+                if (this.Target != null)
+                {
+                    if (this.Position.VDist(this.Target.Position) <= InteractivePed.AttackRange)
+                    {
+                        this.AttackingTarget = true;
+                        this.GoingToTarget = false;
+                    }
+                    else
+                    {
+                        this.AttackingTarget = false;
+                        this.GoingToTarget = true;
+                    }
+                }
 
                 if (_hasBeenReleased)
                 {
@@ -949,6 +968,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
                 RemoveGroup(playerGroupId);
+
+                base.Delete();
 
                 if (DecorExistOn(Handle, Client.NPC_CURRENT_VEHICLE))
                 {

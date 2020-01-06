@@ -25,7 +25,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static void DevCreateFight(int playerHandle, List<object> arguments, string raw)
         {
             if (!ClientInformation.IsDeveloper()) return;
-            CreateFight(true);
+            CreateFight(false);
         }
 
         static public async void CreateFight(bool developer = false)
@@ -51,9 +51,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 Ped suspect1Ped = await PedCreator.CreatePedAtLocation(model1, outpos + new Vector3(0f, -5f, 0f), 0);
                 Ped suspect2Ped = await PedCreator.CreatePedAtLocation(model2, outpos + new Vector3(0f, 5f, 0f), 180);
 
-                InteractivePed suspect1 = InteractivePedCreator.Ped(suspect1Ped, relationshipGroup: Static.Relationships.Fighter1Relationship);
-                InteractivePed suspect2 = InteractivePedCreator.Ped(suspect2Ped, relationshipGroup: Static.Relationships.Fighter2Relationship);
-
                 SetPedCombatAbility(suspect1Ped.Handle, 100);
                 SetPedCombatAbility(suspect2Ped.Handle, 100);
 
@@ -74,7 +71,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     await BaseScript.Delay(100);
                 }
 
-                location.Delete();
+                InteractivePed suspect1 = InteractivePedCreator.Ped(suspect1Ped, relationshipGroup: Static.Relationships.Fighter1Relationship);
+                InteractivePed suspect2 = InteractivePedCreator.Ped(suspect2Ped, relationshipGroup: Static.Relationships.Fighter2Relationship);
+
+                if (location.Exists())
+                    location.Delete();
             }
         }
     }
