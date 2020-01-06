@@ -22,7 +22,6 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
             {
                 this._ped.Task.FightAgainstHatedTargets(_visionDistance);
                 IsHatingTarget = true;
-                Screen.ShowNotification("FIGHT");
             }
         }
 

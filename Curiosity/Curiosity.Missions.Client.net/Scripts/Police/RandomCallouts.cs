@@ -10,16 +10,62 @@ using Curiosity.Missions.Client.net.Scripts.Mission;
 using Curiosity.Missions.Client.net.Classes.PlayerClient;
 using Curiosity.Missions.Client.net.Scripts.PedCreators;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Enums;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {
     class RandomCallouts
     {
+        static Client client = Client.GetInstance();
         static Blip _location;
+        static bool IsCalloutActive = false;
 
         static public void Init()
         {
             RegisterCommand("createfight", new Action<int, List<object>, string>(DevCreateFight), false);
+
+            client.RegisterEventHandler("curiosity:Client:Missions:RandomEventCompleted", new Action(OnRandomEventCompleted));
+        }
+
+        private static void OnRandomEventCompleted()
+        {
+            IsCalloutActive = false;
+            client.RegisterTickHandler(OnRandomEventHandler);
+        }
+
+        internal static void Setup()
+        {
+            client.RegisterTickHandler(OnRandomEventHandler);
+        }
+
+        internal static void Dispose()
+        {
+            client.DeregisterTickHandler(OnRandomEventHandler);
+        }
+
+        static async Task OnRandomEventHandler()
+        {
+            await BaseScript.Delay(0);
+            long gameTime = GetGameTimer();
+            int delay = Client.Random.Next(1, 5);
+            int minute = (1000 * 60);
+
+            while ((GetGameTimer() - gameTime) < (delay * minute))
+            {
+                await BaseScript.Delay(10000);
+            }
+
+            if (!IsCalloutActive)
+            {
+                int randomRunner = Client.Random.Next(2);
+
+                Static.Relationships.SetupRelationShips();
+
+                if (randomRunner == 1)
+                {
+                    CreateFight();
+                }
+            }
         }
 
         static void DevCreateFight(int playerHandle, List<object> arguments, string raw)
@@ -30,6 +76,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static public async void CreateFight(bool developer = false)
         {
+            client.DeregisterTickHandler(OnRandomEventHandler);
+
             if (_location != null)
             {
                 if (_location.Exists())
@@ -41,12 +89,21 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (GetNthClosestVehicleNode(pos.X, pos.Y, pos.Z, Client.Random.Next(200, 300), ref outpos, 0, 0, 0))
             {
 
+                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"Assault", "Citizens have reported a domestic.", 2);
+                PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
+                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{Client.Random.Next(1, 3)} CRIMES/CRIME_ASSAULT_0{Client.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Client.Random.Next(1, 3)} RESIDENT/OUTRO_0{Client.Random.Next(1, 4)}");
+
                 if (developer)
-                    outpos = Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 5f, 0f));
+                    outpos = Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 15f, 0f));
 
                 Array pedHashes = Enum.GetValues(typeof(PedHash));
-                Model model1 = (PedHash)pedHashes.GetValue(Client.Random.Next(pedHashes.Length));
-                Model model2 = (PedHash)pedHashes.GetValue(Client.Random.Next(pedHashes.Length));
+                Model model1 = PedHash.Hillbilly01AMM; // (PedHash)pedHashes.GetValue(Client.Random.Next(pedHashes.Length));
+                Model model2 = PedHash.Hillbilly02AMM; // (PedHash)pedHashes.GetValue(Client.Random.Next(pedHashes.Length));
+
+                Vector3 safeCoord = World.GetSafeCoordForPed(outpos, true, 16);
+
+                if (!safeCoord.IsZero)
+                    outpos = safeCoord;
                 
                 Ped suspect1Ped = await PedCreator.CreatePedAtLocation(model1, outpos + new Vector3(0f, -5f, 0f), 0);
                 Ped suspect2Ped = await PedCreator.CreatePedAtLocation(model2, outpos + new Vector3(0f, 5f, 0f), 180);

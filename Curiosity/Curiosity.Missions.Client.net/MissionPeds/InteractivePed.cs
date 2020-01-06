@@ -469,10 +469,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private void OnDied(EntityEventWrapper sender, Entity entity)
         {
-            Blip currentBlip = base.AttachedBlip;
-            if (currentBlip != null)
+            if (base.IsOccluded)
             {
-                currentBlip.Delete();
+                base.Delete();
             }
         }
 
@@ -587,7 +586,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     return;
                 }
 
-                if (this.Ped.IsBeingStunned || this.Ped.HasBeenDamagedByMelee() || this.Ped.HasBeenDamagedByAnyMeleeWeapon())
+                if (this.Ped.IsBeingStunned)
                 {
                     this.Ped.Health = 200;
 
@@ -665,6 +664,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             client.DeregisterTickHandler(OnMenuTask);
             client.DeregisterTickHandler(OnShowHelpTextTask);
+
+            Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
 
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
@@ -769,7 +770,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         private void OnCoronerCalled(int handle)
         {
             if (Handle == handle)
+            {
                 IsCoronerCalled = true;
+                Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+            }
         }
 
         public void OnIdRequested(int handle)
@@ -876,6 +880,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Handle == handle)
             {
                 _hasBeenReleased = true;
+                Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
             }
         }
 
@@ -969,8 +974,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
                 RemoveGroup(playerGroupId);
 
-                base.Delete();
-
                 if (DecorExistOn(Handle, Client.NPC_CURRENT_VEHICLE))
                 {
                     int vehId = DecorGetInt(Handle, Client.NPC_CURRENT_VEHICLE);
@@ -992,6 +995,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 {
                     Ped.Task.WanderAround(Ped.Position, 1000f);
                 }
+
+                Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
             }
         }
 
@@ -1033,6 +1038,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 return;
             }
 
+
             if (!IsHandcuffed)
             {
                 List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", "~o~Handcuff them you idoit!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", "~r~Cuff them, fecking muppet!" };
@@ -1042,6 +1048,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             ArrestedPedData arrestedPedData = new ArrestedPedData();
             arrestedPedData.IsAllowedToBeArrested = CanBeArrested;
+
+            Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
 
             arrestedPedData.IsDrunk = IsUnderTheInfluence;
             arrestedPedData.IsDrugged = IsUsingCocaine || IsUsingCannabis;
@@ -1068,7 +1076,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             API.NetworkFadeOutEntity(Handle, true, false);
             _hasBeenReleased = true;
             await Client.Delay(5000);
-            Ped.Delete();
+            base.Delete();
         }
 
         private async Task OnShowDeveloperOverlayTask()

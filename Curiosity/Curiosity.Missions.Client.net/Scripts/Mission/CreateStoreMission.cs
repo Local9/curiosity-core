@@ -60,7 +60,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"{store.Name}", "459S Burglar alarm, silent", 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
-                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Client.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{Client.Random.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{Client.Random.Next(1, 5)}");
+                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Client.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{Client.Random.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{Client.Random.Next(1, 5)} RESIDENT/OUTRO_0{Client.Random.Next(1, 4)}");
 
                 client.RegisterTickHandler(MissionCancelAsync);
 
@@ -342,7 +342,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
             RandomMissionHandler.SetDispatchMessageRecieved(false);
 
-            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)}");
+            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)} RESIDENT/OUTRO_0{Client.Random.Next(1, 4)}");
 
             RandomMissionHandler.AllowNextMission();
         }

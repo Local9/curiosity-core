@@ -34,29 +34,29 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static public PatrolZone patrolZone = PatrolZone.City;
 
         static bool _IsArrestActive = false;
+        static bool _IsRandomEventsActive = false;
         static bool _IsTrafficStopActive = false;
 
         static public void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
             client.RegisterEventHandler("curiosity:Client:Mission:TrafficStops", new Action<bool>(OnTrafficStops));
-            // client.RegisterEventHandler("curiosity:Client:Mission:Arrests", new Action<bool>(OnArrests));
-            client.RegisterEventHandler("curiosity:Client:Mission:RandomEvents", new Action<bool>(OnArrests));
+            client.RegisterEventHandler("curiosity:Client:Mission:RandomEvents", new Action<bool>(OnRandomEvents));
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
             client.RegisterEventHandler("curiosity:Client:Mission:NotAvailable", new Action(OnMissionNotAvailable));
             client.RegisterEventHandler("curiosity:Client:Missions:MissionComplete", new Action(OnMissionComplete));
         }
 
-        static void OnArrests(bool state)
+        static void OnRandomEvents(bool state)
         {
-            _IsArrestActive = state;
+            _IsRandomEventsActive = state;
             if (state)
             {
-                Police.ArrestPed.Setup();
+                Police.RandomCallouts.Setup();
             }
             else
             {
-                Police.ArrestPed.Dispose();
+                Police.RandomCallouts.Dispose();
             }
         }
 
@@ -127,8 +127,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 Log.Info($"JOB: {job}");
 
-                if (_IsArrestActive)
-                    Police.ArrestPed.Dispose();
+                Police.ArrestPed.Dispose();
+
+                if (_IsRandomEventsActive)
+                    Police.RandomCallouts.Dispose();
 
                 if (_IsTrafficStopActive)
                     Police.TrafficStop.Dispose();
@@ -152,7 +154,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
             IsOnDuty = onduty;
 
-            OnArrests(true);
+            Police.ArrestPed.Setup();
 
             if (!onduty)
             {
