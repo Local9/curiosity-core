@@ -18,6 +18,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         static MenuCheckboxItem setMinimapScale = new MenuCheckboxItem("Large Minimap", API.GetResourceKvpString("curiosity:minimap:scale") == "large");
 
+        static bool _cinematic = false;
+
         public static void Init()
         {
             bool scale = API.GetResourceKvpString("curiosity:minimap:scale") == "large";
@@ -34,7 +36,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 //menu.AddMenuItem(new MenuItem("Open Skills", "View Skills") { ItemData = SkillType.Experience });
                 //menu.AddMenuItem(new MenuItem("Open Stats", "View Stats") { ItemData = SkillType.Statistic });
                 menu.AddMenuItem(setMinimapScale);
-                menu.AddMenuItem(new MenuCheckboxItem("Cinematic Mode", "Enable Cinematic Mode") { ItemData = "CINEMATIC", Checked = false });
+                menu.AddMenuItem(new MenuCheckboxItem("Cinematic Mode", "Enable Cinematic Mode") { ItemData = "CINEMATIC", Checked = _cinematic });
                 menu.AddMenuItem(new MenuItem("Cinematic Bars", "Select to adjust Cinematic Bars") { ItemData = "CINEMATICBARS" });
 
             };
@@ -42,7 +44,10 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.OnCheckboxChange += (Menu _menu, MenuCheckboxItem _menuItem, int _itemIndex, bool _newCheckedState) =>
             {
                 if (_menuItem.ItemData == "CINEMATIC")
-                    Client.TriggerEvent("curiosity:Player:UI:CinematicMode");
+                {
+                    _cinematic = _newCheckedState;
+                    Client.TriggerEvent("curiosity:Player:UI:CinematicMode", _cinematic);
+                }
 
                 if (_menuItem == setMinimapScale)
                 {

@@ -54,7 +54,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             // (Yet to be tested)
             //Exports.Add("CinematicMode.RegisterCallback", new Func<Func<bool, Task>, Task>(RegisterCallback));
             client.RegisterTickHandler(OnTick);
-            client.RegisterEventHandler("curiosity:Player:UI:CinematicMode", new Action(HideHud));
+            client.RegisterEventHandler("curiosity:Player:UI:CinematicMode", new Action<bool>(HideHud));
             client.RegisterEventHandler("curiosity:Player:UI:BlackBarHeight", new Action(BlackBarHeight));
         }
 
@@ -89,9 +89,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             await BaseScript.Delay(0);
         }
 
-        static public async void HideHud()
+        static public async void HideHud(bool state)
         {
-            DoHideHud = !DoHideHud;
+            DoHideHud = state;
             BaseScript.TriggerEvent("curiosity:Client:Player:HideHud", DoHideHud);
             if (DoHideHud)
             {

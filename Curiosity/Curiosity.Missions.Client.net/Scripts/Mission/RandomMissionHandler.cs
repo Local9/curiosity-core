@@ -40,7 +40,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         {
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
             client.RegisterEventHandler("curiosity:Client:Mission:TrafficStops", new Action<bool>(OnTrafficStops));
-            client.RegisterEventHandler("curiosity:Client:Mission:Arrests", new Action<bool>(OnArrests));
+            // client.RegisterEventHandler("curiosity:Client:Mission:Arrests", new Action<bool>(OnArrests));
+            client.RegisterEventHandler("curiosity:Client:Mission:RandomEvents", new Action<bool>(OnArrests));
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
             client.RegisterEventHandler("curiosity:Client:Mission:NotAvailable", new Action(OnMissionNotAvailable));
             client.RegisterEventHandler("curiosity:Client:Missions:MissionComplete", new Action(OnMissionComplete));
@@ -150,6 +151,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             }
 
             IsOnDuty = onduty;
+
+            OnArrests(true);
 
             if (!onduty)
             {
