@@ -75,6 +75,8 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             {
                 if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
                 {
+                    API.SetVehicleRadioEnabled(Game.PlayerPed.CurrentVehicle.Handle, false);
+
                     API.DisableControlAction(0, 86, true);
                     API.DisableControlAction(0, (int)Control.VehicleCinCam, true);
                     API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
