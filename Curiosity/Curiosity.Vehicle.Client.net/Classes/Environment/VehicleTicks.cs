@@ -125,7 +125,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                     int networkId = API.VehToNet(vehicle.Handle);
                     API.SetNetworkIdExistsOnAllMachines(networkId, true);
                     API.SetNetworkIdCanMigrate(networkId, true);
-                    BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
                 }
             }
         }

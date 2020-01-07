@@ -5,6 +5,7 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -149,7 +150,8 @@ namespace Curiosity.Discord.Bot.Modules
                 "lv!help - What you're looking at right now" +
                 "\nlv!server dlv|elv - Will display server information" +
                 "\nlv!account - Show you're Curiosity Server account" +
-                "\nlv!top - Top 10 Players by Life V Experience"
+                "\nlv!top - Top 10 Players by Life V Experience" +
+                "\nlv!donate - Check users donation status and update if required"
                 ).WithColor(Color.Blue)
                     .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
                     .WithCurrentTimestamp()
@@ -185,6 +187,62 @@ namespace Curiosity.Discord.Bot.Modules
                         .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
 
                 await ReplyAsync("", false, builder.Build());
+            }
+        }
+
+        [Command("donate"), Summary("Check users donation status and update if required.")]
+        public async Task Donate(SocketUser user = null)
+        {
+            if (user == null)
+                user = Context.User;
+
+            Models.User dbUser = await new Models.User().FindUserAsync(user.Id);
+
+            await Context.Message.DeleteAsync();
+
+            if (dbUser == null)
+            {
+                await ReplyAsync("User was not found or has not connected to the server.");
+            }
+            else
+            {
+                bool hasDonatorRole = false;
+
+                IReadOnlyCollection<SocketRole> roles = Context.Guild.GetUser(user.Id).Roles;
+
+                List<ulong> roleIdList = new List<ulong>();
+
+                roles.ToList().ForEach(role =>
+                {
+                    roleIdList.Add(role.Id);
+                });
+
+                hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588444129722105856);
+
+                string statusStr = "Failed";
+
+                if (hasDonatorRole)
+                {
+                    await dbUser.AddDonatorStatus();
+                    statusStr = "Is a Donator";
+                }
+                else
+                {
+                    await dbUser.RemoveDonatorStatus();
+                    statusStr = "Is not a Donator";
+                }
+
+                EmbedBuilder builder = new EmbedBuilder();
+
+                builder
+                    .AddField("Player", $"{dbUser.Username}", true)
+                    .AddField("Status", $"{statusStr}", true)
+                    .WithColor(hasDonatorRole ? Color.Green : Color.Blue)
+                        .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
+                        .WithCurrentTimestamp()
+                        .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+
+                await ReplyAsync("Updated donator status", false, builder.Build());
             }
         }
 

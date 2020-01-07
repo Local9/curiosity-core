@@ -65,12 +65,10 @@ namespace Curiosity.Client.net.Classes.Environment
                             int networkId = API.VehToNet(Game.PlayerPed.CurrentVehicle.Handle);
                             API.SetNetworkIdExistsOnAllMachines(networkId, true);
                             API.SetNetworkIdCanMigrate(networkId, true);
-                            BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
                         }
                     }
                     else
                     {
-                        BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", vehicleHandle);
                     }
                 }
             }
@@ -106,8 +104,6 @@ namespace Curiosity.Client.net.Classes.Environment
                     {
                         Debug.WriteLine($"OnVehicleRemove -> Removed vehicle with handle {copyRef}");
                     }
-
-                    BaseScript.TriggerServerEvent("curiosity:Server:Vehicles:RemoveFromTempStore", copyRef);
                 }
                 else
                 {
@@ -118,11 +114,6 @@ namespace Curiosity.Client.net.Classes.Environment
                 }
             }
             await Task.FromResult(0);
-        }
-
-        static void SentNotification()
-        {
-            Environment.UI.Notifications.LifeV(1, "Invalid Role", "Sorry you cannot drive this car", string.Empty, 2);
         }
     }
 }

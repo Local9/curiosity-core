@@ -19,8 +19,11 @@ namespace Curiosity.Discord.Bot
         private DiscordSocketClient _client;
         private CommandService _commands;
         private IServiceProvider _services;
+        private TimedEvents _timedEvents;
 
         private DiscordConfiguration discordConfiguration;
+
+        private ulong guildId;
 
         static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
 
@@ -49,6 +52,7 @@ namespace Curiosity.Discord.Bot
             bool testing = Convert.ToBoolean(discordConfiguration.BotSettings["Testing"]);
 
             string discordToken = testing ? discordConfiguration.BotSettings["TokenBeta"] : discordConfiguration.BotSettings["TokenLive"];
+            string guildIdStr = testing ? discordConfiguration.BotSettings["GuildBeta"] : discordConfiguration.BotSettings["GuildLive"];
 
             await _client.LoginAsync(TokenType.Bot, discordToken, true);
 
@@ -65,6 +69,11 @@ namespace Curiosity.Discord.Bot
                 "I’d give you advice, but you wouldn’t listen. No one ever does."
             };
             await _client.SetGameAsync(startupScripts[new Random().Next(startupScripts.Count)]);
+
+            if (ulong.TryParse(guildIdStr, out guildId))
+            {
+                _timedEvents = new TimedEvents(_client, guildId);
+            }
 
             await Task.Delay(-1);
         }
@@ -100,6 +109,9 @@ namespace Curiosity.Discord.Bot
             }
             else if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
             {
+                // will delay for 1 second
+                await Task.Delay(1000);
+
                 var result = await _commands.ExecuteAsync(context, argPos, _services);
                 if (!result.IsSuccess)
                 {

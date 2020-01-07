@@ -195,8 +195,6 @@ namespace Curiosity.Tools.Client.net.Controllers
             API.SetNetworkIdExistsOnAllMachines(networkId, true);
             API.SetNetworkIdCanMigrate(networkId, true);
 
-            Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", networkId);
-
 			return true;
 		}
 

@@ -169,8 +169,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 
                 veh.LockStatus = VehicleLockStatus.Unlocked;
 
-                Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", veh.NetworkId);
-
                 await Client.Delay(0);
 
                 if (staffSpawn)
@@ -359,8 +357,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
                 veh.LockStatus = VehicleLockStatus.Unlocked;
-
-                Client.TriggerServerEvent("curiosity:Server:Vehicles:TempStore", veh.NetworkId);
 
                 await Client.Delay(0);
 

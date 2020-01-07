@@ -7,6 +7,7 @@ using CitizenFX.Core;
 using System.Media;
 using System.IO;
 using Curiosity.Missions.Client.net.Scripts;
+using Curiosity.Missions.Client.net.DataClasses;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment
 {
@@ -18,10 +19,21 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
         {
             RegisterCommand("callout", new Action<int, List<object>, string>(OnTestCallout), false);
             RegisterCommand("volume", new Action<int, List<object>, string>(OnAudioVolume), false);
-
             RegisterCommand("create", new Action<int, List<object>, string>(OnCreateCommand), false);
-
             RegisterCommand("playSound", new Action<int, List<object>, string>(OnPlaySound), false);
+            RegisterCommand("item", new Action<int, List<object>, string>(StartItemPreview), false);
+        }
+
+        private static void StartItemPreview(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+
+            string prop = "prop_bin_beach_01d";
+
+            if (arguments.Count > 0)
+                prop = $"{arguments[0]}";
+
+            ItemPreview.StartPreview(prop, new Vector3(0f, 0f, 1f), false);
         }
 
         static async void OnPlaySound(int playerHandle, List<object> arguments, string raw)

@@ -18,6 +18,7 @@ namespace Curiosity.Discord.Bot.Models
         public DateTime LastSeen;
         public bool BannedPerm;
         public DateTime? BannedUntil;
+        public ulong? DiscordId;
 
         public User() { }
 
@@ -60,8 +61,75 @@ namespace Curiosity.Discord.Bot.Models
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"FindUserAsync -> {ex}");
+                Console.WriteLine($"GetTopUsers -> {ex}");
                 return default;
+            }
+        }
+
+        public async Task<List<User>> GetUsersWithDonationStatus()
+        {
+            try
+            {
+                using var connection = await Database.DatabaseConfig.GetDatabaseConnection();
+                await connection.OpenAsync();
+                using var cmd = connection.CreateCommand();
+
+                cmd.CommandText = @"call selDonatingUsers();";
+                var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
+                return result.Count > 0 ? result : null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"selDonatingUsers -> {ex}");
+                return default;
+            }
+        }
+
+        public async Task RemoveDonatorStatus()
+        {
+            try
+            {
+                using var connection = await Database.DatabaseConfig.GetDatabaseConnection();
+                await connection.OpenAsync();
+                using var cmd = connection.CreateCommand();
+
+                cmd.CommandText = @"call upUserRemoveDonatorRole(@userId);";
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@userId",
+                    DbType = DbType.Int64,
+                    Value = this.UserId
+                });
+
+                await cmd.ExecuteReaderAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"RemoveDonatorStatus -> {ex}");
+            }
+        }
+
+        public async Task AddDonatorStatus()
+        {
+            try
+            {
+                using var connection = await Database.DatabaseConfig.GetDatabaseConnection();
+                await connection.OpenAsync();
+                using var cmd = connection.CreateCommand();
+
+                cmd.CommandText = @"call upUserAddDonatorRole(@userId);";
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@userId",
+                    DbType = DbType.Int64,
+                    Value = this.UserId
+                });
+
+                await cmd.ExecuteReaderAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"AddDonatorStatus -> {ex}");
             }
         }
 
@@ -80,11 +148,14 @@ namespace Curiosity.Discord.Bot.Models
                         LifeExperience = reader.GetFieldValue<long>("lifeExperience"),
                         DateCreated = reader.GetFieldValue<DateTime>("dateCreated"),
                         LastSeen = reader.GetFieldValue<DateTime>("lastSeen"),
-                        BannedPerm = reader.GetFieldValue<bool>("bannedPerm")
+                        BannedPerm = reader.GetFieldValue<bool>("bannedPerm"),
                     };
 
                     if (!DBNull.Value.Equals(reader["bannedUntil"]))
                         user.BannedUntil = reader.GetFieldValue<DateTime>("bannedUntil");
+
+                    if (!DBNull.Value.Equals(reader["discordId"]))
+                        user.DiscordId = reader.GetFieldValue<ulong>("discordId");
 
                     users.Add(user);
                 }

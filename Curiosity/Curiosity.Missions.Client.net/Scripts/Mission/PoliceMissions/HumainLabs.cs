@@ -49,7 +49,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
         public static void Init()
         {
             API.RegisterCommand("hlmission", new Action<int, List<object>, string>(CommandHlMission), false);
-            // API.RegisterCommand("item", new Action<int, List<object>, string>(StartItemPreview), false);
             // API.RegisterCommand("boss", new Action<int, List<object>, string>(BossTest), false);
 
             client.RegisterEventHandler("curiosity:missions:player:spawn", new Action(CreateMission));
@@ -115,18 +114,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             }
 
 
-        }
-
-        private static void StartItemPreview(int playerHandle, List<object> arguments, string raw)
-        {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
-
-            string prop = "prop_bin_beach_01d";
-
-            if (arguments.Count > 0)
-                prop = $"{arguments[0]}";
-
-            ItemPreview.StartPreview(prop, new Vector3(0f, 0f, 1f), false);
         }
 
         private static void CommandHlMission(int playerHandle, List<object> arguments, string raw)
