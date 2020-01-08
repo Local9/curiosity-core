@@ -56,7 +56,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             await BaseScript.Delay(0);
             long gameTime = GetGameTimer();
-            int delay = Client.Random.Next(1, 5);
+            int delay = Client.Random.Next(3, 10);
             int minute = (1000 * 60);
 
             while ((GetGameTimer() - gameTime) < (delay * minute))
@@ -124,6 +124,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 if (developer)
                     outpos = Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 15f, 0f));
 
+                Blip location = World.CreateBlip(outpos);
+                location.ShowRoute = true;
+
+                while (Game.PlayerPed.Position.Distance(location.Position) >= 250f)
+                {
+                    await BaseScript.Delay(10);
+                }
+
                 Array pedHashes = Enum.GetValues(typeof(PedHash));
                 Model model1 = PedHash.Hillbilly01AMM; // (PedHash)pedHashes.GetValue(Client.Random.Next(pedHashes.Length));
                 Model model2 = PedHash.Hillbilly02AMM; // (PedHash)pedHashes.GetValue(Client.Random.Next(pedHashes.Length));
@@ -148,8 +156,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 TaskPutPedDirectlyIntoMelee(suspect1Ped.Handle, suspect2Ped.Handle, 0f, 0f, 0f, false);
                 TaskPutPedDirectlyIntoMelee(suspect2Ped.Handle, suspect1Ped.Handle, 0f, 0f, 0f, false);
 
-                Blip location = World.CreateBlip(outpos);
-                location.ShowRoute = true;
 
                 while (Game.PlayerPed.Position.Distance(location.Position) >= 50f)
                 {

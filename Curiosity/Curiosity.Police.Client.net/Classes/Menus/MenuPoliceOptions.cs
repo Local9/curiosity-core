@@ -35,7 +35,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static MenuCheckboxItem menuCheckboxDuty = new MenuCheckboxItem("Accepting Dispatch Calls", _IsOnDuty);
         static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive);
         static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
-        static MenuCheckboxItem menuCheckboxRandomEvents = new MenuCheckboxItem("Enable Random Events", _IsRandomEventsActive);
+        static MenuCheckboxItem menuCheckboxRandomEvents = new MenuCheckboxItem("Enable Random Events", _IsRandomEventsActive) { Description = "Still in development, may be buggy" };
 
         // Request
 
@@ -241,7 +241,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menu.AddMenuItem(menuCheckboxDuty);
             menu.AddMenuItem(menuCheckboxBackup);
             menu.AddMenuItem(menuCheckboxTrafficStops);
-            // menu.AddMenuItem(menuCheckboxRandomEvents);
+            menu.AddMenuItem(menuCheckboxRandomEvents);
 
             await Client.Delay(100);
 

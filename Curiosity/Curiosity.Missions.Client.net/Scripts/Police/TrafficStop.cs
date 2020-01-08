@@ -245,6 +245,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                                     Scripts.VehicleCreators.CreateVehicles.TrafficStop(targetVehicle);
                                     loadingMessage = string.Empty;
+                                    return;
                                 }
 
                                 if (Game.IsControlJustPressed(0, Control.Cover))
@@ -256,6 +257,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                                     DecorSetBool(targetVehicle.Handle, Client.VEHICLE_IGNORE, true);
                                     loadingMessage = string.Empty;
+                                    return;
                                 }
 
                                 if (targetVehicle.Position.Distance(Client.CurrentVehicle.Position) > 40f)
@@ -269,6 +271,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                 }
                             }
                             API.SetUserRadioControlEnabled(false);
+                            loadingMessage = string.Empty;
                         }
                         else
                         {
