@@ -52,47 +52,56 @@ namespace Curiosity.Discord.Bot
 
                                 if (_client != null)
                                 {
-                                    SocketGuildUser socketGuildUser = _client.GetGuild(_guildId).GetUser(discordId);
+                                    SocketGuild socketGuild = _client.GetGuild(_guildId);
 
-                                    if (socketGuildUser != null)
+                                    if (socketGuild != null)
                                     {
+                                        SocketGuildUser socketGuildUser = socketGuild.GetUser(discordId);
 
-                                        IReadOnlyCollection<SocketRole> roles = socketGuildUser.Roles;
-
-                                        if (roles.Count == 0)
-                                        {
-                                            Console.WriteLine($"Discord Donation Checker: No roles found; {discordId}");
-                                        }
-                                        else
+                                        if (socketGuildUser != null)
                                         {
 
-                                            List<ulong> roleIdList = new List<ulong>();
+                                            IReadOnlyCollection<SocketRole> roles = socketGuildUser.Roles;
 
-                                            roles.ToList().ForEach(role =>
+                                            if (roles.Count == 0)
                                             {
-                                                roleIdList.Add(role.Id);
-                                            });
-
-                                            hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588444129722105856);
-
-                                            if (hasDonatorRole)
-                                            {
-                                                await user.AddDonatorStatus();
+                                                Console.WriteLine($"[INFO] Discord Donation Checker: No roles found; {discordId}");
                                             }
                                             else
                                             {
-                                                await user.RemoveDonatorStatus();
+
+                                                List<ulong> roleIdList = new List<ulong>();
+
+                                                roles.ToList().ForEach(role =>
+                                                {
+                                                    roleIdList.Add(role.Id);
+                                                });
+
+                                                hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588444129722105856);
+
+                                                if (hasDonatorRole)
+                                                {
+                                                    await user.AddDonatorStatus();
+                                                }
+                                                else
+                                                {
+                                                    await user.RemoveDonatorStatus();
+                                                }
                                             }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null");
                                         }
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Discord Donation Checker: SocketGuildUser is null");
+                                        Console.WriteLine("[ERROR] Discord Donation Checker: socketGuild is null");
                                     }
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"Discord Donation Checker: Client is null for ID {_guildId}");
+                                    Console.WriteLine($"[ERROR] Discord Donation Checker: Client is null for ID {_guildId}");
                                 }
                             }
 
@@ -105,7 +114,7 @@ namespace Curiosity.Discord.Bot
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"OnDiscordDonationChecker -> {ex}");
+                Console.WriteLine($"[CRITICAL] OnDiscordDonationChecker -> {ex}");
             }
         }
     }
