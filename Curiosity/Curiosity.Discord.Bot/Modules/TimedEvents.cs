@@ -49,24 +49,50 @@ namespace Curiosity.Discord.Bot
                             if (ulong.TryParse($"{user.DiscordId}", out discordId))
                             {
                                 bool hasDonatorRole = false;
-                                IReadOnlyCollection<SocketRole> roles = _client.GetGuild(_guildId).GetUser(discordId).Roles;
 
-                                List<ulong> roleIdList = new List<ulong>();
-
-                                roles.ToList().ForEach(role =>
+                                if (_client != null)
                                 {
-                                    roleIdList.Add(role.Id);
-                                });
+                                    SocketGuildUser socketGuildUser = _client.GetGuild(_guildId).GetUser(discordId);
 
-                                hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588444129722105856);
+                                    if (socketGuildUser != null)
+                                    {
 
-                                if (hasDonatorRole)
-                                {
-                                    await user.AddDonatorStatus();
+                                        IReadOnlyCollection<SocketRole> roles = socketGuildUser.Roles;
+
+                                        if (roles.Count == 0)
+                                        {
+                                            Console.WriteLine($"Discord Donation Checker: No roles found; {discordId}");
+                                        }
+                                        else
+                                        {
+
+                                            List<ulong> roleIdList = new List<ulong>();
+
+                                            roles.ToList().ForEach(role =>
+                                            {
+                                                roleIdList.Add(role.Id);
+                                            });
+
+                                            hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588444129722105856);
+
+                                            if (hasDonatorRole)
+                                            {
+                                                await user.AddDonatorStatus();
+                                            }
+                                            else
+                                            {
+                                                await user.RemoveDonatorStatus();
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Discord Donation Checker: SocketGuildUser is null");
+                                    }
                                 }
                                 else
                                 {
-                                    await user.RemoveDonatorStatus();
+                                    Console.WriteLine($"Discord Donation Checker: Client is null for ID {_guildId}");
                                 }
                             }
 
