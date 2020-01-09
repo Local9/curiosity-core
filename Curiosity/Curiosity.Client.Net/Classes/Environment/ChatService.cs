@@ -167,8 +167,6 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 SetTextChatEnabled(false);
 
-                await Client.Delay(0);
-
                 if (Game.IsControlPressed(0, Control.FrontendCancel))
                 {
                     EnableChatbox(false);

@@ -462,7 +462,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private async Task OnShowHelpTextTask()
         {
-            await Task.FromResult(0);
             if (!string.IsNullOrEmpty(helpText))
                 Screen.DisplayHelpTextThisFrame(helpText);
         }

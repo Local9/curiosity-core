@@ -2,6 +2,7 @@
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,10 @@ namespace Curiosity.Discord.Bot
                     donators.ForEach(async user =>
                     {
                         if (user.DiscordId == null)
+                        {
+                            await user.RemoveDonatorStatus();
+                        }
+                        else if (user.DiscordId == 0)
                         {
                             await user.RemoveDonatorStatus();
                         }
@@ -91,7 +96,8 @@ namespace Curiosity.Discord.Bot
                                         }
                                         else
                                         {
-                                            Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null");
+                                            await user.RemoveDonatorStatus();
+                                            Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
                                         }
                                     }
                                     else
@@ -111,6 +117,10 @@ namespace Curiosity.Discord.Bot
                 }
 
                 Console.WriteLine("Discord Donation Checker Completed");
+            }
+            catch (MySqlException mex)
+            {
+                Console.WriteLine($"[ERROR] OnDiscordDonationChecker -> {mex.Message}");
             }
             catch (Exception ex)
             {
