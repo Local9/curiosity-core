@@ -246,6 +246,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             VisionDistance = 50f;
             AttackRange = 50f;
+            WanderRadius = 50f;
 
             _firstname = string.Empty;
             _surname = string.Empty;
@@ -332,7 +333,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private async void Create()
         {
-
             this._eventWrapper = new EntityEventWrapper(this.Ped);
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
@@ -530,6 +530,26 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             try
             {
+                bool flag;
+                if (this.Position.VDist(Game.PlayerPed.Position) <= 120f)
+                {
+                    flag = false;
+                }
+                else
+                {
+                    flag = (!base.IsOnScreen ? true : base.IsDead);
+                }
+                if (flag)
+                {
+                    base.Delete();
+
+                    client.DeregisterTickHandler(OnMenuTask);
+                    client.DeregisterTickHandler(OnShowHelpTextTask);
+
+                    if (ClientInformation.IsDeveloper())
+                        client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+                }
+
                 if (this.Ped == null)
                 {
                     base.Delete();

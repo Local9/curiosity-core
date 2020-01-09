@@ -99,7 +99,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static void DevCreateFight(int playerHandle, List<object> arguments, string raw)
         {
             if (!ClientInformation.IsDeveloper()) return;
-            CreateFight(false);
+            CreateFight(true);
         }
 
         static public async void CreateFight(bool developer = false)
@@ -112,17 +112,18 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     _location.Delete();
             }
 
+            int randomNode = Client.Random.Next(200, 300);
+
+            if (developer)
+                randomNode = Client.Random.Next(100, 150);
+
             Vector3 pos = Game.PlayerPed.Position;
             Vector3 outpos = new Vector3();
-            if (GetNthClosestVehicleNode(pos.X, pos.Y, pos.Z, Client.Random.Next(200, 300), ref outpos, 0, 0, 0))
+            if (GetNthClosestVehicleNode(pos.X, pos.Y, pos.Z, randomNode, ref outpos, 0, 0, 0))
             {
-
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"Assault", "Citizens have reported a domestic.", 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
                 SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{Client.Random.Next(1, 3)} CRIMES/CRIME_ASSAULT_0{Client.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Client.Random.Next(1, 3)} RESIDENT/OUTRO_0{Client.Random.Next(1, 4)}");
-
-                if (developer)
-                    outpos = Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 15f, 0f));
 
                 Blip location = World.CreateBlip(outpos);
                 location.ShowRoute = true;
@@ -155,7 +156,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                 TaskPutPedDirectlyIntoMelee(suspect1Ped.Handle, suspect2Ped.Handle, 0f, 0f, 0f, false);
                 TaskPutPedDirectlyIntoMelee(suspect2Ped.Handle, suspect1Ped.Handle, 0f, 0f, 0f, false);
-
 
                 while (Game.PlayerPed.Position.Distance(location.Position) >= 50f)
                 {

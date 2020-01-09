@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.MissionPeds;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.MissionPedTypes
 {
@@ -20,6 +21,7 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
         {
             if (!IsHatingTarget)
             {
+                RegisterHatedTargetsAroundPed(this.Ped.Handle, _visionDistance);
                 this._ped.Task.FightAgainstHatedTargets(_visionDistance);
                 IsHatingTarget = true;
             }
