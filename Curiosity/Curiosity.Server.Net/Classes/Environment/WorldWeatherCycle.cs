@@ -21,7 +21,7 @@ namespace Curiosity.Server.net.Classes.Environment
         static bool isLive = false;
         static bool weatherSetup = false;
 
-        static int MINUTES_TO_WAIT = (1000 * 60) * 20;
+        static int MINUTES_TO_WAIT = (1000 * 60) * 60;
 
         static WeatherData weatherData = new WeatherData();
 
@@ -224,14 +224,16 @@ namespace Curiosity.Server.net.Classes.Environment
             //    MINUTES_TO_WAIT = (1000 * 60);
             //}
 
-            await Server.Delay(MINUTES_TO_WAIT);
+            long gameTime = API.GetGameTimer();
+            while ((API.GetGameTimer() - gameTime) < MINUTES_TO_WAIT)
+            {
+                await BaseScript.Delay(60000);
+            }
 
-            await Server.Delay(0);
+            await Server.Delay(MINUTES_TO_WAIT);
 
             isChristmas = API.GetConvar("christmas_weather", "false") == "true";
             isHalloween = API.GetConvar("halloween_weather", "false") == "true";
-
-            await Server.Delay(0);
 
             SetupWindWeather();
             SetupWeathers();
