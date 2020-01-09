@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
@@ -107,6 +108,32 @@ namespace Curiosity.Missions.Client.net.Wrappers
             catch (Exception ex)
             {
                 Log.Error(ex);
+            }
+        }
+
+        public static void RequestControlOfEnt(Entity entity)
+        {
+            int tick = 0;
+            while(!NetworkHasControlOfEntity(entity.Handle) && tick <= 25)
+            {
+                NetworkRequestControlOfEntity(entity.Handle);
+                tick++;
+            }
+            if (NetworkIsSessionStarted())
+            {
+                int netId = NetworkGetNetworkIdFromEntity(entity.Handle);
+                RequestControlOfId(netId);
+                SetNetworkIdCanMigrate(netId, true);
+            }
+        }
+
+        private static void RequestControlOfId(int netId)
+        {
+            int tick = 0;
+            while (!NetworkHasControlOfEntity(netId) && tick <= 25)
+            {
+                NetworkRequestControlOfEntity(netId);
+                tick++;
             }
         }
     }

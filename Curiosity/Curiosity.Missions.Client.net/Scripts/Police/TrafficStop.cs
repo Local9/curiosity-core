@@ -123,8 +123,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             try
             {
-                await BaseScript.Delay(0);
-
                 if (isConductingPullover)
                 {
                     await BaseScript.Delay(60000);
@@ -184,6 +182,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         {
                             targetVehicle = null;
                             Wrappers.Helpers.ShowSimpleNotification("~b~Traffic Stops: ~r~Cooldown Active");
+                            loadingMessage = string.Empty;
                             return;
                         }
 
@@ -192,6 +191,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         if (hasBeenPulledOver)
                         {
                             Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~You have already pulled over this vehicle.");
+                            loadingMessage = string.Empty;
                             return;
                         }
 
@@ -205,13 +205,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         DecorSetInt(targetVehicle.Handle, Client.VEHICLE_DETECTED_BY, Game.Player.ServerId);
 
                         // request network control
-                        NetworkRequestControlOfEntity(targetVehicle.Handle);
-                        SetNetworkIdCanMigrate(targetVehicle.NetworkId, true);
-                        NetworkRegisterEntityAsNetworked(targetVehicle.NetworkId);
-                        SetNetworkIdExistsOnAllMachines(targetVehicle.NetworkId, true);
-
-                        if (!IsEntityAMissionEntity(targetVehicle.Handle))
-                            SetEntityAsMissionEntity(targetVehicle.Handle, true, true);
+                        Wrappers.Helpers.RequestControlOfEnt(targetVehicle);
 
                         bool awaitingPullover = true;
                         if (targetVehicle == Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck))
@@ -236,6 +230,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                                 if (Game.IsControlJustPressed(0, Control.Pickup))
                                 {
+                                    loadingMessage = string.Empty;
                                     targetVehicle.AttachedBlip.IsFlashing = false;
                                     awaitingPullover = false;
                                     isConductingPullover = true;
@@ -243,31 +238,32 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     _ped = targetVehicle.Driver;
                                     _vehicle = targetVehicle;
 
-                                    Scripts.VehicleCreators.CreateVehicles.TrafficStop(targetVehicle);
-                                    loadingMessage = string.Empty;
+                                    targetVehicle.AttachedBlip.Color = BlipColor.MichaelBlue;
+
+                                    VehicleCreators.CreateVehicles.TrafficStop(targetVehicle);
                                     return;
                                 }
 
                                 if (Game.IsControlJustPressed(0, Control.Cover))
                                 {
+                                    loadingMessage = string.Empty;
                                     awaitingPullover = false;
 
                                     if (targetVehicle.AttachedBlip != null)
                                         targetVehicle.AttachedBlip.Delete();
 
                                     DecorSetBool(targetVehicle.Handle, Client.VEHICLE_IGNORE, true);
-                                    loadingMessage = string.Empty;
                                     return;
                                 }
 
                                 if (targetVehicle.Position.Distance(Client.CurrentVehicle.Position) > 40f)
                                 {
+                                    loadingMessage = string.Empty;
+
                                     awaitingPullover = false;
 
                                     if (targetVehicle.AttachedBlip != null)
                                         targetVehicle.AttachedBlip.Delete();
-
-                                    loadingMessage = string.Empty;
                                 }
                             }
                             API.SetUserRadioControlEnabled(false);
@@ -339,6 +335,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (_vehicle.Handle == handle)
             {
                 client.RegisterTickHandler(OnCooldownTask);
+                isConductingPullover = false;
+                loadingMessage = string.Empty;
+                IsCooldownActive = false;
             }
         }
     }

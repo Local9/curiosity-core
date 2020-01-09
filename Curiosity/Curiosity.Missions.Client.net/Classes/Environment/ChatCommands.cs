@@ -89,7 +89,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
                 if (ped != null)
                 {
-                    MissionPeds.InteractivePed interactivePed = Scripts.PedCreators.InteractivePedCreator.Ped(ped, null);
+                    MissionPeds.InteractivePed interactivePed = Scripts.PedCreators.InteractivePedCreator.Ped(ped);
                     
                     if (killPed)
                     {

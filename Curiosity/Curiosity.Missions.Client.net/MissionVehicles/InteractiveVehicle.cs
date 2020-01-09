@@ -96,7 +96,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (!IsEntityAMissionEntity(Vehicle.Handle))
                 SetEntityAsMissionEntity(Vehicle.Handle, true, true);
 
-            this.InteractivePed = Scripts.PedCreators.InteractivePedCreator.Ped(this.Vehicle.Driver, null);
+            this.InteractivePed = Scripts.PedCreators.InteractivePedCreator.Ped(this.Vehicle.Driver);
 
             _chanceOfFlee = 0;
             _chanceOfShootAndFlee = 0;
