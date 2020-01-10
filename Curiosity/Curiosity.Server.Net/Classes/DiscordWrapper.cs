@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Curiosity.Server.net.Helpers;
+using Curiosity.Server.net.Entity.Discord;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -24,7 +25,6 @@ namespace Curiosity.Server.net.Classes
         {
             if (Server.isLive)
             {
-                server.RegisterEventHandler("curiosity:Server:Discord:ChatMessage", new Action<string, string>(SendDiscordChatMessage));
                 server.RegisterEventHandler("curiosity:Server:Discord:Report", new Action<string, string, string>(SendDiscordReportMessage));
             }
 
@@ -48,7 +48,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static async void SendDiscordChatMessage(string name, string message)
+        public static async void SendDiscordChatMessage(string name, string message)
         {
             if (!webhooks.ContainsKey(WebhookChannel.Chat))
             {
@@ -73,40 +73,29 @@ namespace Curiosity.Server.net.Classes
 
                 Entity.DiscordWebhook discordWebhook = webhooks[WebhookChannel.StaffLog];
 
-                //Webhook webhook = new Webhook(discordWebhook.Url);
+                Webhook webhook = new Webhook(discordWebhook.Url);
 
-                //webhook.AvatarUrl = discordWebhook.Avatar;
-                //webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
-                //webhook.Username = "Staff";
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
+                webhook.Username = "Staff";
 
-                //Embed embed = new Embed();
-                //embed.Author = new EmbedAuthor { Name = adminName, IconUrl = discordWebhook.Avatar };
-                //embed.Title = $"Player: {player}";
+                Embed embed = new Embed();
+                embed.Author = new EmbedAuthor { Name = adminName, IconUrl = discordWebhook.Avatar };
+                embed.Title = $"Player: {player}";
 
-                //embed.Description = $" **{action}**: {reason}";
-                //if (!string.IsNullOrEmpty(duration))
-                //    embed.Description = $" **{action}**: {reason} \n **Duration**: {duration}";
+                embed.Description = $" **{action}**: {reason}";
+                if (!string.IsNullOrEmpty(duration))
+                    embed.Description = $" **{action}**: {reason} \n **Duration**: {duration}";
 
-                //embed.Color = (int)DiscordColor.Orange;
-                //if (action == "Ban")
-                //    embed.Color = (int)DiscordColor.Red;
+                embed.Color = (int)DiscordColor.Orange;
+                if (action == "Ban")
+                    embed.Color = (int)DiscordColor.Red;
 
-                //embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+                embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
 
-                //webhook.Embeds.Add(embed);
-                //await Server.Delay(0);
-                //GHMatti.Http.RequestResponse requestResponse = await webhook.Send();
-
-                //if (requestResponse.status == (System.Net.HttpStatusCode)429)
-                //{
-                //    long timer = (long)double.Parse(requestResponse.headers["X-RateLimit-Reset-After"]);
-                //    DelayTriggered(timer);
-                //}
-
-                //if (requestResponse.status != (System.Net.HttpStatusCode)200)
-                //{
-                //    Log.Info($"SendDiscordEmbededMessage() -> Status: {requestResponse.status} - {requestResponse.content}");
-                //}
+                webhook.Embeds.Add(embed);
+                await Server.Delay(0);
+                await webhook.Send();
 
                 await Task.FromResult(0);
             }
@@ -130,33 +119,22 @@ namespace Curiosity.Server.net.Classes
 
                 Entity.DiscordWebhook discordWebhook = webhooks[WebhookChannel.Report];
 
-                //Webhook webhook = new Webhook(discordWebhook.Url);
+                Webhook webhook = new Webhook(discordWebhook.Url);
 
-                //webhook.AvatarUrl = discordWebhook.Avatar;
-                //webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
-                //webhook.Username = $"Report by {reporterName}";
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
+                webhook.Username = $"Report by {reporterName}";
 
-                //Embed embed = new Embed();
-                //embed.Author = new EmbedAuthor { Name = reporterName, IconUrl = discordWebhook.Avatar };
-                //embed.Title = $"Player: {playerBeingReported}";
-                //embed.Description = $"Reason: {reason}";
-                //embed.Color = (int)DiscordColor.Blue;
-                //embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+                Embed embed = new Embed();
+                embed.Author = new EmbedAuthor { Name = reporterName, IconUrl = discordWebhook.Avatar };
+                embed.Title = $"Player: {playerBeingReported}";
+                embed.Description = $"Reason: {reason}";
+                embed.Color = (int)DiscordColor.Blue;
+                embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
 
-                //webhook.Embeds.Add(embed);
-                //await Server.Delay(0);
-                //GHMatti.Http.RequestResponse requestResponse = await webhook.Send();
-
-                //if (requestResponse.status == (System.Net.HttpStatusCode)429)
-                //{
-                //    long timer = (long)double.Parse(requestResponse.headers["X-RateLimit-Reset-After"]);
-                //    DelayTriggered(timer);
-                //}
-
-                //if (requestResponse.status != (System.Net.HttpStatusCode)200)
-                //{
-                //    Log.Info($"SendDiscordEmbededMessage() -> Status: {requestResponse.status} - {requestResponse.content}");
-                //}
+                webhook.Embeds.Add(embed);
+                await Server.Delay(0);
+                await webhook.Send();
 
                 await Task.FromResult(0);
             }
@@ -180,33 +158,22 @@ namespace Curiosity.Server.net.Classes
 
                 Entity.DiscordWebhook discordWebhook = webhooks[webhookChannel];
 
-                //Webhook webhook = new Webhook(discordWebhook.Url);
+                Webhook webhook = new Webhook(discordWebhook.Url);
 
-                //webhook.AvatarUrl = discordWebhook.Avatar;
-                //webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
-                //webhook.Username = name;
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
+                webhook.Username = name;
 
-                //Embed embed = new Embed();
-                //embed.Author = new EmbedAuthor { Name = name, IconUrl = discordWebhook.Avatar };
-                //embed.Title = title;
-                //embed.Description = description;
-                //embed.Color = (int)discordColor;
-                //embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+                Embed embed = new Embed();
+                embed.Author = new EmbedAuthor { Name = name, IconUrl = discordWebhook.Avatar };
+                embed.Title = title;
+                embed.Description = description;
+                embed.Color = (int)discordColor;
+                embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
 
-                //webhook.Embeds.Add(embed);
-                //await Server.Delay(0);
-                //requestResponse = await webhook.Send();
-
-                //if (requestResponse.status == (System.Net.HttpStatusCode)429)
-                //{
-                //    long timer = (long)double.Parse(requestResponse.headers["X-RateLimit-Reset-After"]);
-                //    DelayTriggered(timer);
-                //}
-
-                //if (requestResponse.status != (System.Net.HttpStatusCode)200)
-                //{
-                //    Log.Info($"SendDiscordEmbededMessage() -> Status: {requestResponse.status} - {requestResponse.content}");
-                //}
+                webhook.Embeds.Add(embed);
+                await Server.Delay(0);
+                await webhook.Send();
 
                 await Task.FromResult(0);
             }
@@ -241,26 +208,13 @@ namespace Curiosity.Server.net.Classes
             {
                 Entity.DiscordWebhook discordWebhook = webhooks[webhookChannel];
 
-                ////Webhook webhook = new Webhook(discordWebhook.Url);
+                Webhook webhook = new Webhook(discordWebhook.Url);
 
-                ////webhook.AvatarUrl = discordWebhook.Avatar;
-                ////webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`\n{name}: {message}";
-                ////webhook.Username = username;
-                
-                //string json = "";
-                //await Server.Delay(0);
-                //RequestResponse requestResponse = await Business.Discord.DiscordWebsocket(discordWebhook.Url, "POST", json);
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`\n{name}: {message}";
+                webhook.Username = username;
 
-                //if (requestResponse.status == (System.Net.HttpStatusCode)429)
-                //{
-                //    long timer = (long)double.Parse(requestResponse.headers["X-RateLimit-Reset-After"]);
-                //    DelayTriggered(timer);
-                //}
-
-                //if (requestResponse.status != (System.Net.HttpStatusCode)200)
-                //{
-                //    Log.Info($"SendDiscordEmbededMessage() -> Status: {requestResponse.status} - {requestResponse.content}");
-                //}
+                await webhook.Send();
 
                 await Task.FromResult(0);
             }

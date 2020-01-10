@@ -102,8 +102,12 @@
     <Compile Include="Database\DatabaseUsers.cs" />
     <Compile Include="Entity\AdaptiveCard.cs" />
     <Compile Include="Entity\Discord\Converter.cs" />
+    <Compile Include="Entity\Discord\Embed.cs" />
+    <Compile Include="Entity\Discord\EmbedAuthor.cs" />
+    <Compile Include="Entity\Discord\EmbedThumbnail.cs" />
     <Compile Include="Entity\Discord\Guild.cs" />
     <Compile Include="Entity\Discord\Member.cs" />
+    <Compile Include="Entity\Discord\Webhook.cs" />
     <Compile Include="Enums\Discord\DiscordColor.cs" />
     <Compile Include="Entity\DiscordWebhook.cs" />
     <Compile Include="Entity\VehicleData.cs" />

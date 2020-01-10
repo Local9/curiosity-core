@@ -188,7 +188,8 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 Log.Verbose($"{player.Name} - {message}");
 
-                Server.TriggerEvent("curiosity:Server:Discord:ChatMessage", player.Name, message);
+                DiscordWrapper.SendDiscordChatMessage(player.Name, message);
+
                 Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
             }
             catch (Exception ex)
