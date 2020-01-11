@@ -146,7 +146,7 @@ namespace Curiosity.Server.net.Business
             messages.Add(Messages.Error, "An error prevented deferrals");
             messages.Add(Messages.Timeout, "Exceeded server owners maximum loading time threshold");
             messages.Add(Messages.QueueCount, "[Queue: {0}]");
-            messages.Add(Messages.Symbols, "Invalid characters in your name. The following are allowed A-Z, a-z, 0-9 and _[].#|");
+            messages.Add(Messages.Symbols, "Player name of '{0}' contains invalid characters, please change your player name in FiveM or Steam Settings.\nThe following characters are allowed A-Z, a-z, 0-9 and -_[].#");
         }
         
         static bool IsEverythingReady()
@@ -181,7 +181,7 @@ namespace Curiosity.Server.net.Business
 
                 if (license == null) { deferrals.done($"{messages[Messages.License]}"); return; }
 
-                if (!regex.IsMatch(playerName)) { deferrals.done($"{messages[Messages.Symbols]}"); return; }
+                if (!regex.IsMatch(playerName)) { deferrals.done($"{string.Format(messages[Messages.Symbols], player.Name)}"); return; }
 
                 if (blacklistedNames.IsMatch(playerName.ToLower())) {
                     deferrals.done($"The username of '{playerName}' is blocked. Please note we can see the name from the FiveM settings options or Steam.");
