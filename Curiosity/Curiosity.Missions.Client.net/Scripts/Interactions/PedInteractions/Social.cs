@@ -18,29 +18,29 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 {
     class Social
     {
-        static public async void InteractionHello(InteractivePed interactivePed)
+        static public async void InteractionHello(Ped ped)
         {
             await Helpers.Animations.LoadAnimation("gestures@m@sitting@generic@casual");
 
             if (Client.speechType == SpeechType.NORMAL)
             {
                 string voiceName = "s_f_y_cop_01_white_full_01";
-                if (interactivePed.Ped.Gender == Gender.Male)
+                if (ped.Gender == Gender.Male)
                 {
                     voiceName = "s_m_y_cop_01_white_full_01";
                 }
                 List<string> hello = new List<string>() { "GENERIC_HI", "KIFFLOM_GREET" };
-                PlayAmbientSpeechWithVoice(interactivePed.Ped.Handle, hello[Client.Random.Next(hello.Count)], voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
+                PlayAmbientSpeechWithVoice(ped.Handle, hello[Client.Random.Next(hello.Count)], voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
                 Game.PlayerPed.Task.PlayAnimation("gestures@m@standing@casual", "gesture_hello", 8.0f, -1, (AnimationFlags)49);
             }
             else
             {
                 string voiceName = "s_f_y_cop_01_white_full_01";
-                if (interactivePed.Ped.Gender == Gender.Male)
+                if (ped.Gender == Gender.Male)
                 {
                     voiceName = "s_m_y_cop_01_white_full_01";
                 }
-                PlayAmbientSpeechWithVoice(interactivePed.Ped.Handle, "GENERIC_INSULT_HIGH", voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
+                PlayAmbientSpeechWithVoice(ped.Handle, "GENERIC_INSULT_HIGH", voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
                 Game.PlayerPed.Task.PlayAnimation("gestures@m@standing@casual", "gesture_what_hard", 8.0f, -1, (AnimationFlags)49);
             }
             await Client.Delay(1000);

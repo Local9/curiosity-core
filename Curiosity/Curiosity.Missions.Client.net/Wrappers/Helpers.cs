@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Font = CitizenFX.Core.UI.Font;
+using Curiosity.Missions.Client.net.Classes.PlayerClient;
 
 namespace Curiosity.Missions.Client.net.Wrappers
 {
@@ -121,18 +122,24 @@ namespace Curiosity.Missions.Client.net.Wrappers
             }
             if (NetworkIsSessionStarted())
             {
-                int netId = NetworkGetNetworkIdFromEntity(entity.Handle);
+                int netId = entity.NetworkId;
                 RequestControlOfId(netId);
                 SetNetworkIdCanMigrate(netId, true);
             }
         }
 
-        private static void RequestControlOfId(int netId)
+        public static void RequestControlOfId(int netId)
         {
             int tick = 0;
             while (!NetworkHasControlOfEntity(netId) && tick <= 25)
             {
-                NetworkRequestControlOfEntity(netId);
+                if (NetworkRequestControlOfEntity(netId))
+                {
+                    if (ClientInformation.IsDeveloper())
+                    {
+                        Debug.WriteLine($"Gained Control of {netId}");
+                    }
+                }
                 tick++;
             }
         }

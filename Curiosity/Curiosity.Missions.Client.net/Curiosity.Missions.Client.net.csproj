@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1715\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1976\lib\net45\CitizenFX.Core.Client.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json.net">
       <HintPath>..\_Dependancies\Newtonsoft.Json.net.dll</HintPath>
@@ -78,6 +78,7 @@
     <Compile Include="Scripts\Mission\PoliceMissions\HumainLabs.cs" />
     <Compile Include="Exceptions\InvalidOrderException.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />
+    <Compile Include="Scripts\NpcHandler.cs" />
     <Compile Include="Scripts\PedCreators\InteractivePedCreator.cs" />
     <Compile Include="Scripts\PedCreators\NormalPedCreator.cs" />
     <Compile Include="Scripts\PedCreators\PedCreator.cs" />
@@ -151,7 +152,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

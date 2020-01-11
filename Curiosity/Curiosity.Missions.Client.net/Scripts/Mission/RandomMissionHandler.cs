@@ -37,6 +37,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static bool _IsRandomEventsActive = false;
         static bool _IsTrafficStopActive = false;
 
+        static public string JobName = string.Empty;
+
         static public void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
@@ -117,6 +119,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static async void OnDutyState(bool active, bool onduty, string job)
         {
+            JobName = job;
+
             if (job != "police")
             {
                 // clean up and stop everything

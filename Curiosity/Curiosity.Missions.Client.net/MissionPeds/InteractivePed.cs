@@ -31,7 +31,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         private Ped _target;
         private Vehicle Vehicle;
         // MENU STATES
-        public bool IsMenuVisible = false;
+        
         public bool IsTrafficStop;
         public bool IsPerformingCpr = false;
         public bool HasCprFailed = false;
@@ -212,6 +212,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (this.Ped.IsInVehicle())
                 this.Vehicle = this.Ped.CurrentVehicle;
 
+
+            int netId = API.NetworkGetNetworkIdFromEntity(this.Ped.Handle);
+            SetNetworkIdCanMigrate(netId, true);
+
             Wrappers.Helpers.RequestControlOfEnt(this.Ped);
 
             API.SetPedFleeAttributes(Ped.Handle, 0, false);
@@ -225,7 +229,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             Ped.SetCombatAttributes((CombatAttributes)46, false);
             Ped.SetCombatAttributes((CombatAttributes)5, false);
 
-            IsMenuVisible = false;
             IsPerformingCpr = false;
             IsCoronerCalled = false;
             HasCprFailed = false;
@@ -364,7 +367,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             client.RegisterEventHandler("curiosity:interaction:hasLostId", new Action<int>(OnHasLostId));
 
             client.RegisterTickHandler(OnShowHelpTextTask);
-            client.RegisterTickHandler(OnMenuTask);
 
             if (ClientInformation.IsDeveloper())
                 client.RegisterTickHandler(OnShowDeveloperOverlayTask);
@@ -415,6 +417,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                         Ped.AttachedBlip.Color = BlipColor.Red;
                 }
             }
+
+            NpcHandler.AddNpc(base.NetworkId, this);
         }
 
         public abstract void OnGoToTarget(Ped target);
@@ -541,9 +545,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 }
                 if (flag)
                 {
+                    Scripts.NpcHandler.RemoveNpc(base.NetworkId);
                     base.Delete();
-
-                    client.DeregisterTickHandler(OnMenuTask);
+                    
                     client.DeregisterTickHandler(OnShowHelpTextTask);
 
                     if (ClientInformation.IsDeveloper())
@@ -552,9 +556,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (this.Ped == null)
                 {
+                    Scripts.NpcHandler.RemoveNpc(base.NetworkId);
                     base.Delete();
 
-                    client.DeregisterTickHandler(OnMenuTask);
                     client.DeregisterTickHandler(OnShowHelpTextTask);
 
                     if (ClientInformation.IsDeveloper())
@@ -581,6 +585,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (_hasBeenReleased)
                 {
+                    Scripts.NpcHandler.RemoveNpc(base.NetworkId);
+
                     OnPedLeaveGroups(Ped.Handle);
                     OnPedHasBeenReleased(Ped.Handle);
 
@@ -594,7 +600,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     Ped.Task.WanderAround();
 
                     if (Ped.IsOccluded)
+                    {
                         base.Delete();
+                    }
 
                     return;
                 }
@@ -629,13 +637,25 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (this.Ped.IsOccluded)
                 {
-                    if (Ped.AttachedBlip.Alpha == 255)
-                        Ped.AttachedBlip.Alpha = 0;
+                    if (Ped != null)
+                    {
+                        if (Ped.AttachedBlip != null)
+                        {
+                            if (Ped.AttachedBlip.Alpha == 255)
+                                Ped.AttachedBlip.Alpha = 0;
+                        }
+                    }
                 }
                 else
                 {
-                    if (Ped.AttachedBlip.Alpha == 0)
-                        Ped.AttachedBlip.Alpha = 255;
+                    if (Ped != null)
+                    {
+                        if (Ped.AttachedBlip != null)
+                        {
+                            if (Ped.AttachedBlip.Alpha == 0)
+                                Ped.AttachedBlip.Alpha = 255;
+                        }
+                    }
                 }
 
                 if (IsArrested)
@@ -657,6 +677,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (Ped.Position.Distance(Game.PlayerPed.Position) >= 200f)
                 {
+                    Scripts.NpcHandler.RemoveNpc(base.NetworkId);
                     OnPedHasBeenReleased(Ped.Handle);
                 }
             }
@@ -675,7 +696,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             base.Delete();
 
-            client.DeregisterTickHandler(OnMenuTask);
             client.DeregisterTickHandler(OnShowHelpTextTask);
 
             Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
@@ -684,86 +704,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
         }
 
-        private async Task OnMenuTask()
-        {
-            await Task.FromResult(0);
-            helpText = string.Empty;
+        
 
-            if (Scripts.MissionEvents.HasAcceptedCallout) return; // Should also check at the traffic stop
-
-            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f)
-            {
-                if (CanDisplayMenu())
-                {
-                    helpText = "Press ~INPUT_CONTEXT~ to open the ~b~Interaction Menu";
-
-                    if (Game.IsControlPressed(0, Control.Context))
-                    {
-                        helpText = string.Empty;
-                        Scripts.Menus.PedInteractionMenu.MenuBase.Open(this);
-                    }
-                }
-
-                if (Game.PlayerPed.IsAiming && Ped.IsAlive && !IsArrested && !Game.PlayerPed.IsInVehicle()) {
-                    if (this.Position.Distance(Game.PlayerPed.Position) > 2f && this.Position.Distance(Game.PlayerPed.Position) <= 20f)
-                    {
-                        int entityHandle = 0;
-                        Ped pedBeingAimedAt = null;
-                        if (API.GetEntityPlayerIsFreeAimingAt(Game.Player.Handle, ref entityHandle))
-                        {
-                            if (entityHandle == 0) return;
-
-                            if (API.GetEntityType(entityHandle) == 1 && API.GetPedType(entityHandle) != 28)
-                            {
-                                pedBeingAimedAt = new Ped(entityHandle);
-                            }
-                        }
-
-                        if (pedBeingAimedAt != null)
-                        {
-                            if (Ped == pedBeingAimedAt)
-                            {
-                                if (Ped.IsInVehicle())
-                                {
-                                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_CONTEXT~ to demand the suspect to exit their vehicle.");
-                                }
-                                else
-                                {
-                                    Screen.DisplayHelpTextThisFrame("Press ~INPUT_CONTEXT~ to demand the suspect to get on their knees.");
-                                }
-
-                                if (Game.IsControlJustPressed(0, Control.Context))
-                                {
-                                    IsArrested = true;
-                                    ArrestInteractions.InteractionArrestInit(this);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private bool CanDisplayMenu()
-        {
-            try
-            {
-                if (Scripts.Menus.PedInteractionMenu.MenuBase.MainMenu != null)
-                    IsMenuVisible = Scripts.Menus.PedInteractionMenu.MenuBase.AnyMenuVisible();
-
-                if (this.Ped.IsInVehicle())
-                {
-                    return this.Position.Distance(Game.PlayerPed.Position) <= 4f && !IsMenuVisible && !IsPerformingCpr && !IsCoronerCalled && !Game.PlayerPed.IsInVehicle() && !_hasBeenReleased;
-                }
-
-                return this.Position.Distance(Game.PlayerPed.Position) <= 2f && !IsMenuVisible && !IsPerformingCpr && !IsCoronerCalled && !Game.PlayerPed.IsInVehicle() && !_hasBeenReleased;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("InteractivePed -> CanDisplayMenu");
-                return false;
-            }
-        }
+        
 
         private void OnCpr(int handle, bool state)
         {
@@ -933,6 +876,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 _hasBeenReleased = true;
 
+                Scripts.NpcHandler.RemoveNpc(base.NetworkId);
+
                 DecorSetBool(handle, Client.NPC_ARRESTED, false);
 
                 Ped.SetConfigFlag(292, false);
@@ -978,7 +923,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 DecorSetBool(Handle, Client.NPC_WAS_RELEASED, _hasBeenReleased);
 
-                client.DeregisterTickHandler(OnMenuTask);
                 client.DeregisterTickHandler(OnShowHelpTextTask);
 
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper())
@@ -1042,7 +986,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 base.Delete();
 
-                client.DeregisterTickHandler(OnMenuTask);
                 client.DeregisterTickHandler(OnShowHelpTextTask);
 
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper())
@@ -1088,7 +1031,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
             API.NetworkFadeOutEntity(Handle, true, false);
             _hasBeenReleased = true;
-            await Client.Delay(5000);
+            await Client.Delay(500);
+
+            NpcHandler.RemoveNpc(base.NetworkId);
+
             base.Delete();
         }
 

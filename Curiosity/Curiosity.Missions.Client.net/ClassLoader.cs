@@ -39,6 +39,7 @@ namespace Curiosity.Missions.Client.net
             Scripts.Police.RandomCallouts.Init();
             Scripts.Mission.RandomMissionHandler.Init();
             Scripts.MissionEvents.Init();
+            Scripts.NpcHandler.Init();
 
             Scripts.Menus.PedInteractionMenu.MenuBase.Init();
             client.RegisterTickHandler(OnCleanup);

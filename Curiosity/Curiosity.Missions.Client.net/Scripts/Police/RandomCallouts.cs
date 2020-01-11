@@ -40,6 +40,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         internal static void Setup()
         {
+            if (RandomMissionHandler.JobName != "police")
+            {
+                AreEventsActive = false;
+                client.DeregisterTickHandler(OnRandomEventHandler);
+                return;
+            }
+
             if (AreEventsActive) return;
             AreEventsActive = true;
 
@@ -61,6 +68,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
             while ((GetGameTimer() - gameTime) < (delay * minute))
             {
+                if (RandomMissionHandler.JobName != "police")
+                {
+                    AreEventsActive = false;
+                    client.DeregisterTickHandler(OnRandomEventHandler);
+                    return;
+                }
+
                 await BaseScript.Delay(10000);
             }
 
@@ -85,6 +99,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         }
                     }
 
+                    if (RandomMissionHandler.JobName != "police")
+                    {
+                        AreEventsActive = false;
+                        client.DeregisterTickHandler(OnRandomEventHandler);
+                        return;
+                    }
+
                     break;
                 }
 
@@ -105,6 +126,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         static public async void CreateFight(bool developer = false)
         {
             client.DeregisterTickHandler(OnRandomEventHandler);
+
+            if (RandomMissionHandler.JobName != "police")
+            {
+                AreEventsActive = false;
+                return;
+            }
 
             if (_location != null)
             {
