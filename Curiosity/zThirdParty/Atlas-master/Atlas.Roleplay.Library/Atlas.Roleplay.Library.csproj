@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{990E0439-C985-4785-B0D5-1859E6372E43}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Atlas.Roleplay.Library</RootNamespace>
+        <AssemblyName>Atlas.Roleplay.Library.net</AssemblyName>
+        <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>none</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Compilation</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="JetBrains.Annotations, Version=2018.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
+          <HintPath>..\packages\JetBrains.Annotations.2018.2.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="mscorlib" />
+        <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+          <HintPath>..\vendor\Newtonsoft.Json.dll</HintPath>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.ComponentModel.Annotations, Version=4.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.ComponentModel.Annotations.4.6.0-preview.18571.3\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Billing\Bill.cs" />
+        <Compile Include="Billing\BillReceiver.cs" />
+        <Compile Include="Billing\BillSender.cs" />
+        <Compile Include="Date.cs" />
+        <Compile Include="Events\AsyncEventCallback.cs" />
+        <Compile Include="Events\Event.cs" />
+        <Compile Include="Events\EventAttachment.cs" />
+        <Compile Include="Events\EventCallback.cs" />
+        <Compile Include="Events\EventMetadata.cs" />
+        <Compile Include="Events\EventRequest.cs" />
+        <Compile Include="Events\EventType.cs" />
+        <Compile Include="Inventory\InventoryContainerBase.cs" />
+        <Compile Include="Inventory\InventoryItem.cs" />
+        <Compile Include="Inventory\Storage.cs" />
+        <Compile Include="LawEnforcement\Charge.cs" />
+        <Compile Include="LawEnforcement\Crime.cs" />
+        <Compile Include="LawEnforcement\JailCase.cs" />
+        <Compile Include="LawEnforcement\JailSecurity.cs" />
+        <Compile Include="Models\AtlasCharacter.cs" />
+        <Compile Include="Models\AtlasUser.cs" />
+        <Compile Include="Models\Business.cs" />
+        <Compile Include="Models\Employee.cs" />
+        <Compile Include="Models\JsonBuilder.cs" />
+        <Compile Include="Models\Metadata.cs" />
+        <Compile Include="Models\Role.cs" />
+        <Compile Include="Models\Position.cs" />
+        <Compile Include="Models\SessionCollection.cs" />
+        <Compile Include="Models\Style.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Seed.cs" />
+        <Compile Include="TagId.cs" />
+        <Compile Include="Threading\ThreadLock.cs" />
+        <Compile Include="Utilities\Clipboard.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    
+    <!-- Post Build -->
+
+    <Target Name="AfterBuild">
+        <Delete Files="$(OutputPath)\JetBrains.Annotations.xml" />
+
+        <!-- FileZilla (Remote Host Synchronization) -->
+        <ItemGroup>
+            <Out Include="$(OutputPath)\**" />
+        </ItemGroup>
+        <Copy SourceFiles="@(Out)" DestinationFolder="..\out\%(RecursiveDir)" />
+    </Target>
+</Project>

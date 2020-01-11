@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Atlas | Viewmodel (NUI)</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
+    <!-- Models -->
+
+    <script src="Models/Vendor/JQuery.js"></script>
+    <script src="Models/Vendor/Vue.js"></script>
+    <script src="Models/Atlas.js"></script>
+    <script src="Models/Viewmodel.js"></script>
+
+    <!-- Style -->
+
+    <link rel="stylesheet" href="Style/Dark.css" type="text/css">
+    <link rel="stylesheet" href="Style/Boilerplate.css" type="text/css">
+    <link rel="stylesheet" href="Style/Impl/CharacterManagement.css" type="text/css">
+    <link rel="stylesheet" href="Style/Impl/UserInterface.css" type="text/css">
+    <link rel="stylesheet" href="Style/Impl/Inventory.css" type="text/css">
+    <link rel="stylesheet" href="Style/Impl/Billing.css" type="text/css">
+    <link rel="stylesheet" href="Style/Impl/Jobpanel.css" type="text/css">
+    <link rel="stylesheet" href="Style/Impl/Atm.css" type="text/css">
+    <link rel="stylesheet" href="Style/Impl/Cellphone.css" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+</head>
+<body>
+<div id="viewmodel">
+    <div id="cellphone-overlay" v-if="overlay == Overlay.CELLPHONE">
+        <div class="container" style="background: none">
+            <div class="cellphone">
+                <div id="apps" v-if="panel == 0">
+                    <div class="contact" @click="update_panel(1)">
+                        <img src="Icons/contacts.png" alt="">
+                    </div>
+                    <div class="messages" @click="update_panel(2)">
+                        <img src="Icons/contact-messages.png" alt="">
+                    </div>
+                </div>
+                <div id="contacts" v-if="panel == 1">
+                    <br>
+                    <table>
+                        <tr>
+                            <th><p style="margin-left: 10px; letter-spacing: 0.1em; display: inline; margin-top: -5px; font-weight: normal">KONTAKTER</p></th>
+                            <th><img src="Icons/contact-add.png" style="display: inline; margin-top: 5px" alt=""></th>
+                        </tr>
+                    </table>
+                    <hr>
+                    <div id="contact-list" style="margin-left: 20px">
+                        <br>
+                        <div class="contact" style="color: var(--primary-accent); width: calc(100% - 20px); margin-top: -10px" v-for="contact in contacts">
+                            <p class="contact-name">{{ contact.Alias }}</p>
+                            <div style="display: inline; margin-top: -25px">
+                                <img src="Icons/contact-call.png" alt="">
+                                <img src="Icons/contact-messages.png" alt="">
+                                <img src="Icons/contact-edit.png" alt="">
+                            </div>
+                            <hr style="margin-left: 0; margin-top: 0; margin-bottom: 5px; border: none; border-top: 1px solid rgba(255, 255, 255, 0.1)">
+                        </div>
+                    </div>
+                    <div style="float: bottom">
+                        <br>
+                        <hr>
+                        <br>
+                        <div style="margin-left: 20px">
+                            <button class="button" @click="update_panel(0)">Tillbaka</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="messages" v-if="panel == 2">
+                    <br>
+                    <p style="margin-left: 10px; letter-spacing: 0.1em; display: inline; margin-top: -5px; font-weight: normal">MEDDELANDEN</p>
+                    <hr>
+                    <div id="message-list" style="margin-left: 20px">
+                        <br>
+                        <div class="conversation" style="color: var(--primary-accent); width: calc(100% - 20px); margin-top: -10px" v-for="conversation in conversations" @click="open_conversation(conversation.TargetNumber)">
+                            <p>{{ conversation.Target }}</p>
+                            <p style="margin-top: -15px; color: rgba(255, 255, 255, 0.3)">| {{ conversation.LastMessage() }}</p>
+                            <hr style="margin-left: 0; margin-top: -5px; margin-bottom: 5px; border: none; border-top: 1px solid rgba(255, 255, 255, 0.1)">
+                        </div>
+                    </div>
+                    <div style="float: bottom">
+                        <br>
+                        <hr>
+                        <br>
+                        <div style="margin-left: 20px">
+                            <button class="button" @click="update_panel(0)">Tillbaka</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="conversation" v-if="panel == 3">
+                    <br>
+                    <p style="margin-left: 10px; letter-spacing: 0.1em; display: inline; margin-top: -5px; font-weight: normal">{{ conversation.Target }} | {{ conversation.TargetNumber }}</p>
+                    <hr>
+                    <div>
+                        <div class="message" v-for="message in conversation.History" :class="{ 'message-sent': message.IsSender, 'message-received': !message.IsSender}">
+                            <p>{{ message.Date }}</p>
+                            <p>{{ message.Message }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <br>
+                    <div style="margin-left: 20px">
+                        <label>
+                            <textarea class="textarea" placeholder="Skriv ett meddelande..."></textarea>
+                        </label>
+                        <button class="button">Skicka</button>
+                        <button class="button" @click="update_panel(2)">Tillbaka</button>
+                    </div>
+                </div>
+            </div>
+            <img src="Graphics/cellphone.png"
+                 style="position: absolute; right: -30px; top: 150px; transform: scale(0.45, 0.45); pointer-events: none" alt="">
+        </div>
+    </div>
+    <div id="menu-overlay" v-if="overlay == Overlay.MENU">
+        <div class="container" style="background: none">
+            <div class="menu" v-if="container.Type == 0">
+                <p style="font-size: 25px; letter-spacing: 0.1em; text-align: center; text-transform: uppercase">
+                    {{container.Header}}</p>
+                <hr>
+                <ul style="list-style: none">
+                    <li v-for="(item, index) in container.Items"
+                        v-if="(container.Items.length - 12 <= index && container.Selected + 12 >= container.Items.length) || (index >= container.Selected && index < container.Selected + 12)">
+                        <div class="menu-item" :class="{ 'menu-item-active': container.Selected == index }">
+                            <table style="width: 100%; padding: 10px;">
+                                <tr>
+                                    <td style="width: 50%">{{item.Label}}</td>
+                                    <td v-if="item.SecondaryLabel != null && item.SecondaryLabel.length >= 1"
+                                        style="float: right">{{item.SecondaryLabel}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
+                <hr>
+                <br>
+            </div>
+            <div class="menu menu-dialog" v-else>
+                <p style="font-size: 25px; letter-spacing: 0.1em; text-align: center; text-transform: uppercase">
+                    {{container.Header}}</p>
+                <hr>
+                <form>
+                    <input class="menu-dialog-textbox" v-on:input="post_dialog_menu()" spellcheck="false" type="text"
+                           placeholder="..." ref="menu_dialog" :placeholder="container.Profile.Standard">
+                </form>
+                <hr>
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+    <div id="jobpanel-overlay" v-if="overlay == Overlay.PANEL">
+        <div id="jobpanel-container">
+            <div class="navbar">
+                <br>
+                <p :class="{'selected': panel == 'OVERVIEW'}" @click="update_panel('OVERVIEW')"><i
+                        class="fas fa-chalkboard"></i><i
+                        class="fas fa-chevron-right"></i></p>
+                <p :class="{'selected': panel == 'EMPLOYEES'}" @click="update_panel('EMPLOYEES')"><i
+                        class="fas fa-users"></i><i
+                        class="fas fa-chevron-right"></i></p>
+            </div>
+            <div class="topbar">
+                <table cellspacing="10">
+                    <tr>
+                        <td>Jobbpanel</td>
+                        <td><i class="fas fa-chevron-right" style="font-size: 13px"></i></td>
+                        <td>{{Job.Label}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Overview -->
+            <div class="panel" v-if="panel == 'OVERVIEW'">
+                <div class="statistic-panel" style="margin-left: 14%">
+                    <i class="fas fa-money-bill-alt" style="font-size: 80px"></i>
+                    <div class="stats">
+                        <p style="font-size: 23px"><span id="panel-stat-money">{{Statistics.Money}}</span></p>
+                        <p style="font-size: 15px; text-transform: uppercase; margin-top: -10px; color: rgba(235, 235, 255, 0.3)">
+                            Saldo (SEK)</p>
+                    </div>
+                </div>
+                <div class="statistic-panel">
+                    <i class="fas fa-business-time" style="font-size: 80px"></i>
+                    <div class="stats">
+                        <p style="font-size: 23px"><span id="panel-stat-days">{{Statistics.RegisteredDays}}</span></p>
+                        <p style="font-size: 15px; text-transform: uppercase; margin-top: -10px; color: rgba(235, 235, 255, 0.3)">
+                            Dagar</p>
+                    </div>
+                </div>
+                <div class="statistic-panel" style="margin-left: 23%">
+                    <i class="fas fa-user-tie" style="font-size: 80px"></i>
+                    <div class="stats">
+                        <p style="font-size: 23px"><span id="panel-stat-top-employee">{{Statistics.BestEmployee}}</span>
+                        </p>
+                        <p style="font-size: 15px; text-transform: uppercase; margin-top: -10px; color: rgba(235, 235, 255, 0.3)">
+                            Bäst presterande denna månad</p>
+                    </div>
+                </div>
+                <hr>
+                <br>
+            </div>
+
+            <!-- Employees -->
+            <div id="jobpanel-employees" v-if="panel == 'EMPLOYEES'">
+                <p style="color: rgba(235, 235, 255, 0.3); font-size: 20px">Personal <i class="fas fa-chevron-right"
+                                                                                        style="color: rgba(130, 130, 130, 0.2); font-size: 15px;"></i>
+                    {{Job.Label}}</p>
+                <hr>
+                <table cellspacing="5" cellpadding="5">
+                    <col width="30">
+                    <col width="150">
+                    <col width="100">
+                    <col width="50">
+                    <col width="140">
+                    <col width="250">
+                    <tr>
+                        <th align="left">Id</th>
+                        <th align="left">Namn</th>
+                        <th align="left">Roll</th>
+                        <th align="left">Lön</th>
+                        <th align="left">Omsättning</th>
+                        <th align="left">Åtgärder</th>
+                    </tr>
+                    <tr v-for="(employee, index) in Job.Employees">
+                        <td>{{index + 1}}.</td>
+                        <td nowrap>{{employee.Name}}</td>
+                        <td nowrap>{{employee.Role[1]}}</td>
+                        <td nowrap>{{employee.Salary}}</td>
+                        <td nowrap>{{employee.MonthlyRevenue}} ~ {{employee.TotalRevenue}}</td>
+                        <td>
+                            <div>
+                                <button class="button" style="margin-right: 5px"
+                                        @click="update_panel('EMPLOYEE_MANAGEMENT_ROLE'); Context.Employee = employee; Context.EmployeeRole = employee.Role;">
+                                    Ändra roll
+                                </button>
+                                <button class="button" style="margin-right: 5px"
+                                        @click="update_panel('EMPLOYEE_MANAGEMENT_SALARY'); Context.Employee = employee; Context.EmployeeRole = employee.Role;">
+                                    Justera lön
+                                </button>
+                                <button class="button button_fatal" @click="kick_employee(employee)">Sparka</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <hr>
+                <br>
+                <button class="button" @click="hire()">Anställ</button>
+            </div>
+
+            <!-- Employee Management (Change role) -->
+            <div class="panel" v-if="panel == 'EMPLOYEE_MANAGEMENT_ROLE'">
+                <p style="color: rgba(235, 235, 255, 0.3); font-size: 20px">{{Context.Employee.Name}} <i
+                        class="fas fa-chevron-right"
+                        style="color: rgba(130, 130, 130, 0.2); font-size: 15px;"></i> {{Job.Label}}
+                </p>
+                <hr>
+                <br>
+                <p style="color: var(--primary-accent)" @click="Context.RolesDropdown = !Context.RolesDropdown"
+                   onmouseover="this.style.cursor = 'pointer'" onmouseout="this.style.cursor = 'initial'">
+                    {{Context.EmployeeRole[1]}} <i
+                        class="fas"
+                        :class="{'fa-chevron-down': !Context.RolesDropdown, 'fa-chevron-up': Context.RolesDropdown}"
+                        style="margin-left: 10px; color: rgba(235, 235, 255, 0.3)"></i></p>
+                <hr style="width: 15%">
+                <div style="overflow: hidden">
+                    <transition name="fade">
+                        <div v-if="Context.RolesDropdown && Job != null && Job.Roles != null && Job.Roles.length > 0"
+                             id="employee-role-change-dropdown">
+                            <p v-for="role in Job.Roles" @click="update_role(role)">{{role[1]}}</p>
+                        </div>
+                    </transition>
+                </div>
+                <br>
+                <br>
+                <button class="button"
+                        @click="save_role_settings(Context.Employee, Context.EmployeeRole); update_panel('EMPLOYEES')">
+                    Spara ändringar
+                </button>
+                <br>
+                <br>
+                <button class="button" @click="update_panel('EMPLOYEES')">Avbryt</button>
+            </div>
+
+            <!-- Employee Management (Change salary) -->
+            <div class="panel" v-if="panel == 'EMPLOYEE_MANAGEMENT_SALARY'">
+                <p style="color: rgba(235, 235, 255, 0.3); font-size: 20px">{{Context.Employee.Name}} <i
+                        class="fas fa-chevron-right"
+                        style="color: rgba(130, 130, 130, 0.2); font-size: 15px;"></i> {{Job.Label}}
+                </p>
+                <hr>
+                <br>
+                <p style="color: rgba(235, 235, 255, 0.3)">Lön varje timme för {{Context.Employee.Name}}:</p>
+                <label>
+                    <input ref="employee_salary" class="textbox" :value="Context.Employee.Salary">
+                </label>
+                <br>
+                <br>
+                <br>
+                <button class="button" @click="save_salary_settings(Context.Employee); update_panel('EMPLOYEES')">Spara
+                    ändringar
+                </button>
+                <br>
+                <br>
+                <button class="button" @click="update_panel('EMPLOYEES')">Avbryt</button>
+            </div>
+        </div>
+        <transition name="modal" mode="out-in">
+            <div class="modal" v-if="modal.state">
+                <div class="modal-box">
+                    <p>{{modal.header}}</p>
+                    <hr>
+                    <label v-if="modal.type == 1">
+                        <input ref="modal_input" class="textbox" placeholder="Personnummer">
+                        <br>
+                        <br>
+                    </label>
+                    <button class="button" style="float: right;  margin-left: 10px; margin-right: 30px"
+                            @click="modal.callback()">
+                        {{modal.button_approve}}
+                    </button>
+                    <button class="button" style="float: right" @click="flush_modal()">{{modal.button_cancel}}
+                    </button>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </transition>
+    </div>
+    <div id="billing-overlay" v-if="overlay == Overlay.BILLING">
+        <div id="billing-container">
+            <p class="title" style="margin-left: 8%; font-size: 40px">{{Bill.Sender.Business}}</p>
+            <p style="float: right; margin-right: 10%; margin-top: -5%; padding-bottom: 10%">Fakturanr. <span
+                    style="padding: 5px; background: rgb(245, 245, 255)">{{Bill.BillNumber}}</span></p>
+            <table class="individuals" cellspacing="10">
+                <tr>
+                    <th>Avsändare</th>
+                    <th>Mottagare</th>
+                </tr>
+                <tr>
+                    <td>{{Bill.Sender.Individual}}</td>
+                    <td><label><input spellcheck="false" style="font-size: 16px" ref="receiver"
+                                      :disabled="Bill.IsCreated"
+                                      :placeholder="Bill.Receiver.Name"/></label></td>
+                </tr>
+            </table>
+            <table class="individuals" cellspacing="10">
+                <tr>
+                    <th>Kundnummer</th>
+                    <th>Ordernummer</th>
+                    <th>Leveransvillkor</th>
+                    <th>Leveranssätt</th>
+                </tr>
+                <tr>
+                    <td>{{Bill.ClientNumber}}</td>
+                    <td>{{Bill.OrderNumber}}</td>
+                    <td>Godkänt</td>
+                    <td>Post</td>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <br>
+            <br>
+            <table class="description" cellspacing="0" cellpadding="5">
+                <tr style="background: #333; color: #fff">
+                    <th>Artikelnummer</th>
+                    <th>Benämning/beskrivning</th>
+                    <th>Belopp (SEK)</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><label><textarea rows="10" spellcheck="false" ref="designation"
+                                         :disabled="Bill.IsCreated">{{Bill.Designation.join("\n")}}</textarea></label>
+                    </td>
+                    <td><label><textarea rows="10" spellcheck="false" ref="amount" :disabled="Bill.IsCreated">{{Bill.AmountLines.join("\n")}}</textarea></label>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <hr>
+            <br>
+            <div style="margin-left: 10%">
+                <button v-if="!Bill.IsCreated" class="button button_proffesional" @click="submit_bill()">Skapa faktura
+                </button>
+                <button v-if="Bill.IsCreated && Bill.Receiver.Name == Bill.Sender.Individual"
+                        class="button button_proffesional" @click="destroy_bill()">Riv faktura
+                </button>
+                <button v-if="Bill.IsCreated" class="button button_proffesional" @click="pay_bill()">Betala faktura
+                </button>
+                <button class="button button_proffesional" @click="close()">Avbryt</button>
+            </div>
+            <br>
+            <hr>
+            <br>
+            <p style="position: absolute; right: 5%; bottom: 3%; font-weight: bold">Fakturamall från Society</p>
+        </div>
+    </div>
+    <div id="idcard-overlay" v-if="overlay == Overlay.ID">
+        <div class="container"
+             style="overflow: hidden; position: absolute; left: 25%; top: 5%; width: 70%; background: url('Graphics/idcard.png') no-repeat; background-size: 70%; color: #444">
+            <p style="position: absolute; left: 24%; top: 5.5%">{{Character.Name}}</p>
+            <p style="position: absolute; left: 24%; top: 10.5%">{{Character.Surname}}</p>
+            <p style="position: absolute; left: 24%; top: 15.5%">{{SSN}}</p>
+            <p style="position: absolute; left: 24%; top: 21%">{{Character.DateOfBirth}}</p>
+        </div>
+    </div>
+    <div id="atm-overlay" v-if="overlay == Overlay.ATM">
+        <p style="font-size: 50px; letter-spacing: 0.1em; color: #00ff3a; margin-left: 5%">Fleeca Bank</p>
+        <br>
+        <div class="container" style="background: none; top: 20%" v-if="panel == 0">
+            <table style="margin-left: 5%; width: 90%; color: #555" cellspacing="0" cellpadding="10">
+                <tr style="background: #00ff3a; color: #fff">
+                    <th align="left">Transaktionshistorik</th>
+                    <th align="left">Saldo (SEK)</th>
+                    <th align="left">Datum</th>
+                </tr>
+                <tr v-for="entry in History">
+                    <td>{{entry.Information}}</td>
+                    <td :style="{ color: entry.Type === 0 ? '#ff1503' : '#5dff32' }">{{(entry.Type == 0 ? "-" : "+") +
+                        entry.Amount}}
+                    </td>
+                    <td>{{entry.Date}}</td>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <div style="position: absolute; left: 5%; bottom: 25%">
+                <button class="button button_submit" @click="panel = 1">Lägg in pengar</button>
+                <button class="button button_submit" @click="panel = 2">Ta ut pengar</button>
+            </div>
+        </div>
+        <div class="container" style="background: none; top: 20%; margin-left: 5%; width: 90%;" v-if="panel == 1">
+            <table style="color: #555" cellspacing="0" cellpadding="10">
+                <tr style="background: #00ff3a; color: #fff">
+                    <th align="left">Fickpengar</th>
+                    <th align="left">{{Cash}} (SEK)</th>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <input ref="deposit_field" class="textbox" placeholder="Saldo (SEK)">
+            <br>
+            <br>
+            <button class="button button_submit" @click="panel = 0">Tillbaka</button>
+            <button class="button button_submit" @click="deposit()">Lägg in</button>
+        </div>
+        <div class="container" style="background: none; top: 20%; margin-left: 5%; width: 90%;" v-if="panel == 2">
+            <table style="color: #555" cellspacing="0" cellpadding="10">
+                <tr style="background: #00ff3a; color: #fff">
+                    <th align="left">Bankkonto</th>
+                    <th align="left">{{Bank}} (SEK)</th>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <input ref="withdraw_field" class="textbox" placeholder="Saldo (SEK)">
+            <br>
+            <br>
+            <button class="button button_submit" @click="panel = 0">Tillbaka</button>
+            <button class="button button_submit" @click="withdraw()">Ta ut</button>
+        </div>
+    </div>
+    <div id="inventory-overlay" v-if="overlay == Overlay.INVENTORY">
+        <div id="inventory-equipment" class="inventory-container" style="overflow-y: hidden">
+            <ul>
+                <li v-for="(slot, index) in (inventories.filter(self => self.Seed == 'equipment_inventory')[0] != null ? inventories.filter(self => self.Seed == 'equipment_inventory')[0].Slots : [])"
+                    @mousedown="select_item()" @mouseover="update_hover(slot.Unique)" @mouseout="update_hover('-1')">
+                    <div :id="slot.Unique" class="inventory-slot">
+                        <p class="name">{{index + 1}}</p>
+                        <img class="icon" alt="" src="Icons/unknown.png" :src="slot.Icon">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="inventory-pockets" class="inventory-container">
+            <button id="inventory-use-button" style="position: absolute; left: 5%; top: 4%;" class="button"
+                    v-if="clickedItem !== '-1' && get_item_from_unique(clickedItem).Usable"
+                    @mouseover="hoveredOverUseButton = true" @mouseout="hoveredOverUseButton = false"
+                    @click="use_item()">Använd
+            </button>
+            <p class="inventory-title">Fickor</p>
+            <hr>
+            <ul>
+                <li v-for="slot in (inventories.filter(self => self.Seed == 'pockets_inventory')[0] != null ? inventories.filter(self => self.Seed == 'pockets_inventory')[0].Slots : [])"
+                    @mousedown="select_item()" @mouseover="update_hover(slot.Unique)" @mouseout="update_hover('-1')">
+                    <div :id="slot.Unique" class="inventory-slot">
+                        <p class="name">{{slot.Label}}</p>
+                        <img class="icon" alt="" src="Icons/unknown.png" :src="slot.Icon">
+                    </div>
+                </li>
+            </ul>
+            <br>
+            <hr style="margin-top: -20px;">
+            <br>
+        </div>
+        <div id="inventory-secondary-tabs">
+            <ul style="list-style: none; margin: 0">
+                <li style="display: inline-block"
+                    v-for="inventory in inventories.filter(self => self.Seed != 'pockets_inventory' && self.Seed != 'equipment_inventory' && self.IsVisible)">
+                    <div class="inventory-tab" :class="{ selected: is_selected(inventory.Seed) }"
+                         @click="select_inventory_tab(inventory.Seed)"><p class="inventory-title">{{inventory.Name}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="inventory-secondary" class="inventory-container">
+            <p class="inventory-title">{{secondary_inventory.Name}}</p>
+            <hr>
+            <ul>
+                <li v-for="slot in secondary_inventory.Slots" @mousedown="select_item()"
+                    @mouseover="update_hover(slot.Unique)" @mouseout="update_hover('-1')">
+                    <div :id="slot.Unique" class="inventory-slot">
+                        <p class="name">{{slot.Label}}</p>
+                        <img class="icon" alt="" src="Icons/unknown.png" :src="slot.Icon">
+                    </div>
+                </li>
+            </ul>
+            <br>
+            <hr style="margin-top: -20px;">
+            <br>
+        </div>
+        <div id="money">
+            <p><span style="letter-spacing: 0; font-weight: 700">FICKPENGAR:</span> SEK {{cash}}</p>
+            <p style="margin-top: -10px"><span style="letter-spacing: 0; font-weight: 700">BANKKONTO:</span> SEK
+                {{bank}}</p>
+        </div>
+        <div id="tooltip" v-if="tooltip.enabled"
+             :style="{ left: tooltip.position[0] + 'px', top: tooltip.position[1] + 'px' }">
+            <p style="margin-left: 5%; color: var(--primary-accent)">{{tooltip.title}}</p>
+            <hr>
+            <p style="margin-left: 5%">{{tooltip.description}}</p>
+            <p style="margin-left: 5%" v-if="tooltip.additional_description.length > 0">
+                {{tooltip.additional_description}}</p>
+        </div>
+    </div>
+    <div id="characters-overlay" v-if="overlay == Overlay.CHARACTER_CREATION || overlay == Overlay.CHARACTER_SELECTION">
+        <div class="container">
+            <transition name="modal" mode="out-in">
+                <div class="modal" v-if="modal.state">
+                    <div class="modal-box">
+                        <p>{{modal.header}}</p>
+                        <hr>
+                        <button class="button button_fatal" style="float: right;  margin-left: 10px; margin-right: 30px"
+                                @click="modal.callback()">
+                            {{modal.button_approve}}
+                        </button>
+                        <button class="button" style="float: right" @click="flush_modal()">{{modal.button_cancel}}
+                        </button>
+                    </div>
+                </div>
+            </transition>
+            <transition name="header" mode="out-in">
+                <p v-if="header == Header.SELECTION" key="Header.SELECTION">Dina karaktärer</p>
+                <p v-if="header == Header.CREATION" key="Header.CREATION">Ny karaktär</p>
+            </transition>
+            <ul id="characters" v-if="overlay == Overlay.CHARACTER_SELECTION">
+                <transition-group name="character" tag="li" mode="out-in">
+                    <li class="character" v-for="character in characters" :key="character.Seed">
+                        <div style="margin-left: 5%; width: 90%">
+                            <p style="text-align: center"><span class="bold" style="font-size: 20px">{{character.Name}} {{character.Surname}}</span>
+                            </p>
+                            <hr>
+                            <br>
+                            <p>Födelsedatum: <span
+                                    class="bold">{{character.DateOfBirth}} ({{character.LastDigits}})</span></p>
+                            <p>Kontanter: <span class="bold">{{character.Cash}}</span></p>
+                            <p>Bankkonto: <span class="bold">{{character.BankAccount.Balance}}</span></p>
+                            <br>
+                            <button class="button" style="float: left" @click="load_character(character.Seed)">Välj
+                            </button>
+                            <button class="button button_fatal" style="float: right"
+                                    @click="delete_character(character.Seed)">Radera
+                            </button>
+                            <br>
+                            <br>
+                            <br>
+                        </div>
+                    </li>
+                    <li class="character" v-if="header == Header.SELECTION" :key="Overlay.CHARACTER_SELECTION">
+                        <div style="margin-left: 5%; width: 90%">
+                            <p style="text-align: center"><span class="bold"
+                                                                style="font-size: 20px">Skapa en ny karaktär</span>
+                            </p>
+                            <hr>
+                            <p>Tryck på `Skapa` knappen för att registrera en ny karaktär med separata fordon, jobb,
+                                bankkonton, fastigheter och utseende.</p>
+                            <br>
+                            <button class="button button_approved" style="float: right"
+                                    @click="create_character(false)">Skapa
+                            </button>
+                            <br>
+                            <br>
+                            <br>
+                        </div>
+                    </li>
+                </transition-group>
+            </ul>
+            <div v-if="overlay == Overlay.CHARACTER_CREATION">
+                <ul id="character-creation-form" style="list-style: none;">
+                    <li>
+                        <p>Förnamn</p>
+                        <input class="textbox" placeholder="Förnamn" ref="character_firstname">
+                    </li>
+                    <li>
+                        <p>Efternamn</p>
+                        <input class="textbox" placeholder="Efternamn" ref="character_surname">
+                    </li>
+                    <li>
+                        <p>Födelsedatum (ÅÅÅÅ-MM-DD)</p>
+                        <input class="textbox" placeholder="Födelsedatum (ÅÅÅÅ-MM-DD)" ref="character_dateofbirth">
+                    </li>
+                    <li>
+                        <br>
+                        <br>
+                        <button class="button"
+                                style="text-align: center; letter-spacing: 0; text-transform: none"
+                                @click="create_character(true)">Skapa
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="Models/Impl/CharacterManagement.js"></script>
+<script src="Models/Impl/UserInterface.js"></script>
+<script src="Models/Impl/Inventory.js"></script>
+<script src="Models/Impl/Billing.js"></script>
+<script src="Models/Impl/Jobpanel.js"></script>
+<script src="Models/Impl/Atm.js"></script>
+<script src="Models/Impl/Idcard.js"></script>
+<script src="Models/Impl/Cellphone.js"></script>
+</body>
+</html>

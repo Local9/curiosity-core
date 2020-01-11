@@ -1,0 +1,51 @@
+.cellphone {
+    position: absolute;
+    right: 108px;
+    bottom: 71px;
+    height: 440px;
+    width: 210px;
+    background: #222;
+    border-radius: 15px;
+}
+
+#apps {
+    position: absolute;
+    left: 10%;
+    top: 15%;
+}
+
+#apps div {
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+#apps div:hover {
+    cursor: pointer;
+}
+
+.textarea {
+    background: none;
+    color: #eee;
+    border: 1px solid var(--primary-accent);
+    box-shadow: 0 0 0 0.15rem var(--primary-focus-shadow);
+    padding: 5px;
+    border-radius: 4px;
+    resize: none;
+}
+
+#conversation .message {
+    font-size: 9px;
+    padding: 5px;
+    border-radius: 4px;
+    background: var(--primary-background);
+    border: 2px solid var(--secondary-accent);
+    width: 75%;
+    margin-bottom: 10px;
+}
+
+#conversation .message-received {
+    float: right;
+    background: var(--secondary-accent);
+    border: 2px solid var(--primary-background)
+}

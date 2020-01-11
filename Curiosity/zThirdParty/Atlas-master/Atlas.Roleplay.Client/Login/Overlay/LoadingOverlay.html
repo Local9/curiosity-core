@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Atlas Loading</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="LoadingOverlay.css" type="text/css">
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.8/dist/vue.js"></script>
+</head>
+<body>
+<div id="overlay">
+    <div id="container">
+        <p>Society</p>
+        <p style="margin-top: -50px; font-size: 16px; letter-spacing: 0; opacity: 0.75">www.societyrp.se</p>
+        <div id="load-bar">
+            <div id="load-bar-inner"></div>
+        </div>
+        <p style="font-size: 18px; opacity: 0.75;">{{loadingLabel}}<span id="loading-dots"></span></p>
+    </div>
+</div>
+<script src="LoadingOverlay.js"></script>
+</body>
+</html>

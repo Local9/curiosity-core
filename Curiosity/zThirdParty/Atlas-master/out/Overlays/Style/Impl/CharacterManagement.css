@@ -1,0 +1,49 @@
+#characters-overlay {
+    text-transform: uppercase;
+    font-size: 50px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.1em;
+    margin-top: 5%;
+}
+
+#characters {
+    list-style: none;
+}
+
+.character .bold {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.character {
+    display: inline-block;
+    text-transform: none;
+    text-align: start;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.0em;
+    width: 20%;
+    height: 25%;
+    margin: 10px;
+    background: rgb(34, 34, 37);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgb(44, 44, 47);
+    border-radius: 8px;
+}
+
+
+#character-creation-form {
+    position: absolute;
+    left: calc((100% - 30%) / 2);
+    height: 40%;
+    width: 30%;
+    font-size: 18px;
+    text-align: initial;
+    background: rgb(34, 34, 37);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgb(44, 44, 47);
+    border-radius: 8px;
+}

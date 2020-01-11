@@ -1,0 +1,38 @@
+body {
+    position: absolute;
+    margin: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: rgb(34, 34, 37);
+    background-size: cover;
+}
+
+#overlay {}
+#container {
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 50px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.1em;
+    margin-top: 20%;
+}
+
+#load-bar {
+    margin-top: 1%;
+    width: 50%;
+    margin-left: 25%;
+    overflow: hidden;
+}
+
+#load-bar-inner {
+    background: #fff;
+    width: 0;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    transition: all 2s;
+}

@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B257919D-BF17-4219-B55F-0ED5D1A854CC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Atlas.Roleplay.Client</RootNamespace>
+    <AssemblyName>Atlas.Roleplay.Client.net</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Compilation</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\CitizenFX.Core.Client.1.0.1985\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=2019.1.3.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\JetBrains.Annotations.2019.1.3\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\vendor\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.6.0-preview.19073.11\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AtlasPlugin.cs" />
+    <Compile Include="Billing\BillingExtensions.cs" />
+    <Compile Include="Billing\BillingManager.cs" />
+    <Compile Include="Cache.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\CommandContext.cs" />
+    <Compile Include="Commands\CommandFramework.cs" />
+    <Compile Include="Commands\CommandInfo.cs" />
+    <Compile Include="Commands\Impl\Administrator.cs" />
+    <Compile Include="Commands\Impl\DeveloperTools.cs" />
+    <Compile Include="Commands\Impl\RoleplayChat.cs" />
+    <Compile Include="Commands\Impl\StatusCommands.cs" />
+    <Compile Include="Commands\Impl\UtilityTools.cs" />
+    <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="Discord\DiscordRichPresence.cs" />
+    <Compile Include="Environment\AtmManager.cs" />
+    <Compile Include="Environment\BlipInfo.cs" />
+    <Compile Include="Environment\Crouch.cs" />
+    <Compile Include="Environment\DeathManager.cs" />
+    <Compile Include="Environment\Entities\AtlasEntity.cs" />
+    <Compile Include="Environment\Entities\AtlasPlayer.cs" />
+    <Compile Include="Environment\Entities\Merchant.cs" />
+    <Compile Include="Environment\Entities\Models\CameraViewmodel.cs" />
+    <Compile Include="Environment\Entities\Models\MerchantManager.cs" />
+    <Compile Include="Environment\Entities\Models\MugshotBoardAttachment.cs" />
+    <Compile Include="Environment\Entities\Models\SoundSystem.cs" />
+    <Compile Include="Environment\Entities\Models\AnimationQueue.cs" />
+    <Compile Include="Environment\Entities\Models\VoiceChat.cs" />
+    <Compile Include="Environment\Entities\Modules\EntityModule.cs" />
+    <Compile Include="Environment\Entities\Modules\EntityModuleRegistry.cs" />
+    <Compile Include="Environment\Entities\Modules\Impl\EntityDecorModule.cs" />
+    <Compile Include="Environment\Entities\Modules\Impl\EntityNetworkModule.cs" />
+    <Compile Include="Environment\HandcuffManager.cs" />
+    <Compile Include="Environment\Handsup.cs" />
+    <Compile Include="Environment\IngameTimeManipulation.cs" />
+    <Compile Include="Environment\Jail\JailManager.cs" />
+    <Compile Include="Environment\Jobs\Ambulance\AmbulanceJob.cs" />
+    <Compile Include="Environment\Jobs\Bennys\BennysJob.cs" />
+    <Compile Include="Environment\Jobs\Exceptions\JobException.cs" />
+    <Compile Include="Environment\Jobs\Job.cs" />
+    <Compile Include="Environment\Jobs\JobManager.cs" />
+    <Compile Include="Environment\Jobs\JobPanelManager.cs" />
+    <Compile Include="Environment\Jobs\JobProfile.cs" />
+    <Compile Include="Environment\Jobs\Mechanic\MechanicJob.cs" />
+    <Compile Include="Environment\Jobs\Police\DubstaModifications.cs" />
+    <Compile Include="Environment\Jobs\Police\PoliceJob.cs" />
+    <Compile Include="Environment\Jobs\Police\PoliceUniform.cs" />
+    <Compile Include="Environment\Jobs\Police\SwatUniform.cs" />
+    <Compile Include="Environment\Jobs\Profiles\JobArmoryProfile.cs" />
+    <Compile Include="Environment\Jobs\Profiles\JobBusinessProfile.cs" />
+    <Compile Include="Environment\Jobs\Profiles\JobGarageProfile.cs" />
+    <Compile Include="Environment\Jobs\Profiles\JobLockerRoomProfile.cs" />
+    <Compile Include="Environment\Jobs\Profiles\JobPanelProfile.cs" />
+    <Compile Include="Environment\Jobs\Profiles\JobStorageProfile.cs" />
+    <Compile Include="Environment\Jobs\Taxi\TaxiJob.cs" />
+    <Compile Include="Environment\Marker.cs" />
+    <Compile Include="Environment\PedWeaponsManipulation.cs" />
+    <Compile Include="Environment\PointFinger.cs" />
+    <Compile Include="Environment\PopulationManipulation.cs" />
+    <Compile Include="Environment\SafeTeleport.cs" />
+    <Compile Include="Environment\Stores\Impl\Barber.cs" />
+    <Compile Include="Environment\Stores\Impl\Clothing.cs" />
+    <Compile Include="Environment\Stores\Impl\Masks.cs" />
+    <Compile Include="Environment\Stores\Store.cs" />
+    <Compile Include="Environment\Stores\StoreManager.cs" />
+    <Compile Include="Environment\WeatherManipulation.cs" />
+    <Compile Include="Environment\WorldText.cs" />
+    <Compile Include="Events\EventSystem.cs" />
+    <Compile Include="Extensions\CharacterExtensions.cs" />
+    <Compile Include="Extensions\PositionExtensions.cs" />
+    <Compile Include="Extensions\StyleExtensions.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Interface\Chat.cs" />
+    <Compile Include="Interface\IMenuProfile.cs" />
+    <Compile Include="Interface\Impl\MenuProfileDialog.cs" />
+    <Compile Include="Interface\Impl\MenuProfileSlider.cs" />
+    <Compile Include="Interface\Impl\MenuSliderOperation.cs" />
+    <Compile Include="Interface\InterfaceManager.cs" />
+    <Compile Include="Interface\Menu.cs" />
+    <Compile Include="Interface\MenuItem.cs" />
+    <Compile Include="Interface\IMenuItemProfile.cs" />
+    <Compile Include="Interface\MenuMetadata.cs" />
+    <Compile Include="Interface\MenuOperation.cs" />
+    <Compile Include="Interface\MenuOperationType.cs" />
+    <Compile Include="Interface\Modules\HeadupDisplay.cs" />
+    <Compile Include="Interface\Modules\VehicleHeadupDisplay.cs" />
+    <Compile Include="Interface\ScreenInterface.cs" />
+    <Compile Include="Inventory\Impl\EquipmentInventory.cs" />
+    <Compile Include="Inventory\Impl\PocketsInventory.cs" />
+    <Compile Include="Inventory\Impl\ProximityInventory.cs" />
+    <Compile Include="Inventory\InventoryContainer.cs" />
+    <Compile Include="Inventory\InventoryItemExtensions.cs" />
+    <Compile Include="Inventory\InventoryManager.cs" />
+    <Compile Include="Inventory\InventoryItemDroppedAdapter.cs" />
+    <Compile Include="Inventory\ItemHelper.cs" />
+    <Compile Include="Inventory\Items\BandageItem.cs" />
+    <Compile Include="Inventory\Items\EmptyItem.cs" />
+    <Compile Include="Inventory\Items\FlaregunItem.cs" />
+    <Compile Include="Inventory\Items\Mp5Item.cs" />
+    <Compile Include="Inventory\Items\NightstickItem.cs" />
+    <Compile Include="Inventory\Items\PistolItem.cs" />
+    <Compile Include="Inventory\Items\StungunItem.cs" />
+    <Compile Include="Inventory\Usables\InventoryUsableManager.cs" />
+    <Compile Include="Inventory\WeaponItem.cs" />
+    <Compile Include="Login\LoginManager.cs" />
+    <Compile Include="Managers\CharacterManager.cs" />
+    <Compile Include="Managers\Manager.cs" />
+    <Compile Include="Managers\SessionManager.cs" />
+    <Compile Include="Managers\StyleManager.cs" />
+    <Compile Include="Menus\AnimationMenu.cs" />
+    <Compile Include="Menus\VehicleMenu.cs" />
+    <Compile Include="Menus\InteractionMenu.cs" />
+    <Compile Include="Package\NetworkPackage.cs" />
+    <Compile Include="Package\NetworkPayload.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="TickHandler.cs" />
+    <Compile Include="Vehicles\VehicleModifications.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Post Build -->
+  <ItemGroup>
+    <Loadingscreen Include="Login\Overlay\**\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\**\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Atlas.Roleplay.Library\Atlas.Roleplay.Library.csproj">
+      <Project>{990e0439-c985-4785-b0d5-1859e6372e43}</Project>
+      <Name>Atlas.Roleplay.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(Overlay)" DestinationFolder="$(OutputPath)\Overlays\%(RecursiveDir)" />
+    <Copy SourceFiles="@(Loadingscreen)" DestinationFolder="$(OutputPath)\Overlays\Loadingscreen\%(RecursiveDir)" />
+    <Delete Files="$(OutputPath)\JetBrains.Annotations.xml" />
+    <Delete Files="$(OutputPath)\MySql.Data.xml" />
+    <Delete Files="$(OutputPath)\MySql.Data.Entity.EF6.xml" />
+    <Delete Files="$(OutputPath)\Google.Protobuf.xml" />
+    <Delete Files="$(OutputPath)\Atlas.Roleplay.Server.net.dll.config" />
+    <!-- FileZilla (Remote Host Synchronization) -->
+    <ItemGroup>
+      <Out Include="$(OutputPath)\**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Out)" DestinationFolder="..\out\%(RecursiveDir)" />
+  </Target>
+</Project>

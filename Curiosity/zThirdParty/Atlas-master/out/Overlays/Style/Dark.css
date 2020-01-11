@@ -1,0 +1,9 @@
+:root {
+    --primary-background: #222225;
+    --primary-accent: #1997c6;
+    --secondary-accent: #2c2c2f;
+    --tertiary-accent: #363639;
+    --primary-text: #ffffff;
+    --secondary-text: #cdcdcd;
+    --primary-focus-shadow: rgba(25, 151, 198, 0.5);
+}

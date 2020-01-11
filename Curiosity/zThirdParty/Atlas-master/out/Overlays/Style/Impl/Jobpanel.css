@@ -1,0 +1,134 @@
+#jobpanel-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+#jobpanel-container {
+    position: absolute;
+    left: 20%;
+    top: 15%;
+    width: 60%;
+    height: 70%;
+    background: var(--primary-background);
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    overflow: hidden;
+}
+
+#jobpanel-container .topbar {
+    background: var(--primary-background);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    font-size: 15px;
+    color: var(--primary-accent);
+    border-bottom: 1px solid var(--secondary-accent);
+}
+
+#jobpanel-container .navbar {
+    margin-top: 3%;
+    border-right: 1px solid var(--secondary-accent);
+    width: 7%;
+    height: 100%;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
+}
+
+#jobpanel-container .panel {
+    position: absolute;
+    left: 15%;
+    top: 10%;
+    width: 75%;
+}
+
+#jobpanel-container .navbar p {
+    text-align: center;
+    font-size: 20px;
+    color: var(--tertiary-accent);
+    transition: all 0.25s;
+}
+
+
+#jobpanel-container .navbar .selected {
+    color: var(--primary-accent);
+    cursor: pointer;
+}
+
+#jobpanel-container .navbar p:hover {
+    color: var(--primary-accent);
+    cursor: pointeR;
+}
+
+#jobpanel-container .navbar .fa-chevron-right {
+    float: right;
+    margin-top: 5px;
+    margin-right: 10px;
+    font-size: 13px;
+}
+
+#jobpanel-container .statistic-panel {
+    background: var(--primary-background);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--secondary-accent);
+    border-radius: 8px;
+    padding: 20px 75px;
+    color: var(--primary-accent);
+    transition: all 0.25s;
+    text-align: center;
+    display: inline-block;
+    margin-right: 5%;
+    margin-bottom: 5%;
+}
+
+#jobpanel-container .statistic-panel:hover {
+    box-shadow: 0 0 5px 1px var(--primary-focus-shadow);
+    border: 2px solid var(--primary-accent);
+    cursor: pointer;
+}
+
+#jobpanel-employees {
+    position: absolute;
+    left: 15%;
+    top: 10%;
+    width: 80%;
+}
+
+#jobpanel-container hr {
+    width: 100%;
+    margin: 0;
+    border: 1px solid var(--tertiary-accent);
+}
+
+#jobpanel-employees table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#jobpanel-employees table th {
+    color: var(--primary-accent);
+    font-weight: normal;
+}
+
+#jobpanel-employees table td {
+    color: rgba(235, 235, 255, 0.3);
+}
+
+#jobpanel-employees th, #jobpanel-employees td {
+    border-bottom: 1px solid var(--primary-background);
+}
+
+#employee-role-change-dropdown {
+    color: rgba(235, 235, 255, 0.3);
+    transition: all 0.25s;
+}
+
+#employee-role-change-dropdown p:hover {
+    cursor: pointer;
+    color: var(--primary-accent);
+}

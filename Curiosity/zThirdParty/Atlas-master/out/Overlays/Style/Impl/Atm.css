@@ -1,0 +1,23 @@
+#atm-overlay {
+    position: absolute;
+    top: 5%;
+    left: 25%;
+    width: 50%;
+    height: 90%;
+    background: #fff;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    box-shadow: -2px 0 0 3px #e5e5e5;
+}
+
+#atm-overlay .textbox {
+    border-bottom: 2px solid #00ff3a;
+    color: #555;
+}
+
+#atm-overlay .textbox::placeholder {
+    color: #555;
+}
+
+#atm-overlay tr:nth-child(n + 12) {
+    visibility: hidden;
+}
