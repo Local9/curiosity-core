@@ -419,6 +419,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
 
             NpcHandler.AddNpc(base.NetworkId, this);
+            if (Ped.IsInVehicle())
+            {
+                DecorSetInt(Ped.Handle, Client.NPC_CURRENT_VEHICLE, Ped.CurrentVehicle.Handle);
+            }
         }
 
         public abstract void OnGoToTarget(Ped target);
@@ -946,11 +950,18 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                             if (vehicle.AttachedBlip.Exists())
                                 vehicle.AttachedBlip.Delete();
                         }
+
+                        BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", vehicle.NetworkId);
                     }
                 }
                 else
                 {
                     Ped.Task.WanderAround(Ped.Position, 1000f);
+
+                    if (Ped.IsInVehicle())
+                    {
+                        BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Ped.CurrentVehicle.NetworkId);
+                    }
                 }
 
                 Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");

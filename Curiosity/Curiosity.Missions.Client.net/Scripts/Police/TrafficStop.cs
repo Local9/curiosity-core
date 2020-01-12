@@ -4,11 +4,13 @@ using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -30,12 +32,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static float DistanceToCheck = 20.0f;
 
-        static bool AwaitingPullover = true;
-        static bool isConductingPullover = false;
+        static bool IsAwaitingPullover = true;
+        static bool IsConductingPullover = false;
         static bool IsCooldownActive = false;
 
         static Vehicle _vehicle;
         static Ped _ped;
+        static int _vehicleNetworkId;
 
         static string currentMessage = string.Empty;
 
@@ -56,7 +59,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 client.RegisterTickHandler(OnShowLoading);
                 client.RegisterTickHandler(OnDeveloperData);
 
-                client.RegisterEventHandler("curiosity:interaction:vehicle:towed", new Action<int>(OnVehicleHasBeenTowed));
+                client.RegisterEventHandler("curiosity:interaction:vehicle:released", new Action<int>(OnVehicleHasBeenReleased));
 
                 Screen.ShowNotification("~b~Traffic Stops~s~: ~g~Enabled");
             }
@@ -73,7 +76,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             client.DeregisterTickHandler(OnShowLoading);
 
             client.DeregisterTickHandler(OnDeveloperData);
-            isConductingPullover = false;
+            IsConductingPullover = false;
 
             loadingMessage = string.Empty;
 
@@ -104,6 +107,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             await Task.FromResult(0);
             if (Client.DeveloperVehUiEnabled)
             {
+                string isConductingPullOver = IsConductingPullover ? "~g~" : "~r~";
+                string isCooldownActive = IsCooldownActive ? "~g~" : "~r~";
+                string isAwaitingPullover = IsAwaitingPullover ? "~g~" : "~r~";
+
+                Screen.ShowSubtitle($"{isConductingPullOver}isConductingPullover, {isCooldownActive}IsCooldownActive, {isAwaitingPullover}AwaitingPullover\n~s~{_vehicleNetworkId}");
+
                 try
                 {
                     Client.CurrentVehicle.DrawEntityHit(DistanceToCheck);
@@ -123,7 +132,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             try
             {
-                if (isConductingPullover)
+                if (IsConductingPullover)
                 {
                     await BaseScript.Delay(60000);
                     return;
@@ -140,6 +149,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                     if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency)
                     {
+                        if (IsCooldownActive)
+                        { 
+                            return;
+                        }
+
                         Vehicle targetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
                         // Safe Checks
                         if (targetVehicle == null) return;
@@ -178,14 +192,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             await BaseScript.Delay(0);
                         }
 
-                        if (IsCooldownActive)
-                        {
-                            targetVehicle = null;
-                            Wrappers.Helpers.ShowSimpleNotification("~b~Traffic Stops: ~r~Cooldown Active");
-                            loadingMessage = string.Empty;
-                            return;
-                        }
-
                         bool hasBeenPulledOver = DecorGetBool(targetVehicle.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED);
 
                         if (hasBeenPulledOver)
@@ -212,10 +218,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         {
                             loadingMessage = "Awaiting Confirmation";
 
-                            while (awaitingPullover && !isConductingPullover)
+                            while (awaitingPullover && !IsConductingPullover)
                             {
-                                API.SetUserRadioControlEnabled(false);
-
                                 await BaseScript.Delay(0);
                                 Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to initiate a ~b~Traffic Stop~w~.\nPress ~INPUT_COVER~ to cancel.");
 
@@ -233,10 +237,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     loadingMessage = string.Empty;
                                     targetVehicle.AttachedBlip.IsFlashing = false;
                                     awaitingPullover = false;
-                                    isConductingPullover = true;
+                                    IsConductingPullover = true;
 
                                     _ped = targetVehicle.Driver;
                                     _vehicle = targetVehicle;
+
+                                    _vehicleNetworkId = targetVehicle.NetworkId;
 
                                     targetVehicle.AttachedBlip.Color = BlipColor.MichaelBlue;
 
@@ -291,6 +297,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             catch (Exception ex)
             {
                 Debug.WriteLine($"OnTrafficStopTask -> {ex}");
+                loadingMessage = string.Empty;
             }
         }
 
@@ -314,31 +321,59 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         static async Task OnCooldownTask()
         {
-            IsCooldownActive = true;
-            int timer = 60;
-            while (timer > 0)
+            if (IsCooldownActive)
             {
-                loadingMessage = $"Traffic Stop: Active in {timer}s";
-                await Client.Delay(1000);
-                timer--;
+                Log.Info($"OnCooldownTask -> Task Already Active");
+                return;
             }
+
+            IsCooldownActive = true;
+            int timer = 60000;
+            long gameTimer = API.GetGameTimer();
+
+            while ((API.GetGameTimer() - gameTimer) < timer)
+            {
+                loadingMessage = $"Traffic Stop: ~g~Cooldown Active";
+                await BaseScript.Delay(1000);
+            }
+
             loadingMessage = string.Empty;
+
             IsCooldownActive = false;
-            isConductingPullover = false;
+            IsConductingPullover = false;
+
+            _vehicleNetworkId = 0;
+            _vehicle = null;
+
             client.DeregisterTickHandler(OnCooldownTask);
         }
 
-        private static void OnVehicleHasBeenTowed(int handle)
+        private static void OnVehicleHasBeenReleased(int networkId)
         {
-            API.SetUserRadioControlEnabled(true);
+            Log.Info($"OnVehicleHasBeenReleased -> Traffic Stop reset called");
 
-            if (_vehicle.Handle == handle)
+            List<Vehicle> vehicles = World.GetAllVehicles().Where(x => API.DecorExistOn(x.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)).ToList();
+
+            if (vehicles.Count > 0)
             {
-                client.RegisterTickHandler(OnCooldownTask);
-                isConductingPullover = false;
-                loadingMessage = string.Empty;
-                IsCooldownActive = false;
+                if (!IsCooldownActive)
+                    client.RegisterTickHandler(OnCooldownTask);
             }
+            else if (!VehicleExsits())
+            {
+                if (!IsCooldownActive)
+                    client.RegisterTickHandler(OnCooldownTask);
+            }
+        }
+
+        private static bool VehicleExsits()
+        {
+            bool state = false;
+            if (_vehicle != null)
+            {
+                return _vehicle.Exists() && _vehicle.IsAlive;
+            }
+            return state;
         }
     }
 }

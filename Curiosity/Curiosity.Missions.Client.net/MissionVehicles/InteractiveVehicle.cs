@@ -325,6 +325,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (Game.PlayerPed.Position.Distance(this.Vehicle.Position) >= 300f)
             {
                 Client.TriggerEvent("curiosity:interaction:released", this.Vehicle.Driver.Handle);
+                BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", this.Vehicle.NetworkId);
 
                 this.Delete();
 
@@ -359,10 +360,20 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             Vector3 outPos = new Vector3();
             if (GetNthClosestVehicleNode(InteractivePed.Position.X, InteractivePed.Position.Y, InteractivePed.Position.Z, 3, ref outPos, 0, 0, 0))
             {
+                Vector3 roadside = Vector3.Zero;
+                API.GetRoadSidePointWithHeading(outPos.X, outPos.Y, outPos.Z, Game.PlayerPed.Heading, ref roadside);
+
+                if (!roadside.IsZero)
+                    outPos = roadside;
+
                 ClearPedTasks(InteractivePed.Handle);
                 TaskVehiclePark(InteractivePed.Handle, Handle, outPos.X, outPos.Y, outPos.Z, InteractivePed.Heading, 3, 60f, true);
+                long gameTimer = API.GetGameTimer();
                 while (Vehicle.Position.DistanceToSquared2D(outPos) > 3f)
                 {
+                    if ((API.GetGameTimer() - gameTimer) > 30000)
+                        break;
+
                     await BaseScript.Delay(0);
                 }
                 SetVehicleHalt(Handle, 3f, 0, false);
@@ -458,6 +469,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 this.Vehicle.Driver.SetConfigFlag(292, false);
                 this.Vehicle.Driver.SetConfigFlag(301, false);
 
+                this.Vehicle.Driver.Task.WanderAround(this.Vehicle.Position, 1000f);
+
                 if (Vehicle.AttachedBlip != null)
                 {
                     if (Vehicle.AttachedBlip.Exists())
@@ -469,6 +482,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
                 client.DeregisterTickHandler(OnShowHelpTextTask);
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+
+                BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Vehicle.NetworkId);
             }
 
             if (this.InteractivePed.Handle == handle)
@@ -497,7 +512,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
 
-            Client.TriggerEvent("curiosity:interaction:leaveAllGroups", handle);
+            BaseScript.TriggerEvent("curiosity:interaction:leaveAllGroups", handle);
         }
 
         void OnFlee(int handle)

@@ -177,11 +177,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
             API.SendNuiMessage(JsonConvert.SerializeObject(new SafeZoneMessage() { safezone = false }));
 
-            if (Game.PlayerPed.IsInVehicle())
-            {
-                Game.PlayerPed.CurrentVehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)Game.PlayerPed.CurrentVehicle.Model.Hash);
-            }
-
             client.DeregisterTickHandler(SafeZoneVehicles);
             IsInsideSafeZone = false;
 
@@ -202,6 +197,15 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             }
 
             safeZoneVehicles.Clear();
+
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                while (API.GetVehicleMaxSpeed(Game.PlayerPed.CurrentVehicle.Handle) != API.GetVehicleModelMaxSpeed((uint)Game.PlayerPed.CurrentVehicle.Model.Hash))
+                {
+                    await BaseScript.Delay(1);
+                    Game.PlayerPed.CurrentVehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)Game.PlayerPed.CurrentVehicle.Model.Hash);
+                }
+            }
 
             if (Player.PlayerInformation.IsDeveloper())
             {
