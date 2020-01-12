@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\CitizenFX.Core.Server.1.0.1986\lib\net45\CitizenFX.Core.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,7 +48,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CuriosityPlugin.cs" />
+    <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="Events\EventSystem.cs" />
+    <Compile Include="Extensions\SaveExtensions.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Managers\BillingManager.cs" />
+    <Compile Include="Managers\BusinessManager.cs" />
+    <Compile Include="Managers\CharacterManager.cs" />
+    <Compile Include="Managers\JobManager.cs" />
+    <Compile Include="Managers\Manager.cs" />
+    <Compile Include="Managers\NetworkPackageManager.cs" />
+    <Compile Include="Managers\QueueManager.cs" />
+    <Compile Include="Managers\StorageManager.cs" />
+    <Compile Include="Managers\UserManager.cs" />
+    <Compile Include="MySQL\DatabaseContext.cs" />
+    <Compile Include="MySQL\StorageContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\HttpClient.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Curiosity.System.Library\Curiosity.System.Library.csproj">
+      <Project>{9f8d4d3f-06df-4528-9eae-584d2af2a8d8}</Project>
+      <Name>Curiosity.System.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
