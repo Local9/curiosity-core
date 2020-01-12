@@ -151,6 +151,8 @@ namespace Atlas.Roleplay.Client
             // Whitelist to make the reticle show. (Snipers, and certain weapons with scopes possibly)
             Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
 
+            // Need to manage this based on server settings as some servers require police to be active
+
             API.SetDispatchCopsForPlayer(API.PlayerId(), false);
 
             for (var i = 1; i < 15; i++)

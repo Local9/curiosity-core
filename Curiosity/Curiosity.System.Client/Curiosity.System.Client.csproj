@@ -31,8 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1986\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,8 +48,76 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache.cs" />
+    <Compile Include="Commands\CommandContext.cs" />
+    <Compile Include="Commands\CommandFramework.cs" />
+    <Compile Include="Commands\CommandInfo.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\Impl\Administrator.cs" />
+    <Compile Include="Commands\Impl\DeveloperTools.cs" />
+    <Compile Include="Commands\Impl\RoleplayChat.cs" />
+    <Compile Include="Commands\Impl\StatusCommands.cs" />
+    <Compile Include="Commands\Impl\UtilityTools.cs" />
+    <Compile Include="Environment\Entities\CuriosityEntity.cs" />
     <Compile Include="CuriosityPlugin.cs" />
+    <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="Discord\DiscordRichPresence.cs" />
+    <Compile Include="Environment\Entities\CuriosityPlayer.cs" />
+    <Compile Include="Environment\Entities\Models\AnimationQueue.cs" />
+    <Compile Include="Environment\Entities\Models\CameraViewmodel.cs" />
+    <Compile Include="Environment\Entities\Models\MerchantManager.cs" />
+    <Compile Include="Environment\Entities\Models\MugshotBoardAttachment.cs" />
+    <Compile Include="Environment\Entities\Models\SoundSystem.cs" />
+    <Compile Include="Environment\Entities\Models\VoiceChat.cs" />
+    <Compile Include="Environment\Entities\Modules\EntityModule.cs" />
+    <Compile Include="Environment\Entities\Modules\EntityModuleRegistry.cs" />
+    <Compile Include="Environment\Entities\Modules\Impl\EntityDecorModule.cs" />
+    <Compile Include="Environment\Entities\Modules\Impl\EntityNetworkModule.cs" />
+    <Compile Include="Environment\SafeTeleport.cs" />
+    <Compile Include="Environment\WorldText.cs" />
+    <Compile Include="Events\EventSystem.cs" />
+    <Compile Include="Extensions\CharacterExtensions.cs" />
+    <Compile Include="Extensions\PositionExtensions.cs" />
+    <Compile Include="Extensions\StyleExtensions.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Interface\Chat.cs" />
+    <Compile Include="Interface\Modules\HeadupDisplay.cs" />
+    <Compile Include="Interface\Modules\VehicleHeadupDisplay.cs" />
+    <Compile Include="Inventory\Impl\EquipmentInventory.cs" />
+    <Compile Include="Inventory\Impl\PocketsInventory.cs" />
+    <Compile Include="Inventory\Impl\ProximityInventory.cs" />
+    <Compile Include="Inventory\InventoryContainer.cs" />
+    <Compile Include="Inventory\InventoryItemDroppedAdapter.cs" />
+    <Compile Include="Inventory\InventoryItemExtensions.cs" />
+    <Compile Include="Inventory\InventoryManager.cs" />
+    <Compile Include="Inventory\ItemHelper.cs" />
+    <Compile Include="Inventory\Items\BandageItem.cs" />
+    <Compile Include="Inventory\Items\EmptyItem.cs" />
+    <Compile Include="Inventory\Items\FlaregunItem.cs" />
+    <Compile Include="Inventory\Items\Mp5Item.cs" />
+    <Compile Include="Inventory\Items\NightstickItem.cs" />
+    <Compile Include="Inventory\Items\PistolItem.cs" />
+    <Compile Include="Inventory\Items\StungunItem.cs" />
+    <Compile Include="Inventory\Usables\InventoryUsableManager.cs" />
+    <Compile Include="Inventory\WeaponItem.cs" />
+    <Compile Include="Managers\CharacterManager.cs" />
+    <Compile Include="Managers\Manager.cs" />
+    <Compile Include="Managers\SessionManager.cs" />
+    <Compile Include="Managers\StyleManager.cs" />
+    <Compile Include="Package\NetworkPackage.cs" />
+    <Compile Include="Package\NetworkPayload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="TickHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Curiosity.System.Library\Curiosity.System.Library.csproj">
+      <Project>{9f8d4d3f-06df-4528-9eae-584d2af2a8d8}</Project>
+      <Name>Curiosity.System.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
