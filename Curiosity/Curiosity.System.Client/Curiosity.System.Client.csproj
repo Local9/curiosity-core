@@ -124,6 +124,7 @@
     <Compile Include="Inventory\Items\StungunItem.cs" />
     <Compile Include="Inventory\Usables\InventoryUsableManager.cs" />
     <Compile Include="Inventory\WeaponItem.cs" />
+    <Compile Include="Login\LoginManager.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\SessionManager.cs" />
@@ -142,6 +143,201 @@
       <Project>{9f8d4d3f-06df-4528-9eae-584d2af2a8d8}</Project>
       <Name>Curiosity.System.Library</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Loadingscreen Include="Login\Overlay\LoadingOverlay.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Loadingscreen>
+  </ItemGroup>
+  <ItemGroup>
+    <Loadingscreen Include="Login\Overlay\LoadingOverlay.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Loadingscreen>
+  </ItemGroup>
+  <ItemGroup>
+    <Loadingscreen Include="Login\Overlay\LoadingOverlay.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Loadingscreen>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Graphics\cellphone.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Graphics\idcard.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\bandage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\combatpistol.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\contact-add.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\contact-call.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\contact-edit.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\contact-messages.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\contacts.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\flaregun.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\nightstick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\smg.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\stungun.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Icons\unknown.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Atlas.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Impl\Atm.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Impl\Billing.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Impl\Cellphone.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Impl\CharacterManagement.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Impl\Idcard.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Impl\Inventory.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Impl\Jobpanel.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Impl\UserInterface.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Vendor\JQuery.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Vendor\Vue.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Models\Viewmodel.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Style\Boilerplate.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Style\Dark.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Style\Impl\Atm.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Style\Impl\Billing.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Style\Impl\Cellphone.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Style\Impl\CharacterManagement.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Style\Impl\Inventory.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Style\Impl\Jobpanel.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Style\Impl\UserInterface.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
+  </ItemGroup>
+  <ItemGroup>
+    <Overlay Include="Overlay\Viewmodel.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Overlay>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

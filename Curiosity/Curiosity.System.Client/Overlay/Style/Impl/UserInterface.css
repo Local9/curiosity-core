@@ -1,0 +1,52 @@
+.menu {
+    position: absolute;
+    left: 2%;
+    top: 4%;
+    width: 20%;
+    background: var(--primary-background);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5);
+    border: 3px solid rgb(44, 44, 47);
+    border-radius: 3px;
+}
+
+.menu-item {
+    color: var(--secondary-text);
+    margin: 10px 10px 10px -2%;
+    width: 90%;
+    background: rgb(34, 34, 37);
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgb(44, 44, 47);
+    border-radius: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: all 0.25s;
+}
+
+.menu-item-active {
+    box-shadow: 0 0 0 0.1rem var(--primary-focus-shadow);
+    border: 2px solid var(--primary-accent);
+    color: var(--primary-text)
+}
+
+.menu-dialog-textbox {
+    color: var(--primary-text);
+    font-size: 17px;
+    background: var(--secondary-accent);
+    border: solid 2px var(--tertiary-accent);
+    box-shadow: 0 1px 4px 0 rgba(12, 12, 13, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    margin-left: calc(10% - 10px);
+    border-radius: 10px;
+    padding: 10px;
+    transition: all 0.25s;
+    outline: 0;
+}
+
+.menu-dialog-textbox::placeholder {
+    color: var(--primary-text);
+}
+
+.menu-dialog-textbox:focus {
+    border: solid 2px var(--primary-accent);
+    box-shadow: 0 0 0 0.1rem var(--primary-focus-shadow);
+}

@@ -1,0 +1,148 @@
+#tooltip {
+    position: absolute;
+    font-family: 'Roboto', sans-serif;
+    padding: 10px;
+    background: var(--primary-background);
+    border: 2px solid var(--secondary-accent);
+    border-radius: 5px;
+    overflow: hidden;
+    width: 15%;
+    color: var(--tertiary-accent);
+}
+
+#inventory-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(34, 34, 37, 0.9);
+    overflow: hidden;
+}
+
+#inventory-pockets {
+    position: absolute;
+    left: 3%;
+    top: 20%;
+    width: 45%;
+}
+
+#inventory-equipment {
+    position: absolute;
+    left: 3%;
+    top: 2%;
+    width: 45%;
+    height: 20%;
+}
+
+#inventory-secondary {
+    position: absolute;
+    left: 52%;
+    top: 20%;
+    width: 45%;
+}
+
+#inventory-secondary-tabs {
+    position: absolute;
+    left: 53%;
+    top: 14%;
+    font-family: 'Roboto', sans-serif;
+}
+
+.inventory-tab {
+    display: inline-block;
+    margin-right: 8px;
+    background: var(--primary-background);
+    border: 3px solid var(--secondary-accent);
+    border-radius: 6px;
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3);
+}
+
+.inventory-tab:hover {
+    cursor: pointer;
+}
+
+#inventory-secondary-tabs .selected {
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.7)
+}
+
+.inventory-tab p {
+    margin-top: 5px;
+    padding: 8px;
+}
+
+.inventory-container {
+    font-family: 'Roboto', sans-serif;
+    color: var(--secondary-text);
+    background: var(--primary-background);
+    border: 3px solid var(--secondary-accent);
+    border-radius: 6px;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+    max-height: 75%;
+    overflow-y: auto;
+}
+
+.inventory-container ::-webkit-scrollbar {
+    display: none;
+}
+
+.inventory-title {
+    font-weight: 700;
+    font-size: 25px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--primary-text)
+}
+
+.inventory-container ul {
+    list-style: none;
+}
+
+.inventory-container ul li {
+    display: inline-block;
+    width: 134px;
+    height: 134px;
+    background: var(--primary-background);
+    border: 2px solid var(--secondary-accent);
+    border-radius: 6px;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    transition: all 0.15s;
+}
+
+.inventory-slot .icon {
+    position: relative;
+    left: 31px;
+    top: -25px;
+}
+
+.inventory-slot .name {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    color: var(--primary-text);
+    background: var(--secondary-accent);
+    position: relative;
+    top: -17px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 3px;
+    white-space: nowrap;
+}
+
+.inventory-container ul li:hover {
+    border: 2px solid var(--primary-accent);
+    box-shadow: 0 0 3px 1px var(--primary-focus-shadow);
+    cursor: pointer;
+}
+
+#money {
+    position: absolute;
+    left: 55%;
+    top: 5%;
+    color: #fff;
+    letter-spacing: 0.175em;
+    font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
