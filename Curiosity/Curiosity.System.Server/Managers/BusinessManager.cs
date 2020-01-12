@@ -1,12 +1,12 @@
 using System.Data.Entity.Migrations;
 using System.Linq;
-using Atlas.Roleplay.Library.Events;
-using Atlas.Roleplay.Library.Models;
-using Atlas.Roleplay.Server.Events;
-using Atlas.Roleplay.Server.Extensions;
-using Atlas.Roleplay.Server.MySQL;
+using Curiosity.System.Library.Events;
+using Curiosity.System.Library.Models;
+using Curiosity.System.Server.Events;
+using Curiosity.System.Server.Extensions;
+using Curiosity.System.Server.MySQL;
 
-namespace Atlas.Roleplay.Server.Managers
+namespace Curiosity.System.Server.Managers
 {
     public class BusinessManager : Manager<BusinessManager>
     {
@@ -26,7 +26,7 @@ namespace Atlas.Roleplay.Server.Managers
                     transaction.Commit();
                 }
 
-                Atlas.ActiveUsers.Where(self => self.Handle != metadata.Sender).ToList()
+                Curiosity.ActiveUsers.Where(self => self.Handle != metadata.Sender).ToList()
                     .ForEach(self => self.Send("business:update", business));
 
                 return null;

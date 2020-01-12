@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Atlas.Roleplay.Library.Events;
-using Atlas.Roleplay.Library.Models;
-using Atlas.Roleplay.Server.Events;
-using Atlas.Roleplay.Server.MySQL;
+using Curiosity.System.Library.Events;
+using Curiosity.System.Library.Models;
+using Curiosity.System.Server.Events;
+using Curiosity.System.Server.MySQL;
 
-namespace Atlas.Roleplay.Server.Managers
+namespace Curiosity.System.Server.Managers
 {
     public class JobManager : Manager<JobManager>
     {
@@ -12,14 +12,14 @@ namespace Atlas.Roleplay.Server.Managers
         {
             EventSystem.GetModule().Attach("job:employees:fetch", new EventCallback(metadata =>
             {
-                var job = metadata.Find<int>(0);
+                var job = metadata.Find<string>(0);
                 var employees = new List<Employee>();
 
                 using (var context = new StorageContext())
                 {
                     foreach (var character in context.Characters)
                     {
-                        if ((int) character.Metadata.Employment != job) continue;
+                        if ((string) character.Metadata.Employment != job) continue;
 
                         employees.Add(new Employee
                         {

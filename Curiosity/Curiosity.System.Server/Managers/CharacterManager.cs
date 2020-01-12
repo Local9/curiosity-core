@@ -2,16 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using Atlas.Roleplay.Library;
-using Atlas.Roleplay.Library.Events;
-using Atlas.Roleplay.Library.Inventory;
-using Atlas.Roleplay.Library.LawEnforcement;
-using Atlas.Roleplay.Library.Models;
-using Atlas.Roleplay.Server.Diagnostics;
-using Atlas.Roleplay.Server.Extensions;
-using Atlas.Roleplay.Server.MySQL;
+using Curiosity.System.Library;
+using Curiosity.System.Library.Events;
+using Curiosity.System.Library.Inventory;
+using Curiosity.System.Library.Models;
+using Curiosity.System.Server.Diagnostics;
+using Curiosity.System.Server.Extensions;
+using Curiosity.System.Server.MySQL;
 
-namespace Atlas.Roleplay.Server.Managers
+namespace Curiosity.System.Server.Managers
 {
     public class CharacterManager : Manager<CharacterManager>
     {
@@ -21,7 +20,7 @@ namespace Atlas.Roleplay.Server.Managers
             {
                 using (var context = new StorageContext())
                 {
-                    var user = Atlas.Lookup(metadata.Sender);
+                    var user = Curiosity.Lookup(metadata.Sender);
                     var result = context.Characters.Where(self => self.Owner == user.Seed)
                         .ToList();
 
@@ -38,7 +37,7 @@ namespace Atlas.Roleplay.Server.Managers
             EventSystem.Attach("characters:delete", new AsyncEventCallback(async metadata =>
             {
                 var seed = metadata.Find<string>(0);
-                var user = Atlas.Lookup(metadata.Sender);
+                var user = Curiosity.Lookup(metadata.Sender);
 
                 using (var context = new StorageContext())
                 using (var transaction = context.BeginTransaction())
@@ -59,9 +58,9 @@ namespace Atlas.Roleplay.Server.Managers
 
             EventSystem.Attach("characters:create", new AsyncEventCallback(async metadata =>
             {
-                var user = Atlas.Lookup(metadata.Sender);
+                var user = Curiosity.Lookup(metadata.Sender);
                 var random = new Random();
-                var character = new AtlasCharacter
+                var character = new CuriosityCharacter
                 {
                     Seed = Seed.Generate(),
                     Owner = user.Seed,
@@ -80,10 +79,8 @@ namespace Atlas.Roleplay.Server.Managers
                     },
                     Metadata = new CharacterMetadata
                     {
-                        Employment = Employment.Unemployed,
                         SavedOutfits = new Dictionary<string, Style>(),
                         Inventories = new List<InventoryContainerBase>(),
-                        JailCases = new List<JailCase>()
                     }
                 };
 
@@ -114,7 +111,7 @@ namespace Atlas.Roleplay.Server.Managers
 
             EventSystem.Attach("characters:save", new AsyncEventCallback(async metadata =>
             {
-                var character = metadata.Find<AtlasCharacter>(0);
+                var character = metadata.Find<CuriosityCharacter>(0);
 
                 await character.Save();
 

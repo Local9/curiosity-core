@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using Atlas.Roleplay.Library.Models;
-using Atlas.Roleplay.Server.Diagnostics;
+using Curiosity.System.Library.Models;
+using Curiosity.System.Server.Diagnostics;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
 
-namespace Atlas.Roleplay.Server.Managers
+namespace Curiosity.System.Server.Managers
 {
     public class QueueManager : Manager<QueueManager>
     {
         public override void Begin()
         {
-            Atlas.EventRegistry["playerConnecting"] +=
+            Curiosity.EventRegistry["playerConnecting"] +=
                 new Action<Player, string, CallbackDelegate, ExpandoObject>(OnConnect);
         }
 
@@ -21,38 +21,36 @@ namespace Atlas.Roleplay.Server.Managers
             dynamic deferrals)
         {
             var identifiers = API.GetNumPlayerIdentifiers(player.Handle);
-            var steam = "";
+            var discord = "";
 
             for (var i = 0; i < identifiers; i++)
             {
                 var identifier = API.GetPlayerIdentifier(player.Handle, i);
 
-                if (identifier.StartsWith("steam:"))
+                if (identifier.StartsWith("discord:"))
                 {
-                    steam = identifier;
+                    discord = identifier;
                 }
             }
 
-            if (steam.Length < 1)
+            if (discord.Length < 1)
             {
-                kickManager.Invoke("(Society | www.societyrp.se): Du måste ha Steam tjänsten igång.");
-
                 API.CancelEvent();
 
                 return;
             }
 
             deferrals.defer();
-            deferrals.update("(Society | www.societyrp.se): Hämtar kö-information...");
+            deferrals.update("(Life V | forums.lifev.net): Getting User Information...");
 
             var response =
-                (await AtlasPlugin.Instance.RequestHttp(
-                     $"https://queue.societyrp.se/service.php?steamId={steam}&action=FETCH", new JsonBuilder().Build(),
+                (await CuriosityPlugin.Instance.RequestHttp(
+                     $"RUN A DISCORD CHECK", new JsonBuilder().Build(),
                      new Dictionary<string, string> {["Content-Type"] = "application/json"}) ?? "[]").Trim();
 
             if (response.Length < 2 || response == "{}" || response == "[]")
             {
-                deferrals.done("(Society | www.societyrp.se): Sätt dig i kön först. * queue.societyrp.se");
+                deferrals.done("(Life V | forums.lifev.net): Please connect and be active within our Discord first: discord.lifev.net");
 
                 return;
             }
@@ -62,7 +60,7 @@ namespace Atlas.Roleplay.Server.Managers
 
             foreach (var entry in queueInfo)
             {
-                if (!string.Equals(entry["SteamId"].ToString(), steam,
+                if (!string.Equals(entry["discord"].ToString(), discord,
                     StringComparison.CurrentCultureIgnoreCase)) continue;
 
                 found = entry;
@@ -72,14 +70,7 @@ namespace Atlas.Roleplay.Server.Managers
 
             if (found == null)
             {
-                deferrals.done("(Society | www.societyrp.se): Sätt dig i kön först. * queue.societyrp.se");
-
-                return;
-            }
-
-            if (int.Parse(found["Place"].ToString()) > 1)
-            {
-                deferrals.done($"(Society | www.societyrp.se): Det är inte din tur än! ({found["Place"]})");
+                deferrals.done("(Life V | forums.lifev.net): Please connect and be active within our Discord first: discord.lifev.net");
 
                 return;
             }

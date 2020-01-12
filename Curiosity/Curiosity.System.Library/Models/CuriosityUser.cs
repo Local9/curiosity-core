@@ -31,6 +31,11 @@ namespace Curiosity.System.Library.Models
             get => JsonConvert.SerializeObject(ConnectionHistory);
             set => ConnectionHistory = JsonConvert.DeserializeObject<List<Tuple<string, DateTime>>>(value);
         }
+
+        public void Send(string v1, object[] v2)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class UserMetadata

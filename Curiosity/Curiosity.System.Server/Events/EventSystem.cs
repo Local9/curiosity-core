@@ -18,7 +18,7 @@ namespace Curiosity.System.Server.Events
 
         public EventSystem()
         {
-            Atlas.EventRegistry["qcMjIRRrO6fU8tL98va76a0"] += new Action<int, string>((handle, payload) =>
+            Curiosity.EventRegistry["qcMjIRRrO6fU8tL98va76a0"] += new Action<int, string>((handle, payload) =>
             {
                 var wrapped = JsonConvert.DeserializeObject<Event>(payload.ToString());
 
@@ -111,7 +111,7 @@ namespace Curiosity.System.Server.Events
             Logger.Debug(
                 $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the client `{handle}`.");
 
-            BaseScript.TriggerClientEvent(new PlayerList()[handle], "qcMjIRRrO6fU8tL98va76a0",
+            BaseScript.TriggerClientEvent(CuriosityPlugin.PlayersList[handle], "qcMjIRRrO6fU8tL98va76a0",
                 JsonConvert.SerializeObject(wrapped));
         }
 

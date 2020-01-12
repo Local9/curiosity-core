@@ -1,10 +1,10 @@
 using System.Data.Entity.Migrations;
 using System.Linq;
-using Atlas.Roleplay.Library.Events;
-using Atlas.Roleplay.Library.Inventory;
-using Atlas.Roleplay.Server.MySQL;
+using Curiosity.System.Library.Events;
+using Curiosity.System.Library.Inventory;
+using Curiosity.System.Server.MySQL;
 
-namespace Atlas.Roleplay.Server.Managers
+namespace Curiosity.System.Server.Managers
 {
     public class StorageManager : Manager<StorageManager>
     {

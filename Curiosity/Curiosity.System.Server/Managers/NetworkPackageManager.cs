@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Atlas.Roleplay.Library.Events;
-using Atlas.Roleplay.Server.Extensions;
+using Curiosity.System.Library.Events;
+using Curiosity.System.Server.Extensions;
 
-namespace Atlas.Roleplay.Server.Managers
+namespace Curiosity.System.Server.Managers
 {
     public class NetworkPackageManager : Manager<NetworkPackageManager>
     {
@@ -15,7 +15,7 @@ namespace Atlas.Roleplay.Server.Managers
                 var index = metadata.Find<string>(0);
                 var payload = metadata.Find<string>(1);
 
-                foreach (var user in Atlas.ActiveUsers)
+                foreach (var user in Curiosity.ActiveUsers)
                 {
                     if (user.Handle == metadata.Sender) continue;
 

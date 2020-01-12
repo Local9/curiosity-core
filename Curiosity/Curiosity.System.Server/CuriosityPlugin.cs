@@ -5,6 +5,9 @@ using Curiosity.System.Library.Events;
 using Curiosity.System.Library.Models;
 using Curiosity.System.Server.Diagnostics;
 using Curiosity.System.Server.Events;
+using Curiosity.System.Server.Extensions;
+using Curiosity.System.Server.Managers;
+using Curiosity.System.Server.MySQL;
 using Curiosity.System.Server.Web;
 using System;
 using System.Collections.Generic;
@@ -21,6 +24,7 @@ namespace Curiosity.System.Server
         const string CURIOSITY_VERSION = "v2.0.0.0001";
 
         public static CuriosityPlugin Instance { get; private set; }
+        public static PlayerList PlayersList { get; private set; }
         public static int MaximumPlayers { get; } = 32;
         public static int SaveInterval { get; } = 1000 * 60 * 3;
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
@@ -31,6 +35,7 @@ namespace Curiosity.System.Server
         public CuriosityPlugin()
         {
             Instance = this;
+            PlayersList = Players;
 
             API.SetConvarServerInfo("Discord", API.GetConvar("discord_url", "discord_url not set"));
             API.SetConvarServerInfo("Website", API.GetConvar("website_url", "website_url not set"));
@@ -114,7 +119,7 @@ namespace Curiosity.System.Server
 
             EventRegistry["rconCommand"] += new Action<string, List<object>>(OnRconCommand);
             EventRegistry["chat:global"] += new Action<ExpandoObject>(options =>
-                new List<Player>(Players).ForEach(self => self.TriggerEvent("chat:addMessage", options)));
+                new List<Player>(PlayersList).ForEach(self => self.TriggerEvent("chat:addMessage", options)));
 
             EventSystem.GetModule().Attach("event:global", new EventCallback(metadata =>
             {

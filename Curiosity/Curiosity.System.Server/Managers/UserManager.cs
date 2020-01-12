@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
-using Atlas.Roleplay.Library;
-using Atlas.Roleplay.Library.Events;
-using Atlas.Roleplay.Library.Models;
-using Atlas.Roleplay.Server.MySQL;
-using Atlas.Roleplay.Server.Diagnostics;
-using Atlas.Roleplay.Server.Extensions;
+using Curiosity.System.Library;
+using Curiosity.System.Library.Events;
+using Curiosity.System.Library.Models;
+using Curiosity.System.Server.MySQL;
+using Curiosity.System.Server.Diagnostics;
+using Curiosity.System.Server.Extensions;
 using CitizenFX.Core;
 
-namespace Atlas.Roleplay.Server.Managers
+namespace Curiosity.System.Server.Managers
 {
     public class UserManager : Manager<UserManager>
     {
@@ -19,7 +19,7 @@ namespace Atlas.Roleplay.Server.Managers
         {
             EventSystem.Attach("user:login", new AsyncEventCallback(async metadata =>
             {
-                var player = new PlayerList()[metadata.Sender];
+                var player = CuriosityPlugin.PlayersList[metadata.Sender];
                 var steam = player.Identifiers.FirstOrDefault(self => self.StartsWith("steam:"))?.ToString();
                 var connectedBefore = true;
 
@@ -31,7 +31,7 @@ namespace Atlas.Roleplay.Server.Managers
 
                     if (user == null)
                     {
-                        user = new AtlasUser
+                        user = new CuriosityUser
                         {
                             Seed = Seed.Generate(),
                             SteamId = steam,
@@ -61,7 +61,7 @@ namespace Atlas.Roleplay.Server.Managers
                         ? $"[User] [{user.Seed}] [{user.LastName}] Has connected to the server ({connection.Item1})"
                         : $"[User] [{steam}] [{player.Name}] Has connected for the first time ({connection.Item1})");
 
-                    Atlas.ActiveUsers.Add(user);
+                    Curiosity.ActiveUsers.Add(user);
 
                     return user;
                 }
@@ -69,7 +69,7 @@ namespace Atlas.Roleplay.Server.Managers
 
             EventSystem.Attach("user:save", new AsyncEventCallback(async metadata =>
             {
-                await Atlas.Lookup(metadata.Sender).Save();
+                await Curiosity.Lookup(metadata.Sender).Save();
 
                 return null;
             }));
@@ -78,15 +78,15 @@ namespace Atlas.Roleplay.Server.Managers
             {
                 var seed = metadata.Find<string>(0);
 
-                return Atlas.ActiveUsers.FirstOrDefault(self => self.Seed == seed);
+                return Curiosity.ActiveUsers.FirstOrDefault(self => self.Seed == seed);
             }));
 
             EventSystem.Attach("user:postupdates", new EventCallback(metadata =>
             {
-                var user = metadata.Find<AtlasUser>(0);
+                var user = metadata.Find<CuriosityUser>(0);
 
-                Atlas.ActiveUsers.RemoveAll(self => self.Seed == user.Seed);
-                Atlas.ActiveUsers.Add(user);
+                Curiosity.ActiveUsers.RemoveAll(self => self.Seed == user.Seed);
+                Curiosity.ActiveUsers.Add(user);
 
                 return null;
             }));
@@ -98,18 +98,18 @@ namespace Atlas.Roleplay.Server.Managers
                 return null;
             }));
 
-            Atlas.EventRegistry["playerDropped"] += new Action<Player, string>(OnUserDisconnect);
+            Curiosity.EventRegistry["playerDropped"] += new Action<Player, string>(OnUserDisconnect);
         }
 
         private void OnUserDisconnect([FromSource] Player player, string reason)
         {
-            var user = Atlas.Lookup(Convert.ToInt32(player.Handle));
+            var user = Curiosity.Lookup(Convert.ToInt32(player.Handle));
 
             if (user == null) return;
 
             Logger.Info($"[User] [{user.Seed}] [{user.LastName}] Has disconnected from the server, saving ({reason}).");
 
-            Task.Factory.StartNew(async () => await Atlas.SaveOperation(user));
+            Task.Factory.StartNew(async () => await Curiosity.SaveOperation(user));
         }
     }
 }

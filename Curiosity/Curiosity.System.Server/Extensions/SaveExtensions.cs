@@ -1,14 +1,14 @@
-using System.Data.Entity.Migrations;
-using System.Threading.Tasks;
 using Curiosity.System.Library.Models;
 using Curiosity.System.Server.Diagnostics;
 using Curiosity.System.Server.MySQL;
+using System.Data.Entity.Migrations;
+using System.Threading.Tasks;
 
 namespace Curiosity.System.Server.Extensions
 {
     public static class SaveExtensions
     {
-        public static async Task Save(this AtlasUser user)
+        public static async Task Save(this CuriosityUser user)
         {
             using (var context = new StorageContext())
             using (var transaction = context.BeginTransaction())
@@ -24,7 +24,7 @@ namespace Curiosity.System.Server.Extensions
             }
         }
 
-        public static async Task Save(this AtlasCharacter character)
+        public static async Task Save(this CuriosityCharacter character)
         {
             using (var context = new StorageContext())
             using (var transaction = context.BeginTransaction())

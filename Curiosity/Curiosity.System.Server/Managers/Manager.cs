@@ -1,22 +1,22 @@
-using Atlas.Roleplay.Server.Events;
+using Curiosity.System.Server.Events;
 
-namespace Atlas.Roleplay.Server.Managers
+namespace Curiosity.System.Server.Managers
 {
     public abstract class Manager<T> where T : Manager<T>, new()
     {
         public static T GetModule()
         {
-            return AtlasPlugin.Instance.GetManager<T>() ?? (!AtlasPlugin.Instance.IsLoadingManager<T>()
-                       ? (T) AtlasPlugin.Instance.LoadManager(typeof(T))
+            return CuriosityPlugin.Instance.GetManager<T>() ?? (!CuriosityPlugin.Instance.IsLoadingManager<T>()
+                       ? (T)CuriosityPlugin.Instance.LoadManager(typeof(T))
                        : null);
         }
 
-        public AtlasPlugin Atlas { get; set; }
+        public CuriosityPlugin Curiosity { get; set; }
         public EventSystem EventSystem { get; set; }
 
         protected Manager()
         {
-            Atlas = AtlasPlugin.Instance;
+            Curiosity = CuriosityPlugin.Instance;
             EventSystem = EventSystem.GetModule();
         }
 
