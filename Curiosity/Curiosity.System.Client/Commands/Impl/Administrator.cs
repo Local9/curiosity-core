@@ -16,64 +16,64 @@ namespace Curiosity.System.Client.Commands.Impl
     {
         #region Job
 
-        [CommandInfo(new[] {"job"})]
-        public class Job : ICommand
-        {
-            public const string Title = "Administrator";
-            public const string Usage = "Application: /admin job set <jobb> <roll>";
+        //[CommandInfo(new[] {"job"})]
+        //public class Job : ICommand
+        //{
+        //    public const string Title = "Administrator";
+        //    public const string Usage = "Application: /admin job set <jobb> <roll>";
 
-            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
-            {
-                if (arguments.Count < 1)
-                {
-                    Chat.SendLocalMessage(Title, Usage, Color.FromArgb(255, 0, 0));
+        //    public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+        //    {
+        //        if (arguments.Count < 1)
+        //        {
+        //            Chat.SendLocalMessage(Title, Usage, Color.FromArgb(255, 0, 0));
 
-                    return;
-                }
+        //            return;
+        //        }
 
-                switch (arguments.ElementAt(0).ToUpper())
-                {
-                    case "SET":
-                        if (arguments.Count < 3)
-                        {
-                            Chat.SendLocalMessage(Title, Usage, Color.FromArgb(255,
-                                0, 0));
+        //        switch (arguments.ElementAt(0).ToUpper())
+        //        {
+        //            case "SET":
+        //                if (arguments.Count < 3)
+        //                {
+        //                    Chat.SendLocalMessage(Title, Usage, Color.FromArgb(255,
+        //                        0, 0));
 
-                            return;
-                        }
+        //                    return;
+        //                }
 
-                        var jobName = arguments[1];
-                        var jobRole = 0;
+        //                var jobName = arguments[1];
+        //                var jobRole = 0;
 
-                        try
-                        {
-                            jobRole = int.Parse(arguments[2]);
-                        }
-                        catch (Exception)
-                        {
-                            // Ignored
-                        }
+        //                try
+        //                {
+        //                    jobRole = int.Parse(arguments[2]);
+        //                }
+        //                catch (Exception)
+        //                {
+        //                    // Ignored
+        //                }
 
-                        Enum.TryParse<Employment>(jobName, true, out var job);
+        //                Enum.TryParse<Employment>(jobName, true, out var job);
 
-                        var character = Cache.Character;
+        //                var character = Cache.Character;
 
-                        character.Metadata.Employment = job;
-                        character.Metadata.EmploymentRole = jobRole;
+        //                character.Metadata.Employment = job;
+        //                character.Metadata.EmploymentRole = jobRole;
 
-                        Chat.SendLocalMessage(Title,
-                            $"Anställde {character.Fullname} hos {job.ToString()} - {jobRole}",
-                            Color.FromArgb(255, 0, 0));
+        //                Chat.SendLocalMessage(Title,
+        //                    $"Anställde {character.Fullname} hos {job.ToString()} - {jobRole}",
+        //                    Color.FromArgb(255, 0, 0));
 
-                        break;
-                    default:
-                        Chat.SendLocalMessage(Title,
-                            $"Kunde inte hitta kommando: {arguments.ElementAt(0)}", Color.FromArgb(255, 0, 0));
+        //                break;
+        //            default:
+        //                Chat.SendLocalMessage(Title,
+        //                    $"Kunde inte hitta kommando: {arguments.ElementAt(0)}", Color.FromArgb(255, 0, 0));
 
-                        break;
-                }
-            }
-        }
+        //                break;
+        //        }
+        //    }
+        //}
 
         #endregion
 

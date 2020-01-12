@@ -148,7 +148,7 @@ namespace Curiosity.System.Client.Inventory
 
             if (!OpenedInventory)
             {
-                if (Game.IsControlJustPressed(0, Control.ReplaySnapmaticPhoto) && !HandcuffManager.GetModule().IsHandcuffed)
+                if (Game.IsControlJustPressed(0, Control.ReplaySnapmaticPhoto))
                 {
                     OpenedInventory = true;
 

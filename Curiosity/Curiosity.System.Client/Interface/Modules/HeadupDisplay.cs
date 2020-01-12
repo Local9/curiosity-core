@@ -13,7 +13,7 @@ namespace Curiosity.System.Client.Interface.Modules
         [TickHandler(SessionWait = true)]
         private async Task OnTick()
         {
-            var atlas = AtlasPlugin.Instance;
+            var atlas = CuriosityPlugin.Instance;
             var player = atlas.Local;
             var ped = API.PlayerPedId();
 

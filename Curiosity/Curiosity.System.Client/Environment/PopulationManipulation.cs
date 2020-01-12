@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using Atlas.Roleplay.Client.Managers;
+using Curiosity.System.Client.Managers;
 using CitizenFX.Core.Native;
 
-namespace Atlas.Roleplay.Client.Environment
+namespace Curiosity.System.Client.Environment
 {
     public class PopulationManipulation : Manager<PopulationManipulation>
     {

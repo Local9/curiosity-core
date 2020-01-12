@@ -27,16 +27,16 @@ namespace Curiosity.System.Client.Inventory
 
         public void Activate()
         {
-            AtlasPlugin.Instance.AttachTickHandler(OnTick);
-            AtlasPlugin.Instance.AttachTickHandler(OnSecondaryTick);
+            CuriosityPlugin.Instance.AttachTickHandler(OnTick);
+            CuriosityPlugin.Instance.AttachTickHandler(OnSecondaryTick);
 
             IsActivated = true;
         }
 
         public void Destroy()
         {
-            AtlasPlugin.Instance.DetachTickHandler(OnTick);
-            AtlasPlugin.Instance.DetachTickHandler(OnSecondaryTick);
+            CuriosityPlugin.Instance.DetachTickHandler(OnTick);
+            CuriosityPlugin.Instance.DetachTickHandler(OnSecondaryTick);
 
             IsActivated = false;
         }

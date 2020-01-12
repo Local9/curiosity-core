@@ -4,6 +4,7 @@ using Curiosity.System.Client.Diagnostics;
 using Curiosity.System.Client.Environment;
 using Curiosity.System.Client.Environment.Entities.Models;
 using Curiosity.System.Client.Events;
+using Curiosity.System.Client.Interface;
 using Curiosity.System.Client.Managers;
 using Curiosity.System.Library.Models;
 using System;
@@ -47,7 +48,7 @@ namespace Curiosity.System.Client.Extensions
 
             await EventSystem.GetModule().Request<object>("characters:save", character);
 
-            Logger.Info($"[Characters] Saved `{character.Name} {character.Surname}` and it's changed assets.");
+            Logger.Info($"[Characters] Saved `{character.Name} {character.Surname}` and it's changes.");
         }
 
         public static async Task Load(this CuriosityCharacter character)
@@ -258,7 +259,7 @@ namespace Curiosity.System.Client.Extensions
             API.SetTextDropShadow();
             API.SetTextOutline();
             API.SetTextEntry("STRING");
-            API.AddTextComponentString($"Välkommen till Society, {Cache.Player.Name}.");
+            API.AddTextComponentString($"Welcome to Life V, {Cache.Player.Name}.");
             API.DrawText(0.5f, 0.5f - API.GetTextScaleHeight(0.45f, 0) / 2f);
             API.HideLoadingOnFadeThisFrame();
 

@@ -1,9 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.System.Client.Commands;
 using Curiosity.System.Client.Diagnostics;
 using Curiosity.System.Client.Discord;
 using Curiosity.System.Client.Environment.Entities;
 using Curiosity.System.Client.Events;
+using Curiosity.System.Client.Extensions;
 using Curiosity.System.Client.Managers;
 using Curiosity.System.Library.Events;
 using System;

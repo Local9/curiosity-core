@@ -1,4 +1,7 @@
 using Curiosity.System.Client.Diagnostics;
+using Curiosity.System.Client.Extensions;
+using Curiosity.System.Client.Interface;
+using Curiosity.System.Client.Interface.Impl;
 using Curiosity.System.Library.Models;
 using System;
 using System.Collections.Generic;
