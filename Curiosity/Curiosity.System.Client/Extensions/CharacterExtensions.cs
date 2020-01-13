@@ -38,7 +38,7 @@ namespace Curiosity.System.Client.Extensions
         {
             var player = Cache.Player;
 
-            player.User.Characters.RemoveAll(self => self.Seed == character.Seed);
+            player.User.Characters.RemoveAll(self => self.CharacterId == character.CharacterId);
             player.User.Characters.Add(character);
         }
 
@@ -48,7 +48,7 @@ namespace Curiosity.System.Client.Extensions
 
             await EventSystem.GetModule().Request<object>("characters:save", character);
 
-            Logger.Info($"[Characters] Saved `{character.Name} {character.Surname}` and it's changes.");
+            Logger.Info($"[Characters] Saved `{character.CharacterId}` and it's changes.");
         }
 
         public static async Task Load(this CuriosityCharacter character)

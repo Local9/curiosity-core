@@ -63,7 +63,7 @@ namespace Curiosity.System.Client.Login
 
             Logger.Info($"[User] [{user.Seed}] Creating local player...");
 
-            Atlas.Local = new CuriosityPlayer(user.SteamId, new CuriosityEntity(ped))
+            Atlas.Local = new CuriosityPlayer(user.DiscordId, new CuriosityEntity(ped))
             {
                 Handle = handle,
                 Name = user.LastName,

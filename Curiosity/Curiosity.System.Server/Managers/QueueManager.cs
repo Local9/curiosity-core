@@ -20,23 +20,12 @@ namespace Curiosity.System.Server.Managers
         private async void OnConnect([FromSource] Player player, string name, CallbackDelegate kickManager,
             dynamic deferrals)
         {
-            var identifiers = API.GetNumPlayerIdentifiers(player.Handle);
-            var discord = "";
+            var discord = player.Identifiers["discord"];
+            var license = player.Identifiers["license"];
 
-            for (var i = 0; i < identifiers; i++)
-            {
-                var identifier = API.GetPlayerIdentifier(player.Handle, i);
-
-                if (identifier.StartsWith("discord:"))
-                {
-                    discord = identifier;
-                }
-            }
-
-            if (discord.Length < 1)
+            if (license.Length < 1)
             {
                 API.CancelEvent();
-
                 return;
             }
 

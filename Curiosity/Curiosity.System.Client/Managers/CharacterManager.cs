@@ -41,19 +41,19 @@ namespace Curiosity.System.Client.Managers
 
             Atlas.AttachNuiHandler("DELETE_CHAR", new EventCallback(metadata =>
             {
-                var seed = metadata.Find<string>(0);
+                var characterId = metadata.Find<int>(0);
 
-                EventSystem.Send("characters:delete", seed);
+                EventSystem.Send("characters:delete", characterId);
 
-                AvailableCharacters.RemoveAll(self => self.Seed == seed);
+                AvailableCharacters.RemoveAll(self => self.CharacterId == characterId);
 
                 return null;
             }));
 
             Atlas.AttachNuiHandler("SELECT_CHAR", new AsyncEventCallback(async metadata =>
             {
-                var seed = metadata.Find<string>(0);
-                var character = AvailableCharacters.FirstOrDefault(self => self.Seed == seed);
+                var characterId = metadata.Find<int>(0);
+                var character = AvailableCharacters.FirstOrDefault(self => self.CharacterId == characterId);
 
                 if (character != null)
                 {
@@ -95,7 +95,7 @@ namespace Curiosity.System.Client.Managers
         {
             API.DoScreenFadeOut(0);
 
-            Atlas.DiscordRichPresence.Status = player.Character.Fullname;
+            Atlas.DiscordRichPresence.Status = player.Name;
             Atlas.DiscordRichPresence.Commit();
 
             var transition = new LoadTransition();
@@ -138,19 +138,19 @@ namespace Curiosity.System.Client.Managers
                 new EquipmentInventory(new InventoryContainerBase
                 {
                     Seed = "equipment_inventory",
-                    Name = "Utrustning",
+                    Name = "Equipment",
                     SlotAmount = 5
                 }),
                 new PocketsInventory(new InventoryContainerBase
                 {
                     Seed = "pockets_inventory",
-                    Name = "Fickor",
+                    Name = "Pockets",
                     SlotAmount = 20
                 }),
                 new ProximityInventory(new InventoryContainerBase
                 {
                     Seed = "proximity_inventory",
-                    Name = "Omgivning",
+                    Name = "Enviroment",
                     SlotAmount = 20
                 })
             };

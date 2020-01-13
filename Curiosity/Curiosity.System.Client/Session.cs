@@ -10,7 +10,7 @@ namespace Curiosity.System.Client
 {
     public class Session
     {
-        public static bool HasJoinedRP { get; set; }
+        public static bool HasJoinedSession { get; set; }
         public static bool CreatingCharacter { get; set; }
         public static int LastSession { get; set; }
 

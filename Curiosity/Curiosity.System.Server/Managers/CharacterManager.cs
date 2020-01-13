@@ -21,14 +21,14 @@ namespace Curiosity.System.Server.Managers
                 using (var context = new StorageContext())
                 {
                     var user = Curiosity.Lookup(metadata.Sender);
-                    var result = context.Characters.Where(self => self.Owner == user.Seed)
+                    var result = context.Characters.Where(self => self.UserId == user.UserId)
                         .ToList();
 
                     user.Characters.Clear();
                     user.Characters.AddRange(result);
 
                     Logger.Debug(
-                        $"[Characters] [{user.Seed}] Fetched all characters for `{user.LastName}` totalling {result.Count} character(s).");
+                        $"[Characters] [{user.UserId}] Fetched all characters for `{user.LastName}` totalling {result.Count} character(s).");
 
                     return result;
                 }
@@ -36,13 +36,13 @@ namespace Curiosity.System.Server.Managers
 
             EventSystem.Attach("characters:delete", new AsyncEventCallback(async metadata =>
             {
-                var seed = metadata.Find<string>(0);
+                var characterId = metadata.Find<int>(0);
                 var user = Curiosity.Lookup(metadata.Sender);
 
                 using (var context = new StorageContext())
                 using (var transaction = context.BeginTransaction())
                 {
-                    var character = context.Characters.First(self => self.Seed == seed);
+                    var character = context.Characters.First(self => self.CharacterId == characterId);
 
                     user.Characters.Add(character);
                     context.Characters.Remove(character);
@@ -62,12 +62,6 @@ namespace Curiosity.System.Server.Managers
                 var random = new Random();
                 var character = new CuriosityCharacter
                 {
-                    Seed = Seed.Generate(),
-                    Owner = user.Seed,
-                    Name = metadata.Find<string>(0),
-                    Surname = metadata.Find<string>(1),
-                    DateOfBirth = metadata.Find<string>(2),
-                    LastDigits = random.Next(1000, 10000),
                     Health = 100,
                     Shield = 0,
                     Cash = 3000,
@@ -87,13 +81,6 @@ namespace Curiosity.System.Server.Managers
                 using (var context = new StorageContext())
                 using (var transaction = context.BeginTransaction())
                 {
-                    while (context.Characters.FirstOrDefault(self =>
-                               self.DateOfBirth == character.DateOfBirth && self.LastDigits == character.LastDigits) !=
-                           null)
-                    {
-                        character.LastDigits = random.Next(1000, 10000);
-                    }
-
                     context.Characters.AddOrUpdate(character);
 
                     await context.SaveChangesAsync();
@@ -101,7 +88,7 @@ namespace Curiosity.System.Server.Managers
                     transaction.Commit();
 
                     Logger.Info(
-                        $"[Characters] [{user.LastName}] Has created a new character named `{character.Name} {character.Surname}` ({character.DateOfBirth.Replace("-", "") + character.LastDigits}) ({character.Name})");
+                        $"[Characters] [{user.LastName}] Has created a new character.");
                 }
 
                 user.Characters.Add(character);
@@ -118,46 +105,30 @@ namespace Curiosity.System.Server.Managers
                 return null;
             }));
 
-            EventSystem.Attach("characters:fetch", new EventCallback(metadata =>
-            {
-                var fullname = metadata.Find<string>(0).ToLower().Trim();
+            //EventSystem.Attach("characters:fetch", new EventCallback(metadata =>
+            //{
+            //    var fullname = metadata.Find<string>(0).ToLower().Trim();
 
-                using (var context = new StorageContext())
-                {
-                    foreach (var character in context.Characters)
-                    {
-                        if (character.Fullname.Trim().ToLower() == fullname) return character;
-                    }
-                }
+            //    using (var context = new StorageContext())
+            //    {
+            //        foreach (var character in context.Characters)
+            //        {
+            //            if (character.Fullname.Trim().ToLower() == fullname) return character;
+            //        }
+            //    }
 
-                return null;
-            }));
+            //    return null;
+            //}));
             
-            EventSystem.Attach("characters:fetchbyseed", new EventCallback(metadata =>
+            EventSystem.Attach("characters:fetchByCharacterId", new EventCallback(metadata =>
             {
-                var seed = metadata.Find<string>(0);
+                var characterId = metadata.Find<int>(0);
 
                 using (var context = new StorageContext())
                 {
                     foreach (var character in context.Characters)
                     {
-                        if (character.Seed == seed) return character;
-                    }
-                }
-
-                return null;
-            }));
-
-            EventSystem.Attach("characters:fetchbyssn", new EventCallback(metadata =>
-            {
-                var ssn = metadata.Find<string>(0).Trim();
-
-                using (var context = new StorageContext())
-                {
-                    foreach (var character in context.Characters)
-                    {
-                        if (new string((character.DateOfBirth + character.LastDigits).Replace("-", "").Skip(2).ToArray()) == ssn)
-                            return character;
+                        if (character.CharacterId == characterId) return character;
                     }
                 }
 

@@ -20,7 +20,7 @@ namespace Curiosity.System.Server.Extensions
                 transaction.Commit();
 
                 Logger.Debug(
-                    $"[User] [{user.Seed}] Saving `{user.LastName}` last changes and commiting it to `{context.Database.Connection.Database}`.");
+                    $"[User] [{user.UserId}] Saving `{user.LastName}` last changes and commiting it to `{context.Database.Connection.Database}`.");
             }
         }
 
@@ -35,7 +35,7 @@ namespace Curiosity.System.Server.Extensions
 
                 transaction.Commit();
 
-                Logger.Debug($"[User] [{character.Seed}] - Saving `{character.Name} {character.Surname}` and it's assets.");
+                Logger.Debug($"[User] [{character.CharacterId}] - Saving Character and it's assets.");
             }
         }
     }

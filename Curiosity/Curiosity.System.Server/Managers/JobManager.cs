@@ -23,8 +23,7 @@ namespace Curiosity.System.Server.Managers
 
                         employees.Add(new Employee
                         {
-                            Seed = character.Seed,
-                            Name = character.Fullname,
+                            CharacterId = character.CharacterId,
                             Role = new object[] {character.Metadata.EmploymentRole},
                             Salary = 0,
                             MonthlyRevenue = 0,

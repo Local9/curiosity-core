@@ -20,21 +20,30 @@ namespace Curiosity.System.Server.Managers
             EventSystem.Attach("user:login", new AsyncEventCallback(async metadata =>
             {
                 var player = CuriosityPlugin.PlayersList[metadata.Sender];
-                var steam = player.Identifiers.FirstOrDefault(self => self.StartsWith("steam:"))?.ToString();
+                var discordIdStr = player.Identifiers["discord"];
+                var license = player.Identifiers["license"];
+                ulong discordId = 0;
+
+                if (!ulong.TryParse(discordIdStr, out discordId))
+                {
+                    player.Drop("Error creating login session, Discord ID not found.");
+                    return default;
+                }
+
                 var connectedBefore = true;
 
                 using (var context = new StorageContext())
                 using (var transaction = context.BeginTransaction())
                 {
-                    var user = context.Users.FirstOrDefault(self => self.SteamId == steam);
+                    var user = context.Users.FirstOrDefault(self => self.DiscordId == discordId);
                     var connection = new Tuple<string, DateTime>(player.EndPoint, DateTime.Now);
 
                     if (user == null)
                     {
                         user = new CuriosityUser
                         {
-                            Seed = Seed.Generate(),
-                            SteamId = steam,
+                            License = license,
+                            DiscordId = discordId,
                             Role = Role.Member,
                             ConnectionHistory = new List<Tuple<string, DateTime>>(),
                             Metadata = new UserMetadata()
@@ -58,8 +67,8 @@ namespace Curiosity.System.Server.Managers
                     transaction.Commit();
 
                     Logger.Info(connectedBefore
-                        ? $"[User] [{user.Seed}] [{user.LastName}] Has connected to the server ({connection.Item1})"
-                        : $"[User] [{steam}] [{player.Name}] Has connected for the first time ({connection.Item1})");
+                        ? $"[User] [{user.UserId}] [{user.LastName}] Has connected to the server ({connection.Item1})"
+                        : $"[User] [{user.UserId}] [{player.Name}] Has connected for the first time ({connection.Item1})");
 
                     Curiosity.ActiveUsers.Add(user);
 
@@ -76,16 +85,16 @@ namespace Curiosity.System.Server.Managers
 
             EventSystem.Attach("user:fetch", new EventCallback(metadata =>
             {
-                var seed = metadata.Find<string>(0);
+                var userId = metadata.Find<long>(0);
 
-                return Curiosity.ActiveUsers.FirstOrDefault(self => self.Seed == seed);
+                return Curiosity.ActiveUsers.FirstOrDefault(self => self.UserId == userId);
             }));
 
             EventSystem.Attach("user:postupdates", new EventCallback(metadata =>
             {
                 var user = metadata.Find<CuriosityUser>(0);
 
-                Curiosity.ActiveUsers.RemoveAll(self => self.Seed == user.Seed);
+                Curiosity.ActiveUsers.RemoveAll(self => self.UserId == user.UserId);
                 Curiosity.ActiveUsers.Add(user);
 
                 return null;
@@ -107,7 +116,7 @@ namespace Curiosity.System.Server.Managers
 
             if (user == null) return;
 
-            Logger.Info($"[User] [{user.Seed}] [{user.LastName}] Has disconnected from the server, saving ({reason}).");
+            Logger.Info($"[User] [{user.UserId}] [{user.LastName}] Has disconnected from the server, saving ({reason}).");
 
             Task.Factory.StartNew(async () => await Curiosity.SaveOperation(user));
         }

@@ -8,9 +8,10 @@ namespace Curiosity.System.Library.Models
 {
     public class CuriosityUser
     {
-        [Key] public string Seed { get; set; }
+        [Key] public long UserId { get; set; }
         public int Handle { get; set; }
-        public string SteamId { get; set; }
+        public ulong DiscordId { get; set; }
+        public string License { get; set; }
         public string LastName { get; set; }
         public Role Role { get; set; }
         public DateTime LatestActivity { get; set; }

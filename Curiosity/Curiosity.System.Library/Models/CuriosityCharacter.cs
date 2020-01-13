@@ -11,13 +11,8 @@ namespace Curiosity.System.Library.Models
 {
     public class CuriosityCharacter
     {
-        [Key] public string Seed { get; set; }
-        public string Owner { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Fullname => $"{Name} {Surname}";
-        public string DateOfBirth { get; set; }
-        public int LastDigits { get; set; }
+        [Key] public long CharacterId { get; set; }
+        public long UserId { get; set; }
         public int Health { get; set; }
         public int Shield { get; set; }
         public long Cash { get; set; }
