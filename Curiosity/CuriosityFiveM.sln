@@ -114,6 +114,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.System.Library", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.System.Server", "Curiosity.System.Server\Curiosity.System.Server.csproj", "{7EA79C72-E8FD-403D-9182-F7A5FB73C4CF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Entity", "Entity", "{F355CC72-F4FF-4175-9487-16149FC5D840}"
+	ProjectSection(SolutionItems) = preProject
+		_Dependancies\Entity\EntityFramework.dll = _Dependancies\Entity\EntityFramework.dll
+		_Dependancies\Entity\EntityFramework.SqlServer.dll = _Dependancies\Entity\EntityFramework.SqlServer.dll
+		_Dependancies\Entity\MySql.Data.dll = _Dependancies\Entity\MySql.Data.dll
+		_Dependancies\Entity\MySql.Data.Entity.EF6.dll = _Dependancies\Entity\MySql.Data.Entity.EF6.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -309,6 +317,7 @@ Global
 		{0DA2F681-89CD-4D84-8F27-E4C6879CBD07} = {F02DAF6D-C9BA-4DB9-904A-ED516A17E56F}
 		{9F8D4D3F-06DF-4528-9EAE-584D2AF2A8D8} = {F02DAF6D-C9BA-4DB9-904A-ED516A17E56F}
 		{7EA79C72-E8FD-403D-9182-F7A5FB73C4CF} = {F02DAF6D-C9BA-4DB9-904A-ED516A17E56F}
+		{F355CC72-F4FF-4175-9487-16149FC5D840} = {D9F07760-D804-47DE-98A7-BC5E47182A47}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
