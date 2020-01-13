@@ -102,11 +102,5 @@
       <Name>Curiosity.System.Library</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="EntityFramework.dll" />
-    <Content Include="EntityFramework.SqlServer.dll" />
-    <Content Include="MySql.Data.dll" />
-    <Content Include="MySql.Data.Entity.EF6.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
