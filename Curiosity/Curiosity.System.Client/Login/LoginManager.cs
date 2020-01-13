@@ -61,7 +61,7 @@ namespace Curiosity.System.Client.Login
                 package.Payloads[payload.Key] = JsonConvert.DeserializeObject<NetworkPayload<object>>(payload.Value);
             }
 
-            Logger.Info($"[User] [{user.Seed}] Creating local player...");
+            Logger.Info($"[User] [{user.DiscordId}] Creating local player...");
 
             Atlas.Local = new CuriosityPlayer(user.DiscordId, new CuriosityEntity(ped))
             {
@@ -79,7 +79,7 @@ namespace Curiosity.System.Client.Login
             Atlas.Local.DisableHud();
 
             Logger.Info(
-                $"[User] [{user.Seed}] Logged into the server with the role `{user.Role.ToString()}` and metadata: {JsonConvert.SerializeObject(user.Metadata)}");
+                $"[User] [{user.DiscordId}] Logged into the server with the role `{user.Role.ToString()}` and metadata: {JsonConvert.SerializeObject(user.Metadata)}");
 
             transition.Up(Atlas.Local);
 

@@ -12,7 +12,7 @@ namespace Curiosity.System.Client.Environment.Entities
     {
         [JsonIgnore] protected Player Player => Game.Player;
         [JsonIgnore] public CuriosityUser User { get; set; }
-        public string SteamId { get; set; }
+        public ulong DiscordId { get; set; }
         public int Handle { get; set; }
         [JsonIgnore] public int LocalHandle => Game.Player.Handle;
         public string Name { get; set; }
@@ -22,9 +22,9 @@ namespace Curiosity.System.Client.Environment.Entities
         [JsonIgnore] public AnimationQueue AnimationQueue => Entity.AnimationQueue;
         [JsonIgnore] public CameraViewmodelQueue CameraQueue { get; set; }
 
-        public CuriosityPlayer(string steamId, CuriosityEntity entity)
+        public CuriosityPlayer(ulong discordId, CuriosityEntity entity)
         {
-            SteamId = steamId;
+            DiscordId = discordId;
             Entity = entity;
             Sound = new SoundSystem();
             CameraQueue = new CameraViewmodelQueue();

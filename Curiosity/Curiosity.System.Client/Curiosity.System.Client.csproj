@@ -15,20 +15,21 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -146,199 +147,199 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Loadingscreen Include="Login\Overlay\LoadingOverlay.css">
+    <Content Include="Login\Overlay\LoadingOverlay.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Loadingscreen>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Loadingscreen Include="Login\Overlay\LoadingOverlay.html">
+    <Content Include="Login\Overlay\LoadingOverlay.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Loadingscreen>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Loadingscreen Include="Login\Overlay\LoadingOverlay.js">
+    <Content Include="Login\Overlay\LoadingOverlay.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Loadingscreen>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Graphics\cellphone.png">
+    <Content Include="Overlay\Graphics\cellphone.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Graphics\idcard.png">
+    <Content Include="Overlay\Graphics\idcard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\bandage.png">
+    <Content Include="Overlay\Icons\bandage.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\combatpistol.png">
+    <Content Include="Overlay\Icons\combatpistol.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\contact-add.png">
+    <Content Include="Overlay\Icons\contact-add.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\contact-call.png">
+    <Content Include="Overlay\Icons\contact-call.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\contact-edit.png">
+    <Content Include="Overlay\Icons\contact-edit.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\contact-messages.png">
+    <Content Include="Overlay\Icons\contact-messages.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\contacts.png">
+    <Content Include="Overlay\Icons\contacts.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\flaregun.png">
+    <Content Include="Overlay\Icons\flaregun.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\nightstick.png">
+    <Content Include="Overlay\Icons\nightstick.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\smg.png">
+    <Content Include="Overlay\Icons\smg.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\stungun.png">
+    <Content Include="Overlay\Icons\stungun.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Icons\unknown.png">
+    <Content Include="Overlay\Icons\unknown.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Atlas.js">
+    <Content Include="Overlay\Models\Atlas.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Impl\Atm.js">
+    <Content Include="Overlay\Models\Impl\Atm.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Impl\Billing.js">
+    <Content Include="Overlay\Models\Impl\Billing.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Impl\Cellphone.js">
+    <Content Include="Overlay\Models\Impl\Cellphone.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Impl\CharacterManagement.js">
+    <Content Include="Overlay\Models\Impl\CharacterManagement.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Impl\Idcard.js">
+    <Content Include="Overlay\Models\Impl\Idcard.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Impl\Inventory.js">
+    <Content Include="Overlay\Models\Impl\Inventory.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Impl\Jobpanel.js">
+    <Content Include="Overlay\Models\Impl\Jobpanel.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Impl\UserInterface.js">
+    <Content Include="Overlay\Models\Impl\UserInterface.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Vendor\JQuery.js">
+    <Content Include="Overlay\Models\Vendor\JQuery.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Vendor\Vue.js">
+    <Content Include="Overlay\Models\Vendor\Vue.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Models\Viewmodel.js">
+    <Content Include="Overlay\Models\Viewmodel.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Style\Boilerplate.css">
+    <Content Include="Overlay\Style\Boilerplate.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Style\Dark.css">
+    <Content Include="Overlay\Style\Dark.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Style\Impl\Atm.css">
+    <Content Include="Overlay\Style\Impl\Atm.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Style\Impl\Billing.css">
+    <Content Include="Overlay\Style\Impl\Billing.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Style\Impl\Cellphone.css">
+    <Content Include="Overlay\Style\Impl\Cellphone.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Style\Impl\CharacterManagement.css">
+    <Content Include="Overlay\Style\Impl\CharacterManagement.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Style\Impl\Inventory.css">
+    <Content Include="Overlay\Style\Impl\Inventory.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Style\Impl\Jobpanel.css">
+    <Content Include="Overlay\Style\Impl\Jobpanel.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Style\Impl\UserInterface.css">
+    <Content Include="Overlay\Style\Impl\UserInterface.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Overlay Include="Overlay\Viewmodel.html">
+    <Content Include="Overlay\Viewmodel.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Overlay>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
