@@ -26,21 +26,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
         public static async void Setup()
         {
-            MarkerHandler.Init();
             MarkerHandler.HideAllMarkers = false;
-
-            await Client.Delay(100);
-            Static.Relationships.SetupRelationShips();
-
-            await Client.Delay(100);
-            // kill it incase it doubles
-            client.DeregisterTickHandler(OnTaskJailPed);
-            client.RegisterTickHandler(OnTaskJailPed);
-
             await Client.Delay(100);
             SetupJailHouses();
-
+            await Client.Delay(100);
             Screen.ShowNotification($"~b~Arrests~s~: ~g~Enabled");
+            client.RegisterTickHandler(OnTaskJailPed);
         }
 
         public static void Dispose()
@@ -83,15 +74,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 BlipHandler.AddBlip(b);
             }
+
+            MarkerHandler.Init();
         }
 
         static async Task OnTaskJailPed()
         {
-            await Task.FromResult(0);
             Marker marker = MarkerHandler.GetActiveMarker();
+
             if (marker == null)
             {
-                await Client.Delay(500);
+                await Client.Delay(1000);
             }
             else
             {

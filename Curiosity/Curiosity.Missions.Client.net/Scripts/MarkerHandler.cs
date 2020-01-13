@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CitizenFX.Core.UI;
+using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Missions.Client.net.Scripts
 {
@@ -63,7 +64,7 @@ namespace Curiosity.Missions.Client.net.Scripts
 
         static public Task RefreshClose()
         {
-            MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(m.DrawThreshold, 2)).ToList();
+            MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => m.Position.Distance(Game.PlayerPed.Position) < Math.Pow(m.DrawThreshold, 2)).ToList();
             return Task.FromResult(0);
         }
 
@@ -71,7 +72,7 @@ namespace Curiosity.Missions.Client.net.Scripts
         {
             try
             {
-                Marker closestMarker = MarkersClose.Where(w => w.Position.DistanceToSquared(Game.PlayerPed.Position) < contextAoe).FirstOrDefault();
+                Marker closestMarker = MarkersClose.Where(w => w.Position.Distance(Game.PlayerPed.Position) < contextAoe).FirstOrDefault();
                 if (closestMarker == null) return null;
                 return closestMarker;
             }

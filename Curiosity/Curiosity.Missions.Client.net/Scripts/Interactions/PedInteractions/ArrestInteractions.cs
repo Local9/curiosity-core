@@ -142,7 +142,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 interactivePed.IsHandcuffed = true;
                 Game.PlayerPed.IsPositionFrozen = false;
 
-                Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.Handle, true);
+                Client.TriggerEvent("curiosity:interaction:handcuffs", interactivePed.Ped.Handle, true);
                 Client.TriggerEvent("curiosity:setting:group:join", interactivePed.Ped.Handle);
             }
             else if (interactivePed != null)

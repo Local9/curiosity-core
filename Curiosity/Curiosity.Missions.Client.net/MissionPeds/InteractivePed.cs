@@ -702,7 +702,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             client.DeregisterTickHandler(OnShowHelpTextTask);
 
-            Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+           //  Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
 
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
@@ -731,8 +731,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (Handle == handle)
             {
+                Ped.Detach();
+                HasBeenGrabbed = false;
+
                 IsCoronerCalled = true;
-                Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+                // Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
             }
         }
 
@@ -754,17 +757,17 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public void OnHandcuffs(int handle, bool state)
         {
-            if (Handle == handle)
+            if (Ped.Handle == handle)
             {
                 SoundManager.PlayAudio($"sfx/CUFFS_TIGHTEN_01");
                 
-                API.SetPedFleeAttributes(Handle, 0, false);
-                API.SetBlockingOfNonTemporaryEvents(Handle, true);
-                API.TaskSetBlockingOfNonTemporaryEvents(Handle, true);
+                API.SetPedFleeAttributes(handle, 0, false);
+                API.SetBlockingOfNonTemporaryEvents(handle, true);
+                API.TaskSetBlockingOfNonTemporaryEvents(handle, true);
 
                 IsHandcuffed = state;
                 IsArrested = state;
-                DecorSetBool(Handle, Client.NPC_ARRESTED, state);
+                DecorSetBool(handle, Client.NPC_ARRESTED, state);
 
                 if (!IsArrested)
                 {
@@ -840,7 +843,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Handle == handle)
             {
                 _hasBeenReleased = true;
-                Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+                // Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
             }
         }
 
@@ -878,6 +881,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (Handle == handle)
             {
+
+                Ped.Detach();
+                HasBeenGrabbed = false;
+
                 _hasBeenReleased = true;
 
                 Scripts.NpcHandler.RemoveNpc(base.NetworkId);
@@ -964,7 +971,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     }
                 }
 
-                Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+                // Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
             }
         }
 
@@ -1016,7 +1023,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             ArrestedPedData arrestedPedData = new ArrestedPedData();
             arrestedPedData.IsAllowedToBeArrested = CanBeArrested;
 
-            Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+            // Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
 
             arrestedPedData.IsDrunk = IsUnderTheInfluence;
             arrestedPedData.IsDrugged = IsUsingCocaine || IsUsingCannabis;
@@ -1043,6 +1050,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             API.NetworkFadeOutEntity(Handle, true, false);
             _hasBeenReleased = true;
             await Client.Delay(500);
+
+            Ped.Detach();
+            HasBeenGrabbed = false;
 
             NpcHandler.RemoveNpc(base.NetworkId);
 

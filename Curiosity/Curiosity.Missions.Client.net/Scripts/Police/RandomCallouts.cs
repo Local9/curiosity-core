@@ -50,7 +50,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             if (AreEventsActive) return;
             AreEventsActive = true;
 
-            client.RegisterTickHandler(OnRandomEventHandler);
+            // client.RegisterTickHandler(OnRandomEventHandler);
         }
 
         internal static void Dispose()
