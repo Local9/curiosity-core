@@ -34,8 +34,9 @@
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CitizenFX.Core.Client.1.0.1976\lib\net45\CitizenFX.Core.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.net">
+    <Reference Include="Newtonsoft.Json.net, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\_Dependancies\Newtonsoft.Json.net.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
