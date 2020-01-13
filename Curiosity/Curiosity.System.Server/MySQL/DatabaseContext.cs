@@ -13,7 +13,7 @@ namespace Curiosity.System.Server.MySQL
         }
 
         protected DatabaseContext() : base(API.GetConvar("mysql",
-            "server=127.0.0.1;port=3306;database=curiosity;username=root;password=Lander11;"))
+            "server=127.0.0.1;port=3306;database=curiosity;username=root;password=;"))
         {
         }
     }
