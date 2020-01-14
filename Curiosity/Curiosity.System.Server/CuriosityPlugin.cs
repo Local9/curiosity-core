@@ -34,6 +34,8 @@ namespace Curiosity.System.Server
 
         public CuriosityPlugin()
         {
+            Logger.Info("[CuriosityPlugin] Loading...");
+
             Instance = this;
             PlayersList = Players;
 
