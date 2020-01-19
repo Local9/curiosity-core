@@ -9,6 +9,7 @@ using Curiosity.System.Server.Extensions;
 using Curiosity.System.Server.Managers;
 using Curiosity.System.Server.MySQL;
 using Curiosity.System.Server.Web;
+using Curiosity.Systems.Library;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -38,6 +39,8 @@ namespace Curiosity.System.Server
 
             Instance = this;
             PlayersList = Players;
+
+
 
             API.SetConvarServerInfo("Discord", API.GetConvar("discord_url", "discord_url not set"));
             API.SetConvarServerInfo("Website", API.GetConvar("website_url", "website_url not set"));

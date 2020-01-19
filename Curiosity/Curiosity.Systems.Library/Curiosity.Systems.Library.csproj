@@ -4,37 +4,33 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A6022B94-AEE0-47FC-B956-37E4E205A019}</ProjectGuid>
+    <ProjectGuid>{7D0DF956-549B-4251-9B6B-B05EEB53832C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.Systems.Server</RootNamespace>
-    <AssemblyName>Curiosity.Systems.Server.net</AssemblyName>
+    <RootNamespace>Curiosity.Systems.Library</RootNamespace>
+    <AssemblyName>Curiosity.Systems.Library.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>embedded</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity\server\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>embedded</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity\server\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\CitizenFX.Core.Server.1.0.2004\lib\net45\CitizenFX.Core.Server.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_Dependancies\Newtonsoft.Json.dll</HintPath>
@@ -49,22 +45,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CuriosityPlugin.cs" />
-    <Compile Include="Diagnostics\Logger.cs" />
-    <Compile Include="Events\EventSystem.cs" />
-    <Compile Include="Managers\Manager.cs" />
-    <Compile Include="Managers\QueueManager.cs" />
+    <Compile Include="Date.cs" />
+    <Compile Include="Events\AsyncEventCallback.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\EventAttachment.cs" />
+    <Compile Include="Events\EventCallback.cs" />
+    <Compile Include="Events\EventMetadata.cs" />
+    <Compile Include="Events\EventRequest.cs" />
+    <Compile Include="Events\EventType.cs" />
+    <Compile Include="Models\CuriosityCharacter.cs" />
+    <Compile Include="Models\CuriosityUser.cs" />
+    <Compile Include="Models\JsonBuilder.cs" />
+    <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Models\Position.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\SessionCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web\HttpClient.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Curiosity.Systems.Library\Curiosity.Systems.Library.csproj">
-      <Project>{7d0df956-549b-4251-9b6b-b05eeb53832c}</Project>
-      <Name>Curiosity.Systems.Library</Name>
-    </ProjectReference>
+    <Compile Include="Seed.cs" />
+    <Compile Include="Threading\ThreadLock.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
