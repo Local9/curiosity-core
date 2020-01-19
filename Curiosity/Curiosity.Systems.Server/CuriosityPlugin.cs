@@ -22,6 +22,8 @@ namespace Curiosity.Systems.Server
         public static int MaximumPlayers { get; } = 32;
         public static int SaveInterval { get; } = 1000 * 60 * 3;
         public static bool IsDebugging { get; private set; }
+        public static bool ServerReady { get; private set; }
+        public static ulong DiscordGuildId { get; private set; }
         public List<CuriosityUser> ActiveUsers { get; } = new List<CuriosityUser>();
         public long LastSave { get; set; } = Date.Timestamp;
 
@@ -35,6 +37,21 @@ namespace Curiosity.Systems.Server
             Instance = this;
 
             PlayersList = Players;
+            SetupConvars();
+
+            ServerReady = false;
+
+            async Task LoadTask()
+            {
+                DetachTickHandler(LoadTask);
+                Load();
+            }
+
+            AttachTickHandler(LoadTask);
+        }
+
+        private void SetupConvars()
+        {
             IsDebugging = API.GetConvar("diagnostics_debug", "false") == "true";
 
             if (IsDebugging)
@@ -42,6 +59,12 @@ namespace Curiosity.Systems.Server
                 Logger.Warn($"----------------------------------------");
                 Logger.Warn($"------------ DEBUG ACTIVE --------------");
                 Logger.Warn($"----------------------------------------");
+            }
+            ulong defDiscordGuildId = 0;
+            if (ulong.TryParse(API.GetConvar("discord_guild", "0"), out defDiscordGuildId))
+            {
+                DiscordGuildId = defDiscordGuildId;
+                Logger.Success($"Discord Guild ID: {DiscordGuildId}");
             }
 
             API.SetConvarServerInfo("Discord", API.GetConvar("discord_url", "discord_url not set"));
@@ -62,14 +85,6 @@ namespace Curiosity.Systems.Server
                 API.SetConvar("tags", $"{curiosity}");
             }
             API.SetConvarServerInfo("Curiosity", CURIOSITY_VERSION);
-
-            async Task LoadTask()
-            {
-                DetachTickHandler(LoadTask);
-                Load();
-            }
-
-            AttachTickHandler(LoadTask);
         }
 
         private void Load()
@@ -100,6 +115,8 @@ namespace Curiosity.Systems.Server
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
 
             EventRegistry["rconCommand"] += new Action<string, List<object>>(OnRconCommand);
+
+            ServerReady = true;
         }
 
         public void AttachTickHandler(Func<Task> task)
