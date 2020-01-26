@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data;
 using System.Dynamic;
 using System.Text.RegularExpressions;
 
@@ -98,6 +99,43 @@ namespace Curiosity.Systems.Server.Managers
                 deferrals.done($"The username of '{player.Name}' is blacklisted, please change your username and try to rejoin.");
                 return;
             }
+
+            using (var db = new MySQL.MySqlDatabase())
+            {
+                await db.Connection.OpenAsync();
+
+                using (var cmd = db.Connection.CreateCommand())
+                {
+                    cmd.CommandText = "CALL curiosity.spGetUser(@license, @username, @discordId);";
+                    cmd.Parameters.AddWithValue("@license", license);
+                    cmd.Parameters.AddWithValue("@username", player.Name);
+                    cmd.Parameters.AddWithValue("@discordId", discordId);
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            if (!reader.HasRows)
+                            {
+                                player.Drop($"Sorry {player.Name}, an error occurred while you were trying to connect to the server or update your characters information, please try to connect again. If the issue persists visit our Discord @ {CuriosityPlugin.DiscordUrl}");
+                                throw new Exception($"SQL ERROR -> Failed to find information for {player.Name} [{player.Identifiers["license"]}]");
+                            }
+
+                            DataTable dataTable = new DataTable();
+                            dataTable.Load(reader);
+
+                            foreach (DataColumn dc in dataTable.Columns)
+                            {
+                                Logger.Info($"{dc.ColumnName}:{dataTable.Rows[0][dc.ColumnName]}");
+                            }
+                        }
+                    }
+                }
+            }
+
+            deferrals.done();
+
+            // CuriosityUser curiosityUser = await 
         }
 
         static void SetupConvars()
@@ -123,14 +161,15 @@ namespace Curiosity.Systems.Server.Managers
             reservedTypeThreeSlots = API.GetConvarInt("queue_type_3_reserved_slots", reservedTypeThreeSlots);
             publicTypeSlots = maxSession - reservedTypeOneSlots - reservedTypeTwoSlots - reservedTypeThreeSlots;
 
-            Logger.Verbose($"Queue Settings -> queue_max_session_slots {maxSession}");
-            Logger.Verbose($"Queue Settings -> queue_loading_timeout {loadTime} mins");
-            Logger.Verbose($"Queue Settings -> queue_reconnect_timeout {graceTime} mins");
-            Logger.Verbose($"Queue Settings -> queue_cancel_timeout {queueGraceTime} mins");
-            Logger.Verbose($"Queue Settings -> queue_type_1_reserved_slots {reservedTypeOneSlots}");
-            Logger.Verbose($"Queue Settings -> queue_type_2_reserved_slots {reservedTypeTwoSlots}");
-            Logger.Verbose($"Queue Settings -> queue_type_3_reserved_slots {reservedTypeThreeSlots}");
-            Logger.Verbose($"Queue Settings -> Final Public Slots: {publicTypeSlots}");
+            Logger.Info($"Queue Settings -> queue_max_session_slots {maxSession}");
+            Logger.Info($"Queue Settings -> queue_loading_timeout {loadTime} mins");
+            Logger.Info($"Queue Settings -> queue_reconnect_timeout {graceTime} mins");
+            Logger.Info($"Queue Settings -> queue_cancel_timeout {queueGraceTime} mins");
+            Logger.Info($"Queue Settings -> queue_type_1_reserved_slots {reservedTypeOneSlots}");
+            Logger.Info($"Queue Settings -> queue_type_2_reserved_slots {reservedTypeTwoSlots}");
+            Logger.Info($"Queue Settings -> queue_type_3_reserved_slots {reservedTypeThreeSlots}");
+            Logger.Info($"Queue Settings -> Final Public Slots: {publicTypeSlots}");
+            Logger.Success($"Queue Configuration Completed");
         }
 
         static void SetupMessages()

@@ -10,5 +10,7 @@ namespace Curiosity.Systems.Library.Models
         public string LastName { get; set; }
         public Role Role { get; set; }
         public DateTime LatestActivity { get; set; }
+
+        public CuriosityCharacter Character { get; set; }
     }
 }

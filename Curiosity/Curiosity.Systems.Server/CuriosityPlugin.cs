@@ -4,7 +4,9 @@ using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Managers;
+using Curiosity.Systems.Server.MySQL;
 using Curiosity.Systems.Server.Web;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +25,9 @@ namespace Curiosity.Systems.Server
         public static int SaveInterval { get; } = 1000 * 60 * 3;
         public static bool IsDebugging { get; private set; }
         public static bool ServerReady { get; private set; }
+        public static string DatabaseConnectionString { get; private set; }
         public static ulong DiscordGuildId { get; private set; }
+        public static string DiscordUrl { get; private set; }
         public List<CuriosityUser> ActiveUsers { get; } = new List<CuriosityUser>();
         public long LastSave { get; set; } = Date.Timestamp;
 
@@ -33,7 +37,7 @@ namespace Curiosity.Systems.Server
         public CuriosityPlugin()
         {
             Logger.Info("[CuriosityPlugin] Loading...");
-            
+
             Instance = this;
 
             PlayersList = Players;
@@ -41,13 +45,43 @@ namespace Curiosity.Systems.Server
 
             ServerReady = false;
 
-            async Task LoadTask()
+
+            async Task DatabaseTest()
             {
-                DetachTickHandler(LoadTask);
-                Load();
+                try
+                {
+                    Logger.Info("Running DB Connection Test...");
+                    
+                    await BaseScript.Delay(100);
+                    
+                    DetachTickHandler(DatabaseTest);
+
+                    using (var db = new MySqlDatabase())
+                    {
+                        await db.Connection.OpenAsync();
+
+                        using (var cmd = new MySqlCommand("SELECT 'Success' as Success", db.Connection))
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                            while (await reader.ReadAsync())
+                                if (reader.GetString(0) == "Success")
+                                    Logger.Success("DB Connection Test Successful");
+                    }
+
+                    async Task LoadTask()
+                    {
+                        DetachTickHandler(LoadTask);
+                        Load();
+                    }
+                    AttachTickHandler(LoadTask);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("!!! Critical Error trying to test Database Connection !!!");
+                    Logger.Error($"Message: {ex.Message}");
+                }
             }
 
-            AttachTickHandler(LoadTask);
+            AttachTickHandler(DatabaseTest);
         }
 
         private void SetupConvars()
@@ -67,7 +101,12 @@ namespace Curiosity.Systems.Server
                 Logger.Success($"Discord Guild ID: {DiscordGuildId}");
             }
 
-            API.SetConvarServerInfo("Discord", API.GetConvar("discord_url", "discord_url not set"));
+            DatabaseConnectionString = API.GetConvar("mysql_connection_string", "Host=localhost;Port=3306;Username=root;Password=;Database=curiosity;");
+
+            Logger.Info($"Database String: {DatabaseConnectionString}");
+
+            DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
+            API.SetConvarServerInfo("Discord", DiscordUrl);
             API.SetConvarServerInfo("Website", API.GetConvar("website_url", "website_url not set"));
             API.SetGameType(API.GetConvar("game_type", "game_type not set"));
             API.SetMapName("Life V - Curiosity Framework");
