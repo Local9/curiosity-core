@@ -69,7 +69,7 @@ namespace Curiosity.Systems.Server.Managers
             dynamic deferrals)
         {
             string license = player.Identifiers["license"];
-            string discordId = player.Identifiers["discord"];
+            string discordIdStr = player.Identifiers["discord"];
             string steamId = player.Identifiers["steamId"];
 
             while (!CuriosityPlugin.ServerReady)
@@ -100,42 +100,27 @@ namespace Curiosity.Systems.Server.Managers
                 return;
             }
 
-            using (var db = new MySQL.MySqlDatabase())
+            ulong discordId = 0;
+            ulong.TryParse(discordIdStr, out discordId);
+
+            CuriosityUser curiosityUser = await MySQL.Store.MySqlUsers.Get(license, player, discordId);
+
+            Logger.Info($"Curiosity Queue Manager : Player {curiosityUser.LastName} Connecting");
+
+            await BaseScript.Delay(10);
+
+            if (curiosityUser.Banned)
             {
-                await db.Connection.OpenAsync();
+                string time = $"until {curiosityUser.BannedUntil}";
+                if (curiosityUser.BannedPerm)
+                    time = "permanently.";
 
-                using (var cmd = db.Connection.CreateCommand())
-                {
-                    cmd.CommandText = "CALL curiosity.spGetUser(@license, @username, @discordId);";
-                    cmd.Parameters.AddWithValue("@license", license);
-                    cmd.Parameters.AddWithValue("@username", player.Name);
-                    cmd.Parameters.AddWithValue("@discordId", discordId);
-
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            if (!reader.HasRows)
-                            {
-                                player.Drop($"Sorry {player.Name}, an error occurred while you were trying to connect to the server or update your characters information, please try to connect again. If the issue persists visit our Discord @ {CuriosityPlugin.DiscordUrl}");
-                                throw new Exception($"SQL ERROR -> Failed to find information for {player.Name} [{player.Identifiers["license"]}]");
-                            }
-
-                            DataTable dataTable = new DataTable();
-                            dataTable.Load(reader);
-
-                            foreach (DataColumn dc in dataTable.Columns)
-                            {
-                                Logger.Info($"{dc.ColumnName}:{dataTable.Rows[0][dc.ColumnName]}");
-                            }
-                        }
-                    }
-                }
+                deferrals.done(string.Format($"{messages[Messages.Banned]}", time));
+                API.CancelEvent();
+                return;
             }
 
             deferrals.done();
-
-            // CuriosityUser curiosityUser = await 
         }
 
         static void SetupConvars()

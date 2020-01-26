@@ -9,6 +9,7 @@ using Curiosity.Systems.Server.Web;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -61,10 +62,16 @@ namespace Curiosity.Systems.Server
                         await db.Connection.OpenAsync();
 
                         using (var cmd = new MySqlCommand("SELECT 'Success' as Success", db.Connection))
-                        using (var reader = await cmd.ExecuteReaderAsync())
-                            while (await reader.ReadAsync())
-                                if (reader.GetString(0) == "Success")
-                                    Logger.Success("DB Connection Test Successful");
+                        {
+                            using (var reader = await cmd.ExecuteReaderAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    if (reader.GetString(0) == "Success")
+                                        Logger.Success("DB Connection Test Successful");
+                                }
+                            }
+                        }
                     }
 
                     async Task LoadTask()
@@ -103,7 +110,8 @@ namespace Curiosity.Systems.Server
 
             DatabaseConnectionString = API.GetConvar("mysql_connection_string", "Host=localhost;Port=3306;Username=root;Password=;Database=curiosity;");
 
-            Logger.Info($"Database String: {DatabaseConnectionString}");
+            if (IsDebugging)
+                Logger.Debug($"Database String: {DatabaseConnectionString}");
 
             DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
             API.SetConvarServerInfo("Discord", DiscordUrl);
