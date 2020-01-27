@@ -221,7 +221,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         {
             if (!IsOnActiveCallout && !HasAcceptedCallout)
             {
-                if ((GetGameTimer() - TimeStampOfLastCallout) < RandomTimeBetweenCallouts)
+                while ((GetGameTimer() - TimeStampOfLastCallout) < RandomTimeBetweenCallouts)
                 {
                     if (ClientInformation.IsDeveloper())
                     {
@@ -234,21 +234,20 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     if (!IsOnDuty)
                     {
                         SetDispatchMessageRecieved(false);
-
+                        
                         IsRequestingCallout = false;
                         HasAcceptedCallout = false;
 
                         client.DeregisterTickHandler(OnGenerateRandomMission);
+                        return;
                     }
-
-                    return;
                 }
 
-                if (IsRequestingCallout)
+                if (!IsRequestingCallout)
                 {
                     ChoseRandomMissionArea();
+                    IsRequestingCallout = true;
                 }
-                IsRequestingCallout = true;
             }
         }
 
