@@ -23,7 +23,8 @@ namespace Curiosity.Client.net.Classes.Environment
             new Vector3(-496.291f, -336.9345f, 34.50164f),
             new Vector3(-449.0542f, -339.1804f, 34.50176f),
             new Vector3(1827.909f, 3691.912f, 34.22427f),
-            new Vector3(-243.5568f, 6326.441f, 32.42619f)
+            new Vector3(-243.5568f, 6326.441f, 32.42619f),
+            new Vector3(4773.674f, -1935.709f, 17.06867f)
         };
 
         static Random rnd = new Random();
