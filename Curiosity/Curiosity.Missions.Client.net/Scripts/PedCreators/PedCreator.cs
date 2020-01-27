@@ -15,6 +15,8 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
     {
         static public async Task<Ped> CreatePedAtLocation(Model model, Vector3 location, float heading, bool dropsWeaponsOnDeath = false)
         {
+            await model.Request(10000);
+
             while (!model.IsLoaded)
             {
                 await model.Request(1000);
