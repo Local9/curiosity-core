@@ -25,6 +25,7 @@ namespace Curiosity.Systems.Server
         public static int MaximumPlayers { get; } = 32;
         public static int SaveInterval { get; } = 1000 * 60 * 3;
         public static bool IsDebugging { get; private set; }
+        public static bool IsMaintenanceActive { get; private set; }
         public static bool ServerReady { get; private set; }
         public static string DatabaseConnectionString { get; private set; }
         public static ulong DiscordGuildId { get; private set; }
@@ -112,6 +113,16 @@ namespace Curiosity.Systems.Server
 
             if (IsDebugging)
                 Logger.Debug($"Database String: {DatabaseConnectionString}");
+
+            IsMaintenanceActive = API.GetConvar("server_live", "false") == "false";
+
+            if (IsMaintenanceActive)
+            {
+                Logger.Warn($"----------------------------------------");
+                Logger.Warn($"--------- MAINTENANCE ACTIVE -----------");
+                Logger.Warn($"----------------------------------------");
+
+            }
 
             DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
             API.SetConvarServerInfo("Discord", DiscordUrl);

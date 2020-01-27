@@ -8,7 +8,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Server.Managers
 {
@@ -59,7 +61,6 @@ namespace Curiosity.Systems.Server.Managers
         public override void Begin()
         {
             SetupConvars();
-            SetupMessages();
 
             Curiosity.EventRegistry["playerConnecting"] +=
                 new Action<Player, string, CallbackDelegate, ExpandoObject>(OnConnect);
@@ -120,10 +121,604 @@ namespace Curiosity.Systems.Server.Managers
                 return;
             }
 
+            if (curiosityUser.QueuePriority == 0 && CuriosityPlugin.IsMaintenanceActive)
+            {
+                deferrals.done($"Curiosity Queue Manager : Server is currently in maintenance.");
+                API.CancelEvent();
+                return;
+            }
+
+            if (sentLoading.ContainsKey(license))
+            {
+                sentLoading.TryRemove(license, out Player oldPlayer);
+            }
+            sentLoading.TryAdd(license, player);
+
+            if (curiosityUser.QueuePriority > 0)
+            {
+                if (!priority.TryAdd(license, curiosityUser.QueuePriority))
+                {
+                    priority.TryGetValue(license, out int oldPriority);
+                    priority.TryUpdate(license, curiosityUser.QueuePriority, oldPriority);
+                }
+            }
+
+            if (session.TryAdd(license, SessionState.Queue))
+            {
+                if (!priority.ContainsKey(license))
+                {
+                    newQueue.Enqueue(license);
+                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {player.Name} [{license}]"); }
+                }
+                else
+                {
+                    newPriorityQueue.Enqueue(license);
+                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {player.Name} [{license}]"); }
+                }
+            }
+
+            if (!session[license].Equals(SessionState.Queue))
+            {
+                UpdateTimer(license);
+                session.TryGetValue(license, out SessionState oldState);
+                session.TryUpdate(license, SessionState.Loading, oldState);
+                deferrals.done();
+                if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
+                return;
+            }
+
+            bool inPriority = priority.ContainsKey(license);
+            int dots = 0;
+
+            while (session[license].Equals(SessionState.Queue))
+            {
+                if (index.ContainsKey(license) && index.TryGetValue(license, out int position))
+                {
+                    int count = inPriority ? inPriorityQueue : inQueue;
+                    string message = inPriority ? $"{messages[Messages.PriorityQueue]}" : $"{messages[Messages.Queue]}";
+                    deferrals.update($"{message} {position} / {count}{new string('.', dots)}");
+                }
+                dots = dots > 2 ? 0 : dots + 1;
+                if (player?.EndPoint == null)
+                {
+                    UpdateTimer(license);
+                    deferrals.done($"{messages[Messages.Canceled]}");
+                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
+                    return;
+                }
+                RemoveFrom(license, false, false, true, false, false, false);
+                await BaseScript.Delay(5000);
+            }
+            await BaseScript.Delay(500);
+
             deferrals.done();
         }
 
-        static void SetupConvars()
+        async void StopHardcap()
+        {
+            try
+            {
+                API.ExecuteCommand($"sets fivemqueue Enabled");
+                int attempts = 0;
+                while (attempts < 7)
+                {
+                    attempts += 1;
+                    string state = API.GetResourceState("hardcap");
+                    if (state == "missing")
+                    {
+                        break;
+                    }
+                    else if (state == "started")
+                    {
+                        API.StopResource("hardcap");
+                        break;
+                    }
+                    await BaseScript.Delay(5000);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : StopHardcap()");
+            }
+        }
+
+
+        void OnResourceStop(string name)
+        {
+            try
+            {
+                if (name == resourceName)
+                {
+                    if (API.GetResourceState("hardcap") != "started")
+                    {
+                        API.StartResource("hardcap");
+                        API.ExecuteCommand($"sets fivemqueue Disabled");
+                    }
+                    if (hostName != string.Empty) { API.SetConvar("sv_hostname", hostName); return; }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : OnResourceStop()");
+            }
+        }
+
+        async Task QueueCycle()
+        {
+            while (true)
+            {
+                try
+                {
+                    inPriorityQueue = PriorityQueueCount();
+                    await BaseScript.Delay(100);
+                    inQueue = QueueCount();
+                    await BaseScript.Delay(100);
+                    UpdateHostName();
+                    UpdateStates();
+                    await BaseScript.Delay(100);
+                    BalanceReserved();
+                    await BaseScript.Delay(1000);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Curiosity Queue Manager : QueueCycle() -> {ex.Message}");
+                }
+            }
+        }
+
+
+
+        void UpdateStates()
+        {
+            try
+            {
+                session.Where(k => k.Value == SessionState.Loading || k.Value == SessionState.Grace).ToList().ForEach(j =>
+                {
+                    string license = j.Key;
+                    SessionState state = j.Value;
+                    PlayerList players = CuriosityPlugin.PlayersList;
+                    switch (state)
+                    {
+                        case SessionState.Loading:
+                            if (!timer.TryGetValue(license, out DateTime oldLoadTime))
+                            {
+                                UpdateTimer(license);
+                                break;
+                            }
+                            if (IsTimeUp(license, loadTime))
+                            {
+                                if (players.FirstOrDefault(i => i.Identifiers["license"] == license)?.EndPoint != null)
+                                {
+                                    players.FirstOrDefault(i => i.Identifiers["license"] == license).Drop($"{messages[Messages.Timeout]}");
+                                }
+                                session.TryGetValue(license, out SessionState oldState);
+                                session.TryUpdate(license, SessionState.Grace, oldState);
+                                UpdateTimer(license);
+                                if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : LOADING -> GRACE -> {license}"); }
+                            }
+                            else
+                            {
+                                if (sentLoading.ContainsKey(license) && players.FirstOrDefault(i => i.Identifiers["license"] == license) != null)
+                                {
+                                    BaseScript.TriggerEvent("curiosity:Server:Queue:NewLoading", sentLoading[license]);
+                                    sentLoading.TryRemove(license, out Player oldPlayer);
+                                }
+                            }
+                            break;
+                        case SessionState.Grace:
+                            if (!timer.TryGetValue(license, out DateTime oldGraceTime))
+                            {
+                                UpdateTimer(license);
+                                break;
+                            }
+                            if (IsTimeUp(license, graceTime))
+                            {
+                                if (players.FirstOrDefault(i => i.Identifiers["license"] == license)?.EndPoint != null)
+                                {
+                                    if (!session.TryAdd(license, SessionState.Active))
+                                    {
+                                        session.TryGetValue(license, out SessionState oldState);
+                                        session.TryUpdate(license, SessionState.Active, oldState);
+                                    }
+                                }
+                                else
+                                {
+                                    RemoveFrom(license, true, true, true, true, true, true);
+                                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : GRACE -> REMOVED -> {license}"); }
+                                }
+                            }
+                            break;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : UpdateStates()");
+            }
+        }
+
+        static void BalanceReserved()
+        {
+            try
+            {
+                var query = from license in session
+                            join license2 in reserved on license.Key equals license2.Key
+                            join license3 in slotTaken on license.Key equals license3.Key
+                            where license.Value == SessionState.Active && license2.Value != license3.Value
+                            select new { license.Key, license2.Value };
+
+                query.ToList().ForEach(k =>
+                {
+                    int openReservedTypeOneSlots = reservedTypeOneSlots - slotTaken.Count(j => j.Value == Reserved.Reserved1);
+                    int openReservedTypeTwoSlots = reservedTypeTwoSlots - slotTaken.Count(j => j.Value == Reserved.Reserved2);
+                    int openReservedTypeThreeSlots = reservedTypeThreeSlots - slotTaken.Count(j => j.Value == Reserved.Reserved3);
+
+                    switch (k.Value)
+                    {
+                        case Reserved.Reserved1:
+                            if (openReservedTypeOneSlots > 0)
+                            {
+                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved1))
+                                {
+                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
+                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved1, oldReserved);
+                                }
+                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved1"); }
+                            }
+                            else if (openReservedTypeTwoSlots > 0)
+                            {
+                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved2))
+                                {
+                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
+                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved2, oldReserved);
+                                }
+                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved2"); }
+                            }
+                            else if (openReservedTypeThreeSlots > 0)
+                            {
+                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved3))
+                                {
+                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
+                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved3, oldReserved);
+                                }
+                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved3"); }
+                            }
+                            break;
+
+                        case Reserved.Reserved2:
+                            if (openReservedTypeTwoSlots > 0)
+                            {
+                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved2))
+                                {
+                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
+                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved2, oldReserved);
+                                }
+                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved2"); }
+                            }
+                            else if (openReservedTypeThreeSlots > 0)
+                            {
+                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved3))
+                                {
+                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
+                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved3, oldReserved);
+                                }
+                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved3"); }
+                            }
+                            break;
+
+                        case Reserved.Reserved3:
+                            if (openReservedTypeThreeSlots > 0)
+                            {
+                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved3))
+                                {
+                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
+                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved3, oldReserved);
+                                }
+                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved3"); }
+                            }
+                            break;
+                        default:
+                            if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Public"); }
+                            break;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : BalanceReserved()");
+            }
+        }
+
+        void UpdateHostName()
+        {
+            try
+            {
+                if (hostName == string.Empty) { hostName = API.GetConvar("sv_hostname", string.Empty); }
+                if (hostName == string.Empty) { return; }
+
+                string concat = hostName;
+                bool editHost = false;
+                int count = inQueue + inPriorityQueue;
+                if (API.GetConvar("queue_add_count_before_name", "false") == "true")
+                {
+                    editHost = true;
+                    if (count > 0) { concat = string.Format($"{messages[Messages.QueueCount]} {concat}", count); }
+                    else { concat = hostName; }
+                }
+                if (API.GetConvar("queue_add_count_after_name", "false") == "true")
+                {
+                    editHost = true;
+                    if (count > 0) { concat = string.Format($"{concat} {messages[Messages.QueueCount]}", count); }
+                    else { concat = hostName; }
+                }
+                if (lastCount != count && editHost)
+                {
+                    API.SetConvar("sv_hostname", concat);
+                }
+                lastCount = count;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : UpdateHostName()");
+            }
+        }
+
+        int QueueCount()
+        {
+            try
+            {
+                int place = 0;
+                ConcurrentQueue<string> temp = new ConcurrentQueue<string>();
+                while (!queue.IsEmpty)
+                {
+                    queue.TryDequeue(out string license);
+                    if (IsTimeUp(license, queueGraceTime))
+                    {
+                        RemoveFrom(license, true, true, true, true, true, true);
+                        if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : CANCELED -> REMOVED -> {license}"); }
+                        continue;
+                    }
+                    if (priority.TryGetValue(license, out int priorityAdded))
+                    {
+                        newPriorityQueue.Enqueue(license);
+                        continue;
+                    }
+                    if (!Loading(license))
+                    {
+                        place += 1;
+                        UpdatePlace(license, place);
+                        temp.Enqueue(license);
+                    }
+                }
+                while (!newQueue.IsEmpty)
+                {
+                    newQueue.TryDequeue(out string license);
+                    if (!Loading(license))
+                    {
+                        place += 1;
+                        UpdatePlace(license, place);
+                        temp.Enqueue(license);
+                    }
+                }
+                queue = temp;
+                return queue.Count;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : QueueCount()"); return queue.Count;
+            }
+        }
+
+        bool Loading(string license)
+        {
+            try
+            {
+                if (reserved.ContainsKey(license) && reserved[license] == Reserved.Reserved1 && slotTaken.Count(j => j.Value == Reserved.Reserved1) < reservedTypeOneSlots)
+                { NewLoading(license, Reserved.Reserved1); return true; }
+                else if (reserved.ContainsKey(license) && (reserved[license] == Reserved.Reserved1 || reserved[license] == Reserved.Reserved2) && slotTaken.Count(j => j.Value == Reserved.Reserved2) < reservedTypeTwoSlots)
+                { NewLoading(license, Reserved.Reserved2); return true; }
+                else if (reserved.ContainsKey(license) && (reserved[license] == Reserved.Reserved1 || reserved[license] == Reserved.Reserved2 || reserved[license] == Reserved.Reserved3) && slotTaken.Count(j => j.Value == Reserved.Reserved3) < reservedTypeThreeSlots)
+                { NewLoading(license, Reserved.Reserved3); return true; }
+                else if (session.Count(j => j.Value != SessionState.Queue) - slotTaken.Count(i => i.Value != Reserved.Public) < publicTypeSlots)
+                { NewLoading(license, Reserved.Public); return true; }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : Loading()"); return false;
+            }
+        }
+
+        void NewLoading(string license, Reserved slotType)
+        {
+            try
+            {
+                if (session.TryGetValue(license, out SessionState oldState))
+                {
+                    UpdateTimer(license);
+                    RemoveFrom(license, false, true, false, false, false, false);
+                    if (!slotTaken.TryAdd(license, slotType))
+                    {
+                        slotTaken.TryGetValue(license, out Reserved oldSlotType);
+                        slotTaken.TryUpdate(license, slotType, oldSlotType);
+                    }
+                    session.TryUpdate(license, SessionState.Loading, oldState);
+                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : QUEUE -> LOADING -> ({Enum.GetName(typeof(Reserved), slotType)}) {license}"); }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : NewLoading()");
+            }
+        }
+
+        bool IsTimeUp(string license, double time)
+        {
+            try
+            {
+                if (!timer.ContainsKey(license)) { return false; }
+                return timer[license].AddMinutes(time) < DateTime.UtcNow;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : IsTimeUp()"); return false;
+            }
+        }
+
+        void UpdatePlace(string license, int place)
+        {
+            try
+            {
+                if (!index.TryAdd(license, place))
+                {
+                    index.TryGetValue(license, out int oldPlace);
+                    index.TryUpdate(license, place, oldPlace);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : UpdatePlace()");
+            }
+        }
+
+        void UpdateTimer(string license)
+        {
+            try
+            {
+                if (!timer.TryAdd(license, DateTime.UtcNow))
+                {
+                    timer.TryGetValue(license, out DateTime oldTime);
+                    timer.TryUpdate(license, DateTime.UtcNow, oldTime);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : UpdateTimer()");
+            }
+        }
+
+        int PriorityQueueCount()
+        {
+            try
+            {
+                List<KeyValuePair<string, int>> order = new List<KeyValuePair<string, int>>();
+                while (!priorityQueue.IsEmpty)
+                {
+                    priorityQueue.TryDequeue(out string license);
+                    if (IsTimeUp(license, queueGraceTime))
+                    {
+                        RemoveFrom(license, true, true, true, true, true, true);
+                        if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : CANCELED -> REMOVED -> {license}"); }
+                        continue;
+                    }
+                    if (!priority.TryGetValue(license, out int priorityNum))
+                    {
+                        newQueue.Enqueue(license);
+                        continue;
+                    }
+                    order.Insert(order.FindLastIndex(k => k.Value <= priorityNum) + 1, new KeyValuePair<string, int>(license, priorityNum));
+                }
+                while (!newPriorityQueue.IsEmpty)
+                {
+                    newPriorityQueue.TryDequeue(out string license);
+                    priority.TryGetValue(license, out int priorityNum);
+                    order.Insert(order.FindLastIndex(k => k.Value >= priorityNum) + 1, new KeyValuePair<string, int>(license, priorityNum));
+                }
+                int place = 0;
+                order.ForEach(k =>
+                {
+                    if (!Loading(k.Key))
+                    {
+                        place += 1;
+                        UpdatePlace(k.Key, place);
+                        priorityQueue.Enqueue(k.Key);
+                    }
+                });
+                return priorityQueue.Count;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : PriorityQueueCount()"); return priorityQueue.Count;
+            }
+        }
+
+        void PlayerDropped([FromSource] Player source, string message)
+        {
+            try
+            {
+                string license = source.Identifiers["license"];
+                if (license == null)
+                {
+                    return;
+                }
+                if (!session.ContainsKey(license) || message == "Exited")
+                {
+                    return;
+                }
+                if (message.Contains("Kick") || message.Contains("Ban"))
+                {
+                    RemoveFrom(license, true, true, true, true, true, true);
+                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : REMOVED -> {license}"); }
+                }
+                else
+                {
+                    session.TryGetValue(license, out SessionState oldState);
+                    session.TryUpdate(license, SessionState.Grace, oldState);
+                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> GRACE -> {license}"); }
+                    UpdateTimer(license);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : PlayerDropped()");
+            }
+        }
+
+        async void PlayerActivated([FromSource] Player source)
+        {
+            try
+            {
+                await BaseScript.Delay(0);
+                string license = source.Identifiers["license"];
+                string discordId = source.Identifiers["discord"];
+                if (!session.ContainsKey(license))
+                {
+                    session.TryAdd(license, SessionState.Active);
+                    return;
+                }
+                session.TryGetValue(license, out SessionState oldState);
+                session.TryUpdate(license, SessionState.Active, oldState);
+                if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> ACTIVE -> {license}"); }
+
+                if (discordId == "191686898450825217")
+                    BaseScript.TriggerClientEvent("curiosity:Client:Player:Developer:Online");
+
+                BaseScript.TriggerEvent("environment:train:activate");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : PlayerActivated() {ex}");
+            }
+        }
+
+        void RemoveFrom(string license, bool doSession, bool doIndex, bool doTimer, bool doPriority, bool doReserved, bool doSlot)
+        {
+            try
+            {
+                if (doSession) { session.TryRemove(license, out SessionState oldState); }
+                if (doIndex) { index.TryRemove(license, out int oldPosition); }
+                if (doTimer) { timer.TryRemove(license, out DateTime oldTime); }
+                if (doPriority) { priority.TryRemove(license, out int oldPriority); }
+                if (doReserved) { reserved.TryRemove(license, out Reserved oldReserved); }
+                if (doSlot) { slotTaken.TryRemove(license, out Reserved oldSlot); }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Curiosity Queue Manager : RemoveFrom()");
+            }
+        }
+
+        void SetupConvars()
         {
             stateChangeMessages = API.GetConvar("queue_enable_console_messages", "true") == "true";
             maxSession = API.GetConvarInt("queue_max_session_slots", maxSession);
@@ -154,10 +749,13 @@ namespace Curiosity.Systems.Server.Managers
             Logger.Info($"Queue Settings -> queue_type_2_reserved_slots {reservedTypeTwoSlots}");
             Logger.Info($"Queue Settings -> queue_type_3_reserved_slots {reservedTypeThreeSlots}");
             Logger.Info($"Queue Settings -> Final Public Slots: {publicTypeSlots}");
+            
+            SetupMessages();
+            
             Logger.Success($"Queue Configuration Completed");
         }
 
-        static void SetupMessages()
+        void SetupMessages()
         {
             messages.Add(Messages.Gathering, "Gathering queue information");
             messages.Add(Messages.License, "License is required");
