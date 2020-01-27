@@ -67,7 +67,6 @@ namespace Curiosity.Server.net
             RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(OnPlayerDropped));
 
             // TODO: Move everything else to init from here.
-            Business.Queue.Init();
             Business.Discord.Init();
 
             // DATABASE

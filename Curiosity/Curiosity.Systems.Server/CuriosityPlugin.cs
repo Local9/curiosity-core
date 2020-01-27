@@ -30,6 +30,7 @@ namespace Curiosity.Systems.Server
         public static string DatabaseConnectionString { get; private set; }
         public static ulong DiscordGuildId { get; private set; }
         public static string DiscordUrl { get; private set; }
+        public static string WebsiteUrl { get; private set; }
         public List<CuriosityUser> ActiveUsers { get; } = new List<CuriosityUser>();
         public long LastSave { get; set; } = Date.Timestamp;
 
@@ -121,12 +122,12 @@ namespace Curiosity.Systems.Server
                 Logger.Warn($"----------------------------------------");
                 Logger.Warn($"--------- MAINTENANCE ACTIVE -----------");
                 Logger.Warn($"----------------------------------------");
-
             }
 
             DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
             API.SetConvarServerInfo("Discord", DiscordUrl);
-            API.SetConvarServerInfo("Website", API.GetConvar("website_url", "website_url not set"));
+            WebsiteUrl = API.GetConvar("website_url", "website_url not set");
+            API.SetConvarServerInfo("Website", WebsiteUrl);
             API.SetGameType(API.GetConvar("game_type", "game_type not set"));
             API.SetMapName("Life V - Curiosity Framework");
 

@@ -42,6 +42,7 @@ namespace Curiosity.Systems.Server.Managers
 
         static long serverSetupTimer = API.GetGameTimer();
         static long forceWait = (1000 * 30);
+        static bool IsServerQueueReady = false;
 
         // Concurrent Values
         static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
@@ -62,8 +63,15 @@ namespace Curiosity.Systems.Server.Managers
         {
             SetupConvars();
 
-            Curiosity.EventRegistry["playerConnecting"] +=
-                new Action<Player, string, CallbackDelegate, ExpandoObject>(OnConnect);
+            Curiosity.EventRegistry["playerConnecting"] += new Action<Player, string, CallbackDelegate, ExpandoObject>(OnConnect);
+            Curiosity.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
+            Curiosity.EventRegistry["onResourceStop"] += new Action<string>(OnResourceStop);
+            Curiosity.EventRegistry["curiosity:Server:Queue:PlayerConnected"] += new Action<Player>(OnPlayerActivated);
+
+            Curiosity.AttachTickHandler(QueueCycle);
+            Curiosity.AttachTickHandler(SetupTimer);
+
+            serverSetupTimer = API.GetGameTimer();
         }
 
         private async void OnConnect([FromSource] Player player, string name, CallbackDelegate kickManager,
@@ -73,7 +81,7 @@ namespace Curiosity.Systems.Server.Managers
             string discordIdStr = player.Identifiers["discord"];
             string steamId = player.Identifiers["steamId"];
 
-            while (!CuriosityPlugin.ServerReady)
+            while (!IsServerQueueReady)
             {
                 await BaseScript.Delay(1000);
                 deferrals.update("Awaiting Server Startup...");
@@ -106,7 +114,7 @@ namespace Curiosity.Systems.Server.Managers
 
             CuriosityUser curiosityUser = await MySQL.Store.MySqlUsers.Get(license, player, discordId);
 
-            Logger.Info($"Curiosity Queue Manager : Player {curiosityUser.LastName} Connecting");
+            Logger.Info($"Curiosity Queue Manager : {curiosityUser.UserRole} {curiosityUser.LastName} Connecting");
 
             await BaseScript.Delay(10);
 
@@ -121,11 +129,14 @@ namespace Curiosity.Systems.Server.Managers
                 return;
             }
 
-            if (curiosityUser.QueuePriority == 0 && CuriosityPlugin.IsMaintenanceActive)
+            if (!curiosityUser.IsStaff)
             {
-                deferrals.done($"Curiosity Queue Manager : Server is currently in maintenance.");
-                API.CancelEvent();
-                return;
+                if (CuriosityPlugin.IsMaintenanceActive)
+                {
+                    deferrals.done($"Curiosity Queue Manager : This server is in a testing state, please make sure you are connecting to the correct server or use the links provided at {CuriosityPlugin.WebsiteUrl}.");
+                    API.CancelEvent();
+                    return;
+                }
             }
 
             if (sentLoading.ContainsKey(license))
@@ -134,8 +145,13 @@ namespace Curiosity.Systems.Server.Managers
             }
             sentLoading.TryAdd(license, player);
 
-            if (curiosityUser.QueuePriority > 0)
+            if (curiosityUser.QueuePriority > 0 || curiosityUser.IsStaff)
             {
+                if (curiosityUser.IsStaff)
+                {
+                    Logger.Success($"Curiosity Queue Manager : Staff Member {curiosityUser.LastName} added to Priority Queue");
+                }
+
                 if (!priority.TryAdd(license, curiosityUser.QueuePriority))
                 {
                     priority.TryGetValue(license, out int oldPriority);
@@ -194,6 +210,56 @@ namespace Curiosity.Systems.Server.Managers
             deferrals.done();
         }
 
+        async Task SetupTimer()
+        {
+            try
+            {
+                if (CuriosityPlugin.IsMaintenanceActive)
+                {
+                    IsServerQueueReady = true;
+                    Curiosity.DetachTickHandler(SetupTimer);
+                    Logger.Verbose("[MAINTENANCE] Server Queue is ready.");
+                }
+                else
+                {
+                    if ((API.GetGameTimer() - serverSetupTimer) > forceWait)
+                    {
+                        IsServerQueueReady = true;
+                        Curiosity.DetachTickHandler(SetupTimer);
+                        Logger.Verbose("Server Queue is ready.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Verbose($"SetupTimer() -> {ex.Message}");
+            }
+            await Task.FromResult(0);
+        }
+
+        async Task QueueCycle()
+        {
+            while (true)
+            {
+                try
+                {
+                    inPriorityQueue = PriorityQueueCount();
+                    await BaseScript.Delay(100);
+                    inQueue = QueueCount();
+                    await BaseScript.Delay(100);
+                    UpdateHostName();
+                    UpdateStates();
+                    await BaseScript.Delay(100);
+                    BalanceReserved();
+                    await BaseScript.Delay(1000);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Curiosity Queue Manager : QueueCycle() -> {ex.Message}");
+                }
+            }
+        }
+
         async void StopHardcap()
         {
             try
@@ -242,31 +308,6 @@ namespace Curiosity.Systems.Server.Managers
                 Logger.Error($"Curiosity Queue Manager : OnResourceStop()");
             }
         }
-
-        async Task QueueCycle()
-        {
-            while (true)
-            {
-                try
-                {
-                    inPriorityQueue = PriorityQueueCount();
-                    await BaseScript.Delay(100);
-                    inQueue = QueueCount();
-                    await BaseScript.Delay(100);
-                    UpdateHostName();
-                    UpdateStates();
-                    await BaseScript.Delay(100);
-                    BalanceReserved();
-                    await BaseScript.Delay(1000);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error($"Curiosity Queue Manager : QueueCycle() -> {ex.Message}");
-                }
-            }
-        }
-
-
 
         void UpdateStates()
         {
@@ -642,7 +683,7 @@ namespace Curiosity.Systems.Server.Managers
             }
         }
 
-        void PlayerDropped([FromSource] Player source, string message)
+        void OnPlayerDropped([FromSource] Player source, string message)
         {
             try
             {
@@ -674,7 +715,7 @@ namespace Curiosity.Systems.Server.Managers
             }
         }
 
-        async void PlayerActivated([FromSource] Player source)
+        async void OnPlayerActivated([FromSource] Player source)
         {
             try
             {
