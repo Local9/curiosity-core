@@ -30,6 +30,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
             [VehicleClass.Super] = 2.5f,
             [VehicleClass.Sports] = 1.8f,
             [VehicleClass.Emergency] = 2.0f,
+            [VehicleClass.Industrial] = 1.8f,
+            [VehicleClass.Commercial] = 1.8f
         };
 
         static Dictionary<VehicleHash, float> FuelConsumptionModelMultiplier = new Dictionary<VehicleHash, float>()
