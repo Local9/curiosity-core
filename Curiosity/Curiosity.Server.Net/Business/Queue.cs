@@ -217,7 +217,7 @@ namespace Curiosity.Server.net.Business
 
                 if (user.QueuePriority == 0 && !Server.isLive)
                 {
-                    deferrals.done($"Server is currently in maintaince.");
+                    deferrals.done($"Server is currently in maintenance.");
                     return;
                 }
 
