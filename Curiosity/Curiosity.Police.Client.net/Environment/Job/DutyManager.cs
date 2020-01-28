@@ -5,6 +5,7 @@ using Curiosity.Shared.Client.net;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using static CitizenFX.Core.Native.API;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.Police.Client.net.Environment.Job
 {
@@ -18,6 +19,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
         public static PatrolZone PatrolZone = PatrolZone.City;
 
         public static RelationshipGroup PoliceRelationshipGroup;
+
+        static Scaleform scaleform;
 
         public static void Init()
         {
@@ -79,6 +82,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job == "police")
             {
+                ShowScaleformRules();
+
                 Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Police);
                 Game.PlayerPed.IsInvincible = false;
 
@@ -95,6 +100,70 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 Vehicle.LoadoutPosition.Init();
                 IsPoliceJobActive = true;
             }
+        }
+
+        static async void ShowScaleformRules()
+        {
+            ScaleformTask();
+            await Client.Delay(10000);
+            scaleform.Dispose();
+        }
+
+        static async void LoadDict(string dict)
+        {
+            API.RequestStreamedTextureDict(dict, false);
+            while (!API.HasStreamedTextureDictLoaded(dict))
+            {
+                await Client.Delay(0);
+            }
+        }
+
+        private static async void ScaleformTask()
+        {
+            scaleform = new Scaleform("GTAV_ONLINE");
+
+            while (!scaleform.IsLoaded)
+            {
+                await BaseScript.Delay(0);
+            }
+
+            string description = "~w~Guides can be found via the Intraction Menu [M].~w~\n";
+            description += "~r~DO NOT~w~ Pull over other players.\n";
+            description += "~r~DO NOT~w~ Drive recklessly.\n";
+            description += "~r~DO NOT~w~ Force people to RP.\n";
+            description += "\n";
+            description += "~g~To Get Started:\n";
+            description += "~w~Open the Interaction Menu [M] and open Police Options\n";
+            description += "~w~Here you will find all your options.\n";
+            description += "~w~You can also press [LALT] + [E] to open the Back Up menu.\n";
+            description += "Finally, keep it friendly and we'll all get along.\n";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+            description += "~r~∑\n";
+            description += "~o~REMEMBER Press ~b~M~o~ to read the guides for more information!~w~\n";
+            description += "~b~Forums~w~: forums.lifev.net / ~b~Discord~w~: discord.lifev.net";
+
+            scaleform.CallFunction("SETUP_TABS", 1, false);
+            const string dictTexture = "www_arenawar_tv";
+            LoadDict(dictTexture);
+            scaleform.CallFunction("SETUP_TABS", true);
+            scaleform.CallFunction("SET_BIGFEED_INFO", "Hello", description, 0, dictTexture, "bg_top_left", $"~y~Police Duty", "deprecated", $"Police Duty in Life V!", 0);
+            scaleform.CallFunction("SET_NEWS_CONTEXT", 0);
+
+            while (scaleform.IsLoaded)
+            {
+                await BaseScript.Delay(0);
+                scaleform.Render2D();
+            }
+
+            Screen.ShowNotification("~w~If you are stuck, use ~b~/stuck~w~ to respawn safely.");
+
+            API.SetStreamedTextureDictAsNoLongerNeeded(dictTexture);
         }
 
         static void OnPatrolZone(int zone)
