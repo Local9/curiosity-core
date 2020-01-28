@@ -4,7 +4,7 @@ using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using System;
 
-namespace Curiosity.World.Client.net.Classes.Player
+namespace Curiosity.GameWorld.Client.net.Classes.Player
 {
     static class PlayerInformation
     {

@@ -1,7 +1,7 @@
 ﻿using Curiosity.Shared.Client.net;
 using CitizenFX.Core;
 
-namespace Curiosity.World.Client.net
+namespace Curiosity.GameWorld.Client.net
 {
     /// <summary>
     /// For initialization of all these static classes

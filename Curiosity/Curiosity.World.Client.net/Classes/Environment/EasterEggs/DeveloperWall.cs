@@ -13,7 +13,7 @@ using Curiosity.Shared.Client.net;
 
 using System.Drawing;
 
-namespace Curiosity.World.Client.net.Classes.Environment.EasterEggs
+namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
 {
     class DeveloperWall
     {
@@ -23,8 +23,8 @@ namespace Curiosity.World.Client.net.Classes.Environment.EasterEggs
         static string DEV_TXD_NAME = DEV_TXD;
         static string DEV_TXD_LOCATION = "client/img/dev.png";
 
-        static string MUSIC_EVENT_START = "FM_SUDDEN_DEATH_START_MUSIC";
-        static string MUSIC_EVENT_STOP = "FM_SUDDEN_DEATH_STOP_MUSIC";
+        static string MUSIC_EVENT_START = "KILL_LIST_START_MUSIC";
+        static string MUSIC_EVENT_STOP = "KILL_LIST_STOP_MUSIC";
 
         static string PARTICLE_DICT = "proj_indep_firework";
         static List<string> ParticleNames = new List<string>()
@@ -36,6 +36,11 @@ namespace Curiosity.World.Client.net.Classes.Environment.EasterEggs
         };
 
         static int ParticleId = 0;
+
+        static Ped stripper1;
+        static Ped stripper2;
+        static Ped stripper3;
+        static Ped stripper4;
 
         static Vector3 imagePosition = new Vector3(144.1214f, -560.5704f, 21.99095f);
         static Vector3 positionToStand = new Vector3(144.1214f, -560.5704f, 21.99095f);
@@ -61,6 +66,15 @@ namespace Curiosity.World.Client.net.Classes.Environment.EasterEggs
                     await Client.Delay(0);
                     if (NativeWrappers.GetDistanceBetween(positionToStand, Game.PlayerPed.Position) <= 10f)
                     {
+
+                        if (stripper1 == null)
+                        {
+                            stripper1 = await CreateStripper(Game.PlayerPed.Position + new Vector3(2f, 0f, 0f));
+                            stripper2 = await CreateStripper(Game.PlayerPed.Position + new Vector3(-2f, 0f, 0f));
+                            stripper3 = await CreateStripper(Game.PlayerPed.Position + new Vector3(0f, 2f, 0f));
+                            stripper4 = await CreateStripper(Game.PlayerPed.Position + new Vector3(0f, -2f, 0f));
+                        }
+
                         CommonFunctions.DrawImage3D(DEV_TXD_NAME, imagePosition, 1.6f, 1.5f, 0f, Color.FromArgb(startingAlpha, 255, 255, 255));
                         startingAlpha = startingAlpha >= 230 ? 255 : startingAlpha + 10;
 
@@ -85,6 +99,28 @@ namespace Curiosity.World.Client.net.Classes.Environment.EasterEggs
             }
         }
 
+        private static async Task<Ped> CreateStripper(Vector3 vector3)
+        {
+            Model stripper = PedHash.Stripper01SFY;
+            await stripper.Request(10000);
+
+            Ped ped = await World.CreatePed(stripper, vector3 + new Vector3(0f, 0f, -.5f));
+
+            API.NetworkFadeInEntity(ped.Handle, true);
+
+            stripper.MarkAsNoLongerNeeded();
+
+            ped.CanPlayGestures = true;
+            Function.Call((Hash)8116279360099375049L, new InputArgument[] { ped.Handle, 0, 0 });
+            ped.SetConfigFlag(281, true);
+            ped.AlwaysKeepTask = true;
+            ped.BlockPermanentEvents = true;
+
+            ped.Task.PlayAnimation("mini@strip_club@lap_dance@ld_girl_a_song_a_p1", "ld_girl_a_song_a_p1_f", 8f, -1, AnimationFlags.Loop);
+
+            return ped;
+        }
+
         static async void PlayExtras()
         {
             if (InsideLocation) return;
@@ -95,12 +131,35 @@ namespace Curiosity.World.Client.net.Classes.Environment.EasterEggs
             TriggerMusicEvent(MUSIC_EVENT_START);
         }
 
-        static void Cleanup()
+        static async void Cleanup()
         {
             if (!InsideLocation) return;
             InsideLocation = false;
 
             startingAlpha = 0;
+
+            if (stripper1 != null)
+            {
+
+                int ref1 = stripper1.Handle, ref2 = stripper2.Handle, ref3 = stripper3.Handle, ref4 = stripper4.Handle;
+
+                API.NetworkFadeOutEntity(ref1, false, false);
+                API.NetworkFadeOutEntity(ref2, false, false);
+                API.NetworkFadeOutEntity(ref3, false, false);
+                API.NetworkFadeOutEntity(ref4, false, false);
+
+                await BaseScript.Delay(1000);
+
+                API.DeleteEntity(ref ref1);
+                API.DeleteEntity(ref ref2);
+                API.DeleteEntity(ref ref3);
+                API.DeleteEntity(ref ref4);
+
+                stripper1 = null;
+                stripper2 = null;
+                stripper3 = null;
+                stripper4 = null;
+            }
 
             StopParticleFxLooped(ParticleId, false);
 

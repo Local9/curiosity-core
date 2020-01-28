@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.World.Client.net.Classes.Environment
+namespace Curiosity.GameWorld.Client.net.Classes.Environment
 {
     static class AquaticSpawner
     {

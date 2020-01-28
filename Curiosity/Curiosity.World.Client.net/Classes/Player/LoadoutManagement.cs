@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.World.Client.net.Classes.Player
+namespace Curiosity.GameWorld.Client.net.Classes.Player
 {
     class LoadoutManagement
     {

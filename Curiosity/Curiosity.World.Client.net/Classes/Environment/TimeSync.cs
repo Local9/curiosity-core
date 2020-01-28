@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net;
 
-namespace Curiosity.World.Client.net.Classes.Environment
+namespace Curiosity.GameWorld.Client.net.Classes.Environment
 {
     class TimeSync
     {

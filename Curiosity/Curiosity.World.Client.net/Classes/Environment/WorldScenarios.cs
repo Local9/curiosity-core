@@ -7,7 +7,7 @@ using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.Native;
 
-namespace Curiosity.World.Client.net.Classes.Environment
+namespace Curiosity.GameWorld.Client.net.Classes.Environment
 {
     class WorldScenarios
     {

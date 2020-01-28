@@ -7,7 +7,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
 
-namespace Curiosity.World.Client.net
+namespace Curiosity.GameWorld.Client.net
 {
     public class Client : BaseScript
     {
