@@ -19,7 +19,7 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 
             while (!model.IsLoaded)
             {
-                await model.Request(1000);
+                await model.Request(10);
             }
 
             API.RequestCollisionAtCoord(location.X, location.Y, location.Z);
