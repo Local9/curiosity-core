@@ -180,6 +180,7 @@ namespace Curiosity.Systems.Server.Managers
                 session.TryUpdate(license, SessionState.Loading, oldState);
                 deferrals.done();
                 if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
+                API.CancelEvent();
                 return;
             }
 
