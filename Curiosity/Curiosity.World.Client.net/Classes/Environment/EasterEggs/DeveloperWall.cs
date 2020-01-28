@@ -61,7 +61,7 @@ namespace Curiosity.World.Client.net.Classes.Environment.EasterEggs
                     await Client.Delay(0);
                     if (NativeWrappers.GetDistanceBetween(positionToStand, Game.PlayerPed.Position) <= 10f)
                     {
-                        CommonFunctions.DrawImage3D(DEV_TXD_NAME, imagePosition, 1f, 1.2f, 0f, Color.FromArgb(startingAlpha, 255, 255, 255));
+                        CommonFunctions.DrawImage3D(DEV_TXD_NAME, imagePosition, 1.6f, 1.5f, 0f, Color.FromArgb(startingAlpha, 255, 255, 255));
                         startingAlpha = startingAlpha >= 230 ? 255 : startingAlpha + 10;
 
                         if (PrepareMusicEvent(MUSIC_EVENT_START) && PrepareMusicEvent(MUSIC_EVENT_STOP))
