@@ -19,10 +19,11 @@ namespace Curiosity.Police.Client.net.Environment.Job
             client.RegisterEventHandler("curiosity:Client:Player:BackupNotification", new Action<string, int, float, float, float>(BackupResponseMessage));
         }
 
-        static void BackupResponseMessage(string playerName, int code, float x, float y, float z)
+        static async void BackupResponseMessage(string playerName, int code, float x, float y, float z)
         {
             if (!DutyManager.IsPoliceJobActive) return;
             if (!IsAcceptingBackupCalls) return;
+            if (Game.Player.Name == playerName) return;
 
             string streetName = "Unkown Location";
 
@@ -60,8 +61,18 @@ namespace Curiosity.Police.Client.net.Environment.Job
                     break;
             }
 
+            Blip blip = World.CreateBlip(pos);
+            blip.IsFlashing = true;
+            blip.Sprite = (BlipSprite)458;
+            blip.Color = BlipColor.Red;
+            blip.Name = $"Back Up Request: {playerName}";
+
             Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"Assistance Requested", $"Officer: ~b~{playerName}~n~~s~Code: ~b~{code}", 2);
             Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 2, $"Dispatch", $"Details ~b~{playerName}", $"~s~Loc: ~b~{streetName}~n~{codeDetails}", 2);
+
+            await BaseScript.Delay(10000);
+
+            blip.Delete();
         }
     }
 }
