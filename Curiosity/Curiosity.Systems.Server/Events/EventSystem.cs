@@ -19,7 +19,7 @@ namespace Curiosity.Systems.Server.Events
 
         public EventSystem()
         {
-            Curiosity.EventRegistry["qcMjIRRrO6fU8tL98va76a0"] += new Action<int, string>((handle, payload) =>
+            Curiosity.EventRegistry["XeBQ2h65KTeeW5uQdWdax3EP"] += new Action<int, string>((handle, payload) =>
             {
                 var wrapped = JsonConvert.DeserializeObject<Event>(payload.ToString());
 

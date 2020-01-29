@@ -1,8 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Discord;
 using Curiosity.Systems.Client.Environment.Entities;
+using Curiosity.Systems.Client.Events;
 using Curiosity.Systems.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using System;
@@ -48,7 +50,76 @@ namespace Curiosity.Systems.Client
         private async Task Load()
         {
             DiscordRichPresence.Commit();
+
+            Logger.Info("[Curiosity]: Loading managers, please wait...");
+
+            Assembly.GetExecutingAssembly().GetExportedTypes()
+                .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+                .Where(self => self.GetCustomAttribute(typeof(TickHandler), false) != null).ToList()
+                .ForEach(self =>
+                {
+                    var type = self.DeclaringType;
+
+                    if (type == null) return;
+
+                    if (!TickHandlers.ContainsKey(type))
+                    {
+                        TickHandlers.Add(type, new List<MethodInfo>());
+                    }
+
+                    Logger.Debug($"[TickHandlers] {type.Name}::{self.Name}");
+
+                    TickHandlers[type].Add(self);
+                });
+
+            var loaded = 0;
+
+            // Load event system first
+            LoadManager(typeof(EventSystem));
+
+            foreach (var type in Assembly.GetExecutingAssembly().GetExportedTypes())
+            {
+                if (type.BaseType == null) continue;
+                if (!type.BaseType.IsGenericType) continue;
+
+                var generic = type.BaseType.GetGenericTypeDefinition();
+
+                if (generic != typeof(Manager<>) || type == typeof(Manager<>)) continue;
+
+                LoadManager(type);
+
+                loaded++;
+            }
+
+            foreach (var manager in Managers)
+            {
+                var method = manager.Key.GetMethod("Begin", BindingFlags.Public | BindingFlags.Instance);
+                method?.Invoke(manager.Value, null);
+            }
+
+            Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
+
+            AttachTickHandlers(this);
+
+            Logger.Info("Load method has been completed.");
         }
+
+        [TickHandler]
+        private async Task OnTick()
+        {
+            Screen.Hud.HideComponentThisFrame(HudComponent.WeaponWheel);
+            Screen.Hud.HideComponentThisFrame(HudComponent.Cash);
+            Screen.Hud.HideComponentThisFrame(HudComponent.CashChange);
+            Screen.Hud.HideComponentThisFrame(HudComponent.MpCash);
+            Screen.Hud.HideComponentThisFrame(HudComponent.MpTagCashFromBank);
+            Screen.Hud.HideComponentThisFrame(HudComponent.Saving);
+
+            // Whitelist to make the reticle show. (Snipers, and certain weapons with scopes possibly)
+            Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
+
+            await Task.FromResult(0);
+        }
+
         public object LoadManager(Type type)
         {
             if (GetManager(type) != null) return null;

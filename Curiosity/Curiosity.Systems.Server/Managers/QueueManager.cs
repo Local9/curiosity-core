@@ -63,6 +63,8 @@ namespace Curiosity.Systems.Server.Managers
         {
             SetupConvars();
 
+            Logger.Debug($"[QueueManager] Begin");
+
             Curiosity.EventRegistry["playerConnecting"] += new Action<Player, string, CallbackDelegate, ExpandoObject>(OnConnect);
             Curiosity.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
             Curiosity.EventRegistry["onResourceStop"] += new Action<string>(OnResourceStop);
@@ -112,7 +114,7 @@ namespace Curiosity.Systems.Server.Managers
             ulong discordId = 0;
             ulong.TryParse(discordIdStr, out discordId);
 
-            CuriosityUser curiosityUser = await MySQL.Store.MySqlUsers.Get(license, player, discordId);
+            CuriosityUser curiosityUser = await MySQL.Store.UserDatabase.Get(license, player, discordId);
 
             Logger.Info($"Curiosity Queue Manager : {curiosityUser.UserRole} {curiosityUser.LastName} Connecting");
 

@@ -11,12 +11,12 @@ namespace Curiosity.Systems.Client.Managers
                        : null);
         }
 
-        public CuriosityPlugin Atlas { get; set; }
+        public CuriosityPlugin Curiosity { get; set; }
         public EventSystem EventSystem => EventSystem.GetModule();
 
         protected Manager()
         {
-            Atlas = CuriosityPlugin.Instance;
+            Curiosity = CuriosityPlugin.Instance;
         }
 
         public virtual void Begin()

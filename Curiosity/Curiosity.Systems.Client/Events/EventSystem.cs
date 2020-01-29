@@ -18,7 +18,7 @@ namespace Curiosity.Systems.Client.Events
 
         public EventSystem()
         {
-            Atlas.EventRegistry["qcMjIRRrO6fU8tL98va76a0"] += new Action<string>(payload =>
+            Curiosity.EventRegistry["XeBQ2h65KTeeW5uQdWdax3EP"] += new Action<string>(payload =>
             {
                 var wrapped = JsonConvert.DeserializeObject<Event>(payload.ToString());
 

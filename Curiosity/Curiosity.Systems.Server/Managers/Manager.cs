@@ -1,3 +1,4 @@
+using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Events;
 
 namespace Curiosity.Systems.Server.Managers
@@ -22,6 +23,7 @@ namespace Curiosity.Systems.Server.Managers
 
         public virtual void Begin()
         {
+            Logger.Debug($"[Manager] Begin");
             // Ignored
         }
     }

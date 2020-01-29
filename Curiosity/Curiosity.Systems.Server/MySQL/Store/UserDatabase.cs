@@ -11,12 +11,11 @@ using MySql.Data.MySqlClient;
 
 namespace Curiosity.Systems.Server.MySQL.Store
 {
-    class MySqlUsers
+    class UserDatabase
     {
         public static async Task<CuriosityUser> Get(string license, Player player, ulong discordId)
         {
             CuriosityUser user = new CuriosityUser();
-            user.Character = new CuriosityCharacter();
 
             Logger.Debug($"User: {player.Name}, License: {license}");
 

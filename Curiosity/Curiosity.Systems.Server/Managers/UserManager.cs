@@ -15,9 +15,7 @@ namespace Curiosity.Systems.Server.Managers
     {
         public override void Begin()
         {
-            
+            Logger.Debug($"[UserManager] Begin");
         }
-
-       
     }
 }

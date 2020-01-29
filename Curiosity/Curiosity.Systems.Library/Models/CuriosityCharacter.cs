@@ -11,7 +11,7 @@ namespace Curiosity.Systems.Library.Models
         public long CharacterId { get; set; }
         public long UserId { get; set; }
         public int Health { get; set; }
-        public int Shield { get; set; }
+        public int Armor { get; set; }
         public long Cash { get; set; }
         public bool MarkedAsRegistered { get; set; }
         public Position LastPosition { get; set; }

@@ -23,6 +23,8 @@ namespace Curiosity.Systems.Server
         public static CuriosityPlugin Instance { get; private set; }
         public static PlayerList PlayersList { get; private set; }
         public static int MaximumPlayers { get; } = 32;
+        public static int ServerId { get; private set; }
+        public static int SpawnLocationId { get; private set; }
         public static int SaveInterval { get; } = 1000 * 60 * 3;
         public static bool IsDebugging { get; private set; }
         public static bool IsMaintenanceActive { get; private set; }
@@ -47,7 +49,6 @@ namespace Curiosity.Systems.Server
             SetupConvars();
 
             ServerReady = false;
-
 
             async Task DatabaseTest()
             {
@@ -93,7 +94,7 @@ namespace Curiosity.Systems.Server
             AttachTickHandler(DatabaseTest);
         }
 
-        private void SetupConvars()
+        private async void SetupConvars()
         {
             IsDebugging = API.GetConvar("diagnostics_debug", "false") == "true";
 
@@ -124,12 +125,27 @@ namespace Curiosity.Systems.Server
                 Logger.Warn($"----------------------------------------");
             }
 
+            ServerId = API.GetConvarInt("server_id", 0);
+            if (ServerId == 0)
+            {
+                while(true)
+                {
+                    Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Logger.Error("! Convar 'server_id' is not set or is not a number! !");
+                    Logger.Error("!!! Please set this value and restart the server! !!!");
+                    Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    await BaseScript.Delay(1000);
+                }
+            }
+
             DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
             API.SetConvarServerInfo("Discord", DiscordUrl);
             WebsiteUrl = API.GetConvar("website_url", "website_url not set");
             API.SetConvarServerInfo("Website", WebsiteUrl);
             API.SetGameType(API.GetConvar("game_type", "game_type not set"));
             API.SetMapName("Life V - Curiosity Framework");
+
+            SpawnLocationId = API.GetConvarInt("starting_location_id", 1);
 
             string tags = API.GetConvar("tags", string.Empty);
             string[] tagArr = tags.Split(',');
