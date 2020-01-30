@@ -1,13 +1,7 @@
-﻿using CitizenFX.Core;
+﻿using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
-using Curiosity.Systems.Server.MySQL;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Curiosity.Systems.Server.Events;
 
 namespace Curiosity.Systems.Server.Managers
 {
@@ -15,7 +9,27 @@ namespace Curiosity.Systems.Server.Managers
     {
         public override void Begin()
         {
-            Logger.Debug($"[UserManager] Begin");
+            EventSystem.GetModule().Attach("user:login", new AsyncEventCallback(async metadata =>
+            {
+                var player = CuriosityPlugin.PlayersList[metadata.Sender];
+                var discordIdStr = player.Identifiers["discord"];
+                var license = player.Identifiers["license"];
+                ulong discordId = 0;
+
+                if (!ulong.TryParse(discordIdStr, out discordId))
+                {
+                    player.Drop("Error creating login session, Discord ID not found.");
+                    return default;
+                }
+
+                CuriosityUser curiosityUser = await MySQL.Store.UserDatabase.Get(license, player, discordId);
+
+                Logger.Info($"[User] [{curiosityUser.UserId}] [{curiosityUser.LastName}] Has connected to the server");
+
+                Curiosity.ActiveUsers.Add(curiosityUser);
+
+                return curiosityUser;
+            }));
         }
     }
 }

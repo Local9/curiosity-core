@@ -14,12 +14,14 @@ namespace Curiosity.Systems.Server.Events
 {
     public class EventSystem : Manager<EventSystem>
     {
+        private const string EVENT_KEY = "XeBQ2h65KTeeW5uQdWdax3EP";
+
         public List<EventAttachment> Attachments { get; } = new List<EventAttachment>();
         public List<EventRequest> PendingRequests { get; }= new List<EventRequest>();
 
         public EventSystem()
         {
-            Curiosity.EventRegistry["XeBQ2h65KTeeW5uQdWdax3EP"] += new Action<int, string>((handle, payload) =>
+            Curiosity.EventRegistry[EVENT_KEY] += new Action<int, string>((handle, payload) =>
             {
                 var wrapped = JsonConvert.DeserializeObject<Event>(payload.ToString());
 
@@ -112,7 +114,7 @@ namespace Curiosity.Systems.Server.Events
             Logger.Debug(
                 $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the client `{handle}`.");
 
-            BaseScript.TriggerClientEvent(CuriosityPlugin.PlayersList[handle], "qcMjIRRrO6fU8tL98va76a0",
+            BaseScript.TriggerClientEvent(CuriosityPlugin.PlayersList[handle], EVENT_KEY,
                 JsonConvert.SerializeObject(wrapped));
         }
 

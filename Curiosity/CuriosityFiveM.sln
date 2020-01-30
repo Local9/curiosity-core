@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Dependancies", "_Dependancies", "{D9F07760-D804-47DE-98A7-BC5E47182A47}"
 	ProjectSection(SolutionItems) = preProject
 		_Dependancies\Newtonsoft.Json.dll = _Dependancies\Newtonsoft.Json.dll
+		_Dependancies\Newtonsoft.Json.net.dll = _Dependancies\Newtonsoft.Json.net.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{EF02F259-FF7B-41FB-8B0C-6A72DD1441E6}"
