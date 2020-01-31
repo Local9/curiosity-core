@@ -26,12 +26,12 @@ namespace Curiosity.Systems.Server.MySQL.Store
                 using (var cmd = db.Connection.CreateCommand())
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "";
-                    cmd.Parameters.AddWithValue("@license", license);
-                    cmd.Parameters.AddWithValue("@serverId", serverId);
+                    cmd.CommandText = "spGetUserCharacter";
+                    cmd.Parameters.AddWithValue("@licenseIn", license);
+                    cmd.Parameters.AddWithValue("@serverIdIn", serverId);
                     cmd.Parameters.AddWithValue("@starterCash", starterCash);
-                    cmd.Parameters.AddWithValue("@starterBank", starterBank);
-                    cmd.Parameters.AddWithValue("@locationId", serverSpawnLocationId);
+                    cmd.Parameters.AddWithValue("@starterBankAccount", starterBank);
+                    cmd.Parameters.AddWithValue("@locationIdIn", serverSpawnLocationId);
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
