@@ -1,8 +1,10 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Events;
+using System;
 
 namespace Curiosity.Systems.Server.Managers
 {
@@ -31,16 +33,25 @@ namespace Curiosity.Systems.Server.Managers
                     return null;
                 }
 
-
-
                 CuriosityUser curiosityUser = await MySQL.Store.UserDatabase.Get(license, player, discordId);
 
                 Logger.Info($"[User] [{curiosityUser.UserId}] [{curiosityUser.LastName}] Has connected to the server");
 
-                Curiosity.ActiveUsers.Add(curiosityUser);
+                CuriosityPlugin.ActiveUsers.Add(player.Handle, curiosityUser);
 
                 return curiosityUser;
             }));
+
+            Curiosity.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
+        }
+
+        static void OnPlayerDropped([FromSource]Player player, string reason)
+        {
+            if (CuriosityPlugin.ActiveUsers.ContainsKey(player.Handle))
+            {
+                Logger.Info($"Player: {player.Name} disconnected ({reason})");
+                CuriosityPlugin.ActiveUsers.Remove(player.Handle);
+            }
         }
     }
 }

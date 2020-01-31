@@ -36,7 +36,7 @@ namespace Curiosity.Systems.Server
         public static string DiscordBotKey { get; private set; }
         public static string DiscordUrl { get; private set; }
         public static string WebsiteUrl { get; private set; }
-        public List<CuriosityUser> ActiveUsers { get; } = new List<CuriosityUser>();
+        public static Dictionary<string, CuriosityUser> ActiveUsers { get; } = new Dictionary<string, CuriosityUser>();
         public long LastSave { get; set; } = Date.Timestamp;
 
         public EventHandlerDictionary EventRegistry => EventHandlers;

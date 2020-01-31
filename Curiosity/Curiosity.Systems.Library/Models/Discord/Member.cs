@@ -16,8 +16,8 @@ namespace Curiosity.Systems.Library.Models.Discord
         [JsonProperty("roles", NullValueHandling = NullValueHandling.Ignore)]
         public string[] Roles { get; set; }
 
-        [JsonProperty("premium_since")]
-        public object PremiumSince { get; set; }
+        [JsonProperty("premium_since", NullValueHandling = NullValueHandling.Ignore)]
+        public DateTimeOffset? PremiumSince { get; set; }
 
         [JsonProperty("deaf", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Deaf { get; set; }
