@@ -135,7 +135,7 @@ namespace Curiosity.Systems.Client.Managers
             if (curiosityCharacter == null)
             {
                 Logger.Error("[Character] No character information returned");
-                Screen.LoadingPrompt.Show("ERROR Press F8 and screen shot the console ERROR");
+                Screen.LoadingPrompt.Show("ERROR Press F8 and screenshot the console ERROR");
                 return;
             }
 
