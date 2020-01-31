@@ -14,6 +14,7 @@ namespace Curiosity.Systems.Library.Models
         public int Armor { get; set; }
         public long Cash { get; set; }
         public bool MarkedAsRegistered { get; set; }
+        public long LocationId { get; set; }
         public Position LastPosition { get; set; }
     }
 }

@@ -15,8 +15,6 @@ namespace Curiosity.Systems.Server.MySQL.Store
     {
         public static async Task<CuriosityUser> Get(string license, Player player, ulong discordId)
         {
-            CuriosityUser user = new CuriosityUser();
-
             Logger.Debug($"User: {player.Name}, License: {license}");
 
             using (var db = new MySqlDatabase())
@@ -69,8 +67,7 @@ namespace Curiosity.Systems.Server.MySQL.Store
                     }
                 }
             }
-
-            return user;
+            return null;
         }
     }
 }

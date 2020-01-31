@@ -1,4 +1,6 @@
-﻿using Curiosity.Systems.Library.Events;
+﻿using CitizenFX.Core;
+using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Events;
 
@@ -8,10 +10,14 @@ namespace Curiosity.Systems.Server.Managers
     {
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("character:load", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("character:load", new AsyncEventCallback(async metadata =>
             {
-                Logger.Debug($"[CharacterManager] character:load called");
-                return null;
+                Player player = CuriosityPlugin.PlayersList[metadata.Sender];
+                CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[player.Handle];
+
+                curiosityUser.Character = await MySQL.Store.CharacterDatabase.Get(curiosityUser.License, player);
+
+                return curiosityUser.Character;
             }));
         }
     }
