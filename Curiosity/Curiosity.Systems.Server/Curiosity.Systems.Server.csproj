@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CuriosityPlugin.cs" />
+    <Compile Include="Diagnostics\ErrorText.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="MySQL\Store\CharacterDatabase.cs" />
     <Compile Include="MySQL\Store\UserDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\DiscordClient.cs" />
     <Compile Include="Web\HttpClient.cs" />
   </ItemGroup>
   <ItemGroup>

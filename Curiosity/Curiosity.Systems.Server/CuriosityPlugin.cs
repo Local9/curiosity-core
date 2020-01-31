@@ -20,6 +20,8 @@ namespace Curiosity.Systems.Server
     public class CuriosityPlugin : BaseScript
     {
         const string CURIOSITY_VERSION = "v2.0.0.0001";
+        private const string CONVAR_MISSING = "MISSING";
+
         public static CuriosityPlugin Instance { get; private set; }
         public static PlayerList PlayersList { get; private set; }
         public static int MaximumPlayers { get; } = 32;
@@ -31,6 +33,7 @@ namespace Curiosity.Systems.Server
         public static bool ServerReady { get; private set; }
         public static string DatabaseConnectionString { get; private set; }
         public static ulong DiscordGuildId { get; private set; }
+        public static string DiscordBotKey { get; private set; }
         public static string DiscordUrl { get; private set; }
         public static string WebsiteUrl { get; private set; }
         public List<CuriosityUser> ActiveUsers { get; } = new List<CuriosityUser>();
@@ -96,70 +99,101 @@ namespace Curiosity.Systems.Server
 
         private async void SetupConvars()
         {
-            IsDebugging = API.GetConvar("diagnostics_debug", "false") == "true";
-
-            if (IsDebugging)
+            try
             {
-                Logger.Warn($"----------------------------------------");
-                Logger.Warn($"------------ DEBUG ACTIVE --------------");
-                Logger.Warn($"----------------------------------------");
-            }
-            ulong defDiscordGuildId = 0;
-            if (ulong.TryParse(API.GetConvar("discord_guild", "0"), out defDiscordGuildId))
-            {
-                DiscordGuildId = defDiscordGuildId;
-                Logger.Success($"Discord Guild ID: {DiscordGuildId}");
-            }
+                IsDebugging = API.GetConvar("diagnostics_debug", "false") == "true";
 
-            DatabaseConnectionString = API.GetConvar("mysql_connection_string", "Host=localhost;Port=3306;Username=root;Password=;Database=curiosity;");
-
-            if (IsDebugging)
-                Logger.Debug($"Database String: {DatabaseConnectionString}");
-
-            IsMaintenanceActive = API.GetConvar("server_live", "false") == "false";
-
-            if (IsMaintenanceActive)
-            {
-                Logger.Warn($"----------------------------------------");
-                Logger.Warn($"--------- MAINTENANCE ACTIVE -----------");
-                Logger.Warn($"----------------------------------------");
-            }
-
-            ServerId = API.GetConvarInt("server_id", 0);
-            if (ServerId == 0)
-            {
-                while(true)
+                if (IsDebugging)
                 {
-                    Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    Logger.Error("! Convar 'server_id' is not set or is not a number! !");
-                    Logger.Error("!!! Please set this value and restart the server! !!!");
-                    Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    await BaseScript.Delay(1000);
+                    Logger.Warn($"----------------------------------------");
+                    Logger.Warn($"------------ DEBUG ACTIVE --------------");
+                    Logger.Warn($"----------------------------------------");
                 }
+
+                IsMaintenanceActive = API.GetConvar("server_live", "false") == "false";
+
+                if (IsMaintenanceActive)
+                {
+                    Logger.Warn($"----------------------------------------");
+                    Logger.Warn($"--------- MAINTENANCE ACTIVE -----------");
+                    Logger.Warn($"----------------------------------------");
+                }
+
+                ulong defDiscordGuildId = 0;
+                if (ulong.TryParse(API.GetConvar("discord_guild", "0"), out defDiscordGuildId))
+                {
+                    DiscordGuildId = defDiscordGuildId;
+                    Logger.Success($"Discord Guild ID: {DiscordGuildId}");
+                }
+                else
+                {
+                    while (true)
+                    {
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        Logger.Error("! Convar 'discord_guild' is not set or is not a number! !");
+                        Logger.Error("!!!!! Please set this value and restart the server! !!!!!");
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        await BaseScript.Delay(3000);
+                    }
+                }
+
+                DiscordBotKey = API.GetConvar("discord_bot", CONVAR_MISSING);
+
+                if (DiscordBotKey == CONVAR_MISSING)
+                {
+                    Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Logger.Error("!!!!!!!!!!! Convar 'discord_bot' is not set! !!!!!!!!!!!!");
+                    Logger.Error("!!!!! Please set this value and restart the server! !!!!!");
+                    Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                }
+
+                DatabaseConnectionString = API.GetConvar("mysql_connection_string", "Host=localhost;Port=3306;Username=root;Password=;Database=curiosity;");
+
+                if (IsDebugging)
+                    Logger.Debug($"Database String: {DatabaseConnectionString}");
+
+                ServerId = API.GetConvarInt("server_id", 0);
+                if (ServerId == 0)
+                {
+                    while (true)
+                    {
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        Logger.Error("! Convar 'server_id' is not set or is not a number! !");
+                        Logger.Error("!!! Please set this value and restart the server! !!!");
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        await BaseScript.Delay(3000);
+                    }
+                }
+
+                DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
+                API.SetConvarServerInfo("Discord", DiscordUrl);
+
+                WebsiteUrl = API.GetConvar("website_url", "website_url not set");
+                API.SetConvarServerInfo("Website", WebsiteUrl);
+                API.SetGameType(API.GetConvar("game_type", "game_type not set"));
+                API.SetMapName("Life V - Curiosity Framework");
+
+                SpawnLocationId = API.GetConvarInt("starting_location_id", 1);
+
+                string tags = API.GetConvar("tags", string.Empty);
+                string[] tagArr = tags.Split(',');
+                string curiosity = "Curiosity";
+
+                if (tagArr.Length > 0)
+                {
+                    API.SetConvar("tags", $"{tags}, {curiosity}");
+                }
+                else
+                {
+                    API.SetConvar("tags", $"{curiosity}");
+                }
+                API.SetConvarServerInfo("Curiosity", CURIOSITY_VERSION);
             }
-
-            DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
-            API.SetConvarServerInfo("Discord", DiscordUrl);
-            WebsiteUrl = API.GetConvar("website_url", "website_url not set");
-            API.SetConvarServerInfo("Website", WebsiteUrl);
-            API.SetGameType(API.GetConvar("game_type", "game_type not set"));
-            API.SetMapName("Life V - Curiosity Framework");
-
-            SpawnLocationId = API.GetConvarInt("starting_location_id", 1);
-
-            string tags = API.GetConvar("tags", string.Empty);
-            string[] tagArr = tags.Split(',');
-            string curiosity = "Curiosity";
-
-            if (tagArr.Length > 0)
+            catch (Exception ex)
             {
-                API.SetConvar("tags", $"{tags}, {curiosity}");
+                ErrorText errorText = new ErrorText();
+                errorText.PrintErrorText();
             }
-            else
-            {
-                API.SetConvar("tags", $"{curiosity}");
-            }
-            API.SetConvarServerInfo("Curiosity", CURIOSITY_VERSION);
         }
 
         private void Load()

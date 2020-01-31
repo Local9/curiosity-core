@@ -2,6 +2,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
+using Curiosity.Systems.Server.Web;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
@@ -119,6 +120,11 @@ namespace Curiosity.Systems.Server.Managers
             Logger.Info($"Curiosity Queue Manager : {curiosityUser.UserRole} {curiosityUser.LastName} Connecting");
 
             await BaseScript.Delay(10);
+
+            DiscordClient dc = new DiscordClient();
+            await dc.CheckDiscordIdIsInGuild(player, discordId);
+
+            Logger.Info($"Curiosity Queue Manager : {curiosityUser.UserRole} {curiosityUser.LastName} is a member of the Discord");
 
             if (curiosityUser.Banned)
             {

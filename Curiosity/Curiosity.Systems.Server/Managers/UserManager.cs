@@ -1,4 +1,5 @@
-﻿using Curiosity.Systems.Library.Events;
+﻿using CitizenFX.Core.Native;
+using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Events;
@@ -19,8 +20,18 @@ namespace Curiosity.Systems.Server.Managers
                 if (!ulong.TryParse(discordIdStr, out discordId))
                 {
                     player.Drop("Error creating login session, Discord ID not found.");
-                    return default;
+                    API.CancelEvent();
+                    return null;
                 }
+
+                if (discordId == 0)
+                {
+                    player.Drop("Error creating login session, Discord ID not found.");
+                    API.CancelEvent();
+                    return null;
+                }
+
+
 
                 CuriosityUser curiosityUser = await MySQL.Store.UserDatabase.Get(license, player, discordId);
 
