@@ -130,8 +130,6 @@ namespace Curiosity.Systems.Client.Managers
 
             curiosityCharacter = await EventSystem.Request<CuriosityCharacter>("character:load", null);
 
-            Logger.Debug("[Character] Loaded character data...");
-
             if (curiosityCharacter == null)
             {
                 Logger.Error("[Character] No character information returned");
@@ -139,9 +137,11 @@ namespace Curiosity.Systems.Client.Managers
                 return;
             }
 
+            Logger.Debug("[Character] Loaded character data...");
+
             Curiosity.Local.Character = curiosityCharacter;
 
-            Screen.LoadingPrompt.Show("Creating Character...");
+            Screen.LoadingPrompt.Show("Loading Character...");
 
             await Load(Curiosity.Local);
 
@@ -151,8 +151,12 @@ namespace Curiosity.Systems.Client.Managers
 
         public async Task Load(CuriosityPlayer player)
         {
+
+            API.ShutdownLoadingScreen();
+            API.ShutdownLoadingScreenNui();
+
             Screen.Fading.FadeOut(0);
-            Curiosity.DiscordRichPresence.Status = $"{player.Name} is loading...";
+            Curiosity.DiscordRichPresence.Status = $"Loading...";
             Curiosity.DiscordRichPresence.Commit();
 
             var transition = new LoadTransition();
@@ -180,15 +184,24 @@ namespace Curiosity.Systems.Client.Managers
             Game.PlayerPed.Health = health;
             Game.PlayerPed.Armor = character.Armor;
 
+            Logger.Info("[Character] Base Settings Loaded...");
+
             // INVENTORIES
 
             // Load
+            Logger.Info("[Character] Inventories Loaded...");
 
             await player.Character.Load();
 
+            Logger.Info("[Character] Joining Session...");
             Session.Join(player.Character.MarkedAsRegistered ? 1 : 100 + Game.Player.ServerId);
 
-            await SafeTeleport.Teleport(player.Entity.Id, position);
+            Logger.Info("[Character] Session Joined...");
+
+            // await SafeTeleport.Teleport(player.Entity.Id, position); // Hang?
+            Game.PlayerPed.Position = position.AsVector();
+            
+            Logger.Info("[Character] Teleported...");
 
             if (player.Character.MarkedAsRegistered)
             {
@@ -201,11 +214,14 @@ namespace Curiosity.Systems.Client.Managers
                 await player.Character.PostLoad();
             }
 
+            Logger.Info("[Character] Complete Loading...");
+
             if (Screen.Fading.IsFadedOut && !Screen.Fading.IsFadingOut)
             {
                 Screen.Fading.FadeIn(5000);
             }
 
+            Screen.LoadingPrompt.Hide();
             player.EnableHud();
         }
     }

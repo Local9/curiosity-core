@@ -1,5 +1,6 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.System.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Environment;
@@ -56,7 +57,7 @@ namespace Curiosity.Systems.Client.Extensions
         {
             var player = Cache.Player;
 
-            API.SetPedDefaultComponentVariation(Game.PlayerPed.Handle);
+            API.SetPedDefaultComponentVariation(player.Entity.Id);
 
             var voice = VoiceChat.GetModule();
             voice.Range = VoiceChatRange.Normal;
@@ -78,7 +79,13 @@ namespace Curiosity.Systems.Client.Extensions
 
         public static async Task PostLoad(this CuriosityCharacter character)
         {
+
+            Screen.LoadingPrompt.Show("Loading Create Character...");
+
             CuriosityPlugin.Instance.AttachTickHandler(Intro);
+
+            CuriosityPlugin.Instance.DiscordRichPresence.Status = "Creating Character";
+            CuriosityPlugin.Instance.DiscordRichPresence.Commit();
 
             Session.CreatingCharacter = true;
 

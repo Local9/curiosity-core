@@ -59,8 +59,6 @@ namespace Curiosity.Systems.Client.Environment.Entities
             }
 
             API.SetPlayerModel(LocalHandle, (uint)model.Hash);
-
-            Entity.Id = Game.PlayerPed.Handle;
         }
 
         public void ShowNotification(string message, bool blinking = false)

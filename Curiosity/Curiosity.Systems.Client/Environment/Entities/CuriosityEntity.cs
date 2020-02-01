@@ -10,7 +10,7 @@ namespace Curiosity.Systems.Client.Environment.Entities
     public class CuriosityEntity
     {
         private Ped CitizenPed => API.DoesEntityExist(Id) && API.IsEntityAPed(Id) ? (Ped) Entity.FromHandle(Id) : null;
-        public int Id { get; set; }
+        public int Id { get { return Game.PlayerPed.Handle; } }
         public EntityModuleRegistry Modules { get; set; } = new EntityModuleRegistry();
         public int Model => API.GetEntityModel(Id);
         public AnimationQueue AnimationQueue { get; set; }
@@ -92,8 +92,7 @@ namespace Curiosity.Systems.Client.Environment.Entities
 
         public CuriosityEntity(int id)
         {
-            Id = id;
-            AnimationQueue = new AnimationQueue(id);
+            AnimationQueue = new AnimationQueue(Game.PlayerPed.Handle);
         }
 
         public void InstallModule(string key, EntityModule module)
