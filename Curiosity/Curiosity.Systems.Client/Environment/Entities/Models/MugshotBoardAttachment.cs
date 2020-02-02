@@ -46,9 +46,9 @@ namespace Curiosity.System.Client.Environment.Entities.Models
             while (API.HasScaleformMovieLoaded(movie) && IsAttached)
             {
                 API.PushScaleformMovieFunction(movie, "SET_BOARD");
+                // API.PushScaleformMovieFunctionParameterString($"$0");
+                API.PushScaleformMovieFunctionParameterString($"${player.Character.Cash}");
                 API.PushScaleformMovieFunctionParameterString(player.User.LastName);
-                // API.PushScaleformMovieFunctionParameterString($"${player.User.Character.BankAccount.Balance + player.Character.Cash}");
-                API.PushScaleformMovieFunctionParameterString($"$0");
                 API.PopScaleformMovieFunctionVoid();
                 API.SetTextRenderId(handle);
 
