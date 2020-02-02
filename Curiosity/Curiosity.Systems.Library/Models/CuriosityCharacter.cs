@@ -16,5 +16,6 @@ namespace Curiosity.Systems.Library.Models
         public bool MarkedAsRegistered { get; set; }
         public long LocationId { get; set; }
         public Position LastPosition { get; set; }
+        public Style Style { get; set; }
     }
 }

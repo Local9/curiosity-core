@@ -74,6 +74,7 @@
     <Compile Include="Extensions\CharacterExtensions.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Interface\Menus\PlayerApperance.cs" />
     <Compile Include="Interface\Modules\HeadupDisplay.cs" />
     <Compile Include="Interface\Modules\VehicleHeadupDisplay.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
@@ -95,8 +96,6 @@
       <Name>Curiosity.Systems.Library</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interface\NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
