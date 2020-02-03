@@ -84,6 +84,9 @@ namespace Curiosity.Systems.Client.Extensions
 
             CuriosityPlugin.Instance.AttachTickHandler(Intro);
 
+            Interface.Menus.PlayerApperance playerApperance = new Interface.Menus.PlayerApperance();
+            playerApperance.CreateMenu();
+
             CuriosityPlugin.Instance.DiscordRichPresence.Status = "Creating Character";
             CuriosityPlugin.Instance.DiscordRichPresence.Commit();
 
@@ -127,6 +130,7 @@ namespace Curiosity.Systems.Client.Extensions
             ).PlayQueue();
 
             var registered = false;
+            var menuDisplayed = false;
             var view = 0;
 
             //StyleManager.GetModule().OpenStyleChange(character.Style, "General", 0, async type =>
@@ -173,6 +177,12 @@ namespace Curiosity.Systems.Client.Extensions
 
             while (!registered)
             {
+                if (!menuDisplayed)
+                {
+                    menuDisplayed = true;
+                    playerApperance.OpenMenu();
+                }
+
                 if (!API.IsEntityPlayingAnim(player.Entity.Id, "mp_character_creation@customise@male_a", "loop", 3))
                 {
                     player.AnimationQueue.AddToQueue(new AnimationBuilder()
