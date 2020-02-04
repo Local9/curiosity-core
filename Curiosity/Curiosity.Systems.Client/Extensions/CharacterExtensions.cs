@@ -84,9 +84,6 @@ namespace Curiosity.Systems.Client.Extensions
 
             CuriosityPlugin.Instance.AttachTickHandler(Intro);
 
-            Interface.Menus.PlayerApperance playerApperance = new Interface.Menus.PlayerApperance();
-            playerApperance.CreateMenu();
-
             CuriosityPlugin.Instance.DiscordRichPresence.Status = "Creating Character";
             CuriosityPlugin.Instance.DiscordRichPresence.Commit();
 
@@ -177,25 +174,32 @@ namespace Curiosity.Systems.Client.Extensions
 
             while (!registered)
             {
-                if (!menuDisplayed)
+                try
                 {
-                    menuDisplayed = true;
-                    playerApperance.OpenMenu();
-                }
+                    if (!menuDisplayed)
+                    {
+                        menuDisplayed = true;
+                        new Interface.Menus.PlayerApperance().OpenMenu();
+                    }
 
-                if (!API.IsEntityPlayingAnim(player.Entity.Id, "mp_character_creation@customise@male_a", "loop", 3))
-                {
-                    player.AnimationQueue.AddToQueue(new AnimationBuilder()
-                        .Select("mp_character_creation@customise@male_a", "loop")
-                        .WithFlags(AnimationFlags.Loop)
-                        .SkipTask()
-                    ).PlayQueue();
+                    if (!API.IsEntityPlayingAnim(player.Entity.Id, "mp_character_creation@customise@male_a", "loop", 3))
+                    {
+                        player.AnimationQueue.AddToQueue(new AnimationBuilder()
+                            .Select("mp_character_creation@customise@male_a", "loop")
+                            .WithFlags(AnimationFlags.Loop)
+                            .SkipTask()
+                        ).PlayQueue();
 
-                    board.IsAttached = false;
+                        board.IsAttached = false;
 
 #pragma warning disable 4014
-                    board.Attach(player);
+                        board.Attach(player);
 #pragma warning restore 4014
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Character Init: {ex.Message}");
                 }
 
                 await BaseScript.Delay(100);

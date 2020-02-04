@@ -46,10 +46,12 @@ namespace Curiosity.Systems.Server.MySQL.Store
                             CuriosityCharacter curiosityCharacter = new CuriosityCharacter()
                             {
                                 CharacterId = reader.GetInt64(3),
-                                LocationId = reader.GetInt64(4)
+                                LocationId = reader.GetInt64(4),
+                                MarkedAsRegistered = false
                             };
 
                             curiosityCharacter.LastPosition = new Position(reader.GetFloat(11), reader.GetFloat(12), reader.GetFloat(13));
+                            curiosityCharacter.Style = new Style();
 
                             return curiosityCharacter;
                         }

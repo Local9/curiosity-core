@@ -13,14 +13,14 @@ namespace Curiosity.Systems.Client.Environment.Entities.Models
 {
     public class AnimationQueue
     {
-        private int Entity { get; }
+        private int Entity { get { return Game.PlayerPed.Handle; } }
         private List<Animation> Queue { get; } = new List<Animation>();
         private bool PlayingQueue { get; set; }
         private Animation LastPlayed { get; set; }
 
         public AnimationQueue(int entity)
         {
-            Entity = entity;
+            // Entity = entity;
         }
 
         public async Task<AnimationQueue> PlayDirectInQueue(AnimationBuilder builder)

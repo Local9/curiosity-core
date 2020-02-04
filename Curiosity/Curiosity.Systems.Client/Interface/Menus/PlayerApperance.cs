@@ -1,6 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.System.Client.Environment.Entities.Models;
+using Curiosity.Systems.Client.Diagnostics;
+using Curiosity.Systems.Client.Extensions;
+using Curiosity.Systems.Library.Models;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
@@ -12,7 +16,11 @@ namespace Curiosity.Systems.Client.Interface.Menus
 {
     class PlayerApperance
     {
-        private Menu menu;
+        private static Menu menu;
+
+        public static RotatablePosition[] CameraViews = CharacterExtensions.CameraViews;
+
+        private bool IsFacecamActive = false;
 
         private int FatherApperance = 0;
         private int MotherApperance = 0;
@@ -45,12 +53,13 @@ namespace Curiosity.Systems.Client.Interface.Menus
         private MenuListItem mLstHairColor;
         private MenuListItem mLstHairSecondaryColor;
 
-        public void CreateMenu()
+        private void CreateMenu()
         {
             menu = new Menu(Game.Player.Name, "Customize Appereance");
             // Menu Changes
             menu.OnListIndexChange += Menu_OnListIndexChange;
             menu.OnSliderPositionChange += Menu_OnSliderPositionChange;
+            menu.OnIndexChange += Menu_OnIndexChange;
             // Menu List Content
             Faces = GenerateNumberList("Face", 45);
             Skins = GenerateNumberList("Skin", 45);
@@ -80,6 +89,55 @@ namespace Curiosity.Systems.Client.Interface.Menus
             menu.AddMenuItem(mLstHairSecondaryColor);
 
             MenuController.AddMenu(menu);
+            MenuController.DisableBackButton = true;
+            menu.OpenMenu();
+
+            CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
+
+            Logger.Info("[PlayerApperance] Created");
+        }
+
+        private async Task OnPlayerControls()
+        {
+            if (Game.IsControlPressed(0, Control.Pickup))
+            {
+                Game.PlayerPed.Heading += 10f;
+            }
+
+            if (Game.IsControlPressed(0, Control.Cover))
+            {
+                Game.PlayerPed.Heading -= 10f;
+            }
+        }
+
+        private async void Menu_OnIndexChange(Menu menu, MenuItem oldItem, MenuItem newItem, int oldIndex, int newIndex)
+        {
+            if (newItem == mLstFatherApperance || newItem == mLstMotherApperance || newItem == mLstEyeColor)
+            {
+                if (IsFacecamActive) return;
+
+                IsFacecamActive = true;
+
+                Cache.Player.CameraQueue.Reset();
+                await Cache.Player.CameraQueue.View(new CameraBuilder()
+                            .SkipTask()
+                            .WithMotionBlur(0.5f)
+                            .WithInterpolation(CameraViews[1], CameraViews[2], 300)
+                        );
+            }
+            else
+            {
+                if (!IsFacecamActive) return;
+
+                IsFacecamActive = false;
+
+                Cache.Player.CameraQueue.Reset();
+                await Cache.Player.CameraQueue.View(new CameraBuilder()
+                    .SkipTask()
+                    .WithMotionBlur(0.5f)
+                    .WithInterpolation(CameraViews[2], CameraViews[1], 300)
+                );
+            }
         }
 
         private void Menu_OnSliderPositionChange(Menu menu, MenuSliderItem sliderItem, int oldPosition, int newPosition, int itemIndex)
@@ -111,10 +169,18 @@ namespace Curiosity.Systems.Client.Interface.Menus
                 while (Screen.Fading.IsFadingOut) await BaseScript.Delay(10);
 
                 await Game.Player.ChangeModel(playerModel);
+
+                if (Cache.Character.Style == null)
+                {
+                    Cache.Character.Style = new Library.Models.Style();
+                }
+
                 Cache.Character.Style.Gender = newSelectionIndex;
                 UpdatePedBlendData();
 
-                Screen.Fading.FadeIn(500);
+                await BaseScript.Delay(500);
+
+                Screen.Fading.FadeIn(1000);
                 while (Screen.Fading.IsFadingIn) await BaseScript.Delay(10);
                 return;
             }
@@ -165,7 +231,8 @@ namespace Curiosity.Systems.Client.Interface.Menus
 
         public void OpenMenu()
         {
-            menu.OpenMenu();
+            CreateMenu();
+            Logger.Info("[PlayerApperance] Open");
         }
 
         public void DestroyMenu()
@@ -173,6 +240,8 @@ namespace Curiosity.Systems.Client.Interface.Menus
             // Remove the menu as its no longer required
             if (MenuController.Menus.Contains(menu))
                 MenuController.Menus.Remove(menu);
+
+            CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
 
             menu = null;
         }

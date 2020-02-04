@@ -6,6 +6,7 @@ using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Systems.Client.Diagnostics;
 
 namespace Curiosity.System.Client.Environment.Entities.Models
 {
