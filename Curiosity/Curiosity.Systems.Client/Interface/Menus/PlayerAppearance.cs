@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Interface.Menus
 {
-    class PlayerApperance
+    class PlayerAppearance
     {
         private static Menu menu;
 
@@ -34,8 +34,10 @@ namespace Curiosity.Systems.Client.Interface.Menus
         private int HairSecondaryColor = 0;
 
         private List<string> Genders = new List<string> { $"{Gender.Male}", $"{Gender.Female}" };
-        private List<string> Faces;
-        private List<string> Skins;
+        private List<string> MaleFaces;
+        private List<string> FemaleFaces;
+        private List<string> MaleSkins;
+        private List<string> FemaleSkins;
         private List<string> EyeColors;
         private List<string> HairColors;
 
@@ -53,26 +55,45 @@ namespace Curiosity.Systems.Client.Interface.Menus
         private MenuListItem mLstHairColor;
         private MenuListItem mLstHairSecondaryColor;
 
+        // Male Faces 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 42, 43, 44
+        // Female Faces 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 45
+
+        private void SetupLists()
+        {
+            MaleFaces = new List<string>() { };
+            FemaleFaces = new List<string>() { };
+        }
+
         private void CreateMenu()
         {
-            menu = new Menu(Game.Player.Name, "Customize Appereance");
+            menu = new Menu(Game.Player.Name, "Customize Heritage");
             // Menu Changes
             menu.OnListIndexChange += Menu_OnListIndexChange;
             menu.OnSliderPositionChange += Menu_OnSliderPositionChange;
             menu.OnIndexChange += Menu_OnIndexChange;
             // Menu List Content
-            Faces = GenerateNumberList("Face", 45);
-            Skins = GenerateNumberList("Skin", 45);
+            MaleFaces = GenerateNumberList("Face", 21);
+            FemaleFaces = GenerateNumberList("Face", 45, 22);
+
+            MaleSkins = GenerateNumberList("Skin", 21);
+            FemaleSkins = GenerateNumberList("Skin", 45, 22);
+
             EyeColors = GenerateNumberList("Color", 31);
             HairColors = GenerateNumberList("Color", 64);
             // Menu Items
             mLstGender = new MenuListItem("Gender", Genders, 0);
-            mLstFatherApperance = new MenuListItem("Face: Father", Faces, 0);
-            mLstMotherApperance = new MenuListItem("Face: Mother", Faces, 0);
-            mSldFatherMotherApperanceBlend = new MenuSliderItem("Face: Blend", 0, 49, ApperanceBlend);
-            mLstFatherSkin = new MenuListItem("Skin: Father", Skins, 0);
-            mLstMotherSkin = new MenuListItem("Skin: Mother", Skins, 0);
-            mSldFatherMotherSkinBlend = new MenuSliderItem("Skin: Blend", 0, 49, SkinBlend);
+            
+            mLstFatherApperance = new MenuListItem("Face: Father", MaleFaces, 0);
+            mLstMotherApperance = new MenuListItem("Face: Mother", FemaleFaces, 0);
+
+            mSldFatherMotherApperanceBlend = new MenuSliderItem("Face: Blend", 0, 49, ApperanceBlend) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE };
+            
+            mLstFatherSkin = new MenuListItem("Skin: Father", MaleSkins, 0);
+            mLstMotherSkin = new MenuListItem("Skin: Mother", FemaleSkins, 0);
+            
+            mSldFatherMotherSkinBlend = new MenuSliderItem("Skin: Blend", 0, 49, SkinBlend) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE };
+
+            // Move to Appearance
             mLstEyeColor = new MenuListItem("Eye Color", EyeColors, 0);
             mLstHairColor = new MenuListItem("Primary Hair Color", HairColors, 0);
             mLstHairSecondaryColor = new MenuListItem("Secondary Hair Color", HairColors, 0);
@@ -84,9 +105,10 @@ namespace Curiosity.Systems.Client.Interface.Menus
             menu.AddMenuItem(mLstFatherSkin);
             menu.AddMenuItem(mLstMotherSkin);
             menu.AddMenuItem(mSldFatherMotherSkinBlend);
-            menu.AddMenuItem(mLstEyeColor);
-            menu.AddMenuItem(mLstHairColor);
-            menu.AddMenuItem(mLstHairSecondaryColor);
+
+            //menu.AddMenuItem(mLstEyeColor);
+            //menu.AddMenuItem(mLstHairColor);
+            //menu.AddMenuItem(mLstHairSecondaryColor);
 
             MenuController.AddMenu(menu);
             MenuController.DisableBackButton = true;

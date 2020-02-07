@@ -179,7 +179,7 @@ namespace Curiosity.Systems.Client.Extensions
                     if (!menuDisplayed)
                     {
                         menuDisplayed = true;
-                        new Interface.Menus.PlayerApperance().OpenMenu();
+                        new Interface.Menus.PlayerAppearance().OpenMenu();
                     }
 
                     if (!API.IsEntityPlayingAnim(player.Entity.Id, "mp_character_creation@customise@male_a", "loop", 3))
