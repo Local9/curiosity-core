@@ -73,7 +73,8 @@
     <Compile Include="Extensions\CharacterExtensions.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
-    <Compile Include="Interface\Menus\PlayerAppearance.cs" />
+    <Compile Include="Interface\Menus\Creator\CreatorMenus.cs" />
+    <Compile Include="Interface\Menus\Creator\PlayerHeritage.cs" />
     <Compile Include="Interface\Modules\HeadupDisplay.cs" />
     <Compile Include="Interface\Modules\VehicleHeadupDisplay.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />

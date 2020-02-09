@@ -12,12 +12,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Curiosity.Systems.Client.Interface.Menus
+namespace Curiosity.Systems.Client.Interface.Menus.Creator
 {
-    class PlayerAppearance
+    class PlayerHeritage
     {
-        private static Menu menu;
-
         public static RotatablePosition[] CameraViews = CharacterExtensions.CameraViews;
 
         private bool IsFacecamActive = false;
@@ -57,22 +55,15 @@ namespace Curiosity.Systems.Client.Interface.Menus
         private MenuListItem mLstHairColor;
         private MenuListItem mLstHairSecondaryColor;
 
-        // Male Faces 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 42, 43, 44
-        // Female Faces 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 45
-
-        private void SetupLists()
+        public Menu CreateMenu()
         {
-            MaleFaces = new List<string>() { };
-            FemaleFaces = new List<string>() { };
-        }
-
-        public void CreateMenu()
-        {
-            menu = new Menu(Game.Player.Name, "Customize Heritage");
+            Menu playerHeritageMenu = new Menu(Game.Player.Name, "Customize Heritage");
             // Menu Changes
-            menu.OnListIndexChange += Menu_OnListIndexChange;
-            menu.OnSliderPositionChange += Menu_OnSliderPositionChange;
-            menu.OnIndexChange += Menu_OnIndexChange;
+            playerHeritageMenu.OnListIndexChange += Menu_OnListIndexChange;
+            playerHeritageMenu.OnSliderPositionChange += Menu_OnSliderPositionChange;
+
+            playerHeritageMenu.OnMenuOpen += PlayerHeritage_OnMenuOpen;
+            playerHeritageMenu.OnMenuClose += PlayerHeritage_OnMenuClose;
             // random settings
 
             FatherApperance = CuriosityPlugin.Rand.Next(45);
@@ -111,30 +102,52 @@ namespace Curiosity.Systems.Client.Interface.Menus
             mLstHairColor = new MenuListItem("Primary Hair Color", HairColors, 0);
             mLstHairSecondaryColor = new MenuListItem("Secondary Hair Color", HairColors, 0);
             // Add menu Items
-            menu.AddMenuItem(mLstGender);
-            menu.AddMenuItem(mLstFatherApperance);
-            menu.AddMenuItem(mLstMotherApperance);
-            menu.AddMenuItem(mSldFatherMotherApperanceBlend);
-            menu.AddMenuItem(mLstFatherSkin);
-            menu.AddMenuItem(mLstMotherSkin);
-            menu.AddMenuItem(mSldFatherMotherSkinBlend);
+            playerHeritageMenu.AddMenuItem(mLstGender);
+            playerHeritageMenu.AddMenuItem(mLstFatherApperance);
+            playerHeritageMenu.AddMenuItem(mLstMotherApperance);
+            playerHeritageMenu.AddMenuItem(mSldFatherMotherApperanceBlend);
+            playerHeritageMenu.AddMenuItem(mLstFatherSkin);
+            playerHeritageMenu.AddMenuItem(mLstMotherSkin);
+            playerHeritageMenu.AddMenuItem(mSldFatherMotherSkinBlend);
 
             //menu.AddMenuItem(mLstEyeColor);
             //menu.AddMenuItem(mLstHairColor);
             //menu.AddMenuItem(mLstHairSecondaryColor);
 
+            playerHeritageMenu.InstructionalButtons.Add(Control.Cover, "Spin Left");
+            playerHeritageMenu.InstructionalButtons.Add(Control.Pickup, "Spin Right");
+
+            playerHeritageMenu.InstructionalButtons.Add(Control.Jump, "Random");
+
             UpdatePedBlendData();
-
-            MenuController.AddMenu(menu);
-            MenuController.DisableBackButton = true;
-
-            CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
-
             Logger.Info("[PlayerApperance] Created");
+
+            return playerHeritageMenu;
         }
 
         private async Task OnPlayerControls()
         {
+            if (Game.IsControlJustPressed(0, Control.Jump))
+            {
+                FatherApperance = CuriosityPlugin.Rand.Next(45);
+                MotherApperance = CuriosityPlugin.Rand.Next(45);
+                ApperanceBlendNumber = CuriosityPlugin.Rand.Next(50);
+                ApperanceBlend = ApperanceBlendNumber / 50f;
+                FatherSkin = CuriosityPlugin.Rand.Next(45);
+                MotherSkin = CuriosityPlugin.Rand.Next(45);
+                SkinBlendNumber = CuriosityPlugin.Rand.Next(50);
+                SkinBlend = SkinBlendNumber / 50f;
+
+                mLstFatherApperance.ListIndex = FatherApperance;
+                mLstMotherApperance.ListIndex = MotherApperance;
+                mSldFatherMotherApperanceBlend.Position = ApperanceBlendNumber;
+                mLstFatherSkin.ListIndex = FatherSkin;
+                mLstMotherSkin.ListIndex = MotherSkin;
+                mSldFatherMotherSkinBlend.Position = SkinBlendNumber;
+
+                UpdatePedBlendData();
+            }
+
             if (Game.IsControlPressed(0, Control.Pickup))
             {
                 Game.PlayerPed.Heading += 10f;
@@ -146,34 +159,29 @@ namespace Curiosity.Systems.Client.Interface.Menus
             }
         }
 
-        private async void Menu_OnIndexChange(Menu menu, MenuItem oldItem, MenuItem newItem, int oldIndex, int newIndex)
+        private async void PlayerHeritage_OnMenuClose(Menu menu)
         {
-            if (newItem == mLstFatherApperance || newItem == mLstMotherApperance || newItem == mLstEyeColor || newItem == mSldFatherMotherApperanceBlend)
-            {
-                if (IsFacecamActive) return;
+            CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
 
-                IsFacecamActive = true;
+            Cache.Player.CameraQueue.Reset();
+            await Cache.Player.CameraQueue.View(new CameraBuilder()
+                .SkipTask()
+                .WithMotionBlur(0.5f)
+                .WithInterpolation(CameraViews[2], CameraViews[1], 500)
+            );
+        }
 
-                Cache.Player.CameraQueue.Reset();
-                await Cache.Player.CameraQueue.View(new CameraBuilder()
-                            .SkipTask()
-                            .WithMotionBlur(0.5f)
-                            .WithInterpolation(CameraViews[1], CameraViews[2], 500)
-                        );
-            }
-            else
-            {
-                if (!IsFacecamActive) return;
-
-                IsFacecamActive = false;
-
-                Cache.Player.CameraQueue.Reset();
-                await Cache.Player.CameraQueue.View(new CameraBuilder()
-                    .SkipTask()
-                    .WithMotionBlur(0.5f)
-                    .WithInterpolation(CameraViews[2], CameraViews[1], 500)
-                );
-            }
+        private async void PlayerHeritage_OnMenuOpen(Menu menu)
+        {
+            CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
+            MenuController.DisableBackButton = false;
+            
+            Cache.Player.CameraQueue.Reset();
+            await Cache.Player.CameraQueue.View(new CameraBuilder()
+                        .SkipTask()
+                        .WithMotionBlur(0.5f)
+                        .WithInterpolation(CameraViews[1], CameraViews[2], 500)
+                    );
         }
 
         private void Menu_OnSliderPositionChange(Menu menu, MenuSliderItem sliderItem, int oldPosition, int newPosition, int itemIndex)
@@ -263,23 +271,6 @@ namespace Curiosity.Systems.Client.Interface.Menus
             }
 
             UpdatePedBlendData();
-        }
-
-        public void OpenMenu()
-        {
-            menu.OpenMenu();
-            Logger.Info("[PlayerApperance] Open");
-        }
-
-        public void DestroyMenu()
-        {
-            // Remove the menu as its no longer required
-            if (MenuController.Menus.Contains(menu))
-                MenuController.Menus.Remove(menu);
-
-            CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
-
-            menu = null;
         }
 
         private void UpdatePedBlendData()

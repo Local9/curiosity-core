@@ -7,7 +7,7 @@ using Curiosity.Systems.Client.Environment;
 using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Events;
 using Curiosity.Systems.Client.Interface;
-using Curiosity.Systems.Client.Interface.Menus;
+using Curiosity.Systems.Client.Interface.Menus.Creator;
 using Curiosity.Systems.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -80,8 +80,8 @@ namespace Curiosity.Systems.Client.Extensions
 
         public static async Task PostLoad(this CuriosityCharacter character)
         {
-            PlayerAppearance playerAppearance = new PlayerAppearance();
-            playerAppearance.CreateMenu();
+            CreatorMenus creatorMenu = new CreatorMenus();
+            creatorMenu.CreateMenu();
 
             Screen.LoadingPrompt.Show("Loading Create Character...");
 
@@ -182,7 +182,7 @@ namespace Curiosity.Systems.Client.Extensions
                     if (!menuDisplayed)
                     {
                         menuDisplayed = true;
-                        playerAppearance.OpenMenu();
+                        creatorMenu.OpenMenu();
                     }
 
                     if (!API.IsEntityPlayingAnim(player.Entity.Id, "mp_character_creation@customise@male_a", "loop", 3))
@@ -280,7 +280,7 @@ namespace Curiosity.Systems.Client.Extensions
             API.SetTextDropShadow();
             API.SetTextOutline();
             API.SetTextEntry("STRING");
-            API.AddTextComponentString($"Welcome to Life V, {Cache.Player.Name}.");
+            API.AddTextComponentString($"Welcome, {Cache.Player.Name}.");
             API.DrawText(0.5f, 0.5f - API.GetTextScaleHeight(0.45f, 0) / 2f);
             API.HideLoadingOnFadeThisFrame();
 
