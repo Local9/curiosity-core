@@ -24,10 +24,12 @@ namespace Curiosity.Systems.Client.Interface.Menus
 
         private int FatherApperance = 0;
         private int MotherApperance = 0;
-        private int ApperanceBlend = 25;
+        private float ApperanceBlend = .5f;
+        private int ApperanceBlendNumber = 25;
         private int FatherSkin = 0;
         private int MotherSkin = 0;
-        private int SkinBlend = 25;
+        private float SkinBlend = .5f;
+        private int SkinBlendNumber = 25;
 
         private int EyeColor = 0;
         private int HairPrimaryColor = 0;
@@ -64,34 +66,45 @@ namespace Curiosity.Systems.Client.Interface.Menus
             FemaleFaces = new List<string>() { };
         }
 
-        private void CreateMenu()
+        public void CreateMenu()
         {
             menu = new Menu(Game.Player.Name, "Customize Heritage");
             // Menu Changes
             menu.OnListIndexChange += Menu_OnListIndexChange;
             menu.OnSliderPositionChange += Menu_OnSliderPositionChange;
             menu.OnIndexChange += Menu_OnIndexChange;
-            // Menu List Content
-            MaleFaces = GenerateNumberList("Face", 21);
-            FemaleFaces = GenerateNumberList("Face", 45, 22);
+            // random settings
 
-            MaleSkins = GenerateNumberList("Skin", 21);
-            FemaleSkins = GenerateNumberList("Skin", 45, 22);
+            FatherApperance = CuriosityPlugin.Rand.Next(45);
+            MotherApperance = CuriosityPlugin.Rand.Next(45);
+            ApperanceBlendNumber = CuriosityPlugin.Rand.Next(50);
+            ApperanceBlend = ApperanceBlendNumber / 50f;
+            FatherSkin = CuriosityPlugin.Rand.Next(45);
+            MotherSkin = CuriosityPlugin.Rand.Next(45);
+            SkinBlendNumber = CuriosityPlugin.Rand.Next(50);
+            SkinBlend = SkinBlendNumber / 50f;
+            
+            // Menu List Content
+            MaleFaces = GenerateNumberList("Face", 45);
+            FemaleFaces = GenerateNumberList("Face", 45);
+
+            MaleSkins = GenerateNumberList("Skin", 45);
+            FemaleSkins = GenerateNumberList("Skin", 45);
 
             EyeColors = GenerateNumberList("Color", 31);
             HairColors = GenerateNumberList("Color", 64);
             // Menu Items
             mLstGender = new MenuListItem("Gender", Genders, 0);
             
-            mLstFatherApperance = new MenuListItem("Face: Father", MaleFaces, 0);
-            mLstMotherApperance = new MenuListItem("Face: Mother", FemaleFaces, 0);
+            mLstFatherApperance = new MenuListItem("Face: Father", MaleFaces, FatherApperance);
+            mLstMotherApperance = new MenuListItem("Face: Mother", FemaleFaces, MotherApperance);
 
-            mSldFatherMotherApperanceBlend = new MenuSliderItem("Face: Blend", 0, 49, ApperanceBlend) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE };
+            mSldFatherMotherApperanceBlend = new MenuSliderItem("Face: Blend", 0, 49, ApperanceBlendNumber) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE };
             
-            mLstFatherSkin = new MenuListItem("Skin: Father", MaleSkins, 0);
-            mLstMotherSkin = new MenuListItem("Skin: Mother", FemaleSkins, 0);
+            mLstFatherSkin = new MenuListItem("Skin: Father", MaleSkins, FatherSkin);
+            mLstMotherSkin = new MenuListItem("Skin: Mother", FemaleSkins, MotherSkin);
             
-            mSldFatherMotherSkinBlend = new MenuSliderItem("Skin: Blend", 0, 49, SkinBlend) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE };
+            mSldFatherMotherSkinBlend = new MenuSliderItem("Skin: Blend", 0, 49, SkinBlendNumber) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE };
 
             // Move to Appearance
             mLstEyeColor = new MenuListItem("Eye Color", EyeColors, 0);
@@ -110,9 +123,10 @@ namespace Curiosity.Systems.Client.Interface.Menus
             //menu.AddMenuItem(mLstHairColor);
             //menu.AddMenuItem(mLstHairSecondaryColor);
 
+            UpdatePedBlendData();
+
             MenuController.AddMenu(menu);
             MenuController.DisableBackButton = true;
-            menu.OpenMenu();
 
             CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
 
@@ -134,7 +148,7 @@ namespace Curiosity.Systems.Client.Interface.Menus
 
         private async void Menu_OnIndexChange(Menu menu, MenuItem oldItem, MenuItem newItem, int oldIndex, int newIndex)
         {
-            if (newItem == mLstFatherApperance || newItem == mLstMotherApperance || newItem == mLstEyeColor)
+            if (newItem == mLstFatherApperance || newItem == mLstMotherApperance || newItem == mLstEyeColor || newItem == mSldFatherMotherApperanceBlend)
             {
                 if (IsFacecamActive) return;
 
@@ -144,7 +158,7 @@ namespace Curiosity.Systems.Client.Interface.Menus
                 await Cache.Player.CameraQueue.View(new CameraBuilder()
                             .SkipTask()
                             .WithMotionBlur(0.5f)
-                            .WithInterpolation(CameraViews[1], CameraViews[2], 300)
+                            .WithInterpolation(CameraViews[1], CameraViews[2], 500)
                         );
             }
             else
@@ -157,7 +171,7 @@ namespace Curiosity.Systems.Client.Interface.Menus
                 await Cache.Player.CameraQueue.View(new CameraBuilder()
                     .SkipTask()
                     .WithMotionBlur(0.5f)
-                    .WithInterpolation(CameraViews[2], CameraViews[1], 300)
+                    .WithInterpolation(CameraViews[2], CameraViews[1], 500)
                 );
             }
         }
@@ -166,12 +180,12 @@ namespace Curiosity.Systems.Client.Interface.Menus
         {
             if (sliderItem == mSldFatherMotherApperanceBlend)
             {
-                ApperanceBlend = newPosition;
+                ApperanceBlend = newPosition / 50f;
             }
 
             if (sliderItem == mSldFatherMotherSkinBlend)
             {
-                SkinBlend = newPosition;
+                SkinBlend = newPosition / 50f;
             }
 
             UpdatePedBlendData();
@@ -243,7 +257,7 @@ namespace Curiosity.Systems.Client.Interface.Menus
                 FatherSkin = newSelectionIndex;
             }
 
-            if (listItem == mLstFatherApperance)
+            if (listItem == mLstMotherSkin)
             {
                 MotherSkin = newSelectionIndex;
             }
@@ -253,7 +267,7 @@ namespace Curiosity.Systems.Client.Interface.Menus
 
         public void OpenMenu()
         {
-            CreateMenu();
+            menu.OpenMenu();
             Logger.Info("[PlayerApperance] Open");
         }
 
@@ -270,6 +284,8 @@ namespace Curiosity.Systems.Client.Interface.Menus
 
         private void UpdatePedBlendData()
         {
+            Logger.Debug($"[UpdatePedBlendData] fa/ma {FatherApperance}/{MotherApperance} | fs/ms {FatherSkin}/{MotherSkin} | ab/sb {ApperanceBlend}/{SkinBlend}");
+
             Cache.Character.Style.UpdateBlendData(FatherApperance, MotherApperance, FatherSkin, MotherSkin, ApperanceBlend, SkinBlend);
             API.SetPedHeadBlendData(Cache.Entity.Id, FatherApperance, MotherApperance, 0, FatherSkin, MotherSkin, 0, ApperanceBlend, SkinBlend, 0f, false);
         }

@@ -20,6 +20,7 @@ namespace Curiosity.Systems.Client
     public class CuriosityPlugin : BaseScript
     {
         public static CuriosityPlugin Instance { get; private set; }
+        public static Random Rand = new Random();
         public static int MaximumPlayers { get; } = 32;
 
         public readonly DiscordRichPresence DiscordRichPresence =

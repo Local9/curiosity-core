@@ -7,6 +7,7 @@ using Curiosity.Systems.Client.Environment;
 using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Events;
 using Curiosity.Systems.Client.Interface;
+using Curiosity.Systems.Client.Interface.Menus;
 using Curiosity.Systems.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -24,7 +25,7 @@ namespace Curiosity.Systems.Client.Extensions
         {
             new RotatablePosition(402.8294f, -1002.45f, -98.80403f, 357.6219f, -7f, 0f),
             new RotatablePosition(402.8294f, -998.8467f, -98.80403f, 357.1697f, -7f, 0f),
-            new RotatablePosition(402.8294f, -997.967f, -98.5403f, 357.1697f, -7f, 0f)
+            new RotatablePosition(402.8294f, -997.967f, -98.35f, 357.1697f, -7f, 0f)
         };
 
         public static string[] HeadComponents { get; } =
@@ -79,6 +80,8 @@ namespace Curiosity.Systems.Client.Extensions
 
         public static async Task PostLoad(this CuriosityCharacter character)
         {
+            PlayerAppearance playerAppearance = new PlayerAppearance();
+            playerAppearance.CreateMenu();
 
             Screen.LoadingPrompt.Show("Loading Create Character...");
 
@@ -179,7 +182,7 @@ namespace Curiosity.Systems.Client.Extensions
                     if (!menuDisplayed)
                     {
                         menuDisplayed = true;
-                        new Interface.Menus.PlayerAppearance().OpenMenu();
+                        playerAppearance.OpenMenu();
                     }
 
                     if (!API.IsEntityPlayingAnim(player.Entity.Id, "mp_character_creation@customise@male_a", "loop", 3))

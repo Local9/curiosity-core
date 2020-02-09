@@ -109,6 +109,7 @@ namespace Curiosity.Systems.Server.Managers
             if (blacklistedNames.IsMatch(player.Name.ToLower()))
             {
                 deferrals.done($"The username of '{player.Name}' is blacklisted, please change your username and try to rejoin.");
+                API.CancelEvent();
                 return;
             }
 
@@ -117,7 +118,7 @@ namespace Curiosity.Systems.Server.Managers
 
             CuriosityUser curiosityUser = await MySQL.Store.UserDatabase.Get(license, player, discordId);
 
-            Logger.Info($"Curiosity Queue Manager : {curiosityUser.UserRole} {curiosityUser.LastName} Connecting");
+            Logger.Info($"Curiosity Queue Manager : {curiosityUser.UserRole} {curiosityUser.LastName} Connecting [{discordId}]");
 
             await BaseScript.Delay(10);
 

@@ -11,15 +11,15 @@ namespace Curiosity.Systems.Library.Models
         public int Gender { get; set; } = 0; // Default Gender is Male
         public int FatherApperance { get; set; }
         public int MotherApperance { get; set; }
-        public int BlendApperance { get; set; }
+        public float BlendApperance { get; set; }
         public int FatherSkin { get; set; }
         public int MotherSkin { get; set; }
-        public int BlendSkin { get; set; }
+        public float BlendSkin { get; set; }
         public int EyeColor { get; set; }
         public int HairPrimaryColor { get; set; }
         public int HairSecondaryColor { get; set; }
 
-        public void UpdateBlendData(int fatherApperance, int motherApperance, int fatherSkin, int motherSkin, int apperanceBlend, int skinBlend)
+        public void UpdateBlendData(int fatherApperance, int motherApperance, int fatherSkin, int motherSkin, float apperanceBlend, float skinBlend)
         {
             FatherApperance = fatherApperance;
             MotherApperance = motherApperance;
