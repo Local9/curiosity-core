@@ -160,9 +160,14 @@ namespace Curiosity.Server.net.Classes
                 {
                     float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
 
-                    if (experienceModifier > 1.0f && (session.IsStaff || session.Privilege == GlobalEnum.Privilege.DONATOR))
+                    if (experienceModifier > 1.0f && (session.IsStaff || session.IsDonator))
                     {
-                        experienceModifier = experienceModifier + 0.1f;
+                        experienceModifier += 0.1f;
+                    }
+
+                    if (session.IsStaff || session.IsDonator)
+                    {
+                        experienceModifier += 0.5f;
                     }
 
                     experience = (int)(experience * experienceModifier);
