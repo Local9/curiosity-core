@@ -1,0 +1,3 @@
+[submodule "Curiosity/NativeUI"]
+	path = Curiosity/NativeUI
+	url = https://github.com/citizenfx/NativeUI
