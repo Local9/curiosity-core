@@ -51,7 +51,7 @@ namespace Curiosity.Systems.Server.MySQL.Store
                             };
 
                             curiosityCharacter.LastPosition = new Position(reader.GetFloat(11), reader.GetFloat(12), reader.GetFloat(13));
-                            curiosityCharacter.Style = new Style();
+                            curiosityCharacter.Style = new CharacterHeritage();
 
                             return curiosityCharacter;
                         }

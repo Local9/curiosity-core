@@ -46,10 +46,10 @@ namespace Curiosity.System.Client.Environment.Entities.Models
             while (API.HasScaleformMovieLoaded(movie) && IsAttached)
             {
                 API.PushScaleformMovieFunction(movie, "SET_BOARD");
-                API.PushScaleformMovieFunctionParameterString($"Life V"); // Top Line
+                API.PushScaleformMovieFunctionParameterString($"Life V #{player.User.UserId}"); // Top Line
                 API.PushScaleformMovieFunctionParameterString(player.User.LastName); // Main Line
-                API.PushScaleformMovieFunctionParameterString($"${player.Character.Cash}"); // Bottom
-                API.PushScaleformMovieFunctionParameterString($""); // Sub top line
+                API.PushScaleformMovieFunctionParameterString($"LOS SANTOS POLICE DEPT"); // Bottom
+                API.PushScaleformMovieFunctionParameterString($"${player.Character.Cash}"); // Sub top line
                 API.PopScaleformMovieFunctionVoid();
                 API.SetTextRenderId(handle);
 

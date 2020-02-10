@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,18 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
     {
         // Menus
         private Menu menuMain;
-        private Menu menuPlayerHeritage;
-        private Menu menuPlayerLifeStyle;
-        private Menu menuPlayerAppearance;
+        private Menu menuCharacterHeritage;
+        // private Menu menuPlayerLifeStyle; // 
+        private Menu menuCharacterFeatures; // eyes, hair?
+        private Menu menuCharacterAppearance; // clothes
+        private Menu menuCharacterApparel; // clothing
+        private Menu menuCharacterStats; // stats
+        // items
+        private List<string> Genders = new List<string> { $"{Gender.Male}", $"{Gender.Female}" };
+        private MenuListItem mLstGender;
+
+        // Classes
+        CharacterHeritage CharacterHeritage = new CharacterHeritage();
 
         internal void CreateMenu()
         {
@@ -25,21 +35,60 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             menuMain = new Menu(Game.Player.Name, "Player Creator");
             menuMain.OnMenuOpen += MainMenu_OnMenuOpen;
             menuMain.OnMenuClose += MainMenu_OnMenuClose;
-            MenuController.AddMenu(menuMain);
+            menuMain.OnListIndexChange += MenuMain_OnListIndexChange;
 
-            menuPlayerHeritage = new PlayerHeritage().CreateMenu();
-            AddSubMenu(menuMain, menuPlayerHeritage, "Heritage");
+            MenuController.AddMenu(menuMain);
+            // items
+            mLstGender = new MenuListItem("Gender", Genders, 0);
+            menuMain.AddMenuItem(mLstGender);
+
+            // submenus
+            menuCharacterHeritage = CharacterHeritage.CreateMenu();
+            AddSubMenu(menuMain, menuCharacterHeritage, "Heritage");
 
             // Controls
             menuMain.InstructionalButtons.Add(Control.Cover, "Spin Left");
             menuMain.InstructionalButtons.Add(Control.Pickup, "Spin Right");
         }
 
+        private async void MenuMain_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
+        {
+            if (listItem == mLstGender) // Player Gender
+            {
+                Model playerModel = PedHash.FreemodeMale01;
+                if (newSelectionIndex == 1)
+                {
+                    playerModel = PedHash.FreemodeFemale01;
+                }
+                await playerModel.Request(10000);
+                Screen.Fading.FadeOut(500);
+                while (Screen.Fading.IsFadingOut) await BaseScript.Delay(10);
+
+                await Game.Player.ChangeModel(playerModel);
+
+                if (Cache.Character.Style == null)
+                {
+                    Cache.Character.Style = new Library.Models.CharacterHeritage();
+                }
+
+                Cache.Character.Gender = newSelectionIndex;
+
+                CharacterHeritage.UpdatePedBlendData();
+
+                await BaseScript.Delay(500);
+
+                Screen.Fading.FadeIn(1000);
+                while (Screen.Fading.IsFadingIn) await BaseScript.Delay(10);
+                return;
+            }
+        }
+
         private void DestroyMenus()
         {
-            MenuController.Menus.Remove(menuPlayerHeritage);
-            MenuController.Menus.Remove(menuPlayerLifeStyle);
-            MenuController.Menus.Remove(menuPlayerAppearance);
+            // MenuController.Menus.Remove(menuPlayerLifeStyle);
+            // MenuController.Menus.Remove(menuPlayerAppearance);
+            MenuController.Menus.Remove(menuCharacterHeritage);
+            // remove main menu last
             MenuController.Menus.Remove(menuMain);
         }
 
@@ -50,6 +99,9 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 
         private void MainMenu_OnMenuOpen(Menu menu)
         {
+            CuriosityPlugin.Instance.DiscordRichPresence.Status = "Character Creator";
+            CuriosityPlugin.Instance.DiscordRichPresence.Commit();
+
             CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
             MenuController.DisableBackButton = true;
         }
@@ -70,12 +122,12 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
         internal void DestroyMenu()
         {
             // Remove the menu as its no longer required
-            if (MenuController.Menus.Contains(menuPlayerHeritage))
-                MenuController.Menus.Remove(menuPlayerHeritage);
+            if (MenuController.Menus.Contains(menuCharacterHeritage))
+                MenuController.Menus.Remove(menuCharacterHeritage);
 
             CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
 
-            menuPlayerHeritage = null;
+            menuCharacterHeritage = null;
         }
 
         internal static void AddSubMenu(Menu menu, Menu submenu, string title, string label = "→→→", bool buttonEnabled = true, string description = "", MenuItem.Icon leftIcon = MenuItem.Icon.NONE, MenuItem.Icon rightIcon = MenuItem.Icon.NONE)

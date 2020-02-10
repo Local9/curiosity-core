@@ -286,5 +286,21 @@ namespace Curiosity.Systems.Client.Extensions
 
             await Task.FromResult(0);
         }
+
+        public static void SetupStat(string stat, int value)
+        {
+            API.StatSetInt((uint)API.GetHashKey(stat), value, true);
+        }
+
+        public static void SetupStats(this CuriosityCharacter character)
+        {
+            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_STAMINA), character.Stats.Stamina, true);
+            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_SHOOTING_ABILITY), character.Stats.Shooting, true);
+            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_STRENGTH), character.Stats.Stealth, true);
+            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_STEALTH_ABILITY), character.Stats.Stealth, true);
+            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_FLYING_ABILITY), character.Stats.Flying, true);
+            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_WHEELIE_ABILITY), character.Stats.Driving, true);
+            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_LUNG_CAPACITY), character.Stats.LungCapacity, true);
+        }
     }
 }

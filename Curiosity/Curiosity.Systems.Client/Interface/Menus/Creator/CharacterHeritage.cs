@@ -4,17 +4,19 @@ using CitizenFX.Core.UI;
 using Curiosity.System.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Extensions;
+using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Interface.Menus.Creator
 {
-    class PlayerHeritage
+    class CharacterHeritage
     {
         public static RotatablePosition[] CameraViews = CharacterExtensions.CameraViews;
 
@@ -29,19 +31,8 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
         private float SkinBlend = .5f;
         private int SkinBlendNumber = 25;
 
-        private int EyeColor = 0;
-        private int HairPrimaryColor = 0;
-        private int HairSecondaryColor = 0;
-
-        private List<string> Genders = new List<string> { $"{Gender.Male}", $"{Gender.Female}" };
-        private List<string> MaleFaces;
-        private List<string> FemaleFaces;
-        private List<string> MaleSkins;
-        private List<string> FemaleSkins;
-        private List<string> EyeColors;
-        private List<string> HairColors;
-
-        private MenuListItem mLstGender;
+        private List<string> Faces;
+        private List<string> Skins;
 
         private MenuListItem mLstFatherApperance;
         private MenuListItem mLstMotherApperance;
@@ -50,10 +41,6 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
         private MenuListItem mLstFatherSkin;
         private MenuListItem mLstMotherSkin;
         private MenuSliderItem mSldFatherMotherSkinBlend;
-
-        private MenuListItem mLstEyeColor;
-        private MenuListItem mLstHairColor;
-        private MenuListItem mLstHairSecondaryColor;
 
         public Menu CreateMenu()
         {
@@ -76,33 +63,22 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             SkinBlend = SkinBlendNumber / 50f;
             
             // Menu List Content
-            MaleFaces = GenerateNumberList("Face", 45);
-            FemaleFaces = GenerateNumberList("Face", 45);
+            Faces = Generators.GenerateNumberList("Face", 45);
+            Skins = Generators.GenerateNumberList("Skin", 45);
 
-            MaleSkins = GenerateNumberList("Skin", 45);
-            FemaleSkins = GenerateNumberList("Skin", 45);
-
-            EyeColors = GenerateNumberList("Color", 31);
-            HairColors = GenerateNumberList("Color", 64);
             // Menu Items
-            mLstGender = new MenuListItem("Gender", Genders, 0);
             
-            mLstFatherApperance = new MenuListItem("Face: Father", MaleFaces, FatherApperance);
-            mLstMotherApperance = new MenuListItem("Face: Mother", FemaleFaces, MotherApperance);
+            mLstFatherApperance = new MenuListItem("Face: Father", Faces, FatherApperance);
+            mLstMotherApperance = new MenuListItem("Face: Mother", Faces, MotherApperance);
 
-            mSldFatherMotherApperanceBlend = new MenuSliderItem("Face: Blend", 0, 49, ApperanceBlendNumber) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE };
+            mSldFatherMotherApperanceBlend = new MenuSliderItem("Resemblance", 0, 49, ApperanceBlendNumber) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE, ShowDivider = true };
             
-            mLstFatherSkin = new MenuListItem("Skin: Father", MaleSkins, FatherSkin);
-            mLstMotherSkin = new MenuListItem("Skin: Mother", FemaleSkins, MotherSkin);
+            mLstFatherSkin = new MenuListItem("Skin: Father", Skins, FatherSkin);
+            mLstMotherSkin = new MenuListItem("Skin: Mother", Skins, MotherSkin);
             
-            mSldFatherMotherSkinBlend = new MenuSliderItem("Skin: Blend", 0, 49, SkinBlendNumber) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE };
+            mSldFatherMotherSkinBlend = new MenuSliderItem("Skin Tone", 0, 49, SkinBlendNumber) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE, ShowDivider = true };
 
-            // Move to Appearance
-            mLstEyeColor = new MenuListItem("Eye Color", EyeColors, 0);
-            mLstHairColor = new MenuListItem("Primary Hair Color", HairColors, 0);
-            mLstHairSecondaryColor = new MenuListItem("Secondary Hair Color", HairColors, 0);
             // Add menu Items
-            playerHeritageMenu.AddMenuItem(mLstGender);
             playerHeritageMenu.AddMenuItem(mLstFatherApperance);
             playerHeritageMenu.AddMenuItem(mLstMotherApperance);
             playerHeritageMenu.AddMenuItem(mSldFatherMotherApperanceBlend);
@@ -110,13 +86,8 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             playerHeritageMenu.AddMenuItem(mLstMotherSkin);
             playerHeritageMenu.AddMenuItem(mSldFatherMotherSkinBlend);
 
-            //menu.AddMenuItem(mLstEyeColor);
-            //menu.AddMenuItem(mLstHairColor);
-            //menu.AddMenuItem(mLstHairSecondaryColor);
-
             playerHeritageMenu.InstructionalButtons.Add(Control.Cover, "Spin Left");
             playerHeritageMenu.InstructionalButtons.Add(Control.Pickup, "Spin Right");
-
             playerHeritageMenu.InstructionalButtons.Add(Control.Jump, "Random");
 
             UpdatePedBlendData();
@@ -173,6 +144,9 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 
         private async void PlayerHeritage_OnMenuOpen(Menu menu)
         {
+            CuriosityPlugin.Instance.DiscordRichPresence.Status = "Player Heritage";
+            CuriosityPlugin.Instance.DiscordRichPresence.Commit();
+
             CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
             MenuController.DisableBackButton = false;
             
@@ -201,55 +175,6 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 
         private async void Menu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
         {
-            if (listItem == mLstGender) // Player Gender
-            {
-                Model playerModel = PedHash.FreemodeMale01;
-                if (newSelectionIndex == 1)
-                {
-                    playerModel = PedHash.FreemodeFemale01;
-                }
-                await playerModel.Request(10000);
-                Screen.Fading.FadeOut(500);
-                while (Screen.Fading.IsFadingOut) await BaseScript.Delay(10);
-
-                await Game.Player.ChangeModel(playerModel);
-
-                if (Cache.Character.Style == null)
-                {
-                    Cache.Character.Style = new Library.Models.Style();
-                }
-
-                Cache.Character.Style.Gender = newSelectionIndex;
-                UpdatePedBlendData();
-
-                await BaseScript.Delay(500);
-
-                Screen.Fading.FadeIn(1000);
-                while (Screen.Fading.IsFadingIn) await BaseScript.Delay(10);
-                return;
-            }
-
-            if (listItem == mLstEyeColor)
-            {
-                EyeColor = newSelectionIndex;
-                API.SetPedEyeColor(Cache.Entity.Id, newSelectionIndex);
-                Cache.Character.Style.EyeColor = newSelectionIndex;
-                return;
-            }
-
-            if (listItem == mLstHairColor || listItem == mLstHairSecondaryColor)
-            {
-                if (listItem == mLstHairColor)
-                    HairPrimaryColor = newSelectionIndex;
-
-                if (listItem == mLstHairSecondaryColor)
-                    HairSecondaryColor = newSelectionIndex;
-
-                API.SetPedHairColor(Cache.Entity.Id, HairPrimaryColor, HairSecondaryColor);
-                Cache.Character.Style.UpdateHairData(HairPrimaryColor, HairSecondaryColor);
-                return;
-            }
-
             if (listItem == mLstFatherApperance)
             {
                 FatherApperance = newSelectionIndex;
@@ -273,20 +198,12 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             UpdatePedBlendData();
         }
 
-        private void UpdatePedBlendData()
+        public void UpdatePedBlendData()
         {
-            Logger.Debug($"[UpdatePedBlendData] fa/ma {FatherApperance}/{MotherApperance} | fs/ms {FatherSkin}/{MotherSkin} | ab/sb {ApperanceBlend}/{SkinBlend}");
+            // Logger.Debug($"[UpdatePedBlendData] fa/ma {FatherApperance}/{MotherApperance} | fs/ms {FatherSkin}/{MotherSkin} | ab/sb {ApperanceBlend}/{SkinBlend}");
 
             Cache.Character.Style.UpdateBlendData(FatherApperance, MotherApperance, FatherSkin, MotherSkin, ApperanceBlend, SkinBlend);
             API.SetPedHeadBlendData(Cache.Entity.Id, FatherApperance, MotherApperance, 0, FatherSkin, MotherSkin, 0, ApperanceBlend, SkinBlend, 0f, false);
-        }
-
-        public static List<string> GenerateNumberList(string txt, int max, int min = 0)
-        {
-            List<string> lst = new List<string>();
-            for (int i = min; i < max + 1; i++)
-                lst.Add($"{txt} #{i.ToString()}");
-            return lst;
         }
     }
 }
