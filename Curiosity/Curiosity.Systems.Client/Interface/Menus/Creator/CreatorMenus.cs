@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using MenuAPI;
+using Curiosity.Systems.Client.Extensions;
+using Curiosity.Systems.Library.Models;
+using NativeUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,52 +13,68 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 {
     class CreatorMenus
     {
+        // menu pool
+        public static MenuPool _MenuPool;
         // Menus
-        private Menu menuMain;
-        private Menu menuCharacterHeritage;
-        // private Menu menuPlayerLifeStyle; // 
-        private Menu menuCharacterFeatures; // eyes, hair?
-        private Menu menuCharacterAppearance; // clothes
-        private Menu menuCharacterApparel; // clothing
-        private Menu menuCharacterStats; // stats
+        private UIMenu menuMain;
+        private UIMenu menuCharacterHeritage;
+        // private UIMenu menuPlayerLifeStyle; // 
+        private UIMenu menuCharacterFeatures; // eyes, hair?
+        private UIMenu menuCharacterAppearance; // clothes
+        private UIMenu menuCharacterApparel; // clothing
+        private UIMenu menuCharacterStats; // stats
+        // Cameras
+        public static RotatablePosition[] CameraViews = CharacterExtensions.CameraViews;
+
         // items
-        private List<string> Genders = new List<string> { $"{Gender.Male}", $"{Gender.Female}" };
-        private MenuListItem mLstGender;
+        private List<dynamic> Genders = new List<dynamic> { $"{Gender.Male}", $"{Gender.Female}" };
+        private UIMenuListItem mLstGender;
+
+        // buttons
+        public static InstructionalButton btnRotateLeft = new InstructionalButton(Control.Cover, "Spin Left");
+        public static InstructionalButton btnRotateRight = new InstructionalButton(Control.Pickup, "Spin Right");
+        public static InstructionalButton btnRandom = new InstructionalButton(Control.Jump, "Random");
 
         // Classes
-        CharacterHeritage CharacterHeritage = new CharacterHeritage();
+        private CharacterHeritage _CharacterHeritage = new CharacterHeritage();
+        private CharacterFeatures _CharacterFeatures = new CharacterFeatures();
 
         internal void CreateMenu()
         {
             // TICKS & SETUP
-            CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
+            _MenuPool = new MenuPool();
+            _MenuPool.MouseEdgeEnabled = false;
+            
+            //UIMenu
+            menuMain = new UIMenu(Game.Player.Name, "Player Creator");
+            _MenuPool.Add(menuMain);
 
-            //MENU
-            menuMain = new Menu(Game.Player.Name, "Player Creator");
             menuMain.OnMenuOpen += MainMenu_OnMenuOpen;
             menuMain.OnMenuClose += MainMenu_OnMenuClose;
-            menuMain.OnListIndexChange += MenuMain_OnListIndexChange;
+            menuMain.OnListChange += MenuMain_OnListChange;
 
-            MenuController.AddMenu(menuMain);
             // items
-            mLstGender = new MenuListItem("Gender", Genders, 0);
-            menuMain.AddMenuItem(mLstGender);
+            mLstGender = new UIMenuListItem("Gender", Genders, 0);
+            menuMain.AddItem(mLstGender);
 
-            // submenus
-            menuCharacterHeritage = CharacterHeritage.CreateMenu();
-            AddSubMenu(menuMain, menuCharacterHeritage, "Heritage");
+            menuCharacterHeritage = _MenuPool.AddSubMenu(menuMain, "Heritage");
+            _CharacterHeritage.CreateMenu(menuCharacterHeritage);
+            menuCharacterFeatures = _MenuPool.AddSubMenu(menuMain, "Features");
+            _CharacterFeatures.CreateMenu(menuCharacterFeatures);
 
-            // Controls
-            menuMain.InstructionalButtons.Add(Control.Cover, "Spin Left");
-            menuMain.InstructionalButtons.Add(Control.Pickup, "Spin Right");
+            // buttons
+            menuMain.AddInstructionalButton(btnRotateLeft);
+            menuMain.AddInstructionalButton(btnRotateRight);
+
+            _MenuPool.RefreshIndex();
         }
 
-        private async void MenuMain_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
+        private async void MenuMain_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
             if (listItem == mLstGender) // Player Gender
             {
                 Model playerModel = PedHash.FreemodeMale01;
-                if (newSelectionIndex == 1)
+                if (newIndex == 1)
                 {
                     playerModel = PedHash.FreemodeFemale01;
                 }
@@ -71,9 +89,9 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
                     Cache.Character.Style = new Library.Models.CharacterHeritage();
                 }
 
-                Cache.Character.Gender = newSelectionIndex;
+                Cache.Character.Gender = newIndex;
 
-                CharacterHeritage.UpdatePedBlendData();
+                _CharacterHeritage.UpdatePedBlendData();
 
                 await BaseScript.Delay(500);
 
@@ -85,25 +103,21 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 
         private void DestroyMenus()
         {
-            // MenuController.Menus.Remove(menuPlayerLifeStyle);
-            // MenuController.Menus.Remove(menuPlayerAppearance);
-            MenuController.Menus.Remove(menuCharacterHeritage);
-            // remove main menu last
-            MenuController.Menus.Remove(menuMain);
+            CuriosityPlugin.Instance.DetachTickHandler(OnMenuCreate);
+            CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
         }
 
-        private void MainMenu_OnMenuClose(Menu menu)
+        private void MainMenu_OnMenuClose(UIMenu UIMenu)
         {
             CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
         }
 
-        private void MainMenu_OnMenuOpen(Menu menu)
+        private void MainMenu_OnMenuOpen(UIMenu UIMenu)
         {
             CuriosityPlugin.Instance.DiscordRichPresence.Status = "Character Creator";
             CuriosityPlugin.Instance.DiscordRichPresence.Commit();
 
             CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
-            MenuController.DisableBackButton = true;
         }
 
         private async Task OnPlayerControls()
@@ -119,32 +133,32 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             }
         }
 
+        private async Task OnMenuCreate()
+        {
+            _MenuPool.ProcessMenus();
+            _MenuPool.ProcessMouse();
+
+            if (!_MenuPool.IsAnyMenuOpen()) // KEEP IT FUCKING OPEN
+                menuMain.Visible = true;
+        }
+
         internal void DestroyMenu()
         {
-            // Remove the menu as its no longer required
-            if (MenuController.Menus.Contains(menuCharacterHeritage))
-                MenuController.Menus.Remove(menuCharacterHeritage);
-
+            // Remove the UIMenu as its no longer required
             CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
 
             menuCharacterHeritage = null;
         }
 
-        internal static void AddSubMenu(Menu menu, Menu submenu, string title, string label = "→→→", bool buttonEnabled = true, string description = "", MenuItem.Icon leftIcon = MenuItem.Icon.NONE, MenuItem.Icon rightIcon = MenuItem.Icon.NONE)
+        internal void AddSubMenu(UIMenu menu, string title)
         {
-            MenuController.AddSubmenu(menu, submenu);
-            MenuItem submenuButton = new MenuItem(title, submenu.MenuSubtitle) { Label = label, LeftIcon = leftIcon, RightIcon = rightIcon };
-            if (!buttonEnabled)
-            {
-                submenuButton = new MenuItem(title, description) { Enabled = buttonEnabled, RightIcon = MenuItem.Icon.LOCK };
-            }
-            menu.AddMenuItem(submenuButton);
-            MenuController.BindMenuItem(menu, submenu, submenuButton);
+            _MenuPool.AddSubMenu(menu, title);
         }
 
         internal void OpenMenu()
         {
-            menuMain.OpenMenu();
+            CuriosityPlugin.Instance.AttachTickHandler(OnMenuCreate);
+            CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
         }
     }
 }

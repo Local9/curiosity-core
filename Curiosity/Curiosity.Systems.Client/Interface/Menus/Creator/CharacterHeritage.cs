@@ -1,209 +1,166 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.System.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
-using MenuAPI;
-using System;
+using NativeUI;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Interface.Menus.Creator
 {
     class CharacterHeritage
     {
-        public static RotatablePosition[] CameraViews = CharacterExtensions.CameraViews;
+        private UIMenuHeritageWindow HeritageWindow;
+        private UIMenuListItem Mothers;
+        private UIMenuListItem Fathers;
+        private UIMenuSliderHeritageItem Resemblance;
+        private UIMenuSliderHeritageItem SkinTone;
 
-        private bool IsFacecamActive = false;
+        private int MotherId = 0;
+        private int FatherId = 0;
 
-        private int FatherApperance = 0;
-        private int MotherApperance = 0;
-        private float ApperanceBlend = .5f;
-        private int ApperanceBlendNumber = 25;
-        private int FatherSkin = 0;
-        private int MotherSkin = 0;
-        private float SkinBlend = .5f;
-        private int SkinBlendNumber = 25;
+        private int MenuMotherIndex = 0;
+        private int MenuFatherIndex = 0;
 
-        private List<string> Faces;
-        private List<string> Skins;
+        private float ResembalanceBlend = .5f;
+        private float SkinToneBlend = .5f;
 
-        private MenuListItem mLstFatherApperance;
-        private MenuListItem mLstMotherApperance;
-        private MenuSliderItem mSldFatherMotherApperanceBlend;
+        private Dictionary<string, int> Parents = new Dictionary<string, int>();
 
-        private MenuListItem mLstFatherSkin;
-        private MenuListItem mLstMotherSkin;
-        private MenuSliderItem mSldFatherMotherSkinBlend;
+        // 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 45
+        List<dynamic> MotherFaces = new List<dynamic>() { "Hannah", "Audrey", "Jasmine", "Giselle", "Amelia", "Isabella", "Zoe", "Ava", "Camilla", "Violet", "Sophia", "Eveline", "Nicole", "Ashley", "Grace", "Brianna", "Natalie", "Olivia", "Elizabeth", "Charlotte", "Emma", "Misty" };
+        // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 42, 43, 44
+        List<dynamic> FatherFaces = new List<dynamic>() { "Benjamin", "Daniel", "Joshua", "Noah", "Andrew", "Joan", "Alex", "Isaac", "Evan", "Ethan", "Vincent", "Angel", "Diego", "Adrian", "Gabriel", "Michael", "Santiago", "Kevin", "Louis", "Samuel", "Anthony", "Claude", "Niko", "John" };
 
-        public Menu CreateMenu()
+        public UIMenu CreateMenu(UIMenu menu)
         {
-            Menu playerHeritageMenu = new Menu(Game.Player.Name, "Customize Heritage");
-            // Menu Changes
-            playerHeritageMenu.OnListIndexChange += Menu_OnListIndexChange;
-            playerHeritageMenu.OnSliderPositionChange += Menu_OnSliderPositionChange;
+            SetupParents();
 
-            playerHeritageMenu.OnMenuOpen += PlayerHeritage_OnMenuOpen;
-            playerHeritageMenu.OnMenuClose += PlayerHeritage_OnMenuClose;
-            // random settings
+            menu.OnListChange += Menu_OnListChange;
+            menu.OnSliderChange += Menu_OnSliderChange;
 
-            FatherApperance = CuriosityPlugin.Rand.Next(45);
-            MotherApperance = CuriosityPlugin.Rand.Next(45);
-            ApperanceBlendNumber = CuriosityPlugin.Rand.Next(50);
-            ApperanceBlend = ApperanceBlendNumber / 50f;
-            FatherSkin = CuriosityPlugin.Rand.Next(45);
-            MotherSkin = CuriosityPlugin.Rand.Next(45);
-            SkinBlendNumber = CuriosityPlugin.Rand.Next(50);
-            SkinBlend = SkinBlendNumber / 50f;
-            
-            // Menu List Content
-            Faces = Generators.GenerateNumberList("Face", 45);
-            Skins = Generators.GenerateNumberList("Skin", 45);
+            MenuMotherIndex = CuriosityPlugin.Rand.Next(MotherFaces.Count);
+            MenuFatherIndex = CuriosityPlugin.Rand.Next(FatherFaces.Count);
 
-            // Menu Items
-            
-            mLstFatherApperance = new MenuListItem("Face: Father", Faces, FatherApperance);
-            mLstMotherApperance = new MenuListItem("Face: Mother", Faces, MotherApperance);
+            HeritageWindow = new UIMenuHeritageWindow(MenuMotherIndex, MenuFatherIndex);
+            menu.AddWindow(HeritageWindow);
 
-            mSldFatherMotherApperanceBlend = new MenuSliderItem("Resemblance", 0, 49, ApperanceBlendNumber) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE, ShowDivider = true };
-            
-            mLstFatherSkin = new MenuListItem("Skin: Father", Skins, FatherSkin);
-            mLstMotherSkin = new MenuListItem("Skin: Mother", Skins, MotherSkin);
-            
-            mSldFatherMotherSkinBlend = new MenuSliderItem("Skin Tone", 0, 49, SkinBlendNumber) { SliderLeftIcon = MenuItem.Icon.FEMALE, SliderRightIcon = MenuItem.Icon.MALE, ShowDivider = true };
+            Mothers = new UIMenuListItem("Mother", MotherFaces, MenuMotherIndex);
+            Fathers = new UIMenuListItem("Father", FatherFaces, MenuFatherIndex);
 
-            // Add menu Items
-            playerHeritageMenu.AddMenuItem(mLstFatherApperance);
-            playerHeritageMenu.AddMenuItem(mLstMotherApperance);
-            playerHeritageMenu.AddMenuItem(mSldFatherMotherApperanceBlend);
-            playerHeritageMenu.AddMenuItem(mLstFatherSkin);
-            playerHeritageMenu.AddMenuItem(mLstMotherSkin);
-            playerHeritageMenu.AddMenuItem(mSldFatherMotherSkinBlend);
+            MotherId = Parents[$"{MotherFaces[MenuMotherIndex]}"];
+            FatherId = Parents[$"{FatherFaces[MenuFatherIndex]}"];
 
-            playerHeritageMenu.InstructionalButtons.Add(Control.Cover, "Spin Left");
-            playerHeritageMenu.InstructionalButtons.Add(Control.Pickup, "Spin Right");
-            playerHeritageMenu.InstructionalButtons.Add(Control.Jump, "Random");
+            Resemblance = new UIMenuSliderHeritageItem("Resemblance", "", true);
+            Resemblance.Value = CuriosityPlugin.Rand.Next(100);
+            SkinTone = new UIMenuSliderHeritageItem("Skin Tone", "", true);
+            SkinTone.Value = CuriosityPlugin.Rand.Next(100);
+
+            ResembalanceBlend = (100 - Resemblance.Value) / 100f;
+            SkinToneBlend = (100 - SkinTone.Value) / 100f;
 
             UpdatePedBlendData();
-            Logger.Info("[PlayerApperance] Created");
 
-            return playerHeritageMenu;
+            menu.AddItem(Mothers);
+            menu.AddItem(Fathers);
+            menu.AddItem(Resemblance);
+            menu.AddItem(SkinTone);
+
+            return menu;
         }
 
-        private async Task OnPlayerControls()
+        private void Menu_OnSliderChange(UIMenu sender, UIMenuSliderItem listItem, int newIndex)
         {
-            if (Game.IsControlJustPressed(0, Control.Jump))
-            {
-                FatherApperance = CuriosityPlugin.Rand.Next(45);
-                MotherApperance = CuriosityPlugin.Rand.Next(45);
-                ApperanceBlendNumber = CuriosityPlugin.Rand.Next(50);
-                ApperanceBlend = ApperanceBlendNumber / 50f;
-                FatherSkin = CuriosityPlugin.Rand.Next(45);
-                MotherSkin = CuriosityPlugin.Rand.Next(45);
-                SkinBlendNumber = CuriosityPlugin.Rand.Next(50);
-                SkinBlend = SkinBlendNumber / 50f;
+            if (listItem == Resemblance)
+                ResembalanceBlend = (100 - newIndex) / 100f;
 
-                mLstFatherApperance.ListIndex = FatherApperance;
-                mLstMotherApperance.ListIndex = MotherApperance;
-                mSldFatherMotherApperanceBlend.Position = ApperanceBlendNumber;
-                mLstFatherSkin.ListIndex = FatherSkin;
-                mLstMotherSkin.ListIndex = MotherSkin;
-                mSldFatherMotherSkinBlend.Position = SkinBlendNumber;
-
-                UpdatePedBlendData();
-            }
-
-            if (Game.IsControlPressed(0, Control.Pickup))
-            {
-                Game.PlayerPed.Heading += 10f;
-            }
-
-            if (Game.IsControlPressed(0, Control.Cover))
-            {
-                Game.PlayerPed.Heading -= 10f;
-            }
-        }
-
-        private async void PlayerHeritage_OnMenuClose(Menu menu)
-        {
-            CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
-
-            Cache.Player.CameraQueue.Reset();
-            await Cache.Player.CameraQueue.View(new CameraBuilder()
-                .SkipTask()
-                .WithMotionBlur(0.5f)
-                .WithInterpolation(CameraViews[2], CameraViews[1], 500)
-            );
-        }
-
-        private async void PlayerHeritage_OnMenuOpen(Menu menu)
-        {
-            CuriosityPlugin.Instance.DiscordRichPresence.Status = "Player Heritage";
-            CuriosityPlugin.Instance.DiscordRichPresence.Commit();
-
-            CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
-            MenuController.DisableBackButton = false;
-            
-            Cache.Player.CameraQueue.Reset();
-            await Cache.Player.CameraQueue.View(new CameraBuilder()
-                        .SkipTask()
-                        .WithMotionBlur(0.5f)
-                        .WithInterpolation(CameraViews[1], CameraViews[2], 500)
-                    );
-        }
-
-        private void Menu_OnSliderPositionChange(Menu menu, MenuSliderItem sliderItem, int oldPosition, int newPosition, int itemIndex)
-        {
-            if (sliderItem == mSldFatherMotherApperanceBlend)
-            {
-                ApperanceBlend = newPosition / 50f;
-            }
-
-            if (sliderItem == mSldFatherMotherSkinBlend)
-            {
-                SkinBlend = newPosition / 50f;
-            }
+            if (listItem == SkinTone)
+                SkinToneBlend = (100 - newIndex) / 100f;
 
             UpdatePedBlendData();
         }
 
-        private async void Menu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
+        private void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
-            if (listItem == mLstFatherApperance)
+            var value = listItem.Items[newIndex];
+
+            int index = Parents[$"{value}"];
+
+            if (listItem == Mothers)
             {
-                FatherApperance = newSelectionIndex;
+                MotherId = index;
+                MenuMotherIndex = newIndex;
             }
 
-            if (listItem == mLstMotherApperance)
+            if (listItem == Fathers)
             {
-                MotherApperance = newSelectionIndex;
+                FatherId = index;
+                MenuFatherIndex = newIndex;
             }
 
-            if (listItem == mLstFatherSkin)
-            {
-                FatherSkin = newSelectionIndex;
-            }
-
-            if (listItem == mLstMotherSkin)
-            {
-                MotherSkin = newSelectionIndex;
-            }
-
+            HeritageWindow.Index(MenuMotherIndex, MenuFatherIndex);
             UpdatePedBlendData();
+        }
+
+        public void SetupParents()
+        {
+            Parents.Add("Benjamin", 0);
+            Parents.Add("Daniel", 1);
+            Parents.Add("Joshua", 2);
+            Parents.Add("Noah", 3);
+            Parents.Add("Andrew", 4);
+            Parents.Add("Joan", 5);
+            Parents.Add("Alex", 6);
+            Parents.Add("Isaac", 7);
+            Parents.Add("Evan", 8);
+            Parents.Add("Ethan", 9);
+            Parents.Add("Vincent", 10);
+            Parents.Add("Angel", 11);
+            Parents.Add("Diego", 12);
+            Parents.Add("Adrian", 13);
+            Parents.Add("Gabriel", 14);
+            Parents.Add("Michael", 15);
+            Parents.Add("Santiago", 16);
+            Parents.Add("Kevin", 17);
+            Parents.Add("Louis", 18);
+            Parents.Add("Samuel", 19);
+            Parents.Add("Anthony", 20);
+            Parents.Add("Hannah", 21);
+            Parents.Add("Audrey", 22);
+            Parents.Add("Jasmine", 23);
+            Parents.Add("Giselle", 24);
+            Parents.Add("Amelia", 25);
+            Parents.Add("Isabella", 26);
+            Parents.Add("Zoe", 27);
+            Parents.Add("Ava", 28);
+            Parents.Add("Camilla", 29);
+            Parents.Add("Violet", 30);
+            Parents.Add("Sophia", 31);
+            Parents.Add("Eveline", 32);
+            Parents.Add("Nicole", 33);
+            Parents.Add("Ashley", 34);
+            Parents.Add("Grace", 35);
+            Parents.Add("Brianna", 36);
+            Parents.Add("Natalie", 37);
+            Parents.Add("Olivia", 38);
+            Parents.Add("Elizabeth", 39);
+            Parents.Add("Charlotte", 40);
+            Parents.Add("Emma", 41);
+            Parents.Add("Claude", 42);
+            Parents.Add("Niko", 43);
+            Parents.Add("John", 44);
+            Parents.Add("Misty", 45);
         }
 
         public void UpdatePedBlendData()
         {
             // Logger.Debug($"[UpdatePedBlendData] fa/ma {FatherApperance}/{MotherApperance} | fs/ms {FatherSkin}/{MotherSkin} | ab/sb {ApperanceBlend}/{SkinBlend}");
 
-            Cache.Character.Style.UpdateBlendData(FatherApperance, MotherApperance, FatherSkin, MotherSkin, ApperanceBlend, SkinBlend);
-            API.SetPedHeadBlendData(Cache.Entity.Id, FatherApperance, MotherApperance, 0, FatherSkin, MotherSkin, 0, ApperanceBlend, SkinBlend, 0f, false);
+            Cache.Character.Style.UpdateBlendData(FatherId, MotherId, FatherId, MotherId, ResembalanceBlend, SkinToneBlend);
+            API.SetPedHeadBlendData(Cache.Entity.Id, FatherId, MotherId, 0, FatherId, MotherId, 0, ResembalanceBlend, SkinToneBlend, 0f, false);
         }
     }
 }

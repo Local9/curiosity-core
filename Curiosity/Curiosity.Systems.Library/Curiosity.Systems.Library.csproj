@@ -56,12 +56,10 @@
     <Compile Include="Events\EventType.cs" />
     <Compile Include="Generators.cs" />
     <Compile Include="Models\CharacterAppearance.cs" />
-    <Compile Include="Models\CharacterStats.cs" />
     <Compile Include="Models\CuriosityCharacter.cs" />
     <Compile Include="Models\CuriosityUser.cs" />
     <Compile Include="Models\Discord\Member.cs" />
     <Compile Include="Models\JsonBuilder.cs" />
-    <Compile Include="Models\CharacterLifeStyle.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Role.cs" />

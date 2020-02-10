@@ -11,6 +11,7 @@ using Curiosity.Systems.Client.Interface.Menus.Creator;
 using Curiosity.Systems.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -153,7 +154,7 @@ namespace Curiosity.Systems.Client.Extensions
             //            view = 1;
 
             //            player.CameraQueue.Reset();
-                        
+
             //            await player.CameraQueue.View(new CameraBuilder()
             //                .SkipTask()
             //                .WithMotionBlur(0.5f)
@@ -163,7 +164,7 @@ namespace Curiosity.Systems.Client.Extensions
             //        else if (!head && view == 1)
             //        {
             //            view = 0;
-      
+
             //            player.CameraQueue.Reset();
 
             //            await player.CameraQueue.View(new CameraBuilder()
@@ -294,13 +295,10 @@ namespace Curiosity.Systems.Client.Extensions
 
         public static void SetupStats(this CuriosityCharacter character)
         {
-            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_STAMINA), character.Stats.Stamina, true);
-            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_SHOOTING_ABILITY), character.Stats.Shooting, true);
-            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_STRENGTH), character.Stats.Stealth, true);
-            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_STEALTH_ABILITY), character.Stats.Stealth, true);
-            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_FLYING_ABILITY), character.Stats.Flying, true);
-            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_WHEELIE_ABILITY), character.Stats.Driving, true);
-            API.StatSetInt((uint)API.GetHashKey(character.Stats.MP0_LUNG_CAPACITY), character.Stats.LungCapacity, true);
+            foreach (KeyValuePair<string, int> keyValuePair in character.Stats)
+            {
+                API.StatSetInt((uint)API.GetHashKey(keyValuePair.Key), keyValuePair.Value, true);
+            }
         }
     }
 }
