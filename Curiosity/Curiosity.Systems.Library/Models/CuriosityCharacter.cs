@@ -15,7 +15,11 @@ namespace Curiosity.Systems.Library.Models
         public long Cash { get; set; }
         public bool MarkedAsRegistered { get; set; }
         public long LocationId { get; set; }
+        public int Gender { get; set; } = 0; // Default Gender is Male
         public Position LastPosition { get; set; }
-        public Style Style { get; set; } = new Style();
+        public CharacterHeritage Style { get; set; } = new CharacterHeritage();
+        public CharacterLifeStyle LifeStyle { get; set; } = new CharacterLifeStyle();
+        public CharacterStats Stats { get; set; } = new CharacterStats();
+        public CharacterAppearance Appearance { get; set; } = new CharacterAppearance();
     }
 }
