@@ -348,9 +348,10 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                await BaseScript.Delay(1000);
+                await BaseScript.Delay(100);
 
                 string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
+                string playerName = player.Name;
 
                 if (string.IsNullOrEmpty(license))
                 {
@@ -364,12 +365,12 @@ namespace Curiosity.Server.net.Classes
                 }
 
                 GlobalEntity.User user = await Business.BusinessUser.GetUserAsync(license, player);
-                await BaseScript.Delay(10);
+                await BaseScript.Delay(3000);
 
                 if (user == null)
                 {
-                    player.Drop("Sorry there was an error when creating your account, please try again.");
-                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "User Not Found", "SetupPlayerAsync -> User Failed to Create", $"License: {license}\nPlayer: {player.Name}");
+                    player.Drop("Sorry there was an error when creating your account and the development team have been informed, please try again later.");
+                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "User Not Found", "SetupPlayerAsync -> User Failed to Create", $"\nLicense: {license}\nPlayer: {playerName}");
                     return;
                 }
 
