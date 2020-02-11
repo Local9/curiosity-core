@@ -129,7 +129,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             lstNoseThickness.AddPanel(gridNose);
             gridNoseProfile = new UIMenuGridPanel("Crooked", "Left", "Right", "Curved", new PointF(STANDARD, STANDARD));
             lstNoseProfile.AddPanel(gridNoseProfile);
-            gridNoseTip = new UIMenuGridPanel("Up", "Tip Up", "Tip Down", "Down", new PointF(STANDARD, STANDARD));
+            gridNoseTip = new UIMenuGridPanel("Up", "T-Up", "T-Down", "Down", new PointF(STANDARD, STANDARD));
             lstNoseTip.AddPanel(gridNoseTip);
             gridCheekBones = new UIMenuGridPanel("Up", "In", "Out", "Down", new PointF(STANDARD, STANDARD));
             lstCheekBones.AddPanel(gridCheekBones);
@@ -141,7 +141,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             lstJaw.AddPanel(gridJaw);
             gridChinProfile = new UIMenuGridPanel("Up", "In", "Out", "Down", new PointF(STANDARD, STANDARD));
             lstChinProfile.AddPanel(gridChinProfile);
-            gridChinShape = new UIMenuGridPanel("Pointed", "Square", "Bum", "Rounded", new PointF(STANDARD, STANDARD));
+            gridChinShape = new UIMenuGridPanel("Rounded", "Bum", "Square", "Pointed", new PointF(STANDARD, STANDARD));
             lstChinShape.AddPanel(gridChinShape);
 
             return menu;

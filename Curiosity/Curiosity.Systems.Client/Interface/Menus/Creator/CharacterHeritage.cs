@@ -41,6 +41,11 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 
             menu.OnListChange += Menu_OnListChange;
             menu.OnSliderChange += Menu_OnSliderChange;
+            menu.OnMenuOpen += Menu_OnMenuOpen;
+            menu.OnMenuClose += Menu_OnMenuClose;
+
+            menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
+            menu.AddInstructionalButton(CreatorMenus.btnRotateRight);
 
             MenuMotherIndex = CuriosityPlugin.Rand.Next(MotherFaces.Count);
             MenuFatherIndex = CuriosityPlugin.Rand.Next(FatherFaces.Count);
@@ -70,6 +75,43 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             menu.AddItem(SkinTone);
 
             return menu;
+        }
+
+        private async void Menu_OnMenuClose(UIMenu sender)
+        {
+            Cache.Player.CameraQueue.Reset();
+            await Cache.Player.CameraQueue.View(new CameraBuilder()
+                .SkipTask()
+                .WithMotionBlur(0.5f)
+                .WithInterpolation(CreatorMenus.CameraViews[2], CreatorMenus.CameraViews[1], 500)
+            );
+            CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
+        }
+
+        private async void Menu_OnMenuOpen(UIMenu sender)
+        {
+            Cache.Player.CameraQueue.Reset();
+            await Cache.Player.CameraQueue.View(new CameraBuilder()
+                .SkipTask()
+                .WithMotionBlur(0.5f)
+                .WithInterpolation(CreatorMenus.CameraViews[1], CreatorMenus.CameraViews[2], 500)
+            );
+            CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
+        }
+
+        private async Task OnPlayerControls()
+        {
+            CreatorMenus._MenuPool.ProcessMouse();
+
+            if (Game.IsControlPressed(0, Control.Pickup))
+            {
+                Game.PlayerPed.Heading += 10f;
+            }
+
+            if (Game.IsControlPressed(0, Control.Cover))
+            {
+                Game.PlayerPed.Heading -= 10f;
+            }
         }
 
         private void Menu_OnSliderChange(UIMenu sender, UIMenuSliderItem listItem, int newIndex)
