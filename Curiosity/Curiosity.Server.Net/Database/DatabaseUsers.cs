@@ -107,6 +107,8 @@ namespace Curiosity.Server.net.Database
 
                     if (keyValuePairs.Count == 0)
                     {
+                        Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "User Creation Exception", "GetUserWithCharacterAsync -> User Failed to Create", $"License: {license}\nServerID: {user.ServerId}");
+
                         player.Drop($"Sorry {player.Name}, an error occurred while you were trying to connect to the server or update your characters information, please try to connect again. If the issue persists visit our Discord @ discord.gg/6xHuXwG");
                         throw new Exception($"SQL ERROR -> No rows returned : Maybe failed to setup the character {player.Name}");
                     }

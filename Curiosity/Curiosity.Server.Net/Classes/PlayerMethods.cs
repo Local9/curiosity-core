@@ -369,6 +369,7 @@ namespace Curiosity.Server.net.Classes
                 if (user == null)
                 {
                     player.Drop("Sorry there was an error when creating your account, please try again.");
+                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "User Not Found", "SetupPlayerAsync -> User Failed to Create", $"License: {license}\nPlayer: {player.Name}");
                     return;
                 }
 
