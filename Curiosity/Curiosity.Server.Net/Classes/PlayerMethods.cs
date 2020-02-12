@@ -351,6 +351,7 @@ namespace Curiosity.Server.net.Classes
                 await BaseScript.Delay(100);
 
                 string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
+                string discordId = player.Identifiers[Server.DISCORD_IDENTIFIER];
                 string playerName = player.Name;
 
                 if (string.IsNullOrEmpty(license))
@@ -370,7 +371,7 @@ namespace Curiosity.Server.net.Classes
                 if (user == null)
                 {
                     player.Drop("Sorry there was an error when creating your account and the development team have been informed, please try again later.");
-                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "User Not Found", "SetupPlayerAsync -> User Failed to Create", $"\nLicense: {license}\nPlayer: {playerName}");
+                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "User Not Found", "SetupPlayerAsync -> User Failed to Create", $"\nDiscordID: {discordId}\nLicense: {license}\nPlayer: {playerName}");
                     return;
                 }
 
