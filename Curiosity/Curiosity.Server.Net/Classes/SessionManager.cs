@@ -58,28 +58,32 @@ namespace Curiosity.Server.net.Classes
                 {
                     Session session = playerItem.Value;
 
-                    session.User = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.Player);
-                    session.Privilege = (Privilege)session.User.RoleId;
-                    session.SetBankAccount(session.User.BankAccount);
-                    session.SetWallet(session.User.Wallet);
+                    GlobalEntity.User User = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.Player);
 
-                    PlayerInformation playerInformation = new PlayerInformation();
-                    playerInformation.Handle = session.NetId;
-                    playerInformation.UserId = session.UserID;
-                    playerInformation.CharacterId = session.User.CharacterId;
-                    playerInformation.RoleId = (int)session.Privilege;
-                    playerInformation.Wallet = session.Wallet;
-                    playerInformation.BankAccount = session.BankAccount;
-                    playerInformation.Skills = session.Skills;
+                    if (User == null)
+                    {
+                        session.Privilege = (Privilege)User.RoleId;
+                        session.SetBankAccount(User.BankAccount);
+                        session.SetWallet(User.Wallet);
 
-                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
+                        PlayerInformation playerInformation = new PlayerInformation();
+                        playerInformation.Handle = session.NetId;
+                        playerInformation.UserId = session.UserID;
+                        playerInformation.CharacterId = session.User.CharacterId;
+                        playerInformation.RoleId = (int)session.Privilege;
+                        playerInformation.Wallet = session.Wallet;
+                        playerInformation.BankAccount = session.BankAccount;
+                        playerInformation.Skills = session.Skills;
 
-                    session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-                    await BaseScript.Delay(0);
-                    session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
-                    await BaseScript.Delay(0);
-                    session.Player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
-                    await BaseScript.Delay(0);
+                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
+
+                        session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                        await BaseScript.Delay(0);
+                        session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                        await BaseScript.Delay(0);
+                        session.Player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
+                        await BaseScript.Delay(0);
+                    }
 
                     PlayerList[playerItem.Key] = session;
 
