@@ -80,6 +80,7 @@ namespace Curiosity.Server.net
             Database.Config.Init();
 
             Classes.Missions.Init();
+            Business.Queue.Init();
 
             // Session Manager
             Classes.SessionManager.Init();
