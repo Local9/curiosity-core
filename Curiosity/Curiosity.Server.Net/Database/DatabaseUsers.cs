@@ -165,6 +165,7 @@ namespace Curiosity.Server.net.Database
             }
             catch (Exception ex)
             {
+                player.Drop($"Sorry {player.Name}, an error occurred while you were trying to connect to the server or update your characters information, please try to connect again.\n\nIf the issue persists visit our Discord @ discord.gg/6xHuXwG");
                 Log.Error($"GetUserWithCharacterAsync() -> {ex.Message}");
                 return null;
             }
