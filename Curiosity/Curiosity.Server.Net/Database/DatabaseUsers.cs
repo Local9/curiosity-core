@@ -84,6 +84,11 @@ namespace Curiosity.Server.net.Database
         {
             try
             {
+                if (string.IsNullOrEmpty(license))
+                {
+                    license = player.Identifiers[Server.LICENSE_IDENTIFIER];
+                }
+
                 GlobalEntity.User user = new GlobalEntity.User();
                 user.BankAccount = CitizenFX.Core.Native.API.GetConvarInt("starter_bank", 1000);
                 user.Wallet = CitizenFX.Core.Native.API.GetConvarInt("starter_cash", 100);
@@ -103,7 +108,7 @@ namespace Curiosity.Server.net.Database
                 {
                     ResultSet keyValuePairs = await result;
 
-                    await Delay(100);
+                    await Delay(300);
 
                     if (keyValuePairs.Count == 0)
                     {
