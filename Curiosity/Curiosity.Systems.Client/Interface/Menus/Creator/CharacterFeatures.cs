@@ -147,7 +147,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             return menu;
         }
 
-        private void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
+        private void Menu_OnListChange(UIMenu menu, UIMenuListItem listItem, int newIndex)
         {
             if (listItem == lstBrow)
             {

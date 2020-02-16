@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.System.Client.Environment.Entities.Models;
 using NativeUI;
 using System;
 using System.Collections.Generic;
@@ -11,33 +12,67 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 {
     class CharacterAppearance
     {
-        private UIMenuListItem lstHair; // Color Panel
-        private UIMenuListItem lstEyebrows; // Color Panel + Opacity
-        private UIMenuListItem lstFacialHair; // Male Only | Color Panel + Opacity
-        private UIMenuListItem lstSkinBlemishes; // Opacity
-        private UIMenuListItem lstSkinAging; // Opacity
-        private UIMenuListItem lstSkinComplexion; // Opacity
-        private UIMenuListItem lstSkinMoles; // Opacity
-        private UIMenuListItem lstSkinDamage; // Opacity
-        private UIMenuListItem lstEyeColor;
-        private UIMenuListItem lstEyeMakeup; // Opacity
-        private UIMenuListItem lstBlusher; // Female Only | Color Panel + Opacity
-        private UIMenuListItem lstLipstick; // Color Panel + Opacity
+        private bool FaceCameraActive = false;
 
-        private List<string> hairStyleList = new List<string>();
-        private List<string> eyebrowsStyleList = new List<string>();
-        private List<string> facialHairStylesList = new List<string>();
-        private List<string> blemishesStyleList = new List<string>();
-        private List<string> ageingStyleList = new List<string>();
-        private List<string> complexionStyleList = new List<string>();
-        private List<string> molesFrecklesStyleList = new List<string>();
-        private List<string> skinDamageStyleList = new List<string>();
-        private List<string> eyeColorList = new List<string>();
-        private List<string> eyeMakeupStyleList = new List<string>();
-        private List<string> blusherStyleList = new List<string>();
-        private List<string> lipstickStyleList = new List<string>();
+
+        private UIMenuListItem lstHair; // Color Panel
+        private UIMenuColorPanel pnlHairColorPrimary;
+        private UIMenuColorPanel pnlHairColorSecondary;
         
-        /* vMENU
+        private UIMenuListItem lstEyebrows; // Color Panel + Opacity
+        private UIMenuPercentagePanel pnlEyebrowOpacity;
+        private UIMenuColorPanel pnlEyebrowColor;
+
+        private UIMenuListItem lstFacialHair; // Male Only | Color Panel + Opacity
+        private UIMenuPercentagePanel pnlFacialHairOpacity;
+        private UIMenuColorPanel pnlFacialHairColor;
+
+        private UIMenuListItem lstSkinBlemishes; // Opacity
+        private UIMenuPercentagePanel pnlSkinBlemishesOpacity;
+
+        private UIMenuListItem lstSkinAging; // Opacity
+        private UIMenuPercentagePanel pnlSkinAgingOpacity;
+
+        private UIMenuListItem lstSkinComplexion; // Opacity
+        private UIMenuPercentagePanel pnlSkinComplexionOpacity;
+
+        private UIMenuListItem lstSkinMoles; // Opacity
+        private UIMenuPercentagePanel pnlSkinMolesOpacity;
+
+        private UIMenuListItem lstSkinDamage; // Opacity
+        private UIMenuPercentagePanel pnlSkinDamageOpacity;
+
+        private UIMenuListItem lstEyeColor;
+
+        private UIMenuListItem lstEyeMakeup; // Opacity
+        private UIMenuPercentagePanel pnlEyeMakeupOpacity;
+        private UIMenuColorPanel pnlEyeMakeupColor;
+
+        private UIMenuListItem lstBlusher; // Female Only | Color Panel + Opacity
+        private UIMenuPercentagePanel pnlBlusherOpacity;
+        private UIMenuColorPanel pnlBlusherColor;
+
+        private UIMenuListItem lstLipstick; // Color Panel + Opacity
+        private UIMenuPercentagePanel pnlLipstickOpacity;
+        private UIMenuColorPanel pnlLipstickColor;
+
+        private List<dynamic> hairStyleList = new List<dynamic>();
+        private List<dynamic> eyebrowsStyleList = new List<dynamic>();
+        private List<dynamic> facialHairStylesList = new List<dynamic>();
+        private List<dynamic> blemishesStyleList = new List<dynamic>();
+        private List<dynamic> skinAgingStyleList = new List<dynamic>();
+        private List<dynamic> complexionStyleList = new List<dynamic>();
+        private List<dynamic> molesFrecklesStyleList = new List<dynamic>();
+        private List<dynamic> skinDamageStyleList = new List<dynamic>();
+        private List<dynamic> eyeColorList = new List<dynamic>();
+        private List<dynamic> makeupStyleList = new List<dynamic>();
+        private List<dynamic> blusherStyleList = new List<dynamic>();
+        private List<dynamic> lipstickStyleList = new List<dynamic>();
+        // Body
+        private List<dynamic> chestHairStyleList = new List<dynamic>();
+        private List<dynamic> bodyBlemishesList = new List<dynamic>();
+
+        /* Source: vMenu
            0               Blemishes             0 - 23,   255  
            1               Facial Hair           0 - 28,   255  
            2               Eyebrows              0 - 33,   255  
@@ -58,6 +93,8 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
         {
             menu.OnMenuOpen += Menu_OnMenuOpen;
             menu.OnMenuClose += Menu_OnMenuClose;
+            menu.OnListChange += Menu_OnListChange;
+            menu.OnIndexChange += Menu_OnIndexChange;
 
             menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
             menu.AddInstructionalButton(CreatorMenus.btnRotateRight);
@@ -65,35 +102,343 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             return menu;
         }
 
-        private void Menu_OnMenuClose(UIMenu menu)
+        private async void Menu_OnIndexChange(UIMenu menu, int newIndex)
         {
-            CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
+            if (
+                menu.MenuItems[newIndex] == lstHair
+                || menu.MenuItems[newIndex] == lstEyebrows
+                || menu.MenuItems[newIndex] == lstFacialHair
+                || menu.MenuItems[newIndex] == lstSkinBlemishes
+                || menu.MenuItems[newIndex] == lstSkinAging
+                || menu.MenuItems[newIndex] == lstSkinComplexion
+                || menu.MenuItems[newIndex] == lstSkinMoles
+                || menu.MenuItems[newIndex] == lstSkinDamage
+                || menu.MenuItems[newIndex] == lstEyeColor
+                || menu.MenuItems[newIndex] == lstEyeMakeup
+                || menu.MenuItems[newIndex] == lstBlusher
+                || menu.MenuItems[newIndex] == lstLipstick
+                )
+            {
+                if (FaceCameraActive) return;
+                FaceCameraActive = true;
+
+                Cache.Player.CameraQueue.Reset();
+                await Cache.Player.CameraQueue.View(new CameraBuilder()
+                    .SkipTask()
+                    .WithMotionBlur(0.5f)
+                    .WithInterpolation(CreatorMenus.CameraViews[1], CreatorMenus.CameraViews[2], 500)
+                );
+            }
+            else
+            {
+                if (!FaceCameraActive) return;
+                FaceCameraActive = false;
+
+                Cache.Player.CameraQueue.Reset();
+                await Cache.Player.CameraQueue.View(new CameraBuilder()
+                    .SkipTask()
+                    .WithMotionBlur(0.5f)
+                    .WithInterpolation(CreatorMenus.CameraViews[2], CreatorMenus.CameraViews[1], 500)
+                );
+            }
         }
 
-        private void Menu_OnMenuOpen(UIMenu menu)
+        private void Menu_OnListChange(UIMenu menu, UIMenuListItem listItem, int newIndex)
+        {
+            if (listItem == lstHair)
+            {
+                API.ClearPedFacialDecorations(Game.PlayerPed.Handle);
+                Cache.Character.Appearance.HairOverlay = new KeyValuePair<string, string>("", "");
+                if (newIndex >= API.GetNumberOfPedDrawableVariations(Game.PlayerPed.Handle, 2))
+                {
+                    API.SetPedComponentVariation(Game.PlayerPed.Handle, 2, 0, 0, 0);
+                    Cache.Character.Appearance.HairStyle = 0;
+                }
+                else
+                {
+                    API.SetPedComponentVariation(Game.PlayerPed.Handle, 2, newIndex, 0, 0);
+                    Cache.Character.Appearance.HairStyle = newIndex;
+                    if (hairOverlays.ContainsKey(newIndex))
+                    {
+                        KeyValuePair<string, string> overlay = hairOverlays[newIndex];
+                        API.SetPedFacialDecoration(Game.PlayerPed.Handle, (uint)API.GetHashKey(overlay.Key), (uint)API.GetHashKey(overlay.Value));
+                        Cache.Character.Appearance.HairOverlay = overlay;
+                    }
+                }
+
+                UIMenuColorPanel primaryColor = (UIMenuColorPanel)listItem.Panels[0];
+                UIMenuColorPanel secondaryColor = (UIMenuColorPanel)listItem.Panels[1];
+
+                API.SetPedHairColor(Game.PlayerPed.Handle, primaryColor.CurrentSelection, secondaryColor.CurrentSelection);
+                Cache.Character.Appearance.HairPrimaryColor = primaryColor.CurrentSelection;
+                Cache.Character.Appearance.HairSecondaryColor = secondaryColor.CurrentSelection;
+                
+                return;
+            }
+
+            if (listItem == lstEyebrows)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 2, newIndex, opacity);
+
+                UIMenuColorPanel pnlColor = (UIMenuColorPanel)listItem.Panels[1];
+                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 2, 1, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+
+                Cache.Character.Appearance.Eyebrow = newIndex;
+                Cache.Character.Appearance.EyebrowOpacity = opacity;
+                Cache.Character.Appearance.EyebrowColor = pnlColor.CurrentSelection;
+
+                return;
+            }
+
+            if (listItem == lstFacialHair && Game.PlayerPed.Gender == Gender.Male)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 1, newIndex, opacity);
+
+                UIMenuColorPanel pnlColor = (UIMenuColorPanel)listItem.Panels[1];
+                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 1, 1, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+
+                Cache.Character.Appearance.FacialHair = newIndex;
+                Cache.Character.Appearance.FacialHairOpacity = opacity;
+                Cache.Character.Appearance.FacialHairColor = pnlColor.CurrentSelection;
+
+                return;
+            }
+
+            if (listItem == lstSkinBlemishes)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 0, newIndex, opacity);
+
+                Cache.Character.Appearance.SkinBlemish = newIndex;
+                Cache.Character.Appearance.SkinBlemishOpacity = opacity;
+
+                return;
+            }
+
+            if (listItem == lstSkinAging)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 3, newIndex, opacity);
+
+                Cache.Character.Appearance.SkinAging = newIndex;
+                Cache.Character.Appearance.SkinAgingOpacity = opacity;
+
+                return;
+            }
+
+            if (listItem == lstSkinComplexion)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 6, newIndex, opacity);
+
+                Cache.Character.Appearance.SkinComplexion = newIndex;
+                Cache.Character.Appearance.SkinComplexionOpacity = opacity;
+
+                return;
+            }
+
+            if (listItem == lstSkinMoles)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 9, newIndex, opacity);
+
+                Cache.Character.Appearance.SkinMoles = newIndex;
+                Cache.Character.Appearance.SkinMolesOpacity = opacity;
+
+                return;
+            }
+
+            if (listItem == lstSkinDamage)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 7, newIndex, opacity);
+
+                Cache.Character.Appearance.SkinDamage = newIndex;
+                Cache.Character.Appearance.SkinDamageOpacity = opacity;
+
+                return;
+            }
+
+            if (listItem == lstEyeColor)
+            {
+                API.SetPedEyeColor(Game.PlayerPed.Handle, newIndex);
+
+                Cache.Character.Appearance.EyeColor = newIndex;
+                
+                return;
+            }
+
+            if (listItem == lstEyeMakeup)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                UIMenuColorPanel pnlColor = (UIMenuColorPanel)listItem.Panels[1];
+
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 4, newIndex, opacity);
+                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 4, 2, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+
+                Cache.Character.Appearance.EyeMakeup = newIndex;
+                Cache.Character.Appearance.EyeMakeupOpacity = opacity;
+                Cache.Character.Appearance.EyeMakeupColor = pnlColor.CurrentSelection;
+
+                return;
+            }
+
+            if (listItem == lstBlusher)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                UIMenuColorPanel pnlColor = (UIMenuColorPanel)listItem.Panels[1];
+
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 5, newIndex, opacity);
+                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 5, 2, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+
+                Cache.Character.Appearance.Blusher = newIndex;
+                Cache.Character.Appearance.BlusherOpacity = opacity;
+                Cache.Character.Appearance.BlusherColor = pnlColor.CurrentSelection;
+
+                return;
+            }
+
+            if (listItem == lstLipstick)
+            {
+                UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
+                UIMenuColorPanel pnlColor = (UIMenuColorPanel)listItem.Panels[1];
+
+                float opacity = pnlOpacity.Percentage;
+
+                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 8, newIndex, opacity);
+                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 8, 2, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+
+                Cache.Character.Appearance.Lipstick = newIndex;
+                Cache.Character.Appearance.LipstickOpacity = opacity;
+                Cache.Character.Appearance.LipstickColor = pnlColor.CurrentSelection;
+
+                return;
+            }
+        }
+
+        private async void Menu_OnMenuClose(UIMenu menu)
+        {
+            CuriosityPlugin.Instance.DetachTickHandler(OnPlayerControls);
+
+            Cache.Player.CameraQueue.Reset();
+            await Cache.Player.CameraQueue.View(new CameraBuilder()
+                .SkipTask()
+                .WithMotionBlur(0.5f)
+                .WithInterpolation(CreatorMenus.CameraViews[2], CreatorMenus.CameraViews[1], 500)
+            );
+        }
+
+        private async void Menu_OnMenuOpen(UIMenu menu)
         {
             CuriosityPlugin.Instance.AttachTickHandler(OnPlayerControls);
 
+            Cache.Player.CameraQueue.Reset();
+            await Cache.Player.CameraQueue.View(new CameraBuilder()
+                .SkipTask()
+                .WithMotionBlur(0.5f)
+                .WithInterpolation(CreatorMenus.CameraViews[1], CreatorMenus.CameraViews[2], 500)
+            );
+            FaceCameraActive = true;
+
             menu.Clear(); // clear the menu on load as the gender may of changed
 
-            menu.AddItem(lstHair);
-            menu.AddItem(lstEyebrows);
-            
-            if (Game.PlayerPed.Gender == Gender.Male)
-                menu.AddItem(lstFacialHair);
-            
-            menu.AddItem(lstSkinBlemishes);
-            menu.AddItem(lstSkinAging);
-            menu.AddItem(lstSkinComplexion);
-            menu.AddItem(lstSkinMoles);
-            menu.AddItem(lstSkinDamage);
-            menu.AddItem(lstEyeColor);
-            menu.AddItem(lstEyeMakeup);
-            
-            if (Game.PlayerPed.Gender == Gender.Female)
-                menu.AddItem(lstBlusher);
+            CreateMenuItems();
 
+            lstHair = new UIMenuListItem("Hair", hairStyleList, 0);
+            pnlHairColorPrimary = new UIMenuColorPanel("1st Hair Color", UIMenuColorPanel.ColorPanelType.Hair);
+            pnlHairColorSecondary = new UIMenuColorPanel("2nd Hair Color", UIMenuColorPanel.ColorPanelType.Hair);
+            menu.AddItem(lstHair);
+            lstHair.AddPanel(pnlHairColorPrimary);
+            lstHair.AddPanel(pnlHairColorSecondary);
+
+            lstEyebrows = new UIMenuListItem("Eyebrows", eyebrowsStyleList, 0);
+            pnlEyebrowOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+            pnlEyebrowColor = new UIMenuColorPanel("Color", UIMenuColorPanel.ColorPanelType.Hair);
+            menu.AddItem(lstEyebrows);
+            lstEyebrows.AddPanel(pnlEyebrowOpacity);
+            lstEyebrows.AddPanel(pnlEyebrowColor);
+
+            if (Game.PlayerPed.Gender == Gender.Male)
+            {
+                lstFacialHair = new UIMenuListItem("Facial Hair", facialHairStylesList, 0);
+                pnlFacialHairOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+                pnlFacialHairColor = new UIMenuColorPanel("Color", UIMenuColorPanel.ColorPanelType.Hair);
+                menu.AddItem(lstFacialHair);
+                lstFacialHair.AddPanel(pnlFacialHairOpacity);
+                lstFacialHair.AddPanel(pnlFacialHairColor);
+            }
+
+            lstSkinBlemishes = new UIMenuListItem("Skin Blemishes", blemishesStyleList, 0);
+            pnlSkinBlemishesOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+            menu.AddItem(lstSkinBlemishes);
+            lstSkinBlemishes.AddPanel(pnlSkinBlemishesOpacity);
+            
+            lstSkinAging = new UIMenuListItem("Skin Aging", skinAgingStyleList, 0);
+            pnlSkinAgingOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+            menu.AddItem(lstSkinAging);
+            lstSkinAging.AddPanel(pnlSkinAgingOpacity);
+
+            lstSkinComplexion = new UIMenuListItem("Skin Complexion", complexionStyleList, 0);
+            pnlSkinComplexionOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+            menu.AddItem(lstSkinComplexion);
+            lstSkinComplexion.AddPanel(pnlSkinComplexionOpacity);
+
+            lstSkinMoles = new UIMenuListItem("Moles & Freckles", molesFrecklesStyleList, 0);
+            pnlSkinMolesOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+            menu.AddItem(lstSkinMoles);
+            lstSkinMoles.AddPanel(pnlSkinMolesOpacity);
+
+            lstSkinDamage = new UIMenuListItem("Skin Damage", skinDamageStyleList, 0);
+            pnlSkinDamageOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+            menu.AddItem(lstSkinDamage);
+            lstSkinDamage.AddPanel(pnlSkinDamageOpacity);
+
+            lstEyeColor = new UIMenuListItem("Eye Color", eyeColorList, 0);
+            menu.AddItem(lstEyeColor);
+
+            lstEyeMakeup = new UIMenuListItem("Makeup", makeupStyleList, 0);
+            pnlEyeMakeupOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+            pnlEyeMakeupColor = new UIMenuColorPanel("Color", UIMenuColorPanel.ColorPanelType.Makeup);
+            menu.AddItem(lstEyeMakeup);
+            lstEyeMakeup.AddPanel(pnlEyeMakeupOpacity);
+            lstEyeMakeup.AddPanel(pnlEyeMakeupColor);
+
+            if (Game.PlayerPed.Gender == Gender.Female)
+            {
+                lstBlusher = new UIMenuListItem("Blusher", blusherStyleList, 0);
+                pnlBlusherOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+                pnlBlusherColor = new UIMenuColorPanel("Color", UIMenuColorPanel.ColorPanelType.Makeup);
+                menu.AddItem(lstBlusher);
+                lstBlusher.AddPanel(pnlBlusherOpacity);
+                lstBlusher.AddPanel(pnlBlusherColor);
+            }
+
+            lstLipstick = new UIMenuListItem("Lipstick", lipstickStyleList, 0);
+            pnlLipstickOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
+            pnlLipstickColor = new UIMenuColorPanel("Color", UIMenuColorPanel.ColorPanelType.Makeup);
             menu.AddItem(lstLipstick);
+            lstLipstick.AddPanel(pnlLipstickOpacity);
+            lstLipstick.AddPanel(pnlLipstickColor);
         }
 
         private async Task OnPlayerControls()
@@ -113,11 +458,118 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 
         private void CreateMenuItems()
         {
+            hairStyleList.Clear();
             int maxHairStyles = API.GetNumberOfPedDrawableVariations(Game.PlayerPed.Handle, 2);
             for (int i = 0; i < maxHairStyles; i++)
             {
-                
+                hairStyleList.Add($"Style #{i + 1}");
+            }
+            hairStyleList.Add($"Style #{maxHairStyles + 1}");
+
+            blemishesStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(0); i++)
+            {
+                blemishesStyleList.Add($"Style #{i + 1}");
+            }
+
+            facialHairStylesList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(1); i++)
+            {
+                facialHairStylesList.Add($"Style #{i + 1}");
+            }
+
+            eyebrowsStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(2); i++)
+            {
+                eyebrowsStyleList.Add($"Style #{i + 1}");
+            }
+
+            skinAgingStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(3); i++)
+            {
+                skinAgingStyleList.Add($"Style #{i + 1}");
+            }
+
+            makeupStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(4); i++)
+            {
+                makeupStyleList.Add($"Style #{i + 1}");
+            }
+
+            blusherStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(5); i++)
+            {
+                blusherStyleList.Add($"Style #{i + 1}");
+            }
+
+            complexionStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(6); i++)
+            {
+                complexionStyleList.Add($"Style #{i + 1}");
+            }
+
+            skinDamageStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(7); i++)
+            {
+                skinDamageStyleList.Add($"Style #{i + 1}");
+            }
+
+            lipstickStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(8); i++)
+            {
+                lipstickStyleList.Add($"Style #{i + 1}");
+            }
+
+            molesFrecklesStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(9); i++)
+            {
+                molesFrecklesStyleList.Add($"Style #{i + 1}");
+            }
+
+            chestHairStyleList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(10); i++)
+            {
+                chestHairStyleList.Add($"Style #{i + 1}");
+            }
+
+            bodyBlemishesList.Clear();
+            for (int i = 0; i < API.GetNumHeadOverlayValues(11); i++)
+            {
+                bodyBlemishesList.Add($"Style #{i + 1}");
+            }
+
+            eyeColorList.Clear();
+            for (int i = 0; i < 32; i++)
+            {
+                eyeColorList.Add($"Eye Color #{i + 1}");
             }
         }
+
+        Dictionary<int, KeyValuePair<string, string>> hairOverlays = new Dictionary<int, KeyValuePair<string, string>>()
+            {
+                { 0, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_a") },
+                { 1, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 2, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 3, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_003_a") },
+                { 4, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 5, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 6, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 7, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 8, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_008_a") },
+                { 9, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 10, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 11, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 12, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 13, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 14, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_long_a") },
+                { 15, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_long_a") },
+                { 16, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 17, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_a") },
+                { 18, new KeyValuePair<string, string>("mpbusiness_overlays", "FM_Bus_M_Hair_000_a") },
+                { 19, new KeyValuePair<string, string>("mpbusiness_overlays", "FM_Bus_M_Hair_001_a") },
+                { 20, new KeyValuePair<string, string>("mphipster_overlays", "FM_Hip_M_Hair_000_a") },
+                { 21, new KeyValuePair<string, string>("mphipster_overlays", "FM_Hip_M_Hair_001_a") },
+                { 22, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_a") },
+            };
     }
 }

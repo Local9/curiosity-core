@@ -124,6 +124,9 @@ namespace Curiosity.Systems.Client.Managers
         {
             Screen.Fading.FadeIn(0);
 
+            API.SetTimecycleModifier("default");
+            API.SetTimecycleModifierStrength(1f);
+
             Logger.Debug("[Character] Loading character data...");
 
             Screen.LoadingPrompt.Show("Loading Character Data...");
