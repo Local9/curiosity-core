@@ -70,6 +70,7 @@
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterApparel.cs" />
+    <Compile Include="Interface\Menus\Creator\CharacterCreatorData.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterFeatures.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterStats.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterAppearance.cs" />

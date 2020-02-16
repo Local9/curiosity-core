@@ -10,7 +10,20 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 {
     class CharacterAppearance
     {
+        private UIMenuListItem lstHair; // Color Panel
+        private UIMenuListItem lstEyebrows; // Color Panel + Opacity
+        private UIMenuListItem lstFacialHair; // Male Only | Color Panel + Opacity
+        private UIMenuListItem lstSkinBlemishes; // Opacity
+        private UIMenuListItem lstSkinAging; // Opacity
+        private UIMenuListItem lstSkinComplexion; // Opacity
+        private UIMenuListItem lstSkinMoles; // Opacity
+        private UIMenuListItem lstSkinDamage; // Opacity
+        private UIMenuListItem lstEyeColor;
+        private UIMenuListItem lstEyeMakeup; // Opacity
+        private UIMenuListItem lstBlusher; // Female Only | Color Panel + Opacity
+        private UIMenuListItem lstLipstick; // Color Panel + Opacity
 
+        private int Hair;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
