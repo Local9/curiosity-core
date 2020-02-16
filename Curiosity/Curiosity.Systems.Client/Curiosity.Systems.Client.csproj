@@ -72,7 +72,7 @@
     <Compile Include="Interface\Menus\Creator\CharacterApparel.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterFeatures.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterStats.cs" />
-    <Compile Include="Interface\Menus\Creator\CharactreAppearance.cs" />
+    <Compile Include="Interface\Menus\Creator\CharacterAppearance.cs" />
     <Compile Include="Interface\Menus\Creator\CreatorMenus.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterHeritage.cs" />
     <Compile Include="Interface\Modules\HeadupDisplay.cs" />

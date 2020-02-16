@@ -151,6 +151,7 @@ namespace Curiosity.Systems.Client.Managers
 
         public async Task Load(CuriosityPlayer player)
         {
+            BaseScript.TriggerServerEvent("curiosity:Server:Queue:PlayerConnected");
 
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();

@@ -8,12 +8,9 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Interface.Menus.Creator
 {
-    class CharacterApparel
+    class CharacterAppearance
     {
-        private UIMenuListItem lstStyles;
-        private UIMenuListItem lstOutfits;
-        private UIMenuListItem lstHats;
-        private UIMenuListItem lstGlasses;
+
 
         public UIMenu CreateMenu(UIMenu menu)
         {
