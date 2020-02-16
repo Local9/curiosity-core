@@ -6,6 +6,7 @@ using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -44,6 +45,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             menu.OnMenuOpen += Menu_OnMenuOpen;
             menu.OnMenuClose += Menu_OnMenuClose;
 
+            menu.AddInstructionalButton(CreatorMenus.btnRandom);
             menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
             menu.AddInstructionalButton(CreatorMenus.btnRotateRight);
 
@@ -112,6 +114,32 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             {
                 Game.PlayerPed.Heading -= 10f;
             }
+
+            if (Game.IsControlJustPressed(0, Control.Jump))
+            {
+                Randomise();
+            }
+        }
+
+        private void Randomise()
+        {
+            MenuMotherIndex = CuriosityPlugin.Rand.Next(MotherFaces.Count);
+            MenuFatherIndex = CuriosityPlugin.Rand.Next(FatherFaces.Count);
+
+            MotherId = MenuMotherIndex;
+            FatherId = MenuFatherIndex;
+
+            Mothers.Index = MenuMotherIndex;
+            Fathers.Index = MenuFatherIndex;
+
+            Resemblance.Value = CuriosityPlugin.Rand.Next(100);
+            SkinTone.Value = CuriosityPlugin.Rand.Next(100);
+
+            ResembalanceBlend = (100 - Resemblance.Value) / 100f;
+            SkinToneBlend = (100 - SkinTone.Value) / 100f;
+
+            HeritageWindow.Index(MenuMotherIndex, MenuFatherIndex);
+            UpdatePedBlendData();
         }
 
         private void Menu_OnSliderChange(UIMenu sender, UIMenuSliderItem listItem, int newIndex)
