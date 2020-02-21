@@ -36,6 +36,11 @@ namespace Curiosity.Client.net.Classes.Player
             PeriodicCheck();
         }
 
+        public static int GetTotalEarnings()
+        {
+            return playerInfo.Wallet + playerInfo.BankAccount;
+        }
+
         static void SetDutyIcon(bool onDuty, bool active, string job)
         {
             API.SendNuiMessage(JsonConvert.SerializeObject(new DutyMessage { duty = onDuty, dutyActive = active, job = job }));

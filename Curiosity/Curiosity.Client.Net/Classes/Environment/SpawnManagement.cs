@@ -9,6 +9,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Client.net.Classes.Player;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -69,7 +70,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static async Task ShowText()
         {
             long time = seconds - (int)((API.GetGameTimer() - gameTime) / 1000);
-            string messageText = $"Wait {time}s or press ~b~PICKUP~s~ to force respawn.";
+            string messageText = $"~w~Wait {time}s or press ~b~E~w~ to force respawn.~n~~r~NOTE: You will be charged if you force respawn.\n~w~(Default bind is for your Pick Up key which you can remap)";
 
             NativeWrappers.Draw3DText(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z - 0.5f, messageText, 75f, 10f);
 
