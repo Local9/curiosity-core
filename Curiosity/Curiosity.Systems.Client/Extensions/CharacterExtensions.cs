@@ -46,14 +46,14 @@ namespace Curiosity.Systems.Client.Extensions
         //    player.User.Characters.Add(character);
         //}
 
-        //public static async Task Save(this CuriosityCharacter character)
-        //{
-        //    character.Metadata.LastPosition = Cache.Entity.Position;
+        public static async Task Save(this CuriosityCharacter character)
+        {
+            character.LastPosition = Cache.Entity.Position;
 
-        //    await EventSystem.GetModule().Request<object>("characters:save", character);
+            await EventSystem.GetModule().Request<object>("character:save", character);
 
-        //    Logger.Info($"[Characters] Saved `{character.CharacterId}` and it's changes.");
-        //}
+            Logger.Info($"[Characters] Saved `{character.CharacterId}` and it's changes.");
+        }
 
         public static async Task Load(this CuriosityCharacter character)
         {

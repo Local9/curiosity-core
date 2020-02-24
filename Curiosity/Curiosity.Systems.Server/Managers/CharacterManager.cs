@@ -3,6 +3,7 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Events;
+using Curiosity.Systems.Server.Extenstions;
 
 namespace Curiosity.Systems.Server.Managers
 {
@@ -18,6 +19,13 @@ namespace Curiosity.Systems.Server.Managers
                 curiosityUser.Character = await MySQL.Store.CharacterDatabase.Get(curiosityUser.License, player);
 
                 return curiosityUser.Character;
+            }));
+
+            EventSystem.GetModule().Attach("character:save", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityCharacter curiosityCharacter = metadata.Find<CuriosityCharacter>(0);
+                await curiosityCharacter.Save();
+                return null;
             }));
         }
     }

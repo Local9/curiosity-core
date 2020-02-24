@@ -82,11 +82,11 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             _MenuPool.RefreshIndex();
         }
 
-        private void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
             if (selectedItem == itemSave)
             {
-                
+                await Cache.Character.Save();
             }
         }
 

@@ -60,5 +60,24 @@ namespace Curiosity.Systems.Server.MySQL.Store
             }
             return null;
         }
+
+        public static async Task Save(CuriosityCharacter curiosityCharacter)
+        {
+            string characterJson = Newtonsoft.Json.JsonConvert.SerializeObject(curiosityCharacter);
+
+            using (var db = new MySqlDatabase())
+            {
+                await db.Connection.OpenAsync();
+                using (var cmd = db.Connection.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "upCharacterSkin";
+                    cmd.Parameters.AddWithValue("@characterIdIn", curiosityCharacter.CharacterId);
+                    cmd.Parameters.AddWithValue("@skinIn", characterJson);
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
     }
 }
