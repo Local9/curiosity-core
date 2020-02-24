@@ -45,13 +45,15 @@ namespace Curiosity.Systems.Server.MySQL.Store
 
                             CuriosityCharacter curiosityCharacter = new CuriosityCharacter()
                             {
+                                UserId = reader.GetInt64(0),
                                 CharacterId = reader.GetInt64(3),
-                                LocationId = reader.GetInt64(4),
-                                MarkedAsRegistered = false
+                                LocationId = reader.GetInt64(4)
                             };
 
+                            curiosityCharacter.MarkedAsRegistered = reader.GetBoolean(22);
+
                             curiosityCharacter.LastPosition = new Position(reader.GetFloat(11), reader.GetFloat(12), reader.GetFloat(13));
-                            curiosityCharacter.Style = new CharacterHeritage();
+                            curiosityCharacter.Heritage = new CharacterHeritage();
 
                             return curiosityCharacter;
                         }

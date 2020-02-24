@@ -25,7 +25,7 @@ namespace Curiosity.Systems.Library.Models
         public long LocationId { get; set; }
         public int Gender { get; set; } = 0; // Default Gender is Male
         public Position LastPosition { get; set; }
-        public CharacterHeritage Style { get; set; } = new CharacterHeritage();
+        public CharacterHeritage Heritage { get; set; } = new CharacterHeritage();
         public Dictionary<string, int> Stats { get; set; } = new Dictionary<string, int>();
         public CharacterAppearance Appearance { get; set; } = new CharacterAppearance();
         public Dictionary<int, float> Features { get; set; } = new Dictionary<int, float>();

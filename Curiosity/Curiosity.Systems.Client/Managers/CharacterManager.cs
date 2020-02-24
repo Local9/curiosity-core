@@ -224,6 +224,8 @@ namespace Curiosity.Systems.Client.Managers
             {
                 Screen.Fading.FadeIn(5000);
             }
+            Curiosity.DiscordRichPresence.Status = $"Freeroam @ LSIA";
+            Curiosity.DiscordRichPresence.Commit();
 
             Screen.LoadingPrompt.Hide();
             player.EnableHud();

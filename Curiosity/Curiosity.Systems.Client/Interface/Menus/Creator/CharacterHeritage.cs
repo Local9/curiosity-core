@@ -229,7 +229,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
         {
             // Logger.Debug($"[UpdatePedBlendData] fa/ma {FatherApperance}/{MotherApperance} | fs/ms {FatherSkin}/{MotherSkin} | ab/sb {ApperanceBlend}/{SkinBlend}");
 
-            Cache.Character.Style.UpdateBlendData(FatherId, MotherId, FatherId, MotherId, ResembalanceBlend, SkinToneBlend);
+            Cache.Character.Heritage.UpdateBlendData(FatherId, MotherId, FatherId, MotherId, ResembalanceBlend, SkinToneBlend);
             API.SetPedHeadBlendData(Cache.Entity.Id, FatherId, MotherId, 0, FatherId, MotherId, 0, ResembalanceBlend, SkinToneBlend, 0f, false);
         }
     }

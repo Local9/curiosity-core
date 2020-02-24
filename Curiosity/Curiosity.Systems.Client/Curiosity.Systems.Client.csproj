@@ -77,7 +77,6 @@
     <Compile Include="Interface\Menus\Creator\CreatorMenus.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterHeritage.cs" />
     <Compile Include="Interface\Modules\HeadupDisplay.cs" />
-    <Compile Include="Interface\Modules\VehicleHeadupDisplay.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />

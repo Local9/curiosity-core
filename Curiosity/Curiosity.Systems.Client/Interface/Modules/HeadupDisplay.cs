@@ -13,8 +13,8 @@ namespace Curiosity.Systems.Client.Interface.Modules
         [TickHandler(SessionWait = true)]
         private async Task OnTick()
         {
-            var atlas = CuriosityPlugin.Instance;
-            var player = atlas.Local;
+            var curiosity = CuriosityPlugin.Instance;
+            var player = curiosity.Local;
             var ped = API.PlayerPedId();
 
             if (player?.Entity != null && !IsDisabled && !API.IsPedSittingInAnyVehicle(ped))

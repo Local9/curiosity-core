@@ -72,7 +72,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             menuCharacterApparel = _MenuPool.AddSubMenu(menuMain, "Apparel");
             _CharacterApparel.CreateMenu(menuCharacterApparel);
 
-            itemSave = new UIMenuItem("Save", "Save your character and enter the world.", Color.FromArgb(0, 0, 0), Color.FromArgb(0, 180, 0));
+            itemSave = new UIMenuItem("Save", "Save your character and enter the world.");
             menuMain.AddItem(itemSave);
 
             // buttons
@@ -87,6 +87,11 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             if (selectedItem == itemSave)
             {
                 await Cache.Character.Save();
+                Cache.Character.MarkedAsRegistered = true;
+                DestroyMenus();
+                menuMain.Clear();
+                _MenuPool.CloseAllMenus();
+                menuMain = null;
             }
         }
 
@@ -105,9 +110,9 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 
                 await Game.Player.ChangeModel(playerModel);
 
-                if (Cache.Character.Style == null)
+                if (Cache.Character.Heritage == null)
                 {
-                    Cache.Character.Style = new Library.Models.CharacterHeritage();
+                    Cache.Character.Heritage = new Library.Models.CharacterHeritage();
                 }
 
                 Cache.Character.Gender = newIndex;

@@ -130,53 +130,9 @@ namespace Curiosity.Systems.Client.Extensions
                 .SkipTask()
             ).PlayQueue();
 
-            var registered = false;
             var menuDisplayed = false;
-            var view = 0;
 
-            //StyleManager.GetModule().OpenStyleChange(character.Style, "General", 0, async type =>
-            //{
-            //    if (type == 0)
-            //    {
-            //        registered = true;
-            //    }
-            //    else
-            //    {
-            //        var item = InterfaceManager.GetModule().MenuContext.Selected;
-
-            //        if (item == null) return;
-
-            //        var head = HeadComponents.Select(self => self.ToLower())
-            //            .Contains(item.Seed.Replace("style_component_", "").ToLower());
-
-            //        if (head && view == 0)
-            //        {
-            //            view = 1;
-
-            //            player.CameraQueue.Reset();
-
-            //            await player.CameraQueue.View(new CameraBuilder()
-            //                .SkipTask()
-            //                .WithMotionBlur(0.5f)
-            //                .WithInterpolation(CameraViews[1], CameraViews[2], 300)
-            //            );
-            //        }
-            //        else if (!head && view == 1)
-            //        {
-            //            view = 0;
-
-            //            player.CameraQueue.Reset();
-
-            //            await player.CameraQueue.View(new CameraBuilder()
-            //                .SkipTask()
-            //                .WithMotionBlur(0.5f)
-            //                .WithInterpolation(CameraViews[2], CameraViews[1], 300)
-            //            );
-            //        }
-            //    }
-            //}, "CHAR_CREATE", "All");
-
-            while (!registered)
+            while (!Cache.Character.MarkedAsRegistered)
             {
                 try
                 {

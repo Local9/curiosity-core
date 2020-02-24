@@ -56,11 +56,11 @@ namespace Curiosity.Systems.Client.Environment.Entities.Models
             switch (Range)
             {
                 case VoiceChatRange.Whisper:
-                    return "Viskning";
+                    return "Whisper";
                 case VoiceChatRange.Normal:
                     return "Normal";
                 case VoiceChatRange.Shout:
-                    return "Skrik";
+                    return "Shout";
                 default:
                     return ".";
             }
@@ -77,7 +77,7 @@ namespace Curiosity.Systems.Client.Environment.Entities.Models
                 var anchor = hud.GetMinimapAnchor();
 
                 ScreenInterface.DrawText(
-                    $"Tonläge: {(API.NetworkIsPlayerTalking(API.PlayerId()) ? "~b~" : "")}{Translate()}", 0.25f,
+                    $"Voice: {(API.NetworkIsPlayerTalking(API.PlayerId()) ? "~b~" : "")}{Translate()}", 0.25f,
                     !API.IsPedSittingInAnyVehicle(ped)
                         ? new Vector2(anchor.X + 0.0005f,
                             (float) (anchor.BottomY - anchor.UnitY * 18f / 2 / 2) - anchor.UnitY * 18f * 2 - 0.0005f)
