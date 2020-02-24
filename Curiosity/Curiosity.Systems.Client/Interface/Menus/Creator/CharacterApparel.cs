@@ -28,6 +28,29 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             menu.OnMenuClose += Menu_OnMenuClose;
             menu.OnListChange += Menu_OnListChange;
 
+            lstTops = new UIMenuListItem("Tops", GenerateNumberList(MAX_TOP_VALUE), Cache.Character.Appearance.Top);
+            lstPants = new UIMenuListItem("Pants", GenerateNumberList(MAX_PANTS_VALUE), Cache.Character.Appearance.Pants);
+            lstShoes = new UIMenuListItem("Shoes", GenerateNumberList(MAX_SHOE_VALUE), Cache.Character.Appearance.Shoes);
+            lstHats = new UIMenuListItem("Hats", GenerateNumberList(MAX_HAT_VALUE), Cache.Character.Appearance.Hat);
+            lstGlasses = new UIMenuListItem("Glasses", GenerateNumberList(MAX_GLASSES_VALUE), Cache.Character.Appearance.Glasses);
+
+            Randomise();
+
+            menu.AddItem(lstTops);
+            menu.AddItem(lstPants);
+            menu.AddItem(lstShoes);
+            menu.AddItem(lstHats);
+            menu.AddItem(lstGlasses);
+
+            menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
+            menu.AddInstructionalButton(CreatorMenus.btnRotateRight);
+            menu.AddInstructionalButton(CreatorMenus.btnRandom);
+
+            return menu;
+        }
+
+        private void Randomise()
+        {
             Cache.Character.Appearance.Top = CuriosityPlugin.Rand.Next(MAX_TOP_VALUE);
             Cache.Character.Appearance.Pants = CuriosityPlugin.Rand.Next(MAX_PANTS_VALUE);
             Cache.Character.Appearance.Shoes = CuriosityPlugin.Rand.Next(MAX_SHOE_VALUE);
@@ -40,22 +63,11 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             CharacterClothing.SetPedHat(Game.PlayerPed, Cache.Character.Appearance.Hat);
             CharacterClothing.SetPedGlasses(Game.PlayerPed, Cache.Character.Appearance.Glasses);
 
-            lstTops = new UIMenuListItem("Tops", GenerateNumberList(MAX_TOP_VALUE), Cache.Character.Appearance.Top);
-            lstPants = new UIMenuListItem("Pants", GenerateNumberList(MAX_PANTS_VALUE), Cache.Character.Appearance.Pants);
-            lstShoes = new UIMenuListItem("Shoes", GenerateNumberList(MAX_SHOE_VALUE), Cache.Character.Appearance.Shoes);
-            lstHats = new UIMenuListItem("Hats", GenerateNumberList(MAX_HAT_VALUE), Cache.Character.Appearance.Hat);
-            lstGlasses = new UIMenuListItem("Glasses", GenerateNumberList(MAX_GLASSES_VALUE), Cache.Character.Appearance.Glasses);
-
-            menu.AddItem(lstTops);
-            menu.AddItem(lstPants);
-            menu.AddItem(lstShoes);
-            menu.AddItem(lstHats);
-            menu.AddItem(lstGlasses);
-
-            menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
-            menu.AddInstructionalButton(CreatorMenus.btnRotateRight);
-
-            return menu;
+            lstTops.Index = Cache.Character.Appearance.Top;
+            lstPants.Index = Cache.Character.Appearance.Pants;
+            lstShoes.Index = Cache.Character.Appearance.Shoes;
+            lstHats.Index = Cache.Character.Appearance.Hat;
+            lstGlasses.Index = Cache.Character.Appearance.Glasses;
         }
 
         private void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
@@ -113,6 +125,11 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             if (Game.IsControlPressed(0, Control.Cover))
             {
                 Game.PlayerPed.Heading -= 10f;
+            }
+
+            if (Game.IsControlJustPressed(0, Control.Jump))
+            {
+                Randomise();
             }
         }
 
