@@ -34,6 +34,12 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             lstHats = new UIMenuListItem("Hats", GenerateNumberList(MAX_HAT_VALUE), 0);
             lstGlasses = new UIMenuListItem("Glasses", GenerateNumberList(MAX_GLASSES_VALUE), 0);
 
+            menu.AddItem(lstTops);
+            menu.AddItem(lstPants);
+            menu.AddItem(lstShoes);
+            menu.AddItem(lstHats);
+            menu.AddItem(lstGlasses);
+
             menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
             menu.AddInstructionalButton(CreatorMenus.btnRotateRight);
 
