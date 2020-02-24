@@ -34,6 +34,12 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             Cache.Character.Appearance.Hat = CuriosityPlugin.Rand.Next(MAX_HAT_VALUE);
             Cache.Character.Appearance.Glasses = CuriosityPlugin.Rand.Next(MAX_GLASSES_VALUE);
 
+            CharacterClothing.SetPedTop(Game.PlayerPed, Cache.Character.Appearance.Top);
+            CharacterClothing.SetPedPants(Game.PlayerPed, Cache.Character.Appearance.Pants);
+            CharacterClothing.SetPedShoes(Game.PlayerPed, Cache.Character.Appearance.Shoes);
+            CharacterClothing.SetPedHat(Game.PlayerPed, Cache.Character.Appearance.Hat);
+            CharacterClothing.SetPedGlasses(Game.PlayerPed, Cache.Character.Appearance.Glasses);
+
             lstTops = new UIMenuListItem("Tops", GenerateNumberList(MAX_TOP_VALUE), Cache.Character.Appearance.Top);
             lstPants = new UIMenuListItem("Pants", GenerateNumberList(MAX_PANTS_VALUE), Cache.Character.Appearance.Pants);
             lstShoes = new UIMenuListItem("Shoes", GenerateNumberList(MAX_SHOE_VALUE), Cache.Character.Appearance.Shoes);
