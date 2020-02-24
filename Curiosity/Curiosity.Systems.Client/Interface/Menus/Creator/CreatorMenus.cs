@@ -1,10 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +25,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
         private UIMenu menuCharacterAppearance; // clothes
         private UIMenu menuCharacterApparel; // clothing
         private UIMenu menuCharacterStats; // stats
+        private UIMenuItem itemSave;
         // Cameras
         public static RotatablePosition[] CameraViews = CharacterExtensions.CameraViews;
 
@@ -54,6 +57,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             menuMain.OnMenuOpen += MainMenu_OnMenuOpen;
             menuMain.OnMenuClose += MainMenu_OnMenuClose;
             menuMain.OnListChange += MenuMain_OnListChange;
+            menuMain.OnItemSelect += MenuMain_OnItemSelect;
 
             // items
             mLstGender = new UIMenuListItem("Gender", Genders, 0);
@@ -68,11 +72,22 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             menuCharacterApparel = _MenuPool.AddSubMenu(menuMain, "Apparel");
             _CharacterApparel.CreateMenu(menuCharacterApparel);
 
+            itemSave = new UIMenuItem("Save", "Save your character and enter the world.", Color.FromArgb(0, 0, 0), Color.FromArgb(0, 180, 0));
+            menuMain.AddItem(itemSave);
+
             // buttons
             menuMain.AddInstructionalButton(btnRotateLeft);
             menuMain.AddInstructionalButton(btnRotateRight);
 
             _MenuPool.RefreshIndex();
+        }
+
+        private void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        {
+            if (selectedItem == itemSave)
+            {
+                
+            }
         }
 
         private async void MenuMain_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)

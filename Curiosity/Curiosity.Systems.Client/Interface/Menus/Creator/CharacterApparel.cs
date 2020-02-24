@@ -28,11 +28,17 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             menu.OnMenuClose += Menu_OnMenuClose;
             menu.OnListChange += Menu_OnListChange;
 
-            lstTops = new UIMenuListItem("Tops", GenerateNumberList(MAX_TOP_VALUE), 0);
-            lstPants = new UIMenuListItem("Pants", GenerateNumberList(MAX_PANTS_VALUE), 0);
-            lstShoes = new UIMenuListItem("Shoes", GenerateNumberList(MAX_SHOE_VALUE), 0);
-            lstHats = new UIMenuListItem("Hats", GenerateNumberList(MAX_HAT_VALUE), 0);
-            lstGlasses = new UIMenuListItem("Glasses", GenerateNumberList(MAX_GLASSES_VALUE), 0);
+            Cache.Character.Appearance.Top = CuriosityPlugin.Rand.Next(MAX_TOP_VALUE);
+            Cache.Character.Appearance.Pants = CuriosityPlugin.Rand.Next(MAX_PANTS_VALUE);
+            Cache.Character.Appearance.Shoes = CuriosityPlugin.Rand.Next(MAX_SHOE_VALUE);
+            Cache.Character.Appearance.Hat = CuriosityPlugin.Rand.Next(MAX_HAT_VALUE);
+            Cache.Character.Appearance.Glasses = CuriosityPlugin.Rand.Next(MAX_GLASSES_VALUE);
+
+            lstTops = new UIMenuListItem("Tops", GenerateNumberList(MAX_TOP_VALUE), Cache.Character.Appearance.Top);
+            lstPants = new UIMenuListItem("Pants", GenerateNumberList(MAX_PANTS_VALUE), Cache.Character.Appearance.Pants);
+            lstShoes = new UIMenuListItem("Shoes", GenerateNumberList(MAX_SHOE_VALUE), Cache.Character.Appearance.Shoes);
+            lstHats = new UIMenuListItem("Hats", GenerateNumberList(MAX_HAT_VALUE), Cache.Character.Appearance.Hat);
+            lstGlasses = new UIMenuListItem("Glasses", GenerateNumberList(MAX_GLASSES_VALUE), Cache.Character.Appearance.Glasses);
 
             menu.AddItem(lstTops);
             menu.AddItem(lstPants);
@@ -51,26 +57,31 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             if (listItem == lstTops)
             {
                 CharacterClothing.SetPedTop(Game.PlayerPed, newIndex);
+                Cache.Character.Appearance.Top = newIndex;
             }
 
             if (listItem == lstPants)
             {
                 CharacterClothing.SetPedPants(Game.PlayerPed, newIndex);
+                Cache.Character.Appearance.Pants = newIndex;
             }
 
             if (listItem == lstShoes)
             {
                 CharacterClothing.SetPedShoes(Game.PlayerPed, newIndex);
+                Cache.Character.Appearance.Shoes = newIndex;
             }
 
             if (listItem == lstHats)
             {
                 CharacterClothing.SetPedHat(Game.PlayerPed, newIndex);
+                Cache.Character.Appearance.Hat = newIndex;
             }
 
             if (listItem == lstGlasses)
             {
                 CharacterClothing.SetPedGlasses(Game.PlayerPed, newIndex);
+                Cache.Character.Appearance.Glasses = newIndex;
             }
         }
 
