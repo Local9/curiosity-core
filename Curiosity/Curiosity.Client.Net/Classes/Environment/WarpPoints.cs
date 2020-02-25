@@ -50,6 +50,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static public List<WarpPointPair> Warps = new List<WarpPointPair>()
         {
+            new WarpPointPair { A = new WarpPoint("teleport", new Vector3(-114.5704f, -603.6292f, 36.28073f + MarkerZAdjustment), 237.2837f), B = new WarpPoint("teleport", new Vector3(-141.6387f, -617.3163f, 168.8204f + MarkerZAdjustment), 168.9857f), },
             new WarpPointPair { A = new WarpPoint("teleport", new Vector3(-1635.858f, 181.2483f, 61.75729f + MarkerZAdjustment), 114.9818f), B = new WarpPoint("teleport", new Vector3(-1636.603f, 180.486f, -98.79057f + MarkerZAdjustment), 298.743f), },
             new WarpPointPair { A = new WarpPoint("teleport", new Vector3(-1285.072f, -566.754f, 31.71238f + MarkerZAdjustment), 342.3238f), B = new WarpPoint("teleport", new Vector3(277.7495f, -268.3857f, 53.93997f + MarkerZAdjustment), 322.8678f), },
             // HQ
