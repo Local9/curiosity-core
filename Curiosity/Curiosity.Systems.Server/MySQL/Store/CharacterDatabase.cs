@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Server.Diagnostics;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,12 +14,10 @@ namespace Curiosity.Systems.Server.MySQL.Store
 {
     class CharacterDatabase
     {
-        public static async Task<CuriosityCharacter> Get(string license, Player player)
+        public static async Task<CuriosityCharacter> Get(Player player, ulong discordId)
         {
             int serverId = CuriosityPlugin.ServerId;
             int starterCash = API.GetConvarInt("starter_cash", 100);
-            int starterBank = API.GetConvarInt("starter_bank", 1000);
-            int serverSpawnLocationId = CuriosityPlugin.SpawnLocationId;
 
             using (var db = new MySqlDatabase())
             {
@@ -26,34 +26,33 @@ namespace Curiosity.Systems.Server.MySQL.Store
                 using (var cmd = db.Connection.CreateCommand())
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "spGetUserCharacter";
-                    cmd.Parameters.AddWithValue("@licenseIn", license);
-                    cmd.Parameters.AddWithValue("@serverIdIn", serverId);
-                    cmd.Parameters.AddWithValue("@starterCash", starterCash);
-                    cmd.Parameters.AddWithValue("@starterBankAccount", starterBank);
-                    cmd.Parameters.AddWithValue("@locationIdIn", serverSpawnLocationId);
+                    cmd.CommandText = "spGetUserCharacter_v2";
+                    cmd.Parameters.AddWithValue("@discordIdent", discordId);
+                    cmd.Parameters.AddWithValue("@serverIdent", serverId);
+
+
+                    foreach(MySqlParameter param in cmd.Parameters)
+                    {
+                        Logger.Debug($"{param.ParameterName} = {param.Value}");
+                    }
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
                         if (await reader.ReadAsync())
                         {
-                            if (!reader.HasRows)
+                            CuriosityCharacter curiosityCharacter = new CuriosityCharacter();
+
+                            if (reader.HasRows)
                             {
-                                player.Drop($"Sorry {player.Name}, an error occurred while you were trying to connect to the server or update your characters information, please try to connect again. If the issue persists visit our Discord @ {CuriosityPlugin.DiscordUrl}");
-                                throw new Exception($"SQL ERROR -> Failed to find information for {player.Name} [{player.Identifiers["license"]}]");
+                                if (!reader.IsDBNull(4))
+                                    curiosityCharacter = Newtonsoft.Json.JsonConvert.DeserializeObject<CuriosityCharacter>(reader.GetString(4));
+                                
+                                curiosityCharacter.CharacterId = reader.GetInt64(0);
+                                curiosityCharacter.MarkedAsRegistered = reader.GetBoolean(1);
                             }
 
-                            CuriosityCharacter curiosityCharacter = new CuriosityCharacter()
-                            {
-                                UserId = reader.GetInt64(0),
-                                CharacterId = reader.GetInt64(3),
-                                LocationId = reader.GetInt64(4)
-                            };
-
-                            curiosityCharacter.MarkedAsRegistered = reader.GetBoolean(22);
-
-                            curiosityCharacter.LastPosition = new Position(reader.GetFloat(11), reader.GetFloat(12), reader.GetFloat(13));
-                            curiosityCharacter.Heritage = new CharacterHeritage();
+                            if (!curiosityCharacter.MarkedAsRegistered)
+                                curiosityCharacter.Cash = starterCash;
 
                             return curiosityCharacter;
                         }
@@ -73,7 +72,7 @@ namespace Curiosity.Systems.Server.MySQL.Store
                 using (var cmd = db.Connection.CreateCommand())
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "upCharacterSkin";
+                    cmd.CommandText = "upCharacterSkin_v2";
                     cmd.Parameters.AddWithValue("@characterIdIn", curiosityCharacter.CharacterId);
                     cmd.Parameters.AddWithValue("@skinIn", characterJson);
 

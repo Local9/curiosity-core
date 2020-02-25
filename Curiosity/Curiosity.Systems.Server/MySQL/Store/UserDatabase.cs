@@ -15,7 +15,7 @@ namespace Curiosity.Systems.Server.MySQL.Store
     {
         public static async Task<CuriosityUser> Get(string license, Player player, ulong discordId)
         {
-            Logger.Debug($"User: {player.Name}, License: {license}");
+            Logger.Debug($"User: {player.Name}, License: {license}, DiscordId: {discordId}");
 
             using (var db = new MySqlDatabase())
             {
@@ -24,7 +24,7 @@ namespace Curiosity.Systems.Server.MySQL.Store
                 using (var cmd = db.Connection.CreateCommand())
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "spGetUser";
+                    cmd.CommandText = "spGetUser_v2";
                     cmd.Parameters.AddWithValue("@licenseIn", license);
                     cmd.Parameters.AddWithValue("@usernameIn", player.Name);
                     cmd.Parameters.AddWithValue("@discordIdIn", discordId);
@@ -33,8 +33,6 @@ namespace Curiosity.Systems.Server.MySQL.Store
                     {
                         if (await reader.ReadAsync())
                         {
-                            Logger.Debug($"Reader HasRows: {reader.HasRows}, Field Count: {reader.FieldCount}");
-
                             if (!reader.HasRows)
                             {
                                 player.Drop($"Sorry {player.Name}, an error occurred while you were trying to connect to the server or update your characters information, please try to connect again. If the issue persists visit our Discord @ {CuriosityPlugin.DiscordUrl}");
@@ -57,10 +55,9 @@ namespace Curiosity.Systems.Server.MySQL.Store
                             if (!reader.IsDBNull(6))
                                 curiosityUser.BannedUntil = reader.GetDateTime(6);
 
-                            if (!reader.IsDBNull(10))
-                                curiosityUser.UserRole = (Role)reader.GetInt32(10);
-
+                            curiosityUser.UserRole = (Role)reader.GetInt32(10);
                             curiosityUser.LastName = player.Name;
+                            curiosityUser.DiscordId = discordId;
 
                             return curiosityUser;
                         }
