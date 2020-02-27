@@ -133,6 +133,8 @@ namespace Curiosity.Systems.Client
             Screen.Hud.HideComponentThisFrame(HudComponent.MpTagCashFromBank);
             Screen.Hud.HideComponentThisFrame(HudComponent.Saving);
 
+            API.SetTextChatEnabled(false);
+
             // Whitelist to make the reticle show. (Snipers, and certain weapons with scopes possibly)
             Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
 
