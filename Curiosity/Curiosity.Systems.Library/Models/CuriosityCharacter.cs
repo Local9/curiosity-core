@@ -17,12 +17,11 @@ namespace Curiosity.Systems.Library.Models
         [JsonIgnore] public string MP0_LUNG_CAPACITY { get { return "MP0_LUNG_CAPACITY"; } }
 
         public long CharacterId { get; set; }
-        public long UserId { get; set; }
         public int Health { get; set; }
         public int Armor { get; set; }
+        public bool IsDead { get; set; }
         public long Cash { get; set; }
         public bool MarkedAsRegistered { get; set; }
-        public long LocationId { get; set; }
         public int Gender { get; set; } = 0; // Default Gender is Male
         public Position LastPosition { get; set; }
         public CharacterHeritage Heritage { get; set; } = new CharacterHeritage();
