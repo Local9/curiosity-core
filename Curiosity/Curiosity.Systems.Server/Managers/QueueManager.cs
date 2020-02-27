@@ -20,7 +20,7 @@ namespace Curiosity.Systems.Server.Managers
         static Dictionary<Messages, string> messages = new Dictionary<Messages, string>();
 
         static Regex regex = new Regex(@"^[ A-Za-z0-9-_.#\[\]]{1,32}$");
-        static Regex blacklistedNames = new Regex(@"\b(admin|nigga|nigger|administrator|moderator|staff|n1gg3|n1g|n1gg3r)\b");
+        static Regex blacklistedNames = new Regex(@"\b(admin|administrator|moderator|staff|user)\b");
 
         static string resourceName = API.GetCurrentResourceName();
         static string resourcePath = $"resources/{API.GetResourcePath(resourceName).Substring(API.GetResourcePath(resourceName).LastIndexOf("//") + 2)}";
