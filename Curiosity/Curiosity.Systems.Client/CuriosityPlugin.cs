@@ -5,6 +5,7 @@ using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Discord;
 using Curiosity.Systems.Client.Environment.Entities;
 using Curiosity.Systems.Client.Events;
+using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using System;
@@ -103,6 +104,20 @@ namespace Curiosity.Systems.Client
             AttachTickHandlers(this);
 
             Logger.Info("Load method has been completed.");
+        }
+
+        [TickHandler]
+        private async Task SaveTask()
+        {
+            if (Local?.Character != null)
+            {
+                Local.Character.LastPosition = Local.Entity.Position;
+                Local.Character.Health = API.GetEntityHealth(Cache.Entity.Id);
+                Local.Character.Armor = API.GetPedArmour(Cache.Entity.Id);
+                Local.Character.Save();
+            }
+
+            await Delay(5000);
         }
 
         [TickHandler]
