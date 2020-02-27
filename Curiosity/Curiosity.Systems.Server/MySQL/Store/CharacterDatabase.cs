@@ -72,9 +72,12 @@ namespace Curiosity.Systems.Server.MySQL.Store
                 using (var cmd = db.Connection.CreateCommand())
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "upCharacterSkin_v2";
-                    cmd.Parameters.AddWithValue("@characterIdIn", curiosityCharacter.CharacterId);
-                    cmd.Parameters.AddWithValue("@skinIn", characterJson);
+                    cmd.CommandText = "upCharacter";
+                    cmd.Parameters.AddWithValue("@CharacterIdent", curiosityCharacter.CharacterId);
+                    cmd.Parameters.AddWithValue("@CashAmount", curiosityCharacter.Cash);
+                    cmd.Parameters.AddWithValue("@IsRegistered", curiosityCharacter.MarkedAsRegistered);
+                    cmd.Parameters.AddWithValue("@IsDead", curiosityCharacter.Health == 0);
+                    cmd.Parameters.AddWithValue("@CharacterJson", characterJson);
 
                     await cmd.ExecuteNonQueryAsync();
                 }

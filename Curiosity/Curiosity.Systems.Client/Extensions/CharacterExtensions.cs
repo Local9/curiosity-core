@@ -49,6 +49,8 @@ namespace Curiosity.Systems.Client.Extensions
         public static async Task Save(this CuriosityCharacter character)
         {
             character.LastPosition = Cache.Entity.Position;
+            character.Health = Game.PlayerPed.Health;
+            character.Armor = Game.PlayerPed.Armor;
 
             await EventSystem.GetModule().Request<object>("character:save", character);
 
