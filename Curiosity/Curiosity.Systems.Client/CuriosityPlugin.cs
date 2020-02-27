@@ -111,10 +111,13 @@ namespace Curiosity.Systems.Client
         {
             if (Local?.Character != null)
             {
-                Local.Character.LastPosition = Local.Entity.Position;
-                Local.Character.Health = API.GetEntityHealth(Cache.Entity.Id);
-                Local.Character.Armor = API.GetPedArmour(Cache.Entity.Id);
-                Local.Character.Save();
+                if (Local.Character.MarkedAsRegistered)
+                {
+                    Local.Character.LastPosition = Local.Entity.Position;
+                    Local.Character.Health = API.GetEntityHealth(Cache.Entity.Id);
+                    Local.Character.Armor = API.GetPedArmour(Cache.Entity.Id);
+                    Local.Character.Save();
+                }
             }
 
             await Delay(5000);
