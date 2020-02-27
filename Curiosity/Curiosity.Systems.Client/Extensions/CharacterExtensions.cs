@@ -7,6 +7,7 @@ using Curiosity.Systems.Client.Environment;
 using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Events;
 using Curiosity.Systems.Client.Interface;
+using Curiosity.Systems.Client.Interface.Menus;
 using Curiosity.Systems.Client.Interface.Menus.Creator;
 using Curiosity.Systems.Client.Managers;
 using Curiosity.Systems.Library.Models;
@@ -19,6 +20,33 @@ namespace Curiosity.Systems.Client.Extensions
 {
     public static class CharacterExtensions
     {
+
+        public static Dictionary<int, KeyValuePair<string, string>> HairOverlays = new Dictionary<int, KeyValuePair<string, string>>()
+            {
+                { 0, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_a") },
+                { 1, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 2, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 3, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_003_a") },
+                { 4, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 5, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 6, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 7, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 8, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_008_a") },
+                { 9, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 10, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 11, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 12, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 13, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 14, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_long_a") },
+                { 15, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_long_a") },
+                { 16, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_z") },
+                { 17, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_a") },
+                { 18, new KeyValuePair<string, string>("mpbusiness_overlays", "FM_Bus_M_Hair_000_a") },
+                { 19, new KeyValuePair<string, string>("mpbusiness_overlays", "FM_Bus_M_Hair_001_a") },
+                { 20, new KeyValuePair<string, string>("mphipster_overlays", "FM_Hip_M_Hair_000_a") },
+                { 21, new KeyValuePair<string, string>("mphipster_overlays", "FM_Hip_M_Hair_001_a") },
+                { 22, new KeyValuePair<string, string>("multiplayer_overlays", "FM_M_Hair_001_a") },
+            };
         public static Position DefaultPosition { get; } = new Position(-1042.24f, -2745.336f, 21.3594f, 332.7626f);
         public static Position TaxiPosition { get; } = new Position(-1050.467f, -2720.67f, 19.68902f, 240.8357f);
 
@@ -58,8 +86,72 @@ namespace Curiosity.Systems.Client.Extensions
         public static async Task Load(this CuriosityCharacter character)
         {
             var player = Cache.Player;
-
+            
             API.SetPedDefaultComponentVariation(player.Entity.Id);
+
+            Model playerModel = PedHash.FreemodeMale01;
+            if (character.Gender == 1)
+            {
+                playerModel = PedHash.FreemodeFemale01;
+            }
+            await playerModel.Request(10000);
+            await Game.Player.ChangeModel(playerModel);
+            playerModel.MarkAsNoLongerNeeded();
+
+            int fatherId = character.Heritage.FatherId;
+            int motherId = character.Heritage.MotherId;
+            float remBlend = character.Heritage.BlendApperance;
+            float skinBlend = character.Heritage.BlendSkin;
+
+            API.SetPedHeadBlendData(Cache.Entity.Id, fatherId, motherId, 0, fatherId, motherId, 0, remBlend, skinBlend, 0f, false);
+
+            CharacterClothing.SetPedTop(Game.PlayerPed, character.Appearance.Top);
+            CharacterClothing.SetPedPants(Game.PlayerPed, character.Appearance.Pants);
+            CharacterClothing.SetPedShoes(Game.PlayerPed, character.Appearance.Shoes);
+            CharacterClothing.SetPedHat(Game.PlayerPed, character.Appearance.Hat);
+            CharacterClothing.SetPedGlasses(Game.PlayerPed, character.Appearance.Glasses);
+
+            foreach(KeyValuePair<int, float> keyValuePair in character.Features)
+            {
+                API.SetPedFaceFeature(Cache.Entity.Id, keyValuePair.Key, keyValuePair.Value);
+            }
+
+            API.ClearPedFacialDecorations(Game.PlayerPed.Handle);
+
+            if (character.Appearance.HairStyle == 0)
+            {
+                API.SetPedComponentVariation(Game.PlayerPed.Handle, 2, 0, 0, 0);
+            }
+            else
+            {
+                API.SetPedComponentVariation(Game.PlayerPed.Handle, 2, character.Appearance.HairStyle, 0, 0);
+                if (!character.Appearance.HairOverlay.Equals(new KeyValuePair<string, string>()))
+                {
+                    KeyValuePair<string, string> overlay = character.Appearance.HairOverlay;
+                    API.SetPedFacialDecoration(Game.PlayerPed.Handle, (uint)API.GetHashKey(overlay.Key), (uint)API.GetHashKey(overlay.Value));
+                }
+
+                API.SetPedHairColor(Game.PlayerPed.Handle, character.Appearance.HairPrimaryColor, character.Appearance.HairSecondaryColor);
+            }
+
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 1, character.Appearance.FacialHair, character.Appearance.FacialHairOpacity);
+            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 1, 1, character.Appearance.FacialHairColor, character.Appearance.FacialHairColor);
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 2, character.Appearance.Eyebrow, character.Appearance.EyebrowOpacity);
+            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 2, 1, character.Appearance.EyebrowColor, character.Appearance.EyebrowColor);
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 4, character.Appearance.EyeMakeup, character.Appearance.EyeMakeupOpacity);
+            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 4, 2, character.Appearance.EyeMakeupColor, character.Appearance.EyeMakeupColor);
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 5, character.Appearance.Blusher, character.Appearance.BlusherOpacity);
+            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 5, 2, character.Appearance.BlusherColor, character.Appearance.BlusherColor);
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 8, character.Appearance.Lipstick, character.Appearance.LipstickOpacity);
+            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 8, 2, character.Appearance.LipstickColor, character.Appearance.LipstickColor);
+
+            API.SetPedEyeColor(Game.PlayerPed.Handle, character.Appearance.EyeColor);
+
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 0, character.Appearance.SkinBlemish, character.Appearance.SkinBlemishOpacity);
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 3, character.Appearance.SkinAging, character.Appearance.SkinAgingOpacity);
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 6, character.Appearance.SkinComplexion, character.Appearance.SkinComplexionOpacity);
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 7, character.Appearance.SkinDamage, character.Appearance.SkinDamageOpacity);
+            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 9, character.Appearance.SkinMoles, character.Appearance.SkinMolesOpacity);
 
             var voice = VoiceChat.GetModule();
             voice.Range = VoiceChatRange.Normal;

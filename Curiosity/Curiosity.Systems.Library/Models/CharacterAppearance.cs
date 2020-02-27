@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Curiosity.Systems.Library.Models
 {
@@ -40,5 +41,6 @@ namespace Curiosity.Systems.Library.Models
         public int Pants { get; set; }
         public int Shoes { get; set; }
         public int Glasses { get; set; }
+
     }
 }

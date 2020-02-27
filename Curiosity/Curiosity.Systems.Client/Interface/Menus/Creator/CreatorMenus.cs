@@ -121,6 +121,8 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
 
                 await BaseScript.Delay(500);
 
+                playerModel.MarkAsNoLongerNeeded();
+
                 Screen.Fading.FadeIn(1000);
                 while (Screen.Fading.IsFadingIn) await BaseScript.Delay(10);
                 return;
