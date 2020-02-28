@@ -79,6 +79,8 @@
     <Compile Include="Interface\Modules\HeadupDisplay.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
+    <Compile Include="Managers\CrouchManager.cs" />
+    <Compile Include="Managers\DeathManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\SessionManager.cs" />
