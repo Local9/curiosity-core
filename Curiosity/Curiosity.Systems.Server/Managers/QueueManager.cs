@@ -118,14 +118,14 @@ namespace Curiosity.Systems.Server.Managers
 
             CuriosityUser curiosityUser = await MySQL.Store.UserDatabase.Get(license, player, discordId);
 
-            Logger.Info($"Curiosity Queue Manager : {curiosityUser.UserRole} {curiosityUser.LastName} Connecting [{discordId}]");
+            Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LastName} Connecting [{discordId}]");
 
             await BaseScript.Delay(10);
 
             DiscordClient dc = new DiscordClient();
             await dc.CheckDiscordIdIsInGuild(player, discordId);
 
-            Logger.Info($"Curiosity Queue Manager : {curiosityUser.UserRole} {curiosityUser.LastName} is a member of the Discord");
+            Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LastName} is a member of the Discord");
 
             if (curiosityUser.Banned)
             {
