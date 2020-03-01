@@ -65,7 +65,7 @@ namespace Curiosity.Systems.Client.Managers
             Curiosity.AttachTickHandlers(voice);
             Curiosity.Local.DisableHud();
 
-            Logger.Info($"[User] [{user.DiscordId}] Logged in with `{user.UserRole}`");
+            Logger.Info($"[User] [{user.DiscordId}] Logged in with `{user.Role}`");
             transition.Up(Curiosity.Local);
 
             await CharacterManager.GetModule().Synchronize();

@@ -66,7 +66,7 @@ namespace Curiosity.Systems.Client.Commands
         {
             var player = Cache.Player;
 
-            if (context.IsRestricted && !context.RequiredRoles.Contains(player.User.UserRole))
+            if (context.IsRestricted && !context.RequiredRoles.Contains(player.User.Role))
             {
                 // Restricted command
                 return;
