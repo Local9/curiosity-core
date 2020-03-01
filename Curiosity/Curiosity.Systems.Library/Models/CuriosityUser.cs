@@ -10,7 +10,7 @@ namespace Curiosity.Systems.Library.Models
         public ulong DiscordId { get; set; }
         public string License { get; set; }
         public string LastName { get; set; }
-        public Role UserRole { get; set; } = Role.USER;
+        public Role Role { get; set; } = Role.USER;
         public DateTime LatestActivity { get; set; }
         public DateTime DateCreated { get; set; }
         public bool Banned { get; set; }
@@ -23,10 +23,10 @@ namespace Curiosity.Systems.Library.Models
 
         public CuriosityCharacter Character { get; set; }
 
-        public bool IsStaff => (UserRole == Role.COMMUNITYMANAGER || UserRole == Role.MODERATOR || UserRole == Role.ADMINISTRATOR || UserRole == Role.SENIORADMIN || UserRole == Role.HEADADMIN || UserRole == Role.DEVELOPER || UserRole == Role.PROJECTMANAGER);
-        public bool IsAdmin => (UserRole == Role.COMMUNITYMANAGER || UserRole == Role.ADMINISTRATOR || UserRole == Role.SENIORADMIN || UserRole == Role.HEADADMIN || UserRole == Role.DEVELOPER || UserRole == Role.PROJECTMANAGER);
-        public bool IsTrustedAdmin => (UserRole == Role.COMMUNITYMANAGER || UserRole == Role.HEADADMIN || UserRole == Role.DEVELOPER || UserRole == Role.PROJECTMANAGER);
-        public bool IsDeveloper => (UserRole == Role.DEVELOPER || UserRole == Role.PROJECTMANAGER);
-        public bool IsProjectManager => (UserRole == Role.PROJECTMANAGER);
+        public bool IsStaff => (Role == Role.COMMUNITYMANAGER || Role == Role.MODERATOR || Role == Role.ADMINISTRATOR || Role == Role.SENIORADMIN || Role == Role.HEADADMIN || Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);
+        public bool IsAdmin => (Role == Role.COMMUNITYMANAGER || Role == Role.ADMINISTRATOR || Role == Role.SENIORADMIN || Role == Role.HEADADMIN || Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);
+        public bool IsTrustedAdmin => (Role == Role.COMMUNITYMANAGER || Role == Role.HEADADMIN || Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);
+        public bool IsDeveloper => (Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);
+        public bool IsProjectManager => (Role == Role.PROJECTMANAGER);
     }
 }
