@@ -71,6 +71,7 @@
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Extensions\SaveExtensions.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
+    <Compile Include="Managers\ChatManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\QueueManager.cs" />
     <Compile Include="Managers\UserManager.cs" />

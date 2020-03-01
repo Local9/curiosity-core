@@ -55,7 +55,7 @@ namespace Curiosity.Systems.Server.MySQL.Store
                             if (!reader.IsDBNull(6))
                                 curiosityUser.BannedUntil = reader.GetDateTime(6);
 
-                            curiosityUser.UserRole = (Role)reader.GetInt32(10);
+                            curiosityUser.Role = (Role)reader.GetInt32(10);
                             curiosityUser.LastName = player.Name;
                             curiosityUser.DiscordId = discordId;
 
