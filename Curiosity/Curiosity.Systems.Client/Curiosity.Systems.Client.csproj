@@ -50,6 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache.cs" />
+    <Compile Include="Commands\CommandContext.cs" />
+    <Compile Include="Commands\CommandFramework.cs" />
+    <Compile Include="Commands\CommandInfo.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\Impl\DeveloperTools.cs" />
+    <Compile Include="CommonFunctions.cs" />
     <Compile Include="CuriosityPlugin.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Discord\DiscordRichPresence.cs" />
@@ -77,6 +83,7 @@
     <Compile Include="Interface\Menus\Creator\CreatorMenus.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterHeritage.cs" />
     <Compile Include="Interface\Modules\HeadupDisplay.cs" />
+    <Compile Include="Interface\Notification.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\CrouchManager.cs" />

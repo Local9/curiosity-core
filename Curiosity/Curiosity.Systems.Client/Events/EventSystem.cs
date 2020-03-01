@@ -96,8 +96,8 @@ namespace Curiosity.Systems.Client.Events
 
         public void Send(Event wrapped)
         {
-            Logger.Debug(
-                $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the server-side.");
+            //Logger.Debug(
+            //    $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the server-side.");
 
             BaseScript.TriggerServerEvent(EVENT_KEY, API.GetPlayerServerId(API.PlayerId()),
                 JsonConvert.SerializeObject(wrapped));
@@ -134,8 +134,8 @@ namespace Curiosity.Systems.Client.Events
             var completed = false;
             var wrapped = new EventRequest(new EventCallback(metadata =>
             {
-                Logger.Debug(
-                    $"[{metadata.Inherit}] Got request response from server-side with metadata {JsonConvert.SerializeObject(metadata)}");
+                //Logger.Debug(
+                //    $"[{metadata.Inherit}] Got request response from server-side with metadata {JsonConvert.SerializeObject(metadata)}");
 
                 try
                 {

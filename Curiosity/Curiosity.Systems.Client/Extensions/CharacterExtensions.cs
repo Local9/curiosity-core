@@ -80,7 +80,7 @@ namespace Curiosity.Systems.Client.Extensions
 
             await EventSystem.GetModule().Request<object>("character:save", character);
 
-            Logger.Info($"[Characters] Saved `{character.CharacterId}` and it's changes.");
+            // Logger.Info($"[Characters] Saved `{character.CharacterId}` and it's changes.");
         }
 
         public static async Task Load(this CuriosityCharacter character)

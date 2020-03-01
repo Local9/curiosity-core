@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Systems.Client.Commands;
+using Curiosity.Systems.Client.Commands.Impl;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Discord;
 using Curiosity.Systems.Client.Environment.Entities;
@@ -100,6 +102,10 @@ namespace Curiosity.Systems.Client
             }
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
+
+            var commands = new CommandFramework();
+
+            commands.Bind(typeof(DeveloperTools));
 
             AttachTickHandlers(this);
 
