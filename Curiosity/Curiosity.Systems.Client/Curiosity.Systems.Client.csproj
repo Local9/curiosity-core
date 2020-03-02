@@ -93,6 +93,7 @@
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\PointFinger.cs" />
+    <Compile Include="Managers\PopulationManager.cs" />
     <Compile Include="Managers\SessionManager.cs" />
     <Compile Include="Managers\StyleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
