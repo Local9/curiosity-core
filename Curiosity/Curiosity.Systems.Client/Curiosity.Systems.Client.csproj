@@ -59,6 +59,7 @@
     <Compile Include="CuriosityPlugin.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Discord\DiscordRichPresence.cs" />
+    <Compile Include="Environment\BlipInfo.cs" />
     <Compile Include="Environment\Entities\CuriosityEntity.cs" />
     <Compile Include="Environment\Entities\CuriosityPlayer.cs" />
     <Compile Include="Environment\Entities\Models\AnimationQueue.cs" />
