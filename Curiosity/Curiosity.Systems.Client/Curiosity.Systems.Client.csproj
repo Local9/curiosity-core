@@ -60,6 +60,7 @@
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Discord\DiscordRichPresence.cs" />
     <Compile Include="Environment\BlipInfo.cs" />
+    <Compile Include="Environment\CuriosityPed.cs" />
     <Compile Include="Environment\Entities\CuriosityEntity.cs" />
     <Compile Include="Environment\Entities\CuriosityPlayer.cs" />
     <Compile Include="Environment\Entities\Models\AnimationQueue.cs" />
@@ -72,6 +73,9 @@
     <Compile Include="Environment\Entities\Modules\Impl\EntityDecorModule.cs" />
     <Compile Include="Environment\Entities\Modules\Impl\EntityNetworkModule.cs" />
     <Compile Include="Environment\SafeTeleport.cs" />
+    <Compile Include="Environment\Stores\Impl\Convenience.cs" />
+    <Compile Include="Environment\Stores\Store.cs" />
+    <Compile Include="Environment\Stores\StoreManager.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Extensions\CharacterExtensions.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />

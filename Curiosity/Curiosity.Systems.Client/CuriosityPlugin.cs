@@ -22,6 +22,8 @@ namespace Curiosity.Systems.Client
 {
     public class CuriosityPlugin : BaseScript
     {
+        public const string DECOR_PED_OWNER = "PED_OWNER";
+
         public static CuriosityPlugin Instance { get; private set; }
         public static Random Rand = new Random();
         public static int MaximumPlayers { get; } = 32;
@@ -108,6 +110,8 @@ namespace Curiosity.Systems.Client
             commands.Bind(typeof(DeveloperTools));
 
             AttachTickHandlers(this);
+
+            API.DecorRegister(DECOR_PED_OWNER, 3);
 
             Logger.Info("Load method has been completed.");
         }

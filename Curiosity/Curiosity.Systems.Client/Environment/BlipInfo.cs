@@ -19,8 +19,7 @@ namespace Curiosity.Systems.Client.Environment
 
         public void Commit()
         {
-            Vector3 pos = new Vector3(Position.X, Position.Y, Position.Z);
-            Blip blip = World.CreateBlip(pos);
+            Blip blip = World.CreateBlip(Position.AsVector());
 
             blip.Scale = Scale;
             API.SetBlipDisplay(blip.Handle, Display);
