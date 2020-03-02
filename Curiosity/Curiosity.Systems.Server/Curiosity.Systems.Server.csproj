@@ -74,6 +74,7 @@
     <Compile Include="Managers\ChatManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\QueueManager.cs" />
+    <Compile Include="Managers\SystemManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="MySQL\MySqlDatabase.cs" />
     <Compile Include="MySQL\Store\CharacterDatabase.cs" />

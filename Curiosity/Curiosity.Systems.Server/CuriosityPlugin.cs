@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
+using Curiosity.Systems.Server.Extenstions;
 using Curiosity.Systems.Server.Managers;
 using Curiosity.Systems.Server.MySQL;
 using Curiosity.Systems.Server.Web;
@@ -95,6 +96,7 @@ namespace Curiosity.Systems.Server
             }
 
             AttachTickHandler(DatabaseTest);
+            
         }
 
         private async void SetupConvars()
@@ -222,6 +224,8 @@ namespace Curiosity.Systems.Server
             }
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
+            
+            AttachTickHandler(SaveTask);
 
             EventRegistry["rconCommand"] += new Action<string, List<object>>(OnRconCommand);
 
@@ -240,7 +244,17 @@ namespace Curiosity.Systems.Server
 
         private async void OnRconCommand(string commandName, List<object> args)
         {
-            Logger.Debug($"RCON Command: {commandName}");
+            if (commandName.ToLower() != "save") return;
+
+            Logger.Info("[Saves] Beginning `Save` operation on `Characters`.");
+
+            foreach (var users in ActiveUsers)
+            {
+                await SaveOperation(users.Value);
+            }
+
+            Logger.Info("[Saves] Completed `Save` operation on `Characters`.");
+
             API.CancelEvent();
         }
 
@@ -280,6 +294,31 @@ namespace Curiosity.Systems.Server
             var request = new Request();
 
             return (await request.Http(url, method, json, headers)).content;
+        }
+
+        public async Task SaveOperation(CuriosityUser user)
+        {
+            await user.Character.Save();
+        }
+
+        private async Task SaveTask()
+        {
+            if (LastSave + SaveInterval < Date.Timestamp)
+            {
+                if (ActiveUsers.Count > 0)
+                {
+                    Logger.Info("[Saves] Beginning `Save` operation on `Characters`.");
+
+                    foreach (var users in ActiveUsers)
+                    {
+                        await SaveOperation(users.Value);
+                    }
+
+                    LastSave = Date.Timestamp;
+                }
+
+                await Delay(1000);
+            }
         }
     }
 }

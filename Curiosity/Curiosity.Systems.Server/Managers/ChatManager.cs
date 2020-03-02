@@ -18,25 +18,26 @@ namespace Curiosity.Systems.Server.Managers
     {
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("chat:send", new AsyncEventCallback(metadata =>
-            {
-                Player player = CuriosityPlugin.PlayersList[metadata.Sender];
-                CuriosityUser user = CuriosityPlugin.ActiveUsers[player.Handle];
+            Curiosity.EventRegistry["chat:global"] += new Action<Player, string, string>(OnChatMessage);
+        }
 
-                ChatMessage chatMessage = metadata.Find<ChatMessage>(0);
+        private void OnChatMessage([FromSource] Player player, string message, string channel)
+        {
+            CuriosityUser user = CuriosityPlugin.ActiveUsers[player.Handle];
 
-                string jsonMessage = string.Empty;
+            ChatMessage chatMessage = new ChatMessage();
 
-                chatMessage = new ChatMessage();
-                chatMessage.Name = user.LastName;
-                chatMessage.Role = user.Role;
+            string jsonMessage = string.Empty;
 
-                jsonMessage = JsonConvert.SerializeObject(chatMessage);
+            chatMessage = new ChatMessage();
+            chatMessage.Name = user.LastName;
+            chatMessage.Role = $"{user.Role}";
+            chatMessage.Message = message;
+            chatMessage.Channel = channel;
 
-                CuriosityPlugin.TriggerClientEvent("chat:receive", jsonMessage);
+            jsonMessage = JsonConvert.SerializeObject(chatMessage);
 
-                return null;
-            }));
+            CuriosityPlugin.TriggerClientEvent("chat:receive", jsonMessage);
         }
     }
 }
