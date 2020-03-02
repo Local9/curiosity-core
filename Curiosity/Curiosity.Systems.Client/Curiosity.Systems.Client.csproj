@@ -75,6 +75,7 @@
     <Compile Include="Extensions\CharacterExtensions.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Interface\Chat.cs" />
     <Compile Include="Interface\Menus\CharacterClothing.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterApparel.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterFeatures.cs" />

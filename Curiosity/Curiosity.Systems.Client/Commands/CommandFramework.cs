@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Diagnostics;
+using Curiosity.Systems.Client.Interface;
 
 namespace Curiosity.Systems.Client.Commands
 {
@@ -48,12 +49,13 @@ namespace Curiosity.Systems.Client.Commands
                 registered++;
             }
 
-            context.Aliases.ToList().ForEach(self =>
-                API.RegisterCommand(self,
-                    new Action<int, List<object>, string>((handle, args, raw) =>
-                        HandleCommandInput(context, Registry[context], self, args)), false)
+            foreach(string self in context.Aliases.ToList())
+            {
+                Logger.Debug($"Register: {self}");
 
-                );
+                API.RegisterCommand(self, new Action<int, List<object>, string>((handle, args, raw) =>
+                        HandleCommandInput(context, Registry[context], self, args)), false);
+            };
 
             Logger.Info(
                 $"[CommandFramework] Found {found.Count} nested `ICommand` class(es) in `{type.Name}`, registered {registered} of them!");
@@ -68,7 +70,7 @@ namespace Curiosity.Systems.Client.Commands
 
             if (context.IsRestricted && !context.RequiredRoles.Contains(player.User.Role))
             {
-                // Restricted command
+                Chat.SendLocalMessage("Restricted Command");
                 return;
             }
 
@@ -83,13 +85,12 @@ namespace Curiosity.Systems.Client.Commands
 
             if (arguments.Count < 1)
             {
-                //Chat.SendLocalMessage(context.Title, "Avaliable Commands:", context.Color);
+                Chat.SendLocalMessage("Avaliable Commands:");
 
-                //foreach (var entry in registry)
-                //{
-                //    Chat.SendLocalMessage($"/{alias} {string.Join(", ", entry.Item1.Aliases)}",
-                //        Color.FromArgb(255, 255, 255));
-                //}
+                foreach (var entry in registry)
+                {
+                    Chat.SendLocalMessage($"/{alias} {string.Join(", ", entry.Item1.Aliases)}");
+                }
 
                 return;
             }
@@ -109,8 +110,8 @@ namespace Curiosity.Systems.Client.Commands
                 break;
             }
 
-            // if (!matched)
-                // Chat.SendLocalMessage(context.Title, $"Command not found: {subcommand}", context.Color);
+            if (!matched)
+                Chat.SendLocalMessage($"Command not found: {subcommand}");
         }
     }
 }

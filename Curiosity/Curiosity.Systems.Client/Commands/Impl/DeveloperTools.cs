@@ -81,7 +81,7 @@ namespace Curiosity.Systems.Client.Commands.Impl
 
                 var position = waypoint.Position;
 
-                position.Z = World.GetGroundHeight(position) + 1;
+                position.Z = World.GetGroundHeight(position) + 2;
 
                 await player.Entity.Teleport(position.ToPosition());
             }
