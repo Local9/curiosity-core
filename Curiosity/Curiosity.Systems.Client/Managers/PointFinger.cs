@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers
 {
-    class PointFinger : Manager<PointFinger>
+    public class PointFinger : Manager<PointFinger>
     {
         public bool PointingFinger { get; set; }
 
