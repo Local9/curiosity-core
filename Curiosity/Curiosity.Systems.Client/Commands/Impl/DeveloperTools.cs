@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Environment.Entities;
+using Curiosity.Systems.Client.Events;
 using Curiosity.Systems.Client.Extensions;
+using Curiosity.Systems.Client.Interface;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,25 @@ namespace Curiosity.Systems.Client.Commands.Impl
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECTMANAGER };
+
+        #region Player
+        [CommandInfo(new[] { "god" })]
+        public class Godmode : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                player.Entity.ToggleGodMode();
+                if (Game.PlayerPed.IsInvincible)
+                {
+                    Chat.SendLocalMessage("God Mode: Enabled");
+                }
+                else
+                {
+                    Chat.SendLocalMessage("God Mode: Disabled");
+                }
+            }
+        }
+        #endregion
 
         #region Vehicles
         [CommandInfo(new[] { "vehicle", "veh", "car" })]
@@ -64,7 +85,10 @@ namespace Curiosity.Systems.Client.Commands.Impl
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                entity.Vehicle?.Delete();
+                if (entity.Vehicle != null)
+                {
+                    entity.Vehicle?.Delete();
+                }
             }
         }
         #endregion
@@ -84,6 +108,56 @@ namespace Curiosity.Systems.Client.Commands.Impl
                 position.Z = World.GetGroundHeight(position) + 2;
 
                 await player.Entity.Teleport(position.ToPosition());
+            }
+        }
+
+        [CommandInfo(new[] { "tp", "coords" })]
+        public class TeleportCoords : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (arguments.Count < 3) return;
+
+                try
+                {
+                    float x = float.Parse(arguments[0]);
+                    float y = float.Parse(arguments[1]);
+                    float z = float.Parse(arguments[2]);
+
+                    var position = new Vector3(x, y, z);
+
+                    await player.Entity.Teleport(position.ToPosition());
+                }
+                catch (Exception ex)
+                {
+                    Chat.SendLocalMessage("Invalid or Missing Coord");
+                }
+                
+            }
+        }
+
+        [CommandInfo(new[] { "pos" })]
+        public class SaveCoords : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (arguments.Count <= 0) return;
+
+                string positionName = arguments[0];
+                float x = entity.Position.X;
+                float y = entity.Position.Y;
+                float z = entity.Position.Z;
+                float h = entity.Position.Heading;
+
+                bool response = await EventSystem.GetModule().Request<bool>("system:savePos", positionName, x, y, z, h);
+                if (response)
+                {
+                    Chat.SendLocalMessage($"Position '{positionName}' saved.");
+                }
+                else
+                {
+                    Chat.SendLocalMessage($"Issue when trying to save position: {positionName}.");
+                }
             }
         }
         #endregion

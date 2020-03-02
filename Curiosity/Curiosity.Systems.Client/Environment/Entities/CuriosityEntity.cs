@@ -83,6 +83,11 @@ namespace Curiosity.Systems.Client.Environment.Entities
             API.SetPedDefaultComponentVariation(Id);
         }
 
+        public void ToggleGodMode()
+        {
+            Game.PlayerPed.IsInvincible = !Game.PlayerPed.IsInvincible;
+        }
+
         public WeaponCollection Weapons => CitizenPed.Weapons;
 
         public async Task Teleport(Position position)
