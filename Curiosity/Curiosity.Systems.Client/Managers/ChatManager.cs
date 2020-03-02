@@ -1,9 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers
@@ -14,6 +16,10 @@ namespace Curiosity.Systems.Client.Managers
 
         public override void Begin()
         {
+            API.RegisterCommand("ping", new Action<int, List<object>, string>((handle, args, raw) =>
+                        Logger.Debug("pong")), false);
+
+
             Curiosity.EventRegistry["chat:receive"] += new Action<string>(OnChatReceived);
 
             Curiosity.AttachNuiHandler("SendChatMessage", new EventCallback(metadata =>
