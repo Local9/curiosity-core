@@ -116,8 +116,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 }
                 Client.TriggerEvent("curiosity:interaction:grab", _interactivePed.Handle);
 
-                MenuController.CloseAllMenus();
-                Client.TriggerEvent("curiosity:interaction:closeMenu");
+                //MenuController.CloseAllMenus();
+                //Client.TriggerEvent("curiosity:interaction:closeMenu");
                 return;
             }
 
