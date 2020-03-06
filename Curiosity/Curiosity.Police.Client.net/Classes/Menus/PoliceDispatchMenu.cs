@@ -144,6 +144,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 4, pos.X, pos.Y, pos.Z);
             }
 
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"......", "Assistance has been requested.", 2);
+
             HasRequestedBackup = true;
             client.RegisterTickHandler(OnTaskHasRequestedBackup);
             MenuController.CloseAllMenus();
