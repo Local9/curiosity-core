@@ -15,12 +15,12 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
     {
         static public async Task<Ped> CreatePedAtLocation(Model model, Vector3 location, float heading, bool dropsWeaponsOnDeath = false)
         {
-            await model.Request(1000);
+            //await model.Request(1000);
 
-            while (!model.IsLoaded)
-            {
-                await model.Request(10);
-            }
+            //while (!model.IsLoaded)
+            //{
+            //    await model.Request(10);
+            //}
 
             API.RequestCollisionAtCoord(location.X, location.Y, location.Z);
 
@@ -28,7 +28,6 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 
             Ped spawnedPed = await World.CreatePed(model, location, heading);
             API.NetworkFadeInEntity(spawnedPed.Handle, true);
-            model.MarkAsNoLongerNeeded();
 
             API.SetPedFleeAttributes(spawnedPed.Handle, 0, false);
             spawnedPed.DropsWeaponsOnDeath = dropsWeaponsOnDeath;
