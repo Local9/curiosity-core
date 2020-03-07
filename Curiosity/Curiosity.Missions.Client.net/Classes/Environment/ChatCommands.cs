@@ -22,6 +22,12 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             RegisterCommand("create", new Action<int, List<object>, string>(OnCreateCommand), false);
             RegisterCommand("playSound", new Action<int, List<object>, string>(OnPlaySound), false);
             RegisterCommand("item", new Action<int, List<object>, string>(StartItemPreview), false);
+            RegisterCommand("version", new Action<int, List<object>, string>(OnVersion), false);
+        }
+
+        private static void OnVersion(int playerHandle, List<object> arguments, string raw)
+        {
+            Screen.ShowNotification("1.0.0.1209");
         }
 
         private static void StartItemPreview(int playerHandle, List<object> arguments, string raw)
