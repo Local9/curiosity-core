@@ -18,6 +18,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
         public static bool IsOnCallout = false;
         public static PatrolZone PatrolZone = PatrolZone.City;
 
+        private static bool RulesDisplayed = false;
+
         public static RelationshipGroup PoliceRelationshipGroup;
 
         static Scaleform scaleform;
@@ -82,7 +84,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             if (job == "police")
             {
-                ShowScaleformRules();
+                if (!RulesDisplayed)
+                    ShowScaleformRules();
 
                 Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Police);
                 Game.PlayerPed.IsInvincible = false;
@@ -104,6 +107,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
         static async void ShowScaleformRules()
         {
+            RulesDisplayed = true;
             ScaleformTask();
             await Client.Delay(10000);
             scaleform.Dispose();
