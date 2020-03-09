@@ -16,14 +16,43 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
     {
         static Client client = Client.GetInstance();
 
-        static List<string> SirenModes = new List<string>()
+        static CitizenFX.Core.Vehicle _currentVehicle;
+
+        static List<string> SIRENS_ACTIVE = new List<string>();
+
+        static List<string> SIRENS_POLICE = new List<string>()
         {
             "", // No Sirens, just lights
             "VEHICLES_HORNS_SIREN_1",
             "VEHICLES_HORNS_SIREN_2"
         };
 
-        static string CurrentSirenPreset = SirenModes[0];
+        static List<string> SIRENS_FIRETRUCK = new List<string>()
+        {
+            "", // No Sirens, just lights
+            "RESIDENT_VEHICLES_SIREN_FIRETRUCK_WAIL_01",
+            "RESIDENT_VEHICLES_SIREN_FIRETRUCK_QUICK_01"
+        };
+
+        static List<string>SIRENS_AMBULANCE = new List<string>()
+        {
+            "", // No Sirens, just lights
+            "RESIDENT_VEHICLES_SIREN_WAIL_01",
+            "RESIDENT_VEHICLES_SIREN_QUICK_01"
+        };
+
+        static List<string> SIRENS_BIKE = new List<string>()
+        {
+            "", // No Sirens, just lights
+            "RESIDENT_VEHICLES_SIREN_WAIL_03",
+            "RESIDENT_VEHICLES_SIREN_QUICK_03"
+        };
+
+        static string WARNING_POLICE = "VEHICLES_HORNS_POLICE_WARNING";
+        static string WARNING_AMBULANCE = "VEHICLES_HORNS_AMBULANCE_WARNING";
+        static string WARNING_FIRETRUCK = "VEHICLES_HORNS_FIRETRUCK_WARNING";
+
+        static string CurrentSirenPreset = SIRENS_POLICE[0];
 
         static Dictionary<int, int> SirenSoundIds = new Dictionary<int, int>();
 
@@ -114,7 +143,8 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                 else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind))
                 {
                     SirenActive = true;
-                    SendSoundEvent("VEHICLES_HORNS_POLICE_WARNING");
+
+                    SendSoundEvent(GetWarningSound());
                     while ((ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind)) && Game.PlayerPed.IsInVehicle())
                     {
                         API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
@@ -162,7 +192,8 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         else if (ControlHelper.IsControlJustPressed(Control.MpTextChatTeam) || API.IsControlJustPressed(16, (int)Control.VehicleFlyUnderCarriage)) // Cycle presets
                         {
                             StopSound();
-                            CurrentSirenPreset = SirenModes[(SirenModes.IndexOf(CurrentSirenPreset) + 1) % SirenModes.Count];
+                            GetSirens();
+                            CurrentSirenPreset = SIRENS_ACTIVE[(SIRENS_ACTIVE.IndexOf(CurrentSirenPreset) + 1) % SIRENS_ACTIVE.Count];
                             PlayCurrentPresetSound();
                         }
                         else if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(0, (int)Control.VehicleCinCam))
@@ -180,7 +211,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind))
                         {
                             StopSound();
-                            SendSoundEvent("VEHICLES_HORNS_POLICE_WARNING");
+                            SendSoundEvent(GetWarningSound());
                             string internalPreset = CurrentSirenPreset;
                             while ((ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind)) && Game.PlayerPed.IsInVehicle())
                             {
@@ -214,6 +245,55 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             {
                 SirenActive = false;
             }
+        }
+
+        static void GetSirens()
+        {
+            CitizenFX.Core.Vehicle veh = Game.PlayerPed.CurrentVehicle;
+
+            if (veh != _currentVehicle)
+            {
+                _currentVehicle = veh;
+                SIRENS_ACTIVE = SIRENS_POLICE;
+                CurrentSirenPreset = SIRENS_ACTIVE[0];
+
+                if (veh.Model.Hash == (int)VehicleHash.FireTruk)
+                {
+                    SIRENS_ACTIVE = SIRENS_FIRETRUCK;
+                    CurrentSirenPreset = SIRENS_ACTIVE[0];
+                }
+
+                if (veh.Model.Hash == (int)VehicleHash.Ambulance)
+                {
+                    SIRENS_ACTIVE = SIRENS_AMBULANCE;
+                    CurrentSirenPreset = SIRENS_ACTIVE[0];
+                }
+
+                if (veh.Model.IsBike)
+                {
+                    SIRENS_ACTIVE = SIRENS_BIKE;
+                    CurrentSirenPreset = SIRENS_ACTIVE[0];
+                }
+            }
+        }
+
+        static string GetWarningSound()
+        {
+            CitizenFX.Core.Vehicle veh = Game.PlayerPed.CurrentVehicle;
+
+            string warning = WARNING_POLICE;
+
+            if (veh.Model.Hash == (int)VehicleHash.FireTruk)
+            {
+                warning = WARNING_FIRETRUCK;
+            }
+
+            if (veh.Model.Hash == (int)VehicleHash.Ambulance)
+            {
+                warning = WARNING_AMBULANCE;
+            }
+
+            return warning;
         }
 
         static void OnReceivedSourceEvent(string serializedSoundEvent)
