@@ -24,6 +24,7 @@ namespace Curiosity.Systems.Client.Environment
 
         public Marker(Position position)
         {
+            Debug.WriteLine($"Creating marker with position: {position}");
             Position = position;
             Curiosity = CuriosityPlugin.Instance;
         }

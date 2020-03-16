@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Client.Interface;
 using Curiosity.Systems.Library.Models;
@@ -39,17 +40,13 @@ namespace Curiosity.Systems.Client.Environment.Stores.Impl
                 storePed.AnimationBone = "base";
                 storePed.Init();
 
-                var marker = new Marker(storePed.ForwardOffset.ToPosition())
-                {
-                    Message = "Press ~INPUT_CONTEXT~ to open Store Options.",
-                    Scale = 2f,
-                    Color = Color.FromArgb(255, 255, 0),
-                    MarkerType = MarkerType.VerticalCylinder,
-                    Condition = self => !InterfaceManager.GetModule().IsMenuOpen
-                };
-
-                marker.Show();
+                storePed.Callback += OpenShop;
             }
+        }
+
+        public void OpenShop()
+        {
+            Screen.ShowSubtitle("Hello World");
         }
     }
 }

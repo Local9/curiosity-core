@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Extensions;
+using Curiosity.Systems.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -19,9 +20,11 @@ namespace Curiosity.Systems.Client.Environment
         public Position Position { get; set; }
         public float LoadInDistance { get; set; } = 100f;
         public float DespawnDistance { get; set; } = 110f;
+        public float InteractionDistance { get; set; } = 3f;
         public PedHash PedHash { get; set; }
         public string Message { get; set; } = "Press ~INPUT_CONTEXT~ to interact...";
         public event Action Callback;
+        public Control Control { get; set; } = Control.Context;
         public bool FreezeInPosition { get; set; } = false;
         public string AnimationDict { get; set; }
         public string AnimationBone { get; set; }
@@ -57,6 +60,19 @@ namespace Curiosity.Systems.Client.Environment
             {
                 var position = Cache.Entity.Position;
                 var distance = position.Distance(Position, true);
+
+                if (distance < InteractionDistance && !InterfaceManager.GetModule().IsMenuOpen)
+                {
+                    Screen.DisplayHelpTextThisFrame(Message);
+
+                    if (Game.IsControlJustPressed(0, Control) && Callback?.GetInvocationList().Length > 0)
+                    {
+                        foreach (var invocation in Callback.GetInvocationList())
+                        {
+                            ((Action)invocation).Invoke();
+                        }
+                    }
+                }
 
                 if (distance < LoadInDistance)
                 {
@@ -104,14 +120,10 @@ namespace Curiosity.Systems.Client.Environment
                     API.TaskSetBlockingOfNonTemporaryEvents(_ped.Handle, true);
 
                     API.DecorSetInt(_ped.Handle, CuriosityPlugin.DECOR_PED_OWNER, Game.PlayerPed.Handle);
-
-                    Logger.Debug($"Spawned Ped with '{PedHash}'");
                 }
                 else
                 {
                     _ped = pedInArea;
-
-                    Logger.Debug($"Found existing Ped with '{PedHash}'");
                 }
 
                 ForwardOffset = API.GetOffsetFromEntityInWorldCoords(_ped.Handle, 0f, 2f, 0f);
@@ -146,8 +158,6 @@ namespace Curiosity.Systems.Client.Environment
                             _ped.Delete();
 
                             _ped = null;
-
-                            Logger.Debug($"Removed Ped");
                         }
                     }
                 }
