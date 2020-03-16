@@ -423,5 +423,16 @@ namespace Curiosity.Systems.Client
             }
         }
         #endregion
+
+        #region Animation Loading
+        public static async Task LoadAnimationDict(string dict)
+        {
+            while (!API.HasAnimDictLoaded(dict))
+            {
+                API.RequestAnimDict(dict);
+                await BaseScript.Delay(5);
+            }
+        }
+        #endregion
     }
 }

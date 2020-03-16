@@ -72,6 +72,7 @@
     <Compile Include="Environment\Entities\Modules\EntityModuleRegistry.cs" />
     <Compile Include="Environment\Entities\Modules\Impl\EntityDecorModule.cs" />
     <Compile Include="Environment\Entities\Modules\Impl\EntityNetworkModule.cs" />
+    <Compile Include="Environment\Marker.cs" />
     <Compile Include="Environment\SafeTeleport.cs" />
     <Compile Include="Environment\Stores\Impl\Convenience.cs" />
     <Compile Include="Environment\Stores\Store.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
     <Compile Include="Interface\Chat.cs" />
+    <Compile Include="Interface\InterfaceManager.cs" />
     <Compile Include="Interface\Menus\CharacterClothing.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterApparel.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterFeatures.cs" />

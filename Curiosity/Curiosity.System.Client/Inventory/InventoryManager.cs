@@ -14,6 +14,7 @@ using Curiosity.System.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using Curiosity.Systems.Library;
 
 namespace Curiosity.System.Client.Inventory
 {

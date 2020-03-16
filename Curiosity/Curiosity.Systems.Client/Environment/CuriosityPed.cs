@@ -23,13 +23,18 @@ namespace Curiosity.Systems.Client.Environment
         public string Message { get; set; } = "Press ~INPUT_CONTEXT~ to interact...";
         public event Action Callback;
         public bool FreezeInPosition { get; set; } = false;
+        public string AnimationDict { get; set; }
+        public string AnimationBone { get; set; }
+
+        public Vector3 ForwardOffset { get; set; }
 
         private Ped _ped;
         private Model _model;
 
+        public int Handle { get { return _ped.Handle; } }
+
         public CuriosityPed(Position position, PedHash pedHash)
         {
-            position.Z = position.Z - 1f;
             Position = position;
             PedHash = pedHash;
 
@@ -92,6 +97,8 @@ namespace Curiosity.Systems.Client.Environment
                     int ped = API.CreatePed((int)PedTypes.PED_TYPE_MISSION, (uint)_model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, Position.Heading, false, true);
                     _ped = new Ped(ped);
 
+                    API.PlaceObjectOnGroundProperly(_ped.Handle);
+
                     _ped.IsPositionFrozen = FreezeInPosition;
 
                     API.TaskSetBlockingOfNonTemporaryEvents(_ped.Handle, true);
@@ -103,7 +110,16 @@ namespace Curiosity.Systems.Client.Environment
                 else
                 {
                     _ped = pedInArea;
+
                     Logger.Debug($"Found existing Ped with '{PedHash}'");
+                }
+
+                ForwardOffset = API.GetOffsetFromEntityInWorldCoords(_ped.Handle, 0f, 2f, 0f);
+
+                if (!string.IsNullOrEmpty(AnimationDict))
+                {
+                    await CommonFunctions.LoadAnimationDict(AnimationDict);
+                    API.TaskPlayAnim(_ped.Handle, AnimationDict, AnimationBone, 1f, -1f, -1, 1, 1f, true, true, true);
                 }
 
                 _model.MarkAsNoLongerNeeded();
@@ -123,6 +139,8 @@ namespace Curiosity.Systems.Client.Environment
 
                         if (owner == Game.PlayerPed.Handle)
                         {
+                            API.RemoveAnimDict(AnimationDict);
+
                             _ped.MarkAsNoLongerNeeded();
 
                             _ped.Delete();
