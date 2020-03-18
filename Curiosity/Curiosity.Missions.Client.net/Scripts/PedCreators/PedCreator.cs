@@ -24,7 +24,7 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 
             API.RequestCollisionAtCoord(location.X, location.Y, location.Z);
 
-            API.ClearAreaOfEverything(location.X, location.Y, location.Z, 2f, true, true, true, true);
+            API.ClearAreaOfEverything(location.X, location.Y, location.Z, 1f, true, true, true, true);
 
             Ped spawnedPed = await World.CreatePed(model, location, heading);
             API.NetworkFadeInEntity(spawnedPed.Handle, true);

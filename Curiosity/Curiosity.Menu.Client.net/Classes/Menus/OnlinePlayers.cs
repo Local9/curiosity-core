@@ -286,11 +286,13 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             Game.Player.IsInvincible = true;
             Game.PlayerPed.IsVisible = false;
 
-            Game.PlayerPed.Position = Vector3.Zero; // Fucking hide them
-
             Vector3 entityCords = API.GetEntityCoords(playerPedId, true);
 
             API.RequestCollisionAtCoord(entityCords.X, entityCords.Y, entityCords.Z);
+
+            entityCords.Z -= 50f;
+            Game.PlayerPed.Position = entityCords; // Fucking hide them
+            
             API.NetworkSetInSpectatorMode(true, playerPedId);
 
             Client.TriggerEvent("curioisty:UI:IsSpectating", true);

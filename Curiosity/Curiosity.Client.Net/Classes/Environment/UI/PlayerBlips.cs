@@ -244,7 +244,14 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                             distance = 255;
                         }
 
-                        API.SetBlipAlpha(blip, (int)distance);
+                        if (API.IsEntityVisible(playerCharacterHandle))
+                        {
+                            API.SetBlipAlpha(blip, (int)distance);
+                        }
+                        else
+                        {
+                            API.SetBlipAlpha(blip, 0);
+                        }                        
                     }
                 }
             }
