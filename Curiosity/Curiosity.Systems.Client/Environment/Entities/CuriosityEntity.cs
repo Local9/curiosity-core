@@ -1,7 +1,9 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Environment.Entities.Modules;
+using Curiosity.Systems.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using System.Threading.Tasks;
 
@@ -95,16 +97,42 @@ namespace Curiosity.Systems.Client.Environment.Entities
             await SafeTeleport.Teleport(Id, position);
         }
 
-        public CuriosityEntity(int id)
-        {
-            AnimationQueue = new AnimationQueue(Game.PlayerPed.Handle);
-        }
-
         public void InstallModule(string key, EntityModule module)
         {
             Modules.Add(key, module);
 
             module.CallBeginOperation(this, Id);
+        }
+
+        public CuriosityEntity(int id)
+        {
+            AnimationQueue = new AnimationQueue(Game.PlayerPed.Handle);
+
+            GameEventManager.OnPlayerKillPed += GameEventManager_OnPlayerKillPed;
+            GameEventManager.OnPedKillPlayer += GameEventManager_OnPedKillPlayer;
+            GameEventManager.OnPlayerKillPlayer += GameEventManager_OnPlayerKillPlayer;
+
+            GameEventManager.OnDeath += GameEventManager_OnDeath;
+        }
+
+        private void GameEventManager_OnPlayerKillPlayer(Player attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
+        {
+            // message server
+        }
+
+        private void GameEventManager_OnPedKillPlayer(Ped attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
+        {
+            // ha ha
+        }
+
+        private void GameEventManager_OnPlayerKillPed(Player attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
+        {
+            // monitor and police
+        }
+
+        private void GameEventManager_OnDeath(Entity attacker, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag)
+        {
+            // ha ha
         }
     }
 }

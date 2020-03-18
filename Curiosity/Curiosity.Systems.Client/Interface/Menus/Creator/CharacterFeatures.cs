@@ -1,4 +1,4 @@
-﻿using Curiosity.System.Client.Environment.Entities.Models;
+﻿using Curiosity.Systems.Client.Environment.Entities.Models;
 using NativeUI;
 using System;
 using System.Collections.Generic;

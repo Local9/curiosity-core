@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.System.Client.Environment.Entities.Models;
+using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Interface.Modules;
 using Curiosity.Systems.Library.Models;

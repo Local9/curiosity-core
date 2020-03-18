@@ -4,7 +4,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Environment.Entities;
 
-namespace Curiosity.System.Client.Environment.Entities.Models
+namespace Curiosity.Systems.Client.Environment.Entities.Models
 {
     public class MugshotBoardAttachment
     {

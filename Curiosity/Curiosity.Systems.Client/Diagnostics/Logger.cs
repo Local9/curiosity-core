@@ -41,7 +41,12 @@ namespace Curiosity.Systems.Client.Diagnostics
 
         public static void Debug(string msg)
         {
-            WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
+            if (Cache.Player != null)
+            {
+                if (!Cache.Player.User.IsDeveloper) return;
+
+                WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
+            }
         }
 
         private static void WriteLine(string title, string msg, ConsoleColor color)

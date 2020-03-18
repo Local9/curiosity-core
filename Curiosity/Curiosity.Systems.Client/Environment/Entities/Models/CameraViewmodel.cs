@@ -8,7 +8,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Diagnostics;
 
-namespace Curiosity.System.Client.Environment.Entities.Models
+namespace Curiosity.Systems.Client.Environment.Entities.Models
 {
     public class CameraViewmodelQueue
     {
