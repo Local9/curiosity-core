@@ -183,7 +183,7 @@ namespace Curiosity.Server.net
         {
             if (Classes.SessionManager.PlayerList.ContainsKey(player.Handle))
             {
-                Classes.SessionManager.PlayerList[player.Handle].Dropped(reason);
+                Classes.SessionManager.PlayerList[player.Handle].Dropped(player.Handle, reason);
             }
         }
 

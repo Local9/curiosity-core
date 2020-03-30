@@ -208,13 +208,13 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        public void Dropped(string reason)
+        public void Dropped(string handle, string reason)
         {
             try
             {
                 ChatLog.SendLogMessage($"Dropped: {Name} -> {reason}");
 
-                SessionManager.PlayerList.Remove(NetId);
+                SessionManager.PlayerList.Remove(handle);
             }
             catch (Exception ex)
             {

@@ -46,6 +46,7 @@ namespace Curiosity.Server.net.Classes.Environment
             // API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
 
             API.RegisterCommand("test", new Action<int, List<object>, string>(Test), false);
+            API.RegisterCommand("sessions", new Action<int, List<object>, string>(OnSessions), false);
 
             // API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
         }
@@ -60,6 +61,20 @@ namespace Curiosity.Server.net.Classes.Environment
 
         //    Server.TriggerClientEvent("curiosity:Client:Command:OnFire", session.NetId);
         //}
+
+        static void OnSessions(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (!session.IsDeveloper) return;
+
+            int sessionCount = SessionManager.PlayerList.Count;
+            int playerCount = Server.players.Count();
+
+            Helpers.Notifications.Advanced($"Session Check", $"Active Sessions: {sessionCount}~n~Player Count: {playerCount}", 2, session.Player);
+        }
 
         static void OnDonationCheck(int playerHandle, List<object> arguments, string raw)
         {
