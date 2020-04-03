@@ -118,7 +118,7 @@ namespace Curiosity.Missions.Client.net.Scripts
 
             PatrolZone missionPatrolZone = (PatrolZone)missionMessage.PatrolZone;
 
-            Dictionary<int, DataClasses.Mission.Store> missions = new Dictionary<int, DataClasses.Mission.Store>();
+            Dictionary<int, DataClasses.Mission.MissionData> missions = new Dictionary<int, DataClasses.Mission.MissionData>();
 
             switch (missionPatrolZone)
             {
@@ -133,7 +133,7 @@ namespace Curiosity.Missions.Client.net.Scripts
                     break;
             }
 
-            DataClasses.Mission.Store mission = missions[missionMessage.MissionId];
+            DataClasses.Mission.MissionData mission = missions[missionMessage.MissionId];
 
             Client.TriggerServerEvent("curiosity:Server:Missions:StartedMission", missionMessage.MissionId);
 

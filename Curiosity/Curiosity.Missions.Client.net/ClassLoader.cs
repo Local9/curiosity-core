@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Missions.Client.net.DataClasses.Mission;
 
 namespace Curiosity.Missions.Client.net
 {
@@ -45,6 +46,8 @@ namespace Curiosity.Missions.Client.net
             client.RegisterTickHandler(OnCleanup);
 
             Scripts.Mission.PoliceMissions.HumainLabs.Init();
+
+            // PoliceMissionData.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

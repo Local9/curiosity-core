@@ -12,5 +12,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
         public Extensions.Difficulty Difficulty = Extensions.Difficulty.BringItOn;
         public float VisionDistance = 35f;
         public bool IsHostage = false;
+
+        public RelationshipGroup RelationShipGroup { get; internal set; }
     }
 }

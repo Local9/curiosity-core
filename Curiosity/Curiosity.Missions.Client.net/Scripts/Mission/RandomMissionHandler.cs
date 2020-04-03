@@ -272,7 +272,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             }
         }
 
-        static async Task ChooseRandomMissionAsync(Dictionary<int, DataClasses.Mission.Store> missions, PatrolZone missionPatrolZone)
+        static async Task ChooseRandomMissionAsync(Dictionary<int, DataClasses.Mission.MissionData> missions, PatrolZone missionPatrolZone)
         {
             int randomMissionNumber = missions.Count == 1 ? 0 : Client.Random.Next(0, missions.Count);
             int missionId = missions.ElementAt(randomMissionNumber).Key;

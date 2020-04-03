@@ -8,12 +8,16 @@ using System.Media;
 using System.IO;
 using Curiosity.Missions.Client.net.Scripts;
 using Curiosity.Missions.Client.net.DataClasses;
+using Curiosity.Shared.Client.net.Helper.Area;
+using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment
 {
     class ChatCommands
     {
         static Client client = Client.GetInstance();
+
+        static AreaSphere areaSphere = new AreaSphere();
 
         static public void Init()
         {
@@ -23,11 +27,58 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             RegisterCommand("playSound", new Action<int, List<object>, string>(OnPlaySound), false);
             RegisterCommand("item", new Action<int, List<object>, string>(StartItemPreview), false);
             RegisterCommand("version", new Action<int, List<object>, string>(OnVersion), false);
+
+            RegisterCommand("area", new Action<int, List<object>, string>(OnArea), false);
         }
 
         private static void OnVersion(int playerHandle, List<object> arguments, string raw)
         {
             Screen.ShowNotification("1.0.0.1209");
+        }
+
+        private static async Task AreaSphereCheck()
+        {
+            areaSphere.Draw();
+        }
+
+        private static void OnArea(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+
+            try
+            {
+
+                if (arguments.Count == 0)
+                {
+                    client.DeregisterTickHandler(AreaSphereCheck);
+                    CancelEvent();
+                    return;
+                }
+
+                if (arguments.Count == 4)
+                {
+                    float x = float.Parse($"{arguments[0]}");
+                    float y = float.Parse($"{arguments[1]}");
+                    float z = float.Parse($"{arguments[2]}");
+                    float r = float.Parse($"{arguments[3]}");
+
+                    areaSphere.Pos = new Vector3(x, y, z);
+                    areaSphere.Radius = r;
+                    areaSphere.Identifier = "DEV_TEST_TRIGGER";
+                    areaSphere.Color = System.Drawing.Color.FromArgb(255, 255, 255);
+
+                    client.RegisterTickHandler(AreaSphereCheck);
+                }
+                else
+                {
+                    Screen.ShowNotification("Missing Params;~n~/area x y z r");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{ex}");
+            }
         }
 
         private static void StartItemPreview(int playerHandle, List<object> arguments, string raw)
@@ -158,7 +209,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             int mission = int.Parse($"{arguments[0]}");
             int location = int.Parse($"{arguments[1]}");
 
-            Dictionary<int, DataClasses.Mission.Store> missions = null;
+            Dictionary<int, DataClasses.Mission.MissionData> missions = null;
 
             if (location == 1)
             {
@@ -187,7 +238,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                 return;
             }
 
-            DataClasses.Mission.Store storeMission = missions[mission];
+            DataClasses.Mission.MissionData storeMission = missions[mission];
 
             Screen.ShowNotification($"Mission {storeMission.Name}");
 

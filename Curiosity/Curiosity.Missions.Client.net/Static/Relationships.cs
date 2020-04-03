@@ -13,11 +13,15 @@ namespace Curiosity.Missions.Client.net.Static
 
         public static RelationshipGroup PlayerRelationship; 
         public static RelationshipGroup HostileRelationship;
+
         public static RelationshipGroup ArrestedRelationship;
         public static RelationshipGroup InfectedRelationship;
 
         static public RelationshipGroup Fighter1Relationship;
         static public RelationshipGroup Fighter2Relationship;
+
+        static public RelationshipGroup BallasRelationship;
+        static public RelationshipGroup FamiliesRelationship;
 
         public static void SetRelationshipBothWays(Relationship rel, RelationshipGroup group1, RelationshipGroup group2)
         {
@@ -35,7 +39,7 @@ namespace Curiosity.Missions.Client.net.Static
         static public void SetupRelationShips()
         {
             // Player
-            PlayerRelationship = World.AddRelationshipGroup("PLAYER_RELATIONSHIP");
+            PlayerRelationship = World.AddRelationshipGroup("PLAYER");
             Game.PlayerPed.RelationshipGroup = PlayerRelationship;
             // Other Peds
             HostileRelationship = World.AddRelationshipGroup("HOSTILE_RELATIONSHIP");
@@ -54,6 +58,13 @@ namespace Curiosity.Missions.Client.net.Static
             SetRelationshipBothWays(Relationship.Hate, Fighter1Relationship, Fighter2Relationship);
             SetRelationshipBothWays(Relationship.Hate, PlayerRelationship, Fighter1Relationship);
             SetRelationshipBothWays(Relationship.Hate, PlayerRelationship, Fighter2Relationship);
+
+            // GANGS
+            BallasRelationship = World.AddRelationshipGroup("AMBIENT_GANG_BALLAS");
+            FamiliesRelationship = World.AddRelationshipGroup("AMBIENT_GANG_FAMILY");
+            SetRelationshipBothWays(Relationship.Hate, BallasRelationship, FamiliesRelationship);
+            //SetRelationshipBothWays(Relationship.Hate, PlayerRelationship, BallasRelationship);
+            //SetRelationshipBothWays(Relationship.Hate, PlayerRelationship, FamiliesRelationship);
 
         }
     }

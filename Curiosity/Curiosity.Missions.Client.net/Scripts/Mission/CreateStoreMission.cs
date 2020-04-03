@@ -39,7 +39,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         static Blip LocationBlip;
         static Vector3 Location = new Vector3();
         
-        static public async Task Create(Store store)
+        static public async Task Create(MissionData store)
         {
             if (store == null)
             {
@@ -77,24 +77,24 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     Log.Info($"SETUP: {store.Name}");
                 }
 
-                MissionPedData1 = store.missionPeds[0];
-                MissionPedData2 = store.missionPeds[1];
-                MissionPedData3 = store.missionPeds[2];
-                MissionPedData4 = store.missionPeds[3];
+                MissionPedData1 = store.MissionGangOne[0];
+                MissionPedData2 = store.MissionGangOne[1];
+                MissionPedData3 = store.MissionGangOne[2];
+                MissionPedData4 = store.MissionGangOne[3];
 
-                if (store.hostages != null)
+                if (store.Hostages != null)
                 {
-                    if (store.hostages.Count > 0)
+                    if (store.Hostages.Count > 0)
                     {
-                        MissionHostage = store.hostages[0];
+                        MissionHostage = store.Hostages[0];
 
                         Vector3 spawnpoint = MissionHostage.SpawnPoint;
                         spawnpoint.Z = spawnpoint.Z - 1f;
                         HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, spawnpoint, MissionHostage.SpawnHeading);
                         SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
-                        await BaseScript.Delay(0);
+                        
                         new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
-                        SetPedScream(HostagePed.Handle);
+
                         HostagePed.IsPositionFrozen = true;
                     }
                 }
@@ -229,7 +229,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                                 HostageReleased = (GetGameTimer() - gameTime) > 5000;
 
                                 if (HostageReleased)
+                                {
+                                    SetPedScream(HostagePed.Handle);
                                     HostagePed.IsPositionFrozen = false;
+                                }
 
                                 await BaseScript.Delay(0);
                             }

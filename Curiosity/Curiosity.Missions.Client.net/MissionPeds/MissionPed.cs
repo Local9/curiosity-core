@@ -9,6 +9,7 @@ using Curiosity.Global.Shared.net.Entity;
 using Newtonsoft.Json;
 using Curiosity.Shared.Client.net;
 using static CitizenFX.Core.Native.API;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -273,9 +274,15 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             Entity killerEnt = new Ped(entity.Handle).GetKiller();
             Ped killerPed = new Ped(killerEnt.Handle);
 
+            Blip currentBlip = base.AttachedBlip;
+            if (currentBlip != null)
+            {
+                currentBlip.Delete();
+            }
+
             if (killerPed.IsPlayer)
             {
-                Player p = new Player(CitizenFX.Core.Native.API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
+                Player p = new Player(API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
 
                 SkillMessage skillMessage = new SkillMessage();
                 skillMessage.PlayerHandle = $"{p.ServerId}";
@@ -294,12 +301,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 string json = JsonConvert.SerializeObject(skillMessage);
 
                 BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
-            }
-
-            Blip currentBlip = base.AttachedBlip;
-            if (currentBlip != null)
-            {
-                currentBlip.Delete();
             }
         }
 

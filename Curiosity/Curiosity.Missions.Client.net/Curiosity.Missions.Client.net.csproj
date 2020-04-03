@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Environment\ChatCommands.cs" />
+    <Compile Include="DataClasses\Mission\PoliceMissionData.cs" />
     <Compile Include="DataClasses\PedNames.cs" />
     <Compile Include="DataClasses\Police\ItemData.cs" />
     <Compile Include="DataClasses\Police\LinesOfSpeech.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Client.cs" />
     <Compile Include="DataClasses\ItemPreview.cs" />
     <Compile Include="DataClasses\Mission\MissionPedData.cs" />
-    <Compile Include="DataClasses\Mission\Store.cs" />
+    <Compile Include="DataClasses\Mission\MissionData.cs" />
     <Compile Include="DataClasses\ParticleEffect.cs" />
     <Compile Include="Extensions\Alertness.cs" />
     <Compile Include="Extensions\CombatAbility.cs" />
