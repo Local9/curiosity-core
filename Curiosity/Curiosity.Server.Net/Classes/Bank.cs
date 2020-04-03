@@ -56,7 +56,7 @@ namespace Curiosity.Server.net.Classes
                     await Server.Delay(1);
                     Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, (int)medicalFeeAmount);
                     await Server.Delay(1);
-                    SessionManager.PlayerList[session.NetId].DecreaseWallet((int)medicalFeeAmount);
+                    session.DecreaseWallet((int)medicalFeeAmount);
                     await Server.Delay(1);
                     session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
                     await Server.Delay(1);
@@ -66,7 +66,7 @@ namespace Curiosity.Server.net.Classes
                     await Server.Delay(1);
                     Database.DatabaseUsersBank.DecreaseBank(session.User.BankId, (int)medicalFeeAmount);
                     await Server.Delay(1);
-                    SessionManager.PlayerList[session.NetId].DecreaseBankAccount((int)medicalFeeAmount);
+                    session.DecreaseBankAccount((int)medicalFeeAmount);
                     await Server.Delay(1);
                     session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
                     await Server.Delay(1);
@@ -100,7 +100,7 @@ namespace Curiosity.Server.net.Classes
                             await Server.Delay(0);
                             Database.DatabaseUsersBank.IncreaseBank(session.User.BankId, interest);
                             await Server.Delay(0);
-                            SessionManager.PlayerList[session.NetId].IncreaseBankAccount(interest);
+                            session.IncreaseBankAccount(interest);
                             await Server.Delay(0);
                             session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
                             await Server.Delay(0);
