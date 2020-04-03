@@ -207,6 +207,13 @@ namespace Curiosity.Client.net.Classes.Environment
                         UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You've been treated for you injuries.", 132);
                     }
                 }
+                else
+                {
+                    await Client.Delay(1000);
+
+                    if (hasPlayerSpawned)
+                        API.SetResourceKvpInt("DEATH", 0);
+                }
             }
             catch (Exception ex)
             {
