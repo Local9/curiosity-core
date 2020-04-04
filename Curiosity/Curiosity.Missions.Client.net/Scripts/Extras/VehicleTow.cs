@@ -24,25 +24,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
         // ENTITIES
         static Vehicle vehToRemove;
 
-        static async Task OnVehicleExistsTask()
-        {
-            await Task.FromResult(0);
-        }
-
         static public void RequestService()
         {
             try
             {
                 Debug.WriteLine($"TOW-RequestService->Started");
-                client.DeregisterTickHandler(OnVehicleExistsTask);
 
                 if (IsServiceActive)
                 {
                     Wrappers.Helpers.ShowNotification("City Impound", "Service is Unavailable", string.Empty, NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
                     return;
                 }
-
-                int spawnDistance = Client.Random.Next(100, 200);
 
                 vehToRemove = Game.PlayerPed.GetVehicleInFront(5f, 1f);
 
@@ -56,8 +48,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
                     int tfVehHandle = 0;
                     
-                    if (DecorIsRegisteredAsType(Client.NPC_ACTIVE_TRAFFIC_STOP, 3))
+                    if (DecorIsRegisteredAsType(Client.NPC_ACTIVE_TRAFFIC_STOP, 2))
+                    {
                         tfVehHandle = DecorGetInt(vehToRemove.Handle, Client.TRAFFIC_STOP_VEHICLE_HANDLE);
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Decor is missing from the register");
+                        return;
+                    }
 
                     if (tfVehHandle == 0)
                     {
@@ -97,6 +96,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
             string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
             BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", vehToRemove.NetworkId);
+
+            if (vehToRemove.Exists())
+            {
+                vehToRemove.Delete();
+            }
+
             Reset(true);
         }
 
