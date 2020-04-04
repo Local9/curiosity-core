@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
@@ -20,6 +21,21 @@ namespace Curiosity.Server.net.Classes
             server.RegisterTickHandler(UpdateSessions);
 
             server.RegisterEventHandler("curiosity:Server:SessionManager:GetSessions", new Action(OnGetSessions));
+            server.RegisterEventHandler("curiosity:Server:Session:Ping", new Action<CitizenFX.Core.Player>(OnSessionPing));
+        }
+
+        static void OnSessionPing([FromSource]CitizenFX.Core.Player player)
+        {
+            try
+            {
+                if (!PlayerList.ContainsKey(player.Handle)) return;
+
+                PlayerList[player.Handle].UpdateSessionTimer();
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         static void OnGetSessions()
@@ -54,40 +70,60 @@ namespace Curiosity.Server.net.Classes
             {
                 Dictionary<string, Session> PlayerListCopy = new Dictionary<string, Session>(PlayerList);
 
+                Dictionary<string, Session> SessionsToDrop = new Dictionary<string, Session>();
+
                 foreach (KeyValuePair<string, Session> playerItem in PlayerListCopy)
                 {
                     Session session = playerItem.Value;
 
-                    GlobalEntity.User User = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.Player);
+                    TimeSpan timeSpan = DateTime.UtcNow - session.LastSessionEvent;
 
-                    if (User == null)
+                    if (timeSpan.TotalMinutes >= 5)
                     {
-                        session.Privilege = (Privilege)User.RoleId;
-                        session.SetBankAccount(User.BankAccount);
-                        session.SetWallet(User.Wallet);
+                        SessionsToDrop.Add(playerItem.Key, playerItem.Value);
+                    }
+                    else
+                    {
 
-                        PlayerInformation playerInformation = new PlayerInformation();
-                        playerInformation.Handle = session.NetId;
-                        playerInformation.UserId = session.UserID;
-                        playerInformation.CharacterId = session.User.CharacterId;
-                        playerInformation.RoleId = (int)session.Privilege;
-                        playerInformation.Wallet = session.Wallet;
-                        playerInformation.BankAccount = session.BankAccount;
-                        playerInformation.Skills = session.Skills;
+                        GlobalEntity.User User = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.Player);
 
-                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
+                        if (User == null)
+                        {
+                            session.Privilege = (Privilege)User.RoleId;
+                            session.SetBankAccount(User.BankAccount);
+                            session.SetWallet(User.Wallet);
 
-                        session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-                        await BaseScript.Delay(0);
-                        session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
-                        await BaseScript.Delay(0);
-                        session.Player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
-                        await BaseScript.Delay(0);
+                            PlayerInformation playerInformation = new PlayerInformation();
+                            playerInformation.Handle = session.NetId;
+                            playerInformation.UserId = session.UserID;
+                            playerInformation.CharacterId = session.User.CharacterId;
+                            playerInformation.RoleId = (int)session.Privilege;
+                            playerInformation.Wallet = session.Wallet;
+                            playerInformation.BankAccount = session.BankAccount;
+                            playerInformation.Skills = session.Skills;
+
+                            string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
+
+                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                            await BaseScript.Delay(0);
+                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                            await BaseScript.Delay(0);
+                            session.Player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
+                            await BaseScript.Delay(0);
+                        }
+
+                        PlayerList[playerItem.Key] = session;
                     }
 
-                    PlayerList[playerItem.Key] = session;
-
                     await BaseScript.Delay(100);
+                }
+
+                foreach (KeyValuePair<string, Session> playerItem in SessionsToDrop)
+                {
+                    if (!Server.players.Contains(playerItem.Value.Player))
+                    {
+                        PlayerList.Remove(playerItem.Key);
+                    }
                 }
             }
             catch (Exception ex)

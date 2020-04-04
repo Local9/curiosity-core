@@ -48,6 +48,8 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("test", new Action<int, List<object>, string>(Test), false);
             API.RegisterCommand("sessions", new Action<int, List<object>, string>(OnSessions), false);
 
+            server.RegisterEventHandler("rconCommand", new Action<string, List<object>>(OnRconCommand));
+
             // API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
         }
 
@@ -61,6 +63,16 @@ namespace Curiosity.Server.net.Classes.Environment
 
         //    Server.TriggerClientEvent("curiosity:Client:Command:OnFire", session.NetId);
         //}
+
+        static void OnRconCommand(string commandName, List<object> arguments)
+        {
+            if (commandName.ToLower() != "session") return;
+
+            int sessionCount = SessionManager.PlayerList.Count;
+            int playerCount = Server.players.Count();
+
+            Log.Info($"Active Sessions: {sessionCount}, Player Count: {playerCount}");
+        }
 
         static void OnSessions(int playerHandle, List<object> arguments, string raw)
         {

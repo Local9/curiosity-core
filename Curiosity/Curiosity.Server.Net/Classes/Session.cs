@@ -30,6 +30,14 @@ namespace Curiosity.Server.net.Classes
         // Player states
         public bool HasSpawned { get; private set; }
         public DateTime LastEntityEvent { get; private set; }
+
+        public DateTime LastSessionEvent { get; private set; }
+
+        internal void UpdateSessionTimer()
+        {
+            LastSessionEvent = DateTime.UtcNow;
+        }
+
         public DateTime LastExplosionEvent { get; private set; }
         public bool IsLoggedIn { get { return UserID > 0; } private set { } }
         // public bool IsPlaying { get { return Character != null; } private set { } }

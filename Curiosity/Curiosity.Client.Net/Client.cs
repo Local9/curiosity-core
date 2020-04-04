@@ -27,6 +27,8 @@ namespace Curiosity.Client.net
 
         private static Client _instance;
 
+        static long GameTimeNow;
+
         public static Client GetInstance()
         {
             return _instance;
@@ -73,6 +75,18 @@ namespace Curiosity.Client.net
             BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
             await Delay(1000);
             isSessionActive = true;
+
+            RegisterTickHandler(OnSessionCheck);
+        }
+
+        public async Task OnSessionCheck()
+        {
+            GameTimeNow = API.GetGameTimer();
+            while ((API.GetGameTimer() - GameTimeNow) > 60000)
+            {
+                GameTimeNow = API.GetGameTimer();
+                Client.TriggerServerEvent("curiosity:Server:Session:Ping");
+            }
         }
 
         /// <summary>
