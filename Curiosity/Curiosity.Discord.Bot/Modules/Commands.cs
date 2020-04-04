@@ -253,7 +253,7 @@ namespace Curiosity.Discord.Bot.Modules
             {
                 List<Models.User> dbUsers = new List<Models.User>();
 
-                List<string> routes = new List<string> { "pilot", "trucking", "fire", "police", "knowledge", "train", "taxi", "fishing", "hunting", "farming", "bus", "mechanic" };
+                List<string> routes = new List<string> { "pilot", "trucking", "fire", "police", "knowledge", "train", "taxi", "fishing", "hunting", "farming", "bus", "mechanic", "ems" };
                 string route = string.Empty;
 
                 if (args.Length == 0)
