@@ -94,35 +94,47 @@ namespace Curiosity.Discord.Bot
         private async Task HandleCommandAsync(SocketMessage arg)
         {
             var message = arg as SocketUserMessage;
-            var context = new SocketCommandContext(_client, message);
-            if (message is null || message.Author.IsBot) return;
 
-            int argPos = 0;
-
-            if (message.MentionedUsers.Select(u => u).Where(x => x.IsBot && x.Id == _client.CurrentUser.Id).ToList().Count > 0)
+            try
             {
-                EmbedBuilder builder = new EmbedBuilder();
 
-                builder.WithImageUrl("https://cdn.discordapp.com/attachments/138522037181349888/438774275546152960/Ping_Discordapp_GIF-downsized_large.gif");
+                var context = new SocketCommandContext(_client, message);
+                if (message is null || message.Author.IsBot) return;
 
-                await context.Channel.SendMessageAsync("", false, builder.Build());
-            }
-            else if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
-            {
-                // will delay for 1 second
-                await Task.Delay(1000);
+                int argPos = 0;
 
-                var result = await _commands.ExecuteAsync(context, argPos, _services);
-                if (!result.IsSuccess)
+                if (message.MentionedUsers.Select(u => u).Where(x => x.IsBot && x.Id == _client.CurrentUser.Id).ToList().Count > 0)
                 {
-                    if (result.Error == CommandError.UnknownCommand)
-                    {
-                        await context.Channel.SendMessageAsync("Unknown Command");
-                        return;
-                    }
-                    Console.WriteLine(result.Error);
-                    Console.WriteLine(result.ErrorReason);
+                    EmbedBuilder builder = new EmbedBuilder();
+
+                    builder.WithImageUrl("https://cdn.discordapp.com/attachments/138522037181349888/438774275546152960/Ping_Discordapp_GIF-downsized_large.gif");
+
+                    await context.Channel.SendMessageAsync("", false, builder.Build());
                 }
+                else if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
+                {
+                    // will delay for 1 second
+                    await Task.Delay(1000);
+
+                    var result = await _commands.ExecuteAsync(context, argPos, _services);
+                    if (!result.IsSuccess)
+                    {
+                        if (result.Error == CommandError.UnknownCommand)
+                        {
+                            await context.Channel.SendMessageAsync("Unknown Command");
+                            return;
+                        }
+                        Console.WriteLine(result.Error);
+                        Console.WriteLine(result.ErrorReason);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"ERROR: EXCEPTION");
+                Console.WriteLine($"ERROR: Message causing error '{message.Content}'");
+                Console.WriteLine($"ERROR: Message Posted by '{message.Author}'");
+                Console.WriteLine(ex);
             }
         }
     }
