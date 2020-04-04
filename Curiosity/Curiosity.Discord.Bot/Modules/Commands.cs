@@ -247,14 +247,33 @@ namespace Curiosity.Discord.Bot.Modules
         }
 
         [Command("top")]
-        public async Task Top(SocketUser user = null)
+        public async Task Top(params string[] args)
         {
             try
             {
-                if (user == null)
-                    user = Context.User;
+                List<Models.User> dbUsers = new List<Models.User>();
 
-                List<Models.User> dbUsers = await new Models.User().GetTopUsers();
+                List<string> routes = new List<string> { "pilot", "trucking", "fire", "police", "knowledge", "train", "taxi", "fishing", "hunting", "farming", "bus", "mechanic" };
+                string route = string.Empty;
+
+                if (args.Length == 0)
+                {
+                    dbUsers = await new Models.User().GetTopUsers(string.Empty);
+                }
+                else
+                {
+                    if (!routes.Contains(args[0]))
+                    {
+                        string cmds = string.Join(", ", routes);
+                        await ReplyAsync($"Command not found. Available: {cmds}");
+                        return;
+                    }
+                    else
+                    {
+                        route = args[0];
+                        dbUsers = await new Models.User().GetTopUsers(route);
+                    }
+                }
 
                 if (dbUsers == null)
                 {
@@ -269,7 +288,16 @@ namespace Curiosity.Discord.Bot.Modules
                     dbUsers.ForEach(user =>
                     {
                         topUsers += $"\n[{count:00}]    > {user.Username}";
-                        topUsers += $"\n        Total Experience: {user.LifeExperience:#,###,##0}";
+
+                        if (!string.IsNullOrEmpty(route))
+                        {
+                            topUsers += $"\n              Experience: {user.Experience:#,###,##0}";
+                        }
+                        else
+                        {
+                            topUsers += $"\n        Total Experience: {user.LifeExperience:#,###,##0}";
+                        }
+
                         count++;
                     });
 

@@ -14,6 +14,7 @@ namespace Curiosity.Discord.Bot.Models
         public string Username;
         public string License;
         public long LifeExperience;
+        public long Experience;
         public DateTime DateCreated;
         public DateTime LastSeen;
         public bool BannedPerm;
@@ -47,7 +48,7 @@ namespace Curiosity.Discord.Bot.Models
             }
         }
 
-        public async Task<List<User>> GetTopUsers()
+        public async Task<List<User>> GetTopUsers(string stat)
         {
             try
             {
@@ -55,7 +56,15 @@ namespace Curiosity.Discord.Bot.Models
                 await connection.OpenAsync();
                 using var cmd = connection.CreateCommand();
 
-                cmd.CommandText = @"call selStatsTopUsers();";
+                cmd.CommandText = @"call selStatsTopUsers(@TopStat);";
+                
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@TopStat",
+                    DbType = DbType.String,
+                    Value = stat
+                });
+
                 var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
                 return result.Count > 0 ? result : null;
             }
@@ -156,6 +165,9 @@ namespace Curiosity.Discord.Bot.Models
 
                     if (!DBNull.Value.Equals(reader["discordId"]))
                         user.DiscordId = reader.GetFieldValue<ulong>("discordId");
+
+                    if (!DBNull.Value.Equals(reader["experience"]))
+                        user.Experience = reader.GetFieldValue<long>("experience");
 
                     users.Add(user);
                 }
