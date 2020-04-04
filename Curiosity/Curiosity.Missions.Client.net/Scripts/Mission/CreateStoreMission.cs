@@ -230,7 +230,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                                 if (HostageReleased)
                                 {
-                                    SetPedScream(HostagePed.Handle);
                                     HostagePed.IsPositionFrozen = false;
                                 }
 
