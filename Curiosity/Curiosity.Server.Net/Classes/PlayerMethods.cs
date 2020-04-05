@@ -37,10 +37,10 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Player:Job", new Action<CitizenFX.Core.Player, int>(OnPlayerJob));
             server.RegisterEventHandler("curiosity:Server:Player:Backup", new Action<CitizenFX.Core.Player, int, float, float, float>(OnBackupRequest));
 
-            server.RegisterEventHandler("curiosity:Server:Player:Revive", new Action<CitizenFX.Core.Player, string>(OnPlayerRevive));
+            server.RegisterEventHandler("curiosity:Server:Player:Revive", new Action<CitizenFX.Core.Player, string, bool>(OnPlayerRevive));
         }
 
-        static void OnPlayerRevive([FromSource]CitizenFX.Core.Player player, string playerToRevive)
+        static void OnPlayerRevive([FromSource]CitizenFX.Core.Player player, string playerToRevive, bool killedByPlayer)
         {
             try
             {
@@ -63,15 +63,18 @@ namespace Curiosity.Server.net.Classes
                 }
                 else
                 {
-                    // Ped pedReviving = playerRevivingSession.Player.Character;
-                    // Ped pedToRevive = playerToReviveSession.Player.Character;
-                    // float distance = (pedReviving.Position - pedToRevive.Position).Length();
-
                     if (!Server.isLive)
                         Log.Verbose($"Player {playerRevivingSession.Name}[{playerRevivingSession.NetId}] reviving {playerToReviveSession.Name}[{playerToReviveSession.NetId}]");
 
-                    Bank.IncreaseCashInternally(playerRevivingSession.Player.Handle, 500);
-                    Bank.DecreaseCashInternally(playerToReviveSession.Player.Handle, 500);
+                    if (!killedByPlayer)
+                    {
+                        Bank.IncreaseCashInternally(playerRevivingSession.Player.Handle, 50);
+                        Bank.DecreaseCashInternally(playerToReviveSession.Player.Handle, 50);
+                    }
+                    else
+                    {
+                        Bank.DecreaseCashInternally(playerRevivingSession.Player.Handle, 500);
+                    }
 
                     playerToReviveSession.Player.TriggerEvent("curiosity:Client:Player:Revive");
                 }

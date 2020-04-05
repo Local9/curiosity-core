@@ -39,6 +39,8 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static private string _currentJob = "Unknown";
 
+        static bool CooldownActive = false;
+
         public static void Init()
         {
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
@@ -56,20 +58,55 @@ namespace Curiosity.Client.net.Classes.Environment
             }
         }
 
+        private static async Task OnReviveCooldown()
+        {
+            long GameTimer = API.GetGameTimer();
+
+            while ((API.GetGameTimer() - GameTimer) < 30000)
+            {
+                await Client.Delay(1000);
+            }
+
+            CooldownActive = false;
+            Screen.ShowNotification($"~g~Revive Cooldown Cleared");
+            client.DeregisterTickHandler(OnReviveCooldown);
+        }
+
         private static async Task OnRevivePlayerCheck()
         {
             try
             {
-                CitizenFX.Core.Player closestPlayer = Client.players.Select(x => x).Where(p => p.Character.Position.Distance(Game.PlayerPed.Position) < 5f && p.Character.IsDead).FirstOrDefault();
+                CitizenFX.Core.Player closestPlayer = Client.players.Select(x => x).Where(p => p.Character.Position.Distance(Game.PlayerPed.Position) < 2f && p.Character.IsDead).FirstOrDefault();
 
-                if (Client.isSessionActive && closestPlayer != null)
+                if (
+                    Client.isSessionActive
+                    && closestPlayer != null
+                    && !Game.PlayerPed.IsInVehicle()
+                    && closestPlayer != Game.Player
+                    && Game.PlayerPed.IsAlive
+                    )
                 {
-                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to revive...");
+                    Screen.DisplayHelpTextThisFrame($"~w~Press ~INPUT_CONTEXT~ to revive ~b~{closestPlayer.Name}~w~...");
 
                     if (Game.IsControlJustPressed(0, Control.Context))
                     {
-                        Debug.WriteLine($"Reviving Player {closestPlayer.Name}|{closestPlayer.ServerId}");
-                        Client.TriggerServerEvent("curiosity:Server:Player:Revive", closestPlayer.ServerId);
+                        if (CooldownActive)
+                        {
+                            Screen.ShowNotification($"~r~Cooldown Active");
+                        }
+                        else
+                        { 
+                            Debug.WriteLine($"Reviving Player {closestPlayer.Name}|{closestPlayer.ServerId}");
+
+                            //Ped killerPed = closestPlayer.Character.GetKiller() as Ped;
+
+                            //CitizenFX.Core.Player p = new CitizenFX.Core.Player(API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
+                            //bool samePlayer = Game.Player.ServerId == p.ServerId;
+
+                            Client.TriggerServerEvent("curiosity:Server:Player:Revive", closestPlayer.ServerId, false);
+                            CooldownActive = true;
+                            client.RegisterTickHandler(OnReviveCooldown);
+                        }
                     }
                 }
             }
@@ -93,7 +130,12 @@ namespace Curiosity.Client.net.Classes.Environment
             Game.PlayerPed.Health = 50;
             Game.PlayerPed.Armor = 0;
 
+            hasPlayerSpawned = true;
+
+            API.SetFakeWantedLevel(0);
+
             API.SetResourceKvpInt("DEATH", 0);
+            Screen.Effects.Stop(ScreenEffect.DeathFailOut);
 
             await Client.Delay(500);
             API.NetworkFadeInEntity(Game.PlayerPed.Handle, false);
@@ -119,9 +161,11 @@ namespace Curiosity.Client.net.Classes.Environment
         static async Task ShowText()
         {
             long time = seconds - (int)((API.GetGameTimer() - gameTime) / 1000);
-            string messageText = $"~w~Wait {time}s or press ~b~E~w~ to force respawn.~n~~r~NOTE: You will be charged if you force respawn.~n~~w~(Default bind is for your Pick Up key which you can remap)";
+            string messageText = $"~w~Wait {time}s or press ~b~E~w~ to force respawn.~n~~r~NOTE: You will be charged if you force respawn";
+            string messageText2 = $"~n~Other players can revive you, but it will cost ~g~$50~w~";
 
-            NativeWrappers.Draw3DText(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z - 0.5f, messageText, 75f, 10f);
+            NativeWrappers.Draw3DText(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z - 0.4f, messageText, 75f, 10f);
+            NativeWrappers.Draw3DText(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z - 0.5f, messageText2, 75f, 10f);
 
             if (Player.PlayerInformation.IsDeveloper())
             {
@@ -139,6 +183,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 await Client.Delay(10);
                 if (Game.PlayerPed.IsDead && hasPlayerSpawned)
                 {
+
                     // Entity entity = Game.PlayerPed.GetKiller();
 
                     API.SetResourceKvpInt("DEATH", 1);
@@ -166,6 +211,9 @@ namespace Curiosity.Client.net.Classes.Environment
                                 forceRespawn = true;
                             }
 
+                            if (Game.PlayerPed.IsAlive)
+                                break;
+
                             if ((API.GetGameTimer() - gameTime) > (1000 * seconds))
                             {
                                 break;
@@ -173,87 +221,90 @@ namespace Curiosity.Client.net.Classes.Environment
                         }
                     }
 
-                    client.DeregisterTickHandler(ShowText);
-
-                    API.SetResourceKvpInt("DEATH", 0);
-
-                    await Client.Delay(2000);
-
-                    API.DoScreenFadeOut(1000);
-
-                    while (!API.IsScreenFadedOut())
+                    if (!Game.PlayerPed.IsAlive)
                     {
-                        await Client.Delay(0);
-                    }
+                        client.DeregisterTickHandler(ShowText);
 
-                    Screen.Effects.Stop(ScreenEffect.DeathFailOut);
+                        API.SetResourceKvpInt("DEATH", 0);
 
-                    //Game.Player.WantedLevel = 0;
-                    //Game.PlayerPed.ClearBloodDamage();
-                    //Game.PlayerPed.ClearLastWeaponDamage();
+                        await Client.Delay(2000);
 
-                    int r = rnd.Next(hospitals.Count);
+                        API.DoScreenFadeOut(1000);
 
-                    Vector3 playerPos = Game.PlayerPed.Position;
-
-                    Vector3 pos = new Vector3();
-
-                    foreach (Vector3 hosPos in hospitals)
-                    {
-                        float distance = API.GetDistanceBetweenCoords(playerPos.X, playerPos.Y, playerPos.Z, hosPos.X, hosPos.Y, hosPos.Z, false);
-
-                        if (distance < 3000f)
+                        while (!API.IsScreenFadedOut())
                         {
-                            pos = hosPos;
-                            break;
+                            await Client.Delay(0);
                         }
-                    }
 
-                    if (pos.IsZero)
-                    {
-                        pos = hospitals[r];
-                        UI.Notifications.LifeV(1, "EMS", "", "Looks like you had a bad coma...", 132);
-                    }
+                        Screen.Effects.Stop(ScreenEffect.DeathFailOut);
 
-                    Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, pos.Z - 1.0f);
+                        //Game.Player.WantedLevel = 0;
+                        //Game.PlayerPed.ClearBloodDamage();
+                        //Game.PlayerPed.ClearLastWeaponDamage();
 
-                    Game.PlayerPed.IsPositionFrozen = true;
-                    API.NetworkResurrectLocalPlayer(pos.X, pos.Y, pos.Z - 1.0f, 0.0f, false, false);
+                        int r = rnd.Next(hospitals.Count);
 
-                    await Client.Delay(1000);
-                    Game.PlayerPed.IsPositionFrozen = false;
-                    Game.PlayerPed.DropsWeaponsOnDeath = false;
+                        Vector3 playerPos = Game.PlayerPed.Position;
 
-                    Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, _currentJob);
+                        Vector3 pos = new Vector3();
 
-                    await Client.Delay(500);
-
-                    if (CurrentVehicle != null)
-                    {
-                        if (CurrentVehicle.Exists())
+                        foreach (Vector3 hosPos in hospitals)
                         {
-                            SendDeletionEvent(CurrentVehicle.NetworkId);
-                            CurrentVehicle.Delete();
+                            float distance = API.GetDistanceBetweenCoords(playerPos.X, playerPos.Y, playerPos.Z, hosPos.X, hosPos.Y, hosPos.Z, false);
+
+                            if (distance < 3000f)
+                            {
+                                pos = hosPos;
+                                break;
+                            }
                         }
-                    }
 
-                    API.DoScreenFadeIn(1000);
+                        if (pos.IsZero)
+                        {
+                            pos = hospitals[r];
+                            UI.Notifications.LifeV(1, "EMS", "", "Looks like you had a bad coma...", 132);
+                        }
 
-                    while (!API.IsScreenFadedIn())
-                    {
-                        await Client.Delay(0);
-                    }
+                        Game.PlayerPed.Position = new Vector3(pos.X, pos.Y, pos.Z - 1.0f);
 
-                    API.SetFakeWantedLevel(0);
-                    Client.TriggerServerEvent("curiosity:Server:Bank:MedicalFees", forceRespawn);
+                        Game.PlayerPed.IsPositionFrozen = true;
+                        API.NetworkResurrectLocalPlayer(pos.X, pos.Y, pos.Z - 1.0f, 0.0f, false, false);
 
-                    if (forceRespawn)
-                    {
-                        UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You have been charged for your stay, please try to stay alive.", 132);
-                    }
-                    else
-                    {
-                        UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You've been treated for you injuries.", 132);
+                        await Client.Delay(1000);
+                        Game.PlayerPed.IsPositionFrozen = false;
+                        Game.PlayerPed.DropsWeaponsOnDeath = false;
+
+                        Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, _currentJob);
+
+                        await Client.Delay(500);
+
+                        if (CurrentVehicle != null)
+                        {
+                            if (CurrentVehicle.Exists())
+                            {
+                                SendDeletionEvent(CurrentVehicle.NetworkId);
+                                CurrentVehicle.Delete();
+                            }
+                        }
+
+                        API.DoScreenFadeIn(1000);
+
+                        while (!API.IsScreenFadedIn())
+                        {
+                            await Client.Delay(0);
+                        }
+
+                        API.SetFakeWantedLevel(0);
+                        Client.TriggerServerEvent("curiosity:Server:Bank:MedicalFees", forceRespawn);
+
+                        if (forceRespawn)
+                        {
+                            UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You have been charged for your stay, please try to stay alive.", 132);
+                        }
+                        else
+                        {
+                            UI.Notifications.LifeV(1, "EMS", "Medical Fees", "You've been treated for you injuries.", 132);
+                        }
                     }
                 }
                 else
