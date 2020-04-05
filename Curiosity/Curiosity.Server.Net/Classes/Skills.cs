@@ -48,6 +48,9 @@ namespace Curiosity.Server.net.Classes
                 else
                 {
                     Session session = SessionManager.PlayerList[player.Handle];
+
+                    session.Skills = await Database.DatabaseUsersSkills.GetSkills(session.User.CharacterId);
+
                     foreach (KeyValuePair<string, GlobalEntity.Skills> skill in session.Skills)
                     {
                         if (skill.Value.TypeId == skillType)
@@ -55,7 +58,12 @@ namespace Curiosity.Server.net.Classes
                             skillsList.Add(new GlobalEntity.Skills { Label = skill.Value.Label, Value = skill.Value.Value, Description = skill.Value.Description, LabelDescription = skill.Value.LabelDescription });
                         }
                     }
+
+                    SessionManager.PlayerList[player.Handle] = session;
+
+                    PlayerMethods.SendUpdatedInformation(session);
                 }
+
 
                 GlobalEntity.NuiData nuiData = new GlobalEntity.NuiData();
                 nuiData.panel = $"{skillType}";

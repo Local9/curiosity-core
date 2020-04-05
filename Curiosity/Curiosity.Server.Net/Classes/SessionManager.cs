@@ -106,7 +106,10 @@ namespace Curiosity.Server.net.Classes
                             playerInformation.RoleId = User.RoleId;
                             playerInformation.Wallet = User.Wallet;
                             playerInformation.BankAccount = User.BankAccount;
+
                             playerInformation.Skills = await Database.DatabaseUsersSkills.GetSkills(session.User.CharacterId);
+                            session.Skills = playerInformation.Skills;
+
 
                             string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
 
