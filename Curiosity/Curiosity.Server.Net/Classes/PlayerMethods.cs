@@ -36,6 +36,51 @@ namespace Curiosity.Server.net.Classes
             ///////// JOBS //////////
             server.RegisterEventHandler("curiosity:Server:Player:Job", new Action<CitizenFX.Core.Player, int>(OnPlayerJob));
             server.RegisterEventHandler("curiosity:Server:Player:Backup", new Action<CitizenFX.Core.Player, int, float, float, float>(OnBackupRequest));
+
+            server.RegisterEventHandler("curiosity:Server:Player:Revive", new Action<CitizenFX.Core.Player, string>(OnPlayerRevive));
+        }
+
+        static void OnPlayerRevive([FromSource]CitizenFX.Core.Player player, string playerToRevive)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+                if (!SessionManager.PlayerList.ContainsKey(playerToRevive)) return;
+
+                Session playerRevivingSession = SessionManager.PlayerList[player.Handle];
+                Session playerToReviveSession = SessionManager.PlayerList[playerToRevive];
+
+                if (playerRevivingSession == null) return;
+                if (playerToReviveSession == null) return;
+
+                if (playerToReviveSession.Wallet < 500)
+                {
+                    if (!Server.isLive)
+                        Log.Verbose($"Player {playerToReviveSession.Name}[{playerToReviveSession.NetId}] not enough cash to revive");
+
+                    Helpers.Notifications.Advanced($"Not enough cash", $"Cannot revive, player doesn't have enough to pay you.", 221, player);
+                    Helpers.Notifications.Advanced($"Not enough cash", $"Cannot revive, you do not have enough to pay for a revive.", 221, playerToReviveSession.Player);
+                }
+                else
+                {
+                    // Ped pedReviving = playerRevivingSession.Player.Character;
+                    // Ped pedToRevive = playerToReviveSession.Player.Character;
+                    // float distance = (pedReviving.Position - pedToRevive.Position).Length();
+
+                    if (!Server.isLive)
+                        Log.Verbose($"Player {playerRevivingSession.Name}[{playerRevivingSession.NetId}] reviving {playerToReviveSession.Name}[{playerToReviveSession.NetId}]");
+
+                    Bank.IncreaseCashInternally(playerRevivingSession.Player.Handle, 500);
+                    Bank.DecreaseCashInternally(playerToReviveSession.Player.Handle, 500);
+
+                    playerToReviveSession.Player.TriggerEvent("curiosity:Client:Player:Revive");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Revive > Critical Error: {ex.Message}");
+                Log.Error($"{ex}");
+            }
         }
 
         static void OnPlayerJob([FromSource]CitizenFX.Core.Player player, int job)

@@ -10,6 +10,7 @@ using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Client.net.Classes.Player;
+using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -43,12 +44,60 @@ namespace Curiosity.Client.net.Classes.Environment
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
             client.RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleIdUpdate));
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDuty));
+
+            client.RegisterEventHandler("curiosity:Client:Player:Revive", new Action(OnRevive));
+
             client.RegisterTickHandler(OnWastedCheck);
+            client.RegisterTickHandler(OnRevivePlayerCheck);
 
             foreach (Vector3 pos in hospitals)
             {
                 API.AddHospitalRestart(pos.X, pos.Y, pos.Z - 1.0f, 0.0f, 0);
             }
+        }
+
+        private static async Task OnRevivePlayerCheck()
+        {
+            try
+            {
+                CitizenFX.Core.Player closestPlayer = Client.players.Select(x => x).Where(p => p.Character.Position.Distance(Game.PlayerPed.Position) < 5f && p.Character.IsDead).FirstOrDefault();
+
+                if (Client.isSessionActive && closestPlayer != null)
+                {
+                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to revive...");
+
+                    if (Game.IsControlJustPressed(0, Control.Context))
+                    {
+                        Debug.WriteLine($"Reviving Player {closestPlayer.Name}|{closestPlayer.ServerId}");
+                        Client.TriggerServerEvent("curiosity:Server:Player:Revive", closestPlayer.ServerId);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Revive > Critical Error: {ex.Message}");
+            }
+        }
+
+        private static async void OnRevive()
+        {
+            Debug.WriteLine($"Reviving");
+
+            API.NetworkFadeOutEntity(Game.PlayerPed.Handle, false, false);
+            Game.PlayerPed.IsPositionFrozen = true;
+            await Client.Delay(500);
+
+            Vector3 pos = Game.PlayerPed.Position;
+            API.NetworkResurrectLocalPlayer(pos.X, pos.Y, pos.Z, 0.0f, false, false);
+
+            Game.PlayerPed.Health = 50;
+            Game.PlayerPed.Armor = 0;
+
+            API.SetResourceKvpInt("DEATH", 0);
+
+            await Client.Delay(500);
+            API.NetworkFadeInEntity(Game.PlayerPed.Handle, false);
+            Game.PlayerPed.IsPositionFrozen = false;
         }
 
         static void OnDuty(bool active, bool onDuty, string job)
