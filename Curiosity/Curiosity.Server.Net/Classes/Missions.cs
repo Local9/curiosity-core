@@ -102,8 +102,8 @@ namespace Curiosity.Server.net.Classes
             }
 
             int exp = random.Next(10, 30);
-            int knowledge = random.Next(1, 4);
-            int money = random.Next(25, 100);
+            int knowledge = random.Next(6, 10);
+            int money = random.Next(60, 100);
 
             int experienceEarnAdditional = (int)(exp * experienceMultiplier);
             int knowledgeEarnAdditional = (int)(knowledge * experienceMultiplier);
