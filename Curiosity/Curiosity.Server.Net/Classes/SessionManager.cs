@@ -14,11 +14,16 @@ namespace Curiosity.Server.net.Classes
     {
         static Server server = Server.GetInstance();
 
+        static long GameTimer;
+        const long SESSION_UPDATE = (1000 * 60) * 2;
+
         public static Dictionary<string, Session> PlayerList = new Dictionary<string, Session>();
 
         public static void Init()
         {
             server.RegisterTickHandler(UpdateSessions);
+
+            GameTimer = API.GetGameTimer();
 
             server.RegisterEventHandler("curiosity:Server:SessionManager:GetSessions", new Action(OnGetSessions));
             server.RegisterEventHandler("curiosity:Server:Session:Ping", new Action<CitizenFX.Core.Player>(OnSessionPing));
@@ -45,16 +50,12 @@ namespace Curiosity.Server.net.Classes
 
         static async Task UpdateSessions()
         {
-            while (true)
+            while ((API.GetGameTimer() - GameTimer) > SESSION_UPDATE)
             {
+                GameTimer = API.GetGameTimer();
                 try {
 
-                    lock(PlayerList)
-                    {
-                        UpdatePlayersInformation();
-                    }
-
-                    await BaseScript.Delay((1000 * 60) * 2);
+                    UpdatePlayersInformation();
                 }
                 catch (Exception ex)
                 {
@@ -68,6 +69,11 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
+                if (!Server.isLive)
+                {
+                    Log.Verbose($"Running Session Update");
+                }
+
                 Dictionary<string, Session> PlayerListCopy = new Dictionary<string, Session>(PlayerList);
 
                 Dictionary<string, Session> SessionsToDrop = new Dictionary<string, Session>();
@@ -76,19 +82,19 @@ namespace Curiosity.Server.net.Classes
                 {
                     Session session = playerItem.Value;
 
-                    TimeSpan timeSpan = DateTime.UtcNow - session.LastSessionEvent;
-
-                    if (timeSpan.TotalMinutes >= 5)
+                    if (!Server.players.Contains(playerItem.Value.Player))
                     {
-                        SessionsToDrop.Add(playerItem.Key, playerItem.Value);
+                        if (PlayerList.ContainsKey(playerItem.Key)) // Safe check
+                            PlayerList.Remove(playerItem.Key);
                     }
                     else
                     {
 
                         GlobalEntity.User User = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.Player);
 
-                        if (User == null)
+                        if (User != null)
                         {
+
                             session.Privilege = (Privilege)User.RoleId;
                             session.SetBankAccount(User.BankAccount);
                             session.SetWallet(User.Wallet);
@@ -97,16 +103,16 @@ namespace Curiosity.Server.net.Classes
                             playerInformation.Handle = session.NetId;
                             playerInformation.UserId = session.UserID;
                             playerInformation.CharacterId = session.User.CharacterId;
-                            playerInformation.RoleId = (int)session.Privilege;
-                            playerInformation.Wallet = session.Wallet;
-                            playerInformation.BankAccount = session.BankAccount;
-                            playerInformation.Skills = session.Skills;
+                            playerInformation.RoleId = User.RoleId;
+                            playerInformation.Wallet = User.Wallet;
+                            playerInformation.BankAccount = User.BankAccount;
+                            playerInformation.Skills = await Database.DatabaseUsersSkills.GetSkills(session.User.CharacterId);
 
                             string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
 
-                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", User.Wallet);
                             await BaseScript.Delay(0);
-                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
+                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateBank", User.BankAccount);
                             await BaseScript.Delay(0);
                             session.Player.TriggerEvent("curiosity:Client:Player:GetInformation", json);
                             await BaseScript.Delay(0);
@@ -116,14 +122,6 @@ namespace Curiosity.Server.net.Classes
                     }
 
                     await BaseScript.Delay(100);
-                }
-
-                foreach (KeyValuePair<string, Session> playerItem in SessionsToDrop)
-                {
-                    if (!Server.players.Contains(playerItem.Value.Player))
-                    {
-                        PlayerList.Remove(playerItem.Key);
-                    }
                 }
             }
             catch (Exception ex)

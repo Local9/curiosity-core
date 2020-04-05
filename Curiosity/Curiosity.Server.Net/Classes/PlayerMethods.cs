@@ -293,7 +293,7 @@ namespace Curiosity.Server.net.Classes
                 playerInformation.RoleId = (int)session.Privilege;
                 playerInformation.Wallet = session.Wallet;
                 playerInformation.BankAccount = session.BankAccount;
-                playerInformation.Skills = session.Skills;
+                playerInformation.Skills = await Database.DatabaseUsersSkills.GetSkills(session.User.CharacterId);
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
 
@@ -321,7 +321,7 @@ namespace Curiosity.Server.net.Classes
                 playerInformation.RoleId = (int)session.Privilege;
                 playerInformation.Wallet = session.Wallet;
                 playerInformation.BankAccount = session.BankAccount;
-                playerInformation.Skills = session.Skills;
+                playerInformation.Skills = await Database.DatabaseUsersSkills.GetSkills(session.User.CharacterId);
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(playerInformation);
 

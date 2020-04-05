@@ -143,6 +143,7 @@ namespace Curiosity.Client.net.Classes.Player
                 StatSetInt((uint)GetHashKey("MP0_STEALTH_ABILITY"), 100, true);
             }
 
+            GetPlayerInfo();
             await BaseScript.Delay(0);
         }
 
