@@ -315,6 +315,19 @@ namespace Curiosity.Systems.Server
                         await SaveOperation(users.Value);
                     }
 
+                    int activeUsers = ActiveUsers.Count;
+                    int activeUsersRemoved = 0;
+
+                    foreach(Player player in Players)
+                    {
+                        if (!ActiveUsers.ContainsKey(player.Handle))
+                        {
+                            ActiveUsers.Remove(player.Handle);
+                            activeUsersRemoved++;
+                        }
+                    }
+
+                    Logger.Info($"[ActiveUsers] Removed {activeUsersRemoved} of {activeUsers}.");
                     LastSave = Date.Timestamp;
                 }
 
