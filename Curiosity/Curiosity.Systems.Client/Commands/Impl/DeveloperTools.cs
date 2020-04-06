@@ -145,7 +145,7 @@ namespace Curiosity.Systems.Client.Commands.Impl
 
                 string positionName = arguments[0];
 
-                bool response = await EventSystem.GetModule().Request<bool>("system:savePos", positionName);
+                bool response = await EventSystem.GetModule().Request<bool>("developer:savePos", positionName);
                 if (response)
                 {
                     Chat.SendLocalMessage($"Position '{positionName}' saved.");

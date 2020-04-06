@@ -261,14 +261,28 @@ namespace Curiosity.Systems.Server
 
             Logger.Info("[Saves] Beginning `Save` operation on `Characters`.");
 
-            foreach (var users in ActiveUsers)
+            try
             {
-                await SaveOperation(users.Value);
+                foreach (var users in ActiveUsers)
+                {
+                    await SaveOperation(users.Value);
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.Error($"{ex}");
             }
 
             Logger.Info("[Saves] Completed `Save` operation on `Characters`.");
 
-            API.CancelEvent();
+            try
+            {
+                API.CancelEvent();
+            }
+            catch(Exception ex)
+            {
+                Logger.Error($"Error when canceling event, possible changes made by FiveM Collective.");
+            }
         }
 
         public object LoadManager(Type type)

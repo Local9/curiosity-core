@@ -8,7 +8,8 @@ namespace Curiosity.Systems.Client.Environment.Stores.Impl
     {
         public Position[] Stores { get; } =
         {
-            new Position(-1221.687f, -908.5657f, 12.32636f, 35.45065f)
+            new Position(-1221.687f, -908.5657f, 12.32636f, 35.45065f),
+            new Position(-1486.233f, -378.0527f, 40.14795f, 133.2283f),
         };
 
         public override void Load()

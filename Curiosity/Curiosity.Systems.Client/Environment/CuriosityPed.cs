@@ -128,7 +128,7 @@ namespace Curiosity.Systems.Client.Environment
                 if (!string.IsNullOrEmpty(AnimationDict))
                 {
                     await CommonFunctions.LoadAnimationDict(AnimationDict);
-                    API.TaskPlayAnim(_ped.Handle, AnimationDict, AnimationBone, 1f, -1f, -1, 1, 1f, true, true, true);
+                    _ped.Task.PlayAnimation(AnimationDict, AnimationBone, 8f, -1, AnimationFlags.Loop);
                 }
 
                 _model.MarkAsNoLongerNeeded();
