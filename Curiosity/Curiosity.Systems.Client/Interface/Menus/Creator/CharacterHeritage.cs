@@ -1,12 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Environment.Entities.Models;
-using Curiosity.Systems.Client.Diagnostics;
-using Curiosity.Systems.Client.Extensions;
-using Curiosity.Systems.Library;
-using Curiosity.Systems.Library.Models;
 using NativeUI;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

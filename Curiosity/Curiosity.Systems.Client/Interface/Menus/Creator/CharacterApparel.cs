@@ -1,9 +1,7 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Systems.Client.Interface.Menus.Data;
 using NativeUI;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Interface.Menus.Creator

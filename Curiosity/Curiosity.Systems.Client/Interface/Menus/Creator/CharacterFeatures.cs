@@ -1,13 +1,11 @@
-﻿using Curiosity.Systems.Client.Environment.Entities.Models;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Systems.Client.Environment.Entities.Models;
 using NativeUI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
 using System.Drawing;
-using CitizenFX.Core.Native;
+using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Interface.Menus.Creator
 {

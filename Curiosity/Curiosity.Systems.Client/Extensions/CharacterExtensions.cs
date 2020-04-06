@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Curiosity.Systems.Client.Interface.Menus.Data;
 
 namespace Curiosity.Systems.Client.Extensions
 {
