@@ -14,14 +14,10 @@ namespace Curiosity.Systems.Client.Interface.Menus
 
         public override void Begin()
         {
-            Logger.Info($"--------------------------------------------------");
-            Logger.Info($"---------- [InteractionMenu] Begin ---------------");
-            Logger.Info($"--------------------------------------------------");
-
             _MenuPool = new MenuPool();
             _MenuPool.MouseEdgeEnabled = false;
 
-            menuMain = new UIMenu(Game.Player.Name, "Interaction Menu");
+            menuMain = new UIMenu("Interaction Menu", "Player Interactions");
             _MenuPool.Add(menuMain);
 
             menuMain.OnMenuClose += MenuMain_OnMenuClose;
