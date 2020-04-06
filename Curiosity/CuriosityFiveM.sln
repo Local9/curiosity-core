@@ -128,7 +128,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Systems.Client", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeUI", "NativeUI\NativeUI\NativeUI.csproj", "{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CuriosityRefactor", "CuriosityRefactor", "{5B08BD43-975A-44DD-9AD8-4B96EB32B987}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Curiosity-2.0", "Curiosity-2.0", "{5B08BD43-975A-44DD-9AD8-4B96EB32B987}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.ScratchPad.Client.net", "Curiosity.ScratchPad.Client.net\Curiosity.ScratchPad.Client.net.csproj", "{49E97F43-0268-4D50-8E65-69FB43363CF3}"
 EndProject
