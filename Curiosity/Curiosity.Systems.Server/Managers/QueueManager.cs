@@ -780,9 +780,10 @@ namespace Curiosity.Systems.Server.Managers
             }
             else
             {
-                if (maxSession > 32) { maxSession = 32; }
+                if (maxSession > 32) {
+                    maxSession = 32;
+                }
             }
-            API.ExecuteCommand($"sv_maxclients {maxSession}");
 
             loadTime = API.GetConvarInt("queue_loading_timeout", loadTime);
             graceTime = API.GetConvarInt("queue_reconnect_timeout", graceTime);
