@@ -1,21 +1,16 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Environment;
 using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Events;
-using Curiosity.Systems.Client.Interface;
-using Curiosity.Systems.Client.Interface.Menus;
 using Curiosity.Systems.Client.Interface.Menus.Creator;
-using Curiosity.Systems.Client.Managers;
+using Curiosity.Systems.Client.Interface.Menus.Data;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.Systems.Client.Interface.Menus.Data;
 
 namespace Curiosity.Systems.Client.Extensions
 {
@@ -87,7 +82,7 @@ namespace Curiosity.Systems.Client.Extensions
         public static async Task Load(this CuriosityCharacter character)
         {
             var player = Cache.Player;
-            
+
             API.SetPedDefaultComponentVariation(player.Entity.Id);
 
             Model playerModel = PedHash.FreemodeMale01;
@@ -112,7 +107,7 @@ namespace Curiosity.Systems.Client.Extensions
             CharacterClothing.SetPedHat(Game.PlayerPed, character.Appearance.Hat);
             CharacterClothing.SetPedGlasses(Game.PlayerPed, character.Appearance.Glasses);
 
-            foreach(KeyValuePair<int, float> keyValuePair in character.Features)
+            foreach (KeyValuePair<int, float> keyValuePair in character.Features)
             {
                 API.SetPedFaceFeature(Cache.Entity.Id, keyValuePair.Key, keyValuePair.Value);
             }

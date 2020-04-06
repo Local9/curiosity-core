@@ -1,9 +1,5 @@
 ﻿using CitizenFX.Core;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Server.Diagnostics
 {
@@ -14,7 +10,7 @@ namespace Curiosity.Systems.Server.Diagnostics
         public async void PrintErrorText()
         {
             SetupError();
-            foreach(string s in errorText)
+            foreach (string s in errorText)
             {
                 Logger.Error(s);
                 await BaseScript.Delay(500);

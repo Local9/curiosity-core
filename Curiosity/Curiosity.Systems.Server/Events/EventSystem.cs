@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CitizenFX.Core;
-using Newtonsoft.Json;
-using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Threading;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Managers;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Server.Events
 {
@@ -17,7 +16,7 @@ namespace Curiosity.Systems.Server.Events
         private const string EVENT_KEY = "XeBQ2h65KTeeW5uQdWdax3EP";
 
         public List<EventAttachment> Attachments { get; } = new List<EventAttachment>();
-        public List<EventRequest> PendingRequests { get; }= new List<EventRequest>();
+        public List<EventRequest> PendingRequests { get; } = new List<EventRequest>();
 
         public EventSystem()
         {
@@ -43,7 +42,7 @@ namespace Curiosity.Systems.Server.Events
                                     wrapped.Type = EventType.Response;
                                     wrapped.Metadata.Write("__response",
                                         JsonConvert.SerializeObject(
-                                            await ((AsyncEventCallback) attachment.Callback).AsyncTask(wrapped.Metadata)));
+                                            await ((AsyncEventCallback)attachment.Callback).AsyncTask(wrapped.Metadata)));
 
                                     Send(wrapped, handle);
                                 });
@@ -82,7 +81,7 @@ namespace Curiosity.Systems.Server.Events
                             {
                                 Task.Factory.StartNew(async () =>
                                 {
-                                    await ((AsyncEventCallback) attachment.Callback).AsyncTask(wrapped.Metadata);
+                                    await ((AsyncEventCallback)attachment.Callback).AsyncTask(wrapped.Metadata);
                                 });
                             }
                             else

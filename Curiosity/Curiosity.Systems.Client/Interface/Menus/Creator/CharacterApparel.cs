@@ -69,7 +69,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
         }
 
         private void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
-        {   
+        {
             if (listItem == lstTops)
             {
                 CharacterClothing.SetPedTop(Game.PlayerPed, newIndex);

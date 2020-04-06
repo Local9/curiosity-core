@@ -1,15 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Environment
@@ -81,7 +78,7 @@ namespace Curiosity.Systems.Client.Environment
                         Load();
                     }
                 }
-                
+
                 if (distance > DespawnDistance)
                 {
                     Dispose();

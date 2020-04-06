@@ -1,8 +1,7 @@
-using System.Linq;
-using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Systems.Client.Environment.Entities;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Environment.Entities.Models
 {
@@ -53,16 +52,16 @@ namespace Curiosity.Systems.Client.Environment.Entities.Models
                 API.PopScaleformMovieFunctionVoid();
                 API.SetTextRenderId(handle);
 
-                Function.Call((Hash) 0x40332D115A898AF5, movie, true);
+                Function.Call((Hash)0x40332D115A898AF5, movie, true);
 
                 API.SetUiLayer(4);
 
-                Function.Call((Hash) 0xc6372ecd45d73bcd, movie, true);
+                Function.Call((Hash)0xc6372ecd45d73bcd, movie, true);
 
                 API.DrawScaleformMovie(movie, 0.4f, 0.35f, 0.8f, 0.75f, 255, 255, 255, 255, 255);
                 API.SetTextRenderId(API.GetDefaultScriptRendertargetRenderId());
 
-                Function.Call((Hash) 0x40332D115A898AF5, movie, false);
+                Function.Call((Hash)0x40332D115A898AF5, movie, false);
 
                 await BaseScript.Delay(0);
             }
@@ -82,9 +81,9 @@ namespace Curiosity.Systems.Client.Environment.Entities.Models
                 API.RegisterNamedRendertarget(name, false);
             }
 
-            if (!API.IsNamedRendertargetLinked((uint) model))
+            if (!API.IsNamedRendertargetLinked((uint)model))
             {
-                API.LinkNamedRendertarget((uint) model);
+                API.LinkNamedRendertarget((uint)model);
             }
 
             if (API.IsNamedRendertargetRegistered(name))

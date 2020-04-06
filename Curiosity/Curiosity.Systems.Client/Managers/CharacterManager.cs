@@ -2,15 +2,10 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Diagnostics;
-using Curiosity.Systems.Client.Environment;
 using Curiosity.Systems.Client.Environment.Entities;
 using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers
@@ -204,7 +199,7 @@ namespace Curiosity.Systems.Client.Managers
 
             // await SafeTeleport.Teleport(player.Entity.Id, position); // Hang?
             Game.PlayerPed.Position = position.AsVector();
-            
+
             Logger.Info("[Character] Teleported...");
 
             if (player.Character.MarkedAsRegistered)

@@ -3,11 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Server.MySQL.Store
@@ -31,7 +27,7 @@ namespace Curiosity.Systems.Server.MySQL.Store
                     cmd.Parameters.AddWithValue("@serverIdent", serverId);
 
 
-                    foreach(MySqlParameter param in cmd.Parameters)
+                    foreach (MySqlParameter param in cmd.Parameters)
                     {
                         Logger.Debug($"{param.ParameterName} = {param.Value}");
                     }
@@ -46,7 +42,7 @@ namespace Curiosity.Systems.Server.MySQL.Store
                             {
                                 if (!reader.IsDBNull(4))
                                     curiosityCharacter = Newtonsoft.Json.JsonConvert.DeserializeObject<CuriosityCharacter>(reader.GetString(4));
-                                
+
                                 curiosityCharacter.CharacterId = reader.GetInt64(0);
                                 curiosityCharacter.MarkedAsRegistered = reader.GetBoolean(1);
                             }

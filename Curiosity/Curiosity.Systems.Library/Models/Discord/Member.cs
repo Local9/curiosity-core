@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
-using System.Globalization;
 
 namespace Curiosity.Systems.Library.Models.Discord
 {

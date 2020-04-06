@@ -17,7 +17,7 @@ namespace Curiosity.Systems.Client.Extensions
 
         public static void Send(this CuriosityUser user, string target, params object[] payloads)
         {
-            if (payloads == null) payloads = new object[] {false};
+            if (payloads == null) payloads = new object[] { false };
 
             var modified = new object[2 + payloads.Length];
             var index = 2;

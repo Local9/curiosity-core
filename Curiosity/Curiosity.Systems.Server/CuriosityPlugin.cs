@@ -10,10 +10,8 @@ using Curiosity.Systems.Server.Web;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Server
@@ -60,9 +58,9 @@ namespace Curiosity.Systems.Server
                 try
                 {
                     Logger.Info("Running DB Connection Test...");
-                    
+
                     await BaseScript.Delay(100);
-                    
+
                     DetachTickHandler(DatabaseTest);
 
                     using (var db = new MySqlDatabase())
@@ -97,7 +95,7 @@ namespace Curiosity.Systems.Server
             }
 
             AttachTickHandler(DatabaseTest);
-            
+
         }
 
         private async void SetupConvars()
@@ -172,7 +170,7 @@ namespace Curiosity.Systems.Server
 
                 if (!onesyncActive)
                 {
-                    while(true)
+                    while (true)
                     {
                         Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         Logger.Error("!!!!! OneSync is required to use this framework !!!!!");
@@ -239,7 +237,7 @@ namespace Curiosity.Systems.Server
             }
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
-            
+
             AttachTickHandler(SaveTask);
 
             EventRegistry["rconCommand"] += new Action<string, List<object>>(OnRconCommand);
@@ -333,7 +331,7 @@ namespace Curiosity.Systems.Server
                     int activeUsers = ActiveUsers.Count;
                     int activeUsersRemoved = 0;
 
-                    foreach(Player player in Players)
+                    foreach (Player player in Players)
                     {
                         if (!ActiveUsers.ContainsKey(player.Handle))
                         {

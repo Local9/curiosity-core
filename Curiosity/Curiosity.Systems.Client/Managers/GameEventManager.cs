@@ -1,14 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Managers.Events;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers.Events
 {
@@ -61,7 +56,7 @@ namespace Curiosity.Systems.Client.Managers
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Debug($"{ex}");
             }

@@ -1,11 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers

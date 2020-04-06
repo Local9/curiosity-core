@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Curiosity.Systems.Library.Models
 {

@@ -1,10 +1,10 @@
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Newtonsoft.Json;
 
 namespace Curiosity.Systems.Server.Web
 {
@@ -39,7 +39,9 @@ namespace Curiosity.Systems.Server.Web
         {
             var response = new Dictionary<string, dynamic>
             {
-                ["headers"] = header, ["status"] = status, ["content"] = text
+                ["headers"] = header,
+                ["status"] = status,
+                ["content"] = text
             };
 
             ResponseDictionary[token] = response;
@@ -47,7 +49,7 @@ namespace Curiosity.Systems.Server.Web
 
         public async Task<Dictionary<string, dynamic>> Http(string url, string method, string data, dynamic headers)
         {
-            var requestData = new RequestDataInternal {url = url, method = method, data = data, headers = headers};
+            var requestData = new RequestDataInternal { url = url, method = method, data = data, headers = headers };
             var json = JsonConvert.SerializeObject(requestData);
             var token = API.PerformHttpRequestInternal(json, json.Length);
 
@@ -79,7 +81,7 @@ namespace Curiosity.Systems.Server.Web
         private WebHeaderCollection ParseHeadersInternal(dynamic headerDynamic)
         {
             var headers = new WebHeaderCollection();
-            var headerDictionary = (IDictionary<string, object>) headerDynamic;
+            var headerDictionary = (IDictionary<string, object>)headerDynamic;
 
             foreach (var entry in headerDictionary)
             {
@@ -91,7 +93,7 @@ namespace Curiosity.Systems.Server.Web
 
         private HttpStatusCode ParseStatusInternal(int status)
         {
-            return (HttpStatusCode) Enum.ToObject(typeof(HttpStatusCode), status);
+            return (HttpStatusCode)Enum.ToObject(typeof(HttpStatusCode), status);
         }
 
         private RequestResponse ParseRequestResponseInternal(IDictionary<string, dynamic> response)

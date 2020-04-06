@@ -2,14 +2,9 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Environment.Entities.Models;
-using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Interface.Modules;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Environment.Entities

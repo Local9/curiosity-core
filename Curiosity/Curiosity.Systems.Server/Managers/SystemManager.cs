@@ -4,7 +4,6 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Events;
-using Curiosity.Systems.Server.MySQL;
 using System;
 using System.IO;
 

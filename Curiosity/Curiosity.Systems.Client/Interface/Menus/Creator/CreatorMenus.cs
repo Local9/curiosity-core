@@ -1,14 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Interface.Menus.Creator
@@ -49,7 +44,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             // TICKS & SETUP
             _MenuPool = new MenuPool();
             _MenuPool.MouseEdgeEnabled = false;
-            
+
             //UIMenu
             menuMain = new UIMenu(Game.Player.Name, "Player Creator");
             _MenuPool.Add(menuMain);

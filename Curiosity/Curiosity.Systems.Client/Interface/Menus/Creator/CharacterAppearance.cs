@@ -16,7 +16,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
         private UIMenuListItem lstHair; // Color Panel
         private UIMenuColorPanel pnlHairColorPrimary;
         private UIMenuColorPanel pnlHairColorSecondary;
-        
+
         private UIMenuListItem lstEyebrows; // Color Panel + Opacity
         private UIMenuPercentagePanel pnlEyebrowOpacity;
         private UIMenuColorPanel pnlEyebrowColor;
@@ -170,7 +170,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
                 API.SetPedHairColor(Game.PlayerPed.Handle, primaryColor.CurrentSelection, secondaryColor.CurrentSelection);
                 Cache.Character.Appearance.HairPrimaryColor = primaryColor.CurrentSelection;
                 Cache.Character.Appearance.HairSecondaryColor = secondaryColor.CurrentSelection;
-                
+
                 return;
             }
 
@@ -278,7 +278,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
                 API.SetPedEyeColor(Game.PlayerPed.Handle, newIndex);
 
                 Cache.Character.Appearance.EyeColor = newIndex;
-                
+
                 return;
             }
 
@@ -390,7 +390,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
             pnlSkinBlemishesOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
             menu.AddItem(lstSkinBlemishes);
             lstSkinBlemishes.AddPanel(pnlSkinBlemishesOpacity);
-            
+
             lstSkinAging = new UIMenuListItem("Skin Aging", skinAgingStyleList, 0);
             pnlSkinAgingOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
             menu.AddItem(lstSkinAging);

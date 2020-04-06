@@ -1,6 +1,5 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -62,7 +61,7 @@ namespace Curiosity.Systems.Client.Environment
                         {
                             foreach (var invocation in Callback.GetInvocationList())
                             {
-                                ((Action) invocation).Invoke();
+                                ((Action)invocation).Invoke();
                             }
                         }
                     }

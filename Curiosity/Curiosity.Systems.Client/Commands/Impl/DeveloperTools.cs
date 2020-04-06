@@ -132,7 +132,7 @@ namespace Curiosity.Systems.Client.Commands.Impl
                 {
                     Chat.SendLocalMessage("Invalid or Missing Coord");
                 }
-                
+
             }
         }
 

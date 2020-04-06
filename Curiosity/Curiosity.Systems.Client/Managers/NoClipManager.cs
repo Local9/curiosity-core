@@ -3,8 +3,6 @@ using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Diagnostics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers

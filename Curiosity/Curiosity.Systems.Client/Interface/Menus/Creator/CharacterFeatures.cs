@@ -195,7 +195,7 @@ namespace Curiosity.Systems.Client.Interface.Menus.Creator
                 float x;
                 float y;
 
-                UIMenuGridPanel panel= (UIMenuGridPanel)listItem.Panels[0];
+                UIMenuGridPanel panel = (UIMenuGridPanel)listItem.Panels[0];
 
                 y = Project(panel.CirclePosition.Y, 0.5f, 1.0f);
                 x = Project(panel.CirclePosition.X, 0.5f, 1.0f);

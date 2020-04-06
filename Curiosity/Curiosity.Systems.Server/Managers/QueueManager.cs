@@ -3,11 +3,9 @@ using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Web;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data;
 using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -780,7 +778,8 @@ namespace Curiosity.Systems.Server.Managers
             }
             else
             {
-                if (maxSession > 32) {
+                if (maxSession > 32)
+                {
                     maxSession = 32;
                 }
             }
@@ -801,9 +800,9 @@ namespace Curiosity.Systems.Server.Managers
             Logger.Info($"Queue Settings -> queue_type_2_reserved_slots {reservedTypeTwoSlots}");
             Logger.Info($"Queue Settings -> queue_type_3_reserved_slots {reservedTypeThreeSlots}");
             Logger.Info($"Queue Settings -> Final Public Slots: {publicTypeSlots}");
-            
+
             SetupMessages();
-            
+
             Logger.Success($"Queue Configuration Completed");
         }
 

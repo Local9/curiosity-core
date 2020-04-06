@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.Systems.Client.Commands
 {
@@ -23,7 +22,7 @@ namespace Curiosity.Systems.Client.Commands
                 return;
             }
 
-            var context = (CommandContext) Activator.CreateInstance(type);
+            var context = (CommandContext)Activator.CreateInstance(type);
             var target = typeof(ICommand);
             var assembly = type.Assembly;
             var found = assembly.GetExportedTypes()
@@ -40,7 +39,7 @@ namespace Curiosity.Systems.Client.Commands
                 if (!(nested.GetCustomAttributes(typeof(CommandInfo), true).FirstOrDefault() is CommandInfo commandInfo)
                 ) continue;
 
-                var created = (ICommand) Activator.CreateInstance(nested);
+                var created = (ICommand)Activator.CreateInstance(nested);
 
                 CuriosityPlugin.Instance.AttachTickHandlers(created);
 
@@ -49,7 +48,7 @@ namespace Curiosity.Systems.Client.Commands
                 registered++;
             }
 
-            foreach(string self in context.Aliases.ToList())
+            foreach (string self in context.Aliases.ToList())
             {
                 Logger.Debug($"Register: {self}");
 

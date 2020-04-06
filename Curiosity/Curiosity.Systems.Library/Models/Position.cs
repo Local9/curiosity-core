@@ -35,7 +35,7 @@ namespace Curiosity.Systems.Library.Models
 
             return this;
         }
-        
+
         public Position Add(Position position)
         {
             X = X + position.X;

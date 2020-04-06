@@ -38,7 +38,7 @@ namespace Curiosity.Systems.Client.Managers
             if (entity.IsDead)
             {
                 WasDead = true;
-                
+
                 if (Timestamp < 1)
                 {
                     player.DisableHud();
@@ -108,7 +108,7 @@ namespace Curiosity.Systems.Client.Managers
                 if (WasDead)
                 {
                     Timestamp = 0;
-                    
+
                     player.EnableHud();
                 }
 

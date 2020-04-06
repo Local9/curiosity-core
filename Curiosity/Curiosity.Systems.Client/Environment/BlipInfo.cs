@@ -1,7 +1,7 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Client.Extensions;
+using Curiosity.Systems.Library.Models;
 
 namespace Curiosity.Systems.Client.Environment
 {
