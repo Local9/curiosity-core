@@ -315,6 +315,7 @@ namespace Curiosity.Systems.Server
                         await SaveOperation(users.Value);
                     }
 
+                    // Added is a playerDropped event is not received
                     int activeUsers = ActiveUsers.Count;
                     int activeUsersRemoved = 0;
 
