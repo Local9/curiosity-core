@@ -168,6 +168,20 @@ namespace Curiosity.Systems.Server
                     }
                 }
 
+                bool onesyncActive = Convert.ToBoolean(API.GetConvar("onesync_enabled", "false"));
+
+                if (!onesyncActive)
+                {
+                    while(true)
+                    {
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        Logger.Error("!!!!! OneSync is required to use this framework !!!!!");
+                        Logger.Error("!!! Please set this value and restart the server! !!!");
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        await BaseScript.Delay(3000);
+                    }
+                }
+
                 DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
                 API.SetConvarServerInfo("Discord", DiscordUrl);
 

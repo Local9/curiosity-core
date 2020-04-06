@@ -144,12 +144,8 @@ namespace Curiosity.Systems.Client.Commands.Impl
                 if (arguments.Count <= 0) return;
 
                 string positionName = arguments[0];
-                float x = entity.Position.X;
-                float y = entity.Position.Y;
-                float z = entity.Position.Z;
-                float h = entity.Position.Heading;
 
-                bool response = await EventSystem.GetModule().Request<bool>("system:savePos", positionName, x, y, z, h);
+                bool response = await EventSystem.GetModule().Request<bool>("system:savePos", positionName);
                 if (response)
                 {
                     Chat.SendLocalMessage($"Position '{positionName}' saved.");

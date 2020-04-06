@@ -38,12 +38,13 @@ namespace Curiosity.Systems.Server.Managers
                 using (TextWriter tw = new StreamWriter(filePath, true))
                 {
                     string posName = metadata.Find<string>(0);
-                    float x = metadata.Find<float>(1);
-                    float y = metadata.Find<float>(2);
-                    float z = metadata.Find<float>(3);
-                    float h = metadata.Find<float>(4);
-                    
-                    Logger.Debug($"Saving Position: {posName}");
+                    Vector3 pos = player.Character.Position;
+                    float x = pos.X;
+                    float y = pos.Y;
+                    float z = pos.Z;
+                    float h = player.Character.Heading;
+
+                    Logger.Debug($"Saving Position: {posName} - {pos} : {h}");
 
                     tw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm")},{posName},new Vector3({x}f, {y}f, {z}f),({x}, {y}, {z}),(x: {x}, y: {y}, z: {z}),{h}");
                 }
