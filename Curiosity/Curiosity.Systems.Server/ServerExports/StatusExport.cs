@@ -13,7 +13,7 @@ namespace Curiosity.Systems.Server.ServerExports
     {
         public override void Begin()
         {
-            Curiosity.ExportDictionary.Add("status", new Func<string>(
+            Curiosity.ExportDictionary.Add("Status", new Func<string>(
                 () =>
                 {
                     var returnObject = new { status = CuriosityPlugin.ServerReady };
