@@ -41,6 +41,7 @@ namespace Curiosity.Systems.Server
         public long LastSave { get; set; } = Date.Timestamp;
 
         public EventHandlerDictionary EventRegistry => EventHandlers;
+        public ExportDictionary ExportDictionary => Exports;
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
 
         public CuriosityPlugin()
