@@ -90,6 +90,7 @@
     <Compile Include="Interface\Menus\Creator\CharacterAppearance.cs" />
     <Compile Include="Interface\Menus\Creator\CreatorMenus.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterHeritage.cs" />
+    <Compile Include="Interface\Menus\InteractionMenu.cs" />
     <Compile Include="Interface\Modules\HeadupDisplay.cs" />
     <Compile Include="Interface\Notification.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
