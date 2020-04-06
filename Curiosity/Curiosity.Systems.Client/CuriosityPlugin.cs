@@ -144,6 +144,7 @@ namespace Curiosity.Systems.Client
             Screen.Hud.HideComponentThisFrame(HudComponent.Saving);
 
             API.SetTextChatEnabled(false);
+            API.CancelCurrentPoliceReport();
 
             // Whitelist to make the reticle show. (Snipers, and certain weapons with scopes possibly)
             Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
