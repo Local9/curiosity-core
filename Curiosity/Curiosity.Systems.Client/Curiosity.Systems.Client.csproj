@@ -55,6 +55,7 @@
     <Compile Include="Commands\CommandInfo.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\Impl\DeveloperTools.cs" />
+    <Compile Include="Commands\Impl\PlayerCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="CuriosityPlugin.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\NoClipManager.cs" />
+    <Compile Include="Managers\PartyManager.cs" />
     <Compile Include="Managers\PointFingerManager.cs" />
     <Compile Include="Managers\PopulationManager.cs" />
     <Compile Include="Managers\SessionManager.cs" />

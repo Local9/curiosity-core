@@ -35,6 +35,8 @@ namespace Curiosity.Systems.Client
                 Status = "Connecting..."
             };
 
+        public PlayerList PlayerList;
+
         public EventHandlerDictionary EventRegistry => EventHandlers;
         public CuriosityPlayer Local { get; set; }
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
@@ -44,6 +46,8 @@ namespace Curiosity.Systems.Client
         public CuriosityPlugin()
         {
             Logger.Info("[Curiosity]: Constructor Call from CitizenFX - BaseScript");
+
+            PlayerList = Players;
 
             Instance = this;
 
@@ -107,6 +111,7 @@ namespace Curiosity.Systems.Client
             var commands = new CommandFramework();
 
             commands.Bind(typeof(DeveloperTools));
+            commands.Bind(typeof(PlayerCommands));
 
             AttachTickHandlers(this);
 

@@ -16,12 +16,11 @@ namespace Curiosity.Systems.Library.Models
         public bool Banned { get; set; }
         public bool BannedPerm { get; set; }
         public DateTime? BannedUntil { get; set; }
-
         // Queue
         public int QueuePriority { get; set; }
         public int QueueLevel { get; set; }
-
         public CuriosityCharacter Character { get; set; }
+        public Party Party { get; set; }
 
         public bool IsStaff => (Role == Role.COMMUNITYMANAGER || Role == Role.MODERATOR || Role == Role.ADMINISTRATOR || Role == Role.SENIORADMIN || Role == Role.HEADADMIN || Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);
         public bool IsAdmin => (Role == Role.COMMUNITYMANAGER || Role == Role.ADMINISTRATOR || Role == Role.SENIORADMIN || Role == Role.HEADADMIN || Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);

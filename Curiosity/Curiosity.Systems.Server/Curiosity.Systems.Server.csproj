@@ -70,6 +70,7 @@
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Managers\DeveloperManager.cs" />
+    <Compile Include="Managers\PartyManager.cs" />
     <Compile Include="ServerExports\StatusExport.cs" />
     <Compile Include="Extensions\SaveExtensions.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
