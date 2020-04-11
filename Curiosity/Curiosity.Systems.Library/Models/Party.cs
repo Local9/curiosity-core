@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Library.Models
 {
     public class Party
     {
-        public int PartyId { get; internal set; }
+        public Guid PartyId { get; internal set; }
+        public string LeaderHandle { get; internal set; }
         public List<string> Members { get; internal set; }
 
-        public Party(int partyId)
+        public Party(string leaderHandle)
         {
-            PartyId = partyId;
+            LeaderHandle = leaderHandle;
+            AddMember(leaderHandle);
+            PartyId = Guid.NewGuid();
         }
 
         public void AddMember(string member)

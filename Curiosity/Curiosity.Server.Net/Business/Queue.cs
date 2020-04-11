@@ -13,7 +13,7 @@ using System.IO;
 
 namespace Curiosity.Server.net.Business
 {
-    class Queue
+    public class Queue
     {
         // service requirements
         static Server server = Server.GetInstance();
@@ -43,7 +43,7 @@ namespace Curiosity.Server.net.Business
         static long forceWait = (1000 * 30);
 
         // Concurrent Values
-        static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
+        public static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
         static ConcurrentDictionary<string, Player> sentLoading = new ConcurrentDictionary<string, Player>();
         static ConcurrentDictionary<string, int> priority = new ConcurrentDictionary<string, int>();
         static ConcurrentDictionary<string, int> index = new ConcurrentDictionary<string, int>();

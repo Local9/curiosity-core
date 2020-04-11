@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Server.net.Business;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,12 @@ namespace Curiosity.Server.net.Classes
                     {
                         if (PlayerList.ContainsKey(playerItem.Key)) // Safe check
                             PlayerList.Remove(playerItem.Key);
+
+                        if (Queue.session.ContainsKey(playerItem.Value.License))
+                        {
+                            SessionState sessionState = SessionState.Active;
+                            Queue.session.TryRemove(playerItem.Value.License, out sessionState);
+                        }
                     }
                     else
                     {
