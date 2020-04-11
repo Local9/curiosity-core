@@ -262,6 +262,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
                 Game.Player.IsInvincible = false;
                 Game.PlayerPed.IsVisible = true;
+                Game.PlayerPed.IsPositionFrozen = false;
 
                 Game.PlayerPed.Detach();
                 Game.PlayerPed.Position = _originalPosition;
@@ -285,13 +286,11 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             Game.Player.IsInvincible = true;
             Game.PlayerPed.IsVisible = false;
+            Game.PlayerPed.IsPositionFrozen = true;
 
-            Vector3 entityCords = API.GetEntityCoords(playerPedId, true);
-
-            API.RequestCollisionAtCoord(entityCords.X, entityCords.Y, entityCords.Z);
-
-            entityCords.Z -= 50f;
-            Game.PlayerPed.Position = entityCords; // Fucking hide them
+            Vector3 newPos = _originalPosition;
+            newPos.Z -= 50f;
+            Game.PlayerPed.Position = newPos; // Fucking hide them
             
             API.NetworkSetInSpectatorMode(true, playerPedId);
 

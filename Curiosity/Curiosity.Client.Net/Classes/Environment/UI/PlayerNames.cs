@@ -72,14 +72,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 Log.Error($"ERROR PlayerNames: {ex.Message}");
             }
-
-            await Task.FromResult(0);
         }
-
-        //static internal async void OnCientResourceStop(string resourceName)
-        //{
-
-        //}
 
         static internal async Task ShowName(CitizenFX.Core.Player player)
         {
@@ -116,8 +109,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 API.SetMpGamerTagVisibility(gamerTagId, 0, false);
             }
-
-            await Task.FromResult(0);
         }
     }
 }
