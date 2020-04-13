@@ -68,8 +68,8 @@ namespace Curiosity.Systems.Server.Managers
             Player playerLeader = CuriosityPlugin.PlayersList[leader.Handle];
             Player playerInvitee = CuriosityPlugin.PlayersList[invitee.Handle];
 
-            playerLeader.TriggerEvent("");
-            playerInvitee.TriggerEvent("");
+            playerLeader.TriggerEvent(""); // X invited
+            playerInvitee.TriggerEvent(""); // Confirm Invite
         }
 
         void JoinParty(string playerHandle, Guid partyId)

@@ -186,7 +186,7 @@ namespace Curiosity.Systems.Server
                 WebsiteUrl = API.GetConvar("website_url", "website_url not set");
                 API.SetConvarServerInfo("Website", WebsiteUrl);
                 API.SetGameType(API.GetConvar("game_type", "game_type not set"));
-                API.SetMapName("Life V - Curiosity Framework");
+                API.SetMapName("Curiosity Framework");
 
                 SpawnLocationId = API.GetConvarInt("starting_location_id", 1);
 

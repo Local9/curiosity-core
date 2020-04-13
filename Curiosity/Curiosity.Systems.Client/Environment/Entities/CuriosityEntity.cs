@@ -117,21 +117,26 @@ namespace Curiosity.Systems.Client.Environment.Entities
         private void GameEventManager_OnPlayerKillPlayer(Player attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
         {
             // message server
+            // keep a server side count
+            // nuke player if the count is too high
         }
 
         private void GameEventManager_OnPedKillPlayer(Ped attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
         {
             // ha ha
+            // can laugh at these
         }
 
         private void GameEventManager_OnPlayerKillPed(Player attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
         {
             // monitor and police
+            // Just beat up a player if required, ped justice
         }
 
         private void GameEventManager_OnDeath(Entity attacker, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag)
         {
             // ha ha
+            // suicide? or something else?
         }
     }
 }
