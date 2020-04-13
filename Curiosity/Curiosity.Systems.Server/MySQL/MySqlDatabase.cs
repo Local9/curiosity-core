@@ -9,7 +9,8 @@ namespace Curiosity.Systems.Server.MySQL
 
         public MySqlDatabase()
         {
-            Connection = new MySqlConnection(CuriosityPlugin.DatabaseConnectionString);
+            string connectionStr = $"{CuriosityPlugin.DatabaseConnectionString};Min Pool Size=10;";
+            Connection = new MySqlConnection(connectionStr);
         }
 
         public void Dispose()
