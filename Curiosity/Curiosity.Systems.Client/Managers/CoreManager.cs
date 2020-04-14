@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Interface;
+using Curiosity.Systems.Library.Events;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,12 @@ namespace Curiosity.Systems.Client.Managers
 
         public override void Begin()
         {
-
+            Curiosity.AttachNuiHandler("ClosePanel", new EventCallback(metadata =>
+            {
+                IsCoreOpen = false; // Force shut
+                SendPanelMessage();
+                return null;
+            }));
         }
 
         [TickHandler(SessionWait = true)]
@@ -36,7 +42,7 @@ namespace Curiosity.Systems.Client.Managers
             }
 
             if (IsCoreOpen && (Game.IsControlJustPressed(0, Control.FrontendCancel)
-                || Game.IsControlJustPressed(0, Control.PhoneCancel)
+                // || Game.IsControlJustPressed(0, Control.PhoneCancel)
                 || Game.IsControlJustPressed(0, Control.CursorCancel)))
             {
                 IsCoreOpen = !IsCoreOpen;
@@ -50,6 +56,7 @@ namespace Curiosity.Systems.Client.Managers
             p.Main = IsCoreOpen;
             string json = JsonConvert.SerializeObject(p);
             API.SendNuiMessage(json);
+            API.SetNuiFocus(IsCoreOpen, IsCoreOpen);
         }
     }
 }

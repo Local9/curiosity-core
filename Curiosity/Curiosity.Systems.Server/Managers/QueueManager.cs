@@ -44,7 +44,7 @@ namespace Curiosity.Systems.Server.Managers
         static bool IsServerQueueReady = false;
 
         // Concurrent Values
-        static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
+        public static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
         static ConcurrentDictionary<string, Player> sentLoading = new ConcurrentDictionary<string, Player>();
         static ConcurrentDictionary<string, int> priority = new ConcurrentDictionary<string, int>();
         static ConcurrentDictionary<string, int> index = new ConcurrentDictionary<string, int>();
