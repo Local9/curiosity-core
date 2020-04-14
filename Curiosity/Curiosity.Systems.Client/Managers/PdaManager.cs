@@ -1,8 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Interface;
 using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers
 {
-    public class CoreManager : Manager<CoreManager>
+    public class PdaManager : Manager<PdaManager>
     {
         public class Panel
         {
@@ -25,8 +27,18 @@ namespace Curiosity.Systems.Client.Managers
         {
             Curiosity.AttachNuiHandler("ClosePanel", new EventCallback(metadata =>
             {
-                IsCoreOpen = false; // Force shut
+                IsCoreOpen = false;
                 SendPanelMessage();
+                return null;
+            }));
+
+            Curiosity.AttachNuiHandler("PlayerProfile", new EventCallback(metadata =>
+            {
+                string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
+                    .Add("profile", Cache.Player).Build();
+
+                API.SendNuiMessage(jsn);
+
                 return null;
             }));
         }
