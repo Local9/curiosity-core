@@ -41,8 +41,6 @@ namespace Curiosity.Systems.Client.Managers
 
                 IsCrouching = !IsCrouching;
             }
-
-            await Task.FromResult(0);
         }
     }
 }
