@@ -97,6 +97,7 @@
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\ChatManager.cs" />
+    <Compile Include="Managers\CoreManager.cs" />
     <Compile Include="Managers\CrouchManager.cs" />
     <Compile Include="Managers\DeathManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />

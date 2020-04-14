@@ -148,7 +148,16 @@ namespace Curiosity.Systems.Client
             Screen.Hud.HideComponentThisFrame(HudComponent.Saving);
 
             API.SetTextChatEnabled(false);
-            API.CancelCurrentPoliceReport();
+
+            // Disable wanted levels
+            API.ClearPlayerWantedLevel(Game.Player.Handle);
+            API.SetMaxWantedLevel(0);
+            API.SetPlayerWantedLevel(Game.Player.Handle, 0, false);
+            API.SetPlayerWantedLevelNow(Game.Player.Handle, false);
+            API.SetPlayerWantedLevelNoDrop(Game.Player.Handle, 0, false);
+            Game.Player.WantedLevel = 0;
+
+            Game.Player.SetRunSpeedMultThisFrame(1f); // Speed hack to death
 
             // Whitelist to make the reticle show. (Snipers, and certain weapons with scopes possibly)
             Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
