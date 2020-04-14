@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.Native;
+using Curiosity.Systems.Client.Diagnostics;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -85,19 +86,20 @@ namespace Curiosity.Systems.Client.Interface
 
     public static class Notify
     {
-        public static void Custom(string message, bool blink = true, bool saveToBrief = true)
+        public static void Custom(string message, bool blink = true, bool saveToBrief = true, int bgColor = 2)
         {
             API.SetNotificationTextEntry("CELL_EMAIL_BCON"); // 10x ~a~
             foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
             {
                 API.AddTextComponentSubstringPlayerName(s);
             }
+            API.SetNotificationBackgroundColor(bgColor);
             API.DrawNotification(blink, saveToBrief);
         }
 
         public static void Alert(string message, bool blink = true, bool saveToBrief = true)
         {
-            Custom("~y~~h~Alert~h~~s~: " + message, blink, saveToBrief);
+            Custom("~y~~h~Alert~h~~s~: " + message, blink, saveToBrief, 8);
         }
 
         public static void Alert(CommonErrors errorMessage, bool blink = true, bool saveToBrief = true, string placeholderValue = null)
@@ -108,8 +110,8 @@ namespace Curiosity.Systems.Client.Interface
 
         public static void Error(string message, bool blink = true, bool saveToBrief = true)
         {
-            Custom("~r~~h~Error~h~~s~: " + message, blink, saveToBrief);
-            Debug.Write("[vMenu] [ERROR] " + message + "\n");
+            Custom("~r~~h~Error~h~~s~: " + message, blink, saveToBrief, 8);
+            Logger.Error("[ERROR] " + message + "\n");
         }
 
         public static void Error(CommonErrors errorMessage, bool blink = true, bool saveToBrief = true, string placeholderValue = null)
@@ -125,10 +127,10 @@ namespace Curiosity.Systems.Client.Interface
 
         public static void Success(string message, bool blink = true, bool saveToBrief = true)
         {
-            Custom("~g~~h~Success~h~~s~: " + message, blink, saveToBrief);
+            Custom("~g~~h~Success~h~~s~: " + message, blink, saveToBrief, 20);
         }
 
-        public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, int iconType = 0)
+        public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, int iconType = 0, int bgColor = 0)
         {
             API.SetNotificationTextEntry("CELL_EMAIL_BCON"); // 10x ~a~
             foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
@@ -136,6 +138,7 @@ namespace Curiosity.Systems.Client.Interface
                 API.AddTextComponentSubstringPlayerName(s);
             }
             API.SetNotificationMessage(textureName, textureDict, false, iconType, title, subtitle);
+            API.SetNotificationBackgroundColor(bgColor);
             API.DrawNotification(false, saveToBrief);
         }
     }
