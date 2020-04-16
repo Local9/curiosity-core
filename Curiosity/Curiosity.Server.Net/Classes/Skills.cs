@@ -31,13 +31,15 @@ namespace Curiosity.Server.net.Classes
 
             server.RegisterTickHandler(UpdateSkillsDictionary);
 
-            server.ExportDictionary.Add("increaseSkill", new Func<string, string, string, string>((playerId, skill, amt) =>
-            {
-                int xp = 0;
-                int.TryParse(amt, out xp);
-                IncreaseSkillByPlayerExport(playerId, skill, xp);
-                return null;
-            }));
+            server.ExportDictionary.Add("increaseSkill", new Func<string, string, string, string>(
+                (playerId, skill, amt) =>
+                {
+                    int xp = 0;
+                    int.TryParse(amt, out xp);
+                    IncreaseSkillByPlayerExport(playerId, skill, xp);
+                    return null;
+                }
+            ));
 
         }
 
