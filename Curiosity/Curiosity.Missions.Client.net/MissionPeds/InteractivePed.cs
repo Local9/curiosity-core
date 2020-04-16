@@ -298,6 +298,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Client.Random.Next(100) >= 85)
             {
                 IsUsingCannabis = true; // Its weed ffs
+                CanBeArrested = true;
                 IsAllowedToBeSearched = true;
             }
 
@@ -1021,7 +1022,17 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
 
             ArrestedPedData arrestedPedData = new ArrestedPedData();
-            arrestedPedData.IsAllowedToBeArrested = CanBeArrested;
+
+            if (DecorExistOn(this.Handle, Client.NPC_RAN_FROM_POLICE))
+            {
+
+                arrestedPedData.IsAllowedToBeArrested = DecorGetBool(this.Handle, Client.NPC_RAN_FROM_POLICE);
+            }
+            else
+            {
+                arrestedPedData.IsAllowedToBeArrested = CanBeArrested;
+            }
+
 
             // Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
 

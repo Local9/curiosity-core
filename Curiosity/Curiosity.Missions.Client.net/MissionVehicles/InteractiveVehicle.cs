@@ -444,6 +444,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
                 if (this.InteractivePed.AttachedBlip != null)
                     this.InteractivePed.AttachedBlip.Color = BlipColor.Red;
+
+                DecorSetBool(this.InteractivePed.Ped.Handle, Client.NPC_RAN_FROM_POLICE, true);
             }
             catch (Exception ex)
             {

@@ -30,6 +30,15 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Skills:GetListData", new Action<CitizenFX.Core.Player, int>(GetListData));
 
             server.RegisterTickHandler(UpdateSkillsDictionary);
+
+            server.ExportDictionary.Add("increaseSkill", new Func<string, string, string, string>((playerId, skill, amt) =>
+            {
+                int xp = 0;
+                int.TryParse(amt, out xp);
+                IncreaseSkillByPlayerExport(playerId, skill, xp);
+                return null;
+            }));
+
         }
 
         async static void GetListData([FromSource]CitizenFX.Core.Player player, int skillTypeId)
@@ -142,6 +151,82 @@ namespace Curiosity.Server.net.Classes
             Session session = SessionManager.PlayerList[player];
 
             IncreaseSkillByPlayer(session.Player, skill, experience);
+        }
+
+        static void IncreaseSkillByPlayerExport(string playerId, string skill, int experience)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey(playerId))
+                {
+                    Log.Error($"IncreaseSkill: Player session missing.");
+                    return;
+                }
+
+                Session session = SessionManager.PlayerList[playerId];
+
+                if (!SessionManager.PlayerList.ContainsKey(playerId))
+                {
+                    Log.Error($"IncreaseSkill: Player session missing.");
+                    return;
+                }
+
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                {
+                    float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+                    if (experienceModifier > 1.0f && (session.IsStaff || session.IsDonator))
+                    {
+                        experienceModifier += 0.1f;
+                    }
+
+                    if (session.IsStaff || session.IsDonator)
+                    {
+                        experienceModifier += 0.5f;
+                    }
+
+                    experience = (int)(experience * experienceModifier);
+                }
+
+                int characterId = session.User.CharacterId;
+
+                if (!(characterId > 0))
+                {
+                    Log.Error($"IncreaseSkill: characterId Missing");
+                    return;
+                }
+
+                if (!skills.ContainsKey(skill))
+                {
+                    Log.Error($"IncreaseSkill: Unknown Skill -> {skill}");
+                    Log.Error($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    return;
+                }
+
+                if (!Server.isLive)
+                {
+                    Log.Success($"IncreaseSkill: {skill} + {experience}");
+                }
+
+                Database.DatabaseUsersSkills.IncreaseSkill(characterId, skills[skill].Id, experience);
+
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                    UpdateLifeExperience(session, experience, false);
+
+                session.IncreaseSkill(skill, skills[skill], experience);
+
+                PlayerMethods.SendUpdatedInformation(session);
+
+                if (!Server.isLive)
+                {
+                    session.Player.TriggerEvent("curiosity:Client:Chat:Message", "SERVER", "#FF0000", $"IncreaseSkill: {skill} + {experience}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "IncreaseSkill", $"{ex}");
+                Log.Error($"IncreaseSkill -> {ex.Message}");
+            }
         }
 
         static void IncreaseSkillByPlayer([FromSource]CitizenFX.Core.Player player, string skill, int experience)

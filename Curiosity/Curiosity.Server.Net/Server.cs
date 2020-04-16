@@ -17,6 +17,8 @@ namespace Curiosity.Server.net
         public static bool serverActive = false;
         public static int startingLocationId = 0;
 
+        public ExportDictionary ExportDictionary => Exports;
+
         const string CURIOSITY_VERSION = "v1.0.0.1550";
         public static string LICENSE_IDENTIFIER = "license";
         public static string DISCORD_IDENTIFIER = "discord";

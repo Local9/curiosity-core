@@ -28,6 +28,8 @@ namespace Curiosity.Missions.Client.net
         public const string VEHICLE_IGNORE = "curiosity::vehicle::ignore";
         public const string VEHICLE_DETECTED_BY = "curiosity::vehicle::detected";
 
+        public const string NPC_RAN_FROM_POLICE = "curiosity::npc::runner";
+
         public const string PLAYER_VEHICLE = "Player_Vehicle";
 
         public const string TRAFFIC_STOP_VEHICLE_HANDLE = "curiosity::traffic_stop::vehicle_handle";
@@ -86,6 +88,7 @@ namespace Curiosity.Missions.Client.net
             API.DecorRegister(VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, 2);
             API.DecorRegister(VEHICLE_IGNORE, 2);
             API.DecorRegister(PLAYER_VEHICLE, 2);
+            API.DecorRegister(NPC_RAN_FROM_POLICE, 2);
 
             ClassLoader.Init();
 
