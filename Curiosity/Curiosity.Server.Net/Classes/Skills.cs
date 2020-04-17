@@ -9,6 +9,7 @@ using Curiosity.Shared.Server.net.Helpers;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 using GlobalEnum = Curiosity.Global.Shared.net.Enums;
 using System.Collections.Concurrent;
+using Newtonsoft.Json;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -32,11 +33,11 @@ namespace Curiosity.Server.net.Classes
             server.RegisterTickHandler(UpdateSkillsDictionary);
 
             server.ExportDictionary.Add("increaseSkill", new Func<string, string, string, string>(
-                (playerId, skill, amt) =>
+                (player, skill, amt) =>
                 {
                     int xp = 0;
                     int.TryParse(amt, out xp);
-                    IncreaseSkillByPlayerExport(playerId, skill, xp);
+                    IncreaseSkillByPlayerExport(player, skill, xp);
                     return null;
                 }
             ));
