@@ -25,6 +25,24 @@ namespace Curiosity.Missions.Client.net.MissionPeds
     {
         private static Client client = Client.GetInstance();
 
+        const string DECOR_CAN_BE_ARRESTED = "curiosity::police::ped::canBeArrested";
+        const string DECOR_HANDCUFF = "curiosity::police::ped::handcuff";
+        const string DECOR_ARRESTED = "curiosity::police::ped::arrested";
+
+        const string DECOR_ITEM_ILLEGAL = "curiosity::police::ped::illegalItems";
+        const string DECOR_ITEM_STOLEN = "curiosity::police::ped::stolenItems";
+
+        const string DECOR_DRUG_ALCOHOL = "curiosity::police::ped::alcohol";
+        const string DECOR_DRUG_CANNABIS = "curiosity::police::ped::cannabis";
+        const string DECOR_DRUG_COCAINE = "curiosity::police::ped::cocaine";
+
+        const string DECOR_INTERACTION_CAN_BE_SEARCHED = "curiosity::police::ped::canSearch";
+        const string DECOR_INTERACTION_HAS_BEEN_SEARCHED = "curiosity::police::ped::hasBeenSearched";
+        const string DECOR_INTERACTION_PROVIDED_ID = "curiosity::police::ped::providedId";
+        const string DECOR_INTERACTION_LOST_ID = "curiosity::police::ped::lostId";
+        const string DECOR_INTERACTION_GRABBED = "curiosity::police::ped::grabbed";
+        const string DECOR_INTERACTION_CORONER_CALLED = "curiosity::police::ped::coronerCalled";
+
         public const int MovementUpdateInterval = 10;
         private const string MOVEMENT_ANIMATION_SET_DRUNK = "MOVE_M@DRUNK@VERYDRUNK";
         public readonly Ped Ped;
@@ -40,22 +58,175 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         public bool IsVictim;
         public bool IsHostage;
         // Evil
-        public bool CanBeArrested;
-        public bool IsHandcuffed;
-        public bool IsArrested;
+        public bool CanBeArrested
+        {
+            get
+            {
+                return GetBoolean(DECOR_CAN_BE_ARRESTED);
+            }
+            set
+            {
+                Set(DECOR_CAN_BE_ARRESTED, value);
+            }
+        }
+
+        public bool IsHandcuffed
+        {
+            get
+            {
+                return GetBoolean(DECOR_HANDCUFF);
+            }
+            set
+            {
+                Set(DECOR_HANDCUFF, value);
+            }
+        }
+        public bool IsArrested
+        {
+            get
+            {
+                return GetBoolean(DECOR_ARRESTED);
+            }
+            set
+            {
+                Set(DECOR_ARRESTED, value);
+            }
+        }
+
         // Arrested States
-        public bool IsUnderTheInfluence;
-        public bool IsCarryingIllegalItems;
-        public bool IsCarryingStolenItems;
-        public bool IsUsingCannabis;
-        public bool IsUsingCocaine;
-        public bool IsAllowedToBeSearched;
-        public bool HasLostId;
-        public bool HasProvidedId;
-        public bool HasBeenSearched;
-        public bool HasBeenGrabbed;
+        public bool IsUnderTheInfluence
+        {
+            get
+            {
+                return GetBoolean(DECOR_DRUG_ALCOHOL);
+            }
+            set
+            {
+                Set(DECOR_DRUG_ALCOHOL, value);
+            }
+        }
+
+        public bool IsCarryingIllegalItems
+        {
+            get
+            {
+                return GetBoolean(DECOR_ITEM_ILLEGAL);
+            }
+            set
+            {
+                Set(DECOR_ITEM_ILLEGAL, value);
+            }
+        }
+
+        public bool IsCarryingStolenItems
+        {
+            get
+            {
+                return GetBoolean(DECOR_ITEM_STOLEN);
+            }
+            set
+            {
+                Set(DECOR_ITEM_STOLEN, value);
+            }
+        }
+
+        public bool IsUsingCannabis
+        {
+            get
+            {
+                return GetBoolean(DECOR_DRUG_CANNABIS);
+            }
+            set
+            {
+                Set(DECOR_DRUG_CANNABIS, value);
+            }
+        }
+
+        public bool IsUsingCocaine
+        {
+            get
+            {
+                return GetBoolean(DECOR_DRUG_COCAINE);
+            }
+            set
+            {
+                Set(DECOR_DRUG_COCAINE, value);
+            }
+        }
+
+        public bool IsAllowedToBeSearched
+        {
+            get
+            {
+                return GetBoolean(DECOR_INTERACTION_CAN_BE_SEARCHED);
+            }
+            set
+            {
+                Set(DECOR_INTERACTION_CAN_BE_SEARCHED, value);
+            }
+        }
+
+        public bool HasBeenSearched
+        {
+            get
+            {
+                return GetBoolean(DECOR_INTERACTION_HAS_BEEN_SEARCHED);
+            }
+            set
+            {
+                Set(DECOR_INTERACTION_HAS_BEEN_SEARCHED, value);
+            }
+        }
+
+        public bool HasLostId
+        {
+            get
+            {
+                return GetBoolean(DECOR_INTERACTION_LOST_ID);
+            }
+            set
+            {
+                Set(DECOR_INTERACTION_LOST_ID, value);
+            }
+        }
+
+        public bool HasProvidedId
+        {
+            get
+            {
+                return GetBoolean(DECOR_INTERACTION_PROVIDED_ID);
+            }
+            set
+            {
+                Set(DECOR_INTERACTION_PROVIDED_ID, value);
+            }
+        }
+
+        public bool HasBeenGrabbed
+        {
+            get
+            {
+                return GetBoolean(DECOR_INTERACTION_GRABBED);
+            }
+            set
+            {
+                Set(DECOR_INTERACTION_GRABBED, value);
+            }
+        }
+
         // MENU STATES
-        private bool IsCoronerCalled;
+        private bool IsCoronerCalled
+        {
+            get
+            {
+                return GetBoolean(DECOR_INTERACTION_CORONER_CALLED);
+            }
+            set
+            {
+                Set(DECOR_INTERACTION_CORONER_CALLED, value);
+            }
+        }
+
         // Settings
         public virtual string MovementStyle { get; set; }
         public virtual bool PlayAudio { get; set; }
@@ -211,7 +382,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             if (this.Ped.IsInVehicle())
                 this.Vehicle = this.Ped.CurrentVehicle;
-
 
             int netId = API.NetworkGetNetworkIdFromEntity(this.Ped.Handle);
             SetNetworkIdCanMigrate(netId, true);
@@ -1122,6 +1292,56 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
 
             Wrappers.Helpers.DrawData(this, keyValuePairs);
+        }
+
+        public void Set(string property, object value)
+        {
+            if (value is int i)
+            {
+                if (!API.DecorExistOn(Handle, property))
+                {
+                    API.DecorRegister(property, 3);
+                }
+
+                API.DecorSetInt(Handle, property, i);
+            }
+            else if (value is float f)
+            {
+                if (!API.DecorExistOn(Handle, property))
+                {
+                    API.DecorRegister(property, 1);
+                }
+
+                API.DecorSetFloat(Handle, property, f);
+            }
+            else if (value is bool b)
+            {
+                if (!API.DecorExistOn(Handle, property))
+                {
+                    API.DecorRegister(property, 2);
+                }
+
+                API.DecorSetBool(Handle, property, b);
+            }
+            else
+            {
+                Log.Info("[Decor] Could not set decor object due to it not being a supported type.");
+            }
+        }
+
+        public int GetInteger(string property)
+        {
+            return API.DecorExistOn(Handle, property) ? API.DecorGetInt(Handle, property) : 0;
+        }
+
+        public float GetFloat(string property)
+        {
+            return API.DecorExistOn(Handle, property) ? API.DecorGetFloat(Handle, property) : 0f;
+        }
+
+        public bool GetBoolean(string property)
+        {
+            return API.DecorExistOn(Handle, property) && API.DecorGetBool(Handle, property);
         }
     }
 }
