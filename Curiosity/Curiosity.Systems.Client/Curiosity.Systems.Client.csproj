@@ -98,7 +98,7 @@
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\ChatManager.cs" />
-    <Compile Include="Managers\PdaManager.cs" />
+    <Compile Include="Interface\PDAInterface.cs" />
     <Compile Include="Managers\CrouchManager.cs" />
     <Compile Include="Managers\DeathManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />

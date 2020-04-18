@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers
 {
-    public class PdaManager : Manager<PdaManager>
+    public class PDAInterface : Manager<PDAInterface>
     {
         public class Panel
         {
