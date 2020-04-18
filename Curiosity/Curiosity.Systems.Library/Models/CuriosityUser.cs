@@ -22,10 +22,14 @@ namespace Curiosity.Systems.Library.Models
         public CuriosityCharacter Character { get; set; }
         public Guid PartyId { get; set; } = Guid.Empty;
 
-        public bool IsStaff => (Role == Role.COMMUNITYMANAGER || Role == Role.MODERATOR || Role == Role.ADMINISTRATOR || Role == Role.SENIORADMIN || Role == Role.HEADADMIN || Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);
-        public bool IsAdmin => (Role == Role.COMMUNITYMANAGER || Role == Role.ADMINISTRATOR || Role == Role.SENIORADMIN || Role == Role.HEADADMIN || Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);
-        public bool IsTrustedAdmin => (Role == Role.COMMUNITYMANAGER || Role == Role.HEADADMIN || Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);
-        public bool IsDeveloper => (Role == Role.DEVELOPER || Role == Role.PROJECTMANAGER);
-        public bool IsProjectManager => (Role == Role.PROJECTMANAGER);
+        public bool IsStaff => (Role == Role.COMMUNITYMANAGER || Role == Role.MODERATOR || Role == Role.ADMINISTRATOR || Role == Role.SENIOR_ADMIN || Role == Role.HEAD_ADMIN || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);
+        public bool IsAdmin => (Role == Role.COMMUNITYMANAGER || Role == Role.ADMINISTRATOR || Role == Role.SENIOR_ADMIN || Role == Role.HEAD_ADMIN || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);
+        public bool IsTrustedAdmin => (Role == Role.COMMUNITYMANAGER || Role == Role.HEAD_ADMIN || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);
+        public bool IsDeveloper => (Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);
+        public bool IsProjectManager => (Role == Role.PROJECT_MANAGER);
+        public bool IsDonator => (Role == Role.DONATOR_LEVEL_1 || Role == Role.DONATOR_LEVEL_2 || Role == Role.DONATOR_LEVEL_3);
+        public bool IsDonatorLevel1 => (Role == Role.DONATOR_LEVEL_1);
+        public bool IsDonatorLevel2 => (Role == Role.DONATOR_LEVEL_2);
+        public bool IsDonatorLevel3 => (Role == Role.DONATOR_LEVEL_3);
     }
 }

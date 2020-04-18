@@ -18,7 +18,7 @@ namespace Curiosity.Systems.Client.Commands.Impl
         public override string Title { get; set; } = "Developer";
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
         public override bool IsRestricted { get; set; } = true;
-        public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECTMANAGER };
+        public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
 
         #region Player
         [CommandInfo(new[] { "god" })]

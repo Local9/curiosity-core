@@ -58,7 +58,7 @@ namespace Curiosity.Systems.Client.Environment
                 var position = Cache.Entity.Position;
                 var distance = position.Distance(Position, true);
 
-                if (distance < InteractionDistance && !InterfaceManager.GetModule().IsMenuOpen)
+                if (distance < InteractionDistance)
                 {
                     Screen.DisplayHelpTextThisFrame(Message);
 

@@ -5,6 +5,7 @@ using Curiosity.Systems.Client.Environment.Entities.Models;
 using Curiosity.Systems.Client.Interface.Modules;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Environment.Entities
@@ -20,6 +21,9 @@ namespace Curiosity.Systems.Client.Environment.Entities
         public ulong DiscordId { get; set; }
         public int Handle { get; set; }
         public string Name { get; set; }
+        public DateTime Joined { get { return User.DateCreated; } }
+        public Role Role { get { return User.Role; } }
+        public string RoleDescription { get { return $"{User.Role}"; } }
         [JsonIgnore] public CameraViewmodelQueue CameraQueue { get; set; }
         [JsonIgnore] public AnimationQueue AnimationQueue => Entity.AnimationQueue;
 
