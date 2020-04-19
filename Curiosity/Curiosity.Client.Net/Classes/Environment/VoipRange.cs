@@ -27,7 +27,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static public void Init()
         {
             Client.GetInstance().RegisterTickHandler(OnTick);
-            Function.Call(Hash.NETWORK_SET_TALKER_PROXIMITY, currentRange.Key);
+            API.NetworkSetTalkerProximity(currentRange.Key);
         }
 
         static public Task OnTick()
@@ -36,7 +36,7 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 currentRange = voipRange.ElementAt((voipRange.Keys.ToList().IndexOf(currentRange.Key) + 1) % (voipRange.Count));
                 Screen.ShowNotification($"VOIP range set to ~b~{currentRange.Value}.");
-                Function.Call(Hash.NETWORK_SET_TALKER_PROXIMITY, currentRange.Key);
+                API.NetworkSetTalkerProximity(currentRange.Key);
             }
 
             //if (!UI.CinematicMode.DoHideHud)
