@@ -41,6 +41,28 @@ namespace Curiosity.Systems.Client.Managers
 
                 return null;
             }));
+
+            Curiosity.AttachNuiHandler("GetPlayerList", new EventCallback(metadata =>
+            {
+                string jsn = new JsonBuilder().Add("operation", "PLAYER_LIST")
+                    .Add("party", Curiosity.PlayerList).Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
+
+            Curiosity.AttachNuiHandler("CreateParty", new AsyncEventCallback(async metadata =>
+            {
+                Party party = await EventSystem.Request<Party>("party:create", null);
+
+                string jsn = new JsonBuilder().Add("operation", "PLAYER_PARTY")
+                    .Add("party", party).Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
         }
 
         [TickHandler(SessionWait = true)]

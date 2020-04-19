@@ -20,7 +20,12 @@ namespace Curiosity.Systems.Library.Models
         public int QueuePriority { get; set; }
         public int QueueLevel { get; set; }
         public CuriosityCharacter Character { get; set; }
-        public Guid PartyId { get; set; } = Guid.Empty;
+        public Guid PartyId { get; internal set; } = Guid.Empty;
+
+        public void SetPartyId(Guid partyId)
+        {
+            this.PartyId = partyId;
+        }
 
         public bool IsStaff => (Role == Role.COMMUNITYMANAGER || Role == Role.MODERATOR || Role == Role.ADMINISTRATOR || Role == Role.SENIOR_ADMIN || Role == Role.HEAD_ADMIN || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);
         public bool IsAdmin => (Role == Role.COMMUNITYMANAGER || Role == Role.ADMINISTRATOR || Role == Role.SENIOR_ADMIN || Role == Role.HEAD_ADMIN || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);

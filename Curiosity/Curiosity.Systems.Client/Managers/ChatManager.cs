@@ -35,6 +35,7 @@ namespace Curiosity.Systems.Client.Managers
                 }
                 else
                 {
+                    // EventSystem.Send("chat:global", message, chatChannel);
                     BaseScript.TriggerServerEvent("chat:global", message, chatChannel);
                 }
                 return null;

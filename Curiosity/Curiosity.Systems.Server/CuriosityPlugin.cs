@@ -35,7 +35,7 @@ namespace Curiosity.Systems.Server
         public static string DiscordBotKey { get; private set; }
         public static string DiscordUrl { get; private set; }
         public static string WebsiteUrl { get; private set; }
-        public static Dictionary<string, CuriosityUser> ActiveUsers { get; } = new Dictionary<string, CuriosityUser>();
+        public static Dictionary<int, CuriosityUser> ActiveUsers { get; } = new Dictionary<int, CuriosityUser>();
         public long LastSave { get; set; } = Date.Timestamp;
 
         public EventHandlerDictionary EventRegistry => EventHandlers;
@@ -347,9 +347,10 @@ namespace Curiosity.Systems.Server
 
                     foreach (Player player in Players)
                     {
-                        if (!ActiveUsers.ContainsKey(player.Handle))
+                        int playerHandle = int.Parse(player.Handle);
+                        if (!ActiveUsers.ContainsKey(playerHandle))
                         {
-                            ActiveUsers.Remove(player.Handle);
+                            ActiveUsers.Remove(playerHandle);
                             
                             SessionState sessionState = SessionState.Loading;
                             QueueManager.session.TryRemove(player.Identifiers["license"], out sessionState);

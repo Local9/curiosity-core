@@ -13,9 +13,9 @@ namespace Curiosity.Systems.Server.Managers
             EventSystem.GetModule().Attach("character:load", new AsyncEventCallback(async metadata =>
             {
                 Player player = CuriosityPlugin.PlayersList[metadata.Sender];
-                CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[player.Handle];
+                CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[metadata.Sender];
 
-                curiosityUser.Character = await MySQL.Store.CharacterDatabase.Get(player, curiosityUser.DiscordId);
+                curiosityUser.Character = await MySQL.Store.CharacterDatabase.Get(curiosityUser.DiscordId);
 
                 return curiosityUser.Character;
             }));

@@ -15,7 +15,7 @@ namespace Curiosity.Systems.Client.Commands.Impl
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                PartyManager.InviteMember(arguments.ElementAt(0));
+                
             }
         }
 
@@ -27,7 +27,7 @@ namespace Curiosity.Systems.Client.Commands.Impl
                 List<string> response = await EventSystem.GetModule().Request<List<string>>("party:get:members");
                 response.ForEach((string member) =>
                 {
-                    PartyManager.AddMembers(member);
+                    
                 });
             }
         }

@@ -10,7 +10,7 @@ namespace Curiosity.Systems.Server.MySQL.Store
 {
     class CharacterDatabase
     {
-        public static async Task<CuriosityCharacter> Get(Player player, ulong discordId)
+        public static async Task<CuriosityCharacter> Get(ulong discordId)
         {
             int serverId = CuriosityPlugin.ServerId;
             int starterCash = API.GetConvarInt("starter_cash", 100);

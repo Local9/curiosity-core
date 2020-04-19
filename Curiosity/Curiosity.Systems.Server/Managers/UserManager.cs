@@ -37,7 +37,7 @@ namespace Curiosity.Systems.Server.Managers
 
                 Logger.Info($"[User] [{curiosityUser.UserId}] [{curiosityUser.LastName}] Has connected to the server");
 
-                CuriosityPlugin.ActiveUsers.Add(player.Handle, curiosityUser);
+                CuriosityPlugin.ActiveUsers.Add(metadata.Sender, curiosityUser);
 
                 return curiosityUser;
             }));
@@ -47,10 +47,11 @@ namespace Curiosity.Systems.Server.Managers
 
         static void OnPlayerDropped([FromSource]Player player, string reason)
         {
-            if (CuriosityPlugin.ActiveUsers.ContainsKey(player.Handle))
+            int playerHandle = int.Parse(player.Handle);
+            if (CuriosityPlugin.ActiveUsers.ContainsKey(playerHandle))
             {
                 Logger.Info($"Player: {player.Name} disconnected ({reason})");
-                CuriosityPlugin.ActiveUsers.Remove(player.Handle);
+                CuriosityPlugin.ActiveUsers.Remove(playerHandle);
             }
         }
     }

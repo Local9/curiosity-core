@@ -15,8 +15,7 @@ namespace Curiosity.Systems.Server.Managers
         {
             EventSystem.GetModule().Attach("developer:savePos", new AsyncEventCallback(async metadata =>
             {
-                Player player = CuriosityPlugin.PlayersList[metadata.Sender];
-                CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[player.Handle];
+                CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[metadata.Sender];
 
                 if (!curiosityUser.IsDeveloper) return null;
 
@@ -35,6 +34,9 @@ namespace Curiosity.Systems.Server.Managers
                 using (TextWriter tw = new StreamWriter(filePath, true))
                 {
                     string posName = metadata.Find<string>(0);
+                    
+                    Player player = CuriosityPlugin.PlayersList[metadata.Sender];
+
                     Vector3 pos = player.Character.Position;
                     float x = pos.X;
                     float y = pos.Y;

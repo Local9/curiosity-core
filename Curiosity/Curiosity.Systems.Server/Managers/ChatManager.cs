@@ -14,7 +14,8 @@ namespace Curiosity.Systems.Server.Managers
 
         private void OnChatMessage([FromSource] Player player, string message, string channel)
         {
-            CuriosityUser user = CuriosityPlugin.ActiveUsers[player.Handle];
+            int playerHandle = int.Parse(player.Handle);
+            CuriosityUser user = CuriosityPlugin.ActiveUsers[playerHandle];
 
             ChatMessage chatMessage = new ChatMessage();
 
