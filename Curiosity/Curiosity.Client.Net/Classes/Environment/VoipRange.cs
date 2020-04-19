@@ -24,10 +24,17 @@ namespace Curiosity.Client.net.Classes.Environment
         };
         static public KeyValuePair<float, string> currentRange = voipRange.ElementAt(2);
 
-        static public void Init()
+        static public async void Init()
         {
             Client.GetInstance().RegisterTickHandler(OnTick);
+
+            while (!Client.isSessionActive)
+            {
+                await Client.Delay(3000);
+            }
+
             API.NetworkSetTalkerProximity(currentRange.Key);
+            Screen.ShowNotification($"VOIP range set to ~b~{currentRange.Value}.");
         }
 
         static public Task OnTick()
