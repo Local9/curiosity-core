@@ -278,21 +278,29 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private void OnDied(EntityEventWrapper sender, Entity entity)
         {
+
             Entity killerEnt = new Ped(entity.Handle).GetKiller();
-            Ped killerPed = new Ped(killerEnt.Handle);
 
-            if (killerPed.IsPlayer)
+            if (killerEnt != null)
             {
-                Player p = new Player(CitizenFX.Core.Native.API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
+                Ped killerPed = new Ped(killerEnt.Handle);
 
-                SkillMessage skillMessage = new SkillMessage();
-                skillMessage.PlayerHandle = $"{p.ServerId}";
-                skillMessage.MissionPed = false;
-                skillMessage.Increase = false;
+                if (killerPed != null)
+                {
+                    if (killerPed.IsPlayer)
+                    {
+                        Player p = new Player(CitizenFX.Core.Native.API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
 
-                string json = JsonConvert.SerializeObject(skillMessage);
+                        SkillMessage skillMessage = new SkillMessage();
+                        skillMessage.PlayerHandle = $"{p.ServerId}";
+                        skillMessage.MissionPed = false;
+                        skillMessage.Increase = false;
 
-                BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
+                        string json = JsonConvert.SerializeObject(skillMessage);
+
+                        BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
+                    }
+                }
             }
 
             Blip currentBlip = base.AttachedBlip;
@@ -300,6 +308,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 currentBlip.Delete();
             }
+
+            sender.Dispose();
         }
 
         public abstract void OnGoToTarget(Ped target);

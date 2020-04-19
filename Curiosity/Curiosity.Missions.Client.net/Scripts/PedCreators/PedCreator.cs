@@ -52,19 +52,23 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
             Ped ped = entity as Ped;
             Ped killerPed = ped.GetKiller() as Ped;
 
-            if (killerPed.IsPlayer) {
-                if (ped.GetRelationshipWithPed(killerPed) != Relationship.Hate)
+            if (killerPed != null)
+            {
+                if (killerPed.IsPlayer)
                 {
-                    Player p = new Player(API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
+                    if (ped.GetRelationshipWithPed(killerPed) != Relationship.Hate)
+                    {
+                        Player p = new Player(API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
 
-                    SkillMessage skillMessage = new SkillMessage();
-                    skillMessage.PlayerHandle = $"{p.ServerId}";
-                    skillMessage.MissionPed = false;
-                    skillMessage.Increase = false;
+                        SkillMessage skillMessage = new SkillMessage();
+                        skillMessage.PlayerHandle = $"{p.ServerId}";
+                        skillMessage.MissionPed = false;
+                        skillMessage.Increase = false;
 
-                    string json = JsonConvert.SerializeObject(skillMessage);
+                        string json = JsonConvert.SerializeObject(skillMessage);
 
-                    BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
+                        BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
+                    }
                 }
             }
 
