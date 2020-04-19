@@ -441,26 +441,55 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             _attitude = Client.Random.Next(100);
 
-            int breathlyzerLimit = Client.Random.Next(100);
-            _bloodAlcaholLimit = 0;
-            IsUnderTheInfluence = false;
-            IsAllowedToBeSearched = false;
 
-            if (breathlyzerLimit >= 60)
+            if (IsUnderTheInfluence)
             {
-                _bloodAlcaholLimit = Client.Random.Next(1, 7);
-                if (breathlyzerLimit >= 88)
-                {
-                    IsUnderTheInfluence = true;
-                    IsAllowedToBeSearched = true;
-                    CanBeArrested = true;
-                    _bloodAlcaholLimit = Client.Random.Next(8, 10);
-                    _chanceOfFlee = Client.Random.Next(25, 30);
+                int breathlyzerLimit = Client.Random.Next(60, 100);
+                _bloodAlcaholLimit = 0;
 
-                    if (breathlyzerLimit >= 95)
+                if (breathlyzerLimit >= 60)
+                {
+                    _bloodAlcaholLimit = Client.Random.Next(1, 7);
+                    if (breathlyzerLimit >= 88)
                     {
-                        _bloodAlcaholLimit = Client.Random.Next(10, 20);
-                        _chanceOfShootAndFlee = Client.Random.Next(1, 5);
+                        IsUnderTheInfluence = true;
+                        IsAllowedToBeSearched = true;
+                        CanBeArrested = true;
+                        _bloodAlcaholLimit = Client.Random.Next(8, 10);
+                        _chanceOfFlee = Client.Random.Next(25, 30);
+
+                        if (breathlyzerLimit >= 95)
+                        {
+                            _bloodAlcaholLimit = Client.Random.Next(10, 20);
+                            _chanceOfShootAndFlee = Client.Random.Next(1, 5);
+                        }
+                    }
+                }
+
+            } 
+            else
+            {
+                int breathlyzerLimit = Client.Random.Next(100);
+                _bloodAlcaholLimit = 0;
+                IsUnderTheInfluence = false;
+                IsAllowedToBeSearched = false;
+
+                if (breathlyzerLimit >= 60)
+                {
+                    _bloodAlcaholLimit = Client.Random.Next(1, 7);
+                    if (breathlyzerLimit >= 88)
+                    {
+                        IsUnderTheInfluence = true;
+                        IsAllowedToBeSearched = true;
+                        CanBeArrested = true;
+                        _bloodAlcaholLimit = Client.Random.Next(8, 10);
+                        _chanceOfFlee = Client.Random.Next(25, 30);
+
+                        if (breathlyzerLimit >= 95)
+                        {
+                            _bloodAlcaholLimit = Client.Random.Next(10, 20);
+                            _chanceOfShootAndFlee = Client.Random.Next(1, 5);
+                        }
                     }
                 }
             }
