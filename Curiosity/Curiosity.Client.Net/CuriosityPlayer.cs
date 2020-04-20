@@ -398,6 +398,8 @@ namespace Curiosity.Client.net
 
             await Delay(500);
 
+            API.SetPlayerCanBeHassledByGangs(Game.Player.Handle, true);
+
             try
             {
                 int deathCheck = API.GetResourceKvpInt("DEATH");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
+using CitizenFX.Core;
 using Curiosity.Shared.Client.net;
 
 namespace Curiosity.GameWorld.Client.net.Classes.Environment
@@ -19,8 +20,8 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
         private static int minuteTimer = GetGameTimer();
         private static int minuteClockSpeed = 10000;
 
-        private static int currentServerHours = currentHours;
-        private static int currentServerMinutes = currentMinutes;
+        public static int currentServerHours = currentHours;
+        public static int currentServerMinutes = currentMinutes;
 
         static public void Init()
         {
@@ -46,7 +47,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
         {
             if (Player.PlayerInformation.IsDeveloper())
             {
-
+                Log.Info($"{newHours}:{newMinutes}");
             }
 
             if (WeatherSystem.IsHalloween)

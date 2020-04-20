@@ -60,6 +60,7 @@
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="Extensions\BoolExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
