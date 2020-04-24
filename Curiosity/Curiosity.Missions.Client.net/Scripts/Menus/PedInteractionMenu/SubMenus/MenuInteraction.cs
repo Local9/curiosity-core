@@ -10,6 +10,7 @@ using Curiosity.Shared.Client.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
 using Newtonsoft.Json;
+using Curiosity.Missions.Client.net.Helpers;
 
 namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenus
 {
@@ -73,6 +74,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
 
                 string jsonString = Encode.StringToBase64(JsonConvert.SerializeObject(trafficStopData));
                 Client.TriggerServerEvent("curiosity:Server:Missions:TrafficStop", jsonString);
+
+                Animations.AnimationClipboard();
 
                 MenuController.CloseAllMenus();
                 Client.TriggerEvent("curiosity:interaction:closeMenu");

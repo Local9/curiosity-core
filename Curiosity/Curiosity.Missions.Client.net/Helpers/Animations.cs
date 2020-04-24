@@ -20,6 +20,16 @@ namespace Curiosity.Missions.Client.net.Helpers
                 Game.PlayerPed.Task.ClearAll();
             }
         }
+        static public async void AnimationClipboard()
+        {
+            string scenario = "WORLD_HUMAN_CLIPBOARD";
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                TaskStartScenarioInPlace(Game.PlayerPed.Handle, scenario, 0, true);
+                await Client.Delay(5000);
+                Game.PlayerPed.Task.ClearAll();
+            }
+        }
 
         static public async void AnimationRadio()
         {
