@@ -77,6 +77,12 @@ namespace Curiosity.Server.net.Classes
                 moneyMultiplier += .5f;
             }
 
+            if (arrestedPed.IsWanted)
+            {
+                experienceMultiplier += 1f;
+                moneyMultiplier += 1f;
+            }
+
             if (arrestedPed.IsDrugged || arrestedPed.IsDrunk)
             {
                 experienceMultiplier += 1f;

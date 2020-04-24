@@ -44,9 +44,11 @@ namespace Curiosity.Missions.Client.net
         public const string DECOR_INTERACTION_CAN_BE_SEARCHED = "curiosity::police::ped::canSearch";
         public const string DECOR_INTERACTION_HAS_BEEN_SEARCHED = "curiosity::police::ped::hasBeenSearched";
         public const string DECOR_INTERACTION_PROVIDED_ID = "curiosity::police::ped::providedId";
+        public const string DECOR_INTERACTION_RAN_ID = "curiosity::police::ped::idRan";
         public const string DECOR_INTERACTION_LOST_ID = "curiosity::police::ped::lostId";
         public const string DECOR_INTERACTION_GRABBED = "curiosity::police::ped::grabbed";
         public const string DECOR_INTERACTION_CORONER_CALLED = "curiosity::police::ped::coronerCalled";
+        public const string DECOR_INTERACTION_WANTED = "curiosity::police::ped::wanted";
 
         public static Vehicle CurrentVehicle
         {

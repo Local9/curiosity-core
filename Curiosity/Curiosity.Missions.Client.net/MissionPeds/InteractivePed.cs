@@ -508,6 +508,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 List<string> Offense = new List<string>() { "WANTED BY LSPD", "WANTED FOR ASSAULT", "WANTED FOR UNPAID FINES", "WANTED FOR RUNNING FROM THE POLICE", "WANTED FOR EVADING LAW", "WANTED FOR HIT AND RUN", "WANTED FOR DUI" };
                 _offence = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
+                Set(Client.DECOR_INTERACTION_WANTED, true);
                 CanBeArrested = true;
             }
 
@@ -531,7 +532,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             client.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
             client.RegisterEventHandler("curiosity:interaction:arrest", new Action<int>(OnArrest));
-            client.RegisterEventHandler("curiosity:interaction:idRan", new Action<int>(OnIdRan));
+            
             client.RegisterEventHandler("curiosity:interaction:handcuffs", new Action<int, bool>(OnHandcuffs));
             client.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
             client.RegisterEventHandler("curiosity:interaction:cpr:failed", new Action<int>(OnCprFailed));
@@ -1206,7 +1207,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             if (DecorExistOn(this.Handle, Client.DECOR_NPC_RAN_FROM_POLICE))
             {
-
                 arrestedPedData.IsAllowedToBeArrested = DecorGetBool(this.Handle, Client.DECOR_NPC_RAN_FROM_POLICE);
             }
             else
@@ -1222,6 +1222,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             arrestedPedData.IsDrivingStolenCar = _stolenCar;
             arrestedPedData.IsCarryingIllegalItems = IsCarryingIllegalItems;
             arrestedPedData.CaughtSpeeding = GetBoolean(Client.DECOR_VEHICLE_SPEEDING);
+            arrestedPedData.IsWanted = GetBoolean(Client.DECOR_INTERACTION_WANTED);
 
             arrestedPedData.IsAllowedToBeArrested = (arrestedPedData.IsDrunk || arrestedPedData.IsDrugged || arrestedPedData.IsDrivingStolenCar || arrestedPedData.IsCarryingIllegalItems || arrestedPedData.CaughtSpeeding);
 

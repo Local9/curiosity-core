@@ -31,7 +31,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.DispatchInteraction
 
             if (!interactivePed.HasIdentifcationBeenRan)
             {
-                Client.TriggerEvent("curiosity:interaction:idRan", interactivePed.NetworkId);
+                interactivePed.Set(Client.DECOR_INTERACTION_RAN_ID, true);
             }
 
             Wrappers.Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Name: ~y~{interactivePed.Name}~w~\nGender: ~b~{interactivePed.Ped.Gender}~w~\nDOB: ~b~{interactivePed.DateOfBirth}");
