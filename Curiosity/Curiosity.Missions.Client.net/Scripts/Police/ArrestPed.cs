@@ -101,9 +101,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                     peds.ForEach(p =>
                     {
-                        if (DecorExistOn(p.Handle, Client.NPC_ARRESTED))
+                        if (DecorExistOn(p.Handle, Client.DECOR_NPC_ARRESTED))
                         {
-                            if (DecorGetBool(p.Handle, Client.NPC_ARRESTED))
+                            if (DecorGetBool(p.Handle, Client.DECOR_NPC_ARRESTED))
                                 Client.TriggerEvent("curiosity:interaction:arrest", p.Handle);
                         }
                     });

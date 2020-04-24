@@ -47,7 +47,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
         {
             if (Player.PlayerInformation.IsDeveloper())
             {
-                Log.Info($"{newHours}:{newMinutes}");
+                // Log.Info($"{newHours:00}:{newMinutes:00}");
             }
 
             if (WeatherSystem.IsHalloween)

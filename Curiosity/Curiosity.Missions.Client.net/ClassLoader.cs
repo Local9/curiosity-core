@@ -59,9 +59,9 @@ namespace Curiosity.Missions.Client.net
 
             peds.ForEach(async p =>
             {
-                if (DecorExistOn(p.Handle, Client.NPC_WAS_RELEASED))
+                if (DecorExistOn(p.Handle, Client.DECOR_NPC_WAS_RELEASED))
                 {
-                    if (DecorGetBool(p.Handle, Client.NPC_WAS_RELEASED))
+                    if (DecorGetBool(p.Handle, Client.DECOR_NPC_WAS_RELEASED))
                     {
                         p.MarkAsNoLongerNeeded();
                         p.IsPersistent = false;

@@ -7,6 +7,7 @@
         public bool IsDrugged;
         public bool IsCarryingIllegalItems;
         public bool IsDrivingStolenCar;
+        public bool CaughtSpeeding;
     }
 
     public class TrafficStopData

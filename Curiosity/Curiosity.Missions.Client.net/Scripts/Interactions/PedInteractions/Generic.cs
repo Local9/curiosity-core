@@ -154,11 +154,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
         public async static void InteractionEnterVehicle(InteractivePed interactivePed)
         {
-            if (!DecorExistOn(interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE)) return;
+            if (!DecorExistOn(interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE)) return;
 
             if (interactivePed.Ped.IsInVehicle()) return;
 
-            int vehicleHandle = DecorGetInt(interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE);
+            int vehicleHandle = DecorGetInt(interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE);
             Vehicle vehicle = new Vehicle(vehicleHandle);
 
             if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
@@ -186,7 +186,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
             if (!interactivePed.Ped.IsInVehicle()) return;
 
-            DecorSetInt(interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE, interactivePed.Ped.CurrentVehicle.Handle);
+            DecorSetInt(interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE, interactivePed.Ped.CurrentVehicle.Handle);
 
             if (resistExitChance == 25 || resistExitChance == 29)
             {

@@ -25,24 +25,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
     {
         private static Client client = Client.GetInstance();
 
-        const string DECOR_CAN_BE_ARRESTED = "curiosity::police::ped::canBeArrested";
-        const string DECOR_HANDCUFF = "curiosity::police::ped::handcuff";
-        const string DECOR_ARRESTED = "curiosity::police::ped::arrested";
-
-        const string DECOR_ITEM_ILLEGAL = "curiosity::police::ped::illegalItems";
-        const string DECOR_ITEM_STOLEN = "curiosity::police::ped::stolenItems";
-
-        const string DECOR_DRUG_ALCOHOL = "curiosity::police::ped::alcohol";
-        const string DECOR_DRUG_CANNABIS = "curiosity::police::ped::cannabis";
-        const string DECOR_DRUG_COCAINE = "curiosity::police::ped::cocaine";
-
-        const string DECOR_INTERACTION_CAN_BE_SEARCHED = "curiosity::police::ped::canSearch";
-        const string DECOR_INTERACTION_HAS_BEEN_SEARCHED = "curiosity::police::ped::hasBeenSearched";
-        const string DECOR_INTERACTION_PROVIDED_ID = "curiosity::police::ped::providedId";
-        const string DECOR_INTERACTION_LOST_ID = "curiosity::police::ped::lostId";
-        const string DECOR_INTERACTION_GRABBED = "curiosity::police::ped::grabbed";
-        const string DECOR_INTERACTION_CORONER_CALLED = "curiosity::police::ped::coronerCalled";
-
         public const int MovementUpdateInterval = 10;
         private const string MOVEMENT_ANIMATION_SET_DRUNK = "MOVE_M@DRUNK@VERYDRUNK";
         public readonly Ped Ped;
@@ -62,11 +44,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_CAN_BE_ARRESTED);
+                return GetBoolean(Client.DECOR_NPC_CAN_BE_ARRESTED);
             }
             set
             {
-                Set(DECOR_CAN_BE_ARRESTED, value);
+                Set(Client.DECOR_NPC_CAN_BE_ARRESTED, value);
             }
         }
 
@@ -74,22 +56,22 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_HANDCUFF);
+                return GetBoolean(Client.DECOR_NPC_HANDCUFF);
             }
             set
             {
-                Set(DECOR_HANDCUFF, value);
+                Set(Client.DECOR_NPC_HANDCUFF, value);
             }
         }
         public bool IsArrested
         {
             get
             {
-                return GetBoolean(DECOR_ARRESTED);
+                return GetBoolean(Client.DECOR_NPC_ARRESTED);
             }
             set
             {
-                Set(DECOR_ARRESTED, value);
+                Set(Client.DECOR_NPC_ARRESTED, value);
             }
         }
 
@@ -98,11 +80,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_DRUG_ALCOHOL);
+                return GetBoolean(Client.DECOR_NPC_DRUG_ALCOHOL);
             }
             set
             {
-                Set(DECOR_DRUG_ALCOHOL, value);
+                Set(Client.DECOR_NPC_DRUG_ALCOHOL, value);
             }
         }
 
@@ -110,11 +92,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_ITEM_ILLEGAL);
+                return GetBoolean(Client.DECOR_NPC_ITEM_ILLEGAL);
             }
             set
             {
-                Set(DECOR_ITEM_ILLEGAL, value);
+                Set(Client.DECOR_NPC_ITEM_ILLEGAL, value);
             }
         }
 
@@ -122,11 +104,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_ITEM_STOLEN);
+                return GetBoolean(Client.DECOR_NPC_ITEM_STOLEN);
             }
             set
             {
-                Set(DECOR_ITEM_STOLEN, value);
+                Set(Client.DECOR_NPC_ITEM_STOLEN, value);
             }
         }
 
@@ -134,11 +116,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_DRUG_CANNABIS);
+                return GetBoolean(Client.DECOR_NPC_DRUG_CANNABIS);
             }
             set
             {
-                Set(DECOR_DRUG_CANNABIS, value);
+                Set(Client.DECOR_NPC_DRUG_CANNABIS, value);
             }
         }
 
@@ -146,11 +128,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_DRUG_COCAINE);
+                return GetBoolean(Client.DECOR_NPC_DRUG_COCAINE);
             }
             set
             {
-                Set(DECOR_DRUG_COCAINE, value);
+                Set(Client.DECOR_NPC_DRUG_COCAINE, value);
             }
         }
 
@@ -158,11 +140,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_INTERACTION_CAN_BE_SEARCHED);
+                return GetBoolean(Client.DECOR_INTERACTION_CAN_BE_SEARCHED);
             }
             set
             {
-                Set(DECOR_INTERACTION_CAN_BE_SEARCHED, value);
+                Set(Client.DECOR_INTERACTION_CAN_BE_SEARCHED, value);
             }
         }
 
@@ -170,11 +152,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_INTERACTION_HAS_BEEN_SEARCHED);
+                return GetBoolean(Client.DECOR_INTERACTION_HAS_BEEN_SEARCHED);
             }
             set
             {
-                Set(DECOR_INTERACTION_HAS_BEEN_SEARCHED, value);
+                Set(Client.DECOR_INTERACTION_HAS_BEEN_SEARCHED, value);
             }
         }
 
@@ -182,11 +164,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_INTERACTION_LOST_ID);
+                return GetBoolean(Client.DECOR_INTERACTION_LOST_ID);
             }
             set
             {
-                Set(DECOR_INTERACTION_LOST_ID, value);
+                Set(Client.DECOR_INTERACTION_LOST_ID, value);
             }
         }
 
@@ -194,11 +176,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_INTERACTION_PROVIDED_ID);
+                return GetBoolean(Client.DECOR_INTERACTION_PROVIDED_ID);
             }
             set
             {
-                Set(DECOR_INTERACTION_PROVIDED_ID, value);
+                Set(Client.DECOR_INTERACTION_PROVIDED_ID, value);
             }
         }
 
@@ -206,11 +188,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_INTERACTION_GRABBED);
+                return GetBoolean(Client.DECOR_INTERACTION_GRABBED);
             }
             set
             {
-                Set(DECOR_INTERACTION_GRABBED, value);
+                Set(Client.DECOR_INTERACTION_GRABBED, value);
             }
         }
 
@@ -219,11 +201,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             get
             {
-                return GetBoolean(DECOR_INTERACTION_CORONER_CALLED);
+                return GetBoolean(Client.DECOR_INTERACTION_CORONER_CALLED);
             }
             set
             {
-                Set(DECOR_INTERACTION_CORONER_CALLED, value);
+                Set(Client.DECOR_INTERACTION_CORONER_CALLED, value);
             }
         }
 
@@ -372,7 +354,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 Screen.ShowNotification($"~r~[~g~D~b~E~y~V~o~]~w~ Creating Interactive Ped");
             }
 
-            if (DecorGetBool(handle, Client.NPC_WAS_RELEASED))
+            if (DecorGetBool(handle, Client.DECOR_NPC_WAS_RELEASED))
             {
                 Screen.ShowNotification("~r~This pedestrian was recently released.");
                 return;
@@ -621,7 +603,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             NpcHandler.AddNpc(base.NetworkId, this);
             if (Ped.IsInVehicle())
             {
-                DecorSetInt(Ped.Handle, Client.NPC_CURRENT_VEHICLE, Ped.CurrentVehicle.Handle);
+                DecorSetInt(Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE, Ped.CurrentVehicle.Handle);
             }
         }
 
@@ -967,7 +949,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 IsHandcuffed = state;
                 IsArrested = state;
-                DecorSetBool(handle, Client.NPC_ARRESTED, state);
+                DecorSetBool(handle, Client.DECOR_NPC_ARRESTED, state);
 
                 if (!IsArrested)
                 {
@@ -1089,7 +1071,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 Scripts.NpcHandler.RemoveNpc(base.NetworkId);
 
-                DecorSetBool(handle, Client.NPC_ARRESTED, false);
+                DecorSetBool(handle, Client.DECOR_NPC_ARRESTED, false);
 
                 Ped.SetConfigFlag(292, false);
                 Ped.SetConfigFlag(301, false);
@@ -1132,7 +1114,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 API.TaskSetBlockingOfNonTemporaryEvents(Ped.Handle, false);
 
-                DecorSetBool(Handle, Client.NPC_WAS_RELEASED, _hasBeenReleased);
+                DecorSetBool(Handle, Client.DECOR_NPC_WAS_RELEASED, _hasBeenReleased);
 
                 client.DeregisterTickHandler(OnShowHelpTextTask);
 
@@ -1142,9 +1124,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
                 RemoveGroup(playerGroupId);
 
-                if (DecorExistOn(Handle, Client.NPC_CURRENT_VEHICLE))
+                if (DecorExistOn(Handle, Client.DECOR_NPC_CURRENT_VEHICLE))
                 {
-                    int vehId = DecorGetInt(Handle, Client.NPC_CURRENT_VEHICLE);
+                    int vehId = DecorGetInt(Handle, Client.DECOR_NPC_CURRENT_VEHICLE);
                     if (DoesEntityExist(vehId))
                     {
                         Vehicle vehicle = new Vehicle(vehId);
@@ -1222,10 +1204,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             ArrestedPedData arrestedPedData = new ArrestedPedData();
 
-            if (DecorExistOn(this.Handle, Client.NPC_RAN_FROM_POLICE))
+            if (DecorExistOn(this.Handle, Client.DECOR_NPC_RAN_FROM_POLICE))
             {
 
-                arrestedPedData.IsAllowedToBeArrested = DecorGetBool(this.Handle, Client.NPC_RAN_FROM_POLICE);
+                arrestedPedData.IsAllowedToBeArrested = DecorGetBool(this.Handle, Client.DECOR_NPC_RAN_FROM_POLICE);
             }
             else
             {
@@ -1239,8 +1221,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             arrestedPedData.IsDrugged = IsUsingCocaine || IsUsingCannabis;
             arrestedPedData.IsDrivingStolenCar = _stolenCar;
             arrestedPedData.IsCarryingIllegalItems = IsCarryingIllegalItems;
+            arrestedPedData.CaughtSpeeding = GetBoolean(Client.DECOR_VEHICLE_SPEEDING);
 
-            arrestedPedData.IsAllowedToBeArrested = (arrestedPedData.IsDrunk || arrestedPedData.IsDrugged || arrestedPedData.IsDrivingStolenCar || arrestedPedData.IsCarryingIllegalItems);
+            arrestedPedData.IsAllowedToBeArrested = (arrestedPedData.IsDrunk || arrestedPedData.IsDrugged || arrestedPedData.IsDrivingStolenCar || arrestedPedData.IsCarryingIllegalItems || arrestedPedData.CaughtSpeeding);
 
             string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(arrestedPedData));
 
@@ -1316,7 +1299,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Vehicle != null)
             {
                 keyValuePairs.Add("-----", "");
-                keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(Ped.Handle, Client.NPC_CURRENT_VEHICLE)}");
+                keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE)}");
                 keyValuePairs.Add("Local Vehicle", $"{Vehicle.Handle}");
             }
 

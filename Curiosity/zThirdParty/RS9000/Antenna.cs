@@ -99,9 +99,21 @@ namespace RS9000
                     plate = locked ? value.Mods.LicensePlate : null,
                 });
 
+                // Curiosity Edit for Speeding
                 if (locked)
                 {
-                    BaseScript.TriggerEvent("curiosity:Client:Police:Speeding", value.Handle, locked);
+                    string DECOR_SPEEDING = "curiosity::police::speeding";
+                    if (!API.DecorIsRegisteredAsType(DECOR_SPEEDING, 2))
+                    {
+                        API.DecorRegister(DECOR_SPEEDING, 2);
+                    }
+                    API.DecorSetBool(value.Handle, DECOR_SPEEDING, locked);
+
+                    API.SetNotificationBackgroundColor(2);
+                    API.SetNotificationTextEntry("STRING");
+                    API.AddTextComponentString($"Model: {value.LocalizedName}~n~Plate: {value.Mods.LicensePlate}~n~Color: {value.Mods.PrimaryColor}");
+                    API.SetNotificationMessage("CHAR_CALL911", "CHAR_CALL911", false, 1, "RS9000", "Speeding detected");
+                    API.DrawNotification(false, true);
                 }
 
                 lockedTarget = value;

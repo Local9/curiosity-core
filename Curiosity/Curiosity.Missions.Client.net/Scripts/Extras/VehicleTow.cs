@@ -40,7 +40,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
                 if (vehToRemove != null)
                 {
-                    if (DecorGetInt(vehToRemove.Handle, Client.PLAYER_VEHICLE) > 0)
+                    if (DecorGetInt(vehToRemove.Handle, Client.DECOR_PLAYER_VEHICLE) > 0)
                     {
                         CitizenFX.Core.UI.Screen.ShowNotification("~o~Player Vehicle");
                         return;
@@ -48,9 +48,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
                     int tfVehHandle = 0;
                     
-                    if (DecorIsRegisteredAsType(Client.NPC_ACTIVE_TRAFFIC_STOP, 2))
+                    if (DecorIsRegisteredAsType(Client.DECOR_NPC_ACTIVE_TRAFFIC_STOP, 2))
                     {
-                        tfVehHandle = DecorGetInt(vehToRemove.Handle, Client.TRAFFIC_STOP_VEHICLE_HANDLE);
+                        tfVehHandle = DecorGetInt(vehToRemove.Handle, Client.DECOR_TRAFFIC_STOP_VEHICLE_HANDLE);
                     }
                     else
                     {

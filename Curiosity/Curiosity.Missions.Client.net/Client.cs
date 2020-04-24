@@ -19,20 +19,34 @@ namespace Curiosity.Missions.Client.net
         public static bool DeveloperNpcUiEnabled, DeveloperVehUiEnabled;
 
         // DECOR HANDLES
-        public const string NPC_CURRENT_VEHICLE = "curiosity::npc::vehicle";
-        public const string NPC_WAS_RELEASED = "curiosity::npc::released";
-        public const string NPC_ACTIVE_TRAFFIC_STOP = "curiosity::npc::trafficStopActive";
-        public const string NPC_ARRESTED = "curiosity::npc::arrested";
+        public const string DECOR_NPC_CURRENT_VEHICLE = "curiosity::npc::vehicle";
+        public const string DECOR_NPC_WAS_RELEASED = "curiosity::npc::released";
+        public const string DECOR_NPC_ACTIVE_TRAFFIC_STOP = "curiosity::npc::trafficStopActive";
+        public const string DECOR_NPC_RAN_FROM_POLICE = "curiosity::npc::runner";
 
-        public const string VEHICLE_HAS_BEEN_TRAFFIC_STOPPED = "curiosity::vehicle::trafficStop";
-        public const string VEHICLE_IGNORE = "curiosity::vehicle::ignore";
-        public const string VEHICLE_DETECTED_BY = "curiosity::vehicle::detected";
+        public const string DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED = "curiosity::vehicle::trafficStop";
+        public const string DECOR_VEHICLE_IGNORE = "curiosity::vehicle::ignore";
+        public const string DECOR_VEHICLE_DETECTED_BY = "curiosity::vehicle::detected";
+        public const string DECOR_VEHICLE_SPEEDING = "curiosity::police::speeding";
+        public const string DECOR_VEHICLE_STOLEN = "curiosity::police::ped::stolenCar";
 
-        public const string NPC_RAN_FROM_POLICE = "curiosity::npc::runner";
+        public const string DECOR_PLAYER_VEHICLE = "Player_Vehicle";
+        public const string DECOR_TRAFFIC_STOP_VEHICLE_HANDLE = "curiosity::traffic_stop::vehicle_handle";
 
-        public const string PLAYER_VEHICLE = "Player_Vehicle";
-
-        public const string TRAFFIC_STOP_VEHICLE_HANDLE = "curiosity::traffic_stop::vehicle_handle";
+        public const string DECOR_NPC_CAN_BE_ARRESTED = "curiosity::police::ped::canBeArrested";
+        public const string DECOR_NPC_HANDCUFF = "curiosity::police::ped::handcuff";
+        public const string DECOR_NPC_ARRESTED = "curiosity::police::ped::arrested";
+        public const string DECOR_NPC_ITEM_ILLEGAL = "curiosity::police::ped::illegalItems";
+        public const string DECOR_NPC_ITEM_STOLEN = "curiosity::police::ped::stolenItems";
+        public const string DECOR_NPC_DRUG_ALCOHOL = "curiosity::police::ped::alcohol";
+        public const string DECOR_NPC_DRUG_CANNABIS = "curiosity::police::ped::cannabis";
+        public const string DECOR_NPC_DRUG_COCAINE = "curiosity::police::ped::cocaine";
+        public const string DECOR_INTERACTION_CAN_BE_SEARCHED = "curiosity::police::ped::canSearch";
+        public const string DECOR_INTERACTION_HAS_BEEN_SEARCHED = "curiosity::police::ped::hasBeenSearched";
+        public const string DECOR_INTERACTION_PROVIDED_ID = "curiosity::police::ped::providedId";
+        public const string DECOR_INTERACTION_LOST_ID = "curiosity::police::ped::lostId";
+        public const string DECOR_INTERACTION_GRABBED = "curiosity::police::ped::grabbed";
+        public const string DECOR_INTERACTION_CORONER_CALLED = "curiosity::police::ped::coronerCalled";
 
         public static Vehicle CurrentVehicle
         {
@@ -79,16 +93,17 @@ namespace Curiosity.Missions.Client.net
             RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperNpcUI", new Action<bool>(OnShowDeveloperNpcUi));
             RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperVehUI", new Action<bool>(OnShowDeveloperVehUi));
 
-            API.DecorRegister(NPC_CURRENT_VEHICLE, 3); // int
-            API.DecorRegister(TRAFFIC_STOP_VEHICLE_HANDLE, 3);
-            API.DecorRegister(VEHICLE_DETECTED_BY, 3);
-            API.DecorRegister(NPC_ARRESTED, 2); // bool
-            API.DecorRegister(NPC_WAS_RELEASED, 2);
-            API.DecorRegister(NPC_ACTIVE_TRAFFIC_STOP, 2);
-            API.DecorRegister(VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, 2);
-            API.DecorRegister(VEHICLE_IGNORE, 2);
-            API.DecorRegister(PLAYER_VEHICLE, 2);
-            API.DecorRegister(NPC_RAN_FROM_POLICE, 2);
+            API.DecorRegister(DECOR_NPC_CURRENT_VEHICLE, 3); // int
+            API.DecorRegister(DECOR_TRAFFIC_STOP_VEHICLE_HANDLE, 3);
+            API.DecorRegister(DECOR_VEHICLE_DETECTED_BY, 3);
+            API.DecorRegister(DECOR_NPC_ARRESTED, 2); // bool
+            API.DecorRegister(DECOR_NPC_WAS_RELEASED, 2);
+            API.DecorRegister(DECOR_NPC_ACTIVE_TRAFFIC_STOP, 2);
+            API.DecorRegister(DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, 2);
+            API.DecorRegister(DECOR_VEHICLE_IGNORE, 2);
+            API.DecorRegister(DECOR_PLAYER_VEHICLE, 2);
+            API.DecorRegister(DECOR_NPC_RAN_FROM_POLICE, 2);
+            API.DecorRegister(DECOR_VEHICLE_SPEEDING, 2);
 
             ClassLoader.Init();
 
@@ -116,13 +131,13 @@ namespace Curiosity.Missions.Client.net
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
                 Client.CurrentVehicle = new Vehicle(vehicleId);
-                API.DecorSetBool(Client.CurrentVehicle.Handle, PLAYER_VEHICLE, true);
+                API.DecorSetBool(Client.CurrentVehicle.Handle, DECOR_PLAYER_VEHICLE, true);
             }
             else if (Client.CurrentVehicle.Handle != vehicleId)
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
                 Client.CurrentVehicle = new Vehicle(vehicleId);
-                API.DecorSetBool(Client.CurrentVehicle.Handle, PLAYER_VEHICLE, true);
+                API.DecorSetBool(Client.CurrentVehicle.Handle, DECOR_PLAYER_VEHICLE, true);
             }
 
             if (CurrentVehicle == null)
@@ -130,7 +145,7 @@ namespace Curiosity.Missions.Client.net
                 if (Game.PlayerPed.IsInVehicle())
                 {
                     CurrentVehicle = Game.PlayerPed.CurrentVehicle;
-                    API.DecorSetBool(Client.CurrentVehicle.Handle, PLAYER_VEHICLE, true);
+                    API.DecorSetBool(Client.CurrentVehicle.Handle, DECOR_PLAYER_VEHICLE, true);
                 }
             }
         }

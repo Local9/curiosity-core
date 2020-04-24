@@ -7,6 +7,9 @@ using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net;
+using Newtonsoft.Json;
 
 namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenus
 {
@@ -28,6 +31,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
 
         static MenuItem mItemWarn = new MenuItem("Suspect: Warn");
         static MenuItem mItemRelease = new MenuItem("Suspect: Release");
+
+        // Speeding Interaction
+        static MenuItem mItemSpeedingTicket = new MenuItem("Suspect: Speeding Ticket");
 
         // Dead Interactions
         static MenuItem mItemCallCoroner = new MenuItem("Call Coroner");
@@ -58,6 +64,22 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 Cpr.InteractionCPR(_interactivePed);
                 MenuController.CloseAllMenus();
                 Client.TriggerEvent("curiosity:interaction:closeMenu");
+                return;
+            }
+            if (menuItem == mItemSpeedingTicket)
+            {
+                TrafficStopData trafficStopData = new TrafficStopData();
+                trafficStopData.Ticket = true;
+
+                string jsonString = Encode.StringToBase64(JsonConvert.SerializeObject(trafficStopData));
+                Client.TriggerServerEvent("curiosity:Server:Missions:TrafficStop", jsonString);
+
+                MenuController.CloseAllMenus();
+                Client.TriggerEvent("curiosity:interaction:closeMenu");
+                await BaseScript.Delay(0);
+                Client.TriggerEvent("curiosity:interaction:released", _interactivePed.Handle);
+                await BaseScript.Delay(0);
+                Client.TriggerEvent("curiosity:setting:group:leave", _interactivePed.Handle, Game.PlayerPed.PedGroup.Handle);
                 return;
             }
             if (menuItem == mItemCallCoroner)
@@ -150,7 +172,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 Generic.InteractionLeaveVehicle(_interactivePed);
                 
                 if (_interactivePed.Ped.CurrentVehicle != null)
-                    DecorSetInt(_interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE, _interactivePed.Ped.CurrentVehicle.Handle);
+                    DecorSetInt(_interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE, _interactivePed.Ped.CurrentVehicle.Handle);
 
                 mItemSuspectVehicle.Enabled = false;
                 await Client.Delay(2000);
@@ -160,7 +182,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 return;
             }
 
-            if (menuItem == mItemSuspectVehicle && !_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE))
+            if (menuItem == mItemSuspectVehicle && !_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE))
             {
                 Generic.InteractionEnterVehicle(_interactivePed);
                 
@@ -196,7 +218,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             else
             {
                 mItemSuspectVehicle.Text = "Suspect: Ask to Leave Vehicle";
-                if (!_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.NPC_CURRENT_VEHICLE))
+                if (!_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE))
                 {
                     mItemSuspectVehicle.Text = "Suspect: Return to Vehicle";
                 }
@@ -217,6 +239,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 mItemSearch.Enabled = !IsInVehicle;
                 mItemSearch.Description = IsInVehicle ? "Suspect must be removed from the vehicle before searching." : string.Empty;
                 menu.AddMenuItem(mItemSearch);
+
+                if (_interactivePed.GetBoolean(Client.DECOR_VEHICLE_SPEEDING))
+                {
+                    menu.AddMenuItem(mItemSpeedingTicket);
+                }
 
                 mItemGrabPed.Text = _interactivePed.HasBeenGrabbed ? "Suspect: Stop Holding" : "Suspect: Grab";
                 menu.AddMenuItem(mItemGrabPed);

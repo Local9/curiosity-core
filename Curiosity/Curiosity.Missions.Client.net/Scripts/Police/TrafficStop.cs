@@ -161,15 +161,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         if (targetVehicle.Driver == null) return;
                         if (targetVehicle.Driver.IsDead) return;
 
-                        if (DecorExistOn(targetVehicle.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED) || DecorExistOn(targetVehicle.Handle, Client.VEHICLE_IGNORE))
+                        if (DecorExistOn(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED) || DecorExistOn(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE))
                         {
-                            if (DecorGetBool(targetVehicle.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
+                            if (DecorGetBool(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
                             {
                                 Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle has already been stopped.");
                                 return;
                             }
 
-                            if (DecorGetBool(targetVehicle.Handle, Client.VEHICLE_IGNORE))
+                            if (DecorGetBool(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE))
                             {
                                 Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle is being ignored.");
                                 return;
@@ -192,7 +192,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             await BaseScript.Delay(0);
                         }
 
-                        bool hasBeenPulledOver = DecorGetBool(targetVehicle.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED);
+                        bool hasBeenPulledOver = DecorGetBool(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED);
 
                         if (hasBeenPulledOver)
                         {
@@ -201,14 +201,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             return;
                         }
 
-                        if (DecorExistOn(targetVehicle.Handle, Client.VEHICLE_DETECTED_BY))
+                        if (DecorExistOn(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY))
                         {
-                            int playerIdOnDetectedVehicle = DecorGetInt(targetVehicle.Handle, Client.VEHICLE_DETECTED_BY);
+                            int playerIdOnDetectedVehicle = DecorGetInt(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY);
 
                             if (playerIdOnDetectedVehicle != Game.Player.ServerId) return; // No point showing anything.
                         }
 
-                        DecorSetInt(targetVehicle.Handle, Client.VEHICLE_DETECTED_BY, Game.Player.ServerId);
+                        DecorSetInt(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY, Game.Player.ServerId);
 
                         // request network control
                         Wrappers.Helpers.RequestControlOfEnt(targetVehicle);
@@ -258,7 +258,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     if (targetVehicle.AttachedBlip != null)
                                         targetVehicle.AttachedBlip.Delete();
 
-                                    DecorSetBool(targetVehicle.Handle, Client.VEHICLE_IGNORE, true);
+                                    DecorSetBool(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE, true);
                                     return;
                                 }
 
@@ -352,7 +352,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             Log.Info($"OnVehicleHasBeenReleased -> Traffic Stop reset called");
 
-            List<Vehicle> vehicles = World.GetAllVehicles().Where(x => API.DecorExistOn(x.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)).ToList();
+            List<Vehicle> vehicles = World.GetAllVehicles().Where(x => API.DecorExistOn(x.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)).ToList();
 
             if (vehicles.Count > 0)
             {

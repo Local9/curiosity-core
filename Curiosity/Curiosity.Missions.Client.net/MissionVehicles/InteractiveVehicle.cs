@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,14 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             }
         }
 
+        public bool CaughtSpeeding
+        {
+            get
+            {
+                return GetBoolean(Client.DECOR_VEHICLE_SPEEDING);
+            }
+        }
+
         // Vehicle Flee States
         int _chanceOfFlee, _chanceOfShootAndFlee;
 
@@ -127,10 +136,10 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             _vehicleRegistered = true; // we presume all drivers are registered and insured
             _vehicleInsured = true;
 
-            if (chanceOfStolen == 24)
+            if (chanceOfStolen == 20)
             {
                 _vehicleStolen = true;
-                Client.TriggerEvent("curiosity:interaction:stolencar", InteractivePed.Handle);
+                InteractivePed.Set(Client.DECOR_VEHICLE_STOLEN, true);
                 // generate new registration name
                 _firstname = string.Empty;
                 _surname = string.Empty;
@@ -153,13 +162,13 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 _chanceOfFlee = Client.Random.Next(25, 30);
                 _chanceOfShootAndFlee = Client.Random.Next(1, 5);
                 // Add event to interactive ped to update LostID Flag
-                Client.TriggerEvent("curiosity:interaction:hasLostId", this.InteractivePed.Ped.NetworkId);
+                InteractivePed.Set(Client.DECOR_INTERACTION_LOST_ID, true);
             }
-            else if (chanceOfRegistered == 12)
+            else if (chanceOfRegistered == 10)
             {
                 _vehicleRegistered = false;
             }
-            else if (chanceOfInsured == 8)
+            else if (chanceOfInsured == 6)
             {
                 _vehicleInsured = false;
             }
@@ -169,7 +178,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (searchChance >= 90)
             {
                 _canSearchVehicle = true;
-                Client.TriggerEvent("curiosity:interaction:hasLostId", this.InteractivePed.Ped.NetworkId);
+                InteractivePed.Set(Client.DECOR_INTERACTION_LOST_ID, true);
             }
 
             _vehicleReleased = false;
@@ -191,7 +200,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 client.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
-            DecorSetInt(Handle, Client.TRAFFIC_STOP_VEHICLE_HANDLE, Handle);
+            Set(Client.DECOR_TRAFFIC_STOP_VEHICLE_HANDLE, Handle);
+            InteractivePed.Set(Client.DECOR_VEHICLE_SPEEDING, this.CaughtSpeeding);
 
             // Should we do anything?
             if (_chanceOfFlee == 29)
@@ -382,7 +392,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
             TaskSetBlockingOfNonTemporaryEvents(this.InteractivePed.Handle, true);
             _vehicleStopped = true;
-            DecorSetBool(this.Vehicle.Handle, Client.VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, true);
+            Set(Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, true);
         }
 
         private async void TaskShootAtPlayer()
@@ -445,7 +455,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 if (this.InteractivePed.AttachedBlip != null)
                     this.InteractivePed.AttachedBlip.Color = BlipColor.Red;
 
-                DecorSetBool(this.InteractivePed.Ped.Handle, Client.NPC_RAN_FROM_POLICE, true);
+                InteractivePed.Set(Client.DECOR_NPC_RAN_FROM_POLICE, true);
             }
             catch (Exception ex)
             {
@@ -546,9 +556,9 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 keyValuePairs.Add("_vehicleRegistered", $"{this._vehicleRegistered}");
                 keyValuePairs.Add("_canSearchVehicle", $"{this._canSearchVehicle}");
                 keyValuePairs.Add("---", $"");
-                keyValuePairs.Add("VEHICLE_HAS_BEEN_STOPPED", $"{DecorGetBool(this.Vehicle.Handle, "curiosity::VehicleStopped")}");
-                keyValuePairs.Add("IS_TRAFFIC_STOPPED_PED", $"{DecorGetBool(this.Vehicle.Handle, "curiosity::PedIsTrafficStopped")}");
-                keyValuePairs.Add("NPC_VEHICLE_IGNORE", $"{DecorGetBool(this.Vehicle.Handle, "NPC_VEHICLE_IGNORE")}");
+                keyValuePairs.Add("Vehicle traffic stop", $"{GetBoolean(Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)}");
+                keyValuePairs.Add("Vehicle Ignored", $"{GetBoolean(Client.DECOR_VEHICLE_IGNORE)}");
+                keyValuePairs.Add("Vehicle caught speeding", $"{GetBoolean(Client.DECOR_VEHICLE_SPEEDING)}");
 
                 Wrappers.Helpers.DrawData(this, keyValuePairs);
             }
@@ -556,6 +566,56 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             {
                 await Client.Delay(1000);
             }
+        }
+
+        public void Set(string property, object value)
+        {
+            if (value is int i)
+            {
+                if (!API.DecorExistOn(Handle, property))
+                {
+                    API.DecorRegister(property, 3);
+                }
+
+                API.DecorSetInt(Handle, property, i);
+            }
+            else if (value is float f)
+            {
+                if (!API.DecorExistOn(Handle, property))
+                {
+                    API.DecorRegister(property, 1);
+                }
+
+                API.DecorSetFloat(Handle, property, f);
+            }
+            else if (value is bool b)
+            {
+                if (!API.DecorExistOn(Handle, property))
+                {
+                    API.DecorRegister(property, 2);
+                }
+
+                API.DecorSetBool(Handle, property, b);
+            }
+            else
+            {
+                Log.Info("[Decor] Could not set decor object due to it not being a supported type.");
+            }
+        }
+
+        public int GetInteger(string property)
+        {
+            return API.DecorExistOn(Handle, property) ? API.DecorGetInt(Handle, property) : 0;
+        }
+
+        public float GetFloat(string property)
+        {
+            return API.DecorExistOn(Handle, property) ? API.DecorGetFloat(Handle, property) : 0f;
+        }
+
+        public bool GetBoolean(string property)
+        {
+            return API.DecorExistOn(Handle, property) && API.DecorGetBool(Handle, property);
         }
     }
 }

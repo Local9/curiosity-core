@@ -73,20 +73,26 @@ namespace Curiosity.Server.net.Classes
 
             if (arrestedPed.IsCarryingIllegalItems)
             {
-                experienceMultiplier = 1.5f;
-                moneyMultiplier = 1.5f;
+                experienceMultiplier += .5f;
+                moneyMultiplier += .5f;
             }
 
             if (arrestedPed.IsDrugged || arrestedPed.IsDrunk)
             {
-                experienceMultiplier = 2f;
-                moneyMultiplier = 2f;
+                experienceMultiplier += 1f;
+                moneyMultiplier += 1f;
             }
 
             if (arrestedPed.IsDrivingStolenCar)
             {
-                experienceMultiplier = 5f;
-                moneyMultiplier = 5f;
+                experienceMultiplier += 4f;
+                moneyMultiplier += 4f;
+            }
+
+            if (arrestedPed.CaughtSpeeding)
+            {
+                experienceMultiplier += 1.5f;
+                moneyMultiplier += 1.5f;
             }
 
             if (!arrestedPed.IsAllowedToBeArrested)
