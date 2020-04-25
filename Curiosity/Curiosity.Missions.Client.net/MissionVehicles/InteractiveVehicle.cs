@@ -106,6 +106,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 SetEntityAsMissionEntity(Vehicle.Handle, true, true);
 
             this.InteractivePed = Scripts.PedCreators.InteractivePedCreator.Ped(this.Vehicle.Driver);
+            this.InteractivePed.Set(Client.DECOR_NPC_VEHICLE_HANDLE, this.Vehicle.Handle);
 
             _chanceOfFlee = 0;
             _chanceOfShootAndFlee = 0;

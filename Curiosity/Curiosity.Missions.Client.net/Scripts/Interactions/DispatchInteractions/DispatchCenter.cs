@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Scripts.Interactions.VehicleInteractions;
+using Curiosity.Shared.Client.net;
+
 namespace Curiosity.Missions.Client.net.Scripts.Interactions.DispatchInteractions
 {
     class DispatchCenter
@@ -36,6 +38,24 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.DispatchInteraction
 
             Wrappers.Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Name: ~y~{interactivePed.Name}~w~\nGender: ~b~{interactivePed.Ped.Gender}~w~\nDOB: ~b~{interactivePed.DateOfBirth}");
             Wrappers.Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Citations: {interactivePed.NumberOfCitations}\n~w~Flags: {interactivePed.Offence}");
+        }
+        static public async void InteractionRunPedVehicle(InteractivePed interactivePed)
+        {
+            int vehicleHandle = interactivePed.GetInteger(Client.DECOR_NPC_VEHICLE_HANDLE);
+
+            if (vehicleHandle == 0) return;
+
+            Vehicle vehicle = new Vehicle(vehicleHandle);
+
+            Helpers.Animations.AnimationRadio();
+            Wrappers.Helpers.ShowNotification("Dispatch", $"Running ~o~{vehicle.Mods.LicensePlate}", string.Empty);
+            await Client.Delay(2000);
+
+            bool stolen = interactivePed.GetBoolean(Client.DECOR_VEHICLE_STOLEN);
+
+            string message = stolen ? "~r~STOLEN" : "~g~CLEAN";
+
+            Wrappers.Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Vehicle Report: {message}");
         }
     }
 }

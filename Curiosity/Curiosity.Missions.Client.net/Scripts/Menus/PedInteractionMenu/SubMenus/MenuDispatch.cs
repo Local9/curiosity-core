@@ -16,6 +16,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
         static InteractivePed _interactivePed;
 
         static MenuItem mItemRunIdentifcation = new MenuItem("Run Name Check");
+        static MenuItem mItemRunVehiclePlate = new MenuItem("Run Plate");
 
         static public void SetupMenu(InteractivePed interactivePed)
         {
@@ -36,6 +37,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
         {
             if (menuItem == mItemRunIdentifcation)
                 Interactions.DispatchInteractions.DispatchCenter.InteractionRunPedIdentification(_interactivePed);
+
+            if (menuItem == mItemRunVehiclePlate)
+                Interactions.DispatchInteractions.DispatchCenter.InteractionRunPedVehicle(_interactivePed);
         }
 
         private static void Menu_OnMenuOpen(Menu menu)
@@ -45,6 +49,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             MenuBase.MenuState(true);
 
             menu.ClearMenuItems();
+
+            mItemRunVehiclePlate.Enabled = _interactivePed.GetInteger(Client.DECOR_NPC_VEHICLE_HANDLE) > 0;
+            menu.AddMenuItem(mItemRunVehiclePlate);
 
             mItemRunIdentifcation.Enabled = _interactivePed.HasProvidedId && !_interactivePed.HasLostId;
             mItemRunIdentifcation.Description = _interactivePed.HasProvidedId && !_interactivePed.HasLostId ? "" : "Must have the suspects ID";

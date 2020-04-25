@@ -247,7 +247,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             if (!SpikeStripDeployed) return;
 
-            List<Vehicle> vehicles = World.GetAllVehicles().Select(v => v).Where(p => p.Position.Distance(stingerOffset, false) <= 1f && !p.Driver.IsPlayer).ToList();
+            List<Vehicle> vehicles = World.GetAllVehicles().Select(v => v).Where(p => p.Position.Distance(stingerOffset, false) <= 1f && p.Driver != null && !p.Driver.IsPlayer).ToList();
 
             if (vehicles == null) return;
 
