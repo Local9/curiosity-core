@@ -180,16 +180,14 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             try
             {
-                await Client.Delay(10);
+                if (!hasPlayerSpawned) return;
+
+                if (Game.PlayerPed.IsAlive && hasPlayerSpawned) return;
+
                 if (Game.PlayerPed.IsDead && hasPlayerSpawned)
                 {
-
-                    // Entity entity = Game.PlayerPed.GetKiller();
-
                     API.SetResourceKvpInt("DEATH", 1);
 
-                    await Client.Delay(0);
-                    
                     Screen.Effects.Start(ScreenEffect.DeathFailOut, 0);
 
                     UI.Scaleforms.Wasted();
@@ -270,13 +268,13 @@ namespace Curiosity.Client.net.Classes.Environment
                         Game.PlayerPed.IsPositionFrozen = true;
                         API.NetworkResurrectLocalPlayer(pos.X, pos.Y, pos.Z - 1.0f, 0.0f, false, false);
 
-                        await Client.Delay(1000);
+                        await Client.Delay(100);
                         Game.PlayerPed.IsPositionFrozen = false;
                         Game.PlayerPed.DropsWeaponsOnDeath = false;
 
                         Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, _currentJob);
 
-                        await Client.Delay(500);
+                        await Client.Delay(100);
 
                         if (CurrentVehicle != null)
                         {
