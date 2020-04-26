@@ -123,6 +123,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
             if (job != "police")
             {
+                IsRequestingCallout = false;
+                HasAcceptedCallout = false;
+
                 // clean up and stop everything
                 client.DeregisterTickHandler(OnGenerateRandomMission);
                 

@@ -20,6 +20,8 @@ namespace Curiosity.Client.net.Helpers
         public long duiObj { get; set; }
         public string UniqId { get; set; }
 
+        public Vector3 Position;
+
         public void Draw()
         {
             API.SetTextRenderId(TargetHandle);
@@ -35,11 +37,13 @@ namespace Curiosity.Client.net.Helpers
     class DuiHandler
     {
         public static Dictionary<string, List<string>> Targets { get; set; }
-        public static Dictionary<string, List<DuiContainer>> DuiContainers { get; set; } = new Dictionary<string, List<DuiContainer>>();
+        public static Dictionary<string, DuiContainer> DuiContainers { get; set; } = new Dictionary<string, DuiContainer>();
         public static List<String> UsedRenderTargets = new List<string>();
-        public static Dictionary<string, List<DuiContainer>> DeletedContainers = new Dictionary<string, List<DuiContainer>>();
+        public static Dictionary<string, DuiContainer> DeletedContainers = new Dictionary<string, DuiContainer>();
 
-        public static void Init()
+
+
+        public static async void Init()
         {
             //Exports.Add("createDui", new Func<string, string, Task<DuiContainer>>(AddDui));
             //Exports.Add("CreateRandomUniqueDuiContainer", new Func<string, Task<DuiContainer>>(CreateRandomUniqueDuiContainer));
@@ -48,6 +52,52 @@ namespace Curiosity.Client.net.Helpers
             Targets = RenderTargets.targets;
 
             Client.GetInstance().RegisterTickHandler(DuiHandler_Tick);
+
+            // Client.GetInstance().RegisterTickHandler(OnTickDuiMouse);
+
+            API.RequestStreamedTextureDict("fib_pc", false);
+            while (!API.HasStreamedTextureDictLoaded("fib_pc"))
+            {
+                await Client.Delay(10);
+            }
+        }
+
+        static float scale = 1.5f;
+        static double screenWidth = Math.Floor(1280 / scale);
+        static double screenHeight = Math.Floor(720 / scale);
+
+        private static async Task OnTickDuiMouse()
+        {
+
+            double mX = 0;
+            double mY = 0;
+
+            double pX = 0;
+            double pY = 0;
+
+            DuiContainer duiContainer = DuiContainers.Select(d => d.Value).Where(p => p.Position.DistanceToSquared(Game.PlayerPed.Position) < 25f).FirstOrDefault();
+
+            while (duiContainer != null)
+            {
+                mX = Game.GetControlNormal(0, Control.CursorX) * screenWidth;
+                mY = Game.GetControlNormal(0, Control.CursorY) * screenHeight;
+
+                if (mX != pX || mY != pY)
+                {
+                    pX = mX;
+                    pY = mY;
+
+                    API.SendDuiMouseMove(duiContainer.duiObj, (int)Math.Floor(mX), (int)Math.Floor(mY));
+                }
+
+                API.DrawSprite("fib_pc", "arrow", (float)(mX / screenWidth), (float)(mY / screenHeight), 0.02f, 0.02f, 0.0f, 255, 255, 255, 255);
+
+                BlockWeaponWheelThisFrame();
+                Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed, true);
+
+                await Client.Delay(0);
+            }
+
         }
 
         public static async Task<DuiContainer> CreateRandomUniqueDuiContainer(string url)
@@ -66,13 +116,11 @@ namespace Curiosity.Client.net.Helpers
 
         public static async Task DestroyAllDui()
         {
+            Dictionary<string, DuiContainer> CopyDuiContainers = DuiContainers;
             List<DuiContainer> containers = new List<DuiContainer>();
-            foreach (var renderTargetName in DuiContainers)
+            foreach (KeyValuePair<string, DuiContainer> valuePair in CopyDuiContainers)
             {
-                foreach (var duiContainer in renderTargetName.Value)
-                {
-                    containers.Add(duiContainer);
-                }
+                containers.Add(valuePair.Value);
             }
 
             foreach (var duiContainer in containers)
@@ -93,11 +141,11 @@ namespace Curiosity.Client.net.Helpers
             }
 
             if (!DeletedContainers.ContainsKey(duiContainer.RenderTargetName))
-                DeletedContainers[duiContainer.RenderTargetName] = new List<DuiContainer>();
+            {
+                DeletedContainers[duiContainer.RenderTargetName] = duiContainer;
+            }
 
-            DeletedContainers[duiContainer.RenderTargetName].Add(duiContainer);
-            DuiContainers[duiContainer.RenderTargetName].Remove(duiContainer);
-            if (!DuiContainers[duiContainer.RenderTargetName].Any())
+            if (DuiContainers.ContainsKey(duiContainer.RenderTargetName))
                 DuiContainers.Remove(duiContainer.RenderTargetName);
         }
 
@@ -105,10 +153,7 @@ namespace Curiosity.Client.net.Helpers
         {
             foreach (var renderTargetName in DuiContainers)
             {
-                foreach (var duiContainer in renderTargetName.Value)
-                {
-                    duiContainer.Draw();
-                }
+                renderTargetName.Value.Draw();
             }
             await Task.FromResult(0);
         }
@@ -116,7 +161,7 @@ namespace Curiosity.Client.net.Helpers
         public static async Task<DuiContainer> AddDuiAtPosition(String renderTarget, String modelName, string url, Vector3 position, float heading)
         {
             DuiContainer duiContainer = null;
-            if (DeletedContainers.ContainsKey(renderTarget) && DeletedContainers[renderTarget].Any())
+            if (DeletedContainers.ContainsKey(renderTarget) && DeletedContainers.ContainsKey(renderTarget))
             {
                 duiContainer = ReuseDuiContainer(renderTarget, url);
             }
@@ -125,10 +170,12 @@ namespace Curiosity.Client.net.Helpers
             if (duiContainer == null)
                 duiContainer = AddDuiInternal(renderTarget, modelName, url);
             duiContainer.Props = new List<Prop>() { propAndModelName.Item1 };
-            if (!DuiContainers.ContainsKey(renderTarget))
-                DuiContainers.Add(renderTarget, new List<DuiContainer>());
+            duiContainer.Position = position;
 
-            DuiContainers[renderTarget].Add(duiContainer);
+            if (!DuiContainers.ContainsKey(renderTarget))
+                DuiContainers.Add(renderTarget, new DuiContainer());
+
+            DuiContainers[renderTarget] = duiContainer;
             if (!UsedRenderTargets.Contains(renderTarget))
             {
                 UsedRenderTargets.Add(renderTarget);
@@ -139,7 +186,7 @@ namespace Curiosity.Client.net.Helpers
         public static async Task<DuiContainer> AddDui(String renderTarget, string url)
         {
             DuiContainer duiContainer = null;
-            if (DeletedContainers.ContainsKey(renderTarget) && DeletedContainers[renderTarget].Any())
+            if (DeletedContainers.ContainsKey(renderTarget) && DeletedContainers.ContainsKey(renderTarget))
             {
                 duiContainer = ReuseDuiContainer(renderTarget, url);
             }
@@ -150,9 +197,9 @@ namespace Curiosity.Client.net.Helpers
                 duiContainer = AddDuiInternal(renderTarget, modelName, url);
             duiContainer.Props = new List<Prop>() { propAndModelName.Item1 };
             if (!DuiContainers.ContainsKey(renderTarget))
-                DuiContainers.Add(renderTarget, new List<DuiContainer>());
+                DuiContainers.Add(renderTarget, new DuiContainer());
 
-            DuiContainers[renderTarget].Add(duiContainer);
+            DuiContainers[renderTarget] = duiContainer;
             if (!UsedRenderTargets.Contains(renderTarget))
             {
                 UsedRenderTargets.Add(renderTarget);
@@ -162,9 +209,8 @@ namespace Curiosity.Client.net.Helpers
 
         private static DuiContainer ReuseDuiContainer(string renderTarget, string url)
         {
-            DuiContainer duiContainer = DeletedContainers[renderTarget][0];
-            DeletedContainers[renderTarget].Remove(duiContainer);
-            if (!DeletedContainers[renderTarget].Any())
+            DuiContainer duiContainer = DeletedContainers[renderTarget];
+            if (DeletedContainers.ContainsKey(renderTarget))
             {
                 DeletedContainers.Remove(renderTarget);
             }
