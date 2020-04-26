@@ -32,9 +32,10 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static MenuItem menuItemDispatch = new MenuItem("Dispatch");
         static MenuItem menuItemBreaker = new MenuItem(":: Options ::") { Enabled = false };
 
-        static MenuCheckboxItem menuCheckboxDuty = new MenuCheckboxItem("Accepting Dispatch Calls", _IsOnDuty);
-        static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive);
+        static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive) { Description = "Show information when a player requests backup" } ;
         static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
+        static MenuCheckboxItem menuCheckboxRandomCallouts = new MenuCheckboxItem("Accept Dispatch Calls", _IsOnDuty) { Description = "Random Dispatch Mission" };
+
         static MenuCheckboxItem menuCheckboxRandomEvents = new MenuCheckboxItem("Enable Random Events", _IsRandomEventsActive) { Description = "Still in development, may be buggy" };
 
         // Request
@@ -96,7 +97,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             MenuBaseFunctions.MenuOpen();
 
-            if (menuItem == menuCheckboxDuty)
+            if (menuItem == menuCheckboxRandomCallouts)
             {
                 menuItem.Enabled = false;
 
@@ -189,12 +190,14 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             MenuBaseFunctions.MenuOpen();
 
-            menuCheckboxDuty.Enabled = false;
+            menuCheckboxRandomCallouts.Enabled = false;
             menuListPatrolZone.Enabled = false;
+            menuCheckboxTrafficStops.Enabled = false;
+            menuItemShowRadar.Enabled = false;
 
             menu.AddMenuItem(menuListPatrolZone);
 
-            bool canPullover = false;
+            bool canDoCallouts = false;
             int policexp = 0;
             int knowledge = 0;
 
@@ -205,48 +208,40 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 if (Player.PlayerInformation.playerInfo.Skills.ContainsKey("knowledge"))
                 {
                     knowledge = Player.PlayerInformation.playerInfo.Skills["knowledge"].Value;
-                    canPullover = (policexp >= 2500 && knowledge >= 1000);
+                    canDoCallouts = (policexp >= 1000 && knowledge >= 500);
                 }
             }
 
-            menuItemShowRadar.Enabled = canPullover;
-            menuCheckboxTrafficStops.Enabled = canPullover;
+            menuCheckboxRandomCallouts.Enabled = canDoCallouts;
 
-            if (!menuItemShowRadar.Enabled)
+            if (!menuCheckboxRandomCallouts.Enabled)
             {
                 string description = "~b~Require Additional;";
-                if (policexp < 2500)
-                    description += $"~n~- ~y~{2500 - policexp:#,##0} ~s~Police Experience";
-                if (knowledge < 1000)
-                    description += $"~n~- ~y~{1000 - knowledge:#,##0} ~s~Knowledge";
+                if (policexp < 1000)
+                    description += $"~n~- ~y~{1000 - policexp:#,##0} ~s~Police Experience";
+                if (knowledge < 500)
+                    description += $"~n~- ~y~{500 - knowledge:#,##0} ~s~Knowledge";
 
-                menuItemShowRadar.Description = description;
-                menuCheckboxTrafficStops.Description = description;
+                menuCheckboxRandomCallouts.Description = description;
             }
             else
             {
-                if (GetVehicleDriving(Game.PlayerPed) == null)
-                {
-                    menuItemShowRadar.Description = "Must be in an ~b~Emergency Vehicle~s~ to open.";
-                }
-                else
-                {
-                    menuItemShowRadar.Description = "Open Radar";
-                }
+                menuCheckboxRandomCallouts.Description = "Random Callouts";
             }
 
             menu.AddMenuItem(menuItemShowRadar);
             menu.AddMenuItem(menuItemDispatch);
             menu.AddMenuItem(menuItemBreaker);
-            menu.AddMenuItem(menuCheckboxDuty);
+            menu.AddMenuItem(menuCheckboxRandomCallouts);
             menu.AddMenuItem(menuCheckboxBackup);
             menu.AddMenuItem(menuCheckboxTrafficStops);
             // menu.AddMenuItem(menuCheckboxRandomEvents);
 
             await Client.Delay(100);
 
-            menuCheckboxDuty.Enabled = true;
             menuListPatrolZone.Enabled = true;
+            menuCheckboxTrafficStops.Enabled = true;
+            menuItemShowRadar.Enabled = true;
 
             MenuBaseFunctions.MenuOpen();
         }
