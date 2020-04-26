@@ -1,3 +1,6 @@
 [submodule "Curiosity/NativeUI"]
 	path = Curiosity/NativeUI
 	url = https://github.com/citizenfx/NativeUI
+[submodule "Curiosity/FiveM-MySQL"]
+	path = Curiosity/FiveM-MySQL
+	url = https://github.com/Local9/FiveM-MySQL.git
