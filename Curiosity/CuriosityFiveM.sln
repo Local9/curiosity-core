@@ -21,10 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GHMattiMySQL", "GHMattiMySQ
 	ProjectSection(SolutionItems) = preProject
 		_Dependancies\server\GHMattiMySQL\__resource.lua = _Dependancies\server\GHMattiMySQL\__resource.lua
 		_Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll = _Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll
-		_Dependancies\server\GHMattiMySQL\MySqlConnector.net.dll = _Dependancies\server\GHMattiMySQL\MySqlConnector.net.dll
 		_Dependancies\server\GHMattiMySQL\settings.xml = _Dependancies\server\GHMattiMySQL\settings.xml
-		_Dependancies\server\GHMattiMySQL\System.Buffers.net.dll = _Dependancies\server\GHMattiMySQL\System.Buffers.net.dll
-		_Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll = _Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Weather.Client.net", "Curiosity.Weather.Client.net\Curiosity.Weather.Client.net.csproj", "{0C2F45C5-8130-46C1-B9CA-3C9362C5800F}"
