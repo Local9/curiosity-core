@@ -307,7 +307,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 }
                 else
                 {
-                    await Client.Delay(1000);
+                    await Client.Delay(100);
 
                     if (hasPlayerSpawned)
                         API.SetResourceKvpInt("DEATH", 0);
