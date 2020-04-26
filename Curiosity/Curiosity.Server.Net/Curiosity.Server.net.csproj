@@ -35,28 +35,19 @@
     <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\CitizenFX.Core.Server.1.0.2136\lib\net45\CitizenFX.Core.Server.dll</HintPath>
     </Reference>
-    <Reference Include="GHMattiMySQL.net">
+    <Reference Include="GHMattiMySQL.net, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MySqlConnector.net">
-      <HintPath>..\_Dependancies\server\GHMattiMySQL\MySqlConnector.net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_Dependancies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Buffers.net">
-      <HintPath>..\_Dependancies\server\GHMattiMySQL\System.Buffers.net.dll</HintPath>
-    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Threading.Tasks.Extensions.net">
-      <HintPath>..\_Dependancies\server\GHMattiMySQL\System.Threading.Tasks.Extensions.net.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
