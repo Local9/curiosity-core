@@ -182,7 +182,13 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 if (!hasPlayerSpawned) return;
 
-                if (Game.PlayerPed.IsAlive && hasPlayerSpawned) return;
+                if (Game.PlayerPed.IsAlive && hasPlayerSpawned)
+                {
+                    int deathCheck = API.GetResourceKvpInt("DEATH");
+
+                    if (deathCheck > 0)
+                        API.SetResourceKvpInt("DEATH", 0);
+                }
 
                 if (Game.PlayerPed.IsDead && hasPlayerSpawned)
                 {
