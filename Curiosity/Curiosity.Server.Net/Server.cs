@@ -19,7 +19,7 @@ namespace Curiosity.Server.net
 
         public ExportDictionary ExportDictionary => Exports;
 
-        const string CURIOSITY_VERSION = "v1.0.0.1550";
+        const string CURIOSITY_VERSION = "v1.0.0.1723";
         public static string LICENSE_IDENTIFIER = "license";
         public static string DISCORD_IDENTIFIER = "discord";
         public static bool isLive
