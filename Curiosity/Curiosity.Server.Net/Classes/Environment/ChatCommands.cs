@@ -30,6 +30,7 @@ namespace Curiosity.Server.net.Classes.Environment
             server.RegisterEventHandler("curiosity:Server:Command:NukeArea", new Action<CitizenFX.Core.Player, float, float, float>(OnNuke));
 
             API.RegisterCommand("donator", new Action<int, List<object>, string>(OnDonationCheck), false);
+            API.RegisterCommand("revive", new Action<int, List<object>, string>(OnRevivePlayer), false);
 
             API.RegisterCommand("chase", new Action<int, List<object>, string>(OnChaser), false);
             API.RegisterCommand("chase2", new Action<int, List<object>, string>(OnChaserTwo), false);
@@ -86,6 +87,20 @@ namespace Curiosity.Server.net.Classes.Environment
             int playerCount = Server.players.Count();
 
             Helpers.Notifications.Advanced($"Session Check", $"Active Sessions: {sessionCount}~n~Player Count: {playerCount}", 2, session.Player);
+        }
+        static void OnRevivePlayer(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (!session.IsStaff) return;
+
+            if (arguments.Count == 0) return;
+
+            string playerToRevive = $"{arguments.ElementAt(0)}";
+            Session sessionToRevive = SessionManager.PlayerList[$"{playerToRevive}"];
+            sessionToRevive.Player.TriggerEvent("curiosity:Client:Player:Revive");
         }
 
         static void OnDonationCheck(int playerHandle, List<object> arguments, string raw)

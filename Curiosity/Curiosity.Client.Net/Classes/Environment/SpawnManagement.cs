@@ -11,6 +11,7 @@ using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -78,6 +79,19 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 CitizenFX.Core.Player closestPlayer = Client.players.Select(x => x).Where(p => p.Character.Position.Distance(Game.PlayerPed.Position) < 2f && p.Character.IsDead).FirstOrDefault();
 
+                if (closestPlayer == null) return;
+
+                if (PlayerInformation.IsDeveloper())
+                {
+                    Log.Info($"Player to revive: {closestPlayer.Name}");
+                    Log.Info($"----- > Revive Checks < -----");
+                    Log.Info($"isSessionActive: {Client.isSessionActive}");
+                    Log.Info($"IsInVehicle: {Game.PlayerPed.IsInVehicle()}");
+                    Log.Info($"notSamePlayer: {closestPlayer != Game.Player}");
+                    Log.Info($"Player IsAlive: {Game.Player.IsAlive}");
+                    Log.Info($"----- > Revive Checks < -----");
+                }
+
                 if (
                     Client.isSessionActive
                     && closestPlayer != null
@@ -97,11 +111,6 @@ namespace Curiosity.Client.net.Classes.Environment
                         else
                         { 
                             Debug.WriteLine($"Reviving Player {closestPlayer.Name}|{closestPlayer.ServerId}");
-
-                            //Ped killerPed = closestPlayer.Character.GetKiller() as Ped;
-
-                            //CitizenFX.Core.Player p = new CitizenFX.Core.Player(API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
-                            //bool samePlayer = Game.Player.ServerId == p.ServerId;
 
                             Client.TriggerServerEvent("curiosity:Server:Player:Revive", closestPlayer.ServerId, false);
                             CooldownActive = true;
