@@ -77,7 +77,7 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             try
             {
-                CitizenFX.Core.Player closestPlayer = Client.players.Select(x => x).Where(p => p.Character.Position.Distance(Game.PlayerPed.Position) < 2f && p.Character.IsDead).FirstOrDefault();
+                CitizenFX.Core.Player closestPlayer = Client.players.Select(x => x).Where(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position) < 2f && p.Character.IsDead).FirstOrDefault();
 
                 if (closestPlayer == null) return;
 
