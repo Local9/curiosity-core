@@ -168,12 +168,6 @@ namespace Curiosity.Server.net.Classes
 
                 Session session = SessionManager.PlayerList[playerId];
 
-                if (!SessionManager.PlayerList.ContainsKey(playerId))
-                {
-                    Log.Error($"IncreaseSkill: Player session missing.");
-                    return;
-                }
-
                 if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
                 {
                     float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));

@@ -67,6 +67,7 @@
     <Compile Include="Environment\Vehicle\LoadoutPosition.cs" />
     <Compile Include="Environment\Vehicle\PolmavScripts.cs" />
     <Compile Include="Environment\Vehicle\Sirens.cs" />
+    <Compile Include="Environment\WeaponScripts\SharkLauncher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

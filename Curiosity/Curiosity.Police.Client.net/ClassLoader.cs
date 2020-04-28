@@ -33,6 +33,7 @@ namespace Curiosity.Police.Client.net
 
             // Developer
             Classes.Developer.Init();
+            Environment.WeaponScripts.SharkLauncher.Init();
 
             /// INSPIRATION!
             // Police

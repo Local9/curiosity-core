@@ -50,23 +50,14 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             loadingMessage = string.Empty; // Because it showed some wierd shit.
 
-            int policeXp = Classes.PlayerClient.ClientInformation.playerInfo.Skills["policexp"].Value;
-            int knowledge = Classes.PlayerClient.ClientInformation.playerInfo.Skills["knowledge"].Value;
-            if (policeXp >= 2500 && knowledge >= 1000)
-            {
-                client.RegisterTickHandler(OnTrafficStopTask);
-                client.RegisterTickHandler(OnEmoteCheck);
-                client.RegisterTickHandler(OnShowLoading);
-                client.RegisterTickHandler(OnDeveloperData);
+            client.RegisterTickHandler(OnTrafficStopTask);
+            client.RegisterTickHandler(OnEmoteCheck);
+            client.RegisterTickHandler(OnShowLoading);
+            client.RegisterTickHandler(OnDeveloperData);
 
-                client.RegisterEventHandler("curiosity:interaction:vehicle:released", new Action<int>(OnVehicleHasBeenReleased));
+            client.RegisterEventHandler("curiosity:interaction:vehicle:released", new Action<int>(OnVehicleHasBeenReleased));
 
-                Screen.ShowNotification("~b~Traffic Stops~s~: ~g~Enabled");
-            }
-            else
-            {
-                Screen.ShowNotification($"~b~Traffic Stops~s~: ~o~Missing Req\n~b~Remaining:\n  ~b~PoliceXp: ~w~{2500 - policeXp}\n  ~b~Knowledge: ~w~{1000 - knowledge}");
-            }
+            Screen.ShowNotification("~b~Traffic Stops~s~: ~g~Enabled");
         }
 
         public static void Dispose()
