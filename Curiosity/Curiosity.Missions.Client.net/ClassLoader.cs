@@ -47,7 +47,7 @@ namespace Curiosity.Missions.Client.net
 
             Scripts.Mission.PoliceMissions.HumainLabs.Init();
 
-            // PoliceMissionData.Init();
+            PoliceMissionData.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

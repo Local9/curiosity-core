@@ -106,34 +106,19 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
             ExecuteMission(missionData);
         }
 
-        private async Task RespawnPlayerInArea()
-        {
-            if (Game.PlayerPed.Position.Distance(CurrentMission.Location) < CurrentMission.ResurectionRange) {
-
-                foreach(Player player in Client.players)
-                {
-                    if (Game.PlayerPed.Position.Distance(player.Character.Position) < 2f && player.Character.IsDead)
-                    {
-
-                    }
-                }
-
-            }
-        }
-
         private static async void ExecuteMission(MissionData missionData)
         {
             CurrentMission = missionData;
-            Blip blip = CurrentMission.Blip = World.CreateBlip(CurrentMission.Location);
-            blip.Color = (BlipColor)5;
-            blip.Sprite = BlipSprite.BigCircle;
+            //Blip blip = CurrentMission.Blip = World.CreateBlip(CurrentMission.Location);
+            //blip.Color = (BlipColor)5;
+            //blip.Sprite = BlipSprite.BigCircle;
 
-            blip.Alpha = 126;
-            blip.ShowRoute = true;
-            blip.Priority = 9;
-            blip.IsShortRange = true;
+            //blip.Alpha = 126;
+            //blip.ShowRoute = true;
+            //blip.Priority = 9;
+            //blip.IsShortRange = true;
 
-            API.SetBlipDisplay(blip.Handle, 5);
+            //API.SetBlipDisplay(blip.Handle, 5);
 
             SoundManager.PlayAudio(missionData.AudioStart);
 
@@ -185,20 +170,12 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
 
         private static async Task<MissionPed> CreatePed(Vector3 pos, float heading, Model selectedModel, WeaponHash weapon, RelationshipGroup relationship, PedGroup group)
         {
-            Model model = selectedModel;
-            await model.Request(10000);
-
-            while (!model.IsLoaded)
-            {
-                await BaseScript.Delay(0);
-            }
-
             //var l = -4302450214485519674L;
             //Console.WriteLine(l.ToString(("X")));
 
             API.RequestCollisionAtCoord(pos.X, pos.Y, pos.Z);
 
-            Ped spawnedPed = await World.CreatePed(model, pos, heading);
+            Ped spawnedPed = await World.CreatePed(selectedModel, pos, heading);
             // settings
             spawnedPed.Armor = 100;
 
@@ -214,7 +191,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
             spawnedPed.Task.FightAgainstHatedTargets(500f);
             
             MissionPed missionPed = MissionPedCreator.Ped(spawnedPed, Extensions.Alertness.FullyAlert, Extensions.Difficulty.HurtMePlenty);
-            model.MarkAsNoLongerNeeded();
+            selectedModel.MarkAsNoLongerNeeded();
 
             return missionPed;
         }

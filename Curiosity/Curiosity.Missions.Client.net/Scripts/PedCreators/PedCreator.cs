@@ -15,39 +15,22 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
     {
         static public async Task<Ped> CreatePedAtLocation(Model model, Vector3 location, float heading, bool dropsWeaponsOnDeath = false)
         {
-            await model.Request(10000);
+            API.RequestCollisionAtCoord(location.X, location.Y, location.Z);
 
-            while (!model.IsLoaded)
-            {
-                await Client.Delay(10);
-            }
+            API.ClearAreaOfEverything(location.X, location.Y, location.Z, 1f, true, true, true, true);
 
-            if (model.IsLoaded)
-            {
+            Ped spawnedPed = await World.CreatePed(model, location, heading);
+            API.NetworkFadeInEntity(spawnedPed.Handle, true);
 
-                API.RequestCollisionAtCoord(location.X, location.Y, location.Z);
+            API.SetPedFleeAttributes(spawnedPed.Handle, 0, false);
+            spawnedPed.DropsWeaponsOnDeath = dropsWeaponsOnDeath;
+            spawnedPed.IsPersistent = true;
 
-                API.ClearAreaOfEverything(location.X, location.Y, location.Z, 1f, true, true, true, true);
+            EntityEventWrapper entityEventWrapper = new EntityEventWrapper(spawnedPed);
+            entityEventWrapper.Died += new EntityEventWrapper.OnDeathEvent(EventWrapperOnDied);
+            entityEventWrapper.Disposed += new EntityEventWrapper.OnWrapperDisposedEvent(EventWrapperOnDisposed);
 
-                Ped spawnedPed = await World.CreatePed(model, location, heading);
-                API.NetworkFadeInEntity(spawnedPed.Handle, true);
-
-                model.MarkAsNoLongerNeeded();
-
-                API.SetPedFleeAttributes(spawnedPed.Handle, 0, false);
-                spawnedPed.DropsWeaponsOnDeath = dropsWeaponsOnDeath;
-                spawnedPed.IsPersistent = true;
-
-                EntityEventWrapper entityEventWrapper = new EntityEventWrapper(spawnedPed);
-                entityEventWrapper.Died += new EntityEventWrapper.OnDeathEvent(EventWrapperOnDied);
-                entityEventWrapper.Disposed += new EntityEventWrapper.OnWrapperDisposedEvent(EventWrapperOnDisposed);
-
-                return spawnedPed;
-            }
-            else
-            {
-                return null;
-            }
+            return spawnedPed;
         }
 
         static private void EventWrapperOnDisposed(EntityEventWrapper sender, Entity entity)
