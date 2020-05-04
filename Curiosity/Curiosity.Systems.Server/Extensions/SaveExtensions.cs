@@ -1,5 +1,5 @@
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Server.MySQL.Store;
+using Curiosity.Systems.Server.Database.Store;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Server.Extenstions

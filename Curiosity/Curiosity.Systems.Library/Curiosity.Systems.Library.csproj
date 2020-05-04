@@ -61,6 +61,8 @@
     <Compile Include="Models\CuriosityCharacter.cs" />
     <Compile Include="Models\CuriosityUser.cs" />
     <Compile Include="Models\Discord\Member.cs" />
+    <Compile Include="Models\FiveM\FiveMPlayer.cs" />
+    <Compile Include="Models\FiveM\FiveMPlayerList.cs" />
     <Compile Include="Models\JsonBuilder.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\Party.cs" />

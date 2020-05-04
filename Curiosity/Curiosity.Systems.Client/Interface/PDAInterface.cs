@@ -5,6 +5,7 @@ using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Interface;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Models.FiveM;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -42,10 +43,12 @@ namespace Curiosity.Systems.Client.Managers
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("GetPlayerList", new EventCallback(metadata =>
+            Curiosity.AttachNuiHandler("GetPlayerList", new AsyncEventCallback(async metadata =>
             {
+                FiveMPlayerList players = await EventSystem.Request<FiveMPlayerList>("server:playerList", null);
+
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_LIST")
-                    .Add("party", Curiosity.PlayerList).Build();
+                    .Add("players", players.Players).Build();
 
                 API.SendNuiMessage(jsn);
 

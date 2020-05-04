@@ -15,7 +15,7 @@ namespace Curiosity.Systems.Server.Managers
                 Player player = CuriosityPlugin.PlayersList[metadata.Sender];
                 CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[metadata.Sender];
 
-                curiosityUser.Character = await MySQL.Store.CharacterDatabase.Get(curiosityUser.DiscordId);
+                curiosityUser.Character = await Database.Store.CharacterDatabase.Get(curiosityUser.DiscordId);
 
                 return curiosityUser.Character;
             }));

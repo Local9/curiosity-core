@@ -114,7 +114,7 @@ namespace Curiosity.Systems.Server.Managers
             ulong discordId = 0;
             ulong.TryParse(discordIdStr, out discordId);
 
-            CuriosityUser curiosityUser = await MySQL.Store.UserDatabase.Get(license, player, discordId);
+            CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(license, player, discordId);
 
             Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LastName} Connecting [{discordId}]");
 

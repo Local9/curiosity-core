@@ -5,14 +5,14 @@ using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Extenstions;
 using Curiosity.Systems.Server.Managers;
-using Curiosity.Systems.Server.MySQL;
+using Curiosity.Systems.Server.Database;
 using Curiosity.Systems.Server.Web;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using GHMatti.Data.MySQL.Core;
 
 namespace Curiosity.Systems.Server
 {
@@ -63,21 +63,15 @@ namespace Curiosity.Systems.Server
 
                     DetachTickHandler(DatabaseTest);
 
-                    using (var db = new MySqlDatabase())
+                    using (var result = MySqlDatabase.mySQL.QueryResult("SELECT 'Success' as Success"))
                     {
-                        await db.Connection.OpenAsync();
+                        ResultSet keyValuePairs = await result;
 
-                        using (var cmd = new MySqlCommand("SELECT 'Success' as Success", db.Connection))
-                        {
-                            using (var reader = await cmd.ExecuteReaderAsync())
-                            {
-                                while (await reader.ReadAsync())
-                                {
-                                    if (reader.GetString(0) == "Success")
-                                        Logger.Success("DB Connection Test Successful");
-                                }
-                            }
-                        }
+                        if (keyValuePairs.Count == 0)
+                            Logger.Error("DB Connection Test Failure");
+
+                        if (keyValuePairs[0]["Success"])
+                            Logger.Success("DB Connection Test Successful");
                     }
 
                     async Task LoadTask()
