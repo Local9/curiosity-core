@@ -53,12 +53,12 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             // May have to make this actually receive a string for an exported function instead
             // (Yet to be tested)
             //Exports.Add("CinematicMode.RegisterCallback", new Func<Func<bool, Task>, Task>(RegisterCallback));
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnCinematicTick);
             client.RegisterEventHandler("curiosity:Player:UI:CinematicMode", new Action<bool>(HideHud));
             client.RegisterEventHandler("curiosity:Player:UI:BlackBarHeight", new Action(BlackBarHeight));
         }
 
-        static public async Task OnTick()
+        static public async Task OnCinematicTick()
         {
             if (DoHideHud)
             {

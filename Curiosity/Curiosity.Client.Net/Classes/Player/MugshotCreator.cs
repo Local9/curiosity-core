@@ -26,10 +26,10 @@ namespace Curiosity.Client.net.Classes.Player
         {
             // https://forum.fivem.net/t/c-render-target-example-using-mugshot-sign/180682
 
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Client.GetInstance().RegisterTickHandler(OnMugshotBoardTick);
         }
 
-        static async Task OnTick()
+        static async Task OnMugshotBoardTick()
         {
             if (ControlHelper.IsControlJustPressed(Control.InteractionMenu, true, ControlModifier.Shift))
             {

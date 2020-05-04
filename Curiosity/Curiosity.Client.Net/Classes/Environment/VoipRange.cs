@@ -26,7 +26,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static public async void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Client.GetInstance().RegisterTickHandler(OnVoipRangeChangeTick);
 
             while (!Client.isSessionActive)
             {
@@ -37,7 +37,7 @@ namespace Curiosity.Client.net.Classes.Environment
             Screen.ShowNotification($"VOIP range set to ~b~{currentRange.Value}.");
         }
 
-        static public Task OnTick()
+        static public Task OnVoipRangeChangeTick()
         {
             if (ControlHelper.IsControlJustPressed(Control.EnterCheatCode, true))
             {

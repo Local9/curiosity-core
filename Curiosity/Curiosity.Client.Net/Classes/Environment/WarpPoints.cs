@@ -109,7 +109,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static public void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Client.GetInstance().RegisterTickHandler(OnWarpPointTick);
             PeriodicUpdate();
             Client.GetInstance().RegisterTickHandler(DisplayButtonInstructionCheck);
         }
@@ -150,7 +150,7 @@ namespace Curiosity.Client.net.Classes.Environment
             return null;
         }
 
-        static public async Task OnTick()
+        static public async Task OnWarpPointTick()
         {
             try
             {

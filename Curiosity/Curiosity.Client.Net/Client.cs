@@ -48,7 +48,7 @@ namespace Curiosity.Client.net
             API.DecorRegister("DEATH", 3);
 
             ClassLoader.Init();
-            RegisterTickHandler(OnTick);
+            RegisterTickHandler(OnHideHudTick);
             RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action(OnSessionActive));
             RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
 
@@ -93,7 +93,7 @@ namespace Curiosity.Client.net
         /// Default/main tick function
         /// </summary>
         /// <returns></returns>
-        public async Task OnTick()
+        public async Task OnHideHudTick()
         {
             try
             {

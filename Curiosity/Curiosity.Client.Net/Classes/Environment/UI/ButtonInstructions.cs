@@ -20,10 +20,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Client.GetInstance().RegisterTickHandler(OnShowInstructionalButtonsTick);
         }
 
-        static public async Task OnTick()
+        static public async Task OnShowInstructionalButtonsTick()
         {
             if (StatusCheckCallbacks.Count > 0)
             {

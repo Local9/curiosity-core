@@ -26,7 +26,7 @@ namespace Curiosity.Client.net.Classes.Environment
             MinuteLoop();
         }
 
-        static public Task OnTick()
+        static public Task OnPushToTalkTick()
         {
             if (ControlHelper.IsControlJustPressed(Control.PushToTalk) || ControlHelper.IsControlJustPressed(Control.MpTextChatAll))
             {

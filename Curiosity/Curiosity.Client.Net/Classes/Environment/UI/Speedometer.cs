@@ -18,10 +18,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public void Init()
         {
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnSpeedometerTick);
         }
 
-        static public async Task OnTick()
+        static public async Task OnSpeedometerTick()
         {
             if (CinematicMode.DoHideHud) return;
             try

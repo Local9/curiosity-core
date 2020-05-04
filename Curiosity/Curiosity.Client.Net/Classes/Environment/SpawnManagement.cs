@@ -35,6 +35,8 @@ namespace Curiosity.Client.net.Classes.Environment
         static bool hasPlayerSpawned = false;
         static Vehicle CurrentVehicle = null;
 
+        static bool deathReset = false;
+
         static int seconds = 300;
         static long gameTime = API.GetGameTimer();
 
@@ -144,6 +146,7 @@ namespace Curiosity.Client.net.Classes.Environment
             API.SetFakeWantedLevel(0);
 
             API.SetResourceKvpInt("DEATH", 0);
+            deathReset = true;
             Screen.Effects.Stop(ScreenEffect.DeathFailOut);
 
             await Client.Delay(500);
@@ -165,6 +168,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static void OnPlayerSpawned()
         {
             hasPlayerSpawned = true;
+            deathReset = true;
         }
 
         static async Task ShowText()
@@ -191,12 +195,15 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 if (!hasPlayerSpawned) return;
 
-                if (Game.PlayerPed.IsAlive && hasPlayerSpawned)
+                if (Game.PlayerPed.IsAlive && hasPlayerSpawned && !deathReset)
                 {
                     int deathCheck = API.GetResourceKvpInt("DEATH");
 
                     if (deathCheck > 0)
+                    {
                         API.SetResourceKvpInt("DEATH", 0);
+                        deathReset = true;
+                    }
                 }
 
                 if (Game.PlayerPed.IsDead && hasPlayerSpawned)
@@ -250,10 +257,6 @@ namespace Curiosity.Client.net.Classes.Environment
                         }
 
                         Screen.Effects.Stop(ScreenEffect.DeathFailOut);
-
-                        //Game.Player.WantedLevel = 0;
-                        //Game.PlayerPed.ClearBloodDamage();
-                        //Game.PlayerPed.ClearLastWeaponDamage();
 
                         int r = rnd.Next(hospitals.Count);
 
@@ -322,10 +325,11 @@ namespace Curiosity.Client.net.Classes.Environment
                 }
                 else
                 {
-                    await Client.Delay(100);
-
-                    if (hasPlayerSpawned)
+                    if (hasPlayerSpawned && !deathReset)
+                    {
                         API.SetResourceKvpInt("DEATH", 0);
+                        deathReset = true;
+                    }
                 }
             }
             catch (Exception ex)

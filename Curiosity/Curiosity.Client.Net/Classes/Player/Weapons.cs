@@ -10,10 +10,10 @@ namespace Curiosity.Client.net.Classes.Player
         public static void Init()
         {
             // Need to block all guns, unless whitelisted
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnWeaponManagementTick);
         }
 
-        static async Task OnTick()
+        static async Task OnWeaponManagementTick()
         {
             if (!PlayerInformation.IsDeveloper())
             {

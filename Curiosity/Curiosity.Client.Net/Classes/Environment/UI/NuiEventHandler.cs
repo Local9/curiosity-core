@@ -21,10 +21,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             client.RegisterNuiEventHandler("ClosePanel", new Action<dynamic>(ClosePanel));
             // client.RegisterEventHandler("curiosity:Player:Skills:GetListData", new Action<string>(OpenDataList));
 
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnNuiPanelTick);
         }
 
-        static async Task OnTick()
+        static async Task OnNuiPanelTick()
         {
             if (IsPanelActive)
             {

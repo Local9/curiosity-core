@@ -600,7 +600,7 @@ namespace Curiosity.Client.net.Classes.Actions
             }
             catch (Exception ex)
             {
-                Log.Error($"Emotes OnTick error: {ex.Message}");
+                Log.Error($"Emotes OnEmoteTick error: {ex.Message}");
             }
             return Task.FromResult(0);
         }

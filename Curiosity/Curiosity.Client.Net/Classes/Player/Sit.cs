@@ -29,7 +29,7 @@ namespace Curiosity.Client.net.Classes.Player
             PlayerInteractables.SetupInteractables();
             PlayerInteractables.SetupSitableItems();
 
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnSitTick);
             client.RegisterTickHandler(DisplayButtonInstructionCheck);
 
             client.RegisterEventHandler("curiosity:Player:Environment:CanTakeSeat", new Action<string, bool>(PlayerCanSit));
@@ -50,7 +50,7 @@ namespace Curiosity.Client.net.Classes.Player
             }
         }
 
-        static async Task OnTick()
+        static async Task OnSitTick()
         {
             try
             {

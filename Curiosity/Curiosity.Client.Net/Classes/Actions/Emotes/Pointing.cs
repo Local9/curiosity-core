@@ -16,10 +16,10 @@ namespace Curiosity.Client.net.Classes.Actions.Emotes
 
         static public void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Client.GetInstance().RegisterTickHandler(OnPointingTick);
         }
 
-        static private async Task OnTick()
+        static private async Task OnPointingTick()
         {
             float pitch = GameplayCamera.RelativePitch;
             pitch = (TypeExtensions.Clamp(pitch, -70f, 42f) + 70f) / 112f;

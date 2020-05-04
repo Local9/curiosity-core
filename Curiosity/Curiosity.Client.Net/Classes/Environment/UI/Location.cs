@@ -19,7 +19,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:UI:LocationHide", new Action<bool>(LocationDisplayState));
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnShowStreetNameTick);
         }
 
         static void LocationDisplayState(bool state)
@@ -36,7 +36,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             return Function.Call<string>(Hash.GET_STREET_NAME_FROM_HASH_KEY, crossingHash.GetResult<int>());
         }
 
-        static public async Task OnTick()
+        static public async Task OnShowStreetNameTick()
         {
             if (CinematicMode.DoHideHud)
                 return;

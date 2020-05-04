@@ -20,7 +20,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public void Init()
         {
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnPlayerNamesTick);
             client.RegisterEventHandler("curioisty:UI:IsSpectating", new Action<bool>(OnIsSpectating));
         }
 
@@ -58,7 +58,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             return false;
         }
 
-        static internal async Task OnTick()
+        static internal async Task OnPlayerNamesTick()
         {
             try
             {

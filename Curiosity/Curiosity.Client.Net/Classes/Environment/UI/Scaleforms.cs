@@ -107,7 +107,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             }
         }
 
-        static async Task OnTick()
+        static async Task OnShowMultiplayerInfoTick()
         {
             if (ControlHelper.IsControlJustPressed(Control.MultiplayerInfo))
             {
