@@ -23,6 +23,7 @@ namespace Curiosity.Systems.Client.Managers
         }
 
         private static bool IsCoreOpen = false;
+        public static Party Party;
 
         public override void Begin()
         {
@@ -47,22 +48,44 @@ namespace Curiosity.Systems.Client.Managers
             {
                 FiveMPlayerList players = await EventSystem.Request<FiveMPlayerList>("server:playerList", null);
 
-                string jsn = new JsonBuilder().Add("operation", "PLAYER_LIST")
-                    .Add("players", players.Players).Build();
+                try
+                {
+                    List<FiveMPlayer> playerList = players.Players.Select(p => p).Where(z => z.ServerHandle != $"{Game.Player.ServerId}").ToList();
 
-                API.SendNuiMessage(jsn);
+                    string jsn = new JsonBuilder().Add("operation", "PLAYER_LIST")
+                        .Add("players", playerList).Build();
+
+                    API.SendNuiMessage(jsn);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"{ex}");
+                }
 
                 return null;
             }));
 
             Curiosity.AttachNuiHandler("CreateParty", new AsyncEventCallback(async metadata =>
             {
-                Party party = await EventSystem.Request<Party>("party:create", null);
+                Party = await EventSystem.Request<Party>("party:create", null);
 
-                string jsn = new JsonBuilder().Add("operation", "PLAYER_PARTY")
-                    .Add("party", party).Build();
+                string jsn = new JsonBuilder().Add("operation", "PARTY_DETAILS")
+                    .Add("party", Party).Build();
 
                 API.SendNuiMessage(jsn);
+
+                return null;
+            }));
+
+            Curiosity.AttachNuiHandler("GetPartyDetails", new EventCallback(metadata =>
+            {
+                if (Party != null)
+                {
+                    string jsn = new JsonBuilder().Add("operation", "PARTY_DETAILS")
+                    .Add("party", Party).Build();
+
+                    API.SendNuiMessage(jsn);
+                }
 
                 return null;
             }));

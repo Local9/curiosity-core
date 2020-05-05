@@ -8,16 +8,23 @@ namespace Curiosity.Systems.Server.Managers
 {
     public class PartyManager : Manager<PartyManager>
     {
-        static Dictionary<Guid, Party> ActiveParties = new Dictionary<Guid, Party>();
+        public static Dictionary<Guid, Party> ActiveParties = new Dictionary<Guid, Party>();
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("party:create", new AsyncEventCallback(async metadata =>
+            EventSystem.GetModule().Attach("party:create", new EventCallback(metadata =>
             {
                 CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[metadata.Sender];
                 // Create Party
                 Party party = new Party();
-                party.LeaderHandle = metadata.Sender;
+                party.LeaderHandle = $"{metadata.Sender}";
+
+                PartyMember partyMember = new PartyMember();
+                partyMember.Handle = party.LeaderHandle;
+                partyMember.Name = curiosityUser.LastName;
+                partyMember.Leader = true;
+
+                party.Members.Add(partyMember);
                 // Add party to the player
                 curiosityUser.SetPartyId(party.PartyId);
                 // add party to the active list

@@ -245,29 +245,75 @@ namespace Curiosity.Systems.Server
 
         private async void OnRconCommand(string commandName, List<object> args)
         {
-            if (commandName.ToLower() != "save") return;
-
-            Logger.Info("[Saves] Beginning `Save` operation on `Characters`.");
-
-            try
+            if (commandName.ToLower() == "save")
             {
-                foreach (var users in ActiveUsers)
+
+                Logger.Info("[Saves] Beginning `Save` operation on `Characters`.");
+
+                try
                 {
-                    await SaveOperation(users.Value);
+                    foreach (var users in ActiveUsers)
+                    {
+                        await SaveOperation(users.Value);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"{ex}");
+                }
+
+                Logger.Info("[Saves] Completed `Save` operation on `Characters`.");
+            }
+
+            if (commandName.ToLower() == "party")
+            {
+                if (args.Count == 0)
+                {
+                    Logger.Info($"Command Missing");
+                    Logger.Info($"Commands: show, count");
+                }
+                else
+                {
+                    if ($"{args.ElementAt(0)}" == "count")
+                    {
+                        Logger.Info($"Number of Parties: {PartyManager.ActiveParties.Count}");
+                    }
+
+                    if ($"{args.ElementAt(0)}" == "show")
+                    {
+                        if (PartyManager.ActiveParties.Count == 0)
+                        {
+                            Logger.Info($"No active parties");
+                        }
+                        else
+                        {
+                            foreach (KeyValuePair<Guid, Party> p in PartyManager.ActiveParties)
+                            {
+                                Logger.Info($"GUID: {p.Key}");
+                                Logger.Info($"::: Members :::");
+
+                                foreach (PartyMember partyMember in p.Value.Members)
+                                {
+                                    if (partyMember.Leader)
+                                    {
+                                        Logger.Info($"Leader: {partyMember.Name}#{partyMember.Handle}");
+                                    }
+                                    else
+                                    {
+                                        Logger.Info($"Member: {partyMember.Name}#{partyMember.Handle}");
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            catch(Exception ex)
-            {
-                Logger.Error($"{ex}");
-            }
-
-            Logger.Info("[Saves] Completed `Save` operation on `Characters`.");
 
             try
             {
                 API.CancelEvent();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Error($"Error when canceling event, possible changes made by FiveM Collective.");
             }

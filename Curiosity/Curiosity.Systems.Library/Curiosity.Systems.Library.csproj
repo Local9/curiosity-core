@@ -66,6 +66,7 @@
     <Compile Include="Models\JsonBuilder.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\Party.cs" />
+    <Compile Include="Models\PartyMember.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\SessionCollection.cs" />
