@@ -30,7 +30,6 @@ namespace Curiosity.Systems.Server
         public static bool IsDebugging { get; private set; }
         public static bool IsMaintenanceActive { get; private set; }
         public static bool ServerReady { get; private set; }
-        public static string DatabaseConnectionString { get; private set; }
         public static ulong DiscordGuildId { get; private set; }
         public static string DiscordBotKey { get; private set; }
         public static string DiscordUrl { get; private set; }
@@ -141,11 +140,6 @@ namespace Curiosity.Systems.Server
                     Logger.Error("!!!!! Please set this value and restart the server! !!!!!");
                     Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
-
-                DatabaseConnectionString = API.GetConvar("mysql_connection_string", "Host=localhost;Port=3306;Username=root;Password=;Database=curiosity;");
-
-                if (IsDebugging)
-                    Logger.Debug($"Database String: {DatabaseConnectionString}");
 
                 ServerId = API.GetConvarInt("server_id", 0);
                 if (ServerId == 0)
