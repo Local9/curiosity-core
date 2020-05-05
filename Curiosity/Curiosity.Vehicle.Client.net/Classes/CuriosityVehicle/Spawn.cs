@@ -293,7 +293,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
                     fuelLevel = 15f;
                 }
 
-                Function.Call(Hash._DECOR_SET_FLOAT, veh.Handle, "Vehicle.Fuel", fuelLevel);
+                API.DecorSetFloat(veh.Handle, "Vehicle.Fuel", fuelLevel);
 
                 await Client.Delay(0);
 
@@ -332,6 +332,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
                 API.SetVehicleHasBeenOwnedByPlayer(veh.Handle, true);
 
                 Client.CurrentVehicle = veh;
+
+                API.DecorSetFloat(veh.Handle, "Vehicle.Fuel", fuelLevel);
 
                 API.SetResourceKvpInt("curiosity:vehicle", veh.Handle);
 

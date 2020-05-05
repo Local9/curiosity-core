@@ -1,15 +1,13 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Client.net;
+using Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle;
-using Curiosity.Shared.Client.net.Extensions;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Menus
 {
@@ -135,15 +133,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
                 if (!Player.PlayerInformation.IsDonator() || !Player.PlayerInformation.IsStaff())
                 {
                     Log.Info("Donator Only!");
-                }
-
-                if (Client.CurrentVehicle != null)
-                {
-                    if (Client.CurrentVehicle.Exists() && Client.CurrentVehicle.Position.Distance(Game.PlayerPed.Position) < 300f)
-                    {
-                        Screen.ShowNotification("~r~Sorry, you currently have a vehicle out or close by.");
-                        return;
-                    }
                 }
 
                 Model model = null;
