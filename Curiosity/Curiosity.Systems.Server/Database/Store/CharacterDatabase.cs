@@ -2,7 +2,9 @@
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
+using Curiosity.Systems.Server.Extensions;
 using GHMatti.Data.MySQL.Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -36,13 +38,13 @@ namespace Curiosity.Systems.Server.Database.Store
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
-                    if (kv.ContainsValue("characterObject"))
-                        curiosityCharacter = Newtonsoft.Json.JsonConvert.DeserializeObject<CuriosityCharacter>($"{kv["characterObject"]}");
+                    if (kv.ContainsKey("characterObject") && kv["characterObject"] != null)
+                        curiosityCharacter = JsonConvert.DeserializeObject<CuriosityCharacter>($"{kv["characterObject"]}");
 
-                    curiosityCharacter.CharacterId = (long)kv["characterId"];
-                    curiosityCharacter.MarkedAsRegistered = (bool)kv["registered"];
-                    curiosityCharacter.Cash = (long)kv["cash"];
-                    curiosityCharacter.IsDead = (bool)kv["dead"];
+                    curiosityCharacter.CharacterId = kv["characterId"].ToLong();
+                    curiosityCharacter.MarkedAsRegistered = kv["registered"].ToBoolean();
+                    curiosityCharacter.Cash = kv["cash"].ToLong();
+                    curiosityCharacter.IsDead = kv["dead"].ToBoolean();
 
                     if (!curiosityCharacter.MarkedAsRegistered)
                         curiosityCharacter.Cash = starterCash;
@@ -54,7 +56,9 @@ namespace Curiosity.Systems.Server.Database.Store
 
         public static async Task Save(CuriosityCharacter curiosityCharacter)
         {
-            string characterJson = Newtonsoft.Json.JsonConvert.SerializeObject(curiosityCharacter);
+            if (!curiosityCharacter.MarkedAsRegistered) return;
+
+            string characterJson = JsonConvert.SerializeObject(curiosityCharacter);
 
             Dictionary<string, object> myParams = new Dictionary<string, object>()
             {
@@ -65,7 +69,7 @@ namespace Curiosity.Systems.Server.Database.Store
                 { "@CharacterJson", characterJson }
             };
 
-            string myQuery = "CALL curiosity.upCharacter(@license, @username, @discordId);";
+            string myQuery = "CALL curiosity.upCharacter(@CharacterIdent, @CashAmount, @IsRegistered, @IsDead, @CharacterJson);";
 
             await MySqlDatabase.mySQL.Query(myQuery, myParams);
         }

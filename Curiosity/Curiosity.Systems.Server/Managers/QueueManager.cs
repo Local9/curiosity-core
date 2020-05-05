@@ -116,6 +116,13 @@ namespace Curiosity.Systems.Server.Managers
 
             CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(license, player, discordId);
 
+            if (curiosityUser == null)
+            {
+                deferrals.done($"Sorry, there was an error when trying to load your account.");
+                API.CancelEvent();
+                return;
+            }
+
             Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LastName} Connecting [{discordId}]");
 
             await BaseScript.Delay(10);

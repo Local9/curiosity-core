@@ -70,7 +70,7 @@ namespace Curiosity.Systems.Server
                         if (keyValuePairs.Count == 0)
                             Logger.Error("DB Connection Test Failure");
 
-                        if (keyValuePairs[0]["Success"])
+                        if (keyValuePairs[0]["Success"] == "Success")
                             Logger.Success("DB Connection Test Successful");
                     }
 

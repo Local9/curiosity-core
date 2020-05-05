@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using GHMatti.Utilities;
@@ -8,7 +9,7 @@ using System.Xml.Linq;
 
 namespace Curiosity.Systems.Server.Database
 {
-    public class MySqlDatabase
+    public class MySqlDatabase : BaseScript
     {
         internal static string resourceName = API.GetCurrentResourceName();
         internal static string resourcePath = $"resources/{API.GetResourcePath(resourceName).Substring(API.GetResourcePath(resourceName).LastIndexOf("//") + 2)}";
