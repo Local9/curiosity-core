@@ -50,7 +50,9 @@ namespace Curiosity.Systems.Client.Managers
 
                 try
                 {
-                    List<FiveMPlayer> playerList = players.Players.Select(p => p).Where(z => z.ServerHandle != $"{Game.Player.ServerId}").ToList();
+                    List<FiveMPlayer> playerList = players.Players.Select(p => p)
+                    // .Where(z => z.ServerHandle != $"{Game.Player.ServerId}")
+                    .ToList();
 
                     string jsn = new JsonBuilder().Add("operation", "PLAYER_LIST")
                         .Add("players", playerList).Build();
@@ -86,6 +88,27 @@ namespace Curiosity.Systems.Client.Managers
 
                     API.SendNuiMessage(jsn);
                 }
+
+                return null;
+            }));
+
+            Curiosity.AttachNuiHandler("PartyInvite", new AsyncEventCallback(async metadata =>
+            {
+                Logger.Debug($"{metadata}");
+
+                return null;
+            }));
+
+            Curiosity.AttachNuiHandler("PartyKick", new AsyncEventCallback(async metadata =>
+            {
+                Logger.Debug($"{metadata}");
+
+                return null;
+            }));
+
+            Curiosity.AttachNuiHandler("PartyPromote", new AsyncEventCallback(async metadata =>
+            {
+                Logger.Debug($"{metadata}");
 
                 return null;
             }));
