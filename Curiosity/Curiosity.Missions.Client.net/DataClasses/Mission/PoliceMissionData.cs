@@ -48,6 +48,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
 
         static void MissionOne()
         {
+            Relationships.SetupRelationShips();
+
             MissionData missionData = new MissionData();
             missionData.Name = "Chamberlain Hills";
             missionData.AudioStart = $"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_03_0{Client.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{Client.Random.Next(1, 3)} CRIMES/CRIME_GUNFIRE_0{Client.Random.Next(1, 4)} CONJUNCTIVES/NEAR_01 AREAS/AREA_CHAMBERLAIN_HILLS_01 RESIDENT/OUTRO_0{Client.Random.Next(1, 4)}";
@@ -181,16 +183,13 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
 
             spawnedPed.Weapons.Give(weapon, 999, true, true);
             spawnedPed.DropsWeaponsOnDeath = false;
-            spawnedPed.RelationshipGroup = relationship;
             spawnedPed.IsOnlyDamagedByPlayer = true;
 
             API.SetPedRandomProps(spawnedPed.Handle);
 
             spawnedPed.SetConfigFlag(46, true);
-
-            spawnedPed.Task.FightAgainstHatedTargets(500f);
             
-            MissionPed missionPed = MissionPedCreator.Ped(spawnedPed, Extensions.Alertness.FullyAlert, Extensions.Difficulty.HurtMePlenty);
+            MissionPed missionPed = MissionPedCreator.Ped(spawnedPed, relationship, Extensions.Alertness.FullyAlert, Extensions.Difficulty.HurtMePlenty);
             selectedModel.MarkAsNoLongerNeeded();
 
             return missionPed;

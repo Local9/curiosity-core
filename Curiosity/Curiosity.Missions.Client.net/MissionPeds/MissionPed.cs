@@ -133,7 +133,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             MissionPed.SilencerEffectiveRange = 15f;
             MissionPed.BehindNoticeDistance = 5f;
             MissionPed.RunningNoticeDistance = 25f;
-            MissionPed.WanderRadius = 100f;
+            MissionPed.WanderRadius = 10f;
         }
 
         protected MissionPed(int handle, float visionDistance = 35f, float experience = 10f) : base(handle)

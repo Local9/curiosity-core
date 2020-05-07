@@ -36,7 +36,7 @@ namespace Curiosity.Missions.Client.net.Static
             client.RegisterEventHandler("playerSpawned", new Action(SetupRelationShips));
         }
 
-        static public void SetupRelationShips()
+        public static void SetupRelationShips()
         {
             // Player
             PlayerRelationship = World.AddRelationshipGroup("PLAYER");
@@ -63,8 +63,8 @@ namespace Curiosity.Missions.Client.net.Static
             BallasRelationship = World.AddRelationshipGroup("AMBIENT_GANG_BALLAS");
             FamiliesRelationship = World.AddRelationshipGroup("AMBIENT_GANG_FAMILY");
             SetRelationshipBothWays(Relationship.Hate, BallasRelationship, FamiliesRelationship);
-            //SetRelationshipBothWays(Relationship.Hate, PlayerRelationship, BallasRelationship);
-            //SetRelationshipBothWays(Relationship.Hate, PlayerRelationship, FamiliesRelationship);
+            SetRelationshipBothWays(Relationship.Dislike, PlayerRelationship, BallasRelationship);
+            SetRelationshipBothWays(Relationship.Dislike, PlayerRelationship, FamiliesRelationship);
 
         }
     }

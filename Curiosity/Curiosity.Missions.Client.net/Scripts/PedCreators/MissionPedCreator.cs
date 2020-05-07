@@ -9,13 +9,18 @@ using CitizenFX.Core.Native;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.MissionPedTypes;
+using Curiosity.Missions.Client.net.Static;
 
 namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 {
     static class MissionPedCreator
     {
-
         public static MissionPed Ped(Ped ped, Alertness alertness = Alertness.Nuetral, Difficulty difficulty = Difficulty.BringItOn, float visionDistance = 50f)
+        {
+            return Ped(ped, Relationships.HostileRelationship, alertness, difficulty, visionDistance);
+        }
+
+        public static MissionPed Ped(Ped ped, RelationshipGroup relationshipGroup, Alertness alertness = Alertness.Nuetral, Difficulty difficulty = Difficulty.BringItOn, float visionDistance = 50f)
         {
             MissionPed missionPed;
 
@@ -41,7 +46,7 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
                 currentBlip.Delete();
             }
             ped.IsPersistent = true;
-            ped.RelationshipGroup = Static.Relationships.HostileRelationship;
+            ped.RelationshipGroup = relationshipGroup;
 
             switch (difficulty)
             {
