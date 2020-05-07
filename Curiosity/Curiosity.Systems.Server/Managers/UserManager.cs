@@ -35,7 +35,9 @@ namespace Curiosity.Systems.Server.Managers
 
                 CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(license, player, discordId);
 
-                Logger.Info($"[User] [{curiosityUser.UserId}] [{curiosityUser.LastName}] Has connected to the server");
+                Logger.Info($"[User] [{metadata.Sender}] [{curiosityUser.LastName}#{curiosityUser.UserId}] Has connected to the server");
+
+                curiosityUser.Handle = metadata.Sender;
 
                 CuriosityPlugin.ActiveUsers.Add(metadata.Sender, curiosityUser);
 

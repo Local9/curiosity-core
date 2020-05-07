@@ -9,7 +9,7 @@ namespace Curiosity.Systems.Library.Models
 {
     public class PartyMember
     {
-        public string Handle;
+        public int Handle;
         public string Name;
         public bool Leader;
     }

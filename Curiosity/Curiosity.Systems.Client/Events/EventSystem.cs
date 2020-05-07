@@ -152,7 +152,7 @@ namespace Curiosity.Systems.Client.Events
             }))
             {
                 Target = target,
-                Sender = API.GetPlayerServerId(API.PlayerId())
+                Sender = Game.Player.ServerId
             };
 
 

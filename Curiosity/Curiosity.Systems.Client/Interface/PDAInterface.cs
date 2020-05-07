@@ -94,7 +94,28 @@ namespace Curiosity.Systems.Client.Managers
 
             Curiosity.AttachNuiHandler("PartyInvite", new AsyncEventCallback(async metadata =>
             {
-                Logger.Debug($"{metadata}");
+                int playerToInvite = metadata.Find<int>(0);
+
+                bool inviteSent = await EventSystem.Request<bool>("party:invite", playerToInvite);
+
+                string jsn;
+
+                if (inviteSent)
+                {
+                    jsn = new JsonBuilder().Add("operation", "NOTIFICATION_SUCCESS")
+                    .Add("title", $"Party Invite")
+                    .Add("message", $"Invite Sent")
+                    .Build();
+                }
+                else
+                {
+                    jsn = new JsonBuilder().Add("operation", "NOTIFICATION_ERROR")
+                    .Add("title", $"Party: Error")
+                    .Add("message", $"Player not found, invite not sent.")
+                    .Build();
+                }
+
+                API.SendNuiMessage(jsn);
 
                 return null;
             }));
@@ -109,6 +130,37 @@ namespace Curiosity.Systems.Client.Managers
             Curiosity.AttachNuiHandler("PartyPromote", new AsyncEventCallback(async metadata =>
             {
                 Logger.Debug($"{metadata}");
+
+                return null;
+            }));
+
+            EventSystem.Attach("party:invite:request", new AsyncEventCallback(async metadata =>
+            {
+                string jsn = new JsonBuilder().Add("operation", "NOTIFICATION_INFO")
+                    .Add("title", $"Party Invite")
+                    .Add("message", $"{metadata.Find<string>(1)} invites you to a party.")
+                    .Build();
+                API.SendNuiMessage(jsn);
+
+                bool response = false;
+                long gameTime = API.GetGameTimer();
+
+                while (!response)
+                {
+                    await BaseScript.Delay(0);
+                    response = Game.IsControlJustPressed(0, Control.Context);
+
+                    if ((API.GetGameTimer() - gameTime) > 30000)
+                    {
+                        break;
+                    }
+                }
+
+                if (response)
+                {
+                    // Send response
+                    Logger.Debug($"Accept: {metadata.Find<Guid>(0)}");
+                }
 
                 return null;
             }));
