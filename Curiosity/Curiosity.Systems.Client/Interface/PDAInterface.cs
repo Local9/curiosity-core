@@ -142,26 +142,6 @@ namespace Curiosity.Systems.Client.Managers
                     .Build();
                 API.SendNuiMessage(jsn);
 
-                bool response = false;
-                long gameTime = API.GetGameTimer();
-
-                while (!response)
-                {
-                    await BaseScript.Delay(0);
-                    response = Game.IsControlJustPressed(0, Control.Context);
-
-                    if ((API.GetGameTimer() - gameTime) > 30000)
-                    {
-                        break;
-                    }
-                }
-
-                if (response)
-                {
-                    // Send response
-                    Logger.Debug($"Accept: {metadata.Find<Guid>(0)}");
-                }
-
                 return null;
             }));
         }

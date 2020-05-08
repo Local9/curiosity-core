@@ -237,19 +237,7 @@ namespace Curiosity.Server.net.Classes
                 skillObj.Value = skillObj.Value + experience;
             };
 
-            // this.Skills.AddOrUpdate(skill, skills, (key, oldValue) => oldValue.Value = oldValue.Value + experience);
-
-            // if (!Skills.ContainsKey(skill))
-            // {
-            //     Skills.Add(skill, skills);
-            //     Skills[skill].Value = 0 + experience;
-            // }
-            // else
-            // {
-            //     Skills[skill].Value = Skills[skill].Value + experience;
-            // }
-
-            string skillLabel = Skills[skill].Label;
+            string skillLabel = skillObj.Label;
 
             ChatLog.SendLogMessage($"{skillLabel} Gain: {experience}", Player);
         }
@@ -261,19 +249,7 @@ namespace Curiosity.Server.net.Classes
                 skillObj.Value = skillObj.Value - experience;
             };
 
-            // this.Skills.AddOrUpdate(skill, skills, (key, oldValue) => oldValue.Value = oldValue.Value - experience);
-
-            // if (!Skills.ContainsKey(skill))
-            // {
-            //     Skills.Add(skill, skills);
-            //     Skills[skill].Value = 0 - experience;
-            // }
-            // else
-            // {
-            //     Skills[skill].Value = Skills[skill].Value - experience;
-            // }
-
-            string skillLabel = Skills[skill].Label;
+            string skillLabel = skillObj.Label;
 
             ChatLog.SendLogMessage($"{skillLabel} Loss: {experience}", Player);
         }

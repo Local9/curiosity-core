@@ -81,6 +81,7 @@ namespace Curiosity.Systems.Server.Managers
          * 
          * JoinParty
          * InviteToParty
+         * Accept Party Invite
          * LeaveParty
          * KickFromParty
          * ChatMessage
