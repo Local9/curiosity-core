@@ -34,6 +34,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             RegisterCommand("bd", new Action<int, List<object>, string>(OnBirthdayTest), false);
             RegisterCommand("sfx", new Action<int, List<object>, string>(OnSfxFile), false);
             RegisterCommand("audio", new Action<int, List<object>, string>(OnAudioFile), false);
+            RegisterCommand("particle", new Action<int, List<object>, string>(OnParticleTest), false);
         }
 
         private static void OnVersion(int playerHandle, List<object> arguments, string raw)
@@ -44,6 +45,17 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
         private static async Task AreaSphereCheck()
         {
             areaSphere.Draw();
+        }
+
+        private async static void OnParticleTest(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+
+            ParticleEffectsAsset particleEffectsAsset = new ParticleEffectsAsset("scr_martin1");
+            await particleEffectsAsset.Request(1000);
+            particleEffectsAsset.CreateEffectOnEntity("scr_sol1_sniper_impact", Game.PlayerPed.Bones[Bone.IK_Head], off: new Vector3(0, 0, .8f), startNow: true);
+
+            Log.Info($"Playing particle");
         }
 
         private static void OnAudioFile(int playerHandle, List<object> arguments, string raw)

@@ -270,7 +270,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public abstract void OnAttackTarget(Ped target);
 
-        private void OnDied(EntityEventWrapper sender, Entity entity)
+        private async void OnDied(EntityEventWrapper sender, Entity entity)
         {
             Ped killedPed = new Ped(entity.Handle);
             Entity killerEnt = killedPed.GetKiller();
@@ -286,12 +286,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (Client.IsBirthday)
                 {
-                    ParticleEffectsAsset particleEffectsAsset = new ParticleEffectsAsset("scr_fbi4");
-
-                    API.UseParticleFxAsset("scr_fbi4");
-                    API.StartNetworkedParticleFxNonLoopedOnPedBone("scr_fbi4_trucks_crash", killedPed.Handle, 0f, 0f, 0f, 0f, 0f, 0f, (int)Bone.SKEL_Head, 0.5f, false, false, false);
-
                     SoundManager.PlaySFX($"party");
+
+                    ParticleEffectsAsset particleEffectsAsset = new ParticleEffectsAsset("scr_martin1");
+                    await particleEffectsAsset.Request(1000);
+                    particleEffectsAsset.CreateEffectOnEntity("scr_sol1_sniper_impact", killedPed.Bones[Bone.SKEL_Head], off: new Vector3(0, 0, .8f), startNow: true);
+
                 }
             }
 
