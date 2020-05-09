@@ -3,6 +3,8 @@ using CitizenFX.Core.Native;
 using System;
 using System.Threading.Tasks;
 using Curiosity.Shared.Server.net.Helpers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.Server.net
 {
@@ -67,6 +69,7 @@ namespace Curiosity.Server.net
 
             // RegisterEventHandler("playerConnecting", new Action<CitizenFX.Core.Player, string, dynamic, dynamic>(OnPlayerConnecting));
             RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(OnPlayerDropped));
+            // RegisterEventHandler("rconCommand", new Action<string, List<object>>(OnRconCommand));
 
             // TODO: Move everything else to init from here.
             Business.Discord.Init();

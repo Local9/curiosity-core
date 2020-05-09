@@ -67,12 +67,35 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static void OnRconCommand(string commandName, List<object> arguments)
         {
-            if (commandName.ToLower() != "session") return;
+            Log.Verbose($"[SERVER] Running command: {commandName}");
 
-            int sessionCount = SessionManager.PlayerList.Count;
-            int playerCount = Server.players.Count();
+            if (commandName.ToLower() == "session")
+            {
 
-            Log.Info($"Active Sessions: {sessionCount}, Player Count: {playerCount}");
+                int sessionCount = SessionManager.PlayerList.Count;
+                int playerCount = Server.players.Count();
+
+                Log.Info($"[SERVER] Active Sessions: {sessionCount}, Player Count: {playerCount}");
+            }
+
+            if (commandName.ToLower() == "announcement")
+            {
+                List<string> message = arguments.Cast<string>().ToList();
+                string messageToSend = String.Join(" ", message);
+
+                Log.Info($"[SERVER] Announcing: {messageToSend}");
+
+                Server.TriggerClientEvent("curiosity:Client:Scalefrom:Announce", messageToSend);
+            }
+
+            try
+            {
+                API.CancelEvent();
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error when canceling event, possible changes made by FiveM Collective.");
+            }
         }
 
         static void OnSessions(int playerHandle, List<object> arguments, string raw)

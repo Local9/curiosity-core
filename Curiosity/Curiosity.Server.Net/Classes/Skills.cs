@@ -238,7 +238,7 @@ namespace Curiosity.Server.net.Classes
 
                 Session session = SessionManager.PlayerList[player.Handle];
 
-                if (skill == "policexp" || experience >= 1000)
+                if (skill == "policexp")
                 {
                     session.Player.TriggerEvent("curiosity:Client:Player:UpdateExtraFlags");
                     Server.TriggerEvent("curiosity:Client:Notification:Curiosity", 1, "~h~PERMA BANNED", "~r~CHEATER FOUND", $"~o~Player: ~w~{session.Player.Name}\n~w~Server has been tasked with their elimination.", 107);
