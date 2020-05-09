@@ -21,5 +21,6 @@
         public string Skill;
         public bool MissionPed;
         public bool Increase;
+        public bool IsHeadshot;
     }
 }

@@ -45,7 +45,7 @@
                     autoplay(0, event.data.audioQueue, 1);
                 } else {
                     audioPlayer = new Howl({
-                        src: ["./audio/" + event.data.transactionFile + ".wav"]
+                        src: [event.data.transactionFile]
                     });
                     audioPlayer.play();
                 }

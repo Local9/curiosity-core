@@ -10,6 +10,8 @@ using Curiosity.Missions.Client.net.Scripts;
 using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Shared.Client.net.Helper.Area;
 using System.Threading.Tasks;
+using System.Linq;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment
 {
@@ -29,6 +31,9 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             RegisterCommand("version", new Action<int, List<object>, string>(OnVersion), false);
 
             RegisterCommand("area", new Action<int, List<object>, string>(OnArea), false);
+            RegisterCommand("bd", new Action<int, List<object>, string>(OnBirthdayTest), false);
+            RegisterCommand("sfx", new Action<int, List<object>, string>(OnSfxFile), false);
+            RegisterCommand("audio", new Action<int, List<object>, string>(OnAudioFile), false);
         }
 
         private static void OnVersion(int playerHandle, List<object> arguments, string raw)
@@ -39,6 +44,48 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
         private static async Task AreaSphereCheck()
         {
             areaSphere.Draw();
+        }
+
+        private static void OnAudioFile(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+
+            if (arguments.Count == 0) return;
+
+            string file = $"{arguments[0]}";
+
+            Log.Info($"Playing : {file}");
+
+            SoundManager.PlayAudioFile($"{file}");
+        }
+
+        private static void OnSfxFile(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+
+            if (arguments.Count == 0) return;
+
+            string file = $"{arguments[0]}";
+
+            Log.Info($"Playing : {file}");
+
+            SoundManager.PlaySFX($"{file}");
+        }
+
+        private static void OnBirthdayTest(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+
+            Client.IsBirthday = !Client.IsBirthday;
+
+            if (Client.IsBirthday)
+            {
+                Screen.ShowNotification($"~g~Activated");
+            }
+            else
+            {
+                Screen.ShowNotification($"~g~De-activated");
+            }
         }
 
         private static void OnArea(int playerHandle, List<object> arguments, string raw)

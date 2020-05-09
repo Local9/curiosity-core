@@ -18,6 +18,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
         public static bool IsOnCallout = false;
         public static PatrolZone PatrolZone = PatrolZone.City;
 
+        public static bool IsBirthday = false;
+
         private static bool RulesDisplayed = false;
 
         public static RelationshipGroup PoliceRelationshipGroup;
@@ -32,6 +34,13 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
             client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
+
+            client.RegisterEventHandler("curiosity:client:special", new Action<bool>(OnSpecialDay));
+        }
+
+        private static void OnSpecialDay(bool isBirthday)
+        {
+            IsBirthday = isBirthday;
         }
 
         static void OnPoliceDuty()
@@ -89,6 +98,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
                 Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Police);
                 Game.PlayerPed.IsInvincible = false;
+                Client.TriggerServerEvent("curiosity:client:special");
 
                 client.RegisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
 

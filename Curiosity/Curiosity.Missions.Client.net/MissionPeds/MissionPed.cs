@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Curiosity.Shared.Client.net;
 using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.Native;
+using Curiosity.Missions.Client.net.Scripts;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -271,8 +272,29 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private void OnDied(EntityEventWrapper sender, Entity entity)
         {
-            Entity killerEnt = new Ped(entity.Handle).GetKiller();
+            Ped killedPed = new Ped(entity.Handle);
+            Entity killerEnt = killedPed.GetKiller();
             Ped killerPed = new Ped(killerEnt.Handle);
+
+            bool headshot = false;
+
+            if (killedPed.LastDamagedBone() == Bone.SKEL_Head)
+            {
+                headshot = true;
+
+                // "scr_fbi4", "scr_fbi4_trucks_crash"
+
+                if (Client.IsBirthday)
+                {
+                    ParticleEffectsAsset particleEffectsAsset = new ParticleEffectsAsset("scr_fbi4");
+
+                    API.UseParticleFxAsset("scr_fbi4");
+                    API.StartNetworkedParticleFxNonLoopedOnPedBone("scr_fbi4_trucks_crash", killedPed.Handle, 0f, 0f, 0f, 0f, 0f, 0f, (int)Bone.SKEL_Head, 0.5f, false, false, false);
+
+                    SoundManager.PlaySFX($"party");
+                }
+            }
+
 
             Blip currentBlip = base.AttachedBlip;
             if (currentBlip != null)
@@ -286,6 +308,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 SkillMessage skillMessage = new SkillMessage();
                 skillMessage.PlayerHandle = $"{p.ServerId}";
+                skillMessage.IsHeadshot = headshot;
 
                 if (IsHostage)
                 {

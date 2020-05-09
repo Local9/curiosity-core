@@ -19,6 +19,8 @@ namespace Curiosity.Server.net
         public static bool serverActive = false;
         public static int startingLocationId = 0;
 
+        private static bool IsBirthday = false;
+
         public ExportDictionary ExportDictionary => Exports;
 
         const string CURIOSITY_VERSION = "v1.0.0.1726";
@@ -46,6 +48,10 @@ namespace Curiosity.Server.net
             Log.Success("Entering Curiosity Server cter");
 
             serverStarted = DateTime.Now;
+            DateTime birthdayDate = new DateTime(DateTime.Now.Year, 5, 15);
+
+            IsBirthday = (serverStarted.Date == birthdayDate);
+
             players = Players;
 
             _server = this;
@@ -69,6 +75,7 @@ namespace Curiosity.Server.net
 
             // RegisterEventHandler("playerConnecting", new Action<CitizenFX.Core.Player, string, dynamic, dynamic>(OnPlayerConnecting));
             RegisterEventHandler("playerDropped", new Action<CitizenFX.Core.Player, string>(OnPlayerDropped));
+            RegisterEventHandler("curiosity:server:special", new Action<CitizenFX.Core.Player>(OnSpecialDay));
             // RegisterEventHandler("rconCommand", new Action<string, List<object>>(OnRconCommand));
 
             // TODO: Move everything else to init from here.
@@ -148,6 +155,11 @@ namespace Curiosity.Server.net
                 RegisterTickHandler(SentStartupMessage);
 
             Log.Success("Leaving Curiosity Server cter");
+        }
+
+        private void OnSpecialDay([FromSource]Player player)
+        {
+            player.TriggerEvent("curiosity:client:special", IsBirthday);
         }
 
         private static async void ServerUpTime()

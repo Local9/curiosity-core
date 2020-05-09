@@ -14,6 +14,8 @@ namespace Curiosity.Missions.Client.net
         public static PlayerList players;
         public static Random Random;
 
+        public static bool IsBirthday;
+
         private static Vehicle _currentVehicle;
         public static SpeechType speechType;
         public static bool DeveloperNpcUiEnabled, DeveloperVehUiEnabled;
@@ -96,6 +98,8 @@ namespace Curiosity.Missions.Client.net
             RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperNpcUI", new Action<bool>(OnShowDeveloperNpcUi));
             RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperVehUI", new Action<bool>(OnShowDeveloperVehUi));
 
+            RegisterEventHandler("curiosity:client:special", new Action<bool>(OnSpecialDay));
+
             API.DecorRegister(DECOR_NPC_CURRENT_VEHICLE, 3); // int
             API.DecorRegister(DECOR_TRAFFIC_STOP_VEHICLE_HANDLE, 3);
             API.DecorRegister(DECOR_VEHICLE_DETECTED_BY, 3);
@@ -111,6 +115,11 @@ namespace Curiosity.Missions.Client.net
             ClassLoader.Init();
 
             Log.Info("Curiosity.Missions.Client.net loaded\n");
+        }
+
+        private void OnSpecialDay(bool isBirthday)
+        {
+            IsBirthday = isBirthday;
         }
 
         static void OnSpeechType(int speech)

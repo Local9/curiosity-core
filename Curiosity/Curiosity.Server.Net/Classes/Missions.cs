@@ -292,8 +292,17 @@ namespace Curiosity.Server.net.Classes
 
             if (skillMessage.Increase)
             {
-                Skills.IncreaseSkill(skillMessage.PlayerHandle, "policexp", random.Next(8, 10));
-                Skills.IncreaseSkill(skillMessage.PlayerHandle, "knowledge", random.Next(3, 6));
+                int experience = random.Next(8, 10);
+                int knowledge = random.Next(3, 6);
+
+                if (skillMessage.IsHeadshot)
+                {
+                    experience = experience * 2;
+                    knowledge = knowledge * 2;
+                }
+
+                Skills.IncreaseSkill(skillMessage.PlayerHandle, "policexp", experience);
+                Skills.IncreaseSkill(skillMessage.PlayerHandle, "knowledge", knowledge);
                 Skills.IncreaseSkill(skillMessage.PlayerHandle, "policerep", 1);
             }
             else
