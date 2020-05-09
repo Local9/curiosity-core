@@ -21,6 +21,8 @@ namespace Curiosity.Server.net
 
         private static bool IsBirthday = false;
 
+        DateTime BirthdayDate = new DateTime(DateTime.Now.Year, 5, 15);
+
         public ExportDictionary ExportDictionary => Exports;
 
         const string CURIOSITY_VERSION = "v1.0.0.1726";
@@ -48,9 +50,8 @@ namespace Curiosity.Server.net
             Log.Success("Entering Curiosity Server cter");
 
             serverStarted = DateTime.Now;
-            DateTime birthdayDate = new DateTime(DateTime.Now.Year, 5, 15);
 
-            IsBirthday = (serverStarted.Date == birthdayDate);
+            IsBirthday = (DateTime.Now.Date == BirthdayDate);
 
             players = Players;
 
@@ -159,6 +160,7 @@ namespace Curiosity.Server.net
 
         private void OnSpecialDay([FromSource]Player player)
         {
+            IsBirthday = (DateTime.Now.Date == BirthdayDate);
             player.TriggerEvent("curiosity:client:special", IsBirthday);
         }
 
