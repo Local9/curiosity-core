@@ -42,6 +42,14 @@ namespace Curiosity.Systems.Server.Managers
                 int sender = metadata.Sender;
 
                 CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[sender];
+
+                Party party = ActiveParties[curiosityUser.PartyId];
+
+                if (party.Members.Count >= 4)
+                {
+                    return false;
+                }
+
                 CuriosityUser userToInvite = CuriosityPlugin.ActiveUsers[invitee];
 
                 Logger.Debug($"Handle of Invitee: {userToInvite.LastName}, Sender: {curiosityUser.LastName}");

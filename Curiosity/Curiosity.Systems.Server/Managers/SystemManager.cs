@@ -8,6 +8,7 @@ using Curiosity.Systems.Server.Events;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Management.Instrumentation;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Server.Managers

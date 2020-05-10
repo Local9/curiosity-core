@@ -64,6 +64,7 @@
     <Compile Include="Extensions\UserExtensions.cs" />
     <Compile Include="Managers\DeveloperManager.cs" />
     <Compile Include="Managers\PartyManager.cs" />
+    <Compile Include="Managers\TimeCycleManager.cs" />
     <Compile Include="ServerExports\StatusExport.cs" />
     <Compile Include="Extensions\SaveExtensions.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionManager.cs" />
+    <Compile Include="Managers\WeatherCycleManager.cs" />
     <Compile Include="Web\DiscordClient.cs" />
     <Compile Include="Web\HttpClient.cs" />
   </ItemGroup>
