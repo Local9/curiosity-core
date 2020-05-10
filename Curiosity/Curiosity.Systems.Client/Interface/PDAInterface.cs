@@ -120,6 +120,23 @@ namespace Curiosity.Systems.Client.Managers
                 return null;
             }));
 
+            Curiosity.AttachNuiHandler("PartyAcceptInvite", new EventCallback(metadata =>
+            {
+                string guid = metadata.Find<string>(0);
+
+                EventSystem.Send("party:invite:accept", guid);
+
+                return null;
+            }));
+
+            Curiosity.AttachNuiHandler("PartyDeclineInvite", new EventCallback(metadata =>
+            {
+                string guid = metadata.Find<string>(0);
+                EventSystem.Send("party:invite:decline", guid);
+
+                return null;
+            }));
+
             Curiosity.AttachNuiHandler("PartyKick", new AsyncEventCallback(async metadata =>
             {
                 Logger.Debug($"{metadata}");
@@ -140,6 +157,32 @@ namespace Curiosity.Systems.Client.Managers
                     .Add("title", $"Party Invite")
                     .Add("message", $"{metadata.Find<string>(1)} invites you to a party.")
                     .Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
+
+            EventSystem.Attach("party:details:join", new EventCallback(metadata =>
+            {
+                Party = metadata.Find<Party>(0);
+
+                string jsn = new JsonBuilder().Add("operation", "PARTY_DETAILS")
+                    .Add("notification", $"{Party.NewestMember} Joined")
+                    .Add("party", Party).Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
+
+            EventSystem.Attach("party:invite:declined", new EventCallback(metadata =>
+            {
+                string jsn = new JsonBuilder().Add("operation", "NOTIFICATION_INFO")
+                    .Add("title", $"Party Invite Declined")
+                    .Add("message", $"{metadata.Find<string>(0)} declined your invite.")
+                    .Build();
+
                 API.SendNuiMessage(jsn);
 
                 return null;
@@ -152,6 +195,7 @@ namespace Curiosity.Systems.Client.Managers
             if (Session.CreatingCharacter) return;
             if (!IsCoreOpen && Game.IsControlJustPressed(0, Control.FrontendSocialClubSecondary))
             {
+                Cache.Player.Handle = Game.Player.ServerId;
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
             }
@@ -165,12 +209,42 @@ namespace Curiosity.Systems.Client.Managers
             }
         }
 
+        [TickHandler(SessionWait = true)]
+        private async Task OnPartyUpdate()
+        {
+            if (Party != null)
+            {
+                foreach (PartyMember partyMember in Party.Members)
+                {
+                    int playerLocalHandle = API.GetPlayerFromServerId(partyMember.Handle);
+                    int pedHandle = API.GetPlayerPed(playerLocalHandle);
+                    partyMember.Health = API.GetEntityHealth(pedHandle);
+                    partyMember.Armor = API.GetPedArmour(pedHandle);
+                }
+
+                string jsn = new JsonBuilder().Add("operation", "PARTY_DETAILS")
+                    .Add("party", Party).Build();
+
+                API.SendNuiMessage(jsn);
+
+                long timer = API.GetGameTimer();
+
+                while((API.GetGameTimer() - timer) < 3000)
+                {
+                    await BaseScript.Delay(10);
+                }
+            }
+        }
+
         private void SendPanelMessage()
         {
-            Panel p = new Panel();
-            p.Main = IsCoreOpen;
-            string json = JsonConvert.SerializeObject(p);
-            API.SendNuiMessage(json);
+            string jsn = new JsonBuilder().Add("operation", "PANEL")
+            .Add("panel", "PDA")
+            .Add("playerHandle", Cache.Player.Handle)
+            .Add("main", IsCoreOpen)
+            .Build();
+
+            API.SendNuiMessage(jsn);
             API.SetNuiFocus(IsCoreOpen, IsCoreOpen);
         }
     }

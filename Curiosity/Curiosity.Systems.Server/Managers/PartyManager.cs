@@ -59,19 +59,49 @@ namespace Curiosity.Systems.Server.Managers
 
                 return true;
 
-                // bool accept = await EventSystem.Request<bool>("party:invite:request", userToInvite.Handle);
+            }));
 
-                //if (accept)
-                //{
-                //    Party party = ActiveParties[curiosityUser.PartyId];
-                //    party.AddMember(userToInvite.Handle, userToInvite.LastName);
-                //    return party;
-                //}
-                //else
-                //{
-                //    return null;
-                //}
+            EventSystem.GetModule().Attach("party:invite:accept", new EventCallback(metadata =>
+            {
+                int acceptingPlayer = metadata.Sender;
+                string guidstr = metadata.Find<string>(0);
 
+                Guid guid = Guid.Parse(guidstr);
+
+                if (!ActiveParties.ContainsKey(guid)) return null;
+
+                Party party = ActiveParties[guid];
+                CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[acceptingPlayer];
+
+                party.AddMember(acceptingPlayer, curiosityUser.LastName);
+
+                foreach(PartyMember pm in party.Members)
+                {
+                    CuriosityUser cu = CuriosityPlugin.ActiveUsers[pm.Handle];
+                    cu.Send("party:details:join", party);
+                }
+
+                ActiveParties[guid] = party;
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("party:invite:decline", new EventCallback(metadata =>
+            {
+                int acceptingPlayer = metadata.Sender;
+                string guidstr = metadata.Find<string>(0);
+
+                Guid guid = Guid.Parse(guidstr);
+
+                if (!ActiveParties.ContainsKey(guid)) return null;
+
+                Party party = ActiveParties[guid];
+                CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[acceptingPlayer];
+                CuriosityUser partyLeader = CuriosityPlugin.ActiveUsers[party.LeaderHandle];
+
+                partyLeader.Send("party:invite:declined", curiosityUser.LastName);
+
+                return null;
             }));
         }
 
