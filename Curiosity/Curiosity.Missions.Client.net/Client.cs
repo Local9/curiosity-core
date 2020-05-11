@@ -53,6 +53,9 @@ namespace Curiosity.Missions.Client.net
         public const string DECOR_INTERACTION_CORONER_CALLED = "curiosity::police::ped::coronerCalled";
         public const string DECOR_INTERACTION_WANTED = "curiosity::police::ped::wanted";
 
+        public const string DECOR_PED_MISSION = "curiosity::police::ped::mission";
+        public const string DECOR_PED_HOSTAGE = "curiosity::police::ped::hostage";
+
         public static Vehicle CurrentVehicle
         {
             get

@@ -7,6 +7,7 @@ using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Missions.Client.net.DataClasses.Mission;
+using Curiosity.Missions.Client.net.Classes.Environment;
 
 namespace Curiosity.Missions.Client.net
 {
@@ -46,6 +47,9 @@ namespace Curiosity.Missions.Client.net
             client.RegisterTickHandler(OnCleanup);
 
             Scripts.Mission.PoliceMissions.HumainLabs.Init();
+
+            GameEvents.Init();
+            GameEventHandlers.Init();
 
             PoliceMissionData.Init();
 

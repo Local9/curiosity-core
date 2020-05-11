@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.DataClasses.Mission;
+using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Classes.Data;
@@ -92,6 +93,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                         spawnpoint.Z = spawnpoint.Z - 1f;
                         HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, spawnpoint, MissionHostage.SpawnHeading);
                         SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
+
+                        Decorators.Set(HostagePed.Handle, Client.DECOR_PED_MISSION, true);
+                        Decorators.Set(HostagePed.Handle, Client.DECOR_PED_HOSTAGE, true);
                         
                         new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
 

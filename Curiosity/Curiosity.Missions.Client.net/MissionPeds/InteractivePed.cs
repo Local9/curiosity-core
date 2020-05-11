@@ -514,6 +514,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             _hasBeenReleased = false;
 
+            Set(Client.DECOR_PED_MISSION, true);
+            Set(Client.DECOR_PED_HOSTAGE, CanBeArrested);
+
             Create();
         }
 
@@ -524,6 +527,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
+            Decorators.Set(this.Ped.Handle, Client.DECOR_PED_MISSION, false);
 
             InteractivePed MissionPed = this;
             this.GoToTarget += new InteractivePed.OnGoingToTargetEvent(MissionPed.OnGoToTarget);

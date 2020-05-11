@@ -127,7 +127,7 @@ namespace Curiosity.Client.net.Classes.Environment
             }
         }
 
-        private static async void OnRevive()
+        public static async void OnRevive()
         {
             Debug.WriteLine($"Reviving");
 
@@ -289,6 +289,7 @@ namespace Curiosity.Client.net.Classes.Environment
                         await Client.Delay(100);
                         Game.PlayerPed.IsPositionFrozen = false;
                         Game.PlayerPed.DropsWeaponsOnDeath = false;
+                        // Game.PlayerPed.Weapons.RemoveAll();
 
                         Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, _currentJob);
 

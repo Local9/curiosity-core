@@ -137,7 +137,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             MissionPed.WanderRadius = 10f;
         }
 
-        protected MissionPed(int handle, float visionDistance = 35f, float experience = 10f) : base(handle)
+        protected MissionPed(int handle, float visionDistance = 35f, float experience = 10f, bool isHostage = false) : base(handle)
         {
             this._ped = new Ped(handle);
             this._eventWrapper = new EntityEventWrapper(this._ped);
@@ -148,6 +148,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             // 1/10 chance of armor
             if (Client.Random.Next(10) == 9)
                 this._ped.Armor = Client.Random.Next(100);
+
+            Decorators.Set(this._ped.Handle, Client.DECOR_PED_MISSION, true);
+            Decorators.Set(this._ped.Handle, Client.DECOR_PED_HOSTAGE, isHostage);
 
             VisionDistance = visionDistance;
             AttackRange = visionDistance;
@@ -270,60 +273,12 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public abstract void OnAttackTarget(Ped target);
 
-        private async void OnDied(EntityEventWrapper sender, Entity entity)
+        private void OnDied(EntityEventWrapper sender, Entity entity)
         {
-            Ped killedPed = new Ped(entity.Handle);
-            Entity killerEnt = killedPed.GetKiller();
-            Ped killerPed = new Ped(killerEnt.Handle);
-
-            bool headshot = false;
-
-            if (killedPed.LastDamagedBone() == Bone.SKEL_Head)
-            {
-                headshot = true;
-
-                // "scr_fbi4", "scr_fbi4_trucks_crash"
-
-                if (Client.IsBirthday)
-                {
-                    SoundManager.PlaySFX($"party");
-
-                    ParticleEffectsAsset particleEffectsAsset = new ParticleEffectsAsset("scr_martin1");
-                    await particleEffectsAsset.Request(1000);
-                    particleEffectsAsset.CreateEffectOnEntity("scr_sol1_sniper_impact", killedPed.Bones[Bone.SKEL_Head], off: new Vector3(0, 0, .8f), startNow: true);
-
-                }
-            }
-
-
             Blip currentBlip = base.AttachedBlip;
             if (currentBlip != null)
             {
                 currentBlip.Delete();
-            }
-
-            if (killerPed.IsPlayer)
-            {
-                Player p = new Player(API.NetworkGetPlayerIndexFromPed(killerPed.Handle));
-
-                SkillMessage skillMessage = new SkillMessage();
-                skillMessage.PlayerHandle = $"{p.ServerId}";
-                skillMessage.IsHeadshot = headshot;
-
-                if (IsHostage)
-                {
-                    skillMessage.MissionPed = true;
-                    skillMessage.Increase = false;
-                }
-                else
-                {
-                    skillMessage.MissionPed = true;
-                    skillMessage.Increase = true;
-                }
-
-                string json = JsonConvert.SerializeObject(skillMessage);
-
-                BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
             }
         }
 

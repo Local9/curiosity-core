@@ -39,7 +39,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
         private static void OnVersion(int playerHandle, List<object> arguments, string raw)
         {
-            Screen.ShowNotification("1.0.0.1209");
+            Screen.ShowNotification("1.0.0.1322");
         }
 
         private static async Task AreaSphereCheck()
