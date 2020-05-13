@@ -97,7 +97,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             IsAnInteractionActive = false;
         }
 
-        static public void InteractionSearch(InteractivePed interactivePed)
+        static public async void InteractionSearch(InteractivePed interactivePed)
         {
             if (IsAnInteractionActive) return;
 
@@ -141,7 +141,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                         Client.TriggerEvent("curiosity:setting:group:leave", interactivePed.Ped.Handle);
 
                         interactivePed.Ped.Task.ReactAndFlee(Game.PlayerPed);
-                        interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
+                    }
+                    else if (Client.Random.Next(10) >= 8) 
+                    {
+                        interactivePed.Ped.Weapons.Give(WeaponHash.Pistol, 90, false, true);
+                        interactivePed.Ped.Task.ShootAt(Game.PlayerPed);
                     }
                     interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
                     Client.TriggerEvent("curiosity:interaction:searched", interactivePed.Handle, true);
