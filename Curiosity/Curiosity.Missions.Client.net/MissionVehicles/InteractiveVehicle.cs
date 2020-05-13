@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.DataClasses;
+using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
@@ -241,6 +242,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             {
                 TaskStopVehicle();
             }
+
+            Decorators.Set(this.Vehicle.Handle, Client.DECOR_VEHICLE_MISSION, true);
         }
 
         protected bool Equals(InteractiveVehicle other)

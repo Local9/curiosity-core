@@ -12,6 +12,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using System.Linq;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Police.Client.net.Extensions;
 
 namespace Curiosity.Police.Client.net.Classes.Menus
 {
@@ -253,7 +254,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             foreach(Vehicle vehicle in vehicles)
             {
-                if (vehicle.CanTiresBurst && !AreTiresBurst(vehicle))
+                if (vehicle.CanTiresBurst && !AreTiresBurst(vehicle) && Decorators.GetBoolean(vehicle.Handle, "curiosity::police::vehicle::mission"))
                 {
                     API.SetVehicleTyreBurst(vehicle.Handle, 0, true, 1000.0f);
                 }
