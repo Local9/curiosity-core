@@ -136,12 +136,17 @@ namespace Curiosity.Missions.Client.net
 
         private void OnSpecialDay(bool isBirthday)
         {
+            if (!isBirthday && IsBirthday)
+            {
+                Screen.ShowNotification("The event has now ended, thank you all!", true);
+            }
+
             IsBirthday = isBirthday;
 
             if (isBirthday)
             {
-                Screen.ShowNotification("Its May 15th, 127.0.0.1 Birthday!!!", true);
-                Screen.ShowNotification("Enjoy increased Police XP from callouts!");
+                Screen.ShowNotification("~w~Its ~g~127.0.0.1~w~ Birthday!!!", true);
+                Screen.ShowNotification("Enjoy increased Police XP from callouts and traffic stops!");
             }
         }
 
