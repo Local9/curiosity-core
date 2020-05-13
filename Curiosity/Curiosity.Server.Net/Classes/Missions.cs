@@ -101,6 +101,12 @@ namespace Curiosity.Server.net.Classes
                 moneyMultiplier += 1.5f;
             }
 
+            if (Server.IsBirthday)
+            {
+                experienceMultiplier += 5.0f;
+                moneyMultiplier += 5.0f;
+            }
+
             if (!arrestedPed.IsAllowedToBeArrested)
             {
                 experienceMultiplier = 0.1f;
@@ -120,6 +126,16 @@ namespace Curiosity.Server.net.Classes
             int experienceEarnAdditional = (int)(exp * experienceMultiplier);
             int knowledgeEarnAdditional = (int)(knowledge * experienceMultiplier);
             int moneyEarnAdditional = (int)(money * moneyMultiplier);
+
+            if (experienceEarnAdditional >= 1000)
+            {
+                experienceEarnAdditional = 900;
+            }
+
+            if (knowledgeEarnAdditional >= 1000)
+            {
+                knowledgeEarnAdditional = 900;
+            }
 
             Skills.IncreaseSkill(player.Handle, "policexp", experienceEarnAdditional);
             Skills.IncreaseSkill(player.Handle, "knowledge", knowledgeEarnAdditional);
@@ -248,13 +264,15 @@ namespace Curiosity.Server.net.Classes
             //    return;
             //}
 
+            float multiplier = (Server.IsBirthday) ? 5.0f : 1.0f;
+
             if (passed)
             {
                 missionMessage.MissionCompleted = 1;
-                missionMessage.MoneyEarnt = 100;
+                missionMessage.MoneyEarnt = (int)(100 * multiplier);
                 missionMessage.HostagesRescued = 1;
                 Bank.IncreaseCashInternally(player.Handle, missionMessage.MoneyEarnt);
-                Skills.IncreaseSkill(player.Handle, "policexp", 15);
+                Skills.IncreaseSkill(player.Handle, "policexp", (int)(15 * multiplier));
             }
             else
             {

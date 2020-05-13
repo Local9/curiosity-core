@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Curiosity.Shared.Client.net.Enums.Patrol;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.Missions.Client.net
 {
@@ -136,6 +137,12 @@ namespace Curiosity.Missions.Client.net
         private void OnSpecialDay(bool isBirthday)
         {
             IsBirthday = isBirthday;
+
+            if (isBirthday)
+            {
+                Screen.ShowNotification("Its May 15th, 127.0.0.1 Birthday!!!", true);
+                Screen.ShowNotification("Enjoy increased Police XP from callouts!");
+            }
         }
 
         static void OnSpeechType(int speech)

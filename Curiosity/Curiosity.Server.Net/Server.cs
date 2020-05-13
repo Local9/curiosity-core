@@ -19,7 +19,7 @@ namespace Curiosity.Server.net
         public static bool serverActive = false;
         public static int startingLocationId = 0;
 
-        private static bool IsBirthday = false;
+        public static bool IsBirthday = false;
 
         DateTime BirthdayDate = new DateTime(DateTime.Now.Year, 5, 15);
 
