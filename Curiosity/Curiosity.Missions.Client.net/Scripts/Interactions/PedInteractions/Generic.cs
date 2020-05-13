@@ -141,7 +141,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                         Client.TriggerEvent("curiosity:setting:group:leave", interactivePed.Ped.Handle);
 
                         interactivePed.Ped.Task.ReactAndFlee(Game.PlayerPed);
+                        interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
                     }
+                    interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
                     Client.TriggerEvent("curiosity:interaction:searched", interactivePed.Handle, true);
                 }
             }
