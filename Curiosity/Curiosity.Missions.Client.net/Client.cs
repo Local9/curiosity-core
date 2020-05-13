@@ -16,6 +16,7 @@ namespace Curiosity.Missions.Client.net
         public static Random Random;
 
         public static bool IsBirthday;
+        static bool IsPlayerSpawned;
 
         private static Vehicle _currentVehicle;
         public static SpeechType speechType;
@@ -104,6 +105,7 @@ namespace Curiosity.Missions.Client.net
             RegisterEventHandler("curiosity:Player:Mission:ShowDeveloperVehUI", new Action<bool>(OnShowDeveloperVehUi));
 
             RegisterEventHandler("curiosity:client:special", new Action<bool>(OnSpecialDay));
+            RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
 
             API.DecorRegister(DECOR_NPC_CURRENT_VEHICLE, 3); // int
             API.DecorRegister(DECOR_TRAFFIC_STOP_VEHICLE_HANDLE, 3);
@@ -122,16 +124,25 @@ namespace Curiosity.Missions.Client.net
             Log.Info("Curiosity.Missions.Client.net loaded\n");
         }
 
+        private void OnPlayerSpawned(dynamic obj)
+        {
+            IsPlayerSpawned = true;
+        }
+
         [Tick]
         private async Task OnSpecialDayTick()
         {
-            long gameTimer = API.GetGameTimer();
-            while((API.GetGameTimer() - gameTimer) < 30000)
+            if (IsPlayerSpawned)
             {
-                await Client.Delay(100);
-            }
 
-            TriggerServerEvent("curiosity:server:special");
+                long gameTimer = API.GetGameTimer();
+                while ((API.GetGameTimer() - gameTimer) < 30000)
+                {
+                    await Client.Delay(100);
+                }
+
+                TriggerServerEvent("curiosity:server:special");
+            }
         }
 
         private void OnSpecialDay(bool isBirthday)
