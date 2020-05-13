@@ -121,6 +121,18 @@ namespace Curiosity.Missions.Client.net
             Log.Info("Curiosity.Missions.Client.net loaded\n");
         }
 
+        [Tick]
+        private async Task OnSpecialDayTick()
+        {
+            long gameTimer = API.GetGameTimer();
+            while((API.GetGameTimer() - gameTimer) < 30000)
+            {
+                await Client.Delay(100);
+            }
+
+            TriggerServerEvent("curiosity:server:special");
+        }
+
         private void OnSpecialDay(bool isBirthday)
         {
             IsBirthday = isBirthday;
