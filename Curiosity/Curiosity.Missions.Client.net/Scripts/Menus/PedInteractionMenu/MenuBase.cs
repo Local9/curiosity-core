@@ -66,6 +66,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
             if (_interactivePed.Position.Distance(Game.PlayerPed.Position) > 4)
                 MenuController.CloseAllMenus();
 
+            if (Game.PlayerPed.HasBeenDamagedByAnyWeapon())
+                MenuController.CloseAllMenus();
+
             if (!MenuController.IsAnyMenuOpen())
                 client.DeregisterTickHandler(OnDistanceTask);
         }
