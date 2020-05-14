@@ -66,6 +66,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             client.RegisterEventHandler("curiosity:Player:Vehicle:Siren:SoundEvent", new Action<string>(OnReceivedSourceEvent));
             client.RegisterEventHandler("curiosity:Client:Menu:IsOpened", new Action<bool>(OnMenuStateChange));
             API.DecorRegister("Vehicle.SirensInstalled", 2);
+            API.DecorRegister("Vehicle.SirensActive", 2);
         }
 
         static private void OnMenuStateChange(bool state)
@@ -187,6 +188,8 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         {
                             API.SetFakeWantedLevel(0);
                             LightsActive = false;
+                            StopSound();
+                            SirenActive = false;
                             break;
                         }
                         else if (ControlHelper.IsControlJustPressed(Control.MpTextChatTeam) || API.IsControlJustPressed(16, (int)Control.VehicleFlyUnderCarriage)) // Cycle presets
@@ -243,6 +246,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             }
             else if (!Game.PlayerPed.IsInVehicle())
             {
+                StopSound();
                 SirenActive = false;
             }
         }
