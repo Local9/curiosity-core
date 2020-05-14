@@ -68,6 +68,7 @@ namespace Curiosity.Server.net.Classes
                 timestampLastArrest.Add(player.Handle, DateTime.Now);
             }
 
+            List<string> wrapSheet = new List<string>();
             float experienceMultiplier = 1.0f; // Base value
             float moneyMultiplier = 1.0f; // Base value
 
@@ -75,30 +76,35 @@ namespace Curiosity.Server.net.Classes
             {
                 experienceMultiplier += .5f;
                 moneyMultiplier += .5f;
+                wrapSheet.Add("Illegal Items");
             }
 
             if (arrestedPed.IsWanted)
             {
                 experienceMultiplier += 1f;
                 moneyMultiplier += 1f;
+                wrapSheet.Add("Wanted");
             }
 
             if (arrestedPed.IsDrugged || arrestedPed.IsDrunk)
             {
                 experienceMultiplier += 1f;
                 moneyMultiplier += 1f;
+                wrapSheet.Add("Under the Influence");
             }
 
             if (arrestedPed.IsDrivingStolenCar)
             {
                 experienceMultiplier += 4f;
                 moneyMultiplier += 4f;
+                wrapSheet.Add("Stolen Car");
             }
 
             if (arrestedPed.CaughtSpeeding)
             {
                 experienceMultiplier += 1.5f;
                 moneyMultiplier += 1.5f;
+                wrapSheet.Add("Caught Speeding");
             }
 
             if (Server.IsBirthday)
@@ -111,6 +117,8 @@ namespace Curiosity.Server.net.Classes
             {
                 experienceMultiplier = 0.1f;
                 moneyMultiplier = 0.1f;
+
+                wrapSheet.Add("Was found Innocent");
 
                 Skills.DecreaseSkill(player.Handle, "policerep", 2);
             }
@@ -141,6 +149,9 @@ namespace Curiosity.Server.net.Classes
             Skills.IncreaseSkill(player.Handle, "knowledge", knowledgeEarnAdditional);
             Bank.IncreaseCashInternally(player.Handle, moneyEarnAdditional);
             timestampLastArrest[player.Handle] = DateTime.Now;
+
+            session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", "", $"Experience: ~b~{experienceEarnAdditional:N} XP~n~~s~Knowledge: ~b~{knowledgeEarnAdditional:N}~n~~s~Payout: ~b~${moneyEarnAdditional:C}");
+            session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", "Wrap Sheet", string.Join(", ", wrapSheet));
         }
 
         static void OnTrafficStop([FromSource]CitizenFX.Core.Player player, string encodedData)
