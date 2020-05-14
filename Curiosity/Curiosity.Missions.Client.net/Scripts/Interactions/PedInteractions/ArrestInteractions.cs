@@ -196,19 +196,22 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             }
             else
             {
-                if (Client.CurrentVehicle.PassengerCount >= 2)
+                if (Client.CurrentVehicle.IsSeatFree(VehicleSeat.LeftRear))
                 {
-                    Screen.ShowNotification("~r~Too many passengers.");
-                    return;
+                    interactivePed.Ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.LeftRear);
                 }
-
-                if (Client.CurrentVehicle.PassengerCount == 1)
+                else if (Client.CurrentVehicle.IsSeatFree(VehicleSeat.RightRear))
                 {
                     interactivePed.Ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.RightRear);
                 }
+                else if (Client.CurrentVehicle.IsSeatFree(VehicleSeat.Passenger))
+                {
+                    interactivePed.Ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.Passenger);
+                }
                 else
                 {
-                    interactivePed.Ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.LeftRear);
+                    Screen.ShowNotification("~r~Unable to find a free seat.");
+                    return;
                 }
 
                 while (!interactivePed.Ped.IsInVehicle())
