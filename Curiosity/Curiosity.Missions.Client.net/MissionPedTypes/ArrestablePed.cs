@@ -3,12 +3,6 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.NPCType;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Shared.Client.net.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.MissionPedTypes
 {
