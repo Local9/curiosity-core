@@ -305,6 +305,9 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             try
             {
                 SoundEventModel SoundEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<SoundEventModel>(serializedSoundEvent);
+
+                if (SoundEvent.PlayerServerId == Game.Player.ServerId) return;
+
                 if (SoundEvent.SoundName == "STOP" && SirenSoundIds.ContainsKey(SoundEvent.PlayerServerId) && SirenSoundIds[SoundEvent.PlayerServerId] != -1)
                 {
                     Function.Call(Hash.STOP_SOUND, SirenSoundIds[SoundEvent.PlayerServerId]);
@@ -333,6 +336,31 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
         static void SendSoundEvent(string sound)
         {
+            int playerServerId = Game.Player.ServerId;
+            try
+            {
+                if (sound == "STOP" && SirenSoundIds.ContainsKey(playerServerId) && SirenSoundIds[playerServerId] != -1)
+                {
+                    Function.Call(Hash.STOP_SOUND, SirenSoundIds[playerServerId]);
+                    Function.Call(Hash.RELEASE_SOUND_ID, SirenSoundIds[playerServerId]);
+                    SirenSoundIds[playerServerId] = -1;
+                }
+                else
+                {
+                    if (SirenSoundIds.ContainsKey(playerServerId) && SirenSoundIds[playerServerId] != -1)
+                    {
+                        Function.Call(Hash.STOP_SOUND, SirenSoundIds[playerServerId]);
+                        Function.Call(Hash.RELEASE_SOUND_ID, SirenSoundIds[playerServerId]);
+                    }
+                    SirenSoundIds[playerServerId] = Function.Call<int>(Hash.GET_SOUND_ID);
+                    Function.Call(Hash.PLAY_SOUND_FROM_ENTITY, SirenSoundIds[playerServerId], sound, Game.PlayerPed.CurrentVehicle.Handle, 0, 0, 0);
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+
             string serializedSoundEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new SoundEventModel { SoundName = sound, PlayerServerId = Game.Player.ServerId });
             string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Siren:SoundEvent", serializedSoundEvent));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
