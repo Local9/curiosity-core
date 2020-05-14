@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Drawing;
+using CitizenFX.Core.UI;
 
 //using FamilyRP.Roleplay.SharedClasses;
 //using FamilyRP.Roleplay.Client.Classes.Environment.Controls;
@@ -1672,6 +1673,23 @@ namespace Curiosity.Client.net.Classes.Environment
                         _track = false;
                         _trackingEntity = null;
                         return;
+                    }
+
+                    int entityOwner = API.NetworkGetEntityOwner(_trackingEntity.Handle);
+                    foreach(CitizenFX.Core.Player player in Client.players)
+                    {
+                        if (player.ServerId == entityOwner)
+                        {
+                            Screen.ShowSubtitle($"Created by: {player.Name}");
+                        }
+                        else if (player.Handle == entityOwner)
+                        {
+                            Screen.ShowSubtitle($"Created by: {player.Name}");
+                        }
+                        else
+                        {
+                            Screen.ShowSubtitle($"Owner Unknown");
+                        }
                     }
 
                     if (Game.IsDisabledControlJustPressed(2, Control.Attack))
