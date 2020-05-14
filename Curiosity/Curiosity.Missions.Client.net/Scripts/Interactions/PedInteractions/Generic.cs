@@ -144,6 +144,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                     }
                     else if (Client.Random.Next(10) >= 8) 
                     {
+                        Game.PlayerPed.Task.ClearAll();
                         interactivePed.Ped.Weapons.Give(WeaponHash.Pistol, 90, false, true);
                         interactivePed.Ped.Task.ShootAt(Game.PlayerPed);
                     }
