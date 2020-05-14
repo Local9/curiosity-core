@@ -144,9 +144,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                     }
                     else if (Client.Random.Next(10) >= 8) 
                     {
-                        Game.PlayerPed.Task.ClearAll();
-                        interactivePed.Ped.Weapons.Give(WeaponHash.Pistol, 90, false, true);
-                        interactivePed.Ped.Task.ShootAt(Game.PlayerPed);
+                        if (!interactivePed.IsHandcuffed)
+                        {
+                            Game.PlayerPed.Task.ClearAll();
+                            interactivePed.Ped.Weapons.Give(WeaponHash.Pistol, 90, false, true);
+                            interactivePed.Ped.Task.ShootAt(Game.PlayerPed);
+                        }
                     }
                     interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
                     Client.TriggerEvent("curiosity:interaction:searched", interactivePed.Handle, true);
