@@ -24,6 +24,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         {
             _vehicle = vehicle;
             client.RegisterTickHandler(DisableCollision);
+            Screen.ShowNotification($"~b~Notification:~w~~n~You have entered a safe zone.", true);
         }
 
         async Task DisableCollision()
@@ -59,6 +60,9 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 _vehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
                 Game.PlayerPed.CurrentVehicle.SetNoCollision(_vehicle, true);
             }
+
+            Screen.ShowNotification($"~b~Notification:~w~~n~You have left the safezone.", true);
+            Screen.ShowNotification($"If your vehicle speed is stuck, re-enter and exit the safe zone.");
         }
     }
 
@@ -173,43 +177,52 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         public static async void OnExit(string identifier, dynamic data)
         {
-            if (identifier != SAFE_ZONE) return;
-
-            API.SendNuiMessage(JsonConvert.SerializeObject(new SafeZoneMessage() { safezone = false }));
-
-            client.DeregisterTickHandler(SafeZoneVehicles);
-            IsInsideSafeZone = false;
-
-            List<CitizenFX.Core.Vehicle> vehs = World.GetAllVehicles().ToList();
-
-            foreach (CitizenFX.Core.Vehicle vehicle in vehs)
+            try
             {
-                await Client.Delay(0);
-                if (vehicle.Exists())
+                if (identifier != SAFE_ZONE) return;
+
+                API.SendNuiMessage(JsonConvert.SerializeObject(new SafeZoneMessage() { safezone = false }));
+
+                client.DeregisterTickHandler(SafeZoneVehicles);
+                IsInsideSafeZone = false;
+
+                List<CitizenFX.Core.Vehicle> vehs = World.GetAllVehicles().ToList();
+
+                foreach (CitizenFX.Core.Vehicle vehicle in vehs)
                 {
-                    vehicle.ResetOpacity();
-                    if (safeZoneVehicles.ContainsKey(vehicle.Handle))
+                    await Client.Delay(0);
+                    if (vehicle.Exists())
                     {
-                        safeZoneVehicles[vehicle.Handle].EnableCollision();
-                        safeZoneVehicles.Remove(vehicle.Handle);
-                    };
+                        vehicle.ResetOpacity();
+                        if (safeZoneVehicles.ContainsKey(vehicle.Handle))
+                        {
+                            safeZoneVehicles[vehicle.Handle].EnableCollision();
+                            safeZoneVehicles.Remove(vehicle.Handle);
+                        };
+                    }
                 }
-            }
 
-            safeZoneVehicles.Clear();
+                safeZoneVehicles.Clear();
 
-            if (Game.PlayerPed.IsInVehicle())
-            {
-                while (API.GetVehicleMaxSpeed(Game.PlayerPed.CurrentVehicle.Handle) != API.GetVehicleModelMaxSpeed((uint)Game.PlayerPed.CurrentVehicle.Model.Hash))
+                if (Game.PlayerPed.IsInVehicle())
                 {
-                    await BaseScript.Delay(1);
-                    Game.PlayerPed.CurrentVehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)Game.PlayerPed.CurrentVehicle.Model.Hash);
+                    CitizenFX.Core.Vehicle Vehicle = Game.PlayerPed.CurrentVehicle;
+
+                    while (API.GetVehicleMaxSpeed(Vehicle.Handle) != API.GetVehicleModelMaxSpeed((uint)Vehicle.Model.Hash))
+                    {
+                        await BaseScript.Delay(1);
+                        Vehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)Vehicle.Model.Hash);
+                    }
+                }
+
+                if (Player.PlayerInformation.IsDeveloper())
+                {
+                    Log.Info("Left Safezone");
                 }
             }
-
-            if (Player.PlayerInformation.IsDeveloper())
+            catch(Exception ex)
             {
-                Log.Info("Left Safezone");
+
             }
         }
     }
