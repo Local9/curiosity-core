@@ -22,6 +22,8 @@ namespace Curiosity.Missions.Client.net
         public static SpeechType speechType;
         public static bool DeveloperNpcUiEnabled, DeveloperVehUiEnabled;
 
+
+        public const string MOVEMENT_ANIMATION_SET_DRUNK = "MOVE_M@DRUNK@VERYDRUNK";
         // DECOR HANDLES
         public const string DECOR_NPC_CURRENT_VEHICLE = "curiosity::npc::vehicle";
         public const string DECOR_NPC_WAS_RELEASED = "curiosity::npc::released";
