@@ -1,4 +1,6 @@
-﻿using MenuAPI;
+﻿using CitizenFX.Core;
+using Curiosity.Menus.Client.net.Extensions;
+using MenuAPI;
 using System;
 using static CitizenFX.Core.Native.API;
 
@@ -67,6 +69,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             if (menuItem == menuCheckboxItemDeveloperNpcUi)
             {
                 _developerNpcUiEnable = newCheckedState;
+                
+                Decorators.Set(Game.PlayerPed.Handle, "player::npc::debug", _developerNpcUiEnable);
+
                 Client.TriggerEvent("curiosity:Player:Mission:ShowDeveloperNpcUI", _developerNpcUiEnable);
             }
 
