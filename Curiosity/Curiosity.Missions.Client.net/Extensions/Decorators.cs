@@ -10,6 +10,14 @@ namespace Curiosity.Missions.Client.net.Extensions
 {
     class Decorators
     {
+        public const string DECOR_PED_NETWORKID = "c::ped::networkId";
+        public const string DECOR_PED_INTERACTIVE = "c::ped::interactive";
+        public const string DECOR_PED_MISSION = "c::ped::mission";
+
+
+        public const string DECOR_PED_INFLUENCE_ALCAHOL = "c::ped::alcohol";
+        public const string DECOR_PED_OFFENCE = "c::ped::offence";
+
         public static void Set(int handle, string property, object value)
         {
             if (value is int i)

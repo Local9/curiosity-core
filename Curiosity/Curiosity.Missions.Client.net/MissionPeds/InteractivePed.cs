@@ -18,6 +18,7 @@ using Curiosity.Global.Shared.net;
 using Newtonsoft.Json;
 using Curiosity.Missions.Client.net.Scripts;
 using Curiosity.Missions.Client.net.Classes.PlayerClient;
+using Curiosity.Global.Shared.net.Data;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {

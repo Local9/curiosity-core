@@ -12,7 +12,7 @@ using Curiosity.Missions.Client.net.Classes.PlayerClient;
 
 namespace Curiosity.Missions.Client.net.Wrappers
 {
-    class Helpers
+    internal class Helpers
     {
         private static readonly Vector2 DefaultPos = new Vector2(0.6f, 0.5f);
         public static readonly Color DefaultColor = Color.FromArgb(255, 255, 255);

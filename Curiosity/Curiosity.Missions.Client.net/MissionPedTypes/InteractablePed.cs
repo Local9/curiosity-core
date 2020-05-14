@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.MissionPeds;
 using static CitizenFX.Core.Native.API;
 
