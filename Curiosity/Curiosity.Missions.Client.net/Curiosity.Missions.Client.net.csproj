@@ -54,6 +54,7 @@
     <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="Classes\Environment\GameEvents.cs" />
     <Compile Include="DataClasses\Mission\PoliceMissionData.cs" />
+    <Compile Include="DataClasses\PedType.cs" />
     <Compile Include="DataClasses\Police\ItemData.cs" />
     <Compile Include="DataClasses\Police\LinesOfSpeech.cs" />
     <Compile Include="DataClasses\SoundMessage.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Scripts\PedCreators\MissionPedCreator.cs" />
     <Compile Include="DataClasses\Mission\PoliceStores.cs" />
     <Compile Include="Scripts\Mission\CreateStoreMission.cs" />
+    <Compile Include="Scripts\PedCreators\WorldPedCreator.cs" />
     <Compile Include="Scripts\PedCreators\ZombieCreator.cs" />
     <Compile Include="Scripts\Interactions\PedInteractions\ArrestInteractions.cs" />
     <Compile Include="Scripts\Interactions\PedInteractions\Cpr.cs" />
