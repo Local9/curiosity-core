@@ -12,6 +12,8 @@ using Curiosity.Shared.Client.net.Helper.Area;
 using System.Threading.Tasks;
 using System.Linq;
 using Curiosity.Shared.Client.net;
+using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.net.Scripts.PedCreators;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment
 {
@@ -183,37 +185,46 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             if (arguments.Count < 1) return;
 
             string type = $"{arguments[0]}";
+            string argument = "Interactive";
+
+            if (arguments.Count == 2)
+                argument = $"{arguments[1]}";
 
             if (type == "ped")
             {
-                bool killPed = false;
-                if (arguments.Count == 2)
-                {
-                    if ($"{arguments[1]}" == "dead")
-                        killPed = true;
-                }
-
-                Screen.ShowNotification("~g~Spawning an Interactive Ped");
                 Vector3 spawnPosition = await Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 2f, 0f)).Ground();
 
-                Model model = PedHash.Abigail;
-                await model.Request(10000);
+                Ped ped = await World.CreatePed(PedHash.JimmyDisanto, spawnPosition);
+                Screen.ShowNotification($"~g~Spawning an {argument.ToTitleCase()} Ped");
 
-                Ped ped = await World.CreatePed(model, spawnPosition);
-
-                model.MarkAsNoLongerNeeded();
-
-                if (ped != null)
+                if (ped == null)
                 {
+                    Screen.ShowNotification("Error when creating ped.");
+                    return;
+                }
+
+                if (argument == "arrest")
+                {
+                    WorldPed worldPed = WorldPedCreator.Create(ped, PedType.ARRESTABLE);
+                }
+                else
+                {
+
+                    bool killPed = false;
+                    if (arguments.Count == 2)
+                    {
+                        if ($"{arguments[1]}" == "dead")
+                            killPed = true;
+                    }
+
                     MissionPeds.InteractivePed interactivePed = Scripts.PedCreators.InteractivePedCreator.Ped(ped);
-                    
+
                     if (killPed)
                     {
                         Ped p = interactivePed;
                         p.Kill();
                     }
                 }
-                Screen.ShowNotification("~g~Spawned an Interactive Ped");
             }
 
             if (type == "veh")
