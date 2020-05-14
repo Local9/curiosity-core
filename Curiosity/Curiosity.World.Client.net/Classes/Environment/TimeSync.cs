@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 using CitizenFX.Core;
 using Curiosity.Shared.Client.net;
+using CitizenFX.Core.UI;
 
 namespace Curiosity.GameWorld.Client.net.Classes.Environment
 {
@@ -17,6 +18,8 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
         private static bool DontDoTimeSyncRightNow = false;
         private static bool FreezeTime = false;
 
+        private static bool FreezeTimeOverride = false;
+
         private static int minuteTimer = GetGameTimer();
         private static int minuteClockSpeed = 10000;
 
@@ -25,10 +28,16 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
         static public void Init()
         {
+            client.RegisterEventHandler("curiosity:Player:World:FreezeTimer", new Action<bool>(OnFreezeTimer));
             client.RegisterEventHandler("curiosity:Player:World:SetTime", new Action<int, int, bool>(OnTimeSync));
             client.RegisterTickHandler(TimeSyncEvent);
 
             client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
+        }
+
+        private static void OnFreezeTimer(bool freeze)
+        {
+            FreezeTimeOverride = freeze;
         }
 
         static private void OnPlayerSpawned(dynamic spawnData)
@@ -45,17 +54,12 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
         static private async void OnTimeSync(int newHours, int newMinutes, bool freezeTime)
         {
-            if (Player.PlayerInformation.IsDeveloper())
-            {
-                // Log.Info($"{newHours:00}:{newMinutes:00}");
-            }
-
             if (WeatherSystem.IsHalloween)
             {
                 currentHours = 0;
                 currentMinutes = 0;
-                SetClockTime(0, 0, 0);
-                NetworkOverrideClockTime(0, 0, 0);
+                SetClockTime(0, 1, 0);
+                NetworkOverrideClockTime(0, 1, 0);
                 PauseClock(true);
             }
             else
@@ -112,10 +116,10 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
         static private async Task TimeSyncEvent()
         {
             // If time is frozen...
+
             if (FreezeTime)
             {
                 // Time is set every tick to make sure it never changes (even with some lag).
-                await Client.Delay(0);
                 NetworkOverrideClockTime(currentHours, currentMinutes, 0);
             }
             else if (WeatherSystem.IsHalloween)
@@ -154,7 +158,9 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
                 }
 
                 SetClockTime(currentHours, currentMinutes, 0);
-                NetworkOverrideClockTime(currentHours, currentMinutes, 0);
+
+                if (!FreezeTimeOverride)
+                    NetworkOverrideClockTime(currentHours, currentMinutes, 0);
             }
         }
     }
