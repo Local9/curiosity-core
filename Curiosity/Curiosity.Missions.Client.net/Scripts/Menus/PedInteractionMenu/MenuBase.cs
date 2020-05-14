@@ -67,7 +67,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
                 MenuController.CloseAllMenus();
 
             if (Game.PlayerPed.HasBeenDamagedByAnyWeapon())
+            {
+                Game.PlayerPed.Task.ClearAll();
                 MenuController.CloseAllMenus();
+            }
 
             if (!MenuController.IsAnyMenuOpen())
                 client.DeregisterTickHandler(OnDistanceTask);
