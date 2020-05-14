@@ -14,6 +14,7 @@ using System.Linq;
 using Curiosity.Shared.Client.net;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Scripts.PedCreators;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment
 {
@@ -192,9 +193,17 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
             if (type == "ped")
             {
-                Vector3 spawnPosition = await Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 2f, 0f)).Ground();
+                Vector3 spawnPosition = Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 2f, 0f));
+                float z = spawnPosition.Z;
+                if (!API.GetGroundZFor_3dCoord(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, ref z, false))
+                {
+                    spawnPosition.Z = z;
+                }
 
                 Ped ped = await World.CreatePed(PedHash.JimmyDisanto, spawnPosition);
+                API.NetworkFadeInEntity(ped.Handle, false);
+                API.PlaceObjectOnGroundProperly(ped.Handle);
+
                 Screen.ShowNotification($"~g~Spawning an {argument.ToTitleCase()} Ped");
 
                 if (ped == null)

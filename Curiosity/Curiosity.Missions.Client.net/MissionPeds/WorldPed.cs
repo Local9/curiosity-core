@@ -81,7 +81,19 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private void Update(EntityEventWrapper sender, Entity entity)
         {
-
+            bool flag;
+            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f)
+            {
+                flag = false;
+            }
+            else
+            {
+                flag = (!base.IsOnScreen ? true : base.IsDead);
+            }
+            if (flag)
+            {
+                base.Delete();
+            }
         }
 
         private void OnDied(EntityEventWrapper sender, Entity entity)

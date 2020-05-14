@@ -31,6 +31,8 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
                 Profile = new NpcArrestable(influence, (int)Ped.Gender);
             }
 
+            Decorators.Set(Ped.Handle, Client.DECOR_PED_MISSION, true);
+
             SetDrunkMovementSet();
         }
 
