@@ -4,7 +4,10 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.net.NPC;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Shared.Client.net.Extensions;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -15,6 +18,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public readonly Ped Ped;
         public readonly Vehicle Vehicle;
+        private Client Client;
 
         public NpcProfile Profile;
 
@@ -30,6 +34,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
 
             Ped = new Ped(handle);
+            Client = Client.GetInstance();
+
             Wrappers.Helpers.RequestControlOfEnt(Ped);
 
             this._eventWrapper = new EntityEventWrapper(Ped);
@@ -62,20 +68,26 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             Ped.Health = 200;
             Ped.IsPersistent = true;
+
+            Client.RegisterTickHandler(OnArrestablePedTick);
         }
 
         private void Abort(EntityEventWrapper sender, Entity entity)
         {
+            Client.DeregisterTickHandler(OnArrestablePedTick);
+
             base.Delete();
         }
 
         private void Update(EntityEventWrapper sender, Entity entity)
         {
-            
+
         }
 
         private void OnDied(EntityEventWrapper sender, Entity entity)
         {
+            Client.DeregisterTickHandler(OnArrestablePedTick);
+
             Blip currentBlip = base.AttachedBlip;
             if (currentBlip != null)
             {
@@ -122,5 +134,28 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public delegate void OnAttackingTargetEvent(Ped target);
         public delegate void OnGoingToTargetEvent(Ped target);
+
+        async Task OnArrestablePedTick()
+        {
+            if (Decorators.GetBoolean(Game.PlayerPed.Handle, "player::npc::debug"))
+
+            if (Client.DeveloperNpcUiEnabled)
+            {
+                if (Position.Distance(Game.PlayerPed.Position) >= 6) return;
+
+                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+
+                keyValuePairs.Add("Name", $"{Profile.FirstName} {Profile.LastName}");
+                keyValuePairs.Add("DoB", Profile.DOB);
+                keyValuePairs.Add("Health", $"{Ped.Health} / {Ped.MaxHealth}");
+                keyValuePairs.Add("-", "");
+                keyValuePairs.Add("_ChanceOfFlee", $"{Profile.RiskOfFlee}");
+                keyValuePairs.Add("_ChanceOfShootAndFlee", $"{Profile.RiskOfShootAndFlee}");
+                keyValuePairs.Add("--", "");
+                keyValuePairs.Add("IsArrestable", $"{Profile.IsArrestable}");
+
+                Wrappers.Helpers.DrawData(this, keyValuePairs);
+            }
+        }
     }
 }

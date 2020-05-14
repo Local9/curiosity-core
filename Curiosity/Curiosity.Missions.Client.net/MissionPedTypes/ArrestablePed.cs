@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.NPCType;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +29,25 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
             {
                 bool influence = (Client.Random.Next(30) >= 28);
                 Profile = new NpcArrestable(influence, (int)Ped.Gender);
+            }
+
+            SetDrunkMovementSet();
+        }
+
+        async void SetDrunkMovementSet()
+        {
+            if (Profile.IsUnderAlcaholInfluence)
+            {
+                if (!API.HasAnimSetLoaded(Client.MOVEMENT_ANIMATION_SET_DRUNK))
+                {
+                    API.RequestAnimSet(Client.MOVEMENT_ANIMATION_SET_DRUNK);
+
+                    while (!API.HasAnimSetLoaded(Client.MOVEMENT_ANIMATION_SET_DRUNK))
+                    {
+                        await Client.Delay(100);
+                    }
+                }
+                Ped.MovementAnimationSet = Client.MOVEMENT_ANIMATION_SET_DRUNK;
             }
         }
     }
