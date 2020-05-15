@@ -321,10 +321,12 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             IsCooldownActive = true;
             int timer = 60000;
             long gameTimer = API.GetGameTimer();
+            int wait = 60;
 
             while ((API.GetGameTimer() - gameTimer) < timer)
             {
-                loadingMessage = $"Traffic Stop: ~g~Cooldown Active";
+                loadingMessage = $"Traffic Stop: ~g~Cooldown Active: {wait}s";
+                wait--;
                 await BaseScript.Delay(1000);
             }
 
