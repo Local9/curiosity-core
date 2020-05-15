@@ -127,9 +127,9 @@ namespace Curiosity.Server.net.Classes
                 Skills.IncreaseSkill(player.Handle, "policerep", 1);
             }
 
-            int exp = random.Next(10, 30);
-            int knowledge = random.Next(6, 10);
-            int money = random.Next(60, 100);
+            int exp = random.Next(20, 50);
+            int knowledge = random.Next(6, 15);
+            int money = random.Next(60, 125);
 
             int experienceEarnAdditional = (int)(exp * experienceMultiplier);
             int knowledgeEarnAdditional = (int)(knowledge * experienceMultiplier);
@@ -143,6 +143,11 @@ namespace Curiosity.Server.net.Classes
             if (knowledgeEarnAdditional >= 1000)
             {
                 knowledgeEarnAdditional = 900;
+            }
+
+            if (knowledgeEarnAdditional == 0)
+            {
+                knowledgeEarnAdditional = random.Next(3, 6);
             }
 
             Skills.IncreaseSkill(player.Handle, "policexp", experienceEarnAdditional);
