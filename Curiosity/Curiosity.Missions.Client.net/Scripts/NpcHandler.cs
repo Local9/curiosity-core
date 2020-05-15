@@ -26,10 +26,10 @@ namespace Curiosity.Missions.Client.net.Scripts
 
         static public void Init()
         {
-            client.RegisterTickHandler(OnNpcNetworkIdCheck);
+            client.RegisterTickHandler(OnNpcInteraction);
         }
 
-        private static async Task OnNpcNetworkIdCheck()
+        private static async Task OnNpcInteraction()
         {
             List<Ped> closePeds = World.GetAllPeds().Select(p => p).Where(x => x.Position.Distance(Game.PlayerPed.Position) < 50f).ToList();
 

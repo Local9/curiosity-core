@@ -61,10 +61,23 @@ namespace Curiosity.Shared.Client.net.Extensions
             return default(CitizenFX.Core.Vehicle);
         }
 
-        public static CitizenFX.Core.Ped GetPedInFront(this Ped ped, float distance = 5f)
+        public static CitizenFX.Core.Ped GetPedInFront(this Ped ped, float distance = 5f, float angle = 120f, Ped pedToCheck = null)
         {
             try
             {
+                Vector3 playerPos = Game.PlayerPed.Position;
+                Vector3 offset = new Vector3(0f, 3f, 0f);
+                Vector3 worldOffset = Game.PlayerPed.GetOffsetPosition(offset);
+
+                if (pedToCheck != null)
+                {
+                    if (API.IsEntityInAngledArea(pedToCheck.Handle, playerPos.X, playerPos.Y, playerPos.Z, worldOffset.X, worldOffset.Y, worldOffset.Z, angle, false, true, 0))
+                    {
+                        Log.Verbose($"Found ped in angled area");
+                        return pedToCheck;
+                    }
+                }
+
                 RaycastResult raycast = World.Raycast(ped.Position, ped.GetOffsetPosition(new Vector3(0f, distance, 0f)), IntersectOptions.Peds1, ped);
                 if (raycast.DitHitEntity && raycast.HitEntity.Model.IsPed)
                 {

@@ -21,9 +21,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             if (IsAnInteractionActive) return;
 
             // check ped is in front of the player
-            Ped pedInFront = Game.PlayerPed.GetPedInFront();
+            Ped pedInFront = Game.PlayerPed.GetPedInFront(pedToCheck: interactivePed);
             
             bool runBreathalyzerChecks = false;
+
+            if (pedInFront == null)
+            {
+                Wrappers.Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
+                return;
+            }
+
             if (pedInFront != null)
             {
                 if (pedInFront.Exists() && pedInFront.IsAlive)
@@ -62,11 +69,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
         static public async void InteractionDrugTest(InteractivePed interactivePed)
         {
             if (IsAnInteractionActive) return;
-            
-            Ped pedInFront = Game.PlayerPed.GetPedInFront();
-            
+
+            Ped pedInFront = Game.PlayerPed.GetPedInFront(pedToCheck: interactivePed);
+
             bool runDrugChecks = false;
-            
+
+            if (pedInFront == null)
+            {
+                Wrappers.Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
+                return;
+            }
+
             if (pedInFront != null)
             {
                 if (pedInFront.Exists() && pedInFront.IsAlive)
@@ -102,7 +115,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             if (IsAnInteractionActive) return;
 
             // check ped is in front of the player
-            Ped pedInFront = Game.PlayerPed.GetPedInFront();
+            Ped pedInFront = Game.PlayerPed.GetPedInFront(pedToCheck: interactivePed);
             Vehicle vehicleInFront = Game.PlayerPed.GetVehicleInFront();
 
             if (interactivePed.HasBeenSearched) return;
