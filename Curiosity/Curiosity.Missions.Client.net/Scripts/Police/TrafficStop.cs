@@ -152,19 +152,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         if (targetVehicle.Driver == null) return;
                         if (targetVehicle.Driver.IsDead) return;
 
-                        if (DecorExistOn(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED) || DecorExistOn(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE))
+                        if (Decorators.GetBoolean(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
                         {
-                            if (DecorGetBool(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
-                            {
-                                Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle has already been stopped.");
-                                return;
-                            }
+                            Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle has already been stopped.");
+                            return;
+                        }
 
-                            if (DecorGetBool(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE))
-                            {
-                                Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle is being ignored.");
-                                return;
-                            }
+                        if (Decorators.GetBoolean(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE))
+                        {
+                            Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle is being ignored.");
+                            return;
                         }
 
                         loadingMessage = "Vehicle: Detected";
@@ -183,7 +180,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             await BaseScript.Delay(0);
                         }
 
-                        bool hasBeenPulledOver = DecorGetBool(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED);
+                        bool hasBeenPulledOver = Decorators.GetBoolean(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED);
 
                         if (hasBeenPulledOver)
                         {
@@ -192,14 +189,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                             return;
                         }
 
-                        if (DecorExistOn(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY))
-                        {
-                            int playerIdOnDetectedVehicle = DecorGetInt(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY);
+                        int playerIdOnDetectedVehicle = Decorators.GetInteger(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY);
 
-                            if (playerIdOnDetectedVehicle != Game.Player.ServerId) return; // No point showing anything.
-                        }
+                        if (playerIdOnDetectedVehicle != Game.Player.ServerId) return; // No point showing anything.
 
-                        DecorSetInt(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY, Game.Player.ServerId);
+                        Decorators.Set(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY, Game.Player.ServerId);
 
                         // request network control
                         Wrappers.Helpers.RequestControlOfEnt(targetVehicle);
@@ -249,7 +243,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     if (targetVehicle.AttachedBlip != null)
                                         targetVehicle.AttachedBlip.Delete();
 
-                                    DecorSetBool(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE, true);
+                                    Decorators.Set(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE, true);
                                     return;
                                 }
 
