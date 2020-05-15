@@ -947,7 +947,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (Ped.Handle == handle)
             {
-                SoundManager.PlayAudio($"sfx/CUFFS_TIGHTEN_01");
+                SoundManager.PlaySFX($"CUFFS_TIGHTEN_01");
                 
                 API.SetPedFleeAttributes(handle, 0, false);
                 API.SetBlockingOfNonTemporaryEvents(handle, true);
