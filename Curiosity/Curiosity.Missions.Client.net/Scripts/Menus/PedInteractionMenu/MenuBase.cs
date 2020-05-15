@@ -29,9 +29,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
         static void OnCloseMenus()
         {
             if (MenuController.IsAnyMenuOpen())
-            {
                 MenuController.CloseAllMenus();
-            }
         }
 
         static public void Open(InteractivePed interactivePed)
@@ -65,12 +63,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
         {
             if (_interactivePed.Position.Distance(Game.PlayerPed.Position) > 4)
                 MenuController.CloseAllMenus();
-
-            if (Game.PlayerPed.HasBeenDamagedByAnyWeapon())
-            {
-                Game.PlayerPed.Task.ClearAll();
-                MenuController.CloseAllMenus();
-            }
 
             if (!MenuController.IsAnyMenuOpen())
                 client.DeregisterTickHandler(OnDistanceTask);

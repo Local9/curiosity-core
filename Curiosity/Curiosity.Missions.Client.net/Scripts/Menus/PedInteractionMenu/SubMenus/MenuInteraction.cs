@@ -240,7 +240,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 menu.AddMenuItem(mItemBreathalyzer);
                 menu.AddMenuItem(mItemDrugTest);
 
-                mItemSearch.Enabled = !IsInVehicle;
+                if (_interactivePed.IsAllowedToBeSearched)
+                {
+                    mItemSearch.Enabled = !IsInVehicle;
+                }
+                else
+                {
+                    mItemSearch.Enabled = false;
+                }
+                
                 mItemSearch.Description = IsInVehicle ? "Suspect must be removed from the vehicle before searching." : string.Empty;
                 menu.AddMenuItem(mItemSearch);
 

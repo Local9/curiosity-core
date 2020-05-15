@@ -134,13 +134,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
         {
             Wrappers.Helpers.ShowOfficerSubtitle("Would you mind if I search you?");
             List<string> response;
-            if (interactivePed.IsAllowedToBeSearched)
+            if (!interactivePed.IsAllowedToBeSearched)
             {
-                response = new List<string>() { "I'd prefer you not to...", "I'll have to pass on that", "Uuuh... Y- No..", "Go ahead. For the record its not my car", "Yeah, why not.." };
+                response = new List<string>() { "I'd prefer you not to...", "I'll have to pass on that",  };
             }
             else
             {
-                response = new List<string>() { "Go ahead", "Shes all yours", "I'd prefer you not to", "I don't have anything to hide, go for it." };
+                response = new List<string>() { "Go ahead", "Shes all yours", "I'd prefer you not to", "I don't have anything to hide, go for it.", "Uuuh... Y- No..", "Go ahead. For the record its not my car", "Yeah, why not.." };
             }
             Wrappers.Helpers.ShowSuspectSubtitle(response[Client.Random.Next(response.Count)]);
         }

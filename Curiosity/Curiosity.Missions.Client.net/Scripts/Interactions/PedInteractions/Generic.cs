@@ -106,8 +106,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             Vehicle vehicleInFront = Game.PlayerPed.GetVehicleInFront();
 
             if (interactivePed.HasBeenSearched) return;
+            if (!interactivePed.IsAllowedToBeSearched) return;
 
             bool CanSearchSuspect = false;
+
+            if (pedInFront == null)
+            {
+                Wrappers.Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
+                return;
+            }
 
             if (pedInFront != null)
             {
@@ -128,8 +135,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             {
                 if (interactivePed.IsAllowedToBeSearched)
                 {
+                    int chanceOfFlee = Client.Random.Next(20);
+                    int chanceOfShooting = Client.Random.Next(20);
+
                     Wrappers.Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Client.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
-                    if (Client.Random.Next(10) == 9)
+                    if (chanceOfFlee >= 13)
                     {
                         List<Vehicle> vehicles = World.GetAllVehicles().Select(m => m).Where(x => x.Position.Distance(interactivePed.Position) < 50f).ToList();
 
@@ -141,23 +151,27 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                         Client.TriggerEvent("curiosity:setting:group:leave", interactivePed.Ped.Handle);
 
                         interactivePed.Ped.Task.ReactAndFlee(Game.PlayerPed);
+                        interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
                     }
-                    else if (Client.Random.Next(10) >= 8) 
+                    else if (chanceOfShooting >= 15) 
                     {
                         if (!interactivePed.IsHandcuffed)
                         {
                             Game.PlayerPed.Task.ClearAll();
+                            Game.PlayerPed.Task.ClearAllImmediately();
+
+                            Client.TriggerEvent("curiosity:interaction:closeMenu");
+
+                            interactivePed.Ped.DropsWeaponsOnDeath = false;
+
                             interactivePed.Ped.Weapons.Give(WeaponHash.Pistol, 90, false, true);
                             interactivePed.Ped.Task.ShootAt(Game.PlayerPed);
+                            interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
                         }
                     }
                     interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
                     Client.TriggerEvent("curiosity:interaction:searched", interactivePed.Handle, true);
                 }
-            }
-            else
-            {
-                Wrappers.Helpers.ShowSimpleNotification($"~r~Must be facing the suspect.");
             }
             IsAnInteractionActive = false;
         }
