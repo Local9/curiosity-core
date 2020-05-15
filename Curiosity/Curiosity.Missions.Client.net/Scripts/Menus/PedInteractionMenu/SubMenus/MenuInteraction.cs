@@ -67,6 +67,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 Client.TriggerEvent("curiosity:interaction:closeMenu");
                 return;
             }
+
             if (menuItem == mItemSpeedingTicket)
             {
                 TrafficStopData trafficStopData = new TrafficStopData();
@@ -213,8 +214,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             if (_interactivePed.IsDead)
             {
                 // CPR / Coroner
-                if (!_interactivePed.HasCprFailed)
-                    menu.AddMenuItem(mItemCpr);
+                //if (!_interactivePed.HasCprFailed)
+                //    menu.AddMenuItem(mItemCpr);
 
                 menu.AddMenuItem(mItemCallCoroner);
             }

@@ -36,6 +36,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 
         static public void Open(InteractivePed interactivePed)
         {
+            if (NpcHandler.IsPerformingCpr) return;
+
             MenuState(true);
             _interactivePed = interactivePed;
 
@@ -61,8 +63,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 
         static async Task OnDistanceTask()
         {
-            await Task.FromResult(0);
-
             if (_interactivePed.Position.Distance(Game.PlayerPed.Position) > 4)
                 MenuController.CloseAllMenus();
 

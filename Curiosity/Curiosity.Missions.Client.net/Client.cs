@@ -154,13 +154,13 @@ namespace Curiosity.Missions.Client.net
                 Screen.ShowNotification("The event has now ended, thank you all!", true);
             }
 
-            IsBirthday = isBirthday;
-
-            if (isBirthday)
+            if (!IsBirthday && isBirthday)
             {
                 Screen.ShowNotification("~w~Its ~g~127.0.0.1~w~ Birthday!!!", true);
                 Screen.ShowNotification("Enjoy increased Police XP from callouts and traffic stops!");
             }
+
+            IsBirthday = isBirthday;
         }
 
         static void OnSpeechType(int speech)

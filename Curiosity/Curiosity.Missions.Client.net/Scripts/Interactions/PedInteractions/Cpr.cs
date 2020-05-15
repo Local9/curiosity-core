@@ -71,7 +71,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             }
 
             _cprStart = _seconds;
-            _performingCpr = true;
+            NpcHandler.IsPerformingCpr = false;
             _cprFinished = false;
             _hasSucceeded = false;
             _chance = _seconds - _cprStart + 4;
@@ -84,6 +84,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             _chance = _seconds - _cprStart + 4;
             // START
             _victim = interactivePed;
+            NpcHandler.IsPerformingCpr = true;
             Game.PlayerPed.SetNoCollision(interactivePed, false);
             interactivePed.SetNoCollision(Game.PlayerPed, false);
             Function.Call((Hash)8195582117541601333L, new InputArgument[] { _victim.Handle });
@@ -166,7 +167,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             // CANCEL
             if (Game.IsControlJustReleased(0, Control.FrontendCancel) && !_hasSucceeded && !_cprFinished)
             {
-                _performingCpr = false;
+                NpcHandler.IsPerformingCpr = false;
                 Game.PlayerPed.SetNoCollision(_victim, true);
                 _victim.SetNoCollision(Game.PlayerPed, true);
                 _hasSucceeded = false;
@@ -209,7 +210,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 return;
             }
 
-            _performingCpr = false;
+            NpcHandler.IsPerformingCpr = false;
             Game.PlayerPed.SetNoCollision(_victim, true);
             _victim.SetNoCollision(Game.PlayerPed, true);
 
