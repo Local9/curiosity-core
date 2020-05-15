@@ -423,6 +423,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             this.InteractivePed.Ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
             await Client.Delay(1000);
             this.InteractivePed.Ped.Task.ShootAt(Game.PlayerPed, 10000000, FiringPattern.FullAuto);
+
+            InteractivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
         }
 
         private async void TaskFlee()

@@ -511,6 +511,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 _offence = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
                 Set(Client.DECOR_INTERACTION_WANTED, true);
                 CanBeArrested = true;
+                IsAllowedToBeSearched = true;
             }
 
             _hasBeenReleased = false;
@@ -1239,7 +1240,16 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             arrestedPedData.CaughtSpeeding = GetBoolean(Client.DECOR_VEHICLE_SPEEDING);
             arrestedPedData.IsWanted = GetBoolean(Client.DECOR_INTERACTION_WANTED);
 
-            arrestedPedData.IsAllowedToBeArrested = (arrestedPedData.IsDrunk || arrestedPedData.IsDrugged || arrestedPedData.IsDrivingStolenCar || arrestedPedData.IsCarryingIllegalItems || arrestedPedData.CaughtSpeeding || arrestedPedData.IsWanted);
+            bool ranFromPolice = GetBoolean(Client.DECOR_NPC_RAN_FROM_POLICE);
+
+            arrestedPedData.IsAllowedToBeArrested = (
+                arrestedPedData.IsDrunk
+                || arrestedPedData.IsDrugged
+                || arrestedPedData.IsDrivingStolenCar
+                || arrestedPedData.IsCarryingIllegalItems
+                || arrestedPedData.CaughtSpeeding
+                || arrestedPedData.IsWanted
+                || ranFromPolice);
 
             string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(arrestedPedData));
 
