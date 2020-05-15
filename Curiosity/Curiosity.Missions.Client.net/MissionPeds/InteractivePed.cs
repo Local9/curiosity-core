@@ -606,7 +606,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 }
             }
 
-            NpcHandler.AddNpc(base.NetworkId, this);
+            int networkId = API.NetworkGetNetworkIdFromEntity(base.Handle);
+
+            NpcHandler.AddNpc(networkId, this);
             if (Ped.IsInVehicle())
             {
                 DecorSetInt(Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE, Ped.CurrentVehicle.Handle);
@@ -726,6 +728,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             try
             {
+                int networkId = API.NetworkGetNetworkIdFromEntity(base.Handle);
+
                 bool flag;
                 if (this.Position.VDist(Game.PlayerPed.Position) <= 120f)
                 {
@@ -737,7 +741,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 }
                 if (flag)
                 {
-                    Scripts.NpcHandler.RemoveNpc(base.NetworkId);
+                    Scripts.NpcHandler.RemoveNpc(networkId);
                     base.Delete();
                     
                     client.DeregisterTickHandler(OnShowHelpTextTask);
@@ -748,7 +752,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (this.Ped == null)
                 {
-                    Scripts.NpcHandler.RemoveNpc(base.NetworkId);
+                    Scripts.NpcHandler.RemoveNpc(networkId);
                     base.Delete();
 
                     client.DeregisterTickHandler(OnShowHelpTextTask);
@@ -777,7 +781,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (_hasBeenReleased)
                 {
-                    Scripts.NpcHandler.RemoveNpc(base.NetworkId);
+                    Scripts.NpcHandler.RemoveNpc(networkId);
 
                     OnPedLeaveGroups(Ped.Handle);
                     OnPedHasBeenReleased(Ped.Handle);
@@ -869,7 +873,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (Ped.Position.Distance(Game.PlayerPed.Position) >= 200f)
                 {
-                    Scripts.NpcHandler.RemoveNpc(base.NetworkId);
+                    Scripts.NpcHandler.RemoveNpc(networkId);
                     OnPedHasBeenReleased(Ped.Handle);
                 }
             }
@@ -1146,7 +1150,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                                 vehicle.AttachedBlip.Delete();
                         }
 
-                        BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", vehicle.NetworkId);
+                        if (Decorators.GetBoolean(vehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
+                        { 
+                            BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", vehicle.NetworkId);
+                        }
                     }
                 }
                 else
@@ -1155,7 +1162,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                     if (Ped.IsInVehicle())
                     {
-                        BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Ped.CurrentVehicle.NetworkId);
+                        if (Decorators.GetBoolean(Ped.CurrentVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
+                        {
+                            BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Ped.CurrentVehicle.NetworkId);
+                        }
                     }
                 }
 

@@ -27,7 +27,7 @@ namespace Curiosity.Shared.Client.net.Extensions
             return default(CitizenFX.Core.Entity);
         }
 
-        public static CitizenFX.Core.Vehicle GetVehicleInFront(this Vehicle vehicle, float distance = 5f, float radius = 1f)
+        public static CitizenFX.Core.Vehicle GetVehicleInFront(this Vehicle vehicle, float distance = 5f, float radius = 1.5f)
         {
             try
             {

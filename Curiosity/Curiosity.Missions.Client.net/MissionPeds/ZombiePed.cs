@@ -4,7 +4,7 @@ using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
 using System;
 using System.Linq;
-
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -144,9 +144,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this.AttackTarget += new ZombiePed.OnAttackingTargetEvent(zombiePed1.OnAttackTarget);
 
             NetworkRequestControlOfEntity(this._ped.Handle);
-            SetNetworkIdCanMigrate(this._ped.NetworkId, true);
-            NetworkRegisterEntityAsNetworked(this._ped.NetworkId);
-            SetNetworkIdExistsOnAllMachines(this._ped.NetworkId, true);
+            int networkId = API.NetworkGetNetworkIdFromEntity(this._ped.Handle);
+            SetNetworkIdCanMigrate(networkId, true);
+            NetworkRegisterEntityAsNetworked(networkId);
+            SetNetworkIdExistsOnAllMachines(networkId, true);
 
             if (!IsEntityAMissionEntity(this._ped.Handle))
                 SetEntityAsMissionEntity(this._ped.Handle, true, true);

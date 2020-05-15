@@ -125,7 +125,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
             {
                 if (IsConductingPullover)
                 {
-                    await BaseScript.Delay(60000);
+                    await BaseScript.Delay(5000);
                     return;
                 }
 
@@ -191,7 +191,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                         int playerIdOnDetectedVehicle = Decorators.GetInteger(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY);
 
-                        if (playerIdOnDetectedVehicle != Game.Player.ServerId) return; // No point showing anything.
+                        if (playerIdOnDetectedVehicle != Game.Player.ServerId)
+                        {
+                            Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~Sorry this vehicle was marked by another player.");
+                            loadingMessage = string.Empty;
+                        };
 
                         Decorators.Set(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY, Game.Player.ServerId);
 
@@ -230,6 +234,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                                     _vehicleNetworkId = targetVehicle.NetworkId;
 
                                     targetVehicle.AttachedBlip.Color = BlipColor.MichaelBlue;
+
+                                    Decorators.Set(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, true);
 
                                     VehicleCreators.CreateVehicles.TrafficStop(targetVehicle);
                                     return;
@@ -322,13 +328,16 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 await BaseScript.Delay(1000);
             }
 
-            loadingMessage = string.Empty;
+            loadingMessage = "Cooldown Clearing";
+
+            await BaseScript.Delay(3000);
 
             IsCooldownActive = false;
             IsConductingPullover = false;
 
             _vehicleNetworkId = 0;
             _vehicle = null;
+            loadingMessage = string.Empty;
 
             client.DeregisterTickHandler(OnCooldownTask);
         }
@@ -337,7 +346,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
         {
             Log.Info($"OnVehicleHasBeenReleased -> Traffic Stop reset called");
 
-            List<Vehicle> vehicles = World.GetAllVehicles().Where(x => API.DecorExistOn(x.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)).ToList();
+            List<Vehicle> vehicles = World.GetAllVehicles().Where(x => Decorators.GetBoolean(x.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)).ToList();
 
             if (vehicles.Count > 0)
             {
@@ -349,16 +358,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                 if (!IsCooldownActive)
                     client.RegisterTickHandler(OnCooldownTask);
             }
+            else
+            {
+                client.RegisterTickHandler(OnCooldownTask);
+            }
         }
 
         private static bool VehicleExsits()
         {
-            bool state = false;
             if (_vehicle != null)
             {
                 return _vehicle.Exists() && _vehicle.IsAlive;
             }
-            return state;
+            return false;
         }
     }
 }
