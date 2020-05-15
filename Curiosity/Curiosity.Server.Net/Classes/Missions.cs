@@ -109,8 +109,8 @@ namespace Curiosity.Server.net.Classes
 
             if (Server.IsBirthday)
             {
-                experienceMultiplier += 5.0f;
-                moneyMultiplier += 5.0f;
+                experienceMultiplier += 2.0f;
+                moneyMultiplier += 2.0f;
             }
 
             if (!arrestedPed.IsAllowedToBeArrested)
@@ -171,10 +171,19 @@ namespace Curiosity.Server.net.Classes
                 }
             }
 
+            int experience = random.Next(1, 6);
+            int knowledge = random.Next(1, 4);
+
+            if (Server.IsBirthday)
+            {
+                experience = (int)(experience * 2.0f);
+                knowledge = (int)(knowledge * 2.0f);
+            }
+
             if (string.IsNullOrEmpty(encodedData))
             {
-                Skills.IncreaseSkill(player.Handle, "policexp", random.Next(1, 6));
-                Skills.IncreaseSkill(player.Handle, "knowledge", random.Next(1, 4));
+                Skills.IncreaseSkill(player.Handle, "policexp", experience);
+                Skills.IncreaseSkill(player.Handle, "knowledge", knowledge);
                 Skills.IncreaseSkill(player.Handle, "policerep", 1);
                 Bank.IncreaseCashInternally(player.Handle, 15);
             }
@@ -184,8 +193,18 @@ namespace Curiosity.Server.net.Classes
 
                 if (trafficStopData.Ticket)
                 {
-                    Skills.IncreaseSkill(player.Handle, "policexp", random.Next(6, 12));
-                    Skills.IncreaseSkill(player.Handle, "knowledge", random.Next(3, 6));
+
+                    experience = random.Next(6, 16);
+                    knowledge = random.Next(3, 6);
+
+                    if (Server.IsBirthday)
+                    {
+                        experience = (int)(experience * 2.0f);
+                        knowledge = (int)(knowledge * 2.0f);
+                    }
+
+                    Skills.IncreaseSkill(player.Handle, "policexp", experience);
+                    Skills.IncreaseSkill(player.Handle, "knowledge", knowledge);
                     Skills.IncreaseSkill(player.Handle, "policerep", 1);
                     Bank.IncreaseCashInternally(player.Handle, 25);
                 }
@@ -275,7 +294,7 @@ namespace Curiosity.Server.net.Classes
             //    return;
             //}
 
-            float multiplier = (Server.IsBirthday) ? 5.0f : 1.0f;
+            float multiplier = (Server.IsBirthday) ? 3.0f : 1.0f;
 
             if (passed)
             {
@@ -325,6 +344,12 @@ namespace Curiosity.Server.net.Classes
                 int knowledge = random.Next(3, 6);
 
                 if (skillMessage.IsHeadshot)
+                {
+                    experience = experience * 2;
+                    knowledge = knowledge * 2;
+                }
+
+                if (Server.IsBirthday)
                 {
                     experience = experience * 2;
                     knowledge = knowledge * 2;
