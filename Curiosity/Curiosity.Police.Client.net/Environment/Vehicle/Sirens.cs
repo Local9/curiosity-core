@@ -246,6 +246,11 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             }
             else if (!Game.PlayerPed.IsInVehicle())
             {
+                if (SirenActive)
+                {
+                    StopSound();
+                }
+
                 SirenActive = false;
             }
         }
