@@ -25,8 +25,8 @@ namespace Curiosity.Server.net.Business
         static string hostName = string.Empty;
         static bool stateChangeMessages = false;
         // Internal Queue Settings
-        static int inQueue = 0;
-        static int inPriorityQueue = 0;
+        static int countInQueue = 0;
+        static int countInPriorityQueue = 0;
         static int lastCount = 0;
         // Configurable Queue Settings
         static int queueGraceTime = 2;
@@ -203,8 +203,6 @@ namespace Curiosity.Server.net.Business
 
                 Log.Info($"Queue Player Connecting: {player.Name} ({user.RoleId})");
 
-                await Server.Delay(10);
-
                 if (user.Banned)
                 {
                     string time = $"until {user.BannedUntil}";
@@ -267,11 +265,13 @@ namespace Curiosity.Server.net.Business
                 {
                     if (index.ContainsKey(license) && index.TryGetValue(license, out int position))
                     {
-                        int count = inPriority ? inPriorityQueue : inQueue;
+                        int count = inPriority ? countInPriorityQueue : countInQueue;
                         string message = inPriority ? $"{messages[Messages.PriorityQueue]}" : $"{messages[Messages.Queue]}";
                         deferrals.update($"{message} {position} / {count}{new string('.', dots)}");
                     }
+
                     dots = dots > 2 ? 0 : dots + 1;
+
                     if (player?.EndPoint == null)
                     {
                         UpdateTimer(license);
@@ -279,17 +279,10 @@ namespace Curiosity.Server.net.Business
                         if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
                         return;
                     }
+
                     RemoveFrom(license, false, false, true, false, false, false);
-                    await Server.Delay(5000);
+                    await Server.Delay(1000);
                 }
-                await Server.Delay(500);
-
-                //if (!string.IsNullOrEmpty(adaptiveWelcomeCard))
-                //{
-                //    deferrals.presentCard(adaptiveWelcomeCard);
-                //}
-
-                // await Server.Delay(10000);
 
                 deferrals.done();
             }
@@ -362,9 +355,9 @@ namespace Curiosity.Server.net.Business
             {
                 try
                 {
-                    inPriorityQueue = PriorityQueueCount();
+                    countInPriorityQueue = PriorityQueueCount();
                     await Server.Delay(100);
-                    inQueue = QueueCount();
+                    countInQueue = QueueCount();
                     await Server.Delay(100);
                     UpdateHostName();
                     UpdateStates();
@@ -557,7 +550,7 @@ namespace Curiosity.Server.net.Business
 
                 string concat = hostName;
                 bool editHost = false;
-                int count = inQueue + inPriorityQueue;
+                int count = countInQueue + countInPriorityQueue;
                 if (API.GetConvar("queue_add_count_before_name", "false") == "true")
                 {
                     editHost = true;
@@ -610,6 +603,7 @@ namespace Curiosity.Server.net.Business
                         temp.Enqueue(license);
                     }
                 }
+
                 while (!newQueue.IsEmpty)
                 {
                     newQueue.TryDequeue(out string license);
@@ -620,6 +614,7 @@ namespace Curiosity.Server.net.Business
                         temp.Enqueue(license);
                     }
                 }
+
                 queue = temp;
                 return queue.Count;
             }
@@ -744,12 +739,14 @@ namespace Curiosity.Server.net.Business
                     }
                     order.Insert(order.FindLastIndex(k => k.Value <= priorityNum) + 1, new KeyValuePair<string, int>(license, priorityNum));
                 }
+
                 while (!newPriorityQueue.IsEmpty)
                 {
                     newPriorityQueue.TryDequeue(out string license);
                     priority.TryGetValue(license, out int priorityNum);
                     order.Insert(order.FindLastIndex(k => k.Value >= priorityNum) + 1, new KeyValuePair<string, int>(license, priorityNum));
                 }
+
                 int place = 0;
                 order.ForEach(k =>
                 {
