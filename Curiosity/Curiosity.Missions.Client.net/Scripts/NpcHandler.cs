@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Missions.Client.net.Classes.PlayerClient;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
@@ -10,6 +12,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.Scripts
@@ -23,9 +26,104 @@ namespace Curiosity.Missions.Client.net.Scripts
         static Client client = Client.GetInstance();
         static ConcurrentDictionary<int, InteractivePed> NpcNetworkIds = new ConcurrentDictionary<int, InteractivePed>();
 
+        static Ped recruitedPed;
+
         static public void Init()
         {
             client.RegisterTickHandler(OnNpcInteraction);
+
+            client.RegisterTickHandler(OnPoliceNpcRecruit);
+        }
+
+        public async static Task OnPoliceNpcRecruit()
+        {
+            // Screen.ShowSubtitle($"Group Members: {Game.PlayerPed.PedGroup.MemberCount}");
+            // List<Ped> peds = World.GetAllPeds().Select(x => x).Where(p => p.Position.Distance(Game.PlayerPed.Position) < 3f).ToList();
+
+            if (!ClientInformation.IsTrusted()) return;
+
+            Ped pedInFront = Game.PlayerPed.GetPedInFront();
+
+            //if (pedInFront != null)
+            //{
+
+            //    if (
+            //        pedInFront.Model.Hash != (int)PedHash.Cop01SFY
+            //        || pedInFront.Model.Hash != (int)PedHash.Cop01SMY
+            //        //|| pedInFront.Model.Hash != (int)PedHash.Ranger01SFY
+            //        //|| pedInFront.Model.Hash != (int)PedHash.Ranger01SMY
+            //        //|| pedInFront.Model.Hash != (int)PedHash.Sheriff01SFY
+            //        //|| pedInFront.Model.Hash != (int)PedHash.Sheriff01SMY
+            //        )
+            //    {
+            //        return;
+            //    }
+            //}
+
+            if (pedInFront != null && !Game.PlayerPed.IsInVehicle())
+            {
+                if (
+                    !Decorators.GetBoolean(pedInFront.Handle, Client.DECOR_NPC_ACTIVE_TRAFFIC_STOP)
+                    && !Decorators.GetBoolean(pedInFront.Handle, Decorators.DECOR_GROUP_MEMBER)
+                    && !Decorators.GetBoolean(pedInFront.Handle, Client.DECOR_PED_MISSION)
+                    && !Decorators.GetBoolean(pedInFront.Handle, Decorators.DECOR_PED_INTERACTIVE))
+                {
+                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to recruit ped");
+
+                    if (Game.IsControlJustPressed(0, Control.Context))
+                    {
+                        if (Game.PlayerPed.PedGroup.MemberCount == 1)
+                        {
+                            Screen.ShowNotification($"~r~Cannot recruit more");
+                            return;
+                        }
+
+                        pedInFront.Recruit(Game.PlayerPed);
+
+                        recruitedPed = pedInFront;
+
+                        Screen.ShowNotification($"~g~Ped Recruited");
+                        await Client.Delay(5000);
+                        return;
+                    }
+                }
+                
+                if (Decorators.GetBoolean(pedInFront.Handle, Decorators.DECOR_GROUP_MEMBER))
+                {
+                    Ped ped = Game.PlayerPed.PedGroup.GetMember(0);
+
+                    if (ped != null)
+                    {
+                        if (ped == recruitedPed)
+                        {
+                            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to remove ped");
+
+                            if (Game.IsControlJustPressed(0, Control.Context))
+                            {
+                                pedInFront.LeaveParty();
+                                Game.PlayerPed.LeaveGroup();
+                                Decorators.Set(pedInFront.Handle, Decorators.DECOR_GROUP_MEMBER, false);
+                                Screen.ShowNotification($"~g~Ped has left party");
+                                await Client.Delay(5000);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (recruitedPed != null)
+            {
+                if (Game.PlayerPed.IsInVehicle() && !recruitedPed.IsInVehicle() && recruitedPed.Position.Distance(Game.PlayerPed.Position) > 50f)
+                {
+                    recruitedPed.Fade(true);
+                    await Client.Delay(500);
+                    recruitedPed.Task.WarpIntoVehicle(Game.PlayerPed.CurrentVehicle, VehicleSeat.Any);
+                    await Client.Delay(500);
+                    recruitedPed.Fade(false);
+
+                    await Client.Delay(5000);
+                }
+            }
         }
 
         private static async Task OnNpcInteraction()
