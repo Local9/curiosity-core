@@ -32,7 +32,7 @@ namespace Curiosity.Missions.Client.net.Scripts
         {
             client.RegisterTickHandler(OnNpcInteraction);
 
-            client.RegisterTickHandler(OnPoliceNpcRecruit);
+            // client.RegisterTickHandler(OnPoliceNpcRecruit);
         }
 
         public async static Task OnPoliceNpcRecruit()
