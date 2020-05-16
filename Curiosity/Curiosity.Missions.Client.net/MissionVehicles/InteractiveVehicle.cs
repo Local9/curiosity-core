@@ -340,7 +340,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (Game.PlayerPed.Position.Distance(this.Vehicle.Position) >= 300f)
             {
                 Client.TriggerEvent("curiosity:interaction:released", this.Vehicle.Driver.Handle);
-                BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", this.Vehicle.NetworkId);
+                // BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", this.Vehicle.NetworkId);
 
                 this.Delete();
 
@@ -395,6 +395,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 ClearPedTasks(InteractivePed.Handle);
             }
 
+            Vehicle.IsHandbrakeForcedOn = true;
             TaskSetBlockingOfNonTemporaryEvents(this.InteractivePed.Handle, true);
             _vehicleStopped = true;
             Set(Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, true);
@@ -431,6 +432,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         {
             try
             {
+                Vehicle.IsHandbrakeForcedOn = false;
                 TaskSetBlockingOfNonTemporaryEvents(this.InteractivePed.Ped.Handle, false);
                 this.InteractivePed.Ped.SetConfigFlag(292, false);
                 this.InteractivePed.Ped.SetConfigFlag(301, false);
@@ -474,6 +476,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         {
             if (this.Handle == handle)
             {
+                Vehicle.IsHandbrakeForcedOn = false;
+
                 if (this.Vehicle.AttachedBlip.Exists())
                     this.Vehicle.AttachedBlip.Delete();
 
