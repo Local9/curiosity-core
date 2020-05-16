@@ -37,6 +37,9 @@ namespace Curiosity.Missions.Client.net.Scripts
         }
         static public void PlaySFX(string audioFiles, float audioVolume)
         {
+            if (audioVolume > AudioVolume)
+                audioVolume = AudioVolume;
+
             SoundMessage soundMessage = new SoundMessage(audioVolume);
             foreach (string audioFile in audioFiles.Split(' '))
             {
