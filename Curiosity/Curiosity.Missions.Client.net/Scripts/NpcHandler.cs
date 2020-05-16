@@ -123,6 +123,18 @@ namespace Curiosity.Missions.Client.net.Scripts
 
                     await Client.Delay(5000);
                 }
+
+                if (recruitedPed.Exists())
+                {
+                    if (recruitedPed.IsDead)
+                    {
+                        Game.PlayerPed.LeaveGroup();
+                    }
+                }
+                else
+                {
+                    Game.PlayerPed.LeaveGroup();
+                }
             }
         }
 

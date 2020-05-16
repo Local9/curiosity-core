@@ -15,6 +15,7 @@ namespace Curiosity.Menus.Client.net
             Log.Verbose("Entering ClassLoader Init");
 
             Classes.Player.PlayerInformation.Init();
+            Classes.Scripts.Companion.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }
