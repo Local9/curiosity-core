@@ -31,8 +31,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             { "Westy", new Tuple<PedHash, bool>(PedHash.Westy, false) },
             { "Cop: Female", new Tuple<PedHash, bool>(PedHash.Cop01SFY, true) },
             { "Cop: Male", new Tuple<PedHash, bool>(PedHash.Cop01SMY, true) },
-            { "Sherif: Female", new Tuple<PedHash, bool>(PedHash.Sheriff01SFY, true) },
-            { "Sherif: Male", new Tuple<PedHash, bool>(PedHash.Sheriff01SMY, true) },
+            { "Sheriff: Female", new Tuple<PedHash, bool>(PedHash.Sheriff01SFY, true) },
+            { "Sheriff: Male", new Tuple<PedHash, bool>(PedHash.Sheriff01SMY, true) },
         };
 
         static int selectedCompanion = 0;
