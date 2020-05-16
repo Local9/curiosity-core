@@ -266,6 +266,12 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             if (arguments.Count < 1) return;
             float defaultValue = 0.5f;
             float.TryParse($"{arguments[0]}", out defaultValue);
+
+            if (defaultValue > 1.0f)
+            {
+                defaultValue = 1.0f;
+            }
+
             Scripts.SoundManager.AudioVolume = defaultValue;
             
             Screen.ShowNotification($"Volume Updated: {Scripts.SoundManager.AudioVolume}");
