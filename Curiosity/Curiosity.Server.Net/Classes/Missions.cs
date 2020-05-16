@@ -159,7 +159,7 @@ namespace Curiosity.Server.net.Classes
             Bank.IncreaseCashInternally(player.Handle, moneyEarnAdditional);
             timestampLastArrest[player.Handle] = DateTime.Now;
 
-            string subTitle = "~y~Rewarded Full";
+            string subTitle = "~g~Rewarded Full";
             if (arrestedPed.DispatchJail)
             {
                 subTitle = "~y~Rewarded half";
