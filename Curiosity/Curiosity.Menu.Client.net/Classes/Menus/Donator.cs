@@ -129,21 +129,21 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             if (PlayerInformation.IsDeveloper() || PlayerInformation.IsProjectManager())
             {
-                companions.Add("Cow", new Tuple<PedHash, bool>(PedHash.Cow, false));
-                companions.Add("Mountain Lion", new Tuple<PedHash, bool>(PedHash.MountainLion, false));
-                companions.Add("Chiken Hawk", new Tuple<PedHash, bool>(PedHash.ChickenHawk, false));
-                companions.Add("Gull", new Tuple<PedHash, bool>(PedHash.Seagull, false));
-                companions.Add("Boar", new Tuple<PedHash, bool>(PedHash.Boar, false));
-                companions.Add("Coyote", new Tuple<PedHash, bool>(PedHash.Coyote, false));
-                companions.Add("Hen", new Tuple<PedHash, bool>(PedHash.Hen, false));
-                companions.Add("Deer", new Tuple<PedHash, bool>(PedHash.Deer, false));
-                companions.Add("Pig", new Tuple<PedHash, bool>(PedHash.Pig, false));
-                companions.Add("Rabbit", new Tuple<PedHash, bool>(PedHash.Rabbit, false));
-                companions.Add("Rat", new Tuple<PedHash, bool>(PedHash.Rat, false));
-                companions.Add("Pidgen", new Tuple<PedHash, bool>(PedHash.Pigeon, false));
-                companions.Add("Franklin", new Tuple<PedHash, bool>(PedHash.Franklin, true));
-                companions.Add("Trevor", new Tuple<PedHash, bool>(PedHash.Trevor, true));
-                companions.Add("Michael", new Tuple<PedHash, bool>(PedHash.Michael, true));
+                companions.Add("DEV: Cow", new Tuple<PedHash, bool>(PedHash.Cow, false));
+                companions.Add("DEV: Mountain Lion", new Tuple<PedHash, bool>(PedHash.MountainLion, false));
+                companions.Add("DEV: Chiken Hawk", new Tuple<PedHash, bool>(PedHash.ChickenHawk, false));
+                companions.Add("DEV: Gull", new Tuple<PedHash, bool>(PedHash.Seagull, false));
+                companions.Add("DEV: Boar", new Tuple<PedHash, bool>(PedHash.Boar, false));
+                companions.Add("DEV: Coyote", new Tuple<PedHash, bool>(PedHash.Coyote, false));
+                companions.Add("DEV: Hen", new Tuple<PedHash, bool>(PedHash.Hen, false));
+                companions.Add("DEV: Deer", new Tuple<PedHash, bool>(PedHash.Deer, false));
+                companions.Add("DEV: Pig", new Tuple<PedHash, bool>(PedHash.Pig, false));
+                companions.Add("DEV: Rabbit", new Tuple<PedHash, bool>(PedHash.Rabbit, false));
+                companions.Add("DEV: Rat", new Tuple<PedHash, bool>(PedHash.Rat, false));
+                companions.Add("DEV: Pidgen", new Tuple<PedHash, bool>(PedHash.Pigeon, false));
+                companions.Add("DEV: Franklin", new Tuple<PedHash, bool>(PedHash.Franklin, true));
+                companions.Add("DEV: Trevor", new Tuple<PedHash, bool>(PedHash.Trevor, true));
+                companions.Add("DEV: Michael", new Tuple<PedHash, bool>(PedHash.Michael, true));
             }
 
             menuListItemCompanion.ListItems = companions.Select(x => x.Key).ToList();
