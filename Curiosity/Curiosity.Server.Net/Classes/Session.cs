@@ -1,13 +1,13 @@
-﻿using Curiosity.Global.Shared.net.Enums;
+﻿using Curiosity.Global.Shared.net.Data;
+using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 using static CitizenFX.Core.Native.API;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net.Data;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -233,7 +233,8 @@ namespace Curiosity.Server.net.Classes
         public void IncreaseSkill(string skill, GlobalEntity.Skills skills, int experience)
         {
             GlobalEntity.Skills skillObj = this.Skills.GetOrAdd(skill, key => skills);
-            lock (skillObj) {
+            lock (skillObj)
+            {
                 skillObj.Value = skillObj.Value + experience;
             };
 
@@ -245,7 +246,8 @@ namespace Curiosity.Server.net.Classes
         public void DecreaseSkill(string skill, GlobalEntity.Skills skills, int experience)
         {
             GlobalEntity.Skills skillObj = this.Skills.GetOrAdd(skill, key => skills);
-            lock (skillObj) {
+            lock (skillObj)
+            {
                 skillObj.Value = skillObj.Value - experience;
             };
 

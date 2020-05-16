@@ -1,13 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Missions.Client.net.Wrappers;
-using Curiosity.Shared.Client.net.Enums;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Classes.Environment;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Missions.Client.net.Wrappers;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 {

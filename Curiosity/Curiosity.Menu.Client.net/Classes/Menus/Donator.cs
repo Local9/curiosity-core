@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MenuAPI;
+﻿using MenuAPI;
+using System;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus
@@ -58,7 +54,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                     mitem.RightIcon = MenuItem.Icon.NONE;
                     mitem.LeftIcon = MenuItem.Icon.STAR;
                 };
-            });            
+            });
         }
 
         private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)

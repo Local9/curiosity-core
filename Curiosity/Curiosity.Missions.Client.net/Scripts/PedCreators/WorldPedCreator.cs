@@ -2,12 +2,6 @@
 using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.MissionPedTypes;
-using Curiosity.Missions.Client.net.Wrappers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.Scripts.PedCreators
 {

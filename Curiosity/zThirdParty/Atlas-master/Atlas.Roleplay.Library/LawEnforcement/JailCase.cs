@@ -1,5 +1,5 @@
-using System;
 using Atlas.Roleplay.Library.Models;
+using System;
 
 namespace Atlas.Roleplay.Library.LawEnforcement
 {

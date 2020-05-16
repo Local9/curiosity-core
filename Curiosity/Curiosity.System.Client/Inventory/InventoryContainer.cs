@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
+using CitizenFX.Core.Native;
 using Curiosity.System.Library.Inventory;
 using Curiosity.System.Library.Models;
-using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace Curiosity.System.Client.Inventory
 {
@@ -28,7 +28,7 @@ namespace Curiosity.System.Client.Inventory
 
             foreach (var invocation in Update?.GetInvocationList())
             {
-                ((Action<InventoryItem, InventoryUpdateType>) invocation).Invoke(item, type);
+                ((Action<InventoryItem, InventoryUpdateType>)invocation).Invoke(item, type);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Curiosity.System.Client.Inventory
 
             foreach (var invocation in Registration?.GetInvocationList())
             {
-                ((Action) invocation).Invoke();
+                ((Action)invocation).Invoke();
             }
         }
 

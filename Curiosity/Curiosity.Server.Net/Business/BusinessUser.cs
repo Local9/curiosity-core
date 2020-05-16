@@ -1,8 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Shared.Server.net.Helpers;
-using System;
 using System.Threading.Tasks;
-using System.Timers;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Server.net.Business

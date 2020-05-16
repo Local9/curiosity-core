@@ -1,17 +1,15 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+using CitizenFX.Core.UI;
+using Curiosity.Missions.Client.net.Classes.PlayerClient;
 using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.net.Scripts.Mission;
+using Curiosity.Missions.Client.net.Scripts.PedCreators;
+using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Curiosity.Missions.Client.net.Scripts.Mission;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
-using Curiosity.Missions.Client.net.Scripts.PedCreators;
-using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Shared.Client.net.Enums;
-using CitizenFX.Core.UI;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {
@@ -168,7 +166,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
 
                 if (!safeCoord.IsZero)
                     outpos = safeCoord;
-                
+
                 Ped suspect1Ped = await PedCreator.CreatePedAtLocation(model1, outpos + new Vector3(0f, -5f, 0f), 0);
                 Ped suspect2Ped = await PedCreator.CreatePedAtLocation(model2, outpos + new Vector3(0f, 5f, 0f), 180);
 

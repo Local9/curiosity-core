@@ -137,7 +137,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
             {
                 if (!HideAllMarkers)
                 {
-                    MarkersClose.ForEach(m => {
+                    MarkersClose.ForEach(m =>
+                    {
                         CitizenFX.Core.World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true);
                         string dutyMessage = (!DutyManager.IsPoliceJobActive) ? "~g~Go on Duty" : "~r~Go off Duty";
                         NativeWrappers.Draw3DText(m.Position.X, m.Position.Y, m.Position.Z + 1, $"~s~Police Duty Status~n~{dutyMessage}", 50f, 10f);

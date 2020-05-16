@@ -7,13 +7,13 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Police
     {
         public DubstaModifications()
         {
-            PrimaryColor = (int) VehicleColor.MatteBlack;
-            SecondaryColor = (int) VehicleColor.MatteBlack;
-            PearlescentColor = (int) VehicleColor.MatteBlack;
-            WheelType = (int) VehicleWheelType.Offroad;
-            WheelColor = (int) VehicleColor.MatteBlack;
+            PrimaryColor = (int)VehicleColor.MatteBlack;
+            SecondaryColor = (int)VehicleColor.MatteBlack;
+            PearlescentColor = (int)VehicleColor.MatteBlack;
+            WheelType = (int)VehicleWheelType.Offroad;
+            WheelColor = (int)VehicleColor.MatteBlack;
             FrontWheels = 1;
-            WindowTint = (int) VehicleWindowTint.PureBlack;
+            WindowTint = (int)VehicleWindowTint.PureBlack;
             Xenon = true;
             Roof = 3;
             Fender = 1;

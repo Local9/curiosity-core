@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net.Extensions;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Police.Client.net.Environment.Vehicle
 {
@@ -704,7 +701,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             if (rightAxisX != 0.0 || rightAxisY != 0.0)
             {
                 float newZ = (float)(roatation.Z + rightAxisX * -1.0f * (_speedUD) * (zoomValue + 0.1));
-                float newX = (float)Math.Max(Math.Min(20.0, roatation.X + rightAxisY*-1.0*(_speedLR)*(zoomValue+0.1)), -89.5);
+                float newX = (float)Math.Max(Math.Min(20.0, roatation.X + rightAxisY * -1.0 * (_speedLR) * (zoomValue + 0.1)), -89.5);
                 SetCamRot(cameraHandle, newX, 0.0f, newZ, 2);
             }
         }
@@ -720,7 +717,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                 _fov = Math.Max(_fov + _zoomspeed, _fovMax);
             }
             float currentFov = GetCamFov(cameraHandle);
-            if (Math.Abs(_fov-currentFov) < 0.1)
+            if (Math.Abs(_fov - currentFov) < 0.1)
             {
                 _fov = currentFov;
             }
@@ -735,7 +732,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             Vector3 endPoint = coords + (forwardVector * 200);
 
             int raycastHandle = CastRayPointToPoint(coords.X, coords.Y, coords.Z, endPoint.X, endPoint.Y, endPoint.Z, 10, Game.PlayerPed.CurrentVehicle.Handle, 0);
-            
+
             bool hit = false;
             Vector3 endCoords = Vector3.Zero;
             Vector3 surfaceNormalCoords = Vector3.Zero;

@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Atlas.Roleplay.Library;
+using Atlas.Roleplay.Library.Events;
+using Atlas.Roleplay.Library.Models;
+using Atlas.Roleplay.Server.Diagnostics;
+using Atlas.Roleplay.Server.Events;
+using Atlas.Roleplay.Server.Extensions;
+using Atlas.Roleplay.Server.Managers;
+using Atlas.Roleplay.Server.MySQL;
+using Atlas.Roleplay.Server.Web;
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Atlas.Roleplay.Library;
-using Atlas.Roleplay.Library.Events;
-using Atlas.Roleplay.Library.Models;
-using Atlas.Roleplay.Server.MySQL;
-using Atlas.Roleplay.Server.Diagnostics;
-using Atlas.Roleplay.Server.Events;
-using Atlas.Roleplay.Server.Extensions;
-using Atlas.Roleplay.Server.Managers;
-using Atlas.Roleplay.Server.Web;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 
 #pragma warning disable 1998
 
@@ -194,7 +194,7 @@ namespace Atlas.Roleplay.Server
 
         public T GetManager<T>() where T : Manager<T>, new()
         {
-            return (T) Managers.FirstOrDefault(self => self.Key == typeof(T)).Value;
+            return (T)Managers.FirstOrDefault(self => self.Key == typeof(T)).Value;
         }
 
         public void AttachTickHandler(Func<Task> task)

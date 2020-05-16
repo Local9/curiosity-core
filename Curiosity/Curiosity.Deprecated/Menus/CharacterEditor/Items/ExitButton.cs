@@ -1,7 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-
-namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.MainMenu
+﻿namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.MainMenu
 {
     class ExitButton : MenuItemStandard
     {

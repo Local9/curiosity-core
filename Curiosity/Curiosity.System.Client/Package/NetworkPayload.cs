@@ -24,7 +24,7 @@ namespace Curiosity.System.Client.Package
 
         public T Get()
         {
-            return Object != null ? (T) Object : default(T);
+            return Object != null ? (T)Object : default(T);
         }
 
         public void Update(T obj)

@@ -1,10 +1,8 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Mobile.Client.net.Mobile.Api;
-using Curiosity.Global.Shared.net.Enums.Mobile;
+﻿using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.net.Enums.Mobile;
+using Curiosity.Mobile.Client.net.Mobile.Api;
 using Curiosity.Shared.Client.net.Enums.Patrol;
-using System;
 using System.Threading.Tasks;
 
 namespace Curiosity.Mobile.Client.net.Mobile.Apps
@@ -106,7 +104,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
 
         static async void ToggleActiveStatus(dynamic[] dynamics)
         {
-            if(string.IsNullOrEmpty(CurrentJob))
+            if (string.IsNullOrEmpty(CurrentJob))
             {
                 API.PlaySoundFrontend(-1, "ERROR", "HUD_AMMO_SHOP_SOUNDSET", true);
                 Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Job Status", "", $"~w~Status cannot be changed, please select a job first.", 2);

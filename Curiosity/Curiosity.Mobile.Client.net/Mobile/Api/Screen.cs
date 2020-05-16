@@ -1,9 +1,9 @@
-﻿using Curiosity.Shared.Client.net;
+﻿using Curiosity.Global.Shared.net.Enums.Mobile;
+using Curiosity.Shared.Client.net;
 using System.Collections.Generic;
-using Curiosity.Global.Shared.net.Enums.Mobile;
 
 namespace Curiosity.Mobile.Client.net.Mobile.Api
-{ 
+{
     class Screen
     {
         public static readonly View LIST = View.Settings;

@@ -16,7 +16,7 @@ namespace Curiosity.Interface.Client.net.Environment.UI
         static async Task RenderHeadshot()
         {
             int registeredHeadshot = RegisterPedheadshot(Client.PedHandle);
-            
+
             while (!IsPedheadshotReady(registeredHeadshot))
                 await BaseScript.Delay(100);
 

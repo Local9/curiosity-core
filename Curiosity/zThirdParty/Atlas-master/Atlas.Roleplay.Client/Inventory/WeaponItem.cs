@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Atlas.Roleplay.Library.Inventory;
 using CitizenFX.Core.Native;
+using System.Collections.Generic;
 
 namespace Atlas.Roleplay.Client.Inventory
 {
@@ -14,7 +14,7 @@ namespace Atlas.Roleplay.Client.Inventory
 
         public uint GetHash()
         {
-            return (uint) API.GetHashKey(Name.ToUpper().Replace("::", "_"));
+            return (uint)API.GetHashKey(Name.ToUpper().Replace("::", "_"));
         }
 
         public int GetRealAmmunition()
@@ -65,7 +65,7 @@ namespace Atlas.Roleplay.Client.Inventory
 
             API.SetPedCanSwitchWeapon(ped, true);
             API.RemoveWeaponFromPed(ped, GetHash());
-            API.SetCurrentPedWeapon(ped, (uint) API.GetHashKey("WEAPON_UNARMED"), true);
+            API.SetCurrentPedWeapon(ped, (uint)API.GetHashKey("WEAPON_UNARMED"), true);
 
             IsEquipped = false;
         }

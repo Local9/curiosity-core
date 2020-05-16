@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core.Native;
+using System;
 
 namespace Curiosity.Mobile.Client.net.Mobile.Api
 {

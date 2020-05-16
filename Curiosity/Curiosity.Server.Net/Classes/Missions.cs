@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Curiosity.Shared.Server.net.Helpers;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
-using Newtonsoft.Json;
 using Curiosity.Server.net.Helpers;
+using Curiosity.Shared.Server.net.Helpers;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -322,7 +319,7 @@ namespace Curiosity.Server.net.Classes
             session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch Complete", subTitle, $"Hostages Saved: ~y~{missionMessage.HostagesRescued}");
 
             session.Player.TriggerEvent("curiosity:Client:Missions:MissionComplete");
-            
+
             ChatLog.SendLogMessage($"Mission Completed: {subTitle}", session.Player);
         }
 

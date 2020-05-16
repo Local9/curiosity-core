@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Environment;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
@@ -10,6 +7,9 @@ using Atlas.Roleplay.Client.Managers;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Extensions
 {
@@ -145,7 +145,7 @@ namespace Atlas.Roleplay.Client.Extensions
                         view = 1;
 
                         player.CameraQueue.Reset();
-                        
+
                         await player.CameraQueue.View(new CameraBuilder()
                             .SkipTask()
                             .WithMotionBlur(0.5f)
@@ -155,7 +155,7 @@ namespace Atlas.Roleplay.Client.Extensions
                     else if (!head && view == 1)
                     {
                         view = 0;
-      
+
                         player.CameraQueue.Reset();
 
                         await player.CameraQueue.View(new CameraBuilder()

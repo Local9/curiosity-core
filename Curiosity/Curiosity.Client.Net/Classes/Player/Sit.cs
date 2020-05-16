@@ -126,7 +126,7 @@ namespace Curiosity.Client.net.Classes.Player
                     IsSitting = true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }

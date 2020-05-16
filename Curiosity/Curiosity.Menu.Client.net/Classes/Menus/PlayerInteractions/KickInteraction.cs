@@ -25,7 +25,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerInteractions
         {
             Menu menu = new Menu(menuTitle, $"Kick: {player.Name}");
 
-            menu.OnMenuOpen += async (_menu) => {
+            menu.OnMenuOpen += async (_menu) =>
+            {
 
                 MenuBase.MenuOpen(true);
 

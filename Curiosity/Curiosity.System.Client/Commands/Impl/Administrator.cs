@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Curiosity.System.Client.Environment.Entities;
 using Curiosity.System.Client.Extensions;
 using Curiosity.System.Client.Interface;
 using Curiosity.System.Client.Inventory;
 using Curiosity.System.Client.Inventory.Items;
 using Curiosity.System.Library.Inventory;
-using Curiosity.System.Library.Models;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Curiosity.System.Client.Commands.Impl
 {
@@ -79,7 +78,7 @@ namespace Curiosity.System.Client.Commands.Impl
 
         #region Money
 
-        [CommandInfo(new[] {"cash"})]
+        [CommandInfo(new[] { "cash" })]
         public class Cash : ICommand
         {
             public const string Title = "Administrator";
@@ -116,7 +115,7 @@ namespace Curiosity.System.Client.Commands.Impl
                 {
                     case "ADD":
                         player.Character.Cash += balance;
-                        
+
                         Chat.SendLocalMessage(Title,
                             $"{CorrectedCash}{player.Character.Cash})", Color.FromArgb(255, 0, 0));
 
@@ -142,7 +141,7 @@ namespace Curiosity.System.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"bank"})]
+        [CommandInfo(new[] { "bank" })]
         public class Bank : ICommand
         {
             public const string Title = "Administrator";
@@ -208,7 +207,7 @@ namespace Curiosity.System.Client.Commands.Impl
 
         #region Player
 
-        [CommandInfo(new[] {"revive", "rev"})]
+        [CommandInfo(new[] { "revive", "rev" })]
         public class Revive : ICommand
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -221,7 +220,7 @@ namespace Curiosity.System.Client.Commands.Impl
 
         #region Inventory
 
-        [CommandInfo(new[] {"item", "giveitem", "give"})]
+        [CommandInfo(new[] { "item", "giveitem", "give" })]
         public class ItemCommand : ICommand
         {
             // More complex solution later, like getting all registered items.
@@ -244,7 +243,7 @@ namespace Curiosity.System.Client.Commands.Impl
                     if (item.Key != argument.ToLower()) continue;
 
                     ItemHelper.Give(InventoryManager.GetModule().GetContainer("pockets_inventory"),
-                        (InventoryItem) Activator.CreateInstance(item.Value));
+                        (InventoryItem)Activator.CreateInstance(item.Value));
 
                     Chat.SendLocalMessage("Föremål", $"Gav dig x1 utav `{item.Key}`...", Color.FromArgb(0, 255, 0));
                     break;
@@ -254,7 +253,7 @@ namespace Curiosity.System.Client.Commands.Impl
 
         #endregion
 
-        public override string[] Aliases { get; set; } = {"admin"};
+        public override string[] Aliases { get; set; } = { "admin" };
         public override string Title { get; set; } = "Administrator";
         public override Color Color { get; set; } = Color.FromArgb(255, 0, 0);
         public override bool IsRestricted { get; set; } = true;

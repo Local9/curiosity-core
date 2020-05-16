@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using Curiosity.System.Library.Inventory;
 using CitizenFX.Core.Native;
+using Curiosity.System.Library.Inventory;
+using System.Collections.Generic;
 
 namespace Curiosity.System.Client.Inventory
 {
@@ -14,7 +14,7 @@ namespace Curiosity.System.Client.Inventory
 
         public uint GetHash()
         {
-            return (uint) API.GetHashKey(Name.ToUpper().Replace("::", "_"));
+            return (uint)API.GetHashKey(Name.ToUpper().Replace("::", "_"));
         }
 
         public int GetRealAmmunition()
@@ -65,7 +65,7 @@ namespace Curiosity.System.Client.Inventory
 
             API.SetPedCanSwitchWeapon(ped, true);
             API.RemoveWeaponFromPed(ped, GetHash());
-            API.SetCurrentPedWeapon(ped, (uint) API.GetHashKey("WEAPON_UNARMED"), true);
+            API.SetCurrentPedWeapon(ped, (uint)API.GetHashKey("WEAPON_UNARMED"), true);
 
             IsEquipped = false;
         }

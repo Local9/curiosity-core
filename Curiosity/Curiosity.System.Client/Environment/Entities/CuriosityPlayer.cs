@@ -53,7 +53,7 @@ namespace Curiosity.System.Client.Environment.Entities
                 await BaseScript.Delay(10);
             }
 
-            API.SetPlayerModel(LocalHandle, (uint) model.Hash);
+            API.SetPlayerModel(LocalHandle, (uint)model.Hash);
 
             Entity.Id = Game.PlayerPed.Handle;
         }

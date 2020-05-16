@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using Curiosity.Shared.Client.net;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using static Curiosity.Shared.Client.net.Helper.NativeWrappers;
-using static Curiosity.Shared.Client.net.Helper.ControlHelper;
 
 namespace Curiosity.Chat.Client.net
 {
@@ -67,7 +61,7 @@ namespace Curiosity.Chat.Client.net
 
         void UpdatePlayerRole(string roleIn)
         {
-            switch(roleIn)
+            switch (roleIn)
             {
                 case "Developer":
                     role = "DEV";
@@ -241,7 +235,7 @@ namespace Curiosity.Chat.Client.net
                     previousState = isChatInputActive;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine($"UpdateChat ERROR: ${ex.Message}");
             }

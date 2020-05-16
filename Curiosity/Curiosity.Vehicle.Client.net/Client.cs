@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Vehicle.Client.net
 {

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using Curiosity.Shared.Server.net.Helpers;
+using System;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace Curiosity.Police.Server.net.Environment
 {

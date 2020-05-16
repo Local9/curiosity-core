@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Diagnostics;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Curiosity.Systems.Client.Interface
 {

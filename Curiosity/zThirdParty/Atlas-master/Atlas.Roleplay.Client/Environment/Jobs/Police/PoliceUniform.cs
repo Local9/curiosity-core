@@ -28,8 +28,8 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Police
             Decals.Current = 1;
             Body.Current = 31;
             Pants.Current = 51;
-            Shoes.Current = 25;       
-            Bag.Current = 3;     
+            Shoes.Current = 25;
+            Bag.Current = 3;
             Mask.Current = 121;
         }
     }

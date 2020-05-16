@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Drawing;
 using Curiosity.System.Client.Extensions;
 using Curiosity.System.Client.Interface;
 using Curiosity.System.Client.Managers;
 using Curiosity.System.Library.Models;
 using Curiosity.System.Library.Utilities;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Curiosity.System.Client.Environment.Stores.Impl
 {

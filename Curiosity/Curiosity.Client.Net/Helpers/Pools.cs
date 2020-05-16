@@ -1,8 +1,8 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 
 namespace Curiosity.Client.net.Helpers
 {

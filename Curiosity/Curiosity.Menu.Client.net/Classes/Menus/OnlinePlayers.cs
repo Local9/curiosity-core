@@ -6,7 +6,6 @@ using Curiosity.Global.Shared.net.Entity;
 using MenuAPI;
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus
@@ -24,7 +23,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             client.RegisterEventHandler("curiosity:Client:Player:Bring", new Action<string>(OnBringPlayer));
             client.RegisterEventHandler("curiosity:Client:Player:Freeze", new Action<string>(OnFreezePlayer));
 
-            menu.OnMenuOpen += (_menu) => {
+            menu.OnMenuOpen += (_menu) =>
+            {
                 MenuBase.MenuOpen(true);
 
                 PlayerList players = Client.players;
@@ -49,7 +49,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                         _m.ClearMenuItems();
                     };
 
-                    playerMenu.OnItemSelect += (_playerMenu, _menuItem, _itemIndex) => {
+                    playerMenu.OnItemSelect += (_playerMenu, _menuItem, _itemIndex) =>
+                    {
                         OnItemSelect(_playerMenu, _menuItem, _itemIndex);
                     };
 
@@ -291,7 +292,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             Vector3 newPos = _originalPosition;
             newPos.Z -= 50f;
             Game.PlayerPed.Position = newPos; // Fucking hide them
-            
+
             API.NetworkSetInSpectatorMode(true, playerPedId);
 
             Client.TriggerEvent("curioisty:UI:IsSpectating", true);

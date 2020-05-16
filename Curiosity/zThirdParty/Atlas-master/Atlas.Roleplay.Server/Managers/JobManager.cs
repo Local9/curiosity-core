@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Models;
 using Atlas.Roleplay.Server.Events;
 using Atlas.Roleplay.Server.MySQL;
+using System.Collections.Generic;
 
 namespace Atlas.Roleplay.Server.Managers
 {
@@ -19,13 +19,13 @@ namespace Atlas.Roleplay.Server.Managers
                 {
                     foreach (var character in context.Characters)
                     {
-                        if ((int) character.Metadata.Employment != job) continue;
+                        if ((int)character.Metadata.Employment != job) continue;
 
                         employees.Add(new Employee
                         {
                             Seed = character.Seed,
                             Name = character.Fullname,
-                            Role = new object[] {character.Metadata.EmploymentRole},
+                            Role = new object[] { character.Metadata.EmploymentRole },
                             Salary = 0,
                             MonthlyRevenue = 0,
                             TotalRevenue = 0

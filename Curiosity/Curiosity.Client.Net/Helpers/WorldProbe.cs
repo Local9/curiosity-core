@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net;
 using System;
 using System.Threading.Tasks;
-using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net.Helpers
 {

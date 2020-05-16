@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Atlas.Roleplay.Client.Environment.Jobs.Profiles;
 using Atlas.Roleplay.Library.Models;
+using System.Collections.Generic;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Mechanic
 {

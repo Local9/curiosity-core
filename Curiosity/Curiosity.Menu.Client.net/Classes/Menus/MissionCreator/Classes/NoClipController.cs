@@ -1,10 +1,9 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus.MissionCreator.Classes
 {

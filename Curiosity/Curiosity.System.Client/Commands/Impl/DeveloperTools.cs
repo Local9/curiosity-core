@@ -1,16 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.System.Client.Diagnostics;
 using Curiosity.System.Client.Environment.Entities;
 using Curiosity.System.Client.Extensions;
-using Curiosity.System.Client.Interface;
 using Curiosity.System.Client.Managers;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Curiosity.System.Client.Commands.Impl
 {
@@ -18,7 +16,7 @@ namespace Curiosity.System.Client.Commands.Impl
     {
         #region Fordon
 
-        [CommandInfo(new[] {"vehicle", "veh", "car"})]
+        [CommandInfo(new[] { "vehicle", "veh", "car" })]
         public class VehicleSpawner : ICommand
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -43,7 +41,7 @@ namespace Curiosity.System.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"repair", "fix", "wash"})]
+        [CommandInfo(new[] { "repair", "fix", "wash" })]
         public class VehicleRepairer : ICommand
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -58,7 +56,7 @@ namespace Curiosity.System.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"dv", "deleteveh"})]
+        [CommandInfo(new[] { "dv", "deleteveh" })]
         public class VehicleDespawner : ICommand
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -71,7 +69,7 @@ namespace Curiosity.System.Client.Commands.Impl
 
         #region Teleporterings verktyg
 
-        [CommandInfo(new[] {"tpm"})]
+        [CommandInfo(new[] { "tpm" })]
         public class TeleportMarker : ICommand
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -92,7 +90,7 @@ namespace Curiosity.System.Client.Commands.Impl
 
         #region Utvecklings verktyg
 
-        [CommandInfo(new[] {"position", "pos", "coords"})]
+        [CommandInfo(new[] { "position", "pos", "coords" })]
         public class PositionLogger : ICommand
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -106,7 +104,7 @@ namespace Curiosity.System.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"style"})]
+        [CommandInfo(new[] { "style" })]
         public class StyleLogger : ICommand
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -121,7 +119,7 @@ namespace Curiosity.System.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"session"})]
+        [CommandInfo(new[] { "session" })]
         public class SessionSwitcher : ICommand
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -150,7 +148,7 @@ namespace Curiosity.System.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"voice"})]
+        [CommandInfo(new[] { "voice" })]
         public class VoiceChatSwitcher : ICommand
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -183,7 +181,7 @@ namespace Curiosity.System.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"anim", "animastion"})]
+        [CommandInfo(new[] { "anim", "animastion" })]
         public class Anim : ICommand
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
@@ -199,7 +197,7 @@ namespace Curiosity.System.Client.Commands.Impl
 
         #endregion
 
-        public override string[] Aliases { get; set; } = {"dev", "developer"};
+        public override string[] Aliases { get; set; } = { "dev", "developer" };
         public override string Title { get; set; } = "Developer";
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
         public override bool IsRestricted { get; set; } = true;

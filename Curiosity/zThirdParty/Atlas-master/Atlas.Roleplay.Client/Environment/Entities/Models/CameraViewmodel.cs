@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment.Entities.Models
 {

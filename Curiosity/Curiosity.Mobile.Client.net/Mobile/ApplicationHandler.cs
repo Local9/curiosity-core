@@ -3,7 +3,6 @@ using CitizenFX.Core.Native;
 using Curiosity.Mobile.Client.net.Mobile.Api;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Helper;
 
 namespace Curiosity.Mobile.Client.net.Mobile
 {
@@ -67,7 +66,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
             CurrentApp = null;
             Game.PlaySound("Hang_Up", "Phone_SoundSet_Michael");
-            
+
             client.DeregisterTickHandler(CreateScreen);
         }
 
@@ -85,7 +84,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                     else
                     {
                         bool screenFound = false;
-                        foreach(Screen screen in PreviousScreens)
+                        foreach (Screen screen in PreviousScreens)
                         {
                             if (!screenFound)
                             {
@@ -117,12 +116,12 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
                     MobilePhone.MobileScaleform.CallFunction("SET_HEADER", header);
 
-                    for(var i = 0; i < CurrentAppScreen.Items.Count; i++)
+                    for (var i = 0; i < CurrentAppScreen.Items.Count; i++)
                     {
                         API.PushScaleformMovieFunction(MobilePhone.MobileScaleformHandle, "SET_DATA_SLOT");
                         API.PushScaleformMovieFunctionParameterInt((int)CurrentAppScreen.Type);
                         API.PushScaleformMovieFunctionParameterInt(i);
-                        foreach(ItemData itemData in CurrentAppScreen.Items[i].Data)
+                        foreach (ItemData itemData in CurrentAppScreen.Items[i].Data)
                         {
                             itemData.Push();
                         }

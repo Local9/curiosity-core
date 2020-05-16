@@ -1,6 +1,6 @@
+using CitizenFX.Core;
 using System.Collections.Generic;
 using System.Drawing;
-using CitizenFX.Core;
 
 namespace Atlas.Roleplay.Client.Interface
 {
@@ -10,8 +10,8 @@ namespace Atlas.Roleplay.Client.Interface
         {
             BaseScript.TriggerEvent("chat:addMessage", new Dictionary<string, object>
             {
-                ["color"] = new[] {color.R, color.G, color.B},
-                ["args"] = new[] {title, message}
+                ["color"] = new[] { color.R, color.G, color.B },
+                ["args"] = new[] { title, message }
             });
         }
 
@@ -19,8 +19,8 @@ namespace Atlas.Roleplay.Client.Interface
         {
             BaseScript.TriggerEvent("chat:addMessage", new Dictionary<string, object>
             {
-                ["color"] = new[] {color.R, color.G, color.B},
-                ["args"] = new[] {message}
+                ["color"] = new[] { color.R, color.G, color.B },
+                ["args"] = new[] { message }
             });
         }
 
@@ -28,17 +28,17 @@ namespace Atlas.Roleplay.Client.Interface
         {
             BaseScript.TriggerServerEvent("chat:global", new Dictionary<string, object>
             {
-                ["color"] = new[] {color.R, color.G, color.B},
-                ["args"] = new[] {title, message}
+                ["color"] = new[] { color.R, color.G, color.B },
+                ["args"] = new[] { title, message }
             });
         }
-        
+
         public static void SendGlobalMessage(string message, Color color)
         {
             BaseScript.TriggerServerEvent("chat:global", new Dictionary<string, object>
             {
-                ["color"] = new[] {color.R, color.G, color.B},
-                ["args"] = new[] {message}
+                ["color"] = new[] { color.R, color.G, color.B },
+                ["args"] = new[] { message }
             });
         }
     }

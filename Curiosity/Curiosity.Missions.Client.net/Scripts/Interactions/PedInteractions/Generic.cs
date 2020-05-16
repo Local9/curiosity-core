@@ -1,14 +1,9 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Shared.Client.net.Extensions;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
-using Curiosity.Shared.Client.net;
-using Curiosity.Missions.Client.net.MissionPeds;
-using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
-using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 {
@@ -22,7 +17,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
             // check ped is in front of the player
             Ped pedInFront = Game.PlayerPed.GetPedInFront(pedToCheck: interactivePed);
-            
+
             bool runBreathalyzerChecks = false;
 
             if (pedInFront == null)
@@ -166,7 +161,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                         interactivePed.Ped.Task.ReactAndFlee(Game.PlayerPed);
                         interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
                     }
-                    else if (chanceOfShooting >= 15) 
+                    else if (chanceOfShooting >= 15)
                     {
                         if (!interactivePed.IsHandcuffed)
                         {
@@ -209,7 +204,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             interactivePed.Ped.LeaveGroup();
             interactivePed.Ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver);
 
-            while(!interactivePed.Ped.IsInVehicle())
+            while (!interactivePed.Ped.IsInVehicle())
             {
                 await BaseScript.Delay(0);
             }
@@ -250,7 +245,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 interactivePed.Ped.SetConfigFlag(292, false);
 
                 interactivePed.Ped.Task.LeaveVehicle(LeaveVehicleFlags.None);
-                
+
                 await BaseScript.Delay(100);
 
                 Client.TriggerEvent("curiosity:setting:group:join", interactivePed.Ped.Handle);

@@ -1,5 +1,4 @@
 ﻿using Curiosity.Shared.Client.net;
-using CitizenFX.Core;
 
 namespace Curiosity.Interface.Client.net
 {

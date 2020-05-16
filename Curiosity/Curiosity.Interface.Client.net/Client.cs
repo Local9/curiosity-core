@@ -61,7 +61,7 @@ namespace Curiosity.Interface.Client.net
         {
             try
             {
-                
+
             }
             catch (Exception ex)
             {

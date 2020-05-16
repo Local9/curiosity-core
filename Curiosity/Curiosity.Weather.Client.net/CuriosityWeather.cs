@@ -70,7 +70,8 @@ namespace Curiosity.Client.net
                 API.SetWind(1.0f);
                 API.SetWindSpeed(windSpeed);
                 API.SetWindDirection(windHeading);
-            } else
+            }
+            else
             {
                 API.SetWind(0f);
                 API.SetWindSpeed(0f);

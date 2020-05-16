@@ -406,7 +406,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
         {
             cost = cost * 2;
             PlayerInformationModel playerInfo = Player.PlayerInformation.playerInfo;
-            
+
             if ((playerInfo.Wallet - cost) > 0)
             {
                 Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", playerInfo.Wallet, cost);

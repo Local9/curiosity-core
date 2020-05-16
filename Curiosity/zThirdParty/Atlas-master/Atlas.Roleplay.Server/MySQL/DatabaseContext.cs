@@ -1,6 +1,6 @@
-using System.Data.Entity;
 using CitizenFX.Core.Native;
 using MySql.Data.Entity;
+using System.Data.Entity;
 
 namespace Atlas.Roleplay.Server.MySQL
 {

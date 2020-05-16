@@ -9,7 +9,7 @@ namespace Atlas.Bash.Modules
         public Task<int> Call(string[] args)
         {
             RecursiveSearch(new DirectoryInfo(Environment.CurrentDirectory), file => Console.WriteLine($"'{file.Replace($"{Environment.CurrentDirectory}\\", "").Replace("\\", "/")}',"));
-            
+
             return Task.FromResult(0);
         }
 

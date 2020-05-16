@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MenuAPI;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using CitizenFX.Core;
-using Curiosity.Shared.Client.net.Extensions;
+using MenuAPI;
+using System.Collections.Generic;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerCreator
 {

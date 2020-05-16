@@ -1,13 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Newtonsoft.Json;
+using Curiosity.Client.net.Helpers.Dictionary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
-using Curiosity.Client.net.Helpers.Dictionary;
 
 namespace Curiosity.Client.net.Helpers
 {

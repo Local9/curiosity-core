@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.World.Server.net.Classes.Environment
 {
@@ -171,7 +171,7 @@ namespace Curiosity.World.Server.net.Classes.Environment
 
                 weatherSetup = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // 
             }

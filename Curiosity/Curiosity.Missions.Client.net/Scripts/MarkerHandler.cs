@@ -1,12 +1,11 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CitizenFX.Core.UI;
-using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Missions.Client.net.Scripts
 {
@@ -40,7 +39,8 @@ namespace Curiosity.Missions.Client.net.Scripts
             {
                 if (!HideAllMarkers)
                 {
-                    MarkersClose.ForEach(m => {
+                    MarkersClose.ForEach(m =>
+                    {
                         World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true);
                         NativeWrappers.Draw3DText(m.Position.X, m.Position.Y, m.Position.Z + 1, m.Message, 50f, 10f);
                     });

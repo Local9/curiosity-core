@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
+using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Player.Client.net
 {

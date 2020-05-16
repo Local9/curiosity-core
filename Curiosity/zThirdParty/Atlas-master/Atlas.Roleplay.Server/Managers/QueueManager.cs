@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
 using Atlas.Roleplay.Library.Models;
-using Atlas.Roleplay.Server.Diagnostics;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
 
 namespace Atlas.Roleplay.Server.Managers
 {
@@ -48,7 +47,7 @@ namespace Atlas.Roleplay.Server.Managers
             var response =
                 (await AtlasPlugin.Instance.RequestHttp(
                      $"https://queue.societyrp.se/service.php?steamId={steam}&action=FETCH", new JsonBuilder().Build(),
-                     new Dictionary<string, string> {["Content-Type"] = "application/json"}) ?? "[]").Trim();
+                     new Dictionary<string, string> { ["Content-Type"] = "application/json" }) ?? "[]").Trim();
 
             if (response.Length < 2 || response == "{}" || response == "[]")
             {

@@ -1,7 +1,7 @@
-using System;
-using System.Linq;
 using Curiosity.System.Client.Inventory.Items;
 using Curiosity.System.Library.Inventory;
+using System;
+using System.Linq;
 
 namespace Curiosity.System.Client.Inventory
 {

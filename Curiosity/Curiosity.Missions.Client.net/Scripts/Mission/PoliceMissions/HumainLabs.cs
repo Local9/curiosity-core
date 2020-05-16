@@ -1,24 +1,19 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Missions.Client.net.DataClasses.Mission;
-using Curiosity.Missions.Client.net.MissionPeds;
+using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using Curiosity.Missions.Client.net.Exceptions;
 using Curiosity.Missions.Client.net.Scripts.PedCreators;
+using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Shared.Client.net.Helper.Area;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Extensions;
-using static CitizenFX.Core.Native.API;
-using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Global.Shared.net;
-using Curiosity.Shared.Client.net.Helper.Area;
-using CitizenFX.Core.UI;
 using System.Drawing;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Missions.Client.net.DataClasses;
-using Curiosity.Missions.Client.net.Exceptions;
+using System.Linq;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
 {
@@ -301,7 +296,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
                     _missionTriggers.TryRemove(TRIGGER10, out AreaSphere areaSphere); // REMOVE IT, NO NEED TO TRIGGER IT AGAIN
                 }
             }
-            catch(InvalidOrderException ex)
+            catch (InvalidOrderException ex)
             {
                 // KILL THE MISSION
                 KillTheMission(true);
@@ -518,7 +513,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
                 spawnedPed.IsMeleeProof = true;
 
                 weaponHash = WeaponHash.Minigun;
-                
+
             }
 
             spawnedPed.Weapons.Give(weaponHash, 999, true, true);

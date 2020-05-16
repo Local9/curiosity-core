@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Classes.Environment;
+using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.DataClasses
 {
@@ -66,7 +62,7 @@ namespace Curiosity.Missions.Client.net.DataClasses
                 if (!Game.IsDisabledControlPressed(2, Control.Aim))
                 {
                     Vector3 position = GameplayCamera.Position;
-                    
+
                     Vector3 camRot = API.GetGameplayCamRot(0);
 
                     Vector3 direction = ScreenToWorld.RotationToDirection(camRot);

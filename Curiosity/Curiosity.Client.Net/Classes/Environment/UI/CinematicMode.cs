@@ -2,8 +2,6 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

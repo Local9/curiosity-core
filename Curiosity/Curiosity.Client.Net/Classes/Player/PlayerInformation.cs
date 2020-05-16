@@ -1,15 +1,14 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Shared.Client.net.Models;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Shared.Client.net.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Security;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Curiosity.Shared.Client.net.Models;
-using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Client.net.Classes.Player
 {
@@ -95,7 +94,7 @@ namespace Curiosity.Client.net.Classes.Player
 
         static async Task OnPlayerDeathCheck()
         {
-            while(Game.PlayerPed.IsAlive)
+            while (Game.PlayerPed.IsAlive)
             {
                 await BaseScript.Delay(100);
             }
@@ -106,7 +105,7 @@ namespace Curiosity.Client.net.Classes.Player
             });
 
             listOfIncidents.Clear();
-            
+
             client.DeregisterTickHandler(OnPlayerDeathCheck);
         }
 

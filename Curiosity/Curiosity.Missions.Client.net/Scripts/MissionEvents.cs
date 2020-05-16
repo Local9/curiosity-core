@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Enums.Patrol;
-using Curiosity.Shared.Client.net;
-using static CitizenFX.Core.Native.API;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
-using Newtonsoft.Json;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Missions.Client.net.Classes.PlayerClient;
+using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Enums.Patrol;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts
 {
@@ -39,15 +36,15 @@ namespace Curiosity.Missions.Client.net.Scripts
 
         static void OnDispatch(string missionData)
         {
-            ConcurrentDictionary<int, Tuple<string, int>> MissionsActive = JsonConvert.DeserializeObject <ConcurrentDictionary<int, Tuple<string, int>>>(Encode.Base64ToString(missionData));
+            ConcurrentDictionary<int, Tuple<string, int>> MissionsActive = JsonConvert.DeserializeObject<ConcurrentDictionary<int, Tuple<string, int>>>(Encode.Base64ToString(missionData));
             int CityDispatch = 0;
             int RuralDispatch = 0;
             int CountyDispatch = 0;
 
-            foreach(KeyValuePair<int, Tuple<string, int>> keyValuePair in MissionsActive)
+            foreach (KeyValuePair<int, Tuple<string, int>> keyValuePair in MissionsActive)
             {
                 PatrolZone patrolZone = (PatrolZone)keyValuePair.Value.Item2;
-                switch(patrolZone)
+                switch (patrolZone)
                 {
                     case PatrolZone.City:
                         CityDispatch++;

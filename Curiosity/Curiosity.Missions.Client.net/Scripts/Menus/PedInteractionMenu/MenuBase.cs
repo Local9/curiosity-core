@@ -1,13 +1,10 @@
-﻿using Curiosity.Missions.Client.net.MissionPeds;
+﻿using CitizenFX.Core;
+using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 
 namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 {
@@ -70,7 +67,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
 
         private static void MainMenu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
         {
-            
+
         }
 
         private static void MainMenu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
@@ -81,7 +78,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
         }
 
         private static void MainMenu_OnMenuOpen(Menu menu)
-        { 
+        {
             MainMenu.ClearMenuItems();
 
             if (_interactivePed.IsAlive)

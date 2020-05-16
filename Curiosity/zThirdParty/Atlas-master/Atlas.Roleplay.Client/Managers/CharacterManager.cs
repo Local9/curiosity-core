@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Environment;
 using Atlas.Roleplay.Client.Environment.Entities;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Inventory;
 using Atlas.Roleplay.Client.Inventory.Impl;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Inventory;
 using Atlas.Roleplay.Library.Models;
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Managers
 {
@@ -76,13 +76,13 @@ namespace Atlas.Roleplay.Client.Managers
         public async Task Synchronize()
         {
             API.DoScreenFadeIn(0);
-            
+
             Logger.Debug("[Characters] Fetching characters from the database...");
 
             API.SendLoadingScreenMessage(new JsonBuilder().Add("eventName", "UPDATE_STATUS").Add("status", "Laddar in karaktärer").Build());
-            
+
             AvailableCharacters = await EventSystem.Request<List<AtlasCharacter>>("characters:find", null);
-            
+
             Logger.Debug($"[Characters] Loaded {AvailableCharacters.Count} character(s) from the database.");
 
             API.SetNuiFocus(true, true);
@@ -203,9 +203,9 @@ namespace Atlas.Roleplay.Client.Managers
             inventories.Registry.ForEach(self => self.RefreshItemClassifications());
 
             await player.Character.Load();
-            
+
             Session.Join(player.Character.MarkedAsRegistered ? 1 : 100 + API.GetPlayerServerId(API.PlayerId()));
-            
+
             await SafeTeleport.Teleport(player.Entity.Id, position);
 
             if (player.Character.MarkedAsRegistered)
@@ -218,7 +218,7 @@ namespace Atlas.Roleplay.Client.Managers
             }
             else
             {
-                await player.Character.PostLoad();   
+                await player.Character.PostLoad();
             }
 
             if (API.IsScreenFadedOut() && !API.IsScreenFadingOut())

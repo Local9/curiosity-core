@@ -1,19 +1,6 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.DataClasses;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Wrappers;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Enums.Patrol;
-using Curiosity.Shared.Client.net.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.Interactions.VehicleInteractions;
-using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Missions.Client.net.Scripts.Interactions.DispatchInteractions
 {

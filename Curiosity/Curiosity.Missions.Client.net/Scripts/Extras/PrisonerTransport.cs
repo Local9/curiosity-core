@@ -1,7 +1,4 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Shared.Client.net.Extensions;
-using System;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Extras
 {

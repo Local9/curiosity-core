@@ -1,18 +1,16 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Missions.Client.net.Classes.PlayerClient;
+using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Enums.Patrol;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Enums.Patrol;
-using Curiosity.Shared.Client.net;
 using static CitizenFX.Core.Native.API;
-using CitizenFX.Core;
-using CitizenFX.Core.UI;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net;
-using Newtonsoft.Json;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
-using Curiosity.Shared.Client.net.Enums;
 
 namespace Curiosity.Missions.Client.net.Scripts.Mission
 {
@@ -128,7 +126,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 // clean up and stop everything
                 client.DeregisterTickHandler(OnGenerateRandomMission);
-                
+
                 if (IsOnActiveCallout)
                     CreateStoreMission.CleanUp(true);
 
@@ -237,7 +235,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     if (!IsOnDuty)
                     {
                         SetDispatchMessageRecieved(false);
-                        
+
                         IsRequestingCallout = false;
                         HasAcceptedCallout = false;
 

@@ -1,9 +1,9 @@
-using System;
-using System.Drawing;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Managers;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Interface.Modules
 {
@@ -22,7 +22,7 @@ namespace Atlas.Roleplay.Client.Interface.Modules
                 ScreenInterface.DrawText(
                     $"KM/H: {Math.Ceiling(API.GetEntitySpeed(API.GetVehiclePedIsIn(entity.Id, false)) * 3.6)}", 0.25f,
                     new Vector2(anchor.X + anchor.Width + 0.001f,
-                        (float) (anchor.BottomY - anchor.Height / 2) - 0.025f),
+                        (float)(anchor.BottomY - anchor.Height / 2) - 0.025f),
                     Color.FromArgb(200, 200, 200, 200));
             }
 
@@ -43,16 +43,16 @@ namespace Atlas.Roleplay.Client.Interface.Modules
 
             var anchor = new MinimapAnchor
             {
-                Width = (float) (scaleX * (resolutionX / (4 * aspectRatio))),
-                Height = (float) (scaleY * (resolutionY / 5.674)),
-                X = (float) (scaleX * (resolutionX * (0.05f * (Math.Abs(safezone - 1.0) * 10)))),
+                Width = (float)(scaleX * (resolutionX / (4 * aspectRatio))),
+                Height = (float)(scaleY * (resolutionY / 5.674)),
+                X = (float)(scaleX * (resolutionX * (0.05f * (Math.Abs(safezone - 1.0) * 10)))),
                 BottomY = 1.0 - scaleY * (resolutionY * (0.05f * (Math.Abs(safezone - 1.0) * 10)))
             };
 
             anchor.RightX = anchor.X + anchor.Width;
-            anchor.Y = (float) (anchor.BottomY - anchor.Height);
-            anchor.UnitX = (float) scaleX;
-            anchor.UnitY = (float) scaleY;
+            anchor.Y = (float)(anchor.BottomY - anchor.Height);
+            anchor.UnitX = (float)scaleX;
+            anchor.UnitY = (float)scaleY;
 
             return anchor;
         }

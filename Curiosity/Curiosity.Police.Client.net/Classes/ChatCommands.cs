@@ -1,9 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace Curiosity.Police.Client.net.Classes
 {

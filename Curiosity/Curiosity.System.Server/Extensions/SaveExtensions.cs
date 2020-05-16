@@ -1,7 +1,6 @@
 using Curiosity.System.Library.Models;
 using Curiosity.System.Server.Diagnostics;
 using Curiosity.System.Server.MySQL;
-using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 
 namespace Curiosity.System.Server.Extensions
@@ -30,7 +29,7 @@ namespace Curiosity.System.Server.Extensions
             using (var transaction = context.BeginTransaction())
             {
                 context.Characters.AddOrUpdate(character);
-                
+
                 await context.SaveChangesAsync();
 
                 transaction.Commit();

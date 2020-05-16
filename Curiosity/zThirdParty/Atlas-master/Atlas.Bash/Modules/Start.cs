@@ -1,9 +1,9 @@
+using Atlas.Bash.Utilities;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Atlas.Bash.Utilities;
 
 namespace Atlas.Bash.Modules
 {
@@ -36,7 +36,7 @@ namespace Atlas.Bash.Modules
                         char character;
 
                         while (process != null && !process.HasExited &&
-                               (character = (char) process.StandardOutput.Read()) >= 0)
+                               (character = (char)process.StandardOutput.Read()) >= 0)
                         {
                             Console.Write(character);
                         }

@@ -1,10 +1,7 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Server.net.Helpers;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Entity.Discord

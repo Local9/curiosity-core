@@ -37,7 +37,7 @@ namespace Curiosity.Server.net.Database
                     return skillsDictionary;
                 }
 
-                foreach(Dictionary<string, object> keyValues in keyValuePairs)
+                foreach (Dictionary<string, object> keyValues in keyValuePairs)
                 {
                     GlobalEntity.Skills skills = new GlobalEntity.Skills
                     {

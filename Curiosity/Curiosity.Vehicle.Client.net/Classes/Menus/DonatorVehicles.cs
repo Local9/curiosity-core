@@ -22,7 +22,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Menus
         {
             client.RegisterEventHandler("curiosity:Client:Vehicle:OpenDonatorVehicles", new Action(OpenMenu));
             client.RegisterEventHandler("curiosity:Client:Vehicle:DonatorVehicleList", new Action<string>(OnUpdateMenu));
-            
+
             MenuController.DontOpenAnyMenu = true;
         }
 

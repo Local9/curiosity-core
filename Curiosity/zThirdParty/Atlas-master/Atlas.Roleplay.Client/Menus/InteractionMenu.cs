@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Billing;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Interface;
@@ -11,6 +7,10 @@ using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Menus
 {
@@ -132,7 +132,7 @@ namespace Atlas.Roleplay.Client.Menus
                     {
                         menu.Hide(false);
 
-                        ((Bill) item.Metadata[0]).LookAt();
+                        ((Bill)item.Metadata[0]).LookAt();
                     }
                 }
             }.Commit();
@@ -153,7 +153,7 @@ namespace Atlas.Roleplay.Client.Menus
                     {
                         menu.Hide(false);
 
-                        ((Bill) item.Metadata[0]).LookAt();
+                        ((Bill)item.Metadata[0]).LookAt();
                     }
                 }
             }.Commit();

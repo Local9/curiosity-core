@@ -1,11 +1,10 @@
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.System.Library.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using Curiosity.System.Library.Models;
-using Curiosity.System.Server.Diagnostics;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Newtonsoft.Json;
 
 namespace Curiosity.System.Server.Managers
 {
@@ -35,7 +34,7 @@ namespace Curiosity.System.Server.Managers
             var response =
                 (await CuriosityPlugin.Instance.RequestHttp(
                      $"RUN A DISCORD CHECK", new JsonBuilder().Build(),
-                     new Dictionary<string, string> {["Content-Type"] = "application/json"}) ?? "[]").Trim();
+                     new Dictionary<string, string> { ["Content-Type"] = "application/json" }) ?? "[]").Trim();
 
             if (response.Length < 2 || response == "{}" || response == "[]")
             {

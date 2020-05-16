@@ -1,10 +1,8 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
-using MenuAPI;
-using Curiosity.Shared.Client.net.Classes.Data;
 using Curiosity.Shared.Client.net.Classes;
-using System.Collections.Generic;
+using Curiosity.Shared.Client.net.Classes.Data;
+using MenuAPI;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus
 {
@@ -27,7 +25,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             MenuBase.AddSubMenu(menu, leftIcon: MenuItem.Icon.INV_PERSON);
 
-            menu.OnMenuOpen += (_menu) => {
+            menu.OnMenuOpen += (_menu) =>
+            {
 
                 MenuBase.MenuOpen(true);
                 menu.AddMenuItem(playerScenarios);

@@ -1,13 +1,12 @@
-﻿using Curiosity.Shared.Client.net;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Missions.Client.net.DataClasses.Mission;
+﻿using CitizenFX.Core;
 using Curiosity.Missions.Client.net.Classes.Environment;
+using Curiosity.Missions.Client.net.DataClasses.Mission;
+using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Extensions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net
 {

@@ -1,11 +1,11 @@
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.System.Client.Extensions;
+using Curiosity.System.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.System.Client.Extensions;
-using Curiosity.System.Library.Models;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 
 namespace Curiosity.System.Client.Environment.Entities.Models
 {

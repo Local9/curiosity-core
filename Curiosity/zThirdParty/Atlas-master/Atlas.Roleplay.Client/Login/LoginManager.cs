@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Environment.Entities;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
@@ -9,6 +7,8 @@ using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace Atlas.Roleplay.Client.Login
 {

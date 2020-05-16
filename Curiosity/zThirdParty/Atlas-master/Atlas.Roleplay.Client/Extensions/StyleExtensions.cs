@@ -1,10 +1,10 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment.Entities;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Managers;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Linq;
+using System.Threading.Tasks;
 using Style = Atlas.Roleplay.Library.Models.Style;
 
 namespace Atlas.Roleplay.Client.Extensions
@@ -137,11 +137,11 @@ namespace Atlas.Roleplay.Client.Extensions
                     await player.CommitModel(model);
 
                     var ped = Game.PlayerPed.Handle;
-                    
+
                     player.Entity.SetDefaultStyle();
                     player.Entity.Id = ped;
-                    player.Entity.AnimationQueue = new AnimationQueue(ped); 
-                    
+                    player.Entity.AnimationQueue = new AnimationQueue(ped);
+
                     Session.Join(Session.LastSession);
 
                     await BaseScript.Delay(10);

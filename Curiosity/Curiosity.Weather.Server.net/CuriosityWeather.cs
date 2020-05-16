@@ -9,7 +9,7 @@ namespace Curiosity.Server.Net
 {
     public class CuriosityWeather : BaseScript
     {
-        const int MINUTES_TO_WAIT = (1000*60)*20;
+        const int MINUTES_TO_WAIT = (1000 * 60) * 20;
 
         Dictionary<string, List<string>> weathers = new Dictionary<string, List<string>>();
         Dictionary<string, bool> windWeathers = new Dictionary<string, bool>();
@@ -109,7 +109,7 @@ namespace Curiosity.Server.Net
                 //double hourDouble = timeNow.TotalMinutes % 24;
                 //double minuteDouble = (hourDouble % 1) * 60;
 
-                double hourDouble = (timeNow.TotalSeconds / 180) % 24; 
+                double hourDouble = (timeNow.TotalSeconds / 180) % 24;
                 double minuteDouble = (hourDouble % 1) * 60;
 
                 hour = (int)hourDouble;

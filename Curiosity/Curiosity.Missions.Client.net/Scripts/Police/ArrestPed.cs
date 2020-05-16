@@ -1,13 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Global.Shared.net.Data;
 using Curiosity.Global.Shared.net.Enums;
-using Curiosity.Shared.Client.net.Models;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Models;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Police
 {

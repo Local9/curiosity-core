@@ -1,7 +1,6 @@
+using Curiosity.System.Client.Environment.Entities;
 using System.Collections.Generic;
 using System.Drawing;
-using Curiosity.System.Client.Environment.Entities;
-using Curiosity.System.Client.Interface;
 
 namespace Curiosity.System.Client.Commands.Impl
 {
@@ -20,7 +19,7 @@ namespace Curiosity.System.Client.Commands.Impl
                 }
             }
 
-            public override string[] Aliases { get; set; } = {"online", "players"};
+            public override string[] Aliases { get; set; } = { "online", "players" };
             public override string Title { get; set; } = "Status";
             public override Color Color { get; set; } = Color.FromArgb(150, 150, 255);
             public override bool IsRestricted { get; set; }

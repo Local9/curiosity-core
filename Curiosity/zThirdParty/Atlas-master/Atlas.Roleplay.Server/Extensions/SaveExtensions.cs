@@ -1,8 +1,8 @@
-using System.Data.Entity.Migrations;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Library.Models;
 using Atlas.Roleplay.Server.Diagnostics;
 using Atlas.Roleplay.Server.MySQL;
+using System.Data.Entity.Migrations;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Server.Extensions
 {
@@ -30,7 +30,7 @@ namespace Atlas.Roleplay.Server.Extensions
             using (var transaction = context.BeginTransaction())
             {
                 context.Characters.AddOrUpdate(character);
-                
+
                 await context.SaveChangesAsync();
 
                 transaction.Commit();

@@ -2,10 +2,6 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Shared.Client.net.Classes.Environment
 {
@@ -132,7 +128,7 @@ namespace Curiosity.Shared.Client.net.Classes.Environment
             float z = (float)RadFromDeg(camRot.Z);
             float x = (float)RadFromDeg(camRot.X);
             var num = Math.Abs(Math.Cos(x));
-            
+
             Vector3 result = new Vector3();
             result.X = (float)(-Math.Sin(z) * num);
             result.Y = (float)(Math.Cos(z) * num);
@@ -151,7 +147,8 @@ namespace Curiosity.Shared.Client.net.Classes.Environment
             if (relativeX > 0.0)
             {
                 relativeX = -relativeX;
-            } else
+            }
+            else
             {
                 relativeX = Math.Abs(relativeX);
             }
@@ -166,7 +163,7 @@ namespace Curiosity.Shared.Client.net.Classes.Environment
             {
                 relativeY = Math.Abs(relativeY);
             }
-            
+
             relY = relativeY;
 
             // Screen.ShowSubtitle($"{x} - {y}\n{screenX} - {screenY}\n{relX} - {relY}\n{relativeX} - {relativeY}");

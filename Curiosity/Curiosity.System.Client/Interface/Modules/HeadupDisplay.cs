@@ -1,15 +1,15 @@
+using CitizenFX.Core.Native;
+using Curiosity.System.Client.Managers;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
-using Curiosity.System.Client.Managers;
-using CitizenFX.Core.Native;
 
 namespace Curiosity.System.Client.Interface.Modules
 {
     public class HeadupDisplay : Manager<HeadupDisplay>
     {
         public bool IsDisabled { get; set; }
-        
+
         [TickHandler(SessionWait = true)]
         private async Task OnTick()
         {
@@ -22,23 +22,23 @@ namespace Curiosity.System.Client.Interface.Modules
                 var anchor = GetMinimapAnchor();
 
                 // Base
-                DrawObject(anchor.X + 0.0005f, (float) anchor.BottomY, anchor.Width + 0.0005f,
+                DrawObject(anchor.X + 0.0005f, (float)anchor.BottomY, anchor.Width + 0.0005f,
                     anchor.UnitY * 18f,
                     Color.FromArgb(126, 0, 0, 0));
 
                 // Health
-                DrawObject(anchor.X + 0.0005f, (float) anchor.BottomY - anchor.UnitY * 18f / 2 / 2, anchor.Width / 2,
+                DrawObject(anchor.X + 0.0005f, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2, anchor.Width / 2,
                     anchor.UnitY * 18f / 2, Color.FromArgb(175, 57, 102, 67));
 
-                DrawObject(anchor.X + 0.0005f, (float) anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
+                DrawObject(anchor.X + 0.0005f, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
                     anchor.Width / 2 / API.GetEntityMaxHealth(ped) * API.GetEntityHealth(ped),
                     anchor.UnitY * 18f / 2, Color.FromArgb(175, 114, 204, 114));
 
                 // Armor
-                DrawObject(anchor.X + 0.001f + anchor.Width / 2, (float) anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
+                DrawObject(anchor.X + 0.001f + anchor.Width / 2, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
                     anchor.Width / 2, anchor.UnitY * 18f / 2, Color.FromArgb(175, 47, 92, 115));
 
-                DrawObject(anchor.X + 0.001f + anchor.Width / 2, (float) anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
+                DrawObject(anchor.X + 0.001f + anchor.Width / 2, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
                     anchor.Width / 2 / 100 * API.GetPedArmour(ped), anchor.UnitY * 18f / 2,
                     Color.FromArgb(175, 93, 182, 229));
 
@@ -63,16 +63,16 @@ namespace Curiosity.System.Client.Interface.Modules
 
             var anchor = new MinimapAnchor
             {
-                Width = (float) (scaleX * (resolutionX / (4 * aspectRatio))),
-                Height = (float) (scaleY * (resolutionY / 5.674)),
-                X = (float) (scaleX * (resolutionX * (0.05f * (Math.Abs(safezone - 1.0) * 10)))),
+                Width = (float)(scaleX * (resolutionX / (4 * aspectRatio))),
+                Height = (float)(scaleY * (resolutionY / 5.674)),
+                X = (float)(scaleX * (resolutionX * (0.05f * (Math.Abs(safezone - 1.0) * 10)))),
                 BottomY = 1.0 - scaleY * (resolutionY * (0.05f * (Math.Abs(safezone - 1.0) * 10)))
             };
 
             anchor.RightX = anchor.X + anchor.Width;
-            anchor.Y = (float) (anchor.BottomY - anchor.Height);
-            anchor.UnitX = (float) scaleX;
-            anchor.UnitY = (float) scaleY;
+            anchor.Y = (float)(anchor.BottomY - anchor.Height);
+            anchor.UnitX = (float)scaleX;
+            anchor.UnitY = (float)scaleY;
 
             return anchor;
         }

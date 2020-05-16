@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Curiosity.Shared.Server.net.Helpers;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -37,7 +37,7 @@ namespace Curiosity.Server.net.Classes
 
             server.RegisterTickHandler(BankInterest);
         }
-        
+
         static async void MedicalFees([FromSource]CitizenFX.Core.Player player, bool forcedRespawn)
         {
             if (!forcedRespawn) return;

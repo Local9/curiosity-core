@@ -1,20 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading.Tasks;
+using CitizenFX.Core;
 using Curiosity.System.Client.Environment.Entities;
 using Curiosity.System.Client.Extensions;
 using Curiosity.System.Client.Interface;
 using Curiosity.System.Client.Managers;
 using Curiosity.System.Library.Models;
-using CitizenFX.Core;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Curiosity.System.Client.Environment.Stores.Impl
 {
     public class Masks : Store
     {
         public const int MaskPrice = 300;
-        public static Position[] Stores { get; set; } = {new Position(-1337.668f, -1277.599f, 3.9f, 355.9042f)};
+        public static Position[] Stores { get; set; } = { new Position(-1337.668f, -1277.599f, 3.9f, 355.9042f) };
 
         public override void Load()
         {

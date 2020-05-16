@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.UI;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-
+using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Helper;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -51,7 +47,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 Ped ped = await World.CreatePed(model, Game.PlayerPed.Position);
                 racers.Add(ped.Handle, ped);
-                
+
                 Screen.ShowNotification($"~g~Ped added.");
             }
             await Task.FromResult(0);
@@ -69,7 +65,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static async Task RacePed()
         {
-            foreach(KeyValuePair<int, Ped> item in racers)
+            foreach (KeyValuePair<int, Ped> item in racers)
             {
                 Ped ped = item.Value;
                 GotoWaypoints(ped);

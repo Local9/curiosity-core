@@ -76,13 +76,13 @@ namespace Curiosity.System.Client.Managers
         public async Task Synchronize()
         {
             API.DoScreenFadeIn(0);
-            
+
             Logger.Debug("[Characters] Fetching characters from the database...");
 
             API.SendLoadingScreenMessage(new JsonBuilder().Add("eventName", "UPDATE_STATUS").Add("status", "Laddar in karaktärer").Build());
-            
+
             AvailableCharacters = await EventSystem.Request<List<CuriosityCharacter>>("characters:find", null);
-            
+
             Logger.Debug($"[Characters] Loaded {AvailableCharacters.Count} character(s) from the database.");
 
             API.SetNuiFocus(true, true);
@@ -203,9 +203,9 @@ namespace Curiosity.System.Client.Managers
             inventories.Registry.ForEach(self => self.RefreshItemClassifications());
 
             await player.Character.Load();
-            
+
             Session.Join(player.Character.MarkedAsRegistered ? 1 : 100 + API.GetPlayerServerId(API.PlayerId()));
-            
+
             await SafeTeleport.Teleport(player.Entity.Id, position);
 
             if (player.Character.MarkedAsRegistered)
@@ -218,7 +218,7 @@ namespace Curiosity.System.Client.Managers
             }
             else
             {
-                await player.Character.PostLoad();   
+                await player.Character.PostLoad();
             }
 
             if (API.IsScreenFadedOut() && !API.IsScreenFadingOut())

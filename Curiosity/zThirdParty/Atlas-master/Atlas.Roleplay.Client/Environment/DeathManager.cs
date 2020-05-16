@@ -1,6 +1,3 @@
-using System;
-using System.Drawing;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Client.Inventory;
@@ -9,6 +6,9 @@ using Atlas.Roleplay.Library;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment
 {
@@ -26,7 +26,7 @@ namespace Atlas.Roleplay.Client.Environment
             if (entity.IsDead)
             {
                 WasDead = true;
-                
+
                 if (Timestamp < 1)
                 {
                     player.DisableHud();
@@ -69,7 +69,7 @@ namespace Atlas.Roleplay.Client.Environment
                 if (WasDead)
                 {
                     Timestamp = 0;
-                    
+
                     player.EnableHud();
                 }
 

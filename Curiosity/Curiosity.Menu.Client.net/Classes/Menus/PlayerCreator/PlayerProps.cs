@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerCreator
 {
@@ -51,7 +51,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerCreator
 
                 PedProp[] props = Game.PlayerPed.Style.GetAllProps();
 
-                props.ToList().ForEach(p => {
+                props.ToList().ForEach(p =>
+                {
                     try
                     {
                         if (!propSettings.ContainsKey(p.ToString())) propSettings.Add(p.ToString(), new Tuple<int, int>(0, 0));

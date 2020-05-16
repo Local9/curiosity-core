@@ -1,16 +1,13 @@
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.System.Client.Diagnostics;
+using Curiosity.System.Client.Extensions;
+using Curiosity.System.Library.Models;
+using Curiosity.Systems.Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.System.Client.Diagnostics;
-using Curiosity.System.Client.Extensions;
-using Curiosity.System.Library;
-using Curiosity.System.Library.Models;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.System.Client.Diagnostics;
-using Curiosity.System.Library;
-using Curiosity.Systems.Library;
 
 namespace Curiosity.System.Client.Environment.Entities.Models
 {
@@ -68,7 +65,7 @@ namespace Curiosity.System.Client.Environment.Entities.Models
                     return;
                 }
 
-                var ped = (Ped) entity;
+                var ped = (Ped)entity;
 
                 if (next.Position != null)
                 {
@@ -141,7 +138,7 @@ namespace Curiosity.System.Client.Environment.Entities.Models
                         }
 
                         API.TaskPlayAnimAdvanced(ped.Handle, next.Group, next.AnimationId, offset.X, offset.Y, offset.Z,
-                            0f, 0f, offset.Heading, 8f, -8f, -1, (int) next.Flags, next.StartTime, 0, 0);
+                            0f, 0f, offset.Heading, 8f, -8f, -1, (int)next.Flags, next.StartTime, 0, 0);
                         API.RemoveAnimDict(next.Group);
                     }
 

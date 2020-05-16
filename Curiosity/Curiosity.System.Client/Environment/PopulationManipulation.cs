@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
-using Curiosity.System.Client.Managers;
 using CitizenFX.Core.Native;
+using Curiosity.System.Client.Managers;
+using System.Threading.Tasks;
 
 namespace Curiosity.System.Client.Environment
 {

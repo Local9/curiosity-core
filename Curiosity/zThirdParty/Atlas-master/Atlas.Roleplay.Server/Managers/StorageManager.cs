@@ -1,8 +1,8 @@
-using System.Data.Entity.Migrations;
-using System.Linq;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Inventory;
 using Atlas.Roleplay.Server.MySQL;
+using System.Data.Entity.Migrations;
+using System.Linq;
 
 namespace Atlas.Roleplay.Server.Managers
 {

@@ -1,6 +1,6 @@
-using System.Drawing;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Drawing;
 
 namespace Atlas.Roleplay.Client.Interface
 {

@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Commands
 {
@@ -24,7 +24,7 @@ namespace Atlas.Roleplay.Client.Commands
                 return;
             }
 
-            var context = (CommandContext) Activator.CreateInstance(type);
+            var context = (CommandContext)Activator.CreateInstance(type);
             var target = typeof(ICommand);
             var assembly = type.Assembly;
             var found = assembly.GetExportedTypes()
@@ -41,7 +41,7 @@ namespace Atlas.Roleplay.Client.Commands
                 if (!(nested.GetCustomAttributes(typeof(CommandInfo), true).FirstOrDefault() is CommandInfo commandInfo)
                 ) continue;
 
-                var created = (ICommand) Activator.CreateInstance(nested);
+                var created = (ICommand)Activator.CreateInstance(nested);
 
                 AtlasPlugin.Instance.AttachTickHandlers(created);
 

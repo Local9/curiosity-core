@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Reflection;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Collections.Generic;
+using System.Reflection;
 
 namespace Curiosity.Shared.Client.net.Extensions
 {

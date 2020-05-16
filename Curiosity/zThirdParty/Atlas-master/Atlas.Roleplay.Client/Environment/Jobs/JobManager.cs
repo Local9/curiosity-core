@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
 using Atlas.Roleplay.Client.Environment.Jobs.Ambulance;
 using Atlas.Roleplay.Client.Environment.Jobs.Bennys;
 using Atlas.Roleplay.Client.Environment.Jobs.Exceptions;
 using Atlas.Roleplay.Client.Environment.Jobs.Police;
 using Atlas.Roleplay.Client.Environment.Jobs.Taxi;
 using Atlas.Roleplay.Client.Managers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs
 {
@@ -52,13 +52,13 @@ namespace Atlas.Roleplay.Client.Environment.Jobs
             await Session.Loading();
 
             job.Begin();
-            
+
             AtlasPlugin.Instance.AttachTickHandlers(job);
         }
 
         public T GetJob<T>() where T : Job
         {
-            return (T) Registered.FirstOrDefault(self => self.GetType() == typeof(T));
+            return (T)Registered.FirstOrDefault(self => self.GetType() == typeof(T));
         }
     }
 }

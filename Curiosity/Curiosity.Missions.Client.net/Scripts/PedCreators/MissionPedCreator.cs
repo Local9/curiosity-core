@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Missions.Client.net.Extensions;
@@ -36,7 +31,7 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
             ped.SetConfigFlag(281, true);
 
             API.SetEntityAsMissionEntity(ped.Handle, false, false);
-            
+
             ped.AlwaysKeepTask = true;
             ped.BlockPermanentEvents = true;
 

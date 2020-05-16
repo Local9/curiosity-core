@@ -1,11 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Enums.Patrol;
 using CitizenFX.Core.UI;
+using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Enums.Patrol;
+using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net
 {

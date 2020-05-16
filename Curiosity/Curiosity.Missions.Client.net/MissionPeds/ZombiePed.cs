@@ -1,10 +1,10 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+using CitizenFX.Core.Native;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
 using System;
 using System.Linq;
-using CitizenFX.Core.Native;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {

@@ -1,12 +1,5 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using Curiosity.Shared.Client.net;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using Rectangle = CitizenFX.Core.UI.Rectangle;
 

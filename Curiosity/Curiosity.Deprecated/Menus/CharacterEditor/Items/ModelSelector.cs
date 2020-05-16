@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -489,7 +487,8 @@ namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.MainMenu
 
         private void SetNewModel(int index, string label, MenuItemHorNamedSelector m)
         {
-            Task.Factory.StartNew(async () => {
+            Task.Factory.StartNew(async () =>
+            {
                 try
                 {
                     PedHash pedHash = (PedHash)Game.GenerateHash(label);

@@ -1,11 +1,10 @@
-﻿using System;
-using Curiosity.Shared.Client.net.Enums.Patrol;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
+using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Enums.Patrol;
+using System;
 
 namespace Curiosity.Police.Client.net.Environment.Job
 {

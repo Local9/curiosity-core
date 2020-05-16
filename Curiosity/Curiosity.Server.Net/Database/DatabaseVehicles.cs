@@ -4,7 +4,6 @@ using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Server.net.Database
 {

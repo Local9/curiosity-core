@@ -1,8 +1,8 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Managers;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment
 {

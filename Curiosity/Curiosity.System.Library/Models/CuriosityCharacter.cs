@@ -1,11 +1,10 @@
+using Curiosity.System.Library.Inventory;
+//using Curiosity.System.Library.LawEnforcement;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using Curiosity.System.Library.Inventory;
-//using Curiosity.System.Library.LawEnforcement;
-using Newtonsoft.Json;
 
 namespace Curiosity.System.Library.Models
 {

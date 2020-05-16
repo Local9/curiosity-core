@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Managers;
@@ -8,6 +5,9 @@ using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment
 {
@@ -95,7 +95,7 @@ namespace Atlas.Roleplay.Client.Environment
         };
 
         public bool IsAtmOpened { get; set; }
-        
+
         public override void Begin()
         {
             foreach (var position in Positions)

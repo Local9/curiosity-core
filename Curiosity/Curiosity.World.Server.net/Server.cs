@@ -1,8 +1,7 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
+using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Threading.Tasks;
-using Curiosity.Shared.Server.net.Helpers;
 
 namespace Curiosity.World.Server.net
 {
@@ -31,7 +30,7 @@ namespace Curiosity.World.Server.net
         {
             EventHandlers[name] += action;
         }
-        
+
         public void RegisterTickHandler(Func<Task> action)
         {
             try
@@ -44,7 +43,7 @@ namespace Curiosity.World.Server.net
                 Log.Error($"RegisterTickHandler -> {ex.Message}");
             }
         }
-        
+
         public void DeregisterTickHandler(Func<Task> action)
         {
             try

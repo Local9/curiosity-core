@@ -1,12 +1,11 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Server.Diagnostics;
+using Curiosity.Systems.Server.Extensions;
 using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
-using Curiosity.Systems.Server.Extensions;
 
 namespace Curiosity.Systems.Server.Database.Store
 {

@@ -69,7 +69,7 @@ namespace Atlas.Roleplay.Client.Vehicles
 
             if (Neon == null || Neon.Length < 4)
             {
-                Neon = new[] {false, false, false, false};
+                Neon = new[] { false, false, false, false };
             }
 
             API.SetVehicleNeonLightEnabled(vehicle, 0, Neon[0]);
@@ -79,7 +79,7 @@ namespace Atlas.Roleplay.Client.Vehicles
 
             if (NeonColors == null || NeonColors.Length < 3)
             {
-                NeonColors = new[] {255, 255, 255};
+                NeonColors = new[] { 255, 255, 255 };
             }
 
             API.SetVehicleNeonLightsColour(vehicle, NeonColors[0], NeonColors[1], NeonColors[2]);
@@ -89,11 +89,11 @@ namespace Atlas.Roleplay.Client.Vehicles
 
             if (TyreSmokeColor == null || TyreSmokeColor.Length < 3)
             {
-                TyreSmokeColor = new[] {255, 255, 255};
+                TyreSmokeColor = new[] { 255, 255, 255 };
             }
 
             API.SetVehicleTyreSmokeColor(vehicle, TyreSmokeColor[0], TyreSmokeColor[1], TyreSmokeColor[2]);
-            
+
             ApplyMod(vehicle, 0, Spoiler);
             ApplyMod(vehicle, 1, FrontBumper);
             ApplyMod(vehicle, 2, RearBumper);
@@ -136,7 +136,7 @@ namespace Atlas.Roleplay.Client.Vehicles
             ApplyMod(vehicle, 45, Tank);
             ApplyMod(vehicle, 46, Windows);
             ApplyMod(vehicle, 48, Livery);
-            
+
             API.SetVehicleLivery(vehicle, Livery - 1);
         }
 

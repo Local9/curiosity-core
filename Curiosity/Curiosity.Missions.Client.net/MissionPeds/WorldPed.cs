@@ -151,23 +151,23 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (Decorators.GetBoolean(Game.PlayerPed.Handle, "player::npc::debug"))
 
-            if (Client.DeveloperNpcUiEnabled)
-            {
-                if (Position.Distance(Game.PlayerPed.Position) >= 6) return;
+                if (Client.DeveloperNpcUiEnabled)
+                {
+                    if (Position.Distance(Game.PlayerPed.Position) >= 6) return;
 
-                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                    Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
 
-                keyValuePairs.Add("Name", $"{Profile.FirstName} {Profile.LastName}");
-                keyValuePairs.Add("DoB", Profile.DOB);
-                keyValuePairs.Add("Health", $"{Ped.Health} / {Ped.MaxHealth}");
-                keyValuePairs.Add("-", "");
-                keyValuePairs.Add("_ChanceOfFlee", $"{Profile.RiskOfFlee}");
-                keyValuePairs.Add("_ChanceOfShootAndFlee", $"{Profile.RiskOfShootAndFlee}");
-                keyValuePairs.Add("--", "");
-                keyValuePairs.Add("IsArrestable", $"{Profile.IsArrestable}");
+                    keyValuePairs.Add("Name", $"{Profile.FirstName} {Profile.LastName}");
+                    keyValuePairs.Add("DoB", Profile.DOB);
+                    keyValuePairs.Add("Health", $"{Ped.Health} / {Ped.MaxHealth}");
+                    keyValuePairs.Add("-", "");
+                    keyValuePairs.Add("_ChanceOfFlee", $"{Profile.RiskOfFlee}");
+                    keyValuePairs.Add("_ChanceOfShootAndFlee", $"{Profile.RiskOfShootAndFlee}");
+                    keyValuePairs.Add("--", "");
+                    keyValuePairs.Add("IsArrestable", $"{Profile.IsArrestable}");
 
-                Wrappers.Helpers.DrawData(this, keyValuePairs);
-            }
+                    Wrappers.Helpers.DrawData(this, keyValuePairs);
+                }
         }
     }
 }

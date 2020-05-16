@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Curiosity.Client.net.Helpers.Dictionary.Entity
+﻿namespace Curiosity.Client.net.Helpers.Dictionary.Entity
 {
     class InteractableSetting
     {

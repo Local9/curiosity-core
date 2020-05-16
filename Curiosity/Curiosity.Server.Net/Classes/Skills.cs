@@ -1,15 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Server.net.Helpers;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.Shared.Server.net.Helpers;
-
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 using GlobalEnum = Curiosity.Global.Shared.net.Enums;
-using System.Collections.Concurrent;
-using Newtonsoft.Json;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -135,7 +133,8 @@ namespace Curiosity.Server.net.Classes
                 skillTicker = API.GetGameTimer();
                 skills = await Database.DatabaseUsersSkills.GetSkills();
                 Log.Verbose($"Skills -> {skills.Count} Found.");
-            } else if ((API.GetGameTimer() - skillTicker) > (1000 * 60) * skillMinuteUpdate)
+            }
+            else if ((API.GetGameTimer() - skillTicker) > (1000 * 60) * skillMinuteUpdate)
             {
                 skillTicker = API.GetGameTimer();
                 skills = await Database.DatabaseUsersSkills.GetSkills();

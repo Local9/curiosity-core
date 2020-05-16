@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.GameWorld.Client.net.Classes.Environment
 {

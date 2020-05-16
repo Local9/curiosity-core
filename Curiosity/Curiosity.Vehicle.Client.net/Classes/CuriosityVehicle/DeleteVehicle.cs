@@ -31,10 +31,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
                     {
                         FreezeEntityPosition(vehicleId, true);
                         SetEntityAsMissionEntity(vehicleId, false, false);
-                        
+
                         NetworkFadeOutEntity(vehicleId, true, false);
                         SetEntityCoords(vehicleId, -2000f, -6000f, 0f, false, false, false, true);
-                        
+
                         SetEntityAsNoLongerNeeded(ref vehicleId);
                         DeleteEntity(ref vehicleId);
                     }

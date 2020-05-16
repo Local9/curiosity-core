@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.System.Client.Diagnostics;
 using Curiosity.System.Client.Environment.Entities;
 using Curiosity.System.Client.Environment.Entities.Models;
 using Curiosity.System.Client.Managers;
 using Curiosity.System.Client.Package;
 using Curiosity.System.Library.Models;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace Curiosity.System.Client.Login
 {

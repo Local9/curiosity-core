@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.MissionPedTypes;
 using Curiosity.Missions.Client.net.MissionVehicles;
 using Curiosity.Missions.Client.net.MissionVehicleTypes;
 

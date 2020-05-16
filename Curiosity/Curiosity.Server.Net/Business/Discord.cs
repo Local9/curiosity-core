@@ -1,13 +1,13 @@
-﻿using CitizenFX.Core.Native;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Business
 {
@@ -83,17 +83,18 @@ namespace Curiosity.Server.net.Business
 
         static async Task<RequestResponse> DiscordRequest(string method, string endpoint, string jsonData)
         {
-                Dictionary<string, string> headers = new Dictionary<string, string>();
-                headers.Add("Content-Type", "application/json");
-                headers.Add("Authorization", $"Bot {discordBotKey}");
-                return await request.Http($"https://discordapp.com/api/{endpoint}", method, jsonData, headers);
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Content-Type", "application/json");
+            headers.Add("Authorization", $"Bot {discordBotKey}");
+            return await request.Http($"https://discordapp.com/api/{endpoint}", method, jsonData, headers);
         }
 
         public static async Task<Privilege> DiscordPrivilege(long discordId, Privilege privilegeIn, Player player)
         {
             try
             {
-                if (discordTimedOut) {
+                if (discordTimedOut)
+                {
                     Helpers.Notifications.Advanced($"Discord", $"Hello ~g~{player.Name}~s~, Discord is currently not allowing connections, we cannot confirm your role.", 63, player, NotificationType.CHAR_LIFEINVADER);
                     return privilegeIn;
                 }

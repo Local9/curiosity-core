@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Curiosity.Mobile.Client.net.Mobile.Api;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
 using Curiosity.Global.Shared.net.Enums.Mobile;
+using Curiosity.Mobile.Client.net.Mobile.Api;
 
 namespace Curiosity.Mobile.Client.net.Mobile.Apps
 {

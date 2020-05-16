@@ -18,7 +18,7 @@ namespace Curiosity.System.Client.Environment
             {
                 API.RequestCollisionAtCoord(position.X, position.Y, position.Z);
                 API.RequestAdditionalCollisionAtCoord(position.X, position.Y, position.Z);
-                
+
                 await BaseScript.Delay(interval);
             }
 

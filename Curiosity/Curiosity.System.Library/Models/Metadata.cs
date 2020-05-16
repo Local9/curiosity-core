@@ -1,7 +1,7 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace Curiosity.System.Library.Models
 {
@@ -46,7 +46,7 @@ namespace Curiosity.System.Library.Models
 
         public T Parse<T>(MetadataPack data)
         {
-            return (T) data.Container;
+            return (T)data.Container;
         }
 
         public Dictionary<string, object> ToDictionary()

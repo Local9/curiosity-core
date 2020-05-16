@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

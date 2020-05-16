@@ -108,7 +108,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             if (vehicle == null)
                 return true;
 
-            foreach(VehicleClass veh in blackList)
+            foreach (VehicleClass veh in blackList)
             {
                 if (vehicle.ClassType == veh)
                 {

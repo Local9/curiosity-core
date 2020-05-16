@@ -1,7 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.Menus.CharacterEditor.MPHairMenu;
-using Curiosity.Shared.Client.net;
+﻿using Curiosity.Client.net.Classes.Menus.CharacterEditor.MPHairMenu;
 
 namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.CustomizeMenu
 {

@@ -1,5 +1,5 @@
-using System;
 using CitizenFX.Core.Native;
+using System;
 
 namespace Curiosity.System.Server.Diagnostics
 {

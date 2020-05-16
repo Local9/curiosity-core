@@ -32,9 +32,9 @@ namespace Curiosity.Shared.Client.net.Helper.Area
 
         public override void Draw()
         {
-            
+
             if (Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared2D(Pos3D)) > Radius * 5)
-                  return;
+                return;
 
             Vector3 start;
             Vector3 end;

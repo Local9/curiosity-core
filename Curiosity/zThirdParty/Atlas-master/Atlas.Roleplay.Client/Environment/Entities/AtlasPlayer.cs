@@ -1,10 +1,10 @@
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Interface.Modules;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment.Entities
 {
@@ -53,7 +53,7 @@ namespace Atlas.Roleplay.Client.Environment.Entities
                 await BaseScript.Delay(10);
             }
 
-            API.SetPlayerModel(LocalHandle, (uint) model.Hash);
+            API.SetPlayerModel(LocalHandle, (uint)model.Hash);
 
             Entity.Id = Game.PlayerPed.Handle;
         }

@@ -1,10 +1,10 @@
-using System;
-using System.Drawing;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment
 {
@@ -63,7 +63,7 @@ namespace Atlas.Roleplay.Client.Environment
                         {
                             foreach (var invocation in Callback.GetInvocationList())
                             {
-                                ((Action) invocation).Invoke();
+                                ((Action)invocation).Invoke();
                             }
                         }
                     }

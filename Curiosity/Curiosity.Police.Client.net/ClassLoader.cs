@@ -1,6 +1,4 @@
 ﻿using Curiosity.Shared.Client.net;
-using System.Collections.Generic;
-using System;
 
 namespace Curiosity.Police.Client.net
 {
@@ -18,7 +16,7 @@ namespace Curiosity.Police.Client.net
 
             Classes.Player.PlayerInformation.Init();
             Environment.Job.DutyManager.Init();
-            
+
             Classes.Menus.MenuLoadout.Init(); // exists to make the instance exist
             Classes.Menus.MenuPoliceOptions.Init();
             Classes.Menus.PoliceDispatchMenu.Init();

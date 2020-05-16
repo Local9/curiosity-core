@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Scripts;
 using Curiosity.Missions.Client.net.Scripts.PedCreators;
@@ -8,8 +7,6 @@ using Curiosity.Missions.Client.net.Static;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.DataClasses.Mission
@@ -60,7 +57,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
 
             List<MissionPedData> GangFamilies = new List<MissionPedData>
             {
-                CreatePedData(Families[Client.Random.Next(Families.Count)], new Vector3(-190.4952f, -1556.933f, 34.95501f), 0f, Weapons[Client.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship),                
+                CreatePedData(Families[Client.Random.Next(Families.Count)], new Vector3(-190.4952f, -1556.933f, 34.95501f), 0f, Weapons[Client.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship),
                 CreatePedData(Families[Client.Random.Next(Families.Count)], new Vector3(-158.5557f, -1545.313f, 34.99964f), 0f, Weapons[Client.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship),
                 CreatePedData(Families[Client.Random.Next(Families.Count)], new Vector3(-158.5557f, -1545.313f, 34.99964f), 0f, Weapons[Client.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship)
             };
@@ -154,7 +151,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
             CurrentMission.MissionGangTwo.ForEach(async (MissionPedData ped) =>
             {
                 MissionPed missionPed = await CreatePed(ped.SpawnPoint, ped.SpawnHeading, ped.Model, ped.Weapon, ped.RelationShipGroup, gang2);
-                
+
                 if (!groupLeader2Exists)
                 {
                     groupLeader2Exists = !groupLeader2Exists;
@@ -166,7 +163,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             });
 
-            
+
 
         }
 
@@ -188,7 +185,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
             API.SetPedRandomProps(spawnedPed.Handle);
 
             spawnedPed.SetConfigFlag(46, true);
-            
+
             MissionPed missionPed = MissionPedCreator.Ped(spawnedPed, relationship, Extensions.Alertness.FullyAlert, Extensions.Difficulty.HurtMePlenty);
             selectedModel.MarkAsNoLongerNeeded();
 

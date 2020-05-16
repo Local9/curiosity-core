@@ -1,11 +1,11 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Interface.Impl;
 using Atlas.Roleplay.Client.Managers;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Interface
 {
@@ -18,7 +18,7 @@ namespace Atlas.Roleplay.Client.Interface
             Atlas.AttachNuiHandler("MENU_DIALOG_UPDATE", new EventCallback(metadata =>
             {
                 if (MenuContext?.Profile != null && MenuContext.Profile.GetType() == typeof(MenuProfileDialog))
-                    ((MenuProfileDialog) MenuContext.Profile).Value = metadata.Find<string>(0);
+                    ((MenuProfileDialog)MenuContext.Profile).Value = metadata.Find<string>(0);
 
                 return null;
             }));
@@ -27,7 +27,7 @@ namespace Atlas.Roleplay.Client.Interface
             {
                 if (MenuContext?.Profile == null || MenuContext.Profile.GetType() != typeof(MenuProfileDialog))
                     return null;
-                
+
                 var operation = new MenuOperation
                 {
                     Type = MenuOperationType.Select
@@ -54,7 +54,7 @@ namespace Atlas.Roleplay.Client.Interface
                 {
                     Type = MenuOperationType.Select
                 };
-                
+
                 MenuContext.Items.Where(self => self.Profile != null).Select(self => self.Profile).ToList().ForEach(self => self.On(MenuContext, MenuContext.Items.ElementAtOrDefault(MenuContext.ItemIndex), operation));
                 MenuContext.Callback?.Invoke(MenuContext, MenuContext.Items.ElementAtOrDefault(MenuContext.ItemIndex),
                     operation);
@@ -68,7 +68,7 @@ namespace Atlas.Roleplay.Client.Interface
                 {
                     Type = MenuOperationType.Update
                 };
-                
+
                 MenuContext.Items.Where(self => self.Profile != null).Select(self => self.Profile).ToList().ForEach(self => self.On(MenuContext, MenuContext.Items.ElementAtOrDefault(MenuContext.ItemIndex), operation));
                 MenuContext.Callback?.Invoke(MenuContext, MenuContext.Items.ElementAtOrDefault(MenuContext.ItemIndex),
                     operation);
@@ -86,7 +86,7 @@ namespace Atlas.Roleplay.Client.Interface
                 {
                     Type = MenuOperationType.Update
                 };
-                
+
                 MenuContext.Items.Where(self => self.Profile != null).Select(self => self.Profile).ToList().ForEach(self => self.On(MenuContext, MenuContext.Items.ElementAtOrDefault(MenuContext.ItemIndex), operation));
                 MenuContext.Callback?.Invoke(MenuContext, MenuContext.Items.ElementAtOrDefault(MenuContext.ItemIndex),
                     operation);
@@ -119,7 +119,7 @@ namespace Atlas.Roleplay.Client.Interface
 
                 if (item?.Profile == null || item.Profile.GetType() != typeof(MenuProfileSlider)) return;
 
-                var profile = (MenuProfileSlider) item.Profile;
+                var profile = (MenuProfileSlider)item.Profile;
 
                 if (left)
                     profile.Current = profile.Current <= profile.Minimum ? profile.Maximum : profile.Current - 1;

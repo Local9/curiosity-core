@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Interface;
@@ -9,6 +5,10 @@ using Atlas.Roleplay.Client.Interface.Impl;
 using Atlas.Roleplay.Client.Managers;
 using Atlas.Roleplay.Library.Models;
 using Atlas.Roleplay.Library.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Environment.Stores.Impl
 {
@@ -198,7 +198,7 @@ namespace Atlas.Roleplay.Client.Environment.Stores.Impl
                                         {
                                             if (_operation.Type != MenuOperationType.Select) return;
 
-                                            var name = ((MenuProfileDialog) _menu.Profile).Value;
+                                            var name = ((MenuProfileDialog)_menu.Profile).Value;
 
                                             if (!character.Metadata.SavedOutfits.ContainsKey(name))
                                             {

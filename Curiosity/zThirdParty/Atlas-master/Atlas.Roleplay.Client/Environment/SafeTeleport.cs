@@ -1,7 +1,7 @@
-using System.Threading.Tasks;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment
 {
@@ -18,7 +18,7 @@ namespace Atlas.Roleplay.Client.Environment
             {
                 API.RequestCollisionAtCoord(position.X, position.Y, position.Z);
                 API.RequestAdditionalCollisionAtCoord(position.X, position.Y, position.Z);
-                
+
                 await BaseScript.Delay(interval);
             }
 

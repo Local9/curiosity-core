@@ -1,20 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CitizenFX.Core;
-using Newtonsoft.Json;
 using Curiosity.System.Library.Events;
 using Curiosity.System.Library.Threading;
 using Curiosity.System.Server.Diagnostics;
 using Curiosity.System.Server.Managers;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Curiosity.System.Server.Events
 {
     public class EventSystem : Manager<EventSystem>
     {
         public List<EventAttachment> Attachments { get; } = new List<EventAttachment>();
-        public List<EventRequest> PendingRequests { get; }= new List<EventRequest>();
+        public List<EventRequest> PendingRequests { get; } = new List<EventRequest>();
 
         public EventSystem()
         {
@@ -40,7 +40,7 @@ namespace Curiosity.System.Server.Events
                                     wrapped.Type = EventType.Response;
                                     wrapped.Metadata.Write("__response",
                                         JsonConvert.SerializeObject(
-                                            await ((AsyncEventCallback) attachment.Callback).AsyncTask(wrapped.Metadata)));
+                                            await ((AsyncEventCallback)attachment.Callback).AsyncTask(wrapped.Metadata)));
 
                                     Send(wrapped, handle);
                                 });
@@ -79,7 +79,7 @@ namespace Curiosity.System.Server.Events
                             {
                                 Task.Factory.StartNew(async () =>
                                 {
-                                    await ((AsyncEventCallback) attachment.Callback).AsyncTask(wrapped.Metadata);
+                                    await ((AsyncEventCallback)attachment.Callback).AsyncTask(wrapped.Metadata);
                                 });
                             }
                             else

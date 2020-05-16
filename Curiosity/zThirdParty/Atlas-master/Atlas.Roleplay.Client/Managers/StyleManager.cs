@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Client.Interface.Impl;
 using Atlas.Roleplay.Library.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Managers
 {
@@ -30,7 +30,7 @@ namespace Atlas.Roleplay.Client.Managers
                     {
                         Seed = first.Seed,
                         Label = first.Component.Label,
-                        Group = group.Select(self => (CachedStyleComponent) self.Clone()).ToList()
+                        Group = group.Select(self => (CachedStyleComponent)self.Clone()).ToList()
                     });
 
                     group.Clear();
@@ -47,7 +47,7 @@ namespace Atlas.Roleplay.Client.Managers
             {
                 Seed = group.FirstOrDefault()?.Seed,
                 Label = group.FirstOrDefault()?.Component.Label,
-                Group = group.Select(self => (CachedStyleComponent) self.Clone()).ToList()
+                Group = group.Select(self => (CachedStyleComponent)self.Clone()).ToList()
             });
 
             Logger.Info($"[Style] Successfully cached {properties.Length} style component(s)");
@@ -135,7 +135,7 @@ namespace Atlas.Roleplay.Client.Managers
                     if (operation.Type == MenuOperationType.SliderUpdate)
                     {
                         style.GetByName(item.Seed.Replace("style_component_", "")).Current =
-                            ((MenuProfileSlider) item.Profile).Current;
+                            ((MenuProfileSlider)item.Profile).Current;
 
                         await style.Commit(Atlas.Local);
 

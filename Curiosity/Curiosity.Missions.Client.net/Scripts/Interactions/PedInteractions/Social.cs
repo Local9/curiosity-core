@@ -1,18 +1,9 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.DataClasses;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Wrappers;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Enums.Patrol;
-using Curiosity.Shared.Client.net.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Shared.Client.net.Enums.Patrol;
+using System.Collections.Generic;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 {
@@ -136,7 +127,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             List<string> response;
             if (!interactivePed.IsAllowedToBeSearched)
             {
-                response = new List<string>() { "I'd prefer you not to...", "I'll have to pass on that",  };
+                response = new List<string>() { "I'd prefer you not to...", "I'll have to pass on that", };
             }
             else
             {

@@ -140,7 +140,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                         }
                     }
                 }
-                
+
                 if (attacker != Game.Player) return;
 
                 if (Decorators.GetBoolean(victim.Handle, Client.DECOR_PED_MISSION))
@@ -188,7 +188,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                         {
                             attacker.Character.Kill();
                         }
-                        
+
                         attacker.Character.ApplyDamage(damage);
                     }
                 }

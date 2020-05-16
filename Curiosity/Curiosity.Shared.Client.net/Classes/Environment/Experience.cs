@@ -1,6 +1,5 @@
-﻿using System;
-using CitizenFX.Core;
-using static Curiosity.Shared.Client.net.Helper.NativeWrappers;
+﻿using CitizenFX.Core;
+using System;
 
 namespace Curiosity.Shared.Client.net.Classes.Environment
 {

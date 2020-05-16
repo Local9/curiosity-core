@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Atlas.Roleplay.Client.Managers;
 using Atlas.Roleplay.Library.Events;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace Atlas.Roleplay.Client.Package
 {
@@ -36,7 +36,7 @@ namespace Atlas.Roleplay.Client.Package
 
             try
             {
-                final = (NetworkPayload<T>) load;
+                final = (NetworkPayload<T>)load;
             }
             catch (Exception)
             {
@@ -78,7 +78,7 @@ namespace Atlas.Roleplay.Client.Package
 
             foreach (var import in Imports.GetInvocationList())
             {
-                ((Action<NetworkPackage, string>) import).Invoke(this, index);
+                ((Action<NetworkPackage, string>)import).Invoke(this, index);
             }
         }
     }

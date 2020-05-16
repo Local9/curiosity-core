@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using System.Drawing;
 using Atlas.Roleplay.Client.Environment.Entities;
 using Atlas.Roleplay.Client.Interface;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Atlas.Roleplay.Client.Commands.Impl
 {
@@ -20,7 +20,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
                 }
             }
 
-            public override string[] Aliases { get; set; } = {"online", "players"};
+            public override string[] Aliases { get; set; } = { "online", "players" };
             public override string Title { get; set; } = "Status";
             public override Color Color { get; set; } = Color.FromArgb(150, 150, 255);
             public override bool IsRestricted { get; set; }

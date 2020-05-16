@@ -1,17 +1,17 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
-using Curiosity.Shared.Client.net;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net;
-using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.Client.net.Classes.Actions
 {
@@ -97,7 +97,7 @@ namespace Curiosity.Client.net.Classes.Actions
             client.RegisterEventHandler("curiosity:Player:Prop:Delete", new Action<string>(OnDeleteProp));
 
             client.RegisterEventHandler("curiosity:Client:Command:SpawnWeapon", new Action<string>(SpawnWeapon));
-            
+
             client.RegisterEventHandler("curiosity:Client:Command:OnFire", new Action<string>(OnFire));
             client.RegisterEventHandler("curiosity:Client:Command:Chimp", new Action(ChimpSlap));
 
@@ -319,7 +319,7 @@ namespace Curiosity.Client.net.Classes.Actions
             chimp.IsPositionFrozen = true;
 
             while (Game.PlayerPed.IsInVehicle())
-            { 
+            {
                 if (!IsPackageInCar)
                 {
                     API.TaskWarpPedIntoVehicle(chimp.Handle, Game.PlayerPed.CurrentVehicle.Handle, -2);
@@ -407,10 +407,10 @@ namespace Curiosity.Client.net.Classes.Actions
             Game.PlayerPed.IsPositionFrozen = true;
 
             Screen.Fading.FadeOut(1000);
-            while(Screen.Fading.IsFadingOut)
+            while (Screen.Fading.IsFadingOut)
             {
                 await Client.Delay(100);
-            }            
+            }
 
             Game.PlayerPed.Position = new Vector3(17.86131f, 638.567f, 210.5947f);
             Game.PlayerPed.Heading = 192.4753f;
@@ -420,7 +420,7 @@ namespace Curiosity.Client.net.Classes.Actions
             StuckCooldownActive = true;
 
             Screen.Fading.FadeIn(500);
-            
+
             while (Screen.Fading.IsFadingIn)
             {
                 await Client.Delay(100);
@@ -470,7 +470,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
                 //if (randomEvent == 1)
                 if (randomEvent == 1)
-                    {
+                {
                     if (Player.PlayerInformation.IsDeveloper())
                     {
                         Log.Info("Suicide: Pill");
@@ -732,7 +732,7 @@ namespace Curiosity.Client.net.Classes.Actions
             Environment.UI.Notifications.NineOneOne(2, $"All Units", $"{response} {location}", $"{callout}", 2);
         }
 
-        
+
 
         static void Fire(int playerHandle, List<object> arguments, string raw)
         {
@@ -843,7 +843,7 @@ namespace Curiosity.Client.net.Classes.Actions
             int totalFound = 0;
             int totalNotDeleted = 0;
 
-            foreach(int vehicleHandle in new Helpers.VehicleList())
+            foreach (int vehicleHandle in new Helpers.VehicleList())
             {
                 if (!IsPedAPlayer(GetPedInVehicleSeat(vehicleHandle, -1)))
                 {
@@ -883,7 +883,7 @@ namespace Curiosity.Client.net.Classes.Actions
             }
             else
             {
-                 veh = Helpers.WorldProbe.GetVehicleInFrontOfPlayer();
+                veh = Helpers.WorldProbe.GetVehicleInFrontOfPlayer();
             }
 
             if (veh == null) return;
@@ -930,7 +930,7 @@ namespace Curiosity.Client.net.Classes.Actions
         static void SpawnWeapon(string weapon)
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
-            
+
         }
 
         static async void Teleport(int playerHandle, List<object> arguments, string raw)
@@ -952,7 +952,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
                     posX = pos.X;
                     posY = pos.Y;
-                    posZ = pos.Z;                    
+                    posZ = pos.Z;
                 }
                 else
                 {
@@ -965,9 +965,9 @@ namespace Curiosity.Client.net.Classes.Actions
                 posY = float.Parse(arguments[1].ToString());
                 posZ = float.Parse(arguments[2].ToString());
             }
-            
+
             API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
-            
+
             Game.PlayerPed.Position = new Vector3(posX, posY, posZ);
 
             PlaceObjectOnGroundProperly(Game.PlayerPed.Handle);
@@ -1026,7 +1026,7 @@ namespace Curiosity.Client.net.Classes.Actions
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine($"{ex.Message}");
             }

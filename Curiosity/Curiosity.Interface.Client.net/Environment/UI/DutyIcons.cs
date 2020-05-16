@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Interface.Client.net.Environment.UI
 {

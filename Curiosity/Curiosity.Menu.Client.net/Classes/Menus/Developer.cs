@@ -69,7 +69,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             if (menuItem == menuCheckboxItemDeveloperNpcUi)
             {
                 _developerNpcUiEnable = newCheckedState;
-                
+
                 Decorators.Set(Game.PlayerPed.Handle, "player::npc::debug", _developerNpcUiEnable);
 
                 Client.TriggerEvent("curiosity:Player:Mission:ShowDeveloperNpcUI", _developerNpcUiEnable);

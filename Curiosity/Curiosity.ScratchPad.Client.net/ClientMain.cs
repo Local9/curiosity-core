@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+﻿using CitizenFX.Core;
 
 namespace Curiosity.ScratchPad.Client.net
 {

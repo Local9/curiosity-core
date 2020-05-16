@@ -62,7 +62,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerInteractions
         {
             Menu menu = new Menu(menuTitle, $"Ban: {player.Name}");
 
-            menu.OnMenuOpen += async (_menu) => {
+            menu.OnMenuOpen += async (_menu) =>
+            {
 
                 MenuBase.MenuOpen(true);
 
@@ -70,7 +71,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerInteractions
                 {
                     Client.TriggerServerEvent("curiosity:Server:Menu:Reasons", (int)GlobalEnums.LogGroup.Ban);
                     menu.AddMenuItem(new MenuItem("Loading..."));
-                    
+
                     while (banReasons.Count == 0)
                     {
                         await Client.Delay(0);

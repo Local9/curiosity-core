@@ -41,7 +41,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerInteractions
         {
             Menu menu = new Menu(menuTitle, $"Report: {player.Name}");
 
-            menu.OnMenuOpen += (_menu) => {
+            menu.OnMenuOpen += (_menu) =>
+            {
                 MenuBase.MenuOpen(true);
                 foreach (GlobalEntities.LogType logType in reportReasons)
                 {

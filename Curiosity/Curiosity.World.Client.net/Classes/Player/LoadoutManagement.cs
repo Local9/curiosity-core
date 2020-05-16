@@ -1,9 +1,6 @@
-﻿using System;
+﻿using CitizenFX.Core;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CitizenFX.Core;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.GameWorld.Client.net.Classes.Player
@@ -139,7 +136,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Player
 
         static private bool IsWeaponRestricted(WeaponHash weaponToCheck)
         {
-            foreach(WeaponHash weapon in RestrictedWeapons)
+            foreach (WeaponHash weapon in RestrictedWeapons)
             {
                 return (weapon == weaponToCheck);
             }

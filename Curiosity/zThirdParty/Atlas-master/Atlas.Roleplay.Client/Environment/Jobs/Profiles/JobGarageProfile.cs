@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
 {
@@ -21,7 +21,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
         public override async void Begin(Job job)
         {
             await Session.Loading();
-            
+
             if (Calling != null && Spawn != null)
             {
                 var character = Cache.Character;
@@ -83,11 +83,11 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
             var spawn = vehicle.Position ?? Spawn;
             var entity = await World.CreateVehicle(new Model(API.GetHashKey(vehicle.Model)), spawn.AsVector(),
                 spawn.Heading);
-            
+
             entity.Wash();
             entity.Repair();
             entity.PlaceOnGround();
-            
+
             API.TaskWarpPedIntoVehicle(Cache.Entity.Id, entity.Handle, -1);
 
             vehicle.Callback?.Invoke(entity);

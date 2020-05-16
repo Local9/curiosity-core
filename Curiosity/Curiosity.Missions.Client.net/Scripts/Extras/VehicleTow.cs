@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
-using Curiosity.Global.Shared.net;
-using Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Missions.Client.net.Scripts.Extras
 {
@@ -47,7 +47,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                     }
 
                     int tfVehHandle = 0;
-                    
+
                     if (DecorIsRegisteredAsType(Client.DECOR_NPC_ACTIVE_TRAFFIC_STOP, 2))
                     {
                         tfVehHandle = DecorGetInt(vehToRemove.Handle, Client.DECOR_TRAFFIC_STOP_VEHICLE_HANDLE);

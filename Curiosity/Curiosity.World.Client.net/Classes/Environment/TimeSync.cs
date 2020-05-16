@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Curiosity.Shared.Client.net;
+using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
-using CitizenFX.Core;
-using Curiosity.Shared.Client.net;
-using CitizenFX.Core.UI;
 
 namespace Curiosity.GameWorld.Client.net.Classes.Environment
 {

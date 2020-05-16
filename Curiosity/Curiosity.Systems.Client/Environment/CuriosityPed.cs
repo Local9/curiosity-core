@@ -2,7 +2,6 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Extensions;
-using Curiosity.Systems.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;

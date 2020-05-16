@@ -9,7 +9,7 @@ namespace Curiosity.System.Client.Environment
     public class PointFinger : Manager<PointFinger>
     {
         public bool PointingFinger { get; set; }
-        
+
         private void StopPointing()
         {
             var ped = Cache.Entity.Id;
@@ -34,7 +34,7 @@ namespace Curiosity.System.Client.Environment
         private async Task OnTick()
         {
             if (Session.CreatingCharacter) return;
-            
+
             var ped = Cache.Entity.Id;
 
             if (Game.IsControlJustPressed(0, Control.SpecialAbilitySecondary))
@@ -88,8 +88,8 @@ namespace Curiosity.System.Client.Environment
                     pitch = (pitch + 70f) / 112f;
 
                     var heading = API.GetGameplayCamRelativeHeading();
-                    var cos = (float) Math.Cos(heading);
-                    var sin = (float) Math.Sin(heading);
+                    var cos = (float)Math.Cos(heading);
+                    var sin = (float)Math.Sin(heading);
 
                     if (heading < -180f)
                     {

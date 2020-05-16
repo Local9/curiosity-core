@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
-using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 using System;
 using System.Threading.Tasks;
+using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Menus.Client.net
 {

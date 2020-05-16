@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Atlas.Bash.Modules;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Atlas.Bash.Modules;
 
 namespace Atlas.Bash
 {
@@ -34,7 +34,7 @@ namespace Atlas.Bash
                     break;
                 case "FILES":
                     Task.Run(async () => { ExitCode = await new ResourceConfig().Call(sliced); });
-                    
+
                     break;
                 default:
                     Console.WriteLine(CommandUsage);

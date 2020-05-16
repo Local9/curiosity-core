@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Atlas.Roleplay.Client.Environment.Entities;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Interface;
@@ -9,6 +5,10 @@ using Atlas.Roleplay.Client.Inventory;
 using Atlas.Roleplay.Client.Inventory.Items;
 using Atlas.Roleplay.Library.Inventory;
 using Atlas.Roleplay.Library.Models;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Commands.Impl
 {
@@ -16,7 +16,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
     {
         #region Jobb
 
-        [CommandInfo(new[] {"job"})]
+        [CommandInfo(new[] { "job" })]
         public class Job : ICommand
         {
             public const string Title = "Administratör";
@@ -79,7 +79,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
 
         #region Pengar
 
-        [CommandInfo(new[] {"cash"})]
+        [CommandInfo(new[] { "cash" })]
         public class Cash : ICommand
         {
             public const string Title = "Administratör";
@@ -116,7 +116,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
                 {
                     case "ADD":
                         player.Character.Cash += balance;
-                        
+
                         Chat.SendLocalMessage(Title,
                             $"{CorrectedCash}{player.Character.Cash})", Color.FromArgb(255, 0, 0));
 
@@ -142,7 +142,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"bank"})]
+        [CommandInfo(new[] { "bank" })]
         public class Bank : ICommand
         {
             public const string Title = "Administratör";
@@ -208,7 +208,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
 
         #region Spelare
 
-        [CommandInfo(new[] {"revive", "rev"})]
+        [CommandInfo(new[] { "revive", "rev" })]
         public class Revive : ICommand
         {
             public void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -221,7 +221,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
 
         #region Inventory
 
-        [CommandInfo(new[] {"item", "giveitem", "give"})]
+        [CommandInfo(new[] { "item", "giveitem", "give" })]
         public class ItemCommand : ICommand
         {
             // More complex solution later, like getting all registered items.
@@ -244,7 +244,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
                     if (item.Key != argument.ToLower()) continue;
 
                     ItemHelper.Give(InventoryManager.GetModule().GetContainer("pockets_inventory"),
-                        (InventoryItem) Activator.CreateInstance(item.Value));
+                        (InventoryItem)Activator.CreateInstance(item.Value));
 
                     Chat.SendLocalMessage("Föremål", $"Gav dig x1 utav `{item.Key}`...", Color.FromArgb(0, 255, 0));
                     break;
@@ -254,7 +254,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
 
         #endregion
 
-        public override string[] Aliases { get; set; } = {"admin"};
+        public override string[] Aliases { get; set; } = { "admin" };
         public override string Title { get; set; } = "Administratör";
         public override Color Color { get; set; } = Color.FromArgb(255, 0, 0);
         public override bool IsRestricted { get; set; } = true;

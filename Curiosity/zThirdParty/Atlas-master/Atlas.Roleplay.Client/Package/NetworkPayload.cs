@@ -1,6 +1,6 @@
-using System;
 using Atlas.Roleplay.Client.Events;
 using Newtonsoft.Json;
+using System;
 
 namespace Atlas.Roleplay.Client.Package
 {
@@ -24,7 +24,7 @@ namespace Atlas.Roleplay.Client.Package
 
         public T Get()
         {
-            return Object != null ? (T) Object : default(T);
+            return Object != null ? (T)Object : default(T);
         }
 
         public void Update(T obj)

@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Inventory.Impl;
 using Atlas.Roleplay.Library.Inventory;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Inventory
 {
@@ -64,12 +64,12 @@ namespace Atlas.Roleplay.Client.Inventory
 
         private async Task OnSecondaryTick()
         {
-            if (((ProximityInventory) InventoryManager.GetModule().GetContainer("proximity_inventory"))
+            if (((ProximityInventory)InventoryManager.GetModule().GetContainer("proximity_inventory"))
                 .DroppedWorldItems.FirstOrDefault(self => self.Item.Seed == Item.Seed) == null)
             {
                 Destroy();
             }
-            
+
             await BaseScript.Delay(500);
         }
     }

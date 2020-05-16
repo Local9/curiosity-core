@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Curiosity.System.Library.Events;
 using Curiosity.System.Server.Extensions;
+using System.Collections.Generic;
 
 namespace Curiosity.System.Server.Managers
 {

@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Billing;
 using Atlas.Roleplay.Client.Environment.Jobs.Profiles;
 using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Library.Billing;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Taxi
 {
@@ -27,10 +27,10 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Taxi
 
         public override Dictionary<int, string> Roles { get; set; } = new Dictionary<int, string>
         {
-            [(int) EmploymentRoles.Taxi.CEO] = "Vd",
-            [(int) EmploymentRoles.Taxi.COO] = "Vice Vd",
-            [(int) EmploymentRoles.Taxi.Employee] = "Anställd",
-            [(int) EmploymentRoles.Taxi.Probationary] = "Provanställd"
+            [(int)EmploymentRoles.Taxi.CEO] = "Vd",
+            [(int)EmploymentRoles.Taxi.COO] = "Vice Vd",
+            [(int)EmploymentRoles.Taxi.Employee] = "Anställd",
+            [(int)EmploymentRoles.Taxi.Probationary] = "Provanställd"
         };
 
         public override JobProfile[] Profiles { get; set; } =

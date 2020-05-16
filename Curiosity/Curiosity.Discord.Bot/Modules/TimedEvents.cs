@@ -1,5 +1,4 @@
 ﻿using Curiosity.Discord.Bot.Models;
-using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using MySql.Data.MySqlClient;

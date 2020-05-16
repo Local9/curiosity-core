@@ -30,7 +30,7 @@ namespace Curiosity.Shared.Client.net.Helper.Area
                 BaseScript.TriggerEvent((String)this.OnEnter, this.Params);
             }
             else if (this.OnEnter.GetType() == typeof(CitizenFX.Core.CallbackDelegate))
-            {   
+            {
                 if (this.Params != null)
                 {
                     ((CallbackDelegate)this.OnEnter).Invoke(this.Params);

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 
 namespace Curiosity.Shared.Client.net.Models
 {
@@ -40,7 +35,7 @@ namespace Curiosity.Shared.Client.net.Models
 
             this.Position = position;
             // position.Z = position.Z - 0.5f;
-            
+
             this.Color = color;
             this.Type = type;
             this.Scale = 1.0f * new Vector3(1f, 1f, 1f);

@@ -130,7 +130,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
                 API.ClearOverrideWeather();
                 API.SetWeatherTypeOverTime(weather, 60.00f);
             }
-            
+
 
             await Client.Delay(0);
 

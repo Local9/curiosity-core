@@ -27,7 +27,7 @@ namespace Curiosity.System.Client.Commands.Impl
                 }
             }
 
-            public override string[] Aliases { get; set; } = {"reload", "fix"};
+            public override string[] Aliases { get; set; } = { "reload", "fix" };
             public override string Title { get; set; } = "Reload";
             public override Color Color { get; set; } = Color.FromArgb(255, 0, 0);
             public override bool IsRestricted { get; set; } = false;

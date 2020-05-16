@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
 using System;
 using System.Collections.Generic;

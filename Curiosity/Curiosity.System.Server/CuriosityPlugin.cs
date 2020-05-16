@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.System.Library;
 using Curiosity.System.Library.Events;
 using Curiosity.System.Library.Models;
 using Curiosity.System.Server.Diagnostics;
@@ -15,7 +14,6 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.System.Server

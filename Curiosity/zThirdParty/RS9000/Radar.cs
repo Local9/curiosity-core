@@ -1,8 +1,7 @@
-﻿using System;
+﻿using CitizenFX.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using CitizenFX.Core;
 
 namespace RS9000
 {

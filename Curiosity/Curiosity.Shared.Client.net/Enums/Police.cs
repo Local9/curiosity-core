@@ -1,5 +1,5 @@
 ﻿namespace Curiosity.Shared.Client.net.Enums
-{ 
+{
     namespace Helicopter
     {
         public enum CameraMode

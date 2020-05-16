@@ -41,7 +41,7 @@ namespace Curiosity.Shared.Client.net.Helper.Area
                 {
                     inside = !inside;
                 }
-            }           
+            }
 
             return inside;
         }

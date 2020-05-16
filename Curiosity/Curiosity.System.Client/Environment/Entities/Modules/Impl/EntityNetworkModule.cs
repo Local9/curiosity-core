@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Threading.Tasks;
 
 namespace Curiosity.System.Client.Environment.Entities.Modules.Impl
 {
@@ -34,7 +34,7 @@ namespace Curiosity.System.Client.Environment.Entities.Modules.Impl
         public static CuriosityEntity GetEntity(int id)
         {
             var entity = new CuriosityEntity(API.NetworkGetEntityFromNetworkId(id));
-            
+
             entity.InstallModule("Network", new EntityNetworkModule());
 
             return entity;

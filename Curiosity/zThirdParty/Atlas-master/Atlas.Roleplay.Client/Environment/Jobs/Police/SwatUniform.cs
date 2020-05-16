@@ -24,7 +24,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Police
     {
         public FemaleSwatUniform()
         {
-            
+
         }
     }
 }

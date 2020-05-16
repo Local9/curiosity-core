@@ -1,10 +1,5 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net;
-using Curiosity.Shared.Client.net.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -116,7 +111,8 @@ namespace Curiosity.Client.net.Classes.Menus
                         Type = MenuItemHorizontalSelectorType.NumberAndBar,
                         wrapAround = true,
                         optionList = PedHashNames,
-                        OnActivate = new Action<int, string, MenuItemHorNamedSelector>(async (selectedAlternative, selName, menuItem) => {
+                        OnActivate = new Action<int, string, MenuItemHorNamedSelector>(async (selectedAlternative, selName, menuItem) =>
+                        {
                             await ReplaceCurrentPedModelByIndex(selectedAlternative); componentSettings.Clear(); propSettings.Clear();
                         })
                     });
@@ -306,7 +302,8 @@ namespace Curiosity.Client.net.Classes.Menus
                                         minState = 0,
                                         maxState = c.TextureCount - 1,
                                         overrideDetailWith = $"{componentSettings[c.ToString()].Item2 + 1}/{c.TextureCount}",
-                                        OnChange = new Action<int, MenuItemHorSelector<int>>((selectedAlternative, menuItem) => {
+                                        OnChange = new Action<int, MenuItemHorSelector<int>>((selectedAlternative, menuItem) =>
+                                        {
                                             componentSettings[c.ToString()] = new Tuple<int, int>(componentSettings[c.ToString()].Item1, selectedAlternative);
                                             Function.Call(Hash.SET_PED_COMPONENT_VARIATION, ped.Handle, Enum.GetNames(typeof(PedComponents)).ToList().IndexOf(c.ToString()), componentSettings[c.ToString()].Item1, selectedAlternative, 0);
                                         })
@@ -338,7 +335,8 @@ namespace Curiosity.Client.net.Classes.Menus
                                     minState = -1,
                                     maxState = p.Count - 1,
                                     overrideDetailWith = $"{propSettings[p.ToString()].Item1 + 2}/{p.Count + 1}",
-                                    OnChange = new Action<int, MenuItemHorSelector<int>>((selectedAlternative, menuItem) => {
+                                    OnChange = new Action<int, MenuItemHorSelector<int>>((selectedAlternative, menuItem) =>
+                                    {
                                         propSettings[p.ToString()] = new Tuple<int, int>(selectedAlternative, 0);
                                         if (selectedAlternative == -1)
                                             Function.Call(Hash.CLEAR_PED_PROP, ped.Handle, Enum.GetNames(typeof(PedProps)).ToList().IndexOf(p.ToString()));
@@ -358,7 +356,8 @@ namespace Curiosity.Client.net.Classes.Menus
                                     minState = 0,
                                     maxState = p.TextureCount - 1,
                                     overrideDetailWith = $"{propSettings[p.ToString()].Item2 + 1}/{p.TextureCount}",
-                                    OnChange = new Action<int, MenuItemHorSelector<int>>((selectedAlternative, menuItem) => {
+                                    OnChange = new Action<int, MenuItemHorSelector<int>>((selectedAlternative, menuItem) =>
+                                    {
                                         propSettings[p.ToString()] = new Tuple<int, int>(propSettings[p.ToString()].Item1, selectedAlternative);
                                         Function.Call(Hash.SET_PED_PROP_INDEX, ped.Handle, Enum.GetNames(typeof(PedProps)).ToList().IndexOf(p.ToString()), propSettings[p.ToString()].Item1, selectedAlternative, false);
                                     })
@@ -380,7 +379,8 @@ namespace Curiosity.Client.net.Classes.Menus
                     wrapAround = true,
                     optionList = walkingStyles,
                     overrideDetailWith = walkingStyles[walkingStyleIndex].Replace("move_m@", "").Replace("move_f@", "").Replace("@", " ").AddSpacesToCamelCase().Replace("_", " ").ToTitleCase(),
-                    OnChange = new Action<int, string, MenuItemHorNamedSelector>(async (selectedAlternative, selName, menuItem) => {
+                    OnChange = new Action<int, string, MenuItemHorNamedSelector>(async (selectedAlternative, selName, menuItem) =>
+                    {
                         walkingStyleIndex = selectedAlternative;
                         if (walkingStyleIndex == 0)
                         {

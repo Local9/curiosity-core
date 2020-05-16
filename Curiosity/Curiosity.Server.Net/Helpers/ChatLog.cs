@@ -1,7 +1,7 @@
-﻿using Curiosity.Global.Shared.net;
+﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using System;
-using CitizenFX.Core;
 
 namespace Curiosity.Server.net.Helpers
 {

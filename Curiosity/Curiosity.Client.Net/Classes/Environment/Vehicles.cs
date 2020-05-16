@@ -1,8 +1,7 @@
-﻿using CitizenFX.Core.Native;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using System;
 using System.Threading.Tasks;
-using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net.Classes.Environment
 {

@@ -1,9 +1,9 @@
-using System;
-using System.Linq;
 using Atlas.Roleplay.Client.Interface.Impl;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Interface
 {
@@ -71,14 +71,14 @@ namespace Atlas.Roleplay.Client.Interface
             manager.MenuContext = null;
 
             if (!sendOperation) return;
-            
+
             var operation = new MenuOperation
             {
                 Type = MenuOperationType.PostClose
             };
 
             Items.Where(self => self.Profile != null).Select(self => self.Profile).ToList().ForEach(self => self.On(this, Items.ElementAtOrDefault(ItemIndex), operation));
-            
+
             Callback?.Invoke(this, Items.ElementAtOrDefault(ItemIndex), operation);
         }
     }

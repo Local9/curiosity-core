@@ -1,9 +1,6 @@
 ﻿using Curiosity.Missions.Client.net.DataClasses;
 using Newtonsoft.Json;
 using static CitizenFX.Core.Native.API;
-using System;
-using CitizenFX.Core;
-using CitizenFX.Core.UI;
 
 namespace Curiosity.Missions.Client.net.Scripts
 {

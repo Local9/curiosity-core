@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Helper;
 using System;
@@ -181,7 +180,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                                 if (API.IsVehicleSirenOn(vehicleHandle))
                                 {
                                     API.SetBlipSprite(blip, (int)BlipSprite.PoliceCarDot);
-                                } else {
+                                }
+                                else
+                                {
                                     API.SetBlipSprite(blip, (int)BlipSprite.Standard);
                                 }
 
@@ -251,7 +252,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                         else
                         {
                             API.SetBlipAlpha(blip, 0);
-                        }                        
+                        }
                     }
                 }
             }

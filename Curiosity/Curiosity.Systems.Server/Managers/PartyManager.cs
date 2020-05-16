@@ -1,7 +1,5 @@
-﻿using CitizenFX.Core;
-using Curiosity.Systems.Library.Events;
+﻿using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Models.Discord;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Events;
 using Curiosity.Systems.Server.Extensions;
@@ -83,7 +81,7 @@ namespace Curiosity.Systems.Server.Managers
 
                 party.AddMember(acceptingPlayer, curiosityUser.LastName);
 
-                foreach(PartyMember pm in party.Members)
+                foreach (PartyMember pm in party.Members)
                 {
                     CuriosityUser cu = CuriosityPlugin.ActiveUsers[pm.Handle];
                     cu.Send("party:details:join", party);

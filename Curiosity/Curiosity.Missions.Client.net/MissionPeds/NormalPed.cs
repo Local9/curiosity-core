@@ -1,14 +1,12 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Curiosity.Global.Shared.net;
-using Curiosity.Global.Shared.net.Entity;
-using Newtonsoft.Json;
-using Curiosity.Shared.Client.net.Extensions;
-using CitizenFX.Core.Native;
 using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
@@ -323,7 +321,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (this.Target != null)
             {
-                
+
             }
             else
             {
@@ -390,7 +388,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private async void CheckIfArrested()
         {
-            
+
         }
 
         private static async Task ShowHelpText()

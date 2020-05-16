@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using CitizenFX.Core;
 using Curiosity.System.Client.Environment;
 using Curiosity.System.Client.Extensions;
 using Curiosity.System.Client.Inventory.Impl;
 using Curiosity.System.Library.Inventory;
 using Curiosity.System.Library.Models;
-using CitizenFX.Core;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Curiosity.System.Client.Inventory
 {
@@ -64,12 +64,12 @@ namespace Curiosity.System.Client.Inventory
 
         private async Task OnSecondaryTick()
         {
-            if (((ProximityInventory) InventoryManager.GetModule().GetContainer("proximity_inventory"))
+            if (((ProximityInventory)InventoryManager.GetModule().GetContainer("proximity_inventory"))
                 .DroppedWorldItems.FirstOrDefault(self => self.Item.Seed == Item.Seed) == null)
             {
                 Destroy();
             }
-            
+
             await BaseScript.Delay(500);
         }
     }

@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
-using CitizenFX.Core.UI;
-using CitizenFX.Core.NaturalMotion;
+﻿using CitizenFX.Core;
+using System;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment;
 using Atlas.Roleplay.Client.Environment.Entities;
 using Atlas.Roleplay.Client.Extensions;
@@ -9,9 +5,11 @@ using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Client.Managers;
 using Atlas.Roleplay.Client.Package;
 using Atlas.Roleplay.Library;
-using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Commands.Impl
 {
@@ -29,7 +27,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
                 }
             }
 
-            public override string[] Aliases { get; set; } = {"twitter", "twt", "tweet"};
+            public override string[] Aliases { get; set; } = { "twitter", "twt", "tweet" };
             public override string Title { get; set; } = "Twitter";
             public override Color Color { get; set; } = Color.FromArgb(50, 50, 255);
             public override bool IsRestricted { get; set; }
@@ -54,7 +52,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
                 }
             }
 
-            public override string[] Aliases { get; set; } = {"me", "do"};
+            public override string[] Aliases { get; set; } = { "me", "do" };
             public override string Title { get; set; } = "";
             public override Color Color { get; set; } = Color.FromArgb(255, 0, 0);
             public override bool IsRestricted { get; set; }

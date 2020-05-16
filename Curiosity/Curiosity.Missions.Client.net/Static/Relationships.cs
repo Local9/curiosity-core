@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
+using System;
 
 namespace Curiosity.Missions.Client.net.Static
 {
@@ -11,7 +7,7 @@ namespace Curiosity.Missions.Client.net.Static
     {
         static Client client = Client.GetInstance();
 
-        public static RelationshipGroup PlayerRelationship; 
+        public static RelationshipGroup PlayerRelationship;
         public static RelationshipGroup HostileRelationship;
 
         public static RelationshipGroup ArrestedRelationship;

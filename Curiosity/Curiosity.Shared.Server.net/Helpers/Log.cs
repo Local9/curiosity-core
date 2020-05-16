@@ -1,5 +1,5 @@
-﻿using System;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
+using System;
 
 namespace Curiosity.Shared.Server.net.Helpers
 {
@@ -40,9 +40,9 @@ namespace Curiosity.Shared.Server.net.Helpers
             try
             {
                 var m = $"[{title}] {msg}";
-				Console.ForegroundColor = color;
-				Console.WriteLine( $"{DateTime.Now:HH:mm:ss.fff} {m}" );
-				Console.ResetColor();
+                Console.ForegroundColor = color;
+                Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {m}");
+                Console.ResetColor();
             }
             catch (Exception ex)
             {

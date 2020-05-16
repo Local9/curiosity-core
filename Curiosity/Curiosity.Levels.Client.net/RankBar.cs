@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using static Curiosity.Shared.Client.net.Helper.ControlHelper;
 
 namespace Curiosity.Levels.Client.net
@@ -127,7 +123,7 @@ namespace Curiosity.Levels.Client.net
                 CreateRankBar(GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), currentXP, currentXPWithRemovedXP, startAtLevel, true);
 
                 for (int i = 0; i <= levelDifference; i++)
-                { 
+                {
                     if (i == levelDifference)
                     {
                         CreateRankBar(GetXPFloorForLevel(startAtLevel), GetXPCeilingForLevel(startAtLevel), GetXPFloorForLevel(startAtLevel), currentXPWithRemovedXP, startAtLevel, true);
@@ -201,7 +197,7 @@ namespace Curiosity.Levels.Client.net
 
                 int baseLevel = currentLevel - defaultRanks.Count;
                 int currentXpNeeded = 0;
-                for(int i = 0; i < baseLevel; i++)
+                for (int i = 0; i < baseLevel; i++)
                 {
                     mainAddPerLevel = mainAddPerLevel + extraAddPerLevel;
                     currentXpNeeded = currentXpNeeded + mainAddPerLevel;
@@ -250,7 +246,7 @@ namespace Curiosity.Levels.Client.net
             {
                 int currentLevelScan = 0;
 
-                foreach(int xp in defaultRanks)
+                foreach (int xp in defaultRanks)
                 {
                     currentLevelScan = currentLevelScan + 1;
                     if (searchingFor < xp)
@@ -267,7 +263,7 @@ namespace Curiosity.Levels.Client.net
                 int currentXpNeeded = 0;
                 int currentLevelFound = -1;
 
-                for(int i = 0; i < (maxPlayerLevel - (defaultRanks.Count - 1)); i++)
+                for (int i = 0; i < (maxPlayerLevel - (defaultRanks.Count - 1)); i++)
                 {
                     mainAddPerLevel = mainAddPerLevel + extraAddPerLevel;
                     currentXpNeeded = currentXpNeeded + mainAddPerLevel;

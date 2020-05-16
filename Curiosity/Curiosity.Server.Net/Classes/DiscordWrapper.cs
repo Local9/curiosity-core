@@ -1,11 +1,10 @@
 ﻿using CitizenFX.Core.Native;
+using Curiosity.Server.net.Entity.Discord;
 using Curiosity.Server.net.Enums.Discord;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Curiosity.Server.net.Helpers;
-using Curiosity.Server.net.Entity.Discord;
 
 namespace Curiosity.Server.net.Classes
 {

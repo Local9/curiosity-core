@@ -1,13 +1,9 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Extensions;
 using GHMatti.Data.MySQL.Core;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Server.Database.Store

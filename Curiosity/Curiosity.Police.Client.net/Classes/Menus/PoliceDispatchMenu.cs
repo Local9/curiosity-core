@@ -1,18 +1,15 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Police.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Enums.Patrol;
 using MenuAPI;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
-using Curiosity.Global.Shared.net.Entity;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using System.Linq;
-using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Police.Client.net.Extensions;
 
 namespace Curiosity.Police.Client.net.Classes.Menus
 {
@@ -105,7 +102,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             Skills skill = Player.PlayerInformation.playerInfo.Skills["policexp"];
 
-            if (skill != null) {
+            if (skill != null)
+            {
 
                 long policexp = skill.Value;
                 if (policexp >= 5000)
@@ -172,7 +170,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             }
 
             if (menuItem == rbItemCode4)
-            { 
+            {
                 BaseScript.TriggerServerEvent("curiosity:Server:Player:Backup", 4, pos.X, pos.Y, pos.Z);
             }
 
@@ -252,7 +250,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             if (vehicles == null) return;
 
-            foreach(Vehicle vehicle in vehicles)
+            foreach (Vehicle vehicle in vehicles)
             {
                 if (vehicle.CanTiresBurst && !AreTiresBurst(vehicle) && Decorators.GetBoolean(vehicle.Handle, "curiosity::police::vehicle::mission"))
                 {

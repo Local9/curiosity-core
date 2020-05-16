@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Server.net.Business;
+using Curiosity.Shared.Server.net.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Curiosity.Shared.Server.net.Helpers;
-using Curiosity.Server.net.Business;
-using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -89,7 +89,7 @@ namespace Curiosity.Server.net.Classes
 
                 player.TriggerEvent("curiosity:Client:Inventory:Items", JsonConvert.SerializeObject(inventories));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "GetActiveCharacterInventory", $"{ex}");
                 Log.Error($"GetActiveCharacterInventory -> {ex.Message}");

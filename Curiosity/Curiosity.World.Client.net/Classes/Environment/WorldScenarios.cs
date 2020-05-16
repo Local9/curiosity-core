@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using Curiosity.GameWorld.Client.net.Extensions;
+using System;
+using System.Collections.Generic;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.GameWorld.Client.net.Classes.Environment
 {

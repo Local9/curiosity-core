@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Drawing;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Client.Managers;
 using Atlas.Roleplay.Library.Models;
 using Atlas.Roleplay.Library.Utilities;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Atlas.Roleplay.Client.Environment.Stores.Impl
 {

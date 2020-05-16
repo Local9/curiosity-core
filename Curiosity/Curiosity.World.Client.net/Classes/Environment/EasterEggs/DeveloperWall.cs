@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Classes;
 using Curiosity.Shared.Client.net;
-
+using Curiosity.Shared.Client.net.Classes;
+using Curiosity.Shared.Client.net.Helper;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
 {
@@ -191,7 +187,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
         {
             // Request the particle dictionary.
             RequestNamedPtfxAsset(dict);
-           // Wait for the particle dictionary to load.
+            // Wait for the particle dictionary to load.
 
             while (!HasNamedPtfxAssetLoaded(dict))
             {

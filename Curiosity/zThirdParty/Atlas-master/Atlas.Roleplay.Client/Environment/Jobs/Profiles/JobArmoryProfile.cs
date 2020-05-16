@@ -1,6 +1,3 @@
-using System;
-using System.Drawing;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment.Entities;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Extensions;
@@ -8,12 +5,15 @@ using Atlas.Roleplay.Client.Package;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
 {
     public class JobArmoryProfile : JobProfile
     {
-        public override JobProfile[] Dependencies { get; set; } = {new JobStorageProfile()};
+        public override JobProfile[] Dependencies { get; set; } = { new JobStorageProfile() };
         public Position Armory { get; set; }
         public Position MerchantPosition { get; set; }
         public int MerchantModel { get; set; }
@@ -33,7 +33,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
                 {
                     await model.Request(5000);
 
-                    var ped = API.CreatePed(6, (uint) model.Hash, MerchantPosition.X, MerchantPosition.Y,
+                    var ped = API.CreatePed(6, (uint)model.Hash, MerchantPosition.X, MerchantPosition.Y,
                         MerchantPosition.Z, MerchantPosition.Heading, true, false);
 
                     Merchant = new Merchant(ped)

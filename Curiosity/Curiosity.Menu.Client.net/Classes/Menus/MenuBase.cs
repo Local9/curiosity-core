@@ -1,7 +1,5 @@
-﻿using MenuAPI;
-using System.Collections.Generic;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using MenuAPI;
 using System;
 using static CitizenFX.Core.Native.API;
 
@@ -37,7 +35,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             //// Creating the first menu.
 
             // menu.HeaderTexture = new KeyValuePair<string, string>("shopui_title_graphics_franklin", "shopui_title_graphics_franklin");
-            
+
 
             //// Creating 3 sliders, showing off the 3 possible variations and custom colors.
             //MenuSliderItem slider = new MenuSliderItem("Slider", 0, 10, 5, false);
@@ -368,7 +366,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         public static void RemoveMenu(Menu menu)
         {
-            foreach(MenuItem menuItem in Menu.GetMenuItems())
+            foreach (MenuItem menuItem in Menu.GetMenuItems())
             {
                 if (menu.MenuTitle == menuItem.Text)
                     Menu.RemoveMenuItem(menuItem);

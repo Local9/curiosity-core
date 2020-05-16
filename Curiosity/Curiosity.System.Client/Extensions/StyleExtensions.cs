@@ -137,11 +137,11 @@ namespace Curiosity.System.Client.Extensions
                     await player.CommitModel(model);
 
                     var ped = Game.PlayerPed.Handle;
-                    
+
                     player.Entity.SetDefaultStyle();
                     player.Entity.Id = ped;
-                    player.Entity.AnimationQueue = new AnimationQueue(ped); 
-                    
+                    player.Entity.AnimationQueue = new AnimationQueue(ped);
+
                     Session.Join(Session.LastSession);
 
                     await BaseScript.Delay(10);

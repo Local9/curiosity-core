@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Atlas.Roleplay.Client.Environment.Entities;
+using System.Collections.Generic;
 
 namespace Atlas.Roleplay.Client.Commands
 {

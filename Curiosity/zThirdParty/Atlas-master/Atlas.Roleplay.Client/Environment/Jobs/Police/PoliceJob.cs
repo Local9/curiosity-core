@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Billing;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Environment.Entities.Modules.Impl;
@@ -14,6 +10,10 @@ using Atlas.Roleplay.Library.Billing;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Style = Atlas.Roleplay.Library.Models.Style;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Police
@@ -36,11 +36,11 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Police
 
         public override Dictionary<int, string> Roles { get; set; } = new Dictionary<int, string>
         {
-            [(int) EmploymentRoles.Police.Chief] = "Rikspolischef",
-            [(int) EmploymentRoles.Police.Superintendent] = "Kommissarie",
-            [(int) EmploymentRoles.Police.Inspector] = "Inspektör",
-            [(int) EmploymentRoles.Police.Assistant] = "Assistent",
-            [(int) EmploymentRoles.Police.Trainee] = "Aspirant",
+            [(int)EmploymentRoles.Police.Chief] = "Rikspolischef",
+            [(int)EmploymentRoles.Police.Superintendent] = "Kommissarie",
+            [(int)EmploymentRoles.Police.Inspector] = "Inspektör",
+            [(int)EmploymentRoles.Police.Assistant] = "Assistent",
+            [(int)EmploymentRoles.Police.Trainee] = "Aspirant",
         };
 
         public override JobProfile[] Profiles { get; set; } =
@@ -134,8 +134,8 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Police
         {
             GetProfile<JobArmoryProfile>().Callback = OpenGeneralMenu;
 
-            API.SetRelationshipBetweenGroups(0, (uint) API.GetHashKey("PLAYER"), (uint) API.GetHashKey("COP"));
-            API.SetRelationshipBetweenGroups(0, (uint) API.GetHashKey("COP"), (uint) API.GetHashKey("PLAYER"));
+            API.SetRelationshipBetweenGroups(0, (uint)API.GetHashKey("PLAYER"), (uint)API.GetHashKey("COP"));
+            API.SetRelationshipBetweenGroups(0, (uint)API.GetHashKey("COP"), (uint)API.GetHashKey("PLAYER"));
         }
 
         [TickHandler(SessionWait = true)]
@@ -204,7 +204,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Police
                                 await BaseScript.Delay(100);
 
                                 entity.Weapons.Select(WeaponHash.Unarmed);
-                                merchant.Weapons.Give((WeaponHash) item.Metadata[1], (int) item.Metadata[2], true,
+                                merchant.Weapons.Give((WeaponHash)item.Metadata[1], (int)item.Metadata[2], true,
                                     true);
                             })
                         );
@@ -218,7 +218,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Police
                                 await BaseScript.Delay(4000);
 
                                 merchant.Weapons.RemoveAll();
-                                entity.Weapons.Give((WeaponHash) item.Metadata[1], (int) item.Metadata[2],
+                                entity.Weapons.Give((WeaponHash)item.Metadata[1], (int)item.Metadata[2],
                                     true, true);
                             });
 
@@ -228,9 +228,9 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Police
 
                         entity.Weapons.Select(WeaponHash.Unarmed);
 
-                        var weapon = (WeaponItem) Activator.CreateInstance((Type) item.Metadata[3]);
+                        var weapon = (WeaponItem)Activator.CreateInstance((Type)item.Metadata[3]);
 
-                        weapon.Metadata["Weapon.Ammo"] = (int) item.Metadata[2];
+                        weapon.Metadata["Weapon.Ammo"] = (int)item.Metadata[2];
 
                         if (!ItemHelper.Give(InventoryManager.GetModule().GetContainer("equipment_inventory"), weapon))
                             player.ShowNotification($"Du har inte plats med en {item.Label}!");
@@ -260,7 +260,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Police
                 {
                     if (operation.Type != MenuOperationType.Select) return;
 
-                    ItemHelper.Remove((WeaponItem) item.Metadata[0]);
+                    ItemHelper.Remove((WeaponItem)item.Metadata[0]);
 
                     menu.Hide();
 

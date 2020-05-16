@@ -1,8 +1,5 @@
 ﻿using CitizenFX.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -31,7 +28,7 @@ namespace Curiosity.World.Server.net.Classes.Environment
 
         private static void OnTimeChange([FromSource]Player player, int hour, int minute)
         {
-            
+
         }
 
         static void OnResourceStart(string resourceName)

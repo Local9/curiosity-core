@@ -1,5 +1,4 @@
-﻿using Curiosity.Discord.Bot.Database;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -57,7 +56,7 @@ namespace Curiosity.Discord.Bot.Models
                 using var cmd = connection.CreateCommand();
 
                 cmd.CommandText = @"call selStatsTopUsers(@TopStat);";
-                
+
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@TopStat",

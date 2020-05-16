@@ -1,9 +1,5 @@
-﻿using CitizenFX.Core;
-using Curiosity.Client.net.Classes.Player;
-using Curiosity.Shared.Client.net.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Client.net.Classes.Menus

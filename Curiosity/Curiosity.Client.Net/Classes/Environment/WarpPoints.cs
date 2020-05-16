@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net.Classes.Environment
 {

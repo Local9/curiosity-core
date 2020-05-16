@@ -4,7 +4,6 @@ using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Client.net.Helpers.Dictionary;
-using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net
 {

@@ -43,7 +43,7 @@ namespace Curiosity.Shared.Client.net.Extensions
         {
             float posZ = 0.0f;
 
-            for(int i = 0; i < 800 ; i++)
+            for (int i = 0; i < 800; i++)
             {
                 await BaseScript.Delay(0);
 

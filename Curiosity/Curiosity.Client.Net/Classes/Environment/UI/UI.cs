@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Client.net.Helpers;
+using Curiosity.Global.Shared.net.Enums;
 using System;
 using System.Linq;
-using Curiosity.Client.net.Helpers;
 using static Curiosity.Client.net.Helpers.WorldProbe;
-using Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
 {

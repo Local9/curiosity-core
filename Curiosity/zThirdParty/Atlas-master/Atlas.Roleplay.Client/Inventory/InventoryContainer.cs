@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Atlas.Roleplay.Library.Inventory;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace Atlas.Roleplay.Client.Inventory
 {
@@ -28,7 +28,7 @@ namespace Atlas.Roleplay.Client.Inventory
 
             foreach (var invocation in Update?.GetInvocationList())
             {
-                ((Action<InventoryItem, InventoryUpdateType>) invocation).Invoke(item, type);
+                ((Action<InventoryItem, InventoryUpdateType>)invocation).Invoke(item, type);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Atlas.Roleplay.Client.Inventory
 
             foreach (var invocation in Registration?.GetInvocationList())
             {
-                ((Action) invocation).Invoke();
+                ((Action)invocation).Invoke();
             }
         }
 

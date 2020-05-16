@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Atlas.Roleplay.Client.Commands;
+﻿using Atlas.Roleplay.Client.Commands;
 using Atlas.Roleplay.Client.Commands.Impl;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Discord;
@@ -15,7 +7,15 @@ using Atlas.Roleplay.Client.Events;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Managers;
 using Atlas.Roleplay.Library.Events;
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 #pragma warning disable 1998
 
@@ -97,7 +97,7 @@ namespace Atlas.Roleplay.Client
 
             // Load event system first
             LoadManager(typeof(EventSystem));
-            
+
             foreach (var type in Assembly.GetExecutingAssembly().GetExportedTypes())
             {
                 if (type.BaseType == null) continue;
@@ -212,14 +212,14 @@ namespace Atlas.Roleplay.Client
 
             methods?.ForEach(async self =>
             {
-                var handler = (TickHandler) self.GetCustomAttribute(typeof(TickHandler));
+                var handler = (TickHandler)self.GetCustomAttribute(typeof(TickHandler));
 
                 if (handler.SessionWait)
                 {
                     await Session.Loading();
                 }
 
-                Tick += (Func<Task>) Delegate.CreateDelegate(typeof(Func<Task>), instance, self);
+                Tick += (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), instance, self);
 
                 RegisteredTickHandlers.Add(instance.GetType());
             });
@@ -237,7 +237,7 @@ namespace Atlas.Roleplay.Client
 
         public T GetManager<T>() where T : Manager<T>, new()
         {
-            return (T)  Managers.FirstOrDefault(self => self.Key == typeof(T)).Value;
+            return (T)Managers.FirstOrDefault(self => self.Key == typeof(T)).Value;
         }
 
         public void AttachTickHandler(Func<Task> task)
@@ -257,7 +257,7 @@ namespace Atlas.Roleplay.Client
             EventHandlers[$"__cfx_nui:{pipe}"] += new Action<ExpandoObject, CallbackDelegate>((body, result) =>
             {
                 var metadata = new EventMetadata();
-                var properties = (IDictionary<string, object>) body;
+                var properties = (IDictionary<string, object>)body;
 
                 if (properties != null)
                 {
@@ -278,7 +278,7 @@ namespace Atlas.Roleplay.Client
                 if (callback.GetType() == typeof(AsyncEventCallback))
                 {
 #pragma warning disable 4014
-                    ((AsyncEventCallback) callback).AsyncTask(metadata);
+                    ((AsyncEventCallback)callback).AsyncTask(metadata);
 #pragma warning restore 4014
                 }
                 else

@@ -1,11 +1,7 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Curiosity.Shared.Client.net;
+using System;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -26,7 +22,7 @@ namespace Curiosity.Client.net.Classes.Environment
             metroModel = metro;
             await metroModel.Request(10000);
 
-            while(!metroModel.IsLoaded)
+            while (!metroModel.IsLoaded)
             {
                 await BaseScript.Delay(0);
             }

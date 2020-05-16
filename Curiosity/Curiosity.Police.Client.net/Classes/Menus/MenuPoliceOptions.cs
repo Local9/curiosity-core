@@ -1,12 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Police.Client.net.Classes.Menus
 {
@@ -32,7 +29,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static MenuItem menuItemDispatch = new MenuItem("Dispatch");
         static MenuItem menuItemBreaker = new MenuItem(":: Options ::") { Enabled = false };
 
-        static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive) { Description = "Show information when a player requests backup" } ;
+        static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive) { Description = "Show information when a player requests backup" };
         static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
         static MenuCheckboxItem menuCheckboxRandomCallouts = new MenuCheckboxItem("Accept Dispatch Calls", _IsOnDuty) { Description = "Random Dispatch Mission" };
 
@@ -77,7 +74,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             if (MainMenu == null)
             {
                 MainMenu = new Menu("Police Options", "Additional options for Police");
-                
+
                 MainMenu.OnMenuOpen += OnMenuOpen;
                 MainMenu.OnListItemSelect += OnListItemSelect;
                 MainMenu.OnItemSelect += OnItemSelect;
@@ -181,7 +178,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void OnListItemSelect(Menu menu, MenuListItem listItem, int selectedIndex, int itemIndex)
         {
-            
+
         }
 
         private static async void OnMenuOpen(Menu menu)

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using CorePlayer = CitizenFX.Core.Player;
+﻿using CitizenFX.Core;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
+using System;
+using CorePlayer = CitizenFX.Core.Player;
 
 namespace Curiosity.Server.net.Classes.Menu
 {

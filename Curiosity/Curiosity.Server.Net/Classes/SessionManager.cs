@@ -54,7 +54,8 @@ namespace Curiosity.Server.net.Classes
             while ((API.GetGameTimer() - GameTimer) > SESSION_UPDATE)
             {
                 GameTimer = API.GetGameTimer();
-                try {
+                try
+                {
 
                     UpdatePlayersInformation();
                 }

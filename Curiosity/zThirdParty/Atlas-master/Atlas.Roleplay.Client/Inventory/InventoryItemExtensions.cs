@@ -1,5 +1,5 @@
-using System.Linq;
 using Atlas.Roleplay.Library.Inventory;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Inventory
 {

@@ -1,9 +1,6 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.Menus;
+﻿using Curiosity.Client.net.Classes.Menus;
 using Curiosity.Client.net.Classes.Menus.CharacterEditor.MainMenu;
 using System.Threading.Tasks;
-using Curiosity.Client.net.Models;
 
 namespace Curiosity.Client.net
 {

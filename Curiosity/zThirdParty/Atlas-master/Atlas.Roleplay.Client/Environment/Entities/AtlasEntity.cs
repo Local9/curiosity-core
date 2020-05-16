@@ -1,15 +1,15 @@
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Environment.Entities.Modules;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment.Entities
 {
     public class AtlasEntity
     {
-        private Ped CitizenPed => API.DoesEntityExist(Id) && API.IsEntityAPed(Id) ? (Ped) Entity.FromHandle(Id) : null;
+        private Ped CitizenPed => API.DoesEntityExist(Id) && API.IsEntityAPed(Id) ? (Ped)Entity.FromHandle(Id) : null;
         public int Id { get; set; }
         public EntityModuleRegistry Modules { get; set; } = new EntityModuleRegistry();
         public int Model => API.GetEntityModel(Id);
@@ -77,7 +77,7 @@ namespace Atlas.Roleplay.Client.Environment.Entities
         public bool IsDead => API.IsEntityDead(Id);
         public Vehicle Vehicle => CitizenPed?.CurrentVehicle;
         public Tasks Task => CitizenPed?.Task;
-        
+
         public void SetDefaultStyle()
         {
             API.SetPedDefaultComponentVariation(Id);

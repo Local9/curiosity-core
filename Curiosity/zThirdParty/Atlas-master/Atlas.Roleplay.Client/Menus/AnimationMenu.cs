@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Client.Managers;
 using CitizenFX.Core;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Menus
 {
@@ -324,7 +324,7 @@ namespace Atlas.Roleplay.Client.Menus
                     }
                     else if (operation.Type == MenuOperationType.Select)
                     {
-                        var animations = (List<AnimationBuilder>) item.Metadata[0];
+                        var animations = (List<AnimationBuilder>)item.Metadata[0];
 
                         foreach (var animation in animations)
                         {

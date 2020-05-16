@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Linq;
-using System.Threading.Tasks;
-using Curiosity.System.Library;
+using CitizenFX.Core;
 using Curiosity.System.Library.Events;
 using Curiosity.System.Library.Models;
-using Curiosity.System.Server.MySQL;
 using Curiosity.System.Server.Diagnostics;
 using Curiosity.System.Server.Extensions;
-using CitizenFX.Core;
+using Curiosity.System.Server.MySQL;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Curiosity.System.Server.Managers
 {

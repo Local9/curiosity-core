@@ -29,7 +29,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
-            foreach(int groupId in groups)
+            foreach (int groupId in groups)
             {
                 if (API.DoesGroupExist(groupId))
                 {
@@ -58,7 +58,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
 
                 Vector3 spawnPosition = new Vector3();
                 API.GetNthClosestVehicleNode(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, random.Next(500, 1000), ref spawnPosition, 0, 0, 0);
-                
+
                 await BaseScript.Delay(1000);
 
                 Vector3 streetSpawnPosition = World.GetNextPositionOnStreet(spawnPosition, true);
@@ -159,7 +159,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                 }
 
                 List<Ped> pedsToRun = new List<Ped>(peds);
-                foreach(Ped ped in pedsToRun)
+                foreach (Ped ped in pedsToRun)
                 {
                     await BaseScript.Delay(50);
 
@@ -173,7 +173,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                                 ped.Task.EnterAnyVehicle(VehicleSeat.Driver, -1, 2f);
                                 ped.Task.DriveTo(ped.CurrentVehicle, Game.PlayerPed.Position, 10.0f, 30.0f, (int)DrivingStyle.ShortestPath);
                             }
-                            
+
                             if (ped.Position.DistanceToSquared(Game.PlayerPed.Position) < 99.9f)
                             {
                                 ped.Task.LeaveVehicle();
@@ -181,7 +181,7 @@ namespace Curiosity.Client.net.Classes.Environment.PedClasses
                                 ped.Task.FightAgainstHatedTargets(100.0f);
                                 await Client.Delay(10000);
                             }
-                            
+
                         }
 
                         if (ped.IsDead)

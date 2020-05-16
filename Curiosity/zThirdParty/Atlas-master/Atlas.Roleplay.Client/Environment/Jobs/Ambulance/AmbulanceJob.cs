@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Environment.Jobs.Profiles;
 using Atlas.Roleplay.Client.Events;
@@ -11,6 +7,10 @@ using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Ambulance
 {
@@ -32,10 +32,10 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Ambulance
 
         public override Dictionary<int, string> Roles { get; set; } = new Dictionary<int, string>
         {
-            [(int) EmploymentRoles.Ambulance.Chief] = "Sjukvårdschef",
-            [(int) EmploymentRoles.Ambulance.Consultant] = "Överläkare",
-            [(int) EmploymentRoles.Ambulance.Medic] = "Läkare",
-            [(int) EmploymentRoles.Ambulance.Nurse] = "Sjuksköterska"
+            [(int)EmploymentRoles.Ambulance.Chief] = "Sjukvårdschef",
+            [(int)EmploymentRoles.Ambulance.Consultant] = "Överläkare",
+            [(int)EmploymentRoles.Ambulance.Medic] = "Läkare",
+            [(int)EmploymentRoles.Ambulance.Nurse] = "Sjuksköterska"
         };
 
         public override JobProfile[] Profiles { get; set; } =

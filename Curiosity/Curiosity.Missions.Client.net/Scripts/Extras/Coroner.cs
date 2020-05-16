@@ -1,9 +1,7 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
-using Curiosity.Missions.Client.net.Wrappers;
 
 namespace Curiosity.Missions.Client.net.Scripts.Extras
 {
@@ -18,7 +16,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
 
         // STATE
         static public bool IsServiceActive = false;
-        
+
         // ENTITIES
         static Ped PedToRecover;
 
@@ -81,7 +79,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
             {
                 PedToRecover.Delete();
             }
-            
+
             Reset(true);
         }
 

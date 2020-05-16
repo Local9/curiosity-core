@@ -64,7 +64,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             {
                 if (_vehicleStolen)
                     return $"{_firstname} {_surname}";
-                
+
                 return this.InteractivePed.Name;
             }
         }
@@ -363,7 +363,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
         public void Abort(EntityEventWrapper sender, Entity entity)
         {
             base.Delete();
-            
+
             client.DeregisterTickHandler(OnShowHelpTextTask);
 
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
@@ -443,7 +443,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
                 if (this.Vehicle.Driver == null)
                     this.InteractivePed.Ped.Task.EnterVehicle(this.Vehicle, VehicleSeat.Driver, 20000, 5f);
-                
+
                 await Client.Delay(1000);
 
                 int willRam = Client.Random.Next(5);
@@ -512,7 +512,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             if (this.InteractivePed.Handle == handle)
             {
                 client.DeregisterTickHandler(OnShowHelpTextTask);
-                
+
                 this.InteractivePed.Ped.LeaveGroup();
 
                 this.InteractivePed.Ped.SetConfigFlag(292, false);

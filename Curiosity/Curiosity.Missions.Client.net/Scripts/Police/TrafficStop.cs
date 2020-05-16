@@ -1,12 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Wrappers;
 using Curiosity.Shared.Client.net;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
@@ -141,7 +137,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                     if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency)
                     {
                         if (IsCooldownActive)
-                        { 
+                        {
                             return;
                         }
 

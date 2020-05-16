@@ -2,7 +2,6 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Player
@@ -133,7 +132,7 @@ namespace Curiosity.Client.net.Classes.Player
 
                 IsCameraMoving = false;
                 IsPedHoldingSign = false;
-                
+
 
                 Debug.WriteLine($"DisableMovement()");
             }
@@ -141,7 +140,7 @@ namespace Curiosity.Client.net.Classes.Player
             {
                 Debug.WriteLine($"DisableMovement() -> {ex.Message}");
             }
-}
+        }
 
         public static async Task HoldSign()
         {

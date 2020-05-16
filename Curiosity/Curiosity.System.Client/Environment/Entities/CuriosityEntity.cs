@@ -9,7 +9,7 @@ namespace Curiosity.System.Client.Environment.Entities
 {
     public class CuriosityEntity
     {
-        private Ped CitizenPed => API.DoesEntityExist(Id) && API.IsEntityAPed(Id) ? (Ped) Entity.FromHandle(Id) : null;
+        private Ped CitizenPed => API.DoesEntityExist(Id) && API.IsEntityAPed(Id) ? (Ped)Entity.FromHandle(Id) : null;
         public int Id { get; set; }
         public EntityModuleRegistry Modules { get; set; } = new EntityModuleRegistry();
         public int Model => API.GetEntityModel(Id);
@@ -77,7 +77,7 @@ namespace Curiosity.System.Client.Environment.Entities
         public bool IsDead => API.IsEntityDead(Id);
         public Vehicle Vehicle => CitizenPed?.CurrentVehicle;
         public Tasks Task => CitizenPed?.Task;
-        
+
         public void SetDefaultStyle()
         {
             API.SetPedDefaultComponentVariation(Id);

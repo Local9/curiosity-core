@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
-using CitizenFX.Core.Native;
+﻿using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Client.net.Classes.Actions
 {
@@ -94,7 +88,7 @@ namespace Curiosity.Client.net.Classes.Actions
                     SetBlipSprite(BlipHandle, 66);
                 }
                 DrawScaleformMovieFullscreen(ScaleformHandle, 255, 255, 255, 200, 0);
-                
+
                 CaptureInputs(ScaleformHandle);
                 await Client.Delay(0);
             }

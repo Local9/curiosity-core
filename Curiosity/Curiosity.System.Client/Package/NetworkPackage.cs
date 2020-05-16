@@ -36,7 +36,7 @@ namespace Curiosity.System.Client.Package
 
             try
             {
-                final = (NetworkPayload<T>) load;
+                final = (NetworkPayload<T>)load;
             }
             catch (Exception)
             {
@@ -78,7 +78,7 @@ namespace Curiosity.System.Client.Package
 
             foreach (var import in Imports.GetInvocationList())
             {
-                ((Action<NetworkPackage, string>) import).Invoke(this, index);
+                ((Action<NetworkPackage, string>)import).Invoke(this, index);
             }
         }
     }

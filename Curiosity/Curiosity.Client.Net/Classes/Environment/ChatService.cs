@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static Curiosity.Shared.Client.net.Helper.NativeWrappers;
-using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net;
-using Newtonsoft.Json;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Client.net;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using static Curiosity.Shared.Client.net.Helper.NativeWrappers;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -156,7 +154,8 @@ namespace Curiosity.Client.net.Classes.Environment
             return Regex.Replace(
                 value,
                 @"\\u(?<Value>[a-zA-Z0-9]{4})",
-                m => {
+                m =>
+                {
                     return ((char)int.Parse(m.Groups["Value"].Value, NumberStyles.HexNumber)).ToString();
                 });
         }

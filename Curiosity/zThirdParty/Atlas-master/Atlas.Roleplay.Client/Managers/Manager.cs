@@ -7,7 +7,7 @@ namespace Atlas.Roleplay.Client.Managers
         public static T GetModule()
         {
             return AtlasPlugin.Instance.GetManager<T>() ?? (!AtlasPlugin.Instance.IsLoadingManager<T>()
-                       ? (T) AtlasPlugin.Instance.LoadManager(typeof(T))
+                       ? (T)AtlasPlugin.Instance.LoadManager(typeof(T))
                        : null);
         }
 

@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Threading.Tasks;
-using Curiosity.Shared.Server.net.Helpers;
 
 namespace Curiosity.Police.Server.net
 {
@@ -38,12 +38,12 @@ namespace Curiosity.Police.Server.net
 
         static void OnPlayerConnecting([FromSource]CitizenFX.Core.Player player, string playerName, dynamic setKickReason, dynamic deferrals)
         {
-            
+
         }
 
         static void OnPlayerDropped([FromSource]CitizenFX.Core.Player player, string reason)
         {
-            
+
         }
 
         public void RegisterEventHandler(string name, Delegate action)

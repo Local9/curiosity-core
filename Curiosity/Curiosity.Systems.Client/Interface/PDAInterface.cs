@@ -1,16 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Diagnostics;
-using Curiosity.Systems.Client.Interface;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.FiveM;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers
@@ -229,7 +225,7 @@ namespace Curiosity.Systems.Client.Managers
 
                 long timer = API.GetGameTimer();
 
-                while((API.GetGameTimer() - timer) < 3000)
+                while ((API.GetGameTimer() - timer) < 3000)
                 {
                     await BaseScript.Delay(10);
                 }

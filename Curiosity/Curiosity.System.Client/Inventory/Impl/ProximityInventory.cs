@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
 using Curiosity.System.Client.Package;
 using Curiosity.System.Library.Inventory;
 using Curiosity.System.Library.Utilities;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.System.Client.Inventory.Impl
 {

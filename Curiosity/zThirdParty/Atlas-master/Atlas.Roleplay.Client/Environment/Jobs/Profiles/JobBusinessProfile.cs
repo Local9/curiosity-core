@@ -1,7 +1,7 @@
-using System;
 using Atlas.Roleplay.Client.Events;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Models;
+using System;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
 {
@@ -14,7 +14,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
         public override async void Begin(Job job)
         {
             await Session.Loading();
-            
+
             Seed = $"business::{job.Attachment.ToString().ToLower()}";
             Business = await EventSystem.GetModule().Request<Business>("business:fetch", Seed) ?? new Business
             {

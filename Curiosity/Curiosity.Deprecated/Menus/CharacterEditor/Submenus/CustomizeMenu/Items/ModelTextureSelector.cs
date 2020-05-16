@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.CustomizeMenu

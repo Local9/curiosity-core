@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Events;
 using Atlas.Roleplay.Client.Extensions;
@@ -7,6 +5,8 @@ using Atlas.Roleplay.Client.Inventory;
 using Atlas.Roleplay.Client.Package;
 using Atlas.Roleplay.Library.Inventory;
 using Atlas.Roleplay.Library.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
 {
@@ -20,15 +20,16 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
         public override async void Begin(Job job)
         {
             await Session.Loading();
-            
+
             var package = NetworkPackage.GetModule();
 
             Seed = $"storage::{job.Attachment.ToString().ToLower()}";
             Storage = await EventSystem.GetModule().Request<Storage>("storage:fetch", Seed) ??
                       (package.GetLoad<Storage>(Seed).Get() ?? new Storage
                       {
-                          Seed = Seed, Owner = job.Attachment.ToString().ToLower(),
-                          Metadata = new StorageMetadata {Items = new List<InventoryItem>()}
+                          Seed = Seed,
+                          Owner = job.Attachment.ToString().ToLower(),
+                          Metadata = new StorageMetadata { Items = new List<InventoryItem>() }
                       });
 
             var inventory = new JobStorageInventory(new InventoryContainerBase

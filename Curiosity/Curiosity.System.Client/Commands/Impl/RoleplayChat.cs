@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading.Tasks;
+using CitizenFX.Core.Native;
 using Curiosity.System.Client.Environment;
 using Curiosity.System.Client.Environment.Entities;
 using Curiosity.System.Client.Extensions;
-using Curiosity.System.Client.Interface;
 using Curiosity.System.Client.Managers;
 using Curiosity.System.Client.Package;
 using Curiosity.System.Library;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Curiosity.System.Client.Commands.Impl
 {
@@ -29,7 +26,7 @@ namespace Curiosity.System.Client.Commands.Impl
                 }
             }
 
-            public override string[] Aliases { get; set; } = {"twitter", "twt", "tweet"};
+            public override string[] Aliases { get; set; } = { "twitter", "twt", "tweet" };
             public override string Title { get; set; } = "Twitter";
             public override Color Color { get; set; } = Color.FromArgb(50, 50, 255);
             public override bool IsRestricted { get; set; }
@@ -54,7 +51,7 @@ namespace Curiosity.System.Client.Commands.Impl
                 }
             }
 
-            public override string[] Aliases { get; set; } = {"me", "do"};
+            public override string[] Aliases { get; set; } = { "me", "do" };
             public override string Title { get; set; } = "";
             public override Color Color { get; set; } = Color.FromArgb(255, 0, 0);
             public override bool IsRestricted { get; set; }

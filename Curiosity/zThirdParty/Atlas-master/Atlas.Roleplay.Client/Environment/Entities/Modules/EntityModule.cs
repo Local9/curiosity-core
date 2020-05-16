@@ -9,13 +9,13 @@ namespace Atlas.Roleplay.Client.Environment.Entities.Modules
         {
             Entity = entity;
             Id = id;
-            
+
             Begin(entity, id);
         }
 
         public T As<T>() where T : EntityModule
         {
-            return (T) this;
+            return (T)this;
         }
 
         protected abstract void Begin(AtlasEntity entity, int id);

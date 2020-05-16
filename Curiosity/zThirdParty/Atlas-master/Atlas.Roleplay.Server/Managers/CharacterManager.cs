@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Linq;
 using Atlas.Roleplay.Library;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Inventory;
@@ -10,6 +6,10 @@ using Atlas.Roleplay.Library.Models;
 using Atlas.Roleplay.Server.Diagnostics;
 using Atlas.Roleplay.Server.Extensions;
 using Atlas.Roleplay.Server.MySQL;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Linq;
 
 namespace Atlas.Roleplay.Server.Managers
 {
@@ -135,7 +135,7 @@ namespace Atlas.Roleplay.Server.Managers
 
                 return null;
             }));
-            
+
             EventSystem.Attach("characters:fetchbyseed", new EventCallback(metadata =>
             {
                 var seed = metadata.Find<string>(0);

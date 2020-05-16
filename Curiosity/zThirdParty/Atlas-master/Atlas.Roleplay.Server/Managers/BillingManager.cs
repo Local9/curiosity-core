@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Linq;
 using Atlas.Roleplay.Library.Billing;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Server.MySQL;
+using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Linq;
 
 namespace Atlas.Roleplay.Server.Managers
 {
@@ -77,9 +77,9 @@ namespace Atlas.Roleplay.Server.Managers
                     var bill = context.Bills.FirstOrDefault(self => self.Seed == seed);
 
                     if (bill == null) return null;
-                    
+
                     bill.IsActive = false;
-                    
+
                     context.Bills.AddOrUpdate(bill);
 
                     await context.SaveChangesAsync();

@@ -1,11 +1,9 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.DataClasses.Mission;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Shared.Client.net;
-using Curiosity.Shared.Client.net.Classes.Data;
 using Curiosity.Shared.Client.net.Classes.Environment;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Extensions;
@@ -39,7 +37,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static Blip LocationBlip;
         static Vector3 Location = new Vector3();
-        
+
         static public async Task Create(MissionData store)
         {
             if (store == null)
@@ -96,7 +94,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                         Decorators.Set(HostagePed.Handle, Client.DECOR_PED_MISSION, true);
                         Decorators.Set(HostagePed.Handle, Client.DECOR_PED_HOSTAGE, true);
-                        
+
                         new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
 
                         HostagePed.IsPositionFrozen = true;
@@ -113,7 +111,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     await BaseScript.Delay(0);
                     MissionPed1 = PedCreators.MissionPedCreator.Ped(ped1, MissionPedData1.Alertness, MissionPedData1.Difficulty, MissionPedData1.VisionDistance);
                 }
-                
+
                 await BaseScript.Delay(10);
 
                 Vector3 mpd2Spawnpoint = MissionPedData2.SpawnPoint;
@@ -125,13 +123,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     await BaseScript.Delay(0);
                     MissionPed2 = PedCreators.MissionPedCreator.Ped(ped2, MissionPedData2.Alertness, MissionPedData2.Difficulty, MissionPedData2.VisionDistance);
                 }
-                
+
                 await BaseScript.Delay(10);
 
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 {
                     Log.Info($"INITAL MISSION PEDS: {store.Name}");
-                    
+
                     if (MissionPed1 != null)
                         Log.Info($"PED1: {MissionPed1.Exists()}");
                     if (MissionPed2 != null)
@@ -160,7 +158,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         {
             Model modelToLoad = model;
             modelToLoad.Request(1000);
-            while(!modelToLoad.IsLoaded)
+            while (!modelToLoad.IsLoaded)
             {
                 await BaseScript.Delay(10);
             }
@@ -183,7 +181,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 {
                     Vector3 spawnpoint = MissionPedData3.SpawnPoint;
                     Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData3.Model, spawnpoint, MissionPedData3.SpawnHeading);
-                    
+
                     if (backup != null)
                     {
                         backup.Weapons.Give(MissionPedData3.Weapon, 1, true, true);

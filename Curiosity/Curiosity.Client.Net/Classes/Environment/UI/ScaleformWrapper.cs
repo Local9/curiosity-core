@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using System;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
@@ -16,7 +15,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             while (!scaleform.IsLoaded)
             {
                 await Client.Delay(0);
-                if  (API.GetGameTimer() - startTime >= 5000)
+                if (API.GetGameTimer() - startTime >= 5000)
                 {
                     Debug.WriteLine("SCALEFORM -> Request loading failed");
                     return null;

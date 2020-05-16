@@ -1,6 +1,4 @@
-﻿using Curiosity.Global.Shared.net.Enums;
-
-namespace Curiosity.Global.Shared.net.Entity
+﻿namespace Curiosity.Global.Shared.net.Entity
 {
     public class ChatState
     {

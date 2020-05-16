@@ -1,7 +1,7 @@
-using System.Data.Entity;
 using Atlas.Roleplay.Library.Billing;
 using Atlas.Roleplay.Library.Inventory;
 using Atlas.Roleplay.Library.Models;
+using System.Data.Entity;
 
 namespace Atlas.Roleplay.Server.MySQL
 {

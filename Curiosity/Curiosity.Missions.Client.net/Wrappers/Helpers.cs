@@ -1,14 +1,14 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
+using Curiosity.Missions.Client.net.Classes.PlayerClient;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using static CitizenFX.Core.Native.API;
 using Font = CitizenFX.Core.UI.Font;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
 
 namespace Curiosity.Missions.Client.net.Wrappers
 {
@@ -115,7 +115,7 @@ namespace Curiosity.Missions.Client.net.Wrappers
         public static void RequestControlOfEnt(Entity entity)
         {
             int tick = 0;
-            while(!NetworkHasControlOfEntity(entity.Handle) && tick <= 25)
+            while (!NetworkHasControlOfEntity(entity.Handle) && tick <= 25)
             {
                 NetworkRequestControlOfEntity(entity.Handle);
                 tick++;

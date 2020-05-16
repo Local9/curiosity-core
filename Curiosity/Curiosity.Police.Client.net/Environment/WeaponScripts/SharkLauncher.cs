@@ -1,11 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Police.Client.net.Classes.Player;
-using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Police.Client.net.Environment.WeaponScripts

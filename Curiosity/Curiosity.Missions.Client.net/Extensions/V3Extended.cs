@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-
-namespace Curiosity.Missions.Client.net.Extensions
+﻿namespace Curiosity.Missions.Client.net.Extensions
 {
     static class V3Extended
     {

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Helper.Area;
-using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Helper.Area;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Curiosity.Vehicle.Client.net.Classes.Environment
 {
@@ -72,7 +69,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static Client client = Client.GetInstance();
 
         static List<AreaBox> safeZones = new List<AreaBox>();
-        
+
         static int Opacity = 200;
 
         static Dictionary<int, SafeZoneVehicle> safeZoneVehicles = new Dictionary<int, SafeZoneVehicle>();
@@ -220,7 +217,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                     Log.Info("Left Safezone");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }

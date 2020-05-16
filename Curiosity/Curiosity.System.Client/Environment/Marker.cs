@@ -63,7 +63,7 @@ namespace Curiosity.System.Client.Environment
                         {
                             foreach (var invocation in Callback.GetInvocationList())
                             {
-                                ((Action) invocation).Invoke();
+                                ((Action)invocation).Invoke();
                             }
                         }
                     }

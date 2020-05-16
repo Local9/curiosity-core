@@ -1,16 +1,14 @@
-﻿using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Shared.Client.net.Extensions;
-using MenuAPI;
-using System;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Missions.Client.net.Helpers;
+using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net;
+using Curiosity.Shared.Client.net.Extensions;
+using MenuAPI;
 using Newtonsoft.Json;
-using Curiosity.Missions.Client.net.Helpers;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenus
 {
@@ -174,7 +172,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             if (menuItem == mItemSuspectVehicle && _interactivePed.Ped.IsInVehicle())
             {
                 Generic.InteractionLeaveVehicle(_interactivePed);
-                
+
                 if (_interactivePed.Ped.CurrentVehicle != null)
                     DecorSetInt(_interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE, _interactivePed.Ped.CurrentVehicle.Handle);
 
@@ -189,7 +187,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             if (menuItem == mItemSuspectVehicle && !_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE))
             {
                 Generic.InteractionEnterVehicle(_interactivePed);
-                
+
                 mItemSuspectVehicle.Enabled = false;
                 await Client.Delay(2000);
                 mItemSuspectVehicle.Text = "Suspect: Ask to Leave Vehicle";
@@ -248,7 +246,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
                 {
                     mItemSearch.Enabled = false;
                 }
-                
+
                 mItemSearch.Description = IsInVehicle ? "Suspect must be removed from the vehicle before searching." : string.Empty;
                 menu.AddMenuItem(mItemSearch);
 

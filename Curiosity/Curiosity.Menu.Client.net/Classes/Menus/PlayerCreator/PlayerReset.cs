@@ -1,10 +1,9 @@
-﻿using MenuAPI;
-using Newtonsoft.Json;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Entity;
-using System.Collections.Generic;
+using MenuAPI;
 using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerCreator
 {

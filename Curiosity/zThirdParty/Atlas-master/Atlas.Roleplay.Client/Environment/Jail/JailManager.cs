@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment.Jobs;
 using Atlas.Roleplay.Client.Environment.Jobs.Police;
 using Atlas.Roleplay.Client.Extensions;
@@ -11,6 +8,9 @@ using Atlas.Roleplay.Library.LawEnforcement;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment.Jail
 {
@@ -29,7 +29,7 @@ namespace Atlas.Roleplay.Client.Environment.Jail
         public Position ReleasePosition { get; } = new Position(1849.07f, 2600.969f, 45.61405f, 265.0127f);
         public Position JailPosition { get; } = new Position();
         public JailCase LastJailCase { get; set; }
-        
+
         public override async void Begin()
         {
             await Session.Loading();
@@ -41,7 +41,7 @@ namespace Atlas.Roleplay.Client.Environment.Jail
             SetActive(character.Metadata.ActiveJailCase);
 
             Atlas.AttachTickHandler(OnTick);
-            
+
             var marker = new Marker(JailPosition)
             {
                 Message = "Tryck ~INPUT_CONTEXT~ för att fängsla personen.",
@@ -58,10 +58,10 @@ namespace Atlas.Roleplay.Client.Environment.Jail
             var job = JobManager.GetModule().GetJob<PoliceJob>();
 
             CaseBuilder = new JailCase();
-            
+
             new Menu($"{job.Label} | Fängsla person")
             {
-               Items = new List<MenuItem>
+                Items = new List<MenuItem>
                {
                    new MenuItem("security", "Säkerhet")
                    {
@@ -72,10 +72,10 @@ namespace Atlas.Roleplay.Client.Environment.Jail
                    },
                    new MenuItem("pursue_case", "Fänsla")
                },
-               Callback = (menu, item, operation) =>
-               {
-                   if (operation.Type != MenuOperationType.Select) return;
-               }
+                Callback = (menu, item, operation) =>
+                {
+                    if (operation.Type != MenuOperationType.Select) return;
+                }
             }.Commit();
         }
 

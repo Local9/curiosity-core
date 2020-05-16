@@ -18,10 +18,10 @@ namespace Atlas.Roleplay.Client.Inventory.Usables
                 {
                     Cache.Entity.Health += 75;
                     Cache.Player.Sound.PlayFrontend("Bus_Schedule_Pickup", "DLC_PRISON_BREAK_HEIST_SOUNDS");
-                    
+
                     ItemHelper.Remove(item);
                 }
-                
+
                 return null;
             }));
         }

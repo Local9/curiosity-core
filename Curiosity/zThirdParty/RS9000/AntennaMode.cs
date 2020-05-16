@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RS9000
+﻿namespace RS9000
 {
     internal enum AntennaMode
     {

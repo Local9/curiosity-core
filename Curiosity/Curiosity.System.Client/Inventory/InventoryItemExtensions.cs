@@ -1,5 +1,5 @@
-using System.Linq;
 using Curiosity.System.Library.Inventory;
+using System.Linq;
 
 namespace Curiosity.System.Client.Inventory
 {

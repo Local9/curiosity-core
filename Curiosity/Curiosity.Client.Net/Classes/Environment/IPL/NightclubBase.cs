@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.UI;
-using static CitizenFX.Core.Native.API;
-
-using Curiosity.Shared.Client.net.Helper;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using Curiosity.Shared.Client.net.Helper;
+using System;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Client.net.Classes.Environment.IPL
 {

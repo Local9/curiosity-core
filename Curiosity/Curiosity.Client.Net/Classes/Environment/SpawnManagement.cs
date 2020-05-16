@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Client.net.Classes.Player;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Client.net.Classes.Player;
-using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Helper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment
 {
@@ -111,7 +109,7 @@ namespace Curiosity.Client.net.Classes.Environment
                             Screen.ShowNotification($"~r~Cooldown Active");
                         }
                         else
-                        { 
+                        {
                             Debug.WriteLine($"Reviving Player {closestPlayer.Name}|{closestPlayer.ServerId}");
 
                             Client.TriggerServerEvent("curiosity:Server:Player:Revive", closestPlayer.ServerId, false);
@@ -121,7 +119,7 @@ namespace Curiosity.Client.net.Classes.Environment
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine($"Revive > Critical Error: {ex.Message}");
             }

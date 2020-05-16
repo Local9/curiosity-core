@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Library.Models;
-using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
 {
@@ -24,7 +23,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
         public override async void Begin(Job job)
         {
             await Session.Loading();
-            
+
             var character = Cache.Character;
             var marker = new Marker(Position)
             {
@@ -57,7 +56,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
 
                         if (name != "CHARACTER_STYLE")
                         {
-                            style = style.Merge((Style) Activator.CreateInstance(Type.GetType(name) ?? throw new NullReferenceException($"[Job] [JobLockerRoomProfile] Could not find style class `{name}`.")),
+                            style = style.Merge((Style)Activator.CreateInstance(Type.GetType(name) ?? throw new NullReferenceException($"[Job] [JobLockerRoomProfile] Could not find style class `{name}`.")),
                                 ClothingComponents);
                         }
 

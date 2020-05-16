@@ -1,6 +1,4 @@
 ﻿using Curiosity.Shared.Client.net;
-using System;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Vehicle.Client.net
 {

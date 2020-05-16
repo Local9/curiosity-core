@@ -1,8 +1,7 @@
-using System.Data.Entity.Migrations;
-using System.Linq;
 using Curiosity.System.Library.Events;
 using Curiosity.System.Library.Inventory;
 using Curiosity.System.Server.MySQL;
+using System.Linq;
 
 namespace Curiosity.System.Server.Managers
 {

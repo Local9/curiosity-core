@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-
-namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.MPBodyMenu
+﻿namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.MPBodyMenu
 {
     class ItemSelector : MenuItemHorSelector<int>
     {

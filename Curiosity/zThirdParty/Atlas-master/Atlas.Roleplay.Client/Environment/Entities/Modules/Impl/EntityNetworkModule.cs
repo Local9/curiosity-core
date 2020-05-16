@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment.Entities.Modules.Impl
 {
@@ -34,7 +34,7 @@ namespace Atlas.Roleplay.Client.Environment.Entities.Modules.Impl
         public static AtlasEntity GetEntity(int id)
         {
             var entity = new AtlasEntity(API.NetworkGetEntityFromNetworkId(id));
-            
+
             entity.InstallModule("Network", new EntityNetworkModule());
 
             return entity;

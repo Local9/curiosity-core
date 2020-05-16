@@ -1,20 +1,18 @@
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.System.Client.Diagnostics;
+using Curiosity.System.Client.Inventory.Impl;
+using Curiosity.System.Client.Inventory.Items;
+using Curiosity.System.Client.Managers;
+using Curiosity.System.Library.Events;
+using Curiosity.System.Library.Inventory;
+using Curiosity.System.Library.Models;
+using Curiosity.Systems.Library;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.System.Client.Diagnostics;
-using Curiosity.System.Client.Environment;
-using Curiosity.System.Client.Inventory.Impl;
-using Curiosity.System.Client.Inventory.Items;
-using Curiosity.System.Client.Managers;
-using Curiosity.System.Library;
-using Curiosity.System.Library.Events;
-using Curiosity.System.Library.Inventory;
-using Curiosity.System.Library.Models;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Newtonsoft.Json;
-using Curiosity.Systems.Library;
 
 namespace Curiosity.System.Client.Inventory
 {
@@ -33,7 +31,7 @@ namespace Curiosity.System.Client.Inventory
                     ? "[Inventory] Opening inventory..."
                     : "[Inventory] Closed inventory.");
             };
-            
+
             Atlas.AttachNuiHandler("CLOSE_INVENTORY", new EventCallback(metadata =>
             {
                 OpenedInventory = false;
@@ -41,7 +39,7 @@ namespace Curiosity.System.Client.Inventory
                 if (StateChanged != null)
                     foreach (var invocation in StateChanged?.GetInvocationList())
                     {
-                        ((Action<InventoryStateChange>) invocation).Invoke(InventoryStateChange.Hide);
+                        ((Action<InventoryStateChange>)invocation).Invoke(InventoryStateChange.Hide);
                     }
 
                 API.SetNuiFocus(false, false);
@@ -130,12 +128,12 @@ namespace Curiosity.System.Client.Inventory
                 {
                     if (!Game.IsControlJustPressed(0, entry.Value)) continue;
 
-                    var equipment = (EquipmentInventory) container;
+                    var equipment = (EquipmentInventory)container;
                     var slot = equipment.Slots[entry.Key];
 
                     if (slot == null || !slot.IsWeapon()) continue;
 
-                    var weapon = (WeaponItem) slot;
+                    var weapon = (WeaponItem)slot;
                     var selected = equipment.GetSelected();
 
                     if (selected != null && selected.Seed != weapon.Seed) selected.Unequip();
@@ -156,10 +154,10 @@ namespace Curiosity.System.Client.Inventory
                     if (StateChanged != null)
                         foreach (var invocation in StateChanged?.GetInvocationList())
                         {
-                            ((Action<InventoryStateChange>) invocation).Invoke(InventoryStateChange.Show);
+                            ((Action<InventoryStateChange>)invocation).Invoke(InventoryStateChange.Show);
                         }
 
-                    API.SendNuiMessage(new JsonBuilder().Add("Operation", "OPEN_INTERFACE").Add("Inventories", Registry).Add("Cash", Cache.Character.Cash).Add("Bank", Cache.Character.BankAccount.Balance).Build());               
+                    API.SendNuiMessage(new JsonBuilder().Add("Operation", "OPEN_INTERFACE").Add("Inventories", Registry).Add("Cash", Cache.Character.Cash).Add("Bank", Cache.Character.BankAccount.Balance).Build());
                     API.SetNuiFocus(true, true);
                 }
             }
@@ -174,7 +172,7 @@ namespace Curiosity.System.Client.Inventory
 
             if (container != null)
             {
-                var equipment = (EquipmentInventory) container;
+                var equipment = (EquipmentInventory)container;
                 var selected = equipment.GetSelected();
 
                 selected?.UpdateAmmunition();

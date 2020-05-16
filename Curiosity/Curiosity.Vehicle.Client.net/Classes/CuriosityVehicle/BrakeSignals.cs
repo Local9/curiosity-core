@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Helper;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Enums;
 
 namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 {

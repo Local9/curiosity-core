@@ -1,15 +1,15 @@
+using Atlas.Roleplay.Library;
+using Atlas.Roleplay.Library.Events;
+using Atlas.Roleplay.Library.Models;
+using Atlas.Roleplay.Server.Diagnostics;
+using Atlas.Roleplay.Server.Extensions;
+using Atlas.Roleplay.Server.MySQL;
+using CitizenFX.Core;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
-using Atlas.Roleplay.Library;
-using Atlas.Roleplay.Library.Events;
-using Atlas.Roleplay.Library.Models;
-using Atlas.Roleplay.Server.MySQL;
-using Atlas.Roleplay.Server.Diagnostics;
-using Atlas.Roleplay.Server.Extensions;
-using CitizenFX.Core;
 
 namespace Atlas.Roleplay.Server.Managers
 {

@@ -1,11 +1,5 @@
 ﻿using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
-using System;
-using System.Threading.Tasks;
-using CitizenFX.Core;
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
-using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenus
 {

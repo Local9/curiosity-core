@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Shared.Client.net;
-using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Helper;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Police.Client.net.Environment.Vehicle
 {
@@ -34,7 +31,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             "RESIDENT_VEHICLES_SIREN_FIRETRUCK_QUICK_01"
         };
 
-        static List<string>SIRENS_AMBULANCE = new List<string>()
+        static List<string> SIRENS_AMBULANCE = new List<string>()
         {
             "", // No Sirens, just lights
             "RESIDENT_VEHICLES_SIREN_WAIL_01",
@@ -362,7 +359,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             }
             catch (Exception ex)
             {
-                
+
             }
 
             string serializedSoundEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new SoundEventModel { SoundName = sound, PlayerServerId = Game.Player.ServerId });

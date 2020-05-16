@@ -17,15 +17,15 @@ namespace Curiosity.Global.Shared.net.Entity
         // Objectives...
 
         // Mission Actors
-        
+
         // Mission Vehicles
-        
+
         // Mission Props
-        
+
         // Mission Pickups
-        
+
         // Mission Messages
-        
+
         // Mission Teleports
 
     }
@@ -33,9 +33,9 @@ namespace Curiosity.Global.Shared.net.Entity
     public class MissionMessage
     {
         int _missionCompleted = 0;
-        
+
         public string MissionTitle;
-        
+
         public int MissionCompleted
         {
             get

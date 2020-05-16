@@ -1,13 +1,10 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Server.net.Entity;
 using Curiosity.Server.net.Extensions;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Classes.Environment
 {
@@ -39,7 +36,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
             catch (Exception ex)
             {
-                
+
             }
         }
         static async void OnGetDonatorVehicleList([FromSource]CitizenFX.Core.Player player)
@@ -87,7 +84,7 @@ namespace Curiosity.Server.net.Classes.Environment
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 

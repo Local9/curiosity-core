@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RS9000
 {
@@ -31,7 +30,7 @@ namespace RS9000
 
         public Controller(Script script, Radar radar)
         {
-            script.RegisterNUICallback("close", new Action<IDictionary<string, object>, CallbackDelegate>((body, result) => { Visible = false;  }));
+            script.RegisterNUICallback("close", new Action<IDictionary<string, object>, CallbackDelegate>((body, result) => { Visible = false; }));
 
             script.RegisterNUICallback("radarPower", new Action<IDictionary<string, object>, CallbackDelegate>(ToggleRadarPower));
             script.RegisterNUICallback("radarDisplay", new Action<IDictionary<string, object>, CallbackDelegate>(ToggleRadarDisplay));
@@ -42,7 +41,7 @@ namespace RS9000
             script.RegisterNUICallback("setFastLimit", new Func<IDictionary<string, object>, CallbackDelegate, Task>(SetFastLimit));
 
             this.script = script;
-            this.radar = radar; 
+            this.radar = radar;
         }
 
         private void ToggleRadarPower(IDictionary<string, object> body, CallbackDelegate result)
@@ -98,7 +97,7 @@ namespace RS9000
             {
                 return;
             }
-            
+
             if (speed < 50)
             {
                 speed = 50;

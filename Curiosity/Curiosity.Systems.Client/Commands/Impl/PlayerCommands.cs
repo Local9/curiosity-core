@@ -1,10 +1,8 @@
 ﻿using Curiosity.Systems.Client.Environment.Entities;
 using Curiosity.Systems.Client.Events;
-using Curiosity.Systems.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace Curiosity.Systems.Client.Commands.Impl
 {
@@ -15,7 +13,7 @@ namespace Curiosity.Systems.Client.Commands.Impl
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                
+
             }
         }
 
@@ -27,7 +25,7 @@ namespace Curiosity.Systems.Client.Commands.Impl
                 List<string> response = await EventSystem.GetModule().Request<List<string>>("party:get:members");
                 response.ForEach((string member) =>
                 {
-                    
+
                 });
             }
         }

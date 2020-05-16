@@ -48,7 +48,7 @@ namespace Curiosity.Shared.Client.net.Helper.Area
             F = F - center;
             G = G - center;
             H = H - center;
-            
+
             A = Vector3.Transform(A, rot);
             B = Vector3.Transform(B, rot);
             C = Vector3.Transform(C, rot);

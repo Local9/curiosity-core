@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace Curiosity.Global.Shared.net.Data
 {

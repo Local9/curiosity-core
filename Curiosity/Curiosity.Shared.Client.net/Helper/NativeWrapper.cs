@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Shared.Client.net.Helper

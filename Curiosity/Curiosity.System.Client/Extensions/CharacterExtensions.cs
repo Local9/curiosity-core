@@ -145,7 +145,7 @@ namespace Curiosity.System.Client.Extensions
                         view = 1;
 
                         player.CameraQueue.Reset();
-                        
+
                         await player.CameraQueue.View(new CameraBuilder()
                             .SkipTask()
                             .WithMotionBlur(0.5f)
@@ -155,7 +155,7 @@ namespace Curiosity.System.Client.Extensions
                     else if (!head && view == 1)
                     {
                         view = 0;
-      
+
                         player.CameraQueue.Reset();
 
                         await player.CameraQueue.View(new CameraBuilder()

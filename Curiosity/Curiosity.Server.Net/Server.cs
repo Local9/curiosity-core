@@ -1,10 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Threading.Tasks;
-using Curiosity.Shared.Server.net.Helpers;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Curiosity.Server.net
 {
@@ -33,7 +31,7 @@ namespace Curiosity.Server.net
             get
             {
                 return API.GetConvar("server_live", "false") == "true";
-            }   
+            }
         }
 
         public static PlayerList players;
@@ -44,7 +42,7 @@ namespace Curiosity.Server.net
         {
             return _server;
         }
-        
+
         public Server()
         {
             Log.Success("Entering Curiosity Server cter");
@@ -142,7 +140,8 @@ namespace Curiosity.Server.net
             if (tagArr.Length > 0)
             {
                 API.SetConvar("tags", $"{tags}, {curiosity}");
-            } else
+            }
+            else
             {
                 API.SetConvar("tags", $"{curiosity}");
             }

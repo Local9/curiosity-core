@@ -1,10 +1,10 @@
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment.Entities.Models;
 using Atlas.Roleplay.Client.Environment.Entities.Modules.Impl;
 using Atlas.Roleplay.Client.Events;
 using Atlas.Roleplay.Client.Managers;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client
 {

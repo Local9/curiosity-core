@@ -2,17 +2,17 @@
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Server.Database;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Extenstions;
 using Curiosity.Systems.Server.Managers;
-using Curiosity.Systems.Server.Database;
 using Curiosity.Systems.Server.Web;
+using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using GHMatti.Data.MySQL.Core;
 
 namespace Curiosity.Systems.Server
 {
@@ -385,7 +385,7 @@ namespace Curiosity.Systems.Server
                         if (!ActiveUsers.ContainsKey(playerHandle))
                         {
                             ActiveUsers.Remove(playerHandle);
-                            
+
                             SessionState sessionState = SessionState.Loading;
                             QueueManager.session.TryRemove(player.Identifiers["license"], out sessionState);
 

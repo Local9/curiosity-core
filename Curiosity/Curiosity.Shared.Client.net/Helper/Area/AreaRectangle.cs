@@ -26,7 +26,7 @@ namespace Curiosity.Shared.Client.net.Helper.Area
 
         public override void Draw()
         {
-            if (Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared2D(((new Vector3 { X = Pos1.X, Y = Pos1.Y, Z = 0.0f }) + (new Vector3 { X = Pos2.X, Y = Pos2.Y, Z = 0.0f })) / 2)) > 
+            if (Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared2D(((new Vector3 { X = Pos1.X, Y = Pos1.Y, Z = 0.0f }) + (new Vector3 { X = Pos2.X, Y = Pos2.Y, Z = 0.0f })) / 2)) >
                 Math.Sqrt((new Vector3 { X = Pos1.X, Y = Pos1.Y, Z = 0.0f }).DistanceToSquared2D(new Vector3 { X = Pos2.X, Y = Pos2.Y, Z = 0.0f })) * 5)
                 return;
 

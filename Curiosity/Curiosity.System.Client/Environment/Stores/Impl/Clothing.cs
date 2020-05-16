@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Curiosity.System.Client.Environment.Entities.Models;
 using Curiosity.System.Client.Extensions;
 using Curiosity.System.Client.Interface;
@@ -9,6 +5,10 @@ using Curiosity.System.Client.Interface.Impl;
 using Curiosity.System.Client.Managers;
 using Curiosity.System.Library.Models;
 using Curiosity.System.Library.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Curiosity.System.Client.Environment.Stores.Impl
 {
@@ -198,7 +198,7 @@ namespace Curiosity.System.Client.Environment.Stores.Impl
                                         {
                                             if (_operation.Type != MenuOperationType.Select) return;
 
-                                            var name = ((MenuProfileDialog) _menu.Profile).Value;
+                                            var name = ((MenuProfileDialog)_menu.Profile).Value;
 
                                             if (!character.Metadata.SavedOutfits.ContainsKey(name))
                                             {

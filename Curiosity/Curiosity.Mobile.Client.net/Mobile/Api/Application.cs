@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Curiosity.Global.Shared.net.Enums.Mobile;
 using System;
-using Curiosity.Global.Shared.net.Enums.Mobile;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Mobile.Client.net.Mobile.Api
 {

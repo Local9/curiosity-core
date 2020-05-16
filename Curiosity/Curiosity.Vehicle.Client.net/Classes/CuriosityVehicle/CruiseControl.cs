@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Helper;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Shared.Client.net.Helper;
+using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 {

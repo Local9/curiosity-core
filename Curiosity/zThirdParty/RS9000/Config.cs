@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.Serialization;
-
+﻿using CitizenFX.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-
-using CitizenFX.Core;
+using System;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace RS9000
 {
@@ -81,7 +79,7 @@ namespace RS9000
 
         public Control? Modifier { get; private set; }
 
-        public Control? Control { get; private set;  }
+        public Control? Control { get; private set; }
 
         public ControlConfig()
         {

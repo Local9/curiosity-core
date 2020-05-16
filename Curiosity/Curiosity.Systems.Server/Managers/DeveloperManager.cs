@@ -34,7 +34,7 @@ namespace Curiosity.Systems.Server.Managers
                 using (TextWriter tw = new StreamWriter(filePath, true))
                 {
                     string posName = metadata.Find<string>(0);
-                    
+
                     Player player = CuriosityPlugin.PlayersList[metadata.Sender];
 
                     Vector3 pos = player.Character.Position;

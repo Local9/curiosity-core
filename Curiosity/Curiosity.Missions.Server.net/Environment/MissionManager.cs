@@ -1,13 +1,11 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Server.net.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net;
-using Newtonsoft.Json;
 
 namespace Curiosity.Missions.Server.net.Environment
 {

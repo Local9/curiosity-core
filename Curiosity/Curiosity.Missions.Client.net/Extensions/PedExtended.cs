@@ -164,7 +164,8 @@ namespace Curiosity.Missions.Client.net.Extensions
                 blip1.Scale = 0.7f;
                 blip1.Name = "Friend";
                 EntityEventWrapper entityEventWrapper = new EntityEventWrapper(ped);
-                entityEventWrapper.Died += new EntityEventWrapper.OnDeathEvent((EntityEventWrapper sender, Entity entity) => {
+                entityEventWrapper.Died += new EntityEventWrapper.OnDeathEvent((EntityEventWrapper sender, Entity entity) =>
+                {
                     Blip currentBlip = entity.AttachedBlip;
                     if (currentBlip != null)
                     {

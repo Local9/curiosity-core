@@ -1,12 +1,8 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
-using CitizenFX.Core.Native;
-using System;
-using System.Threading.Tasks;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using GlobalEnums = Curiosity.Global.Shared.net.Enums;
+using System.Threading.Tasks;
 using GlobalEntities = Curiosity.Global.Shared.net.Entity;
+using GlobalEnums = Curiosity.Global.Shared.net.Enums;
 
 namespace Curiosity.Client.net.Classes.Menus
 {
@@ -54,7 +50,7 @@ namespace Curiosity.Client.net.Classes.Menus
             playerName = string.Empty;
             banReason = string.Empty;
 
-            
+
         }
 
         static void BanPlayer(string playerHandle, string banReason, int banDuration, bool perm)
@@ -327,7 +323,7 @@ namespace Curiosity.Client.net.Classes.Menus
 
                 _menuItems.Add(new MenuItemBack { Title = "Go Back", OnSelect = (item) => { playerName = string.Empty; playerHandle = string.Empty; } });
 
-                foreach(CitizenFX.Core.Player player in Client.players)
+                foreach (CitizenFX.Core.Player player in Client.players)
                 {
                     _menuItems.Add(new MenuItemSubMenu
                     {

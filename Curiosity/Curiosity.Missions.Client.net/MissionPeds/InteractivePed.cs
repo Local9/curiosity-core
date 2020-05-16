@@ -1,24 +1,23 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Missions.Client.net.Wrappers;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Data;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Missions.Client.net.Classes.PlayerClient;
 using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Missions.Client.net.DataClasses;
+using Curiosity.Missions.Client.net.Scripts;
 // INTERACTIONS
 using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
+using Curiosity.Missions.Client.net.Wrappers;
 using Curiosity.Shared.Client.net;
-using System.Collections.Generic;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net;
+using Curiosity.Shared.Client.net.Extensions;
 using Newtonsoft.Json;
-using Curiosity.Missions.Client.net.Scripts;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
-using Curiosity.Global.Shared.net.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -32,7 +31,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         private Ped _target;
         private Vehicle Vehicle;
         // MENU STATES
-        
+
         public bool IsTrafficStop;
         public bool IsPerformingCpr = false;
         public bool HasCprFailed = false;
@@ -449,7 +448,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     }
                 }
 
-            } 
+            }
             else
             {
                 int breathlyzerLimit = Client.Random.Next(100);
@@ -538,7 +537,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             client.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
             client.RegisterEventHandler("curiosity:interaction:arrest", new Action<int>(OnArrest));
-            
+
             client.RegisterEventHandler("curiosity:interaction:handcuffs", new Action<int, bool>(OnHandcuffs));
             client.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
             client.RegisterEventHandler("curiosity:interaction:cpr:failed", new Action<int>(OnCprFailed));
@@ -744,7 +743,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 {
                     Scripts.NpcHandler.RemoveNpc(networkId);
                     base.Delete();
-                    
+
                     client.DeregisterTickHandler(OnShowHelpTextTask);
 
                     if (ClientInformation.IsDeveloper())
@@ -895,15 +894,15 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             client.DeregisterTickHandler(OnShowHelpTextTask);
 
-           //  Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+            //  Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
 
             if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
         }
 
-        
 
-        
+
+
 
         private void OnCpr(int handle, bool state)
         {
@@ -953,7 +952,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             if (Ped.Handle == handle)
             {
                 SoundManager.PlaySFX($"CUFFS_TIGHTEN_01");
-                
+
                 API.SetPedFleeAttributes(handle, 0, false);
                 API.SetBlockingOfNonTemporaryEvents(handle, true);
                 API.TaskSetBlockingOfNonTemporaryEvents(handle, true);
@@ -1152,7 +1151,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                         }
 
                         if (Decorators.GetBoolean(vehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
-                        { 
+                        {
                             BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", vehicle.NetworkId);
                         }
                     }
@@ -1312,7 +1311,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             keyValuePairs.Add("IsCarryingIllegalItems", $"{IsCarryingIllegalItems}");
             keyValuePairs.Add("IsUnderTheInfluence", $"{IsUnderTheInfluence}");
             keyValuePairs.Add("IsInGroup", $"{Ped.IsInGroup}");
-            
+
             if (Ped.IsInGroup)
                 keyValuePairs.Add("Group", $"{Ped.RelationshipGroup}");
 
@@ -1321,7 +1320,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             keyValuePairs.Add("Attitude", $"{Attitude}");
             keyValuePairs.Add("NumberOfCitations", $"{NumberOfCitations}");
             keyValuePairs.Add("Offence", $"{Offence}");
-            
+
             if (Vehicle != null)
             {
                 keyValuePairs.Add("-----", "");

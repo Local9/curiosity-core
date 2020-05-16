@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using Curiosity.Shared.Client.net.Extensions;
-using static CitizenFX.Core.Native.API;
-using CitizenFX.Core.UI;
-using CitizenFX.Core;
-using System.Media;
-using System.IO;
-using Curiosity.Missions.Client.net.Scripts;
-using Curiosity.Missions.Client.net.DataClasses;
-using Curiosity.Shared.Client.net.Helper.Area;
-using System.Threading.Tasks;
-using System.Linq;
-using Curiosity.Shared.Client.net;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.PedCreators;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using Curiosity.Missions.Client.net.DataClasses;
+using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.net.Scripts;
+using Curiosity.Missions.Client.net.Scripts.PedCreators;
+using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Shared.Client.net.Helper.Area;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.Classes.Environment
 {
@@ -273,7 +270,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             }
 
             Scripts.SoundManager.AudioVolume = defaultValue;
-            
+
             Screen.ShowNotification($"Volume Updated: {Scripts.SoundManager.AudioVolume}");
         }
 

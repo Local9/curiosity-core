@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-
-namespace Curiosity.Global.Shared.net.Entity
+﻿namespace Curiosity.Global.Shared.net.Entity
 {
     public class VehicleSpawnLocation
     {

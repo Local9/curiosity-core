@@ -1,8 +1,8 @@
 ﻿using Curiosity.Global.Shared.net.Enums;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Database
@@ -60,7 +60,7 @@ namespace Curiosity.Server.net.Database
                     return wh;
                 }
 
-                foreach(Dictionary<string, object> pairs in rs)
+                foreach (Dictionary<string, object> pairs in rs)
                 {
                     Enums.Discord.WebhookChannel webhook = (Enums.Discord.WebhookChannel)int.Parse($"{pairs["discordTypeId"]}");
 

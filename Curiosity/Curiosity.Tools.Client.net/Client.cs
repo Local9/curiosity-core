@@ -11,32 +11,33 @@ using System.Threading.Tasks;
 namespace Curiosity.Tools.Client.net
 {
     public class Client : BaseScript
-	{
-		public DevTools Tools { get; }
-		public MenuController Menu { get; }
-		public NoclipController NoClip { get; }
-		public EntityDebugger Debugger { get; }
+    {
+        public DevTools Tools { get; }
+        public MenuController Menu { get; }
+        public NoclipController NoClip { get; }
+        public EntityDebugger Debugger { get; }
 
         public PlayerList players;
 
-		private bool _isInstantiated;
+        private bool _isInstantiated;
 
         public bool IsDeveloper = false;
 
-		public Client() {
+        public Client()
+        {
             players = Players;
 
-            Menu = new MenuController( this );
-			Tools = new DevTools( this );
-			NoClip = new NoclipController( this );
-			Debugger = new EntityDebugger( this );
+            Menu = new MenuController(this);
+            Tools = new DevTools(this);
+            NoClip = new NoclipController(this);
+            Debugger = new EntityDebugger(this);
 
-			RegisterEventHandler( "playerSpawned", new Action( OnSpawn ) );
+            RegisterEventHandler("playerSpawned", new Action(OnSpawn));
             RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(SetPriviledge));
 
-			if( Game.PlayerPed.Position != default( Vector3 ) )
-				OnSpawn();
-		}
+            if (Game.PlayerPed.Position != default(Vector3))
+                OnSpawn();
+        }
 
         private void SetPriviledge(string json)
         {
@@ -52,22 +53,26 @@ namespace Curiosity.Tools.Client.net
             IsDeveloper = serverIsDeveloper;
         }
 
-        private void OnSpawn() {
-			if( !_isInstantiated )
-				TriggerServerEvent("curiosity:Tools:Player:Ready");
-			_isInstantiated = true;
-		}
+        private void OnSpawn()
+        {
+            if (!_isInstantiated)
+                TriggerServerEvent("curiosity:Tools:Player:Ready");
+            _isInstantiated = true;
+        }
 
-		public void RegisterEventHandler( string eventName, Delegate action ) {
-			EventHandlers[eventName] += action;
-		}
+        public void RegisterEventHandler(string eventName, Delegate action)
+        {
+            EventHandlers[eventName] += action;
+        }
 
-		public void RegisterTickHandler( Func<Task> tick ) {
-			Tick += tick;
-		}
+        public void RegisterTickHandler(Func<Task> tick)
+        {
+            Tick += tick;
+        }
 
-		public void DeregisterTickHandler( Func<Task> tick ) {
-			Tick -= tick;
-		}
-	}
+        public void DeregisterTickHandler(Func<Task> tick)
+        {
+            Tick -= tick;
+        }
+    }
 }

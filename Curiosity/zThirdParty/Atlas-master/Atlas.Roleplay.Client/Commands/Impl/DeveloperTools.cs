@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Environment.Entities;
 using Atlas.Roleplay.Client.Extensions;
@@ -11,6 +6,11 @@ using Atlas.Roleplay.Client.Managers;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Commands.Impl
 {
@@ -18,7 +18,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
     {
         #region Fordon
 
-        [CommandInfo(new[] {"vehicle", "veh", "car"})]
+        [CommandInfo(new[] { "vehicle", "veh", "car" })]
         public class VehicleSpawner : ICommand
         {
             public async void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -43,7 +43,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"repair", "fix", "wash"})]
+        [CommandInfo(new[] { "repair", "fix", "wash" })]
         public class VehicleRepairer : ICommand
         {
             public void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -58,7 +58,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"dv", "deleteveh"})]
+        [CommandInfo(new[] { "dv", "deleteveh" })]
         public class VehicleDespawner : ICommand
         {
             public void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -71,7 +71,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
 
         #region Teleporterings verktyg
 
-        [CommandInfo(new[] {"tpm"})]
+        [CommandInfo(new[] { "tpm" })]
         public class TeleportMarker : ICommand
         {
             public async void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -92,7 +92,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
 
         #region Utvecklings verktyg
 
-        [CommandInfo(new[] {"position", "pos", "coords"})]
+        [CommandInfo(new[] { "position", "pos", "coords" })]
         public class PositionLogger : ICommand
         {
             public void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -106,7 +106,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"style"})]
+        [CommandInfo(new[] { "style" })]
         public class StyleLogger : ICommand
         {
             public void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -121,7 +121,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"session"})]
+        [CommandInfo(new[] { "session" })]
         public class SessionSwitcher : ICommand
         {
             public void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -150,7 +150,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"voice"})]
+        [CommandInfo(new[] { "voice" })]
         public class VoiceChatSwitcher : ICommand
         {
             public void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -183,7 +183,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new[] {"anim", "animastion"})]
+        [CommandInfo(new[] { "anim", "animastion" })]
         public class Anim : ICommand
         {
             public async void On(AtlasPlayer player, AtlasEntity entity, List<string> arguments)
@@ -199,7 +199,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
 
         #endregion
 
-        public override string[] Aliases { get; set; } = {"dev", "developer"};
+        public override string[] Aliases { get; set; } = { "dev", "developer" };
         public override string Title { get; set; } = "Utvecking";
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
         public override bool IsRestricted { get; set; } = true;

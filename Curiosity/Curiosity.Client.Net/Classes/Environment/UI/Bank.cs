@@ -12,7 +12,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         public static int wallet = 0;
         public static int bank = 0;
-        
+
         const int HUD_SCALEFORM_ID = 4;
         static bool showWallet = false;
 
@@ -55,7 +55,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static async Task SetupBank()
         {
             StatSetInt((uint)bankBalanceHashKey, bank, true);
-            await Task.FromResult(0);            
+            await Task.FromResult(0);
         }
 
         static async Task SetupWallet()

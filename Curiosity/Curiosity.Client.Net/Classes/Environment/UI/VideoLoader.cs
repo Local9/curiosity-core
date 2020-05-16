@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Client.net.Helpers;
+using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Threading.Tasks;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Client.net.Helpers;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
 {

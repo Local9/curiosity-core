@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Extensions;
+using Curiosity.Missions.Client.net.MissionPeds;
 
 namespace Curiosity.Missions.Client.net.MissionPedTypes
 {

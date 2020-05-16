@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Atlas.Roleplay.Client.Diagnostics;
 using Atlas.Roleplay.Client.Environment.Jobs;
 using Atlas.Roleplay.Client.Environment.Jobs.Profiles;
@@ -11,6 +9,8 @@ using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core.Native;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Billing
 {

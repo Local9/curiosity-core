@@ -12,7 +12,7 @@ namespace Atlas.Roleplay.Library.LawEnforcement
         public override string ToString()
         {
             var modified = new Dictionary<Charge, int>();
-            
+
             Charges.ForEach(self =>
             {
                 if (modified.ContainsKey(self))

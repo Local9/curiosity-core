@@ -1,6 +1,6 @@
+using Atlas.Roleplay.Library.Models;
 using System.Collections.Generic;
 using System.Linq;
-using Atlas.Roleplay.Library.Models;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs
 {
@@ -19,7 +19,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs
 
         public T GetProfile<T>() where T : JobProfile
         {
-            return (T) Profiles.FirstOrDefault(self => self.GetType() == typeof(T));
+            return (T)Profiles.FirstOrDefault(self => self.GetType() == typeof(T));
         }
     }
 }

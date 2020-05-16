@@ -2,15 +2,14 @@
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace Curiosity.Discord.Bot
 {
@@ -48,7 +47,7 @@ namespace Curiosity.Discord.Bot
 
             await RegisterCommandsAsync();
 
-            
+
             bool testing = Convert.ToBoolean(discordConfiguration.BotSettings["Testing"]);
 
             string discordToken = testing ? discordConfiguration.BotSettings["TokenBeta"] : discordConfiguration.BotSettings["TokenLive"];
@@ -129,7 +128,7 @@ namespace Curiosity.Discord.Bot
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"ERROR: EXCEPTION");
                 Console.WriteLine($"ERROR: Message causing error '{message.Content}'");

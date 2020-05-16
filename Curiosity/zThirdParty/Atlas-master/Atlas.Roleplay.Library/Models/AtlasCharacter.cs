@@ -1,11 +1,11 @@
+using Atlas.Roleplay.Library.Inventory;
+using Atlas.Roleplay.Library.LawEnforcement;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using Atlas.Roleplay.Library.Inventory;
-using Atlas.Roleplay.Library.LawEnforcement;
-using Newtonsoft.Json;
 
 namespace Atlas.Roleplay.Library.Models
 {

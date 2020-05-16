@@ -1,6 +1,4 @@
-using System.Data.Entity;
 using CitizenFX.Core.Native;
-using MySql.Data.Entity;
 
 namespace Curiosity.System.Server.MySQL
 {

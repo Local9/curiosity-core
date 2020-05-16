@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Atlas.Roleplay.Client.Environment.Entities;
 using Atlas.Roleplay.Client.Events;
 using Atlas.Roleplay.Client.Interface;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Commands.Impl
 {
@@ -29,7 +29,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
                 }
             }
 
-            public override string[] Aliases { get; set; } = {"reload", "fix"};
+            public override string[] Aliases { get; set; } = { "reload", "fix" };
             public override string Title { get; set; } = "Reload";
             public override Color Color { get; set; } = Color.FromArgb(255, 0, 0);
             public override bool IsRestricted { get; set; } = false;
@@ -47,7 +47,7 @@ namespace Atlas.Roleplay.Client.Commands.Impl
                 }
             }
 
-            public override string[] Aliases { get; set; } = {"rep", "report", "bug"};
+            public override string[] Aliases { get; set; } = { "rep", "report", "bug" };
             public override string Title { get; set; } = "Rapporter";
             public override Color Color { get; set; } = Color.FromArgb(255, 0, 0);
             public override bool IsRestricted { get; set; } = false;

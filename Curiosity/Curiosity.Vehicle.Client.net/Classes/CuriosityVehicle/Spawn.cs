@@ -1,14 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Shared.Client.net;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Global.Shared.net;
 
 namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 {
@@ -144,7 +142,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 
                 blip.Priority = 100;
                 blip.Name = "Personal Vehicle";
-                
+
                 await Client.Delay(0);
 
                 API.SetVehicleHasBeenOwnedByPlayer(veh.Handle, true);

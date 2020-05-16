@@ -1,9 +1,9 @@
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Environment.Entities.Modules.Impl;
 using Atlas.Roleplay.Client.Managers;
 using Atlas.Roleplay.Library.Events;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment
 {
@@ -33,7 +33,7 @@ namespace Atlas.Roleplay.Client.Environment
                 var source = API.GetPlayerPed(API.GetPlayerFromServerId(metadata.Find<int>(0)));
 
                 if (!API.DoesEntityExist(source)) return null;
-                
+
                 if (API.IsEntityAttachedToEntity(ped, source))
                 {
                     API.DetachEntity(ped, true, false);
@@ -52,7 +52,7 @@ namespace Atlas.Roleplay.Client.Environment
             var ped = API.GetPlayerPed(-1);
 
             API.SetEnableHandcuffs(ped, true);
-            API.SetCurrentPedWeapon(ped, (uint) API.GetHashKey("WEAPON_UNARMED"), true);
+            API.SetCurrentPedWeapon(ped, (uint)API.GetHashKey("WEAPON_UNARMED"), true);
             API.DisablePlayerFiring(ped, true);
 
             var decors = new EntityDecorModule()
@@ -98,7 +98,7 @@ namespace Atlas.Roleplay.Client.Environment
                         }
 
                         API.TaskPlayAnim(ped, "mp_arresting", "idle", 8f, -8, -1,
-                            (int) (AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.AllowRotation),
+                            (int)(AnimationFlags.Loop | AnimationFlags.UpperBodyOnly | AnimationFlags.AllowRotation),
                             0, false,
                             false,
                             false);

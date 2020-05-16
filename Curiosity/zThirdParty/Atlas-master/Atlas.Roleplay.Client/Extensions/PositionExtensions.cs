@@ -1,5 +1,5 @@
-using CitizenFX.Core;
 using Atlas.Roleplay.Library.Models;
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 
 namespace Atlas.Roleplay.Client.Extensions

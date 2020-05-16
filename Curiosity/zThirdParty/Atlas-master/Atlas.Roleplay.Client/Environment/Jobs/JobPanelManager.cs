@@ -1,10 +1,10 @@
-using System;
-using System.Linq;
 using Atlas.Roleplay.Client.Extensions;
 using Atlas.Roleplay.Client.Managers;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core.Native;
+using System;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs
 {
@@ -73,9 +73,9 @@ namespace Atlas.Roleplay.Client.Environment.Jobs
             {
                 var atlas = AtlasPlugin.Instance;
                 var character = await EventSystem.Request<AtlasCharacter>("characters:fetchbyseed", metadata.Find<string>(0));
-                
+
                 if (character == null) return null;
-                
+
                 var user = await EventSystem.Request<AtlasUser>("user:fetch", character.Owner);
 
                 if (user != null)
@@ -97,9 +97,9 @@ namespace Atlas.Roleplay.Client.Environment.Jobs
             {
                 var atlas = AtlasPlugin.Instance;
                 var character = await EventSystem.Request<AtlasCharacter>("characters:fetchbyseed", metadata.Find<string>(0));
-                
+
                 if (character == null) return null;
-                
+
                 var user = await EventSystem.Request<AtlasUser>("user:fetch", character.Owner);
 
                 if (user != null)

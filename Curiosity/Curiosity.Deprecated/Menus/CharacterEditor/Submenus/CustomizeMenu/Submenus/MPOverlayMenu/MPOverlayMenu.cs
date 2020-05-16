@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net.Models;
-using Curiosity.Client.net.Models;
 
 namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.CustomizeMenu
 {
@@ -45,7 +41,8 @@ namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.CustomizeMenu
                     Type = MenuItemHorizontalSelectorType.NumberAndBar,
                     wrapAround = true,
                     optionList = o.OptionNames,
-                    OnChange = new Action<int, string, MenuItemHorNamedSelector>((selectedAlternative, selName, menuItem) => {
+                    OnChange = new Action<int, string, MenuItemHorNamedSelector>((selectedAlternative, selName, menuItem) =>
+                    {
                         Function.Call(Hash.SET_PED_HEAD_OVERLAY, Game.PlayerPed.Handle, o.ID, o.OptionValues[selectedAlternative], 1f);
 
                         if (!Root.AdditionalSaveData.HeadOverlays.ContainsKey((byte)o.ID))
@@ -66,7 +63,8 @@ namespace Curiosity.Client.net.Classes.Menus.CharacterEditor.CustomizeMenu
                         wrapAround = true,
                         minState = 0,
                         maxState = 63,
-                        OnChange = new Action<int, MenuItemHorSelector<int>>((selectedAlternative, menuItem) => {
+                        OnChange = new Action<int, MenuItemHorSelector<int>>((selectedAlternative, menuItem) =>
+                        {
                             overlayColors[o.ID] = selectedAlternative; Function.Call(Hash._SET_PED_HEAD_OVERLAY_COLOR, Game.PlayerPed.Handle, o.ID, o.colorType, selectedAlternative, selectedAlternative);
 
                             if (!Root.AdditionalSaveData.HeadOverlays.ContainsKey((byte)o.ID))

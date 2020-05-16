@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Threading.Tasks;
-
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
+using System;
+using System.Dynamic;
+using System.Threading.Tasks;
 
 namespace RS9000
 {
@@ -17,8 +14,8 @@ namespace RS9000
         private readonly Controller controller;
 
         public string ResourceName { get; }
-        
-        public Config Config { get; } 
+
+        public Config Config { get; }
 
         private bool IsDisplayingKeyboard { get; set; }
 

@@ -1,15 +1,14 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Curiosity.Shared.Server.net.Helpers;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
-using System.IO;
 
 namespace Curiosity.Server.net.Business
 {
@@ -148,7 +147,7 @@ namespace Curiosity.Server.net.Business
             messages.Add(Messages.QueueCount, "[Queue: {0}]");
             messages.Add(Messages.Symbols, "Player name of '{0}' contains invalid characters, please change your player name in FiveM or Steam Settings.\nThe following characters are allowed A-Z, a-z, 0-9 and -_[].#");
         }
-        
+
         static bool IsEverythingReady()
         {
             return isServerQueueReady;
@@ -183,7 +182,8 @@ namespace Curiosity.Server.net.Business
 
                 if (!regex.IsMatch(playerName)) { deferrals.done($"{string.Format(messages[Messages.Symbols], player.Name)}"); return; }
 
-                if (blacklistedNames.IsMatch(playerName.ToLower())) {
+                if (blacklistedNames.IsMatch(playerName.ToLower()))
+                {
                     deferrals.done($"The username of '{playerName}' is blocked. Please note we can see the name from the FiveM settings options or Steam.");
                     return;
                 }

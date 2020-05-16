@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using CitizenFX.Core;
 using System;
 
 namespace Curiosity.Client.net.Classes.Environment.UI
@@ -24,7 +23,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         }
 
         static public void Curiosity(int iconType, string title, string subject, string message, int gtaColorId)
-        { 
+        {
             API.SetNotificationBackgroundColor(gtaColorId);
             API.SetNotificationTextEntry("STRING");
             API.AddTextComponentString(message);

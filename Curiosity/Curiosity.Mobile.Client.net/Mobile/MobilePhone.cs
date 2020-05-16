@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Global.Shared.net.Enums.Mobile;
 using Curiosity.Mobile.Client.net.Mobile.Api;
+using Curiosity.Shared.Client.net.Helper;
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Mobile.Client.net.Mobile
 {
@@ -302,7 +300,7 @@ namespace Curiosity.Mobile.Client.net.Mobile
                 if (IsMobilePhoneOpen && !ApplicationHandler.IsInApp && !IsMenuOpen)
                 {
                     int a = 0;
-                    foreach(Application application in ApplicationHandler.Apps.OrderBy(x => x.GetPosition))
+                    foreach (Application application in ApplicationHandler.Apps.OrderBy(x => x.GetPosition))
                     {
                         MobileScaleform.CallFunction("SET_DATA_SLOT", 1, a, (int)application.GetIcon);
                         a++;

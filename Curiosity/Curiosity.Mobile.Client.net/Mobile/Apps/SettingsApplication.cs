@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core.Native;
-using Curiosity.Mobile.Client.net.Mobile.Api;
 using Curiosity.Global.Shared.net.Enums.Mobile;
+using Curiosity.Mobile.Client.net.Mobile.Api;
 using System;
 
 namespace Curiosity.Mobile.Client.net.Mobile.Apps

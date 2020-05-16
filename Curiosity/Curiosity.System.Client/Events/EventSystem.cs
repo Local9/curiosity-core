@@ -33,7 +33,7 @@ namespace Curiosity.System.Client.Events
                             wrapped.Type = EventType.Response;
                             wrapped.Metadata.Write("__response",
                                 JsonConvert.SerializeObject(
-                                    ((AsyncEventCallback) attachment.Callback).AsyncTask(wrapped.Metadata)));
+                                    ((AsyncEventCallback)attachment.Callback).AsyncTask(wrapped.Metadata)));
 
                             Send(wrapped);
                         }
@@ -70,7 +70,7 @@ namespace Curiosity.System.Client.Events
                         if (attachment.Callback.GetType() == typeof(AsyncEventCallback))
                         {
 #pragma warning disable 4014
-                            ((AsyncEventCallback) attachment.Callback).AsyncTask(wrapped.Metadata);
+                            ((AsyncEventCallback)attachment.Callback).AsyncTask(wrapped.Metadata);
 #pragma warning restore 4014
                         }
                         else

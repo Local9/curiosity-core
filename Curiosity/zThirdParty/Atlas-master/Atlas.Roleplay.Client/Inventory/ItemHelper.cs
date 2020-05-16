@@ -1,7 +1,7 @@
-using System;
-using System.Linq;
 using Atlas.Roleplay.Client.Inventory.Items;
 using Atlas.Roleplay.Library.Inventory;
+using System;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Inventory
 {

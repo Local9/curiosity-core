@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
 using Atlas.Roleplay.Client.Package;
 using Atlas.Roleplay.Library.Inventory;
 using Atlas.Roleplay.Library.Utilities;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Inventory.Impl
 {

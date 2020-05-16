@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MenuAPI;
-using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
-using Curiosity.Shared.Client.net.GameData;
-using Curiosity.Shared.Client.net.Enums.Patrol;
+﻿using CitizenFX.Core;
 using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.GameData;
+using MenuAPI;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Police.Client.net.Classes.Menus
 {
@@ -118,7 +114,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             {
                 Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "PD Vehicle", $"Sorry....", "You resupplied within the last 2 minutes, please reserve your ammunition more.", 2);
             }
-                    
+
         }
 
         static async Task CheckDistance()
@@ -172,7 +168,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 Game.PlayerPed.Weapons.Give(WeaponHash.StunGun, 1, false, false);
                 Game.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, false, false);
 
-                if (Game.PlayerPed.Weapons.HasWeapon(WeaponHash.CombatPistol)) {
+                if (Game.PlayerPed.Weapons.HasWeapon(WeaponHash.CombatPistol))
+                {
                     GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.CombatPistol, (uint)GetHashKey("COMPONENT_AT_PI_FLSH"));
                 }
             }
@@ -235,7 +232,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void LoadoutMenu_OnMenuOpen(Menu menu)
         {
-            LoadoutMenu.ClearMenuItems();;
+            LoadoutMenu.ClearMenuItems(); ;
 
             Game.PlayerPed.Weapons.RemoveAll();
 

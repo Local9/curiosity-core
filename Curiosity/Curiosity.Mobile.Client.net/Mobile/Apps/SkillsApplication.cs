@@ -1,11 +1,8 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Mobile.Client.net.Mobile.Api;
-using Curiosity.Global.Shared.net.Enums.Mobile;
+﻿using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
-using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net.Enums.Mobile;
+using Curiosity.Mobile.Client.net.Mobile.Api;
 using System;
-using System.Threading.Tasks;
 
 namespace Curiosity.Mobile.Client.net.Mobile.Apps
 {
@@ -67,7 +64,7 @@ namespace Curiosity.Mobile.Client.net.Mobile.Apps
         static async void GetDataForScreen(dynamic[] data)
         {
             ApplicationHandler.ChangeScreen(data);
-            
+
             if (data[1] == 1)
             {
                 GetList((int)SkillType.Statistic);

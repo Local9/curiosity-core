@@ -1,5 +1,4 @@
 ﻿using Curiosity.Shared.Client.net;
-using System;
 
 namespace Curiosity.Player.Client.net
 {

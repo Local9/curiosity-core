@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core.UI;
-using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using System;

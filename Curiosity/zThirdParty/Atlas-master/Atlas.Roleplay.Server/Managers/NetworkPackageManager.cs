@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Server.Extensions;
+using System.Collections.Generic;
 
 namespace Atlas.Roleplay.Server.Managers
 {

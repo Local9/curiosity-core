@@ -1,13 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Drawing;
-using CitizenFX.Core.UI;
 
 //using FamilyRP.Roleplay.SharedClasses;
 //using FamilyRP.Roleplay.Client.Classes.Environment.Controls;
@@ -1676,7 +1676,7 @@ namespace Curiosity.Client.net.Classes.Environment
                     }
 
                     int entityOwner = API.NetworkGetEntityOwner(_trackingEntity.Handle);
-                    foreach(CitizenFX.Core.Player player in Client.players)
+                    foreach (CitizenFX.Core.Player player in Client.players)
                     {
                         if (player.ServerId == entityOwner)
                         {

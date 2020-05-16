@@ -3,20 +3,23 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Tools.Client.net.Menus
 {
-	public class MenuItemSubMenu : MenuItem
-	{
-		public Menu Child { get; }
+    public class MenuItemSubMenu : MenuItem
+    {
+        public Menu Child { get; }
 
-		public MenuItemSubMenu( Client client, Menu owner, Menu child, string label = "", int priority = -1 ) : base( client, owner, label, priority ) {
-			Label = label.Any() ? label : child.Title;
-			Child = child;
-		}
+        public MenuItemSubMenu(Client client, Menu owner, Menu child, string label = "", int priority = -1) : base(client, owner, label, priority)
+        {
+            Label = label.Any() ? label : child.Title;
+            Child = child;
+        }
 
-		protected override Task OnActivate() {
-			if( Child != null ) {
-				Client.Menu.CurrentMenu = Child;
-			}
-			return Task.FromResult( 0 );
-		}
-	}
+        protected override Task OnActivate()
+        {
+            if (Child != null)
+            {
+                Client.Menu.CurrentMenu = Child;
+            }
+            return Task.FromResult(0);
+        }
+    }
 }

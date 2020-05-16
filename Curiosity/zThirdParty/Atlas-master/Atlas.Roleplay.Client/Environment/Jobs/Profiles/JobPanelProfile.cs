@@ -1,23 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Atlas.Roleplay.Client.Events;
 using Atlas.Roleplay.Library.Models;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
 {
     public class JobPanelProfile : JobProfile
     {
-        public override JobProfile[] Dependencies { get; set; } = {new JobBusinessProfile()};
+        public override JobProfile[] Dependencies { get; set; } = { new JobBusinessProfile() };
         public Position Position { get; set; }
 
         public override async void Begin(Job job)
         {
             await Session.Loading();
-            
+
             Business business;
 
             while ((business = job.GetProfile<JobBusinessProfile>().Business) == null)
@@ -42,13 +42,13 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
             marker.Callback += async () =>
             {
                 var employees = await EventSystem.GetModule()
-                    .Request<List<Employee>>("job:employees:fetch", (int) Job.Attachment);
+                    .Request<List<Employee>>("job:employees:fetch", (int)Job.Attachment);
 
                 foreach (var employee in employees)
                 {
                     try
                     {
-                        employee.Role = new[] {employee.Role[0], job.Roles[int.Parse(employee.Role[0].ToString())]};
+                        employee.Role = new[] { employee.Role[0], job.Roles[int.Parse(employee.Role[0].ToString())] };
                     }
                     catch (KeyNotFoundException)
                     {
@@ -60,7 +60,7 @@ namespace Atlas.Roleplay.Client.Environment.Jobs.Profiles
 
                 foreach (var role in job.Roles)
                 {
-                    _roles.Add(new object[] {role.Key, role.Value});
+                    _roles.Add(new object[] { role.Key, role.Value });
                 }
 
                 API.SendNuiMessage(new JsonBuilder()

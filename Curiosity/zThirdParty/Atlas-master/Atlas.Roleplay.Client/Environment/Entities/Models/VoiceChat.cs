@@ -1,10 +1,10 @@
-using System.Drawing;
-using System.Threading.Tasks;
 using Atlas.Roleplay.Client.Interface;
 using Atlas.Roleplay.Client.Interface.Modules;
 using Atlas.Roleplay.Client.Managers;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Atlas.Roleplay.Client.Environment.Entities.Models
 {
@@ -80,8 +80,8 @@ namespace Atlas.Roleplay.Client.Environment.Entities.Models
                     $"Tonläge: {(API.NetworkIsPlayerTalking(API.PlayerId()) ? "~b~" : "")}{Translate()}", 0.25f,
                     !API.IsPedSittingInAnyVehicle(ped)
                         ? new Vector2(anchor.X + 0.0005f,
-                            (float) (anchor.BottomY - anchor.UnitY * 18f / 2 / 2) - anchor.UnitY * 18f * 2 - 0.0005f)
-                        : new Vector2(anchor.X + anchor.Width + 0.001f, (float) (anchor.BottomY - anchor.Height / 2)),
+                            (float)(anchor.BottomY - anchor.UnitY * 18f / 2 / 2) - anchor.UnitY * 18f * 2 - 0.0005f)
+                        : new Vector2(anchor.X + anchor.Width + 0.001f, (float)(anchor.BottomY - anchor.Height / 2)),
                     Color.FromArgb(200, 200, 200, 200));
 
                 if (Game.IsControlPressed(0, Control.Sprint) && Game.IsControlJustPressed(0, Control.VehicleHeadlight))

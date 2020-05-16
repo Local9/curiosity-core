@@ -1,13 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Enums;
-using Curiosity.Global.Shared.net;
+using Curiosity.Shared.Server.net.Helpers;
 using System;
-using System.Web;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Curiosity.Shared.Server.net.Helpers;
+using System.Web;
 
 namespace Curiosity.Server.net.Classes.Environment
 {

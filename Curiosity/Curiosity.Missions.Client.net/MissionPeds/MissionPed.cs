@@ -1,16 +1,11 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Curiosity.Global.Shared.net;
-using Curiosity.Global.Shared.net.Entity;
-using Newtonsoft.Json;
-using Curiosity.Shared.Client.net;
 using static CitizenFX.Core.Native.API;
-using CitizenFX.Core.Native;
-using Curiosity.Missions.Client.net.Scripts;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
 {
@@ -294,7 +289,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         {
             if (this.Target != null)
             {
-                
+
             }
             else
             {

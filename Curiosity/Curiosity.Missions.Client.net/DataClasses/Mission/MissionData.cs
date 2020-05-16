@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using System.Collections.Generic;
-using System;
 
 namespace Curiosity.Missions.Client.net.DataClasses.Mission
 {

@@ -1,12 +1,7 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Shared.Client.net.Helper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Curiosity.Shared.Client.net.Helper.NativeWrappers;
 
 namespace Curiosity.Client.net.Classes.Menus
 {

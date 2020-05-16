@@ -1,6 +1,6 @@
-﻿using System;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using Curiosity.Shared.Client.net.Enums;
+using System;
 
 namespace Curiosity.Shared.Client.net
 {

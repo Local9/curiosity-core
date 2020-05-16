@@ -1,10 +1,10 @@
-using System.Data.Entity.Migrations;
-using System.Linq;
 using Atlas.Roleplay.Library.Events;
 using Atlas.Roleplay.Library.Models;
 using Atlas.Roleplay.Server.Events;
 using Atlas.Roleplay.Server.Extensions;
 using Atlas.Roleplay.Server.MySQL;
+using System.Data.Entity.Migrations;
+using System.Linq;
 
 namespace Atlas.Roleplay.Server.Managers
 {

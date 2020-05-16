@@ -1,16 +1,8 @@
-﻿using System;
+﻿using Curiosity.Client.net.Classes.Menus;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
-
-using Curiosity.Client.net.Classes.Menus;
-using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Shared.Client.net.Enums;
-using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Shared.Client.net;
 
 namespace Curiosity.Client.net.Classes.Actions.Emotes
 {

@@ -1,9 +1,4 @@
 ﻿using CitizenFX.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.MenuSystem.Client
 {
@@ -12,7 +7,7 @@ namespace Curiosity.MenuSystem.Client
         #region Variables
 
         private bool firstTick = true;
-        
+
 
 
         #endregion

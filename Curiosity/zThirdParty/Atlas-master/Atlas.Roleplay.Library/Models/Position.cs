@@ -35,7 +35,7 @@ namespace Atlas.Roleplay.Library.Models
 
             return this;
         }
-        
+
         public Position Add(Position position)
         {
             X = X + position.X;

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using System;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Police.Client.net.Environment.Job

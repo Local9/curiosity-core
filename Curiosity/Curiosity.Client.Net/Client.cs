@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
-using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Shared.Client.net.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using GlobalEntity = Curiosity.Global.Shared.net.Entity;
 
 namespace Curiosity.Client.net

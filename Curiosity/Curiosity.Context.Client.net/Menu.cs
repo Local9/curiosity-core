@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using static CitizenFX.Core.Native.API;
 using Curiosity.Shared.Client.net;
-using Newtonsoft.Json;
 using Curiosity.Shared.Client.net.Helper;
+using Newtonsoft.Json;
+using System;
+using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Context.Client.net
 {
@@ -143,7 +140,7 @@ namespace Curiosity.Context.Client.net
                 if (trafficStopActive)
                 {
                     Crosshair(false);
-                    
+
                     if (showMenu)
                         SendNuiMessage(JsonConvert.SerializeObject(new MenuSetting { menu = false }));
 

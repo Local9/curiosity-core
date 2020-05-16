@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Curiosity.System.Client.Environment.Entities;
+using System.Collections.Generic;
 
 namespace Curiosity.System.Client.Commands
 {

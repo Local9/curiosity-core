@@ -1,11 +1,11 @@
+using CitizenFX.Core.Native;
+using Curiosity.System.Client.Diagnostics;
+using Curiosity.System.Client.Interface;
+using Curiosity.System.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Curiosity.System.Client.Diagnostics;
-using Curiosity.System.Client.Interface;
-using Curiosity.System.Library.Models;
-using CitizenFX.Core.Native;
 
 namespace Curiosity.System.Client.Commands
 {
@@ -24,7 +24,7 @@ namespace Curiosity.System.Client.Commands
                 return;
             }
 
-            var context = (CommandContext) Activator.CreateInstance(type);
+            var context = (CommandContext)Activator.CreateInstance(type);
             var target = typeof(ICommand);
             var assembly = type.Assembly;
             var found = assembly.GetExportedTypes()
@@ -41,7 +41,7 @@ namespace Curiosity.System.Client.Commands
                 if (!(nested.GetCustomAttributes(typeof(CommandInfo), true).FirstOrDefault() is CommandInfo commandInfo)
                 ) continue;
 
-                var created = (ICommand) Activator.CreateInstance(nested);
+                var created = (ICommand)Activator.CreateInstance(nested);
 
                 CuriosityPlugin.Instance.AttachTickHandlers(created);
 

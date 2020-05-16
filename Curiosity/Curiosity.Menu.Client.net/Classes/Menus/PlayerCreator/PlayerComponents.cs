@@ -77,7 +77,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerCreator
                         Log.Error($"[PlayerComponents] Exception in components code; {ex.Message}");
                     }
                 });
-                
+
             };
 
             menu.OnMenuClose += (_menu) =>

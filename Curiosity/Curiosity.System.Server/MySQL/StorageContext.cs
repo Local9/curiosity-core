@@ -1,4 +1,3 @@
-using System.Data.Entity;
 using Curiosity.System.Library.Inventory;
 using Curiosity.System.Library.Models;
 

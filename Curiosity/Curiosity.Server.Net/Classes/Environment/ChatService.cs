@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Server.net.Extensions;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net;
 using Newtonsoft.Json;
-using Curiosity.Global.Shared.net.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Curiosity.Server.net.Classes.Environment
 {

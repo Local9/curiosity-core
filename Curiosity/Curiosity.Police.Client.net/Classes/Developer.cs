@@ -13,7 +13,7 @@ namespace Curiosity.Police.Client.net.Classes
         {
             API.RegisterCommand("co", new Action<int, List<object>, string>(CallOut), false);
         }
-        
+
         static async void CallOut(int playerHandle, List<object> arguments, string raw)
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
