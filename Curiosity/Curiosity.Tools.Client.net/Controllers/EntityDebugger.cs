@@ -61,6 +61,7 @@ namespace Curiosity.Tools.Client.net.Controllers
                     list["RPM"] = $"{veh.CurrentRPM:n3}";
                     list["Current Gear"] = $"{veh.CurrentGear}";
                     list["Acceleration"] = $"{veh.Acceleration:n3}";
+                    list["Lock Status"] = $"{veh.LockStatus}";
                 }
                 else if (entity is Ped ped)
                 {

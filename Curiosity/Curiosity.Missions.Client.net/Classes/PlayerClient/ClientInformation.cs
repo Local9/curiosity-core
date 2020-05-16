@@ -48,6 +48,11 @@ namespace Curiosity.Missions.Client.net.Classes.PlayerClient
             patrolZone = (PatrolZone)location;
         }
 
+        public static bool IsTrusted()
+        {
+            return privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER;
+        }
+
         public static bool IsDeveloper()
         {
             return privilege == Privilege.DEVELOPER;

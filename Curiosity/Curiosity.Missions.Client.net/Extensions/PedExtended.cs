@@ -154,6 +154,20 @@ namespace Curiosity.Missions.Client.net.Extensions
                 ped.IsPersistent = true;
                 ped.RelationshipGroup = leader.RelationshipGroup;
                 ped.NeverLeavesGroup = true;
+
+                ped.Weapons.Give(WeaponHash.AssaultRifle, 1, false, true);
+                ped.Weapons.Give(WeaponHash.Pistol, 1, false, true);
+
+                if (!Decorators.GetBoolean(ped.Handle, Decorators.DECOR_GROUP_MEMBER))
+                {
+                    ped.Health = 200;
+                    ped.Armor = 100;
+                }
+
+                ped.CanSwitchWeapons = true;
+                ped.DropsWeaponsOnDeath = false;
+                ped.CanSufferCriticalHits = false;
+
                 Blip blip = ped.AttachedBlip;
                 if (blip != null)
                 {
@@ -174,6 +188,7 @@ namespace Curiosity.Missions.Client.net.Extensions
                     entityEventWrapper.Dispose();
                 });
                 ped.PlayAmbientSpeech("GENERIC_HI", SpeechModifier.Standard);
+                Decorators.Set(ped.Handle, Decorators.DECOR_GROUP_MEMBER, true);
             }
         }
 
@@ -185,6 +200,13 @@ namespace Curiosity.Missions.Client.net.Extensions
         public static void Recruit(this Ped ped, Ped leader)
         {
             ped.Recruit(leader, true);
+        }
+
+        public static void LeaveParty(this Ped ped)
+        {
+            ped.PlayAmbientSpeech("GENERIC_BYE", SpeechModifier.Standard);
+            ped.Weapons.RemoveAll();
+            ped.LeaveGroup();
         }
 
         public static void RemoveElegantly(this Ped ped)

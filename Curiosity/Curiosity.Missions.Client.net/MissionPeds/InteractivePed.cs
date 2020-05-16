@@ -362,6 +362,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             this.Ped = new Ped(handle);
 
+            Decorators.Set(this.Ped.Handle, Decorators.DECOR_PED_INTERACTIVE, true);
+
             if (this.Ped.IsInVehicle())
                 this.Vehicle = this.Ped.CurrentVehicle;
 
@@ -1240,6 +1242,9 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             arrestedPedData.IsWanted = GetBoolean(Client.DECOR_INTERACTION_WANTED);
 
             arrestedPedData.DispatchJail = interaction;
+
+            if (Client.CurrentVehicle != null)
+                arrestedPedData.IsBike = Client.CurrentVehicle.Model.IsBike;
 
             bool ranFromPolice = GetBoolean(Client.DECOR_NPC_RAN_FROM_POLICE);
 

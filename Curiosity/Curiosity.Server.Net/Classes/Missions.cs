@@ -134,9 +134,11 @@ namespace Curiosity.Server.net.Classes
 
             if (arrestedPed.DispatchJail)
             {
-                experienceEarnAdditional = (int)(experienceEarnAdditional * .5f);
-                knowledgeEarnAdditional = (int)(knowledgeEarnAdditional * .5f);
-                moneyEarnAdditional = (int)(moneyEarnAdditional * .5f);
+                float lostPct = arrestedPed.IsBike ? .75f : .5f;
+
+                experienceEarnAdditional = (int)(experienceEarnAdditional * lostPct);
+                knowledgeEarnAdditional = (int)(knowledgeEarnAdditional * lostPct);
+                moneyEarnAdditional = (int)(moneyEarnAdditional * lostPct);
             }
 
             if (experienceEarnAdditional >= 1000)
@@ -159,10 +161,15 @@ namespace Curiosity.Server.net.Classes
             Bank.IncreaseCashInternally(player.Handle, moneyEarnAdditional);
             timestampLastArrest[player.Handle] = DateTime.Now;
 
-            string subTitle = "~g~Rewarded Full";
+            string subTitle = "~g~Reward: 100%";
             if (arrestedPed.DispatchJail)
             {
-                subTitle = "~y~Rewarded half";
+                subTitle = "~y~Reward: 50%";
+            }
+
+            if (arrestedPed.IsBike)
+            {
+                subTitle = "~y~Reward: 75%";
             }
 
             session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", subTitle, $"Experience: ~b~{experienceEarnAdditional:N} XP~n~~s~Knowledge: ~b~{knowledgeEarnAdditional:N}~n~~s~Payout: ~b~${moneyEarnAdditional:C}");

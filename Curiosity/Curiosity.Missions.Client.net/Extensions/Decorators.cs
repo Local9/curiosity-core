@@ -13,6 +13,10 @@ namespace Curiosity.Missions.Client.net.Extensions
         public const string DECOR_PED_INFLUENCE_ALCAHOL = "c::ped::alcohol";
         public const string DECOR_PED_OFFENCE = "c::ped::offence";
 
+        // Grouping
+
+        public const string DECOR_GROUP_MEMBER = "c::ped:member";
+
         public static void Set(int handle, string property, object value)
         {
             if (value is int i)
