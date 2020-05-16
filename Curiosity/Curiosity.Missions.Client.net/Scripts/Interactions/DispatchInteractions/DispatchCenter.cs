@@ -6,6 +6,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.DispatchInteraction
 {
     class DispatchCenter
     {
+        static public void InteractionArrestPed(InteractivePed interactivePed)
+        {
+            Client.TriggerEvent("curiosity:interaction:arrest", interactivePed.Handle, true);
+        }
+
         static public async void InteractionRunPedIdentification(InteractivePed interactivePed)
         {
             if (!interactivePed.HasProvidedId)

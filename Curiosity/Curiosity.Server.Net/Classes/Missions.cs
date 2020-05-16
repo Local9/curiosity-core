@@ -132,6 +132,13 @@ namespace Curiosity.Server.net.Classes
             int knowledgeEarnAdditional = (int)(knowledge * experienceMultiplier);
             int moneyEarnAdditional = (int)(money * moneyMultiplier);
 
+            if (arrestedPed.DispatchJail)
+            {
+                experienceEarnAdditional = (int)(experienceEarnAdditional * .5f);
+                knowledgeEarnAdditional = (int)(knowledgeEarnAdditional * .5f);
+                moneyEarnAdditional = (int)(moneyEarnAdditional * .5f);
+            }
+
             if (experienceEarnAdditional >= 1000)
             {
                 experienceEarnAdditional = 900;
@@ -152,7 +159,13 @@ namespace Curiosity.Server.net.Classes
             Bank.IncreaseCashInternally(player.Handle, moneyEarnAdditional);
             timestampLastArrest[player.Handle] = DateTime.Now;
 
-            session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", "", $"Experience: ~b~{experienceEarnAdditional:N} XP~n~~s~Knowledge: ~b~{knowledgeEarnAdditional:N}~n~~s~Payout: ~b~${moneyEarnAdditional:C}");
+            string subTitle = "~y~Rewarded Full";
+            if (arrestedPed.DispatchJail)
+            {
+                subTitle = "~y~Rewarded half";
+            }
+
+            session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", subTitle, $"Experience: ~b~{experienceEarnAdditional:N} XP~n~~s~Knowledge: ~b~{knowledgeEarnAdditional:N}~n~~s~Payout: ~b~${moneyEarnAdditional:C}");
             session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", "Wrap Sheet", string.Join(", ", wrapSheet));
         }
 

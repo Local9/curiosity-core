@@ -11,6 +11,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
 
         static MenuItem mItemRunIdentifcation = new MenuItem("Run Name Check");
         static MenuItem mItemRunVehiclePlate = new MenuItem("Run Plate");
+        static MenuItem mItemArrestPed = new MenuItem("Arrest Ped");
 
         static public void SetupMenu(InteractivePed interactivePed)
         {
@@ -34,6 +35,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
 
             if (menuItem == mItemRunVehiclePlate)
                 Interactions.DispatchInteractions.DispatchCenter.InteractionRunPedVehicle(_interactivePed);
+
+            if (menuItem == mItemArrestPed)
+                Interactions.DispatchInteractions.DispatchCenter.InteractionArrestPed(_interactivePed);
         }
 
         private static void Menu_OnMenuOpen(Menu menu)
@@ -50,6 +54,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenu
             mItemRunIdentifcation.Enabled = _interactivePed.HasProvidedId && !_interactivePed.HasLostId;
             mItemRunIdentifcation.Description = _interactivePed.HasProvidedId && !_interactivePed.HasLostId ? "" : "Must have the suspects ID";
             menu.AddMenuItem(mItemRunIdentifcation);
+
+            mItemArrestPed.Enabled = _interactivePed.CanBeArrested;
+            menu.AddMenuItem(mItemArrestPed);
         }
 
         private static void Menu_OnMenuClose(Menu menu)

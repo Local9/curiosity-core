@@ -536,7 +536,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             this.AttackTarget += new InteractivePed.OnAttackingTargetEvent(MissionPed1.OnAttackTarget);
 
             client.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
-            client.RegisterEventHandler("curiosity:interaction:arrest", new Action<int>(OnArrest));
+            client.RegisterEventHandler("curiosity:interaction:arrest", new Action<int, bool>(OnArrest));
 
             client.RegisterEventHandler("curiosity:interaction:handcuffs", new Action<int, bool>(OnHandcuffs));
             client.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
@@ -1196,7 +1196,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
         }
 
-        private async void OnArrest(int handle)
+        private async void OnArrest(int handle, bool interaction = false)
         {
             if (Handle != handle)
             {
@@ -1238,6 +1238,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             arrestedPedData.IsCarryingIllegalItems = IsCarryingIllegalItems;
             arrestedPedData.CaughtSpeeding = GetBoolean(Client.DECOR_VEHICLE_SPEEDING);
             arrestedPedData.IsWanted = GetBoolean(Client.DECOR_INTERACTION_WANTED);
+
+            arrestedPedData.DispatchJail = interaction;
 
             bool ranFromPolice = GetBoolean(Client.DECOR_NPC_RAN_FROM_POLICE);
 

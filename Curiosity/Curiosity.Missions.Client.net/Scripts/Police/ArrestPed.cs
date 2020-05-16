@@ -104,7 +104,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Police
                         if (DecorExistOn(p.Handle, Client.DECOR_NPC_ARRESTED))
                         {
                             if (DecorGetBool(p.Handle, Client.DECOR_NPC_ARRESTED))
-                                Client.TriggerEvent("curiosity:interaction:arrest", p.Handle);
+                                Client.TriggerEvent("curiosity:interaction:arrest", p.Handle, false);
                         }
                     });
 
