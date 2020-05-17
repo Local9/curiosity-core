@@ -9,6 +9,8 @@ namespace Curiosity.Menus.Client.net.Static
 
         public static RelationshipGroup PlayerRelationship;
         public static RelationshipGroup HostileRelationship;
+        public static RelationshipGroup DislikeRelationship;
+        public static RelationshipGroup NeutralRelationship;
 
         public static RelationshipGroup ArrestedRelationship;
         public static RelationshipGroup InfectedRelationship;
@@ -38,8 +40,13 @@ namespace Curiosity.Menus.Client.net.Static
             PlayerRelationship = World.AddRelationshipGroup("PLAYER");
             Game.PlayerPed.RelationshipGroup = PlayerRelationship;
             // Other Peds
+            // Other Peds
             HostileRelationship = World.AddRelationshipGroup("HOSTILE_RELATIONSHIP");
             SetRelationshipBothWays(Relationship.Hate, HostileRelationship, PlayerRelationship);
+            DislikeRelationship = World.AddRelationshipGroup("DISLIKE_RELATIONSHIP");
+            SetRelationshipBothWays(Relationship.Dislike, DislikeRelationship, PlayerRelationship);
+            NeutralRelationship = World.AddRelationshipGroup("NEUTRAL_RELATIONSHIP");
+            SetRelationshipBothWays(Relationship.Neutral, NeutralRelationship, PlayerRelationship);
             // Zombies
             InfectedRelationship = World.AddRelationshipGroup("INFECTED_RELATIONSHIP");
             SetRelationshipBothWays(Relationship.Hate, InfectedRelationship, HostileRelationship);
