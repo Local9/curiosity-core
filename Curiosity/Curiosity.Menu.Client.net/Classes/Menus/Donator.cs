@@ -129,6 +129,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             if (PlayerInformation.IsDeveloper() || PlayerInformation.IsProjectManager())
             {
+                if (companions.ContainsKey("DEV: Cow")) return;
+
                 companions.Add("DEV: Cow", new Tuple<PedHash, bool>(PedHash.Cow, false));
                 companions.Add("DEV: Mountain Lion", new Tuple<PedHash, bool>(PedHash.MountainLion, false));
                 companions.Add("DEV: Chiken Hawk", new Tuple<PedHash, bool>(PedHash.ChickenHawk, false));
