@@ -174,7 +174,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
                 }
             }
 
-            List<Vehicle> vehicles = World.GetAllVehicles().Select(v => v).Where(x => Decorators.GetBoolean(x.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE)).ToList();
+            List<Vehicle> vehicles = World.GetAllVehicles().Select(v => v).Where(x => 
+                Decorators.GetBoolean(x.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE)
+                && !Decorators.GetBoolean(x.Handle, Client.PLAYER_VEHICLE)).ToList();
 
             vehicles.ForEach(async veh =>
             {
