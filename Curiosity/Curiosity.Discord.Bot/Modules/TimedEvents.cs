@@ -70,6 +70,7 @@ namespace Curiosity.Discord.Bot
                                             if (roles.Count == 0)
                                             {
                                                 Console.WriteLine($"[INFO] Discord Donation Checker: No roles found; {discordId}");
+                                                await user.RemoveDonatorStatus();
                                             }
                                             else
                                             {
@@ -101,6 +102,7 @@ namespace Curiosity.Discord.Bot
                                     }
                                     else
                                     {
+                                        await user.RemoveDonatorStatus();
                                         Console.WriteLine("[ERROR] Discord Donation Checker: socketGuild is null");
                                     }
                                 }
