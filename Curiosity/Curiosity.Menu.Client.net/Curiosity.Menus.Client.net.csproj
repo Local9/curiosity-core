@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Data\CompanionData.cs" />
     <Compile Include="Classes\Menus\Developer.cs" />
     <Compile Include="Classes\Menus\Donator.cs" />
     <Compile Include="Classes\Menus\Inventory.cs" />

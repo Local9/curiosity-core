@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Menus.Client.net.Classes.Data;
 using Curiosity.Menus.Client.net.Classes.Player;
 using Curiosity.Menus.Client.net.Classes.Scripts;
 using MenuAPI;
@@ -18,26 +19,26 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static MenuItem menuItemDonatorVehicles = new MenuItem("Vehicles") { LeftIcon = MenuItem.Icon.INV_CAR };
         static MenuItem menuItemRemoveCompanion = new MenuItem("Remove Companion") { };
 
-        static Dictionary<string, Tuple<PedHash, bool>> companions = new Dictionary<string, Tuple<PedHash, bool>>()
+        static List<CompanionData> companions = new List<CompanionData>()
         {
-            { "Husky", new Tuple<PedHash, bool>(PedHash.Husky, false) },
-            { "Poodle", new Tuple<PedHash, bool>(PedHash.Poodle, false) },
-            { "Pug", new Tuple<PedHash, bool>(PedHash.Pug, false) },
-            { "Retriever", new Tuple<PedHash, bool>(PedHash.Retriever, false) },
-            { "Rottweiler", new Tuple<PedHash, bool>(PedHash.Rottweiler, false) },
-            { "Shepherd", new Tuple<PedHash, bool>(PedHash.Shepherd, false) },
-            { "Cat", new Tuple<PedHash, bool>(PedHash.Cat, false) },
-            { "Chimp", new Tuple<PedHash, bool>(PedHash.Chimp, true) },
-            { "Westy", new Tuple<PedHash, bool>(PedHash.Westy, false) },
-            { "Cop: Female", new Tuple<PedHash, bool>(PedHash.Cop01SFY, true) },
-            { "Cop: Male", new Tuple<PedHash, bool>(PedHash.Cop01SMY, true) },
-            { "Sheriff: Female", new Tuple<PedHash, bool>(PedHash.Sheriff01SFY, true) },
-            { "Sheriff: Male", new Tuple<PedHash, bool>(PedHash.Sheriff01SMY, true) },
+            new CompanionData("Husky", PedHash.Husky, canInteract: true), // retriever
+            new CompanionData("Poodle", PedHash.Poodle, canInteract: true), // retriever ?
+            new CompanionData("Pug", PedHash.Pug),
+            new CompanionData("Retriever", PedHash.Retriever, canInteract: true), // retriever
+            new CompanionData("Rottweiler", PedHash.Rottweiler, canInteract: true), // rottweiller
+            new CompanionData("Shepherd", PedHash.Shepherd, canInteract: true), // retriever
+            new CompanionData("Cat", PedHash.Cat),
+            new CompanionData("Chimp", PedHash.Chimp, true),
+            new CompanionData("Westy", PedHash.Westy),
+            new CompanionData("Cop: Female", PedHash.Cop01SFY, true),
+            new CompanionData("Cop: Male", PedHash.Cop01SMY, true),
+            new CompanionData("Sheriff: Female", PedHash.Sheriff01SFY, true),
+            new CompanionData("Sheriff: Male", PedHash.Sheriff01SMY, true),
         };
 
         static int selectedCompanion = 0;
 
-        static MenuListItem menuListItemCompanion = new MenuListItem("Companion", companions.Select(x => x.Key).ToList(), selectedCompanion);
+        static MenuListItem menuListItemCompanion = new MenuListItem("Companion", companions.Select(x => x.Label).ToList(), selectedCompanion);
 
         public static void Init()
         {
@@ -70,6 +71,26 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
                 donatorMenu.OnItemSelect += Menu_OnItemSelect;
                 donatorMenu.OnListItemSelect += DonatorMenu_OnListItemSelect;
+
+                if (PlayerInformation.IsDeveloper() || PlayerInformation.IsProjectManager())
+                {
+                    companions.Add(new CompanionData("DEV: Cow", PedHash.Cow));
+                    companions.Add(new CompanionData("DEV: Mountain Lion", PedHash.MountainLion));
+                    companions.Add(new CompanionData("DEV: Chiken Hawk", PedHash.ChickenHawk));
+                    companions.Add(new CompanionData("DEV: Gull", PedHash.Seagull));
+                    companions.Add(new CompanionData("DEV: Boar", PedHash.Boar));
+                    companions.Add(new CompanionData("DEV: Coyote", PedHash.Coyote));
+                    companions.Add(new CompanionData("DEV: Hen", PedHash.Hen));
+                    companions.Add(new CompanionData("DEV: Deer", PedHash.Deer));
+                    companions.Add(new CompanionData("DEV: Pig", PedHash.Pig));
+                    companions.Add(new CompanionData("DEV: Rabbit", PedHash.Rabbit));
+                    companions.Add(new CompanionData("DEV: Rat", PedHash.Rat));
+                    companions.Add(new CompanionData("DEV: Pidgen", PedHash.Pigeon));
+                    companions.Add(new CompanionData("DEV: Franklin", PedHash.Franklin, true));
+                    companions.Add(new CompanionData("DEV: Trevor", PedHash.Trevor, true));
+                    companions.Add(new CompanionData("DEV: Michael", PedHash.Michael, true));
+                }
+
                 subMenuItem = MenuBase.AddSubMenu(donatorMenu, "→→→", isItemEnabled, description, MenuItem.Icon.STAR);
             }
 
@@ -92,8 +113,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         {
             if (listItem == menuListItemCompanion)
             {
-                KeyValuePair<string, Tuple<PedHash, bool>> selection = companions.ElementAt(selectedIndex);
-                Companion.CreateCompanion(selection.Value.Item1, selection.Value.Item2);
+                CompanionData selection = companions[selectedIndex];
+                Companion.CreateCompanion(selection);
             }
         }
 
@@ -126,31 +147,6 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.ClearMenuItems();
             menu.AddMenuItem(menuItemDonatorVehicles);
             menu.AddMenuItem(menuListItemCompanion);
-
-            if (PlayerInformation.IsDeveloper() || PlayerInformation.IsProjectManager())
-            {
-                if (!companions.ContainsKey("DEV: Cow"))
-                {
-                    companions.Add("DEV: Cow", new Tuple<PedHash, bool>(PedHash.Cow, false));
-                    companions.Add("DEV: Mountain Lion", new Tuple<PedHash, bool>(PedHash.MountainLion, false));
-                    companions.Add("DEV: Chiken Hawk", new Tuple<PedHash, bool>(PedHash.ChickenHawk, false));
-                    companions.Add("DEV: Gull", new Tuple<PedHash, bool>(PedHash.Seagull, false));
-                    companions.Add("DEV: Boar", new Tuple<PedHash, bool>(PedHash.Boar, false));
-                    companions.Add("DEV: Coyote", new Tuple<PedHash, bool>(PedHash.Coyote, false));
-                    companions.Add("DEV: Hen", new Tuple<PedHash, bool>(PedHash.Hen, false));
-                    companions.Add("DEV: Deer", new Tuple<PedHash, bool>(PedHash.Deer, false));
-                    companions.Add("DEV: Pig", new Tuple<PedHash, bool>(PedHash.Pig, false));
-                    companions.Add("DEV: Rabbit", new Tuple<PedHash, bool>(PedHash.Rabbit, false));
-                    companions.Add("DEV: Rat", new Tuple<PedHash, bool>(PedHash.Rat, false));
-                    companions.Add("DEV: Pidgen", new Tuple<PedHash, bool>(PedHash.Pigeon, false));
-                    companions.Add("DEV: Franklin", new Tuple<PedHash, bool>(PedHash.Franklin, true));
-                    companions.Add("DEV: Trevor", new Tuple<PedHash, bool>(PedHash.Trevor, true));
-                    companions.Add("DEV: Michael", new Tuple<PedHash, bool>(PedHash.Michael, true));
-                }
-            }
-
-            menuListItemCompanion.ListItems = companions.Select(x => x.Key).ToList();
-
             menu.AddMenuItem(menuItemRemoveCompanion);
         }
     }
