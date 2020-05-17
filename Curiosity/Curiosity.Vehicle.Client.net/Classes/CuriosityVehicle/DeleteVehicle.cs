@@ -30,13 +30,18 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                     if (DoesEntityExist(vehicleId))
                     {
                         Vehicle veh = new Vehicle(vehicleId);
+                        if (veh != null)
+                        {
+                            Blip blip = veh.AttachedBlip;
+                            if (blip.Exists())
+                                blip.Delete();
 
-                        Blip blip = veh.AttachedBlip;
-                        if (blip.Exists())
-                            blip.Delete();
-
-                        if (Client.CurrentVehicle.Handle == veh.Handle)
-                            Client.CurrentVehicle = null;
+                            if (Client.CurrentVehicle != null)
+                            {
+                                if (Client.CurrentVehicle.Handle == veh.Handle)
+                                    Client.CurrentVehicle = null;
+                            }
+                        }
 
                         FreezeEntityPosition(vehicleId, true);
                         SetEntityAsMissionEntity(vehicleId, false, false);
