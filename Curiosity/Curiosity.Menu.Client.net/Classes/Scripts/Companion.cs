@@ -8,6 +8,7 @@ using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,9 +31,13 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
         const string ANIM_ROTTWEILER_IDLE = "creatures@rottweiler@amb@world_dog_sitting@idle_a";
 
         const string ANIM_DICT_TRICKS = "creatures@rottweiler@tricks@";
+        const string ANIM_PETTING_PLAYER = "petting_franklin";
+        const string ANIM_PETTING_PET = "petting_chop";
         const string ANIM_SIT_ENTER = "sit_enter";
         const string ANIM_SIT_LOOP = "sit_loop";
         const string ANIM_SIT_EXIT = "sit_exit";
+
+        static bool InteractingWithPet = false;
 
         static public void Init()
         {
@@ -212,6 +217,19 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                 await Client.Delay(3000);
             }
 
+            if (CanInteract)
+            {
+                // interaction menu
+
+                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to pat.");
+
+                if (Game.IsControlPressed(0, Control.Context))
+                {
+                    Pat();
+                }
+
+            }
+
             if (!Game.PlayerPed.IsInVehicle() && ped.IsInVehicle() && !IsHuman)
             {
                 API.NetworkFadeOutEntity(ped.Handle, false, false);
@@ -237,6 +255,73 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                 ped.Task.PlayAnimation(ANIM_DICT_TRICKS, ANIM_SIT_EXIT, 1f, -1, AnimationFlags.StayInEndFrame);
                 await BaseScript.Delay(1000);
                 ped.Task.ClearAll();
+            }
+        }
+
+        static bool CanInteract
+        {
+            get
+            {
+                return !Game.PlayerPed.IsInVehicle() && Game.PlayerPed.IsAlive && !ped.IsInVehicle() && ped.IsAlive && Game.PlayerPed.Position.Distance(ped.Position) < 1.5f && !InteractingWithPet;
+            }
+        }
+
+        private static async void Paw()
+        {
+            PedBone boneIndex = Game.PlayerPed.Bones[Bone.SKEL_L_Finger00];
+            Vector3 fingerPosition = boneIndex.Position;
+
+            if (!ped.IsRagdoll && !InteractingWithPet)
+            {
+                InteractingWithPet = true;
+
+                Game.DisableAllControlsThisFrame(0);
+
+                Game.PlayerPed.Task.TurnTo(ped, 1000);
+                ped.Task.TurnTo(Game.PlayerPed, 1000);
+                await BaseScript.Delay(1000);
+
+                ped.Task.PlayAnimation(ANIM_DICT_TRICKS, "paw_right_enter", 1f, -1.5f, -1, AnimationFlags.StayInEndFrame, 0f);
+                await BaseScript.Delay(1000);
+                ped.Task.PlayAnimation(ANIM_DICT_TRICKS, "paw_right_loop", 1f, -1.5f, -1, AnimationFlags.Loop, 0f);
+                await BaseScript.Delay(3000);
+                ped.Task.PlayAnimation(ANIM_DICT_TRICKS, "paw_right_exit", 1f, -1.5f, -1, AnimationFlags.StayInEndFrame, 0f);
+                await BaseScript.Delay(1000);
+
+                ped.Task.ClearAll();
+                Game.PlayerPed.Task.ClearAll();
+
+                InteractingWithPet = false;
+            }
+        }
+
+        private static async void Pat()
+        {
+            PedBone boneIndex = Game.PlayerPed.Bones[Bone.SKEL_L_Finger00];
+            Vector3 fingerPosition = boneIndex.Position;
+
+            if (!ped.IsRagdoll && !InteractingWithPet)
+            {
+                InteractingWithPet = true;
+
+                Game.DisableAllControlsThisFrame(0);
+
+                Game.PlayerPed.Task.TurnTo(ped, 1000);
+                ped.Task.TurnTo(Game.PlayerPed, 1000);
+                await BaseScript.Delay(1000);
+                Vector3 playerPos = Game.PlayerPed.Position;
+                Vector3 playerRot = Game.PlayerPed.Rotation;
+
+                int scene = API.CreateSynchronizedScene(playerPos.X, playerPos.Y, playerPos.Z - 1f, playerRot.X, playerRot.Y, playerRot.Z, 0);
+                API.TaskSynchronizedScene(ped.Handle, scene, ANIM_DICT_TRICKS, ANIM_PETTING_PET, 1f, -8f, 4, 0, 1148846080, 0);
+                API.TaskSynchronizedScene(Game.PlayerPed.Handle, scene, ANIM_DICT_TRICKS, ANIM_PETTING_PLAYER, 1f, -8f, 4, 0, 1148846080, 0);
+
+                await BaseScript.Delay(4000);
+
+                ped.Task.ClearAll();
+                Game.PlayerPed.Task.ClearAll();
+
+                InteractingWithPet = false;
             }
         }
 
