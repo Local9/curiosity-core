@@ -188,8 +188,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
                         {
                             API.NetworkFadeOutEntity(veh.Handle, false, false);
                             await BaseScript.Delay(500);
-                            API.SetNetworkIdCanMigrate(veh.NetworkId, true);
-                            Spawn.SendDeletionEvent($"{veh.NetworkId}");
+                            // API.SetNetworkIdCanMigrate(veh.NetworkId, true);
+                            // Spawn.SendDeletionEvent($"{veh.NetworkId}");
                             if (veh.Exists())
                                 veh.Delete();
                         }
@@ -226,8 +226,10 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
                     API.NetworkFadeOutEntity(Client.CurrentVehicle.Handle, false, false);
                     await BaseScript.Delay(500);
-                    API.SetNetworkIdCanMigrate(Client.CurrentVehicle.NetworkId, true);
-                    Spawn.SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
+                    // API.SetNetworkIdCanMigrate(Client.CurrentVehicle.NetworkId, true);
+                    // Spawn.SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
+
+                    Client.CurrentVehicle.Delete();
                 }
             }
             else
