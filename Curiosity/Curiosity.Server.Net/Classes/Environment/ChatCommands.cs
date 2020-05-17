@@ -267,11 +267,11 @@ namespace Curiosity.Server.net.Classes.Environment
 
             ChatMessage chatMessage = new ChatMessage();
 
-            chatMessage.color = $"{Privilege.HEADADMIN}".ToLower();
-            chatMessage.role = $"{Privilege.HEADADMIN}";
+            chatMessage.color = $"{Privilege.DEVELOPER}".ToLower();
+            chatMessage.role = $"{Privilege.DEVELOPER}";
             chatMessage.list = "chat";
             chatMessage.message = "See out our guide '[ELV] Welcome to Emergency Life V Player - Guide(READ ME)' which can be found on our forums @ forums.lifev.net or ingame via M -> Open Player-Guide. Starting jobs are EMT/Fire/Police.";
-            chatMessage.roleClass = $"{Privilege.HEADADMIN}";
+            chatMessage.roleClass = $"{Privilege.DEVELOPER}";
             chatMessage.name = "GUIDE";
             chatMessage.job = $"Guide";
 
