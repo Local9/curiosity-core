@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Scripts.Interactions.VehicleInteractions;
+using Curiosity.Missions.Client.net.Static;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Extensions;
 using System.Collections.Generic;

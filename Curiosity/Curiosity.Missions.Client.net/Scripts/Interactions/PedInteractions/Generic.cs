@@ -51,6 +51,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 if (interactivePed.BloodAlcaholLimit >= 8)
                 {
                     bac = $"~r~0.{interactivePed.BloodAlcaholLimit}";
+                    interactivePed.IsUnderTheInfluence = true;
                 }
                 Wrappers.Helpers.ShowSimpleNotification($"~b~BAC ~w~Level: {bac}");
             }
@@ -159,7 +160,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                         Client.TriggerEvent("curiosity:setting:group:leave", interactivePed.Ped.Handle);
 
                         interactivePed.Ped.Task.ReactAndFlee(Game.PlayerPed);
-                        interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
+                        interactivePed.RanFromPolice = true;
                     }
                     else if (chanceOfShooting >= 15)
                     {
@@ -174,10 +175,9 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
                             interactivePed.Ped.Weapons.Give(WeaponHash.Pistol, 90, false, true);
                             interactivePed.Ped.Task.ShootAt(Game.PlayerPed);
-                            interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
+                            interactivePed.IsWanted = true;
                         }
                     }
-                    interactivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
                     Client.TriggerEvent("curiosity:interaction:searched", interactivePed.Handle, true);
                 }
             }

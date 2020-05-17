@@ -43,7 +43,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.DispatchInteraction
             Wrappers.Helpers.ShowNotification("Dispatch", $"Running ~o~{vehicle.Mods.LicensePlate}", string.Empty);
             await Client.Delay(2000);
 
-            bool stolen = interactivePed.GetBoolean(Client.DECOR_VEHICLE_STOLEN);
+            bool stolen = interactivePed.HasStolenCar;
 
             string message = stolen ? "~r~STOLEN" : "~g~CLEAN";
 
