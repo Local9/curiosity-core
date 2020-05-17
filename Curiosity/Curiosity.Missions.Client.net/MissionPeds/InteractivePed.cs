@@ -9,6 +9,7 @@ using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Scripts;
 // INTERACTIONS
 using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
+using Curiosity.Missions.Client.net.Static;
 using Curiosity.Missions.Client.net.Wrappers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
@@ -193,6 +194,54 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             set
             {
                 Set(Client.DECOR_INTERACTION_GRABBED, value);
+            }
+        }
+
+        public bool HasStolenCar
+        {
+            get
+            {
+                return GetBoolean(Client.DECOR_VEHICLE_STOLEN);
+            }
+            set
+            {
+                Set(Client.DECOR_VEHICLE_STOLEN, value);
+            }
+        }
+
+        public bool CaughtSpeeding
+        {
+            get
+            {
+                return GetBoolean(Client.DECOR_VEHICLE_SPEEDING);
+            }
+            set
+            {
+                Set(Client.DECOR_VEHICLE_SPEEDING, value);
+            }
+        }
+
+        public bool IsWanted
+        {
+            get
+            {
+                return GetBoolean(Client.DECOR_INTERACTION_WANTED);
+            }
+            set
+            {
+                Set(Client.DECOR_INTERACTION_WANTED, value);
+            }
+        }
+
+        public bool RanFromPolice
+        {
+            get
+            {
+                return GetBoolean(Client.DECOR_NPC_RAN_FROM_POLICE);
+            }
+            set
+            {
+                Set(Client.DECOR_NPC_RAN_FROM_POLICE, value);
             }
         }
 
@@ -510,8 +559,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 List<string> Offense = new List<string>() { "WANTED BY LSPD", "WANTED FOR ASSAULT", "WANTED FOR UNPAID FINES", "WANTED FOR RUNNING FROM THE POLICE", "WANTED FOR EVADING LAW", "WANTED FOR HIT AND RUN", "WANTED FOR DUI" };
                 _offence = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
-                Set(Client.DECOR_INTERACTION_WANTED, true);
                 CanBeArrested = true;
+                IsWanted = true;
                 IsAllowedToBeSearched = true;
             }
 
@@ -582,6 +631,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 this.Ped.MovementAnimationSet = MOVEMENT_ANIMATION_SET_DRUNK;
             }
 
+            Ped.RelationshipGroup = Relationships.NeutralRelationship;
+
             if (!this.Ped.IsInVehicle() && !this.Ped.IsInGroup) // Ignore this if they are in a vehicle
             {
                 if (_chanceOfShootAndFlee == 4)
@@ -596,12 +647,16 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     await Client.Delay(3000);
                     this.Ped.Task.FleeFrom(Game.PlayerPed);
 
+                    Ped.RelationshipGroup = Relationships.HostileRelationship;
+
                     if (Ped.AttachedBlip != null)
                         Ped.AttachedBlip.Color = BlipColor.Red;
                 }
                 else if (_chanceOfFlee >= 28)
                 {
                     this.Ped.Task.FleeFrom(Game.PlayerPed);
+
+                    Ped.RelationshipGroup = Relationships.DislikeRelationship;
 
                     if (Ped.AttachedBlip != null)
                         Ped.AttachedBlip.Color = BlipColor.Red;
@@ -785,6 +840,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 {
                     Scripts.NpcHandler.RemoveNpc(networkId);
 
+                    Ped.RelationshipGroup = Relationships.NeutralRelationship;
+
                     OnPedLeaveGroups(Ped.Handle);
                     OnPedHasBeenReleased(Ped.Handle);
 
@@ -862,9 +919,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     {
                         IsArrested = false;
                         this.Ped.LeaveGroup();
-
-                        if (Ped.IsInGroup)
-                            Ped.PedGroup.Delete();
 
                         this.Ped.Task.FleeFrom(Game.PlayerPed);
 
@@ -966,7 +1020,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 if (!IsArrested)
                 {
                     if (Ped.IsInGroup)
-                        Ped.PedGroup.Delete();
+                        Ped.LeaveGroup();
                 }
             }
         }
@@ -1121,9 +1175,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 API.SetPedFleeAttributes(Handle, 0, true);
                 API.SetBlockingOfNonTemporaryEvents(Handle, false);
 
-                if (Ped.IsInGroup)
-                    Ped.PedGroup.Delete();
-
                 API.TaskSetBlockingOfNonTemporaryEvents(Ped.Handle, false);
 
                 DecorSetBool(Handle, Client.DECOR_NPC_WAS_RELEASED, _hasBeenReleased);
@@ -1132,9 +1183,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (Classes.PlayerClient.ClientInformation.IsDeveloper())
                     client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
-
-                int playerGroupId = API.GetPedGroupIndex(Game.PlayerPed.Handle);
-                RemoveGroup(playerGroupId);
 
                 if (DecorExistOn(Handle, Client.DECOR_NPC_CURRENT_VEHICLE))
                 {
@@ -1222,31 +1270,17 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             ArrestedPedData arrestedPedData = new ArrestedPedData();
 
-            if (DecorExistOn(this.Handle, Client.DECOR_NPC_RAN_FROM_POLICE))
-            {
-                arrestedPedData.IsAllowedToBeArrested = DecorGetBool(this.Handle, Client.DECOR_NPC_RAN_FROM_POLICE);
-            }
-            else
-            {
-                arrestedPedData.IsAllowedToBeArrested = CanBeArrested;
-            }
-
-
-            // Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
-
             arrestedPedData.IsDrunk = IsUnderTheInfluence;
             arrestedPedData.IsDrugged = IsUsingCocaine || IsUsingCannabis;
-            arrestedPedData.IsDrivingStolenCar = _stolenCar;
-            arrestedPedData.IsCarryingIllegalItems = IsCarryingIllegalItems;
-            arrestedPedData.CaughtSpeeding = GetBoolean(Client.DECOR_VEHICLE_SPEEDING);
-            arrestedPedData.IsWanted = GetBoolean(Client.DECOR_INTERACTION_WANTED);
+            arrestedPedData.IsDrivingStolenCar = HasStolenCar;
+            arrestedPedData.IsCarryingIllegalItems = IsCarryingIllegalItems || IsCarryingStolenItems;
+            arrestedPedData.CaughtSpeeding = CaughtSpeeding;
+            arrestedPedData.IsWanted = IsWanted;
 
             arrestedPedData.DispatchJail = interaction;
 
             if (Client.CurrentVehicle != null)
                 arrestedPedData.IsBike = Client.CurrentVehicle.Model.IsBike;
-
-            bool ranFromPolice = GetBoolean(Client.DECOR_NPC_RAN_FROM_POLICE);
 
             arrestedPedData.IsAllowedToBeArrested = (
                 arrestedPedData.IsDrunk
@@ -1255,7 +1289,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 || arrestedPedData.IsCarryingIllegalItems
                 || arrestedPedData.CaughtSpeeding
                 || arrestedPedData.IsWanted
-                || ranFromPolice);
+                || CanBeArrested
+                || RanFromPolice);
 
             string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(arrestedPedData));
 

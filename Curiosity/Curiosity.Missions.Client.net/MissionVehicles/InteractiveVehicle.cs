@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.net.Data;
 using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Missions.Client.net.Extensions;
+using Curiosity.Missions.Client.net.Static;
 using Curiosity.Missions.Client.net.Wrappers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
@@ -425,7 +426,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             await Client.Delay(1000);
             this.InteractivePed.Ped.Task.ShootAt(Game.PlayerPed, 10000000, FiringPattern.FullAuto);
 
-            InteractivePed.Set(Client.DECOR_INTERACTION_WANTED, true);
+            InteractivePed.Ped.RelationshipGroup = Relationships.HostileRelationship;
+            InteractivePed.IsWanted = true;
         }
 
         private async void TaskFlee()
@@ -464,7 +466,9 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 if (this.InteractivePed.AttachedBlip != null)
                     this.InteractivePed.AttachedBlip.Color = BlipColor.Red;
 
-                InteractivePed.Set(Client.DECOR_NPC_RAN_FROM_POLICE, true);
+                InteractivePed.Ped.RelationshipGroup = Relationships.DislikeRelationship;
+
+                InteractivePed.RanFromPolice = true;
             }
             catch (Exception ex)
             {
@@ -491,6 +495,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
 
                 this.Vehicle.Driver.SetConfigFlag(292, false);
                 this.Vehicle.Driver.SetConfigFlag(301, false);
+
+                this.Vehicle.Driver.RelationshipGroup = Relationships.NeutralRelationship;
 
                 this.Vehicle.Driver.Task.WanderAround(this.Vehicle.Position, 1000f);
 
@@ -530,6 +536,8 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                     if (InteractivePed.AttachedBlip.Exists())
                         InteractivePed.AttachedBlip.Delete();
                 }
+
+                InteractivePed.Ped.RelationshipGroup = Relationships.NeutralRelationship;
 
                 client.DeregisterTickHandler(OnShowHelpTextTask);
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
