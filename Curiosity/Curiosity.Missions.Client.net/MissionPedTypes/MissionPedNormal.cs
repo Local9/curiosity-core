@@ -10,7 +10,7 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
 
         private bool IsHatingTarget = false;
 
-        public MissionPedNormal(int handle, float visionDistance = 50f, float experience = 10f) : base(handle, visionDistance, experience)
+        public MissionPedNormal(int handle, float visionDistance = 70f, float experience = 20f) : base(handle, visionDistance, experience)
         {
             this._ped = this;
             this._visionDistance = visionDistance;

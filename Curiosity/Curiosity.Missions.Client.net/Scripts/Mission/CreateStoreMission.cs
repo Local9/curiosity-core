@@ -3,6 +3,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.DataClasses.Mission;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.net.Static;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Classes.Environment;
 using Curiosity.Shared.Client.net.Enums;
@@ -109,7 +110,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 {
                     ped1.Weapons.Give(MissionPedData1.Weapon, 1, true, true);
                     await BaseScript.Delay(0);
-                    MissionPed1 = PedCreators.MissionPedCreator.Ped(ped1, MissionPedData1.Alertness, MissionPedData1.Difficulty, MissionPedData1.VisionDistance);
+                    MissionPed1 = PedCreators.MissionPedCreator.Ped(ped1, Relationships.HostileRelationship, MissionPedData1.Alertness, MissionPedData1.Difficulty, MissionPedData1.VisionDistance);
                 }
 
                 await BaseScript.Delay(10);
@@ -121,7 +122,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                 {
                     ped2.Weapons.Give(MissionPedData2.Weapon, 1, true, true);
                     await BaseScript.Delay(0);
-                    MissionPed2 = PedCreators.MissionPedCreator.Ped(ped2, MissionPedData2.Alertness, MissionPedData2.Difficulty, MissionPedData2.VisionDistance);
+                    MissionPed2 = PedCreators.MissionPedCreator.Ped(ped2, Relationships.HostileRelationship, MissionPedData2.Alertness, MissionPedData2.Difficulty, MissionPedData2.VisionDistance);
                 }
 
                 await BaseScript.Delay(10);
@@ -154,23 +155,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
             }
         }
 
-        private async static Task<Model> LoadModel(PedHash model)
-        {
-            Model modelToLoad = model;
-            modelToLoad.Request(1000);
-            while (!modelToLoad.IsLoaded)
-            {
-                await BaseScript.Delay(10);
-            }
-
-            return modelToLoad;
-        }
-
-        static async Task<Vector3> GetSpawnPoint(Vector3 position)
-        {
-            return await position.Ground(false);
-        }
-
         static async Task SpawnBackupPedOne()
         {
             await Task.FromResult(0);
@@ -186,7 +170,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     {
                         backup.Weapons.Give(MissionPedData3.Weapon, 1, true, true);
                         await Client.Delay(0);
-                        MissionPed3 = PedCreators.MissionPedCreator.Ped(backup, MissionPedData3.Alertness, MissionPedData3.Difficulty, MissionPedData3.VisionDistance);
+                        MissionPed3 = PedCreators.MissionPedCreator.Ped(backup, Relationships.HostileRelationship, MissionPedData3.Alertness, MissionPedData3.Difficulty, MissionPedData3.VisionDistance);
                     }
 
                     if (backup != null)
@@ -214,7 +198,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
                     {
                         backup.Weapons.Give(MissionPedData4.Weapon, 1, true, true);
                         await Client.Delay(0);
-                        MissionPed4 = PedCreators.MissionPedCreator.Ped(backup, MissionPedData4.Alertness, MissionPedData4.Difficulty, MissionPedData4.VisionDistance);
+                        MissionPed4 = PedCreators.MissionPedCreator.Ped(backup, Relationships.HostileRelationship, MissionPedData4.Alertness, MissionPedData4.Difficulty, MissionPedData4.VisionDistance);
                     }
 
                     if (backup != null)
@@ -229,8 +213,6 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
         static async Task MissionCompletionChecks()
         {
-            await Task.FromResult(0);
-
             await Client.Delay(1000);
 
             if (MissionHostage != null)

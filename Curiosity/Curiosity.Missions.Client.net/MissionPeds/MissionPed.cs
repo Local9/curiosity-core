@@ -1,10 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Missions.Client.net.Classes.PlayerClient;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Missions.Client.net.MissionPeds
@@ -132,7 +135,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             MissionPed.WanderRadius = 10f;
         }
 
-        protected MissionPed(int handle, float visionDistance = 35f, float experience = 10f, bool isHostage = false) : base(handle)
+        protected MissionPed(int handle, float visionDistance = 100f, float experience = 10f, bool isHostage = false) : base(handle)
         {
             this._ped = new Ped(handle);
             this._eventWrapper = new EntityEventWrapper(this._ped);
@@ -164,11 +167,32 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             if (!IsEntityAMissionEntity(this._ped.Handle))
                 SetEntityAsMissionEntity(this._ped.Handle, true, true);
+
+            Client.GetInstance().RegisterTickHandler(OnDevUI);
+        }
+
+        private async Task OnDevUI()
+        {
+            if (Decorators.GetBoolean(Game.PlayerPed.Handle, "player::npc::debug"))
+            {
+                if (Position.Distance(Game.PlayerPed.Position) >= 6) return;
+
+                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+
+                keyValuePairs.Add("Attacking Target", $"{this.AttackingTarget}");
+                keyValuePairs.Add("Going to Target", $"{this.GoingToTarget}");
+                keyValuePairs.Add("Has Target", $"{this.Target != null}");
+                keyValuePairs.Add("---", $"---");
+                keyValuePairs.Add("Target", $"{this.Target}");
+
+                Wrappers.Helpers.DrawData(this, keyValuePairs);
+            }
         }
 
         public void Abort(EntityEventWrapper sender, Entity entity)
         {
             base.Delete();
+            Client.GetInstance().DeregisterTickHandler(OnDevUI);
         }
 
         private bool CanHearPed(Ped ped)
@@ -276,6 +300,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 currentBlip.Delete();
             }
+
+            Client.GetInstance().DeregisterTickHandler(OnDevUI);
         }
 
         public abstract void OnGoToTarget(Ped target);
@@ -333,9 +359,6 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             this.GetTarget();
 
-            if (Waypoints != null)
-                this.GotoWaypoint();
-
             if (this.Target != null)
             {
                 if (this.Position.VDist(this.Target.Position) <= MissionPed.AttackRange)
@@ -349,6 +372,8 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     this.GoingToTarget = true;
                 }
             }
+
+            
         }
 
         public event MissionPed.OnAttackingTargetEvent AttackTarget;
