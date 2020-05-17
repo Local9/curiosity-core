@@ -237,7 +237,6 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                 ped.Task.PlayAnimation(ANIM_DICT_TRICKS, ANIM_SIT_EXIT, 1f, -1, AnimationFlags.StayInEndFrame);
                 await BaseScript.Delay(1000);
                 ped.Task.ClearAll();
-                ped.IsPositionFrozen = false;
             }
         }
 
