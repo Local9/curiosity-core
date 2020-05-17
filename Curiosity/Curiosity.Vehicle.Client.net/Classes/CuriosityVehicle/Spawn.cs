@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
+namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     class Spawn
     {
@@ -419,8 +419,10 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
             IsSpawning = false;
         }
 
-        static void SendDeletionEvent(string vehicleNetworkId)
+        public static void SendDeletionEvent(string vehicleNetworkId)
         {
+            int netId = int.Parse(vehicleNetworkId);
+            API.SetNetworkIdCanMigrate(netId, true);
             string encodedString = Encode.StringToBase64(vehicleNetworkId);
             string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);

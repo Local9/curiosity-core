@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Environment
+namespace Curiosity.Vehicles.Client.net.Classes.Environment
 {
     internal class BlipData
     {

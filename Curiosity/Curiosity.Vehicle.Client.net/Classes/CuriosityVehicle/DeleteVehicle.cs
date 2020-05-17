@@ -3,7 +3,7 @@ using Curiosity.Global.Shared.net;
 using System;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
+namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     class DeleteVehicle
     {
@@ -29,12 +29,19 @@ namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
 
                     if (DoesEntityExist(vehicleId))
                     {
+                        Vehicle veh = new Vehicle(vehicleId);
+
+                        Blip blip = veh.AttachedBlip;
+                        if (blip.Exists())
+                            blip.Delete();
+
+                        if (Client.CurrentVehicle.Handle == veh.Handle)
+                            Client.CurrentVehicle = null;
+
                         FreezeEntityPosition(vehicleId, true);
                         SetEntityAsMissionEntity(vehicleId, false, false);
-
                         NetworkFadeOutEntity(vehicleId, true, false);
                         SetEntityCoords(vehicleId, -2000f, -6000f, 0f, false, false, false, true);
-
                         SetEntityAsNoLongerNeeded(ref vehicleId);
                         DeleteEntity(ref vehicleId);
                     }

@@ -2,14 +2,14 @@
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Client.net;
-using Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle;
+using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Menus
+namespace Curiosity.Vehicles.Client.net.Classes.Menus
 {
     class DonatorVehicles
     {

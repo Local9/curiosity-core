@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
+namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     public class VehicleMemoryModel
     {

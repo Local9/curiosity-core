@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Vehicle.Client.net
+namespace Curiosity.Vehicles.Client.net
 {
     public class Client : BaseScript
     {
@@ -20,6 +20,9 @@ namespace Curiosity.Vehicle.Client.net
         public static string HSTAFF_LICENSE_PLATE = "LV0HSTAF";
         public static string DEV_LICENSE_PLATE = "LIFEVDEV";
         public const string TROUBLE_LICENSE_PLATE = "TROUBLES";
+
+        public const string DECOR_VEHICLE_SAFEZONE_TIME = "c::vehicle::safezone::time";
+        public const string DECOR_VEHICLE_SAFEZONE_INSIDE = "c::vehicle::safezone::inside";
 
         // decor
         public const string PLAYER_VEHICLE = "Player_Vehicle";
@@ -43,7 +46,7 @@ namespace Curiosity.Vehicle.Client.net
             RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
             RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
 
-            Log.Info("Curiosity.Vehicle.Client.net loaded\n");
+            Log.Info("Curiosity.Vehicles.Client.net loaded\n");
 
 
             // Register DECOR

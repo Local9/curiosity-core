@@ -1,6 +1,6 @@
 ﻿using Curiosity.Shared.Client.net;
 
-namespace Curiosity.Vehicle.Client.net
+namespace Curiosity.Vehicles.Client.net
 {
     /// <summary>
     /// For initialization of all these static classes

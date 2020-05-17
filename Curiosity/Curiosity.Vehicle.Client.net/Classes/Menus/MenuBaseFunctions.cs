@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Menus
+namespace Curiosity.Vehicles.Client.net.Classes.Menus
 {
     class MenuBaseFunctions
     {

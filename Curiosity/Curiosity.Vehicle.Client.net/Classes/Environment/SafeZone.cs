@@ -2,14 +2,18 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net;
+using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper.Area;
+using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
+using Curiosity.Vehicles.Client.net.Extensions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Environment
+namespace Curiosity.Vehicles.Client.net.Classes.Environment
 {
 
     class SafeZoneVehicle
@@ -26,8 +30,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
         async Task DisableCollision()
         {
-            await Client.Delay(0);
-
             _vehicle.Opacity = 200;
 
             _vehicle.SetNoCollision(Game.PlayerPed, false);
@@ -36,7 +38,6 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             if (Game.PlayerPed.IsInVehicle())
             {
                 _vehicle.MaxSpeed = 10f;
-
                 _vehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
                 Game.PlayerPed.CurrentVehicle.SetNoCollision(_vehicle, false);
             }
@@ -77,6 +78,11 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
         static bool IsInsideSafeZone = false;
         static bool DebugAreas = false;
 
+        static bool Warning;
+        static long TimeEntered;
+        const int ONE_MINUITE = (1000 * 60);
+        const int FIVE_MINUTES = ONE_MINUITE * 5;
+
         public static void Init()
         {
             AreaBox areaBox = new AreaBox();
@@ -99,6 +105,38 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
             client.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action(OnDrawAreas));
 
             client.RegisterTickHandler(IsInSafeZone);
+            client.RegisterTickHandler(ShowDebugInformation);
+        }
+
+        private static async Task ShowDebugInformation()
+        {
+            if (Decorators.GetBoolean(Game.PlayerPed.Handle, "player::veh::debug"))
+            {
+                Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
+
+                if (vehicle == null) return;
+
+                bool insideSafeZone = Decorators.GetBoolean(vehicle.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE);
+                int insideSafeZoneTime = Decorators.GetInteger(vehicle.Handle, Client.DECOR_VEHICLE_SAFEZONE_TIME);
+
+                Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+                keyValuePairs.Add("Inside SZ", $"{insideSafeZone}");
+                if (insideSafeZone)
+                {
+                    keyValuePairs.Add("Time Entered SZ", $"{insideSafeZoneTime}");
+                    keyValuePairs.Add("Time Inside SZ", $"{API.GetGameTimer() - insideSafeZoneTime}");
+
+                    int gameTimeCountDown = (API.GetGameTimer() - insideSafeZoneTime);
+                    bool removeFromSafeZone = gameTimeCountDown > FIVE_MINUTES;
+                    int timeLeft = FIVE_MINUTES - (gameTimeCountDown);
+                    TimeSpan timeSpan = TimeSpan.FromMilliseconds(timeLeft);
+                
+                    keyValuePairs.Add("Time Left SZ", $"{timeSpan.Minutes}:{timeSpan.Seconds:00}");
+                    keyValuePairs.Add("Remove From SZ", $"{removeFromSafeZone}");
+                }
+
+                Wrappers.Helpers.DrawData(vehicle, keyValuePairs);
+            }
         }
 
         static void OnDrawAreas()
@@ -136,13 +174,60 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
                 }
             }
 
+            List<Vehicle> vehicles = World.GetAllVehicles().Select(v => v).Where(x => Decorators.GetBoolean(x.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE)).ToList();
+
+            vehicles.ForEach(async veh =>
+            {
+                int time = Decorators.GetInteger(veh.Handle, Client.DECOR_VEHICLE_SAFEZONE_TIME);
+
+                if (!veh.Driver.Exists())
+                {
+                    if ((API.GetGameTimer() - time) > FIVE_MINUTES)
+                    {
+                        if (veh.Exists())
+                        {
+                            API.NetworkFadeOutEntity(veh.Handle, false, false);
+                            await BaseScript.Delay(500);
+                            API.SetNetworkIdCanMigrate(veh.NetworkId, true);
+                            Spawn.SendDeletionEvent($"{veh.NetworkId}");
+                            if (veh.Exists())
+                                veh.Delete();
+                        }
+                    }
+                }
+            });
+
+            if (Game.PlayerPed.IsInVehicle())
+                Decorators.Set(Game.PlayerPed.CurrentVehicle.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE, IsInsideSafeZone);
+
             if (IsInsideSafeZone)
             {
                 Game.PlayerPed.Opacity = Opacity;
 
                 if (Game.PlayerPed.IsInVehicle())
                 {
+                    Decorators.Set(Game.PlayerPed.CurrentVehicle.Handle, Client.DECOR_VEHICLE_SAFEZONE_TIME, API.GetGameTimer());
                     Game.PlayerPed.CurrentVehicle.Opacity = Opacity;
+                }
+
+                if ((API.GetGameTimer() - TimeEntered) > ONE_MINUITE && !Warning && Client.CurrentVehicle != null)
+                {
+                    if (Client.CurrentVehicle == null) return;
+                    if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Client.CurrentVehicle) return;
+
+                    Warning = true;
+                    Screen.ShowNotification($"~y~WARNING~n~~w~After 4 mins your vehicle will be deleted from the safe zone.");
+                }
+
+                if ((API.GetGameTimer() - TimeEntered) > FIVE_MINUTES && Warning)
+                {
+                    if (Client.CurrentVehicle == null) return;
+                    if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Client.CurrentVehicle) return;
+
+                    API.NetworkFadeOutEntity(Client.CurrentVehicle.Handle, false, false);
+                    await BaseScript.Delay(500);
+                    API.SetNetworkIdCanMigrate(Client.CurrentVehicle.NetworkId, true);
+                    Spawn.SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
                 }
             }
             else
@@ -154,6 +239,8 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
                 if (Client.CurrentVehicle != null)
                     Client.CurrentVehicle.ResetOpacity();
+
+                Warning = false;
             }
         }
 
@@ -165,6 +252,7 @@ namespace Curiosity.Vehicle.Client.net.Classes.Environment
 
             client.RegisterTickHandler(SafeZoneVehicles);
             IsInsideSafeZone = true;
+            TimeEntered = API.GetGameTimer();
 
             if (Player.PlayerInformation.IsDeveloper())
             {

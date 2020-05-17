@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
@@ -263,7 +265,20 @@ namespace Curiosity.Server.net.Classes.Environment
 
             Session session = SessionManager.PlayerList[$"{playerHandle}"];
 
-            session.Player.TriggerEvent("curiosity:Client:Chat:Message", "Guide", "dodgerblue", "See out our guide '[ELV] Welcome to Emergency Life V Player - Guide(READ ME)' which can be found on our forums @ forums.lifev.net or ingame via M -> Open Player-Guide. Starting jobs are EMT/Fire/Police.");
+            ChatMessage chatMessage = new ChatMessage();
+
+            chatMessage.color = $"{Privilege.HEADADMIN}".ToLower();
+            chatMessage.role = $"{Privilege.HEADADMIN}";
+            chatMessage.list = "chat";
+            chatMessage.message = "See out our guide '[ELV] Welcome to Emergency Life V Player - Guide(READ ME)' which can be found on our forums @ forums.lifev.net or ingame via M -> Open Player-Guide. Starting jobs are EMT/Fire/Police.";
+            chatMessage.roleClass = $"{Privilege.HEADADMIN}";
+            chatMessage.name = "GUIDE";
+            chatMessage.job = $"Guide";
+
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
+            string encoded = Encode.StringToBase64(json);
+
+            session.Player.TriggerEvent("curiosity:Client:Chat:Message", encoded);
         }
 
         static void RequestURL(int playerHandle, List<object> arguments, string raw)

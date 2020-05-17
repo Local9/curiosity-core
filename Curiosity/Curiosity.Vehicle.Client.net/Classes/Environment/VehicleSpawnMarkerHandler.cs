@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Environment
+namespace Curiosity.Vehicles.Client.net.Classes.Environment
 {
     // TODO: Test and debug
     // Might make this class more general later to actually inform other classes that it's in range or getting close to a marker

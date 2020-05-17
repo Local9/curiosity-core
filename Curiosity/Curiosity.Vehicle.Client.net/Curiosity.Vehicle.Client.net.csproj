@@ -54,6 +54,7 @@
     <Compile Include="Classes\Environment\SafeZone.cs" />
     <Compile Include="Classes\Environment\VehicleSpawnMarkerHandler.cs" />
     <Compile Include="Classes\Environment\VehicleTicks.cs" />
+    <Compile Include="Classes\Extensions\Decorators.cs" />
     <Compile Include="Classes\Menus\DonatorVehicles.cs" />
     <Compile Include="Classes\Menus\MenuBaseFunctions.cs" />
     <Compile Include="Classes\Menus\VehicleSpawn.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Classes\CuriosityVehicle\FuelManager.cs" />
     <Compile Include="Classes\CuriosityVehicle\VehicleDamage.cs" />
     <Compile Include="Classes\CuriosityVehicle\VehiclePack.cs" />
+    <Compile Include="Wrappers\Helpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">

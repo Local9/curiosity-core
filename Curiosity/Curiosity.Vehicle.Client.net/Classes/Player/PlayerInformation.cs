@@ -3,7 +3,7 @@ using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using System;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Player
+namespace Curiosity.Vehicles.Client.net.Classes.Player
 {
     static class PlayerInformation
     {

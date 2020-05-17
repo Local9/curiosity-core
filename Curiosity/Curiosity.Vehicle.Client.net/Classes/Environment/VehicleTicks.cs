@@ -2,7 +2,7 @@
 using CitizenFX.Core.Native;
 using System.Threading.Tasks;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Environment
+namespace Curiosity.Vehicles.Client.net.Classes.Environment
 {
     class VehicleTicks
     {

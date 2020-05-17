@@ -1,12 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle;
+using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Vehicle.Client.net.Classes.Environment
+namespace Curiosity.Vehicles.Client.net.Classes.Environment
 {
     class ChatCommands
     {

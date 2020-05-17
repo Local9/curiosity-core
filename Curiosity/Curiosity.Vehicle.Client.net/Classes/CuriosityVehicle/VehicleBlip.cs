@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
+namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     class VehicleBlip
     {

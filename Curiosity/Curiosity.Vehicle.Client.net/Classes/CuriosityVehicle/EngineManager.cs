@@ -2,7 +2,7 @@
 using CitizenFX.Core.Native;
 using System;
 
-namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
+namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     static class EngineManager
     {

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Curiosity.Vehicle.Client.net.Classes.CuriosityVehicle
+namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     // To set fuel on a car when taken out of a garage, set the Vehicle.Fuel decor on it.
     // TODO: Potentially make the vehicles have different fuel tank sizes

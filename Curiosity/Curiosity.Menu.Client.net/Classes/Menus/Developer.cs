@@ -78,6 +78,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             if (menuItem == menuCheckboxItemDeveloperVehUi)
             {
                 __developerVehicleUiEnable = newCheckedState;
+
+                Decorators.Set(Game.PlayerPed.Handle, "player::veh::debug", __developerVehicleUiEnable);
+
                 Client.TriggerEvent("curiosity:Player:Mission:ShowDeveloperVehUI", __developerVehicleUiEnable);
             }
         }
