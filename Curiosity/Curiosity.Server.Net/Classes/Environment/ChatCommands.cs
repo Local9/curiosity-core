@@ -47,6 +47,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             API.RegisterCommand("test", new Action<int, List<object>, string>(Test), false);
             API.RegisterCommand("sessions", new Action<int, List<object>, string>(OnSessions), false);
+            API.RegisterCommand("guide", new Action<int, List<object>, string>(Guide), false);
 
             server.RegisterEventHandler("rconCommand", new Action<string, List<object>>(OnRconCommand));
 
@@ -250,6 +251,19 @@ namespace Curiosity.Server.net.Classes.Environment
             Session session = SessionManager.PlayerList[$"{playerHandle}"];
 
             Server.TriggerClientEvent("curiosity:Client:Chat:Message", "PIA", "dodgerblue", "Q: <- <u>I cannot see PIA or SSIA. What do I do to fix it?</u> -><br /><i>In advanced Graphics in your settings</i><br />1.<b>Turning High Detail Streaming While Flying</b>[ON]<br />2.<b>Extended - Distance Scaling to max</b> (or high depending on your PC<br />3.Restart your FiveM<hr /><img src=https://i.imgur.com/KnXKWhL.jpg width=100% />");
+        }
+
+        static void Guide(int playerHandle, List<object> arguments, string raw)
+        {
+            if ((API.GetGameTimer() - lastTimePIA) < coolDownTime) return;
+
+            lastTimePIA = API.GetGameTimer();
+
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            session.Player.TriggerEvent("curiosity:Client:Chat:Message", "Guide", "dodgerblue", "See out our guide '[ELV] Welcome to Emergency Life V Player - Guide(READ ME)' which can be found on our forums @ forums.lifev.net or ingame via M -> Open Player-Guide. Starting jobs are EMT/Fire/Police.");
         }
 
         static void RequestURL(int playerHandle, List<object> arguments, string raw)
