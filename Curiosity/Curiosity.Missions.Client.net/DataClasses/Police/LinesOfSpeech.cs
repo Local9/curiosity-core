@@ -12,5 +12,6 @@ namespace Curiosity.Missions.Client.net.DataClasses.Police
         static public List<string> DriverResponseNormalIdentity = new List<string> { "Yeah, sure.", "Okay, here you go.", "There.", "Take it, just hurry up please.", "*Gives ID*", "Okay, here you go.", "Sure thing!", "Alright, no problem.", "Yep, there it is." };
         static public List<string> DriverResponseRushedIdentity = new List<string> { "Take it, just hurry up please.", "I really don't have the time for this...", "What was I stopped for again?", "Sure thing, did I do something wrong?", "Is this necessary?" };
         static public List<string> DriverResponseAngeredIdentity = new List<string> { "Is it because I'm black?", "Just take it already...", "Uhm.. Sure... Here.", "But I've done nothing wrong, sir!", "Pig.", "Why dont you go and fight real crime?" };
+        static public List<string> DriverResponsePissedIdentity = new List<string> { "Fuck you pig!", "You'll never catch me!", "TAZER FACE!!!", "SQUEAL FOR ME PIGGY!!!", "Kermit wants your ass tonight!" };
     }
 }

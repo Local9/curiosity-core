@@ -59,20 +59,22 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             }
             else
             {
-                string driverResponse = string.Empty;
                 if (interactivePed.Attitude < 50)
                 {
-                    driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity.Count)];
+                    string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity.Count)];
+                    Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
                 }
                 else if (interactivePed.Attitude >= 50 && interactivePed.Attitude < 80)
                 {
-                    driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity.Count)];
+                    string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity.Count)];
+                    Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
                 }
                 else if (interactivePed.Attitude >= 80)
                 {
                     if (Client.Random.Next(10) > 8)
                     {
-                        if (interactivePed.Ped.IsInVehicle()) {
+                        if (interactivePed.Ped.IsInVehicle())
+                        {
                             interactivePed.Ped.Weapons.Give(WeaponHash.StunGun, 1, true, true);
                             interactivePed.SetRelationship(Relationships.HostileRelationship);
                             interactivePed.Ped.Task.FightAgainstHatedTargets(20f, 3000);
@@ -81,11 +83,17 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                             interactivePed.RanFromPolice = true;
 
                             TrafficStopInteractions.TrafficStopVehicleFlee(interactivePed.Ped.CurrentVehicle, interactivePed.Ped);
+
+                            string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponsePissedIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponsePissedIdentity.Count)];
+                            Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
                         }
                     }
-                    driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity.Count)];
+                    else
+                    {
+                        string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity.Count)];
+                        Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
+                    }
                 }
-                Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
 
                 Wrappers.Helpers.ShowNotification("Driver's ID", string.Empty, $"~w~Name: ~y~{interactivePed.Name}\n~w~DOB: ~y~{interactivePed.DateOfBirth}");
 
