@@ -200,6 +200,9 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
 
             API.SetPedCanTeleportToGroupLeader(ped.Handle, groupIndex, true);
 
+            if (Game.PlayerPed.Weapons.HasWeapon(WeaponHash.Ball))
+                Game.PlayerPed.Weapons.Remove(WeaponHash.Ball);
+
             if (companionData.CanInteract)
             {
                 PlaySound("BARK");
