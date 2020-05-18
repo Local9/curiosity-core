@@ -31,6 +31,8 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
         const string ANIM_RETRIEVER_IDLE = "creatures@retriever@amb@world_dog_sitting@idle_a";
         const string ANIM_ROTTWEILER_IDLE = "creatures@rottweiler@amb@world_dog_sitting@idle_a";
 
+        const string ANIM_DICT_MOVE = "creatures@rottweiler@move";
+
         const string ANIM_DICT_TRICKS = "creatures@rottweiler@tricks@";
         const string ANIM_PETTING_PLAYER = "petting_franklin";
         const string ANIM_PETTING_PET = "petting_chop";
@@ -42,8 +44,23 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
 
         static int LastTimeWhine;
 
-        static int companionAction = 0;
-        static int companionActionSequence = 0;
+        static int sequenceGameTimer;
+        static int sequenceTaskId;
+        static int internalSequenceGameTimer;
+        static int projectileEntityId;
+
+        static int countAttemptsBeforeReturningToPlayer = 0;
+        static int countAttemptsBeforeReturningToPlayer2 = 0;
+        static bool companionIsFetchingBall = false;
+        static bool isProjectileThrown = false;
+
+        static Vector3 projectilePosition;
+        static WeaponHash thrownProjectile;
+        static WeaponHash weaponBall = WeaponHash.Ball;
+        static int companionInteraction = 0;
+        static int companionInteractionSequence = 0;
+
+        static int audioSoundId = API.GetSoundId();
 
         static public void Init()
         {
@@ -51,6 +68,15 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
             Relationships.SetupRelationShips();
 
             client.RegisterTickHandler(OnPlayerMovementTask);
+            client.RegisterTickHandler(OnMonitorCompanionTask);
+        }
+
+        private static async Task OnMonitorCompanionTask()
+        {
+            if (Game.PlayerPed.IsAiming && Game.PlayerPed.Weapons.Current == WeaponHash.Ball)
+            {
+                companionInteraction = 15;
+            }
         }
 
         private static async Task OnPlayerMovementTask()
@@ -159,6 +185,7 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
             Client.TriggerEvent("curiosity:Client:Notification:Curiosity", 1, "Companion", "", "Your companion will attack anyone who attacks you.", 3);
 
             client.RegisterTickHandler(OnCompanionTick);
+            client.RegisterTickHandler(OnCompanionInteractionTask);
         }
 
         private static async Task OnCompanionTick()
@@ -168,7 +195,10 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                 failureCount++;
 
                 if (failureCount >= 5)
+                {
                     client.DeregisterTickHandler(OnCompanionTick);
+                    client.DeregisterTickHandler(OnCompanionInteractionTask);
+                }
 
                 return;
             }
@@ -178,7 +208,10 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                 failureCount++;
 
                 if (failureCount >= 5)
+                {
                     client.DeregisterTickHandler(OnCompanionTick);
+                    client.DeregisterTickHandler(OnCompanionInteractionTask);
+                }
 
                 return;
             }
@@ -409,7 +442,307 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                     await Client.Delay(500);
                     ped.Delete();
                     client.DeregisterTickHandler(OnCompanionTick);
+                    client.DeregisterTickHandler(OnCompanionInteractionTask);
                 }
+            }
+        }
+
+        // Scripts below engineered from chop.c
+
+        static void GivePlayerBall(bool isHidden, bool playSound, bool equipNow)
+        {
+            if (!API.HasPedGotWeapon(Game.PlayerPed.Handle, (uint)WeaponHash.Ball, false) || API.GetAmmoInPedWeapon(Game.PlayerPed.Handle, (uint)WeaponHash.Ball) == 0)
+            {
+                API.GiveWeaponToPed(Game.PlayerPed.Handle, (uint)WeaponHash.Ball, 1, isHidden, equipNow);
+                API.HudWeaponWheelGetSlotHash((int)WeaponHash.Ball);
+                if (playSound)
+                {
+                    API.PlaySoundFrontend(audioSoundId, "PICKUP_WEAPON_BALL", "HUD_FRONTEND_WEAPONS_PICKUPS_SOUNDSET", true);
+                }
+            }
+        }
+
+        static float GetDistanceBetweenEntities(int entityOne, int entityTwo, bool useZ)
+        {
+            Vector3 entity1Coords;
+            Vector3 entity2Coords;
+
+            if (!API.IsEntityDead(entityOne))
+            {
+                entity1Coords = API.GetEntityCoords(entityOne, true);
+            }
+            else
+            {
+                entity1Coords = API.GetEntityCoords(entityOne, false);
+            }
+
+            if (!API.IsEntityDead(entityTwo))
+            {
+                entity2Coords = API.GetEntityCoords(entityTwo, true);
+            }
+            else
+            {
+                entity2Coords = API.GetEntityCoords(entityTwo, false);
+            }
+
+            return API.GetDistanceBetweenCoords(entity1Coords.X, entity1Coords.Y, entity1Coords.Z, entity2Coords.X, entity2Coords.Y, entity2Coords.Z, useZ);
+        }
+
+        static bool IsProjectileReachable()
+        {
+            Vector3 entityCoord;
+            float groundZ = 0;
+
+            if (GetDistanceBetweenEntities(ped.Handle, projectileEntityId, true) < (0.5f + 0.25f))
+            {
+                entityCoord = API.GetEntityCoords(projectileEntityId, true);
+                if (API.GetGroundZFor_3dCoord(entityCoord.X, entityCoord.Y, (entityCoord.Z + 1f), ref groundZ, false))
+                {
+                    if (API.Absf(entityCoord.Z - groundZ) < 0.1f)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        static void RemoveOrDropBall(bool removeBall)
+        {
+            Vector3 projectilePosition;
+
+            if (API.DoesEntityExist(projectileEntityId))
+            {
+                projectilePosition = API.GetEntityCoords(projectileEntityId, true);
+                if (API.IsEntityAttachedToAnyPed(projectileEntityId))
+                {
+                    API.DetachEntity(projectileEntityId, true, true);
+                }
+                
+                API.SetEntityAsNoLongerNeeded(ref projectileEntityId);
+
+                if (removeBall && thrownProjectile == WeaponHash.Ball)
+                {
+                    API.ClearAreaOfProjectiles(projectilePosition.X, projectilePosition.Y, projectilePosition.Z, 0.1f, false);
+                }
+            }
+        }
+
+        static bool PedIsNotDead(int entityId)
+        {
+            if (API.DoesEntityExist(entityId))
+            {
+                if (!API.IsEntityDead(entityId))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        static bool PedIsNotInjured(int entityId)
+        { 
+            if (PedIsNotDead(entityId))
+            {
+                if (!API.IsPedInjured(entityId))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        static bool TaskStatus(int entityId, uint scriptHash) // func_113
+        {
+            if (PedIsNotInjured(entityId))
+            {
+                if (API.GetScriptTaskStatus(entityId, scriptHash) == 1 || API.GetScriptTaskStatus(entityId, scriptHash) == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static async Task OnCompanionInteractionTask()
+        {
+            int distanceRemaining;
+            bool boolVar1 = false;
+            float floatVar1 = 0f;
+
+            Vector3 vVar3;
+            float fVar4;
+            float fVar5;
+            int iVar6;
+            int iVar7;
+
+            int playerPedHandle = Game.PlayerPed.Handle;
+            switch (companionInteraction)
+            {
+                case 15:
+                    if (Game.PlayerPed.IsInVehicle())
+                    {
+                        RemoveOrDropBall(false);
+                        sequenceGameTimer = API.GetGameTimer();
+                    }
+                    else
+                    {
+                        if (companionInteractionSequence == 0)
+                        {
+                            RemoveOrDropBall(true);
+                            if (API.GetProjectileNearPed(playerPedHandle, (uint)weaponBall, 50f, ref projectilePosition, ref projectileEntityId, false))
+                            {
+                                API.SetCurrentPedWeapon(playerPedHandle, (uint)weaponBall, true);
+                                isProjectileThrown = false;
+                                companionIsFetchingBall = false;
+                                countAttemptsBeforeReturningToPlayer = 0;
+                                // Group thing...
+                                internalSequenceGameTimer = API.GetGameTimer();
+                                companionInteractionSequence++;
+                            }
+                        }
+                        else if (companionInteractionSequence == 1)
+                        {
+                            if (API.DoesEntityExist(projectileEntityId))
+                            {
+                                if (!API.IsEntityInWater(projectileEntityId))
+                                {
+                                    if ((API.GetGameTimer() - internalSequenceGameTimer) > 500)
+                                    {
+                                        if (IsProjectileReachable()) // func_5
+                                        {
+                                            API.RequestAnimDict(ANIM_DICT_MOVE);
+                                            if (API.HasAnimDictLoaded(ANIM_DICT_MOVE))
+                                            {
+                                                API.OpenSequenceTask(ref sequenceTaskId);
+                                                if (thrownProjectile == weaponBall) // GameHashBall
+                                                {
+                                                    API.TaskPlayAnim(0, ANIM_DICT_MOVE, "fetch_pickup", 8f, -8f, -1, 49152, 0f, false, false, false);
+                                                }
+                                                API.TaskGoToEntity(0, playerPedHandle, 20000, 4f, 3f, 1073741824, 0);
+                                                API.CloseSequenceTask(sequenceTaskId);
+                                                API.TaskPerformSequence(ped.Handle, sequenceTaskId);
+                                                API.ClearSequenceTask(ref sequenceTaskId);
+                                                if (weaponBall == WeaponHash.Ball)
+                                                {
+                                                    isProjectileThrown = true;
+                                                }
+                                                companionInteractionSequence++;
+                                            }
+                                        }
+                                        else if (!TaskStatus(ped.Handle, 1227113341))
+                                        {
+                                            API.TaskGoToEntity(ped.Handle, projectileEntityId, 30000, 0.5f, 3f, 1073741824, 0);
+                                            countAttemptsBeforeReturningToPlayer++;
+                                            countAttemptsBeforeReturningToPlayer2 = 0; // iLocal_339 = 0;
+                                            if (countAttemptsBeforeReturningToPlayer > 3)
+                                            {
+                                                API.TaskGoToEntity(ped.Handle, playerPedHandle, 20000, 5f, 3f, 1073741824, 0);
+                                                RemoveOrDropBall(true);
+                                                companionInteractionSequence++;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            distanceRemaining = API.GetNavmeshRouteDistanceRemaining(ped.Handle, ref floatVar1, ref boolVar1);
+                                            if (distanceRemaining == 2)
+                                            {
+                                                float entityHeightAboveGround = API.GetEntityHeightAboveGround(projectileEntityId);
+                                                if (entityHeightAboveGround < 1f)
+                                                {
+                                                    countAttemptsBeforeReturningToPlayer2++;
+                                                }
+                                            }
+                                            else if (distanceRemaining == 3)
+                                            {
+                                                if (!companionIsFetchingBall)
+                                                {
+                                                    PlaySound("BARK");
+                                                    if (thrownProjectile == weaponBall)
+                                                    {
+                                                        // func_108 // Conversation function between franklin and chop
+                                                    }
+                                                    companionIsFetchingBall = true;
+                                                }
+                                            }
+                                            if (countAttemptsBeforeReturningToPlayer2 > 9)
+                                            {
+                                                API.TaskGoToEntity(ped.Handle, playerPedHandle, 20000, 5f, 3f, 1073741824, 0);
+                                                RemoveOrDropBall(true);
+                                                companionInteractionSequence++;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    API.TaskGoToEntity(ped.Handle, playerPedHandle, 20000, 5f, 3f, 1073741824, 0);
+                                    companionInteractionSequence++;
+                                }
+                            }
+                            else
+                            {
+                                API.TaskGoToEntity(ped.Handle, playerPedHandle, 20000, 5f, 3f, 1073741824, 0);
+                                companionInteractionSequence++;
+                            }
+                        }
+                        else if (companionInteractionSequence == 2)
+                        {
+                            if (isProjectileThrown)
+                            {
+                                if ((API.DoesEntityExist(projectileEntityId) && API.IsEntityPlayingAnim(ped.Handle, ANIM_DICT_MOVE, "fetch_pickup", 3)) && API.GetEntityAnimCurrentTime(ped.Handle, ANIM_DICT_MOVE, "fetch_pickup") > 0.25f)
+                                {
+                                    API.AttachEntityToEntity(projectileEntityId, ped.Handle, 28, 0.2042f, 0f, -0.0608f, 0f, 0f, 0f, false, false, false, false, 2, true);
+                                    API.SetAudioFlag("DisableBarks", true);
+                                    companionInteractionSequence++;
+                                }
+                            }
+                            else
+                            {
+                                companionInteractionSequence++;
+                            }
+                        }
+                        else if (companionInteractionSequence == 3)
+                        {
+                            if (GetDistanceBetweenEntities(playerPedHandle, ped.Handle, true) < 5f)
+                            {
+                                if (isProjectileThrown)
+                                {
+                                    API.RequestAnimDict(ANIM_DICT_MOVE);
+                                    if (API.HasAnimDictLoaded(ANIM_DICT_MOVE))
+                                    {
+                                        API.OpenSequenceTask(ref sequenceTaskId);
+                                        API.TaskTurnPedToFaceEntity(0, playerPedHandle, 0);
+                                        API.TaskPlayAnim(0, ANIM_DICT_MOVE, "fetch_drop", 8f, 8f, -1, 16384, 0, false, false, false);
+                                        API.CloseSequenceTask(sequenceTaskId);
+                                        API.TaskPerformSequence(ped.Handle, sequenceTaskId);
+                                        API.ClearSequenceTask(ref sequenceTaskId);
+                                        // return dialog
+                                        API.SetAudioFlag("DisableBarks", false);
+                                        companionInteractionSequence++;
+                                    }
+                                }
+                                else
+                                {
+                                    PlaySound("BREATH_AGITATED");
+                                    // function for autio conversation
+                                    // reset function
+                                }
+                            }
+                        }
+                        else if (companionInteractionSequence == 4)
+                        {
+                            if (!TaskStatus(ped.Handle, 242628503) && !API.DoesEntityExist(projectileEntityId))
+                            {
+
+                            }
+                        }
+                        // func_102
+                    }
+
+                    break;
             }
         }
     }
