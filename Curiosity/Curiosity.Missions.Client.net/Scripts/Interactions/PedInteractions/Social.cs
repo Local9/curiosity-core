@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.net.Scripts.Interactions.VehicleInteractions;
+using Curiosity.Missions.Client.net.Static;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using System.Collections.Generic;
 using static CitizenFX.Core.Native.API;
@@ -68,6 +70,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 }
                 else if (interactivePed.Attitude >= 80)
                 {
+                    if (Client.Random.Next(10) > 8)
+                    {
+                        if (interactivePed.Ped.IsInVehicle()) {
+                            interactivePed.Ped.Weapons.Give(WeaponHash.StunGun, 1, true, true);
+                            interactivePed.SetRelationship(Relationships.HostileRelationship);
+                            interactivePed.Ped.Task.FightAgainstHatedTargets(20f, 3000);
+                            await BaseScript.Delay(2000);
+                            interactivePed.IsWanted = true;
+                            interactivePed.RanFromPolice = true;
+
+                            TrafficStopInteractions.TrafficStopVehicleFlee(interactivePed.Ped.CurrentVehicle, interactivePed.Ped);
+                        }
+                    }
                     driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity[Client.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity.Count)];
                 }
                 Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
