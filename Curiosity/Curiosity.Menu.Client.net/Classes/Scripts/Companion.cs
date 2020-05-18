@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Menus.Client.net.Classes.Data;
 using Curiosity.Menus.Client.net.Extensions;
 using Curiosity.Menus.Client.net.Static;
+using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,11 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
 
         static bool InteractingWithPet = false;
 
+        static int LastTimeWhine;
+
+        static int companionAction = 0;
+        static int companionActionSequence = 0;
+
         static public void Init()
         {
             client = Client.GetInstance();
@@ -49,7 +55,8 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
 
         private static async Task OnPlayerMovementTask()
         {
-            await Client.Delay(5000);
+            await BaseScript.Delay(5000);
+
             if (Game.PlayerPed.Position.Distance(lastLocation) > 3f)
             {
                 LastMovement = API.GetGameTimer();
@@ -143,7 +150,13 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
 
             await Client.Delay(500);
 
-            ped.PlayAmbientSpeech("GENERIC_HI", SpeechModifier.Standard);
+            if (companionData.IsHuman)
+                ped.PlayAmbientSpeech("GENERIC_HI", SpeechModifier.Standard);
+
+            if (companionData.CanInteract)
+                PlaySound("BARK");
+
+            Client.TriggerEvent("curiosity:Client:Notification:Curiosity", 1, "Companion", "", "Your companion will attack anyone who attacks you.", 3);
 
             client.RegisterTickHandler(OnCompanionTick);
         }
@@ -221,7 +234,8 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
             {
                 // interaction menu
 
-                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to pat.");
+                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to pat your pet.");
+                // DisplayHelp("CHOP_H_ATTACK", -1);
 
                 if (Game.IsControlPressed(0, Control.Context))
                 {
@@ -246,8 +260,10 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                     await BaseScript.Delay(1000);
                     ped.Task.PlayAnimation(ANIM_DICT_TRICKS, ANIM_SIT_ENTER, 1f, -1, AnimationFlags.StayInEndFrame);
                     await BaseScript.Delay(2000);
+                    PlaySound("WHINE");
                     ped.Task.PlayAnimation(ANIM_DICT_TRICKS, ANIM_SIT_LOOP, 1f, -1, AnimationFlags.Loop);
                     await BaseScript.Delay(2000);
+                    LastTimeWhine = API.GetGameTimer();
                 }
             }
             else if (currentCompanion.CanInteract && !hasNotMoved && API.IsEntityPlayingAnim(ped.Handle, ANIM_DICT_TRICKS, ANIM_SIT_LOOP, 3))
@@ -255,7 +271,22 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                 ped.Task.PlayAnimation(ANIM_DICT_TRICKS, ANIM_SIT_EXIT, 1f, -1, AnimationFlags.StayInEndFrame);
                 await BaseScript.Delay(1000);
                 ped.Task.ClearAll();
+                PlaySound("BARK");
             }
+        }
+
+        static void DisplayHelp(string text, int shape)
+        {
+            API.BeginTextCommandDisplayHelp(text);
+            API.EndTextCommandDisplayHelp(0, false, true, shape);
+        }
+
+        static void PlaySound(string sound)
+        {
+            if (Player.PlayerInformation.IsDeveloper())
+                Log.Verbose($"PlaySound : {sound}");
+
+            API.PlayAnimalVocalization(ped.Handle, 3, sound);
         }
 
         static bool CanInteract
