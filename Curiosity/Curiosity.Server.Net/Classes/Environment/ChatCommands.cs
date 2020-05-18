@@ -50,6 +50,7 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("test", new Action<int, List<object>, string>(Test), false);
             API.RegisterCommand("sessions", new Action<int, List<object>, string>(OnSessions), false);
             API.RegisterCommand("guide", new Action<int, List<object>, string>(Guide), false);
+            API.RegisterCommand("help", new Action<int, List<object>, string>(Guide), false);
 
             server.RegisterEventHandler("rconCommand", new Action<string, List<object>>(OnRconCommand));
 
@@ -261,9 +262,23 @@ namespace Curiosity.Server.net.Classes.Environment
 
             lastTimePIA = API.GetGameTimer();
 
-            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+            int handle = playerHandle;
 
-            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+            if (SessionManager.PlayerList.ContainsKey($"{handle}"))
+            {
+                Session staffSession = SessionManager.PlayerList[$"{handle}"];
+                if (staffSession.IsStaff)
+                {
+                    if (arguments.Count == 1)
+                    {
+                        handle = int.Parse($"{arguments[0]}");
+                    }
+                }
+            }
+
+            if (!SessionManager.PlayerList.ContainsKey($"{handle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{handle}"];
 
             ChatMessage chatMessage = new ChatMessage();
 
