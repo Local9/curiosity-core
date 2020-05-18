@@ -93,7 +93,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             try
             {
-                API.CancelEvent();
+
             }
             catch (Exception ex)
             {
