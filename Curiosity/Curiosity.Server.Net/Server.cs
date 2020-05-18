@@ -118,7 +118,7 @@ namespace Curiosity.Server.net
             Classes.Environment.ChatService.Init();
             Classes.Environment.PolmavEvents.Init();
             // Classes.Environment.InstanceChecker.Init();
-            Classes.Environment.Trains.Init();
+            // Classes.Environment.Trains.Init();
             // weather and time
             Classes.Environment.WeatherSystems.Init();
             Classes.Environment.WorldTimeCycle.Init();

@@ -131,7 +131,7 @@ namespace Curiosity.Client.net
             //EmotesManager.Init();
             //Stay.Init();
 
-            Classes.Environment.Trains.Init();
+            // Classes.Environment.Trains.Init();
 
             MarqueeMessages.Init();
             ChatService.Init();
