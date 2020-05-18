@@ -12,6 +12,7 @@ namespace Curiosity.Menus.Client.net
         private static Client _instance;
         public static PlayerList players;
         public static GlobalEntity.User User;
+        public static Random Random = new Random();
 
         public static int PedHandle { get { return Game.PlayerPed.Handle; } }
         public static int PlayerHandle { get { return Game.Player.Handle; } }

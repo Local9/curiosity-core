@@ -6,11 +6,15 @@ using Curiosity.Menus.Client.net.Extensions;
 using Curiosity.Menus.Client.net.Static;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Curiosity.Menus.Client.net.Classes.Scripts
@@ -44,6 +48,9 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
 
         static int LastTimeWhine;
 
+        static int WhineTime;
+        static int WhineTimeInterval;
+
         static int sequenceGameTimer;
         static int sequenceTaskId;
         static int internalSequenceGameTimer;
@@ -66,16 +73,18 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
         {
             client = Client.GetInstance();
             Relationships.SetupRelationShips();
-
-            client.RegisterTickHandler(OnPlayerMovementTask);
-            client.RegisterTickHandler(OnMonitorCompanionTask);
         }
 
         private static async Task OnMonitorCompanionTask()
         {
-            if (Game.PlayerPed.IsAiming && Game.PlayerPed.Weapons.Current == WeaponHash.Ball)
+            if (API.GetProjectileNearPed(Game.PlayerPed.Handle, (uint)weaponBall, 50f, ref projectilePosition, ref projectileEntityId, false))
             {
+                thrownProjectile = WeaponHash.Ball;
                 companionInteraction = 15;
+            }
+            else
+            {
+                companionInteraction = 0;
             }
         }
 
@@ -110,6 +119,8 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                     ped.Delete();
                 }
             }
+
+            companionInteraction = 0;
 
             Relationships.SetupRelationShips();
 
@@ -176,14 +187,29 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
 
             await Client.Delay(500);
 
+            int groupIndex = API.GetPedGroupIndex(Game.PlayerPed.Handle);
+
             if (companionData.IsHuman)
+            {
                 ped.PlayAmbientSpeech("GENERIC_HI", SpeechModifier.Standard);
+            }
+            else
+            {
+                API.SetGroupFormationSpacing(groupIndex, 1f, 0.9f, 3f);
+            }
+
+            API.SetPedCanTeleportToGroupLeader(ped.Handle, groupIndex, true);
 
             if (companionData.CanInteract)
+            {
                 PlaySound("BARK");
+                GivePlayerBall(true, true, false);
+            }
 
             Client.TriggerEvent("curiosity:Client:Notification:Curiosity", 1, "Companion", "", "Your companion will attack anyone who attacks you.", 3);
 
+            client.RegisterTickHandler(OnPlayerMovementTask);
+            client.RegisterTickHandler(OnMonitorCompanionTask);
             client.RegisterTickHandler(OnCompanionTick);
             client.RegisterTickHandler(OnCompanionInteractionTask);
         }
@@ -198,6 +224,8 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                 {
                     client.DeregisterTickHandler(OnCompanionTick);
                     client.DeregisterTickHandler(OnCompanionInteractionTask);
+                    client.DeregisterTickHandler(OnPlayerMovementTask);
+                    client.DeregisterTickHandler(OnMonitorCompanionTask);
                 }
 
                 return;
@@ -211,6 +239,8 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                 {
                     client.DeregisterTickHandler(OnCompanionTick);
                     client.DeregisterTickHandler(OnCompanionInteractionTask);
+                    client.DeregisterTickHandler(OnPlayerMovementTask);
+                    client.DeregisterTickHandler(OnMonitorCompanionTask);
                 }
 
                 return;
@@ -284,7 +314,7 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                 API.NetworkFadeInEntity(ped.Handle, false);
             }
 
-            if (currentCompanion.CanInteract && hasNotMoved)
+            if (currentCompanion.CanInteract && hasNotMoved && companionInteraction == 0)
             {
                 if ((API.GetGameTimer() - LastMovement) < 10000
                     && !API.IsEntityPlayingAnim(ped.Handle, ANIM_DICT_TRICKS, ANIM_SIT_LOOP, 2))
@@ -437,12 +467,20 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                     if (IsHuman)
                         ped.PlayAmbientSpeech("GENERIC_BYE", SpeechModifier.Standard);
 
+                    if (currentCompanion.CanInteract)
+                        Reset(2, true);
+
                     await Client.Delay(500);
                     API.NetworkFadeOutEntity(ped.Handle, false, false);
                     await Client.Delay(500);
                     ped.Delete();
+
+                    Game.PlayerPed.Weapons.Remove(WeaponHash.Ball);
+
                     client.DeregisterTickHandler(OnCompanionTick);
                     client.DeregisterTickHandler(OnCompanionInteractionTask);
+                    client.DeregisterTickHandler(OnPlayerMovementTask);
+                    client.DeregisterTickHandler(OnMonitorCompanionTask);
                 }
             }
         }
@@ -578,9 +616,24 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
             int iVar6;
             int iVar7;
 
+            // Screen.ShowSubtitle($"companionInteraction : {companionInteraction} / companionInteractionSequence: {companionInteractionSequence}~n~isProjectileThrown {isProjectileThrown}");
+
             int playerPedHandle = Game.PlayerPed.Handle;
             switch (companionInteraction)
             {
+                case 2:
+                    CleanUp();
+                    if (companionInteractionSequence == 0)
+                    {
+                        sequenceGameTimer = API.GetGameTimer();
+                        companionInteractionSequence++;
+                    }
+                    else if (companionInteractionSequence == 2)
+                    {
+                        RandomWhine();
+                    }
+
+                    break;
                 case 15:
                     if (Game.PlayerPed.IsInVehicle())
                     {
@@ -594,6 +647,7 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                             RemoveOrDropBall(true);
                             if (API.GetProjectileNearPed(playerPedHandle, (uint)weaponBall, 50f, ref projectilePosition, ref projectileEntityId, false))
                             {
+                                GivePlayerBall(true, true, false);
                                 API.SetCurrentPedWeapon(playerPedHandle, (uint)weaponBall, true);
                                 isProjectileThrown = false;
                                 companionIsFetchingBall = false;
@@ -625,7 +679,7 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                                                 API.CloseSequenceTask(sequenceTaskId);
                                                 API.TaskPerformSequence(ped.Handle, sequenceTaskId);
                                                 API.ClearSequenceTask(ref sequenceTaskId);
-                                                if (weaponBall == WeaponHash.Ball)
+                                                if (thrownProjectile == WeaponHash.Ball)
                                                 {
                                                     isProjectileThrown = true;
                                                 }
@@ -708,27 +762,37 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                         {
                             if (GetDistanceBetweenEntities(playerPedHandle, ped.Handle, true) < 5f)
                             {
-                                if (isProjectileThrown)
+                                if (thrownProjectile == WeaponHash.Ball)
                                 {
-                                    API.RequestAnimDict(ANIM_DICT_MOVE);
-                                    if (API.HasAnimDictLoaded(ANIM_DICT_MOVE))
+                                    if (isProjectileThrown)
                                     {
-                                        API.OpenSequenceTask(ref sequenceTaskId);
-                                        API.TaskTurnPedToFaceEntity(0, playerPedHandle, 0);
-                                        API.TaskPlayAnim(0, ANIM_DICT_MOVE, "fetch_drop", 8f, 8f, -1, 16384, 0, false, false, false);
-                                        API.CloseSequenceTask(sequenceTaskId);
-                                        API.TaskPerformSequence(ped.Handle, sequenceTaskId);
-                                        API.ClearSequenceTask(ref sequenceTaskId);
-                                        // return dialog
-                                        API.SetAudioFlag("DisableBarks", false);
-                                        companionInteractionSequence++;
+                                        API.RequestAnimDict(ANIM_DICT_MOVE);
+                                        if (API.HasAnimDictLoaded(ANIM_DICT_MOVE))
+                                        {
+                                            API.OpenSequenceTask(ref sequenceTaskId);
+                                            API.TaskTurnPedToFaceEntity(0, playerPedHandle, 0);
+                                            API.TaskPlayAnim(0, ANIM_DICT_MOVE, "fetch_drop", 8f, 8f, -1, 16384, 0, false, false, false);
+                                            API.CloseSequenceTask(sequenceTaskId);
+                                            API.TaskPerformSequence(ped.Handle, sequenceTaskId);
+                                            API.ClearSequenceTask(ref sequenceTaskId);
+                                            // return dialog
+                                            API.SetAudioFlag("DisableBarks", false);
+                                            companionInteractionSequence++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        PlaySound("BREATH_AGITATED");
+                                        // function for autio conversation
+                                        // reset function
+                                        Reset(2, true);
                                     }
                                 }
                                 else
                                 {
-                                    PlaySound("BREATH_AGITATED");
-                                    // function for autio conversation
-                                    // reset function
+                                    PlaySound("BARK_WHINE");
+                                    RemoveOrDropBall(true);
+                                    Reset(2, true);
                                 }
                             }
                         }
@@ -736,14 +800,96 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
                         {
                             if (!TaskStatus(ped.Handle, 242628503) && !API.DoesEntityExist(projectileEntityId))
                             {
-
+                                GivePlayerBall(true, true, false);
+                                sequenceGameTimer = API.GetGameTimer();
+                                Reset(2, true);
+                            }
+                            else if (API.DoesEntityExist(projectileEntityId))
+                            {
+                                if (API.IsEntityAttached(projectileEntityId))
+                                {
+                                    if (API.IsEntityPlayingAnim(ped.Handle, ANIM_DICT_MOVE, "fetch_drop", 3) && API.GetEntityAnimCurrentTime(ped.Handle, ANIM_DICT_MOVE, "fetch_drop") > 0.4f)
+                                    {
+                                        API.DetachEntity(projectileEntityId, true, true);
+                                        await BaseScript.Delay(500);
+                                        GivePlayerBall(true, true, true);
+                                        Reset(2, true);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (GetDistanceBetweenEntities(playerPedHandle, projectileEntityId, true) < 1.5f || GetDistanceBetweenEntities(playerPedHandle, projectileEntityId, true) > 20f || Game.PlayerPed.IsInVehicle())
+                                {
+                                    RemoveOrDropBall(true);
+                                    Reset(2, true);
+                                }
+                                if (!TaskStatus(ped.Handle, 242628503))
+                                {
+                                    
+                                }
                             }
                         }
-                        // func_102
+                        CleanUp();
                     }
 
                     break;
             }
+        }
+
+        private static void RandomWhine()
+        {
+            if ((API.GetGameTimer() - WhineTime) > WhineTimeInterval)
+            {
+                WhineTime = API.GetGameTimer();
+                WhineTimeInterval = Client.Random.Next(10000, 15000);
+                PlaySound("WHINE");
+            }
+        }
+
+        private static void CleanUp()
+        {
+            //if (!Game.PlayerPed.IsInVehicle() && !Game.PlayerPed.IsInWater)
+            //{
+            //    if (companionInteraction == 15 && companionInteractionSequence > 1)
+            //    {
+
+            //    }
+            //    else
+            //    {
+            //        RemoveOrDropBall(false);
+            //        if (companionInteraction == 2)
+            //        {
+            //            Reset(2, false);
+            //        } else
+            //        {
+            //            Reset(2, true);
+            //        }
+            //    }
+            //}
+        }
+
+        private static void Reset(int compInteraction, bool clearTasks)
+        {
+            if (PedIsNotDead(ped.Handle))
+            {
+                API.SetBlockingOfNonTemporaryEvents(ped.Handle, true);
+                ped.ClearLastWeaponDamage();
+                if (!ped.IsInVehicle())
+                {
+                    if (clearTasks)
+                    {
+                        ped.Task.ClearAll();
+                    }
+                    ped.IsInvincible = false;
+                }
+            }
+
+            companionInteractionSequence = 0;
+            companionInteraction = compInteraction;
+            companionIsFetchingBall = false;
+            isProjectileThrown = false;
+            API.SetAudioFlag("DisableBarks", false);
         }
     }
 }
