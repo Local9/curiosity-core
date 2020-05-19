@@ -482,8 +482,11 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
             {
                 Vehicle.IsHandbrakeForcedOn = false;
 
-                if (this.Vehicle.AttachedBlip.Exists())
-                    this.Vehicle.AttachedBlip.Delete();
+                if (this.Vehicle.AttachedBlip != null)
+                {
+                    if (this.Vehicle.AttachedBlip.Exists())
+                        this.Vehicle.AttachedBlip.Delete();
+                }
 
                 this.Vehicle.IsPositionFrozen = false;
 
