@@ -54,7 +54,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
                             return;
                         }
 
-                        Client.TriggerEvent("curiosity:interaction:coroner", PedToRecover.NetworkId); // PED UPDATE
+                        Client.TriggerEvent("curiosity:interaction:coroner", PedToRecover.Handle); // PED UPDATE
 
                         CleanUpPed();
                     }

@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Shared.Client.net.Enums;
@@ -91,6 +92,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
         static async void CleanUpVehicle()
         {
             NetworkFadeOutEntity(vehToRemove.Handle, true, false);
+            API.SetNetworkIdCanMigrate(vehToRemove.NetworkId, true);
             await Client.Delay(1000);
             string encodedString = Encode.StringToBase64($"{vehToRemove.NetworkId}");
             string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));

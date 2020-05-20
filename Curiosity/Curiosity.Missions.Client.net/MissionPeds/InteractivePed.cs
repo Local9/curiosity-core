@@ -665,7 +665,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             int networkId = API.NetworkGetNetworkIdFromEntity(base.Handle);
 
-            NpcHandler.AddNpc(networkId, this);
+            NpcHandler.AddNpc(base.Handle, this);
             if (Ped.IsInVehicle())
             {
                 DecorSetInt(Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE, Ped.CurrentVehicle.Handle);
@@ -798,7 +798,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 }
                 if (flag)
                 {
-                    Scripts.NpcHandler.RemoveNpc(networkId);
+                    Scripts.NpcHandler.RemoveNpc(base.Handle);
                     base.Delete();
 
                     client.DeregisterTickHandler(OnShowHelpTextTask);
@@ -809,7 +809,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (this.Ped == null)
                 {
-                    Scripts.NpcHandler.RemoveNpc(networkId);
+                    Scripts.NpcHandler.RemoveNpc(base.Handle);
                     base.Delete();
 
                     client.DeregisterTickHandler(OnShowHelpTextTask);
@@ -838,7 +838,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (_hasBeenReleased)
                 {
-                    Scripts.NpcHandler.RemoveNpc(networkId);
+                    Scripts.NpcHandler.RemoveNpc(base.Handle);
 
                     Ped.RelationshipGroup = Relationships.NeutralRelationship;
 
@@ -929,7 +929,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 if (Ped.Position.Distance(Game.PlayerPed.Position) >= 200f)
                 {
-                    Scripts.NpcHandler.RemoveNpc(networkId);
+                    Scripts.NpcHandler.RemoveNpc(base.Handle);
                     OnPedHasBeenReleased(Ped.Handle);
                 }
             }
@@ -1135,7 +1135,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                 _hasBeenReleased = true;
 
-                Scripts.NpcHandler.RemoveNpc(base.NetworkId);
+                Scripts.NpcHandler.RemoveNpc(base.Handle);
 
                 DecorSetBool(handle, Client.DECOR_NPC_ARRESTED, false);
 
@@ -1202,7 +1202,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
                         if (Decorators.GetBoolean(vehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
                         {
-                            BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", vehicle.NetworkId);
+                            BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", vehicle.Handle);
                         }
                     }
                 }
@@ -1214,7 +1214,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                     {
                         if (Decorators.GetBoolean(Ped.CurrentVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
                         {
-                            BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Ped.CurrentVehicle.NetworkId);
+                            BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Ped.CurrentVehicle.Handle);
                         }
                     }
                 }
@@ -1314,7 +1314,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             Ped.Detach();
             HasBeenGrabbed = false;
 
-            NpcHandler.RemoveNpc(base.NetworkId);
+            NpcHandler.RemoveNpc(base.Handle);
 
             base.Delete();
         }

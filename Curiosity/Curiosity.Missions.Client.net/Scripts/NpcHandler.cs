@@ -26,121 +26,14 @@ namespace Curiosity.Missions.Client.net.Scripts
         static Client client = Client.GetInstance();
         static ConcurrentDictionary<int, InteractivePed> NpcNetworkIds = new ConcurrentDictionary<int, InteractivePed>();
 
-        static Ped recruitedPed;
-
         static public void Init()
         {
             client.RegisterTickHandler(OnNpcInteraction);
-
-            // client.RegisterTickHandler(OnPoliceNpcRecruit);
-        }
-
-        public async static Task OnPoliceNpcRecruit()
-        {
-            // Screen.ShowSubtitle($"Group Members: {Game.PlayerPed.PedGroup.MemberCount}");
-            // List<Ped> peds = World.GetAllPeds().Select(x => x).Where(p => p.Position.Distance(Game.PlayerPed.Position) < 3f).ToList();
-
-            if (!ClientInformation.IsTrusted()) return;
-
-            Ped pedInFront = Game.PlayerPed.GetPedInFront();
-
-            //if (pedInFront != null)
-            //{
-
-            //    if (
-            //        pedInFront.Model.Hash != (int)PedHash.Cop01SFY
-            //        || pedInFront.Model.Hash != (int)PedHash.Cop01SMY
-            //        //|| pedInFront.Model.Hash != (int)PedHash.Ranger01SFY
-            //        //|| pedInFront.Model.Hash != (int)PedHash.Ranger01SMY
-            //        //|| pedInFront.Model.Hash != (int)PedHash.Sheriff01SFY
-            //        //|| pedInFront.Model.Hash != (int)PedHash.Sheriff01SMY
-            //        )
-            //    {
-            //        return;
-            //    }
-            //}
-
-            if (pedInFront != null && !Game.PlayerPed.IsInVehicle())
-            {
-                if (
-                    !Decorators.GetBoolean(pedInFront.Handle, Client.DECOR_NPC_ACTIVE_TRAFFIC_STOP)
-                    && !Decorators.GetBoolean(pedInFront.Handle, Decorators.DECOR_GROUP_MEMBER)
-                    && !Decorators.GetBoolean(pedInFront.Handle, Client.DECOR_PED_MISSION)
-                    && !Decorators.GetBoolean(pedInFront.Handle, Decorators.DECOR_PED_INTERACTIVE))
-                {
-                    Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to recruit ped");
-
-                    if (Game.IsControlJustPressed(0, Control.Context))
-                    {
-                        if (Game.PlayerPed.PedGroup.MemberCount == 1)
-                        {
-                            Screen.ShowNotification($"~r~Cannot recruit more");
-                            return;
-                        }
-
-                        pedInFront.Recruit(Game.PlayerPed);
-
-                        recruitedPed = pedInFront;
-
-                        Screen.ShowNotification($"~g~Ped Recruited");
-                        await Client.Delay(5000);
-                        return;
-                    }
-                }
-                
-                if (Decorators.GetBoolean(pedInFront.Handle, Decorators.DECOR_GROUP_MEMBER))
-                {
-                    Ped ped = Game.PlayerPed.PedGroup.GetMember(0);
-
-                    if (ped != null)
-                    {
-                        if (ped == recruitedPed)
-                        {
-                            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to remove ped");
-
-                            if (Game.IsControlJustPressed(0, Control.Context))
-                            {
-                                pedInFront.LeaveParty();
-                                Game.PlayerPed.LeaveGroup();
-                                Decorators.Set(pedInFront.Handle, Decorators.DECOR_GROUP_MEMBER, false);
-                                Screen.ShowNotification($"~g~Ped has left party");
-                                await Client.Delay(5000);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (recruitedPed != null)
-            {
-                if (Game.PlayerPed.IsInVehicle() && !recruitedPed.IsInVehicle() && recruitedPed.Position.Distance(Game.PlayerPed.Position) > 50f)
-                {
-                    recruitedPed.Fade(true);
-                    await Client.Delay(500);
-                    recruitedPed.Task.WarpIntoVehicle(Game.PlayerPed.CurrentVehicle, VehicleSeat.Any);
-                    await Client.Delay(500);
-                    recruitedPed.Fade(false);
-
-                    await Client.Delay(5000);
-                }
-
-                if (recruitedPed.Exists())
-                {
-                    if (recruitedPed.IsDead)
-                    {
-                        Game.PlayerPed.LeaveGroup();
-                    }
-                }
-                else
-                {
-                    Game.PlayerPed.LeaveGroup();
-                }
-            }
         }
 
         private static async Task OnNpcInteraction()
         {
-            List<Ped> closePeds = World.GetAllPeds().Select(p => p).Where(x => x.Position.Distance(Game.PlayerPed.Position) < 50f).ToList();
+            List<Ped> closePeds = World.GetAllPeds().Select(p => p).Where(x => x.Position.Distance(Game.PlayerPed.Position) < 20f).ToList();
 
             if (NpcNetworkIds.Count > 0)
             {
@@ -148,11 +41,11 @@ namespace Curiosity.Missions.Client.net.Scripts
 
                 foreach (Ped ped in copy)
                 {
-                    if (NpcNetworkIds.ContainsKey(ped.NetworkId))
+                    if (NpcNetworkIds.ContainsKey(ped.Handle))
                     {
-                        if (ped.Position.Distance(Game.PlayerPed.Position) <= 20)
+                        if (ped.Position.Distance(Game.PlayerPed.Position) <= 10f)
                         {
-                            if (ped.Position.VDist(Game.PlayerPed.Position) <= 120f)
+                            if (ped.Position.VDist(Game.PlayerPed.Position) <= 100f)
                             {
                                 if (CanDisplayMenu(ped))
                                 {
@@ -160,7 +53,7 @@ namespace Curiosity.Missions.Client.net.Scripts
 
                                     if (Game.IsControlPressed(0, Control.Context))
                                     {
-                                        Menus.PedInteractionMenu.MenuBase.Open(NpcNetworkIds[ped.NetworkId]);
+                                        Menus.PedInteractionMenu.MenuBase.Open(NpcNetworkIds[ped.Handle]);
                                     }
                                 }
 
@@ -195,7 +88,7 @@ namespace Curiosity.Missions.Client.net.Scripts
 
                                                 if (Game.IsControlJustPressed(0, Control.Context))
                                                 {
-                                                    ArrestInteractions.InteractionArrestInit(NpcNetworkIds[ped.NetworkId]);
+                                                    ArrestInteractions.InteractionArrestInit(NpcNetworkIds[ped.Handle]);
                                                 }
                                             }
                                         }
@@ -208,21 +101,21 @@ namespace Curiosity.Missions.Client.net.Scripts
             }
         }
 
-        public static void AddNpc(int networkId, InteractivePed interactivePed)
+        public static void AddNpc(int handle, InteractivePed interactivePed)
         {
-            NpcNetworkIds.GetOrAdd(networkId, interactivePed);
+            NpcNetworkIds.GetOrAdd(handle, interactivePed);
         }
 
-        public static void RemoveNpc(int networkId)
+        public static void RemoveNpc(int handle)
         {
-            NpcNetworkIds.TryRemove(networkId, out InteractivePed p);
+            NpcNetworkIds.TryRemove(handle, out InteractivePed p);
         }
 
         private static bool CanDisplayMenu(Ped ped)
         {
             try
             {
-                if (!NpcNetworkIds.ContainsKey(ped.NetworkId)) return false;
+                if (!NpcNetworkIds.ContainsKey(ped.Handle)) return false;
 
                 if (Menus.PedInteractionMenu.MenuBase.MainMenu != null)
                     IsMenuVisible = Menus.PedInteractionMenu.MenuBase.AnyMenuVisible();

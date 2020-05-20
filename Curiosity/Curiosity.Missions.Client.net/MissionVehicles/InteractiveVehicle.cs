@@ -515,7 +515,7 @@ namespace Curiosity.Missions.Client.net.MissionVehicles
                 client.DeregisterTickHandler(OnShowHelpTextTask);
                 client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
 
-                BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Vehicle.NetworkId);
+                BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Vehicle.Handle);
             }
 
             if (this.InteractivePed.Handle == handle)
