@@ -78,7 +78,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             if (!API.NetworkIsPlayerActive(player.Handle) && Game.Player.Handle == player.Handle) return;
 
-            int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, false, "", 0);
+            bool staffMember = Player.PlayerInformation.IsStaff();
+            string staffTag = staffMember ? "[STAFF]" : string.Empty;
+
+            int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, staffMember, staffTag, 0);
 
             if (!API.NetworkIsPlayerActive(player.Handle))
             {
@@ -100,7 +103,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 API.SetMpGamerTagVisibility(gamerTagId, 0, false);
             }
-            else if (API.HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17))
+            else if (API.HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17) && !isSpectating)
             {
                 API.SetMpGamerTagName(gamerTagId, player.Name);
                 API.SetMpGamerTagVisibility(gamerTagId, 0, true);
