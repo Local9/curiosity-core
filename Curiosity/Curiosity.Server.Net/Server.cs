@@ -8,6 +8,9 @@ namespace Curiosity.Server.net
 {
     public class Server : BaseScript
     {
+
+        // Nitro : 712753920123863170
+
         private static Server _server;
 
         public static Random random = new Random(Guid.NewGuid().GetHashCode());
