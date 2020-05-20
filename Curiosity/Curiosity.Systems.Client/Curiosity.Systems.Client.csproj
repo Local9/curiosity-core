@@ -81,6 +81,7 @@
     <Compile Include="Environment\Stores\StoreManager.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Extensions\CharacterExtensions.cs" />
+    <Compile Include="Extensions\DecoratorExtensions.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
     <Compile Include="Interface\Chat.cs" />

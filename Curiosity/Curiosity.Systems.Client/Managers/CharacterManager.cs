@@ -4,8 +4,11 @@ using CitizenFX.Core.UI;
 using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Environment.Entities;
 using Curiosity.Systems.Client.Extensions;
+using Curiosity.Systems.Client.net.Extensions;
+using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers
@@ -183,6 +186,8 @@ namespace Curiosity.Systems.Client.Managers
             Game.PlayerPed.Health = health;
             Game.PlayerPed.Armor = character.Armor;
 
+            SetupDecorators();
+
             Logger.Info("[Character] Base Settings Loaded...");
 
             // INVENTORIES
@@ -224,6 +229,12 @@ namespace Curiosity.Systems.Client.Managers
 
             Screen.LoadingPrompt.Hide();
             player.EnableHud();
+        }
+
+        private void SetupDecorators()
+        {
+            int playerHandle = Game.PlayerPed.Handle;
+            DecoratorExtensions.Set(playerHandle, Decors.PLAYER_NAME, Game.Player.Name);
         }
     }
 }

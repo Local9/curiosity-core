@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Systems.Library.Models
 {
@@ -8,6 +9,7 @@ namespace Curiosity.Systems.Library.Models
         public long UserId { get; set; }
         public long LifeExperience { get; set; }
         public ulong DiscordId { get; set; }
+        public List<ulong> DiscordRoles { get; set; }
         public string License { get; set; }
         public string LastName { get; set; }
         public Role Role { get; set; } = Role.USER;
@@ -36,5 +38,7 @@ namespace Curiosity.Systems.Library.Models
         public bool IsDonatorLevel1 => (Role == Role.DONATOR_LEVEL_1);
         public bool IsDonatorLevel2 => (Role == Role.DONATOR_LEVEL_2);
         public bool IsDonatorLevel3 => (Role == Role.DONATOR_LEVEL_3);
+        public bool IsAllowedSupportXp => (IsStaff || IsDonator || DiscordRoles.Contains(Roles.EARLY_ACCESS) || DiscordRoles.Contains(Roles.RESPECTED) || DiscordRoles.Contains(Roles.VETERAN));
+        public bool IsDiscordNitroBooster => (DiscordRoles.Contains(Roles.NITRO));
     }
 }

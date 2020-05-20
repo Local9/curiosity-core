@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Date.cs" />
+    <Compile Include="Decors.cs" />
     <Compile Include="Enums\PedType.cs" />
     <Compile Include="Events\AsyncEventCallback.cs" />
     <Compile Include="Events\Event.cs" />
