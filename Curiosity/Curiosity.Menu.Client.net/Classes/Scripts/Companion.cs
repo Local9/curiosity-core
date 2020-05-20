@@ -51,8 +51,8 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
         static int WhineTime;
         static int WhineTimeInterval;
 
-        static int sequenceGameTimer;
         static int sequenceTaskId;
+        static int sequenceGameTimer;
         static int internalSequenceGameTimer;
         static int projectileEntityId;
 
@@ -68,6 +68,7 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
         static int companionInteractionSequence = 0;
 
         static int audioSoundId = API.GetSoundId();
+        
 
         static public void Init()
         {
@@ -359,7 +360,7 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
         {
             get
             {
-                return !Game.PlayerPed.IsInVehicle() && Game.PlayerPed.IsAlive && !ped.IsInVehicle() && ped.IsAlive && Game.PlayerPed.Position.Distance(ped.Position) < 1.5f && !InteractingWithPet;
+                return !Game.PlayerPed.IsInVehicle() && Game.PlayerPed.IsAlive && !ped.IsInVehicle() && ped.IsAlive && Game.PlayerPed.Position.Distance(ped.Position) < 1.5f && !InteractingWithPet && currentCompanion.CanInteract;
             }
         }
 
