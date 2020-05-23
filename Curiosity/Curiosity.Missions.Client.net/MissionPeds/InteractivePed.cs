@@ -1263,8 +1263,15 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
             if (!IsHandcuffed)
             {
-                List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", "~o~Handcuff them you idoit!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", "~r~Cuff them, fecking muppet!" };
-                Screen.ShowNotification(vs[Client.Random.Next(vs.Count)]);
+                List<string> insults = new List<string>()
+                {
+                    "idiot", "fool", "muppet", "pleb", "maguire"
+                };
+
+                string randomInsult = insults[Client.Random.Next(insults.Count + 1)];
+
+                List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", $"~o~Handcuff them you {randomInsult}!!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", $"~r~Cuff them, fecking {randomInsult}!" };
+                Screen.ShowNotification(vs[Client.Random.Next(vs.Count + 1)]);
                 return;
             }
 
