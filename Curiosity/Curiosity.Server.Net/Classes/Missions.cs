@@ -121,6 +121,7 @@ namespace Curiosity.Server.net.Classes
             }
             else
             {
+                BaseScript.TriggerEvent("elv:community:arrest");
                 Skills.IncreaseSkill(player.Handle, "policerep", 1);
             }
 
