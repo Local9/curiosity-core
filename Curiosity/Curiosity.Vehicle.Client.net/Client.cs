@@ -13,6 +13,8 @@ namespace Curiosity.Vehicles.Client.net
         public static PlayerList players;
         public static CitizenFX.Core.Vehicle CurrentVehicle;
 
+        public static Random random = new Random();
+
         public static RelationshipGroup PlayerRelationshipGroup;
         public static RelationshipGroup MechanicRelationshipGroup;
 

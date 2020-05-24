@@ -18,7 +18,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
     static class FuelManager
     {
         static float startingMultiplier = 1 / 1600f;
-        static float FuelPumpRange = 4f;
+        static float FuelPumpRange = 6f;
         static bool refueling = false;
 
         // For random vehicles with unassigned fuel levels
@@ -198,7 +198,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         {
             while (true)
             {
-                if (isNearFuelPump)
+                if (isNearFuelPump && !refueling)
                 {
                     NativeWrappers.DrawHelpText("Press ~INPUT_PICKUP~ to ~y~refuel vehicle");
                     await BaseScript.Delay(0);
@@ -224,6 +224,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                     else
                     {
                         isNearFuelPump = false;
+                        refueling = false;
                     }
                 }
                 catch (Exception ex)
@@ -242,6 +243,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 if (isNearFuelPump && ControlHelper.IsControlPressed(Control.Pickup, false) && Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver.IsPlayer)
                 {
                     Refuel(100.0f - vehicleFuel);
+                    return;
                 }
 
                 if (Game.PlayerPed.IsInVehicle())
@@ -361,7 +363,10 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 }
 
                 if (refueling)
+                {
+                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Currently Refueling.", 8);
                     return;
+                }
 
                 refueling = true;
 
@@ -396,7 +401,6 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 int refuelTick = 25;
                 float refuelTickAmount = 0.07f;
-                float refuelRate = 0.35f;
                 float refueled = 0f;
 
                 vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, vehicle.Handle, "Vehicle.Fuel");
@@ -460,7 +464,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
         static async void Charge(int cost)
         {
-            cost = cost * 2;
+            cost = (int)(cost * 1.5);
+
             PlayerInformationModel playerInfo = Player.PlayerInformation.playerInfo;
 
             if ((playerInfo.Wallet - cost) > 0)
