@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Police.Client.net.Environment.Vehicle;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using MenuAPI;
 using System;
@@ -29,6 +30,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static MenuItem menuItemDispatch = new MenuItem("Dispatch");
         static MenuItem menuItemBreaker = new MenuItem(":: Options ::") { Enabled = false };
 
+        static MenuCheckboxItem menuCheckboxAlternateSirens = new MenuCheckboxItem("Alternate Sirens", Sirens.alternateSirens) { Description = "Alternative Sirens for Police Cars", Enabled = Sirens.alternateSirens };
         static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive) { Description = "Show information when a player requests backup" };
         static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
         static MenuCheckboxItem menuCheckboxRandomCallouts = new MenuCheckboxItem("Accept Dispatch Calls", _IsOnDuty) { Description = "Random Dispatch Mission" };
@@ -93,6 +95,11 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         private static async void OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
         {
             MenuBaseFunctions.MenuOpen();
+
+            if (menuItem == menuCheckboxAlternateSirens)
+            {
+                Sirens.alternateSirens = newCheckedState;
+            }
 
             if (menuItem == menuCheckboxRandomCallouts)
             {
@@ -191,6 +198,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menuListPatrolZone.Enabled = false;
             menuCheckboxTrafficStops.Enabled = false;
             menuItemShowRadar.Enabled = false;
+
+            menuCheckboxAlternateSirens.Checked = Sirens.alternateSirens;
 
             menu.AddMenuItem(menuListPatrolZone);
 

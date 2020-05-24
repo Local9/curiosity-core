@@ -17,6 +17,15 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
         static List<string> SIRENS_ACTIVE = new List<string>();
 
+        public static bool alternateSirens = false;
+
+        static List<string> SIRENS_FIB = new List<string>()
+        {
+            "", // No Sirens, just lights
+            "RESIDENT_VEHICLES_SIREN_WAIL_02",
+            "RESIDENT_VEHICLES_SIREN_QUICK_02"
+        };
+
         static List<string> SIRENS_POLICE = new List<string>()
         {
             "", // No Sirens, just lights
@@ -259,7 +268,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             if (veh != _currentVehicle)
             {
                 _currentVehicle = veh;
-                SIRENS_ACTIVE = SIRENS_POLICE;
+                SIRENS_ACTIVE = alternateSirens ? SIRENS_FIB : SIRENS_POLICE;
                 CurrentSirenPreset = SIRENS_ACTIVE[0];
 
                 if (veh.Model.Hash == (int)VehicleHash.FireTruk)
