@@ -1,12 +1,15 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Debug = CitizenFX.Core.Debug;
 
 namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
@@ -22,6 +25,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         static float minRandomFuel = 14f;
         static float maxRandomFuel = 97f;
 
+        static bool warning1Played = false;
+        static bool warning2Played = false;
+
         // Just placeholders for testing, feel free to change
         static Dictionary<VehicleClass, float> FuelConsumptionClassMultiplier = new Dictionary<VehicleClass, float>()
         {
@@ -36,7 +42,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
         static Dictionary<VehicleHash, float> FuelConsumptionModelMultiplier = new Dictionary<VehicleHash, float>()
         {
-            //[VehicleHash.Infernus] = 100f // For testing
+            // [VehicleHash.Infernus] = 100f // For testing
         };
 
         static List<ObjectHash> FuelPumpModelHashes = new List<ObjectHash>()
@@ -93,6 +99,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         private static bool isNearFuelPump;
         private static int cooldown = 0;
 
+        private static long GameTimer;
+
         private static bool IsInstantRefuelDisabled = false;
 
         static public void Init()
@@ -105,6 +113,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
             CheckFuelPumpDistance();
             ShowHelpText();
+
+            GameTimer = API.GetGameTimer();
 
             client.RegisterEventHandler("playerSpawn", new Action<dynamic>(OnPlayerSpawn));
 
@@ -285,6 +295,27 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", vehicleFuel);
                     }
 
+                    if ((API.GetGameTimer() - GameTimer) < 1000)
+                    {
+                        GameTimer = API.GetGameTimer();
+
+                        if (vehicleFuel > 20f && vehicleFuel < 35f && !warning1Played)
+                        {
+                            PlayWarning(false);
+                            warning1Played = true;
+                            Screen.ShowNotification($"~o~Fuel Warning");
+                        }
+                            
+
+                        if (vehicleFuel > 1f && vehicleFuel < 15f && !warning2Played)
+                        {
+                            PlayWarning(true);
+                            warning2Played = true;
+                            Screen.ShowNotification($"~r~Critical Fuel Warning");
+                        }
+                            
+                    }
+
                     lastUpdate = currentUpdate;
                 }
                 else
@@ -300,6 +331,21 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 Debug.WriteLine($"FuelManager Error: {ex.Message}");
                 await BaseScript.Delay(500);
             }
+        }
+
+        static async void PlayWarning(bool final)
+        {
+            string warning = final ? "5_SEC_WARNING" : "10_SEC_WARNING";
+
+            API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
+            await BaseScript.Delay(500);
+            API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
+            await BaseScript.Delay(500);
+            API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
+            await BaseScript.Delay(500);
+            API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
+            await BaseScript.Delay(500);
+            API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
         }
 
         public static async void Refuel(float amount)
@@ -394,6 +440,16 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                     refueling = false;
 
                     Charge((int)(refueled));
+
+                    if (vehicleFuel > 15f)
+                    {
+                        warning2Played = false;
+                    }
+
+                    if (vehicleFuel > 50f)
+                    {
+                        warning1Played = false;
+                    }
                 }
             }
             catch (Exception ex)
@@ -429,6 +485,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             if (!Player.PlayerInformation.IsDeveloper()) return;
             Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
             Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
+            warning1Played = false;
+            warning2Played = false;
         }
 
         static async void ClientRefuel()
@@ -441,6 +499,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             float currentFuel = API.DecorGetFloat(Client.CurrentVehicle.Handle, "Vehicle.Fuel");
 
             Charge((int)(100f - currentFuel));
+            warning1Played = false;
+            warning2Played = false;
 
             Function.Call(Hash._DECOR_SET_FLOAT, Client.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
 
