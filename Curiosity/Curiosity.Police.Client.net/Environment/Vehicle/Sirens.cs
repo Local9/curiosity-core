@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Helper;
 using System;
@@ -169,6 +170,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                 }
                 else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(17, (int)Control.CharacterWheel)) // Preset on/off
                 {
+                    GetSirens();
                     LightsActive = true;
                     client.RegisterTickHandler(HideHudComponent);
 
@@ -265,10 +267,11 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
         {
             CitizenFX.Core.Vehicle veh = Game.PlayerPed.CurrentVehicle;
 
+            SIRENS_ACTIVE = alternateSirens ? SIRENS_FIB : SIRENS_POLICE;
+
             if (veh != _currentVehicle)
             {
                 _currentVehicle = veh;
-                SIRENS_ACTIVE = alternateSirens ? SIRENS_FIB : SIRENS_POLICE;
                 CurrentSirenPreset = SIRENS_ACTIVE[0];
 
                 if (veh.Model.Hash == (int)VehicleHash.FireTruk)

@@ -30,7 +30,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static MenuItem menuItemDispatch = new MenuItem("Dispatch");
         static MenuItem menuItemBreaker = new MenuItem(":: Options ::") { Enabled = false };
 
-        static MenuCheckboxItem menuCheckboxAlternateSirens = new MenuCheckboxItem("Alternate Sirens", Sirens.alternateSirens) { Description = "Alternative Sirens for Police Cars", Enabled = Sirens.alternateSirens };
+        static MenuCheckboxItem menuCheckboxAlternateSirens = new MenuCheckboxItem("Alternate Sirens", Sirens.alternateSirens) { Description = "Alternative Sirens for Police Cars", Checked = Sirens.alternateSirens };
         static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive) { Description = "Show information when a player requests backup" };
         static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
         static MenuCheckboxItem menuCheckboxRandomCallouts = new MenuCheckboxItem("Accept Dispatch Calls", _IsOnDuty) { Description = "Random Dispatch Mission" };
@@ -99,6 +99,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             if (menuItem == menuCheckboxAlternateSirens)
             {
                 Sirens.alternateSirens = newCheckedState;
+                return;
             }
 
             if (menuItem == menuCheckboxRandomCallouts)
@@ -110,18 +111,21 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
                 await Client.Delay(3000);
                 menuItem.Enabled = true;
+                return;
             }
 
             if (menuItem == menuCheckboxTrafficStops)
             {
                 _IsTrafficStopsActive = newCheckedState;
                 BaseScript.TriggerEvent("curiosity:Client:Mission:TrafficStops", _IsTrafficStopsActive);
+                return;
             }
 
             if (menuItem == menuCheckboxRandomEvents)
             {
                 _IsRandomEventsActive = newCheckedState;
                 BaseScript.TriggerEvent("curiosity:Client:Mission:RandomEvents", _IsRandomEventsActive);
+                return;
             }
 
             if (menuItem == menuCheckboxBackup)
@@ -136,6 +140,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 {
                     Screen.ShowNotification("~r~No longer accepting Backup Calls");
                 }
+                return;
             }
         }
 
@@ -238,6 +243,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menu.AddMenuItem(menuItemShowRadar);
             menu.AddMenuItem(menuItemDispatch);
             menu.AddMenuItem(menuItemBreaker);
+            menu.AddMenuItem(menuCheckboxAlternateSirens);
             menu.AddMenuItem(menuCheckboxRandomCallouts);
             menu.AddMenuItem(menuCheckboxBackup);
             menu.AddMenuItem(menuCheckboxTrafficStops);
