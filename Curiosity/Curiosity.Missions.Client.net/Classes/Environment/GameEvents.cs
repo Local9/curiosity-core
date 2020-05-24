@@ -118,7 +118,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                     attacker.Character.ApplyDamage(damage);
                 }
 
-                string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"{victim.Name} was killed by {attacker.Name}"));
+                string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"[{victim.ServerId}] {victim.Name} was killed by [{attacker.ServerId}] {attacker.Name}"));
                 BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
             }
             catch (Exception ex)
