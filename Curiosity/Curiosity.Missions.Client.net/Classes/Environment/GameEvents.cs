@@ -29,6 +29,13 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
         static Ped juggernaut;
         static bool juggernautSpawned;
 
+        static bool wasKilledByScript = false;
+
+        static List<string> knockedOut = new List<string>()
+        {
+            "got knocked the f' out!", "got given a black eye", "got into a fist fight and lost"
+        };
+
         public static void Init()
         {
             GameEvents.OnPlayerKillPed += GameEventManager_OnPlayerKillPed;
@@ -61,10 +68,14 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
         private static void GameEventManager_OnDeath(Player victim, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag)
         {
-            if (victim.Character.GetKiller() == null)
+            if (victim.Character.GetKiller() == null && Client.IsPlayerSpawned && !wasKilledByScript)
             {
-                string serializedEvent = JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"{victim.Name} killed themselves"));
+                string message = "killed themselves";
+
+                string serializedEvent = JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"{victim.Name} {message}"));
                 BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
+
+                wasKilledByScript = false;
             }
         }
 
@@ -79,6 +90,8 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
                 if (attacker != Game.Player) return;
 
+                wasKilledByScript = false;
+
                 // RDM...
                 int victimMaxHealth = victim.Character.MaxHealth;
                 int victimCurrentHealth = victim.Character.Health;
@@ -91,17 +104,22 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
                 if (attacker.IsInvincible)
                 {
+                    wasKilledByScript = true;
                     attacker.Character.Kill();
                 }
 
                 if (victim.IsDead)
                 {
+                    wasKilledByScript = true;
                     attacker.Character.Kill();
                 }
                 else
                 {
                     attacker.Character.ApplyDamage(damage);
                 }
+
+                string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"{victim.Name} was killed by {attacker.Name}"));
+                BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
             }
             catch (Exception ex)
             {
@@ -111,7 +129,17 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
         private static void GameEventManager_OnPedKillPlayer(Ped attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
         {
-            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"{victim.Name} Died"));
+            string message = "died in mysterious ways";
+            if (isMeleeDamage)
+            {
+                message = knockedOut[Client.Random.Next(knockedOut.Count + 1)];
+            }
+            else if (damageTypeFlag == 0)
+            {
+                message = "was killed by a ped";
+            }
+
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"{victim.Name} {message}"));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
 
@@ -186,15 +214,18 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
                         if (attacker.Character.IsInvincible)
                         {
+                            wasKilledByScript = true;
                             attacker.Character.Kill();
                         }
 
                         if (attacker.Character.Health == 0)
                         {
+                            wasKilledByScript = true;
                             attacker.Character.Kill();
                         }
                         else
                         {
+                            wasKilledByScript = false;
                             attacker.Character.ApplyDamage(damage);
 
                             await Client.Delay(100);

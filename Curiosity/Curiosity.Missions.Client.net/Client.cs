@@ -15,7 +15,7 @@ namespace Curiosity.Missions.Client.net
         public static Random Random;
 
         public static bool IsBirthday;
-        static bool IsPlayerSpawned;
+        public static bool IsPlayerSpawned;
 
         private static Vehicle _currentVehicle;
         public static SpeechType speechType;
