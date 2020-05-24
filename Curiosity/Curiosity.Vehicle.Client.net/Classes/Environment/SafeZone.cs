@@ -104,8 +104,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
             client.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action(OnDrawAreas));
 
-            client.RegisterTickHandler(IsInSafeZone);
-            client.RegisterTickHandler(ShowDebugInformation);
+            // client.RegisterTickHandler(IsInSafeZone);
+            // client.RegisterTickHandler(ShowDebugInformation);
         }
 
         private static async Task ShowDebugInformation()
