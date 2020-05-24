@@ -178,7 +178,7 @@ namespace Curiosity.Server.net.Classes.Environment
                 chatMessage.list = chatChannel;
                 chatMessage.message = message;
                 chatMessage.roleClass = $"{session.Privilege}";
-                chatMessage.name = session.Player.Name;
+                chatMessage.name = $"[{session.Player.Handle}] {session.Player.Name}";
                 chatMessage.job = $"{session.job}";
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
