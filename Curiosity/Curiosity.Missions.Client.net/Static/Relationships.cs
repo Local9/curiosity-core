@@ -66,8 +66,8 @@ namespace Curiosity.Missions.Client.net.Static
             BallasRelationship = World.AddRelationshipGroup("AMBIENT_GANG_BALLAS");
             FamiliesRelationship = World.AddRelationshipGroup("AMBIENT_GANG_FAMILY");
             SetRelationshipBothWays(Relationship.Hate, BallasRelationship, FamiliesRelationship);
-            SetRelationshipBothWays(Relationship.Dislike, PlayerRelationship, BallasRelationship);
-            SetRelationshipBothWays(Relationship.Dislike, PlayerRelationship, FamiliesRelationship);
+            // SetRelationshipBothWays(Relationship.Dislike, PlayerRelationship, BallasRelationship);
+            // SetRelationshipBothWays(Relationship.Dislike, PlayerRelationship, FamiliesRelationship);
 
         }
     }

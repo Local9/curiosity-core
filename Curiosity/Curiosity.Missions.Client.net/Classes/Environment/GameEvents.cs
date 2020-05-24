@@ -5,6 +5,7 @@ using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Scripts;
+using Curiosity.Missions.Client.net.Static;
 using Curiosity.Shared.Client.net;
 using Newtonsoft.Json;
 using System;
@@ -23,6 +24,10 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
     class GameEventHandlers
     {
         static int numberOfPedsKilled = 0;
+        static int numberOfTimesKilledByPedTracker = 0;
+
+        static Ped juggernaut;
+        static bool juggernautSpawned;
 
         public static void Init()
         {
@@ -177,7 +182,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                         if (numberOfPedsKilled == 5)
                             Screen.ShowNotification($"~r~Warning:~w~ Damage to peds is now reflected");
 
-                        int damage = 10 * numberOfPedsKilled;
+                        int damage = (int)((1 * numberOfPedsKilled) * (numberOfTimesKilledByPedTracker + 1));
 
                         if (attacker.Character.IsInvincible)
                         {
@@ -188,14 +193,128 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                         {
                             attacker.Character.Kill();
                         }
+                        else
+                        {
+                            attacker.Character.ApplyDamage(damage);
 
-                        attacker.Character.ApplyDamage(damage);
+                            await Client.Delay(100);
+
+                            Log.Verbose($"{numberOfTimesKilledByPedTracker}:{juggernautSpawned}");
+
+                            if (attacker.IsDead)
+                            {
+                                numberOfTimesKilledByPedTracker++;
+                                Log.Verbose($"{numberOfTimesKilledByPedTracker}:{juggernautSpawned}");
+                            }
+                        }
+
+                        if (numberOfTimesKilledByPedTracker >= 2 && !juggernautSpawned)
+                        {
+                            CreateKiller();
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
 
+            }
+        }
+
+        static async void CreateKiller()
+        {
+            if (juggernautSpawned) return;
+
+            Model model = (PedHash)API.GetHashKey("u_m_y_juggernaut_01");
+
+            float posX = (float)Client.Random.Next(50, 90);
+            float posY = (float)Client.Random.Next(50, 90);
+
+            Vector3 position = World.GetNextPositionOnStreet(Game.PlayerPed.GetOffsetPosition(new Vector3(posX, posY, 0f)), false);
+
+            Ped ped = await World.CreatePed(model, position);
+            juggernaut = ped;
+            ped = null;
+            
+            if (model.IsLoaded)
+                model.MarkAsNoLongerNeeded();
+
+            model = null;
+
+            juggernaut.AlwaysKeepTask = true;
+            juggernaut.BlockPermanentEvents = true;
+            juggernaut.CanSufferCriticalHits = false;
+            juggernaut.Weapons.Give(WeaponHash.Minigun, 999, true, true);
+            juggernaut.Health = 3000;
+
+            juggernaut.FiringPattern = FiringPattern.FullAuto;
+
+            juggernaut.RelationshipGroup = Relationships.HostileRelationship;
+            juggernaut.Task.GoTo(Game.PlayerPed);
+
+            Client.GetInstance().RegisterTickHandler(OnCleanUpJuggernaut);
+
+            Blip b = juggernaut.AttachBlip();
+            b.Alpha = 0;
+            b.Color = BlipColor.Red;
+            b.IsShortRange = true;
+
+            juggernautSpawned = true;
+        }
+
+        static async Task OnCleanUpJuggernaut()
+        {
+            while (Game.PlayerPed.IsAlive)
+            {
+                await Client.Delay(500);
+
+                if (juggernaut != null)
+                {
+                    if (juggernaut.Exists())
+                    {
+                        if (!juggernaut.HasClearLineOfSight(Game.PlayerPed, 100f))
+                        {
+                            juggernaut.Task.GoTo(Game.PlayerPed);
+                        }
+                        else
+                        {
+                            juggernaut.Task.ShootAt(Game.PlayerPed);
+                        }
+                    }
+                }
+            }
+
+            if (Game.PlayerPed.IsDead)
+            {
+                if (juggernaut != null)
+                {
+                    if (juggernaut.Exists())
+                    {
+                        API.NetworkFadeOutEntity(juggernaut.Handle, false, false);
+                        await BaseScript.Delay(1000);
+                        juggernaut.Delete();
+                        juggernaut = null;
+
+                        Client.GetInstance().DeregisterTickHandler(OnCleanUpJuggernaut);
+                        juggernautSpawned = false;
+                    }
+                }
+            }
+            else
+            {
+                if (juggernaut != null)
+                {
+                    if (juggernaut.Exists() && juggernaut.IsDead)
+                    {
+                        API.NetworkFadeOutEntity(juggernaut.Handle, false, false);
+                        await BaseScript.Delay(1000);
+                        juggernaut.Delete();
+                        juggernaut = null;
+
+                        Client.GetInstance().DeregisterTickHandler(OnCleanUpJuggernaut);
+                        juggernautSpawned = false;
+                    }
+                }
             }
         }
     }

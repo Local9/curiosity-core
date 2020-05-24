@@ -81,16 +81,16 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 if (closestPlayer == null) return;
 
-                if (PlayerInformation.IsDeveloper())
-                {
-                    Log.Info($"Player to revive: {closestPlayer.Name}");
-                    Log.Info($"----- > Revive Checks < -----");
-                    Log.Info($"isSessionActive: {Client.isSessionActive}");
-                    Log.Info($"IsInVehicle: {Game.PlayerPed.IsInVehicle()}");
-                    Log.Info($"notSamePlayer: {closestPlayer != Game.Player}");
-                    Log.Info($"Player IsAlive: {Game.Player.IsAlive}");
-                    Log.Info($"----- > Revive Checks < -----");
-                }
+                //if (PlayerInformation.IsDeveloper())
+                //{
+                //    Log.Info($"Player to revive: {closestPlayer.Name}");
+                //    Log.Info($"----- > Revive Checks < -----");
+                //    Log.Info($"isSessionActive: {Client.isSessionActive}");
+                //    Log.Info($"IsInVehicle: {Game.PlayerPed.IsInVehicle()}");
+                //    Log.Info($"notSamePlayer: {closestPlayer != Game.Player}");
+                //    Log.Info($"Player IsAlive: {Game.Player.IsAlive}");
+                //    Log.Info($"----- > Revive Checks < -----");
+                //}
 
                 if (
                     Client.isSessionActive
@@ -211,6 +211,8 @@ namespace Curiosity.Client.net.Classes.Environment
                     Screen.Effects.Start(ScreenEffect.DeathFailOut, 0);
 
                     UI.Scaleforms.Wasted();
+
+                    await Client.Delay(1000);
 
                     bool forceRespawn = false;
 
