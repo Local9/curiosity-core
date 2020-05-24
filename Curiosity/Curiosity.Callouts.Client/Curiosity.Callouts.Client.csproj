@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Curiosity.Callouts.Client</RootNamespace>
-    <AssemblyName>Curiosity.Callouts.Client</AssemblyName>
+    <AssemblyName>Curiosity.Callouts.Client.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
