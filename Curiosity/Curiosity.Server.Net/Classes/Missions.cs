@@ -2,11 +2,13 @@
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.Server.net.Classes
 {
@@ -40,8 +42,6 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Missions:CompletedMission", new Action<CitizenFX.Core.Player, bool>(OnCompletedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:StartedMission", new Action<CitizenFX.Core.Player, int>(OnStartedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:EndMission", new Action<CitizenFX.Core.Player>(OnEndMission));
-
-
         }
 
         static void OnArrestedPed([FromSource]CitizenFX.Core.Player player, string encodedData)
@@ -175,6 +175,8 @@ namespace Curiosity.Server.net.Classes
 
             session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", subTitle, $"Experience: ~b~{experienceEarnAdditional:N} XP~n~~s~Knowledge: ~b~{knowledgeEarnAdditional:N}~n~~s~Payout: ~b~${moneyEarnAdditional:C}");
             session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", "Wrap Sheet", string.Join(", ", wrapSheet));
+
+            MessagePolicePlayers("Dispatch", string.Empty, $"{session.Player.Name} has arrested a suspect");
         }
 
         static void OnTrafficStop([FromSource]CitizenFX.Core.Player player, string encodedData)
@@ -233,6 +235,20 @@ namespace Curiosity.Server.net.Classes
                 }
             }
             timestampLastTrafficStop[player.Handle] = DateTime.Now;
+
+            MessagePolicePlayers("Dispatch", string.Empty, $"{session.Player.Name} has completed a traffic stop");
+        }
+
+        static void MessagePolicePlayers(string title, string subtitle, string message)
+        {
+            foreach (KeyValuePair<string, Session> valuePair in SessionManager.PlayerList)
+            {
+                Session session = valuePair.Value;
+                if (session.job == Job.Police)
+                {
+                    session.Player.Send(NotificationType.CHAR_CALL911, 2, title, subtitle, message);
+                }
+            }
         }
 
         static void SendMission(int playerHandle, List<object> arguments, string raw)
@@ -319,8 +335,11 @@ namespace Curiosity.Server.net.Classes
 
             float multiplier = (Server.IsBirthday) ? 3.0f : 1.0f;
 
+            string message = "has failed to rescue the hostage";
+
             if (passed)
             {
+                message = "has rescued the hostage";
                 missionMessage.MissionCompleted = 1;
                 missionMessage.MoneyEarnt = (int)(100 * multiplier);
                 missionMessage.HostagesRescued = 1;
@@ -342,6 +361,8 @@ namespace Curiosity.Server.net.Classes
             session.Player.TriggerEvent("curiosity:Client:Missions:MissionComplete");
 
             ChatLog.SendLogMessage($"Mission Completed: {subTitle}", session.Player);
+
+            MessagePolicePlayers("Dispatch", string.Empty, $"{session.Player.Name} {message}");
         }
 
         static void OnKilledPed([FromSource]CitizenFX.Core.Player player, string data)
