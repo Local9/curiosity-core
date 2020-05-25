@@ -168,7 +168,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     await BaseScript.Delay(700);
                     SirenActive = false;
                 }
-                else if (ControlHelper.IsControlPressed(Control.ThrowGrenade) || API.IsDisabledControlPressed(17, (int)Control.CharacterWheel)) // Preset on/off
+                else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(17, (int)Control.CharacterWheel)) // Preset on/off
                 {
                     GetSirens();
                     LightsActive = true;
@@ -192,7 +192,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         }
 
                         await BaseScript.Delay(0);
-                        if (ControlHelper.IsControlPressed(Control.ThrowGrenade) || API.IsDisabledControlPressed(17, (int)Control.CharacterWheel))
+                        if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(17, (int)Control.CharacterWheel))
                         {
                             API.SetFakeWantedLevel(0);
                             LightsActive = false;
@@ -200,7 +200,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                             SirenActive = false;
                             break;
                         }
-                        else if (ControlHelper.IsControlPressed(Control.MpTextChatTeam) || API.IsControlPressed(16, (int)Control.VehicleFlyUnderCarriage)) // Cycle presets
+                        else if (ControlHelper.IsControlJustPressed(Control.MpTextChatTeam) || API.IsControlJustPressed(16, (int)Control.VehicleFlyUnderCarriage)) // Cycle presets
                         {
                             // StopSound();
                             GetSirens();
@@ -267,6 +267,9 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             CitizenFX.Core.Vehicle veh = Game.PlayerPed.CurrentVehicle;
 
             SIRENS_ACTIVE = alternateSirens ? SIRENS_FIB : SIRENS_POLICE;
+
+            if (SIRENS_ACTIVE.Count == 0)
+                SIRENS_ACTIVE = SIRENS_POLICE;
 
             if (veh != _currentVehicle)
             {
