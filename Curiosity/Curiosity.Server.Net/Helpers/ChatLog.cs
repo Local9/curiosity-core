@@ -1,14 +1,14 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Server.net.Classes;
 using System;
 
 namespace Curiosity.Server.net.Helpers
 {
     class ChatLog
     {
-
-        public static void SendLogMessage(string message, Player player = null)
+        public static void SendLogMessage(string message, Player player = null, bool discord = false)
         {
             ChatMessage chatMessage = new ChatMessage();
 
@@ -26,6 +26,9 @@ namespace Curiosity.Server.net.Helpers
             {
                 player.TriggerEvent("curiosity:Client:Chat:Message", encoded);
             }
+
+            if (discord)
+                DiscordWrapper.SendDiscordPlayerLogMessage(message);
         }
     }
 }

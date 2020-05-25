@@ -75,6 +75,8 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                 string serializedEvent = JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"{victim.Name} {message}"));
                 BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
 
+                BaseScript.TriggerServerEvent("curiosity:Server:Log:Message", $"{victim.Name} {message}");
+
                 wasKilledByScript = false;
             }
         }
@@ -122,6 +124,8 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
                 string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"[{victim.ServerId}] {victim.Name} was killed by [{attacker.ServerId}] {attacker.Name}"));
                 BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
+
+                BaseScript.TriggerServerEvent("curiosity:Server:Log:Message", $"[{victim.ServerId}] {victim.Name} was killed by [{attacker.ServerId}] {attacker.Name}");
             }
             catch (Exception ex)
             {
@@ -143,6 +147,8 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
             string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Client:Notification:Simple", $"{victim.Name} {message}"));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
+
+            BaseScript.TriggerServerEvent("curiosity:Server:Log:Message", $"{victim.Name} {message}");
         }
 
         private static async void GameEventManager_OnPlayerKillPed(Player attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)

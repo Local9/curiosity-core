@@ -20,12 +20,16 @@ namespace Curiosity.Server.net.Classes
         static bool IsDelayRunnning = false;
         static long DelayMillis = 0;
 
+        static string hostName = string.Empty;
+
         public static void Init()
         {
             if (Server.isLive)
             {
                 server.RegisterEventHandler("curiosity:Server:Discord:Report", new Action<string, string, string>(SendDiscordReportMessage));
             }
+
+            hostName = API.GetConvar("sv_hostname", "Missing sv_hostname");
 
             server.RegisterTickHandler(SetupDiscordWebhooksDictionary);
         }
@@ -56,6 +60,35 @@ namespace Curiosity.Server.net.Classes
             }
 
             await SendDiscordSimpleMessage(WebhookChannel.Chat, "World", name, message);
+        }
+
+        public static async void SendDiscordPlayerLogMessage(string message)
+        {
+            if (!webhooks.ContainsKey(WebhookChannel.PlayerLog))
+            {
+                Log.Warn($"SendDiscordChatMessage() -> Discord Player Webhook Missing");
+                return;
+            }
+
+            try
+            {
+                Entity.DiscordWebhook discordWebhook = webhooks[WebhookChannel.PlayerLog];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}";
+                webhook.Username = hostName;
+
+                await webhook.Send();
+
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"SendDiscordSimpleMessage() -> {ex.Message}");
+            }
+
         }
 
         public static async void SendDiscordStaffMessage(string adminName, string player, string action, string reason, string duration)

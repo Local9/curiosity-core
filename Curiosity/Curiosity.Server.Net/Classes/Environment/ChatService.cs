@@ -21,12 +21,34 @@ namespace Curiosity.Server.net.Classes.Environment
 
         public static void Init()
         {
+            server.RegisterEventHandler("curiosity:Server:Log:Message", new Action<CitizenFX.Core.Player, string>(ProcessLogMessage));
+
             server.RegisterEventHandler("curiosity:Server:Chat:Message", new Action<CitizenFX.Core.Player, string, string>(ProcessMessage));
 
             // TODO : MOVE THESE
             server.RegisterEventHandler("entityCreated", new Action<dynamic>(OnEntityCreated));
             // server.RegisterEventHandler("entityCreating", new Action<dynamic>(OnEntityCreating));
             server.RegisterEventHandler("explosionEvent", new Action<int, dynamic>(OnExplosionEvent));
+        }
+
+        private static void ProcessLogMessage([FromSource]CitizenFX.Core.Player player, string message)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            if (!Server.isLive)
+            {
+                Log.Verbose($"[ProcessLogMessage] {message}");
+            }
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                API.CancelEvent();
+                return;
+            }
+
+            ChatLog.SendLogMessage($"S: [{player.Handle}] {player.Name}#{session.UserID} | {message}", discord: true);
         }
 
         static void OnExplosionEvent(int sender, dynamic explosionData) // TODO : MOVE

@@ -6,6 +6,7 @@
         Report,
         StaffLog,
         ServerLog,
-        ServerErrors
+        ServerErrors,
+        PlayerLog
     }
 }
