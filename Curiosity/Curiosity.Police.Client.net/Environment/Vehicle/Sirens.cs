@@ -69,7 +69,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
         static public void Init()
         {
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnSirenControlsTick);
             client.RegisterEventHandler("curiosity:Player:Vehicle:Siren:SoundEvent", new Action<string>(OnReceivedSourceEvent));
             client.RegisterEventHandler("curiosity:Client:Menu:IsOpened", new Action<bool>(OnMenuStateChange));
             API.DecorRegister("Vehicle.SirensInstalled", 2);
@@ -105,7 +105,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             await Client.Delay(0);
         }
 
-        static private async Task OnTick()
+        static private async Task OnSirenControlsTick()
         {
 
             if (Game.PlayerPed.IsInVehicle())
@@ -161,14 +161,14 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     StopSound();
                     SirenActive = false;
                 }
-                else if (ControlHelper.IsControlJustPressed(Control.SpecialAbilitySecondary, true, ControlModifier.Any))
+                else if (ControlHelper.IsControlPressed(Control.SpecialAbilitySecondary, true, ControlModifier.Any))
                 {
                     SirenActive = true;
                     Function.Call(Hash.BLIP_SIREN, Game.PlayerPed.CurrentVehicle.Handle);
                     await BaseScript.Delay(700);
                     SirenActive = false;
                 }
-                else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(17, (int)Control.CharacterWheel)) // Preset on/off
+                else if (ControlHelper.IsControlPressed(Control.ThrowGrenade) || API.IsDisabledControlPressed(17, (int)Control.CharacterWheel)) // Preset on/off
                 {
                     GetSirens();
                     LightsActive = true;
@@ -192,7 +192,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         }
 
                         await BaseScript.Delay(0);
-                        if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(17, (int)Control.CharacterWheel))
+                        if (ControlHelper.IsControlPressed(Control.ThrowGrenade) || API.IsDisabledControlPressed(17, (int)Control.CharacterWheel))
                         {
                             API.SetFakeWantedLevel(0);
                             LightsActive = false;
@@ -200,7 +200,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                             SirenActive = false;
                             break;
                         }
-                        else if (ControlHelper.IsControlJustPressed(Control.MpTextChatTeam) || API.IsControlJustPressed(16, (int)Control.VehicleFlyUnderCarriage)) // Cycle presets
+                        else if (ControlHelper.IsControlPressed(Control.MpTextChatTeam) || API.IsControlPressed(16, (int)Control.VehicleFlyUnderCarriage)) // Cycle presets
                         {
                             // StopSound();
                             GetSirens();
@@ -256,10 +256,9 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             {
                 if (SirenActive)
                 {
+                    SirenActive = false;
                     StopSound();
                 }
-
-                SirenActive = false;
             }
         }
 
