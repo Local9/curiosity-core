@@ -176,7 +176,7 @@ namespace Curiosity.Server.net.Classes
             session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", subTitle, $"Experience: ~b~{experienceEarnAdditional:N} XP~n~~s~Knowledge: ~b~{knowledgeEarnAdditional:N}~n~~s~Payout: ~b~${moneyEarnAdditional:C}");
             session.Player.Send(NotificationType.CHAR_CALL911, 2, "Suspect Booked", "Wrap Sheet", string.Join(", ", wrapSheet));
 
-            MessagePolicePlayers("Dispatch", string.Empty, $"{session.Player.Name} has arrested a suspect");
+            MessagePolicePlayers(session.Player, "Dispatch", string.Empty, $"{session.Player.Name} has arrested a suspect");
         }
 
         static void OnTrafficStop([FromSource]CitizenFX.Core.Player player, string encodedData)
@@ -236,14 +236,17 @@ namespace Curiosity.Server.net.Classes
             }
             timestampLastTrafficStop[player.Handle] = DateTime.Now;
 
-            MessagePolicePlayers("Dispatch", string.Empty, $"{session.Player.Name} has completed a traffic stop");
+            MessagePolicePlayers(session.Player, "Dispatch", string.Empty, $"{session.Player.Name} has completed a traffic stop");
         }
 
-        static void MessagePolicePlayers(string title, string subtitle, string message)
+        static void MessagePolicePlayers(CitizenFX.Core.Player player, string title, string subtitle, string message)
         {
             foreach (KeyValuePair<string, Session> valuePair in SessionManager.PlayerList)
             {
                 Session session = valuePair.Value;
+
+                if (player.Handle == session.Player.Handle) continue;
+                
                 if (session.job == Job.Police)
                 {
                     session.Player.Send(NotificationType.CHAR_CALL911, 2, title, subtitle, message);
@@ -362,7 +365,7 @@ namespace Curiosity.Server.net.Classes
 
             ChatLog.SendLogMessage($"Mission Completed: {subTitle}", session.Player);
 
-            MessagePolicePlayers("Dispatch", string.Empty, $"{session.Player.Name} {message}");
+            MessagePolicePlayers(session.Player, "Dispatch", string.Empty, $"{session.Player.Name} {message}");
         }
 
         static void OnKilledPed([FromSource]CitizenFX.Core.Player player, string data)
