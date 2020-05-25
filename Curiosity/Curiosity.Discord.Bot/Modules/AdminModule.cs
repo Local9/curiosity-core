@@ -55,6 +55,8 @@ namespace Curiosity.LifeV.Bot.Modules
 
                 EmbedBuilder builder = new EmbedBuilder();
 
+                string discordId = dbUser.DiscordId == null ? $"Unknown" : $"{dbUser.DiscordId}";
+
                 builder
                     .AddField("Player", $"{dbUser.Username}", true)
                     .AddField("Role", $"{textInfo.ToTitleCase(dbUser.UserRole.ToString())}", true)
@@ -62,7 +64,7 @@ namespace Curiosity.LifeV.Bot.Modules
                     .AddField("Server: First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
                     .AddField("Server: Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)
                     .AddField("License", $"{dbUser.License}", false)
-                    .AddField("Stored DiscordID", $"{dbUser.DiscordId}", false)
+                    .AddField("Stored DiscordID", $"{discordId}", false)
                     .AddField("Perm Banned", $"{dbUser.BannedPerm}", true)
 
                     .WithColor(Color.Blue)
@@ -75,7 +77,7 @@ namespace Curiosity.LifeV.Bot.Modules
                     builder.AddField("Banned Until", $"{dbUser.BannedUntil?.ToString("yyyy-MM-dd HH:mm")}", true);
                 }
 
-                if (dbUser.DiscordId != null)
+                if (dbUser.DiscordId != null && dbUser.DiscordId > 0)
                 {
 
                     builder.AddField("Discord Information", "Below is information on the Discord Member.", false);
@@ -85,12 +87,12 @@ namespace Curiosity.LifeV.Bot.Modules
                     {
                         if (guildUser.JoinedAt.HasValue)
                         {
-                            builder.AddField("Joined", $"{guildUser.JoinedAt}", true);
+                            builder.AddField("Joined", $"{guildUser.JoinedAt.Value.ToString("yyyy-MM-dd HH:mm")}", true);
                         }
 
                         if (guildUser.PremiumSince.HasValue)
                         {
-                            builder.AddField("Boosted", $"{guildUser.PremiumSince}", true);
+                            builder.AddField("Boosted", $"{guildUser.PremiumSince.Value.ToString("yyyy-MM-dd HH:mm")}", true);
                         }
 
                         builder.AddField("Status", $"{guildUser.Status}");
