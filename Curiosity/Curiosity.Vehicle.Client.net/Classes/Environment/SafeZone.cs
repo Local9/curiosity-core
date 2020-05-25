@@ -104,12 +104,17 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
             client.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action(OnDrawAreas));
 
-            // client.RegisterTickHandler(IsInSafeZone);
-            // client.RegisterTickHandler(ShowDebugInformation);
+            client.RegisterTickHandler(IsInSafeZone);
+            client.RegisterTickHandler(ShowDebugInformation);
         }
 
         private static async Task ShowDebugInformation()
         {
+            if (!Player.PlayerInformation.IsDeveloper())
+            {
+                client.DeregisterTickHandler(ShowDebugInformation);
+            }
+
             if (Decorators.GetBoolean(Game.PlayerPed.Handle, "player::veh::debug"))
             {
                 Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
@@ -174,30 +179,30 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
                 }
             }
 
-            List<Vehicle> vehicles = World.GetAllVehicles().Select(v => v).Where(x => 
-                Decorators.GetBoolean(x.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE)
-                && !Decorators.GetBoolean(x.Handle, Client.PLAYER_VEHICLE)).ToList();
+            //List<Vehicle> vehicles = World.GetAllVehicles().Select(v => v).Where(x => 
+            //    Decorators.GetBoolean(x.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE)
+            //    && !Decorators.GetBoolean(x.Handle, Client.PLAYER_VEHICLE)).ToList();
 
-            vehicles.ForEach(async veh =>
-            {
-                int time = Decorators.GetInteger(veh.Handle, Client.DECOR_VEHICLE_SAFEZONE_TIME);
+            //vehicles.ForEach(async veh =>
+            //{
+            //    int time = Decorators.GetInteger(veh.Handle, Client.DECOR_VEHICLE_SAFEZONE_TIME);
 
-                if (!veh.Driver.Exists())
-                {
-                    if ((API.GetGameTimer() - time) > FIVE_MINUTES)
-                    {
-                        if (veh.Exists())
-                        {
-                            API.NetworkFadeOutEntity(veh.Handle, false, false);
-                            await BaseScript.Delay(500);
-                            // API.SetNetworkIdCanMigrate(veh.NetworkId, true);
-                            // Spawn.SendDeletionEvent($"{veh.NetworkId}");
-                            if (veh.Exists())
-                                veh.Delete();
-                        }
-                    }
-                }
-            });
+            //    if (!veh.Driver.Exists())
+            //    {
+            //        if ((API.GetGameTimer() - time) > FIVE_MINUTES)
+            //        {
+            //            if (veh.Exists())
+            //            {
+            //                API.NetworkFadeOutEntity(veh.Handle, false, false);
+            //                await BaseScript.Delay(500);
+            //                // API.SetNetworkIdCanMigrate(veh.NetworkId, true);
+            //                // Spawn.SendDeletionEvent($"{veh.NetworkId}");
+            //                if (veh.Exists())
+            //                    veh.Delete();
+            //            }
+            //        }
+            //    }
+            //});
 
             if (Game.PlayerPed.IsInVehicle())
                 Decorators.Set(Game.PlayerPed.CurrentVehicle.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE, IsInsideSafeZone);
