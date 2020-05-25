@@ -11,9 +11,23 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
         static public bool IsAcceptingBackupCalls = false;
 
+        static int count = 0;
+
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:BackupNotification", new Action<string, int, float, float, float>(BackupResponseMessage));
+
+            // SpamNotification();
+        }
+
+        static async void SpamNotification()
+        {
+            while(true)
+            {
+                await BaseScript.Delay(500);
+                count++;
+                Screen.ShowNotification($"Notification #{count}");
+            }
         }
 
         static async void BackupResponseMessage(string playerName, int code, float x, float y, float z)
