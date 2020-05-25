@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Classes;
 using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -100,7 +101,18 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
             Model stripper = PedHash.Stripper01SFY;
             await stripper.Request(10000);
 
-            Ped ped = await World.CreatePed(stripper, vector3 + new Vector3(0f, 0f, -.5f));
+            while(!stripper.IsLoaded)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            Vector3 pos = vector3 + new Vector3(0f, 0f, -.5f);
+
+            int pedHandle = API.CreatePed((int)PedTypes.PED_TYPE_PROSTITUTE, (uint)stripper.Hash, pos.X, pos.Y, pos.Z, 0, false, true);
+
+            stripper.MarkAsNoLongerNeeded();
+            
+            Ped ped = new Ped(pedHandle);
 
             API.NetworkFadeInEntity(ped.Handle, true);
 
@@ -111,6 +123,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
             ped.SetConfigFlag(281, true);
             ped.AlwaysKeepTask = true;
             ped.BlockPermanentEvents = true;
+            ped.IsMeleeProof = true;
 
             ped.Task.PlayAnimation("mini@strip_club@lap_dance@ld_girl_a_song_a_p1", "ld_girl_a_song_a_p1_f", 8f, -1, AnimationFlags.Loop);
 
@@ -139,12 +152,12 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
 
                 int ref1 = stripper1.Handle, ref2 = stripper2.Handle, ref3 = stripper3.Handle, ref4 = stripper4.Handle;
 
-                API.NetworkFadeOutEntity(ref1, false, false);
-                API.NetworkFadeOutEntity(ref2, false, false);
-                API.NetworkFadeOutEntity(ref3, false, false);
-                API.NetworkFadeOutEntity(ref4, false, false);
+                API.NetworkFadeOutEntity(ref1, true, false);
+                API.NetworkFadeOutEntity(ref2, true, false);
+                API.NetworkFadeOutEntity(ref3, true, false);
+                API.NetworkFadeOutEntity(ref4, true, false);
 
-                await BaseScript.Delay(1000);
+                await BaseScript.Delay(3000);
 
                 API.DeleteEntity(ref ref1);
                 API.DeleteEntity(ref ref2);
