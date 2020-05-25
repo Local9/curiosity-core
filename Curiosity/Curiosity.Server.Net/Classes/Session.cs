@@ -100,7 +100,7 @@ namespace Curiosity.Server.net.Classes
             Wallet = 0;
             BankAccount = 0;
 
-            ChatLog.SendLogMessage($"Connecting: {Name}");
+            ChatLog.SendLogMessage($"Connecting: {Name}#{UserID}");
         }
 
         public void SetLastEntityEvent()
@@ -199,7 +199,7 @@ namespace Curiosity.Server.net.Classes
 
             SessionManager.PlayerList[NetId] = this;
 
-            ChatLog.SendLogMessage($"Connected: [{Player.Handle}] {Name} (Ping: {Ping}ms)");
+            ChatLog.SendLogMessage($"Connected: [{Player.Handle}] {Name}#{UserID} (Ping: {Ping}ms)");
 
             return true;
         }
@@ -220,7 +220,7 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
-                ChatLog.SendLogMessage($"Dropped: {Name} -> {reason}");
+                ChatLog.SendLogMessage($"Dropped: [{handle}] {Name}#{UserID} -> {reason}");
 
                 SessionManager.PlayerList.Remove(handle);
             }

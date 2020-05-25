@@ -160,6 +160,13 @@ namespace Curiosity.Discord.Bot.Modules
             await ReplyAsync("", false, builder.Build());
         }
 
+        [Command("user")]
+        [Summary("Get User information from the database using their UserId")]
+        public async Task GetUser(SocketUser user = null)
+        {
+
+        }
+
         [Command("account")]
         public async Task Account(SocketUser user = null)
         {

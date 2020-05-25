@@ -184,9 +184,9 @@ namespace Curiosity.Server.net.Classes.Environment
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
                 string encoded = Encode.StringToBase64(json);
 
-                Log.Verbose($"{player.Name} - {message}");
+                Log.Verbose($"[{player.Handle}] {player.Name}#{session.UserID} - {message}");
 
-                DiscordWrapper.SendDiscordChatMessage(player.Name, message);
+                DiscordWrapper.SendDiscordChatMessage($"[{player.Handle}] {player.Name}#{session.UserID}", message);
 
                 Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
             }

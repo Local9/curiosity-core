@@ -43,18 +43,18 @@ namespace Curiosity.Server.net.Business
 
         // Concurrent Values
         public static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
-        static ConcurrentDictionary<string, Player> sentLoading = new ConcurrentDictionary<string, Player>();
-        static ConcurrentDictionary<string, int> priority = new ConcurrentDictionary<string, int>();
+        public static ConcurrentDictionary<string, Player> sentLoading = new ConcurrentDictionary<string, Player>();
+        public static ConcurrentDictionary<string, int> priority = new ConcurrentDictionary<string, int>();
         static ConcurrentDictionary<string, int> index = new ConcurrentDictionary<string, int>();
         static ConcurrentDictionary<string, DateTime> timer = new ConcurrentDictionary<string, DateTime>();
         // Slots
         static ConcurrentDictionary<string, Reserved> reserved = new ConcurrentDictionary<string, Reserved>();
         static ConcurrentDictionary<string, Reserved> slotTaken = new ConcurrentDictionary<string, Reserved>();
         // Concurrent Queues:
-        static ConcurrentQueue<string> queue = new ConcurrentQueue<string>();
-        static ConcurrentQueue<string> priorityQueue = new ConcurrentQueue<string>();
-        static ConcurrentQueue<string> newQueue = new ConcurrentQueue<string>();
-        static ConcurrentQueue<string> newPriorityQueue = new ConcurrentQueue<string>();
+        public static ConcurrentQueue<string> queue = new ConcurrentQueue<string>();
+        public static ConcurrentQueue<string> priorityQueue = new ConcurrentQueue<string>();
+        public static ConcurrentQueue<string> newQueue = new ConcurrentQueue<string>();
+        public static ConcurrentQueue<string> newPriorityQueue = new ConcurrentQueue<string>();
 
         public static void Init()
         {

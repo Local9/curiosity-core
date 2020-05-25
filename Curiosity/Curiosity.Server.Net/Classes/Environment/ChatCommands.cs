@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Server.net.Business;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
@@ -52,9 +53,27 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("guide", new Action<int, List<object>, string>(Guide), false);
             API.RegisterCommand("help", new Action<int, List<object>, string>(Guide), false);
 
+            API.RegisterCommand("queue", new Action<int, List<object>, string>(OnQueueReadout), false);
+
             server.RegisterEventHandler("rconCommand", new Action<string, List<object>>(OnRconCommand));
 
             // API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
+        }
+
+        private static void OnQueueReadout(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            int numberInSession = Queue.session.Count;
+            int numberLoading = Queue.sentLoading.Count;
+            int numberQueued = Queue.queue.Count;
+            int numberPriority = Queue.priority.Count;
+            // int numberQueueNew = Queue.newQueue.Count;
+            // int numberPriorityNew = Queue.newPriorityQueue.Count;
+
+            Helpers.Notifications.Advanced($"Queue Check", $"Sessions: {numberInSession}~n~Loading: {numberLoading}~n~Queued: {numberQueued}~n~Priority: {numberPriority}", 2, session.Player);
         }
 
         //static void OnFire(int playerHandle, List<object> arguments, string raw)
