@@ -47,10 +47,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
                 Wrappers.Helpers.ShowSimpleNotification("~w~Performing ~b~Breathalyzer~w~ test...");
 
                 await Client.Delay(3000);
-                string bac = $"~g~0.{interactivePed.BloodAlcaholLimit}";
+                string bac = $"~g~0.{interactivePed.BloodAlcaholLimit:00}";
                 if (interactivePed.BloodAlcaholLimit >= 8)
                 {
-                    bac = $"~r~0.{interactivePed.BloodAlcaholLimit}";
+                    bac = $"~r~0.{interactivePed.BloodAlcaholLimit:00}";
                     interactivePed.IsUnderTheInfluence = true;
                 }
                 Wrappers.Helpers.ShowSimpleNotification($"~b~BAC ~w~Level: {bac}");
