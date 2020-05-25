@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using static CitizenFX.Core.Native.API;
 using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Extensions;
 using System.Threading.Tasks;
@@ -38,9 +39,26 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
                 if (Game.IsControlJustPressed(0, Control.Pickup))
                 {
+                    Game.PlayerPed.Task.TurnTo(Client.CurrentVehicle);
+                    Client.CurrentVehicle.Doors[VehicleDoorIndex.Trunk].Open();
+                    await Client.Delay(500);
+                    AnimationSearch();
+                    await Client.Delay(5100);
                     Classes.Menus.MenuLoadout.OnWeaponResupply();
+                    Client.CurrentVehicle.Doors[VehicleDoorIndex.Trunk].Close();
                     await Client.Delay(10000);
                 }
+            }
+        }
+
+        static public async void AnimationSearch()
+        {
+            string scenario = "PROP_HUMAN_BUM_BIN";
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                TaskStartScenarioInPlace(Game.PlayerPed.Handle, scenario, 0, true);
+                await Client.Delay(5000);
+                Game.PlayerPed.Task.ClearAll();
             }
         }
     }
