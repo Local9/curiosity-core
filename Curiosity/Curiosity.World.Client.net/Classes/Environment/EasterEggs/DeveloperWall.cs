@@ -60,7 +60,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
                 while (true)
                 {
                     await Client.Delay(0);
-                    if (NativeWrappers.GetDistanceBetween(positionToStand, Game.PlayerPed.Position) <= 10f)
+                    if (NativeWrappers.GetDistanceBetween(positionToStand, Game.PlayerPed.Position, true) <= 10f)
                     {
 
                         if (stripper1 == null)
