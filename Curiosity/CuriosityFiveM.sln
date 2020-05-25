@@ -88,7 +88,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Missions.Server.n
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discord", "Discord", "{B408851E-C7C4-4CF2-B9C2-D7762399DE8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curiosity.Discord.Bot", "Curiosity.Discord.Bot\Curiosity.Discord.Bot.csproj", "{B539301D-A1E5-4F83-8D77-557C853EC742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curiosity.LifeV.Bot", "Curiosity.Discord.Bot\Curiosity.LifeV.Bot.csproj", "{B539301D-A1E5-4F83-8D77-557C853EC742}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Atlas", "Atlas", "{BDC955BA-9785-4F8D-8130-1FDB2F8F3010}"
 EndProject

@@ -1,4 +1,4 @@
-﻿using Curiosity.Discord.Bot.Models;
+﻿using Curiosity.LifeV.Bot.Models;
 using Discord.Commands;
 using Discord.WebSocket;
 using MySql.Data.MySqlClient;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace Curiosity.Discord.Bot
+namespace Curiosity.LifeV.Bot
 {
     internal class TimedEvents : ModuleBase<SocketCommandContext>
     {

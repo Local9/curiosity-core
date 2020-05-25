@@ -1,7 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 
-namespace Curiosity.Discord.Bot.Database
+namespace Curiosity.LifeV.Bot.Database
 {
     public class AppDb : IDisposable
     {

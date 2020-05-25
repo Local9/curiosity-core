@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Curiosity.Discord.Bot.Entities
+namespace Curiosity.LifeV.Bot.Entities
 {
     public class Logging
     {

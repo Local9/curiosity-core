@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 
-namespace Curiosity.Discord.Bot.Models
+namespace Curiosity.LifeV.Bot.Models
 {
     public class User
     {

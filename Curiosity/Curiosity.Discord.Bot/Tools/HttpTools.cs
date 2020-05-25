@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Curiosity.Discord.Bot.Tools
+namespace Curiosity.LifeV.Bot.Tools
 {
     class HttpTools
     {

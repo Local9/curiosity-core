@@ -1,4 +1,4 @@
-﻿using Curiosity.Discord.Bot.Entities;
+﻿using Curiosity.LifeV.Bot.Entities;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using System;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Curiosity.Discord.Bot.Database
+namespace Curiosity.LifeV.Bot.Database
 {
     static class DatabaseConfig
     {

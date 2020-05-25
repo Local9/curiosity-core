@@ -1,4 +1,4 @@
-﻿using Curiosity.Discord.Bot.Entities.CitizenFX;
+﻿using Curiosity.LifeV.Bot.Entities.CitizenFX;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace Curiosity.Discord.Bot.Modules
+namespace Curiosity.LifeV.Bot.Modules
 {
     public class Commands : ModuleBase<SocketCommandContext>
     {
@@ -158,13 +158,6 @@ namespace Curiosity.Discord.Bot.Modules
                     .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
 
             await ReplyAsync("", false, builder.Build());
-        }
-
-        [Command("user")]
-        [Summary("Get User information from the database using their UserId")]
-        public async Task GetUser(SocketUser user = null)
-        {
-
         }
 
         [Command("account")]

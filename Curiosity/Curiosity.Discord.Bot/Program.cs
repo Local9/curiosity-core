@@ -1,4 +1,4 @@
-﻿using Curiosity.Discord.Bot.Entities;
+﻿using Curiosity.LifeV.Bot.Entities;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Curiosity.Discord.Bot
+namespace Curiosity.LifeV.Bot
 {
     class Program
     {
@@ -61,7 +61,7 @@ namespace Curiosity.Discord.Bot
             await _client.SetStatusAsync(UserStatus.Online);
 
             List<string> startupScripts = new List<string>() {
-                "Happy Troublesum? happy are now?",
+                "Happy Troublesum? happy are we now?",
                 "Troublesum wanted me to say something",
                 "Don't ping me",
                 "I have a million ideas. They all point to certain death.",
@@ -97,7 +97,6 @@ namespace Curiosity.Discord.Bot
 
             try
             {
-
                 var context = new SocketCommandContext(_client, message);
                 if (message is null || message.Author.IsBot) return;
 
