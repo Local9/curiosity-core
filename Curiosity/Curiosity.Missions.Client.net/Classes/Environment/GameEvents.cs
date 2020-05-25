@@ -83,6 +83,8 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
         {
             try
             {
+                if (victim == attacker) return;
+
                 if (victim == Game.Player && victim.IsDead)
                 {
                     Client.TriggerEvent("curiosity:Client:Player:Revive");
