@@ -35,7 +35,6 @@
 
   <ItemGroup>
     <Folder Include="Entities\Generic\" />
-    <Folder Include="Entities\Curiosity\" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,9 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -163,6 +165,9 @@ namespace Curiosity.LifeV.Bot.Modules
         [Command("account")]
         public async Task Account(SocketUser user = null)
         {
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+
             if (user == null)
                 user = Context.User;
 
@@ -178,6 +183,7 @@ namespace Curiosity.LifeV.Bot.Modules
 
                 builder
                     .AddField("Player", $"{dbUser.Username}", true)
+                    .AddField("Role", $"{textInfo.ToTitleCase(dbUser.UserRole.ToString())}", true)
                     .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}")
                     .AddField("Server First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
                     .AddField("Server Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)

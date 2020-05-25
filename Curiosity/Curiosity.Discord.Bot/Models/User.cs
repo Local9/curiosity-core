@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Curiosity.LifeV.Bot.Entities.Curiosity;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,8 +20,36 @@ namespace Curiosity.LifeV.Bot.Models
         public bool BannedPerm;
         public DateTime? BannedUntil;
         public ulong? DiscordId;
+        public Role? UserRole;
+
+        public bool IsStaff => (UserRole == Role.COMMUNITYMANAGER || UserRole == Role.MODERATOR || UserRole == Role.ADMINISTRATOR || UserRole == Role.SENIOR_ADMIN || UserRole == Role.HEAD_ADMIN || UserRole == Role.DEVELOPER || UserRole == Role.PROJECT_MANAGER);
 
         public User() { }
+
+        public async Task<User> FindUserByCuriosityUserId(long userId)
+        {
+            try
+            {
+                using var connection = await Database.DatabaseConfig.GetDatabaseConnection();
+                await connection.OpenAsync();
+                using var cmd = connection.CreateCommand();
+
+                cmd.CommandText = @"call selUser(@identifer);";
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@identifer",
+                    DbType = DbType.Int64,
+                    Value = userId
+                });
+                var result = await ReadAllAsync(await cmd.ExecuteReaderAsync());
+                return result.Count > 0 ? result[0] : null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"FindUserAsync -> {ex}");
+                return default;
+            }
+        }
 
         public async Task<User> FindUserAsync(ulong discordId)
         {
@@ -159,14 +188,21 @@ namespace Curiosity.LifeV.Bot.Models
                         BannedPerm = reader.GetFieldValue<bool>("bannedPerm"),
                     };
 
+                    if (!DBNull.Value.Equals(reader["experience"]))
+                        user.Experience = reader.GetFieldValue<long>("experience");
+
                     if (!DBNull.Value.Equals(reader["bannedUntil"]))
                         user.BannedUntil = reader.GetFieldValue<DateTime>("bannedUntil");
 
                     if (!DBNull.Value.Equals(reader["discordId"]))
                         user.DiscordId = reader.GetFieldValue<ulong>("discordId");
 
-                    if (!DBNull.Value.Equals(reader["experience"]))
-                        user.Experience = reader.GetFieldValue<long>("experience");
+                    if (!DBNull.Value.Equals(reader["roleId"]))
+                    {
+                        int roleId = reader.GetFieldValue<int>("roleId");
+                        user.UserRole = (Role)roleId;
+                    }
+
 
                     users.Add(user);
                 }
