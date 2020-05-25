@@ -55,7 +55,7 @@ namespace Curiosity.LifeV.Bot.Modules
 
                 EmbedBuilder builder = new EmbedBuilder();
 
-                string discordId = dbUser.DiscordId == null ? $"Unknown" : $"{dbUser.DiscordId}";
+                string discordId = (dbUser.DiscordId == null || dbUser.DiscordId == 0) ? $"Unknown" : $"{dbUser.DiscordId}";
 
                 builder
                     .AddField("Player", $"{dbUser.Username}", true)
