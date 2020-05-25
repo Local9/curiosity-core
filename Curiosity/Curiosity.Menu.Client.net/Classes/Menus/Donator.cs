@@ -19,6 +19,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static MenuItem menuItemDonatorVehicles = new MenuItem("Vehicles") { LeftIcon = MenuItem.Icon.INV_CAR };
         static MenuItem menuItemRemoveCompanion = new MenuItem("Remove Companion") { };
 
+        static bool devConfigured = false;
+
         static List<CompanionData> companions = new List<CompanionData>()
         {
             new CompanionData("Husky", PedHash.Husky, canInteract: true), // retriever
@@ -127,21 +129,25 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             if (PlayerInformation.IsDeveloper() || PlayerInformation.IsProjectManager())
             {
-                companions.Add(new CompanionData("DEV: Cow", PedHash.Cow));
-                companions.Add(new CompanionData("DEV: Mountain Lion", PedHash.MountainLion));
-                companions.Add(new CompanionData("DEV: Chiken Hawk", PedHash.ChickenHawk));
-                companions.Add(new CompanionData("DEV: Gull", PedHash.Seagull));
-                companions.Add(new CompanionData("DEV: Boar", PedHash.Boar));
-                companions.Add(new CompanionData("DEV: Coyote", PedHash.Coyote));
-                companions.Add(new CompanionData("DEV: Hen", PedHash.Hen));
-                companions.Add(new CompanionData("DEV: Deer", PedHash.Deer));
-                companions.Add(new CompanionData("DEV: Pig", PedHash.Pig));
-                companions.Add(new CompanionData("DEV: Rabbit", PedHash.Rabbit));
-                companions.Add(new CompanionData("DEV: Rat", PedHash.Rat));
-                companions.Add(new CompanionData("DEV: Pidgen", PedHash.Pigeon));
-                companions.Add(new CompanionData("DEV: Franklin", PedHash.Franklin, true));
-                companions.Add(new CompanionData("DEV: Trevor", PedHash.Trevor, true));
-                companions.Add(new CompanionData("DEV: Michael", PedHash.Michael, true));
+                if (!devConfigured)
+                {
+                    companions.Add(new CompanionData("DEV: Cow", PedHash.Cow));
+                    companions.Add(new CompanionData("DEV: Mountain Lion", PedHash.MountainLion));
+                    companions.Add(new CompanionData("DEV: Chiken Hawk", PedHash.ChickenHawk));
+                    companions.Add(new CompanionData("DEV: Gull", PedHash.Seagull));
+                    companions.Add(new CompanionData("DEV: Boar", PedHash.Boar));
+                    companions.Add(new CompanionData("DEV: Coyote", PedHash.Coyote));
+                    companions.Add(new CompanionData("DEV: Hen", PedHash.Hen));
+                    companions.Add(new CompanionData("DEV: Deer", PedHash.Deer));
+                    companions.Add(new CompanionData("DEV: Pig", PedHash.Pig));
+                    companions.Add(new CompanionData("DEV: Rabbit", PedHash.Rabbit));
+                    companions.Add(new CompanionData("DEV: Rat", PedHash.Rat));
+                    companions.Add(new CompanionData("DEV: Pidgen", PedHash.Pigeon));
+                    companions.Add(new CompanionData("DEV: Franklin", PedHash.Franklin, true));
+                    companions.Add(new CompanionData("DEV: Trevor", PedHash.Trevor, true));
+                    companions.Add(new CompanionData("DEV: Michael", PedHash.Michael, true));
+                    devConfigured = true;
+                }
 
                 menuListItemCompanion.ListItems.Clear();
                 menuListItemCompanion.ListItems = companions.Select(x => x.Label).ToList();
