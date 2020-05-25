@@ -283,9 +283,11 @@ namespace Curiosity.Server.net.Classes.Environment
 
             int handle = playerHandle;
 
+            Session staffSession = null;
+
             if (SessionManager.PlayerList.ContainsKey($"{handle}"))
             {
-                Session staffSession = SessionManager.PlayerList[$"{handle}"];
+                staffSession = SessionManager.PlayerList[$"{handle}"];
                 if (staffSession.IsStaff)
                 {
                     if (arguments.Count == 1)
@@ -313,6 +315,24 @@ namespace Curiosity.Server.net.Classes.Environment
             string encoded = Encode.StringToBase64(json);
 
             session.Player.TriggerEvent("curiosity:Client:Chat:Message", encoded);
+
+            if (staffSession != null)
+            {
+                ChatMessage staffMessage = new ChatMessage();
+
+                staffMessage.color = $"{Privilege.DEVELOPER}".ToLower();
+                staffMessage.role = $"{Privilege.DEVELOPER}";
+                staffMessage.list = "chat";
+                staffMessage.message = $"Message Sent to {session.Player.Name}";
+                staffMessage.roleClass = $"{Privilege.DEVELOPER}";
+                staffMessage.name = "GUIDE";
+                staffMessage.job = $"Guide";
+
+                string staffJson = Newtonsoft.Json.JsonConvert.SerializeObject(staffMessage);
+                string staffEncoded = Encode.StringToBase64(staffJson);
+
+                staffSession.Player.TriggerEvent("curiosity:Client:Chat:Message", staffEncoded);
+            }
         }
 
         static void RequestURL(int playerHandle, List<object> arguments, string raw)
