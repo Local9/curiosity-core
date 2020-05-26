@@ -1,4 +1,8 @@
-﻿using Curiosity.Shared.Client.net;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net;
+using System;
+using System.Threading;
 
 namespace Curiosity.Police.Client.net
 {
@@ -50,7 +54,11 @@ namespace Curiosity.Police.Client.net
             //PoliceVehicleMenu.Init();
             //DutyManager.Init();
 
+            // Spin();
+
             Log.Verbose("Leaving ClassLoader Init");
         }
+
+        
     }
 }
