@@ -22,10 +22,10 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static public void Init()
         {
             BaseScript.Delay(5000);
-            client.RegisterTickHandler(SetupBank);
-            client.RegisterTickHandler(SetupWallet);
-            client.RegisterTickHandler(TickCash);
-            client.RegisterTickHandler(ShowWallet);
+            // client.RegisterTickHandler(SetupBank);
+            // client.RegisterTickHandler(SetupWallet);
+            // client.RegisterTickHandler(TickCash);
+            // client.RegisterTickHandler(ShowWallet);
 
             client.RegisterEventHandler("curiosity:Client:Bank:UpdateWallet", new Action<int>(UpdateWallet));
             client.RegisterEventHandler("curiosity:Client:Bank:UpdateBank", new Action<int>(UpdateBank));
@@ -40,16 +40,14 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             //StatSetInt((uint)shoot, 25, true);
         }
 
-        static async void UpdateWallet(int amount)
+        static void UpdateWallet(int amount)
         {
             wallet = amount;
-            await BaseScript.Delay(0);
         }
 
-        static async void UpdateBank(int amount)
+        static void UpdateBank(int amount)
         {
             bank = amount;
-            await BaseScript.Delay(0);
         }
 
         static async Task SetupBank()
