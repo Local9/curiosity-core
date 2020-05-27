@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Extensions\Creators.cs" />
     <Compile Include="Extensions\Helpers.cs" />
+    <Compile Include="Extensions\PlayerPed.cs" />
     <Compile Include="Extensions\VectorExtension.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginLoader.cs" />

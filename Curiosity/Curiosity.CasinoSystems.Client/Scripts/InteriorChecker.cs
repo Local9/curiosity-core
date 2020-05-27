@@ -55,6 +55,8 @@ namespace Curiosity.CasinoSystems.Client.Scripts
 
                 AudioSettings();
 
+                // NOTE: Look into awaiting each interior script before allowing player to see.
+
                 VehiclePodium.Init();
                 CasinoBar.Init();
                 // Population.Init();
