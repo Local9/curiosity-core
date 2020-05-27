@@ -92,7 +92,7 @@ namespace Curiosity.CasinoSystems.Client.Scripts.InteriorScripts
             RemoveVehicle();
             int veh;
             int loadChecks = 0;
-            Model model = API.GetHashKey(randomVehicle[Plugin.random.Next(randomVehicle.Count + 1)]); // server side setting
+            Model model = API.GetHashKey(randomVehicle[Plugin.random.Next(randomVehicle.Count)]); // server side setting
             model.Request(10000);
 
             while (!model.IsLoaded)
