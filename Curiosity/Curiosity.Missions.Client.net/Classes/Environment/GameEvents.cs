@@ -138,7 +138,7 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
             string message = "died in mysterious ways";
             if (isMeleeDamage)
             {
-                message = knockedOut[Client.Random.Next(knockedOut.Count + 1)];
+                message = knockedOut[Client.Random.Next(knockedOut.Count)];
             }
             else if (damageTypeFlag == 0)
             {
