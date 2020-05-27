@@ -39,6 +39,6 @@ namespace Curiosity.Systems.Library.Models
         public bool IsDonatorLevel2 => (Role == Role.DONATOR_LEVEL_2);
         public bool IsDonatorLevel3 => (Role == Role.DONATOR_LEVEL_3);
         public bool IsAllowedSupportXp => (IsStaff || IsDonator || DiscordRoles.Contains(Roles.EARLY_ACCESS) || DiscordRoles.Contains(Roles.RESPECTED) || DiscordRoles.Contains(Roles.VETERAN));
-        public bool IsDiscordNitroBooster => (DiscordRoles.Contains(Roles.NITRO));
+        // public bool IsDiscordNitroBooster => (DiscordRoles.Contains(Roles.NITRO));
     }
 }
