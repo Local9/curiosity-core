@@ -100,6 +100,7 @@
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />
+    <Compile Include="Extensions\Decorators.cs" />
     <Compile Include="Helpers\CommandProcessor.cs" />
     <Compile Include="Helpers\Dictionary\Entity\InteractableSetting.cs" />
     <Compile Include="Helpers\Dictionary\PlayerInteractables.cs" />

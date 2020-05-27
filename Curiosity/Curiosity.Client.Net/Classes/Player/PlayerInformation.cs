@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Client.net.Extensions;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Shared.Client.net.Models;
@@ -141,6 +142,9 @@ namespace Curiosity.Client.net.Classes.Player
                 StatSetInt((uint)GetHashKey("MP0_SHOOTING_ABILITY"), 100, true);
                 StatSetInt((uint)GetHashKey("MP0_STEALTH_ABILITY"), 100, true);
             }
+
+            if (Game.PlayerPed != null)
+                Decorators.Set(Game.PlayerPed.Handle, Decorators.DECOR_PLAYER_STAFF, IsStaff());
 
             GetPlayerInfo();
             await BaseScript.Delay(0);

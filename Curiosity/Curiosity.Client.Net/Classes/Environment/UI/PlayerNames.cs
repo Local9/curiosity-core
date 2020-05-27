@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Client.net.Extensions;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             if (!API.NetworkIsPlayerActive(player.Handle) && Game.Player.Handle == player.Handle) return;
 
-            bool staffMember = Player.PlayerInformation.IsStaff();
+            bool staffMember = Decorators.GetBoolean(player.Character.Handle, Decorators.DECOR_PLAYER_STAFF);
             string staffTag = staffMember ? "[STAFF]" : string.Empty;
 
             int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, staffMember, staffTag, 0);
@@ -103,7 +104,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 API.SetMpGamerTagVisibility(gamerTagId, 0, false);
             }
-            else if (API.HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17) && !isSpectating)
+            else if (API.HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17) || isSpectating)
             {
                 API.SetMpGamerTagName(gamerTagId, player.Name);
                 API.SetMpGamerTagVisibility(gamerTagId, 0, true);
