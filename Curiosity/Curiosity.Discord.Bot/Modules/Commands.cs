@@ -259,7 +259,7 @@ namespace Curiosity.LifeV.Bot.Modules
             {
                 List<Models.User> dbUsers = new List<Models.User>();
 
-                List<string> routes = new List<string> { "pilot", "trucking", "fire", "police", "knowledge", "train", "taxi", "fishing", "hunting", "farming", "bus", "mechanic", "ems" };
+                List<string> routes = new List<string> { "pilot", "trucking", "fire", "police", "knowledge", "train", "taxi", "fishing", "hunting", "farming", "bus", "mechanic", "ems", "freight" };
                 string route = string.Empty;
 
                 if (args.Length == 0)
