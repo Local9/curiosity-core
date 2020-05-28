@@ -79,6 +79,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 // API.SetEntityProofs(veh.Handle, true, true, true, true, true, true, true, true);
                 API.SetVehicleOnGroundProperly(veh.Handle);
                 veh.IsPersistent = true;
+                veh.LockStatus = VehicleLockStatus.Unlocked;
 
                 await Client.Delay(0);
 
@@ -157,8 +158,6 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
-
-                veh.LockStatus = VehicleLockStatus.Unlocked;
 
                 await Client.Delay(0);
 

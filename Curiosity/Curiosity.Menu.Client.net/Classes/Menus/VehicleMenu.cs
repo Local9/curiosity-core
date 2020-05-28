@@ -51,6 +51,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             }
 
             mItemEngine.Checked = Client.CurrentVehicle.IsEngineRunning;
+            
+            MainVehicleMenu.AddMenuItem(mListItemVehicleLocks);
+
             MainVehicleMenu.AddMenuItem(mItemEngine);
             MainVehicleMenu.AddMenuItem(mItemHeadLights);
 
