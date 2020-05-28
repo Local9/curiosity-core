@@ -42,6 +42,15 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Missions:CompletedMission", new Action<CitizenFX.Core.Player, bool>(OnCompletedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:StartedMission", new Action<CitizenFX.Core.Player, int>(OnStartedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:EndMission", new Action<CitizenFX.Core.Player>(OnEndMission));
+            server.RegisterEventHandler("curiosity:Server:Missions:VehicleTowed", new Action<CitizenFX.Core.Player>(OnVehicleTowed));
+        }
+
+        private static void OnVehicleTowed([FromSource] CitizenFX.Core.Player player)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+            Session session = SessionManager.PlayerList[player.Handle];
+            Bank.IncreaseCashInternally(player.Handle, 50);
+            Server.TriggerEvent("elv:police:towed");
         }
 
         static void OnArrestedPed([FromSource]CitizenFX.Core.Player player, string encodedData)

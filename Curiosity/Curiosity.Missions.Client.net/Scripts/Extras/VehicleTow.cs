@@ -102,6 +102,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Extras
             if (vehToRemove.Exists())
             {
                 vehToRemove.Delete();
+                BaseScript.TriggerServerEvent("curiosity:Server:Missions:VehicleTowed");
             }
 
             Reset(true);
