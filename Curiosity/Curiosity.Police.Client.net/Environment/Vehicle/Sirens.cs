@@ -69,11 +69,30 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
 
         static public void Init()
         {
+            client.RegisterTickHandler(OnSirenDisableControls);
             client.RegisterTickHandler(OnSirenControlsTick);
             client.RegisterEventHandler("curiosity:Player:Vehicle:Siren:SoundEvent", new Action<string>(OnReceivedSourceEvent));
             client.RegisterEventHandler("curiosity:Client:Menu:IsOpened", new Action<bool>(OnMenuStateChange));
             API.DecorRegister("Vehicle.SirensInstalled", 2);
             API.DecorRegister("Vehicle.SirensActive", 2);
+        }
+
+        private static async Task OnSirenDisableControls()
+        {
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
+                {
+                    API.SetVehicleRadioEnabled(Game.PlayerPed.CurrentVehicle.Handle, false);
+
+                    API.DisableControlAction(2, (int)Control.VehicleHorn, true);
+                    API.DisableControlAction(2, (int)Control.VehicleCinCam, true);
+                    API.DisableControlAction(2, (int)Control.VehicleLookBehind, true);
+                    API.DisableControlAction(2, (int)Control.LookBehind, true);
+                    API.DisableControlAction(2, (int)Control.SniperZoomOutSecondary, true);
+                    API.DisableControlAction(2, (int)Control.CharacterWheel, true);
+                }
+            }
         }
 
         static private void OnMenuStateChange(bool state)
@@ -108,20 +127,6 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
         static private async Task OnSirenControlsTick()
         {
 
-            if (Game.PlayerPed.IsInVehicle())
-            {
-                if (API.GetVehicleClass(Game.PlayerPed.CurrentVehicle.Handle) == (int)VehicleClass.Emergency)
-                {
-                    API.SetVehicleRadioEnabled(Game.PlayerPed.CurrentVehicle.Handle, false);
-
-                    API.DisableControlAction(0, (int)Control.VehicleHorn, true);
-                    API.DisableControlAction(0, (int)Control.VehicleCinCam, true);
-                    API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
-                    API.DisableControlAction(0, (int)Control.LookBehind, true);
-                    API.DisableControlAction(0, (int)Control.SniperZoomOutSecondary, true);
-                }
-            }
-
             if (IsMenuOpen)
             {
                 await BaseScript.Delay(100);
@@ -136,11 +141,11 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     && API.DecorGetBool(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.SirensInstalled"))
                     || Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency))
             {
-                if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(0, (int)Control.VehicleCinCam))
+                if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(2, (int)Control.VehicleCinCam))
                 {
                     SirenActive = true;
                     SendSoundEvent("SIRENS_AIRHORN");
-                    while ((ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(0, (int)Control.VehicleCinCam)) && Game.PlayerPed.IsInVehicle())
+                    while ((ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(2, (int)Control.VehicleCinCam)) && Game.PlayerPed.IsInVehicle())
                     {
                         API.DisableControlAction(0, (int)Control.VehicleCinCam, true);
                         await BaseScript.Delay(0);
@@ -148,12 +153,12 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     StopSound();
                     SirenActive = false;
                 }
-                else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind))
+                else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(2, (int)Control.VehicleLookBehind))
                 {
                     SirenActive = true;
 
                     SendSoundEvent(GetWarningSound());
-                    while ((ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind)) && Game.PlayerPed.IsInVehicle())
+                    while ((ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(2, (int)Control.VehicleLookBehind)) && Game.PlayerPed.IsInVehicle())
                     {
                         API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
                         await BaseScript.Delay(0);
@@ -168,7 +173,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                     await BaseScript.Delay(700);
                     SirenActive = false;
                 }
-                else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(17, (int)Control.CharacterWheel)) // Preset on/off
+                else if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(2, (int)Control.CharacterWheel)) // Preset on/off
                 {
                     GetSirens();
                     LightsActive = true;
@@ -192,7 +197,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                         }
 
                         await BaseScript.Delay(0);
-                        if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(17, (int)Control.CharacterWheel))
+                        if (ControlHelper.IsControlJustPressed(Control.ThrowGrenade) || API.IsDisabledControlJustPressed(2, (int)Control.CharacterWheel))
                         {
                             API.SetFakeWantedLevel(0);
                             LightsActive = false;
@@ -200,18 +205,18 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                             SirenActive = false;
                             break;
                         }
-                        else if (ControlHelper.IsControlJustPressed(Control.MpTextChatTeam) || API.IsControlJustPressed(16, (int)Control.VehicleFlyUnderCarriage)) // Cycle presets
+                        else if (ControlHelper.IsControlJustPressed(Control.MpTextChatTeam) || API.IsControlJustPressed(2, (int)Control.VehicleFlyUnderCarriage)) // Cycle presets
                         {
                             // StopSound();
                             GetSirens();
                             CurrentSirenPreset = SIRENS_ACTIVE[(SIRENS_ACTIVE.IndexOf(CurrentSirenPreset) + 1) % SIRENS_ACTIVE.Count];
                             PlayCurrentPresetSound();
                         }
-                        else if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(0, (int)Control.VehicleCinCam))
+                        else if (ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(2, (int)Control.VehicleCinCam))
                         {
                             // StopSound();
                             SendSoundEvent("SIRENS_AIRHORN");
-                            while ((ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(0, (int)Control.VehicleCinCam)) && Game.PlayerPed.IsInVehicle())
+                            while ((ControlHelper.IsControlPressed(Control.Sprint, true, ControlModifier.Shift) || API.IsDisabledControlPressed(2, (int)Control.VehicleCinCam)) && Game.PlayerPed.IsInVehicle())
                             {
                                 API.DisableControlAction(0, (int)Control.VehicleCinCam, true);
                                 await BaseScript.Delay(0);
@@ -219,12 +224,12 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
                             // StopSound();
                             PlayCurrentPresetSound();
                         }
-                        else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind))
+                        else if (ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(2, (int)Control.VehicleLookBehind))
                         {
                             // StopSound();
                             SendSoundEvent(GetWarningSound());
                             string internalPreset = CurrentSirenPreset;
-                            while ((ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(16, (int)Control.VehicleLookBehind)) && Game.PlayerPed.IsInVehicle())
+                            while ((ControlHelper.IsControlPressed(Control.Duck, true, ControlModifier.Ctrl) || API.IsDisabledControlPressed(2, (int)Control.VehicleLookBehind)) && Game.PlayerPed.IsInVehicle())
                             {
                                 API.DisableControlAction(0, (int)Control.VehicleLookBehind, true);
                                 await BaseScript.Delay(0);
