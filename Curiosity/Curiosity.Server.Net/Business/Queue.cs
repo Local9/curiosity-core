@@ -239,12 +239,12 @@ namespace Curiosity.Server.net.Business
                     if (!priority.ContainsKey(license))
                     {
                         newQueue.Enqueue(license);
-                        if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {license}"); }
+                        if (stateChangeMessages) { Log.Verbose($"[UpdateStates] Curiosity Queue Manager : NEW -> QUEUE -> (Public) {license}"); }
                     }
                     else
                     {
                         newPriorityQueue.Enqueue(license);
-                        if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {license}"); }
+                        if (stateChangeMessages) { Log.Verbose($"[UpdateStates] Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {license}"); }
                     }
                 }
 
@@ -254,7 +254,7 @@ namespace Curiosity.Server.net.Business
                     session.TryGetValue(license, out SessionState oldState);
                     session.TryUpdate(license, SessionState.Loading, oldState);
                     deferrals.done();
-                    if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {license}"); }
+                    if (stateChangeMessages) { Log.Verbose($"[UpdateStates] Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {license}"); }
                     return;
                 }
 
@@ -276,7 +276,7 @@ namespace Curiosity.Server.net.Business
                     {
                         UpdateTimer(license);
                         deferrals.done($"{messages[Messages.Canceled]}");
-                        if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
+                        if (stateChangeMessages) { Log.Verbose($"[UpdateStates] Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
                         return;
                     }
 
@@ -351,30 +351,27 @@ namespace Curiosity.Server.net.Business
 
         static async Task QueueCycle()
         {
-            while (true)
+            try
             {
-                try
-                {
-                    countInPriorityQueue = PriorityQueueCount();
-                    await Server.Delay(100);
-                    countInQueue = QueueCount();
-                    await Server.Delay(100);
-                    UpdateHostName();
-                    UpdateStates();
-                    await Server.Delay(100);
-                    BalanceReserved();
-                    await Server.Delay(1000);
+                countInPriorityQueue = PriorityQueueCount();
+                await Server.Delay(100);
+                countInQueue = QueueCount();
+                await Server.Delay(100);
+                UpdateHostName();
+                UpdateStates();
+                await Server.Delay(100);
+                BalanceReserved();
+                await Server.Delay(1000);
 
-                    //if (!Server.isLive)
-                    //{
-                    //    Log.Verbose($"Curiosity Queue Manager : QueueCycle()");
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : QueueCycle", $"{ex}");
-                    Log.Error($"Curiosity Queue Manager : QueueCycle()");
-                }
+                //if (!Server.isLive)
+                //{
+                //    Log.Verbose($"Curiosity Queue Manager : QueueCycle()");
+                //}
+            }
+            catch (Exception ex)
+            {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : QueueCycle", $"{ex}");
+                Log.Error($"Curiosity Queue Manager : QueueCycle()");
             }
         }
 
@@ -404,7 +401,7 @@ namespace Curiosity.Server.net.Business
                                 session.TryGetValue(license, out SessionState oldState);
                                 session.TryUpdate(license, SessionState.Grace, oldState);
                                 UpdateTimer(license);
-                                if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : LOADING -> GRACE -> {license}"); }
+                                if (stateChangeMessages) { Log.Verbose($"[UpdateStates] Curiosity Queue Manager : LOADING -> GRACE -> {license}"); }
                             }
                             else
                             {
@@ -434,7 +431,7 @@ namespace Curiosity.Server.net.Business
                                 else
                                 {
                                     RemoveFrom(license, true, true, true, true, true, true);
-                                    if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : GRACE -> REMOVED -> {license}"); }
+                                    if (stateChangeMessages) { Log.Verbose($"[UpdateStates] Curiosity Queue Manager : GRACE -> REMOVED -> {license}"); }
                                 }
                             }
                             break;
@@ -588,7 +585,7 @@ namespace Curiosity.Server.net.Business
                     if (IsTimeUp(license, queueGraceTime))
                     {
                         RemoveFrom(license, true, true, true, true, true, true);
-                        if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : CANCELED -> REMOVED -> {license}"); }
+                        if (stateChangeMessages) { Log.Verbose($"[QueueCount] Curiosity Queue Manager : CANCELED -> REMOVED -> {license}"); }
                         continue;
                     }
                     if (priority.TryGetValue(license, out int priorityAdded))
@@ -660,7 +657,7 @@ namespace Curiosity.Server.net.Business
                         slotTaken.TryUpdate(license, slotType, oldSlotType);
                     }
                     session.TryUpdate(license, SessionState.Loading, oldState);
-                    if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : QUEUE -> LOADING -> ({Enum.GetName(typeof(Reserved), slotType)}) {license}"); }
+                    if (stateChangeMessages) { Log.Verbose($"[NewLoading] Curiosity Queue Manager : QUEUE -> LOADING -> ({Enum.GetName(typeof(Reserved), slotType)}) {license}"); }
                 }
             }
             catch (Exception ex)
@@ -729,7 +726,7 @@ namespace Curiosity.Server.net.Business
                     if (IsTimeUp(license, queueGraceTime))
                     {
                         RemoveFrom(license, true, true, true, true, true, true);
-                        if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : CANCELED -> REMOVED -> {license}"); }
+                        if (stateChangeMessages) { Log.Verbose($"[PriorityQueueCount] Curiosity Queue Manager : CANCELED -> REMOVED -> {license}"); }
                         continue;
                     }
                     if (!priority.TryGetValue(license, out int priorityNum))
@@ -782,14 +779,23 @@ namespace Curiosity.Server.net.Business
                 if (message.Contains("Kick") || message.Contains("Ban"))
                 {
                     RemoveFrom(license, true, true, true, true, true, true);
-                    if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : REMOVED -> {license}"); }
+                    if (stateChangeMessages) { Log.Verbose($"[PlayerDropped] Curiosity Queue Manager : REMOVED -> {license}"); }
                 }
                 else
                 {
                     session.TryGetValue(license, out SessionState oldState);
-                    session.TryUpdate(license, SessionState.Grace, oldState);
-                    if (stateChangeMessages) { Log.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> GRACE -> {license}"); }
-                    UpdateTimer(license);
+
+                    if (oldState == SessionState.Loading || oldState == SessionState.Queue)
+                    {
+                        RemoveFrom(license, true, true, true, true, true, true);
+                        if (stateChangeMessages) { Log.Verbose($"[PlayerDropped] Curiosity Queue Manager : REMOVED -> {license}"); }
+                    }
+                    else
+                    {
+                        session.TryUpdate(license, SessionState.Grace, oldState);
+                        if (stateChangeMessages) { Log.Verbose($"[PlayerDropped] Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> GRACE -> {license}"); }
+                        UpdateTimer(license);
+                    }
                 }
             }
             catch (Exception ex)
