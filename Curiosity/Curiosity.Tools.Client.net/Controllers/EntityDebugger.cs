@@ -62,6 +62,7 @@ namespace Curiosity.Tools.Client.net.Controllers
                     list["Current Gear"] = $"{veh.CurrentGear}";
                     list["Acceleration"] = $"{veh.Acceleration:n3}";
                     list["Lock Status"] = $"{veh.LockStatus}";
+                    list["Fuel"] = $"{API.DecorGetFloat(veh.Handle, "Vehicle.Fuel")}";
                 }
                 else if (entity is Ped ped)
                 {
