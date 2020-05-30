@@ -108,6 +108,21 @@ namespace Curiosity.Server.net.Classes.Environment
                 Log.Info($"[SERVER] Announcing: {messageToSend}");
 
                 Server.TriggerClientEvent("curiosity:Client:Scalefrom:Announce", messageToSend);
+
+                ChatMessage chatMessage = new ChatMessage();
+
+                chatMessage.color = $"{Privilege.DEVELOPER}".ToLower();
+                chatMessage.role = $"{Privilege.DEVELOPER}";
+                chatMessage.list = "chat";
+                chatMessage.message = messageToSend;
+                chatMessage.roleClass = $"{Privilege.DEVELOPER}";
+                chatMessage.name = "SERVER";
+                chatMessage.job = $"Server";
+
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
+                string encoded = Encode.StringToBase64(json);
+
+                Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
             }
 
             try
