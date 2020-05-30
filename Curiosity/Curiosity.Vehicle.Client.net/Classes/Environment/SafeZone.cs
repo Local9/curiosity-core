@@ -30,16 +30,24 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
         async Task DisableCollision()
         {
-            _vehicle.Opacity = 200;
 
-            _vehicle.SetNoCollision(Game.PlayerPed, false);
-            Game.Player.Character.SetNoCollision(_vehicle, false);
-
-            if (Game.PlayerPed.IsInVehicle())
+            if (_vehicle.Position.Distance(Game.PlayerPed.Position) > 35f)
             {
-                _vehicle.MaxSpeed = 10f;
-                _vehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
-                Game.PlayerPed.CurrentVehicle.SetNoCollision(_vehicle, false);
+                EnableCollision();
+            }
+            else
+            {
+                _vehicle.Opacity = 200;
+
+                _vehicle.SetNoCollision(Game.PlayerPed, false);
+                Game.Player.Character.SetNoCollision(_vehicle, false);
+
+                if (Game.PlayerPed.IsInVehicle())
+                {
+                    Game.PlayerPed.CurrentVehicle.MaxSpeed = 10f;
+                    _vehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, false);
+                    Game.PlayerPed.CurrentVehicle.SetNoCollision(_vehicle, false);
+                }
             }
         }
 
@@ -48,13 +56,14 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
             client.DeregisterTickHandler(DisableCollision);
 
             _vehicle.ResetOpacity();
-            _vehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)_vehicle.Model.Hash);
-
+            
             _vehicle.SetNoCollision(Game.PlayerPed, true);
             Game.Player.Character.SetNoCollision(_vehicle, true);
 
             if (Game.PlayerPed.IsInVehicle())
             {
+
+                Game.PlayerPed.CurrentVehicle.MaxSpeed = API.GetVehicleModelMaxSpeed((uint)Game.PlayerPed.CurrentVehicle.Model.Hash);
                 _vehicle.SetNoCollision(Game.PlayerPed.CurrentVehicle, true);
                 Game.PlayerPed.CurrentVehicle.SetNoCollision(_vehicle, true);
             }
