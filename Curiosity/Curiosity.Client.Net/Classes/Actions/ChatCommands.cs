@@ -141,6 +141,8 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("kick", new Action<int, List<object>, string>(RoyallyFuckPlayerRP), false);
             API.RegisterCommand("esx", new Action<int, List<object>, string>(Fairy), false);
 
+            API.RegisterCommand("wash", new Action<int, List<object>, string>(Wash), false);
+
             API.RegisterCommand("report", new Action<int, List<object>, string>(ReportingNotification), false);
 
             API.RegisterCommand("tennis", new Action<int, List<object>, string>(OnTennisMode), false);
@@ -181,6 +183,11 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
 
             }), false);
+        }
+
+        private static void Wash(int playerHandle, List<object> arguments, string raw)
+        {
+            Game.PlayerPed.ClearBloodDamage();
         }
 
         static void OnTennisMode(int playerHandle, List<object> arguments, string raw)
