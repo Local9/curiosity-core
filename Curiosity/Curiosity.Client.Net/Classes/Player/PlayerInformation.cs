@@ -43,6 +43,9 @@ namespace Curiosity.Client.net.Classes.Player
 
         static void SetDutyIcon(bool onDuty, bool active, string job)
         {
+            if (string.IsNullOrEmpty(job) || job == "undefined") 
+                job = "Unemployed";
+
             API.SendNuiMessage(JsonConvert.SerializeObject(new DutyMessage { duty = onDuty, dutyActive = active, job = job }));
         }
 
