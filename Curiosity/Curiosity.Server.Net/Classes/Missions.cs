@@ -252,13 +252,15 @@ namespace Curiosity.Server.net.Classes
 
         static void MessagePolicePlayers(CitizenFX.Core.Player player, string title, string subtitle, string message)
         {
-            foreach (KeyValuePair<string, Session> valuePair in SessionManager.PlayerList)
+            Dictionary<string, Session> police = SessionManager.PlayerList.Select(x => x).Where(x => x.Value.JobMessages && x.Value.job == Job.Police).ToDictionary(x => x.Key, x => x.Value);
+
+            foreach (KeyValuePair<string, Session> valuePair in police)
             {
                 Session session = valuePair.Value;
 
                 if (player.Handle == session.Player.Handle) continue;
                 
-                if (session.job == Job.Police && !session.JobMessages)
+                if (session.job == Job.Police && session.JobMessages)
                 {
                     session.Player.Send(NotificationType.CHAR_CALL911, 2, title, subtitle, message);
                 }
