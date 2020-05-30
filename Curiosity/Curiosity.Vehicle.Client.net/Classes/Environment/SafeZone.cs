@@ -156,7 +156,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
             await Client.Delay(0);
             int PlayerHandle = Game.PlayerPed.Handle;
 
-            List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(Game.PlayerPed.Position) < 30f).ToList();
+            List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.Distance(Game.PlayerPed.Position) < 30f).ToList();
 
             foreach (CitizenFX.Core.Vehicle vehicle in vehicles)
             {
