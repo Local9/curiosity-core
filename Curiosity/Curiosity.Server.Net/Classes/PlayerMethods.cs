@@ -35,9 +35,17 @@ namespace Curiosity.Server.net.Classes
 
             ///////// JOBS //////////
             server.RegisterEventHandler("curiosity:Server:Player:Job", new Action<CitizenFX.Core.Player, int>(OnPlayerJob));
+            server.RegisterEventHandler("curiosity:Server:Player:police:dispatchToggle", new Action<CitizenFX.Core.Player, bool>(OnBlockDispatchMessages));
             server.RegisterEventHandler("curiosity:Server:Player:Backup", new Action<CitizenFX.Core.Player, int, float, float, float>(OnBackupRequest));
 
             server.RegisterEventHandler("curiosity:Server:Player:Revive", new Action<CitizenFX.Core.Player, string, bool>(OnPlayerRevive));
+        }
+
+        private static void OnBlockDispatchMessages([FromSource] CitizenFX.Core.Player player, bool toggle)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+            Session session = SessionManager.PlayerList[player.Handle];
+            session.JobMessages = toggle;
         }
 
         static void OnPlayerRevive([FromSource]CitizenFX.Core.Player player, string playerToRevive, bool killedByPlayer)

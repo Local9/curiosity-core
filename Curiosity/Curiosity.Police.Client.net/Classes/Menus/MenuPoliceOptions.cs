@@ -20,6 +20,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static bool _IsTrafficStopsActive = false;
         static bool _IsRandomEventsActive = false;
         static bool _IsBackupActive = false;
+        static bool _AllowDispatchMessages = true;
 
         static string _ActiveJob;
 
@@ -32,6 +33,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         static MenuCheckboxItem menuCheckboxAlternateSirens = new MenuCheckboxItem("Alternate Sirens", Sirens.alternateSirens) { Description = "Alternative Sirens for Police Cars", Checked = Sirens.alternateSirens };
         static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive) { Description = "Show information when a player requests backup" };
+        static MenuCheckboxItem menuCheckboxDispatchMessages = new MenuCheckboxItem("Receive Dispatch Messages", _AllowDispatchMessages) { Description = "Show information when another player completes a task" };
         static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
         static MenuCheckboxItem menuCheckboxRandomCallouts = new MenuCheckboxItem("Accept Dispatch Calls", _IsOnDuty) { Description = "Random Dispatch Mission" };
 
@@ -99,6 +101,24 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             if (menuItem == menuCheckboxAlternateSirens)
             {
                 Sirens.alternateSirens = newCheckedState;
+                return;
+            }
+
+            if (menuItem == menuCheckboxDispatchMessages)
+            {
+                _AllowDispatchMessages = newCheckedState;
+
+                BaseScript.TriggerServerEvent("curiosity:Server:Player:police:dispatchToggle", _AllowDispatchMessages);
+
+                if (_AllowDispatchMessages)
+                {
+                    Screen.ShowNotification("~g~Accepting Dispatch Messages");
+                }
+                else
+                {
+                    Screen.ShowNotification("~r~No longer receiving Dispatch Messages");
+                }
+
                 return;
             }
 
@@ -244,6 +264,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menu.AddMenuItem(menuItemDispatch);
             menu.AddMenuItem(menuItemBreaker);
             menu.AddMenuItem(menuCheckboxAlternateSirens);
+            menu.AddMenuItem(menuCheckboxDispatchMessages);
             menu.AddMenuItem(menuCheckboxRandomCallouts);
             menu.AddMenuItem(menuCheckboxBackup);
             menu.AddMenuItem(menuCheckboxTrafficStops);

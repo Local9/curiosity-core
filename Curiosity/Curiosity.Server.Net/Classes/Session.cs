@@ -63,6 +63,7 @@ namespace Curiosity.Server.net.Classes
         public Job job { get; private set; }
 
         public DateTime LastDonationCheck { get; private set; }
+        public bool JobMessages { get; internal set; }
 
         public PartyData Party = new PartyData();
 
@@ -79,6 +80,7 @@ namespace Curiosity.Server.net.Classes
             Name = player.Name;
 
             job = Job.Unknown;
+            JobMessages = true;
 
             int numIdents = GetNumPlayerIdentifiers(NetId);
             List<string> idents = new List<string>();

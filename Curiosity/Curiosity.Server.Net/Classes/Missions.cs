@@ -220,6 +220,8 @@ namespace Curiosity.Server.net.Classes
                 Skills.IncreaseSkill(player.Handle, "knowledge", knowledge);
                 Skills.IncreaseSkill(player.Handle, "policerep", 1);
                 Bank.IncreaseCashInternally(player.Handle, 15);
+
+                MessagePolicePlayers(session.Player, "Dispatch", string.Empty, $"{session.Player.Name} has completed a traffic stop");
             }
             else
             {
@@ -241,11 +243,11 @@ namespace Curiosity.Server.net.Classes
                     Skills.IncreaseSkill(player.Handle, "knowledge", knowledge);
                     Skills.IncreaseSkill(player.Handle, "policerep", 1);
                     Bank.IncreaseCashInternally(player.Handle, 25);
+
+                    MessagePolicePlayers(session.Player, "Dispatch", string.Empty, $"{session.Player.Name} has issued a speeding ticket");
                 }
             }
             timestampLastTrafficStop[player.Handle] = DateTime.Now;
-
-            MessagePolicePlayers(session.Player, "Dispatch", string.Empty, $"{session.Player.Name} has completed a traffic stop");
         }
 
         static void MessagePolicePlayers(CitizenFX.Core.Player player, string title, string subtitle, string message)
@@ -256,7 +258,7 @@ namespace Curiosity.Server.net.Classes
 
                 if (player.Handle == session.Player.Handle) continue;
                 
-                if (session.job == Job.Police)
+                if (session.job == Job.Police && !session.JobMessages)
                 {
                     session.Player.Send(NotificationType.CHAR_CALL911, 2, title, subtitle, message);
                 }
