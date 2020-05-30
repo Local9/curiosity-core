@@ -39,6 +39,8 @@ namespace Curiosity.Server.net.Classes
                         int.TryParse(amt, out xp);
                         IncreaseSkillByPlayerExport(player, skill, xp);
 
+                        Log.Success($"[EXPORT] increaseSkill called, {player}, {skill}, {xp}");
+
                         if (Server.ShowExportMessages)
                             Log.Success($"[EXPORT] increaseSkill called, {player}, {skill}, {xp}");
                     }
