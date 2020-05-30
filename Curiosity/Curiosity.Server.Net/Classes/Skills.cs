@@ -33,9 +33,20 @@ namespace Curiosity.Server.net.Classes
             server.ExportDictionary.Add("increaseSkill", new Func<string, string, string, string>(
                 (player, skill, amt) =>
                 {
-                    int xp = 0;
-                    int.TryParse(amt, out xp);
-                    IncreaseSkillByPlayerExport(player, skill, xp);
+                    try
+                    {
+                        int xp = 0;
+                        int.TryParse(amt, out xp);
+                        IncreaseSkillByPlayerExport(player, skill, xp);
+
+                        if (Server.ShowExportMessages)
+                            Log.Success($"[EXPORT] increaseSkill called, {player}, {skill}, {xp}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"[EXPORT] increaseSkill : {ex.Message}");
+                    }
+
                     return null;
                 }
             ));
@@ -165,9 +176,18 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
+                if (!skills.ContainsKey(skill))
+                {
+                    Log.Error($"IncreaseSkill: Skill is missing.");
+                    Log.Error($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    return;
+                }
+
                 Session session = SessionManager.PlayerList[playerId];
 
-                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                GlobalEntity.Skills skillEnt = skills[skill];
+
+                if (skillEnt.TypeId == GlobalEnum.SkillType.Experience)
                 {
                     float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
 
@@ -189,13 +209,6 @@ namespace Curiosity.Server.net.Classes
                 if (!(characterId > 0))
                 {
                     Log.Error($"IncreaseSkill: characterId Missing");
-                    return;
-                }
-
-                if (!skills.ContainsKey(skill))
-                {
-                    Log.Error($"IncreaseSkill: Unknown Skill -> {skill}");
-                    Log.Error($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
                     return;
                 }
 

@@ -37,6 +37,14 @@ namespace Curiosity.Server.net
             }
         }
 
+        public static bool ShowExportMessages
+        {
+            get
+            {
+                return API.GetConvar("server_export_messages", "false") == "true";
+            }
+        }
+
         public static PlayerList players;
 
         static DateTime serverStarted;
