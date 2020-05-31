@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Managers.Callouts;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.EventWrapper;
@@ -48,8 +49,20 @@ namespace Curiosity.Callouts.Client.Managers
                     break;
             }
 
+            if (ActiveCallout != null)
+            {
+                ActiveCallout?.End(true);
+                ActiveCallout = null;
+            }
+
             newCallout?.Prepare();
             ActiveCallout = newCallout;
+
+            if (PlayerManager.IsDeveloper())
+            {
+                Screen.ShowNotification($"Loading {ActiveCallout?.Name}");
+            }
+
             if (ActiveCallout != null) ActiveCallout.Ended += forcefully => { ActiveCallout = null; };
 #endif
         }
