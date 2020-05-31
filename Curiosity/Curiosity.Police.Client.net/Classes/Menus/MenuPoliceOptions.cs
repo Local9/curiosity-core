@@ -127,7 +127,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
                 menuItem.Enabled = false;
 
                 _AcceptingCallouts = newCheckedState;
-                BaseScript.TriggerEvent("curiosity:client:callout:manager:enable", _AcceptingCallouts);
+                BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", _IsActive, _AcceptingCallouts, _ActiveJob);
+                // BaseScript.TriggerEvent("curiosity:client:callout:manager:enable", _AcceptingCallouts);
 
                 await Client.Delay(3000);
                 menuItem.Enabled = true;
