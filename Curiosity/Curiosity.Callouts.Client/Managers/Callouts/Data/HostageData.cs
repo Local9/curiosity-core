@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Callouts.Shared.Classes;
+using Curiosity.Callouts.Shared.EventWrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +10,27 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Callouts.Client.Managers.Callouts.Data
 {
-    class HostageData
+    class HostageData : BaseScript
     {
         public List<HostageDataModel> Situations = new List<HostageDataModel>();
         
         public HostageData()
         {
+            EventHandlers[Events.Native.Client.OnClientResourceStart.Path]
+                += Events.Native.Client.OnClientResourceStart.Action += resourceName =>
+                {
+                    if (resourceName != API.GetCurrentResourceName()) return;
+                };
+
+            
+        }
+
+        void SetupSituationData()
+        {
             HostageDataModel clintonAve = new HostageDataModel()
             {
-                StoreName = "",
-                Location = new Vector3(),
+                StoreName = "24/7, Clinton Ave",
+                Location = new Vector3(375.6602f, 325.6703f, 103.5664f),
                 PatrolZone = PatrolZone.City,
                 Shooters = new List<Tuple<Vector3, float>>
                 {
@@ -31,6 +44,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
                     new Tuple<Vector3, float>( new Vector3(379.5025f,332.2108f,103.5664f), 257.2952f ),
                 }
             };
+
+            Situations.Add(clintonAve);
         }
     }
 
