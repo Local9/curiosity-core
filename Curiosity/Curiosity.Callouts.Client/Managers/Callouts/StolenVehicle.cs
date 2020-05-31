@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Utils;
+using Curiosity.Callouts.Shared.Classes;
 using Curiosity.Callouts.Shared.Utils;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
 using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
@@ -13,7 +15,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         private Ped criminal;
         private Vehicle stolenVehicle;
 
-        public List<VehicleHash> vehicleHashes = new List<VehicleHash>()
+        List<VehicleHash> vehicleHashes = new List<VehicleHash>()
         {
             VehicleHash.Oracle2,
             VehicleHash.Panto,
@@ -21,7 +23,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             VehicleHash.SlamVan
         };
 
-        public List<PedHash> pedHashes = new List<PedHash>()
+        List<PedHash> pedHashes = new List<PedHash>()
         {
             PedHash.Tourist01AFM,
             PedHash.Tourist01AFY,
@@ -33,26 +35,49 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             PedHash.Korean01GMY
         };
 
+        List<WeaponHash> weaponHashes = new List<WeaponHash>()
+        {
+            WeaponHash.Pistol,
+            WeaponHash.SMG,
+            WeaponHash.MicroSMG
+        };
+
         public StolenVehicle(Player primaryPlayer) : base(primaryPlayer) => Players.Add(primaryPlayer);
+
+        /// <summary>
+        /// Complete Requirements
+        /// -- //
+        /// Dead
+        /// Arrested
+        /// Distance
+        /// -- //
+        /// </summary>
 
         internal override async void Prepare()
         {
             base.Prepare();
 
+            base.Name = "StolenVehicle";
+
             stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
-                Players[0].Character.Position.AroundStreet(250f, 500f));
+                Players[0].Character.Position.AroundStreet(250f, 600f));
             RegisterVehicle(stolenVehicle);
             Logger.Log(stolenVehicle.Name);
 
             criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position);
-            criminal.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
+
+            if (Utility.RANDOM.NextDouble() > .8)
+            {
+                criminal.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
+                criminal.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
+            }
+
             RegisterPed(criminal);
 
             criminal.PutInVehicle(stolenVehicle);
             criminal.Task.CruiseWithVehicle(stolenVehicle.Fx, float.MaxValue,
                 (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
             criminal.AttachBlip(BlipColor.Red, true);
-
             PursuitManager.StartNewPursuit(this);
 
             base.IsSetup = true;
@@ -73,10 +98,29 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     if (!criminal.IsDead) return;
                     progress++;
                     break;
+                case 2:
+                    CalloutMessage calloutMessage = new CalloutMessage();
+                    
+                    calloutMessage.Name = Name;
+                    calloutMessage.Success = true;
 
+                    base.CompleteCallout(calloutMessage);
+                    progress++;
+                    break;
                 default:
                     End();
                     break;
+            }
+
+            if (criminal.Position.Distance(Game.PlayerPed.Position) > 250f)
+            {
+                Screen.ShowSubtitle($"~o~WARNING~s~ Suspect is getting away!");
+            }
+
+            if (criminal.Position.Distance(Game.PlayerPed.Position) > 700f)
+            {
+                Screen.ShowSubtitle($"~r~Suspect has got away!");
+                End();
             }
         }
     }

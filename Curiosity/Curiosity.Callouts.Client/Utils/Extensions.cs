@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Callouts.Shared.EventWrapper;
 using System;
 
@@ -54,6 +55,11 @@ namespace Curiosity.Callouts.Client.Utils
             var y = (float)(vector.Y * Math.Cos(degrees) + vector.X * Math.Sin(degrees));
 
             return new Vector3(x, y, vector.Z);
+        }
+
+        public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
+        {
+            return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
         }
     }
 }

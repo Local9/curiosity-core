@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Server.net.Entity;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using Newtonsoft.Json;
@@ -35,6 +36,8 @@ namespace Curiosity.Server.net.Classes
 
             API.RegisterCommand("mission", new Action<int, List<object>, string>(SendMission), false);
 
+            server.RegisterEventHandler("curiosity:server:missions:callout", new Action<CitizenFX.Core.Player, string>(OnCalloutCompleted));
+
             server.RegisterEventHandler("curiosity:Server:Missions:TrafficStop", new Action<CitizenFX.Core.Player, string>(OnTrafficStop));
             server.RegisterEventHandler("curiosity:Server:Missions:ArrestedPed", new Action<CitizenFX.Core.Player, string>(OnArrestedPed));
 
@@ -43,6 +46,20 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Missions:StartedMission", new Action<CitizenFX.Core.Player, int>(OnStartedMission));
             server.RegisterEventHandler("curiosity:Server:Missions:EndMission", new Action<CitizenFX.Core.Player>(OnEndMission));
             server.RegisterEventHandler("curiosity:Server:Missions:VehicleTowed", new Action<CitizenFX.Core.Player>(OnVehicleTowed));
+        }
+
+        static void OnCalloutCompleted([FromSource] CitizenFX.Core.Player player, string encodedData)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            CalloutMessage calloutMessage = JsonConvert.DeserializeObject<CalloutMessage>(Encode.Base64ToString(encodedData));
+
+
+
+            session.Player.Send(NotificationType.CHAR_CALL911, 2, "Callout Completed", "Wrap Sheet", string.Empty);
+
+            // MessagePolicePlayers(session.Player, "Dispatch", string.Empty, $"{session.Player.Name} completed callout");
         }
 
         private static void OnVehicleTowed([FromSource] CitizenFX.Core.Player player)

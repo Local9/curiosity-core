@@ -4,6 +4,13 @@ namespace Curiosity.Callouts.Client.Utils
 {
     class Decorators
     {
+        public const string VEHICLE_STOLEN = "c::vehicle::stolen";
+        public const string VEHICLE_FLEE = "c::vehicle::flee";
+
+        public const string PED_FLEE = "c::vehicle::flee";
+        public const string PED_SHOOT = "c::vehicle::shoot";
+        public const string PED_ARREST = "c::vehicle::arrest";
+
         public static void Set(int handle, string property, object value)
         {
             if (value is int i)

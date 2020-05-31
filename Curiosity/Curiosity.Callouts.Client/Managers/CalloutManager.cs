@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Callouts.Client.Managers.Callouts;
+using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.EventWrapper;
 using Curiosity.Callouts.Shared.Utils;
 using System;
@@ -16,7 +17,7 @@ namespace Curiosity.Callouts.Client.Managers
 
         public CalloutManager()
         {
-            API.RegisterCommand("cot", new Action<int, List<object>, string>(OnRunCallout), false);
+            API.RegisterCommand("tco", new Action<int, List<object>, string>(OnRunCallout), false);
 
             EventHandlers[Events.Native.Client.OnClientResourceStart.Path] +=
                 Events.Native.Client.OnClientResourceStart.Action +=
@@ -25,13 +26,32 @@ namespace Curiosity.Callouts.Client.Managers
                         if (name != API.GetCurrentResourceName()) return;
 
                         registeredCallouts.Add(typeof(StolenVehicle));
-
                     };
         }
 
         private void OnRunCallout(int playerId, List<object> args, string raw)
         {
-            StartCallout();
+#if DEBUG
+            if (args.Count == 0)
+            {
+                return;
+            }
+
+            string calloutName = $"{args[0]}";
+
+            var newCallout = Activator.CreateInstance(typeof(StolenVehicle), Game.Player) as Callout;
+
+            switch(calloutName)
+            {
+                case "stolenVehicle":
+                    newCallout = Activator.CreateInstance(typeof(StolenVehicle), Game.Player) as Callout;
+                    break;
+            }
+
+            newCallout?.Prepare();
+            ActiveCallout = newCallout;
+            if (ActiveCallout != null) ActiveCallout.Ended += forcefully => { ActiveCallout = null; };
+#endif
         }
 
         [Tick]

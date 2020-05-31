@@ -1,8 +1,11 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Callouts.Client.Utils;
+using Curiosity.Callouts.Shared.Classes;
+using Curiosity.Callouts.Shared.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-
+using System.Security.Cryptography.X509Certificates;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
 using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
 
@@ -13,6 +16,8 @@ namespace Curiosity.Callouts.Client.Managers
     {
         public event Action<bool> Ended;
         public bool IsSetup = false;
+
+        internal virtual string Name { get; set; }
 
         protected internal List<Player> Players { get; }
         protected int progress = 1;
@@ -55,6 +60,13 @@ namespace Curiosity.Callouts.Client.Managers
             vehicle.Fx.IsPersistent = true;
             registeredVehicles.Add(vehicle);
             Logger.Log($"Registered vehicle {vehicle.Name} to callout {GetType().Name}");
+        }
+
+        internal void CompleteCallout(CalloutMessage calloutMessage)
+        {
+            string jsonMessage = JsonConvert.SerializeObject(calloutMessage);
+            string encoded = Encode.StringToBase64(jsonMessage);
+            BaseScript.TriggerServerEvent("", encoded);
         }
     }
 }

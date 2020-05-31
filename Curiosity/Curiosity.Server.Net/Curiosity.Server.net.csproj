@@ -96,6 +96,7 @@
     <Compile Include="Database\DatabaseUsersSkills.cs" />
     <Compile Include="Database\DatabaseUsers.cs" />
     <Compile Include="Entity\AdaptiveCard.cs" />
+    <Compile Include="Entity\CalloutMessage.cs" />
     <Compile Include="Entity\Discord\Converter.cs" />
     <Compile Include="Entity\Discord\Embed.cs" />
     <Compile Include="Entity\Discord\EmbedAuthor.cs" />
