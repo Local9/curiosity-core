@@ -266,6 +266,14 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 Game.PlayerPed.IsPositionFrozen = false;
 
                 Game.PlayerPed.Detach();
+                float positionZ = _originalPosition.Z;
+                Vector3 newNormal = Vector3.Zero;
+
+                if (API.GetGroundZAndNormalFor_3dCoord(_originalPosition.X, _originalPosition.Y, _originalPosition.Z, ref positionZ, ref newNormal))
+                {
+                    _originalPosition.Z = positionZ;
+                }
+
                 Game.PlayerPed.Position = _originalPosition;
 
                 _originalPosition = Vector3.Zero;
