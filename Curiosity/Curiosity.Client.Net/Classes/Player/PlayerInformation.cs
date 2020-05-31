@@ -22,8 +22,14 @@ namespace Curiosity.Client.net.Classes.Player
         static bool statsSet = false;
         static List<int> listOfIncidents = new List<int>();
 
+        static ExportDictionary ExportDictionary;
+
         public static async void Init()
         {
+            ExportDictionary.Add("IsDeveloper", new Func<bool>(() => {
+                return IsDeveloper();
+            }));
+
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:Information", new Action(GetPlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:UpdateFlags", new Action(OnFlagUpdate));

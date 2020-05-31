@@ -19,16 +19,7 @@ namespace Curiosity.Callouts.Client
 
             EventHandlers[Events.Client.Callout.EnableCalloutManager.Path] += Events.Client.Callout.EnableCalloutManager.Action += enableCallouts =>
             {
-                if (enableCallouts)
-                {
-                    Screen.ShowNotification($"~b~Callouts~s~: ~g~Enabled");
-                    Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
-                }
-                else
-                {
-                    Screen.ShowNotification($"~b~Callouts~s~: ~r~Disabled");
-                    Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
-                }
+                UpdateCalloutStatus(enableCallouts);
             };
 
             EventHandlers[Events.Native.Client.OnClientResourceStart.Path] += Events.Native.Client.OnClientResourceStart.Action +=
@@ -42,9 +33,23 @@ namespace Curiosity.Callouts.Client
                 };
         }
 
+        private void UpdateCalloutStatus(bool enableCallouts)
+        {
+            if (enableCallouts)
+            {
+                Screen.ShowNotification($"~b~Callouts~s~: ~g~Enabled");
+                Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
+            }
+            else
+            {
+                Screen.ShowNotification($"~b~Callouts~s~: ~r~Disabled");
+                Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
+            }
+        }
+
         private void OnPlayerSpawned(dynamic spawnInfo)
         {
-
+            BaseScript.TriggerEvent("curiosity:Client:Player:Information");
         }
     }
 }
