@@ -2,6 +2,7 @@
 using Curiosity.Shared.Server.net.Helpers;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,77 +22,93 @@ namespace Curiosity.Server.net.Database
 
         public static async Task<Dictionary<string, GlobalEntity.Skills>> GetSkills()
         {
-            Dictionary<string, GlobalEntity.Skills> skillsDictionary = new Dictionary<string, GlobalEntity.Skills>();
-
-            string query = "select skillId, skillTypeId, description, label, labelDescription from curiosity.skill;";
-
-            using (var result = mySql.QueryResult(query))
+            try
             {
-                ResultSet keyValuePairs = await result;
+                Dictionary<string, GlobalEntity.Skills> skillsDictionary = new Dictionary<string, GlobalEntity.Skills>();
 
-                await Delay(0);
+                string query = "select skillId, skillTypeId, description, label, labelDescription from curiosity.skill;";
 
-                if (keyValuePairs.Count == 0)
+                using (var result = mySql.QueryResult(query))
                 {
-                    Log.Warn("SKILLS -> No skills found");
+                    ResultSet keyValuePairs = await result;
+
+                    await Delay(0);
+
+                    if (keyValuePairs.Count == 0)
+                    {
+                        Log.Warn("SKILLS -> No skills found");
+                        return skillsDictionary;
+                    }
+
+                    foreach (Dictionary<string, object> keyValues in keyValuePairs)
+                    {
+                        GlobalEntity.Skills skills = new GlobalEntity.Skills
+                        {
+                            Id = int.Parse($"{keyValues["skillId"]}"),
+                            TypeId = (GlobalEnum.SkillType)int.Parse($"{keyValues["skillTypeId"]}"),
+                            Description = $"{keyValues["description"]}",
+                            Label = $"{keyValues["label"]}",
+                            LabelDescription = $"{keyValues["labelDescription"]}"
+                        };
+                        skillsDictionary.Add($"{keyValues["description"]}", skills);
+                    }
+
                     return skillsDictionary;
                 }
-
-                foreach (Dictionary<string, object> keyValues in keyValuePairs)
-                {
-                    GlobalEntity.Skills skills = new GlobalEntity.Skills
-                    {
-                        Id = int.Parse($"{keyValues["skillId"]}"),
-                        TypeId = (GlobalEnum.SkillType)int.Parse($"{keyValues["skillTypeId"]}"),
-                        Description = $"{keyValues["description"]}",
-                        Label = $"{keyValues["label"]}",
-                        LabelDescription = $"{keyValues["labelDescription"]}"
-                    };
-                    skillsDictionary.Add($"{keyValues["description"]}", skills);
-                }
-
-                return skillsDictionary;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[CRITICAL] Unable to get data to cache skills");
+                return null;
             }
         }
 
         public static async Task<ConcurrentDictionary<string, GlobalEntity.Skills>> GetSkills(int characterId)
         {
-            ConcurrentDictionary<string, GlobalEntity.Skills> skillsDictionary = new ConcurrentDictionary<string, GlobalEntity.Skills>();
-
-            string query = "select skill.skillId, skill.skillTypeId, skill.description, skill.label, skill.labelDescription, character_skill.experience from curiosity.character_skill inner join skill on character_skill.skillId = skill.skillId where character_skill.characterId = @characterId order by skill.skillTypeId;";
-
-            Dictionary<string, object> myParams = new Dictionary<string, object>();
-            myParams.Add("@characterId", characterId);
-
-            using (var result = mySql.QueryResult(query, myParams))
+            try
             {
-                ResultSet keyValuePairs = await result;
+                ConcurrentDictionary<string, GlobalEntity.Skills> skillsDictionary = new ConcurrentDictionary<string, GlobalEntity.Skills>();
 
-                await Delay(0);
+                string query = "select skill.skillId, skill.skillTypeId, skill.description, skill.label, skill.labelDescription, character_skill.experience from curiosity.character_skill inner join skill on character_skill.skillId = skill.skillId where character_skill.characterId = @characterId order by skill.skillTypeId;";
 
-                if (keyValuePairs.Count == 0)
+                Dictionary<string, object> myParams = new Dictionary<string, object>();
+                myParams.Add("@characterId", characterId);
+
+                using (var result = mySql.QueryResult(query, myParams))
                 {
-                    // Log.Warn($"SKILLS -> No skills found for user {userId}, possible they are new.");
-                    return new ConcurrentDictionary<string, GlobalEntity.Skills>();
-                }
+                    ResultSet keyValuePairs = await result;
 
-                foreach (Dictionary<string, object> keyValues in keyValuePairs)
-                {
-                    GlobalEntity.Skills skills = new GlobalEntity.Skills
+                    await Delay(0);
+
+                    if (keyValuePairs.Count == 0)
                     {
-                        Id = int.Parse($"{keyValues["skillId"]}"),
-                        TypeId = (GlobalEnum.SkillType)int.Parse($"{keyValues["skillTypeId"]}"),
-                        Description = $"{keyValues["description"]}",
-                        Label = $"{keyValues["label"]}",
-                        LabelDescription = $"{keyValues["labelDescription"]}",
-                        Value = int.Parse($"{keyValues["experience"]}")
-                    };
-                    skillsDictionary.GetOrAdd($"{keyValues["description"]}", skills);
-                }
+                        // Log.Warn($"SKILLS -> No skills found for user {userId}, possible they are new.");
+                        return new ConcurrentDictionary<string, GlobalEntity.Skills>();
+                    }
 
-                return skillsDictionary;
+                    foreach (Dictionary<string, object> keyValues in keyValuePairs)
+                    {
+                        GlobalEntity.Skills skills = new GlobalEntity.Skills
+                        {
+                            Id = int.Parse($"{keyValues["skillId"]}"),
+                            TypeId = (GlobalEnum.SkillType)int.Parse($"{keyValues["skillTypeId"]}"),
+                            Description = $"{keyValues["description"]}",
+                            Label = $"{keyValues["label"]}",
+                            LabelDescription = $"{keyValues["labelDescription"]}",
+                            Value = int.Parse($"{keyValues["experience"]}")
+                        };
+                        skillsDictionary.GetOrAdd($"{keyValues["description"]}", skills);
+                    }
+
+                    return skillsDictionary;
+                }
             }
-        }
+            catch (Exception ex)
+            {
+                Log.Error($"[CRITICAL] Unable to get skill data for {characterId}");
+                return null;
+            }
+}
 
         public static void IncreaseSkill(long characterId, int skillId, int experience)
         {

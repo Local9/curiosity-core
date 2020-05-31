@@ -35,11 +35,21 @@ namespace Curiosity.Server.net.Classes
                 {
                     try
                     {
-                        int xp = 0;
-                        int.TryParse(amt, out xp);
-                        IncreaseSkillByPlayerExport(player, skill, xp);
+                        if (!SessionManager.PlayerList.ContainsKey(player))
+                        {
+                            Log.Error($"No player found with the handle {player}");
+                            return null;
+                        }
 
-                        Log.Success($"[EXPORT] increaseSkill called, {player}, {skill}, {xp}");
+                        int xp = 0;
+
+                        if (!int.TryParse(amt, out xp))
+                        {
+                            Log.Error($"XP of '{xp}' is not a valid number!");
+                            return null;
+                        }
+
+                        IncreaseSkillByPlayerExport(player, skill, xp);
 
                         if (Server.ShowExportMessages)
                             Log.Success($"[EXPORT] increaseSkill called, {player}, {skill}, {xp}");
@@ -216,7 +226,7 @@ namespace Curiosity.Server.net.Classes
 
                 if (!Server.isLive)
                 {
-                    Log.Success($"IncreaseSkill: {skill} + {experience}");
+                    Log.Success($"IncreaseSkill {session.Player.Name}: {skill} + {experience}");
                 }
 
                 Database.DatabaseUsersSkills.IncreaseSkill(characterId, skills[skill].Id, experience);
