@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Curiosity.Callouts.Client")]
+[assembly: AssemblyTitle("Curiosity.Callouts.Server")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Curiosity.Callouts.Client")]
+[assembly: AssemblyProduct("Curiosity.Callouts.Server")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9b7efe35-1cb0-47cf-a3b9-99bc4f1d511c")]
+[assembly: Guid("98b7061b-d34e-4549-8467-4b6068ea87b8")]
 
 // Version information for an assembly consists of the following four values:
 //

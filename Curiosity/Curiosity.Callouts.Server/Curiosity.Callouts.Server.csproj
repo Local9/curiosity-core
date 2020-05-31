@@ -4,20 +4,20 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9B7EFE35-1CB0-47CF-A3B9-99BC4F1D511C}</ProjectGuid>
+    <ProjectGuid>{98B7061B-D34E-4549-8467-4B6068EA87B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.Callouts.Client</RootNamespace>
-    <AssemblyName>Curiosity.Callouts.Client.net</AssemblyName>
+    <RootNamespace>Curiosity.Callouts.Server</RootNamespace>
+    <AssemblyName>Curiosity.Callouts.Server.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>embedded</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity-callouts\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,11 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.2513\lib\net45\CitizenFX.Core.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\CitizenFX.Core.Server.1.0.2561\lib\net45\CitizenFX.Core.Server.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,30 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Ped.cs" />
-    <Compile Include="Classes\Persuit.cs" />
-    <Compile Include="Classes\Vehicle.cs" />
-    <Compile Include="Managers\Callout.cs" />
-    <Compile Include="Managers\CalloutManager.cs" />
-    <Compile Include="Managers\Callouts\StolenVehicle.cs" />
-    <Compile Include="Managers\PersuitManager.cs" />
-    <Compile Include="Managers\SpawnManager.cs" />
-    <Compile Include="PluginManager.cs" />
+    <Compile Include="Managers\CalloutDistributor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\Collections.cs" />
-    <Compile Include="Utils\Decorators.cs" />
     <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Utils\Logger.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Curiosity.Callouts.Shared\Curiosity.Callouts.Shared.csproj">
       <Project>{05f001db-1c17-4a57-ae5f-85a4308ea220}</Project>
       <Name>Curiosity.Callouts.Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

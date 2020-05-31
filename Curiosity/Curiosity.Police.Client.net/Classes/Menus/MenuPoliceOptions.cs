@@ -16,7 +16,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static int _patrolZone = 0;
 
         static bool _IsActive = false;
-        static bool _IsOnDuty = false;
+        static bool _AcceptingCallouts = false;
         static bool _IsTrafficStopsActive = false;
         static bool _IsRandomEventsActive = false;
         static bool _IsBackupActive = false;
@@ -35,7 +35,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static MenuCheckboxItem menuCheckboxBackup = new MenuCheckboxItem("Receive Back Up Calls", _IsBackupActive) { Description = "Show information when a player requests backup" };
         static MenuCheckboxItem menuCheckboxDispatchMessages = new MenuCheckboxItem("Receive Dispatch Messages", _AllowDispatchMessages) { Description = "Show information when another player completes a task" };
         static MenuCheckboxItem menuCheckboxTrafficStops = new MenuCheckboxItem("Enable Traffic Stops", _IsTrafficStopsActive);
-        static MenuCheckboxItem menuCheckboxRandomCallouts = new MenuCheckboxItem("Accept Dispatch Calls", _IsOnDuty) { Description = "Random Dispatch Mission" };
+        static MenuCheckboxItem menuCheckboxRandomCallouts = new MenuCheckboxItem("Accept Dispatch Calls", _AcceptingCallouts) { Description = "Random Dispatch Mission" };
 
         static MenuCheckboxItem menuCheckboxRandomEvents = new MenuCheckboxItem("Enable Random Events", _IsRandomEventsActive) { Description = "Still in development, may be buggy" };
 
@@ -58,8 +58,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             _IsActive = active;
             _ActiveJob = job;
 
-            if (_IsOnDuty != onduty)
-                _IsOnDuty = onduty;
+            if (_AcceptingCallouts != onduty)
+                _AcceptingCallouts = onduty;
         }
 
         static void OnTrafficStopState(bool state)
@@ -126,8 +126,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             {
                 menuItem.Enabled = false;
 
-                _IsOnDuty = newCheckedState;
-                BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", _IsActive, _IsOnDuty, _ActiveJob);
+                _AcceptingCallouts = newCheckedState;
+                BaseScript.TriggerEvent("curiosity:client:callout:manager:enable", _AcceptingCallouts);
 
                 await Client.Delay(3000);
                 menuItem.Enabled = true;
