@@ -18,6 +18,8 @@ namespace Curiosity.Callouts.Client.Classes
         internal string Name => Fx.Model.ToString();
         internal bool IsInVehicle { get; set; }
 
+        internal bool IsKneeling { get; set; }
+
         internal Ped(CitizenFX.Core.Ped fx)
         {
             Fx = fx;
@@ -31,7 +33,37 @@ namespace Curiosity.Callouts.Client.Classes
         [Tick]
         internal async void Update()
         {
-            await System.Threading.Tasks.Task.FromResult(100);
+            if (Fx.IsBeingStunned)
+            {
+                Fx.Health = 200;
+
+                if (Utility.RANDOM.Bool(0.8f) && !IsKneeling)
+                {
+                    RunSequence(Sequence.KNEEL);
+                }
+            }
+        }
+
+        private void RunSequence(Sequence sequence)
+        {
+            switch (sequence)
+            {
+                case Sequence.KNEEL:
+                    Fx.CanRagdoll = true;
+                    Fx.Weapons.RemoveAll();
+
+                    TaskSequence taskSequence = new TaskSequence();
+                    taskSequence.AddTask.PlayAnimation("random@arrests", "idle_2_hands_up", 8.0f, -1, AnimationFlags.StayInEndFrame);
+                    taskSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_idle", 8.0f, -1, AnimationFlags.StayInEndFrame);
+                    taskSequence.AddTask.PlayAnimation("random@arrests@busted", "enter", 8.0f, -1, AnimationFlags.StayInEndFrame);
+                    taskSequence.AddTask.PlayAnimation("random@arrests@busted", "idle_a", 8.0f, -1, (AnimationFlags)9);
+
+                    Fx.Task.PerformSequence(taskSequence);
+
+                    IsKneeling = true;
+
+                    break;
+            }
         }
 
         private async void ApplyHandcuffs()
@@ -93,6 +125,11 @@ namespace Curiosity.Callouts.Client.Classes
         {
             foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
             Fx.IsPersistent = false;
+        }
+
+        internal enum Sequence
+        {
+            KNEEL
         }
     }
 }
