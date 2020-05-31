@@ -14,23 +14,12 @@ namespace Curiosity.Callouts.Client
 
         public Plugin()
         {
-            //List<Base> objects = new List<Base>();
-            //DirectoryInfo dir = new DirectoryInfo(resourcePath);
+            DirectoryInfo dir = new DirectoryInfo(resourcePath);
 
-            //foreach (FileInfo file in dir.GetFiles("*.net.dll"))
-            //{
-            //    Assembly assembly = Assembly.LoadFrom(file.FullName);
-            //    foreach (Type type in assembly.GetTypes())
-            //    {
-            //        if (type.IsSubclassOf(typeof(Base)) && type.IsAbstract == false)
-            //        {
-            //            Base b = type.InvokeMember(null,
-            //                                       BindingFlags.CreateInstance,
-            //                                       null, null, null) as Base;
-            //            objects.Add(b);
-            //        }
-            //    }
-            //}
+            foreach (FileInfo file in dir.GetFiles("*.net.dll"))
+            {
+
+            }
         }
     }
 }

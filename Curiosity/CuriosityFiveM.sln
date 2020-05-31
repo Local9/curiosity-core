@@ -136,6 +136,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Callouts.Client",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.CasinoSystems.Client", "Curiosity.CasinoSystems.Client\Curiosity.CasinoSystems.Client.csproj", "{5FFB1905-75CC-4D92-8F20-678A08113953}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Callouts", "Callouts", "{23FDE4D3-3A19-4DEE-BB6B-B5013E89A040}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
