@@ -15,7 +15,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         private const string LOADOUT_SECONDARY_KEY = "Loadout:Secondary";
 
         static Client client = Client.GetInstance();
-        static Menu LoadoutMenu;
+        public static Menu mainLoadoutMenu;
 
         static List<string> listPrimaryNames = new List<string>();
         static List<string> listSecondaryNames = new List<string>();
@@ -24,6 +24,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static List<string> listSecondaryWeapons = new List<string>();
 
         static Dictionary<string, WeaponHash> weapons = new Dictionary<string, WeaponHash>();
+        static Dictionary<MenuItem, string> weaponComponents = new Dictionary<MenuItem, string>();
 
         static MenuListItem menuListItemPrimary;
         static MenuListItem menuListItemSecondary;
@@ -43,6 +44,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             listPrimaryWeapons.Add("weapon_smg");
             listPrimaryWeapons.Add("weapon_pumpshotgun");
             listPrimaryWeapons.Add("weapon_carbinerifle");
+            listPrimaryWeapons.Add("weapon_sniperrifle");
 
             foreach (string str in listPrimaryWeapons)
             {
@@ -121,8 +123,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         {
             if (positionMenuOpen.DistanceToSquared(Game.PlayerPed.Position) > 5f)
             {
-                if (LoadoutMenu != null)
-                    LoadoutMenu.CloseMenu();
+                if (mainLoadoutMenu != null)
+                    mainLoadoutMenu.CloseMenu();
 
                 client.DeregisterTickHandler(CheckDistance);
             }
@@ -143,21 +145,101 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
             client.RegisterTickHandler(CheckDistance);
 
-            if (LoadoutMenu == null)
+            if (mainLoadoutMenu == null)
             {
-                LoadoutMenu = new Menu("Loadout", "Select your weapons");
-                LoadoutMenu.OnMenuOpen += LoadoutMenu_OnMenuOpen;
+                mainLoadoutMenu = new Menu("Loadout", "Select your weapons");
+                mainLoadoutMenu.OnMenuOpen += LoadoutMenu_OnMenuOpen;
 
-                LoadoutMenu.OnListItemSelect += LoadoutMenu_OnListItemSelect;
-                LoadoutMenu.OnItemSelect += LoadoutMenu_OnItemSelect;
-                LoadoutMenu.OnMenuClose += LoadoutMenu_OnMenuClose;
+                mainLoadoutMenu.OnListItemSelect += LoadoutMenu_OnListItemSelect;
+                mainLoadoutMenu.OnListIndexChange += LoadoutMenu_OnListIndexChange;
+                mainLoadoutMenu.OnItemSelect += LoadoutMenu_OnItemSelect;
+                mainLoadoutMenu.OnMenuClose += LoadoutMenu_OnMenuClose;
 
-                MenuController.AddMenu(LoadoutMenu);
+                MenuController.AddMenu(mainLoadoutMenu);
                 MenuController.EnableMenuToggleKeyOnController = false;
             }
 
-            LoadoutMenu.ClearMenuItems();
-            LoadoutMenu.OpenMenu();
+            mainLoadoutMenu.ClearMenuItems();
+            mainLoadoutMenu.OpenMenu();
+        }
+
+        private static void LoadoutMenu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
+        {
+            if (listItem == menuListItemPrimary)
+            {
+                if (Game.PlayerPed.Weapons.HasWeapon((WeaponHash)GetHashKey(listPrimaryWeapons[newSelectionIndex]))) return;
+
+                string weaponHash = listPrimaryWeapons[newSelectionIndex];
+
+                foreach (string str in listPrimaryWeapons)
+                {
+                    Game.PlayerPed.Weapons.Remove((WeaponHash)GetHashKey(str));
+                }
+
+                Game.PlayerPed.Weapons.Give((WeaponHash)GetHashKey(weaponHash), 0, false, true);
+
+                if (weaponHash == "weapon_assaultshotgun")
+                {
+                    SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(listPrimaryWeapons[newSelectionIndex]), 40);
+                    GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.AssaultShotgun, (uint)GetHashKey("COMPONENT_AT_PI_FLSH"));
+                }
+                else
+                {
+                    if (weaponHash == "weapon_carbinerifle")
+                    {
+                        if (Player.PlayerInformation.playerInfo.Skills.ContainsKey("policexp"))
+                        {
+                            int xp = Player.PlayerInformation.playerInfo.Skills["policexp"].Value;
+
+                            if (xp > 500)
+                            {
+                                GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.CarbineRifle, (uint)GetHashKey("COMPONENT_AT_AR_FLSH")); // correct
+                            }
+
+                            if (xp >= 5000)
+                            {
+                                GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.CarbineRifle, (uint)GetHashKey("COMPONENT_AT_AR_AFGRIP")); // correct
+                                SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(listPrimaryWeapons[newSelectionIndex]), 180);
+                            }
+                            else
+                            {
+                                SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(listPrimaryWeapons[newSelectionIndex]), 120);
+                            }
+
+                            if (xp >= 10000)
+                            {
+                                GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.CarbineRifle, (uint)GetHashKey("COMPONENT_CARBINERIFLE_CLIP_02")); // correct
+                            }
+                            
+                            if (xp >= 100000)
+                            {
+                                GiveWeaponComponentToPed(Game.PlayerPed.Handle, (uint)WeaponHash.CarbineRifle, (uint)WeaponComponentHash.CarbineRifleVarmodLuxe); // correct
+                            }
+                        }
+                    }
+                    else
+                    {
+                        SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(listPrimaryWeapons[newSelectionIndex]), 120);
+                    }
+                }
+
+                SetResourceKvp(LOADOUT_PRIMARY_KEY, listPrimaryWeapons[newSelectionIndex]);
+            }
+
+            if (listItem == menuListItemSecondary)
+            {
+                if (Game.PlayerPed.Weapons.HasWeapon((WeaponHash)GetHashKey(listSecondaryWeapons[newSelectionIndex]))) return;
+
+                foreach (string str in listSecondaryWeapons)
+                {
+                    Game.PlayerPed.Weapons.Remove((WeaponHash)GetHashKey(str));
+                }
+
+                Game.PlayerPed.Weapons.Give((WeaponHash)GetHashKey(listSecondaryWeapons[newSelectionIndex]), 0, false, true);
+                SetPedAmmo(Game.PlayerPed.Handle, (uint)GetHashKey(listSecondaryWeapons[newSelectionIndex]), 50);
+
+                SetResourceKvp(LOADOUT_SECONDARY_KEY, listSecondaryWeapons[newSelectionIndex]);
+            }
         }
 
         private static void LoadoutMenu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
@@ -185,8 +267,8 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             MenuController.DontOpenAnyMenu = true;
             Game.PlayerPed.CanRagdoll = true;
             MenuBaseFunctions.MenuClose();
-            LoadoutMenu.ClearMenuItems();
-            LoadoutMenu = null;
+            mainLoadoutMenu.ClearMenuItems();
+            mainLoadoutMenu = null;
         }
 
         private static void LoadoutMenu_OnListItemSelect(Menu menu, MenuListItem listItem, int selectedIndex, int itemIndex)
@@ -232,20 +314,20 @@ namespace Curiosity.Police.Client.net.Classes.Menus
 
         private static void LoadoutMenu_OnMenuOpen(Menu menu)
         {
-            LoadoutMenu.ClearMenuItems(); ;
+            mainLoadoutMenu.ClearMenuItems(); ;
 
             Game.PlayerPed.Weapons.RemoveAll();
 
-            menuListItemPrimary = new MenuListItem("Collect Primary", listPrimaryNames, 0) { Description = "Press ~r~ENTER~s~ to equip primary." };
-            menuListItemSecondary = new MenuListItem("Collect Secondary", listSecondaryNames, 0) { Description = "Press ~r~ENTER~s~ to equip secondary." };
+            menuListItemPrimary = new MenuListItem("Primary", listPrimaryNames, 0);
+            menuListItemSecondary = new MenuListItem("Secondary", listSecondaryNames, 0);
 
             menuItemEquipExtras = new MenuItem("Collect Tools") { Description = "Press ~r~ENTER~s~ to equip tools." };
             menuItemEquipArmor = new MenuItem("Equip Armor") { Description = "Press ~r~ENTER~s~ to equip armor." };
 
-            LoadoutMenu.AddMenuItem(menuListItemPrimary);
-            LoadoutMenu.AddMenuItem(menuListItemSecondary);
-            LoadoutMenu.AddMenuItem(menuItemEquipExtras);
-            LoadoutMenu.AddMenuItem(menuItemEquipArmor);
+            mainLoadoutMenu.AddMenuItem(menuListItemPrimary);
+            mainLoadoutMenu.AddMenuItem(menuListItemSecondary);
+            mainLoadoutMenu.AddMenuItem(menuItemEquipExtras);
+            mainLoadoutMenu.AddMenuItem(menuItemEquipArmor);
 
         }
     }
