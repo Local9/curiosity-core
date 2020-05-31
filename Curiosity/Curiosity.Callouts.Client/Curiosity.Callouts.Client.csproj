@@ -53,6 +53,8 @@
     <Compile Include="Managers\Callout.cs" />
     <Compile Include="Managers\CalloutManager.cs" />
     <Compile Include="Managers\Callouts\StolenVehicle.cs" />
+    <Compile Include="Managers\Callouts\zTemplateFile.cs" />
+    <Compile Include="Managers\Callouts\StoreShooting.cs" />
     <Compile Include="Managers\PersuitManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Managers\SpawnManager.cs" />

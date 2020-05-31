@@ -58,7 +58,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         {
             base.Prepare();
 
-            base.Name = "StolenVehicle";
+            base.Name = "Stolen Vehicle";
 
             stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
                 Players[0].Character.Position.AroundStreet(250f, 600f));

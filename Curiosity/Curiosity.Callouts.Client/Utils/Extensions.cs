@@ -61,5 +61,10 @@ namespace Curiosity.Callouts.Client.Utils
         {
             return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
         }
+
+        public static bool IsPlayingAnim(this Entity entity, string animSet, string animName)
+        {
+            return API.IsEntityPlayingAnim(entity.Handle, animSet, animName, 3);
+        }
     }
 }
