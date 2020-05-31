@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Callouts.Client.Managers.Callouts;
 using Curiosity.Callouts.Shared.EventWrapper;
 using Curiosity.Callouts.Shared.Utils;
 using System;
@@ -15,22 +16,32 @@ namespace Curiosity.Callouts.Client.Managers
 
         public CalloutManager()
         {
+            API.RegisterCommand("cot", new Action<int, List<object>, string>(OnRunCallout), false);
+
             EventHandlers[Events.Native.Client.OnClientResourceStart.Path] +=
                 Events.Native.Client.OnClientResourceStart.Action +=
                     name =>
                     {
                         if (name != API.GetCurrentResourceName()) return;
 
+                        registeredCallouts.Add(typeof(StolenVehicle));
+
                     };
+        }
+
+        private void OnRunCallout(int playerId, List<object> args, string raw)
+        {
+            StartCallout();
         }
 
         [Tick]
         private async Task Update()
         {
             if (ActiveCallout == null) return;
+            if (!ActiveCallout.IsSetup) return;
             if (ActiveCallout.Players[0] == LocalPlayer) ActiveCallout.Tick();
 
-            await Task.FromResult(0);
+            await Task.FromResult(100);
         }
 
         internal static void StartCallout()

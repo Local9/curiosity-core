@@ -12,6 +12,7 @@ namespace Curiosity.Callouts.Client.Managers
     internal abstract class Callout
     {
         public event Action<bool> Ended;
+        public bool IsSetup = false;
 
         protected internal List<Player> Players { get; }
         protected int progress = 1;
@@ -29,6 +30,7 @@ namespace Curiosity.Callouts.Client.Managers
 
         internal virtual void Prepare()
         {
+            this.IsSetup = false;
             Logger.Log($"Preparing callout {GetType().Name}");
         }
 

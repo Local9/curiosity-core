@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Callouts.Client.Utils;
+using Curiosity.Callouts.Shared.Utils;
 using System;
 using System.Threading.Tasks;
 
