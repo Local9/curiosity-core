@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Classes;
@@ -66,7 +67,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position);
 
-            if (Utility.RANDOM.NextDouble() > .8)
+            if (Utility.RANDOM.Bool(0.8f))
             {
                 criminal.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
                 criminal.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
@@ -92,6 +93,21 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 return;
             }
 
+            float distance = Game.PlayerPed.Position.Distance(criminal.Position);
+            Screen.ShowSubtitle($"Distance: {distance}");
+
+            if (distance > 500 && distance < 800)
+            {
+                Screen.ShowSubtitle($"~o~WARNING~s~: Suspect is getting away!");
+            }
+
+            if (distance > 850)
+            {
+                Screen.ShowSubtitle($"~r~Suspect has got away! Get'em next time.");
+                End();
+                return;
+            }
+
             switch (progress)
             {
                 case 1:
@@ -110,17 +126,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 default:
                     End();
                     break;
-            }
-
-            if (criminal.Position.Distance(Game.PlayerPed.Position) > 250f)
-            {
-                Screen.ShowSubtitle($"~o~WARNING~s~ Suspect is getting away!");
-            }
-
-            if (criminal.Position.Distance(Game.PlayerPed.Position) > 700f)
-            {
-                Screen.ShowSubtitle($"~r~Suspect has got away!");
-                End();
             }
         }
     }
