@@ -95,7 +95,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             // Tools
             Classes.Menus.Developer.Init();
-            Classes.Menus.MissionCreator.MissionMenu.Init();
+            // Classes.Menus.MissionCreator.MissionMenu.Init();
         }
 
         public static void MenuOpen(bool isOpen)
