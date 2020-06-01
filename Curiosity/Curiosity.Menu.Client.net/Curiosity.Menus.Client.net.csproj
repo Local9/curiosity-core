@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Classes\Data\CompanionData.cs" />
     <Compile Include="Classes\Menus\Developer.cs" />
+    <Compile Include="Classes\Menus\Staff.cs" />
     <Compile Include="Classes\Menus\Donator.cs" />
     <Compile Include="Classes\Menus\Inventory.cs" />
     <Compile Include="Classes\Menus\MenuBase.cs" />

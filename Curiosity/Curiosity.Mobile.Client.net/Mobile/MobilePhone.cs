@@ -172,17 +172,8 @@ namespace Curiosity.Mobile.Client.net.Mobile
 
         static async Task OnMobileCreationTick()
         {
-            if (Game.PlayerPed.IsDead)
-            {
-                await Task.FromResult(0);
-                return;
-            }
-
-            if (IsMenuOpen)
-            {
-                await Task.FromResult(0);
-                return;
-            }
+            if (Game.PlayerPed.IsDead) return;
+            if (IsMenuOpen) return;
 
             if (IsMobilePhoneOpen)
             {

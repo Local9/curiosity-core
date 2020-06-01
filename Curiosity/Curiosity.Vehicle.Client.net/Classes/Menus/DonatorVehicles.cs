@@ -70,8 +70,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
             menu.ClearMenuItems();
         }
 
-        private static void Menu_OnMenuOpen(Menu menu)
+        private async static void Menu_OnMenuOpen(Menu menu)
         {
+            await BaseScript.Delay(10);
             MenuBaseFunctions.MenuOpen();
             menu.AddMenuItem(new MenuItem("Loading...") { Enabled = false });
         }
