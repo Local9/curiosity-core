@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Menus.Client.net.Extensions;
 using MenuAPI;
 using System;
+using System.Linq;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus
@@ -10,7 +12,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
     {
         static bool menuSetup = false;
 
-        static bool _debugAreas = false, _developerNpcUiEnable = false, __developerVehicleUiEnable = false;
+        static bool _debugAreas = false, _developerNpcUiEnable = false, __developerVehicleUiEnable = false, _godMode = false, _allWeapons = false;
 
         static Client client = Client.GetInstance();
         static Menu menu = new Menu("Developer Menu", "Various Settings or options");
@@ -20,6 +22,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static MenuItem mItemRefuel = new MenuItem("Refuel Vehicle");
         // Debuging
         static MenuCheckboxItem menuCheckboxItemDebugAreas = new MenuCheckboxItem("Draw Area Debug", _debugAreas);
+        static MenuCheckboxItem menuCheckboxGodMode = new MenuCheckboxItem("God Mode", _godMode);
+        static MenuCheckboxItem menuCheckboxGiveAllWeapons = new MenuCheckboxItem("All Weapons", _allWeapons);
         static MenuCheckboxItem menuCheckboxItemDeveloperNpcUi = new MenuCheckboxItem("Show Interactive NPC UI", _developerNpcUiEnable);
         static MenuCheckboxItem menuCheckboxItemDeveloperVehUi = new MenuCheckboxItem("Show Interactive Veh UI", __developerVehicleUiEnable);
 
@@ -60,6 +64,44 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         private static void Menu_OnCheckboxChange(Menu menu, MenuCheckboxItem menuItem, int itemIndex, bool newCheckedState)
         {
+            if (menuItem == menuCheckboxGodMode)
+            {
+                string msg = "~b~God Mode~s~: ~r~Disabled";
+
+                if (newCheckedState)
+                    msg = "~b~God Mode~s~: ~g~Enabled";
+
+                Screen.ShowNotification(msg);
+
+                Game.PlayerPed.IsInvincible = newCheckedState;
+                Game.PlayerPed.ClearBloodDamage();
+                Game.PlayerPed.ClearLastWeaponDamage();
+            }
+
+            if (menuItem == menuCheckboxGiveAllWeapons)
+            {
+                string msg = "~b~All Weapons~s~: ~r~Disabled";
+
+                if (newCheckedState)
+                    msg = "~b~All Weapons~s~: ~g~Enabled";
+
+                Screen.ShowNotification(msg);
+
+                if (newCheckedState)
+                {
+                    Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
+                    {
+                        Game.PlayerPed.Weapons.Give(w, 999, false, true);
+                        Game.PlayerPed.Weapons[w].InfiniteAmmo = true;
+                        Game.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
+                    });
+                }
+                else
+                {
+                    Game.PlayerPed.Weapons.RemoveAll();
+                }
+            }
+
             if (menuItem == menuCheckboxItemDebugAreas)
             {
                 _debugAreas = newCheckedState;
@@ -94,6 +136,9 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         {
             MenuBase.MenuOpen(true);
             menu.ClearMenuItems();
+
+            menu.AddMenuItem(menuCheckboxGodMode);
+            menu.AddMenuItem(menuCheckboxGiveAllWeapons);
 
             bool enableVehicleOptions = Client.CurrentVehicle != null;
 
