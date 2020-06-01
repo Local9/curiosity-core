@@ -151,12 +151,11 @@ namespace Curiosity.Callouts.Client.Classes
 
         async Task OnPedInteractionCheck()
         {
+            if (IsHostage) return;
+
             float distanceCheck = Fx.IsInVehicle() ? 3f : 1.5f;
 
             string message = $"Press ~INPUT_CONTEXT~ to interact";
-
-            if (IsHostage)
-                message = $"Press ~INPUT_CONTEXT~ to release";
 
             if (Game.PlayerPed.Position.Distance(Fx.Position) < distanceCheck)
             {
@@ -164,15 +163,7 @@ namespace Curiosity.Callouts.Client.Classes
 
                 if (Game.IsControlJustPressed(0, Control.Context))
                 {
-                    if (IsHostage)
-                    {
-                        RunSequence(Sequence.UNKNEEL_AND_FLEE);
-                        Decorators.Set(Fx.Handle, Decorators.PED_RELEASED, true);
-                    }
-                    else
-                    {
-
-                    }
+                    // what do I want to do with you
                 }
             }
         }
