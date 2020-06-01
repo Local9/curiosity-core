@@ -58,7 +58,7 @@ namespace Curiosity.Missions.Client.net
 
         public const string DECOR_PED_MISSION = "c::ped::mission";
         public const string DECOR_VEHICLE_MISSION = "curiosity::police::vehicle::mission";
-        public const string DECOR_PED_HOSTAGE = "curiosity::police::ped::hostage";
+        public const string DECOR_PED_HOSTAGE = "c::ped::hostage";
 
         public static Vehicle CurrentVehicle
         {
