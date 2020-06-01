@@ -80,7 +80,7 @@ namespace Curiosity.Callouts.Client.Managers
             if (TimeCalloutCreated == 0)
                 TimeCalloutCreated = API.GetGameTimer();
 
-            if ((API.GetGameTimer() - TimeCalloutCreated) > 5000)
+            if ((API.GetGameTimer() - TimeCalloutCreated) > 5000 && !ActiveCallout.IsSetup)
             {
                 Screen.ShowNotification($"Callout taking too long to create.");
                 Screen.ShowNotification($"Did you miss the IsSetup Flag?");
