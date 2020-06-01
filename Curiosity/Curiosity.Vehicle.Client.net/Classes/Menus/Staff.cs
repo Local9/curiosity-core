@@ -23,7 +23,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
             MenuController.DontOpenAnyMenu = true;
         }
 
-        private static void OpenMenu()
+        private async static void OpenMenu()
         {
             if (!Player.PlayerInformation.IsStaff()) return;
 
@@ -43,7 +43,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
                 MenuController.EnableManualGCs = false;
             }
 
-            MenuBaseFunctions.MenuOpen();
+            await BaseScript.Delay(500);
+
             staffMenu.OpenMenu();
         }
 
@@ -56,7 +57,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
         private async static void Menu_OnMenuOpen(Menu menu)
         {
             SetupMenu();
-            await BaseScript.Delay(10);
+            await BaseScript.Delay(100);
+            MenuBaseFunctions.MenuOpen();
         }
 
         static void SetupMenu()
@@ -172,9 +174,6 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
         private static void VehicleClassMenu_OnMenuClose(Menu menu)
         {
             MenuController.DontOpenAnyMenu = true;
-
-            MenuBaseFunctions.MenuOpen();
-            staffMenu.OpenMenu();
         }
 
         private static void VehicleClassMenu_OnMenuOpen(Menu menu)
