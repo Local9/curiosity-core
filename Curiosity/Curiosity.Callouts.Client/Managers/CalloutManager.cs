@@ -63,11 +63,6 @@ namespace Curiosity.Callouts.Client.Managers
             newCallout?.Prepare();
             ActiveCallout = newCallout;
 
-            if (PlayerManager.IsDeveloper())
-            {
-                Screen.ShowNotification($"Loading {ActiveCallout?.Name}");
-            }
-
             if (ActiveCallout != null) ActiveCallout.Ended += forcefully => { ActiveCallout = null; };
 #endif
         }
