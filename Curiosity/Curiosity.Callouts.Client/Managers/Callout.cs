@@ -14,6 +14,8 @@ namespace Curiosity.Callouts.Client.Managers
     [Serializable]
     internal abstract class Callout
     {
+        // Consider manual callout end
+
         public event Action<bool> Ended;
         public bool IsSetup = false;
 

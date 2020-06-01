@@ -82,6 +82,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             criminal.AttachBlip(BlipColor.Red, true);
             PursuitManager.StartNewPursuit(this);
 
+            stolenVehicle.IsSpikable = true;
+
             base.IsSetup = true;
         }
 
@@ -118,10 +120,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     break;
                 case 1:
                     if (!criminal.IsDead) return;
-                    progress++;
-                    break;
-                case 2:
-                    
                     progress++;
                     break;
                 default:
