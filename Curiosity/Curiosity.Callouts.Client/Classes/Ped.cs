@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using Curiosity.Callouts.Client.Managers;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Utils;
 using System;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 namespace Curiosity.Callouts.Client.Classes
 {
     [Serializable]
-    internal class Ped
+    internal class Ped : Entity, IEquatable<Ped>
     {
         internal CitizenFX.Core.Ped Fx { get; set; }
 
@@ -16,35 +18,95 @@ namespace Curiosity.Callouts.Client.Classes
         internal Tasks Task => Fx.Task;
         internal bool IsDead => Fx.IsDead;
         internal string Name => Fx.Model.ToString();
+        internal bool IsBeingStunned => Fx.IsBeingStunned;
         internal bool IsInVehicle { get; set; }
 
         internal bool IsKneeling { get; set; }
 
-        internal Ped(CitizenFX.Core.Ped fx)
+        private EntityEventWrapper _eventWrapper;
+        private long TimeOfDeath = 0;
+
+        internal Ped(CitizenFX.Core.Ped fx) : base(fx.Handle)
         {
             Fx = fx;
 
-            Fx.AlwaysKeepTask = true;
+            this._eventWrapper = new EntityEventWrapper(this.Fx);
+            this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
+            this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
+            this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
+            Fx.AlwaysKeepTask = true;
+            Fx.DropsWeaponsOnDeath = false;
+            Fx.IsPersistent = true;
+            Fx.Health = 200;
+
+            API.SetPedFleeAttributes(Fx.Handle, 0, false);
             API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
             API.TaskSetBlockingOfNonTemporaryEvents(Fx.Handle, true);
+            API.SetPedDiesInWater(Fx.Handle, false);
+            API.SetPedDiesWhenInjured(Fx.Handle, false);
+            API.SetPedCombatAttributes(Fx.Handle, 17, false);
+            API.SetPedCombatAttributes(Fx.Handle, 46, false);
+            API.SetPedCombatAttributes(Fx.Handle, 5, false);
         }
 
-        [Tick]
-        internal async void Update()
+        internal async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
         {
-            if (Fx.IsBeingStunned)
+            bool flag;
+            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f)
             {
-                Fx.Health = 200;
+                flag = false;
+            }
+            else
+            {
+                flag = (!base.IsOnScreen ? true : base.IsDead);
+            }
+            if (flag)
+            {
+                base.Delete();
+            }
+
+            if (Fx.IsBeingStunned && Fx.IsAlive)
+            {
+                base.Health = 200;
 
                 if (Utility.RANDOM.Bool(0.8f) && !IsKneeling)
                 {
                     RunSequence(Sequence.KNEEL);
                 }
             }
+
+            if (TimeOfDeath > 0) // Remove the ped from the world
+            {
+                if ((API.GetGameTimer() - TimeOfDeath) > 5000)
+                {
+                    int handle = Fx.Handle;
+                    API.RemovePedElegantly(ref handle);
+
+                    API.NetworkFadeOutEntity(base.Handle, false, false);
+                    await BaseScript.Delay(2000);
+                    Dismiss();
+                }
+            }
         }
 
-        private void RunSequence(Sequence sequence)
+        public void Abort(EntityEventWrapper sender, Entity entity)
+        {
+            Dismiss();
+        }
+
+        private void OnDied(EntityEventWrapper sender, Entity entity)
+        {
+            if (TimeOfDeath == 0)
+                TimeOfDeath = API.GetGameTimer();
+
+            if (base.IsOccluded)
+            {
+                Dismiss();
+            }
+        }
+
+        internal void RunSequence(Sequence sequence)
         {
             switch (sequence)
             {
@@ -123,8 +185,46 @@ namespace Curiosity.Callouts.Client.Classes
 
         internal void Dismiss()
         {
-            foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
+            //if (Fx.AttachedBlips.Length > 0)
+            //    foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
+
+            if (Fx == null) return;
+            if (!base.Exists()) return;
+
+            Blip singleBlip = Fx.AttachedBlip;
+            if (singleBlip != null)
+            {
+                if (singleBlip.Exists())
+                    singleBlip.Delete();
+            }
+
             Fx.IsPersistent = false;
+
+            base.Delete();
+        }
+
+        protected bool Equals(Ped other)
+        {
+            return (!base.Equals(other) ? false : object.Equals(this.Fx, other.Fx));
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool flag;
+            if (obj == null)
+            {
+                flag = false;
+            }
+            else
+            {
+                flag = (this) != obj ? obj.GetType() != GetType() ? false : Equals((Ped)obj) : true;
+            }
+            return flag;
+        }
+
+        bool IEquatable<Ped>.Equals(Ped other)
+        {
+            return (!base.Equals(other) ? false : object.Equals(this.Fx, other.Fx));
         }
 
         internal enum Sequence
