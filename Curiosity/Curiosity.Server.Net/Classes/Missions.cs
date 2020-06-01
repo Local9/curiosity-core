@@ -59,14 +59,33 @@ namespace Curiosity.Server.net.Classes
             if (calloutMessage.Success)
                 subTitle = "~g~Completed";
 
+            int experience = 50;
+            int knowledge = 10;
+            int money = 100;
+
             string content = string.Empty;
             switch(calloutMessage.CalloutType)
             {
                 case CalloutType.HOSTAGE_RESCUE:
                     content = $"~b~Hostages Rescued~s~: {calloutMessage.NumberRescued}";
-                    break;
 
+                    experience = Server.random.Next(50, 80) * calloutMessage.NumberRescued;
+                    knowledge = Server.random.Next(5, 10) * calloutMessage.NumberRescued;
+                    money = Server.random.Next(60, 120) * calloutMessage.NumberRescued;
+
+                    break;
             }
+
+            if (Server.IsBirthday)
+            {
+                experience = (int)(experience * 2.0f);
+                money = (int)(money * 2.0f);
+            }
+
+            // Experience, skills, and money... need to add some event fun
+            Skills.IncreaseSkill(player.Handle, "policexp", experience);
+            Skills.IncreaseSkill(player.Handle, "knowledge", knowledge);
+            Bank.IncreaseCashInternally(player.Handle, money);
 
             session.Player.Send(NotificationType.CHAR_CALL911, 2, "Callout Completed", subTitle, content);
 
