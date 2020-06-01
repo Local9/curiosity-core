@@ -55,9 +55,20 @@ namespace Curiosity.Server.net.Classes
 
             CalloutMessage calloutMessage = JsonConvert.DeserializeObject<CalloutMessage>(Encode.Base64ToString(encodedData));
 
+            string subTitle = "Maybe next time...";
+            if (calloutMessage.Success)
+                subTitle = "~g~Completed";
 
+            string content = string.Empty;
+            switch(calloutMessage.CalloutType)
+            {
+                case CalloutType.HOSTAGE_RESCUE:
+                    content = $"~b~Hostages Rescued~s~: {calloutMessage.NumberRescued}";
+                    break;
 
-            session.Player.Send(NotificationType.CHAR_CALL911, 2, "Callout Completed", "Wrap Sheet", string.Empty);
+            }
+
+            session.Player.Send(NotificationType.CHAR_CALL911, 2, "Callout Completed", subTitle, content);
 
             // MessagePolicePlayers(session.Player, "Dispatch", string.Empty, $"{session.Player.Name} completed callout");
         }
