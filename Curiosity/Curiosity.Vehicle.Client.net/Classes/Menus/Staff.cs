@@ -57,7 +57,6 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
         {
             SetupMenu();
             await BaseScript.Delay(10);
-            MenuBaseFunctions.MenuOpen();
         }
 
         static void SetupMenu()
@@ -173,6 +172,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
         private static void VehicleClassMenu_OnMenuClose(Menu menu)
         {
             MenuController.DontOpenAnyMenu = true;
+
+            MenuBaseFunctions.MenuOpen();
+            staffMenu.OpenMenu();
         }
 
         private static void VehicleClassMenu_OnMenuOpen(Menu menu)
