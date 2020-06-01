@@ -25,6 +25,18 @@ namespace Curiosity.Callouts.Client.Classes
         internal bool IsBeingStunned => Fx.IsBeingStunned;
         internal bool IsInVehicle { get; set; }
 
+        internal bool IsArrestable
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_ARRESTABLE);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.PED_ARRESTABLE, value);
+            }
+        }
+
         internal bool IsMission
         {
             get
@@ -107,7 +119,7 @@ namespace Curiosity.Callouts.Client.Classes
                 base.Delete();
             }
 
-            if (Fx.IsBeingStunned && Fx.IsAlive)
+            if (Fx.IsBeingStunned && Fx.IsAlive && IsArrestable)
             {
                 base.MaxHealth = 200;
                 base.Health = 200;

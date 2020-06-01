@@ -159,6 +159,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 ped.RunSequence(Ped.Sequence.KNEEL);
 
                 ped.IsHostage = true;
+                ped.IsArrestable = false;
 
                 ped.Fx.RelationshipGroup = relationshipGroup;
 
@@ -207,6 +208,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 ped.Task.FightAgainstHatedTargets(data.SpawnRadius);
 
                 ped.IsMission = true;
+                ped.IsArrestable = false;
 
                 Decorators.Set(ped.Handle, Decorators.PED_MISSION, true);
 
@@ -253,7 +255,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     break;
                 case 3:
                     if (numberOfAliveShooters > 0) return;
-                    Screen.ShowNotification($"All Suspects have been killed. Release the hostages");
+                    Screen.ShowNotification($"All Suspects have been killed. Remember to save the hostages");
                     progress++;
                     break;
             }
@@ -276,7 +278,14 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
                 int remaining = numberOfHostages - hostageReleaseTracker;
 
-                Screen.ShowNotification($"You have released a hostage. {remaining} hostages remaining.");
+                if (remaining == 0)
+                {
+                    Screen.ShowNotification($"You have released a hostage. No more hostages remaining.");
+                }
+                else
+                {
+                    Screen.ShowNotification($"You have released a hostage. {remaining} hostages remaining.");
+                }
             }
         }
 
