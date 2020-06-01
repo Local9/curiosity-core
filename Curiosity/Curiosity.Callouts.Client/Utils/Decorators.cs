@@ -4,6 +4,8 @@ namespace Curiosity.Callouts.Client.Utils
 {
     class Decorators
     {
+        public const string PLAYER_DEBUG = "player::npc::debug";
+
         public const string VEHICLE_STOLEN = "c::vehicle::stolen";
         public const string VEHICLE_FLEE = "c::vehicle::flee";
 
@@ -12,6 +14,7 @@ namespace Curiosity.Callouts.Client.Utils
         public const string PED_ARREST = "c::ped::arrest";
         public const string PED_MISSION = "c::ped::mission";
         public const string PED_HOSTAGE = "c::ped::hostage";
+        public const string PED_RELEASED = "c::ped::released";
 
         public static void Set(int handle, string property, object value)
         {

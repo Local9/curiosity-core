@@ -23,6 +23,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
         private HostageDataModel data;
         private PedHash lastPedHash;
+        private float spawnRadius;
 
         private List<PedHash> CityPedHashes = new List<PedHash>()
         {
@@ -106,11 +107,15 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             data = hostageDataList.Random();
 
+            spawnRadius = data.SpawnRadius > 200f ? 100f : data.SpawnRadius;
+
             Blip = World.CreateBlip(data.Location);
             Blip.Sprite = BlipSprite.BigCircle;
             Blip.Color = BlipColor.Yellow;
             Blip.ShowRoute = true;
             Blip.IsShortRange = true;
+            Blip.Alpha = 120;
+            Blip.Scale = data.BlipScale;
 
             base.IsSetup = true;
         }
@@ -128,7 +133,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
                 lastPedHash = pedHash;
 
-                Ped ped = await Ped.Spawn(pedHash, h.Item1);
+                Ped ped = await Ped.Spawn(pedHash, h.Item1, false);
                 ped.Heading = h.Item2;
 
                 RelationshipGroup relationshipGroup = (uint)Collections.RelationshipHash.Civfemale;
@@ -137,7 +142,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     relationshipGroup = (uint)Collections.RelationshipHash.Civmale;
                 }
 
-                Decorators.Set(ped.Handle, Decorators.PED_HOSTAGE, true);
+                ped.RunSequence(Ped.Sequence.KNEEL);
+
+                ped.IsHostage = true;
 
                 ped.Fx.RelationshipGroup = relationshipGroup;
 
@@ -177,12 +184,15 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
                 lastPedHash = pedHash;
 
-                Ped ped = await Ped.Spawn(pedHash, s.Item1);
+                Ped ped = await Ped.Spawn(pedHash, s.Item1, false);
                 ped.Heading = s.Item2;
 
                 RelationshipGroup relationshipGroup = (uint)Collections.RelationshipHash.Gang1;
                 ped.Fx.RelationshipGroup = relationshipGroup;
                 relationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate, true);
+                ped.Task.FightAgainstHatedTargets(data.SpawnRadius);
+
+                ped.IsMission = true;
 
                 Decorators.Set(ped.Handle, Decorators.PED_MISSION, true);
 
@@ -197,9 +207,11 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         internal override async void Tick()
         {
             int numberOfAliveHostages = Hostages.Select(x => x).Where(x => x.IsAlive).Count();
+            int numberOfReleasedHostages = Hostages.Select(x => x).Where(x => x.IsReleased).Count();
             int numberOfAliveShooters = Shooters.Select(x => x).Where(x => x.IsAlive).Count();
 
-            Screen.ShowSubtitle($"No. {numberOfAliveHostages}, P: {progress}");
+            if (PlayerManager.IsDeveloper)
+                Screen.ShowSubtitle($"H. {numberOfAliveHostages}, HR: {numberOfReleasedHostages}, S: {numberOfAliveShooters}, P: {progress}");
 
             switch (progress)
             {
@@ -209,12 +221,17 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     End();
                     break;
                 case 1:
-                    if (Game.PlayerPed.Position.Distance(data.Location) > 100f) return;
+                    if (Game.PlayerPed.Position.Distance(data.Location) > spawnRadius) return;
                     progress++;
                     break;
                 case 2:
                     SetupHostages(data.Hostages);
                     SetupShooters(data.Shooters);
+                    progress++;
+                    break;
+                case 3:
+                    if (numberOfAliveShooters > 0) return;
+                    Screen.ShowNotification($"All Suspects have been killed.");
                     progress++;
                     break;
             }

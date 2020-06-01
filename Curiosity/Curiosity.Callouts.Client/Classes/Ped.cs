@@ -14,6 +14,8 @@ namespace Curiosity.Callouts.Client.Classes
     [Serializable]
     internal class Ped : Entity, IEquatable<Ped>
     {
+        private DebuggingTools DebuggingTools = new DebuggingTools();
+
         internal CitizenFX.Core.Ped Fx { get; set; }
         internal PluginManager PluginIntance => PluginManager.Instance;
         public Vector3 Position => Fx.Position;
@@ -22,6 +24,42 @@ namespace Curiosity.Callouts.Client.Classes
         internal string Name => Fx.Model.ToString();
         internal bool IsBeingStunned => Fx.IsBeingStunned;
         internal bool IsInVehicle { get; set; }
+
+        internal bool IsMission
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_MISSION);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.PED_MISSION, value);
+            }
+        }
+
+        internal bool IsHostage
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_HOSTAGE);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.PED_HOSTAGE, value);
+            }
+        }
+
+        internal bool IsReleased
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_RELEASED);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.PED_RELEASED, value);
+            }
+        }
 
         internal bool IsKneeling { get; set; }
 
@@ -92,19 +130,49 @@ namespace Curiosity.Callouts.Client.Classes
                     Dismiss();
                 }
             }
+
+            if (IsHostage)
+                PluginIntance.RegisterTickHandler(OnPedInteractionCheck);
+
+            if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG))
+            {
+                PluginIntance.RegisterTickHandler(OnDeveloperOverlay);
+            }
+            else
+            {
+                PluginIntance.DeregisterTickHandler(OnDeveloperOverlay);
+            }
+        }
+
+        async Task OnDeveloperOverlay()
+        {
+            DebuggingTools.DrawData(this);
         }
 
         async Task OnPedInteractionCheck()
         {
             float distanceCheck = Fx.IsInVehicle() ? 3f : 1.5f;
 
+            string message = $"Press ~INPUT_CONTEXT~ to interact";
+
+            if (IsHostage)
+                message = $"Press ~INPUT_CONTEXT~ to release";
+
             if (Game.PlayerPed.Position.Distance(Fx.Position) < distanceCheck)
             {
-                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to interact");
+                Screen.DisplayHelpTextThisFrame($"{message}");
 
                 if (Game.IsControlJustPressed(0, Control.Context))
                 {
-                    Screen.ShowNotification($"Input Pressed");
+                    if (IsHostage)
+                    {
+                        RunSequence(Sequence.UNKNEEL_AND_FLEE);
+                        Decorators.Set(Fx.Handle, Decorators.PED_RELEASED, true);
+                    }
+                    else
+                    {
+
+                    }
                 }
             }
         }
@@ -133,18 +201,30 @@ namespace Curiosity.Callouts.Client.Classes
                     Fx.CanRagdoll = true;
                     Fx.Weapons.RemoveAll();
 
-                    TaskSequence taskSequence = new TaskSequence();
-                    taskSequence.AddTask.PlayAnimation("random@arrests", "idle_2_hands_up", 8.0f, -1, AnimationFlags.StayInEndFrame);
-                    taskSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_idle", 8.0f, -1, AnimationFlags.StayInEndFrame);
-                    taskSequence.AddTask.PlayAnimation("random@arrests@busted", "enter", 8.0f, -1, AnimationFlags.StayInEndFrame);
-                    taskSequence.AddTask.PlayAnimation("random@arrests@busted", "idle_a", 8.0f, -1, (AnimationFlags)9);
+                    TaskSequence kneelTaskSequence = new TaskSequence();
+                    kneelTaskSequence.AddTask.PlayAnimation("random@arrests", "idle_2_hands_up", 8.0f, -1, AnimationFlags.StayInEndFrame);
+                    kneelTaskSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_idle", 8.0f, -1, AnimationFlags.StayInEndFrame);
+                    kneelTaskSequence.AddTask.PlayAnimation("random@arrests@busted", "enter", 8.0f, -1, AnimationFlags.StayInEndFrame);
+                    kneelTaskSequence.AddTask.PlayAnimation("random@arrests@busted", "idle_a", 8.0f, -1, (AnimationFlags)9);
 
-                    Fx.Task.PerformSequence(taskSequence);
+                    Fx.Task.PerformSequence(kneelTaskSequence);
+                    kneelTaskSequence.Close();
 
                     IsKneeling = true;
 
                     PluginIntance.RegisterTickHandler(OnPedInteractionCheck);
 
+                    break;
+                case Sequence.UNKNEEL_AND_FLEE:
+                    TaskSequence realeaseAndFleeTaskSequence = new TaskSequence();
+                    realeaseAndFleeTaskSequence.AddTask.PlayAnimation("random@arrests@busted", "exit", 8.0f, -1, AnimationFlags.StayInEndFrame);
+                    realeaseAndFleeTaskSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
+                    realeaseAndFleeTaskSequence.AddTask.ReactAndFlee(Game.PlayerPed);
+                    Fx.Task.PerformSequence(realeaseAndFleeTaskSequence);
+                    realeaseAndFleeTaskSequence.Close();
+                    Fx.Task.ClearSecondary();
+                    IsKneeling = false;
+                    PluginIntance.DeregisterTickHandler(OnPedInteractionCheck);
                     break;
             }
         }
@@ -183,18 +263,25 @@ namespace Curiosity.Callouts.Client.Classes
             }
         }
 
-        internal static async Task<Ped> Spawn(Model model, Vector3 position)
+        internal static async Task<Ped> Spawn(Model model, Vector3 position, bool sidewalk = true)
         {
             float groundZ = position.Z;
-            Vector3 sidewalkPosition = position.Sidewalk();
+
+            Vector3 spawnPosition = position;
+
+            if (sidewalk)
+            {
+                spawnPosition = position.Sidewalk();
+            }
+
             Vector3 normal = Vector3.Zero;
 
             if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
             {
-                sidewalkPosition.Z = groundZ;
+                spawnPosition.Z = groundZ;
             }
 
-            CitizenFX.Core.Ped fxPed = await World.CreatePed(model, sidewalkPosition);
+            CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition);
 
             API.NetworkFadeInEntity(fxPed.Handle, false);
 
@@ -263,7 +350,9 @@ namespace Curiosity.Callouts.Client.Classes
 
         internal enum Sequence
         {
-            KNEEL
+            KNEEL,
+            UNKNEEL,
+            UNKNEEL_AND_FLEE
         }
     }
 }

@@ -20,18 +20,24 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
                 += Events.Native.Client.OnClientResourceStart.Action += resourceName =>
                 {
                     if (resourceName != API.GetCurrentResourceName()) return;
-                };
 
-            
+                    SetupSituationData();
+                };
         }
 
         void SetupSituationData()
         {
+            if (Situations.Count() > 0)
+                Situations.Clear();
+
             HostageDataModel clintonAve = new HostageDataModel()
             {
                 StoreName = "24/7, Clinton Ave",
                 Location = new Vector3(375.6602f, 325.6703f, 103.5664f),
                 PatrolZone = PatrolZone.City,
+                SpawnRadius = 150f,
+                MissionRadius = 100f,
+                BlipScale = .5f,
                 Shooters = new List<Tuple<Vector3, float>>
                 {
                     new Tuple<Vector3, float>( new Vector3(375.6602f, 325.6703f, 103.5664f), 255.8121f ),
@@ -54,8 +60,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
         public Vector3 Location;
         public string StoreName;
         public PatrolZone PatrolZone;
-        public float MissionRadius;
-        public float BlipRadius;
+        public float SpawnRadius = 150f;
+        public float MissionRadius = 100f;
+        public float BlipScale = 1.0f;
         public List<Tuple<Vector3, float>> Shooters = new List<Tuple<Vector3, float>>();
         public List<Tuple<Vector3, float>> Hostages = new List<Tuple<Vector3, float>>();
     }
