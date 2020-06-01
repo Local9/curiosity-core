@@ -1,4 +1,6 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Callouts.Client.Utils;
+using Curiosity.Callouts.Shared.Utils;
 using System;
 using System.Collections.Generic;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
