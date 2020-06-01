@@ -6,7 +6,6 @@ using Curiosity.Callouts.Shared.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
 using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
 
