@@ -143,7 +143,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 
             Add(new MenuItemVehicleLivery(client, this));
 
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnVehicleSettingsTick);
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(SetPriviledge));
         }
 
@@ -154,7 +154,7 @@ namespace Curiosity.Tools.Client.net.Controllers
             IsDeveloper = (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         }
 
-        private async Task OnTick()
+        private async Task OnVehicleSettingsTick()
         {
             try
             {

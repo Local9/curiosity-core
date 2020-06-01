@@ -47,10 +47,10 @@ namespace Curiosity.Tools.Client.net.Controllers
             var plist = new PlayerListMenu(client, this);
             Add(new MenuItemSubMenu(client, this, plist, "Players"));
 
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnVoipRangeDebugTick);
         }
 
-        private async Task OnTick()
+        private async Task OnVoipRangeDebugTick()
         {
             try
             {

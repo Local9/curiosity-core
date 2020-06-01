@@ -105,10 +105,10 @@ namespace Curiosity.Tools.Client.net.Controllers
             Add(sec);
 
             _lastUpdate = DateTime.UtcNow;
-            client.RegisterTickHandler(OnTick);
+            // client.RegisterTickHandler(OnClickTick);
         }
 
-        private async Task OnTick()
+        private async Task OnClickTick()
         {
             try
             {

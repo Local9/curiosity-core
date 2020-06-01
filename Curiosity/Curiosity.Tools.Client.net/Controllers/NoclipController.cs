@@ -34,11 +34,11 @@ namespace Curiosity.Tools.Client.net.Controllers
 
         public NoclipController(Client client) : base(client)
         {
-            Client.RegisterTickHandler(OnTick);
+            Client.RegisterTickHandler(OnNoClipTick);
             Client.RegisterTickHandler(CheckInputRotation);
         }
 
-        private async Task OnTick()
+        private async Task OnNoClipTick()
         {
             try
             {

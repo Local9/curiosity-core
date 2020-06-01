@@ -26,7 +26,7 @@ namespace Curiosity.Tools.Client.net.Controllers
 
         public EntityDebugger(Client client) : base(client)
         {
-            Client.RegisterTickHandler(OnTick);
+            Client.RegisterTickHandler(OnEntityDebuggerTick);
         }
 
         private Dictionary<string, string> GetDataFor(Entity entity)
@@ -92,7 +92,7 @@ namespace Curiosity.Tools.Client.net.Controllers
             return list;
         }
 
-        private async Task OnTick()
+        private async Task OnEntityDebuggerTick()
         {
             try
             {

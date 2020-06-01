@@ -47,10 +47,10 @@ namespace Curiosity.Tools.Client.net.Controllers
             var timecycles = new MenuItemSubMenu(client, this, new TimeCycleMenu(client, this), "Timecycles");
             Add(timecycles);
 
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnHideComponentsTick);
         }
 
-        private async Task OnTick()
+        private async Task OnHideComponentsTick()
         {
             try
             {

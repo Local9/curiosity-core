@@ -95,10 +95,10 @@ namespace Curiosity.Tools.Client.net.Controllers
             };
             Add(veh);
 
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnWorldSettingsTick);
         }
 
-        private async Task OnTick()
+        private async Task OnWorldSettingsTick()
         {
             try
             {

@@ -106,10 +106,10 @@ namespace Curiosity.Tools.Client.net.Controllers
             };
             Add(speedMult);
 
-            client.RegisterTickHandler(OnTick);
+            client.RegisterTickHandler(OnPlayerSettingsTick);
         }
 
-        private Task OnTick()
+        private Task OnPlayerSettingsTick()
         {
             try
             {
