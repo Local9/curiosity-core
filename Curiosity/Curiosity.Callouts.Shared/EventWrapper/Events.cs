@@ -15,6 +15,7 @@ namespace Curiosity.Callouts.Shared.EventWrapper
             public const string ReceivePlayerInformation = "curiosity:Client:Player:InternalInformation";
             public const string RequestPlayerInformation = "curiosity:Client:Player:Information";
             public const string ServerPlayerInformationUpdate = "curiosity:Client:Player:GetInformation";
+            public const string PolicePatrolZone = "curiosity:Client:Mission:SetLocation";
 
             public static class Callout
             {
