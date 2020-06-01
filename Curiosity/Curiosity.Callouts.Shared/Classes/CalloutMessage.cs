@@ -10,6 +10,7 @@ namespace Curiosity.Callouts.Shared.Classes
     {
         public string Name;
         public bool Success;
+        public bool IsCalloutFinished;
         public int NumberKilled;
         public int NumberRescued;
         public List<CalloutPed> calloutPed = new List<CalloutPed>();

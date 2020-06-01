@@ -90,6 +90,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         internal override async void Prepare()
         {
             base.Prepare();
+            progress = 1;
 
             // Get a dataset based on patrolZone
 
@@ -102,7 +103,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             data.Location = Game.PlayerPed.Position; // testing
             data.MissionRadius = 10f;
 
-            data.Hostages.Add(tuple);
+            // data.Hostages.Add(tuple);
             data.Hostages.Add(tuple);
 
             if (data != null)
@@ -139,7 +140,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
         }
 
-        internal override void Tick()
+        internal override async void Tick()
         {
             int numberOfAliveHostages = Hostages.Select(x => x).Where(x => x.IsAlive).Count();
 
@@ -148,10 +149,13 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             switch (progress)
             {
                 case 0:
+                    if (calloutMessage.IsCalloutFinished) return;
+                    calloutMessage.IsCalloutFinished = true;
                     End();
                     break;
                 case 1:
-                    
+
+                    await BaseScript.Delay(100);
 
                     if (numberOfAliveHostages == 0)
                     {
@@ -168,12 +172,16 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             while (Game.PlayerPed.Position.Distance(data.Location) < data.MissionRadius)
             {
                 Screen.DisplayHelpTextThisFrame("Please leave the area");
-                await BaseScript.Delay(100);
+                await BaseScript.Delay(0);
             }
 
-            base.End(forcefully);
+            Hostages.Clear();
+            Shooters.Clear();
 
+            base.End(forcefully);
             base.CompleteCallout(calloutMessage);
+
+            calloutMessage = null;
         }
 
     }

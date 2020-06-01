@@ -4,7 +4,9 @@ using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Managers;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Utils;
+using Newtonsoft.Json.Bson;
 using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Curiosity.Callouts.Client.Classes
@@ -13,7 +15,7 @@ namespace Curiosity.Callouts.Client.Classes
     internal class Ped : Entity, IEquatable<Ped>
     {
         internal CitizenFX.Core.Ped Fx { get; set; }
-
+        internal PluginManager PluginIntance => PluginManager.Instance;
         public Vector3 Position => Fx.Position;
         internal Tasks Task => Fx.Task;
         internal bool IsDead => Fx.IsDead;
@@ -72,7 +74,7 @@ namespace Curiosity.Callouts.Client.Classes
                 base.MaxHealth = 200;
                 base.Health = 200;
 
-                if (Utility.RANDOM.Bool(0.8f) && !IsKneeling)
+                if (Utility.RANDOM.Bool(0.9f) && !IsKneeling)
                 {
                     RunSequence(Sequence.KNEEL);
                 }
@@ -88,6 +90,21 @@ namespace Curiosity.Callouts.Client.Classes
                     API.NetworkFadeOutEntity(base.Handle, false, false);
                     await BaseScript.Delay(2000);
                     Dismiss();
+                }
+            }
+        }
+
+        async Task OnPedInteractionCheck()
+        {
+            float distanceCheck = Fx.IsInVehicle() ? 3f : 1.5f;
+
+            if (Game.PlayerPed.Position.Distance(Fx.Position) < distanceCheck)
+            {
+                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to interact");
+
+                if (Game.IsControlJustPressed(0, Control.Context))
+                {
+                    Screen.ShowNotification($"Input Pressed");
                 }
             }
         }
@@ -108,7 +125,7 @@ namespace Curiosity.Callouts.Client.Classes
             }
         }
 
-        internal void RunSequence(Sequence sequence)
+        internal async void RunSequence(Sequence sequence)
         {
             switch (sequence)
             {
@@ -125,6 +142,8 @@ namespace Curiosity.Callouts.Client.Classes
                     Fx.Task.PerformSequence(taskSequence);
 
                     IsKneeling = true;
+
+                    PluginIntance.RegisterTickHandler(OnPedInteractionCheck);
 
                     break;
             }
@@ -166,8 +185,19 @@ namespace Curiosity.Callouts.Client.Classes
 
         internal static async Task<Ped> Spawn(Model model, Vector3 position)
         {
+            float groundZ = position.Z;
             Vector3 sidewalkPosition = position.Sidewalk();
+            Vector3 normal = Vector3.Zero;
+
+            if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
+            {
+                sidewalkPosition.Z = groundZ;
+            }
+
             CitizenFX.Core.Ped fxPed = await World.CreatePed(model, sidewalkPosition);
+
+            API.NetworkFadeInEntity(fxPed.Handle, false);
+
             Logger.Log(fxPed.ToString());
             var ped = new Ped(fxPed);
             return ped;
@@ -189,6 +219,8 @@ namespace Curiosity.Callouts.Client.Classes
         {
             //if (Fx.AttachedBlips.Length > 0)
             //    foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
+
+            PluginIntance.DeregisterTickHandler(OnPedInteractionCheck);
 
             if (Fx == null) return;
             if (!base.Exists()) return;
