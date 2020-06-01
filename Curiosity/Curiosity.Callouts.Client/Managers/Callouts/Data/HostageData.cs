@@ -12,7 +12,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
 {
     class HostageData : BaseScript
     {
-        public List<HostageDataModel> Situations = new List<HostageDataModel>();
+        public static List<HostageDataModel> Situations = new List<HostageDataModel>();
         
         public HostageData()
         {
