@@ -226,7 +226,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     break;
                 case 2:
                     SetupHostages(data.Hostages);
-                    SetupShooters(data.Shooters);
+                    // SetupShooters(data.Shooters);
                     progress++;
                     break;
                 case 3:

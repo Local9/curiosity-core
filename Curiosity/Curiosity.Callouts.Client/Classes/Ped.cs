@@ -216,8 +216,9 @@ namespace Curiosity.Callouts.Client.Classes
 
                     break;
                 case Sequence.UNKNEEL_AND_FLEE:
+                    Fx.Task.ClearAllImmediately();
                     TaskSequence realeaseAndFleeTaskSequence = new TaskSequence();
-                    realeaseAndFleeTaskSequence.AddTask.PlayAnimation("random@arrests@busted", "exit", 8.0f, -1, AnimationFlags.StayInEndFrame);
+                    // realeaseAndFleeTaskSequence.AddTask.PlayAnimation("random@arrests@busted", "exit", 8.0f, -1, AnimationFlags.StayInEndFrame);
                     realeaseAndFleeTaskSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
                     realeaseAndFleeTaskSequence.AddTask.ReactAndFlee(Game.PlayerPed);
                     Fx.Task.PerformSequence(realeaseAndFleeTaskSequence);
@@ -225,6 +226,21 @@ namespace Curiosity.Callouts.Client.Classes
                     Fx.Task.ClearSecondary();
                     IsKneeling = false;
                     PluginIntance.DeregisterTickHandler(OnPedInteractionCheck);
+                    RunSequence(Sequence.REMOVE_FROM_WORLD);
+                    break;
+                case Sequence.REMOVE_FROM_WORLD:
+                    while (Fx.Position.Distance(Game.PlayerPed.Position) < 25f)
+                    {
+                        await BaseScript.Delay(100);
+                    }
+
+                    int handle = Fx.Handle;
+                    API.RemovePedElegantly(ref handle);
+
+                    API.NetworkFadeOutEntity(base.Handle, false, false);
+                    await BaseScript.Delay(2000);
+                    Dismiss();
+
                     break;
             }
         }
@@ -352,7 +368,8 @@ namespace Curiosity.Callouts.Client.Classes
         {
             KNEEL,
             UNKNEEL,
-            UNKNEEL_AND_FLEE
+            UNKNEEL_AND_FLEE,
+            REMOVE_FROM_WORLD
         }
     }
 }
