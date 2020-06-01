@@ -1,8 +1,10 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Managers.Callouts.Data;
 using Curiosity.Callouts.Shared.Classes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
 
@@ -69,22 +71,47 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
         public HostageSituation(Player primaryPlayer) : base(primaryPlayer) => Players.Add(primaryPlayer);
 
-        internal override void Prepare()
+        internal override async void Prepare()
         {
             base.Prepare();
 
+            Ped ped = await Ped.Spawn(PedHash.Abigail, Game.PlayerPed.GetOffsetPosition(new Vector3(1f, 0f, 0f)));
+            Hostages.Add(ped);
+
+            RegisterPed(ped);
+
+            base.IsSetup = true;
         }
 
         internal override void Tick()
         {
+            int numberOfAliveHostages = Hostages.Select(x => x).Where(x => x.IsAlive).Count();
+
+            Screen.ShowSubtitle($"No. {numberOfAliveHostages}, P: {progress}");
+
             switch (progress)
             {
                 case 0:
                     End(true);
                     break;
+                case 1:
+                    
+
+                    if (numberOfAliveHostages == 0)
+                    {
+                        progress = 0;
+                    }
+
+                    break;
             }
         }
 
+        internal override void End(bool forcefully = false)
+        {
+            base.End(forcefully);
+
+            Screen.ShowNotification($"Callout Ended");
+        }
 
     }
 }
