@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Menus.Client.net.Extensions;
 using MenuAPI;
@@ -140,7 +141,12 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             menu.AddMenuItem(menuCheckboxGodMode);
             menu.AddMenuItem(menuCheckboxGiveAllWeapons);
 
-            bool enableVehicleOptions = Client.CurrentVehicle != null;
+            bool enableVehicleOptions = false;
+
+            if (Client.CurrentVehicle != null)
+            {
+                enableVehicleOptions = Client.CurrentVehicle.Exists();
+            }
 
             mItemRefuel.Enabled = enableVehicleOptions;
             menu.AddMenuItem(mItemRefuel);
@@ -155,7 +161,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         private static void Menu_OnItemSelect(Menu menu, MenuItem menuItem, int itemIndex)
         {
             if (menuItem == mItemRefuel)
-                Client.TriggerEvent("curiosity:Client:Vehicle:DevRefuel");
+                BaseScript.TriggerEvent("curiosity:Client:Vehicle:DevRefuel");
 
             if (menuItem == mItemRepair)
                 Client.TriggerEvent("curiosity:Client:Vehicle:DevRepair");

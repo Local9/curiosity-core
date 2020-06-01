@@ -488,7 +488,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         static void DevRefuel()
         {
             if (!Player.PlayerInformation.IsDeveloper()) return;
-            Function.Call(Hash._DECOR_SET_FLOAT, Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
+            API.DecorSetFloat(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
             Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
             warning1Played = false;
             warning2Played = false;
