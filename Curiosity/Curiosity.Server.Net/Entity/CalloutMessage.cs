@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Curiosity.Server.net.Entity
 {
@@ -10,8 +6,9 @@ namespace Curiosity.Server.net.Entity
     {
         public string Name;
         public bool Success;
-        public int NumberKilled;
+        public bool IsCalloutFinished;
         public int NumberRescued;
+        public CalloutType CalloutType;
         public List<CalloutPed> calloutPed = new List<CalloutPed>();
         public List<CalloutVehicle> calloutVehicle = new List<CalloutVehicle>();
     }
@@ -40,5 +37,10 @@ namespace Curiosity.Server.net.Entity
     {
         public bool IsIllegal;
         public string Label;
+    }
+
+    public enum CalloutType
+    {
+        HOSTAGE_RESCUE
     }
 }

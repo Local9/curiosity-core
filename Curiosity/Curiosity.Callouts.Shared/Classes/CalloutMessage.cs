@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Curiosity.Callouts.Shared.Classes
 {
@@ -11,8 +7,8 @@ namespace Curiosity.Callouts.Shared.Classes
         public string Name;
         public bool Success;
         public bool IsCalloutFinished;
-        public int NumberKilled;
         public int NumberRescued;
+        public CalloutType CalloutType;
         public List<CalloutPed> calloutPed = new List<CalloutPed>();
         public List<CalloutVehicle> calloutVehicle = new List<CalloutVehicle>();
     }
@@ -41,5 +37,10 @@ namespace Curiosity.Callouts.Shared.Classes
     {
         public bool IsIllegal;
         public string Label;
+    }
+
+    public enum CalloutType
+    {
+        HOSTAGE_RESCUE
     }
 }
