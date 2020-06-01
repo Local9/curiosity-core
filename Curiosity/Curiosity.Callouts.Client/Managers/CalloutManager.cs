@@ -42,7 +42,7 @@ namespace Curiosity.Callouts.Client.Managers
 
             string calloutName = $"{args[0]}";
 
-            var newCallout = Activator.CreateInstance(typeof(StolenVehicle), Game.Player) as Callout;
+            Callout newCallout = null; // = Activator.CreateInstance(typeof(StolenVehicle), Game.Player) as Callout;
 
             switch(calloutName)
             {
@@ -52,6 +52,9 @@ namespace Curiosity.Callouts.Client.Managers
                 case "hostage":
                     newCallout = Activator.CreateInstance(typeof(HostageSituation), Game.Player) as Callout;
                     break;
+                default:
+                    Screen.ShowNotification($"~r~Invalid callout type '{calloutName}'");
+                    break;
             }
 
             if (ActiveCallout != null)
@@ -60,7 +63,7 @@ namespace Curiosity.Callouts.Client.Managers
                 ActiveCallout = null;
             }
 
-            newCallout?.Prepare();
+            newCallout.Prepare();
             ActiveCallout = newCallout;
 
             if (ActiveCallout != null) ActiveCallout.Ended += forcefully => { ActiveCallout = null; };
