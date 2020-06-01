@@ -9,12 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using static Curiosity.Callouts.Client.Classes.Ped;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
 
 namespace Curiosity.Callouts.Client.Managers.Callouts
 {
     internal class HostageSituation : Callout
     {
+        private PluginManager PluginInstance => PluginManager.Instance;
+
         List<Ped> Shooters = new List<Ped>();
         List<Ped> Hostages = new List<Ped>();
         Blip Blip;
@@ -24,6 +27,10 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         private HostageDataModel data;
         private PedHash lastPedHash;
         private float spawnRadius;
+
+        private int hostageReleaseTracker = 0;
+        private int numberOfHostages = 0;
+        private int numberOfShooters = 0;
 
         private List<PedHash> CityPedHashes = new List<PedHash>()
         {
@@ -116,6 +123,13 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             Blip.IsShortRange = true;
             Blip.Alpha = 120;
             Blip.Scale = data.BlipScale;
+
+            numberOfHostages = data.Hostages.Count();
+            numberOfShooters = data.Shooters.Count();
+
+            calloutMessage.CalloutType = CalloutType.HOSTAGE_RESCUE;
+
+            PluginInstance.RegisterTickHandler(OnHostageMessagePrompt);
 
             base.IsSetup = true;
         }
@@ -210,14 +224,22 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             int numberOfReleasedHostages = Hostages.Select(x => x).Where(x => x.IsReleased).Count();
             int numberOfAliveShooters = Shooters.Select(x => x).Where(x => x.IsAlive).Count();
 
+            int remaining = numberOfHostages - hostageReleaseTracker;
+
+            if (remaining == 0)
+                progress = 0;
+
             if (PlayerManager.IsDeveloper)
-                Screen.ShowSubtitle($"H. {numberOfAliveHostages}, HR: {numberOfReleasedHostages}, S: {numberOfAliveShooters}, P: {progress}");
+                Screen.ShowSubtitle($"H. {numberOfAliveHostages}, HRT: {hostageReleaseTracker}, S: {numberOfAliveShooters}, P: {progress}");
 
             switch (progress)
             {
                 case 0:
                     if (calloutMessage.IsCalloutFinished) return;
                     calloutMessage.IsCalloutFinished = true;
+
+                    calloutMessage.Success = (hostageReleaseTracker > 0);
+                    calloutMessage.NumberRescued = hostageReleaseTracker;
                     End();
                     break;
                 case 1:
@@ -231,14 +253,37 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     break;
                 case 3:
                     if (numberOfAliveShooters > 0) return;
-                    Screen.ShowNotification($"All Suspects have been killed.");
+                    Screen.ShowNotification($"All Suspects have been killed. Release the hostages");
                     progress++;
                     break;
             }
         }
 
+        internal async Task OnHostageMessagePrompt()
+        {
+            Ped ped = Hostages.Select(x => x).Where(x => x.Position.Distance(Game.PlayerPed.Position) < 1.5f).FirstOrDefault();
+
+            if (ped == null) return;
+
+            string message = $"Press ~INPUT_CONTEXT~ to release";
+            Screen.DisplayHelpTextThisFrame($"{message}");
+
+            if (Game.IsControlJustPressed(0, Control.Context))
+            {
+                ped.RunSequence(Sequence.UNKNEEL_AND_FLEE);
+                Decorators.Set(ped.Fx.Handle, Decorators.PED_RELEASED, true);
+                hostageReleaseTracker++;
+
+                int remaining = numberOfHostages - hostageReleaseTracker;
+
+                Screen.ShowNotification($"You have released a hostage. {remaining} hostages remaining.");
+            }
+        }
+
         internal override async void End(bool forcefully = false)
         {
+            PluginInstance.DeregisterTickHandler(OnHostageMessagePrompt);
+
             while (Game.PlayerPed.Position.Distance(data.Location) < data.MissionRadius)
             {
                 Screen.DisplayHelpTextThisFrame("Please leave the area");
@@ -255,6 +300,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             }
 
             base.End(forcefully);
+
             base.CompleteCallout(calloutMessage);
 
             calloutMessage = null;
