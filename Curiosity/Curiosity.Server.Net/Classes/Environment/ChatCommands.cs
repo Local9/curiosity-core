@@ -446,6 +446,21 @@ namespace Curiosity.Server.net.Classes.Environment
 
             List<string> args = arguments.Cast<string>().ToList();
             Server.TriggerClientEvent("curiosity:Client:Scalefrom:Announce", String.Join(" ", args));
+
+            ChatMessage chatMessage = new ChatMessage();
+
+            chatMessage.color = $"{Privilege.DEVELOPER}".ToLower();
+            chatMessage.role = $"{Privilege.DEVELOPER}";
+            chatMessage.list = "chat";
+            chatMessage.message = String.Join(" ", args);
+            chatMessage.roleClass = $"{Privilege.DEVELOPER}";
+            chatMessage.name = "SERVER";
+            chatMessage.job = $"Server";
+
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
+            string encoded = Encode.StringToBase64(json);
+
+            Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
         }
 
         static void Test(int playerHandle, List<object> arguments, string raw)
