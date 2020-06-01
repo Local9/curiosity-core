@@ -8,6 +8,10 @@ using System.Text;
 using System.Drawing;
 using System.Threading.Tasks;
 
+
+using Ped = Curiosity.Callouts.Client.Classes.Ped;
+// using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
+
 namespace Curiosity.Callouts.Client.Utils
 {
     class DebuggingTools
@@ -75,12 +79,14 @@ namespace Curiosity.Callouts.Client.Utils
                 else if (entity is Ped ped)
                 {
                     list["Health"] = $"{ped.Health} / {ped.MaxHealth}";
+
                     list["MissionPed"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_MISSION)}";
                     list["Hostage"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_HOSTAGE)}";
                     list["Arrested"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_ARREST)}";
-                    if (ped.IsInGroup)
+
+                    if (ped.Fx.IsInGroup)
                     {
-                        list["GroupId"] = $"{ped.PedGroup.Handle}";
+                        list["GroupId"] = $"{ped.Fx.PedGroup.Handle}";
                         list["Player GroupID"] = $"{Game.PlayerPed.PedGroup.Handle}";
                     }
                 }
