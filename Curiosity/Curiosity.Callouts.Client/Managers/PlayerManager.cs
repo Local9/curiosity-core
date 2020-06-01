@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Utils;
+using Curiosity.Callouts.Shared.Classes;
 using Curiosity.Callouts.Shared.EventWrapper;
 using Newtonsoft.Json;
 using System;
@@ -12,11 +13,17 @@ namespace Curiosity.Callouts.Client.Managers
     {
         static ExportDictionary exportDictionary;
         static PlayerInformationModel playerInfo;
-
+        static public PatrolZone PatrolZone = PatrolZone.City;
         public PlayerManager()
         {
             EventHandlers[Events.Client.ServerPlayerInformationUpdate] += new Action<string>(OnPlayerInformationUpdate);
             EventHandlers[Events.Client.ReceivePlayerInformation] += new Action<string>(OnPlayerInformationUpdate);
+            EventHandlers[Events.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
+        }
+
+        private void OnPlayerPatrolZone(int zone)
+        {
+            PatrolZone = (PatrolZone)zone;
         }
 
         private void OnPlayerInformationUpdate(string json)
