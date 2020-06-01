@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.EventWrapper;
 using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Callouts.Client
 {
@@ -50,6 +51,38 @@ namespace Curiosity.Callouts.Client
         private void OnPlayerSpawned(dynamic spawnInfo)
         {
             BaseScript.TriggerEvent("curiosity:Client:Player:Information");
+        }
+
+        /// <summary>
+        /// Registers a tick function
+        /// </summary>
+        /// <param name="action"></param>
+        public void RegisterTickHandler(Func<Task> action)
+        {
+            try
+            {
+                Tick += action;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Removes a tick function from the registry
+        /// </summary>
+        /// <param name="action"></param>
+        public void DeregisterTickHandler(Func<Task> action)
+        {
+            try
+            {
+                Tick -= action;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex.Message);
+            }
         }
     }
 }
