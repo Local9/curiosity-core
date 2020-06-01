@@ -66,5 +66,10 @@ namespace Curiosity.Callouts.Client.Utils
         {
             return API.IsEntityPlayingAnim(entity.Handle, animSet, animName, 3);
         }
+
+        public static float VDist(this Vector3 v, Vector3 to)
+        {
+            return API.Vdist(v.X, v.Y, v.Z, to.X, to.Y, to.Z);
+        }
     }
 }
