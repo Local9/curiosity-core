@@ -7,9 +7,11 @@ namespace Curiosity.Callouts.Client.Utils
         public const string VEHICLE_STOLEN = "c::vehicle::stolen";
         public const string VEHICLE_FLEE = "c::vehicle::flee";
 
-        public const string PED_FLEE = "c::vehicle::flee";
-        public const string PED_SHOOT = "c::vehicle::shoot";
-        public const string PED_ARREST = "c::vehicle::arrest";
+        public const string PED_FLEE = "c::ped::flee";
+        public const string PED_SHOOT = "c::ped::shoot";
+        public const string PED_ARREST = "c::ped::arrest";
+        public const string PED_MISSION = "c::ped::mission";
+        public const string PED_HOSTAGE = "c::ped::hostage";
 
         public static void Set(int handle, string property, object value)
         {
