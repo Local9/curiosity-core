@@ -1,11 +1,14 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Managers.Callouts.Data;
+using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Classes;
+using Curiosity.Callouts.Shared.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
 
 namespace Curiosity.Callouts.Client.Managers.Callouts
@@ -18,6 +21,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         CalloutMessage calloutMessage = new CalloutMessage();
 
         private HostageDataModel data;
+        private PedHash lastPedHash;
 
         private List<PedHash> CityPedHashes = new List<PedHash>()
         {
@@ -61,6 +65,16 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             PedHash.Hippie01,
         };
 
+        private List<PedHash> HostagePedHashes = new List<PedHash>()
+        {
+            PedHash.Abigail,
+            PedHash.ShopKeep01,
+            PedHash.Tourist01AFM,
+            PedHash.Tourist01AFY,
+            PedHash.Tourist01AMM,
+            PedHash.Tourist02AFY,
+        };
+
         private List<WeaponHash> weaponHashes = new List<WeaponHash>()
         {
             WeaponHash.Pistol,
@@ -77,12 +91,52 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         {
             base.Prepare();
 
-            Ped ped = await Ped.Spawn(PedHash.Abigail, Game.PlayerPed.GetOffsetPosition(new Vector3(1f, 0f, 0f)));
-            Hostages.Add(ped);
+            // Get a dataset based on patrolZone
 
-            RegisterPed(ped);
+            data = new HostageDataModel();
+
+            Vector3 offset = Game.PlayerPed.GetOffsetPosition(new Vector3(1f, 0f, 0f));
+
+            Tuple<Vector3, float> tuple = new Tuple<Vector3, float>(offset, 0f);
+
+            data.Location = Game.PlayerPed.Position; // testing
+            data.MissionRadius = 10f;
+
+            data.Hostages.Add(tuple);
+            data.Hostages.Add(tuple);
+
+            if (data != null)
+            {
+                SetupShooters(data.Shooters);
+                SetupHostages(data.Hostages);
+            }
 
             base.IsSetup = true;
+        }
+
+        private void SetupHostages(List<Tuple<Vector3, float>> hostageList)
+        {
+            hostageList.ForEach(async h =>
+            {
+                PedHash pedHash = HostagePedHashes.Random();
+
+                while (pedHash == lastPedHash)
+                {
+                    pedHash = HostagePedHashes.Random();
+                }
+
+                lastPedHash = pedHash;
+
+                Ped ped = await Ped.Spawn(pedHash, h.Item1);
+                ped.Heading = h.Item2;
+                RegisterPed(ped);
+                Hostages.Add(ped);
+            });
+        }
+
+        private void SetupShooters(List<Tuple<Vector3, float>> shooters)
+        {
+
         }
 
         internal override void Tick()
@@ -94,7 +148,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             switch (progress)
             {
                 case 0:
-                    End(true);
+                    End();
                     break;
                 case 1:
                     
@@ -109,13 +163,17 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             }
         }
 
-        internal override void End(bool forcefully = false)
+        internal override async void End(bool forcefully = false)
         {
+            while (Game.PlayerPed.Position.Distance(data.Location) < data.MissionRadius)
+            {
+                Screen.DisplayHelpTextThisFrame("Please leave the area");
+                await BaseScript.Delay(100);
+            }
+
             base.End(forcefully);
 
             base.CompleteCallout(calloutMessage);
-
-            Screen.ShowNotification($"Callout Ended");
         }
 
     }

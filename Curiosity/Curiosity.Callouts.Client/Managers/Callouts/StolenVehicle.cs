@@ -15,6 +15,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
     {
         private Ped criminal;
         private Vehicle stolenVehicle;
+        private CalloutMessage calloutMessage = new CalloutMessage();
 
         List<VehicleHash> vehicleHashes = new List<VehicleHash>()
         {
@@ -110,23 +111,30 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             switch (progress)
             {
+                case 0:
+                    calloutMessage.Name = Name;
+                    calloutMessage.Success = true;
+                    base.End();
+                    break;
                 case 1:
                     if (!criminal.IsDead) return;
                     progress++;
                     break;
                 case 2:
-                    CalloutMessage calloutMessage = new CalloutMessage();
                     
-                    calloutMessage.Name = Name;
-                    calloutMessage.Success = true;
-
-                    base.CompleteCallout(calloutMessage);
                     progress++;
                     break;
                 default:
                     End();
                     break;
             }
+        }
+
+        internal override void End(bool forcefully = false)
+        {
+            base.End(forcefully);
+
+            base.CompleteCallout(calloutMessage);
         }
     }
 }

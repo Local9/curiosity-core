@@ -12,6 +12,10 @@ namespace Curiosity.Callouts.Shared.EventWrapper
 
         public static class Client
         {
+            public const string ReceivePlayerInformation = "curiosity:Client:Player:InternalInformation";
+            public const string RequestPlayerInformation = "curiosity:Client:Player:Information";
+            public const string ServerPlayerInformationUpdate = "curiosity:Client:Player:GetInformation";
+
             public static class Callout
             {
                 public static Event<bool> EnableCalloutManager => new Event<bool>("curiosity:client:callout:manager:enable");

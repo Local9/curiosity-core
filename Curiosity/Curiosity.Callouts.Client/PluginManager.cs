@@ -28,6 +28,8 @@ namespace Curiosity.Callouts.Client
                 {
                     if (resourceName != API.GetCurrentResourceName()) return;
 
+                    BaseScript.TriggerEvent(Events.Client.RequestPlayerInformation);
+
                     Logger.Log("---------------------------------");
                     Logger.Log("------ > Callouts loaded < ------");
                     Logger.Log("---------------------------------");

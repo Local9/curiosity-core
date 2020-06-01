@@ -48,6 +48,7 @@ namespace Curiosity.Callouts.Client.Classes
             API.SetPedCombatAttributes(Fx.Handle, 17, false);
             API.SetPedCombatAttributes(Fx.Handle, 46, false);
             API.SetPedCombatAttributes(Fx.Handle, 5, false);
+            Fx.SetConfigFlag(281, true); // No more rolling about
         }
 
         internal async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
@@ -68,6 +69,7 @@ namespace Curiosity.Callouts.Client.Classes
 
             if (Fx.IsBeingStunned && Fx.IsAlive)
             {
+                base.MaxHealth = 200;
                 base.Health = 200;
 
                 if (Utility.RANDOM.Bool(0.8f) && !IsKneeling)

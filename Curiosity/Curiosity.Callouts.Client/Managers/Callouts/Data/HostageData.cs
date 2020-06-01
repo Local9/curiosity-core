@@ -54,6 +54,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
         public Vector3 Location;
         public string StoreName;
         public PatrolZone PatrolZone;
+        public float MissionRadius;
+        public float BlipRadius;
         public List<Tuple<Vector3, float>> Shooters = new List<Tuple<Vector3, float>>();
         public List<Tuple<Vector3, float>> Hostages = new List<Tuple<Vector3, float>>();
     }
