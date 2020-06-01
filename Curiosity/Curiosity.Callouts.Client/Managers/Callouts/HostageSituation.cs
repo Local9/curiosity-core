@@ -17,6 +17,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
     {
         List<Ped> Shooters = new List<Ped>();
         List<Ped> Hostages = new List<Ped>();
+        Blip Blip;
 
         CalloutMessage calloutMessage = new CalloutMessage();
 
@@ -94,23 +95,22 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             // Get a dataset based on patrolZone
 
-            data = new HostageDataModel();
+            List<HostageDataModel> hostageDataList = Data.HostageData.Situations.Select(x => x).Where(x => x.PatrolZone == PlayerManager.PatrolZone).ToList();
 
-            Vector3 offset = Game.PlayerPed.GetOffsetPosition(new Vector3(1f, 0f, 0f));
-
-            Tuple<Vector3, float> tuple = new Tuple<Vector3, float>(offset, 0f);
-
-            data.Location = Game.PlayerPed.Position; // testing
-            data.MissionRadius = 10f;
-
-            // data.Hostages.Add(tuple);
-            data.Hostages.Add(tuple);
-
-            if (data != null)
+            if (hostageDataList.Count == 0)
             {
-                SetupShooters(data.Shooters);
-                SetupHostages(data.Hostages);
+                Logger.Log($"No hostage situations returned for '{PlayerManager.PatrolZone}'");
+                base.End(true);
+                return;
             }
+
+            data = hostageDataList.Random();
+
+            Blip = World.CreateBlip(data.Location);
+            Blip.Sprite = BlipSprite.BigCircle;
+            Blip.Color = BlipColor.Yellow;
+            Blip.ShowRoute = true;
+            Blip.IsShortRange = true;
 
             base.IsSetup = true;
         }
@@ -130,6 +130,17 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
                 Ped ped = await Ped.Spawn(pedHash, h.Item1);
                 ped.Heading = h.Item2;
+
+                RelationshipGroup relationshipGroup = (uint)Collections.RelationshipHash.Civfemale;
+                if (ped.Fx.Gender == Gender.Male)
+                {
+                    relationshipGroup = (uint)Collections.RelationshipHash.Civmale;
+                }
+
+                Decorators.Set(ped.Handle, Decorators.PED_HOSTAGE, true);
+
+                ped.Fx.RelationshipGroup = relationshipGroup;
+
                 RegisterPed(ped);
                 Hostages.Add(ped);
             });
@@ -137,12 +148,56 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
         private void SetupShooters(List<Tuple<Vector3, float>> shooters)
         {
+            shooters.ForEach(async s =>
+            {
+                PedHash pedHash = CityPedHashes.Random();
 
+                // Look into Ocean and Highway
+
+                switch (PlayerManager.PatrolZone)
+                {
+                    case PatrolZone.City:
+                        pedHash = CityPedHashes.Random();
+                        break;
+                    case PatrolZone.Country:
+                        pedHash = CountryPedHashes.Random();
+                        break;
+                    case PatrolZone.Rural:
+                        pedHash = RurualPedHashes.Random();
+                        break;
+                    default:
+                        pedHash = CityPedHashes.Random();
+                        break;
+                }
+
+                while (pedHash == lastPedHash)
+                {
+                    pedHash = HostagePedHashes.Random();
+                }
+
+                lastPedHash = pedHash;
+
+                Ped ped = await Ped.Spawn(pedHash, s.Item1);
+                ped.Heading = s.Item2;
+
+                RelationshipGroup relationshipGroup = (uint)Collections.RelationshipHash.Gang1;
+                ped.Fx.RelationshipGroup = relationshipGroup;
+                relationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate, true);
+
+                Decorators.Set(ped.Handle, Decorators.PED_MISSION, true);
+
+                ped.Fx.Weapons.Give(weaponHashes.Random(), 90, true, true);
+                ped.Fx.DropsWeaponsOnDeath = false;
+
+                RegisterPed(ped);
+                Shooters.Add(ped);
+            });
         }
 
         internal override async void Tick()
         {
             int numberOfAliveHostages = Hostages.Select(x => x).Where(x => x.IsAlive).Count();
+            int numberOfAliveShooters = Shooters.Select(x => x).Where(x => x.IsAlive).Count();
 
             Screen.ShowSubtitle($"No. {numberOfAliveHostages}, P: {progress}");
 
@@ -154,15 +209,13 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     End();
                     break;
                 case 1:
-
-                    await BaseScript.Delay(100);
-
-                    if (numberOfAliveHostages == 0)
-                    {
-                        calloutMessage.Success = false;
-                        progress = 0;
-                    }
-
+                    if (Game.PlayerPed.Position.Distance(data.Location) > 100f) return;
+                    progress++;
+                    break;
+                case 2:
+                    SetupHostages(data.Hostages);
+                    SetupShooters(data.Shooters);
+                    progress++;
                     break;
             }
         }
@@ -177,6 +230,12 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             Hostages.Clear();
             Shooters.Clear();
+
+            if (Blip != null)
+            {
+                if (Blip.Exists())
+                    Blip.Delete();
+            }
 
             base.End(forcefully);
             base.CompleteCallout(calloutMessage);
