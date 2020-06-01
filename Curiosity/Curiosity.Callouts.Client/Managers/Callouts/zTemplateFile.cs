@@ -10,7 +10,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
     {
         public Template(Player primaryPlayer) : base(primaryPlayer) => Players.Add(primaryPlayer);
 
-        internal override void Prepare()
+        internal async override void Prepare()
         {
             base.Prepare();
         }
