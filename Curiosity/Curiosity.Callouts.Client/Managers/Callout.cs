@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Classes;
+using Curiosity.Callouts.Shared.EventWrapper;
 using Curiosity.Callouts.Shared.Utils;
 using Newtonsoft.Json;
 using System;
@@ -66,7 +67,7 @@ namespace Curiosity.Callouts.Client.Managers
         {
             string jsonMessage = JsonConvert.SerializeObject(calloutMessage);
             string encoded = Encode.StringToBase64(jsonMessage);
-            BaseScript.TriggerServerEvent("", encoded);
+            BaseScript.TriggerServerEvent(Events.Server.Callout.CompleteCallout, encoded);
         }
     }
 }

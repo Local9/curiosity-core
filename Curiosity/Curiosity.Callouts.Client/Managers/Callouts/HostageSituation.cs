@@ -15,6 +15,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         List<Ped> Shooters = new List<Ped>();
         List<Ped> Hostages = new List<Ped>();
 
+        CalloutMessage calloutMessage = new CalloutMessage();
+
         private HostageDataModel data;
 
         private List<PedHash> CityPedHashes = new List<PedHash>()
@@ -99,6 +101,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
                     if (numberOfAliveHostages == 0)
                     {
+                        calloutMessage.Success = false;
                         progress = 0;
                     }
 
@@ -109,6 +112,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         internal override void End(bool forcefully = false)
         {
             base.End(forcefully);
+
+            base.CompleteCallout(calloutMessage);
 
             Screen.ShowNotification($"Callout Ended");
         }

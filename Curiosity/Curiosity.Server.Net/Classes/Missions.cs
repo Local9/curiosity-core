@@ -36,7 +36,7 @@ namespace Curiosity.Server.net.Classes
 
             API.RegisterCommand("mission", new Action<int, List<object>, string>(SendMission), false);
 
-            server.RegisterEventHandler("curiosity:server:missions:callout", new Action<CitizenFX.Core.Player, string>(OnCalloutCompleted));
+            server.RegisterEventHandler("curiosity:server:callout:completed", new Action<CitizenFX.Core.Player, string>(OnCalloutCompleted));
 
             server.RegisterEventHandler("curiosity:Server:Missions:TrafficStop", new Action<CitizenFX.Core.Player, string>(OnTrafficStop));
             server.RegisterEventHandler("curiosity:Server:Missions:ArrestedPed", new Action<CitizenFX.Core.Player, string>(OnArrestedPed));

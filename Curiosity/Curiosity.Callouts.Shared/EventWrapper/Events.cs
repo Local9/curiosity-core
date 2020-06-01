@@ -40,8 +40,9 @@ namespace Curiosity.Callouts.Shared.EventWrapper
         {
             public static class Callout
             {
-                public static Event StartCallout => new Event("curiosity:server:callouts:startCallout");
+                public static Event StartCallout => new Event("curiosity:server:callout:startCallout");
                 public const string FreeCopsResponse = "curiosity:server:callout:freeCopsResponse";
+                public const string CompleteCallout = "curiosity:server:callout:completed";
             }
         }
     }
