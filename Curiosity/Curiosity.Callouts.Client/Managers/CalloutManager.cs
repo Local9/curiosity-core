@@ -29,6 +29,8 @@ namespace Curiosity.Callouts.Client.Managers
                         if (name != API.GetCurrentResourceName()) return;
 
                         registeredCallouts.Add(typeof(StolenVehicle));
+                        registeredCallouts.Add(typeof(HostageSituation));
+                        registeredCallouts.Add(typeof(ParkingViolation));
                     };
         }
 
@@ -51,6 +53,9 @@ namespace Curiosity.Callouts.Client.Managers
                     break;
                 case "hostage":
                     newCallout = Activator.CreateInstance(typeof(HostageSituation), Game.Player) as Callout;
+                    break;
+                case "parking":
+                    newCallout = Activator.CreateInstance(typeof(ParkingViolation), Game.Player) as Callout;
                     break;
                 default:
                     Screen.ShowNotification($"~r~Invalid callout type '{calloutName}'");

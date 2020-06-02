@@ -71,5 +71,7 @@ namespace Curiosity.Callouts.Client.Utils
         {
             return API.Vdist(v.X, v.Y, v.Z, to.X, to.Y, to.Z);
         }
+
+        
     }
 }

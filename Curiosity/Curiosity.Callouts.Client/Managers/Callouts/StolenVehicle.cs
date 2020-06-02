@@ -22,7 +22,16 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             VehicleHash.Oracle2,
             VehicleHash.Panto,
             VehicleHash.Sandking,
-            VehicleHash.SlamVan
+            VehicleHash.SlamVan,
+            VehicleHash.Adder,
+            VehicleHash.Faggio,
+            VehicleHash.Issi2,
+            VehicleHash.Kuruma,
+            VehicleHash.F620,
+            VehicleHash.Dukes,
+            VehicleHash.Baller,
+            VehicleHash.Boxville,
+            VehicleHash.Rumpo
         };
 
         List<PedHash> pedHashes = new List<PedHash>()
@@ -83,6 +92,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             PursuitManager.StartNewPursuit(this);
 
             stolenVehicle.IsSpikable = true;
+
+            SendEmergancyNotification("CODE 3", "Stolen Vehicle");
 
             base.IsSetup = true;
         }

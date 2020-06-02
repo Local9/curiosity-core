@@ -70,5 +70,10 @@ namespace Curiosity.Callouts.Client.Managers
             string encoded = Encode.StringToBase64(jsonMessage);
             BaseScript.TriggerServerEvent(Events.Server.Callout.CompleteCallout, encoded);
         }
+
+        internal void SendEmergancyNotification(string title, string subtitle = "", string message = "", int colorId = 2)
+        {
+            BaseScript.TriggerEvent("curiosity:Client:Notification:Advanced", $"CHAR_CALL911", 1, title, subtitle, message, colorId);
+        }
     }
 }

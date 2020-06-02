@@ -131,6 +131,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             PluginInstance.RegisterTickHandler(OnHostageMessagePrompt);
 
+            SendEmergancyNotification("CODE 3", "Hostage Situation", "~r~Shots fired! Shots fired!");
+
             base.IsSetup = true;
         }
 
