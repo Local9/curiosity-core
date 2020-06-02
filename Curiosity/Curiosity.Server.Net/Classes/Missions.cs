@@ -74,6 +74,22 @@ namespace Curiosity.Server.net.Classes
                     money = Server.random.Next(60, 120) * calloutMessage.NumberRescued;
 
                     break;
+                case CalloutType.PARKING_VIOLATION:
+                    content = $"Completed a Parking Violation";
+
+                    experience = Server.random.Next(10, 20);
+                    knowledge = Server.random.Next(3, 6);
+                    money = Server.random.Next(20, 60);
+
+                    break;
+                case CalloutType.STOLEN_VEHICLE:
+                    content = $"Recovered the Stolen Vehicle";
+
+                    experience = Server.random.Next(100, 200);
+                    knowledge = Server.random.Next(20, 30);
+                    money = Server.random.Next(100, 250);
+
+                    break;
             }
 
             if (Server.IsBirthday)
