@@ -41,6 +41,8 @@ namespace Curiosity.Callouts.Shared.Classes
 
     public enum CalloutType
     {
-        HOSTAGE_RESCUE
+        HOSTAGE_RESCUE,
+        STOLEN_VEHICLE,
+        PARKING_VIOLATION
     }
 }

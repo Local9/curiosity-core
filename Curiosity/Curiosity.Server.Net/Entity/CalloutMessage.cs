@@ -41,6 +41,8 @@ namespace Curiosity.Server.net.Entity
 
     public enum CalloutType
     {
-        HOSTAGE_RESCUE
+        HOSTAGE_RESCUE,
+        STOLEN_VEHICLE,
+        PARKING_VIOLATION
     }
 }
