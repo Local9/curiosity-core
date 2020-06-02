@@ -79,7 +79,6 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 // API.SetEntityProofs(veh.Handle, true, true, true, true, true, true, true, true);
                 API.SetVehicleOnGroundProperly(veh.Handle);
                 veh.IsPersistent = true;
-                veh.LockStatus = VehicleLockStatus.Unlocked;
 
                 await Client.Delay(0);
 
