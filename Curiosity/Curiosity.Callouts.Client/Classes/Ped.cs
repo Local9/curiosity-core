@@ -104,7 +104,7 @@ namespace Curiosity.Callouts.Client.Classes
         internal async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
         {
             bool flag;
-            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f)
+            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f || IsMission)
             {
                 flag = false;
             }
