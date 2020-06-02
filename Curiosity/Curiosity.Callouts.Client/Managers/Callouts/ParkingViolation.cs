@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Utils;
+using Curiosity.Callouts.Shared.Classes;
 using Curiosity.Callouts.Shared.Utils;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
         Vehicle parkedVehicle;
         Blip blip;
+
+        CalloutMessage CalloutMessage = new CalloutMessage();
 
         List<VehicleHash> vehicleHashes = new List<VehicleHash>()
         {
@@ -130,6 +133,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             if(Game.IsControlPressed(0, Control.Context))
             {
+                CalloutMessage.CalloutType = CalloutType.HOSTAGE_RESCUE;
+                CalloutMessage.Success = true;
+
                 parkedVehicle.Dismiss();
                 progress = 0;
             }
