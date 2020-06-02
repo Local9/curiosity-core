@@ -4,9 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Managers;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Utils;
-using Newtonsoft.Json.Bson;
 using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Curiosity.Callouts.Client.Classes
