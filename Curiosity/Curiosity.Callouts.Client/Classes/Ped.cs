@@ -282,7 +282,6 @@ namespace Curiosity.Callouts.Client.Classes
 
         internal static async Task<Ped> Spawn(Model model, Vector3 position, bool sidewalk = true)
         {
-            float groundZ = position.Z;
 
             Vector3 spawnPosition = position;
 
@@ -290,12 +289,15 @@ namespace Curiosity.Callouts.Client.Classes
             {
                 spawnPosition = position.Sidewalk();
             }
-
-            Vector3 normal = Vector3.Zero;
-
-            if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
+            else
             {
-                spawnPosition.Z = groundZ;
+                float groundZ = position.Z;
+                Vector3 normal = Vector3.Zero;
+
+                if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
+                {
+                    spawnPosition.Z = groundZ;
+                }
             }
 
             CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition);

@@ -90,6 +90,7 @@ namespace Curiosity.Callouts.Client.Managers
             }
 
             if (!ActiveCallout.IsSetup) return;
+
             if (ActiveCallout.Players[0] == LocalPlayer) ActiveCallout.Tick();
 
             await Task.FromResult(100);

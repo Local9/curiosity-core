@@ -30,7 +30,7 @@ namespace Curiosity.Callouts.Client.Classes
             Fx = fx;
         }
 
-        public static async Task<Vehicle> Spawn(Model model, Vector3 position, bool IsSpikable = false)
+        public static async Task<Vehicle> Spawn(Model model, Vector3 position)
         {
             Vector3 streetPosition = position.Street();
             CitizenFX.Core.Vehicle fxVehicle = await World.CreateVehicle(model, streetPosition);

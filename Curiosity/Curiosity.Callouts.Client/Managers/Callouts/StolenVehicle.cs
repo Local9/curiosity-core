@@ -40,10 +40,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             PedHash.Tourist01AFY,
             PedHash.Lost01GFY,
             PedHash.Lost01GMY,
-            PedHash.MexGang01GMY,
-            PedHash.Families01GFY,
-            PedHash.BallaOrig01GMY,
-            PedHash.Korean01GMY
         };
 
         List<WeaponHash> weaponHashes = new List<WeaponHash>()
@@ -68,14 +64,17 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         {
             base.Prepare();
 
-            base.Name = "Stolen Vehicle";
+            calloutMessage.CalloutType = CalloutType.STOLEN_VEHICLE;
 
             stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
-                Players[0].Character.Position.AroundStreet(250f, 600f));
+                Players[0].Character.Position.AroundStreet(150f, 400f));
             RegisterVehicle(stolenVehicle);
             Logger.Log(stolenVehicle.Name);
 
-            criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position);
+            criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, true);
+
+            criminal.IsPersistent = true;
+            criminal.IsMission = true;
 
             if (Utility.RANDOM.Bool(0.8f))
             {
@@ -107,21 +106,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 return;
             }
 
-            float distance = Game.PlayerPed.Position.Distance(criminal.Position);
-            Screen.ShowSubtitle($"Distance: {distance}");
-
-            if (distance > 500 && distance < 800)
-            {
-                Screen.ShowSubtitle($"~o~WARNING~s~: Suspect is getting away!");
-            }
-
-            if (distance > 850)
-            {
-                Screen.ShowSubtitle($"~r~Suspect has got away! Get'em next time.");
-                End();
-                return;
-            }
-
             switch (progress)
             {
                 case 0:
@@ -130,7 +114,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     base.End();
                     break;
                 case 1:
-                    if (!criminal.IsDead) return;
+                    if (!criminal.IsDead) return; // FAILING
+                    Logger.Log($"Ped is dead...");
                     progress++;
                     break;
                 default:
