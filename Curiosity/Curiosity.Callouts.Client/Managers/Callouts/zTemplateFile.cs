@@ -3,6 +3,7 @@ using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
 using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
 
@@ -23,7 +24,19 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
         internal override void Tick()
         {
-            throw new NotImplementedException();
+            int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
+
+            if (numberOfAlivePlayers == 0) // clear callout
+            {
+                End(true);
+            }
+
+            switch(progress)
+            {
+                default:
+                    End();
+                    break;
+            }
         }
     }
 }
