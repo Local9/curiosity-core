@@ -54,6 +54,13 @@ namespace Curiosity.Callouts.Client.Utils
             };
         }
 
+        internal static class PolicePeds
+        {
+            internal static List<PedHash> URBAN = new List<PedHash>() { PedHash.Cop01SFY, PedHash.Cop01SMY };
+            internal static List<PedHash> RURAL = new List<PedHash>() { PedHash.Sheriff01SFY, PedHash.Sheriff01SFY };
+            internal static List<PedHash> HIGHWAY = new List<PedHash>() { PedHash.Cop01SFY, PedHash.Cop01SMY, PedHash.Sheriff01SFY, PedHash.Sheriff01SFY };
+        }
+
         internal enum RelationshipHash : uint
         {
             Player = 0x6F0783F5,

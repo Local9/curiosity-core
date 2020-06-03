@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Managers;
 using Curiosity.Callouts.Client.Utils;
+using Curiosity.Callouts.Shared.Classes;
 using Curiosity.Callouts.Shared.EventWrapper;
 using Curiosity.Callouts.Shared.Utils;
 using NativeUI;
@@ -100,11 +101,32 @@ namespace Curiosity.Callouts.Client.Menu
 
                 for (var i = 0; i < numCops; i++)
                 {
-                    Vehicle copCar = await World.CreateVehicle(Collections.PoliceCars.URBAN.Random(),
+                    PedHash pedToSpawn;
+                    VehicleHash vehicleHash;
+
+                    switch (PlayerManager.PatrolZone)
+                    {
+                        case PatrolZone.Highway:
+                            pedToSpawn = Collections.PolicePeds.HIGHWAY.Random();
+                            vehicleHash = Collections.PoliceCars.HIGHWAY.Random();
+                            break;
+                        case PatrolZone.Country:
+                        case PatrolZone.Rural:
+                            pedToSpawn = Collections.PolicePeds.RURAL.Random();
+                            vehicleHash = Collections.PoliceCars.RURAL.Random();
+                            break;
+                        default:
+                            pedToSpawn = Collections.PolicePeds.URBAN.Random();
+                            vehicleHash = Collections.PoliceCars.URBAN.Random();
+                            break;
+                    }
+
+
+                    Vehicle copCar = await World.CreateVehicle(vehicleHash,
                         Game.PlayerPed.Position.AroundStreet(200f, 2000f));
                     copCar.IsSirenActive = true;
 
-                    Ped cop = await World.CreatePed(PedHash.Cop01SMY, copCar.Position + copCar.UpVector * 5f);
+                    Ped cop = await World.CreatePed(pedToSpawn, copCar.Position + copCar.UpVector * 5f);
                     cop.SetIntoVehicle(copCar, VehicleSeat.Driver);
                     Blip blip = cop.AttachedBlip;
 

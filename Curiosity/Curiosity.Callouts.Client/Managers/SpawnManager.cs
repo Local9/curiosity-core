@@ -15,9 +15,6 @@ namespace Curiosity.Callouts.Client.Managers
     {
         public static SpawnManager Instance { get; private set; }
 
-        static List<PedHash> CityCops = new List<PedHash>() { PedHash.Cop01SFY, PedHash.Cop01SMY };
-        static List<PedHash> RuralCops = new List<PedHash>() { PedHash.Sheriff01SFY, PedHash.Sheriff01SFY };
-
         public SpawnManager()
         {
             Instance = this;
@@ -32,16 +29,16 @@ namespace Curiosity.Callouts.Client.Managers
             switch(PlayerManager.PatrolZone)
             {
                 case PatrolZone.Highway:
-                    pedToSpawn = RuralCops.Random();
+                    pedToSpawn = Collections.PolicePeds.HIGHWAY.Random();
                     vehicleHash = Collections.PoliceCars.HIGHWAY.Random();
                     break;
                 case PatrolZone.Country:
                 case PatrolZone.Rural:
-                    pedToSpawn = RuralCops.Random();
+                    pedToSpawn = Collections.PolicePeds.RURAL.Random();
                     vehicleHash = Collections.PoliceCars.RURAL.Random();
                     break;
                 default:
-                    pedToSpawn = CityCops.Random();
+                    pedToSpawn = Collections.PolicePeds.URBAN.Random();
                     vehicleHash = Collections.PoliceCars.URBAN.Random();
                     break;
             }
