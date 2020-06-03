@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Classes;
 using Curiosity.Callouts.Client.Utils;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
@@ -10,6 +12,9 @@ namespace Curiosity.Callouts.Client.Managers
     public class PursuitManager : BaseScript
     {
         private static Pursuit activePursuit;
+        public static bool IsPursuitActive => activePursuit != null;
+
+        private static Sequence currentSqeunce = Sequence.REST;
 
         internal static void StartNewPursuit(Callout callout)
         {
@@ -33,9 +38,9 @@ namespace Curiosity.Callouts.Client.Managers
                 if (ped.IsInVehicle != ped.Fx.IsInVehicle())
                 {
                     ped.IsInVehicle = ped.Fx.IsInVehicle();
-                    RedistributeCops(ped);
                 }
 
+                RedistributeCops(ped);
                 await Delay(100);
             }
         }
@@ -52,6 +57,8 @@ namespace Curiosity.Callouts.Client.Managers
                 .OrderBy(tuple => Vector3.Distance(tuple.Item1.Position, ped.Position))
                 .ToArray();
 
+            if (nearestCops.Length == 0) return;
+
             var alivePeds = activePursuit.Callout.RegisteredPeds
                 .Where(registeredPed => !registeredPed.IsDead)
                 .ToArray();
@@ -59,19 +66,73 @@ namespace Curiosity.Callouts.Client.Managers
             if (alivePeds.Length == 0) return;
 
             int numRedistributedCops = nearestCops.Length / alivePeds.Length;
-            for (var i = 0; i < numRedistributedCops - 1; i++)
+
+            for (var i = 0; i < numRedistributedCops; i++)
             {
-                if (ped.IsInVehicle)
-                    nearestCops[i].Item1.Task.VehicleChase(ped.Fx);
+                if (nearestCops[i].Item1.IsDead) // remove if dead
+                {
+                    CopSequence(Sequence.DEAD, ped, nearestCops[i]);
+                }
+                else if (ped.IsInVehicle)
+                {
+                    CopSequence(Sequence.CHASE, ped, nearestCops[i]);
+                }
                 else
-                    nearestCops[i].Item1.Task.Arrest(ped.Fx);
+                {
+                    CopSequence(Sequence.ARREST, ped, nearestCops[i]);
+                }
+            }
+        }
+
+        internal enum Sequence
+        {
+            REST = 0,
+            CHASE,
+            ARREST,
+            DEAD
+        }
+
+        internal static void CopSequence(Sequence sequence, Ped suspect, Tuple<Ped, Classes.Vehicle> officer)
+        {
+            if (currentSqeunce == sequence) return;
+            currentSqeunce = sequence;
+
+            Classes.Vehicle veh = officer.Item2;
+            Ped cop = officer.Item1;
+
+            switch(sequence)
+            {
+                case Sequence.REST:
+                    break;
+                case Sequence.CHASE:
+                    if (!cop.IsInVehicle)
+                        cop.PutInVehicle(veh);
+
+                    cop.Task.VehicleChase(suspect.Fx);
+                    break;
+                case Sequence.ARREST:
+                    cop.Task.Arrest(suspect.Fx);
+                    break;
+                case Sequence.DEAD:
+                    cop.Delete();
+                    veh.Delete();
+
+                    activePursuit.cops.Remove(officer);
+                    break;
             }
         }
 
         internal static async void AddNewCopToPursuit()
         {
+            if (activePursuit.cops.Count > 0)
+            {
+                UiTools.Dispatch("Units Unavailable", "No more units are currently available");
+                return;
+            }
+
             Vector3 position = Game.PlayerPed.Position.AroundStreet(200f, 500f);
             var newCop = await SpawnManager.CreateNewCop(position);
+
             if (activePursuit != null) activePursuit.cops.Add(newCop);
             else
             {
