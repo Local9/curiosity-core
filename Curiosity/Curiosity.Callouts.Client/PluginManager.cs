@@ -10,6 +10,13 @@ namespace Curiosity.Callouts.Client
 {
     public class PluginManager : BaseScript
     {
+        /* If you're reading this, either you're apart of the project or decompiled it.
+           This is a thank you to Salzian and his work here https://github.com/Salzian/SAEMS
+           which helped in guiding this project to what it is. I have added and expanded to his
+           initial work myself to get it to what it is today but without his initial work on
+           SAEMS I wouldn't of had this great foundation to achieve this. Thank you again.
+        */
+
         internal static PluginManager Instance { get; private set; }
 
         public PluginManager()
