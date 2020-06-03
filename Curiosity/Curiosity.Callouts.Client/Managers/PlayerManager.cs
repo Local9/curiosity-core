@@ -14,11 +14,31 @@ namespace Curiosity.Callouts.Client.Managers
         static ExportDictionary exportDictionary;
         static PlayerInformationModel playerInfo;
         static public PatrolZone PatrolZone = PatrolZone.City;
+
+        static public bool IsOnDuty;
+        static public bool IsOfficer;
+
         public PlayerManager()
         {
             EventHandlers[Events.Client.ServerPlayerInformationUpdate] += new Action<string>(OnPlayerInformationUpdate);
             EventHandlers[Events.Client.ReceivePlayerInformation] += new Action<string>(OnPlayerInformationUpdate);
             EventHandlers[Events.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
+            EventHandlers[Events.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
+        }
+
+        private void OnPoliceDuty(bool active, bool onduty, string job)
+        {
+            IsOnDuty = onduty;
+            IsOfficer = (job == "police");
+
+            if (IsOfficer)
+            {
+                Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
+            }
+            else
+            {
+                Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
+            }
         }
 
         private void OnPlayerPatrolZone(int zone)
