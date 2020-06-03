@@ -6,6 +6,7 @@ using Curiosity.Callouts.Shared.Classes;
 using Curiosity.Callouts.Shared.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
 using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
 
@@ -67,9 +68,11 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             calloutMessage.CalloutType = CalloutType.STOLEN_VEHICLE;
 
             stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
-                Players[0].Character.Position.AroundStreet(150f, 400f));
+                Players[0].Character.Position.AroundStreet(200f, 600f));
             RegisterVehicle(stolenVehicle);
             Logger.Log(stolenVehicle.Name);
+
+            // CONSIDER ESCAPE
 
             criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, true);
 
@@ -79,6 +82,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             if (Utility.RANDOM.Bool(0.8f))
             {
                 criminal.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
+                criminal.Fx.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate);
                 criminal.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
             }
 
@@ -92,7 +96,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             stolenVehicle.IsSpikable = true;
 
-            SendEmergancyNotification("CODE 3", "Stolen Vehicle");
+            UiTools.Dispatch("CODE 3", "Stolen Vehicle");
 
             base.IsSetup = true;
         }
@@ -104,6 +108,23 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 Logger.Log("Criminal was null");
                 End(true);
                 return;
+            }
+
+            float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
+            if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 2f)
+            {
+                TaskSequence taskSequence = new TaskSequence();
+                taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
+                taskSequence.AddTask.FleeFrom(Game.PlayerPed);
+                criminal.Task.PerformSequence(taskSequence);
+                taskSequence.Close();
+            }
+
+            int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
+
+            if (numberOfAlivePlayers == 0) // clear callout
+            {
+                End(true);
             }
 
             switch (progress)
