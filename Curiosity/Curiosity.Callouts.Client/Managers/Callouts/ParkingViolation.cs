@@ -7,6 +7,7 @@ using Curiosity.Callouts.Shared.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
@@ -72,7 +73,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             string model = $"{vehName}";
 
 
-            SendEmergancyNotification("Parking Violation", "Map has been updated", $"~b~Veh~s~: {model}~n~~b~Color~s~: {color.ToLower()}~n~~b~Plate~s~: {parkedVehicle.Fx.Mods.LicensePlate}");
+            UiTools.Dispatch("Parking Violation", $"~b~Veh~s~: {model}~n~~b~Color~s~: {color}~n~~b~Plate~s~: {parkedVehicle.Fx.Mods.LicensePlate}");
 
             base.IsSetup = true;
         }
@@ -93,8 +94,17 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
         internal override void Tick()
         {
+#if DEBUG
             if (PlayerManager.IsDeveloper)
                 Screen.ShowSubtitle($"Dis: {Game.PlayerPed.Position.Distance(parkedVehicle.Position)}");
+#endif
+
+            int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
+
+            if (numberOfAlivePlayers == 0) // clear callout
+            {
+                End(true);
+            }
 
             switch (progress)
             {
@@ -119,7 +129,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     progress++;
                     break;
                 case 2:
-                    if (Game.PlayerPed.Position.Distance(parkedVehicle.Position) > 2f) return;
+                    if (Game.PlayerPed.Position.Distance(parkedVehicle.Position) > 3f) return;
                     PluginInstance.RegisterTickHandler(OnPlayerInteraction);
                     break;
             }

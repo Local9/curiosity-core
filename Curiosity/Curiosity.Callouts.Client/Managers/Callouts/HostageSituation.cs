@@ -131,7 +131,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             PluginInstance.RegisterTickHandler(OnHostageMessagePrompt);
 
-            SendEmergancyNotification("CODE 3", "Hostage Situation", "~r~Shots fired! Shots fired!");
+            UiTools.Dispatch("CODE 3", "Hostage Situation~n~~r~Shots fired! Shots fired!");
 
             base.IsSetup = true;
         }
@@ -233,8 +233,17 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             if (remaining == 0)
                 progress = 0;
 
+            int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
+
+            if (numberOfAlivePlayers == 0) // clear callout
+            {
+                End(true);
+            }
+
+#if DEBUG
             if (PlayerManager.IsDeveloper)
                 Screen.ShowSubtitle($"H. {numberOfAliveHostages}, HRT: {hostageReleaseTracker}, S: {numberOfAliveShooters}, P: {progress}");
+#endif
 
             switch (progress)
             {
