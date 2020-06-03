@@ -104,6 +104,10 @@ namespace Curiosity.Callouts.Client.Classes
         internal async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
         {
             bool flag;
+
+            // if the ped is marked as a mission related ped, do not allow them to be deleted unless they match the other criteria
+            // does require manual clean up also
+
             if (this.Position.VDist(Game.PlayerPed.Position) <= 120f || IsMission)
             {
                 flag = false;
@@ -121,6 +125,8 @@ namespace Curiosity.Callouts.Client.Classes
             {
                 base.MaxHealth = 200;
                 base.Health = 200;
+
+                await BaseScript.Delay(10);
 
                 if (Utility.RANDOM.Bool(0.9f) && !IsKneeling)
                 {
@@ -174,6 +180,7 @@ namespace Curiosity.Callouts.Client.Classes
                 if (Game.IsControlJustPressed(0, Control.Context))
                 {
                     // what do I want to do with you
+                    // MENU
                 }
             }
         }
