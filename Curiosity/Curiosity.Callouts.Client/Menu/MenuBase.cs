@@ -21,10 +21,14 @@ namespace Curiosity.Callouts.Client.Menu
         public static MenuPool _MenuPool;
         private UIMenu menuMain;
 
-        private bool IsPanicButtonCooldownActive = false;
+        // sub menus
+        private Submenu.Dispatch _dispatch = new Submenu.Dispatch();
+        private UIMenu menuDispatch;
 
-        private UIMenuItem mItemRequestAssistance = new UIMenuItem($"Request Assistance", "Call for support");
-        private UIMenuItem mItemPanicButton = new UIMenuItem($"Panic Button", "Call dispatch for assistance.~n~~o~5 Minute cooldown between requests");
+        private bool IsPanicButtonCooldownActive = false;
+        // menu items - Maybe move these???
+        private UIMenuItem mItemRequestAssistance = new UIMenuItem($"Request Assistance", "Call for support during an active pursuit.");
+        private UIMenuItem mItemPanicButton = new UIMenuItem($"Panic Button", "Call dispatch for immediate assistance.~n~~o~5 Minute cooldown between requests");
 
         public MenuBase()
         {
@@ -43,11 +47,17 @@ namespace Curiosity.Callouts.Client.Menu
             _MenuPool.MouseEdgeEnabled = false;
 
             menuMain = new UIMenu("Activity Menu", "Options for your current activity");
+            menuMain.MouseControlsEnabled = false;
             _MenuPool.Add(menuMain);
 
             menuMain.OnItemSelect += MenuMain_OnItemSelect;
             menuMain.OnMenuOpen += MenuMain_OnMenuOpen;
             menuMain.OnMenuClose += MenuMain_OnMenuClose;
+
+
+            menuDispatch = _MenuPool.AddSubMenu(menuMain, "Dispatch", "Dispatch Options~n~~o~Options are available when a callout is active.");
+            menuDispatch.MouseControlsEnabled = false;
+            _dispatch.CreateMenu(menuDispatch);
 
             menuMain.AddItem(mItemPanicButton);
             menuMain.AddItem(mItemRequestAssistance);
@@ -60,11 +70,11 @@ namespace Curiosity.Callouts.Client.Menu
             OnMenuState(true);
 
             // Change button states
-
+            bool isCalloutActive = CalloutManager.ActiveCallout != null;
             bool isPursuitActive = PursuitManager.IsPursuitActive;
 
             mItemRequestAssistance.Enabled = isPursuitActive;
-            mItemRequestAssistance.Description = isPursuitActive ? "Call an NPC for assistance" : "Currently not in an active pursuit";
+            mItemRequestAssistance.Description = isPursuitActive ? "10-78 - Call dispatch for assistance." : "You'tr currently ~r~NOT~s~ in an active pursuit";
         }
 
         async Task OnPanicButtonCooldown()
@@ -159,7 +169,6 @@ namespace Curiosity.Callouts.Client.Menu
         private void MenuMain_OnMenuClose(UIMenu sender)
         {
             OnMenuState();
-            PluginInstance.DeregisterTickHandler(OnMenuDisplay);
         }
 
         private async Task OnMenuDisplay()
