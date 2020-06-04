@@ -17,11 +17,11 @@ namespace Curiosity.Callouts.Client.Classes
         {
             get
             {
-                return Decorators.GetBoolean(Fx.Handle, "curiosity::police::vehicle::mission");
+                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_SPIKE_ALLOWED);
             }
             set
             {
-                Decorators.Set(Fx.Handle, "curiosity::police::vehicle::mission", value);
+                Decorators.Set(Fx.Handle, Decorators.VEHICLE_SPIKE_ALLOWED, value);
             }
         }
 
