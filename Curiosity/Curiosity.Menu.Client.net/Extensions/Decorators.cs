@@ -5,6 +5,7 @@ namespace Curiosity.Menus.Client.net.Extensions
 {
     class Decorators
     {
+        public const string PLAYER_MENU = "player::npc::menu";
         public static void Set(int handle, string property, object value)
         {
             if (value is int i)

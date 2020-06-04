@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Menus.Client.net.Extensions;
 using MenuAPI;
 using System;
 using static CitizenFX.Core.Native.API;
@@ -105,6 +106,8 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             //{
             //    Debug.WriteLine($"MenuOpen: {isOpen}");
             //}
+
+            Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_MENU, isOpen);
 
             if (isOpen)
             {

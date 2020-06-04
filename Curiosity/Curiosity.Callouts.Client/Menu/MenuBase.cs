@@ -21,6 +21,8 @@ namespace Curiosity.Callouts.Client.Menu
         public static MenuPool _MenuPool;
         private UIMenu menuMain;
 
+        private bool isMenuOpen => Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_MENU);
+
         // sub menus
         private Submenu.Dispatch _dispatch = new Submenu.Dispatch();
         private UIMenu menuDispatch;
@@ -182,6 +184,8 @@ namespace Curiosity.Callouts.Client.Menu
         {
             _MenuPool.MouseEdgeEnabled = false;
 
+            Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_MENU, isOpen);
+
             if (isOpen)
             {
                 BaseScript.TriggerEvent("curiosity:Client:UI:LocationHide", true);
@@ -197,7 +201,7 @@ namespace Curiosity.Callouts.Client.Menu
         [Tick]
         private async Task OnMenuControls()
         {
-            if (Game.PlayerPed.IsAlive && PlayerManager.IsOfficer)
+            if (Game.PlayerPed.IsAlive && PlayerManager.IsOfficer && !isMenuOpen)
             {
                 if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording))
                 {

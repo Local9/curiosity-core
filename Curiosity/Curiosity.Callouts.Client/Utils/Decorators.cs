@@ -5,6 +5,7 @@ namespace Curiosity.Callouts.Client.Utils
     class Decorators
     {
         public const string PLAYER_DEBUG = "player::npc::debug";
+        public const string PLAYER_MENU = "player::npc::menu";
 
         public const string VEHICLE_STOLEN = "c::vehicle::stolen";
         public const string VEHICLE_FLEE = "c::vehicle::flee";
