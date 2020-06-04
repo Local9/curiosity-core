@@ -27,10 +27,9 @@ namespace Curiosity.Callouts.Client.Menu
         private Submenu.Dispatch _dispatch = new Submenu.Dispatch();
         private UIMenu menuDispatch;
 
-        private bool IsPanicButtonCooldownActive = false;
         // menu items - Maybe move these???
         private UIMenuItem mItemRequestAssistance = new UIMenuItem($"Request Assistance", "Call for support during an active pursuit.");
-        private UIMenuItem mItemPanicButton = new UIMenuItem($"Panic Button", "Call dispatch for immediate assistance.~n~~o~5 Minute cooldown between requests");
+        private UIMenuItem mItemPanicButton = new UIMenuItem($"Panic Button", "Call dispatch for immediate assistance.~n~~y~Will be removed after 2 mins~n~~o~5 Minute cooldown between requests");
 
         public MenuBase()
         {
@@ -79,18 +78,6 @@ namespace Curiosity.Callouts.Client.Menu
             mItemRequestAssistance.Description = isPursuitActive ? "10-78 - Call dispatch for assistance." : "You'tr currently ~r~NOT~s~ in an active pursuit";
         }
 
-        async Task OnPanicButtonCooldown()
-        {
-            long ggt = API.GetGameTimer();
-            while ((API.GetGameTimer() - ggt) < 300000) // 5 minutes
-            {
-                await BaseScript.Delay(100);
-            }
-            UiTools.Dispatch("Units Available", "Units have now returned to the depo");
-            IsPanicButtonCooldownActive = false;
-            PluginInstance.DeregisterTickHandler(OnPanicButtonCooldown);
-        }
-
         private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
             if (selectedItem == mItemRequestAssistance)
@@ -100,71 +87,7 @@ namespace Curiosity.Callouts.Client.Menu
 
             if (selectedItem == mItemPanicButton)
             {
-                if (IsPanicButtonCooldownActive)
-                {
-                    UiTools.Dispatch("Request Denied", "Requested units are currently responding to another call");
-                    return;
-                }
-
-                IsPanicButtonCooldownActive = true;
-                PluginInstance.RegisterTickHandler(OnPanicButtonCooldown);
-
-                int numCops = Utility.RANDOM.Next(3, 10);
-
-                for (var i = 0; i < numCops; i++)
-                {
-                    PedHash pedToSpawn;
-                    VehicleHash vehicleHash;
-
-                    switch (PlayerManager.PatrolZone)
-                    {
-                        case PatrolZone.Highway:
-                            pedToSpawn = Collections.PolicePeds.HIGHWAY.Random();
-                            vehicleHash = Collections.PoliceCars.HIGHWAY.Random();
-                            break;
-                        case PatrolZone.Country:
-                        case PatrolZone.Rural:
-                            pedToSpawn = Collections.PolicePeds.RURAL.Random();
-                            vehicleHash = Collections.PoliceCars.RURAL.Random();
-                            break;
-                        default:
-                            pedToSpawn = Collections.PolicePeds.URBAN.Random();
-                            vehicleHash = Collections.PoliceCars.URBAN.Random();
-                            break;
-                    }
-
-
-                    Vehicle copCar = await World.CreateVehicle(vehicleHash,
-                        Game.PlayerPed.Position.AroundStreet(200f, 2000f));
-                    copCar.IsSirenActive = true;
-
-                    Ped cop = await World.CreatePed(pedToSpawn, copCar.Position + copCar.UpVector * 5f);
-                    cop.SetIntoVehicle(copCar, VehicleSeat.Driver);
-                    Blip blip = cop.AttachedBlip;
-
-                    if (blip == null)
-                    {
-                        blip = cop.AttachBlip();
-                    }
-
-                    if (blip != null)
-                    {
-                        blip.Color = BlipColor.Blue;
-                        blip.IsFriendly = true;
-                    }
-
-                    TaskSequence sequence = new TaskSequence();
-
-                    sequence.AddTask.DriveTo(copCar, Game.PlayerPed.Position, 15f, float.MaxValue, (int)DrivingStyle.Rushed);
-                    sequence.AddTask.LeaveVehicle();
-                    sequence.AddTask.ChatTo(Game.PlayerPed);
-                    sequence.AddTask.WanderAround();
-                    sequence.Close();
-
-                    cop.Task.PerformSequence(sequence);
-
-                    copCar.IsPersistent = false;
-                }
+                PanicButton.Pressed();
             }
         }
 

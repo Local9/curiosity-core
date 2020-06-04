@@ -35,6 +35,7 @@ namespace Curiosity.Callouts.Client
                 {
                     if (resourceName != API.GetCurrentResourceName()) return;
 
+                    Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_MENU, false);
                     BaseScript.TriggerEvent(Events.Client.RequestPlayerInformation);
 
                     Logger.Log("---------------------------------");
