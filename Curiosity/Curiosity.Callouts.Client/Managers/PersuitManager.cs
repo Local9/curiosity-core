@@ -63,7 +63,20 @@ namespace Curiosity.Callouts.Client.Managers
                 .Where(registeredPed => !registeredPed.IsDead)
                 .ToArray();
 
-            if (alivePeds.Length == 0) return;
+            if (alivePeds.Length == 0)
+            {
+                if (activePursuit.cops.Count > 0)
+                {
+                    activePursuit.cops.ForEach(c =>
+                    {
+                        if (c.Item1.Exists())
+                            c.Item1.MarkAsNoLongerNeeded();
+
+                        if (c.Item2.Exists())
+                            c.Item2.MarkAsNoLongerNeeded();
+                    });
+                }
+            }
 
             int numRedistributedCops = nearestCops.Length / alivePeds.Length;
 
