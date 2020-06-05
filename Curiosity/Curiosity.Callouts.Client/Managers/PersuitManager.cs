@@ -31,7 +31,20 @@ namespace Curiosity.Callouts.Client.Managers
         [Tick]
         private async Task OnTick()
         {
-            if (activePursuit == null) return;
+            if (activePursuit == null)
+            {
+                if (activePursuit.cops.Count > 0)
+                {
+                    activePursuit.cops.ForEach(c =>
+                    {
+                        if (c.Item1.Exists())
+                            c.Item1.MarkAsNoLongerNeeded();
+
+                        if (c.Item2.Exists())
+                            c.Item2.MarkAsNoLongerNeeded();
+                    });
+                }
+            }
 
             foreach (Ped ped in activePursuit.Callout.RegisteredPeds)
             {
@@ -63,20 +76,7 @@ namespace Curiosity.Callouts.Client.Managers
                 .Where(registeredPed => !registeredPed.IsDead)
                 .ToArray();
 
-            if (alivePeds.Length == 0)
-            {
-                if (activePursuit.cops.Count > 0)
-                {
-                    activePursuit.cops.ForEach(c =>
-                    {
-                        if (c.Item1.Exists())
-                            c.Item1.MarkAsNoLongerNeeded();
-
-                        if (c.Item2.Exists())
-                            c.Item2.MarkAsNoLongerNeeded();
-                    });
-                }
-            }
+            if (alivePeds.Length == 0) return;
 
             int numRedistributedCops = nearestCops.Length / alivePeds.Length;
 
