@@ -56,7 +56,9 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
         {
             if (selectedItem == menuItemCode4)
             {
-                CalloutManager.ActiveCallout?.End();
+                bool isCalloutSuccess = true;
+
+                CalloutManager.ActiveCallout?.End(!isCalloutSuccess);
             }
         }
 
