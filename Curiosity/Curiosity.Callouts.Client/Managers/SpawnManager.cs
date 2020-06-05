@@ -46,6 +46,9 @@ namespace Curiosity.Callouts.Client.Managers
             Ped ped = await Ped.Spawn(pedToSpawn, position);
             ped.IsMission = true;
             ped.Fx.AlwaysKeepTask = true;
+            ped.Fx.Weapons.Give(Collections.PoliceWeapons.WEAPONS.Random(), 90, false, true);
+            ped.Fx.DropsWeaponsOnDeath = false;
+            ped.Fx.IsOnlyDamagedByPlayer = false;
 
             if (ped == null)
             {
@@ -54,6 +57,7 @@ namespace Curiosity.Callouts.Client.Managers
 
             Vehicle vehicle = await Vehicle.Spawn(vehicleHash, position);
             ped.PutInVehicle(vehicle);
+            
 
             vehicle.Fx.IsSirenActive = true;
 
