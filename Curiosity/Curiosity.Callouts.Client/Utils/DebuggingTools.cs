@@ -80,6 +80,7 @@ namespace Curiosity.Callouts.Client.Utils
                 {
                     list["Health"] = $"{ped.Health} / {ped.MaxHealth}";
 
+                    list["Important"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_IMPORTANT)}";
                     list["MissionPed"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_MISSION)}";
                     list["Hostage"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_HOSTAGE)}";
                     list["Arrested"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_ARREST)}";

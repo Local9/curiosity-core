@@ -47,6 +47,18 @@ namespace Curiosity.Callouts.Client.Classes
             }
         }
 
+        internal bool IsImportant
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_IMPORTANT);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.PED_IMPORTANT, value);
+            }
+        }
+
         internal bool IsHostage
         {
             get
@@ -108,13 +120,13 @@ namespace Curiosity.Callouts.Client.Classes
             // if the ped is marked as a mission related ped, do not allow them to be deleted unless they match the other criteria
             // does require manual clean up also
 
-            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f || IsMission)
+            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f || IsImportant)
             {
                 flag = false;
             }
             else
             {
-                flag = (!base.IsOnScreen ? true : base.IsDead);
+                flag = (!base.IsOnScreen ? true : base.IsDead && !IsImportant);
             }
             if (flag)
             {
@@ -134,7 +146,7 @@ namespace Curiosity.Callouts.Client.Classes
                 }
             }
 
-            if (TimeOfDeath > 0) // Remove the ped from the world
+            if (TimeOfDeath > 0 && !IsImportant) // Remove the ped from the world
             {
                 if ((API.GetGameTimer() - TimeOfDeath) > 5000)
                 {

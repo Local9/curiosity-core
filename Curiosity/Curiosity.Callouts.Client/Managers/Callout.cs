@@ -18,6 +18,7 @@ namespace Curiosity.Callouts.Client.Managers
 
         public event Action<bool> Ended;
         public bool IsSetup = false;
+        public bool IsRunning = false;
 
         internal virtual string Name { get; set; }
 

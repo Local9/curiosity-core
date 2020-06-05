@@ -161,6 +161,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 ped.RunSequence(Ped.Sequence.KNEEL);
 
                 ped.IsHostage = true;
+                ped.IsImportant = true;
                 ped.IsArrestable = false;
 
                 ped.Fx.RelationshipGroup = relationshipGroup;
@@ -210,6 +211,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 ped.Task.FightAgainstHatedTargets(data.SpawnRadius);
 
                 ped.IsMission = true;
+                ped.IsImportant = true;
                 ped.IsArrestable = false;
 
                 Decorators.Set(ped.Handle, Decorators.PED_MISSION, true);

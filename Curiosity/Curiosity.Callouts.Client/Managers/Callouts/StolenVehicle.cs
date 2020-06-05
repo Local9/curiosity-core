@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Callouts.Client.Menu.Submenu;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Classes;
 using Curiosity.Callouts.Shared.Utils;
@@ -68,7 +69,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             calloutMessage.CalloutType = CalloutType.STOLEN_VEHICLE;
 
             stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
-                Players[0].Character.Position.AroundStreet(200f, 600f));
+                Players[0].Character.Position.AroundStreet(200f, 400f));
             RegisterVehicle(stolenVehicle);
             Logger.Log(stolenVehicle.Name);
 
@@ -77,6 +78,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, true);
 
             criminal.IsPersistent = true;
+            criminal.IsImportant = true;
             criminal.IsMission = true;
 
             if (Utility.RANDOM.Bool(0.8f))
@@ -101,14 +103,15 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             base.IsSetup = true;
         }
 
-        internal override void Tick()
+        internal async override void Tick()
         {
-            if (criminal == null)
+            if (criminal == null && !IsRunning)
             {
                 Logger.Log("Criminal was null");
                 End(true);
                 return;
             }
+            IsRunning = true;
 
             float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
             if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 2f)
@@ -120,6 +123,24 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 taskSequence.Close();
             }
 
+            if (stolenVehicle.Fx.Speed < 4.0f && criminal.IsInVehicle)
+            {
+                long gameTimer = API.GetGameTimer();
+                Vector3 location = stolenVehicle.Position;
+                while (criminal.IsInVehicle && stolenVehicle.Position.Distance(location) < 4.0f)
+                {
+                    await BaseScript.Delay(100);
+                    if ((API.GetGameTimer() - gameTimer) > 10000)
+                    {
+                        TaskSequence fleeVehicle = new TaskSequence();
+                        fleeVehicle.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
+                        fleeVehicle.AddTask.FleeFrom(Game.PlayerPed);
+                        criminal.Task.PerformSequence(fleeVehicle);
+                        fleeVehicle.Close();
+                    }
+                }
+            }
+
             int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
 
             if (numberOfAlivePlayers == 0) // clear callout
@@ -127,22 +148,28 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 End(true);
             }
 
-            switch (progress)
+            if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f)
             {
-                case 0:
-                    calloutMessage.Name = Name;
-                    calloutMessage.Success = true;
-                    base.End();
-                    break;
-                case 1:
-                    if (!criminal.IsDead) return; // FAILING
-                    Logger.Log($"Ped is dead...");
-                    progress++;
-                    break;
-                default:
-                    End();
-                    break;
+                UiTools.Dispatch("Pursuit Ended", "Suspect has got away. Return to patrol.");
+                End(true);
             }
+
+            //switch (progress)
+            //{
+            //    case 0:
+            //        calloutMessage.Name = Name;
+            //        calloutMessage.Success = true;
+            //        base.End();
+            //        break;
+            //    case 1:
+            //        //if (!criminal.IsDead) return; // FAILING
+            //        //Logger.Log($"Ped is dead...");
+            //        //progress++;
+            //        break;
+            //    default:
+            //        End();
+            //        break;
+            //}
         }
 
         internal override void End(bool forcefully = false)
