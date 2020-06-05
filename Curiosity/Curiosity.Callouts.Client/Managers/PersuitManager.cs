@@ -33,9 +33,9 @@ namespace Curiosity.Callouts.Client.Managers
         {
             if (activePursuit == null)
             {
-                if (activePursuit.cops.Count > 0)
+                if (activePursuit?.cops.Count > 0)
                 {
-                    activePursuit.cops.ForEach(c =>
+                    activePursuit?.cops.ForEach(c =>
                     {
                         if (c.Item1.Exists())
                         {
@@ -47,6 +47,7 @@ namespace Curiosity.Callouts.Client.Managers
                             c.Item2.MarkAsNoLongerNeeded();
                     });
                 }
+                return;
             }
 
             foreach (Ped ped in activePursuit.Callout.RegisteredPeds)
