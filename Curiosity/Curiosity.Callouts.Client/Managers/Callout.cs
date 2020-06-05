@@ -27,12 +27,17 @@ namespace Curiosity.Callouts.Client.Managers
         private List<Vehicle> registeredVehicles;
         public List<Ped> RegisteredPeds { get; }
 
-
         protected Callout(Player primaryPlayer)
         {
             registeredVehicles = new List<Vehicle>();
             RegisteredPeds = new List<Ped>();
             Players = new List<Player> { primaryPlayer };
+        }
+
+        public void AddPlayer(Player player)
+        {
+            Players.Add(player);
+            Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, true);
         }
 
         internal virtual void Prepare()
@@ -47,6 +52,16 @@ namespace Curiosity.Callouts.Client.Managers
         {
             RegisteredPeds.ForEach(ped => ped?.Dismiss());
             registeredVehicles.ForEach(vehicle => vehicle?.Dismiss());
+
+            if (Players.Count > 0)
+            {
+                // Mark to update the blip script about the players state
+                Players.ForEach(player =>
+                {
+                    Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, false);
+                });
+            }
+
             Ended?.Invoke(forcefully);
         }
 

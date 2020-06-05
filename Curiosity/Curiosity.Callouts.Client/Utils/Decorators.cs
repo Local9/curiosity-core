@@ -6,6 +6,7 @@ namespace Curiosity.Callouts.Client.Utils
     {
         public const string PLAYER_DEBUG = "player::npc::debug";
         public const string PLAYER_MENU = "player::npc::menu";
+        public const string PLAYER_ASSISTING = "player::npc::assisting";
 
         public const string VEHICLE_STOLEN = "c::vehicle::stolen";
         public const string VEHICLE_FLEE = "c::vehicle::flee";
