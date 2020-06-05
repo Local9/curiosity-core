@@ -1,9 +1,15 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Callouts.Client.Utils
 {
-    class UiTools
+    class UiTools : BaseScript
     {
+        public UiTools()
+        {
+
+        }
+
         static public void Dispatch(string subject, string message)
         {
             Advanced("CHAR_911", 2, "Dispatch", subject, message, 2);
