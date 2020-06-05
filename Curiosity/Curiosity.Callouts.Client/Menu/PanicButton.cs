@@ -23,7 +23,7 @@ namespace Curiosity.Callouts.Client.Menu
         {
             if (IsPanicButtonCooldownActive)
             {
-                UiTools.Dispatch("Request Denied", "Requested units are currently responding to another call");
+                UiTools.Dispatch("Request Denied", "~r~Requested units are currently responding to another call");
                 return;
             }
 
