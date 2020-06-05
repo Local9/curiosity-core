@@ -302,7 +302,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             }
         }
 
-        internal override async void End(bool forcefully = false)
+        internal override async void End(bool forcefully = false, CalloutMessage cm = null)
         {
             PluginInstance.DeregisterTickHandler(OnHostageMessagePrompt);
 
@@ -321,11 +321,10 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     Blip.Delete();
             }
 
-            base.End(forcefully);
+            cm = calloutMessage;
+            base.End(forcefully, cm);
 
-            base.CompleteCallout(calloutMessage);
-
-            calloutMessage = null;
+            cm = null;
         }
 
     }

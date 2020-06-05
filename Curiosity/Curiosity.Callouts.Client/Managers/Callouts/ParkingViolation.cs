@@ -77,9 +77,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             base.IsSetup = true;
         }
-        internal override void End(bool forcefully = false)
+        internal override void End(bool forcefully = false, CalloutMessage cm = null)
         {
-            base.End(forcefully);
+            base.End(forcefully, cm);
 
             PluginInstance.DeregisterTickHandler(OnPlayerInteraction);
 

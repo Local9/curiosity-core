@@ -49,7 +49,7 @@ namespace Curiosity.Callouts.Client.Managers
 
         internal abstract void Tick();
 
-        internal virtual void End(bool forcefully = false)
+        internal virtual void End(bool forcefully = false, CalloutMessage calloutMessage = null)
         {
             RegisteredPeds.ForEach(ped => ped?.Dismiss());
             registeredVehicles.ForEach(vehicle => vehicle?.Dismiss());
@@ -61,6 +61,13 @@ namespace Curiosity.Callouts.Client.Managers
                 {
                     Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, false);
                 });
+            }
+
+            if (calloutMessage != null)
+            {
+                string jsonMessage = JsonConvert.SerializeObject(calloutMessage);
+                string encoded = Encode.StringToBase64(jsonMessage);
+                BaseScript.TriggerServerEvent(Events.Server.Callout.CompleteCallout, encoded);
             }
 
             Ended?.Invoke(forcefully);
@@ -78,13 +85,6 @@ namespace Curiosity.Callouts.Client.Managers
             vehicle.Fx.IsPersistent = true;
             registeredVehicles.Add(vehicle);
             Logger.Log($"Registered vehicle {vehicle.Hash} to callout {GetType().Name}");
-        }
-
-        internal void CompleteCallout(CalloutMessage calloutMessage)
-        {
-            string jsonMessage = JsonConvert.SerializeObject(calloutMessage);
-            string encoded = Encode.StringToBase64(jsonMessage);
-            BaseScript.TriggerServerEvent(Events.Server.Callout.CompleteCallout, encoded);
         }
     }
 }

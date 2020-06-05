@@ -156,11 +156,10 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             }
         }
 
-        internal override void End(bool forcefully = false)
+        internal override void End(bool forcefully = false, CalloutMessage cm = null)
         {
-            base.End(forcefully);
-
-            base.CompleteCallout(calloutMessage);
+            cm = calloutMessage;
+            base.End(forcefully, cm);
         }
     }
 }
