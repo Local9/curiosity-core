@@ -92,9 +92,17 @@ namespace Curiosity.Server.net.Classes
                     break;
             }
 
+            if (!calloutMessage.Success)
+            {
+                experience = (int)(experience * .05f);
+                money = (int)(money * .05f);
+                knowledge = (int)(knowledge * .05f);
+            }
+
             if (Server.IsBirthday)
             {
                 experience = (int)(experience * 2.0f);
+                knowledge = (int)(knowledge * 2.0f);
                 money = (int)(money * 2.0f);
             }
 
