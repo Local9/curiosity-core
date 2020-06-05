@@ -38,7 +38,10 @@ namespace Curiosity.Callouts.Client.Managers
                     activePursuit.cops.ForEach(c =>
                     {
                         if (c.Item1.Exists())
+                        {
+                            c.Item1.Task.WanderAround();
                             c.Item1.MarkAsNoLongerNeeded();
+                        }
 
                         if (c.Item2.Exists())
                             c.Item2.MarkAsNoLongerNeeded();
