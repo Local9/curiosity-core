@@ -11,7 +11,9 @@ namespace Curiosity.Callouts.Client.Classes
     {
         internal CitizenFX.Core.Vehicle Fx { get; private set; }
         public Vector3 Position => Fx.Position;
-        public string Name => Fx.Model.ToString();
+        public string Hash => Fx.Model.ToString();
+
+        public string Name => API.GetLabelText(API.GetDisplayNameFromVehicleModel((uint)Fx.Model.Hash));
 
         public bool IsSpikable
         {

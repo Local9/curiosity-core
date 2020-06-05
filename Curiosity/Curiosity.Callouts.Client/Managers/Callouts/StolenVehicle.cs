@@ -6,6 +6,7 @@ using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Classes;
 using Curiosity.Callouts.Shared.Utils;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
@@ -71,7 +72,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
                 Players[0].Character.Position.AroundStreet(200f, 400f));
             RegisterVehicle(stolenVehicle);
-            Logger.Log(stolenVehicle.Name);
+            Logger.Log(stolenVehicle.Hash);
 
             // CONSIDER ESCAPE
 
@@ -98,7 +99,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             stolenVehicle.IsSpikable = true;
 
-            UiTools.Dispatch("CODE 3", "Stolen Vehicle");
+            UiTools.Dispatch("~r~CODE 3~s~: Stolen Vehicle", $"~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}");
 
             base.IsSetup = true;
         }
@@ -150,26 +151,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f)
             {
-                UiTools.Dispatch("Pursuit Ended", "Suspect has got away. Return to patrol.");
+                UiTools.Dispatch("~r~Pursuit Ended", "Suspect has got away. Return to patrol.");
                 End(true);
             }
-
-            //switch (progress)
-            //{
-            //    case 0:
-            //        calloutMessage.Name = Name;
-            //        calloutMessage.Success = true;
-            //        base.End();
-            //        break;
-            //    case 1:
-            //        //if (!criminal.IsDead) return; // FAILING
-            //        //Logger.Log($"Ped is dead...");
-            //        //progress++;
-            //        break;
-            //    default:
-            //        End();
-            //        break;
-            //}
         }
 
         internal override void End(bool forcefully = false)

@@ -77,7 +77,7 @@ namespace Curiosity.Callouts.Client.Managers
         {
             vehicle.Fx.IsPersistent = true;
             registeredVehicles.Add(vehicle);
-            Logger.Log($"Registered vehicle {vehicle.Name} to callout {GetType().Name}");
+            Logger.Log($"Registered vehicle {vehicle.Hash} to callout {GetType().Name}");
         }
 
         internal void CompleteCallout(CalloutMessage calloutMessage)
