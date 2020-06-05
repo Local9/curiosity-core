@@ -140,6 +140,17 @@ namespace Curiosity.Client.net.Classes.Player
 
             privilege = (Privilege)playerInfo.RoleId;
 
+            if (IsDeveloper())
+            {
+                client.RegisterTickHandler(NoClip.OnNoClipTick);
+                client.RegisterTickHandler(NoClip.CheckInputRotation);
+            }
+            else
+            {
+                client.DeregisterTickHandler(NoClip.OnNoClipTick);
+                client.DeregisterTickHandler(NoClip.CheckInputRotation);
+            }
+
             if (privilege == Privilege.DEVELOPER && !statsSet)
             {
                 statsSet = true;

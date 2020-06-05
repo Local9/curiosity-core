@@ -91,6 +91,7 @@
     <Compile Include="Classes\Player\Creation.cs" />
     <Compile Include="Classes\Player\Inventory.cs" />
     <Compile Include="Classes\Player\MugshotCreator.cs" />
+    <Compile Include="Classes\Player\NoClip.cs" />
     <Compile Include="Classes\Player\PedDamage.cs" />
     <Compile Include="Classes\Player\PlayerInformation.cs" />
     <Compile Include="Classes\Player\Queue.cs" />
