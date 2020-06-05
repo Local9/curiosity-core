@@ -1,18 +1,14 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using System;
 
 namespace Curiosity.Callouts.Client.Utils
 {
     class UiTools : BaseScript
     {
-        public UiTools()
-        {
-
-        }
-
         static public void Dispatch(string subject, string message)
         {
-            Advanced("CHAR_911", 2, "Dispatch", subject, message, 2);
+            Advanced("CHAR_CALL911", 2, "Dispatch", subject, message, 2);
         }
 
         static public void Advanced(string icon, int iconType, string title, string subject, string message, int gtaColorId)
