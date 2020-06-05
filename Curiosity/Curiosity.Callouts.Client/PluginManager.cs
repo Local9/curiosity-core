@@ -54,8 +54,16 @@ namespace Curiosity.Callouts.Client
             else
             {
                 Screen.ShowNotification($"~b~Callouts~s~: ~r~Disabled");
-                Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
+                ResetPlayer();
             }
+        }
+
+        private void ResetPlayer()
+        {
+            Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
+            Game.PlayerPed.Weapons.RemoveAll();
+            Game.PlayerPed.Armor = 0;
+            Game.PlayerPed.Health = 200;
         }
 
         private void OnPlayerSpawned(dynamic spawnInfo)
