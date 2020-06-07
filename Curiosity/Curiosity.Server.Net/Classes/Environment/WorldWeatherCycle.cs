@@ -132,22 +132,11 @@ namespace Curiosity.Server.net.Classes.Environment
 
             if (isChristmas)
             {
-                weathers.Add("SNOW", new List<string> { "BLIZZARD", "RAIN", "SNOWLIGHT", "SMOG" });
-                weathers.Add("BLIZZARD", new List<string> { "SNOW", "SNOWLIGHT", "THUNDER", "SMOG" });
-                weathers.Add("SNOWLIGHT", new List<string> { "SNOW", "RAIN", "CLEARING", "FOGGY" });
-                weathers.Add("RAIN", new List<string> { "SNOW", "CLEARING", "FOGGY" });
-                weathers.Add("FOGGY", new List<string> { "SNOW", "BLIZZARD", "SNOWLIGHT" });
-                weathers.Add("CLEARING", new List<string> { "SNOW", "BLIZZARD", "SNOWLIGHT" });
-                weathers.Add("SMOG", new List<string> { "SNOW", "BLIZZARD", "SNOWLIGHT", "RAIN" });
-                weathers.Add("THUNDER", new List<string> { "SNOW", "BLIZZARD", "FOGGY", "RAIN" });
+                weathers.Add("XMAS", new List<string> { "XMAS" });
             }
             else if (isHalloween)
             {
-                weathers.Add("HALLOWEEN", new List<string> { "CLOUDS", "RAIN", "CLEARING", "CLEAR" });
-                weathers.Add("CLOUDS", new List<string> { "HALLOWEEN", "RAIN", "CLEARING", "CLEAR" });
-                weathers.Add("RAIN", new List<string> { "CLOUDS", "HALLOWEEN", "CLEARING", "CLEAR" });
-                weathers.Add("CLEARING", new List<string> { "CLOUDS", "RAIN", "HALLOWEEN", "CLEAR" });
-                weathers.Add("CLEAR", new List<string> { "CLOUDS", "RAIN", "CLEARING", "HALLOWEEN" });
+                weathers.Add("HALLOWEEN", new List<string> { "HALLOWEEN" });
             }
             else
             {
