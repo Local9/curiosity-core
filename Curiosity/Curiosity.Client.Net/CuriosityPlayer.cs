@@ -42,12 +42,11 @@ namespace Curiosity.Client.net
             EventHandlers["curiosity:Client:Player:Setup"] += new Action<string>(OnPlayerSetup);
             EventHandlers["curiosity:Client:Player:Role"] += new Action<string>(UpdatePlayerRole);
             EventHandlers["curiosity:Client:Player:DisplayInfo"] += new Action<bool>(DisplayInfo);
+            EventHandlers["curiosity:Client:Player:Rules"] += new Action(ShowScaleformRules);
 
             Tick += UpdatePlayerLocation;
             Tick += PlayerAndServerSettings;
             Tick += SpawnTick;
-
-            API.RegisterCommand("rules", new Action(ShowScaleformRules), false);
         }
 
         async void DisplayInfo(bool display)

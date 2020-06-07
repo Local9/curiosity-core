@@ -4,6 +4,7 @@ using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Server.net.Business;
+using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
@@ -54,12 +55,43 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("guide", new Action<int, List<object>, string>(Guide), false);
             API.RegisterCommand("help", new Action<int, List<object>, string>(Guide), false);
             API.RegisterCommand("kickall", new Action<int, List<object>, string>(OnMassKick), false);
+            API.RegisterCommand("rules", new Action<int, List<object>, string>(OnShowRules), false);
 
             API.RegisterCommand("queue", new Action<int, List<object>, string>(OnQueueReadout), false);
 
             server.RegisterEventHandler("rconCommand", new Action<string, List<object>>(OnRconCommand));
 
             // API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
+        }
+
+        private static void OnShowRules(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (!session.IsStaff)
+            {
+                session.Player.TriggerEvent("curiosity:Client:Player:Rules");
+            }
+            else
+            {
+                if (arguments.Count > 0)
+                {
+                    string playerToAdminister = $"{arguments[0]}";
+
+                    if (!SessionManager.PlayerList.ContainsKey(playerToAdminister)) return;
+
+                    Session player = SessionManager.PlayerList[playerToAdminister];
+                    player.Player.TriggerEvent("curiosity:Client:Player:Rules");
+                    session.Player.Send(NotificationType.CHAR_LIFEINVADER, 20, $"Rules sent", $"Player: {player.Name}", $"");
+                }
+                else
+                {
+                    session.Player.Send(NotificationType.CHAR_LIFEINVADER, 20, $"Players Server ID missing", $"", $"");
+                }
+            }
+
         }
 
         private static void OnMassKick(int playerHandle, List<object> arguments, string raw)
