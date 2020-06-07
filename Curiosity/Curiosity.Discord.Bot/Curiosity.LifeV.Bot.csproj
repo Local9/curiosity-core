@@ -30,7 +30,7 @@
     <PackageReference Include="Discord.Net" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.4" />
-    <PackageReference Include="MySqlConnector" Version="0.66.0" />
+    <PackageReference Include="MySqlConnector" Version="0.68.0" />
   </ItemGroup>
 
   <ItemGroup>
