@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,24 @@ namespace Curiosity.Server.net.Classes.Environment
         static int MINUTES_TO_WAIT = (1000 * 60) * 60;
 
         static WeatherData weatherData = new WeatherData();
+
+        static List<string> allowedWeather = new List<string>()
+        {
+            "OVERCAST",
+            "RAIN",
+            "THUNDER",
+            "CLOUDS",
+            "EXTRASUNNY",
+            "SMOG",
+            "CLEAR",
+            "FOGGY",
+            "CLEARING",
+            "BLIZZARD",
+            "XMAS",
+            "SNOWLIGHT",
+            "SNOW",
+            "HALLOWEEN"
+        };
 
         public static void Init()
         {
@@ -56,6 +75,12 @@ namespace Curiosity.Server.net.Classes.Environment
             if (!session.IsDeveloper) return;
 
             string newWeather = weather.ToUpper();
+
+            if (!allowedWeather.Contains(newWeather))
+            {
+                session.Player.Send(NotificationType.CHAR_LIFEINVADER, 20, $"Unknown Weather", $"'{newWeather}' is unknown", $"");
+                return;
+            }
 
             weatherData.CurrentWeather = newWeather;
 
