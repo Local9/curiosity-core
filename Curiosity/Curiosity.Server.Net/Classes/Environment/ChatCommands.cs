@@ -53,12 +53,33 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("sessions", new Action<int, List<object>, string>(OnSessions), false);
             API.RegisterCommand("guide", new Action<int, List<object>, string>(Guide), false);
             API.RegisterCommand("help", new Action<int, List<object>, string>(Guide), false);
+            API.RegisterCommand("kickall", new Action<int, List<object>, string>(OnMassKick), false);
 
             API.RegisterCommand("queue", new Action<int, List<object>, string>(OnQueueReadout), false);
 
             server.RegisterEventHandler("rconCommand", new Action<string, List<object>>(OnRconCommand));
 
             // API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
+        }
+
+        private static void OnMassKick(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (!session.IsManager)
+            {
+                session.Player.Drop("Well done, you just kicked yourself...");
+            }
+            else
+            {
+                List<Session> players = SessionManager.PlayerList.Select(x => x.Value).Where(x => !x.IsStaff).ToList();
+                players?.ForEach(p =>
+                {
+                    p?.Player?.Drop("Mass Kick: You can rejoin, this was to clear some issues.");
+                });
+            }
         }
 
         private static void OnRemoveAllWeapons(int playerHandle, List<object> arguments, string raw)
@@ -188,7 +209,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             string playerToRevive = $"{arguments.ElementAt(0)}";
             Session sessionToRevive = SessionManager.PlayerList[$"{playerToRevive}"];
-            sessionToRevive.Player.TriggerEvent("curiosity:Client:Player:Revive");
+            sessionToRevive.Player.TriggerEvent("curiosity:Client:Player:Revive", session.Player.Name);
         }
 
         static void OnDonationCheck(int playerHandle, List<object> arguments, string raw)

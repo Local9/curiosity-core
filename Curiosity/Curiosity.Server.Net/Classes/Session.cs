@@ -48,6 +48,7 @@ namespace Curiosity.Server.net.Classes
         public string EndPoint => GetPlayerEndpoint(NetId);
         public bool IsDonator => (Privilege == Privilege.DONATOR);
         public bool IsDeveloper => (Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);
+        public bool IsManager => (Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER || Privilege == Privilege.COMMUNITYMANAGER);
         public bool IsAdmin => (Privilege == Privilege.COMMUNITYMANAGER || Privilege == Privilege.ADMINISTRATOR || Privilege == Privilege.SENIORADMIN || Privilege == Privilege.HEADADMIN || Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);
         public bool IsStaff => (Privilege == Privilege.COMMUNITYMANAGER || Privilege == Privilege.MODERATOR || Privilege == Privilege.ADMINISTRATOR || Privilege == Privilege.SENIORADMIN || Privilege == Privilege.HEADADMIN || Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);
         public void Drop(string reason) => DropPlayer(NetId, reason);

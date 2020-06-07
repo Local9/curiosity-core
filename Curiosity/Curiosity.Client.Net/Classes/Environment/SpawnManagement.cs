@@ -48,7 +48,7 @@ namespace Curiosity.Client.net.Classes.Environment
             client.RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleIdUpdate));
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDuty));
 
-            client.RegisterEventHandler("curiosity:Client:Player:Revive", new Action(OnRevive));
+            client.RegisterEventHandler("curiosity:Client:Player:Revive", new Action<string>(OnRevive));
 
             client.RegisterTickHandler(OnWastedCheck);
             client.RegisterTickHandler(OnRevivePlayerCheck);
@@ -125,9 +125,11 @@ namespace Curiosity.Client.net.Classes.Environment
             }
         }
 
-        public static async void OnRevive()
+        public static async void OnRevive(string staffName)
         {
             Debug.WriteLine($"Reviving");
+
+            Screen.ShowNotification($"Revived by {staffName}");
 
             API.NetworkFadeOutEntity(Game.PlayerPed.Handle, false, false);
             Game.PlayerPed.IsPositionFrozen = true;
