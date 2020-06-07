@@ -35,11 +35,17 @@ namespace Curiosity.Client.net.Classes.Player
             client.RegisterEventHandler("curiosity:Client:Player:UpdateFlags", new Action(OnFlagUpdate));
             client.RegisterEventHandler("curiosity:Client:Player:UpdateExtraFlags", new Action(UpdateExtraFlags));
             client.RegisterEventHandler("curiosity:Client:Player:Developer:Online", new Action(DeveloperOnline));
+            client.RegisterEventHandler("curiosity:Client:Player:RemoveAllWeapons", new Action(OnRemoveAllWeapons));
 
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(SetDutyIcon));
 
             await BaseScript.Delay(1000);
             PeriodicCheck();
+        }
+
+        private static void OnRemoveAllWeapons()
+        {
+            Game.PlayerPed.Weapons.RemoveAll();
         }
 
         public static int GetTotalEarnings()

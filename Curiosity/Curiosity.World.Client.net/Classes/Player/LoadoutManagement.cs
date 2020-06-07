@@ -111,7 +111,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Player
             client.RegisterTickHandler(CheckCurrentWeaponIsAllowed);
         }
 
-        static Task CheckCurrentWeaponIsAllowed()
+        static async Task CheckCurrentWeaponIsAllowed()
         {
             if (Player.PlayerInformation.IsDeveloper())
             {
@@ -130,8 +130,6 @@ namespace Curiosity.GameWorld.Client.net.Classes.Player
                     currentWeapon = selectedWeapon;
                 }
             }
-            Client.Delay(250);
-            return Task.FromResult(0);
         }
 
         static private bool IsWeaponRestricted(WeaponHash weaponToCheck)

@@ -33,6 +33,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             API.RegisterCommand("donator", new Action<int, List<object>, string>(OnDonationCheck), false);
             API.RegisterCommand("revive", new Action<int, List<object>, string>(OnRevivePlayer), false);
+            API.RegisterCommand("remweap", new Action<int, List<object>, string>(OnRemoveAllWeapons), false);
 
             API.RegisterCommand("chase", new Action<int, List<object>, string>(OnChaser), false);
             API.RegisterCommand("chase2", new Action<int, List<object>, string>(OnChaserTwo), false);
@@ -58,6 +59,33 @@ namespace Curiosity.Server.net.Classes.Environment
             server.RegisterEventHandler("rconCommand", new Action<string, List<object>>(OnRconCommand));
 
             // API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFire), false);
+        }
+
+        private static void OnRemoveAllWeapons(int playerHandle, List<object> arguments, string raw)
+        {
+            if (!SessionManager.PlayerList.ContainsKey($"{playerHandle}")) return;
+
+            Session session = SessionManager.PlayerList[$"{playerHandle}"];
+
+            if (!session.IsStaff) return;
+
+            if (arguments.Count > 0)
+            {
+                string playerToAdminister = $"{arguments[0]}";
+
+                if (!SessionManager.PlayerList.ContainsKey(playerToAdminister)) return;
+
+                Session player = SessionManager.PlayerList[playerToAdminister];
+                player.Player.TriggerEvent("curiosity:Client:Player:RemoveAllWeapons");
+            }
+            else
+            {
+                List<CitizenFX.Core.Player> players = SessionManager.PlayerList.Select(x => x.Value.Player).ToList();
+                players?.ForEach(p =>
+                {
+                    p?.TriggerEvent("curiosity:Client:Player:RemoveAllWeapons");
+                });
+            }
         }
 
         private static void OnQueueReadout(int playerHandle, List<object> arguments, string raw)
