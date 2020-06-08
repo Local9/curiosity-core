@@ -77,6 +77,7 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
             bool isCalloutActive = (CalloutManager.ActiveCallout != null);
 
             menuItemCode4.Enabled = isCalloutActive;
+            menuItemCode16.Enabled = isCalloutActive;
             menuItemCode27.Enabled = isCalloutActive;
             menuItemCode28.Enabled = isCalloutActive;
             menuItemCode29.Enabled = isCalloutActive;
