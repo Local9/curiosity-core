@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Classes;
@@ -11,9 +12,12 @@ namespace Curiosity.Callouts.Client.Managers
 {
     class PlayerManager : BaseScript
     {
+        const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
+
         static ExportDictionary exportDictionary;
         static PlayerInformationModel playerInfo;
         static public PatrolZone PatrolZone = PatrolZone.City;
+        static public Vehicle Vehicle;
 
         static public bool IsOnDuty;
         static public bool IsOfficer;
@@ -24,6 +28,21 @@ namespace Curiosity.Callouts.Client.Managers
             EventHandlers[Events.Client.ReceivePlayerInformation] += new Action<string>(OnPlayerInformationUpdate);
             EventHandlers[Events.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
             EventHandlers[Events.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
+            EventHandlers[Events.Client.CurrentVehicle] += new Action<int>(OnVehicleId);
+        }
+
+        private static void OnVehicleId(int vehicleId)
+        {
+            if (Vehicle == null)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                Vehicle = new Vehicle(vehicleId);
+            }
+            else if (Vehicle.Handle != vehicleId)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
+                Vehicle = new Vehicle(vehicleId);
+            }
         }
 
         private void OnPoliceDuty(bool active, bool onduty, string job)
