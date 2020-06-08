@@ -212,7 +212,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
                 ped.IsMission = true;
                 ped.IsImportant = true;
-                ped.IsArrestable = false;
+                ped.IsArrestable = true;
+                ped.IsSuspect = true;
 
                 Decorators.Set(ped.Handle, Decorators.PED_MISSION, true);
 

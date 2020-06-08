@@ -23,6 +23,18 @@ namespace Curiosity.Callouts.Client.Classes
         internal bool IsBeingStunned => Fx.IsBeingStunned;
         internal bool IsInVehicle { get; set; }
 
+        internal bool IsSuspect
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_SUSPECT);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.PED_SUSPECT, value);
+            }
+        }
+
         internal bool IsArrestable
         {
             get
@@ -83,6 +95,26 @@ namespace Curiosity.Callouts.Client.Classes
             }
         }
 
+        internal bool IsHandcuffed
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_HANDCUFFED);
+            }
+            set
+            {
+                if (value)
+                {
+                    RunSequence(Sequence.HANDCUFFED);
+                }
+                else
+                {
+                    RunSequence(Sequence.UNHANDCUFFED);
+                }
+                Decorators.Set(Fx.Handle, Decorators.PED_HANDCUFFED, value);
+            }
+        }
+
         internal bool IsKneeling { get; set; }
 
         private EntityEventWrapper _eventWrapper;
@@ -140,7 +172,7 @@ namespace Curiosity.Callouts.Client.Classes
 
                 await BaseScript.Delay(10);
 
-                if (Utility.RANDOM.Bool(0.9f) && !IsKneeling)
+                if (Utility.RANDOM.Bool(0.8f) && !IsKneeling)
                 {
                     RunSequence(Sequence.KNEEL);
                 }
@@ -159,9 +191,6 @@ namespace Curiosity.Callouts.Client.Classes
                 }
             }
 
-            if (IsHostage)
-                PluginIntance.RegisterTickHandler(OnPedInteractionCheck);
-
             if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG))
             {
                 PluginIntance.RegisterTickHandler(OnDeveloperOverlay);
@@ -175,26 +204,6 @@ namespace Curiosity.Callouts.Client.Classes
         async Task OnDeveloperOverlay()
         {
             DebuggingTools.DrawData(this);
-        }
-
-        async Task OnPedInteractionCheck()
-        {
-            if (IsHostage) return;
-
-            float distanceCheck = Fx.IsInVehicle() ? 3f : 1.5f;
-
-            string message = $"Press ~INPUT_CONTEXT~ to interact";
-
-            if (Game.PlayerPed.Position.Distance(Fx.Position) < distanceCheck)
-            {
-                Screen.DisplayHelpTextThisFrame($"{message}");
-
-                if (Game.IsControlJustPressed(0, Control.Context))
-                {
-                    // what do I want to do with you
-                    // MENU
-                }
-            }
         }
 
         public void Abort(EntityEventWrapper sender, Entity entity)
@@ -232,8 +241,6 @@ namespace Curiosity.Callouts.Client.Classes
 
                     IsKneeling = true;
 
-                    PluginIntance.RegisterTickHandler(OnPedInteractionCheck);
-
                     break;
                 case Sequence.UNKNEEL_AND_FLEE:
                     Fx.Task.ClearAllImmediately();
@@ -245,7 +252,7 @@ namespace Curiosity.Callouts.Client.Classes
                     realeaseAndFleeTaskSequence.Close();
                     Fx.Task.ClearSecondary();
                     IsKneeling = false;
-                    PluginIntance.DeregisterTickHandler(OnPedInteractionCheck);
+                    
                     RunSequence(Sequence.REMOVE_FROM_WORLD);
                     break;
                 case Sequence.REMOVE_FROM_WORLD:
@@ -260,6 +267,63 @@ namespace Curiosity.Callouts.Client.Classes
                     API.NetworkFadeOutEntity(base.Handle, false, false);
                     await BaseScript.Delay(2000);
                     Dismiss();
+
+                    break;
+                case Sequence.HANDCUFFED:
+                    Game.PlayerPed.IsPositionFrozen = true;
+
+                    API.SetPedFleeAttributes(Fx.Handle, 0, false);
+                    API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
+                    API.TaskSetBlockingOfNonTemporaryEvents(Fx.Handle, true);
+
+                    bool isKneeling = Fx.IsPlayingAnim("random@arrests@busted", "idle_a");
+
+                    float y = isKneeling ? 0.3f : 0.65f;
+                    Vector3 pos = Vector3.Zero;
+                    pos.Y = y;
+
+                    Fx.AttachTo(Game.PlayerPed.Bones[11816], pos);
+
+                    TaskSequence playerHandcuffSequence = new TaskSequence();
+                    TaskSequence handcuffSequence = new TaskSequence();
+
+                    playerHandcuffSequence.AddTask.PlayAnimation("mp_arresting", "a_uncuff");
+                    handcuffSequence.AddTask.PlayAnimation("mp_arresting", "idle");
+
+                    if (isKneeling)
+                    {
+                        handcuffSequence.AddTask.PlayAnimation("random@arrests@busted", "exit");
+                        handcuffSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_get_up");
+                    }
+
+                    Game.PlayerPed.Task.PerformSequence(playerHandcuffSequence);
+                    Fx.Task.PerformSequence(handcuffSequence);
+
+                    API.SetEnableHandcuffs(Fx.Handle, true);
+
+                    playerHandcuffSequence.Close();
+                    handcuffSequence.Close();
+
+                    Fx.Detach();
+
+                    Game.PlayerPed.IsPositionFrozen = false;
+
+                    break;
+                case Sequence.UNHANDCUFFED:
+
+                    Game.PlayerPed.IsPositionFrozen = true;
+
+                    Fx.AttachTo(Game.PlayerPed.Bones[11816], new Vector3(0, .65f, 0));
+
+                    TaskSequence playerUnhandcuffSequence = new TaskSequence();
+                    playerUnhandcuffSequence.AddTask.PlayAnimation("mp_arresting", "a_uncuff");
+                    Game.PlayerPed.Task.PerformSequence(playerUnhandcuffSequence);
+                    playerUnhandcuffSequence.Close();
+
+                    API.SetEnableHandcuffs(Fx.Handle, false);
+                    Fx.Detach();
+
+                    Game.PlayerPed.IsPositionFrozen = false;
 
                     break;
             }
@@ -345,8 +409,6 @@ namespace Curiosity.Callouts.Client.Classes
             //if (Fx.AttachedBlips.Length > 0)
             //    foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
 
-            PluginIntance.DeregisterTickHandler(OnPedInteractionCheck);
-
             if (Fx == null) return;
             if (!base.Exists()) return;
 
@@ -391,7 +453,9 @@ namespace Curiosity.Callouts.Client.Classes
             KNEEL,
             UNKNEEL,
             UNKNEEL_AND_FLEE,
-            REMOVE_FROM_WORLD
+            REMOVE_FROM_WORLD,
+            HANDCUFFED,
+            UNHANDCUFFED
         }
     }
 }

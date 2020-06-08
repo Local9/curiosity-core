@@ -25,7 +25,9 @@ namespace Curiosity.Callouts.Client.Menu
 
         // sub menus
         private Submenu.Dispatch _dispatch = new Submenu.Dispatch();
+        private Submenu.Suspect _suspect = new Submenu.Suspect();
         private UIMenu menuDispatch;
+        private UIMenu menuSuspect;
 
         // menu items - Maybe move these???
         private UIMenuItem mItemRequestAssistance = new UIMenuItem($"Request Assistance", "Call for support during an active pursuit.");
@@ -59,6 +61,10 @@ namespace Curiosity.Callouts.Client.Menu
             menuDispatch = _MenuPool.AddSubMenu(menuMain, "Dispatch", "Dispatch Options~n~~o~Options are available when a callout is active.");
             menuDispatch.MouseControlsEnabled = false;
             _dispatch.CreateMenu(menuDispatch);
+
+            menuSuspect = _MenuPool.AddSubMenu(menuMain, "Suspect", "Suspect Options~n~~o~Options are available when a callout is active.");
+            menuSuspect.MouseControlsEnabled = false;
+            _suspect.CreateMenu(menuSuspect);
 
             menuMain.AddItem(mItemPanicButton);
             menuMain.AddItem(mItemRequestAssistance);

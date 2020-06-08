@@ -18,10 +18,12 @@ namespace Curiosity.Callouts.Client.Utils
         public const string PED_SHOOT = "c::ped::shoot";
         public const string PED_ARREST = "c::ped::arrest";
         public const string PED_ARRESTABLE = "c::ped::arrest";
+        public const string PED_SUSPECT = "c::ped::suspect";
         public const string PED_MISSION = "c::ped::mission";
         public const string PED_IMPORTANT = "c::ped::important";
         public const string PED_HOSTAGE = "c::ped::hostage";
         public const string PED_RELEASED = "c::ped::released";
+        public const string PED_HANDCUFFED = "c::ped::handcuffed";
 
         public static void Set(int handle, string property, object value)
         {
