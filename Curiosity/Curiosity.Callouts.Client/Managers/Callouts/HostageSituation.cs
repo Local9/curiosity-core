@@ -231,11 +231,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             int numberOfReleasedHostages = Hostages.Select(x => x).Where(x => x.IsReleased).Count();
             int numberOfAliveShooters = Shooters.Select(x => x).Where(x => x.IsAlive).Count();
 
-            int remaining = numberOfHostages - hostageReleaseTracker;
-
-            if (remaining == 0)
-                progress = 0;
-
             int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
 
             if (numberOfAlivePlayers == 0) // clear callout
@@ -250,14 +245,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             switch (progress)
             {
-                case 0:
-                    if (calloutMessage.IsCalloutFinished) return;
-                    calloutMessage.IsCalloutFinished = true;
-
-                    calloutMessage.Success = (hostageReleaseTracker > 0);
-                    calloutMessage.NumberRescued = hostageReleaseTracker;
-                    End();
-                    break;
                 case 1:
                     if (Game.PlayerPed.Position.Distance(data.Location) > spawnRadius) return;
                     progress++;
@@ -321,6 +308,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 if (Blip.Exists())
                     Blip.Delete();
             }
+
+            calloutMessage.Success = true;
+            calloutMessage.NumberRescued = hostageReleaseTracker;
 
             cm = calloutMessage;
             base.End(forcefully, cm);
