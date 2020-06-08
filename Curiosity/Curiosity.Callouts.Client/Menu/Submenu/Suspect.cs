@@ -63,7 +63,7 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
 
         private async Task OnSuspectDistanceCheck()
         {
-            if (Ped.Position.Distance(Game.PlayerPed.Position) > 4f)
+            if (Ped.Position.Distance(Game.PlayerPed.Position) > 3f)
                 MenuBase._MenuPool.CloseAllMenus();
         }
 
@@ -78,7 +78,7 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
 
         private Ped GetClosestSuspect()
         {
-            return callout.RegisteredPeds.Select(x => x).Where(p => p.Position.Distance(Game.PlayerPed.Position) < 2f && p.IsSuspect).FirstOrDefault();
+            return callout.RegisteredPeds.Select(x => x).Where(p => p.Position.Distance(Game.PlayerPed.Position) < 1.5f && p.IsSuspect && p.IsMission).FirstOrDefault();
         }
     }
 }

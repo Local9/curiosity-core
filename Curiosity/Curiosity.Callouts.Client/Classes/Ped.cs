@@ -111,6 +111,7 @@ namespace Curiosity.Callouts.Client.Classes
                 {
                     RunSequence(Sequence.UNHANDCUFFED);
                 }
+
                 Decorators.Set(Fx.Handle, Decorators.PED_HANDCUFFED, value);
             }
         }
@@ -143,6 +144,10 @@ namespace Curiosity.Callouts.Client.Classes
             API.SetPedCombatAttributes(Fx.Handle, 46, false);
             API.SetPedCombatAttributes(Fx.Handle, 5, false);
             Fx.SetConfigFlag(281, true); // No more rolling about
+
+            API.RequestAnimDict("mp_arresting");
+            API.RequestAnimDict("random@arrests@busted");
+            API.RequestAnimDict("random@arrests");
         }
 
         internal async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
@@ -235,7 +240,6 @@ namespace Curiosity.Callouts.Client.Classes
                     kneelTaskSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_idle", 8.0f, -1, AnimationFlags.StayInEndFrame);
                     kneelTaskSequence.AddTask.PlayAnimation("random@arrests@busted", "enter", 8.0f, -1, AnimationFlags.StayInEndFrame);
                     kneelTaskSequence.AddTask.PlayAnimation("random@arrests@busted", "idle_a", 8.0f, -1, (AnimationFlags)9);
-
                     Fx.Task.PerformSequence(kneelTaskSequence);
                     kneelTaskSequence.Close();
 
@@ -245,7 +249,6 @@ namespace Curiosity.Callouts.Client.Classes
                 case Sequence.UNKNEEL_AND_FLEE:
                     Fx.Task.ClearAllImmediately();
                     TaskSequence realeaseAndFleeTaskSequence = new TaskSequence();
-                    // realeaseAndFleeTaskSequence.AddTask.PlayAnimation("random@arrests@busted", "exit", 8.0f, -1, AnimationFlags.StayInEndFrame);
                     realeaseAndFleeTaskSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
                     realeaseAndFleeTaskSequence.AddTask.ReactAndFlee(Game.PlayerPed);
                     Fx.Task.PerformSequence(realeaseAndFleeTaskSequence);
@@ -276,35 +279,31 @@ namespace Curiosity.Callouts.Client.Classes
                     API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
                     API.TaskSetBlockingOfNonTemporaryEvents(Fx.Handle, true);
 
-                    bool isKneeling = Fx.IsPlayingAnim("random@arrests@busted", "idle_a");
-
-                    float y = isKneeling ? 0.3f : 0.65f;
+                    float y = IsKneeling ? 0.3f : 0.65f;
                     Vector3 pos = Vector3.Zero;
                     pos.Y = y;
 
                     Fx.AttachTo(Game.PlayerPed.Bones[11816], pos);
 
-                    TaskSequence playerHandcuffSequence = new TaskSequence();
-                    TaskSequence handcuffSequence = new TaskSequence();
-
-                    playerHandcuffSequence.AddTask.PlayAnimation("mp_arresting", "a_uncuff");
-                    handcuffSequence.AddTask.PlayAnimation("mp_arresting", "idle");
-
-                    if (isKneeling)
+                    Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8f, -1, (AnimationFlags)49);
+                    Fx.Task.PlayAnimation("mp_arresting", "idle", 8f, -1, (AnimationFlags)49);
+                    await BaseScript.Delay(1000);
+                    
+                    if (IsKneeling)
                     {
-                        handcuffSequence.AddTask.PlayAnimation("random@arrests@busted", "exit");
-                        handcuffSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_get_up");
+                        Fx.Task.PlayAnimation("random@arrests@busted", "exit", 8f, -1, AnimationFlags.StayInEndFrame);
+                        await BaseScript.Delay(1000);
+                        Fx.Task.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8f, -1, AnimationFlags.CancelableWithMovement);
+                        this.IsKneeling = false;
                     }
 
-                    Game.PlayerPed.Task.PerformSequence(playerHandcuffSequence);
-                    Fx.Task.PerformSequence(handcuffSequence);
-
-                    API.SetEnableHandcuffs(Fx.Handle, true);
-
-                    playerHandcuffSequence.Close();
-                    handcuffSequence.Close();
+                    await BaseScript.Delay(1000);
+                    
+                    Game.PlayerPed.Task.ClearAll();
 
                     Fx.Detach();
+
+                    API.SetEnableHandcuffs(Fx.Handle, true);
 
                     Game.PlayerPed.IsPositionFrozen = false;
 
@@ -313,12 +312,19 @@ namespace Curiosity.Callouts.Client.Classes
 
                     Game.PlayerPed.IsPositionFrozen = true;
 
-                    Fx.AttachTo(Game.PlayerPed.Bones[11816], new Vector3(0, .65f, 0));
+                    IsKneeling = Fx.IsPlayingAnim("random@arrests@busted", "idle_a") || Fx.IsPlayingAnim("random@arrests@busted", "exit");
 
-                    TaskSequence playerUnhandcuffSequence = new TaskSequence();
-                    playerUnhandcuffSequence.AddTask.PlayAnimation("mp_arresting", "a_uncuff");
-                    Game.PlayerPed.Task.PerformSequence(playerUnhandcuffSequence);
-                    playerUnhandcuffSequence.Close();
+                    float kneelingY = IsKneeling ? 0.3f : 0.65f;
+                    Vector3 kneelingPos = Vector3.Zero;
+                    kneelingPos.Y = kneelingY;
+
+                    Fx.AttachTo(Game.PlayerPed.Bones[11816], kneelingPos);
+
+                    Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8f, -1, (AnimationFlags)49);
+
+                    await BaseScript.Delay(1000);
+
+                    Game.PlayerPed.Task.ClearAll();
 
                     API.SetEnableHandcuffs(Fx.Handle, false);
                     Fx.Detach();
@@ -326,40 +332,6 @@ namespace Curiosity.Callouts.Client.Classes
                     Game.PlayerPed.IsPositionFrozen = false;
 
                     break;
-            }
-        }
-
-        private async void ApplyHandcuffs()
-        {
-            if (Decorators.GetBoolean(Fx.Handle, Decorators.PED_ARREST))
-            {
-                if (Fx.IsCuffed)
-                {
-                    API.SetPedFleeAttributes(Fx.Handle, 0, false);
-
-                    Game.PlayerPed.Task.TurnTo(Fx);
-                    Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
-                    Fx.Task.PlayAnimation("mp_arresting", "idle", 8.0f, -1, (AnimationFlags)49);
-
-                    float position = Fx.IsPlayingAnim("random@arrests@busted", "idle_a") ? 0.3f : 0.65f;
-                    API.AttachEntityToEntity(Fx.Handle, Game.PlayerPed.Handle, 11816, 0.0f, position, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
-                    await BaseScript.Delay(2000);
-                    Fx.Detach();
-                    Fx.Task.ClearSecondary();
-                    Game.PlayerPed.Task.ClearSecondary();
-
-                    API.SetEnableHandcuffs(Fx.Handle, true);
-                }
-                else
-                {
-                    Game.PlayerPed.Task.TurnTo(Fx);
-                    Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8.0f, -1, (AnimationFlags)49);
-                    API.AttachEntityToEntity(Fx.Handle, Game.PlayerPed.Handle, 11816, 0.0f, 0.65f, 0.0f, 0.0f, 0.0f, 0.0f, false, false, false, false, 2, true);
-                    await BaseScript.Delay(2000);
-                    Fx.Detach();
-                    Fx.Task.ClearSecondary();
-                    Game.PlayerPed.Task.ClearSecondary();
-                }
             }
         }
 
@@ -408,6 +380,9 @@ namespace Curiosity.Callouts.Client.Classes
         {
             //if (Fx.AttachedBlips.Length > 0)
             //    foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
+            API.RemoveAnimDict("mp_arresting");
+            API.RemoveAnimDict("random@arrests@busted");
+            API.RemoveAnimDict("random@arrests");
 
             if (Fx == null) return;
             if (!base.Exists()) return;
