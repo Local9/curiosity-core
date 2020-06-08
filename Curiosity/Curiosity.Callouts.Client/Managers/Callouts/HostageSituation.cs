@@ -238,6 +238,15 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 End(true);
             }
 
+            if (Game.PlayerPed.Position.Distance(data.Location) < 50f)
+            {
+                if (Blip != null)
+                {
+                    if (Blip.Exists())
+                        Blip.Delete();
+                }
+            }
+
 #if DEBUG
             if (PlayerManager.IsDeveloper)
                 Screen.ShowSubtitle($"H. {numberOfAliveHostages}, HRT: {hostageReleaseTracker}, S: {numberOfAliveShooters}, P: {progress}");
@@ -294,20 +303,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         {
             PluginInstance.DeregisterTickHandler(OnHostageMessagePrompt);
 
-            while (Game.PlayerPed.Position.Distance(data.Location) < data.MissionRadius)
-            {
-                Screen.DisplayHelpTextThisFrame("Please leave the area");
-                await BaseScript.Delay(0);
-            }
-
             Hostages.Clear();
             Shooters.Clear();
-
-            if (Blip != null)
-            {
-                if (Blip.Exists())
-                    Blip.Delete();
-            }
 
             calloutMessage.Success = true;
             calloutMessage.NumberRescued = hostageReleaseTracker;
