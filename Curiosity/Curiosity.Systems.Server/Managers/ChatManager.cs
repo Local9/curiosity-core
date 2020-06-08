@@ -12,7 +12,7 @@ namespace Curiosity.Systems.Server.Managers
             Curiosity.EventRegistry["chat:global"] += new Action<Player, string, string>(OnChatMessage);
         }
 
-        private void OnChatMessage([FromSource] Player player, string message, string channel)
+        public static void OnChatMessage([FromSource] Player player, string message, string channel)
         {
             int playerHandle = int.Parse(player.Handle);
             CuriosityUser user = CuriosityPlugin.ActiveUsers[playerHandle];

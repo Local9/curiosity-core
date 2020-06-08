@@ -2,6 +2,8 @@
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Server.Commands;
+using Curiosity.Systems.Server.Commands.Impl;
 using Curiosity.Systems.Server.Database;
 using Curiosity.Systems.Server.Diagnostics;
 using Curiosity.Systems.Server.Extenstions;
@@ -40,6 +42,8 @@ namespace Curiosity.Systems.Server
         public EventHandlerDictionary EventRegistry => EventHandlers;
         public ExportDictionary ExportDictionary => Exports;
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
+        public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
+        public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
 
         public CuriosityPlugin()
         {
@@ -191,6 +195,9 @@ namespace Curiosity.Systems.Server
                     API.SetConvar("tags", $"{curiosity}");
                 }
                 API.SetConvarServerInfo("Curiosity", CURIOSITY_VERSION);
+
+                // Disable client side entity creation
+                Function.Call((Hash)0x0071321B, "relaxed");
             }
             catch (Exception ex)
             {
@@ -223,6 +230,9 @@ namespace Curiosity.Systems.Server
 
                 method?.Invoke(manager.Value, null);
             }
+
+            var commands = new CommandFramework();
+            commands.Bind(typeof(DeveloperTools));
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
 
@@ -399,6 +409,20 @@ namespace Curiosity.Systems.Server
 
                 await Delay(1000);
             }
+        }
+
+        public void AttachTickHandlers(object instance)
+        {
+            TickHandlers.TryGetValue(instance.GetType(), out var methods);
+
+            methods?.ForEach(async self =>
+            {
+                var handler = (TickHandler)self.GetCustomAttribute(typeof(TickHandler));
+
+                Tick += (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), instance, self);
+
+                RegisteredTickHandlers.Add(instance.GetType());
+            });
         }
     }
 }

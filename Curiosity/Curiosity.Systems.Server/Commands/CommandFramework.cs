@@ -1,11 +1,13 @@
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Systems.Client.Diagnostics;
-using Curiosity.Systems.Client.Interface;
+using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Server.Diagnostics;
+using Curiosity.Systems.Server.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Systems.Client.Commands
+namespace Curiosity.Systems.Server.Commands
 {
     public class CommandFramework
     {
@@ -53,23 +55,31 @@ namespace Curiosity.Systems.Client.Commands
                 Logger.Debug($"Register: {self}");
 
                 API.RegisterCommand(self, new Action<int, List<object>, string>((handle, args, raw) =>
-                        HandleCommandInput(context, Registry[context], self, args)), false);
+                        HandleCommandInput(handle, context, Registry[context], self, args)), false);
             };
 
             Logger.Info(
                 $"[CommandFramework] Found {found.Count} nested `ICommand` class(es) in `{type.Name}`, registered {registered} of them!");
         }
 
-        private void HandleCommandInput(CommandContext context,
+        private void HandleCommandInput(int playerHandle, CommandContext context,
             IReadOnlyCollection<Tuple<CommandInfo, ICommand>> registry,
             string alias,
             IReadOnlyList<object> arguments)
         {
-            var player = Cache.Player;
+            if (!CuriosityPlugin.ActiveUsers.ContainsKey(playerHandle)) return;
 
-            if (context.IsRestricted && !context.RequiredRoles.Contains(player.User.Role))
+            CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[playerHandle];
+
+            Player player = CuriosityPlugin.PlayersList[playerHandle];
+
+            int entityHandle = player.Character.Handle;
+
+            Logger.Error($"{API.GetEntityCoords(entityHandle)}");
+
+            if (context.IsRestricted && !context.RequiredRoles.Contains(curiosityUser.Role))
             {
-                Chat.SendLocalMessage("Restricted Command");
+                ChatManager.OnChatMessage(player, "Restricted Command", "chat");
                 return;
             }
 
@@ -77,18 +87,18 @@ namespace Curiosity.Systems.Client.Commands
             {
                 if (entry.Item1.Aliases.Length >= 1) continue;
 
-                entry.Item2.On(player, player.Entity, arguments.Skip(entry.Item1.Aliases.Length > 1 ? 1 : 0).Select(self => self.ToString()).ToList());
+                entry.Item2.On(curiosityUser, entityHandle, arguments.Skip(entry.Item1.Aliases.Length > 1 ? 1 : 0).Select(self => self.ToString()).ToList());
 
                 return;
             }
 
             if (arguments.Count < 1)
             {
-                Chat.SendLocalMessage("Avaliable Commands:");
+                ChatManager.OnChatMessage(player, "Avaliable Commands:", "chat");
 
                 foreach (var entry in registry)
                 {
-                    Chat.SendLocalMessage($"/{alias} {string.Join(", ", entry.Item1.Aliases)}");
+                    ChatManager.OnChatMessage(player, $"/{alias} {string.Join(", ", entry.Item1.Aliases)}", "chat");
                 }
 
                 return;
@@ -102,15 +112,15 @@ namespace Curiosity.Systems.Client.Commands
                 if (!entry.Item1.Aliases.Select(self => self.ToLower())
                     .Contains(subcommand.ToString().ToLower())) continue;
 
-                entry.Item2.On(player, player.Entity, arguments.Skip(1).Select(self => self.ToString()).ToList());
+                entry.Item2.On(curiosityUser, entityHandle, arguments.Skip(1).Select(self => self.ToString()).ToList());
 
                 matched = true;
 
                 break;
             }
-             
-            if (!matched) // NEED TO FIRE ON THE SERVER!
-                Chat.SendLocalMessage($"Command not found: {subcommand}");
+
+            if (!matched)
+                ChatManager.OnChatMessage(player, $"Command not found: {subcommand}", "chat");
         }
     }
 }

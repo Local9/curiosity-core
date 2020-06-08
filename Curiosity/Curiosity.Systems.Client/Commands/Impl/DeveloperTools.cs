@@ -40,30 +40,30 @@ namespace Curiosity.Systems.Client.Commands.Impl
         #endregion
 
         #region Vehicles
-        [CommandInfo(new[] { "vehicle", "veh", "car" })]
-        public class VehicleSpawner : ICommand
-        {
-            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
-            {
-                try
-                {
-                    if (arguments.Count <= 0) return;
+        //[CommandInfo(new[] { "vehicle", "veh", "car" })]
+        //public class VehicleSpawner : ICommand
+        //{
+        //    public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+        //    {
+        //        try
+        //        {
+        //            if (arguments.Count <= 0) return;
 
-                    var model = new Model(API.GetHashKey(arguments.ElementAt(0)));
+        //            var model = new Model(API.GetHashKey(arguments.ElementAt(0)));
 
-                    if (!model.IsValid || !model.IsVehicle) return;
+        //            if (!model.IsValid || !model.IsVehicle) return;
 
-                    var position = entity.Position;
-                    var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
+        //            var position = entity.Position;
+        //            var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
 
-                    entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
-                }
-                catch (Exception)
-                {
-                    // Ignored
-                }
-            }
-        }
+        //            entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+        //        }
+        //        catch (Exception)
+        //        {
+        //            // Ignored
+        //        }
+        //    }
+        //}
 
         [CommandInfo(new[] { "repair", "fix", "wash" })]
         public class VehicleRepairer : ICommand
