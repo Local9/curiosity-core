@@ -107,6 +107,67 @@ namespace Curiosity.LifeV.Bot.Modules
 
                 await ReplyAsync("", false, embed);
             }
+        }// lv!admin user <userId>
+        [Command("log")]
+        [Summary("Return users log from Curiosity")]
+        [Alias("l", "history")]
+        public async Task GetUserLog([Summary("Curiosity UserId")] long? userId = null)
+        {
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+
+            var user = Context.User;
+
+            // Permission Check
+            Models.User dbAdminUser = await new Models.User().FindUserAsync(user.Id);
+
+            if (!dbAdminUser.IsStaff)
+            {
+                await Context.Channel.SendMessageAsync($"Admin permission required");
+                return;
+            }
+
+            // User
+
+            if (userId == null)
+            {
+                await Context.Channel.SendMessageAsync($"UserID must be supplied");
+                return;
+            }
+
+            long uId = (long)userId;
+
+            List<Models.Log> dbUserLog = await new Models.Log().GetUserLogAsync(uId);
+
+            if (dbUserLog == null)
+            {
+                await ReplyAsync("User was not found.");
+            }
+            else
+            {
+
+                string message = "Last 10 Logged Results" +
+                    "```" +
+                    "\n+------------------+-----------------------------------------------+-----------------------------------+" +
+                    "\n| Timestamp        | Details                                       | By                                |" +
+                    "\n+------------------+-----------------------------------------------+-----------------------------------+";
+
+                dbUserLog.ForEach(log =>
+                {
+                    message += "\n| ";
+                    message += log.Timestamp.ToString("yyyy-MM-dd HH:mm").PadRight(16, ' ');
+                    message += " | ";
+                    message += log.Details.PadRight(45, ' ');
+                    message += " | ";
+                    message += log.LoggedBy.PadRight(33, ' ');
+                    message += " |";
+                });
+
+                message += "\n+------------------+-----------------------------------------------+-----------------------------------+" +
+                    "\n```";
+
+                await ReplyAsync(message, false);
+            }
         }
 
         //public class CleanModule : ModuleBase<SocketCommandContext>
