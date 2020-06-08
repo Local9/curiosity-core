@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Managers.Callouts.Data;
 using Curiosity.Callouts.Client.Utils;
@@ -247,6 +248,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 }
             }
 
+            
+
 #if DEBUG
             if (PlayerManager.IsDeveloper)
                 Screen.ShowSubtitle($"H. {numberOfAliveHostages}, HRT: {hostageReleaseTracker}, S: {numberOfAliveShooters}, P: {progress}");
@@ -267,6 +270,13 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     if (numberOfAliveShooters > 0) return;
                     Screen.ShowNotification($"All Suspects have been killed. Remember to save the hostages");
                     progress++;
+                    break;
+                case 4:
+                    if (Game.PlayerPed.Position.Distance(data.Location) > 200f)
+                    {
+                        API.ClearAreaOfEverything(data.Location.X, data.Location.Y, data.Location.Z, 50f, false, false, false, false);
+                        progress++;
+                    }
                     break;
             }
         }
