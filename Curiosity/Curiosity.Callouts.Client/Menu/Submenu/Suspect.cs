@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using Curiosity.Callouts.Client.Classes;
 using Curiosity.Callouts.Client.Managers;
 using Curiosity.Callouts.Client.Utils;
@@ -22,11 +23,14 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
 
         UIMenu Menu;
         UIMenuItem menuItemHandcuff;
+        UIMenuItem menuItemDetain;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
             menuItemHandcuff = new UIMenuItem("Apply Handcuffs");
             menu.AddItem(menuItemHandcuff);
+            menuItemDetain = new UIMenuItem("Detain");
+            menu.AddItem(menuItemDetain);
 
             menu.OnItemSelect += Menu_OnItemSelect;
             menu.OnMenuOpen += Menu_OnMenuOpen;
@@ -44,16 +48,30 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
 
         private void Menu_OnMenuOpen(UIMenu sender)
         {
+            if (Game.PlayerPed.IsInVehicle())
+            {
+                MenuBase._MenuPool.CloseAllMenus();
+                Screen.ShowNotification($"Cannot interact with suspects while in a vehicle.");
+                return;
+            }
+
             bool isCalloutActive = (callout != null);
 
             if (!isCalloutActive)
             {
                 menuItemHandcuff.Enabled = false;
+                menuItemDetain.Enabled = false;
             }
             else
             {
                 Ped = GetClosestSuspect();
-                menuItemHandcuff.Enabled = Ped != null;
+                bool isControlable = PedCanBeControled();
+
+                menuItemHandcuff.Text = Ped.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
+                menuItemHandcuff.Enabled = isControlable;
+
+                menuItemDetain.Text = Ped.Fx.IsInVehicle() ? "Remove from Vehicle" : "Detain in Vehicle";
+                menuItemDetain.Enabled = Ped.IsHandcuffed;
 
                 PluginInstance.RegisterTickHandler(OnSuspectDistanceCheck);
             }
@@ -72,8 +90,37 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
             if (selectedItem == menuItemHandcuff)
             {
                 Ped.IsHandcuffed = !Ped.IsHandcuffed;
+                menuItemHandcuff.Text = Ped.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
+                menuItemDetain.Enabled = Ped.IsHandcuffed;
+
                 await BaseScript.Delay(500);
+                return;
             }
+
+            if (selectedItem == menuItemDetain)
+            {
+                if (Ped.Fx.IsInVehicle())
+                {
+                    Ped.RunSequence(Ped.Sequence.LEAVE_VEHICLE);
+                    menuItemDetain.Text = "Remove from Vehicle";
+                }
+                else
+                {
+                    Ped.RunSequence(Ped.Sequence.DETAIN_IN_CURRENT_VEHICLE);
+                    menuItemDetain.Text = "Detain in Vehicle";
+                }
+                return;
+            }
+        }
+
+        private bool PedCanBeControled()
+        {
+            if (Ped != null)
+            {
+                if (Ped.Exists())
+                    return Ped.IsAlive;
+            }
+            return false;
         }
 
         private Ped GetClosestSuspect()

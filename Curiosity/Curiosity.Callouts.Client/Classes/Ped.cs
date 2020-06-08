@@ -255,7 +255,7 @@ namespace Curiosity.Callouts.Client.Classes
                     realeaseAndFleeTaskSequence.Close();
                     Fx.Task.ClearSecondary();
                     IsKneeling = false;
-                    
+
                     RunSequence(Sequence.REMOVE_FROM_WORLD);
                     break;
                 case Sequence.REMOVE_FROM_WORLD:
@@ -288,7 +288,7 @@ namespace Curiosity.Callouts.Client.Classes
                     Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8f, -1, (AnimationFlags)49);
                     Fx.Task.PlayAnimation("mp_arresting", "idle", 8f, -1, (AnimationFlags)49);
                     await BaseScript.Delay(1000);
-                    
+
                     if (IsKneeling)
                     {
                         Fx.Task.PlayAnimation("random@arrests@busted", "exit", 8f, -1, AnimationFlags.StayInEndFrame);
@@ -298,7 +298,7 @@ namespace Curiosity.Callouts.Client.Classes
                     }
 
                     await BaseScript.Delay(1000);
-                    
+
                     Game.PlayerPed.Task.ClearAll();
 
                     Fx.Detach();
@@ -331,6 +331,47 @@ namespace Curiosity.Callouts.Client.Classes
 
                     Game.PlayerPed.IsPositionFrozen = false;
 
+                    break;
+                case Sequence.DETAIN_IN_CURRENT_VEHICLE:
+
+                    if (PlayerManager.Vehicle == null)
+                    {
+                        Screen.ShowNotification("~r~Vehicle not found.");
+                        return;
+                    }
+
+                    if (PlayerManager.Vehicle.IsSeatFree(VehicleSeat.LeftRear))
+                    {
+                        Fx.Task.EnterVehicle(PlayerManager.Vehicle, VehicleSeat.LeftRear);
+                    }
+                    else if (PlayerManager.Vehicle.IsSeatFree(VehicleSeat.RightRear))
+                    {
+                        Fx.Task.EnterVehicle(PlayerManager.Vehicle, VehicleSeat.RightRear);
+                    }
+                    else if (PlayerManager.Vehicle.IsSeatFree(VehicleSeat.Passenger))
+                    {
+                        Fx.Task.EnterVehicle(PlayerManager.Vehicle, VehicleSeat.Passenger);
+                    }
+                    else
+                    {
+                        Screen.ShowNotification("~r~Unable to find a free seat.");
+                        return;
+                    }
+
+                    while (!Fx.IsInVehicle())
+                    {
+                        await BaseScript.Delay(100);
+                    }
+
+                    Fx.SetConfigFlag(292, true);
+
+                    break;
+                case Sequence.LEAVE_VEHICLE:
+                    if (Fx.IsInVehicle())
+                    {
+                        Fx.SetConfigFlag(293, false);
+                        Fx.Task.LeaveVehicle();
+                    }
                     break;
             }
         }
@@ -430,7 +471,9 @@ namespace Curiosity.Callouts.Client.Classes
             UNKNEEL_AND_FLEE,
             REMOVE_FROM_WORLD,
             HANDCUFFED,
-            UNHANDCUFFED
+            UNHANDCUFFED,
+            DETAIN_IN_CURRENT_VEHICLE,
+            LEAVE_VEHICLE
         }
     }
 }
