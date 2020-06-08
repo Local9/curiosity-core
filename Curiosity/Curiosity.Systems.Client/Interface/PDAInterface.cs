@@ -18,6 +18,8 @@ namespace Curiosity.Systems.Client.Managers
             public bool Main;
         }
 
+        private Prop TabletProp;
+
         private static bool IsCoreOpen = false;
 
         public override void Begin()
@@ -26,6 +28,7 @@ namespace Curiosity.Systems.Client.Managers
             {
                 IsCoreOpen = false;
                 SendPanelMessage();
+                CloseTablet();
                 return null;
             }));
 
@@ -72,6 +75,7 @@ namespace Curiosity.Systems.Client.Managers
                 Cache.Player.Handle = Game.Player.ServerId;
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
+                OpenTablet();
             }
 
             if (IsCoreOpen && (Game.IsControlJustPressed(0, Control.FrontendCancel)
@@ -80,6 +84,7 @@ namespace Curiosity.Systems.Client.Managers
             {
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
+                CloseTablet();
             }
         }
 
@@ -93,6 +98,51 @@ namespace Curiosity.Systems.Client.Managers
 
             API.SendNuiMessage(jsn);
             API.SetNuiFocus(IsCoreOpen, IsCoreOpen);
+        }
+
+        private void OpenTablet()
+        {
+            AddProp();
+            string animationDict = "amb@world_human_tourist_map@male@base";
+            string animationBase = "base";
+
+            Game.PlayerPed.Task.PlayAnimation(animationDict, animationBase, -8f, -1, AnimationFlags.Loop);
+        }
+
+        private void CloseTablet()
+        {
+            RemoveProp();
+            Game.PlayerPed.Task.ClearAll();
+        }
+
+        private async void AddProp()
+        {
+            Model model = "prop_cs_tablet";
+
+            Vector3 pos = Game.PlayerPed.Position;
+            pos.Z += .2f;
+
+            TabletProp = await World.CreateProp(model, pos, true, false);
+
+            if (TabletProp == null) return;
+            
+            Vector3 offset = new Vector3(0.0f, -0.03f, 0.0f);
+            Vector3 rotation = new Vector3(20.0f, -90.0f, 0.0f);
+
+            TabletProp.AttachTo(Game.PlayerPed.Bones[Bone.PH_R_Hand], offset, rotation);
+
+            model.MarkAsNoLongerNeeded();
+        }
+
+        private void RemoveProp()
+        {
+            if (TabletProp == null) return;
+
+            if (TabletProp.Exists())
+            {
+                TabletProp.Delete();
+                TabletProp = null;
+            }
         }
     }
 }
