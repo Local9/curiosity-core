@@ -283,7 +283,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
         internal async Task OnHostageMessagePrompt()
         {
-            Ped ped = Hostages.Select(x => x).Where(x => x.Position.Distance(Game.PlayerPed.Position) < 1.5f).FirstOrDefault();
+            Ped ped = Hostages.Select(x => x).Where(x => x.Position.Distance(Game.PlayerPed.Position) < 1.5f && !x.IsReleased).FirstOrDefault();
 
             if (ped == null) return;
 
@@ -293,7 +293,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             if (Game.IsControlJustPressed(0, Control.Context))
             {
                 ped.RunSequence(Sequence.UNKNEEL_AND_FLEE);
-                Decorators.Set(ped.Fx.Handle, Decorators.PED_RELEASED, true);
+                ped.IsReleased = true;
                 hostageReleaseTracker++;
 
                 int remaining = numberOfHostages - hostageReleaseTracker;
