@@ -22,8 +22,12 @@ namespace Curiosity.Systems.Server.Managers
 
             EventSystem.GetModule().Attach("character:save", new AsyncEventCallback(async metadata =>
             {
+                Player player = CuriosityPlugin.PlayersList[metadata.Sender];
                 CuriosityCharacter curiosityCharacter = metadata.Find<CuriosityCharacter>(0);
-                await curiosityCharacter.Save();
+
+                if (player.Character.Position != Vector3.Zero)
+                    await curiosityCharacter.Save();
+
                 return null;
             }));
         }

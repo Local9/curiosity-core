@@ -70,12 +70,7 @@ namespace Curiosity.Systems.Server.Commands
             if (!CuriosityPlugin.ActiveUsers.ContainsKey(playerHandle)) return;
 
             CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[playerHandle];
-
-            Player player = CuriosityPlugin.PlayersList[playerHandle];
-
-            int entityHandle = player.Character.Handle;
-
-            Logger.Error($"{API.GetEntityCoords(entityHandle)}");
+            Player player = CuriosityPlugin.GetPlayer(playerHandle);
 
             if (context.IsRestricted && !context.RequiredRoles.Contains(curiosityUser.Role))
             {
@@ -87,7 +82,7 @@ namespace Curiosity.Systems.Server.Commands
             {
                 if (entry.Item1.Aliases.Length >= 1) continue;
 
-                entry.Item2.On(curiosityUser, entityHandle, arguments.Skip(entry.Item1.Aliases.Length > 1 ? 1 : 0).Select(self => self.ToString()).ToList());
+                entry.Item2.On(curiosityUser, player, arguments.Skip(entry.Item1.Aliases.Length > 1 ? 1 : 0).Select(self => self.ToString()).ToList());
 
                 return;
             }
@@ -112,7 +107,7 @@ namespace Curiosity.Systems.Server.Commands
                 if (!entry.Item1.Aliases.Select(self => self.ToLower())
                     .Contains(subcommand.ToString().ToLower())) continue;
 
-                entry.Item2.On(curiosityUser, entityHandle, arguments.Skip(1).Select(self => self.ToString()).ToList());
+                entry.Item2.On(curiosityUser, player, arguments.Skip(1).Select(self => self.ToString()).ToList());
 
                 matched = true;
 

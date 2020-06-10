@@ -20,22 +20,15 @@ namespace Curiosity.Systems.Server.Commands.Impl
         [CommandInfo(new[] { "vehicle", "veh", "car" })]
         public class VehicleSpawner : ICommand
         {
-            public async void On(CuriosityUser player, int entityHandle, List<string> arguments)
+            public async void On(CuriosityUser user, Player player, List<string> arguments)
             {
                 try
                 {
                     if (arguments.Count <= 0) return;
-
                     var model = API.GetHashKey(arguments.ElementAt(0));
 
-                    Vector3 pos = API.GetEntityCoords(entityHandle);
-                    float entityHeading = API.GetEntityHeading(entityHandle);
-
-                    int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, entityHeading, true, true);
-
-                    Logger.Info($"Created Vehicle: {vehicleId} : {pos}");
-
-                    // entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+                    Vector3 pos = player.Character.Position;
+                    int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
                 }
                 catch (Exception)
                 {

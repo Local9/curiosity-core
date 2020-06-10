@@ -6,6 +6,6 @@ namespace Curiosity.Systems.Server.Commands
 {
     public interface ICommand
     {
-        void On(CuriosityUser player, int entityHandle, List<string> arguments);
+        void On(CuriosityUser curiosityUser, Player player, List<string> arguments);
     }
 }

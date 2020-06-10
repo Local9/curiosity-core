@@ -50,8 +50,6 @@ namespace Curiosity.Systems.Server
             Logger.Info("[CuriosityPlugin] Loading...");
 
             Instance = this;
-
-            PlayersList = Players;
             SetupConvars();
 
             ServerReady = false;
@@ -240,7 +238,14 @@ namespace Curiosity.Systems.Server
 
             EventRegistry["rconCommand"] += new Action<string, List<object>>(OnRconCommand);
 
+            PlayersList = Players;
+
             ServerReady = true;
+        }
+
+        public static Player GetPlayer(int netID)
+        {
+            return PlayersList[netID];
         }
 
         public void AttachTickHandler(Func<Task> task)
