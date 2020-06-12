@@ -98,6 +98,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             PursuitManager.StartNewPursuit(this);
 
             stolenVehicle.IsSpikable = true;
+            stolenVehicle.IsMission = true;
+            stolenVehicle.IsTowable = true;
 
             UiTools.Dispatch("~r~CODE 3~s~: Stolen Vehicle", $"~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}");
 
