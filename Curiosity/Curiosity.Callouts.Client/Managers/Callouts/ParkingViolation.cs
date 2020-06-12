@@ -52,6 +52,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             parkedVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
                 Players[0].Character.Position.AroundStreet(250f, 600f));
 
+            RegisterVehicle(parkedVehicle);
+
             parkedVehicle.Fx.LockStatus = VehicleLockStatus.Locked;
 
             int X = Utility.RANDOM.Next(20, 40);
@@ -72,7 +74,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             string color = $"{parkedVehicle.Fx.Mods.PrimaryColor}~n~{parkedVehicle.Fx.Mods.SecondaryColor}";
             string model = $"{vehName}";
 
-
             UiTools.Dispatch("Parking Violation", $"~b~Veh~s~: {model}~n~~b~Color~s~: {color}~n~~b~Plate~s~: {parkedVehicle.Fx.Mods.LicensePlate}");
 
             base.IsSetup = true;
@@ -80,8 +81,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         internal override void End(bool forcefully = false, CalloutMessage cm = null)
         {
             base.End(forcefully, cm);
-
-            PluginInstance.DeregisterTickHandler(OnPlayerInteraction);
 
             if (blip != null)
             {
@@ -108,9 +107,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             switch (progress)
             {
-                case 0:
-                    End();
-                    break;
                 case 1:
                     if (Game.PlayerPed.Position.Distance(parkedVehicle.Position) > 50f) return;
                     
@@ -130,24 +126,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     break;
                 case 2:
                     if (Game.PlayerPed.Position.Distance(parkedVehicle.Position) > 3f) return;
-                    PluginInstance.RegisterTickHandler(OnPlayerInteraction);
+                    
                     break;
-            }
-        }
-
-        internal async Task OnPlayerInteraction()
-        {
-            if (Game.PlayerPed.IsInVehicle()) return;
-
-            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to Impound the Vehicle");
-
-            if(Game.IsControlPressed(0, Control.Context))
-            {
-                CalloutMessage.CalloutType = CalloutType.HOSTAGE_RESCUE;
-                CalloutMessage.Success = true;
-
-                parkedVehicle.Dismiss();
-                progress = 0;
             }
         }
 

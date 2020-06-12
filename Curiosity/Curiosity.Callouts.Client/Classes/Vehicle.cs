@@ -15,6 +15,42 @@ namespace Curiosity.Callouts.Client.Classes
 
         public string Name => API.GetLabelText(API.GetDisplayNameFromVehicleModel((uint)Fx.Model.Hash));
 
+        internal bool IsTowable
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TOW);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.VEHICLE_TOW, value);
+            }
+        }
+
+        internal bool IsSearchable
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_SEARCH);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.VEHICLE_SEARCH, value);
+            }
+        }
+
+        internal bool IsMission
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_MISSION);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.VEHICLE_MISSION, value);
+            }
+        }
+
         public bool IsSpikable
         {
             get
@@ -49,7 +85,6 @@ namespace Curiosity.Callouts.Client.Classes
 
             API.NetworkFadeOutEntity(base.Handle, false, false);
             await BaseScript.Delay(2000);
-
             base.Delete();
         }
 

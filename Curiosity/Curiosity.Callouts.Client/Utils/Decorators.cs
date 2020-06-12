@@ -10,6 +10,9 @@ namespace Curiosity.Callouts.Client.Utils
 
         public const string VEHICLE_STOLEN = "c::vehicle::stolen";
         public const string VEHICLE_FLEE = "c::vehicle::flee";
+        public const string VEHICLE_MISSION = "c::vehicle::mission";
+        public const string VEHICLE_SEARCH = "c::vehicle::search";
+        public const string VEHICLE_TOW = "c::vehicle::tow";
 
         // LEGACY
         public const string VEHICLE_SPIKE_ALLOWED = "curiosity::police::vehicle::mission";
