@@ -52,6 +52,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             parkedVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
                 Players[0].Character.Position.AroundStreet(250f, 600f));
 
+            parkedVehicle.IsMission = true;
+            parkedVehicle.IsTowable = true;
+
             RegisterVehicle(parkedVehicle);
 
             parkedVehicle.Fx.LockStatus = VehicleLockStatus.Locked;
