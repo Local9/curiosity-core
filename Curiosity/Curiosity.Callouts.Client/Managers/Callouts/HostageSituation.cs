@@ -12,6 +12,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using static Curiosity.Callouts.Client.Classes.Ped;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
+using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
+using static Curiosity.Callouts.Client.Classes.Vehicle;
 
 namespace Curiosity.Callouts.Client.Managers.Callouts
 {
@@ -26,7 +28,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         CalloutMessage calloutMessage = new CalloutMessage();
 
         private HostageDataModel data;
-        private PedHash lastPedHash;
+        private PedHash lastPedHashHostage;
+        private PedHash lastPedHashEnemy;
         private float spawnRadius;
 
         private int hostageReleaseTracker = 0;
@@ -95,6 +98,13 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             WeaponHash.SniperRifle,
         };
 
+        private List<WeaponHash> sniperHash = new List<WeaponHash>()
+        {
+            WeaponHash.SniperRifle,
+            WeaponHash.HeavySniper,
+            WeaponHash.HeavySniperMk2,
+        };
+
         public HostageSituation(Player primaryPlayer) : base(primaryPlayer) => Players.Add(primaryPlayer);
 
         internal override async void Prepare()
@@ -126,7 +136,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             Blip.Scale = data.BlipScale;
 
             numberOfHostages = data.Hostages.Count();
-            numberOfShooters = data.Shooters.Count();
+            numberOfShooters = data.Guards.Count();
 
             calloutMessage.CalloutType = CalloutType.HOSTAGE_RESCUE;
 
@@ -137,18 +147,91 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             base.IsSetup = true;
         }
 
+        internal override async void Tick()
+        {
+            int numberOfAliveHostages = Hostages.Select(x => x).Where(x => x.IsAlive).Count();
+            int numberOfReleasedHostages = Hostages.Select(x => x).Where(x => x.IsReleased).Count();
+            int numberOfAliveShooters = Shooters.Select(x => x).Where(x => x.IsAlive).Count();
+
+            if (Game.PlayerPed.Position.Distance(data.Location) < 50f)
+            {
+                if (Blip != null)
+                {
+                    if (Blip.Exists())
+                        Blip.Delete();
+                }
+            }
+
+
+
+#if DEBUG
+            if (PlayerManager.IsDeveloper)
+                Screen.ShowSubtitle($"H. {numberOfAliveHostages}, HRT: {hostageReleaseTracker}, S: {numberOfAliveShooters}, P: {progress}");
+#endif
+
+            switch (progress)
+            {
+                case 1:
+                    if (Game.PlayerPed.Position.Distance(data.Location) > spawnRadius) return;
+                    progress++;
+                    break;
+                case 2:
+                    if (data.Hostages.Count > 0)
+                        SetupHostages(data.Hostages);
+
+                    if (data.Guards.Count > 0)
+                        SetupEnemyGroup(data.Guards, weaponHashes);
+
+                    if (data.Snipers.Count > 0)
+                        SetupEnemyGroup(data.Snipers, sniperHash);
+
+                    if (data.Wanders.Count > 0)
+                        SetupEnemyGroup(data.Wanders, weaponHashes);
+
+                    if (data.Vehicles.Count > 0)
+                        SetupVehicles(data.Vehicles);
+
+                    progress++;
+                    break;
+                case 3:
+                    if (numberOfAliveShooters > 0) return;
+                    Screen.ShowNotification($"All Suspects have been killed. Remember to save the hostages");
+                    progress++;
+                    break;
+                case 4:
+                    if (Game.PlayerPed.Position.Distance(data.Location) > 200f)
+                    {
+                        API.ClearAreaOfEverything(data.Location.X, data.Location.Y, data.Location.Z, 50f, false, false, false, false);
+                        progress++;
+                    }
+                    break;
+            }
+        }
+
+        private void SetupVehicles(List<Tuple<Vector3, float>> vehicles)
+        {
+            vehicles.ForEach(async v =>
+            {
+                Model model = VehicleHash.Crusader;
+                Vehicle veh = await Vehicle.Spawn(model, v.Item1);
+                veh.Heading = v.Item2;
+                veh.Fx.LockStatus = VehicleLockStatus.LockedForPlayer;
+                RegisterVehicle(veh);
+            });
+        }
+
         private void SetupHostages(List<Tuple<Vector3, float>> hostageList)
         {
             hostageList.ForEach(async h =>
             {
                 PedHash pedHash = HostagePedHashes.Random();
 
-                while (pedHash == lastPedHash)
+                while (pedHash == lastPedHashHostage)
                 {
                     pedHash = HostagePedHashes.Random();
                 }
 
-                lastPedHash = pedHash;
+                lastPedHashHostage = pedHash;
 
                 Ped ped = await Ped.Spawn(pedHash, h.Item1, false);
                 ped.Heading = h.Item2;
@@ -172,15 +255,15 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             });
         }
 
-        private void SetupShooters(List<Tuple<Vector3, float>> shooters)
+        private void SetupEnemyGroup(List<Tuple<Vector3, float>> enemies, List<WeaponHash> weapons)
         {
-            shooters.ForEach(async s =>
+            enemies.ForEach(async s =>
             {
                 PedHash pedHash = CityPedHashes.Random();
-
+                PatrolZone PatrolZone = PlayerManager.PatrolZone;
                 // Look into Ocean and Highway
 
-                switch (PlayerManager.PatrolZone)
+                switch (PatrolZone)
                 {
                     case PatrolZone.City:
                         pedHash = CityPedHashes.Random();
@@ -196,12 +279,26 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                         break;
                 }
 
-                while (pedHash == lastPedHash)
+                while (pedHash == lastPedHashEnemy)
                 {
-                    pedHash = HostagePedHashes.Random();
+                    switch (PatrolZone)
+                    {
+                        case PatrolZone.City:
+                            pedHash = CityPedHashes.Random();
+                            break;
+                        case PatrolZone.Country:
+                            pedHash = CountryPedHashes.Random();
+                            break;
+                        case PatrolZone.Rural:
+                            pedHash = RurualPedHashes.Random();
+                            break;
+                        default:
+                            pedHash = CityPedHashes.Random();
+                            break;
+                    }
                 }
 
-                lastPedHash = pedHash;
+                lastPedHashEnemy = pedHash;
 
                 Ped ped = await Ped.Spawn(pedHash, s.Item1, false);
                 ped.Heading = s.Item2;
@@ -218,7 +315,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
                 Decorators.Set(ped.Handle, Decorators.PED_MISSION, true);
 
-                ped.Fx.Weapons.Give(weaponHashes.Random(), 90, true, true);
+                ped.Fx.Weapons.Give(weapons.Random(), 90, true, true);
                 ped.Fx.DropsWeaponsOnDeath = false;
 
                 RegisterPed(ped);
@@ -226,57 +323,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             });
         }
 
-        internal override async void Tick()
-        {
-            int numberOfAliveHostages = Hostages.Select(x => x).Where(x => x.IsAlive).Count();
-            int numberOfReleasedHostages = Hostages.Select(x => x).Where(x => x.IsReleased).Count();
-            int numberOfAliveShooters = Shooters.Select(x => x).Where(x => x.IsAlive).Count();
-
-            if (Game.PlayerPed.Position.Distance(data.Location) < 50f)
-            {
-                if (Blip != null)
-                {
-                    if (Blip.Exists())
-                        Blip.Delete();
-                }
-            }
-
-            
-
-#if DEBUG
-            if (PlayerManager.IsDeveloper)
-                Screen.ShowSubtitle($"H. {numberOfAliveHostages}, HRT: {hostageReleaseTracker}, S: {numberOfAliveShooters}, P: {progress}");
-#endif
-
-            switch (progress)
-            {
-                case 1:
-                    if (Game.PlayerPed.Position.Distance(data.Location) > spawnRadius) return;
-                    progress++;
-                    break;
-                case 2:
-                    SetupHostages(data.Hostages);
-                    SetupShooters(data.Shooters);
-                    progress++;
-                    break;
-                case 3:
-                    if (numberOfAliveShooters > 0) return;
-                    Screen.ShowNotification($"All Suspects have been killed. Remember to save the hostages");
-                    progress++;
-                    break;
-                case 4:
-                    if (Game.PlayerPed.Position.Distance(data.Location) > 200f)
-                    {
-                        API.ClearAreaOfEverything(data.Location.X, data.Location.Y, data.Location.Z, 50f, false, false, false, false);
-                        progress++;
-                    }
-                    break;
-            }
-        }
-
         internal async Task OnHostageMessagePrompt()
         {
-            Ped ped = Hostages.Select(x => x).Where(x => x.Position.Distance(Game.PlayerPed.Position) < 1.5f && !x.IsReleased).FirstOrDefault();
+            Ped ped = Hostages.Select(x => x).Where(x => x.Position.Distance(Game.PlayerPed.Position, true) < 1.5f && !x.IsReleased).FirstOrDefault();
 
             if (ped == null) return;
 
