@@ -51,7 +51,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
                 }
             };
 
-            // Situations.Add(clintonAve);
+            Situations.Add(clintonAve);
 
             HostageDataModel landActDam = new HostageDataModel()
             {
@@ -74,7 +74,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
                 }
             };
 
-            Situations.Add(landActDam);
+            // Situations.Add(landActDam);
         }
     }
 
