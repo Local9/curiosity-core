@@ -5,6 +5,7 @@ using Curiosity.Callouts.Client.Managers;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.Utils;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Callouts.Client.Classes
@@ -373,7 +374,43 @@ namespace Curiosity.Callouts.Client.Classes
                         Fx.Task.LeaveVehicle();
                     }
                     break;
+                case Sequence.ARRESTED:
+                    Callout callout = CalloutManager.ActiveCallout;
+                    Ped myPed = callout.RegisteredPeds.Select(x => x).Where(x => x.Handle == this.Handle).FirstOrDefault();
+                    if (myPed != null)
+                    {
+                        callout.NumberArrested++;
+                    }
+                    break;
             }
+        }
+        internal static async Task<Ped> SpawnRandom(Vector3 position, bool sidewalk = true)
+        {
+
+            Vector3 spawnPosition = position;
+
+            if (sidewalk)
+            {
+                spawnPosition = position.Sidewalk();
+            }
+            else
+            {
+                float groundZ = position.Z;
+                Vector3 normal = Vector3.Zero;
+
+                if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
+                {
+                    spawnPosition.Z = groundZ;
+                }
+            }
+
+            CitizenFX.Core.Ped fxPed = await World.CreatePed(Collections.Peds.ALL.Random(), spawnPosition);
+
+            API.NetworkFadeInEntity(fxPed.Handle, false);
+
+            Logger.Log(fxPed.ToString());
+            var ped = new Ped(fxPed);
+            return ped;
         }
 
         internal static async Task<Ped> Spawn(Model model, Vector3 position, bool sidewalk = true)
@@ -473,7 +510,8 @@ namespace Curiosity.Callouts.Client.Classes
             HANDCUFFED,
             UNHANDCUFFED,
             DETAIN_IN_CURRENT_VEHICLE,
-            LEAVE_VEHICLE
+            LEAVE_VEHICLE,
+            ARRESTED
         }
     }
 }
