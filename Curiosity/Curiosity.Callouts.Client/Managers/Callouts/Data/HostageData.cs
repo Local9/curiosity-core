@@ -30,29 +30,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
             if (Situations.Count() > 0)
                 Situations.Clear();
 
-            HostageDataModel clintonAve = new HostageDataModel()
-            {
-                StoreName = "24/7, Clinton Ave",
-                Location = new Vector3(375.6602f, 325.6703f, 103.5664f),
-                PatrolZone = PatrolZone.City,
-                SpawnRadius = 150f,
-                MissionRadius = 100f,
-                BlipScale = .5f,
-                Guards = new List<Tuple<Vector3, float>>
-                {
-                    new Tuple<Vector3, float>( new Vector3(375.6602f, 325.6703f, 103.5664f), 255.8121f ),
-                    new Tuple<Vector3, float>( new Vector3(381.166f, 327.2303f, 103.5664f), 109.4753f ),
-                    new Tuple<Vector3, float>( new Vector3(381.946f, 358.5238f, 102.5128f), 84.95505f ),
-                    new Tuple<Vector3, float>( new Vector3(365.0694f, 254.3395f, 112.8926f), 355.4359f ),
-                },
-                Hostages = new List<Tuple<Vector3, float>>
-                {
-                    new Tuple<Vector3, float>( new Vector3(379.5025f,332.2108f,103.5664f), 257.2952f ),
-                }
-            };
-
-            // Situations.Add(clintonAve);
-
             HostageDataModel landActDam = new HostageDataModel()
             {
                 StoreName = "Land Act Dam",
@@ -98,6 +75,53 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
             };
 
             Situations.Add(landActDam);
+
+            HostageDataModel pacificStandard = new HostageDataModel()
+            {
+                StoreName = "Pacific Standard",
+                Location = new Vector3(235.6577f, 216.9228f, 106.2868f),
+                PatrolZone = PatrolZone.City,
+                SpawnRadius = 100f,
+                MissionRadius = 100f,
+                BlipScale = .5f,
+                Hostages = new List<Tuple<Vector3, float>>
+                {
+                    new Tuple<Vector3, float>( new Vector3(263.2645f, 220.7315f, 101.6833f), 172.6615f ),
+                    new Tuple<Vector3, float>( new Vector3(254.2221f, 224.1971f, 106.2869f), 153.1367f ),
+                    new Tuple<Vector3, float>( new Vector3(248.1087f, 226.165f, 106.2873f), 152.5928f ),
+                    new Tuple<Vector3, float>( new Vector3(242.8457f, 227.2699f, 106.2872f), 152.1703f ),
+                    new Tuple<Vector3, float>( new Vector3(233.6464f, 219.9191f, 110.2827f), 61.93121f ),
+                    new Tuple<Vector3, float>( new Vector3(243.1119f, 210.6941f, 110.283f), 18.85863f ),
+                    new Tuple<Vector3, float>( new Vector3(254.4889f, 209.0891f, 110.283f), 341.6508f ),
+                    new Tuple<Vector3, float>( new Vector3(261.4947f, 204.1163f, 110.2874f), 25.54833f ),
+                },
+                Guards = new List<Tuple<Vector3, float>>
+                {
+                    new Tuple<Vector3, float>( new Vector3(236.3161f, 212.9918f, 106.2868f), 56.04658f ),
+                    new Tuple<Vector3, float>( new Vector3(233.3001f, 220.6271f, 106.2868f), 183.7656f ),
+                    new Tuple<Vector3, float>( new Vector3(239.1385f, 223.1199f, 106.2868f), 260.8069f ),
+                    new Tuple<Vector3, float>( new Vector3(251.5542f, 208.3407f, 106.2868f), 35.13206f ),
+                    new Tuple<Vector3, float>( new Vector3(263.1232f, 209.5521f, 106.2832f), 159.4815f ),
+                    new Tuple<Vector3, float>( new Vector3(259.5376f, 210.5749f, 106.2832f), 247.1622f ),
+                    new Tuple<Vector3, float>( new Vector3(259.0273f, 222.4877f, 106.2853f), 146.3903f ),
+                    new Tuple<Vector3, float>( new Vector3(266.0105f, 220.1533f, 110.283f), 69.43592f ),
+                    new Tuple<Vector3, float>( new Vector3(263.0029f, 224.0629f, 101.6833f), 199.8399f ),
+                    new Tuple<Vector3, float>( new Vector3(255.1471f, 227.4406f, 101.6833f), 242.3134f ),
+                    new Tuple<Vector3, float>( new Vector3(253.9521f, 207.4929f, 110.283f), 346.3055f ),
+                    new Tuple<Vector3, float>( new Vector3(235.2369f, 217.0184f, 110.2828f), 283.4188f ),
+                    new Tuple<Vector3, float>( new Vector3(236.1823f, 224.7399f, 110.2828f), 266.6903f ),
+                    
+                },
+                Wanders = new List<Tuple<Vector3, float>>
+                {
+                    new Tuple<Vector3, float>( new Vector3(242.3272f, 218.7228f, 106.2868f), 248.3813f ),
+                    new Tuple<Vector3, float>( new Vector3(253.7576f, 213.2547f, 106.2868f), 246.8687f ),
+                    new Tuple<Vector3, float>( new Vector3(259.0129f, 209.7595f, 110.283f), 70.91381f ),
+                    new Tuple<Vector3, float>( new Vector3(261.1353f, 214.6259f, 110.283f), 341.6583f ),
+                }
+            };
+
+            Situations.Add(pacificStandard);
         }
     }
 
