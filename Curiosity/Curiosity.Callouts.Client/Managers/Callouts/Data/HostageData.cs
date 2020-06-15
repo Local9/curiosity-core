@@ -51,7 +51,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
                 }
             };
 
-            Situations.Add(clintonAve);
+            // Situations.Add(clintonAve);
 
             HostageDataModel landActDam = new HostageDataModel()
             {
@@ -71,10 +71,33 @@ namespace Curiosity.Callouts.Client.Managers.Callouts.Data
                 {
                     new Tuple<Vector3, float>( new Vector3(1670.741f, -73.97673f, 173.4063f), 124.1436f ),
                     new Tuple<Vector3, float>( new Vector3(1643.784f, 20.3597f, 173.7745f), 351.5334f ),
+                },
+                Guards = new List<Tuple<Vector3, float>>
+                {
+                    new Tuple<Vector3, float>( new Vector3(1671.809f, -74.20051f, 173.4963f), 120.7903f ),
+                    new Tuple<Vector3, float>( new Vector3(1668.851f, -69.07045f, 173.5114f), 135.1386f ),
+                    new Tuple<Vector3, float>( new Vector3(1662.848f, -28.89268f, 173.7748f), 109.1476f ),
+                    new Tuple<Vector3, float>( new Vector3(1665.733f, -0.4518342f, 173.7751f), 289.996f ),
+                    new Tuple<Vector3, float>( new Vector3(1640.632f, 20.70308f, 173.7744f), 338.3163f ),
+                    new Tuple<Vector3, float>( new Vector3(1645.217f, 20.78804f, 173.7744f), 343.6192f ),
+                    new Tuple<Vector3, float>( new Vector3(1662.544f, -3.019243f, 166.1182f), 29.75872f ),
+                    new Tuple<Vector3, float>( new Vector3(1660.352f, 5.324343f, 166.1182f), 183.8288f ),
+                },
+                Snipers = new List<Tuple<Vector3, float>>
+                {
+                    new Tuple<Vector3, float>( new Vector3(1661.223f, 36.43375f, 179.8763f), 301.0259f ),
+                    new Tuple<Vector3, float>( new Vector3(1662.174f, -30.35659f, 182.7696f), 170.3308f ),
+                    new Tuple<Vector3, float>( new Vector3(1658.894f, -66.81844f, 178.6644f), 85.56298f ),
+                },
+                Wanders = new List<Tuple<Vector3, float>>
+                {
+                    new Tuple<Vector3, float>( new Vector3(1671.246f, -43.60514f, 173.771f), 2.846863f ),
+                    new Tuple<Vector3, float>( new Vector3(1665.694f, -15.00139f, 173.7745f), 19.3666f ),
+                    new Tuple<Vector3, float>( new Vector3(1645.912f, 14.74555f, 173.7745f), 14.06115f ),
                 }
             };
 
-            // Situations.Add(landActDam);
+            Situations.Add(landActDam);
         }
     }
 

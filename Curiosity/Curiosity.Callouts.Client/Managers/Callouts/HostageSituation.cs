@@ -186,7 +186,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                         SetupEnemyGroup(data.Snipers, sniperHash);
 
                     if (data.Wanders.Count > 0)
-                        SetupEnemyGroup(data.Wanders, weaponHashes);
+                        SetupWanderingEnemyGroup(data.Wanders, weaponHashes);
 
                     if (data.Vehicles.Count > 0)
                         SetupVehicles(data.Vehicles);
@@ -252,6 +252,76 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
                 RegisterPed(ped);
                 Hostages.Add(ped);
+            });
+        }
+
+        private void SetupWanderingEnemyGroup(List<Tuple<Vector3, float>> enemies, List<WeaponHash> weapons)
+        {
+            enemies.ForEach(async s =>
+            {
+                PedHash pedHash = CityPedHashes.Random();
+                PatrolZone PatrolZone = PlayerManager.PatrolZone;
+                // Look into Ocean and Highway
+
+                switch (PatrolZone)
+                {
+                    case PatrolZone.City:
+                        pedHash = CityPedHashes.Random();
+                        break;
+                    case PatrolZone.Country:
+                        pedHash = CountryPedHashes.Random();
+                        break;
+                    case PatrolZone.Rural:
+                        pedHash = RurualPedHashes.Random();
+                        break;
+                    default:
+                        pedHash = CityPedHashes.Random();
+                        break;
+                }
+
+                while (pedHash == lastPedHashEnemy)
+                {
+                    switch (PatrolZone)
+                    {
+                        case PatrolZone.City:
+                            pedHash = CityPedHashes.Random();
+                            break;
+                        case PatrolZone.Country:
+                            pedHash = CountryPedHashes.Random();
+                            break;
+                        case PatrolZone.Rural:
+                            pedHash = RurualPedHashes.Random();
+                            break;
+                        default:
+                            pedHash = CityPedHashes.Random();
+                            break;
+                    }
+                }
+
+                lastPedHashEnemy = pedHash;
+
+                Ped ped = await Ped.Spawn(pedHash, s.Item1, false);
+                ped.Heading = s.Item2;
+
+                RelationshipGroup relationshipGroup = (uint)Collections.RelationshipHash.Gang1;
+                ped.Fx.RelationshipGroup = relationshipGroup;
+                relationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate, true);
+                ped.Task.FightAgainstHatedTargets(data.SpawnRadius);
+
+                ped.IsMission = true;
+                ped.IsImportant = true;
+                ped.IsArrestable = true;
+                ped.IsSuspect = true;
+
+                Decorators.Set(ped.Handle, Decorators.PED_MISSION, true);
+
+                ped.Fx.Weapons.Give(weapons.Random(), 90, true, true);
+                ped.Fx.DropsWeaponsOnDeath = false;
+
+                ped.Task.WanderAround(s.Item1, 20f);
+
+                RegisterPed(ped);
+                Shooters.Add(ped);
             });
         }
 
