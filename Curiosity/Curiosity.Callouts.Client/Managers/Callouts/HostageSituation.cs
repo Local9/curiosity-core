@@ -135,8 +135,10 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             Blip.Alpha = 120;
             Blip.Scale = data.BlipScale;
 
+            API.ClearAreaOfEverything(data.Location.X, data.Location.Y, data.Location.Z, data.SpawnRadius, false, false, false, false);
+
             numberOfHostages = data.Hostages.Count();
-            numberOfShooters = data.Guards.Count();
+            numberOfShooters = data.Guards.Count() + data.Wanders.Count() + data.Snipers.Count();
 
             calloutMessage.CalloutType = CalloutType.HOSTAGE_RESCUE;
 
