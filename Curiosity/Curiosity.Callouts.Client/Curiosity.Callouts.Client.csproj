@@ -55,6 +55,7 @@
     <Compile Include="Managers\Callout.cs" />
     <Compile Include="Managers\CalloutManager.cs" />
     <Compile Include="Managers\Callouts\Data\HostageData.cs" />
+    <Compile Include="Managers\Callouts\FreewayCyclist.cs" />
     <Compile Include="Managers\Callouts\StolenVehicle.cs" />
     <Compile Include="Managers\Callouts\ParkingViolation.cs" />
     <Compile Include="Managers\Callouts\zTemplateFile.cs" />
