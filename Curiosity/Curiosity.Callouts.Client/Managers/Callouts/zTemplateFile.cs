@@ -18,6 +18,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         internal async override void Prepare()
         {
             base.Prepare();
+
+            base.IsSetup = true;
         }
         internal override void End(bool forcefully = false, CalloutMessage cm = null)
         {
@@ -25,15 +27,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             base.End(forcefully);
         }
 
-        internal override void Tick()
+        internal async override void Tick()
         {
-            int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
-
-            if (numberOfAlivePlayers == 0) // clear callout
-            {
-                End(true);
-            }
-
             switch(progress)
             {
                 default:
