@@ -44,7 +44,7 @@ namespace Curiosity.Callouts.Client.Managers
             }
 
             Ped ped = await Ped.Spawn(pedToSpawn, position);
-            ped.IsMission = true;
+            ped.IsImportant = true;
             ped.Fx.AlwaysKeepTask = true;
             ped.Fx.Weapons.Give(Collections.PoliceWeapons.WEAPONS.Random(), 90, false, true);
             ped.Fx.DropsWeaponsOnDeath = false;
