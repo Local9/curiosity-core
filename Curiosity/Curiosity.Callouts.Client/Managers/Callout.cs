@@ -6,6 +6,8 @@ using Curiosity.Callouts.Shared.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Ped = Curiosity.Callouts.Client.Classes.Ped;
 using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
 
@@ -15,7 +17,7 @@ namespace Curiosity.Callouts.Client.Managers
     internal abstract class Callout
     {
         // Consider manual callout end
-
+        static PluginManager PluginInstance => PluginManager.Instance;
         public event Action<bool> Ended;
         public bool IsSetup = false;
         public bool IsRunning = false;
@@ -25,14 +27,15 @@ namespace Curiosity.Callouts.Client.Managers
         protected internal List<Player> Players { get; }
         protected int progress = 1;
 
-        private List<Vehicle> registeredVehicles;
+        public List<Vehicle> RegisteredVehicles { get; }
         public List<Ped> RegisteredPeds { get; }
 
         protected Callout(Player primaryPlayer)
         {
-            registeredVehicles = new List<Vehicle>();
+            RegisteredVehicles = new List<Vehicle>();
             RegisteredPeds = new List<Ped>();
             Players = new List<Player> { primaryPlayer };
+            PluginInstance.RegisterTickHandler(OnCalloutTask);
         }
 
         public void AddPlayer(Player player)
@@ -49,10 +52,26 @@ namespace Curiosity.Callouts.Client.Managers
 
         internal abstract void Tick();
 
+        internal async Task OnCalloutTask()
+        {
+            if (!IsSetup) return;
+
+            int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
+
+            if (numberOfAlivePlayers == 0) // clear callout
+            {
+                End(true);
+            }
+
+            await BaseScript.Delay(100);
+        }
+
         internal virtual void End(bool forcefully = false, CalloutMessage calloutMessage = null)
         {
+            PluginInstance.DeregisterTickHandler(OnCalloutTask);
+
             RegisteredPeds.ForEach(ped => ped?.Dismiss());
-            registeredVehicles.ForEach(vehicle => vehicle?.Dismiss());
+            RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
 
             if (Players.Count > 0)
             {
@@ -65,6 +84,8 @@ namespace Curiosity.Callouts.Client.Managers
 
             if (calloutMessage != null)
             {
+                calloutMessage.Success = !forcefully;
+
                 string jsonMessage = JsonConvert.SerializeObject(calloutMessage);
                 string encoded = Encode.StringToBase64(jsonMessage);
                 BaseScript.TriggerServerEvent(Events.Server.Callout.CompleteCallout, encoded);
@@ -83,7 +104,7 @@ namespace Curiosity.Callouts.Client.Managers
         internal void RegisterVehicle(Vehicle vehicle)
         {
             vehicle.Fx.IsPersistent = true;
-            registeredVehicles.Add(vehicle);
+            RegisteredVehicles.Add(vehicle);
             Logger.Log($"Registered vehicle {vehicle.Hash} to callout {GetType().Name}");
         }
     }

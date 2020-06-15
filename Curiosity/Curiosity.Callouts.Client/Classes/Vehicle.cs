@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Callouts.Client.Managers;
 using Curiosity.Callouts.Client.Utils;
 using System;
 using System.Threading.Tasks;
@@ -110,6 +111,11 @@ namespace Curiosity.Callouts.Client.Classes
         bool IEquatable<Vehicle>.Equals(Vehicle other)
         {
             return (!base.Equals(other) ? false : object.Equals(this.Fx, other.Fx));
+        }
+
+        internal void Impound()
+        {
+            ImpoundManager.Tow(this);
         }
     }
 }

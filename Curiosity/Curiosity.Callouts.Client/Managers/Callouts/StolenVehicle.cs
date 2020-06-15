@@ -117,7 +117,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             IsRunning = true;
 
             float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
-            if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 2f)
+            if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 4f)
             {
                 TaskSequence taskSequence = new TaskSequence();
                 taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
@@ -153,7 +153,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f)
             {
-                UiTools.Dispatch("~r~Pursuit Ended", "Suspect has got away. Return to patrol.");
+                UiTools.Dispatch("~r~Pursuit Ended", "Suspect has got away. Return to your patrol.");
                 End(true);
             }
         }

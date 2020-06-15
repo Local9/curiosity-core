@@ -56,7 +56,7 @@ namespace Curiosity.Server.net.Classes
             CalloutMessage calloutMessage = JsonConvert.DeserializeObject<CalloutMessage>(Encode.Base64ToString(encodedData));
 
             string subTitle = "Maybe next time...";
-            if (calloutMessage.Success)
+            if (calloutMessage.IsCalloutFinished)
                 subTitle = "~g~Completed";
 
             int experience = 50;

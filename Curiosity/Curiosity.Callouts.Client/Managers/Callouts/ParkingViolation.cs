@@ -18,11 +18,10 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
     internal class ParkingViolation : Callout
     {
         private PluginManager PluginInstance => PluginManager.Instance;
+        private CalloutMessage calloutMessage = new CalloutMessage();
 
         Vehicle parkedVehicle;
         Blip blip;
-
-        CalloutMessage CalloutMessage = new CalloutMessage();
 
         List<VehicleHash> vehicleHashes = new List<VehicleHash>()
         {
@@ -83,6 +82,11 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         }
         internal override void End(bool forcefully = false, CalloutMessage cm = null)
         {
+            if (!parkedVehicle.Exists())
+            {
+                calloutMessage.IsCalloutFinished = true;
+            }
+
             base.End(forcefully, cm);
 
             if (blip != null)
@@ -97,16 +101,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         internal override void Tick()
         {
 #if DEBUG
-            if (PlayerManager.IsDeveloper)
+            if (PlayerManager.IsDeveloper && Game.PlayerPed.Position.Distance(parkedVehicle.Position) > 50f)
                 Screen.ShowSubtitle($"Dis: {Game.PlayerPed.Position.Distance(parkedVehicle.Position)}");
 #endif
-
-            int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
-
-            if (numberOfAlivePlayers == 0) // clear callout
-            {
-                End(true);
-            }
 
             switch (progress)
             {
@@ -126,10 +123,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                     API.ShowHeightOnBlip(blip.Handle, true);
 
                     progress++;
-                    break;
-                case 2:
-                    if (Game.PlayerPed.Position.Distance(parkedVehicle.Position) > 3f) return;
-                    
                     break;
             }
         }

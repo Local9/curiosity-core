@@ -1,10 +1,16 @@
-﻿using Curiosity.Callouts.Client.Managers;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
+using Curiosity.Callouts.Client.Managers;
+using Curiosity.Callouts.Client.Utils;
 using NativeUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using Ped = Curiosity.Callouts.Client.Classes.Ped;
+using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
 
 namespace Curiosity.Callouts.Client.Menu.Submenu
 {
@@ -62,6 +68,20 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
                 bool isCalloutSuccess = true;
 
                 CalloutManager.ActiveCallout?.End(!isCalloutSuccess);
+                return;
+            }
+
+            if (selectedItem == menuItemCode51)
+            {
+                Vehicle suspectVehicle = MenuBase.GetClosestVehicle();
+                if (suspectVehicle != null)
+                {
+                    suspectVehicle.Impound();
+                }
+                else
+                {
+                    UiTools.Impound("Sorry...?", "Whats the registration again? Get closer so you can read it better.");
+                }
             }
         }
 
@@ -74,14 +94,15 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
         {
             MenuBase.OnMenuState(true);
 
-            bool isCalloutActive = (CalloutManager.ActiveCallout != null);
+            bool isCalloutActive = MenuBase.IsCalloutActive;
+            bool isVehicleTowable = MenuBase.GetClosestVehicle() != null;
 
             menuItemCode4.Enabled = isCalloutActive;
             menuItemCode16.Enabled = isCalloutActive;
             menuItemCode27.Enabled = isCalloutActive;
             menuItemCode28.Enabled = isCalloutActive;
             menuItemCode29.Enabled = isCalloutActive;
-            menuItemCode51.Enabled = isCalloutActive;
+            menuItemCode51.Enabled = isCalloutActive && isVehicleTowable;
             menuItemCode52.Enabled = isCalloutActive;
             menuItemCode55d.Enabled = isCalloutActive;
             menuItemCode78.Enabled = isCalloutActive;

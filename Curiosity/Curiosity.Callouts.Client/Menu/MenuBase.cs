@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ped = Curiosity.Callouts.Client.Classes.Ped;
+using Vehicle = Curiosity.Callouts.Client.Classes.Vehicle;
 
 namespace Curiosity.Callouts.Client.Menu
 {
@@ -20,6 +22,8 @@ namespace Curiosity.Callouts.Client.Menu
         private PluginManager PluginInstance => PluginManager.Instance;
         public static MenuPool _MenuPool;
         private UIMenu menuMain;
+        private static Callout callout => CalloutManager.ActiveCallout;
+        public static bool IsCalloutActive;
 
         private bool isMenuOpen => Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_MENU);
 
@@ -31,7 +35,7 @@ namespace Curiosity.Callouts.Client.Menu
 
         // menu items - Maybe move these???
         private UIMenuItem mItemRequestAssistance = new UIMenuItem($"Request Assistance", "Call for support during an active pursuit.");
-        private UIMenuItem mItemPanicButton = new UIMenuItem($"Panic Button", "Call dispatch for immediate assistance.~n~~y~Will be removed after 2 mins~n~~o~5 Minute cooldown between requests");
+        private UIMenuItem mItemPanicButton = new UIMenuItem($"Panic Button", "Call dispatch for immediate assistance.~n~~y~Will be removed after 2 mins~n~~o~5 Minute cooldown between requests") { Enabled = false };
 
         public MenuBase()
         {
@@ -75,9 +79,9 @@ namespace Curiosity.Callouts.Client.Menu
         private void MenuMain_OnMenuOpen(UIMenu sender)
         {
             OnMenuState(true);
+            IsCalloutActive = callout != null;
 
             // Change button states
-            bool isCalloutActive = CalloutManager.ActiveCallout != null;
             bool isPursuitActive = PursuitManager.IsPursuitActive;
 
             mItemRequestAssistance.Enabled = isPursuitActive;
@@ -138,6 +142,20 @@ namespace Curiosity.Callouts.Client.Menu
                     menuMain.Visible = true;
                 }
             }
+        }
+
+        public static Ped GetClosestSuspect()
+        {
+            if (!IsCalloutActive) return null;
+
+            return callout.RegisteredPeds.Select(x => x).Where(p => p.Position.Distance(Game.PlayerPed.Position) < 1.5f && p.IsSuspect && p.IsMission).FirstOrDefault();
+        }
+
+        public static Vehicle GetClosestVehicle()
+        {
+            if (!IsCalloutActive) return null;
+
+            return callout.RegisteredVehicles.Select(x => x).Where(p => p.Position.Distance(Game.PlayerPed.Position) < 4f && p.IsMission).FirstOrDefault();
         }
     }
 }

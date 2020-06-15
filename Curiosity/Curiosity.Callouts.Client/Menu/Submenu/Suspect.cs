@@ -18,7 +18,6 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
     class Suspect
     {
         private PluginManager PluginInstance => PluginManager.Instance;
-        private Callout callout => CalloutManager.ActiveCallout;
         private Ped Ped;
 
         UIMenu Menu;
@@ -55,7 +54,7 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
                 return;
             }
 
-            bool isCalloutActive = (callout != null);
+            bool isCalloutActive = MenuBase.IsCalloutActive;
 
             if (!isCalloutActive)
             {
@@ -64,8 +63,15 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
             }
             else
             {
-                Ped = GetClosestSuspect();
+                Ped = MenuBase.GetClosestSuspect();
                 bool isControlable = PedCanBeControled();
+
+                if (Ped == null)
+                {
+                    UiTools.Dispatch("No suspect nearby", $"");
+                    MenuBase._MenuPool.CloseAllMenus();
+                    return;
+                }
 
                 menuItemHandcuff.Text = Ped.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
                 menuItemHandcuff.Enabled = isControlable;
@@ -121,11 +127,6 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
                     return Ped.IsAlive;
             }
             return false;
-        }
-
-        private Ped GetClosestSuspect()
-        {
-            return callout.RegisteredPeds.Select(x => x).Where(p => p.Position.Distance(Game.PlayerPed.Position) < 1.5f && p.IsSuspect && p.IsMission).FirstOrDefault();
         }
     }
 }

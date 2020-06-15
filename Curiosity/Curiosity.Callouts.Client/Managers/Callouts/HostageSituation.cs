@@ -316,7 +316,9 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             Hostages.Clear();
             Shooters.Clear();
 
-            calloutMessage.Success = true;
+            if (hostageReleaseTracker > 0)
+                calloutMessage.IsCalloutFinished = true;
+
             calloutMessage.NumberRescued = hostageReleaseTracker;
 
             cm = calloutMessage;
