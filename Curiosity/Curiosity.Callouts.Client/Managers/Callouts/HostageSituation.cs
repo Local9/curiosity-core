@@ -305,10 +305,12 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 Ped ped = await Ped.Spawn(pedHash, s.Item1, false);
                 ped.Heading = s.Item2;
 
+// #if RELEASE
                 RelationshipGroup relationshipGroup = (uint)Collections.RelationshipHash.Gang1;
                 ped.Fx.RelationshipGroup = relationshipGroup;
                 relationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate, true);
                 ped.Task.FightAgainstHatedTargets(data.SpawnRadius);
+// #endif
 
                 ped.IsMission = true;
                 ped.IsImportant = true;
@@ -375,10 +377,12 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 Ped ped = await Ped.Spawn(pedHash, s.Item1, false);
                 ped.Heading = s.Item2;
 
+// #if RELEASE
                 RelationshipGroup relationshipGroup = (uint)Collections.RelationshipHash.Gang1;
                 ped.Fx.RelationshipGroup = relationshipGroup;
                 relationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate, true);
                 ped.Task.FightAgainstHatedTargets(data.SpawnRadius);
+// #endif
 
                 ped.IsMission = true;
                 ped.IsImportant = true;
@@ -406,6 +410,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             if (Game.IsControlJustPressed(0, Control.Context))
             {
+                // Add method to earn experience?
                 ped.RunSequence(Sequence.UNKNEEL_AND_FLEE);
                 ped.IsReleased = true;
                 hostageReleaseTracker++;
