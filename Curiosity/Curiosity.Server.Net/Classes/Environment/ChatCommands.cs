@@ -491,13 +491,13 @@ namespace Curiosity.Server.net.Classes.Environment
 
                     using (TextWriter tw = new StreamWriter(filePath))
                     {
-                        tw.WriteLine("Date,Name,X,Y,Z,Heading,Vector,VectorJson,VectorLua");
+                        tw.WriteLine("Date,Name,X,Y,Z,Heading,Vector,VectorJson,VectorLua,C#");
                     }
                 }
 
                 using (TextWriter tw = new StreamWriter(filePath, true))
                 {
-                    tw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm")},{positionName},{posX},{posY},{posZ},{heading},({posX}f, {posY}f, {posZ}f),(x: {posX}, y: {posY}, z: {posZ}),({posX}, {posY}, {posZ})");
+                    tw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm")},{positionName},{posX},{posY},{posZ},{heading},({posX}f, {posY}f, {posZ}f),(x: {posX}, y: {posY}, z: {posZ}),({posX}, {posY}, {posZ}),new Vector3({posX}f, {posY}f, {posZ}f), {heading}f");
                 }
 
                 Helpers.Notifications.Advanced($"Position Saved", $"~b~Name: ~s~{positionName}", 20, session.Player);
