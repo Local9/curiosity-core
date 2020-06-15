@@ -5,6 +5,26 @@ namespace Curiosity.Callouts.Client.Utils
 {
     internal static class Collections
     {
+        internal static class Peds
+        {
+            internal static readonly List<PedHash> ALL = new List<PedHash>()
+            {
+                PedHash.Ammucity01SMY,
+                PedHash.AmmuCountrySMM,
+                PedHash.ArmBoss01GMM,
+                PedHash.ArmGoon01GMM,
+                PedHash.ArmGoon02GMY,
+                PedHash.Autoshop01SMM,
+                PedHash.BallaEast01GMY,
+                PedHash.BallaOrig01GMY,
+                PedHash.Bartender01SFY,
+                PedHash.Bevhills01AFY,
+                PedHash.Bevhills01AMM,
+                PedHash.Bevhills03AFY,
+                PedHash.Bouncer01SMM,
+            };
+        }
+
         internal static class PoliceCars
         {
             internal static readonly List<VehicleHash> ALL = new List<VehicleHash>()
