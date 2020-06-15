@@ -29,6 +29,7 @@ namespace Curiosity.Callouts.Client.Managers
 
         public List<Vehicle> RegisteredVehicles { get; }
         public List<Ped> RegisteredPeds { get; }
+        public int NumberArrested { get; set; } = 0;
 
         protected Callout(Player primaryPlayer)
         {
@@ -85,6 +86,7 @@ namespace Curiosity.Callouts.Client.Managers
             if (calloutMessage != null)
             {
                 calloutMessage.Success = !forcefully;
+                calloutMessage.NumberArrested = this.NumberArrested;
 
                 string jsonMessage = JsonConvert.SerializeObject(calloutMessage);
                 string encoded = Encode.StringToBase64(jsonMessage);
