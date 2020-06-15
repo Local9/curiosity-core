@@ -144,13 +144,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
                 }
             }
 
-            int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
-
-            if (numberOfAlivePlayers == 0) // clear callout
-            {
-                End(true);
-            }
-
             if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f)
             {
                 UiTools.Dispatch("~r~Pursuit Ended", "Suspect has got away. Return to your patrol.");

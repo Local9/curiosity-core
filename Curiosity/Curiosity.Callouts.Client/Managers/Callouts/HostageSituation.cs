@@ -232,13 +232,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             int numberOfReleasedHostages = Hostages.Select(x => x).Where(x => x.IsReleased).Count();
             int numberOfAliveShooters = Shooters.Select(x => x).Where(x => x.IsAlive).Count();
 
-            int numberOfAlivePlayers = Players.Select(x => x).Where(x => x.IsAlive).Count();
-
-            if (numberOfAlivePlayers == 0) // clear callout
-            {
-                End(true);
-            }
-
             if (Game.PlayerPed.Position.Distance(data.Location) < 50f)
             {
                 if (Blip != null)
