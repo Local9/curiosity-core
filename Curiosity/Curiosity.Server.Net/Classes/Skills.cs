@@ -297,7 +297,7 @@ namespace Curiosity.Server.net.Classes
                 if (!skills.ContainsKey(skill))
                 {
                     Log.Error($"IncreaseSkill: Unknown Skill -> {skill}");
-                    Log.Error($"IncreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    Log.Error($"IncreaseSkill: Known Skills -> {String.Join(", ", skills.Select(x => x.Key))}");
                     return;
                 }
 
