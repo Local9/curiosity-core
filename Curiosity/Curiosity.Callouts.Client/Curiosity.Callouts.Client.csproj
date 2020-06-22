@@ -52,6 +52,7 @@
     <Compile Include="Classes\Ped.cs" />
     <Compile Include="Classes\Persuit.cs" />
     <Compile Include="Classes\Vehicle.cs" />
+    <Compile Include="Managers\AmbulanceManager.cs" />
     <Compile Include="Managers\Callout.cs" />
     <Compile Include="Managers\CalloutManager.cs" />
     <Compile Include="Managers\Callouts\Data\HostageData.cs" />
