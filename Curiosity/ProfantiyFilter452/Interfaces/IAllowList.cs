@@ -20,7 +20,7 @@ SOFTWARE.
 using System;
 using System.Collections.ObjectModel;
 
-namespace ProfanityFilter.Interfaces
+namespace ProfanityFilterNS.Interfaces
 {
     public interface IAllowList
     {
