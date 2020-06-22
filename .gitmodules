@@ -4,3 +4,6 @@
 [submodule "Curiosity/FiveM-MySQL"]
 	path = Curiosity/FiveM-MySQL
 	url = https://github.com/Local9/FiveM-MySQL.git
+[submodule "ProfanityDetector"]
+	path = ProfanityDetector
+	url = https://github.com/stephenhaunts/ProfanityDetector.git
