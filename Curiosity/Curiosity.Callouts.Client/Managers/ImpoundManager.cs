@@ -24,7 +24,7 @@ namespace Curiosity.Callouts.Client.Managers
         Vector3 PickupLocation;
 
         [Tick]
-        private async Task OnTick()
+        private async Task OnInpoundTick()
         {
             if (VehToImpound == null) return;
 

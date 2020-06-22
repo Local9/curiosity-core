@@ -79,7 +79,7 @@ namespace Curiosity.Callouts.Client.Managers
         }
 
         [Tick]
-        private async Task Update()
+        private async Task OnCalloutUpdate()
         {
             if (ActiveCallout == null) return;
 

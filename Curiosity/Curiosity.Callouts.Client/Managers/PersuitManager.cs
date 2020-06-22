@@ -29,7 +29,7 @@ namespace Curiosity.Callouts.Client.Managers
         }
 
         [Tick]
-        private async Task OnTick()
+        private async Task OnPursuitTick()
         {
             if (activePursuit == null)
             {
