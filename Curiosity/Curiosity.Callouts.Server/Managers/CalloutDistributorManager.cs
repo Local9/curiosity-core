@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Callouts.Server.Managers
 {
-    class CalloutDistributor : BaseScript
+    class CalloutDistributorManager : BaseScript
     {
         async void GetAvailablePlayers()
         {
