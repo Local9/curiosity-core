@@ -18,5 +18,15 @@ namespace Curiosity.Callouts.Client.Managers
         public static bool IsActive = false;
         static List<Ped> Prisoners;
         static int managerProgress = 0;
+
+        Vehicle TransportVehicle;
+        Ped TransportDriver;
+        Vector3 PickupLocation;
+
+        [Tick]
+        private async Task OnPrisonerTransportClick()
+        {
+            if (Prisoners.Count == 0) return;
+        }
     }
 }
