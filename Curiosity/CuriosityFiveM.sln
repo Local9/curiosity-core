@@ -146,6 +146,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fivem.Test.Server", "Fivem.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Callout.Client", "Curiosity.Callout.Client\Curiosity.Callout.Client.csproj", "{7443F620-BE8E-4C52-9F99-5ABF6B71141E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfanityFilter", "..\ProfanityDetector\ProfanityFilter\ProfanityFilter\ProfanityFilter.csproj", "{EEB0ED60-CAA6-41BF-968E-6C7FF47C9639}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -348,6 +350,10 @@ Global
 		{7443F620-BE8E-4C52-9F99-5ABF6B71141E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7443F620-BE8E-4C52-9F99-5ABF6B71141E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7443F620-BE8E-4C52-9F99-5ABF6B71141E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEB0ED60-CAA6-41BF-968E-6C7FF47C9639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEB0ED60-CAA6-41BF-968E-6C7FF47C9639}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEB0ED60-CAA6-41BF-968E-6C7FF47C9639}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEB0ED60-CAA6-41BF-968E-6C7FF47C9639}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -406,6 +412,7 @@ Global
 		{98B7061B-D34E-4549-8467-4B6068EA87B8} = {23FDE4D3-3A19-4DEE-BB6B-B5013E89A040}
 		{28F09296-FEF7-4D51-89A4-91A384750244} = {5CB9B26A-88FF-4B46-BBE4-4FF11C7FDFC8}
 		{7443F620-BE8E-4C52-9F99-5ABF6B71141E} = {5B08BD43-975A-44DD-9AD8-4B96EB32B987}
+		{EEB0ED60-CAA6-41BF-968E-6C7FF47C9639} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
