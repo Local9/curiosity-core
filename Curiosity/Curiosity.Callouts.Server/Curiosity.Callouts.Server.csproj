@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Managers\CalloutDistributorManager.cs" />
+    <Compile Include="Managers\DispatchManager.cs" />
     <Compile Include="Managers\VehicleRegistrationManager.cs" />
     <Compile Include="Managers\WarrentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
