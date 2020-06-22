@@ -109,7 +109,7 @@
     <Compile Include="Entity\VehicleData.cs" />
     <Compile Include="Enums\Discord\Webhook.cs" />
     <Compile Include="Extensions\PlayerExtentions.cs" />
-    <Compile Include="Extensions\ProfanityFilter.cs" />
+    <Compile Include="Extensions\InternalFilter.cs" />
     <Compile Include="Helpers\ChatLog.cs" />
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\Request.cs" />
@@ -133,6 +133,10 @@
     <ProjectReference Include="..\Curiosity.Shared.Server.net\Curiosity.Shared.Server.net.csproj">
       <Project>{e665b41e-6ffb-4ea8-998f-80122b2afe7c}</Project>
       <Name>Curiosity.Shared.Server.net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProfantiyFilter452\ProfantiyFilter452.csproj">
+      <Project>{d2b12e3f-bced-4bd8-80cd-8a7fa042025a}</Project>
+      <Name>ProfantiyFilter452</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

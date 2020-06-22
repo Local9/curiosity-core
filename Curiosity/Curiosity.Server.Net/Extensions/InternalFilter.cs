@@ -2,7 +2,7 @@
 
 namespace Curiosity.Server.net.Extensions
 {
-    static class ProfanityFilter
+    static class InternalFilter
     {
         // METHOD: containsProfanity
         static public bool ContainsProfanity(this string checkStr)

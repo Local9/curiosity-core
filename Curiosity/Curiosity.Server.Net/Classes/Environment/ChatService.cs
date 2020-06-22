@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ProfanityFilterNS;
 
 namespace Curiosity.Server.net.Classes.Environment
 {
@@ -182,11 +183,9 @@ namespace Curiosity.Server.net.Classes.Environment
                     message = message.Substring(0, 240);
                 }
 
-                if (message.ContainsProfanity())
-                {
-                    Regex wordFilter = new Regex($"({string.Join("|", ProfanityFilter.ProfanityArray())})");
-                    message = wordFilter.Replace(message, "$!\"£^!@");
-                }
+                var filter = new ProfanityFilter();
+                message = filter.CensorString(message);
+
 
                 if (message.IsAllUpper())
                 {
