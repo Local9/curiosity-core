@@ -27,10 +27,10 @@ namespace Curiosity.Callouts.Client.Managers
         private async Task OnInpoundTick()
         {
             if (VehToImpound == null) return;
-
-            if (PlayerManager.IsDeveloper && TowTruck != null)
+#if DEBUG
+            if (PlayerManager.IsDeveloper && TowTruck != null && PlayerManager.IsDeveloperUIActive)
                 Screen.ShowSubtitle($"Dis: {Game.PlayerPed.Position.Distance(TowTruck.Position)} | prog: {managerProgress}");
-
+#endif
             Sequence(managerProgress);
             await BaseScript.Delay(500);
         }

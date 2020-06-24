@@ -16,7 +16,7 @@ namespace Curiosity.Callouts.Client.Managers
     internal class PrisonerTransportManager : BaseScript
     {
         public static bool IsActive = false;
-        static List<Ped> Prisoners;
+        static List<Ped> Prisoners = new List<Ped>();
         static int managerProgress = 0;
 
         Vehicle TransportVehicle;

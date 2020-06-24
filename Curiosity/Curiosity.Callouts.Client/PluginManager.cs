@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Callouts.Client.Managers;
 using Curiosity.Callouts.Client.Utils;
 using Curiosity.Callouts.Shared.EventWrapper;
 using System;

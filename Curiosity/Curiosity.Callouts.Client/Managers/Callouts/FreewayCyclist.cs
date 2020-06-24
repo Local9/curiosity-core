@@ -86,7 +86,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
             }
 #if DEBUG
-            if (PlayerManager.IsDeveloper && Game.PlayerPed.Position.Distance(Cyclist.Position) > 50f)
+            if (PlayerManager.IsDeveloper && Game.PlayerPed.Position.Distance(Cyclist.Position) > 50f && PlayerManager.IsDeveloperUIActive)
                 Screen.ShowSubtitle($"Dis: {Game.PlayerPed.Position.Distance(Cyclist.Position)}");
 #endif
         }

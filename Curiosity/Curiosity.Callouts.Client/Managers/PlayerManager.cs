@@ -71,6 +71,7 @@ namespace Curiosity.Callouts.Client.Managers
         }
 
         public static bool IsDeveloper => playerInfo.RoleId == 4 || playerInfo.RoleId == 5;
+        public static bool IsDeveloperUIActive => (playerInfo.RoleId == 4 || playerInfo.RoleId == 5) && Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_UI);
 
         public class PlayerInformationModel
         {

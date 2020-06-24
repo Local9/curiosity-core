@@ -101,7 +101,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
         internal override void Tick()
         {
 #if DEBUG
-            if (PlayerManager.IsDeveloper && Game.PlayerPed.Position.Distance(parkedVehicle.Position) > 50f)
+            if (PlayerManager.IsDeveloper && Game.PlayerPed.Position.Distance(parkedVehicle.Position) > 50f && PlayerManager.IsDeveloperUIActive)
                 Screen.ShowSubtitle($"Dis: {Game.PlayerPed.Position.Distance(parkedVehicle.Position)}");
 #endif
 

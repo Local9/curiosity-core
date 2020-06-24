@@ -167,7 +167,7 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
 
 
 #if DEBUG
-            if (PlayerManager.IsDeveloper)
+            if (PlayerManager.IsDeveloper && PlayerManager.IsDeveloperUIActive)
                 Screen.ShowSubtitle($"H. {numberOfAliveHostages}, HRT: {hostageReleaseTracker}, S: {numberOfAliveShooters}, P: {progress}");
 #endif
 
