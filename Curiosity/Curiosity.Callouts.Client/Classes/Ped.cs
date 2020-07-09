@@ -32,6 +32,7 @@ namespace Curiosity.Callouts.Client.Classes
             }
             set
             {
+                this.IsArrestable = true;
                 Decorators.Set(Fx.Handle, Decorators.PED_SUSPECT, value);
             }
         }
@@ -44,6 +45,7 @@ namespace Curiosity.Callouts.Client.Classes
             }
             set
             {
+                this.IsSuspect = value;
                 Decorators.Set(Fx.Handle, Decorators.PED_ARRESTABLE, value);
             }
         }
@@ -149,6 +151,11 @@ namespace Curiosity.Callouts.Client.Classes
             API.RequestAnimDict("mp_arresting");
             API.RequestAnimDict("random@arrests@busted");
             API.RequestAnimDict("random@arrests");
+        }
+
+        internal void PrisonTransport()
+        {
+            PrisonerTransportManager.Collect(this);
         }
 
         internal async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
@@ -415,7 +422,6 @@ namespace Curiosity.Callouts.Client.Classes
 
         internal static async Task<Ped> Spawn(Model model, Vector3 position, bool sidewalk = true)
         {
-
             Vector3 spawnPosition = position;
 
             if (sidewalk)

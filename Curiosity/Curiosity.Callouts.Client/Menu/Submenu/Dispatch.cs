@@ -63,15 +63,14 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
 
         private void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
-            if (selectedItem == menuItemCode4)
+            if (selectedItem == menuItemCode4) // end callout
             {
-                bool isCalloutSuccess = true;
-
-                CalloutManager.ActiveCallout?.End(!isCalloutSuccess);
+                Callout callout = CalloutManager.ActiveCallout;
+                callout?.End(); // need a success state
                 return;
             }
 
-            if (selectedItem == menuItemCode51)
+            if (selectedItem == menuItemCode51) // impound
             {
                 Vehicle suspectVehicle = MenuBase.GetClosestVehicle();
                 if (suspectVehicle != null)
@@ -81,6 +80,19 @@ namespace Curiosity.Callouts.Client.Menu.Submenu
                 else
                 {
                     UiTools.Impound("Sorry...?", "Whats the registration again? Get closer so you can read it better.");
+                }
+            }
+
+            if (selectedItem == menuItemCode16) // prison transport
+            {
+                Ped ped = MenuBase.GetClosestSuspect();
+                if (ped != null)
+                {
+                    ped.PrisonTransport();
+                }
+                else
+                {
+                    Screen.ShowSubtitle($"Must be closer to the suspect.");
                 }
             }
         }

@@ -121,6 +121,12 @@ namespace Curiosity.Callouts.Client.Managers
 
         public static void Tow(Vehicle vehicle)
         {
+            if (IsActive)
+            {
+                UiTools.Impound("Vehicle Impound", "We're currently enroute.");
+                return;
+            }
+
             managerProgress = 1;
             VehToImpound = vehicle;
             IsActive = true;

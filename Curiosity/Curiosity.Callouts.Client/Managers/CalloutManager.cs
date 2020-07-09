@@ -60,6 +60,9 @@ namespace Curiosity.Callouts.Client.Managers
                 case "cyclist":
                     newCallout = Activator.CreateInstance(typeof(FreewayCyclist), Game.Player) as Callout;
                     break;
+                case "testPed":
+                    newCallout = Activator.CreateInstance(typeof(CalloutPedTest), Game.Player) as Callout;
+                    break;
                 default:
                     Screen.ShowNotification($"~r~Invalid callout type '{calloutName}'");
                     break;
