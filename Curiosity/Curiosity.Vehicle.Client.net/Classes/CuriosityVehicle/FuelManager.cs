@@ -102,6 +102,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         private static long GameTimer;
 
         private static bool IsInstantRefuelDisabled = false;
+        private static bool IsFuelFree = false;
 
         static public void Init()
         {
@@ -121,6 +122,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             client.RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
             client.RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
             client.RegisterEventHandler("curiosity:Client:Settings:InstantRefuel", new Action<bool>(InstantRefuel));
+            client.RegisterEventHandler("curiosity:Client:Settings:Chargeable", new Action<bool>(Chargeable));
 
             //DevRefuel
             client.RegisterEventHandler("curiosity:Client:Vehicle:DevRefuel", new Action(DevRefuel));
@@ -464,6 +466,12 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
         static async void Charge(int cost)
         {
+            if (IsFuelFree)
+            {
+                // Free refueling
+                return;
+            }
+
             cost = (int)(cost * 1.5);
 
             PlayerInformationModel playerInfo = Player.PlayerInformation.playerInfo;
@@ -516,6 +524,16 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         {
             BaseScript.TriggerEvent("curiosity:Client:Vehicle:CurrentFuel", vehicleFuel);
             await BaseScript.Delay(0);
+        }
+
+        static void Chargeable(bool setting)
+        {
+            IsFuelFree = setting;
+
+            if (Player.PlayerInformation.IsDeveloper())
+            {
+                Debug.WriteLine($"IsInstantRefuelDisabled: {IsInstantRefuelDisabled}");
+            }
         }
 
         static void InstantRefuel(bool IsInstantRefuelDisabledSetting)
