@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Models;
 using System;
@@ -48,7 +49,7 @@ namespace Curiosity.Client.net
 
             ClassLoader.Init();
             RegisterTickHandler(OnHideHudTick);
-            RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action(OnSessionActive));
+            RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action<bool>(OnSessionActive));
             RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
 
             //RegisterEventHandler("TriggerEventNearPoint", new Action<string>(HandleLocalEvent));
@@ -69,8 +70,11 @@ namespace Curiosity.Client.net
             }
         }
 
-        async void OnSessionActive()
+        async void OnSessionActive(bool showBlips)
         {
+            if (showBlips)
+                RegisterTickHandler(PlayerBlips.OnTickShowPlayerBlips);
+
             BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
             await Delay(1000);
             isSessionActive = true;

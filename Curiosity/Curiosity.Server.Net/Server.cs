@@ -18,6 +18,7 @@ namespace Curiosity.Server.net
         static string serverKeyString;
         public static int serverId = 0;
         public static bool serverActive = false;
+        public static bool showPlayerBlips = true;
         public static int startingLocationId = 0;
 
         public static bool IsBirthday = false;
@@ -67,6 +68,7 @@ namespace Curiosity.Server.net
             _server = this;
 
             startingLocationId = API.GetConvarInt("starting_location_id", 1);
+            showPlayerBlips = API.GetConvarInt("player_blips", 1) == 1;
 
             API.SetConvar("sv_authMaxVariance", "");
             API.SetConvar("sv_authMinTrust", "");
