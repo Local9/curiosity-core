@@ -19,7 +19,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:UI:LocationHide", new Action<bool>(LocationDisplayState));
-            client.RegisterTickHandler(OnShowStreetNameTick);
         }
 
         static void LocationDisplayState(bool state)
