@@ -147,6 +147,18 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             Blip currentGasBlip = null;
             while (true)
             {
+                if (IsFuelFree)
+                {
+                    if (currentGasBlip != null)
+                    {
+                        if (currentGasBlip.Exists())
+                        {
+                            currentGasBlip.Delete();
+                        }
+                    }
+                    break;
+                }
+
                 await BaseScript.Delay(10000);
                 // isNearFuelPump = false;
 
