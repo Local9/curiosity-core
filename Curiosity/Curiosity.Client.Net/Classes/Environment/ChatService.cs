@@ -31,7 +31,7 @@ namespace Curiosity.Client.net.Classes.Environment
             client.RegisterEventHandler("curiosity:Client:Chat:Message", new Action<string>(OnChatMessage));
 
             RegisterNuiCallbackType("SendChatMessage");
-            client.RegisterEventHandler("__cfx_nui:SendChatMessage", new Action<System.Dynamic.ExpandoObject>(HandleChatResult));
+            client.RegisterEventHandler("__cfx_nui:SendChatMessage", new Action<IDictionary<string, object>, CallbackDelegate>(HandleChatResult));
 
             RegisterNuiCallbackType("ChatPosition");
             client.RegisterEventHandler("__cfx_nui:ChatPosition", new Action<System.Dynamic.ExpandoObject>(StoreChatPosition));
@@ -110,7 +110,7 @@ namespace Curiosity.Client.net.Classes.Environment
             }
         }
 
-        static void HandleChatResult(System.Dynamic.ExpandoObject data)
+        static void HandleChatResult(IDictionary<string, object> data, CallbackDelegate cb)
         {
             try
             {
@@ -142,6 +142,8 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     Client.TriggerServerEvent("curiosity:Server:Chat:Message", message, chatChannel);
                 }
+
+                cb(new { ok = true });
             }
             catch (Exception ex)
             {
