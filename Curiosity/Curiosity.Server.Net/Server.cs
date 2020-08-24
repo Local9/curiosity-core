@@ -21,6 +21,7 @@ namespace Curiosity.Server.net
         public static bool showPlayerBlips = true;
         public static bool showPlayerLocation = true;
         public static int startingLocationId = 0;
+        public static int minutesAFK = 15;
 
         public static bool IsBirthday = false;
 
@@ -28,7 +29,7 @@ namespace Curiosity.Server.net
 
         public ExportDictionary ExportDictionary => Exports;
 
-        const string CURIOSITY_VERSION = "v1.0.0.1726";
+        const string CURIOSITY_VERSION = "v1.0.1.1638";
         public static string LICENSE_IDENTIFIER = "license";
         public static string DISCORD_IDENTIFIER = "discord";
         public static bool isLive
@@ -71,6 +72,7 @@ namespace Curiosity.Server.net
             startingLocationId = API.GetConvarInt("starting_location_id", 1);
             showPlayerBlips = API.GetConvarInt("player_blips", 1) == 1;
             showPlayerLocation = API.GetConvarInt("player_location_display", 1) == 1;
+            minutesAFK = API.GetConvarInt("player_location_display", 15);
 
             API.SetConvar("sv_authMaxVariance", "");
             API.SetConvar("sv_authMinTrust", "");

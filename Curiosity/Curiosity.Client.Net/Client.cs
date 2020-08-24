@@ -18,6 +18,7 @@ namespace Curiosity.Client.net
         public static string PLAYER_GROUP = "PLAYER";
         private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
         public static RelationshipGroup PlayerRelationshipGroup;
+        public static int minutesAfkKick = 15;
 
         public static CitizenFX.Core.Vehicle CurrentVehicle;
 
@@ -49,7 +50,7 @@ namespace Curiosity.Client.net
 
             ClassLoader.Init();
             RegisterTickHandler(OnHideHudTick);
-            RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action<bool, bool>(OnSessionActive));
+            RegisterEventHandler("curiosity:Client:Player:SessionActivated", new Action<bool, bool, int>(OnSessionActive));
             RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
 
             //RegisterEventHandler("TriggerEventNearPoint", new Action<string>(HandleLocalEvent));
@@ -70,13 +71,15 @@ namespace Curiosity.Client.net
             }
         }
 
-        async void OnSessionActive(bool showBlips, bool showLocation)
+        async void OnSessionActive(bool showBlips, bool showLocation, int afkMinutes)
         {
             if (showBlips)
                 RegisterTickHandler(PlayerBlips.OnTickShowPlayerBlips);
 
             if (showLocation)
                 RegisterTickHandler(Location.OnShowStreetNameTick);
+
+            minutesAfkKick = afkMinutes;
 
             BaseScript.TriggerServerEvent("curiosity:Server:Character:RoleCheck");
             await Delay(1000);

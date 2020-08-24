@@ -11,7 +11,6 @@ namespace Curiosity.Client.net.Classes.Environment
         static Vector3 lastPlayerLocation = new Vector3();
         static int lastMovement = 0;
         static int lastKeyPress = 0;
-        static float afkLimit = 15f; // How many minutes since last movement or keypress we allow before kick
         static float afkWarning = 5f; // How many minutes before to warn player
 
         // Also, if dev don't kick
@@ -37,6 +36,11 @@ namespace Curiosity.Client.net.Classes.Environment
             {
                 await BaseScript.Delay(60000);
 
+                if (Client.minutesAfkKick == 0)
+                {
+                    break; // disable AFK timer
+                }
+
                 if (PlayerInformation.IsStaff())
                     return;
 
@@ -47,14 +51,14 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 int currentTime = API.GetGameTimer();
 
-                if ((currentTime - lastMovement) > 60000 * afkLimit)
+                if ((currentTime - lastMovement) > 60000 * Client.minutesAfkKick)
                 {
                     BaseScript.TriggerServerEvent("curiosity:Server:Player:AfkKick");
                 }
-                else if ((currentTime - lastMovement) > 60000 * (afkLimit - afkWarning))
+                else if ((currentTime - lastMovement) > 60000 * (Client.minutesAfkKick - afkWarning))
                 {
                     float timeRemaining = (currentTime - lastMovement) / 60000f;
-                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#FF0000", $@"You will be kicked for being AFK in {(afkLimit - timeRemaining):0} minute{(afkLimit - timeRemaining > 1 ? "s" : "")}.");
+                    BaseScript.TriggerEvent("curiosity:Client:Chat:Message", "", "#FF0000", $@"You will be kicked for being AFK in {(Client.minutesAfkKick - timeRemaining):0} minute{(Client.minutesAfkKick - timeRemaining > 1 ? "s" : "")}.");
                 }
 
                 //if (((currentTime - lastMovement) > 60000 * afkLimit || (currentTime - lastKeyPress) > 60000 * afkLimit))

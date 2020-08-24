@@ -456,7 +456,7 @@ namespace Curiosity.Server.net.Classes
                 await BaseScript.Delay(0);
                 player.TriggerEvent("curiosity:Client:Bank:UpdateBank", session.BankAccount);
                 await BaseScript.Delay(0);
-                player.TriggerEvent("curiosity:Client:Player:SessionActivated", Server.showPlayerBlips, Server.showPlayerLocation);
+                player.TriggerEvent("curiosity:Client:Player:SessionActivated", Server.showPlayerBlips, Server.showPlayerLocation, Server.minutesAFK);
                 Log.Success($"session.Activate() -> {session.Name}");
             }
             catch (Exception ex)
