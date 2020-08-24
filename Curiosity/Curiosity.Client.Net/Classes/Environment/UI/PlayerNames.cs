@@ -63,6 +63,18 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         {
             try
             {
+                if (!Client.ShowPlayerNames)
+                {
+                    if (Client.StaffShowPlayerNames)
+                    {
+                        // carry on
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
                 if (CinematicMode.DoHideHud) return;
 
                 MarkerPlayers = Client.players.Where(ShouldShowName);

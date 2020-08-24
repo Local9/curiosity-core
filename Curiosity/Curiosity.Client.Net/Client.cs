@@ -14,6 +14,10 @@ namespace Curiosity.Client.net
     {
         public static int PedHandle { get { return Game.PlayerPed.Handle; } }
         public static int PlayerHandle { get { return Game.Player.Handle; } }
+
+        public static bool ShowPlayerNames = true;
+        public static bool StaffShowPlayerNames = false;
+
         public static GlobalEntity.User User;
         public static string PLAYER_GROUP = "PLAYER";
         private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";

@@ -72,7 +72,7 @@ namespace Curiosity.Server.net
             startingLocationId = API.GetConvarInt("starting_location_id", 1);
             showPlayerBlips = API.GetConvarInt("player_blips", 1) == 1;
             showPlayerLocation = API.GetConvarInt("player_location_display", 1) == 1;
-            minutesAFK = API.GetConvarInt("player_location_display", 15);
+            minutesAFK = API.GetConvarInt("player_afk_timer", 15);
 
             API.SetConvar("sv_authMaxVariance", "");
             API.SetConvar("sv_authMinTrust", "");
