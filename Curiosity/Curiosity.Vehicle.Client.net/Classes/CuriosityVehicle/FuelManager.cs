@@ -145,66 +145,63 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         static async Task GasStationBlips()
         {
             Blip currentGasBlip = null;
-            while (true)
+
+            if (IsFuelFree)
             {
-                if (IsFuelFree)
+                if (currentGasBlip != null)
                 {
-                    if (currentGasBlip != null)
+                    if (currentGasBlip.Exists())
                     {
-                        if (currentGasBlip.Exists())
-                        {
-                            currentGasBlip.Delete();
-                        }
-                    }
-                    break;
-                }
-
-                await BaseScript.Delay(10000);
-                // isNearFuelPump = false;
-
-                if (Game.PlayerPed.IsInHeli || Game.PlayerPed.IsInBoat || Game.PlayerPed.IsInPlane || !Game.PlayerPed.IsInVehicle() || Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Cycles)
-                {
-                    if (currentGasBlip != null)
-                    {
-                        if (currentGasBlip.Exists())
-                        {
-                            currentGasBlip.Delete();
-                        }
+                        currentGasBlip.Delete();
                     }
                 }
-                else
+                client.DeregisterTickHandler(GasStationBlips);
+            }
+
+            await BaseScript.Delay(10000);
+
+            if (Game.PlayerPed.IsInHeli || Game.PlayerPed.IsInBoat || Game.PlayerPed.IsInPlane || !Game.PlayerPed.IsInVehicle() || Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Cycles)
+            {
+                if (currentGasBlip != null)
                 {
-
-                    Vector3 playerPos = Game.PlayerPed.Position;
-                    float closest = 1000.0f;
-                    Vector3 closestCoords = new Vector3();
-
-                    foreach (Vector3 gasStation in GasStations)
+                    if (currentGasBlip.Exists())
                     {
-                        float distanceCheck = NativeWrappers.GetDistanceBetween(playerPos, gasStation, false);
-
-                        if (distanceCheck < closest)
-                        {
-                            closest = distanceCheck;
-                            closestCoords = gasStation;
-                        }
+                        currentGasBlip.Delete();
                     }
-
-                    if (currentGasBlip != null)
-                    {
-                        if (currentGasBlip.Exists())
-                        {
-                            currentGasBlip.Delete();
-                        }
-                    }
-
-                    currentGasBlip = new Blip(API.AddBlipForCoord(closestCoords.X, closestCoords.Y, closestCoords.Z));
-                    currentGasBlip.Sprite = BlipSprite.JerryCan;
-                    currentGasBlip.Color = BlipColor.Red;
-                    currentGasBlip.Scale = 0.9f;
-                    currentGasBlip.IsShortRange = true;
-                    currentGasBlip.Name = "Gas Station";
                 }
+            }
+            else
+            {
+
+                Vector3 playerPos = Game.PlayerPed.Position;
+                float closest = 1000.0f;
+                Vector3 closestCoords = new Vector3();
+
+                foreach (Vector3 gasStation in GasStations)
+                {
+                    float distanceCheck = NativeWrappers.GetDistanceBetween(playerPos, gasStation, false);
+
+                    if (distanceCheck < closest)
+                    {
+                        closest = distanceCheck;
+                        closestCoords = gasStation;
+                    }
+                }
+
+                if (currentGasBlip != null)
+                {
+                    if (currentGasBlip.Exists())
+                    {
+                        currentGasBlip.Delete();
+                    }
+                }
+
+                currentGasBlip = new Blip(API.AddBlipForCoord(closestCoords.X, closestCoords.Y, closestCoords.Z));
+                currentGasBlip.Sprite = BlipSprite.JerryCan;
+                currentGasBlip.Color = BlipColor.Red;
+                currentGasBlip.Scale = 0.9f;
+                currentGasBlip.IsShortRange = true;
+                currentGasBlip.Name = "Gas Station";
             }
         }
 
