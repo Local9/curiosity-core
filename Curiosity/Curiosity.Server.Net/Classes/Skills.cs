@@ -265,7 +265,7 @@ namespace Curiosity.Server.net.Classes
                 if (skill == "policexp")
                 {
                     session.Player.TriggerEvent("curiosity:Client:Player:UpdateExtraFlags");
-                    Server.TriggerEvent("curiosity:Client:Notification:Curiosity", 1, "~h~PERMA BANNED", "~r~CHEATER FOUND", $"~o~Player: ~w~{session.Player.Name}\n~w~Server has been tasked with their elimination.", 107);
+                    Server.TriggerEvent("curiosity:Client:Notification:Curiosity", 1, "~h~PERMA BANNED", "~r~CHEATER FOUND", $"~o~Player: ~w~{session.Player.Name}~n~~w~Server has been tasked with their elimination.", 107);
                     Database.DatabaseUsers.LogBan(session.UserID, 15, 24, session.User.CharacterId, true, DateTime.Now.AddYears(10));
                 }
 
