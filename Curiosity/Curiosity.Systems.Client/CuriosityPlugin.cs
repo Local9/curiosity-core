@@ -259,6 +259,8 @@ namespace Curiosity.Systems.Client
                 {
                     callback.Task(metadata);
                 }
+
+                result(new { ok = true });
             });
         }
     }
