@@ -180,6 +180,35 @@ namespace Curiosity.Server.net.Business
             }
         }
 
+        public static async Task<bool> CheckDiscordIdIsInGuild(Player player, ulong discordId)
+        {
+            bool IsMember = false;
+
+            RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{discordGuild}/members/{discordId}", string.Empty);
+
+            if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
+            {
+                Log.Info($"DiscordClient : {player.Name} is NOT a member of the Discord Guild.");
+                player.Drop($"This server requires that your are a member of their Discord.\nDiscord URL: discord.lifev.net");
+                return IsMember;
+            }
+
+            if (!(requestResponse.status == System.Net.HttpStatusCode.OK))
+            {
+                Log.Error($"DiscordClient : Error communicating with Discord");
+                player.Drop($"Error communicating with Discord, please raise a support ticket or try connecting again later.");
+                return IsMember;
+            }
+
+            Member discordMember = JsonConvert.DeserializeObject<Member>(requestResponse.content);
+
+            IsMember = discordMember.JoinedAt.HasValue;
+
+            Log.Success($"DiscordClient : {player.Name} is a member of the Discord Guild.");
+
+            return IsMember;
+        }
+
         static async void CheckDiscordSetup()
         {
             try
@@ -217,5 +246,76 @@ namespace Curiosity.Server.net.Business
     class DiscordWebhook
     {
 
+    }
+
+    public partial class Member
+    {
+        [JsonProperty("nick")]
+        public object Nick { get; set; }
+
+        [JsonProperty("user", NullValueHandling = NullValueHandling.Ignore)]
+        public User User { get; set; }
+
+        [JsonProperty("roles", NullValueHandling = NullValueHandling.Ignore)]
+        public string[] Roles { get; set; }
+
+        [JsonProperty("premium_since", NullValueHandling = NullValueHandling.Ignore)]
+        public DateTimeOffset? PremiumSince { get; set; }
+
+        [JsonProperty("deaf", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? Deaf { get; set; }
+
+        [JsonProperty("mute", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? Mute { get; set; }
+
+        [JsonProperty("joined_at", NullValueHandling = NullValueHandling.Ignore)]
+        public DateTimeOffset? JoinedAt { get; set; }
+    }
+
+    public partial class User
+    {
+        [JsonProperty("username", NullValueHandling = NullValueHandling.Ignore)]
+        public string Username { get; set; }
+
+        [JsonProperty("discriminator", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(ParseStringConverter))]
+        public long? Discriminator { get; set; }
+
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+        public string Id { get; set; }
+
+        [JsonProperty("avatar", NullValueHandling = NullValueHandling.Ignore)]
+        public string Avatar { get; set; }
+    }
+
+    internal class ParseStringConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(long) || t == typeof(long?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            long l;
+            if (Int64.TryParse(value, out l))
+            {
+                return l;
+            }
+            throw new Exception("Cannot unmarshal type long");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (long)untypedValue;
+            serializer.Serialize(writer, value.ToString());
+            return;
+        }
+
+        public static readonly ParseStringConverter Singleton = new ParseStringConverter();
     }
 }

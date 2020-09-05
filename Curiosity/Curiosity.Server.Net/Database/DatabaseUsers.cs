@@ -19,7 +19,7 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static async Task<GlobalEntity.User> GetUser(string license, Player player, long discordId)
+        public static async Task<GlobalEntity.User> GetUser(string license, Player player, ulong discordId)
         {
             GlobalEntity.User user = new GlobalEntity.User();
             Dictionary<string, object> myParams = new Dictionary<string, object>();

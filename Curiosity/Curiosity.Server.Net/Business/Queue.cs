@@ -194,10 +194,18 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
-                long discordIdLong = 0;
+                ulong discordIdLong = 0;
 
                 if (!string.IsNullOrEmpty(discordId))
-                    discordIdLong = long.Parse(discordId);
+                    discordIdLong = ulong.Parse(discordId);
+
+                if (discordIdLong == 0)
+                {
+                    deferrals.done($"This server requires that your are a member of their Discord.\nDiscord URL: discord.lifev.net");
+                    return;
+                }
+
+                await Discord.CheckDiscordIdIsInGuild(player, discordIdLong);
 
                 GlobalEntity.User user = await Database.DatabaseUsers.GetUser(license, player, discordIdLong);
 
