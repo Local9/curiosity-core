@@ -201,7 +201,7 @@ namespace Curiosity.Server.net.Business
 
                 if (discordIdLong == 0)
                 {
-                    deferrals.done($"This server requires that your are a member of their Discord.\n\nIF you have recently verified, please wait 5 minutes for Discords API to update.\n\nDiscord URL: discord.lifev.net");
+                    deferrals.done($"This server requires that you are running Discord and have allowed FiveM to access it.\n\nDiscord URL: discord.lifev.net");
                     return;
                 }
 
@@ -209,7 +209,7 @@ namespace Curiosity.Server.net.Business
 
                 if (!isVerified)
                 {
-                    deferrals.done($"This server requires that your are a member of their Discord and Verified.\nDiscord URL: discord.lifev.net");
+                    deferrals.done($"This server requires that your are a member of their Discord and Verified.\n\nIF you have recently verified, please wait 5 minutes for Discords API to update.\n\nDiscord URL: discord.lifev.net");
                     return;
                 }
 
