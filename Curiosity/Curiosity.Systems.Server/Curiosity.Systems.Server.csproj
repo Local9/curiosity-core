@@ -61,6 +61,7 @@
     <Compile Include="CuriosityPlugin.cs" />
     <Compile Include="Database\MySqlDatabase.cs" />
     <Compile Include="Database\Store\CharacterDatabase.cs" />
+    <Compile Include="Database\Store\ServerDatabase.cs" />
     <Compile Include="Database\Store\UserDatabase.cs" />
     <Compile Include="Diagnostics\ErrorText.cs" />
     <Compile Include="Diagnostics\Logger.cs" />

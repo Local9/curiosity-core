@@ -19,8 +19,8 @@ namespace Curiosity.Systems.Server.Database.Store
 
                 Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
-                    { "@usernameIn", player.Name },
-                    { "@discordIdIn", discordId }
+                    { "@Username", player.Name },
+                    { "@DiscordID", discordId }
                 };
 
                 string myQuery = "CALL spGetUser(@usernameIn, @discordIdIn);";

@@ -156,19 +156,32 @@ namespace Curiosity.Systems.Server
                     }
                 }
 
-                bool onesyncActive = Convert.ToBoolean(API.GetConvar("onesync_enabled", "false"));
+                string serverKey = API.GetConvar("sv_licenseKey", CONVAR_MISSING);
 
-                //if (!onesyncActive)
-                //{
-                //    while (true)
-                //    {
-                //        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                //        Logger.Error("!!!!! OneSync is required to use this framework !!!!!");
-                //        Logger.Error("!!! Please set this value and restart the server! !!!");
-                //        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                //        await BaseScript.Delay(3000);
-                //    }
-                //}
+                if (serverKey == CONVAR_MISSING)
+                {
+                    while (true)
+                    {
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        Logger.Error("!!!!!!!! Convar 'sv_licenseKey' is not set! !!!!!!!!!");
+                        Logger.Error("!!! Please set this value and restart the server! !!!");
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        await BaseScript.Delay(3000);
+                    }
+                }
+
+                bool checkServerSetup = await Database.Store.ServerDatabase.CheckServerKey(ServerId, serverKey);
+
+                if (!checkServerSetup)
+                {
+                    while (true)
+                    {
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        Logger.Error("!!!!!!!! Server not found in server table! !!!!!!!!!!");
+                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                        await BaseScript.Delay(3000);
+                    }
+                }
 
                 DiscordUrl = API.GetConvar("discord_url", "discord_url not set");
                 API.SetConvarServerInfo("Discord", DiscordUrl);
