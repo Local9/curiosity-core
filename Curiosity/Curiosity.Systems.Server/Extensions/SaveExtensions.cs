@@ -13,6 +13,8 @@ namespace Curiosity.Systems.Server.Extenstions
 
         public static async Task Save(this CuriosityCharacter character)
         {
+            if (character == null) return;
+
             await CharacterDatabase.Save(character);
         }
     }

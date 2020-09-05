@@ -25,7 +25,7 @@ namespace Curiosity.Systems.Client.Managers
                 string chatChannel = metadata.Find<string>(1);
 
                 if (string.IsNullOrWhiteSpace(message))
-                    return null;
+                    return new { ok = true };
 
                 var spaceSplit = message.Split(' ');
 
@@ -38,13 +38,13 @@ namespace Curiosity.Systems.Client.Managers
                     // EventSystem.Send("chat:global", message, chatChannel);
                     BaseScript.TriggerServerEvent("chat:global", message, chatChannel);
                 }
-                return null;
+                return new { ok = true };
             }));
 
             Curiosity.AttachNuiHandler("CloseChatMessage", new EventCallback(metadata =>
             {
                 EnableChatbox(false);
-                return null;
+                return new { ok = true };
             }));
         }
 

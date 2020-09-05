@@ -35,7 +35,7 @@ namespace Curiosity.Systems.Server.Database.Store
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
                     if (kv.ContainsKey("CharacterJSON") && kv["CharacterJSON"] != null)
-                        curiosityCharacter = JsonConvert.DeserializeObject<CuriosityCharacter>($"{kv["characterObject"]}");
+                        curiosityCharacter = JsonConvert.DeserializeObject<CuriosityCharacter>($"{kv["CharacterJSON"]}");
 
                     curiosityCharacter.CharacterId = kv["CharacterID"].ToLong();
                     curiosityCharacter.MarkedAsRegistered = kv["IsRegistered"].ToBoolean();
