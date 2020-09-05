@@ -202,9 +202,27 @@ namespace Curiosity.Server.net.Business
 
             Member discordMember = JsonConvert.DeserializeObject<Member>(requestResponse.content);
 
-            IsMember = discordMember.JoinedAt.HasValue;
+            bool isVerified = false;
 
-            Log.Success($"DiscordClient : {player.Name} is a member of the Discord Guild.");
+            // Log.Info($"DiscordClient : {string.Join(", ", discordMember.Roles)}");
+
+            foreach (string role in discordMember.Roles)
+            {
+                if (role == "751832468197212171")
+                {
+                    isVerified = true;
+                }
+            }
+
+            IsMember = discordMember.JoinedAt.HasValue && isVerified;
+
+            if (!IsMember)
+            {
+                Log.Error($"DiscordClient : {player.Name} is NOT a member of the Discord Guild or isn't verified.");
+            } else
+            {
+                Log.Success($"DiscordClient : {player.Name} is a member of the Discord Guild and verified.");
+            }
 
             return IsMember;
         }
