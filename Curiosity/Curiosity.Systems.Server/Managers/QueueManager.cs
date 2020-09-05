@@ -123,14 +123,14 @@ namespace Curiosity.Systems.Server.Managers
                 return;
             }
 
-            Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LastName} Connecting [{discordId}]");
+            Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LatestName} Connecting [{discordId}]");
 
             await BaseScript.Delay(10);
 
             DiscordClient dc = new DiscordClient();
             await dc.CheckDiscordIdIsInGuild(player, discordId);
 
-            Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LastName} is a member of the Discord");
+            Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LatestName} is a member of the Discord");
 
             if (curiosityUser.Banned)
             {
@@ -163,7 +163,7 @@ namespace Curiosity.Systems.Server.Managers
             {
                 if (curiosityUser.IsStaff)
                 {
-                    Logger.Success($"Curiosity Queue Manager : Staff Member {curiosityUser.LastName} added to Priority Queue");
+                    Logger.Success($"Curiosity Queue Manager : Staff Member {curiosityUser.LatestName} added to Priority Queue");
                 }
 
                 if (!priority.TryAdd(license, curiosityUser.QueuePriority))

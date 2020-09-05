@@ -11,20 +11,19 @@ namespace Curiosity.Systems.Server.Database.Store
 {
     class UserDatabase
     {
-        public static async Task<CuriosityUser> Get(string license, Player player, ulong discordId)
+        public static async Task<CuriosityUser> Get(Player player, ulong discordId)
         {
             try
             {
-                Logger.Debug($"User: {player.Name}, License: {license}, DiscordId: {discordId}");
+                Logger.Debug($"User: {player.Name}, DiscordId: {discordId}");
 
                 Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
-                    { "@licenseIn", license },
                     { "@usernameIn", player.Name },
                     { "@discordIdIn", discordId }
                 };
 
-                string myQuery = "CALL curiosity.spGetUser_v2(@licenseIn, @usernameIn, @discordIdIn);";
+                string myQuery = "CALL curiosity.spGetUser(@usernameIn, @discordIdIn);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
@@ -37,17 +36,13 @@ namespace Curiosity.Systems.Server.Database.Store
 
                     foreach (Dictionary<string, object> kv in keyValuePairs)
                     {
-                        curiosityUser.UserId = kv["userId"].ToLong();
-                        curiosityUser.License = kv["license"].ToString();
-                        curiosityUser.LifeExperience = kv["lifeExperience"].ToLong();
-                        curiosityUser.DateCreated = kv["dateCreated"].ToDateTime();
-                        curiosityUser.LatestActivity = kv["lastSeen"].ToDateTime();
-                        curiosityUser.BannedPerm = kv["bannedPerm"].ToBoolean();
-                        curiosityUser.Banned = kv["banned"].ToBoolean();
-                        curiosityUser.QueuePriority = kv["queuePriority"].ToInt();
-                        curiosityUser.QueueLevel = kv["queueLevel"].ToInt();
-                        curiosityUser.Role = (Role)kv["roleId"].ToInt();
-                        curiosityUser.LastName = player.Name;
+                        curiosityUser.UserId = kv["UserID"].ToLong();
+                        curiosityUser.DateCreated = kv["DateCreated"].ToDateTime();
+                        curiosityUser.LatestActivity = kv["LastJoined"].ToDateTime();
+                        curiosityUser.BannedPerm = kv["IsPermBanned"].ToBoolean();
+                        curiosityUser.Banned = kv["IsBanned"].ToBoolean();
+                        curiosityUser.Role = (Role)kv["RoleID"].ToInt();
+                        curiosityUser.LatestName = player.Name;
                         curiosityUser.DiscordId = discordId;
 
                         if (kv.ContainsValue("bannedUntil"))

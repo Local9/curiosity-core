@@ -22,7 +22,7 @@ namespace Curiosity.Systems.Server.Managers
             string jsonMessage = string.Empty;
 
             chatMessage = new ChatMessage();
-            chatMessage.Name = user.LastName;
+            chatMessage.Name = user.LatestName;
             chatMessage.Role = $"{user.Role}";
             chatMessage.Message = message;
             chatMessage.Channel = channel;

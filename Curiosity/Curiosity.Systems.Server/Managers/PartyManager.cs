@@ -22,7 +22,7 @@ namespace Curiosity.Systems.Server.Managers
 
                 PartyMember partyMember = new PartyMember();
                 partyMember.Handle = party.LeaderHandle;
-                partyMember.Name = curiosityUser.LastName;
+                partyMember.Name = curiosityUser.LatestName;
                 partyMember.Leader = true;
 
                 party.Members.Add(partyMember);
@@ -50,7 +50,7 @@ namespace Curiosity.Systems.Server.Managers
 
                 CuriosityUser userToInvite = CuriosityPlugin.ActiveUsers[invitee];
 
-                Logger.Debug($"Handle of Invitee: {userToInvite.LastName}, Sender: {curiosityUser.LastName}");
+                Logger.Debug($"Handle of Invitee: {userToInvite.LatestName}, Sender: {curiosityUser.LatestName}");
 
                 if (userToInvite.Handle == 0)
                 {
@@ -59,9 +59,9 @@ namespace Curiosity.Systems.Server.Managers
                     return false;
                 }
 
-                Logger.Debug($"[PARTY][INVITE] PID: {curiosityUser.PartyId}, Inviter: {curiosityUser.LastName}, Invitee: [{userToInvite.Handle}] {userToInvite.LastName}");
+                Logger.Debug($"[PARTY][INVITE] PID: {curiosityUser.PartyId}, Inviter: {curiosityUser.LatestName}, Invitee: [{userToInvite.Handle}] {userToInvite.LatestName}");
 
-                userToInvite.Send("party:invite:request", curiosityUser.PartyId, curiosityUser.LastName);
+                userToInvite.Send("party:invite:request", curiosityUser.PartyId, curiosityUser.LatestName);
 
                 return true;
 
@@ -79,7 +79,7 @@ namespace Curiosity.Systems.Server.Managers
                 Party party = ActiveParties[guid];
                 CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[acceptingPlayer];
 
-                party.AddMember(acceptingPlayer, curiosityUser.LastName);
+                party.AddMember(acceptingPlayer, curiosityUser.LatestName);
 
                 foreach (PartyMember pm in party.Members)
                 {
@@ -105,7 +105,7 @@ namespace Curiosity.Systems.Server.Managers
                 CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[acceptingPlayer];
                 CuriosityUser partyLeader = CuriosityPlugin.ActiveUsers[party.LeaderHandle];
 
-                partyLeader.Send("party:invite:declined", curiosityUser.LastName);
+                partyLeader.Send("party:invite:declined", curiosityUser.LatestName);
 
                 return null;
             }));

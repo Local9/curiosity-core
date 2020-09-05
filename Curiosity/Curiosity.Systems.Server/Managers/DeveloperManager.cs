@@ -19,7 +19,7 @@ namespace Curiosity.Systems.Server.Managers
 
                 if (!curiosityUser.IsDeveloper) return null;
 
-                string filePath = $@"{API.GetResourcePath(API.GetCurrentResourceName())}\data\{curiosityUser.LastName}-savedPositions.txt";
+                string filePath = $@"{API.GetResourcePath(API.GetCurrentResourceName())}\data\{curiosityUser.LatestName}-savedPositions.txt";
 
                 if (!File.Exists(filePath))
                 {

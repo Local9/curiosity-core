@@ -11,7 +11,7 @@ namespace Curiosity.Systems.Library.Models
         public ulong DiscordId { get; set; }
         public List<ulong> DiscordRoles { get; set; }
         public string License { get; set; }
-        public string LastName { get; set; }
+        public string LatestName { get; set; }
         public Role Role { get; set; } = Role.USER;
         public DateTime LatestActivity { get; set; }
         public DateTime DateCreated { get; set; }
