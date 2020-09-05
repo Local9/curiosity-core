@@ -23,7 +23,7 @@ namespace Curiosity.Systems.Server.Database.Store
                     { "@DiscordID", discordId }
                 };
 
-                string myQuery = "CALL spGetUser(@usernameIn, @discordIdIn);";
+                string myQuery = "CALL selUser(@Username, @DiscordID);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {

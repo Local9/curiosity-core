@@ -22,6 +22,7 @@ namespace Curiosity.Systems.Server
     {
         const string CURIOSITY_VERSION = "v2.0.0.0001";
         private const string CONVAR_MISSING = "MISSING";
+        private string SERVER_KEY;
 
         public static CuriosityPlugin Instance { get; private set; }
         public static PlayerList PlayersList { get; private set; }
@@ -156,28 +157,15 @@ namespace Curiosity.Systems.Server
                     }
                 }
 
-                string serverKey = API.GetConvar("sv_licenseKey", CONVAR_MISSING);
+                SERVER_KEY = API.GetConvar("sv_licenseKey", CONVAR_MISSING);
 
-                if (serverKey == CONVAR_MISSING)
+                if (SERVER_KEY == CONVAR_MISSING)
                 {
                     while (true)
                     {
                         Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         Logger.Error("!!!!!!!! Convar 'sv_licenseKey' is not set! !!!!!!!!!");
                         Logger.Error("!!! Please set this value and restart the server! !!!");
-                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        await BaseScript.Delay(3000);
-                    }
-                }
-
-                bool checkServerSetup = await Database.Store.ServerDatabase.CheckServerKey(ServerId, serverKey);
-
-                if (!checkServerSetup)
-                {
-                    while (true)
-                    {
-                        Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                        Logger.Error("!!!!!!!! Server not found in server table! !!!!!!!!!!");
                         Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                         await BaseScript.Delay(3000);
                     }
@@ -217,7 +205,7 @@ namespace Curiosity.Systems.Server
             }
         }
 
-        private void Load()
+        private async void Load()
         {
             var loaded = 0;
 
@@ -252,6 +240,19 @@ namespace Curiosity.Systems.Server
             EventRegistry["rconCommand"] += new Action<string, List<object>>(OnRconCommand);
 
             PlayersList = Players;
+
+            bool checkServerSetup = await Database.Store.ServerDatabase.CheckServerKey(ServerId, SERVER_KEY);
+
+            if (!checkServerSetup)
+            {
+                while (true)
+                {
+                    Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    Logger.Error("!!!!!!!! Server not found in server table! !!!!!!!!!!");
+                    Logger.Error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    await BaseScript.Delay(3000);
+                }
+            }
 
             ServerReady = true;
         }
