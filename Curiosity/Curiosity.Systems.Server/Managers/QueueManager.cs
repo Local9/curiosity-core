@@ -114,7 +114,7 @@ namespace Curiosity.Systems.Server.Managers
             ulong discordId = 0;
             ulong.TryParse(discordIdStr, out discordId);
 
-            CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(license, player, discordId);
+            CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player, discordId);
 
             if (curiosityUser == null)
             {
@@ -132,10 +132,10 @@ namespace Curiosity.Systems.Server.Managers
 
             Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LatestName} is a member of the Discord");
 
-            if (curiosityUser.Banned)
+            if (curiosityUser.IsBanned)
             {
                 string time = $"until {curiosityUser.BannedUntil}";
-                if (curiosityUser.BannedPerm)
+                if (curiosityUser.IsBannedPerm)
                     time = "permanently.";
 
                 deferrals.done(string.Format($"{messages[Messages.Banned]}", time));

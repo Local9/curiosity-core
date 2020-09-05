@@ -48,5 +48,10 @@ namespace Curiosity.Systems.Server.Extensions
         {
             return DateTime.Parse($"{o}");
         }
+
+        public static float ToFloat(this object o)
+        {
+            return float.Parse($"{o}");
+        }
     }
 }

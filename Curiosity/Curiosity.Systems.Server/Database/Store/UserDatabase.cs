@@ -23,7 +23,7 @@ namespace Curiosity.Systems.Server.Database.Store
                     { "@discordIdIn", discordId }
                 };
 
-                string myQuery = "CALL curiosity.spGetUser(@usernameIn, @discordIdIn);";
+                string myQuery = "CALL spGetUser(@usernameIn, @discordIdIn);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
@@ -39,9 +39,10 @@ namespace Curiosity.Systems.Server.Database.Store
                         curiosityUser.UserId = kv["UserID"].ToLong();
                         curiosityUser.DateCreated = kv["DateCreated"].ToDateTime();
                         curiosityUser.LatestActivity = kv["LastJoined"].ToDateTime();
-                        curiosityUser.BannedPerm = kv["IsPermBanned"].ToBoolean();
-                        curiosityUser.Banned = kv["IsBanned"].ToBoolean();
+                        curiosityUser.IsBannedPerm = kv["IsPermBanned"].ToBoolean();
+                        curiosityUser.IsBanned = kv["IsBanned"].ToBoolean();
                         curiosityUser.Role = (Role)kv["RoleID"].ToInt();
+                        curiosityUser.QueuePriority = kv["QueuePriority"].ToInt();
                         curiosityUser.LatestName = player.Name;
                         curiosityUser.DiscordId = discordId;
 

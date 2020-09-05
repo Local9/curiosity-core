@@ -33,7 +33,7 @@ namespace Curiosity.Systems.Server.Managers
                     return null;
                 }
 
-                CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(license, player, discordId);
+                CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player, discordId);
 
                 Logger.Info($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}] Has connected to the server");
 

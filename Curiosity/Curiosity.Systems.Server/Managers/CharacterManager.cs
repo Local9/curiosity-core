@@ -25,8 +25,7 @@ namespace Curiosity.Systems.Server.Managers
                 Player player = CuriosityPlugin.PlayersList[metadata.Sender];
                 CuriosityCharacter curiosityCharacter = metadata.Find<CuriosityCharacter>(0);
 
-                if (player.Character.Position != Vector3.Zero)
-                    await curiosityCharacter.Save();
+                await curiosityCharacter.Save();
 
                 return null;
             }));

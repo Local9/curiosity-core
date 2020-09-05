@@ -17,11 +17,11 @@ namespace Curiosity.Systems.Server.Database.Store
 
             Dictionary<string, object> myParams = new Dictionary<string, object>()
             {
-                { "@discordIdent", discordId },
-                { "@serverIdent", serverId }
+                { "@DiscordID", discordId },
+                { "@ServerID", serverId }
             };
 
-            string myQuery = "CALL curiosity.spGetUserCharacter_v2(@discordIdent, @serverIdent);";
+            string myQuery = "CALL selCharacter(@DiscordID, @ServerID);";
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
@@ -34,13 +34,12 @@ namespace Curiosity.Systems.Server.Database.Store
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
-                    if (kv.ContainsKey("characterObject") && kv["characterObject"] != null)
+                    if (kv.ContainsKey("CharacterJSON") && kv["CharacterJSON"] != null)
                         curiosityCharacter = JsonConvert.DeserializeObject<CuriosityCharacter>($"{kv["characterObject"]}");
 
-                    curiosityCharacter.CharacterId = kv["characterId"].ToLong();
-                    curiosityCharacter.MarkedAsRegistered = kv["registered"].ToBoolean();
-                    curiosityCharacter.Cash = kv["cash"].ToLong();
-                    curiosityCharacter.IsDead = kv["dead"].ToBoolean();
+                    curiosityCharacter.CharacterId = kv["CharacterID"].ToLong();
+                    curiosityCharacter.MarkedAsRegistered = kv["IsRegistered"].ToBoolean();
+                    curiosityCharacter.Cash = kv["Cash"].ToLong();
 
                     if (!curiosityCharacter.MarkedAsRegistered)
                         curiosityCharacter.Cash = starterCash;
@@ -58,14 +57,12 @@ namespace Curiosity.Systems.Server.Database.Store
 
             Dictionary<string, object> myParams = new Dictionary<string, object>()
             {
-                { "@CharacterIdent", curiosityCharacter.CharacterId },
-                { "@CashAmount", curiosityCharacter.Cash },
+                { "@CharacterId", curiosityCharacter.CharacterId },
                 { "@IsRegistered", curiosityCharacter.MarkedAsRegistered },
-                { "@IsDead", curiosityCharacter.Health == 0 },
-                { "@CharacterJson", characterJson }
+                { "@CharacterJSON", characterJson }
             };
 
-            string myQuery = "CALL curiosity.upCharacter(@CharacterIdent, @CashAmount, @IsRegistered, @IsDead, @CharacterJson);";
+            string myQuery = "CALL upCharacter(@CharacterId, @IsRegistered, @CharacterJSON);";
 
             await MySqlDatabase.mySQL.Query(myQuery, myParams);
         }
