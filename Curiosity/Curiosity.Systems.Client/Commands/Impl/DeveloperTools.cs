@@ -53,6 +53,9 @@ namespace Curiosity.Systems.Client.Commands.Impl
 
                     if (!model.IsValid || !model.IsVehicle) return;
 
+                    if (Game.PlayerPed.IsInVehicle())
+                        Game.PlayerPed.CurrentVehicle.Delete();
+
                     var position = entity.Position;
                     var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
 
