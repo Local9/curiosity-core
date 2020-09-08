@@ -21,7 +21,7 @@ namespace Curiosity.Callouts.Client.Utils
         public const string PED_FLEE = "c::ped::flee";
         public const string PED_SHOOT = "c::ped::shoot";
         public const string PED_ARREST = "c::ped::arrest";
-        public const string PED_ARRESTABLE = "c::ped::arrest";
+        public const string PED_ARRESTABLE = "c::ped::arrestable";
         public const string PED_SUSPECT = "c::ped::suspect";
         public const string PED_MISSION = "c::ped::mission";
         public const string PED_IMPORTANT = "c::ped::important";
