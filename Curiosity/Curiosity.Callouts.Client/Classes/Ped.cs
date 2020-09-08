@@ -14,7 +14,6 @@ namespace Curiosity.Callouts.Client.Classes
     internal class Ped : Entity, IEquatable<Ped>
     {
         private DebuggingTools DebuggingTools = new DebuggingTools();
-
         internal CitizenFX.Core.Ped Fx { get; set; }
         internal PluginManager PluginIntance => PluginManager.Instance;
         public Vector3 Position => Fx.Position;
@@ -23,6 +22,7 @@ namespace Curiosity.Callouts.Client.Classes
         internal string Name => Fx.Model.ToString();
         internal bool IsBeingStunned => Fx.IsBeingStunned;
         internal bool IsInVehicle { get; set; }
+        private bool _DEBUG_ENABLED { get; set; } = false;
 
         internal bool IsSuspect
         {
@@ -45,7 +45,6 @@ namespace Curiosity.Callouts.Client.Classes
             }
             set
             {
-                this.IsSuspect = value;
                 Decorators.Set(Fx.Handle, Decorators.PED_ARRESTABLE, value);
             }
         }
@@ -204,12 +203,14 @@ namespace Curiosity.Callouts.Client.Classes
                 }
             }
 
-            if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG))
+            if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG) && !_DEBUG_ENABLED)
             {
                 PluginIntance.RegisterTickHandler(OnDeveloperOverlay);
+                _DEBUG_ENABLED = true;
             }
-            else
+            else if (!Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG) && _DEBUG_ENABLED)
             {
+                _DEBUG_ENABLED = false;
                 PluginIntance.DeregisterTickHandler(OnDeveloperOverlay);
             }
         }
