@@ -58,7 +58,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             Model model = bicycles.Random();
             Cyclist = await Ped.SpawnRandom(SpawnLocation, false);
             Cyclist.IsImportant = true;
-            Cyclist.IsArrestable = true;
             Cyclist.IsSuspect = true;
 
             Bicycle = await Vehicle.Spawn(model, SpawnLocation);

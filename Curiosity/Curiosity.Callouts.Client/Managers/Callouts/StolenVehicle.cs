@@ -81,7 +81,6 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             criminal.IsPersistent = true;
             criminal.IsImportant = true;
             criminal.IsMission = true;
-            criminal.IsArrestable = true;
             criminal.IsSuspect = true;
 
             if (Utility.RANDOM.Bool(0.8f))
