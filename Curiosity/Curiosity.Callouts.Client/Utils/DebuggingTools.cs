@@ -84,6 +84,8 @@ namespace Curiosity.Callouts.Client.Utils
                     list["MissionPed"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_MISSION)}";
                     list["Hostage"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_HOSTAGE)}";
                     list["Arrested"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_ARREST)}";
+                    list["Suspect"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_SUSPECT)}";
+                    list["Arrestable"] = $"{Decorators.GetBoolean(ped.Handle, Decorators.PED_ARRESTABLE)}";
 
                     if (ped.Fx.IsInGroup)
                     {
