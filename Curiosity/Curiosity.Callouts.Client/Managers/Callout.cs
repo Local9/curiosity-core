@@ -98,16 +98,30 @@ namespace Curiosity.Callouts.Client.Managers
 
         internal void RegisterPed(Ped ped)
         {
-            ped.Fx.IsPersistent = true;
-            RegisteredPeds.Add(ped);
-            Logger.Log($"Registered ped {ped.Name} to callout {GetType().Name}");
+            try
+            {
+                ped.Fx.IsPersistent = true;
+                RegisteredPeds.Add(ped);
+                Logger.Log($"Registered ped {ped.Name} to callout {GetType().Name}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error: {ex.Message}");
+            }
         }
 
         internal void RegisterVehicle(Vehicle vehicle)
         {
-            vehicle.Fx.IsPersistent = true;
-            RegisteredVehicles.Add(vehicle);
-            Logger.Log($"Registered vehicle {vehicle.Hash} to callout {GetType().Name}");
+            try
+            {
+                vehicle.Fx.IsPersistent = true;
+                RegisteredVehicles.Add(vehicle);
+                Logger.Log($"Registered vehicle {vehicle.Hash} to callout {GetType().Name}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error: {ex.Message}");
+            }
         }
     }
 }
