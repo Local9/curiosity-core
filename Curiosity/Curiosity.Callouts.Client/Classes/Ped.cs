@@ -294,7 +294,9 @@ namespace Curiosity.Callouts.Client.Classes
 
                     Fx.AttachTo(Game.PlayerPed.Bones[11816], pos);
 
-                    Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8f, -1, (AnimationFlags)49);
+                    Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 4f, -1, (AnimationFlags)49);
+                    Fx.Task.PlayAnimation("mp_arresting", "arrested_spin_l_0", 4f, -1, AnimationFlags.None);
+                    await BaseScript.Delay(3000);
                     Fx.Task.PlayAnimation("mp_arresting", "idle", 8f, -1, (AnimationFlags)49);
                     await BaseScript.Delay(1000);
 

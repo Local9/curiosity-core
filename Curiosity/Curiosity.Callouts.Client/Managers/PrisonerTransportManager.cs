@@ -48,9 +48,11 @@ namespace Curiosity.Callouts.Client.Managers
             IsActive = true;
         }
 
-        private async void CollectPrisoners(int managerProgress)
+        private async void CollectPrisoners(int state)
         {
-            switch(managerProgress)
+            // Screen.ShowSubtitle($"PT: S: {state}");
+
+            switch(state)
             {
                 case 0:
                     TransportDriver?.Dismiss();
@@ -65,8 +67,10 @@ namespace Curiosity.Callouts.Client.Managers
                     }
                     PedHash pedHash = (Utility.RANDOM.Next(2) == 1) ? PedHash.Cop01SFY : PedHash.Cop01SMY;
 
-                    TransportVehicle = await Vehicle.Spawn(VehicleHash.PoliceT, CalloutManager.ActiveCallout.Players[0].Character.Position.AroundStreet(200f, 400f));
+                    TransportVehicle = await Vehicle.Spawn(VehicleHash.Police2, CalloutManager.ActiveCallout.Players[0].Character.Position.AroundStreet(200f, 400f));
                     TransportDriver = await Ped.Spawn(pedHash, TransportVehicle.Position, true);
+
+                    TransportDriver.Fx.Weapons.Give(WeaponHash.APPistol, 1, true, true);
 
                     TransportDriver.IsImportant = true;
                     TransportDriver.PutInVehicle(TransportVehicle);
@@ -84,7 +88,7 @@ namespace Curiosity.Callouts.Client.Managers
 
                     break;
                 case 2:
-                    Logger.Log($"Travel to Vehicle");
+                    Logger.Log($"Travel to position");
                     TaskSequence taskSequence = new TaskSequence();
                     taskSequence.AddTask.DriveTo(TransportVehicle.Fx, Prisoner.Position, 10f, 30f, (int)CombinedVehicleDrivingFlags.Emergency);
                     TransportDriver.Task.PerformSequence(taskSequence);
@@ -103,6 +107,7 @@ namespace Curiosity.Callouts.Client.Managers
                     TaskSequence taskSequenceExit = new TaskSequence();
                     taskSequenceExit.AddTask.LeaveVehicle();
                     taskSequenceExit.AddTask.GoTo(Prisoner.Position);
+                    taskSequenceExit.AddTask.AimAt(Prisoner, -1);
                     TransportDriver.Task.PerformSequence(taskSequenceExit);
                     taskSequenceExit.Close();
 
@@ -120,16 +125,9 @@ namespace Curiosity.Callouts.Client.Managers
                     {
                         prisonerSequence.AddTask.LeaveVehicle();
                     }
-                    escortPrisoner.AddTask.GoTo(TransportVehicle);
-                    escortPrisoner.AddTask.EnterVehicle(TransportVehicle.Fx, VehicleSeat.Driver);
-                    prisonerSequence.AddTask.GoTo(TransportVehicle);
 
-                    prisonerSequence.AddTask.EnterVehicle(TransportVehicle.Fx, VehicleSeat.LeftRear);
-                    Prisoner.Task.PerformSequence(prisonerSequence);
-                    TransportDriver.Task.PerformSequence(escortPrisoner);
-
-                    escortPrisoner.Close();
-                    prisonerSequence.Close();
+                    Prisoner.Task.EnterVehicle(TransportVehicle.Fx, VehicleSeat.LeftRear, 5000);
+                    TransportDriver.Task.EnterVehicle(TransportVehicle.Fx, VehicleSeat.Driver, 5000);
 
                     PickupLocation = TransportVehicle.Position;
 

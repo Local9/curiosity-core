@@ -30,9 +30,14 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             base.RegisterPed(_ped);
 
             if (_ped != null)
+            {
+                _ped.IsPersistent = true;
+                _ped.IsImportant = true;
+                _ped.IsMission = true;
                 _ped.IsSuspect = true;
-            
-            base.IsSetup = true;
+            }
+
+                base.IsSetup = true;
 
             if (_ped == null)
             {
