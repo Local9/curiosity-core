@@ -61,6 +61,8 @@ namespace Curiosity.Callouts.Client.Managers.Callouts
             Cyclist.IsSuspect = true;
 
             Bicycle = await Vehicle.Spawn(model, SpawnLocation);
+            Bicycle.IsMission = true;
+
             Cyclist.Task.WarpIntoVehicle(Bicycle.Fx, VehicleSeat.Driver);
             Cyclist.Task.CruiseWithVehicle(Bicycle.Fx, 60f, (int)Collections.CombinedVehicleDrivingFlags.Normal);
 
