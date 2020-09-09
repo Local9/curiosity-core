@@ -50,9 +50,13 @@ namespace Curiosity.Callouts.Client.Managers
 
         private async void CollectPrisoners(int state)
         {
-            // Screen.ShowSubtitle($"PT: S: {state}");
+            if (Prisoner == null)
+                state = 6;
 
-            switch(state)
+            if (!Prisoner.Exists())
+                state = 6;
+
+            switch (state)
             {
                 case 0:
                     TransportDriver?.Dismiss();

@@ -37,6 +37,12 @@ namespace Curiosity.Callouts.Client.Managers
 
         async void Sequence(int progress)
         {
+            if (VehToImpound == null)
+                progress = 6;
+
+            if (!VehToImpound.Exists())
+                progress = 6;
+
             switch (progress)
             {
                 case 0:
