@@ -146,7 +146,7 @@ namespace Curiosity.Callouts.Client.Managers
                     if (TransportVehicle.AttachedBlip.Exists())
                         TransportVehicle.AttachedBlip.Delete();
 
-                    UiTools.Dispatch("Suspect collected", "");
+                    UiTools.Dispatch("Suspect collected", "Suspect has been detained and will be taken for logging.");
 
                     managerProgress = 6;
                     break;
