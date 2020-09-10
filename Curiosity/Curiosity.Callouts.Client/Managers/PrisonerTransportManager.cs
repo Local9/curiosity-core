@@ -143,6 +143,9 @@ namespace Curiosity.Callouts.Client.Managers
 
                     TransportDriver.Task.CruiseWithVehicle(TransportVehicle.Fx, 30f, (int)CombinedVehicleDrivingFlags.Normal);
 
+                    if (TransportVehicle.AttachedBlip.Exists())
+                        TransportVehicle.AttachedBlip.Delete();
+
                     managerProgress = 6;
                     break;
                 case 6:
