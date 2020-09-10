@@ -146,6 +146,8 @@ namespace Curiosity.Callouts.Client.Managers
                     if (TransportVehicle.AttachedBlip.Exists())
                         TransportVehicle.AttachedBlip.Delete();
 
+                    UiTools.Dispatch("Suspect collected", "");
+
                     managerProgress = 6;
                     break;
                 case 6:
@@ -160,7 +162,6 @@ namespace Curiosity.Callouts.Client.Managers
                     TransportVehicle = null;
 
                     IsActive = false;
-                    UiTools.Dispatch("Suspect collected", "");
                     managerProgress = 7;
                     break;
             }
