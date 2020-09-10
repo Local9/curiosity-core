@@ -85,7 +85,7 @@ namespace Curiosity.Callouts.Client.Menu
             bool isPursuitActive = PursuitManager.IsPursuitActive;
 
             mItemRequestAssistance.Enabled = isPursuitActive;
-            mItemRequestAssistance.Description = isPursuitActive ? "10-78 - Call dispatch for assistance." : "You'tr currently ~r~NOT~s~ in an active pursuit";
+            mItemRequestAssistance.Description = isPursuitActive ? "10-78 - Call dispatch for assistance." : "You're currently ~r~NOT~s~ in an active pursuit";
         }
 
         private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
