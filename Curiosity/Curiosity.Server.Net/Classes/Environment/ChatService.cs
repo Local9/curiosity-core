@@ -194,11 +194,26 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 ChatMessage chatMessage = new ChatMessage();
 
-                chatMessage.color = $"{session.Privilege}".ToLower();
-                chatMessage.role = $"{session.Privilege}";
+                Privilege privilege = session.Privilege;
+
+                switch(session.Privilege)
+                {
+                    case Privilege.DONATOR:
+                    case Privilege.DONATOR1:
+                    case Privilege.DONATOR2:
+                    case Privilege.DONATOR3:
+                        privilege = Privilege.DONATOR;
+                        break;
+                    default:
+                        privilege = session.Privilege;
+                        break;
+                }
+
+                chatMessage.color = $"{privilege}".ToLower();
+                chatMessage.role = $"{privilege}";
                 chatMessage.list = chatChannel;
                 chatMessage.message = message;
-                chatMessage.roleClass = $"{session.Privilege}";
+                chatMessage.roleClass = $"{privilege}";
                 chatMessage.name = $"[{session.Player.Handle}] {session.Player.Name}";
                 chatMessage.job = $"{session.job}";
 
