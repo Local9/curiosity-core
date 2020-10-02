@@ -70,8 +70,8 @@ namespace Curiosity.Callouts.Client.Menu
             menuSuspect.MouseControlsEnabled = false;
             _suspect.CreateMenu(menuSuspect);
 
-            menuMain.AddItem(mItemPanicButton);
-            menuMain.AddItem(mItemRequestAssistance);
+            // menuMain.AddItem(mItemPanicButton);
+            // menuMain.AddItem(mItemRequestAssistance);
 
             _MenuPool.RefreshIndex();
         }
