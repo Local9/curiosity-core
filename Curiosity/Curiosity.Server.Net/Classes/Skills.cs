@@ -280,7 +280,21 @@ namespace Curiosity.Server.net.Classes
 
                     if (session.IsStaff || session.IsDonator)
                     {
-                        experienceModifier += 0.5f;
+                        switch (session.Privilege)
+                        {
+                            case GlobalEnum.Privilege.DONATOR1:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_donator1", $"0.1"));
+                                break;
+                            case GlobalEnum.Privilege.DONATOR2:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_donator2", $"0.25"));
+                                break;
+                            case GlobalEnum.Privilege.DONATOR3:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_donator3", $"0.5"));
+                                break;
+                            default:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_lifeTime", $"0.05"));
+                                break;
+                        }
                     }
 
                     experience = (int)(experience * experienceModifier);
