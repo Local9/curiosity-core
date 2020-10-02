@@ -1,5 +1,6 @@
 ﻿using Curiosity.LifeV.Bot.Entities.Curiosity;
 using MySql.Data.MySqlClient;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -146,7 +147,7 @@ namespace Curiosity.LifeV.Bot.Models
             }
         }
 
-        public async Task AddDonatorStatus()
+        public async Task AddDonatorStatus(int donatorRoleId)
         {
             try
             {
@@ -160,6 +161,12 @@ namespace Curiosity.LifeV.Bot.Models
                     ParameterName = "@userId",
                     DbType = DbType.Int64,
                     Value = this.UserId
+                });
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@DonatorRoleId",
+                    DbType = DbType.Int64,
+                    Value = donatorRoleId
                 });
 
                 await cmd.ExecuteReaderAsync();

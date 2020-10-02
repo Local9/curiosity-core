@@ -13,6 +13,9 @@
         HELPER = 7,
         HEADADMIN = 8,
         DONATOR = 9,
-        COMMUNITYMANAGER = 10
+        COMMUNITYMANAGER = 10,
+        DONATOR1 = 11,
+        DONATOR2 = 12,
+        DONATOR3 = 13
     }
 }

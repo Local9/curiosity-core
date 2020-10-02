@@ -225,11 +225,28 @@ namespace Curiosity.LifeV.Bot.Modules
 
                 hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588444129722105856);
 
+                int donatorRoleId = 9;
+
+                if (roleIdList.Contains(588443443496222720)) // Lv1
+                {
+                    donatorRoleId = 11;
+                }
+
+                if (roleIdList.Contains(541955570601558036)) // Lv2
+                {
+                    donatorRoleId = 12;
+                }
+
+                if (roleIdList.Contains(588444129722105856)) // Lv2
+                {
+                    donatorRoleId = 13;
+                }
+
                 string statusStr = "Failed";
 
                 if (hasDonatorRole)
                 {
-                    await dbUser.AddDonatorStatus();
+                    await dbUser.AddDonatorStatus(donatorRoleId);
                     statusStr = "Is a Donator";
                 }
                 else
