@@ -39,7 +39,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Player
 
         public static bool IsDonator()
         {
-            return (privilege == Privilege.DONATOR);
+            return (privilege == Privilege.DONATOR || privilege == Privilege.DONATOR1 || privilege == Privilege.DONATOR2 || privilege == Privilege.DONATOR3);
         }
 
         public static bool IsStaff()
