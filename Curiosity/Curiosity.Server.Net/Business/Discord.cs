@@ -95,7 +95,7 @@ namespace Curiosity.Server.net.Business
             {
                 if (discordTimedOut)
                 {
-                    Helpers.Notifications.Advanced($"Discord", $"Hello ~g~{player.Name}~s~, Discord is currently not allowing connections, we cannot confirm your role.", 63, player, NotificationType.CHAR_LIFEINVADER);
+                    // Helpers.Notifications.Advanced($"Discord", $"Hello ~g~{player.Name}~s~, Discord is currently not allowing connections, we cannot confirm your role.", 63, player, NotificationType.CHAR_LIFEINVADER);
                     return privilegeIn;
                 }
 
