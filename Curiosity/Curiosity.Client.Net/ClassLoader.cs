@@ -1,6 +1,7 @@
 ﻿using Curiosity.Client.net.Classes.Actions;
 using Curiosity.Client.net.Classes.Actions.Emotes;
 using Curiosity.Client.net.Classes.Environment;
+using Curiosity.Client.net.Classes.Environment.IPL;
 using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Client.net.Helpers.Dictionary;
@@ -136,6 +137,7 @@ namespace Curiosity.Client.net
             MarqueeMessages.Init();
             ChatService.Init();
             DevCommands.Init();
+            IplLoader.Init();
         }
     }
 }
