@@ -23,7 +23,7 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
             // Fountain Fix
             API.RequestIpl("DT1_05_HC_REMOVE");
             
-            API.RequestIpl("xm_mpchristmasadditions");
+            // API.RequestIpl("xm_mpchristmasadditions");
         }
     }
 }
