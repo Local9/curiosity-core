@@ -11,7 +11,7 @@ namespace Curiosity.Systems.Client.Interface.Modules
         public bool IsDisabled { get; set; }
 
         [TickHandler(SessionWait = true)]
-        private async Task OnTick()
+        private async Task OnHeadsupDisplayTick()
         {
             var curiosity = CuriosityPlugin.Instance;
             var player = curiosity.Local;

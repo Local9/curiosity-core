@@ -33,7 +33,7 @@ namespace Curiosity.Systems.Client.Interface.Menus
         }
 
         [TickHandler(SessionWait = true)]
-        private async Task OnMenuControls()
+        private async Task OnInteractionMenuControls()
         {
             if (Cache.Character.MarkedAsRegistered && Game.PlayerPed.IsAlive)
             {

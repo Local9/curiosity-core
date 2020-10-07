@@ -67,7 +67,7 @@ namespace Curiosity.Systems.Client.Environment.Entities.Models
         }
 
         [TickHandler(SessionWait = true)]
-        private async Task OnTick()
+        private async Task OnVoiceChatTick()
         {
             var hud = HeadupDisplay.GetModule();
 

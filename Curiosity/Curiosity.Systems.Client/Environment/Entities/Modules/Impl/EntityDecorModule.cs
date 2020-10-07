@@ -41,6 +41,9 @@ namespace Curiosity.Systems.Client.Environment.Entities.Modules.Impl
             else
             {
                 Logger.Info("[Decor] Could not set decor object due to it not being a supported type.");
+#if DEBUG
+                Logger.Info($"[Decor] Value: {value}");
+#endif
             }
         }
 

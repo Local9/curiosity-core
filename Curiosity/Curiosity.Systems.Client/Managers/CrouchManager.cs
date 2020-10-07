@@ -20,7 +20,7 @@ namespace Curiosity.Systems.Client.Managers
 
 
         [TickHandler(SessionWait = true)]
-        private async Task OnTick()
+        private async Task OnCrouchTick()
         {
             if (Session.CreatingCharacter) return;
             if (Game.IsControlJustPressed(0, Control.Duck))

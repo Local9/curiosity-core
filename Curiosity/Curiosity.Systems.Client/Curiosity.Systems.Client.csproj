@@ -103,6 +103,7 @@
     <Compile Include="Managers\CrouchManager.cs" />
     <Compile Include="Managers\DeathManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />
+    <Compile Include="Managers\IplManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\NoClipManager.cs" />

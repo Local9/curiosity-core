@@ -7,7 +7,7 @@ namespace Curiosity.Systems.Client.Managers
     {
         public float Mulitplier { get; set; } = 1.0f;
 
-        [TickHandler]
+        [TickHandler(SessionWait=true)]
         private async Task OnTick()
         {
             API.SetVehicleDensityMultiplierThisFrame(Mulitplier);
@@ -15,8 +15,6 @@ namespace Curiosity.Systems.Client.Managers
             API.SetRandomVehicleDensityMultiplierThisFrame(Mulitplier);
             API.SetParkedVehicleDensityMultiplierThisFrame(Mulitplier);
             API.SetScenarioPedDensityMultiplierThisFrame(Mulitplier, Mulitplier);
-
-            await Task.FromResult(0);
         }
     }
 }

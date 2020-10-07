@@ -30,7 +30,7 @@ namespace Curiosity.Systems.Client.Managers
         };
 
         [TickHandler(SessionWait = true)]
-        private async Task OnTick()
+        private async Task OnDeathTick()
         {
             var player = Cache.Player;
             var entity = Cache.Entity;

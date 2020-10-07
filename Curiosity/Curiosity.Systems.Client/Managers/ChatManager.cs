@@ -91,7 +91,7 @@ namespace Curiosity.Systems.Client.Managers
         }
 
         [TickHandler(SessionWait = true)]
-        private async Task OnTick()
+        private async Task OnChatManagerTick()
         {
             try
             {

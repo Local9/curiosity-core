@@ -67,7 +67,7 @@ namespace Curiosity.Systems.Client.Managers
         }
 
         [TickHandler(SessionWait = true)]
-        private async Task OnCoreControls()
+        private async Task OnPdaCoreControls()
         {
             if (Session.CreatingCharacter) return;
             if (!IsCoreOpen && Game.IsControlJustPressed(0, Control.FrontendSocialClubSecondary))

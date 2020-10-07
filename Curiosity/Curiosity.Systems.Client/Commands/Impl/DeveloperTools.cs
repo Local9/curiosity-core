@@ -150,7 +150,7 @@ namespace Curiosity.Systems.Client.Commands.Impl
 
                 Vector3 pos = Game.PlayerPed.Position;
 
-                bool response = await EventSystem.GetModule().Request<bool>("developer:savePos", positionName, pos.X, pos.Y, pos.Z);
+                bool response = await EventSystem.GetModule().Request<bool>("developer:savePos", positionName, pos.X, pos.Y, pos.Z, Game.PlayerPed.Heading);
                 if (response)
                 {
                     Chat.SendLocalMessage($"Position '{positionName}' saved.");

@@ -1,3 +1,4 @@
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Environment.Entities.Modules.Impl;
 using Curiosity.Systems.Library.Events;
@@ -10,8 +11,9 @@ namespace Curiosity.Systems.Client.Managers
         {
             EventSystem.Attach("session:reload", new EventCallback(metadata =>
             {
-                var entity = API.GetPlayerPed(API.GetPlayerFromServerId(metadata.Find<int>(0)));
+                var entity = Game.PlayerPed.Handle;
                 var session = metadata.Find<int>(1);
+
                 var decors = new EntityDecorModule
                 {
                     Id = entity,
