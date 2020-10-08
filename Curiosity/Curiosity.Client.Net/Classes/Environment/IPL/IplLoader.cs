@@ -49,6 +49,7 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
             // rails: 2626.374 2949.869 39.1409
             API.RequestIpl("ld_rail_01_track");
             API.RequestIpl("ld_rail_02_track");
+            API.RequestIpl("FBI_repair");
 
             // golf flags
             API.RequestIpl("golfflags");

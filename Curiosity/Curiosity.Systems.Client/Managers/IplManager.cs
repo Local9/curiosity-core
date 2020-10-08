@@ -25,17 +25,19 @@ namespace Curiosity.Systems.Client.Managers
             RequestIpl("trailerparkA_grp1"); // Lost trailer
             RequestIpl("dockcrane1"); // 889.3 -2910.9 40
             RequestIpl("chophillskennel"); // 19.0568 536.4818 169.6277
+            RequestIpl("FBI_repair");
+
+            // tanker stuff : 1676.415f, -1626.37f, 111.4848f
+            RequestIpl("tankerexp_grp0"); // fixed tankers
+            RemoveIpl("tankerexp_grp3"); // blown up tankers -after clean up
+            RemoveIpl("tankerexp_grp1"); // damaged tanker
+            RemoveIpl("tankerexp_grp2"); // blown up after tanker
+            RemoveIpl("DES_tankerexp"); // damaged
 
             // FIB WINDOW: 136.1795f, -750.701f, 262.0516f
             RequestIpl("atriumglstatic");
             // RemoveIpl("atriumglmission");
             // RemoveIpl("atriumglcut");
-
-            // Hospital: 330.4596 -584.8196 42.3174
-            RemoveIpl("RC12B_HospitalInterior"); // Broken interior
-            RemoveIpl("RC12B_Destroyed"); // broken windows
-            RequestIpl("RC12B_Default"); // default look
-            RemoveIpl("RC12B_Fixed"); // boarded up
 
             // Trevor: 1985.48132, 3828.76757, 32.5
             // Trash or Tidy.Only choose one.
@@ -82,6 +84,7 @@ namespace Curiosity.Systems.Client.Managers
             RequestIpl("coronertrash");
 
             //  Cluckin Bell: -146.3837, 6161.5, 30.2062
+            // CS1_02_cf_offmission : Closed up
             RequestIpl("CS1_02_cf_onmission1");
             RequestIpl("CS1_02_cf_onmission2");
             RequestIpl("CS1_02_cf_onmission3");
@@ -148,9 +151,9 @@ namespace Curiosity.Systems.Client.Managers
             //  Josh's house: -1117.1632080078, 303.090698, 66.52217
             RequestIpl("bh1_47_joshhse_unburnt");
             RequestIpl("bh1_47_joshhse_unburnt_lod");
-
-            //  Bahama Mamas: -1388.0013, -618.41967, 30.819599
-            RequestIpl("hei_sm_16_interior_v_bahama_milo_");
+            // on fire
+            // RequestIpl("bh1_47_joshhse_firevfx");
+            // RequestIpl("BH1_47_JoshHse_Burnt");
 
             //  Zancudo River(need streamed content): 86.815, 3191.649, 30.463
             RequestIpl("cs3_05_water_grp1");
@@ -172,10 +175,10 @@ namespace Curiosity.Systems.Client.Managers
             RequestIpl("CS5_04_MazeBillboardGraffiti"); // 2697.32, 3162.18, 58.1
             RequestIpl("CS5_Roads_RonOilGraffiti"); // 2119.12, 3058.21, 53.25
 
-            // Pillbox hill hospital
-            RequestIpl("rc12b_hospitalinterior");
+            // Hospital: 330.4596 -584.8196 42.3174
+            RemoveIpl("rc12b_hospitalinterior");
             RemoveIpl("rc12b_hospitalinterior_lod");
-            RemoveIpl("rc12b_default");
+            RequestIpl("rc12b_default");
             RemoveIpl("rc12b_fixed");
             RemoveIpl("rc12b_destroyed");
 
