@@ -17,7 +17,7 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
             API.RequestIpl("dt1_03_gr_closed");
 
             // Missing Elevators
-            API.RequestIpl("dt1_21_prop_lift");
+            // API.RequestIpl("dt1_21_prop_lift");
             API.RequestIpl("dt1_21_prop_lift_on");
 
             // Fountain Fix

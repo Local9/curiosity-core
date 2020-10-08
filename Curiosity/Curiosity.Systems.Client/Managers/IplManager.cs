@@ -21,11 +21,22 @@ namespace Curiosity.Systems.Client.Managers
             // RequestIpl("xm_mpchristmasadditions"); // trees?
 
             // KEEP BELOW
+            RequestIpl("cs5_4_trains"); // 2773.61 2835.327 35.1903
+            RequestIpl("airfield"); // 1743.682 3286.251 40.0875
+            RequestIpl("trailerparkA_grp1"); // Lost trailer
+            RequestIpl("dockcrane1"); // 889.3 -2910.9 40
+
+            // Hospital: 330.4596 -584.8196 42.3174
+            RemoveIpl("RC12B_HospitalInterior"); // Broken interior
+            RemoveIpl("RC12B_Destroyed"); // broken windows
+            RequestIpl("RC12B_Default"); // default look
+            RemoveIpl("RC12B_Fixed"); // boarded up
 
             // Trevor: 1985.48132, 3828.76757, 32.5
             // Trash or Tidy.Only choose one.
-            RequestIpl("TrevorsTrailerTrash");
-            // RequestIpl("trevorstrailertidy");
+            RequestIpl("TrevorsTrailer");
+            RemoveIpl("TrevorsTrailerTrash");
+            RemoveIpl("TrevorsTrailerTidy");
 
             // Ferris Wheel: -1654.6622314453, -1121.9139404297, 13.027465820313
             RequestIpl("ferris_finale_anim");
@@ -35,7 +46,7 @@ namespace Curiosity.Systems.Client.Managers
             RequestIpl("dt1_03_gr_closed");
 
             // Missing Elevators: -156.20492553711, -945.26287841797, 269.13494873047
-            RequestIpl("dt1_21_prop_lift");
+            // RequestIpl("dt1_21_prop_lift"); // Only need one of them
             RequestIpl("dt1_21_prop_lift_on");
 
             // Fountain Fix: 184.48793029785, -678.62164306641, 43.14094543457
@@ -101,6 +112,7 @@ namespace Curiosity.Systems.Client.Managers
 
             //  House in Banham Canyon: -3086.428, 339.2523, 6.3717
             RequestIpl("ch1_02_open");
+            // RequestIpl("ch1_02_closed"); // adds shutters
 
             //  Garage in La Mesa(autoshop): 970.27453, -1826.56982, 31.11477
             RequestIpl("bkr_bi_id1_23_door");
@@ -114,8 +126,9 @@ namespace Curiosity.Systems.Client.Managers
             //  Lost safehouse: 984.1552, -95.3662, 74.50
             RequestIpl("bkr_bi_hw1_13_int");
 
-            //  Raton Canyon river: -1652.83, 4445.28, 2.52
+            //  Raton Canyon river: 1600.619 4443.457 0.725
             RequestIpl("CanyonRvrShallow");
+            RequestIpl("CanyonRvrDeep");
 
             //  Pillbox hospital: 307.1680, -590.807, 43.280
             RequestIpl("rc12b_default");
@@ -143,9 +156,9 @@ namespace Curiosity.Systems.Client.Managers
             RequestIpl("bh1_47_joshhse_unburnt_lod");
 
             // Graffitis
-            RequestIpl("ch3_rd2_bishopschickengraffiti"); // 1861.28, 2402.11, 58.53
-            RequestIpl("cs5_04_mazebillboardgraffiti"); // 2697.32, 3162.18, 58.1
-            RequestIpl("cs5_roads_ronoilgraffiti"); // 2119.12, 3058.21, 53.25
+            RequestIpl("CH3_RD2_BishopsChickenGraffiti"); // 1861.28, 2402.11, 58.53
+            RequestIpl("CS5_04_MazeBillboardGraffiti"); // 2697.32, 3162.18, 58.1
+            RequestIpl("CS5_Roads_RonOilGraffiti"); // 2119.12, 3058.21, 53.25
 
             // Pillbox hill hospital
             RequestIpl("rc12b_hospitalinterior");
