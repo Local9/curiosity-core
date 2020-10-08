@@ -17,14 +17,19 @@ namespace Curiosity.Systems.Client.Managers
             EnableMpDlcMaps(true);
 
             // TEMP
-            RequestIpl("bkr_v_carmod3_milo_"); // unknown
-            // RequestIpl("xm_mpchristmasadditions"); // trees?
+            RequestIpl("xm_mpchristmasadditions"); // trees?
 
             // KEEP BELOW
             RequestIpl("cs5_4_trains"); // 2773.61 2835.327 35.1903
             RequestIpl("airfield"); // 1743.682 3286.251 40.0875
             RequestIpl("trailerparkA_grp1"); // Lost trailer
             RequestIpl("dockcrane1"); // 889.3 -2910.9 40
+            RequestIpl("chophillskennel"); // 19.0568 536.4818 169.6277
+
+            // FIB WINDOW: 136.1795f, -750.701f, 262.0516f
+            RequestIpl("atriumglstatic");
+            // RemoveIpl("atriumglmission");
+            // RemoveIpl("atriumglcut");
 
             // Hospital: 330.4596 -584.8196 42.3174
             RemoveIpl("RC12B_HospitalInterior"); // Broken interior
@@ -37,6 +42,13 @@ namespace Curiosity.Systems.Client.Managers
             RequestIpl("TrevorsTrailer");
             RemoveIpl("TrevorsTrailerTrash");
             RemoveIpl("TrevorsTrailerTidy");
+
+            // rails: 2626.374 2949.869 39.1409
+            RequestIpl("ld_rail_01_track");
+            RequestIpl("ld_rail_02_track");
+
+            // golf flags
+            RequestIpl("golfflags");
 
             // Ferris Wheel: -1654.6622314453, -1121.9139404297, 13.027465820313
             RequestIpl("ferris_finale_anim");
