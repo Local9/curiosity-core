@@ -6,13 +6,10 @@
     }
     public class ChatMessage
     {
-        public int messageId;
-        public string list;
-        public string message;
-        public string name;
-        public string role;
-        public string color;
-        public string roleClass;
-        public string job;
+        public string Role;
+        public string ActiveJob;
+        public string Channel;
+        public string Name;
+        public string Message;
     }
 }

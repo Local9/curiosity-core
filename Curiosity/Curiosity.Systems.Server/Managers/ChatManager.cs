@@ -19,15 +19,12 @@ namespace Curiosity.Systems.Server.Managers
 
             ChatMessage chatMessage = new ChatMessage();
 
-            string jsonMessage = string.Empty;
-
-            chatMessage = new ChatMessage();
             chatMessage.Name = user.LatestName;
             chatMessage.Role = $"{user.Role}";
             chatMessage.Message = message;
             chatMessage.Channel = channel;
 
-            jsonMessage = JsonConvert.SerializeObject(chatMessage);
+            string jsonMessage = JsonConvert.SerializeObject(chatMessage);
 
             CuriosityPlugin.TriggerClientEvent("chat:receive", jsonMessage);
         }

@@ -37,7 +37,7 @@ namespace Curiosity.Client.net.Classes.Environment
             client.RegisterEventHandler("__cfx_nui:ChatPosition", new Action<System.Dynamic.ExpandoObject>(StoreChatPosition));
 
             RegisterNuiCallbackType("CloseChatMessage");
-            client.RegisterEventHandler("__cfx_nui:CloseChatMessage", new Action(OnNuiCloseChat));
+            client.RegisterEventHandler("__cfx_nui:CloseChatMessage", new Action<CallbackDelegate>(OnNuiCloseChat));
 
             client.RegisterTickHandler(OnChatTask);
 
@@ -58,9 +58,11 @@ namespace Curiosity.Client.net.Classes.Environment
             API.SendNuiMessage(JsonConvert.SerializeObject(chatPosition));
         }
 
-        static void OnNuiCloseChat()
+        static void OnNuiCloseChat(CallbackDelegate cb)
         {
             EnableChatbox(false);
+
+            cb(new { ok = true });
         }
 
         static void OnCloseChat()
@@ -98,8 +100,8 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 if (string.IsNullOrEmpty(encodedMessage)) return;
 
-                string json = Encode.Base64ToString(encodedMessage);
-                API.SendNuiMessage(json);
+                Debug.WriteLine($"{encodedMessage}");
+                API.SendNuiMessage(encodedMessage);
             }
             catch (Exception ex)
             {
@@ -119,11 +121,11 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 IDictionary<string, object> chatResult = data;
 
-                if (!chatResult.ContainsKey("msg") || string.IsNullOrWhiteSpace((string)chatResult["msg"]))
+                if (!chatResult.ContainsKey("0") || string.IsNullOrWhiteSpace((string)chatResult["0"]))
                     return;
 
-                string message = (String)chatResult["msg"];
-                string chatChannel = (String)chatResult["chat"];
+                string message = (String)chatResult["0"];
+                string chatChannel = (String)chatResult["1"];
 
                 if (Player.PlayerInformation.IsDeveloper())
                 {

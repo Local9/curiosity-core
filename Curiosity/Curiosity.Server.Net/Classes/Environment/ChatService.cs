@@ -168,29 +168,40 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 if (string.IsNullOrWhiteSpace(message))
                 {
+                    //Log.Verbose($"[ProcessMessage] IsNullOrWhiteSpace");
                     API.CancelEvent();
                     return;
                 }
 
-                if (!regex.Match(message).Success)
+                //if (!regex.Match(message).Success)
+                //{
+                //    Log.Verbose($"[ProcessMessage] regex");
+                //    API.CancelEvent();
+                //    return;
+                //}
+
+                if (message.Length == 0)
                 {
+                    //Log.Verbose($"[ProcessMessage] Length");
                     API.CancelEvent();
                     return;
                 }
 
-                if (message.Length == 0 || message.Length > 240)
+                if (message.Length > 240)
                 {
+                    //Log.Verbose($"[ProcessMessage] Length too long");
                     message = message.Substring(0, 240);
                 }
 
                 var filter = new ProfanityFilter();
                 message = filter.CensorString(message);
 
-
                 if (message.IsAllUpper())
                 {
                     message.ToLower();
                 }
+
+                //Log.Verbose($"[ProcessMessage] ProfanityFilter");
 
                 ChatMessage chatMessage = new ChatMessage();
 
@@ -209,22 +220,29 @@ namespace Curiosity.Server.net.Classes.Environment
                         break;
                 }
 
-                chatMessage.color = $"{privilege}".ToLower();
-                chatMessage.role = $"{privilege}";
-                chatMessage.list = chatChannel;
-                chatMessage.message = message;
-                chatMessage.roleClass = $"{privilege}";
-                chatMessage.name = $"[{session.Player.Handle}] {session.Player.Name}";
-                chatMessage.job = $"{session.job}";
+                chatMessage.Name = $"[{session.Player.Handle}] {session.Player.Name}";
+                chatMessage.Message = message;
+                chatMessage.Channel = chatChannel;
+                chatMessage.Role = $"{privilege}";
+
+                //chatMessage.color = $"{privilege}".ToLower();
+                //chatMessage.role = $"{privilege}";
+                //chatMessage.list = chatChannel;
+                //chatMessage.message = message;
+                //chatMessage.roleClass = $"{privilege}";
+                //chatMessage.name = $"[{session.Player.Handle}] {session.Player.Name}";
+                //chatMessage.job = $"{session.job}";
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
-                string encoded = Encode.StringToBase64(json);
 
                 Log.Verbose($"[{player.Handle}] {player.Name}#{session.UserID} - {message}");
+                Log.Verbose($"{json}");
+
+                Server.TriggerClientEvent("curiosity:Client:Chat:Message", json);
 
                 DiscordWrapper.SendDiscordChatMessage($"[{player.Handle}] {player.Name}#{session.UserID}", message);
 
-                Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
+                
             }
             catch (Exception ex)
             {

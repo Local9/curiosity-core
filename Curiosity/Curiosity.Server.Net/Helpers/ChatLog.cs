@@ -12,8 +12,8 @@ namespace Curiosity.Server.net.Helpers
         {
             ChatMessage chatMessage = new ChatMessage();
 
-            chatMessage.list = "log";
-            chatMessage.message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
+            chatMessage.Channel = "log";
+            chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
             string encoded = Encode.StringToBase64(json);

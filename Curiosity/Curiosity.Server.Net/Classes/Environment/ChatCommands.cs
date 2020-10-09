@@ -193,13 +193,18 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 ChatMessage chatMessage = new ChatMessage();
 
-                chatMessage.color = $"{Privilege.DEVELOPER}".ToLower();
-                chatMessage.role = $"{Privilege.DEVELOPER}";
-                chatMessage.list = "chat";
-                chatMessage.message = messageToSend;
-                chatMessage.roleClass = $"{Privilege.DEVELOPER}";
-                chatMessage.name = "SERVER";
-                chatMessage.job = $"Server";
+                //chatMessage.color = $"{Privilege.DEVELOPER}".ToLower();
+                //chatMessage.role = $"{Privilege.DEVELOPER}";
+                //chatMessage.list = "chat";
+                //chatMessage.message = messageToSend;
+                //chatMessage.roleClass = $"{Privilege.DEVELOPER}";
+                //chatMessage.name = "SERVER";
+                //chatMessage.job = $"Server";
+
+                chatMessage.Name = $"SERVER";
+                chatMessage.Message = messageToSend;
+                chatMessage.Channel = "chat";
+                chatMessage.Role = $"{Privilege.DEVELOPER}";
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
                 string encoded = Encode.StringToBase64(json);
@@ -400,13 +405,18 @@ namespace Curiosity.Server.net.Classes.Environment
 
             ChatMessage chatMessage = new ChatMessage();
 
-            chatMessage.color = $"{Privilege.DEVELOPER}".ToLower();
-            chatMessage.role = $"{Privilege.DEVELOPER}";
-            chatMessage.list = "chat";
-            chatMessage.message = "See out our guide '[ELV] Welcome to Emergency Life V Player - Guide(READ ME)' which can be found on our forums @ forums.lifev.net or ingame via M -> Open Player-Guide. Starting jobs are EMT/Fire/Police.";
-            chatMessage.roleClass = $"{Privilege.DEVELOPER}";
-            chatMessage.name = "GUIDE";
-            chatMessage.job = $"Guide";
+            //chatMessage.color = $"{Privilege.DEVELOPER}".ToLower();
+            //chatMessage.role = $"{Privilege.DEVELOPER}";
+            //chatMessage.list = "chat";
+            //chatMessage.message = "See out our guide '[ELV] Welcome to Emergency Life V Player - Guide(READ ME)' which can be found on our forums @ forums.lifev.net or ingame via M -> Open Player-Guide. Starting jobs are EMT/Fire/Police.";
+            //chatMessage.roleClass = $"{Privilege.DEVELOPER}";
+            //chatMessage.name = "GUIDE";
+            //chatMessage.job = $"Guide";
+
+            chatMessage.Name = "GUIDE";
+            chatMessage.Role = $"{Privilege.DEVELOPER}";
+            chatMessage.Message = "See out our guide '[ELV] Welcome to Emergency Life V Player - Guide(READ ME)' which can be found on our forums @ forums.lifev.net or ingame via M -> Open Player-Guide. Starting jobs are EMT/Fire/Police.";
+            chatMessage.Channel = "chat";
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
             string encoded = Encode.StringToBase64(json);
@@ -417,13 +427,18 @@ namespace Curiosity.Server.net.Classes.Environment
             {
                 ChatMessage staffMessage = new ChatMessage();
 
-                staffMessage.color = $"{Privilege.DEVELOPER}".ToLower();
-                staffMessage.role = $"{Privilege.DEVELOPER}";
-                staffMessage.list = "chat";
-                staffMessage.message = $"Message Sent to {session.Player.Name}";
-                staffMessage.roleClass = $"{Privilege.DEVELOPER}";
-                staffMessage.name = "GUIDE";
-                staffMessage.job = $"Guide";
+                //staffMessage.color = $"{Privilege.DEVELOPER}".ToLower();
+                //staffMessage.role = $"{Privilege.DEVELOPER}";
+                //staffMessage.list = "chat";
+                //staffMessage.message = $"Message Sent to {session.Player.Name}";
+                //staffMessage.roleClass = $"{Privilege.DEVELOPER}";
+                //staffMessage.name = "GUIDE";
+                //staffMessage.job = $"Guide";
+
+                chatMessage.Name = "GUIDE";
+                chatMessage.Role = $"{Privilege.DEVELOPER}";
+                chatMessage.Message = $"Message Sent to {session.Player.Name}";
+                chatMessage.Channel = "chat";
 
                 string staffJson = Newtonsoft.Json.JsonConvert.SerializeObject(staffMessage);
                 string staffEncoded = Encode.StringToBase64(staffJson);
@@ -531,13 +546,18 @@ namespace Curiosity.Server.net.Classes.Environment
 
             ChatMessage chatMessage = new ChatMessage();
 
-            chatMessage.color = $"{Privilege.DEVELOPER}".ToLower();
-            chatMessage.role = $"{Privilege.DEVELOPER}";
-            chatMessage.list = "chat";
-            chatMessage.message = String.Join(" ", args);
-            chatMessage.roleClass = $"{Privilege.DEVELOPER}";
-            chatMessage.name = "SERVER";
-            chatMessage.job = $"Server";
+            //chatMessage.color = $"{Privilege.DEVELOPER}".ToLower();
+            //chatMessage.role = $"{Privilege.DEVELOPER}";
+            //chatMessage.list = "chat";
+            //chatMessage.message = String.Join(" ", args);
+            //chatMessage.roleClass = $"{Privilege.DEVELOPER}";
+            //chatMessage.name = "SERVER";
+            //chatMessage.job = $"Server";
+
+            chatMessage.Name = "ANNOUNCEMENT";
+            chatMessage.Role = $"{Privilege.DEVELOPER}";
+            chatMessage.Message = String.Join(" ", args);
+            chatMessage.Channel = "chat";
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
             string encoded = Encode.StringToBase64(json);
