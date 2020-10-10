@@ -2,6 +2,8 @@
 using CitizenFX.Core.Native;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Helpers;
+using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Shared.Client.net.Helper;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -48,7 +50,7 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
         private static async Task OnPdaCoreControls()
         {
             if (!Client.isSessionActive) return;
-            if (!IsCoreOpen && Game.IsControlJustPressed(0, Control.SwitchVisor))
+            if (!IsCoreOpen && ControlHelper.IsControlJustPressed(Control.SwitchVisor, true, ControlModifier.Alt))
             {
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
