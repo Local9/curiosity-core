@@ -16,35 +16,55 @@ namespace Curiosity.Client.net.Classes.Environment
         public MarkerType Type { get; private set; }
         public Vector3 Scale { get; private set; }
         public System.Drawing.Color Color { get; private set; }
+        public float DrawThreshold { get; private set; }
 
-        public Marker(Vector3 position, MarkerType type = MarkerType.VerticleCircle)
+        public Marker(Vector3 position, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 5f)
         {
+            position.Z = position.Z - 1f;
             this.Position = position;
+
             this.Rotation = new Vector3(0, 0, 0);
             this.Direction = new Vector3(0, 0, 0);
             this.Color = System.Drawing.Color.FromArgb(255, 255, 255, 255);
             this.Type = type;
             this.Scale = 1.0f * new Vector3(1f, 1f, 1f);
+            this.DrawThreshold = drawThreshold;
         }
 
-        public Marker(Vector3 position, MarkerType type, System.Drawing.Color color, float scale = 0.3f)
+        public Marker(Vector3 position, MarkerType type, System.Drawing.Color color, float scale = 0.3f, float drawThreshold = 5f)
         {
+            position.Z = position.Z - 1f;
             this.Position = position;
             this.Rotation = new Vector3(0, 0, 0);
             this.Direction = new Vector3(0, 0, 0);
             this.Color = color;
             this.Type = type;
             this.Scale = scale * new Vector3(1f, 1f, 1f);
+            this.DrawThreshold = drawThreshold;
         }
 
-        public Marker(Vector3 position, MarkerType type, System.Drawing.Color color, Vector3 scale, Vector3 rotation, Vector3 direction)
+        public Marker(Vector3 position, MarkerType type, System.Drawing.Color color, Vector3 scale, float drawThreshold = 5f)
         {
+            position.Z = position.Z - 1f;
+            this.Position = position;
+            this.Rotation = new Vector3(0, 0, 0);
+            this.Direction = new Vector3(0, 0, 0);
+            this.Color = color;
+            this.Type = type;
+            this.Scale = scale;
+            this.DrawThreshold = drawThreshold;
+        }
+
+        public Marker(Vector3 position, MarkerType type, System.Drawing.Color color, Vector3 scale, Vector3 rotation, Vector3 direction, float drawThreshold = 5f)
+        {
+            position.Z = position.Z - 1f;
             this.Position = position;
             this.Rotation = rotation;
             this.Direction = direction;
             this.Color = color;
             this.Type = type;
             this.Scale = scale;
+            this.DrawThreshold = drawThreshold;
         }
     }
 

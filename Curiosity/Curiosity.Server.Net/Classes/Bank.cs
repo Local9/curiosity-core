@@ -15,6 +15,7 @@ namespace Curiosity.Server.net.Classes
         static int timeMark = (1000 * 60) * minutesInterest;
         static float bankInterestPct = 0.013f;
         static float medicalFees = 0.05f;
+        const int VEHICLE_REPAIR_VALUE = 100;
 
         public static void Init()
         {
@@ -24,6 +25,8 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Bank:DecreaseBank", new Action<CitizenFX.Core.Player, int, int>(DecreaseBank));
             server.RegisterEventHandler("curiosity:Server:Bank:TransferMoney", new Action<CitizenFX.Core.Player, int, bool>(TransferMoney));
             server.RegisterEventHandler("curiosity:Server:Bank:MedicalFees", new Action<CitizenFX.Core.Player, bool>(MedicalFees));
+
+            server.RegisterEventHandler("curiosity:server:repair:vehicle", new Action<CitizenFX.Core.Player>(EventRepairVehicleFee));
 
             timerCheck = API.GetGameTimer();
 
@@ -36,6 +39,18 @@ namespace Curiosity.Server.net.Classes
             Log.Verbose($"Bank Settings -> bank_interest_gain {minutesInterest} mins");
 
             server.RegisterTickHandler(BankInterest);
+        }
+
+        private static void EventRepairVehicleFee([FromSource]CitizenFX.Core.Player player)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            if (session.Wallet < VEHICLE_REPAIR_VALUE) return;
+
+            session.DecreaseWallet(VEHICLE_REPAIR_VALUE);
+            Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, VEHICLE_REPAIR_VALUE);
         }
 
         static async void MedicalFees([FromSource]CitizenFX.Core.Player player, bool forcedRespawn)
