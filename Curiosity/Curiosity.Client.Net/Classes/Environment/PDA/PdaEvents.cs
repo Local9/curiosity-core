@@ -21,24 +21,28 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
 
         static public void Init()
         {
-            client.RegisterNuiEventHandler("PlayerProfile", new Action(OnPlayerProfile));
-            client.RegisterNuiEventHandler("ClosePanel", new Action(OnClosePda));
+            client.RegisterNuiEventHandler("PlayerProfile", new Action<IDictionary<string, object>, CallbackDelegate>(OnPlayerProfile));
+            client.RegisterNuiEventHandler("ClosePanel", new Action<IDictionary<string, object>, CallbackDelegate>(OnClosePda));
 
             client.RegisterTickHandler(OnPdaCoreControls);
         }
 
-        private static void OnPlayerProfile()
+        private static void OnPlayerProfile(IDictionary<string, object> data, CallbackDelegate cb)
         {
             string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
                     .Add("profile", PlayerInformation.playerInfo).Build();
             API.SendNuiMessage(jsn);
+
+            cb(new { ok = true });
         }
 
-        private static void OnClosePda()
+        private static void OnClosePda(IDictionary<string, object> data, CallbackDelegate cb)
         {
             IsCoreOpen = false;
             SendPanelMessage();
             CloseTablet();
+
+            cb(new { ok = true });
         }
 
         private static async Task OnPdaCoreControls()
