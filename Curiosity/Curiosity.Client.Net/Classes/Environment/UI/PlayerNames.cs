@@ -94,7 +94,12 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             bool staffMember = Decorators.GetBoolean(player.Character.Handle, Decorators.DECOR_PLAYER_STAFF);
             string staffTag = staffMember ? "[STAFF]" : string.Empty;
 
-            int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, staffMember, staffTag, 0);
+            int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, staffMember, staffTag, staffMember ? 1 : 0);
+
+            if (staffMember)
+            {
+                API.CreateMpGamerTagWithCrewColor(player.Character.Handle, player.Name, false, staffMember, staffTag, staffMember ? 1 : 0, 255, 215, 0);
+            }
 
             if (!API.NetworkIsPlayerActive(player.Handle))
             {
