@@ -30,14 +30,9 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             client.RegisterEventHandler("curiosity:Client:Chat:Message", new Action<string>(OnChatMessage));
 
-            RegisterNuiCallbackType("SendChatMessage");
-            client.RegisterEventHandler("__cfx_nui:SendChatMessage", new Action<IDictionary<string, object>, CallbackDelegate>(HandleChatResult));
-
-            RegisterNuiCallbackType("ChatPosition");
-            client.RegisterEventHandler("__cfx_nui:ChatPosition", new Action<System.Dynamic.ExpandoObject>(StoreChatPosition));
-
-            RegisterNuiCallbackType("CloseChatMessage");
-            client.RegisterEventHandler("__cfx_nui:CloseChatMessage", new Action<CallbackDelegate>(OnNuiCloseChat));
+            client.RegisterNuiEventHandler("SendChatMessage", new Action<IDictionary<string, object>, CallbackDelegate>(HandleChatResult));
+            client.RegisterNuiEventHandler("ChatPosition", new Action<System.Dynamic.ExpandoObject>(StoreChatPosition));
+            client.RegisterNuiEventHandler("CloseChatMessage", new Action(OnNuiCloseChat));
 
             client.RegisterTickHandler(OnChatTask);
 
@@ -58,11 +53,9 @@ namespace Curiosity.Client.net.Classes.Environment
             API.SendNuiMessage(JsonConvert.SerializeObject(chatPosition));
         }
 
-        static void OnNuiCloseChat(CallbackDelegate cb)
+        static void OnNuiCloseChat()
         {
             EnableChatbox(false);
-
-            cb(new { ok = true });
         }
 
         static void OnCloseChat()
@@ -100,7 +93,6 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 if (string.IsNullOrEmpty(encodedMessage)) return;
 
-                Debug.WriteLine($"{encodedMessage}");
                 API.SendNuiMessage(encodedMessage);
             }
             catch (Exception ex)

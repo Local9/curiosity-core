@@ -8,6 +8,8 @@ namespace Curiosity.Global.Shared.net.Entity
         public int UserId;
         public int CharacterId;
         public int RoleId;
+        public string Role;
+        public string Name;
         public int Wallet;
         public int BankAccount;
         public Dictionary<string, Skills> Skills;

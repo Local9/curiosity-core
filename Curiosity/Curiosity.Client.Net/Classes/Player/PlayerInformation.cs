@@ -135,14 +135,8 @@ namespace Curiosity.Client.net.Classes.Player
         {
             playerInfo = JsonConvert.DeserializeObject<PlayerInformationModel>(json);
 
-            UiPlayerCharacter uiPlayer = new UiPlayerCharacter();
-            uiPlayer.UserId = playerInfo.UserId;
-            uiPlayer.Username = Game.Player.Name;
-            uiPlayer.Finance.Cash = playerInfo.Wallet;
-            uiPlayer.Finance.Bank = playerInfo.BankAccount;
-
-            string nuiData = JsonConvert.SerializeObject(uiPlayer);
-            API.SendNuiMessage(nuiData);
+            playerInfo.Name = Game.Player.Name;
+            playerInfo.Role = $"{(Privilege)playerInfo.RoleId}";
 
             privilege = (Privilege)playerInfo.RoleId;
 

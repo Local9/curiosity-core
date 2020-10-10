@@ -236,7 +236,6 @@ namespace Curiosity.Server.net.Classes.Environment
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
 
                 Log.Verbose($"[{player.Handle}] {player.Name}#{session.UserID} - {message}");
-                Log.Verbose($"{json}");
 
                 Server.TriggerClientEvent("curiosity:Client:Chat:Message", json);
 

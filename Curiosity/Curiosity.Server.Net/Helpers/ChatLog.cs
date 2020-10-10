@@ -16,15 +16,14 @@ namespace Curiosity.Server.net.Helpers
             chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
-            string encoded = Encode.StringToBase64(json);
 
             if (player == null)
             {
-                Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
+                Server.TriggerClientEvent("curiosity:Client:Chat:Message", json);
             }
             else
             {
-                player.TriggerEvent("curiosity:Client:Chat:Message", encoded);
+                player.TriggerEvent("curiosity:Client:Chat:Message", json);
             }
 
             if (discord)

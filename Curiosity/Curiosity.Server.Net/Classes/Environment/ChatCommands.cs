@@ -207,9 +207,8 @@ namespace Curiosity.Server.net.Classes.Environment
                 chatMessage.Role = $"{Privilege.DEVELOPER}";
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
-                string encoded = Encode.StringToBase64(json);
 
-                Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
+                Server.TriggerClientEvent("curiosity:Client:Chat:Message", json);
             }
 
             try
@@ -419,9 +418,8 @@ namespace Curiosity.Server.net.Classes.Environment
             chatMessage.Channel = "chat";
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
-            string encoded = Encode.StringToBase64(json);
 
-            session.Player.TriggerEvent("curiosity:Client:Chat:Message", encoded);
+            session.Player.TriggerEvent("curiosity:Client:Chat:Message", json);
 
             if (staffSession != null)
             {
@@ -441,9 +439,8 @@ namespace Curiosity.Server.net.Classes.Environment
                 chatMessage.Channel = "chat";
 
                 string staffJson = Newtonsoft.Json.JsonConvert.SerializeObject(staffMessage);
-                string staffEncoded = Encode.StringToBase64(staffJson);
 
-                staffSession.Player.TriggerEvent("curiosity:Client:Chat:Message", staffEncoded);
+                staffSession.Player.TriggerEvent("curiosity:Client:Chat:Message", staffJson);
             }
         }
 
@@ -560,9 +557,8 @@ namespace Curiosity.Server.net.Classes.Environment
             chatMessage.Channel = "chat";
 
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
-            string encoded = Encode.StringToBase64(json);
 
-            Server.TriggerClientEvent("curiosity:Client:Chat:Message", encoded);
+            Server.TriggerClientEvent("curiosity:Client:Chat:Message", json);
         }
 
         static void Test(int playerHandle, List<object> arguments, string raw)

@@ -165,7 +165,7 @@ namespace Curiosity.Client.net
         {
             try
             {
-                EventHandlers[name] += action;
+                EventHandlers[$"{name}"] += action;
             }
             catch (Exception ex)
             {
@@ -182,7 +182,7 @@ namespace Curiosity.Client.net
         {
             try
             {
-                Function.Call(Hash.REGISTER_NUI_CALLBACK_TYPE, name);
+                API.RegisterNuiCallbackType(name);
                 RegisterEventHandler(string.Concat("__cfx_nui:", name), action);
             }
             catch (Exception ex)
