@@ -44,7 +44,7 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
         private static async Task OnPdaCoreControls()
         {
             if (!Client.isSessionActive) return;
-            if (!IsCoreOpen && Game.IsControlJustPressed(0, Control.PhoneUp))
+            if (!IsCoreOpen && Game.IsControlJustPressed(0, Control.SwitchVisor))
             {
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();

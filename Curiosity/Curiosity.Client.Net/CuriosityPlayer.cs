@@ -503,7 +503,7 @@ namespace Curiosity.Client.net
             }
 
             Screen.ShowNotification("~w~If you are stuck, use ~b~/stuck~w~ to respawn safely.");
-            Screen.ShowNotification("~w~Press the UP ARROW key to access your profile.");
+            Screen.ShowNotification("~w~Press the F11 key to access your profile.");
 
             API.SetStreamedTextureDictAsNoLongerNeeded(dictTexture);
         }
