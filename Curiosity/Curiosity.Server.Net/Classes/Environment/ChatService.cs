@@ -239,8 +239,11 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 Server.TriggerClientEvent("curiosity:Client:Chat:Message", json);
 
-                DiscordWrapper.SendDiscordChatMessage($"[{player.Handle}] {player.Name}#{session.UserID}", message);
+                //if (!regex.Match(message).Success)
+                //{
 
+                DiscordWrapper.SendDiscordChatMessage($"[{player.Handle}] {player.Name}#{session.UserID}", message.Trim('"'));
+                //}
                 
             }
             catch (Exception ex)
