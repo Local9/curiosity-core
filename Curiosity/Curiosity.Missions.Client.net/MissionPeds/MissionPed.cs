@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Missions.Client.net.Classes.PlayerClient;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.Wrappers;
@@ -242,7 +244,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
         private void GetTarget()
         {
             bool flag;
-            Ped[] array = World.GetAllPeds().Where<Ped>(new Func<Ped, bool>(this.IsGoodTarget)).ToArray<Ped>();
+
+            Ped[] playerArray = World.GetAllPeds().Where(x => x.IsPlayer).ToArray<Ped>();
+
+            Ped[] array = playerArray.Where<Ped>(new Func<Ped, bool>(this.IsGoodTarget)).ToArray<Ped>();
+
             Ped closest = World.GetClosest<Ped>(this.Position, array);
             if (closest == null)
             {
@@ -269,7 +275,25 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         private bool IsGoodTarget(Ped ped)
         {
-            return ped.GetRelationshipWithPed(this._ped) == Relationship.Hate;
+            Relationship rel = ped.GetRelationshipWithPed(this._ped);
+            bool isTarget = rel == Relationship.Hate;
+
+            //if (ClientInformation.IsDeveloper())
+            //{
+            //    if (ped.Handle == Game.PlayerPed.Handle)
+            //    {
+            //        rel = ped.GetRelationshipWithPed(this._ped);
+            //        Screen.ShowSubtitle($"isT: {isTarget}, r: {rel}");
+            //    }
+            //    else
+            //    {
+            //        Screen.ShowSubtitle($"isT: {isTarget}");
+            //    }
+
+                
+            //}
+
+            return isTarget;
         }
 
         private static bool IsRunningNoticed(Ped ped, float distance)

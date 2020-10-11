@@ -63,52 +63,55 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             Vector3 offset = Game.PlayerPed.Position + new Vector3(0f, 3f, 0f);
 
             await CreatePed(offset.X, offset.Y, offset.Z, Game.PlayerPed.Heading, API.GetHashKey("u_m_y_juggernaut_01"));
+            //await CreatePed(offset.X, offset.Y, offset.Z, Game.PlayerPed.Heading, API.GetHashKey("u_m_y_juggernaut_01"));
+            //await CreatePed(offset.X, offset.Y, offset.Z, Game.PlayerPed.Heading, API.GetHashKey("u_m_y_juggernaut_01"));
+            //await CreatePed(offset.X, offset.Y, offset.Z, Game.PlayerPed.Heading, API.GetHashKey("u_m_y_juggernaut_01"));
 
-            Model model = API.GetHashKey("u_m_y_juggernaut_01");
-            await model.Request(10000);
-            Ped ped = await World.CreatePed(model, offset);
-            model.MarkAsNoLongerNeeded();
+            //Model model = API.GetHashKey("u_m_y_juggernaut_01");
+            //await model.Request(10000);
+            //Ped ped = await World.CreatePed(model, offset);
+            //model.MarkAsNoLongerNeeded();
 
-            int type = 1;
+            //int type = 1;
 
-            if (arguments.Count > 0)
-                type = int.Parse($"{arguments[0]}");
+            //if (arguments.Count > 0)
+            //    type = int.Parse($"{arguments[0]}");
 
-            if (type == 1)
-            {
-                SetPedPropIndex(ped.Handle, 0, 0, 0, false);
-                SetPedComponentVariation(ped.Handle, 0, 0, 1, 0);
-                SetPedComponentVariation(ped.Handle, 3, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 4, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 5, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 8, 0, 1, 0);
-                SetPedComponentVariation(ped.Handle, 10, 0, 1, 0);
-                return;
-            }
+            //if (type == 1)
+            //{
+            //    SetPedPropIndex(ped.Handle, 0, 0, 0, false);
+            //    SetPedComponentVariation(ped.Handle, 0, 0, 1, 0);
+            //    SetPedComponentVariation(ped.Handle, 3, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 4, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 5, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 8, 0, 1, 0);
+            //    SetPedComponentVariation(ped.Handle, 10, 0, 1, 0);
+            //    return;
+            //}
 
-            if (type == 2)
-            {
-                SetPedPropIndex(ped.Handle, 0, 0, 0, false);
-                SetPedComponentVariation(ped.Handle, 0, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 3, 0, 1, 0);
-                SetPedComponentVariation(ped.Handle, 4, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 5, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 8, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 10, 0, 0, 0);
-                return;
-            }
+            //if (type == 2)
+            //{
+            //    SetPedPropIndex(ped.Handle, 0, 0, 0, false);
+            //    SetPedComponentVariation(ped.Handle, 0, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 3, 0, 1, 0);
+            //    SetPedComponentVariation(ped.Handle, 4, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 5, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 8, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 10, 0, 0, 0);
+            //    return;
+            //}
 
-            if (type == 3)
-            {
-                ClearPedProp(ped.Handle, 0);
-                SetPedComponentVariation(ped.Handle, 0, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 3, 0, 1, 0);
-                SetPedComponentVariation(ped.Handle, 4, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 5, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 8, 0, 0, 0);
-                SetPedComponentVariation(ped.Handle, 10, 0, 0, 0);
-                return;
-            }
+            //if (type == 3)
+            //{
+            //    ClearPedProp(ped.Handle, 0);
+            //    SetPedComponentVariation(ped.Handle, 0, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 3, 0, 1, 0);
+            //    SetPedComponentVariation(ped.Handle, 4, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 5, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 8, 0, 0, 0);
+            //    SetPedComponentVariation(ped.Handle, 10, 0, 0, 0);
+            //    return;
+            //}
 
 
         }
@@ -520,7 +523,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             spawnedPed.Weapons.Give(weaponHash, 999, true, true);
             spawnedPed.DropsWeaponsOnDeath = false;
             // mission maker
-            MissionPedCreator.Ped(spawnedPed, Extensions.Alertness.FullyAlert, Extensions.Difficulty.HurtMePlenty);
+            MissionPedCreator.Ped(spawnedPed, Extensions.Alertness.FullyAlert, Extensions.Difficulty.BringItOn);
             model.MarkAsNoLongerNeeded();
         }
 
