@@ -44,7 +44,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
         public static void Init()
         {
             API.RegisterCommand("hlmission", new Action<int, List<object>, string>(CommandHlMission), false);
-            // API.RegisterCommand("boss", new Action<int, List<object>, string>(BossTest), false);
+            API.RegisterCommand("boss", new Action<int, List<object>, string>(BossTest), false);
 
             client.RegisterEventHandler("curiosity:missions:player:spawn", new Action(CreateMission));
             client.RegisterEventHandler("curiosity:missions:player:invalid", new Action(InvalidMission));
@@ -58,9 +58,11 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
 
         private static async void BossTest(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!Classes.PlayerClient.ClientInformation.IsTrusted()) return;
 
             Vector3 offset = Game.PlayerPed.Position + new Vector3(0f, 3f, 0f);
+
+            await CreatePed(offset.X, offset.Y, offset.Z, Game.PlayerPed.Heading, API.GetHashKey("u_m_y_juggernaut_01"));
 
             Model model = API.GetHashKey("u_m_y_juggernaut_01");
             await model.Request(10000);
@@ -506,14 +508,13 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
 
             if (spawnedPed.Model.Hash == API.GetHashKey("u_m_y_juggernaut_01"))
             {
-                spawnedPed.Health = 2000;
+                spawnedPed.Health = 5000;
                 spawnedPed.CanRagdoll = false;
                 spawnedPed.CanSufferCriticalHits = false;
                 spawnedPed.FiringPattern = FiringPattern.FullAuto;
                 spawnedPed.IsMeleeProof = true;
 
                 weaponHash = WeaponHash.Minigun;
-
             }
 
             spawnedPed.Weapons.Give(weaponHash, 999, true, true);
