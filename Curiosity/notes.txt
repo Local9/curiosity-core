@@ -1,0 +1,11 @@
+Call cop on target;
+
+Game.PlaySound("Start", "DLC_HEIST_HACKING_SNAKE_SOUNDS");
+Function.Call(-7916498010425305858L, (dynamic)this.HackTarget, 50f); // RegisterHatedTargetsAroundPed
+Function.Call(189372676006300666L, (dynamic)this.HackTarget); // SetPedAsEnemy
+Function.Call(8116279360099375049L, (dynamic)this.HackTarget, 0, 0); // SetPedFleeAttributes
+Function.Call(-6955927877681029095L, (dynamic)this.HackTarget, 46, 1); // SetPedCombatAttributes
+Function.Call(-6974808092771143243L, (dynamic)this.HackTarget, 46, 1); // SetPedAsGroupMember
+Function.Call(189372676006300666L, (dynamic)this.HackTarget, true); // SetPedAsEnemy
+Function.Call(-2619105872414424666L, new InputArgument[] { 3 }); // SetPedAlertness
+
