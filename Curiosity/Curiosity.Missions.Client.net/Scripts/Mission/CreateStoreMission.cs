@@ -65,7 +65,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
 
                 client.RegisterTickHandler(MissionCancelAsync);
 
-                while (Game.PlayerPed.Position.Distance(store.Location) > 300f)
+                while (Game.PlayerPed.Position.Distance(store.Location) > 100f)
                 {
                     await BaseScript.Delay(10);
                 }

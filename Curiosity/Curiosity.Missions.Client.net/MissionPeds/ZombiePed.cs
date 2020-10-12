@@ -280,7 +280,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 currentBlip.Delete();
             }
 
-            CitizenFX.Core.UI.Screen.ShowNotification("Killed Zombie");
+            // CitizenFX.Core.UI.Screen.ShowNotification("Killed Zombie");
 
             //if ((!ZombieVehicleSpawner.Instance.IsInvalidZone(entity.get_Position()) ? false : ZombieVehicleSpawner.Instance.IsValidSpawn(entity.get_Position())))
             //{

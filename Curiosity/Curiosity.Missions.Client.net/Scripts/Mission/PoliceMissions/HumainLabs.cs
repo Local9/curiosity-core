@@ -1,8 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net.Data;
 using Curiosity.Missions.Client.net.Exceptions;
+using Curiosity.Missions.Client.net.Extensions;
+using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Scripts.PedCreators;
+using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper;
@@ -45,6 +49,7 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
         {
             API.RegisterCommand("hlmission", new Action<int, List<object>, string>(CommandHlMission), false);
             API.RegisterCommand("boss", new Action<int, List<object>, string>(BossTest), false);
+            API.RegisterCommand("zombie", new Action<int, List<object>, string>(OnZombieCommand), false);
 
             client.RegisterEventHandler("curiosity:missions:player:spawn", new Action(CreateMission));
             client.RegisterEventHandler("curiosity:missions:player:invalid", new Action(InvalidMission));
@@ -55,6 +60,225 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
 
             client.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action<bool>(OnDrawAreas));
         }
+
+        private static async void OnZombieCommand(int playerHandle, List<object> arguments, string raw)
+        {
+            try
+            {
+                if (!Classes.PlayerClient.ClientInformation.IsTrusted()) return;
+
+                int numberToSpawn = Client.Random.Next(3, 8);
+
+                int runs = arguments.Count > 0 ? int.Parse($"{arguments[0]}") : 1;
+
+                if (runs > 10)
+                    runs = 10;
+
+                for (int r = 0; r < runs; r++)
+                {
+                    await Client.Delay(50);
+                    for (int i = 0; i < numberToSpawn; i++)
+                    {
+                        await Client.Delay(50);
+                        CreateZombie();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{ex.InnerException}");
+            }
+        }
+
+        static async void CreateZombie()
+        {
+            float rnd = Client.Random.Next(-15, 15);
+            float rnd2 = Client.Random.Next(-15, 15);
+            Vector3 offset = Game.PlayerPed.Position + new Vector3(rnd, rnd2, 0f);
+            float groundPosZ = 0f;
+
+            if(API.GetGroundZFor_3dCoord(offset.X, offset.Y, offset.Z, ref groundPosZ, false))
+            {
+                offset.Z = groundPosZ;
+            }
+
+            List<dynamic> pedHashList = PedModelListUniqueFemale;
+
+            if (Client.Random.NextBool(50))
+            {
+                pedHashList = PedModelListUniqueMale;
+            }
+
+            if (Client.Random.NextBool(10))
+            {
+                pedHashList = PedModelListSpecialMale;
+            }
+
+            if (Client.Random.NextBool(10))
+            {
+                pedHashList = PedModelListSpecialFemale;
+            }
+
+            object pedHash = pedHashList[Client.Random.Next(0, pedHashList.Count - 1)];
+
+            await CreateZombiePed(offset.X, offset.Y, offset.Z, Game.PlayerPed.Heading, API.GetHashKey($"{pedHash}"));
+        }
+
+        static List<dynamic> PedModelListSpecialMale = new List<object>() {
+            "s_m_m_ammucountry",
+            "s_m_m_autoshop_01",
+            "s_m_m_autoshop_02",
+            "s_m_m_cntrybar_01",
+            "s_m_m_dockwork_01",
+            "s_m_m_doctor_01",
+            "s_m_m_gaffer_01",
+            "s_m_m_gardener_01",
+            "s_m_m_gentransport",
+            "s_m_m_hairdress_01",
+            "s_m_m_janitor",
+            "s_m_m_lathandy_01",
+            "s_m_m_lifeinvad_01",
+            "s_m_m_linecook",
+            "s_m_m_lsmetro_01",
+            "s_m_m_mariachi_01",
+            "s_m_m_migrant_01",
+            "s_m_m_movalien_01",
+            "s_m_m_movprem_01",
+            "s_m_m_movspace_01",
+            "s_m_m_paramedic_01",
+            "s_m_m_pilot_01",
+            "s_m_m_pilot_02",
+            "s_m_m_postal_01",
+            "s_m_m_postal_02",
+            "s_m_m_scientist_01",
+            "s_m_m_strperf_01",
+            "s_m_m_strpreach_01",
+            "s_m_m_strvend_01",
+            "s_m_m_trucker_01",
+            "s_m_m_ups_01",
+            "s_m_m_ups_02",
+            "s_m_o_busker_01",
+            "s_m_y_airworker",
+            "s_m_y_ammucity_01",
+            "s_m_y_autopsy_01",
+            "s_m_y_barman_01",
+            "s_m_y_baywatch_01",
+            "s_m_y_busboy_01",
+            "s_m_y_chef_01",
+            "s_m_y_clown_01",
+            "s_m_y_construct_01",
+            "s_m_y_construct_02",
+            "s_m_y_dealer_01",
+            "s_m_y_devinsec_01",
+            "s_m_y_dockwork_01",
+            "s_m_y_dwservice_01",
+            "s_m_y_dwservice_02",
+            "s_m_y_factory_01",
+            "s_m_y_fireman_01",
+            "s_m_y_garbage",
+            "s_m_y_grip_01",
+            "s_m_y_mime",
+            "s_m_y_pestcont_01",
+            "s_m_y_pilot_01",
+            "s_m_y_prismuscl_01",
+            "s_m_y_prisoner_01",
+            "s_m_y_robber_01",
+            "s_m_y_shop_mask",
+            "s_m_y_strvend_01",
+            "s_m_y_valet_01",
+            "s_m_y_waiter_01",
+            "s_m_y_winclean_01",
+            "s_m_y_xmech_01",
+            "s_m_y_xmech_02"
+        };
+
+        static List<dynamic> PedModelListSpecialFemale = new List<object>() {
+            "s_f_m_fembarber",
+            "s_f_m_maid_01",
+            "s_f_m_shop_high",
+            "s_f_m_sweatshop_01",
+            "s_f_y_airhostess_01",
+            "s_f_y_bartender_01",
+            "s_f_y_baywatch_01",
+            "s_f_y_factory_01",
+            "s_f_y_hooker_01",
+            "s_f_y_hooker_02",
+            "s_f_y_hooker_03",
+            "s_f_y_migrant_01",
+            "s_f_y_movprem_01",
+            "s_f_y_scrubs_01",
+            "s_f_y_shop_low",
+            "s_f_y_shop_mid",
+            "s_f_y_stripperlite",
+            "s_f_y_stripper_01",
+            "s_f_y_stripper_02",
+            "s_f_y_sweatshop_01"
+        };
+
+        static List<dynamic> PedModelListUniqueMale = new List<object>() {
+            "u_m_m_aldinapoli",
+            "u_m_m_bankman",
+            "u_m_m_bikehire_01",
+            "u_m_m_fibarchitect",
+            "u_m_m_filmdirector",
+            "u_m_m_glenstank_01",
+            "u_m_m_griff_01",
+            "u_m_m_jesus_01",
+            "u_m_m_jewelthief",
+            "u_m_m_markfost",
+            "u_m_m_partytarget",
+            "u_m_m_prolsec_01",
+            "u_m_m_promourn_01",
+            "u_m_m_rivalpap",
+            "u_m_m_spyactor",
+            "u_m_m_willyfist",
+            "u_m_o_finguru_01",
+            "u_m_o_taphillbilly",
+            "u_m_o_tramp_01",
+            "u_m_y_abner",
+            "u_m_y_antonb",
+            "u_m_y_babyd",
+            "u_m_y_baygor",
+            "u_m_y_burgerdrug_01",
+            "u_m_y_chip",
+            "u_m_y_cyclist_01",
+            "u_m_y_fibmugger_01",
+            "u_m_y_guido_01",
+            "u_m_y_gunvend_01",
+            "u_m_y_hippie_01",
+            "u_m_y_imporage",
+            "u_m_y_justin",
+            "u_m_y_mani",
+            "u_m_y_militarybum",
+            "u_m_y_paparazzi",
+            "u_m_y_party_01",
+            "u_m_y_pogo_01",
+            "u_m_y_prisoner_01",
+            "u_m_y_proldriver_01",
+            "u_m_y_rsranger_01",
+            "u_m_y_sbike",
+            "u_m_y_staggrm_01",
+            "u_m_y_tattoo_01",
+            "u_m_y_zombie_01"
+        };
+
+        static List<dynamic> PedModelListUniqueFemale = new List<object>() {
+            "u_f_m_corpse_01",
+            "u_f_m_miranda",
+            "u_f_m_promourn_01",
+            "u_f_o_moviestar",
+            "u_f_o_prolhost_01",
+            "u_f_y_bikerchic",
+            "u_f_y_comjane",
+            // "u_f_y_corpse_01",
+            // "u_f_y_corpse_02",
+            "u_f_y_hotposh_01",
+            "u_f_y_jewelass_01",
+            "u_f_y_mistress",
+            "u_f_y_poppymich",
+            "u_f_y_princess",
+            "u_f_y_spyactress"
+        };
 
         private static async void BossTest(int playerHandle, List<object> arguments, string raw)
         {
@@ -484,6 +708,37 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             await CreatePed(x, y, z, heading, model);
         }
 
+        private static async Task CreateZombiePed(float x, float y, float z, float heading, Model selectedModel)
+        {
+            await BaseScript.Delay(10);
+            if (DebugAreas)
+            {
+                AddTrigger($"npc_{Client.Random.Next(999999999)}", new Vector3(x, y, z), Color.FromArgb(255, 0, 0), 2f);
+                return;
+            }
+
+            Vector3 position = new Vector3(x, y, z);
+            Model model = selectedModel;
+            await model.Request(10000);
+
+            while (!model.IsLoaded)
+            {
+                await BaseScript.Delay(0);
+            }
+
+            API.RequestCollisionAtCoord(x, y, z);
+
+            Ped spawnedPed = await World.CreatePed(model, position, heading);
+
+            API.NetworkFadeInEntity(spawnedPed.Handle, false);
+
+            spawnedPed.DropsWeaponsOnDeath = false;
+            // mission maker
+            ZombieCreator.InfectPed(spawnedPed, 300, Client.Random.NextBool(20));
+            model.MarkAsNoLongerNeeded();
+
+        }
+
         private static async Task CreatePed(float x, float y, float z, float heading, Model selectedModel)
         {
             await BaseScript.Delay(10);
@@ -523,7 +778,8 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
             spawnedPed.Weapons.Give(weaponHash, 999, true, true);
             spawnedPed.DropsWeaponsOnDeath = false;
             // mission maker
-            MissionPedCreator.Ped(spawnedPed, Extensions.Alertness.FullyAlert, Extensions.Difficulty.BringItOn);
+            MissionPed missionPed = MissionPedCreator.Ped(spawnedPed, Extensions.Alertness.FullyAlert, Extensions.Difficulty.BringItOn);
+            Decorators.Set(missionPed.Handle, Client.DECOR_PED_MISSION, true);
             model.MarkAsNoLongerNeeded();
         }
 

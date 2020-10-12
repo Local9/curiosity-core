@@ -75,6 +75,8 @@ namespace Curiosity.Missions.Client.net.Scripts.PedCreators
                 walker = new ZombieRunner(ped.Handle);
             }
 
+            Decorators.Set(walker.Handle, Client.DECOR_PED_MISSION, true);
+
             return walker;
         }
 

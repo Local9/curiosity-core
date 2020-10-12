@@ -17,7 +17,7 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
 
         public ZombieRunner(int handle) : base(handle)
         {
-            CitizenFX.Core.UI.Screen.ShowNotification($"Ped Runner: {handle}");
+            // CitizenFX.Core.UI.Screen.ShowNotification($"Ped Runner: {handle}");
             this._ped = this;
         }
 

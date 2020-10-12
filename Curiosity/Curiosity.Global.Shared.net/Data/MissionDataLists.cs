@@ -5709,15 +5709,5 @@ namespace Curiosity.Global.Shared.net.Data
             Orange = 47,
             Transparent = 80
         }
-
-        static public List<dynamic> CheckpointBlipColors = new List<object>() {
-            MissionDataLists.BlipColorsTwo.Yellow,
-            MissionDataLists.BlipColorsTwo.Red,
-            MissionDataLists.BlipColorsTwo.White,
-            MissionDataLists.BlipColorsTwo.Blue,
-            MissionDataLists.BlipColorsTwo.Green,
-            MissionDataLists.BlipColorsTwo.Purple,
-            MissionDataLists.BlipColorsTwo.Black
-        };
     }
 }
