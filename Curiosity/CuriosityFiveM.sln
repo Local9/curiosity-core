@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{A0D62F10-DBC9-4C31-B3AB-7058530A87C9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1_Server", "1_Server", "{A0D62F10-DBC9-4C31-B3AB-7058530A87C9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{1D33637F-66E3-4977-9B9E-5A524FAFE523}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1_Client", "1_Client", "{1D33637F-66E3-4977-9B9E-5A524FAFE523}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Dependancies", "_Dependancies", "{D9F07760-D804-47DE-98A7-BC5E47182A47}"
 	ProjectSection(SolutionItems) = preProject
@@ -40,7 +40,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Tools.Client.net"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Tools.Server.net", "Curiosity.Tools.Server.net\Curiosity.Tools.Server.net.csproj", "{A6A93AA4-0717-4AAC-A54D-AD67DDC338B7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{89A76DE7-5B27-4AEA-9C22-B0671FDC967A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1_shared", "1_shared", "{89A76DE7-5B27-4AEA-9C22-B0671FDC967A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Global.Shared.net", "Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj", "{FE7F0756-CFE5-4BB9-A822-E9E1CFBC412B}"
 EndProject
@@ -86,7 +86,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Missions.Client.n
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Missions.Server.net", "Curiosity.Missions.Server.net\Curiosity.Missions.Server.net.csproj", "{62FEA3B1-5CC9-4DE0-8FFC-439555D457A4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discord", "Discord", "{B408851E-C7C4-4CF2-B9C2-D7762399DE8C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DiscordBot", "DiscordBot", "{B408851E-C7C4-4CF2-B9C2-D7762399DE8C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Curiosity.LifeV.Bot", "Curiosity.Discord.Bot\Curiosity.LifeV.Bot.csproj", "{B539301D-A1E5-4F83-8D77-557C853EC742}"
 EndProject
