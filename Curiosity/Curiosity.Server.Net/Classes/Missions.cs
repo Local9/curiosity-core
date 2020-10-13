@@ -205,7 +205,7 @@ namespace Curiosity.Server.net.Classes
                 Skills.IncreaseSkill(player.Handle, "policerep", 1);
             }
 
-            int exp = random.Next(20, 50);
+            int exp = random.Next(40, 60);
             int knowledge = random.Next(6, 15);
             int money = random.Next(60, 125);
 
