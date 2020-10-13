@@ -355,13 +355,30 @@ namespace Curiosity.Server.net.Classes
 
                 int characterId = session.User.CharacterId;
 
+
+
+
                 if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
                 {
                     float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
 
-                    if (experienceModifier > 1.0f && (session.IsStaff || session.Privilege == GlobalEnum.Privilege.DONATOR))
+                    if (session.IsStaff || session.IsDonator)
                     {
-                        experienceModifier = experienceModifier + 0.1f;
+                        switch (session.Privilege)
+                        {
+                            case GlobalEnum.Privilege.DONATOR1:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_donator1", $"0.1"));
+                                break;
+                            case GlobalEnum.Privilege.DONATOR2:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_donator2", $"0.25"));
+                                break;
+                            case GlobalEnum.Privilege.DONATOR3:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_donator3", $"0.5"));
+                                break;
+                            default:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_lifeTime", $"0.05"));
+                                break;
+                        }
                     }
 
                     experience = (int)(experience * experienceModifier);
@@ -438,10 +455,23 @@ namespace Curiosity.Server.net.Classes
                 {
                     float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
 
-
-                    if (experienceModifier > 1.0f && (session.IsStaff || session.Privilege == GlobalEnum.Privilege.DONATOR))
+                    if (session.IsStaff || session.IsDonator)
                     {
-                        experienceModifier = experienceModifier + 0.1f;
+                        switch (session.Privilege)
+                        {
+                            case GlobalEnum.Privilege.DONATOR1:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_donator1", $"0.1"));
+                                break;
+                            case GlobalEnum.Privilege.DONATOR2:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_donator2", $"0.25"));
+                                break;
+                            case GlobalEnum.Privilege.DONATOR3:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_donator3", $"0.5"));
+                                break;
+                            default:
+                                experienceModifier += float.Parse(API.GetConvar("experience_modifier_lifeTime", $"0.05"));
+                                break;
+                        }
                     }
 
                     experience = (int)(experience * experienceModifier);
