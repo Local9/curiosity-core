@@ -206,53 +206,53 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
                     BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
                 }
-                else
-                {
-                    numberOfPedsKilled++;
+                //else
+                //{
+                //    numberOfPedsKilled++;
 
-                    if (numberOfPedsKilled == 3)
-                        Screen.ShowNotification($"~r~Warning:~w~ You will be punished if you killing random peds.");
+                //    if (numberOfPedsKilled == 3)
+                //        Screen.ShowNotification($"~r~Warning:~w~ You will be punished if you killing random peds.");
 
-                    if (numberOfPedsKilled >= 5)
-                    {
-                        if (numberOfPedsKilled == 5)
-                            Screen.ShowNotification($"~r~Warning:~w~ Damage to peds is now reflected");
+                //    if (numberOfPedsKilled >= 5)
+                //    {
+                //        if (numberOfPedsKilled == 5)
+                //            Screen.ShowNotification($"~r~Warning:~w~ Damage to peds is now reflected");
 
-                        int damage = (int)((1 * numberOfPedsKilled) * (numberOfTimesKilledByPedTracker + 1));
+                //        int damage = (int)((1 * numberOfPedsKilled) * (numberOfTimesKilledByPedTracker + 1));
 
-                        if (attacker.Character.IsInvincible)
-                        {
-                            wasKilledByScript = true;
-                            attacker.Character.Kill();
-                        }
+                //        if (attacker.Character.IsInvincible)
+                //        {
+                //            wasKilledByScript = true;
+                //            attacker.Character.Kill();
+                //        }
 
-                        if (attacker.Character.Health == 0)
-                        {
-                            wasKilledByScript = true;
-                            attacker.Character.Kill();
-                        }
-                        else
-                        {
-                            wasKilledByScript = false;
-                            attacker.Character.ApplyDamage(damage);
+                //        if (attacker.Character.Health == 0)
+                //        {
+                //            wasKilledByScript = true;
+                //            attacker.Character.Kill();
+                //        }
+                //        else
+                //        {
+                //            wasKilledByScript = false;
+                //            attacker.Character.ApplyDamage(damage);
 
-                            await Client.Delay(100);
+                //            await Client.Delay(100);
 
-                            Log.Verbose($"{numberOfTimesKilledByPedTracker}:{juggernautSpawned}");
+                //            Log.Verbose($"{numberOfTimesKilledByPedTracker}:{juggernautSpawned}");
 
-                            if (attacker.IsDead)
-                            {
-                                numberOfTimesKilledByPedTracker++;
-                                Log.Verbose($"{numberOfTimesKilledByPedTracker}:{juggernautSpawned}");
-                            }
-                        }
+                //            if (attacker.IsDead)
+                //            {
+                //                numberOfTimesKilledByPedTracker++;
+                //                Log.Verbose($"{numberOfTimesKilledByPedTracker}:{juggernautSpawned}");
+                //            }
+                //        }
 
-                        if (numberOfTimesKilledByPedTracker >= 2 && !juggernautSpawned)
-                        {
-                            CreateKiller();
-                        }
-                    }
-                }
+                //        if (numberOfTimesKilledByPedTracker >= 2 && !juggernautSpawned)
+                //        {
+                //            CreateKiller();
+                //        }
+                //    }
+                //}
             }
             catch (Exception ex)
             {
