@@ -223,7 +223,7 @@ namespace Curiosity.LifeV.Bot.Modules
                     roleIdList.Add(role.Id);
                 });
 
-                hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588444129722105856);
+                hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588444129722105856);
 
                 int donatorRoleId = 9;
 
@@ -232,12 +232,12 @@ namespace Curiosity.LifeV.Bot.Modules
                     donatorRoleId = 11;
                 }
 
-                if (roleIdList.Contains(541955570601558036)) // Lv2
+                if (roleIdList.Contains(588440994543042560)) // Lv2
                 {
                     donatorRoleId = 12;
                 }
 
-                if (roleIdList.Contains(588444129722105856)) // Lv2
+                if (roleIdList.Contains(588444129722105856)) // Lv3
                 {
                     donatorRoleId = 13;
                 }
