@@ -471,7 +471,7 @@ namespace Curiosity.Server.net.Classes
 
             if (skillMessage.Increase)
             {
-                int experience = random.Next(8, 10);
+                int experience = random.Next(12, 18);
                 int knowledge = random.Next(3, 6);
 
                 if (skillMessage.IsHeadshot)
