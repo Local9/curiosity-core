@@ -283,6 +283,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             await Client.Delay(3000);
             API.NetworkFadeOutEntity(this.Handle, false, false);
             await Client.Delay(1000);
+            sender.Dispose();
             
 
             // CitizenFX.Core.UI.Screen.ShowNotification("Killed Zombie");
