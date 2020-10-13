@@ -197,17 +197,15 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
             }
             else
             {
-                if (Client.CurrentVehicle.IsSeatFree(VehicleSeat.LeftRear))
+                VehicleSeat seat = VehicleSeat.LeftRear;
+
+                if (Client.CurrentVehicle.IsSeatFree(VehicleSeat.RightRear))
                 {
-                    interactivePed.Ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.LeftRear);
-                }
-                else if (Client.CurrentVehicle.IsSeatFree(VehicleSeat.RightRear))
-                {
-                    interactivePed.Ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.RightRear);
+                    seat = VehicleSeat.RightRear;
                 }
                 else if (Client.CurrentVehicle.IsSeatFree(VehicleSeat.Passenger))
                 {
-                    interactivePed.Ped.Task.EnterVehicle(Client.CurrentVehicle, VehicleSeat.Passenger);
+                    seat = VehicleSeat.Passenger;
                 }
                 else
                 {
@@ -217,8 +215,10 @@ namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
 
                 while (!interactivePed.Ped.IsInVehicle())
                 {
-                    await Client.Delay(0);
+                    await Client.Delay(500);
+                    interactivePed.Ped.Task.EnterVehicle(Client.CurrentVehicle, seat);
                 }
+
                 interactivePed.Ped.SetConfigFlag(292, true);
             }
         }
