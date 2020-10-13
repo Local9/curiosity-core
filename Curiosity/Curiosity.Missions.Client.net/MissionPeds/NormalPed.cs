@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
 using Curiosity.Missions.Client.net.Extensions;
@@ -274,7 +275,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public abstract void OnAttackTarget(Ped target);
 
-        private void OnDied(EntityEventWrapper sender, Entity entity)
+        private async void OnDied(EntityEventWrapper sender, Entity entity)
         {
 
             Entity killerEnt = new Ped(entity.Handle).GetKiller();
@@ -306,6 +307,10 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             {
                 currentBlip.Delete();
             }
+
+            await Client.Delay(3000);
+            API.NetworkFadeOutEntity(this.Handle, false, false);
+            await Client.Delay(1000);
 
             sender.Dispose();
         }

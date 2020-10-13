@@ -272,13 +272,18 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public abstract void OnAttackTarget(Ped target);
 
-        private void OnDied(EntityEventWrapper sender, Entity entity)
+        private async void OnDied(EntityEventWrapper sender, Entity entity)
         {
             Blip currentBlip = base.AttachedBlip;
             if (currentBlip != null)
             {
                 currentBlip.Delete();
             }
+
+            await Client.Delay(3000);
+            API.NetworkFadeOutEntity(this.Handle, false, false);
+            await Client.Delay(1000);
+            
 
             // CitizenFX.Core.UI.Screen.ShowNotification("Killed Zombie");
 

@@ -715,12 +715,17 @@ namespace Curiosity.Missions.Client.net.MissionPeds
                 Screen.DisplayHelpTextThisFrame(helpText);
         }
 
-        private void OnDied(EntityEventWrapper sender, Entity entity)
+        private async void OnDied(EntityEventWrapper sender, Entity entity)
         {
             if (base.IsOccluded)
             {
                 base.Delete();
             }
+
+            await Client.Delay(3000);
+            API.NetworkFadeOutEntity(this.Handle, false, false);
+            await Client.Delay(1000);
+            sender.Dispose();
         }
 
         private bool IsGoodTarget(Ped ped)

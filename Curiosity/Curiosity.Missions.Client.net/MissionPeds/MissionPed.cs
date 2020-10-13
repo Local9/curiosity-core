@@ -317,7 +317,7 @@ namespace Curiosity.Missions.Client.net.MissionPeds
 
         public abstract void OnAttackTarget(Ped target);
 
-        private void OnDied(EntityEventWrapper sender, Entity entity)
+        private async void OnDied(EntityEventWrapper sender, Entity entity)
         {
             Blip currentBlip = base.AttachedBlip;
             if (currentBlip != null)
@@ -326,6 +326,11 @@ namespace Curiosity.Missions.Client.net.MissionPeds
             }
 
             Client.GetInstance().DeregisterTickHandler(OnDevUI);
+
+            await Client.Delay(3000);
+            API.NetworkFadeOutEntity(this.Handle, false, false);
+            await Client.Delay(1000);
+            sender.Dispose();
         }
 
         public abstract void OnGoToTarget(Ped target);
