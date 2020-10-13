@@ -51,6 +51,8 @@ namespace Curiosity.Missions.Client.net.Static
             InfectedRelationship = World.AddRelationshipGroup("INFECTED_RELATIONSHIP");
             SetRelationshipBothWays(Relationship.Hate, InfectedRelationship, HostileRelationship);
             SetRelationshipBothWays(Relationship.Hate, InfectedRelationship, PlayerRelationship);
+            SetRelationshipBothWays(Relationship.Hate, InfectedRelationship, DislikeRelationship);
+            SetRelationshipBothWays(Relationship.Hate, InfectedRelationship, NeutralRelationship);
             // Arrested
             ArrestedRelationship = World.AddRelationshipGroup("ARRESTED_RELATIONSHIP");
             SetRelationshipBothWays(Relationship.Like, ArrestedRelationship, PlayerRelationship);
