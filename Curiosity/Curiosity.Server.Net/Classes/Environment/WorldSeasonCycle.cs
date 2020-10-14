@@ -284,12 +284,12 @@ namespace Curiosity.Server.net.Classes.Environment
             }
             else
             {
-                WeatherTypes newType = weathers[Server.random.Next(weathers.Count)];
+                WeatherTypes newType = weathers[Server.random.Next(weathers.Count - 1)];
 
                 while (_serverWeather == newType)
                 {
                     await Server.Delay(10);
-                    newType = weathers[Server.random.Next(weathers.Count)];
+                    newType = weathers[Server.random.Next(weathers.Count - 1)];
                 }
 
                 _serverWeather = newType;
