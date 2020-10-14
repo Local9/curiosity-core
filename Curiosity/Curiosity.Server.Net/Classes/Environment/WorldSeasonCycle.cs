@@ -82,7 +82,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             _freezeTime = !_freezeTime;
 
-            session.Player.NotificationCuriosity("Time", string.Format("Time: {0}", _freezeTime ? "~g~Enabled" : "~r~Disabled}"));
+            session.Player.NotificationCuriosity("Time", string.Format("Time: {0}", _freezeTime ? "~g~Enabled" : "~r~Disabled"));
 
             SyncAllUsers();
         }
@@ -97,7 +97,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             _dynamicWeatherEnabled = !_dynamicWeatherEnabled;
 
-            session.Player.NotificationCuriosity("Weather", string.Format("Weather: {0}", _dynamicWeatherEnabled ? "~g~Enabled" : "~r~Disabled}"));
+            session.Player.NotificationCuriosity("Weather", string.Format("Weather: {0}", _dynamicWeatherEnabled ? "~g~Enabled" : "~r~Disabled"));
 
             SyncAllUsers();
         }
@@ -172,7 +172,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             _blackout = !_blackout;
 
-            session.Player.NotificationCuriosity("Blackout", string.Format("Blackout: {0}", _blackout ? "~g~Enabled" : "~r~Disabled}"));
+            session.Player.NotificationCuriosity("Blackout", string.Format("Blackout: {0}", _blackout ? "~g~Enabled" : "~r~Disabled"));
 
             SyncAllUsers();
         }
