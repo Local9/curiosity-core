@@ -109,6 +109,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             minute = (int)Math.Floor((_clientBaseTime + _clientTimeOffset) % 60);
 
             NetworkOverrideClockTime(hour, minute, 0);
+            SetClockTime(hour, minute, 0);
         }
 
         private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp)

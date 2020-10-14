@@ -277,15 +277,15 @@ namespace Curiosity.Server.net.Classes.Environment
             switch(_serverSeason) // self explanitory
             {
                 case Seasons.SPRING:
-                    weathers = _springWeather;
+                    weathers = SeasonData.WeatherSpringList();
                     _serverTemp = Server.random.Next(60, 88);
                     break;
                 case Seasons.SUMMER:
-                    weathers = _summerWeather;
+                    weathers = SeasonData.WeatherSummerList();
                     _serverTemp = Server.random.Next(73, 102);
                     break;
                 case Seasons.AUTUMN:
-                    weathers = _autumnWeather;
+                    weathers = SeasonData.WeatherAutumnList();
                     _serverTemp = Server.random.Next(53, 77);
                     break;
                 case Seasons.WINTER:
