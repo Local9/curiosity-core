@@ -111,8 +111,14 @@ namespace Curiosity.Server.net.Classes.Environment
                     break;
             }
 
-            if (_serverSeason != Seasons.WINTER) // if its winter, its always xmas, blizzard and light snow are for north yankton
+            if (_serverSeason == Seasons.WINTER) // if its winter, its always xmas, blizzard and light snow are for north yankton
+            {
                 _serverWeather = Server.random.NextDouble() > 0.8 ? WeatherTypes.XMAS_STORM : WeatherTypes.XMAS;
+            }
+            else
+            {
+                _serverWeather = weathers[Server.random.Next(weathers.Count)];
+            }
 
             weathers.Clear(); // clear the list
 
