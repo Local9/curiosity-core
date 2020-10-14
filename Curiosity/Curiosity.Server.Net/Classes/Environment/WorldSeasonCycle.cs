@@ -43,8 +43,8 @@ namespace Curiosity.Server.net.Classes.Environment
 
         // TODO:
         /*
-         * Client Sync
-         * Server Time
+         * Population Control
+         * 
          * 
          */
 

@@ -28,6 +28,11 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
         // WEATHER
         static WeatherTypes _lastWeather;
 
+        // population
+        static float PED_MULTIPLIER = 1.0f;
+        static float VEH_MULTIPLIER = 1.0f;
+        static float VEH_PARKED_MULTIPLIER = 1.0f;
+
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:server:seasons:sync:time", new Action<double, double, bool>(OnSeasonsTimeSync));
@@ -35,8 +40,18 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int>(OnSeasonsWeatherSync));
 
             client.RegisterTickHandler(OnSeasonTimerTick);
+            client.RegisterTickHandler(OnPopulationManagement);
 
             Log.Verbose($"[WORLD WEATHER] Init");
+        }
+
+        private static async Task OnPopulationManagement()
+        {
+            API.SetVehicleDensityMultiplierThisFrame(VEH_MULTIPLIER);
+            API.SetPedDensityMultiplierThisFrame(PED_MULTIPLIER);
+            API.SetRandomVehicleDensityMultiplierThisFrame(VEH_MULTIPLIER);
+            API.SetParkedVehicleDensityMultiplierThisFrame(VEH_PARKED_MULTIPLIER);
+            API.SetScenarioPedDensityMultiplierThisFrame(PED_MULTIPLIER, PED_MULTIPLIER);
         }
 
         private static async Task OnSeasonTimerTick()
@@ -94,6 +109,45 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
                     SetWeather(_lastWeather);
                     SetForceVehicleTrails(false);
                     SetForcePedFootstepsTracks(false);
+                    break;
+            }
+
+            switch((WeatherTypes)weather)
+            {
+                case WeatherTypes.HALLOWEEN:
+                case WeatherTypes.XMAS:
+                    PED_MULTIPLIER = .2f;
+                    VEH_MULTIPLIER = .5f;
+                    VEH_PARKED_MULTIPLIER = 1f;
+                    break;
+                case WeatherTypes.CLEAR:
+                case WeatherTypes.CLEARING:
+                case WeatherTypes.EXTRASUNNY:
+                case WeatherTypes.NEUTRAL:
+                    PED_MULTIPLIER = 1f;
+                    VEH_MULTIPLIER = 1f;
+                    VEH_PARKED_MULTIPLIER = .5f;
+                    break;
+                case WeatherTypes.FOGGY:
+                case WeatherTypes.SMOG:
+                    PED_MULTIPLIER = .5f;
+                    VEH_MULTIPLIER = 1f;
+                    VEH_PARKED_MULTIPLIER = .1f;
+                    break;
+                case WeatherTypes.OVERCAST:
+                    PED_MULTIPLIER = .8f;
+                    VEH_MULTIPLIER = 1f;
+                    VEH_PARKED_MULTIPLIER = .1f;
+                    break;
+                case WeatherTypes.RAIN:
+                    PED_MULTIPLIER = .3f;
+                    VEH_MULTIPLIER = 1f;
+                    VEH_PARKED_MULTIPLIER = .1f;
+                    break;
+                case WeatherTypes.THUNDER:
+                    PED_MULTIPLIER = .1f;
+                    VEH_PARKED_MULTIPLIER = .1f;
+                    VEH_MULTIPLIER = 1f;
                     break;
             }
 
