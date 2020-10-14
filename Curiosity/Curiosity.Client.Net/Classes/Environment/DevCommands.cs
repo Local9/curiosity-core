@@ -34,13 +34,13 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             try
             {
-                client.RegisterCommand("allweapons", new Action<int, List<object>, string>(GiveAllWeapons), false);
+                // client.RegisterCommand("allweapons", new Action<int, List<object>, string>(GiveAllWeapons), false);
                 client.RegisterCommand("del", new Action<int, List<object>, string>(OnDeleteEntity), false);
 
                 API.RegisterCommand("bones", new Action<int, List<object>, string>(OnBones), false);
 
-                API.RegisterCommand("time", new Action<int, List<object>, string>(SetTime), false);
-                API.RegisterCommand("weather", new Action<int, List<object>, string>(SetWeather), false);
+                // API.RegisterCommand("time", new Action<int, List<object>, string>(SetTime), false);
+                // API.RegisterCommand("weather", new Action<int, List<object>, string>(SetWeather), false);
 
                 //Client.GetInstance().ClientCommands.Register("/dev", Handle);
                 //Register("ui", ToggleDevUI);
