@@ -83,6 +83,8 @@ namespace Curiosity.Server.net.Classes.Environment
             _freezeTime = !_freezeTime;
 
             session.Player.NotificationCuriosity("Time", string.Format("Time: {0}", _freezeTime ? "~g~Enabled" : "~r~Disabled}"));
+
+            SyncAllUsers();
         }
 
         private static void OnFreezeWeatherCommand(int playerHandle, List<object> args, string raw)
@@ -96,6 +98,8 @@ namespace Curiosity.Server.net.Classes.Environment
             _dynamicWeatherEnabled = !_dynamicWeatherEnabled;
 
             session.Player.NotificationCuriosity("Weather", string.Format("Weather: {0}", _dynamicWeatherEnabled ? "~g~Enabled" : "~r~Disabled}"));
+
+            SyncAllUsers();
         }
 
         private static void OnEveningCommand(int playerHandle, List<object> args, string raw)
@@ -109,6 +113,8 @@ namespace Curiosity.Server.net.Classes.Environment
             ShiftTimeToHour(18);
             ShiftTimeToMinute(0);
             session.Player.NotificationCuriosity("Time Shift", "Time set to ~y~evening~s~.");
+
+            SyncAllUsers();
         }
 
         private static void OnNightCommand(int playerHandle, List<object> args, string raw)
@@ -122,6 +128,8 @@ namespace Curiosity.Server.net.Classes.Environment
             ShiftTimeToHour(23);
             ShiftTimeToMinute(0);
             session.Player.NotificationCuriosity("Time Shift", "Time set to ~y~night~s~.");
+
+            SyncAllUsers();
         }
 
         private static void OnNoonCommand(int playerHandle, List<object> args, string raw)
@@ -135,6 +143,8 @@ namespace Curiosity.Server.net.Classes.Environment
             ShiftTimeToHour(12);
             ShiftTimeToMinute(0);
             session.Player.NotificationCuriosity("Time Shift", "Time set to ~y~noon~s~.");
+
+            SyncAllUsers();
         }
 
         private static void OnMorningCommand(int playerHandle, List<object> args, string raw)
@@ -148,6 +158,8 @@ namespace Curiosity.Server.net.Classes.Environment
             ShiftTimeToHour(9);
             ShiftTimeToMinute(0);
             session.Player.NotificationCuriosity("Time Shift", "Time set to ~y~morning~s~.");
+
+            SyncAllUsers();
         }
 
         private static void OnBlackoutCommand(int playerHandle, List<object> args, string raw)
@@ -161,6 +173,8 @@ namespace Curiosity.Server.net.Classes.Environment
             _blackout = !_blackout;
 
             session.Player.NotificationCuriosity("Blackout", string.Format("Blackout: {0}", _blackout ? "~g~Enabled" : "~r~Disabled}"));
+
+            SyncAllUsers();
         }
 
         private static void OnTimeCommand(int playerHandle, List<object> args, string raw)
@@ -191,6 +205,8 @@ namespace Curiosity.Server.net.Classes.Environment
 
             ShiftTimeToHour(inHour);
             ShiftTimeToMinute(inMins);
+
+            SyncAllUsers();
         }
 
         private static void ShiftTimeToHour(int inHour)
