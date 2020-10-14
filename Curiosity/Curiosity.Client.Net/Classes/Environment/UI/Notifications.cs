@@ -19,11 +19,15 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static void Simple(string message)
         {
+            if (!Client.isSessionActive) return;
+
             Screen.ShowNotification(message);
         }
 
         static public void Curiosity(int iconType, string title, string subject, string message, int gtaColorId)
         {
+            if (!Client.isSessionActive) return;
+
             API.SetNotificationBackgroundColor(gtaColorId);
             API.SetNotificationTextEntry("STRING");
             API.AddTextComponentString(message);
@@ -33,6 +37,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public void LifeV(int iconType, string title, string subject, string message, int gtaColorId)
         {
+            if (!Client.isSessionActive) return;
+
             API.SetNotificationBackgroundColor(gtaColorId);
             API.SetNotificationTextEntry("STRING");
             API.AddTextComponentString(message);
@@ -42,6 +48,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static public void NineOneOne(int iconType, string title, string subject, string message, int gtaColorId)
         {
+            if (!Client.isSessionActive) return;
+
             API.SetNotificationBackgroundColor(gtaColorId);
             API.SetNotificationTextEntry("STRING");
             API.AddTextComponentString(message);
@@ -49,8 +57,11 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             API.DrawNotification(false, true);
         }
 
+        // TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Weather Update", "subject", "message", 3);
         static public void Advanced(string icon, int iconType, string title, string subject, string message, int gtaColorId)
         {
+            if (!Client.isSessionActive) return;
+
             API.SetNotificationBackgroundColor(gtaColorId);
             API.SetNotificationTextEntry("STRING");
             API.AddTextComponentString(message);
