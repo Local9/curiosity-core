@@ -27,6 +27,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
         // WEATHER
         static WeatherTypes _lastWeather;
+        static Seasons _lastSeason;
 
         // population
         static float PED_MULTIPLIER = 1.0f;
@@ -114,6 +115,11 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
             switch((WeatherTypes)weather)
             {
+                case WeatherTypes.XMAS_STORM:
+                    PED_MULTIPLIER = 0f;
+                    VEH_MULTIPLIER = .2f;
+                    VEH_PARKED_MULTIPLIER = 1f;
+                    break;
                 case WeatherTypes.HALLOWEEN:
                 case WeatherTypes.XMAS:
                     PED_MULTIPLIER = .2f;
@@ -146,13 +152,65 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
                     break;
                 case WeatherTypes.THUNDER:
                     PED_MULTIPLIER = .1f;
-                    VEH_PARKED_MULTIPLIER = .1f;
                     VEH_MULTIPLIER = 1f;
+                    VEH_PARKED_MULTIPLIER = .1f;
                     break;
             }
 
-            string ws = $"{(WeatherTypes)weather}".ToLowerInvariant();
-            Screen.ShowNotification($"~b~Weather: ~s~{ws}");
+            string weatherMessage = "";
+            switch ((WeatherTypes)weather)
+            {
+                case WeatherTypes.XMAS_STORM:
+                    weatherMessage = "Winter Storm";
+                    break;
+                case WeatherTypes.XMAS:
+                    weatherMessage = "Winter";
+                    break;
+                case WeatherTypes.THUNDER:
+                    weatherMessage = "Thunder Storm";
+                    break;
+                case WeatherTypes.SNOWLIGHT:
+                    weatherMessage = "Light Snow";
+                    break;
+                case WeatherTypes.SNOW:
+                    weatherMessage = "Snow";
+                    break;
+                case WeatherTypes.SMOG:
+                    weatherMessage = "Smoggy";
+                    break;
+                case WeatherTypes.RAIN:
+                    weatherMessage = "Raining cats and dogs";
+                    break;
+                case WeatherTypes.OVERCAST:
+                    weatherMessage = "Overcast";
+                    break;
+                case WeatherTypes.NEUTRAL:
+                    weatherMessage = "Nothing to say";
+                    break;
+                case WeatherTypes.HALLOWEEN:
+                    weatherMessage = "SPOOKY!";
+                    break;
+                case WeatherTypes.FOGGY:
+                    weatherMessage = "Foggy, can't see s***";
+                    break;
+                case WeatherTypes.EXTRASUNNY:
+                    weatherMessage = "Hot and Sweaty";
+                    break;
+                case WeatherTypes.CLOUDS:
+                    weatherMessage = "Clouds";
+                    break;
+                case WeatherTypes.CLEARING:
+                    weatherMessage = "Its clearing up";
+                    break;
+                case WeatherTypes.CLEAR:
+                    weatherMessage = "Clear day a'head";
+                    break;
+                case WeatherTypes.BLIZZARD:
+                    weatherMessage = "Its a damn blizzard!";
+                    break;
+            }
+
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Weather Update", $"{weatherMessage}", $"", 2);
         }
 
         private static void SetWeather(WeatherTypes weather)
@@ -165,10 +223,28 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
         private static void GetOnSeasonsTimeSync(int season, int weather, int temp)
         {
-            // Need to find a point for this...
+            if (_lastSeason == (Seasons)season) return;
+            _lastSeason = (Seasons)season;
 
-            string ws = $"{(Seasons)season}".ToLowerInvariant();
-            Screen.ShowNotification($"~b~Season: ~s~{ws}");
+            string message = "";
+
+            switch ((Seasons)season)
+            {
+                case Seasons.SPRING:
+                    message = "Ah, early spring morning. Listen to those birds.";
+                    break;
+                case Seasons.SUMMER:
+                    message = "Its hot out side, look out for the lizard people!";
+                    break;
+                case Seasons.AUTUMN:
+                    message = "Leaf falls down, thats why we call it Fall.";
+                    break;
+                case Seasons.WINTER:
+                    message = "It's as cold a my sex life.";
+                    break;
+            }
+
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Seasonal Change", "", $"{message}", 2);
         }
 
         private static void OnSeasonsTimeSync(double serverTime, double serverOffset, bool freezeTime)
