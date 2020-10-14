@@ -213,6 +213,8 @@ namespace Curiosity.Client.net
                 await Client.Delay(0);
             }
 
+            Client.TriggerServerEvent("curiosity:server:seasons:sync:connection");
+
             await Game.Player.ChangeModel(defaultModel);
             Game.PlayerPed.IsInvincible = true;
             Game.PlayerPed.IsPositionFrozen = true;

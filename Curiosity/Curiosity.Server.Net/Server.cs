@@ -137,8 +137,9 @@ namespace Curiosity.Server.net
             // Classes.Environment.InstanceChecker.Init();
             // Classes.Environment.Trains.Init();
             // weather and time
-            Classes.Environment.WeatherSystems.Init();
-            Classes.Environment.WorldTimeCycle.Init();
+            // Classes.Environment.WeatherSystems.Init(); // DEPRECATED
+            // Classes.Environment.WorldTimeCycle.Init(); // DEPRECATED
+            Classes.Environment.WorldSeasonCycle.Init();
 
             // menu options
             Classes.Menu.Player.Init();

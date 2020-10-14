@@ -7,7 +7,7 @@
     <ProjectGuid>{B9C25C6A-A356-4469-B4B7-94FAF92BDEDF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.World.Client.net</RootNamespace>
+    <RootNamespace>Curiosity.GameWorld.Client.net</RootNamespace>
     <AssemblyName>Curiosity.World.Client.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -52,6 +52,7 @@
     <Compile Include="Classes\Environment\AquaticSpawner.cs" />
     <Compile Include="Classes\Environment\Birds.cs" />
     <Compile Include="Classes\Environment\EasterEggs\DeveloperWall.cs" />
+    <Compile Include="Classes\Environment\SeasonSync.cs" />
     <Compile Include="Classes\Environment\TimeSync.cs" />
     <Compile Include="Classes\Environment\WeatherSystem.cs" />
     <Compile Include="Classes\Environment\WorldLimits.cs" />

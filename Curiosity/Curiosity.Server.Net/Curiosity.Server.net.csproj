@@ -69,6 +69,7 @@
     <Compile Include="Classes\DiscordWrapper.cs" />
     <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="Classes\Environment\ChatService.cs" />
+    <Compile Include="Classes\Environment\WorldSeasonCycle.cs" />
     <Compile Include="Classes\Environment\WorldTimeCycle.cs" />
     <Compile Include="Classes\Environment\WorldWeatherCycle.cs" />
     <Compile Include="Classes\Environment\InstanceChecker.cs" />
