@@ -150,39 +150,6 @@ namespace Curiosity.Client.net.Classes.Actions
             // API.RegisterCommand("minigame", new Action<int, List<object>, string>(OnMinigame), false);
             // API.RegisterCommand("knifeCallout", new Action<int, List<object>, string>(KnifeCallout), false);
 
-            RegisterCommand("god", new Action<int, List<object>, string>((source, args, raw) =>
-            {
-                if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER)
-                {
-                    RoyallyFuckPlayer(source, args, raw);
-                    return;
-                }
-                else
-                {
-
-                    if (Game.Player.IsInvincible)
-                    {
-                        Game.Player.IsInvincible = false;
-                        Game.Player.CanControlRagdoll = true;
-                        Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
-                        SetPedConfigFlag(Game.PlayerPed.Handle, 32, true);
-                        Game.PlayerPed.ClearBloodDamage();
-                        Game.PlayerPed.ResetVisibleDamage();
-                        Game.PlayerPed.ClearLastWeaponDamage();
-
-                    }
-                    else
-                    {
-                        Game.Player.IsInvincible = true;
-                        Game.Player.CanControlRagdoll = false;
-                        Game.PlayerPed.CanBeDraggedOutOfVehicle = false;
-                        SetPedConfigFlag(Game.PlayerPed.Handle, 32, false);
-                    }
-
-                    CitizenFX.Core.UI.Screen.ShowNotification($"GodMode: {(Game.Player.IsInvincible ? "Active" : "Disabled")}");
-                }
-
-            }), false);
         }
 
         private static void Wash(int playerHandle, List<object> arguments, string raw)
