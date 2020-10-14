@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net.Data;
 using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
         static Vector3 clubEntrance = new Vector3(194.6124f, -3167.278f, 5.790269f);
         static Vector3 clubExit = new Vector3(-1569.665f, -3016.758f, -74.40615f);
 
-        static string CurrentWeather;
+        static WeatherTypes _lastWeather;
 
         public static void Init()
         {
@@ -25,12 +26,12 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
             client.RegisterTickHandler(TeleportToClub);
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
 
-            client.RegisterEventHandler("curiosity:Client:Weather:Sync", new Action<string, bool, float, float, bool, bool>(WeatherSync));
+            client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int>(OnSeasonsWeatherSync));
         }
 
-        private static void WeatherSync(string weather, bool arg2, float arg3, float arg4, bool arg5, bool arg6)
+        private static void OnSeasonsWeatherSync(int weather, bool blackout, int temp)
         {
-            CurrentWeather = weather;
+            _lastWeather = (WeatherTypes)weather;
         }
 
         static void OnPlayerSpawned()
@@ -93,7 +94,7 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
 
                     Screen.Fading.FadeOut(500);
 
-                    API.SetOverrideWeather(CurrentWeather);
+                    API.SetOverrideWeather($"{_lastWeather}");
 
                     DisableAllControlActions(0);
 

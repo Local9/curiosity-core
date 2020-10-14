@@ -113,7 +113,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("dvn", new Action<int, List<object>, string>(DeleteVehicleNuke), false);
             API.RegisterCommand("don", new Action<int, List<object>, string>(DeleteObjectNuke), false);
             API.RegisterCommand("nuke", new Action<int, List<object>, string>(Nuke), false);
-            API.RegisterCommand("weather", new Action<int, List<object>, string>(Weather), false);
+            // API.RegisterCommand("weather", new Action<int, List<object>, string>(Weather), false);
             API.RegisterCommand("stuck", new Action<int, List<object>, string>(OnStuck), false);
             // test commands
             API.RegisterCommand("pulse", new Action<int, List<object>, string>(Pulse), false);

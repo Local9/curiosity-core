@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.GameWorld.Client.net.Classes.Player;
 using Curiosity.Global.Shared.net.Data;
 using Curiosity.Shared.Client.net;
 using System;
@@ -27,6 +28,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
         // WEATHER
         static WeatherTypes _lastWeather;
+        static WeatherTypes _lastWeatherBeforeXmas;
         static Seasons _lastSeason;
 
         // population
@@ -34,9 +36,15 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
         static float VEH_MULTIPLIER = 1.0f;
         static float VEH_PARKED_MULTIPLIER = 1.0f;
 
+        static bool weatherDebug = false;
+
         public static void Init()
         {
-            client.RegisterEventHandler("curiosity:server:seasons:sync:time", new Action<double, double, bool>(OnSeasonsTimeSync));
+            RegisterCommand("wd", new Action<int, List<object>, string>(OnWeatherDebug), false);
+
+            client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnResourceStart));
+
+            client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
             client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
             client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int>(OnSeasonsWeatherSync));
 
@@ -44,6 +52,32 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             client.RegisterTickHandler(OnPopulationManagement);
 
             Log.Verbose($"[WORLD WEATHER] Init");
+        }
+
+        private static void OnResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            Client.TriggerServerEvent("curiosity:server:seasons:sync:connection");
+            Client.TriggerEvent("curiosity:Client:Player:Information");
+        }
+
+        private static void OnWeatherDebug(int arg1, List<object> arg2, string arg3)
+        {
+            if (!PlayerInformation.IsTrustedAdmin()) return;
+
+            weatherDebug = !weatherDebug;
+            if (weatherDebug)
+            {
+                client.RegisterTickHandler(OnWeatherDebugTick);
+                return;
+            }
+            client.DeregisterTickHandler(OnWeatherDebugTick);
+        }
+
+        private static async Task OnWeatherDebugTick()
+        {
+            Screen.ShowSubtitle($"WT: {_lastWeather}, S: {_lastSeason}, T: {hour:00}:{minute:00}~n~P: V {VEH_MULTIPLIER:f}, PV {VEH_PARKED_MULTIPLIER:f}, P: {PED_MULTIPLIER:f}");
         }
 
         private static async Task OnPopulationManagement()
@@ -91,20 +125,19 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             ClearWeatherTypePersist();
             SetBlackout(blackout);
 
+            if (_lastSeason == Seasons.WINTER) // override to be sure 
+            {
+                _lastWeather = WeatherTypes.XMAS;
+                _lastWeatherBeforeXmas = (WeatherTypes)weather;
+            }
+
             switch((WeatherTypes)weather)
             {
                 case WeatherTypes.XMAS_STORM:
                 case WeatherTypes.XMAS:
                     SetForceVehicleTrails(true);
                     SetForcePedFootstepsTracks(true);
-                    if ((WeatherTypes)weather == WeatherTypes.XMAS_STORM)
-                    {
-                        SetWeatherTypeTransition((uint)GetHashKey("XMAS"), (uint)GetHashKey("BLIZZARD"), 0.5f);
-                    }
-                    else
-                    {
-                        SetWeather(_lastWeather);
-                    }
+                    SetWeather(WeatherTypes.XMAS);
                     break;
                 default:
                     SetWeather(_lastWeather);
@@ -116,14 +149,10 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             switch((WeatherTypes)weather)
             {
                 case WeatherTypes.XMAS_STORM:
-                    PED_MULTIPLIER = 0f;
-                    VEH_MULTIPLIER = .2f;
-                    VEH_PARKED_MULTIPLIER = 1f;
-                    break;
                 case WeatherTypes.HALLOWEEN:
                 case WeatherTypes.XMAS:
-                    PED_MULTIPLIER = .2f;
-                    VEH_MULTIPLIER = .5f;
+                    PED_MULTIPLIER = 0.2f;
+                    VEH_MULTIPLIER = 0.5f;
                     VEH_PARKED_MULTIPLIER = 1f;
                     break;
                 case WeatherTypes.CLEAR:
@@ -132,85 +161,101 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
                 case WeatherTypes.NEUTRAL:
                     PED_MULTIPLIER = 1f;
                     VEH_MULTIPLIER = 1f;
-                    VEH_PARKED_MULTIPLIER = .5f;
+                    VEH_PARKED_MULTIPLIER = 0.5f;
                     break;
                 case WeatherTypes.FOGGY:
                 case WeatherTypes.SMOG:
-                    PED_MULTIPLIER = .5f;
+                    PED_MULTIPLIER = 0.5f;
                     VEH_MULTIPLIER = 1f;
-                    VEH_PARKED_MULTIPLIER = .1f;
+                    VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
                 case WeatherTypes.OVERCAST:
-                    PED_MULTIPLIER = .8f;
-                    VEH_MULTIPLIER = 1f;
-                    VEH_PARKED_MULTIPLIER = .1f;
-                    break;
-                case WeatherTypes.RAIN:
-                    PED_MULTIPLIER = .3f;
-                    VEH_MULTIPLIER = 1f;
-                    VEH_PARKED_MULTIPLIER = .1f;
-                    break;
-                case WeatherTypes.THUNDER:
-                    PED_MULTIPLIER = .1f;
-                    VEH_MULTIPLIER = 1f;
-                    VEH_PARKED_MULTIPLIER = .1f;
-                    break;
-            }
-
-            string weatherMessage = "";
-            switch ((WeatherTypes)weather)
-            {
-                case WeatherTypes.XMAS_STORM:
-                    weatherMessage = "Winter Storm";
-                    break;
-                case WeatherTypes.XMAS:
-                    weatherMessage = "Winter";
-                    break;
-                case WeatherTypes.THUNDER:
-                    weatherMessage = "Thunder Storm";
-                    break;
-                case WeatherTypes.SNOWLIGHT:
-                    weatherMessage = "Light Snow";
-                    break;
-                case WeatherTypes.SNOW:
-                    weatherMessage = "Snow";
-                    break;
-                case WeatherTypes.SMOG:
-                    weatherMessage = "Smoggy";
-                    break;
-                case WeatherTypes.RAIN:
-                    weatherMessage = "Raining cats and dogs";
-                    break;
-                case WeatherTypes.OVERCAST:
-                    weatherMessage = "Overcast";
-                    break;
-                case WeatherTypes.NEUTRAL:
-                    weatherMessage = "Nothing to say";
-                    break;
-                case WeatherTypes.HALLOWEEN:
-                    weatherMessage = "SPOOKY!";
-                    break;
-                case WeatherTypes.FOGGY:
-                    weatherMessage = "Foggy, can't see s***";
-                    break;
-                case WeatherTypes.EXTRASUNNY:
-                    weatherMessage = "Hot and Sweaty";
-                    break;
                 case WeatherTypes.CLOUDS:
-                    weatherMessage = "Clouds";
+                    PED_MULTIPLIER = 0.8f;
+                    VEH_MULTIPLIER = 1f;
+                    VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
-                case WeatherTypes.CLEARING:
-                    weatherMessage = "Its clearing up";
+                case WeatherTypes.RAIN:
+                    PED_MULTIPLIER = 0.3f;
+                    VEH_MULTIPLIER = 1f;
+                    VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
-                case WeatherTypes.CLEAR:
-                    weatherMessage = "Clear day a'head";
-                    break;
-                case WeatherTypes.BLIZZARD:
-                    weatherMessage = "Its a damn blizzard!";
+                case WeatherTypes.THUNDER:
+                    PED_MULTIPLIER = 0.1f;
+                    VEH_MULTIPLIER = 1f;
+                    VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
             }
 
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Weather Update", $"{weatherMessage}", $"", 2);
+            //string weatherMessage = "";
+            //switch ((WeatherTypes)weather)
+            //{
+            //    case WeatherTypes.XMAS_STORM:
+            //        weatherMessage = "Winter";
+            //        break;
+            //    case WeatherTypes.XMAS:
+            //        weatherMessage = "Winter";
+            //        break;
+            //    case WeatherTypes.THUNDER:
+            //        weatherMessage = "Thunder Storm";
+            //        break;
+            //    case WeatherTypes.SNOWLIGHT:
+            //        weatherMessage = "Light Snow";
+            //        break;
+            //    case WeatherTypes.SNOW:
+            //        weatherMessage = "Snow";
+            //        break;
+            //    case WeatherTypes.SMOG:
+            //        weatherMessage = "Smoggy";
+            //        break;
+            //    case WeatherTypes.RAIN:
+            //        weatherMessage = "Raining cats and dogs";
+            //        break;
+            //    case WeatherTypes.OVERCAST:
+            //        weatherMessage = "Overcast";
+            //        break;
+            //    case WeatherTypes.NEUTRAL:
+            //        weatherMessage = "Nothing to say";
+            //        break;
+            //    case WeatherTypes.HALLOWEEN:
+            //        weatherMessage = "SPOOKY!";
+            //        break;
+            //    case WeatherTypes.FOGGY:
+            //        weatherMessage = "Foggy, can't see s***";
+            //        break;
+            //    case WeatherTypes.EXTRASUNNY:
+            //        weatherMessage = "Hot and Sweaty";
+            //        break;
+            //    case WeatherTypes.CLOUDS:
+            //        weatherMessage = "Scattered Clouds";
+            //        break;
+            //    case WeatherTypes.CLEARING:
+            //        weatherMessage = "Its clearing up";
+            //        break;
+            //    case WeatherTypes.CLEAR:
+            //        weatherMessage = "Clear day a'head";
+            //        break;
+            //    case WeatherTypes.BLIZZARD:
+            //        weatherMessage = "Its a damn blizzard!";
+            //        break;
+            //}
+
+            // Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Weather Update", $"{weatherMessage}", $"", 2);
+        }
+
+        private static async void SetWeatherDelay(WeatherTypes weather)
+        {
+            SetWeatherTypeOverTime($"{_lastWeather}", 15.0f);
+
+            await Client.Delay(15000);
+
+            ClearOverrideWeather();
+            ClearWeatherTypePersist();
+
+            string w = $"{weather}";
+            SetWeatherTypeNow(w);
+            SetWeatherTypePersist(w);
+            SetWeatherTypeNowPersist(w);
         }
 
         private static void SetWeather(WeatherTypes weather)
@@ -221,7 +266,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             SetWeatherTypeNowPersist(w);
         }
 
-        private static void GetOnSeasonsTimeSync(int season, int weather, int temp)
+        private static async void GetOnSeasonsTimeSync(int season, int weather, int temp)
         {
             if (_lastSeason == (Seasons)season) return;
             _lastSeason = (Seasons)season;
@@ -231,23 +276,45 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             switch ((Seasons)season)
             {
                 case Seasons.SPRING:
+                    if (_lastWeather.Equals(WeatherTypes.XMAS) || _lastWeather.Equals(WeatherTypes.XMAS_STORM))
+                    {
+                        _lastWeather = _lastWeatherBeforeXmas;
+                        SetWeatherDelay(_lastWeather);
+                        PED_MULTIPLIER = 1f;
+                        VEH_MULTIPLIER = 1f;
+                        VEH_PARKED_MULTIPLIER = 0.5f;
+                    }
+                    SetForceVehicleTrails(false);
+                    SetForcePedFootstepsTracks(false);
                     message = "Ah, early spring morning. Listen to those birds.";
                     break;
                 case Seasons.SUMMER:
+                    SetForceVehicleTrails(false);
+                    SetForcePedFootstepsTracks(false);
                     message = "Its hot out side, look out for the lizard people!";
                     break;
                 case Seasons.AUTUMN:
+                    SetForceVehicleTrails(false);
+                    SetForcePedFootstepsTracks(false);
                     message = "Leaf falls down, thats why we call it Fall.";
                     break;
-                case Seasons.WINTER:
+                case Seasons.WINTER: // OVERRIDE ALL THE THINGS!
                     message = "It's as cold a my sex life.";
+                    _lastWeatherBeforeXmas = _lastWeather;
+                    _lastWeather = WeatherTypes.XMAS;
+                    SetForceVehicleTrails(true);
+                    SetForcePedFootstepsTracks(true);
+                    SetWeatherDelay(_lastWeather);
+                    PED_MULTIPLIER = 0.2f;
+                    VEH_MULTIPLIER = 0.5f;
+                    VEH_PARKED_MULTIPLIER = 1f;
                     break;
             }
 
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Seasonal Change", "", $"{message}", 2);
+            // Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Seasonal Change", "", $"{message}", 2);
         }
 
-        private static void OnSeasonsTimeSync(double serverTime, double serverOffset, bool freezeTime)
+        private static void OnSyncTime(double serverTime, double serverOffset, bool freezeTime)
         {
             _clientBaseTime = serverTime;
             _clientTimeOffset = serverOffset;
