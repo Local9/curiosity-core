@@ -280,7 +280,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             if (_serverSeason == Seasons.WINTER) // if its winter, its always xmas, blizzard and light snow are for north yankton
             {
-                _serverWeather = Server.random.NextDouble() > 0.8 ? WeatherTypes.XMAS_STORM : WeatherTypes.XMAS;
+                _serverWeather = WeatherTypes.XMAS;
             }
             else
             {
