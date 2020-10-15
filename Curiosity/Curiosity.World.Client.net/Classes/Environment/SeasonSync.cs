@@ -32,9 +32,9 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
         static Seasons _lastSeason;
 
         // population
-        static float PED_MULTIPLIER = 1.0f;
-        static float VEH_MULTIPLIER = 1.0f;
-        static float VEH_PARKED_MULTIPLIER = 1.0f;
+        static float PED_MULTIPLIER;
+        static float VEH_MULTIPLIER;
+        static float VEH_PARKED_MULTIPLIER;
 
         static bool weatherDebug = false;
 
