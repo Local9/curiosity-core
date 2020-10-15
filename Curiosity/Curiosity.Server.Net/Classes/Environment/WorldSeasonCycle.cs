@@ -272,48 +272,55 @@ namespace Curiosity.Server.net.Classes.Environment
 
         private static async void SetNextWeather()
         {
-            List<WeatherTypes> weathers = new List<WeatherTypes>(); // create a new list
-
-            switch(_serverSeason) // self explanitory
+            try
             {
-                case Seasons.SPRING:
-                    weathers = SeasonData.WeatherSpringList();
-                    _serverTemp = Server.random.Next(60, 88);
-                    break;
-                case Seasons.SUMMER:
-                    weathers = SeasonData.WeatherSummerList();
-                    _serverTemp = Server.random.Next(73, 102);
-                    break;
-                case Seasons.AUTUMN:
-                    weathers = SeasonData.WeatherAutumnList();
-                    _serverTemp = Server.random.Next(53, 77);
-                    break;
-                case Seasons.WINTER:
-                    _serverWeather = WeatherTypes.XMAS;
-                    _serverTemp = Server.random.Next(29, 43);
-                    break;
-            }
+                List<WeatherTypes> weathers = new List<WeatherTypes>(); // create a new list
 
-            if (_serverSeason == Seasons.WINTER) // if its winter, its always xmas, blizzard and light snow are for north yankton
-            {
-                _serverWeather = WeatherTypes.XMAS;
-            }
-            else
-            {
-                WeatherTypes newType = weathers[Server.random.Next(weathers.Count - 1)];
-
-                while (_serverWeather == newType)
+                switch (_serverSeason) // self explanitory
                 {
-                    await Server.Delay(10);
-                    newType = weathers[Server.random.Next(weathers.Count - 1)];
+                    case Seasons.SPRING:
+                        weathers = SeasonData.WeatherSpringList();
+                        _serverTemp = Server.random.Next(60, 88);
+                        break;
+                    case Seasons.SUMMER:
+                        weathers = SeasonData.WeatherSummerList();
+                        _serverTemp = Server.random.Next(73, 102);
+                        break;
+                    case Seasons.AUTUMN:
+                        weathers = SeasonData.WeatherAutumnList();
+                        _serverTemp = Server.random.Next(53, 77);
+                        break;
+                    case Seasons.WINTER:
+                        _serverWeather = WeatherTypes.XMAS;
+                        _serverTemp = Server.random.Next(29, 43);
+                        break;
                 }
 
-                _serverWeather = newType;
+                if (_serverSeason == Seasons.WINTER) // if its winter, its always xmas, blizzard and light snow are for north yankton
+                {
+                    _serverWeather = WeatherTypes.XMAS;
+                }
+                else
+                {
+                    WeatherTypes newType = weathers[Server.random.Next(weathers.Count - 1)];
+
+                    while (_serverWeather == newType)
+                    {
+                        await Server.Delay(10);
+                        newType = weathers[Server.random.Next(weathers.Count - 1)];
+                    }
+
+                    _serverWeather = newType;
+                }
+
+                weathers.Clear(); // clear the list
+
+                SyncAllUsers(); // sync all players
             }
-
-            weathers.Clear(); // clear the list
-
-            SyncAllUsers(); // sync all players
+            catch (Exception ex)
+            {
+                Log.Error($"[WEATHER] (SetNextWeather) {ex.Message}");
+            }
         }
 
         private static async Task OnWorldTimeTick()

@@ -141,13 +141,94 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
                     SetWeather(WeatherTypes.XMAS);
                     break;
                 default:
-                    SetWeather(_lastWeather);
                     SetForceVehicleTrails(false);
                     SetForcePedFootstepsTracks(false);
+                    SetWeather(_lastWeather);
+                    break;
+            }
+        }
+
+        private static async void SetWeatherDelay(WeatherTypes weather)
+        {
+            SetWeatherTypeOverTime($"{_lastWeather}", 15.0f);
+
+            await Client.Delay(15000);
+
+            ClearOverrideWeather();
+            ClearWeatherTypePersist();
+
+            string w = $"{weather}";
+            SetWeatherTypeNow(w);
+            SetWeatherTypePersist(w);
+            SetWeatherTypeNowPersist(w);
+
+            SetPopulationValues(weather);
+        }
+
+        private static void SetWeather(WeatherTypes weather)
+        {
+            string w = $"{weather}";
+            SetWeatherTypeNow(w);
+            SetWeatherTypePersist(w);
+            SetWeatherTypeNowPersist(w);
+
+            SetPopulationValues(weather);
+        }
+
+        private static async void GetOnSeasonsTimeSync(int season, int weather, int temp)
+        {
+            if (_lastSeason == (Seasons)season) return;
+            _lastSeason = (Seasons)season;
+
+            SetPopulationValues((WeatherTypes)weather);
+
+            string message = "";
+
+            switch ((Seasons)season)
+            {
+                case Seasons.SPRING:
+                    if (_lastWeather.Equals(WeatherTypes.XMAS) || _lastWeather.Equals(WeatherTypes.XMAS_STORM))
+                    {
+                        _lastWeather = _lastWeatherBeforeXmas;
+                        SetWeatherDelay(_lastWeather);
+                    }
+                    SetForceVehicleTrails(false);
+                    SetForcePedFootstepsTracks(false);
+                    message = "Ah, early spring morning. Listen to those birds.";
+                    break;
+                case Seasons.SUMMER:
+                    SetForceVehicleTrails(false);
+                    SetForcePedFootstepsTracks(false);
+                    message = "Its hot out side, look out for the lizard people!";
+                    break;
+                case Seasons.AUTUMN:
+                    SetForceVehicleTrails(false);
+                    SetForcePedFootstepsTracks(false);
+                    message = "Leaf falls down, thats why we call it Fall.";
+                    break;
+                case Seasons.WINTER: // OVERRIDE ALL THE THINGS!
+                    message = "It's as cold a my sex life.";
+                    _lastWeatherBeforeXmas = _lastWeather;
+                    _lastWeather = WeatherTypes.XMAS;
+                    SetForceVehicleTrails(true);
+                    SetForcePedFootstepsTracks(true);
+                    SetWeatherDelay(_lastWeather);
                     break;
             }
 
-            switch((WeatherTypes)weather)
+            // Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Seasonal Change", "", $"{message}", 2);
+        }
+
+        private static void OnSyncTime(double serverTime, double serverOffset, bool freezeTime)
+        {
+            _clientBaseTime = serverTime;
+            _clientTimeOffset = serverOffset;
+            _clientFreezeTime = freezeTime;
+        }
+
+        private static void SetPopulationValues(WeatherTypes weather)
+        {
+            switch (weather)
             {
                 case WeatherTypes.XMAS_STORM:
                 case WeatherTypes.HALLOWEEN:
@@ -187,139 +268,6 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
                     VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
             }
-
-            //string weatherMessage = "";
-            //switch ((WeatherTypes)weather)
-            //{
-            //    case WeatherTypes.XMAS_STORM:
-            //        weatherMessage = "Winter";
-            //        break;
-            //    case WeatherTypes.XMAS:
-            //        weatherMessage = "Winter";
-            //        break;
-            //    case WeatherTypes.THUNDER:
-            //        weatherMessage = "Thunder Storm";
-            //        break;
-            //    case WeatherTypes.SNOWLIGHT:
-            //        weatherMessage = "Light Snow";
-            //        break;
-            //    case WeatherTypes.SNOW:
-            //        weatherMessage = "Snow";
-            //        break;
-            //    case WeatherTypes.SMOG:
-            //        weatherMessage = "Smoggy";
-            //        break;
-            //    case WeatherTypes.RAIN:
-            //        weatherMessage = "Raining cats and dogs";
-            //        break;
-            //    case WeatherTypes.OVERCAST:
-            //        weatherMessage = "Overcast";
-            //        break;
-            //    case WeatherTypes.NEUTRAL:
-            //        weatherMessage = "Nothing to say";
-            //        break;
-            //    case WeatherTypes.HALLOWEEN:
-            //        weatherMessage = "SPOOKY!";
-            //        break;
-            //    case WeatherTypes.FOGGY:
-            //        weatherMessage = "Foggy, can't see s***";
-            //        break;
-            //    case WeatherTypes.EXTRASUNNY:
-            //        weatherMessage = "Hot and Sweaty";
-            //        break;
-            //    case WeatherTypes.CLOUDS:
-            //        weatherMessage = "Scattered Clouds";
-            //        break;
-            //    case WeatherTypes.CLEARING:
-            //        weatherMessage = "Its clearing up";
-            //        break;
-            //    case WeatherTypes.CLEAR:
-            //        weatherMessage = "Clear day a'head";
-            //        break;
-            //    case WeatherTypes.BLIZZARD:
-            //        weatherMessage = "Its a damn blizzard!";
-            //        break;
-            //}
-
-            // Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Weather Update", $"{weatherMessage}", $"", 2);
-        }
-
-        private static async void SetWeatherDelay(WeatherTypes weather)
-        {
-            SetWeatherTypeOverTime($"{_lastWeather}", 15.0f);
-
-            await Client.Delay(15000);
-
-            ClearOverrideWeather();
-            ClearWeatherTypePersist();
-
-            string w = $"{weather}";
-            SetWeatherTypeNow(w);
-            SetWeatherTypePersist(w);
-            SetWeatherTypeNowPersist(w);
-        }
-
-        private static void SetWeather(WeatherTypes weather)
-        {
-            string w = $"{weather}";
-            SetWeatherTypeNow(w);
-            SetWeatherTypePersist(w);
-            SetWeatherTypeNowPersist(w);
-        }
-
-        private static async void GetOnSeasonsTimeSync(int season, int weather, int temp)
-        {
-            if (_lastSeason == (Seasons)season) return;
-            _lastSeason = (Seasons)season;
-
-            string message = "";
-
-            switch ((Seasons)season)
-            {
-                case Seasons.SPRING:
-                    if (_lastWeather.Equals(WeatherTypes.XMAS) || _lastWeather.Equals(WeatherTypes.XMAS_STORM))
-                    {
-                        _lastWeather = _lastWeatherBeforeXmas;
-                        SetWeatherDelay(_lastWeather);
-                        PED_MULTIPLIER = 1f;
-                        VEH_MULTIPLIER = 1f;
-                        VEH_PARKED_MULTIPLIER = 0.5f;
-                    }
-                    SetForceVehicleTrails(false);
-                    SetForcePedFootstepsTracks(false);
-                    message = "Ah, early spring morning. Listen to those birds.";
-                    break;
-                case Seasons.SUMMER:
-                    SetForceVehicleTrails(false);
-                    SetForcePedFootstepsTracks(false);
-                    message = "Its hot out side, look out for the lizard people!";
-                    break;
-                case Seasons.AUTUMN:
-                    SetForceVehicleTrails(false);
-                    SetForcePedFootstepsTracks(false);
-                    message = "Leaf falls down, thats why we call it Fall.";
-                    break;
-                case Seasons.WINTER: // OVERRIDE ALL THE THINGS!
-                    message = "It's as cold a my sex life.";
-                    _lastWeatherBeforeXmas = _lastWeather;
-                    _lastWeather = WeatherTypes.XMAS;
-                    SetForceVehicleTrails(true);
-                    SetForcePedFootstepsTracks(true);
-                    SetWeatherDelay(_lastWeather);
-                    PED_MULTIPLIER = 0.2f;
-                    VEH_MULTIPLIER = 0.5f;
-                    VEH_PARKED_MULTIPLIER = 1f;
-                    break;
-            }
-
-            // Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Seasonal Change", "", $"{message}", 2);
-        }
-
-        private static void OnSyncTime(double serverTime, double serverOffset, bool freezeTime)
-        {
-            _clientBaseTime = serverTime;
-            _clientTimeOffset = serverOffset;
-            _clientFreezeTime = freezeTime;
         }
     }
 }
