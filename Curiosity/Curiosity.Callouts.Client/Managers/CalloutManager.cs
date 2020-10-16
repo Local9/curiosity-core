@@ -48,16 +48,16 @@ namespace Curiosity.Callouts.Client.Managers
 
             switch(calloutName)
             {
-                case "stolenVehicle":
+                case "stolenVehicle": // best thing ever!
                     newCallout = Activator.CreateInstance(typeof(StolenVehicle), Game.Player) as Callout;
                     break;
-                case "hostage":
+                case "hostage": // spawn state control
                     newCallout = Activator.CreateInstance(typeof(HostageSituation), Game.Player) as Callout;
                     break;
-                case "parking":
+                case "parking": 
                     newCallout = Activator.CreateInstance(typeof(ParkingViolation), Game.Player) as Callout;
                     break;
-                case "cyclist":
+                case "cyclist": // buggy
                     newCallout = Activator.CreateInstance(typeof(FreewayCyclist), Game.Player) as Callout;
                     break;
                 case "testPed":
