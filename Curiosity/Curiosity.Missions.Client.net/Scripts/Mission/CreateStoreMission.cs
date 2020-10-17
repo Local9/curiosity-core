@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
@@ -114,6 +115,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                     ped1.Weapons.Give(MissionPedData1.Weapon, 1, true, true);
                     await BaseScript.Delay(0);
                     MissionPed1 = PedCreators.MissionPedCreator.Ped(ped1, Relationships.HostileRelationship, MissionPedData1.Alertness, MissionPedData1.Difficulty, MissionPedData1.VisionDistance);
+                    API.RegisterHatedTargetsAroundPed(MissionPed1.Handle, 100f);
                 }
 
                 await BaseScript.Delay(10);
@@ -126,6 +128,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                     ped2.Weapons.Give(MissionPedData2.Weapon, 1, true, true);
                     await BaseScript.Delay(0);
                     MissionPed2 = PedCreators.MissionPedCreator.Ped(ped2, Relationships.HostileRelationship, MissionPedData2.Alertness, MissionPedData2.Difficulty, MissionPedData2.VisionDistance);
+                    API.RegisterHatedTargetsAroundPed(MissionPed2.Handle, 100f);
                 }
 
                 await BaseScript.Delay(10);
@@ -174,6 +177,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                         backup.Weapons.Give(MissionPedData3.Weapon, 1, true, true);
                         await PluginManager.Delay(0);
                         MissionPed3 = PedCreators.MissionPedCreator.Ped(backup, Relationships.HostileRelationship, MissionPedData3.Alertness, MissionPedData3.Difficulty, MissionPedData3.VisionDistance);
+                        API.RegisterHatedTargetsAroundPed(MissionPed3.Handle, 100f);
                     }
 
                     if (backup != null)
@@ -202,6 +206,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                         backup.Weapons.Give(MissionPedData4.Weapon, 1, true, true);
                         await PluginManager.Delay(0);
                         MissionPed4 = PedCreators.MissionPedCreator.Ped(backup, Relationships.HostileRelationship, MissionPedData4.Alertness, MissionPedData4.Difficulty, MissionPedData4.VisionDistance);
+                        API.RegisterHatedTargetsAroundPed(MissionPed4.Handle, 100f);
                     }
 
                     if (backup != null)

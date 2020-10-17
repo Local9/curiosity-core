@@ -37,7 +37,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
         private Ped _target;
 
-        private readonly Ped _ped;
+        public readonly Ped _ped;
 
         private EntityEventWrapper _eventWrapper;
 

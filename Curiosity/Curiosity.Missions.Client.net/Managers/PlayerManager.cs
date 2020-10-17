@@ -38,6 +38,13 @@ namespace Curiosity.Missions.Client.Managers
             if (API.GetCurrentResourceName() != resourceName) return;
 
             TriggerEvent("curiosity:Client:Player:Information");
+
+            int vehicleHandle = API.GetResourceKvpInt(PERSONAL_VEHICLE_KEY);
+            if (vehicleHandle > 0)
+            {
+                if (API.DoesEntityExist(vehicleHandle))
+                    Vehicle = new Vehicle(vehicleHandle);
+            }
         }
 
         private static void OnVehicleId(int vehicleId)
