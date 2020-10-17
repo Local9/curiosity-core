@@ -53,8 +53,6 @@ namespace Curiosity.Missions.Client.Classes.PlayerClient
             return privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER;
         }
 
-        public static bool IsDeveloper => privilege == Privilege.DEVELOPER;
-
         static void OnIsPlayerCalloutActive()
         {
             PluginManager.TriggerEvent("curiosity:Client:Mission:CalloutState", IsPlayerCalloutActive);

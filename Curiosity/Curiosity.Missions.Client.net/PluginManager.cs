@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using System;
@@ -233,7 +234,7 @@ namespace Curiosity.Missions.Client
         {
             try
             {
-                if (ClientInformation.IsDeveloper)
+                if (PlayerManager.IsDeveloper)
                     Debug.WriteLine($"REGISTERED: {action.Method.Name}");
 
                 Tick += action;
@@ -252,7 +253,7 @@ namespace Curiosity.Missions.Client
         {
             try
             {
-                if (ClientInformation.IsDeveloper)
+                if (PlayerManager.IsDeveloper)
                     Debug.WriteLine($"DEREGISTERED: {action.Method.Name}");
 
                 Tick -= action;

@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Scripts;
 using Curiosity.Missions.Client.Scripts.PedCreators;
@@ -51,7 +52,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private async static void OnParticleTest(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             ParticleEffectsAsset particleEffectsAsset = new ParticleEffectsAsset("scr_martin1");
             await particleEffectsAsset.Request(1000);
@@ -62,7 +63,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void OnAudioFile(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             if (arguments.Count == 0) return;
 
@@ -75,7 +76,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void OnSfxFile(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             if (arguments.Count == 0) return;
 
@@ -88,7 +89,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void OnBirthdayTest(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             PluginManager.IsBirthday = !PluginManager.IsBirthday;
 
@@ -104,7 +105,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void OnArea(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             try
             {
@@ -144,7 +145,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void StartItemPreview(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             string prop = "prop_bin_beach_01d";
 
@@ -157,7 +158,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
         static async void OnPlaySound(int playerHandle, List<object> arguments, string raw)
         {
             await BaseScript.Delay(0);
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             string sending = $"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)}";
 
@@ -177,7 +178,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         static async void OnCreateCommand(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper)
+            if (!PlayerManager.IsDeveloper)
             {
                 Screen.ShowNotification("~r~Method Protected");
             }

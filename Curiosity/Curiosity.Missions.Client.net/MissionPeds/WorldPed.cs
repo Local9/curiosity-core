@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.NPC;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
 using Curiosity.Shared.Client.net.Extensions;
@@ -30,7 +31,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
         protected WorldPed(int handle) : base(handle)
         {
-            if (ClientInformation.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
+            if (PlayerManager.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
             {
                 Screen.ShowNotification($"~r~[~g~D~b~E~y~V~o~]~w~ Creating World Ped");
             }

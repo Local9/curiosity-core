@@ -3,6 +3,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Newtonsoft.Json;
@@ -97,7 +98,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         static void OnMissionNotAvailable()
         {
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
             {
                 Log.Info($"Requesting Mission, none Available");
             }
@@ -224,7 +225,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             {
                 while ((GetGameTimer() - TimeStampOfLastCallout) < RandomTimeBetweenCallouts)
                 {
-                    if (ClientInformation.IsDeveloper)
+                    if (PlayerManager.IsDeveloper)
                     {
                         Log.Info($"Waiting to create mission {RandomTimeBetweenCallouts}");
                         Log.Info($"Waiting to create mission {(GetGameTimer() - TimeStampOfLastCallout)}");
@@ -302,7 +303,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                 PatrolZone = (int)missionPatrolZone
             };
 
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
             {
                 Log.Info($"Requesting Mission");
             }

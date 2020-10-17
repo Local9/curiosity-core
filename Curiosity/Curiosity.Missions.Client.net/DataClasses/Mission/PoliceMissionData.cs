@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Scripts;
 using Curiosity.Missions.Client.Scripts.PedCreators;
@@ -39,7 +40,7 @@ namespace Curiosity.Missions.Client.DataClasses.Mission
 
         static void RunMission(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             MissionOne();
         }

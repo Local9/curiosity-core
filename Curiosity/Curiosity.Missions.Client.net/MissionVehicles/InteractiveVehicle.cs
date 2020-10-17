@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.Static;
 using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
@@ -94,7 +95,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
 
         public InteractiveVehicle(int handle) : base(handle)
         {
-            if (ClientInformation.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
+            if (PlayerManager.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
             {
                 Screen.ShowNotification($"~r~[~g~D~b~E~y~V~o~]~w~ Creating Interactive Vehicle");
             }
@@ -202,7 +203,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
             PluginInstance.RegisterEventHandler("curiosity:interaction:veh:flee", new Action<int>(OnFlee));
 
             PluginInstance.RegisterTickHandler(OnShowHelpTextTask);
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
                 PluginInstance.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
             Set(PluginManager.DECOR_TRAFFIC_STOP_VEHICLE_HANDLE, Handle);
@@ -348,7 +349,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
 
                 PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                if (ClientInformation.IsDeveloper)
+                if (PlayerManager.IsDeveloper)
                     PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
         }
@@ -368,7 +369,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
 
             PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
                 PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
         }
 

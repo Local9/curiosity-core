@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
 using System;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 
             PluginInstance.RegisterTickHandler(OnTask);
 
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
             {
                 Debug.WriteLine("Initiated CPR -> Init");
                 //var l = -6539555060529535670L;
@@ -59,7 +60,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                 PluginManager.TriggerEvent("curiosity:interaction:cpr:failed", _victim.Handle);
             }
 
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
             {
                 Debug.WriteLine("Initiated CPR -> Dispose");
             }
@@ -92,7 +93,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             Game.PlayerPed.Task.PerformSequence(_introAndIdleMedic);
             _victim.Task.PerformSequence(_introAndIdleVictim);
 
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
             {
                 Debug.WriteLine("Initiated CPR");
             }

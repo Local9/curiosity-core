@@ -15,6 +15,9 @@
             public const string PolicePatrolZone = "curiosity:Client:Mission:SetLocation";
             public const string PoliceDutyEvent = "curiosity:Client:Interface:Duty";
             public const string CurrentVehicle = "curiosity:Player:Menu:VehicleId";
+            public const string OnClientResourceStart = "onClientResourceStart";
+            public const string OnClientResourceStop = "onClientResourceStop";
+            public const string OnPlayerSpawned = "playerSpawned";
 
             public static class Callout
             {

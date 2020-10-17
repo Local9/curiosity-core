@@ -2,6 +2,7 @@
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses.Mission;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Static;
 using Curiosity.Missions.Client.Utils;
@@ -73,7 +74,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
                 PluginInstance.DeregisterTickHandler(MissionCancelAsync);
 
-                if (ClientInformation.IsDeveloper)
+                if (PlayerManager.IsDeveloper)
                 {
                     Log.Info($"SETUP: {store.Name}");
                 }
@@ -128,7 +129,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
                 await BaseScript.Delay(10);
 
-                if (ClientInformation.IsDeveloper)
+                if (PlayerManager.IsDeveloper)
                 {
                     Log.Info($"INITAL MISSION PEDS: {store.Name}");
 
@@ -149,7 +150,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             {
                 Log.Error("[CreateStoreMission] Mission failed creation");
 
-                if (ClientInformation.IsDeveloper)
+                if (PlayerManager.IsDeveloper)
                 {
                     Log.Error($"{ex}");
                 }

@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using System;
@@ -135,7 +136,7 @@ namespace Curiosity.Missions.Client.Wrappers
             {
                 if (NetworkRequestControlOfEntity(netId))
                 {
-                    if (ClientInformation.IsDeveloper)
+                    if (PlayerManager.IsDeveloper)
                     {
                         Debug.WriteLine($"Gained Control of {netId}");
                     }

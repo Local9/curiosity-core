@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Exceptions;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Scripts.PedCreators;
 using Curiosity.Missions.Client.Utils;
@@ -342,7 +343,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         private static void CommandHlMission(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             if (arguments.Count > 0)
                 DebugAreas = true;
@@ -581,7 +582,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         static void OnDrawAreas(bool state)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
 
             DebugAreas = state;
         }

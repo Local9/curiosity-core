@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Shared.Client.net.Extensions;
 using System.Collections.Generic;
@@ -194,7 +195,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             int vehicleHandle = DecorGetInt(interactivePed.Ped.Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE);
             Vehicle vehicle = new Vehicle(vehicleHandle);
 
-            if (ClientInformation.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
+            if (PlayerManager.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
             {
                 CitizenFX.Core.UI.Screen.ShowNotification($"Vehicle: {vehicle.Handle}");
             }

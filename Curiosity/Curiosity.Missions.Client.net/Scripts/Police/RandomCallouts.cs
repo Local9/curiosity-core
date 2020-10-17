@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
 using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Scripts.Mission;
 using Curiosity.Missions.Client.Scripts.PedCreators;
@@ -117,7 +118,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
 
         static void DevCreateFight(int playerHandle, List<object> arguments, string raw)
         {
-            if (!ClientInformation.IsDeveloper) return;
+            if (!PlayerManager.IsDeveloper) return;
             CreateFight(true);
         }
 

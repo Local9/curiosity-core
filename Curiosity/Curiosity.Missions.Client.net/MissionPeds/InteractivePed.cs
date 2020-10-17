@@ -6,6 +6,7 @@ using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.Scripts;
 // INTERACTIONS
 using Curiosity.Missions.Client.Scripts.Interactions.PedInteractions;
@@ -399,7 +400,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
         protected InteractivePed(int handle) : base(handle)
         {
-            if (ClientInformation.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
+            if (PlayerManager.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
             {
                 Screen.ShowNotification($"~r~[~g~D~b~E~y~V~o~]~w~ Creating Interactive Ped");
             }
@@ -608,7 +609,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             PluginInstance.RegisterTickHandler(OnShowHelpTextTask);
 
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
                 PluginInstance.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
             if (Ped.AttachedBlip == null)
@@ -809,7 +810,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                     PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                    if (ClientInformation.IsDeveloper)
+                    if (PlayerManager.IsDeveloper)
                         PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
                 }
 
@@ -820,7 +821,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                     PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                    if (ClientInformation.IsDeveloper)
+                    if (PlayerManager.IsDeveloper)
                         PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
 
                     return;
@@ -958,7 +959,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             //  PluginInstance.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
 
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
                 PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
         }
 
@@ -1187,7 +1188,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                 PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                if (ClientInformation.IsDeveloper)
+                if (PlayerManager.IsDeveloper)
                     PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
 
                 if (DecorExistOn(Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE))
@@ -1260,7 +1261,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                 PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                if (ClientInformation.IsDeveloper)
+                if (PlayerManager.IsDeveloper)
                     PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
 
                 return;

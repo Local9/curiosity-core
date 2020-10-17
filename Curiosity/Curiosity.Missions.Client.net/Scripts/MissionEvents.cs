@@ -4,6 +4,7 @@ using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Managers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Enums.Patrol;
@@ -109,7 +110,7 @@ namespace Curiosity.Missions.Client.Scripts
             EnableControlAction(0, (int)Control.FrontendDelete, true);
             EnableControlAction(0, (int)Control.FrontendAccept, true);
 
-            if (ClientInformation.IsDeveloper)
+            if (PlayerManager.IsDeveloper)
             {
                 Log.Info($"Mission Message {missionMessage}");
             }
