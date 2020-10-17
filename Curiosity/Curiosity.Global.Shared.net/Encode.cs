@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Curiosity.Global.Shared.net
+namespace Curiosity.Global.Shared
 {
     public class Encode
     {

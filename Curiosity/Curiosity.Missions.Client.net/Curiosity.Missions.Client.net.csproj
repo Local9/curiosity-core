@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="Classes\Environment\GameEvents.cs" />
+    <Compile Include="Classes\Vehicle.cs" />
     <Compile Include="DataClasses\Mission\PoliceMissionData.cs" />
     <Compile Include="DataClasses\PedType.cs" />
     <Compile Include="DataClasses\Police\ItemData.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuQuestions.cs" />
     <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuInteraction.cs" />
     <Compile Include="Scripts\MissionEvents.cs" />
+    <Compile Include="Scripts\Mission\Callout.cs" />
     <Compile Include="Scripts\Mission\PoliceMissions\HumainLabs.cs" />
     <Compile Include="Exceptions\InvalidOrderException.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />
@@ -138,6 +140,9 @@
     <Compile Include="Scripts\SoundManager.cs" />
     <Compile Include="Scripts\VehicleCreators\CreateVehicles.cs" />
     <Compile Include="Static\Relationships.cs" />
+    <Compile Include="Utils\Decorators.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\Logger.cs" />
     <Compile Include="Wrappers\EntityEventWrapper.cs" />
     <Compile Include="Wrappers\Helpers.cs" />
   </ItemGroup>

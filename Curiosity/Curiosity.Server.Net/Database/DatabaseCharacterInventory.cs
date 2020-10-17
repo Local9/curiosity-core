@@ -1,5 +1,5 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.Entity;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using System.Collections.Generic;

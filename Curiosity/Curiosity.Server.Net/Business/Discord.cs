@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using Newtonsoft.Json;

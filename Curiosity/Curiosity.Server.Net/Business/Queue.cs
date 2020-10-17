@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Concurrent;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using GlobalEntity = Curiosity.Global.Shared.Entity;
 
 namespace Curiosity.Server.net.Business
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Curiosity.Global.Shared.net.Enums
+namespace Curiosity.Global.Shared.Enums
 {
     public enum PedTypes
     {

@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.GameWorld.Client.net.Classes.Player;
-using Curiosity.Global.Shared.net.Data;
+using Curiosity.Global.Shared.Data;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Global.Shared.net;
+using Curiosity.Global.Shared;
 using System;
 using static CitizenFX.Core.Native.API;
 

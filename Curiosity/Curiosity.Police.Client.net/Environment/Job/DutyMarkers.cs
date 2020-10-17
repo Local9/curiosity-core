@@ -1,14 +1,14 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net.Data;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Data;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Curiosity.Global.Shared.net.Data.BlipHandler;
+using static Curiosity.Global.Shared.Data.BlipHandler;
 
 namespace Curiosity.Police.Client.net.Environment.Job
 {

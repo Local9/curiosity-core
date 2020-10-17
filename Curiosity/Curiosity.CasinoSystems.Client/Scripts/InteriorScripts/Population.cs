@@ -2,7 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.NaturalMotion;
 using Curiosity.CasinoSystems.Client.Extensions;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

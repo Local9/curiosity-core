@@ -5,17 +5,31 @@ namespace Curiosity.Missions.Client.net.Extensions
 {
     class Decorators
     {
-        public const string DECOR_PED_NETWORKID = "c::ped::networkId";
-        public const string DECOR_PED_INTERACTIVE = "c::ped::interactive";
-        public const string DECOR_PED_MISSION = "c::ped::mission";
+        public const string PLAYER_DEBUG = "player::npc::debug";
+        public const string PLAYER_DEBUG_UI = "player::ui::debug";
+        public const string PLAYER_MENU = "player::npc::menu";
+        public const string PLAYER_ASSISTING = "player::npc::assisting";
 
+        public const string VEHICLE_STOLEN = "c::vehicle::stolen";
+        public const string VEHICLE_FLEE = "c::vehicle::flee";
+        public const string VEHICLE_MISSION = "c::vehicle::mission";
+        public const string VEHICLE_SEARCH = "c::vehicle::search";
+        public const string VEHICLE_TOW = "c::vehicle::tow";
 
-        public const string DECOR_PED_INFLUENCE_ALCAHOL = "c::ped::alcohol";
-        public const string DECOR_PED_OFFENCE = "c::ped::offence";
+        // LEGACY
+        public const string VEHICLE_SPIKE_ALLOWED = "curiosity::police::vehicle::mission";
 
-        // Grouping
-
-        public const string DECOR_GROUP_MEMBER = "c::ped:member";
+        public const string PED_FLEE = "c::ped::flee";
+        public const string PED_SHOOT = "c::ped::shoot";
+        public const string PED_ARREST = "c::ped::arrest";
+        public const string PED_ARRESTABLE = "c::ped::arrestable";
+        public const string PED_SUSPECT = "c::ped::suspect";
+        public const string PED_MISSION = "c::ped::mission";
+        public const string PED_IMPORTANT = "c::ped::important";
+        public const string PED_HOSTAGE = "c::ped::hostage";
+        public const string PED_RELEASED = "c::ped::released";
+        public const string PED_HANDCUFFED = "c::ped::handcuffed";
+        public const string DECOR_PED_INFLUENCE_ALCOHOL = "c::ped::influence::alcohol";
 
         public static void Set(int handle, string property, object value)
         {
@@ -48,7 +62,7 @@ namespace Curiosity.Missions.Client.net.Extensions
             }
             else
             {
-                Log.Info("[Decor] Could not set decor object due to it not being a supported type.");
+                Logger.Log("[Decor] Could not set decor object due to it not being a supported type.");
             }
         }
 

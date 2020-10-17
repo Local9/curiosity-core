@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Curiosity.Global.Shared.net.Entity
+namespace Curiosity.Global.Shared.Entity
 {
     public class NuiData
     {

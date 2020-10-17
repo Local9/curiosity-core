@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment

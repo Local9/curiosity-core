@@ -1,5 +1,5 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 using System.Collections.Generic;
 
 namespace Curiosity.Missions.Client.net.DataClasses.Mission

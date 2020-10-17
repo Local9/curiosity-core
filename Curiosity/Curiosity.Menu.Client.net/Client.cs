@@ -3,7 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Threading.Tasks;
-using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using GlobalEntity = Curiosity.Global.Shared.Entity;
 
 namespace Curiosity.Menus.Client.net
 {

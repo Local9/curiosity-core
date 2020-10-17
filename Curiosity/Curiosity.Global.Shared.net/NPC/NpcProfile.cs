@@ -1,8 +1,8 @@
-﻿using Curiosity.Global.Shared.net.Data;
+﻿using Curiosity.Global.Shared.Data;
 using Newtonsoft.Json;
 using System;
 
-namespace Curiosity.Global.Shared.net.NPC
+namespace Curiosity.Global.Shared.NPC
 {
     public class NpcProfile
     {

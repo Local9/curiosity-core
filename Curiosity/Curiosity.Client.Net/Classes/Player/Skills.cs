@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using GlobalEntity = Curiosity.Global.Shared.Entity;
 
 namespace Curiosity.Client.net.Classes.Player
 {

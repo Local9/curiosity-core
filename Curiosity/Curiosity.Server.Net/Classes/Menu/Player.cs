@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Global.Shared.net;
-using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared;
+using Curiosity.Global.Shared.Entity;
 using System;
 using CorePlayer = CitizenFX.Core.Player;
 

@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Global.Shared.net.Enums
+﻿namespace Curiosity.Global.Shared.Enums
 {
     // Object hashes will need to be cast to uints for some spawning functions
     public enum ObjectHash : long

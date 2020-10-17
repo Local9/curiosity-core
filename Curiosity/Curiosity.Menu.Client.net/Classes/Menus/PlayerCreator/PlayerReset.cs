@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.Entity;
 using MenuAPI;
 using System;
 using System.Collections.Generic;

@@ -6,7 +6,7 @@ using Curiosity.Shared.Client.net.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using GlobalEntity = Curiosity.Global.Shared.Entity;
 
 namespace Curiosity.Client.net
 {

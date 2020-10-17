@@ -1,5 +1,5 @@
 ﻿using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net.Classes;
 using Curiosity.Shared.Client.net.Classes.Data;
 using MenuAPI;

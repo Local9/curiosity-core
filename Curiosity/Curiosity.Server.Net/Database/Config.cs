@@ -1,4 +1,4 @@
-﻿using Curiosity.Global.Shared.net.Enums;
+﻿using Curiosity.Global.Shared.Enums;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using System.Collections.Concurrent;

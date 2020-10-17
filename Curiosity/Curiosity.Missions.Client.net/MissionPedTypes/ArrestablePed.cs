@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net.NPCType;
+using Curiosity.Global.Shared.NPCType;
 using Curiosity.Missions.Client.net.Extensions;
 using Curiosity.Missions.Client.net.MissionPeds;
 
@@ -14,7 +14,7 @@ namespace Curiosity.Missions.Client.net.MissionPedTypes
         {
             Ped = this;
 
-            if (Decorators.GetBoolean(Ped.Handle, Decorators.DECOR_PED_INFLUENCE_ALCAHOL)
+            if (Decorators.GetBoolean(Ped.Handle, Decorators.DECOR_PED_INFLUENCE_ALCOHOL)
                 || Decorators.GetBoolean(Ped.Handle, Client.DECOR_NPC_DRUG_ALCOHOL))
             {
                 Profile = new NpcArrestable(true, (int)Ped.Gender);

@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GlobalEntities = Curiosity.Global.Shared.net.Entity;
-using GlobalEnums = Curiosity.Global.Shared.net.Enums;
+using GlobalEntities = Curiosity.Global.Shared.Entity;
+using GlobalEnums = Curiosity.Global.Shared.Enums;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus.PlayerInteractions
 {

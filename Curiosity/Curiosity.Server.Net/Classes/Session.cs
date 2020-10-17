@@ -1,5 +1,5 @@
-﻿using Curiosity.Global.Shared.net.Data;
-using Curiosity.Global.Shared.net.Enums;
+﻿using Curiosity.Global.Shared.Data;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
@@ -7,7 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using static CitizenFX.Core.Native.API;
-using GlobalEntity = Curiosity.Global.Shared.net.Entity;
+using GlobalEntity = Curiosity.Global.Shared.Entity;
 
 namespace Curiosity.Server.net.Classes
 {

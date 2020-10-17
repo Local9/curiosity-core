@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net.Data;
+using Curiosity.Global.Shared.Data;
 using Curiosity.Server.net.Extensions;
 using Curiosity.Shared.Server.net.Helpers;
 using System;

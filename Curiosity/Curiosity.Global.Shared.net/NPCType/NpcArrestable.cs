@@ -1,9 +1,9 @@
-﻿using Curiosity.Global.Shared.net.NPC;
+﻿using Curiosity.Global.Shared.NPC;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Curiosity.Global.Shared.net.NPCType
+namespace Curiosity.Global.Shared.NPCType
 {
     public class NpcArrestable : NpcProfile
     {

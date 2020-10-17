@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared;
+using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Server.net.Entity;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;

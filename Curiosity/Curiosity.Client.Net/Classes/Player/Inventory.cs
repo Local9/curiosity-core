@@ -2,7 +2,7 @@
 using CitizenFX.Core.UI;
 using System;
 using System.Collections.Generic;
-using Entity = Curiosity.Global.Shared.net.Entity;
+using Entity = Curiosity.Global.Shared.Entity;
 
 namespace Curiosity.Client.net.Classes.Player
 {

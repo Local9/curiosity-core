@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Global.Shared.net.Data
+namespace Curiosity.Global.Shared.Data
 {
     public class BlipData
     {

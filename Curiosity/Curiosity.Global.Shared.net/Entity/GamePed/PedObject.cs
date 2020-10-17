@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using System.Collections.Generic;
 
-namespace Curiosity.Global.Shared.net.Entity.GamePed
+namespace Curiosity.Global.Shared.Entity.GamePed
 {
     public class PedObject
     {

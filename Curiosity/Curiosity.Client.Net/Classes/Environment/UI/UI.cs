@@ -2,7 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Client.net.Helpers;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 using System;
 using System.Linq;
 using static Curiosity.Client.net.Helpers.WorldProbe;

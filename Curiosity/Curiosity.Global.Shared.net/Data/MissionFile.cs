@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using System.Collections.Concurrent;
 
-namespace Curiosity.Global.Shared.net.Data
+namespace Curiosity.Global.Shared.Data
 {
     class MissionFile
     {

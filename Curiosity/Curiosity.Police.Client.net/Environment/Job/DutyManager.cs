@@ -59,7 +59,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
             if (job == "error")
             {
                 Vehicle.LoadoutPosition.Dispose();
-                Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Unknown);
+                Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.Enums.Job.Unknown);
                 client.DeregisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
                 Game.PlayerPed.Weapons.RemoveAll();
 
@@ -74,7 +74,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
             if (job != "police")
             {
                 Vehicle.LoadoutPosition.Dispose();
-                Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Unknown);
+                Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.Enums.Job.Unknown);
                 client.DeregisterTickHandler(Classes.Menus.PoliceDispatchMenu.OnTaskKeyCombination);
 
                 Game.PlayerPed.Weapons.RemoveAll();
@@ -95,7 +95,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 if (!RulesDisplayed)
                     ShowScaleformRules();
 
-                Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.net.Enums.Job.Police);
+                Client.TriggerServerEvent("curiosity:Server:Player:Job", (int)Curiosity.Global.Shared.Enums.Job.Police);
                 Game.PlayerPed.IsInvincible = false;
                 Client.TriggerServerEvent("curiosity:client:special");
 

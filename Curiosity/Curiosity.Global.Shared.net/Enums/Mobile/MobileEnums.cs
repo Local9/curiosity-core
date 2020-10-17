@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Global.Shared.net.Enums.Mobile
+﻿namespace Curiosity.Global.Shared.Enums.Mobile
 {
     public enum View
     {

@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 
-namespace Curiosity.Global.Shared.net.Entity
+namespace Curiosity.Global.Shared.Entity
 {
     public class Mission
     {

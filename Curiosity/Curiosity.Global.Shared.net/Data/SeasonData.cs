@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Global.Shared.net.Data
+namespace Curiosity.Global.Shared.Data
 {
     public enum WeatherTypes
     {

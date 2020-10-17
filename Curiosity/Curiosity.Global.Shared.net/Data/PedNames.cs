@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Curiosity.Global.Shared.net.Data
+namespace Curiosity.Global.Shared.Data
 {
     public class PedNames
     {

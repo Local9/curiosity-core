@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Global.Shared.net.Data;
-using Curiosity.Global.Shared.net.Entity;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Data;
+using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Extensions;

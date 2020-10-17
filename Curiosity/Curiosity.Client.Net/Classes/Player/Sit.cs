@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Client.net.Helpers.Dictionary;
-using Curiosity.Global.Shared.net.Enums;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Threading.Tasks;

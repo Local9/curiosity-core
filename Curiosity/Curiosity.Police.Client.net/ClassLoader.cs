@@ -28,7 +28,7 @@ namespace Curiosity.Police.Client.net
             Environment.Job.BackupMessages.Init();
 
             Environment.Vehicle.Sirens.Init();
-            Curiosity.Global.Shared.net.Data.BlipHandler.Init();
+            Curiosity.Global.Shared.Data.BlipHandler.Init();
             Environment.Job.DutyMarkers.Init();
 
             Environment.Vehicle.PolmavScripts.Init();

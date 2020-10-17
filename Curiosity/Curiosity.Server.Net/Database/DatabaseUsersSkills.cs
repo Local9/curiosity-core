@@ -6,8 +6,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GlobalEntity = Curiosity.Global.Shared.net.Entity;
-using GlobalEnum = Curiosity.Global.Shared.net.Enums;
+using GlobalEntity = Curiosity.Global.Shared.Entity;
+using GlobalEnum = Curiosity.Global.Shared.Enums;
 
 namespace Curiosity.Server.net.Database
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Curiosity.Global.Shared.net.Data
+namespace Curiosity.Global.Shared.Data
 {
     static public class MissionDataLists
     {

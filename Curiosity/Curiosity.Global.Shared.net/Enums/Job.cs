@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Global.Shared.net.Enums
+﻿namespace Curiosity.Global.Shared.Enums
 {
     public enum Job
     {

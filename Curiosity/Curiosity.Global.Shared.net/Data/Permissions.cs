@@ -1,6 +1,6 @@
-﻿using Curiosity.Global.Shared.net.Enums;
+﻿using Curiosity.Global.Shared.Enums;
 
-namespace Curiosity.Global.Shared.net.Data
+namespace Curiosity.Global.Shared.Data
 {
     static public class Permissions
     {
