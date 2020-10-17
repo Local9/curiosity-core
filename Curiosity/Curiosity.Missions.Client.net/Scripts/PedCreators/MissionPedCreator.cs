@@ -1,6 +1,7 @@
 ﻿
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.MissionPedTypes;
@@ -24,7 +25,7 @@ namespace Curiosity.Missions.Client.Scripts.PedCreators
             ped.SetCanEvasiveDive(true);
             ped.SetPathCanUseLadders(true);
             ped.SetPathCanClimb(true);
-            ped.AlwaysDiesOnLowHealth = PluginManager.Random.Next(2) == 1;
+            ped.AlwaysDiesOnLowHealth = Utility.RANDOM.Next(2) == 1;
             ped.SetAlertness(alertness);
             ped.SetCombatAttributes(CombatAttributes.AlwaysFight, true);
             Function.Call((Hash)8116279360099375049L, new InputArgument[] { ped.Handle, 0, 0 });

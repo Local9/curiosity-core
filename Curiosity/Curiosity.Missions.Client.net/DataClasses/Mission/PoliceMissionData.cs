@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
@@ -51,7 +52,7 @@ namespace Curiosity.Missions.Client.DataClasses.Mission
 
             MissionData missionData = new MissionData();
             missionData.Name = "Chamberlain Hills";
-            missionData.AudioStart = $"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_03_0{PluginManager.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{PluginManager.Random.Next(1, 3)} CRIMES/CRIME_GUNFIRE_0{PluginManager.Random.Next(1, 4)} CONJUNCTIVES/NEAR_01 AREAS/AREA_CHAMBERLAIN_HILLS_01 RESIDENT/OUTRO_0{PluginManager.Random.Next(1, 4)}";
+            missionData.AudioStart = $"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_03_0{Utility.RANDOM.Next(1, 3)} WE_HAVE/WE_HAVE_0{Utility.RANDOM.Next(1, 3)} CRIMES/CRIME_GUNFIRE_0{Utility.RANDOM.Next(1, 4)} CONJUNCTIVES/NEAR_01 AREAS/AREA_CHAMBERLAIN_HILLS_01 RESIDENT/OUTRO_0{Utility.RANDOM.Next(1, 4)}";
             missionData.Location = new Vector3(-202.2457f, -1566.719f, 41.67303f);
 
             missionData.ResurectionRange = 100f;
@@ -59,23 +60,23 @@ namespace Curiosity.Missions.Client.DataClasses.Mission
 
             List<MissionPedData> GangFamilies = new List<MissionPedData>
             {
-                CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-190.4952f, -1556.933f, 34.95501f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship),
-                CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-158.5557f, -1545.313f, 34.99964f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship),
-                CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-158.5557f, -1545.313f, 34.99964f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship)
+                CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-190.4952f, -1556.933f, 34.95501f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship),
+                CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-158.5557f, -1545.313f, 34.99964f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship),
+                CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-158.5557f, -1545.313f, 34.99964f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship)
             };
 
-            if (PluginManager.Random.Next(2) == 1)
+            if (Utility.RANDOM.Next(2) == 1)
             {
-                GangFamilies.Add(CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-172.3433f, -1540.761f, 35.13003f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship));
-                GangFamilies.Add(CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-194.5631f, -1555.576f, 38.335f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship));
-                GangFamilies.Add(CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-158.5557f, -1545.313f, 34.99964f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship));
+                GangFamilies.Add(CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-172.3433f, -1540.761f, 35.13003f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship));
+                GangFamilies.Add(CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-194.5631f, -1555.576f, 38.335f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship));
+                GangFamilies.Add(CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-158.5557f, -1545.313f, 34.99964f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship));
             }
             else
             {
-                GangFamilies.Add(CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-176.1628f, -1533.092f, 34.35227f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship));
-                GangFamilies.Add(CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-185.4702f, -1582.057f, 35.20162f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship));
-                GangFamilies.Add(CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-226.4251f, -1578.034f, 34.3596f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship));
-                GangFamilies.Add(CreatePedData(Families[PluginManager.Random.Next(Families.Count)], new Vector3(-216.1098f, -1614.366f, 34.86931f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.FamiliesRelationship));
+                GangFamilies.Add(CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-176.1628f, -1533.092f, 34.35227f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship));
+                GangFamilies.Add(CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-185.4702f, -1582.057f, 35.20162f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship));
+                GangFamilies.Add(CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-226.4251f, -1578.034f, 34.3596f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship));
+                GangFamilies.Add(CreatePedData(Families[Utility.RANDOM.Next(Families.Count)], new Vector3(-216.1098f, -1614.366f, 34.86931f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.FamiliesRelationship));
             }
 
 
@@ -83,23 +84,23 @@ namespace Curiosity.Missions.Client.DataClasses.Mission
 
             List<MissionPedData> GangBallas = new List<MissionPedData>
             {
-                CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-176.0499f, -1506.66f, 32.73354f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship),
-                CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-176.0499f, -1506.66f, 32.73354f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship),
-                CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-194.493f, -1635.402f, 33.38757f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship),
-                CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-194.493f, -1635.402f, 33.38757f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship),
+                CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-176.0499f, -1506.66f, 32.73354f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship),
+                CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-176.0499f, -1506.66f, 32.73354f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship),
+                CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-194.493f, -1635.402f, 33.38757f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship),
+                CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-194.493f, -1635.402f, 33.38757f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship),
             };
 
-            if (PluginManager.Random.Next(2) == 1)
+            if (Utility.RANDOM.Next(2) == 1)
             {
-                GangBallas.Add(CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-169.2854f, -1600.612f, 34.01611f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship));
-                GangBallas.Add(CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-169.2854f, -1600.612f, 34.01611f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship));
-                GangBallas.Add(CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-194.493f, -1635.402f, 33.38757f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship));
+                GangBallas.Add(CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-169.2854f, -1600.612f, 34.01611f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship));
+                GangBallas.Add(CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-169.2854f, -1600.612f, 34.01611f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship));
+                GangBallas.Add(CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-194.493f, -1635.402f, 33.38757f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship));
             }
             else
             {
-                GangBallas.Add(CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-176.0499f, -1506.66f, 32.73354f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship));
-                GangBallas.Add(CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-194.493f, -1635.402f, 33.38757f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship));
-                GangBallas.Add(CreatePedData(Ballas[PluginManager.Random.Next(Ballas.Count)], new Vector3(-169.2854f, -1600.612f, 34.01611f), 0f, Weapons[PluginManager.Random.Next(Weapons.Count)], Relationships.BallasRelationship));
+                GangBallas.Add(CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-176.0499f, -1506.66f, 32.73354f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship));
+                GangBallas.Add(CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-194.493f, -1635.402f, 33.38757f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship));
+                GangBallas.Add(CreatePedData(Ballas[Utility.RANDOM.Next(Ballas.Count)], new Vector3(-169.2854f, -1600.612f, 34.01611f), 0f, Weapons[Utility.RANDOM.Next(Weapons.Count)], Relationships.BallasRelationship));
             }
 
             missionData.MissionGangTwo = GangBallas;

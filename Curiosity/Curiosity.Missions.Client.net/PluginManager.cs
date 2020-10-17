@@ -15,7 +15,6 @@ namespace Curiosity.Missions.Client
         internal static PluginManager Instance { get; private set; }
 
         public static PlayerList players;
-        public static Random Random;
 
         public static bool IsBirthday;
         public static bool IsPlayerSpawned;

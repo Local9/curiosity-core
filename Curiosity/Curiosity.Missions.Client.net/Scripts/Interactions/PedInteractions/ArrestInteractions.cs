@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Scripts.Interactions.VehicleInteractions;
 using Curiosity.Missions.Client.Utils;
@@ -16,16 +17,16 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
         {
             List<string> resp = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!" };
 
-            int resistExitChance = PluginManager.Random.Next(30);
+            int resistExitChance = Utility.RANDOM.Next(30);
 
             if (interactivePed.IsUnderTheInfluence)
             {
-                resistExitChance = PluginManager.Random.Next(15, 30);
+                resistExitChance = Utility.RANDOM.Next(15, 30);
             }
 
             if (interactivePed.IsCarryingStolenItems)
             {
-                resistExitChance = PluginManager.Random.Next(25, 30);
+                resistExitChance = Utility.RANDOM.Next(25, 30);
             }
 
             if (interactivePed.Ped.IsInVehicle())
@@ -33,7 +34,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                 Wrappers.Helpers.ShowOfficerSubtitle("Out of the vehicle! Now!");
                 if (resistExitChance >= 25)
                 {
-                    Wrappers.Helpers.ShowSuspectSubtitle(resp[PluginManager.Random.Next(resp.Count)]);
+                    Wrappers.Helpers.ShowSuspectSubtitle(resp[Utility.RANDOM.Next(resp.Count)]);
                     await PluginManager.Delay(1000);
                     interactivePed.Ped.CurrentVehicle.TrafficStopVehicleFlee(interactivePed.Ped);
                 }
@@ -66,7 +67,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 if (resistExitChance >= 28)
                 {
-                    Wrappers.Helpers.ShowSuspectSubtitle(resp[PluginManager.Random.Next(resp.Count)]);
+                    Wrappers.Helpers.ShowSuspectSubtitle(resp[Utility.RANDOM.Next(resp.Count)]);
                     interactivePed.Ped.Weapons.Give(WeaponHash.Pistol, 10, true, true);
                     interactivePed.Ped.DropsWeaponsOnDeath = false;
                     interactivePed.Ped.Task.ShootAt(Game.PlayerPed);
@@ -75,7 +76,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                 }
                 else if (resistExitChance >= 25)
                 {
-                    Wrappers.Helpers.ShowSuspectSubtitle(resp[PluginManager.Random.Next(resp.Count)]);
+                    Wrappers.Helpers.ShowSuspectSubtitle(resp[Utility.RANDOM.Next(resp.Count)]);
                     interactivePed.Ped.Task.FleeFrom(Game.PlayerPed);
                 }
                 else
@@ -242,7 +243,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                 DriverResponse = new List<string>() { "Bye, asshole...", "Ugh.. Finally.", "Damn cops...", "Until next time.", "Its about time, pig" };
             }
             await PluginManager.Delay(2000);
-            Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[PluginManager.Random.Next(DriverResponse.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Utility.RANDOM.Next(DriverResponse.Count)]);
 
             await PluginManager.Delay(0);
             PluginManager.TriggerEvent("curiosity:interaction:released", interactivePed.Ped.Handle);
@@ -275,9 +276,9 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                 DriverResponse = new List<string>() { "Troublesum said fuck you too buddy!", "Yea, well don't kill yourself trying" };
             }
 
-            Wrappers.Helpers.ShowOfficerSubtitle(OfficerResponse[PluginManager.Random.Next(OfficerResponse.Count)]);
+            Wrappers.Helpers.ShowOfficerSubtitle(OfficerResponse[Utility.RANDOM.Next(OfficerResponse.Count)]);
             await PluginManager.Delay(2000);
-            Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[PluginManager.Random.Next(DriverResponse.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(DriverResponse[Utility.RANDOM.Next(DriverResponse.Count)]);
             await PluginManager.Delay(2000);
 
             await PluginManager.Delay(0);

@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
@@ -62,7 +63,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
         {
             await BaseScript.Delay(0);
             long gameTime = GetGameTimer();
-            int delay = PluginManager.Random.Next(3, 10);
+            int delay = Utility.RANDOM.Next(3, 10);
             int minute = (1000 * 60);
 
             while ((GetGameTimer() - gameTime) < (delay * minute))
@@ -88,7 +89,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
                 {
                     if (!IsCalloutActive)
                     {
-                        int randomRunner = PluginManager.Random.Next(2);
+                        int randomRunner = Utility.RANDOM.Next(2);
 
                         Static.Relationships.SetupRelationShips();
 
@@ -110,7 +111,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
 
                 if (Game.IsControlPressed(0, Control.FrontendCancel))
                 {
-                    SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)} RESIDENT/OUTRO_0{PluginManager.Random.Next(1, 4)}");
+                    SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Utility.RANDOM.Next(1, 5)} RESIDENT/OUTRO_0{Utility.RANDOM.Next(1, 4)}");
                     return;
                 }
             }
@@ -138,10 +139,10 @@ namespace Curiosity.Missions.Client.Scripts.Police
                     _location.Delete();
             }
 
-            int randomNode = PluginManager.Random.Next(200, 300);
+            int randomNode = Utility.RANDOM.Next(200, 300);
 
             if (developer)
-                randomNode = PluginManager.Random.Next(100, 150);
+                randomNode = Utility.RANDOM.Next(100, 150);
 
             Vector3 pos = Game.PlayerPed.Position;
             Vector3 outpos = new Vector3();
@@ -149,7 +150,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
             {
                 PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"Assault", "Citizens have reported a domestic.", 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
-                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{PluginManager.Random.Next(1, 3)} CRIMES/CRIME_ASSAULT_0{PluginManager.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{PluginManager.Random.Next(1, 3)} RESIDENT/OUTRO_0{PluginManager.Random.Next(1, 4)}");
+                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} WE_HAVE/WE_HAVE_0{Utility.RANDOM.Next(1, 3)} CRIMES/CRIME_ASSAULT_0{Utility.RANDOM.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Utility.RANDOM.Next(1, 3)} RESIDENT/OUTRO_0{Utility.RANDOM.Next(1, 4)}");
 
                 Blip location = World.CreateBlip(outpos);
                 location.ShowRoute = true;

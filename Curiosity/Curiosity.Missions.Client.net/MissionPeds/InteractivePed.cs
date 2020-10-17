@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.Managers;
@@ -461,42 +462,42 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             if (this.Ped.Gender == Gender.Female)
             {
-                _firstname = PedNames.FirstNameFemale[PluginManager.Random.Next(PedNames.FirstNameFemale.Count)];
+                _firstname = PedNames.FirstNameFemale[Utility.RANDOM.Next(PedNames.FirstNameFemale.Count)];
             }
             else
             {
-                _firstname = PedNames.FirstNameMale[PluginManager.Random.Next(PedNames.FirstNameMale.Count)];
+                _firstname = PedNames.FirstNameMale[Utility.RANDOM.Next(PedNames.FirstNameMale.Count)];
             }
-            _surname = PedNames.Surname[PluginManager.Random.Next(PedNames.Surname.Count)];
+            _surname = PedNames.Surname[Utility.RANDOM.Next(PedNames.Surname.Count)];
 
             DateTime StartDateForDriverDoB = new DateTime(1949, 1, 1);
             double Range = (DateTime.Today - StartDateForDriverDoB).TotalDays;
             Range = Range - 6570; // MINUS 18 YEARS
-            _dateOfBirth = StartDateForDriverDoB.AddDays(PluginManager.Random.Next((int)Range)).ToString("yyyy-MM-dd");
+            _dateOfBirth = StartDateForDriverDoB.AddDays(Utility.RANDOM.Next((int)Range)).ToString("yyyy-MM-dd");
 
-            _attitude = PluginManager.Random.Next(100);
+            _attitude = Utility.RANDOM.Next(100);
 
 
             if (IsUnderTheInfluence)
             {
-                int breathlyzerLimit = PluginManager.Random.Next(60, 100);
+                int breathlyzerLimit = Utility.RANDOM.Next(60, 100);
                 _bloodAlcaholLimit = 0;
 
                 if (breathlyzerLimit >= 60)
                 {
-                    _bloodAlcaholLimit = PluginManager.Random.Next(1, 7);
+                    _bloodAlcaholLimit = Utility.RANDOM.Next(1, 7);
                     if (breathlyzerLimit >= 88)
                     {
                         IsUnderTheInfluence = true;
                         IsAllowedToBeSearched = true;
                         CanBeArrested = true;
-                        _bloodAlcaholLimit = PluginManager.Random.Next(8, 10);
-                        _chanceOfFlee = PluginManager.Random.Next(25, 30);
+                        _bloodAlcaholLimit = Utility.RANDOM.Next(8, 10);
+                        _chanceOfFlee = Utility.RANDOM.Next(25, 30);
 
                         if (breathlyzerLimit >= 95)
                         {
-                            _bloodAlcaholLimit = PluginManager.Random.Next(10, 20);
-                            _chanceOfShootAndFlee = PluginManager.Random.Next(1, 5);
+                            _bloodAlcaholLimit = Utility.RANDOM.Next(10, 20);
+                            _chanceOfShootAndFlee = Utility.RANDOM.Next(1, 5);
                         }
                     }
                 }
@@ -504,63 +505,63 @@ namespace Curiosity.Missions.Client.MissionPeds
             }
             else
             {
-                int breathlyzerLimit = PluginManager.Random.Next(100);
+                int breathlyzerLimit = Utility.RANDOM.Next(100);
                 _bloodAlcaholLimit = 0;
                 IsUnderTheInfluence = false;
                 IsAllowedToBeSearched = false;
 
                 if (breathlyzerLimit >= 60)
                 {
-                    _bloodAlcaholLimit = PluginManager.Random.Next(1, 7);
+                    _bloodAlcaholLimit = Utility.RANDOM.Next(1, 7);
                     if (breathlyzerLimit >= 88)
                     {
                         IsUnderTheInfluence = true;
                         IsAllowedToBeSearched = true;
                         CanBeArrested = true;
-                        _bloodAlcaholLimit = PluginManager.Random.Next(8, 10);
-                        _chanceOfFlee = PluginManager.Random.Next(25, 30);
+                        _bloodAlcaholLimit = Utility.RANDOM.Next(8, 10);
+                        _chanceOfFlee = Utility.RANDOM.Next(25, 30);
 
                         if (breathlyzerLimit >= 95)
                         {
-                            _bloodAlcaholLimit = PluginManager.Random.Next(10, 20);
-                            _chanceOfShootAndFlee = PluginManager.Random.Next(1, 5);
+                            _bloodAlcaholLimit = Utility.RANDOM.Next(10, 20);
+                            _chanceOfShootAndFlee = Utility.RANDOM.Next(1, 5);
                         }
                     }
                 }
             }
 
-            if (PluginManager.Random.Next(100) >= 85)
+            if (Utility.RANDOM.Next(100) >= 85)
             {
                 IsUsingCannabis = true; // Its weed ffs
                 CanBeArrested = true;
                 IsAllowedToBeSearched = true;
             }
 
-            if (PluginManager.Random.Next(100) >= 90)
+            if (Utility.RANDOM.Next(100) >= 90)
             {
                 IsUsingCocaine = true;
                 CanBeArrested = true;
                 IsAllowedToBeSearched = true;
             }
 
-            if (PluginManager.Random.Next(100) >= 95)
+            if (Utility.RANDOM.Next(100) >= 95)
             {
                 HasLostId = true;
                 IsAllowedToBeSearched = true;
             }
 
-            if (PluginManager.Random.Next(100) >= 95)
+            if (Utility.RANDOM.Next(100) >= 95)
             {
                 IsAllowedToBeSearched = true;
             }
 
-            _numberOfCitations = PluginManager.Random.Next(8);
+            _numberOfCitations = Utility.RANDOM.Next(8);
 
             _offence = "~g~NONE";
-            if (PluginManager.Random.Next(100) >= 75)
+            if (Utility.RANDOM.Next(100) >= 75)
             {
                 List<string> Offense = new List<string>() { "WANTED BY LSPD", "WANTED FOR ASSAULT", "WANTED FOR UNPAID FINES", "WANTED FOR RUNNING FROM THE POLICE", "WANTED FOR EVADING LAW", "WANTED FOR HIT AND RUN", "WANTED FOR DUI" };
-                _offence = $"~r~{Offense[PluginManager.Random.Next(Offense.Count)]}";
+                _offence = $"~r~{Offense[Utility.RANDOM.Next(Offense.Count)]}";
                 CanBeArrested = true;
                 IsWanted = true;
                 IsAllowedToBeSearched = true;
@@ -640,7 +641,7 @@ namespace Curiosity.Missions.Client.MissionPeds
                 if (_chanceOfShootAndFlee == 4)
                 {
                     WeaponHash weaponHash = WeaponHash.Pistol;
-                    if (PluginManager.Random.Next(5) == 4)
+                    if (Utility.RANDOM.Next(5) == 4)
                     {
                         weaponHash = WeaponHash.SawnOffShotgun;
                     }
@@ -873,7 +874,7 @@ namespace Curiosity.Missions.Client.MissionPeds
                 {
                     this.Ped.Health = 200;
 
-                    if (PluginManager.Random.Next(5) >= 3 && !IsArrested)
+                    if (Utility.RANDOM.Next(5) >= 3 && !IsArrested)
                     {
                         IsArrested = true;
                         ArrestInteractions.InteractionArrestInit(this);
@@ -882,9 +883,9 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                 if (this.Ped.IsInjured)
                 {
-                    if (PluginManager.Random.Next(5) >= 3 && !IsArrested)
+                    if (Utility.RANDOM.Next(5) >= 3 && !IsArrested)
                     {
-                        if (PluginManager.Random.Next(30) == 28)
+                        if (Utility.RANDOM.Next(30) == 28)
                         {
                             this.Ped.SetConfigFlag(187, true);
                         }
@@ -1038,7 +1039,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             if (Handle == handle)
             {
-                if (PluginManager.Random.Next(80, 100) >= 95)
+                if (Utility.RANDOM.Next(80, 100) >= 95)
                 {
                     HasLostId = true;
                     IsAllowedToBeSearched = true;
@@ -1275,10 +1276,10 @@ namespace Curiosity.Missions.Client.MissionPeds
                     "idiot", "fool", "muppet", "pleb", "maguire"
                 };
 
-                string randomInsult = insults[PluginManager.Random.Next(insults.Count + 1)];
+                string randomInsult = insults[Utility.RANDOM.Next(insults.Count + 1)];
 
                 List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", $"~o~Handcuff them you {randomInsult}!!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", $"~r~Cuff them, fecking {randomInsult}!" };
-                Screen.ShowNotification(vs[PluginManager.Random.Next(vs.Count + 1)]);
+                Screen.ShowNotification(vs[Utility.RANDOM.Next(vs.Count + 1)]);
                 return;
             }
 

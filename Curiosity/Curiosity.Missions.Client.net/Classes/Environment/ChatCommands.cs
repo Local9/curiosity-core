@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses;
 using Curiosity.Missions.Client.Managers;
@@ -160,14 +161,14 @@ namespace Curiosity.Missions.Client.Classes.Environment
             await BaseScript.Delay(0);
             if (!PlayerManager.IsDeveloper) return;
 
-            string sending = $"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)}";
+            string sending = $"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Utility.RANDOM.Next(1, 5)}";
 
             if (arguments.Count > 0)
             {
                 if ($"{arguments[0]}" == "1")
                 {
-                    sending = $"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{PluginManager.Random.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{PluginManager.Random.Next(1, 5)} " +
-                        $"CONJUNCTIVES/IN_0{PluginManager.Random.Next(1, 6)} AREAS/AREA_DAVIS_01 UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{PluginManager.Random.Next(1, 3)}";
+                    sending = $"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} WE_HAVE/WE_HAVE_0{Utility.RANDOM.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{Utility.RANDOM.Next(1, 5)} " +
+                        $"CONJUNCTIVES/IN_0{Utility.RANDOM.Next(1, 6)} AREAS/AREA_DAVIS_01 UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Utility.RANDOM.Next(1, 3)}";
                 }
             }
 

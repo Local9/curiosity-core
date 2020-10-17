@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Scripts.Interactions.VehicleInteractions;
 using Curiosity.Missions.Client.Static;
@@ -23,7 +24,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                     voiceName = "s_m_y_cop_01_white_full_01";
                 }
                 List<string> hello = new List<string>() { "GENERIC_HI", "KIFFLOM_GREET" };
-                PlayAmbientSpeechWithVoice(ped.Handle, hello[PluginManager.Random.Next(hello.Count)], voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
+                PlayAmbientSpeechWithVoice(ped.Handle, hello[Utility.RANDOM.Next(hello.Count)], voiceName, "SPEECH_PARAMS_FORCE_SHOUTED", false);
                 Game.PlayerPed.Task.PlayAnimation("gestures@m@standing@casual", "gesture_hello", 8.0f, -1, (AnimationFlags)49);
             }
             else
@@ -45,11 +46,11 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             string officerSubtitle = string.Empty;
             if (PluginManager.speechType == SpeechType.NORMAL)
             {
-                officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes[PluginManager.Random.Next(DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes.Count)];
+                officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes[Utility.RANDOM.Next(DataClasses.Police.LinesOfSpeech.OfficerNormalQuotes.Count)];
             }
             else
             {
-                officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes[PluginManager.Random.Next(DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes.Count)];
+                officerSubtitle = DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes[Utility.RANDOM.Next(DataClasses.Police.LinesOfSpeech.OfficerAggresiveQuotes.Count)];
             }
             Screen.ShowSubtitle($"~o~Officer: ~w~{officerSubtitle}");
             await PluginManager.Delay(2000);
@@ -61,17 +62,17 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 if (interactivePed.Attitude < 50)
                 {
-                    string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity[PluginManager.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity.Count)];
+                    string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity[Utility.RANDOM.Next(DataClasses.Police.LinesOfSpeech.DriverResponseNormalIdentity.Count)];
                     Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
                 }
                 else if (interactivePed.Attitude >= 50 && interactivePed.Attitude < 80)
                 {
-                    string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity[PluginManager.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity.Count)];
+                    string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity[Utility.RANDOM.Next(DataClasses.Police.LinesOfSpeech.DriverResponseRushedIdentity.Count)];
                     Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
                 }
                 else if (interactivePed.Attitude >= 80)
                 {
-                    if (PluginManager.Random.Next(10) > 8)
+                    if (Utility.RANDOM.Next(10) > 8)
                     {
                         if (interactivePed.Ped.IsInVehicle())
                         {
@@ -84,13 +85,13 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 
                             TrafficStopInteractions.TrafficStopVehicleFlee(interactivePed.Ped.CurrentVehicle, interactivePed.Ped);
 
-                            string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponsePissedIdentity[PluginManager.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponsePissedIdentity.Count)];
+                            string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponsePissedIdentity[Utility.RANDOM.Next(DataClasses.Police.LinesOfSpeech.DriverResponsePissedIdentity.Count)];
                             Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
                         }
                     }
                     else
                     {
-                        string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity[PluginManager.Random.Next(DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity.Count)];
+                        string driverResponse = DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity[Utility.RANDOM.Next(DataClasses.Police.LinesOfSpeech.DriverResponseAngeredIdentity.Count)];
                         Screen.ShowSubtitle($"~b~Driver: ~w~{driverResponse}");
                     }
                 }
@@ -113,7 +114,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 response = new List<string>() { "No, sir", "I dont drink.", "Nope.", "No.", "Only 1.", "Yes... a water and 2 orange juices." };
             }
-            Wrappers.Helpers.ShowSuspectSubtitle(response[PluginManager.Random.Next(response.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(response[Utility.RANDOM.Next(response.Count)]);
         }
 
         static public void InteractionDrug(InteractivePed interactivePed)
@@ -128,7 +129,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 response = new List<string>() { "No, sir", "I don't do that stuff.", "Nope.", "No.", "Nah" };
             }
-            Wrappers.Helpers.ShowSuspectSubtitle(response[PluginManager.Random.Next(response.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(response[Utility.RANDOM.Next(response.Count)]);
         }
 
         static public void InteractionIllegal(InteractivePed interactivePed)
@@ -141,7 +142,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 response = new List<string>() { "No, sir", "Not that I know of.", "Nope.", "No.", "Apart from the 13 dead hookers in the back.. No.", "Maybe? But most probably not.", "I sure hope not" };
             }
-            Wrappers.Helpers.ShowSuspectSubtitle(response[PluginManager.Random.Next(response.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(response[Utility.RANDOM.Next(response.Count)]);
         }
 
         static public void InteractionSearch(InteractivePed interactivePed)
@@ -156,7 +157,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 response = new List<string>() { "Go ahead", "Shes all yours", "I'd prefer you not to", "I don't have anything to hide, go for it.", "Uuuh... Y- No..", "Go ahead. For the record its not my car", "Yeah, why not.." };
             }
-            Wrappers.Helpers.ShowSuspectSubtitle(response[PluginManager.Random.Next(response.Count)]);
+            Wrappers.Helpers.ShowSuspectSubtitle(response[Utility.RANDOM.Next(response.Count)]);
         }
 
         //static public void InteractionSearchVehicle()

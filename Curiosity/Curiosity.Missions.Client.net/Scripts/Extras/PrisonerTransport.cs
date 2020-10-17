@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.Utils;
 
 namespace Curiosity.Missions.Client.Scripts.Extras
 {
@@ -38,7 +39,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
                 return;
             }
 
-            int spawnDistance = PluginManager.Random.Next(300, 800);
+            int spawnDistance = Utility.RANDOM.Next(300, 800);
             RaycastResult raycastResult = World.RaycastCapsule(Game.PlayerPed.Position, Game.PlayerPed.Position, 5.0f, IntersectOptions.Peds1, Game.Player.Character);
 
 

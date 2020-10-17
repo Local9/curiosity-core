@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Exceptions;
 using Curiosity.Missions.Client.Managers;
@@ -68,7 +69,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             {
                 if (!ClientInformation.IsTrusted()) return;
 
-                int numberToSpawn = PluginManager.Random.Next(3, 8);
+                int numberToSpawn = Utility.RANDOM.Next(3, 8);
 
                 int runs = arguments.Count > 0 ? int.Parse($"{arguments[0]}") : 1;
 
@@ -93,8 +94,8 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         static async void CreateZombie()
         {
-            float rnd = PluginManager.Random.Next(-15, 15);
-            float rnd2 = PluginManager.Random.Next(-15, 15);
+            float rnd = Utility.RANDOM.Next(-15, 15);
+            float rnd2 = Utility.RANDOM.Next(-15, 15);
             Vector3 offset = Game.PlayerPed.Position + new Vector3(rnd, rnd2, 0f);
             float groundPosZ = 0f;
 
@@ -105,22 +106,22 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
             List<dynamic> pedHashList = PedModelListUniqueFemale;
 
-            if (PluginManager.Random.NextBool(50))
+            if (Utility.RANDOM.NextBool(50))
             {
                 pedHashList = PedModelListUniqueMale;
             }
 
-            if (PluginManager.Random.NextBool(10))
+            if (Utility.RANDOM.NextBool(10))
             {
                 pedHashList = PedModelListSpecialMale;
             }
 
-            if (PluginManager.Random.NextBool(10))
+            if (Utility.RANDOM.NextBool(10))
             {
                 pedHashList = PedModelListSpecialFemale;
             }
 
-            object pedHash = pedHashList[PluginManager.Random.Next(0, pedHashList.Count - 1)];
+            object pedHash = pedHashList[Utility.RANDOM.Next(0, pedHashList.Count - 1)];
 
             await CreateZombiePed(offset.X, offset.Y, offset.Z, Game.PlayerPed.Heading, API.GetHashKey($"{pedHash}"));
         }
@@ -686,7 +687,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
         {
             PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 3", $"Humain Labs", "Humain labs is being raided!", 2);
             PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
-            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} ATTENTION_ALL_UNITS/ATTENTION_ALL_UNITS_0{PluginManager.Random.Next(1, 5)} WE_HAVE/WE_HAVE_0{PluginManager.Random.Next(1, 3)} CRIMES/CRIME_GUNFIRE_0{PluginManager.Random.Next(1, 4)} CONJUNCTIVES/AT_0{PluginManager.Random.Next(1, 3)} AREAS/AREA_HUMANE_LABS");
+            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} ATTENTION_ALL_UNITS/ATTENTION_ALL_UNITS_0{Utility.RANDOM.Next(1, 5)} WE_HAVE/WE_HAVE_0{Utility.RANDOM.Next(1, 3)} CRIMES/CRIME_GUNFIRE_0{Utility.RANDOM.Next(1, 4)} CONJUNCTIVES/AT_0{Utility.RANDOM.Next(1, 3)} AREAS/AREA_HUMANE_LABS");
         }
 
         private static void CreateMissionBlip()
@@ -705,7 +706,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         private static async Task CreatePed(float x, float y, float z, float heading)
         {
-            Model model = PluginManager.Random.Next(2) == 1 ? PedHash.Lost01GMY : PluginManager.Random.Next(2) == 1 ? PedHash.Lost03GMY : PedHash.Lost02GMY;
+            Model model = Utility.RANDOM.Next(2) == 1 ? PedHash.Lost01GMY : Utility.RANDOM.Next(2) == 1 ? PedHash.Lost03GMY : PedHash.Lost02GMY;
             await CreatePed(x, y, z, heading, model);
         }
 
@@ -714,7 +715,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             await BaseScript.Delay(10);
             if (DebugAreas)
             {
-                AddTrigger($"npc_{PluginManager.Random.Next(999999999)}", new Vector3(x, y, z), Color.FromArgb(255, 0, 0), 2f);
+                AddTrigger($"npc_{Utility.RANDOM.Next(999999999)}", new Vector3(x, y, z), Color.FromArgb(255, 0, 0), 2f);
                 return;
             }
 
@@ -735,7 +736,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
             spawnedPed.DropsWeaponsOnDeath = false;
             // mission maker
-            ZombieCreator.InfectPed(spawnedPed, 300, PluginManager.Random.NextBool(20));
+            ZombieCreator.InfectPed(spawnedPed, 300, Utility.RANDOM.NextBool(20));
             model.MarkAsNoLongerNeeded();
 
         }
@@ -745,7 +746,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             await BaseScript.Delay(10);
             if (DebugAreas)
             {
-                AddTrigger($"npc_{PluginManager.Random.Next(999999999)}", new Vector3(x, y, z), Color.FromArgb(255, 0, 0), 2f);
+                AddTrigger($"npc_{Utility.RANDOM.Next(999999999)}", new Vector3(x, y, z), Color.FromArgb(255, 0, 0), 2f);
                 return;
             }
 
@@ -762,7 +763,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
             Ped spawnedPed = await World.CreatePed(model, position, heading);
             // settings
-            WeaponHash weaponHash = PluginManager.Random.Next(2) == 1 ? WeaponHash.SawnOffShotgun : PluginManager.Random.Next(2) == 1 ? WeaponHash.AssaultRifle : WeaponHash.MicroSMG;
+            WeaponHash weaponHash = Utility.RANDOM.Next(2) == 1 ? WeaponHash.SawnOffShotgun : Utility.RANDOM.Next(2) == 1 ? WeaponHash.AssaultRifle : WeaponHash.MicroSMG;
             spawnedPed.Armor = 100;
 
             if (spawnedPed.Model.Hash == API.GetHashKey("u_m_y_juggernaut_01"))

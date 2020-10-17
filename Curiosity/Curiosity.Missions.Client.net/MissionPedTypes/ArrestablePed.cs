@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.NPCType;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Utils;
 
@@ -21,7 +22,7 @@ namespace Curiosity.Missions.Client.MissionPedTypes
             }
             else
             {
-                bool influence = (PluginManager.Random.Next(30) >= 28);
+                bool influence = (Utility.RANDOM.Next(30) >= 28);
                 Profile = new NpcArrestable(influence, (int)Ped.Gender);
             }
 

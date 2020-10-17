@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
@@ -144,8 +145,8 @@ namespace Curiosity.Missions.Client.MissionPeds
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
             // 1/10 chance of armor
-            if (PluginManager.Random.Next(10) == 9)
-                this._ped.Armor = PluginManager.Random.Next(100);
+            if (Utility.RANDOM.Next(10) == 9)
+                this._ped.Armor = Utility.RANDOM.Next(100);
 
             Decorators.Set(this._ped.Handle, Decorators.PED_MISSION, true);
             Decorators.Set(this._ped.Handle, Decorators.PED_HOSTAGE, isHostage);

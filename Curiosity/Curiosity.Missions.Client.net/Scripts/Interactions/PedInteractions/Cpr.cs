@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
@@ -180,7 +181,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 if (Game.IsControlJustPressed(0, Control.Jump) && !_hasSucceeded && Game.PlayerPed.TaskSequenceProgress == 1 && !_cprFinished)
                 {
-                    _hasSucceeded = PluginManager.Random.Next(_chance) == 0;
+                    _hasSucceeded = Utility.RANDOM.Next(_chance) == 0;
                     if (!_hasSucceeded)
                     {
                         Game.PlayerPed.Task.PerformSequence(_pumpAndIdleMedic);

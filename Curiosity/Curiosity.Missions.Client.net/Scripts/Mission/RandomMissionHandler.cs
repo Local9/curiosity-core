@@ -2,6 +2,7 @@
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Managers;
 using Curiosity.Shared.Client.net;
@@ -25,7 +26,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         static long TimeStampOfLastCallout;
 
-        static public int RandomTimeBetweenCallouts = PluginManager.Random.Next(60000, 180000);
+        static public int RandomTimeBetweenCallouts = Utility.RANDOM.Next(60000, 180000);
         static int PreviousMissionId = 0;
 
         static public bool IsOnDuty = false;
@@ -93,7 +94,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         static void OnMissionComplete()
         {
-            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)}");
+            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Utility.RANDOM.Next(1, 5)}");
         }
 
         static void OnMissionNotAvailable()
@@ -104,7 +105,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             }
 
             SetDispatchMessageRecieved(false);
-            RandomTimeBetweenCallouts = PluginManager.Random.Next(60000, 180000);
+            RandomTimeBetweenCallouts = Utility.RANDOM.Next(60000, 180000);
             TimeStampOfLastCallout = GetGameTimer();
 
             IsRequestingCallout = false;
@@ -155,7 +156,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
             if (IsOnDuty != onduty)
             {
-                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)}");
+                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Utility.RANDOM.Next(1, 5)}");
             }
 
             IsOnDuty = onduty;
@@ -210,7 +211,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             }
 
             SetDispatchMessageRecieved(false);
-            RandomTimeBetweenCallouts = PluginManager.Random.Next(60000, 180000);
+            RandomTimeBetweenCallouts = Utility.RANDOM.Next(60000, 180000);
             TimeStampOfLastCallout = GetGameTimer();
 
             IsRequestingCallout = false;
@@ -257,7 +258,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
         {
             HasAcceptedCallout = true;
 
-            if (PluginManager.Random.Next(20) == 1 && DataClasses.Mission.PoliceCallouts.ruralCallouts.Count > 0)
+            if (Utility.RANDOM.Next(20) == 1 && DataClasses.Mission.PoliceCallouts.ruralCallouts.Count > 0)
             {
                 ChooseRandomMissionAsync(DataClasses.Mission.PoliceCallouts.ruralCallouts, PatrolZone.Rural);
                 return;
@@ -276,7 +277,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         static async Task ChooseRandomMissionAsync(Dictionary<int, DataClasses.Mission.MissionData> missions, PatrolZone missionPatrolZone)
         {
-            int randomMissionNumber = missions.Count == 1 ? 0 : PluginManager.Random.Next(0, missions.Count);
+            int randomMissionNumber = missions.Count == 1 ? 0 : Utility.RANDOM.Next(0, missions.Count);
             int missionId = missions.ElementAt(randomMissionNumber).Key;
 
             bool foundNewCallout = false;
@@ -284,7 +285,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             while (!foundNewCallout)
             {
                 if (!IsOnDuty) return;
-                randomMissionNumber = missions.Count == 1 ? 0 : PluginManager.Random.Next(0, missions.Count);
+                randomMissionNumber = missions.Count == 1 ? 0 : Utility.RANDOM.Next(0, missions.Count);
                 missionId = missions.ElementAt(randomMissionNumber).Key;
 
                 if (missionId != PreviousMissionId)

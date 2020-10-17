@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Data;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses;
 using Curiosity.Missions.Client.Managers;
@@ -121,23 +122,23 @@ namespace Curiosity.Missions.Client.MissionVehicles
             string currentZoneName = Zones.Locations[zoneKey];
             if (currentZoneName == "Davis" || currentZoneName == "Rancho" || currentZoneName == "Strawberry")
             {
-                _chanceOfFlee = PluginManager.Random.Next(23, 30);
-                _chanceOfShootAndFlee = PluginManager.Random.Next(1, 5);
+                _chanceOfFlee = Utility.RANDOM.Next(23, 30);
+                _chanceOfShootAndFlee = Utility.RANDOM.Next(1, 5);
             }
             else if (this.Vehicle.Model.IsBike)
             {
-                _chanceOfFlee = PluginManager.Random.Next(23, 30);
+                _chanceOfFlee = Utility.RANDOM.Next(23, 30);
                 _chanceOfShootAndFlee = 0;
             }
             else
             {
-                _chanceOfFlee = PluginManager.Random.Next(30);
-                _chanceOfShootAndFlee = PluginManager.Random.Next(5);
+                _chanceOfFlee = Utility.RANDOM.Next(30);
+                _chanceOfShootAndFlee = Utility.RANDOM.Next(5);
             }
 
-            int chanceOfStolen = PluginManager.Random.Next(25);
-            int chanceOfRegistered = PluginManager.Random.Next(13);
-            int chanceOfInsured = PluginManager.Random.Next(9);
+            int chanceOfStolen = Utility.RANDOM.Next(25);
+            int chanceOfRegistered = Utility.RANDOM.Next(13);
+            int chanceOfInsured = Utility.RANDOM.Next(9);
 
             _vehicleRegistered = true; // we presume all drivers are registered and insured
             _vehicleInsured = true;
@@ -150,23 +151,23 @@ namespace Curiosity.Missions.Client.MissionVehicles
                 _firstname = string.Empty;
                 _surname = string.Empty;
 
-                if (PluginManager.Random.Next(2) == 1)
+                if (Utility.RANDOM.Next(2) == 1)
                 {
-                    _firstname = PedNames.FirstNameFemale[PluginManager.Random.Next(PedNames.FirstNameFemale.Count)];
+                    _firstname = PedNames.FirstNameFemale[Utility.RANDOM.Next(PedNames.FirstNameFemale.Count)];
                 }
                 else
                 {
-                    _firstname = PedNames.FirstNameMale[PluginManager.Random.Next(PedNames.FirstNameMale.Count)];
+                    _firstname = PedNames.FirstNameMale[Utility.RANDOM.Next(PedNames.FirstNameMale.Count)];
                 }
-                _surname = PedNames.Surname[PluginManager.Random.Next(PedNames.Surname.Count)];
+                _surname = PedNames.Surname[Utility.RANDOM.Next(PedNames.Surname.Count)];
 
                 DateTime StartDateForDriverDoB = new DateTime(1949, 1, 1);
                 double Range = (DateTime.Today - StartDateForDriverDoB).TotalDays;
                 Range = Range - 6570; // MINUS 18 YEARS
-                _dateOfBirth = StartDateForDriverDoB.AddDays(PluginManager.Random.Next((int)Range)).ToString("yyyy-MM-dd");
+                _dateOfBirth = StartDateForDriverDoB.AddDays(Utility.RANDOM.Next((int)Range)).ToString("yyyy-MM-dd");
 
-                _chanceOfFlee = PluginManager.Random.Next(25, 30);
-                _chanceOfShootAndFlee = PluginManager.Random.Next(1, 5);
+                _chanceOfFlee = Utility.RANDOM.Next(25, 30);
+                _chanceOfShootAndFlee = Utility.RANDOM.Next(1, 5);
                 // Add event to interactive ped to update LostID Flag
                 InteractivePed.Set(PluginManager.DECOR_INTERACTION_LOST_ID, true);
             }
@@ -180,7 +181,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
             }
 
             _canSearchVehicle = false;
-            int searchChance = PluginManager.Random.Next(100);
+            int searchChance = Utility.RANDOM.Next(100);
             if (searchChance >= 90)
             {
                 _canSearchVehicle = true;
@@ -219,8 +220,8 @@ namespace Curiosity.Missions.Client.MissionVehicles
                 // SHOOT?
                 if (_chanceOfShootAndFlee == 4)
                 {
-                    int timeAfterStop = PluginManager.Random.Next(5, 30) * 1000;
-                    int timeAfterStoot = PluginManager.Random.Next(5, 30) * 1000;
+                    int timeAfterStop = Utility.RANDOM.Next(5, 30) * 1000;
+                    int timeAfterStoot = Utility.RANDOM.Next(5, 30) * 1000;
                     TaskStopVehicle();
                     await PluginManager.Delay(timeAfterStop);
                     TaskShootAtPlayer();
@@ -411,7 +412,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
             this.InteractivePed.Ped.SetConfigFlag(292, false);
 
             WeaponHash weaponHash = WeaponHash.Pistol;
-            int chanceOfScale = PluginManager.Random.Next(30);
+            int chanceOfScale = Utility.RANDOM.Next(30);
 
             if (chanceOfScale >= 25)
             {
@@ -450,7 +451,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
 
                 await PluginManager.Delay(1000);
 
-                int willRam = PluginManager.Random.Next(5);
+                int willRam = Utility.RANDOM.Next(5);
 
                 if (willRam == 4)
                 {

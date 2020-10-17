@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses.Mission;
 using Curiosity.Missions.Client.Managers;
@@ -63,7 +64,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
                 PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"{store.Name}", "459S Burglar alarm, silent", 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
-                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{PluginManager.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{PluginManager.Random.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{PluginManager.Random.Next(1, 5)} RESIDENT/OUTRO_0{PluginManager.Random.Next(1, 4)}");
+                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Utility.RANDOM.Next(1, 3)} WE_HAVE/WE_HAVE_0{Utility.RANDOM.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{Utility.RANDOM.Next(1, 5)} RESIDENT/OUTRO_0{Utility.RANDOM.Next(1, 4)}");
 
                 PluginInstance.RegisterTickHandler(MissionCancelAsync);
 
@@ -163,7 +164,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             bool running = true;
             while (running)
             {
-                if (AreMissionPedsDead() && PluginManager.Random.Next(3) == 1)
+                if (AreMissionPedsDead() && Utility.RANDOM.Next(3) == 1)
                 {
                     Vector3 spawnpoint = MissionPedData3.SpawnPoint;
                     Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData3.Model, spawnpoint, MissionPedData3.SpawnHeading);
@@ -191,7 +192,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             bool running = true;
             while (running)
             {
-                if (AreMissionPedsDead() && PluginManager.Random.Next(5) == 1)
+                if (AreMissionPedsDead() && Utility.RANDOM.Next(5) == 1)
                 {
                     Vector3 spawnpoint = MissionPedData4.SpawnPoint;
                     Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData4.Model, spawnpoint, MissionPedData4.SpawnHeading);
@@ -363,7 +364,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
             RandomMissionHandler.SetDispatchMessageRecieved(false);
 
-            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)} RESIDENT/OUTRO_0{PluginManager.Random.Next(1, 4)}");
+            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Utility.RANDOM.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Utility.RANDOM.Next(1, 5)} RESIDENT/OUTRO_0{Utility.RANDOM.Next(1, 4)}");
 
             RandomMissionHandler.AllowNextMission();
         }

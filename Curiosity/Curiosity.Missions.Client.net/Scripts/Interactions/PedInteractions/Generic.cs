@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.MissionPeds;
@@ -146,10 +147,10 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 if (interactivePed.IsAllowedToBeSearched)
                 {
-                    int chanceOfFlee = PluginManager.Random.Next(20);
-                    int chanceOfShooting = PluginManager.Random.Next(20);
+                    int chanceOfFlee = Utility.RANDOM.Next(20);
+                    int chanceOfShooting = Utility.RANDOM.Next(20);
 
-                    Wrappers.Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[PluginManager.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
+                    Wrappers.Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Utility.RANDOM.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
                     if (chanceOfFlee >= 13)
                     {
                         List<Vehicle> vehicles = World.GetAllVehicles().Select(m => m).Where(x => x.Position.Distance(interactivePed.Position) < 50f).ToList();
@@ -216,7 +217,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 
         public static async void InteractionLeaveVehicle(InteractivePed interactivePed)
         {
-            int resistExitChance = PluginManager.Random.Next(30);
+            int resistExitChance = Utility.RANDOM.Next(30);
 
             if (!interactivePed.Ped.IsInVehicle()) return;
 
@@ -226,10 +227,10 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 await PluginManager.Delay(500);
                 List<string> driverResponse = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!", "You'll never take me alive, pig!" };
-                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[PluginManager.Random.Next(driverResponse.Count)]);
+                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Utility.RANDOM.Next(driverResponse.Count)]);
                 await PluginManager.Delay(3000);
 
-                int willRam = PluginManager.Random.Next(5);
+                int willRam = Utility.RANDOM.Next(5);
                 if (willRam == 4)
                     TaskVehicleTempAction(interactivePed.Ped.Handle, interactivePed.Ped.CurrentVehicle.Handle, 28, 3000);
 
@@ -242,7 +243,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             else
             {
                 List<string> driverResponse = new List<string>() { "What's the problem?", "What seems to be the problem, officer?", "Yeah, sure.", "Okay.", "Fine.", "What now?", "Whats up?", "Ummm... O-okay.", "This is ridiculous...", "I'm kind of in a hurry right now.", "Oh what now?!", "No problem.", "Am I being detained?", "Yeah, okay... One moment.", "Okay.", "Uh huh.", "Yep." };
-                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[PluginManager.Random.Next(driverResponse.Count)]);
+                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Utility.RANDOM.Next(driverResponse.Count)]);
 
                 interactivePed.Ped.SetConfigFlag(292, false);
 

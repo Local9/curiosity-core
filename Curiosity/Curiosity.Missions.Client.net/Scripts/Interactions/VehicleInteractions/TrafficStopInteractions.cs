@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.Utils;
 using System;
 using static CitizenFX.Core.Native.API;
 
@@ -22,7 +23,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.VehicleInteractions
 
                 await PluginManager.Delay(1000);
 
-                int willRam = PluginManager.Random.Next(5);
+                int willRam = Utility.RANDOM.Next(5);
 
                 if (willRam == 4)
                 {

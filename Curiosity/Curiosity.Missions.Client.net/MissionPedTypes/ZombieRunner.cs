@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Utils;
@@ -31,7 +32,7 @@ namespace Curiosity.Missions.Client.MissionPedTypes
                     this._ped.Task.PlayAnimation("amb@world_human_bum_wash@male@high@idle_a", "idle_b", 8f, -1, 1);
                 }
             }
-            else if (((PluginManager.Random.NextDouble() >= 0.300000011920929 ? true : this._jumpAttack) || target.IsPerformingStealthKill || target.IsGettingUp ? false : !target.IsRagdoll))
+            else if (((Utility.RANDOM.NextDouble() >= 0.300000011920929 ? true : this._jumpAttack) || target.IsPerformingStealthKill || target.IsGettingUp ? false : !target.IsRagdoll))
             {
                 this._ped.Task.Jump();
                 Ped ped = this._ped;

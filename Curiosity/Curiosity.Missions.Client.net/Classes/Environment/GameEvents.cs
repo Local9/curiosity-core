@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.Scripts;
 using Curiosity.Missions.Client.Utils;
@@ -114,7 +115,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
             string message = "died in mysterious ways";
             if (isMeleeDamage)
             {
-                message = knockedOut[PluginManager.Random.Next(knockedOut.Count)];
+                message = knockedOut[Utility.RANDOM.Next(knockedOut.Count)];
             }
             else if (damageTypeFlag == 0)
             {
