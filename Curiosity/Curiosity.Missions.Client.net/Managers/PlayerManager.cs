@@ -91,7 +91,7 @@ namespace Curiosity.Missions.Client.Managers
             public int UserId;
             public int CharacterId;
             public int RoleId;
-            public Privilege Role;
+            public Privilege? Role;
             public int Wallet;
             public int BankAccount;
             public Dictionary<string, Skills> Skills;
