@@ -98,7 +98,7 @@ namespace Curiosity.Server.net.Classes
                     else
                     {
 
-                        GlobalEntity.User User = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.Player);
+                        GlobalEntity.User User = await Database.DatabaseUsers.GetUserWithCharacterAsync(session.License, session.DiscordId, session.Player);
 
                         if (User != null)
                         {

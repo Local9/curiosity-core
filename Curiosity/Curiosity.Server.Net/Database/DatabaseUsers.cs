@@ -80,7 +80,7 @@ namespace Curiosity.Server.net.Database
             mySql.Query(query, myParams);
         }
 
-        public static async Task<GlobalEntity.User> GetUserWithCharacterAsync(string license, Player player)
+        public static async Task<GlobalEntity.User> GetUserWithCharacterAsync(string license, ulong discordId, Player player)
         {
             try
             {
@@ -97,12 +97,13 @@ namespace Curiosity.Server.net.Database
 
                 Dictionary<string, object> myParams = new Dictionary<string, object>();
                 myParams.Add("@license", license);
+                myParams.Add("@discordId", discordId);
                 myParams.Add("@serverId", user.ServerId);
                 myParams.Add("@starterCash", user.Wallet);
                 myParams.Add("@starterBank", user.BankAccount);
                 myParams.Add("@locationId", user.LocationId);
 
-                string selectQuery = "CALL curiosity.spGetUserCharacter(@license, @serverId, @starterCash, @starterBank, @locationId);";
+                string selectQuery = "CALL curiosity.spGetUserCharacter(@license, @discordId, @serverId, @starterCash, @starterBank, @locationId);";
 
                 using (var result = mySql.QueryResult(selectQuery, myParams))
                 {

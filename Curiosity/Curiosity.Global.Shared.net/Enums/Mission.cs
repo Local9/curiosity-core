@@ -2,10 +2,8 @@
 {
     public enum MissionType
     {
-        Unknown = 0,
-        Police = 1,
-        Medic,
-        Firefighter
+        STORE,
+        STOLEN_VEHICLE
     }
 
     public enum MissionDifficulty

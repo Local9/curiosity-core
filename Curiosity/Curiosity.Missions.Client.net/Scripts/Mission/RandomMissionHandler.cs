@@ -256,19 +256,19 @@ namespace Curiosity.Missions.Client.net.Scripts.Mission
         {
             HasAcceptedCallout = true;
 
-            if (Client.Random.Next(20) == 1 && DataClasses.Mission.PoliceStores.storesRural.Count > 0)
+            if (Client.Random.Next(20) == 1 && DataClasses.Mission.PoliceCallouts.ruralCallouts.Count > 0)
             {
-                ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesRural, PatrolZone.Rural);
+                ChooseRandomMissionAsync(DataClasses.Mission.PoliceCallouts.ruralCallouts, PatrolZone.Rural);
                 return;
             }
 
             switch (patrolZone)
             {
                 case PatrolZone.Country:
-                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCountry, PatrolZone.Country);
+                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceCallouts.countyCallouts, PatrolZone.Country);
                     break;
                 default: // CITY
-                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceStores.storesCity, PatrolZone.City);
+                    ChooseRandomMissionAsync(DataClasses.Mission.PoliceCallouts.cityCallouts, PatrolZone.City);
                     break;
             }
         }

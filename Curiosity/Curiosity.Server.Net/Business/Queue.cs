@@ -365,27 +365,25 @@ namespace Curiosity.Server.net.Business
 
         static async Task QueueCycle()
         {
-            try
+            while (true)
             {
-                countInPriorityQueue = PriorityQueueCount();
-                await Server.Delay(100);
-                countInQueue = QueueCount();
-                await Server.Delay(100);
-                UpdateHostName();
-                UpdateStates();
-                await Server.Delay(100);
-                BalanceReserved();
-                await Server.Delay(1000);
-
-                //if (!Server.isLive)
-                //{
-                //    Log.Verbose($"Curiosity Queue Manager : QueueCycle()");
-                //}
-            }
-            catch (Exception ex)
-            {
-                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : QueueCycle", $"{ex}");
-                Log.Error($"Curiosity Queue Manager : QueueCycle()");
+                try
+                {
+                    countInPriorityQueue = PriorityQueueCount();
+                    await Server.Delay(100);
+                    countInQueue = QueueCount();
+                    await Server.Delay(100);
+                    UpdateHostName();
+                    UpdateStates();
+                    await Server.Delay(100);
+                    BalanceReserved();
+                    await Server.Delay(5000);
+                }
+                catch (Exception ex)
+                {
+                    Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : QueueCycle", $"{ex}");
+                    Log.Error($"Curiosity Queue Manager : QueueCycle()");
+                }
             }
         }
 

@@ -2,6 +2,7 @@
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.net;
 using Curiosity.Global.Shared.net.Entity;
+using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Missions.Client.net.Classes.PlayerClient;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
@@ -58,7 +59,7 @@ namespace Curiosity.Missions.Client.net.Scripts
                 }
             }
 
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Current Active", $"~b~{CityDispatch}/{DataClasses.Mission.PoliceStores.storesCity.Count} ~s~City~n~~b~{RuralDispatch}/{DataClasses.Mission.PoliceStores.storesRural.Count} ~s~Rural~n~~b~{CountyDispatch}/{DataClasses.Mission.PoliceStores.storesCountry.Count} ~s~Country", 2);
+            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Current Active", $"~b~{CityDispatch}/{DataClasses.Mission.PoliceCallouts.cityCallouts.Count} ~s~City~n~~b~{RuralDispatch}/{DataClasses.Mission.PoliceCallouts.ruralCallouts.Count} ~s~Rural~n~~b~{CountyDispatch}/{DataClasses.Mission.PoliceCallouts.countyCallouts.Count} ~s~Country", 2);
         }
 
         static async void OnPlayerCanStartMission(string missionData)
@@ -115,18 +116,18 @@ namespace Curiosity.Missions.Client.net.Scripts
 
             PatrolZone missionPatrolZone = (PatrolZone)missionMessage.PatrolZone;
 
-            Dictionary<int, DataClasses.Mission.MissionData> missions = new Dictionary<int, DataClasses.Mission.MissionData>();
+            Dictionary<int, DataClasses.Mission.MissionData> missions;
 
             switch (missionPatrolZone)
             {
                 case PatrolZone.Rural:
-                    missions = DataClasses.Mission.PoliceStores.storesRural;
+                    missions = DataClasses.Mission.PoliceCallouts.ruralCallouts;
                     break;
                 case PatrolZone.Country:
-                    missions = DataClasses.Mission.PoliceStores.storesCountry;
+                    missions = DataClasses.Mission.PoliceCallouts.countyCallouts;
                     break;
                 default: // CITY
-                    missions = DataClasses.Mission.PoliceStores.storesCity;
+                    missions = DataClasses.Mission.PoliceCallouts.cityCallouts;
                     break;
             }
 
@@ -134,7 +135,16 @@ namespace Curiosity.Missions.Client.net.Scripts
 
             Client.TriggerServerEvent("curiosity:Server:Missions:StartedMission", missionMessage.MissionId);
 
-            Mission.CreateStoreMission.Create(mission);
+            switch(mission.MissionType)
+            {
+                case MissionType.STORE:
+                    Mission.CreateStoreMission.Create(mission);
+                    break;
+                case MissionType.STOLEN_VEHICLE:
+                    Mission.StolenVehicle.Create(mission);
+                    break;
+            }
+
         }
 
         static void DeclineMission(int missionId)

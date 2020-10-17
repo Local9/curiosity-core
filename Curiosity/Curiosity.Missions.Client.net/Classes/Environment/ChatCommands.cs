@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.net.Enums;
 using Curiosity.Missions.Client.net.DataClasses;
 using Curiosity.Missions.Client.net.MissionPeds;
 using Curiosity.Missions.Client.net.Scripts;
@@ -295,17 +296,17 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
 
             if (location == 1)
             {
-                missions = DataClasses.Mission.PoliceStores.storesCity;
+                missions = DataClasses.Mission.PoliceCallouts.cityCallouts;
             }
 
             if (location == 2)
             {
-                missions = DataClasses.Mission.PoliceStores.storesCountry;
+                missions = DataClasses.Mission.PoliceCallouts.countyCallouts;
             }
 
             if (location == 3)
             {
-                missions = DataClasses.Mission.PoliceStores.storesRural;
+                missions = DataClasses.Mission.PoliceCallouts.ruralCallouts;
             }
 
             if (missions == null)
@@ -320,17 +321,18 @@ namespace Curiosity.Missions.Client.net.Classes.Environment
                 return;
             }
 
-            DataClasses.Mission.MissionData storeMission = missions[mission];
+            DataClasses.Mission.MissionData missionData = missions[mission];
 
-            Screen.ShowNotification($"Mission {storeMission.Name}");
+            Screen.ShowNotification($"Mission {missionData.Name}");
 
             if (arguments.Count > 2)
             {
-                Game.PlayerPed.Position = storeMission.Location;
+                Game.PlayerPed.Position = missionData.Location;
             }
             else
             {
-                Scripts.Mission.CreateStoreMission.Create(storeMission);
+                if (missionData.MissionType == MissionType.STORE)
+                    Scripts.Mission.CreateStoreMission.Create(missionData);
             }
         }
 

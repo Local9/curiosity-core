@@ -28,7 +28,7 @@ namespace Curiosity.Missions.Client.net
             Static.Relationships.Init();
 
             // DATA
-            DataClasses.Mission.PoliceStores.Init();
+            DataClasses.Mission.PoliceCallouts.Init();
 
             Classes.Environment.ChatCommands.Init();
 

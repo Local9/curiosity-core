@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.net.Enums;
 using System.Collections.Generic;
 
 namespace Curiosity.Missions.Client.net.DataClasses.Mission
@@ -13,6 +14,8 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
         public List<MissionPedData> MissionGangOne = new List<MissionPedData>();
         public List<MissionPedData> MissionGangTwo = new List<MissionPedData>();
         public List<MissionPedData> Hostages = new List<MissionPedData>();
+
+        public MissionType MissionType;
 
         public float ResurectionRange { get; internal set; }
         public float SpawnRange { get; internal set; }

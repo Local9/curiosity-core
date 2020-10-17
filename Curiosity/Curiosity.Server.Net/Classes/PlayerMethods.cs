@@ -407,7 +407,7 @@ namespace Curiosity.Server.net.Classes
                 await BaseScript.Delay(100);
 
                 string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
-                string discordId = player.Identifiers[Server.DISCORD_IDENTIFIER];
+                ulong discordId = ulong.Parse(player.Identifiers[Server.DISCORD_IDENTIFIER]);
                 string playerName = player.Name;
 
                 if (string.IsNullOrEmpty(license))
@@ -421,7 +421,7 @@ namespace Curiosity.Server.net.Classes
                     return;
                 }
 
-                GlobalEntity.User user = await Business.BusinessUser.GetUserAsync(license, player);
+                GlobalEntity.User user = await Business.BusinessUser.GetUserAsync(license, discordId, player);
                 await BaseScript.Delay(3000);
 
                 if (user == null)
@@ -492,6 +492,7 @@ namespace Curiosity.Server.net.Classes
             try
             {
                 string license = player.Identifiers[Server.LICENSE_IDENTIFIER];
+                ulong discord = ulong.Parse(player.Identifiers[Server.DISCORD_IDENTIFIER]);
 
                 if (string.IsNullOrEmpty(license))
                 {
@@ -502,7 +503,7 @@ namespace Curiosity.Server.net.Classes
 
                 Session session = SessionManager.PlayerList[player.Handle];
 
-                session.User = await Business.BusinessUser.GetUserAsync(license, session.Player);
+                session.User = await Business.BusinessUser.GetUserAsync(license, discord, session.Player);
 
                 player.TriggerEvent("curiosity:Client:Player:Role", session.User.Role);
             }

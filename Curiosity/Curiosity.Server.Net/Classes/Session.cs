@@ -14,11 +14,13 @@ namespace Curiosity.Server.net.Classes
     public class Session
     {
         const string LICENSE_IDENTIFIER = "license";
+        const string DISCORD_IDENTIFIER = "discord";
         // Session data
         public string NetId { get; private set; }
         public string Name { get; private set; }
         public string[] Identities { get; private set; }
         public string License { get; private set; } = null;
+        public ulong DiscordId { get; private set; } = 0;
 
         // Player data
         public int UserID { get; set; }
@@ -94,6 +96,12 @@ namespace Curiosity.Server.net.Classes
             Identities = idents.ToArray();
 
             License = player.Identifiers[LICENSE_IDENTIFIER];
+            ulong discordId;
+            if (!ulong.TryParse(player.Identifiers[DISCORD_IDENTIFIER], out discordId))
+            {
+                player.Drop("Error obtaining Discord ID");
+            };
+            DiscordId = discordId;
 
             // Set unknowns
             // Character = null;

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.net.DataClasses.Mission
 {
-    class PoliceStores
+    class PoliceCallouts
     {
         static Client client = Client.GetInstance();
 
-        static public Dictionary<int, DataClasses.Mission.MissionData> storesCity = new Dictionary<int, DataClasses.Mission.MissionData>();
-        static public Dictionary<int, DataClasses.Mission.MissionData> storesCountry = new Dictionary<int, DataClasses.Mission.MissionData>();
-        static public Dictionary<int, DataClasses.Mission.MissionData> storesRural = new Dictionary<int, DataClasses.Mission.MissionData>();
+        static public Dictionary<int, DataClasses.Mission.MissionData> cityCallouts = new Dictionary<int, DataClasses.Mission.MissionData>();
+        static public Dictionary<int, DataClasses.Mission.MissionData> countyCallouts = new Dictionary<int, DataClasses.Mission.MissionData>();
+        static public Dictionary<int, DataClasses.Mission.MissionData> ruralCallouts = new Dictionary<int, DataClasses.Mission.MissionData>();
 
         static public void Init()
         {
@@ -34,11 +34,11 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
 
         static async void SetupStores()
         {
-            if (storesCity.Count > 0)
+            if (cityCallouts.Count > 0)
             {
-                storesCity.Clear();
-                storesCountry.Clear();
-                storesRural.Clear();
+                cityCallouts.Clear();
+                countyCallouts.Clear();
+                ruralCallouts.Clear();
 
                 Debug.WriteLine("Mission Lists Cleared");
             }
@@ -126,7 +126,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCity.Add(1, new DataClasses.Mission.MissionData
+            cityCallouts.Add(1, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Clinton Ave",
                 Location = new Vector3(375.6602f, 325.6703f, 103.5664f),
@@ -185,7 +185,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCity.Add(2, new DataClasses.Mission.MissionData
+            cityCallouts.Add(2, new DataClasses.Mission.MissionData
             {
                 Name = "LTD Garage, Davis Ave",
                 Location = new Vector3(-53.7861f, -1757.661f, 29.43897f),
@@ -244,7 +244,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCity.Add(3, new DataClasses.Mission.MissionData
+            cityCallouts.Add(3, new DataClasses.Mission.MissionData
             {
                 Name = "LTD, Palomino Ave & Ginger St",
                 Location = new Vector3(-711.6313f, -918.0067f, 19.21452f),
@@ -303,7 +303,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCity.Add(4, new DataClasses.Mission.MissionData
+            cityCallouts.Add(4, new DataClasses.Mission.MissionData
             {
                 Name = "LTD, West Mirror Drive",
                 Location = new Vector3(1159.815f, -327.377f, 69.21338f),
@@ -362,7 +362,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCity.Add(5, new DataClasses.Mission.MissionData
+            cityCallouts.Add(5, new DataClasses.Mission.MissionData
             {
                 Name = "Rob's Liquor, Vespucci Blvd",
                 Location = new Vector3(1142.1f, -980.7694f, 46.20402f),
@@ -421,7 +421,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCity.Add(6, new DataClasses.Mission.MissionData
+            cityCallouts.Add(6, new DataClasses.Mission.MissionData
             {
                 Name = "Rob's Liquor, Prosperity St",
                 Location = new Vector3(-1491.354f, -384.2097f, 40.08645f),
@@ -480,7 +480,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCity.Add(7, new DataClasses.Mission.MissionData
+            cityCallouts.Add(7, new DataClasses.Mission.MissionData
             {
                 Name = "Rob's Liquor, San Andreas Ave",
                 Location = new Vector3(-1226.846f, -901.4744f, 12.28888f),
@@ -539,7 +539,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCity.Add(8, new DataClasses.Mission.MissionData
+            cityCallouts.Add(8, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Elgin Ave",
                 Location = new Vector3(29.32283f, -1349.734f, 29.32919f),
@@ -603,7 +603,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCountry.Add(9, new DataClasses.Mission.MissionData
+            countyCallouts.Add(9, new DataClasses.Mission.MissionData
             {
                 Name = "Scoops Liquor Barn",
                 Location = new Vector3(1166.458f, 2702.856f, 38.17914f),
@@ -662,7 +662,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCountry.Add(10, new DataClasses.Mission.MissionData
+            countyCallouts.Add(10, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Grand Senora Desert",
                 Location = new Vector3(2683.266f, 3281.896f, 55.24052f),
@@ -721,7 +721,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCountry.Add(11, new DataClasses.Mission.MissionData
+            countyCallouts.Add(11, new DataClasses.Mission.MissionData
             {
                 Name = "LTD Garage, Grapeseed",
                 Location = new Vector3(1698.641f, 4929.917f, 42.0781f),
@@ -780,7 +780,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCountry.Add(12, new DataClasses.Mission.MissionData
+            countyCallouts.Add(12, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Harmony",
                 Location = new Vector3(543.722f, 2674.618f, 42.15475f),
@@ -839,7 +839,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCountry.Add(13, new DataClasses.Mission.MissionData
+            countyCallouts.Add(13, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Mount Chiliad",
                 Location = new Vector3(1730.532f, 6410.807f, 35.00065f),
@@ -898,7 +898,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCountry.Add(14, new DataClasses.Mission.MissionData
+            countyCallouts.Add(14, new DataClasses.Mission.MissionData
             {
                 Name = "Liquor ACE, Sandy Shores",
                 Location = new Vector3(1394.598f, 3598.536f, 34.99088f),
@@ -957,7 +957,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesCountry.Add(15, new DataClasses.Mission.MissionData
+            countyCallouts.Add(15, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Sandy Shores",
                 Location = new Vector3(1965.68f, 3739.752f, 32.32018f),
@@ -1020,7 +1020,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesRural.Add(16, new DataClasses.Mission.MissionData
+            ruralCallouts.Add(16, new DataClasses.Mission.MissionData
             {
                 Name = "Rob's Liquor, Banham Canyon",
                 Location = new Vector3(-2974.973f, 390.8409f, 15.03081f),
@@ -1079,7 +1079,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesRural.Add(17, new DataClasses.Mission.MissionData
+            ruralCallouts.Add(17, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Banham Canyon",
                 Location = new Vector3(-3036.43f, 589.7015f, 7.811507f),
@@ -1139,7 +1139,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesRural.Add(18, new DataClasses.Mission.MissionData
+            ruralCallouts.Add(18, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Chumash",
                 Location = new Vector3(-3238.816f, 1004.304f, 12.45766f),
@@ -1198,7 +1198,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesRural.Add(19, new DataClasses.Mission.MissionData
+            ruralCallouts.Add(19, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Richman Glen",
                 Location = new Vector3(-1819.346f, 786.3083f, 137.9569f),
@@ -1257,7 +1257,7 @@ namespace Curiosity.Missions.Client.net.DataClasses.Mission
                 }
             };
 
-            storesRural.Add(20, new DataClasses.Mission.MissionData
+            ruralCallouts.Add(20, new DataClasses.Mission.MissionData
             {
                 Name = "24/7, Tataviam Mountains",
                 Location = new Vector3(2561.057f, 385.2407f, 108.6211f),

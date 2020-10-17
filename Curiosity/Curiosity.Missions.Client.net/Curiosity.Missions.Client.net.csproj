@@ -84,6 +84,7 @@
     <Compile Include="Scripts\Mission\PoliceMissions\HumainLabs.cs" />
     <Compile Include="Exceptions\InvalidOrderException.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />
+    <Compile Include="Scripts\Mission\StolenVehicle.cs" />
     <Compile Include="Scripts\NpcHandler.cs" />
     <Compile Include="Scripts\PedCreators\InteractivePedCreator.cs" />
     <Compile Include="Scripts\PedCreators\NormalPedCreator.cs" />
@@ -123,7 +124,7 @@
     <Compile Include="MissionPedTypes\ZombieWalker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\PedCreators\MissionPedCreator.cs" />
-    <Compile Include="DataClasses\Mission\PoliceStores.cs" />
+    <Compile Include="DataClasses\Mission\PoliceCallouts.cs" />
     <Compile Include="Scripts\Mission\CreateStoreMission.cs" />
     <Compile Include="Scripts\PedCreators\WorldPedCreator.cs" />
     <Compile Include="Scripts\PedCreators\ZombieCreator.cs" />
