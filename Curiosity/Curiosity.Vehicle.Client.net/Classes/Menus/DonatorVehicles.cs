@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
 using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
 using MenuAPI;
@@ -88,7 +89,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
                 string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
                 List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
 
-                if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+                if (Player.PlayerInformation.privilege == Privilege.DEVELOPER)
                 {
                     VehicleItem refVeh = vehicleItems[0];
                     VehicleItem dev = new VehicleItem();

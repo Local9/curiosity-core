@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Helper;
@@ -347,7 +348,7 @@ namespace Curiosity.Police.Client.net.Environment.Vehicle
             }
             catch (Exception ex)
             {
-                if (Classes.Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+                if (Classes.Player.PlayerInformation.privilege == Privilege.DEVELOPER)
                 {
                     // Log.Error($"Siren event error: {ex.Message}");
                 }

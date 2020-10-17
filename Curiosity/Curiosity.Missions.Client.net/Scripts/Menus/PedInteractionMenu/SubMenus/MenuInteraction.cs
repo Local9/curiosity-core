@@ -59,10 +59,10 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
             if (menuItem == mItemCpr)
             {
                 Cpr.Init();
-                await Client.Delay(1000);
+                await PluginManager.Delay(1000);
                 Cpr.InteractionCPR(_interactivePed);
                 MenuController.CloseAllMenus();
-                Client.TriggerEvent("curiosity:interaction:closeMenu");
+                PluginManager.TriggerEvent("curiosity:interaction:closeMenu");
                 return;
             }
 
@@ -72,23 +72,23 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
                 trafficStopData.Ticket = true;
 
                 string jsonString = Encode.StringToBase64(JsonConvert.SerializeObject(trafficStopData));
-                Client.TriggerServerEvent("curiosity:Server:Missions:TrafficStop", jsonString);
+                PluginManager.TriggerServerEvent("curiosity:Server:Missions:TrafficStop", jsonString);
 
                 Animations.AnimationClipboard();
 
                 MenuController.CloseAllMenus();
-                Client.TriggerEvent("curiosity:interaction:closeMenu");
+                PluginManager.TriggerEvent("curiosity:interaction:closeMenu");
                 await BaseScript.Delay(0);
-                Client.TriggerEvent("curiosity:interaction:released", _interactivePed.Handle);
+                PluginManager.TriggerEvent("curiosity:interaction:released", _interactivePed.Handle);
                 await BaseScript.Delay(0);
-                Client.TriggerEvent("curiosity:setting:group:leave", _interactivePed.Handle, Game.PlayerPed.PedGroup.Handle);
+                PluginManager.TriggerEvent("curiosity:setting:group:leave", _interactivePed.Handle, Game.PlayerPed.PedGroup.Handle);
                 return;
             }
             if (menuItem == mItemCallCoroner)
             {
                 Extras.Coroner.RequestService();
                 MenuController.CloseAllMenus();
-                Client.TriggerEvent("curiosity:interaction:closeMenu");
+                PluginManager.TriggerEvent("curiosity:interaction:closeMenu");
                 return;
             }
             // ALIVE
@@ -96,7 +96,7 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
             {
                 ArrestInteractions.InteractionHandcuff(_interactivePed);
                 mItemHandcuffs.Enabled = false;
-                await Client.Delay(4000);
+                await PluginManager.Delay(4000);
                 mItemHandcuffs.Text = _interactivePed.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
                 mItemHandcuffs.Enabled = true;
                 mItemDetainInCurrentVehicle.Enabled = CanDetainPed();
@@ -106,9 +106,9 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
             {
                 ArrestInteractions.InteractionPutInVehicle(_interactivePed);
                 mItemDetainInCurrentVehicle.Enabled = false;
-                await Client.Delay(4000);
+                await PluginManager.Delay(4000);
                 mItemDetainInCurrentVehicle.Enabled = CanDetainPed();
-                mItemDetainInCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() && _interactivePed.Ped.CurrentVehicle == Client.CurrentVehicle ? "Remove from Vehicle" : "Detain in Vehicle";
+                mItemDetainInCurrentVehicle.Text = _interactivePed.Ped.IsInVehicle() && _interactivePed.Ped.CurrentVehicle == PluginManager.CurrentVehicle ? "Remove from Vehicle" : "Detain in Vehicle";
                 return;
             }
 
@@ -138,10 +138,10 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
                     CitizenFX.Core.UI.Screen.ShowNotification("~r~Must be closer to grab the ped");
                     return;
                 }
-                Client.TriggerEvent("curiosity:interaction:grab", _interactivePed.Handle);
+                PluginManager.TriggerEvent("curiosity:interaction:grab", _interactivePed.Handle);
 
                 //MenuController.CloseAllMenus();
-                //Client.TriggerEvent("curiosity:interaction:closeMenu");
+                //PluginInstance.TriggerEvent("curiosity:interaction:closeMenu");
                 return;
             }
 
@@ -149,11 +149,11 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
             {
                 ArrestInteractions.InteractionIssueWarning(_interactivePed);
                 MenuController.CloseAllMenus();
-                Client.TriggerEvent("curiosity:interaction:closeMenu");
+                PluginManager.TriggerEvent("curiosity:interaction:closeMenu");
                 await BaseScript.Delay(0);
-                Client.TriggerEvent("curiosity:interaction:released", _interactivePed.Handle);
+                PluginManager.TriggerEvent("curiosity:interaction:released", _interactivePed.Handle);
                 await BaseScript.Delay(0);
-                Client.TriggerEvent("curiosity:setting:group:leave", _interactivePed.Handle, Game.PlayerPed.PedGroup.Handle);
+                PluginManager.TriggerEvent("curiosity:setting:group:leave", _interactivePed.Handle, Game.PlayerPed.PedGroup.Handle);
                 return;
             }
 
@@ -161,11 +161,11 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
             {
                 ArrestInteractions.InteractionRelease(_interactivePed);
                 MenuController.CloseAllMenus();
-                Client.TriggerEvent("curiosity:interaction:closeMenu");
+                PluginManager.TriggerEvent("curiosity:interaction:closeMenu");
                 await BaseScript.Delay(0);
-                Client.TriggerEvent("curiosity:interaction:released", _interactivePed.Handle);
+                PluginManager.TriggerEvent("curiosity:interaction:released", _interactivePed.Handle);
                 await BaseScript.Delay(0);
-                Client.TriggerEvent("curiosity:setting:group:leave", _interactivePed.Handle, Game.PlayerPed.PedGroup.Handle);
+                PluginManager.TriggerEvent("curiosity:setting:group:leave", _interactivePed.Handle, Game.PlayerPed.PedGroup.Handle);
                 return;
             }
 
@@ -174,22 +174,22 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
                 Generic.InteractionLeaveVehicle(_interactivePed);
 
                 if (_interactivePed.Ped.CurrentVehicle != null)
-                    DecorSetInt(_interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE, _interactivePed.Ped.CurrentVehicle.Handle);
+                    DecorSetInt(_interactivePed.Ped.Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE, _interactivePed.Ped.CurrentVehicle.Handle);
 
                 mItemSuspectVehicle.Enabled = false;
-                await Client.Delay(2000);
+                await PluginManager.Delay(2000);
                 mItemSuspectVehicle.Text = "Suspect: Return to Vehicle";
                 mItemSuspectVehicle.Enabled = true;
                 mItemHandcuffs.Enabled = !_interactivePed.Ped.IsInVehicle();
                 return;
             }
 
-            if (menuItem == mItemSuspectVehicle && !_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE))
+            if (menuItem == mItemSuspectVehicle && !_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE))
             {
                 Generic.InteractionEnterVehicle(_interactivePed);
 
                 mItemSuspectVehicle.Enabled = false;
-                await Client.Delay(2000);
+                await PluginManager.Delay(2000);
                 mItemSuspectVehicle.Text = "Suspect: Ask to Leave Vehicle";
                 mItemSuspectVehicle.Enabled = true;
                 mItemHandcuffs.Enabled = _interactivePed.Ped.IsInVehicle();
@@ -220,7 +220,7 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
             else
             {
                 mItemSuspectVehicle.Text = "Suspect: Ask to Leave Vehicle";
-                if (!_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE))
+                if (!_interactivePed.Ped.IsInVehicle() && DecorExistOn(_interactivePed.Ped.Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE))
                 {
                     mItemSuspectVehicle.Text = "Suspect: Return to Vehicle";
                 }
@@ -250,7 +250,7 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
                 mItemSearch.Description = IsInVehicle ? "Suspect must be removed from the vehicle before searching." : string.Empty;
                 menu.AddMenuItem(mItemSearch);
 
-                if (_interactivePed.GetBoolean(Client.DECOR_VEHICLE_SPEEDING))
+                if (_interactivePed.GetBoolean(PluginManager.DECOR_VEHICLE_SPEEDING))
                 {
                     menu.AddMenuItem(mItemSpeedingTicket);
                 }
@@ -271,7 +271,7 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
 
         private static bool CanDetainPed()
         {
-            return _interactivePed.IsHandcuffed && Client.CurrentVehicle != null;
+            return _interactivePed.IsHandcuffed && PluginManager.CurrentVehicle != null;
         }
     }
 }

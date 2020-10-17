@@ -8,7 +8,7 @@ namespace Curiosity.Missions.Client.DataClasses.Mission
 {
     class PoliceCallouts
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static public Dictionary<int, DataClasses.Mission.MissionData> cityCallouts = new Dictionary<int, DataClasses.Mission.MissionData>();
         static public Dictionary<int, DataClasses.Mission.MissionData> countyCallouts = new Dictionary<int, DataClasses.Mission.MissionData>();
@@ -16,8 +16,8 @@ namespace Curiosity.Missions.Client.DataClasses.Mission
 
         static public void Init()
         {
-            client.RegisterEventHandler("playerSpawned", new Action(PlayerSpawned));
-            client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+            PluginInstance.RegisterEventHandler("playerSpawned", new Action(PlayerSpawned));
+            PluginInstance.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
         }
 
         static void OnClientResourceStart(string resourceName)

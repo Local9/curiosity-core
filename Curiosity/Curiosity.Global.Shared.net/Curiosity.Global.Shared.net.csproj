@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\BlipData.cs" />
+    <Compile Include="Data\CalloutMessage.cs" />
     <Compile Include="Data\MissionDataLists.cs" />
     <Compile Include="Data\MissionFile.cs" />
     <Compile Include="Data\PedNames.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventWrapper\Event.cs" />
     <Compile Include="EventWrapper\Events.cs" />
+    <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Utility.cs" />
   </ItemGroup>
   <ItemGroup>

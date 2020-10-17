@@ -1,9 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses.Mission;
-using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Static;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Classes.Environment;
 using Curiosity.Shared.Client.net.Enums;
@@ -18,7 +19,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 {
     class CreateStoreMission
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static MissionPedData MissionPedData1;
         static MissionPedData MissionPedData2;
@@ -59,20 +60,20 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
                 SetupLocationBlip(store.Location);
 
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"{store.Name}", "459S Burglar alarm, silent", 2);
+                PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 2", $"{store.Name}", "459S Burglar alarm, silent", 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
-                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Client.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{Client.Random.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{Client.Random.Next(1, 5)} RESIDENT/OUTRO_0{Client.Random.Next(1, 4)}");
+                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{PluginManager.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{PluginManager.Random.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{PluginManager.Random.Next(1, 5)} RESIDENT/OUTRO_0{PluginManager.Random.Next(1, 4)}");
 
-                client.RegisterTickHandler(MissionCancelAsync);
+                PluginInstance.RegisterTickHandler(MissionCancelAsync);
 
                 while (Game.PlayerPed.Position.Distance(store.Location) > 100f)
                 {
                     await BaseScript.Delay(10);
                 }
 
-                client.DeregisterTickHandler(MissionCancelAsync);
+                PluginInstance.DeregisterTickHandler(MissionCancelAsync);
 
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                if (ClientInformation.IsDeveloper)
                 {
                     Log.Info($"SETUP: {store.Name}");
                 }
@@ -93,8 +94,8 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                         HostagePed = await PedCreators.PedCreator.CreatePedAtLocation(MissionHostage.Model, spawnpoint, MissionHostage.SpawnHeading);
                         SetBlockingOfNonTemporaryEvents(HostagePed.Handle, true);
 
-                        Decorators.Set(HostagePed.Handle, Client.DECOR_PED_MISSION, true);
-                        Decorators.Set(HostagePed.Handle, Client.DECOR_PED_HOSTAGE, true);
+                        Decorators.Set(HostagePed.Handle, Decorators.PED_MISSION, true);
+                        Decorators.Set(HostagePed.Handle, Decorators.PED_HOSTAGE, true);
 
                         new AnimationQueue(HostagePed.Handle).PlayDirectInQueue(new AnimationBuilder().Select("random@arrests", "kneeling_arrest_idle").WithFlags(AnimationFlags.Loop));
 
@@ -127,7 +128,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
                 await BaseScript.Delay(10);
 
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                if (ClientInformation.IsDeveloper)
                 {
                     Log.Info($"INITAL MISSION PEDS: {store.Name}");
 
@@ -139,16 +140,16 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                     Log.Info($"---------------------------------");
                 }
 
-                client.RegisterTickHandler(SpawnBackupPedOne);
-                client.RegisterTickHandler(SpawnBackupPedTwo);
+                PluginInstance.RegisterTickHandler(SpawnBackupPedOne);
+                PluginInstance.RegisterTickHandler(SpawnBackupPedTwo);
 
-                client.RegisterTickHandler(MissionCompletionChecks);
+                PluginInstance.RegisterTickHandler(MissionCompletionChecks);
             }
             catch (Exception ex)
             {
                 Log.Error("[CreateStoreMission] Mission failed creation");
 
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                if (ClientInformation.IsDeveloper)
                 {
                     Log.Error($"{ex}");
                 }
@@ -161,7 +162,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             bool running = true;
             while (running)
             {
-                if (AreMissionPedsDead() && Client.Random.Next(3) == 1)
+                if (AreMissionPedsDead() && PluginManager.Random.Next(3) == 1)
                 {
                     Vector3 spawnpoint = MissionPedData3.SpawnPoint;
                     Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData3.Model, spawnpoint, MissionPedData3.SpawnHeading);
@@ -169,13 +170,13 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                     if (backup != null)
                     {
                         backup.Weapons.Give(MissionPedData3.Weapon, 1, true, true);
-                        await Client.Delay(0);
+                        await PluginManager.Delay(0);
                         MissionPed3 = PedCreators.MissionPedCreator.Ped(backup, Relationships.HostileRelationship, MissionPedData3.Alertness, MissionPedData3.Difficulty, MissionPedData3.VisionDistance);
                     }
 
                     if (backup != null)
                     {
-                        client.DeregisterTickHandler(SpawnBackupPedOne);
+                        PluginInstance.DeregisterTickHandler(SpawnBackupPedOne);
                         running = false;
                     }
                 }
@@ -189,7 +190,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             bool running = true;
             while (running)
             {
-                if (AreMissionPedsDead() && Client.Random.Next(5) == 1)
+                if (AreMissionPedsDead() && PluginManager.Random.Next(5) == 1)
                 {
                     Vector3 spawnpoint = MissionPedData4.SpawnPoint;
                     Ped backup = await PedCreators.PedCreator.CreatePedAtLocation(MissionPedData4.Model, spawnpoint, MissionPedData4.SpawnHeading);
@@ -197,13 +198,13 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                     if (backup != null)
                     {
                         backup.Weapons.Give(MissionPedData4.Weapon, 1, true, true);
-                        await Client.Delay(0);
+                        await PluginManager.Delay(0);
                         MissionPed4 = PedCreators.MissionPedCreator.Ped(backup, Relationships.HostileRelationship, MissionPedData4.Alertness, MissionPedData4.Difficulty, MissionPedData4.VisionDistance);
                     }
 
                     if (backup != null)
                     {
-                        client.DeregisterTickHandler(SpawnBackupPedTwo);
+                        PluginInstance.DeregisterTickHandler(SpawnBackupPedTwo);
                         running = false;
                     }
                 }
@@ -213,7 +214,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         static async Task MissionCompletionChecks()
         {
-            await Client.Delay(1000);
+            await PluginManager.Delay(1000);
 
             if (MissionHostage != null)
             {
@@ -250,7 +251,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                 }
                 else
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Failed", $"... I don't know what to say", $"This will not look good on your record.", 2);
+                    PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Failed", $"... I don't know what to say", $"This will not look good on your record.", 2);
                     PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
 
                     HostageKilled = true;
@@ -261,7 +262,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
             if (HostageReleased && Game.PlayerPed.IsAlive)
             {
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Completed", $"Hostage Rescued", string.Empty, 2);
+                PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Completed", $"Hostage Rescued", string.Empty, 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
 
                 CleanUp();
@@ -269,7 +270,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
             if (Game.PlayerPed.IsDead)
             {
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Failed", $"Unlucky...", string.Empty, 2);
+                PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Failed", $"Unlucky...", string.Empty, 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
 
                 CleanUp();
@@ -281,7 +282,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             await Task.FromResult(0);
             if (Game.IsControlPressed(0, Control.FrontendDelete))
             {
-                client.DeregisterTickHandler(MissionCancelAsync);
+                PluginInstance.DeregisterTickHandler(MissionCancelAsync);
                 CleanUp(true);
             }
         }
@@ -299,21 +300,21 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         static public async void CleanUp(bool cancelMission = false)
         {
-            client.DeregisterTickHandler(SpawnBackupPedOne);
-            client.DeregisterTickHandler(SpawnBackupPedTwo);
-            client.DeregisterTickHandler(MissionCompletionChecks);
+            PluginInstance.DeregisterTickHandler(SpawnBackupPedOne);
+            PluginInstance.DeregisterTickHandler(SpawnBackupPedTwo);
+            PluginInstance.DeregisterTickHandler(MissionCompletionChecks);
 
             LocationBlip.ShowRoute = false;
             LocationBlip.Scale = 1.0f;
 
             if (cancelMission)
             {
-                Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Cancelled", $"No Payout", string.Empty, 2);
+                PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Callout Cancelled", $"No Payout", string.Empty, 2);
                 PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
             }
             else
             {
-                Client.TriggerServerEvent("curiosity:Server:Missions:CompletedMission", !HostageKilled);
+                PluginManager.TriggerServerEvent("curiosity:Server:Missions:CompletedMission", !HostageKilled);
             }
 
             Vector3 position = Game.PlayerPed.Position;
@@ -361,7 +362,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
             RandomMissionHandler.SetDispatchMessageRecieved(false);
 
-            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)} RESIDENT/OUTRO_0{Client.Random.Next(1, 4)}");
+            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)} RESIDENT/OUTRO_0{PluginManager.Random.Next(1, 4)}");
 
             RandomMissionHandler.AllowNextMission();
         }

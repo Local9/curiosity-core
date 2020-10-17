@@ -13,7 +13,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
 {
     class ArrestPed
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static public Ped ArrestedPed = null;
         static public Ped PedInHandcuffs = null;
@@ -27,11 +27,11 @@ namespace Curiosity.Missions.Client.Scripts.Police
         public static async void Setup()
         {
             MarkerHandler.HideAllMarkers = false;
-            await Client.Delay(100);
+            await PluginManager.Delay(100);
             SetupJailHouses();
-            await Client.Delay(100);
+            await PluginManager.Delay(100);
             Screen.ShowNotification($"~b~Arrests~s~: ~g~Enabled");
-            client.RegisterTickHandler(OnTaskJailPed);
+            PluginInstance.RegisterTickHandler(OnTaskJailPed);
         }
 
         public static void Dispose()
@@ -41,7 +41,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
 
             jailHouseBlips.ForEach(m => BlipHandler.RemoveBlip(m.BlipId));
 
-            client.DeregisterTickHandler(OnTaskJailPed);
+            PluginInstance.DeregisterTickHandler(OnTaskJailPed);
         }
 
         static async void SetupJailHouses()
@@ -61,7 +61,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
             jailHouseMarkers.Add(new Marker("~b~LSPD\n~w~Jail Arrested Ped", new Vector3(458.9213f, -997.9607f, 23.9148f - 0.5f), c));
             jailHouseMarkers.Add(new Marker("~b~LSPD\n~w~Jail Arrested Ped", new Vector3(460.7617f, -994.2283f, 23.9148f - 0.5f), c));
 
-            await Client.Delay(100);
+            await PluginManager.Delay(100);
 
             foreach (Marker m in jailHouseMarkers)
             {
@@ -84,7 +84,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
 
             if (marker == null)
             {
-                await Client.Delay(1000);
+                await PluginManager.Delay(1000);
             }
             else
             {
@@ -101,14 +101,14 @@ namespace Curiosity.Missions.Client.Scripts.Police
 
                     peds.ForEach(p =>
                     {
-                        if (DecorExistOn(p.Handle, Client.DECOR_NPC_ARRESTED))
+                        if (DecorExistOn(p.Handle, PluginManager.DECOR_NPC_ARRESTED))
                         {
-                            if (DecorGetBool(p.Handle, Client.DECOR_NPC_ARRESTED))
-                                Client.TriggerEvent("curiosity:interaction:arrest", p.Handle, false);
+                            if (DecorGetBool(p.Handle, PluginManager.DECOR_NPC_ARRESTED))
+                                PluginManager.TriggerEvent("curiosity:interaction:arrest", p.Handle, false);
                         }
                     });
 
-                    await Client.Delay(5000);
+                    await PluginManager.Delay(5000);
                 }
             }
         }

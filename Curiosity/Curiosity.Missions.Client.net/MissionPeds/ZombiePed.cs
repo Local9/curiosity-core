@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
 using System;
 using System.Linq;
@@ -280,11 +281,11 @@ namespace Curiosity.Missions.Client.MissionPeds
                 currentBlip.Delete();
             }
 
-            await Client.Delay(3000);
+            await PluginManager.Delay(3000);
             API.NetworkFadeOutEntity(this.Handle, false, false);
-            await Client.Delay(1000);
+            await PluginManager.Delay(1000);
             sender.Dispose();
-            
+
 
             // CitizenFX.Core.UI.Screen.ShowNotification("Killed Zombie");
 

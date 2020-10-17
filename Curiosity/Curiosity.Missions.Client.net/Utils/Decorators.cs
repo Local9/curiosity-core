@@ -28,6 +28,12 @@ namespace Curiosity.Missions.Client.Utils
         public const string PED_HOSTAGE = "c::ped::hostage";
         public const string PED_RELEASED = "c::ped::released";
         public const string PED_HANDCUFFED = "c::ped::handcuffed";
+        public const string PED_INTERACTIVE = "c::ped::interactive";
+        public const string PED_NETWORKID = "c::ped::networkId";
+        public const string PED_GROUP_MEMBER = "c::ped::group::leader";
+        public const string PED_GROUP_LEADER = "c::ped::group::member";
+        public const string PED_INFLUENCE_ALCOHOL = "c::ped::influence::alcohol";
+        public const string PED_INFLUENCE_DRUG = "c::ped::influence::drug";
 
         public static void Set(int handle, string property, object value)
         {

@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
 using Newtonsoft.Json;
 using System;
@@ -14,7 +15,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 {
     abstract class NormalPed : Entity, IEquatable<Ped>
     {
-        private static Client client = Client.GetInstance();
+        private static PluginManager PluginInstance => PluginManager.Instance;
 
         public const int MovementUpdateInterval = 5;
 
@@ -138,7 +139,7 @@ namespace Curiosity.Missions.Client.MissionPeds
             NormalPed.RunningNoticeDistance = 25f;
             NormalPed.WanderRadius = 100f;
 
-            client.RegisterTickHandler(ShowHelpText);
+            PluginInstance.RegisterTickHandler(ShowHelpText);
         }
 
         protected NormalPed(int handle, float visionDistance = 35f, float experience = 10f) : base(handle)
@@ -308,9 +309,9 @@ namespace Curiosity.Missions.Client.MissionPeds
                 currentBlip.Delete();
             }
 
-            await Client.Delay(3000);
+            await PluginManager.Delay(3000);
             API.NetworkFadeOutEntity(this.Handle, false, false);
-            await Client.Delay(1000);
+            await PluginManager.Delay(1000);
 
             sender.Dispose();
         }

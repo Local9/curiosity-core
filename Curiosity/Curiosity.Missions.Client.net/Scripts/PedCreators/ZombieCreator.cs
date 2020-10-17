@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.MissionPedTypes;
+using Curiosity.Missions.Client.Utils;
 using System;
 
 namespace Curiosity.Missions.Client.Scripts.PedCreators
@@ -62,7 +63,7 @@ namespace Curiosity.Missions.Client.Scripts.PedCreators
                 single = 0.4f;
             }
 
-            if ((!(Client.Random.NextDouble() < (double)single | overrideAsFastZombie) ? true : !ZombieCreator.Runners))
+            if ((!(PluginManager.Random.NextDouble() < (double)single | overrideAsFastZombie) ? true : !ZombieCreator.Runners))
             {
                 int num = health;
                 int num1 = num;
@@ -75,7 +76,7 @@ namespace Curiosity.Missions.Client.Scripts.PedCreators
                 walker = new ZombieRunner(ped.Handle);
             }
 
-            Decorators.Set(walker.Handle, Client.DECOR_PED_MISSION, true);
+            Decorators.Set(walker.Handle, Decorators.PED_MISSION, true);
 
             return walker;
         }

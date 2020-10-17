@@ -20,16 +20,16 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.VehicleInteractions
                     ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver, 20000, 5f);
                 }
 
-                await Client.Delay(1000);
+                await PluginManager.Delay(1000);
 
-                int willRam = Client.Random.Next(5);
+                int willRam = PluginManager.Random.Next(5);
 
                 if (willRam == 4)
                 {
                     TaskVehicleTempAction(vehicle.Driver.Handle, vehicle.Handle, 28, 3000);
                 }
 
-                await Client.Delay(0);
+                await PluginManager.Delay(0);
 
                 TaskVehicleTempAction(vehicle.Driver.Handle, vehicle.Handle, 32, 30000);
                 vehicle.Driver.Task.FleeFrom(Game.PlayerPed);

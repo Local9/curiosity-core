@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
@@ -23,7 +23,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
 
     class TrafficStop
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
         static bool IsScenarioPlaying = false;
 
         static float DistanceToCheck = 20.0f;
@@ -46,34 +46,34 @@ namespace Curiosity.Missions.Client.Scripts.Police
         {
             loadingMessage = string.Empty; // Because it showed some wierd shit.
 
-            client.RegisterTickHandler(OnTrafficStopTask);
-            client.RegisterTickHandler(OnEmoteCheck);
-            client.RegisterTickHandler(OnShowLoading);
-            client.RegisterTickHandler(OnDeveloperData);
+            PluginInstance.RegisterTickHandler(OnTrafficStopTask);
+            PluginInstance.RegisterTickHandler(OnEmoteCheck);
+            PluginInstance.RegisterTickHandler(OnShowLoading);
+            PluginInstance.RegisterTickHandler(OnDeveloperData);
 
-            client.RegisterEventHandler("curiosity:interaction:vehicle:released", new Action<int>(OnVehicleHasBeenReleased));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:vehicle:released", new Action<int>(OnVehicleHasBeenReleased));
 
             Screen.ShowNotification("~b~Traffic Stops~s~: ~g~Enabled");
         }
 
         public static void Dispose()
         {
-            client.DeregisterTickHandler(OnTrafficStopTask);
-            client.DeregisterTickHandler(OnEmoteCheck);
-            client.DeregisterTickHandler(OnShowLoading);
+            PluginInstance.DeregisterTickHandler(OnTrafficStopTask);
+            PluginInstance.DeregisterTickHandler(OnEmoteCheck);
+            PluginInstance.DeregisterTickHandler(OnShowLoading);
 
-            client.DeregisterTickHandler(OnDeveloperData);
+            PluginInstance.DeregisterTickHandler(OnDeveloperData);
             IsConductingPullover = false;
 
             loadingMessage = string.Empty;
 
             Screen.ShowNotification("~b~Traffic Stops~s~: ~r~Disabled");
-            Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
+            PluginManager.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
         }
 
         static async Task OnEmoteCheck()
         {
-            await Client.Delay(0);
+            await PluginManager.Delay(0);
             if (IsScenarioPlaying)
             {
                 if (
@@ -92,7 +92,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
         static async Task OnDeveloperData()
         {
             await Task.FromResult(0);
-            if (Client.DeveloperVehUiEnabled)
+            if (PluginManager.DeveloperVehUiEnabled)
             {
                 string isConductingPullOver = IsConductingPullover ? "~g~" : "~r~";
                 string isCooldownActive = IsCooldownActive ? "~g~" : "~r~";
@@ -102,7 +102,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
 
                 try
                 {
-                    Client.CurrentVehicle.DrawEntityHit(DistanceToCheck);
+                    PluginManager.CurrentVehicle.DrawEntityHit(DistanceToCheck);
                 }
                 catch (Exception ex)
                 {
@@ -111,7 +111,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
             }
             else
             {
-                await Client.Delay(1000);
+                await PluginManager.Delay(1000);
             }
         }
 
@@ -125,9 +125,9 @@ namespace Curiosity.Missions.Client.Scripts.Police
                     return;
                 }
 
-                if (Game.PlayerPed.IsInVehicle() && Client.CurrentVehicle != null)
+                if (Game.PlayerPed.IsInVehicle() && PluginManager.CurrentVehicle != null)
                 {
-                    if (Game.PlayerPed.CurrentVehicle != Client.CurrentVehicle)
+                    if (Game.PlayerPed.CurrentVehicle != PluginManager.CurrentVehicle)
                     {
                         Screen.ShowNotification($"~b~Traffic Stop: ~w~Must be using a Personal Vehicle from the garage.");
                         await BaseScript.Delay(60000);
@@ -141,20 +141,20 @@ namespace Curiosity.Missions.Client.Scripts.Police
                             return;
                         }
 
-                        Vehicle targetVehicle = Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
+                        Vehicle targetVehicle = PluginManager.CurrentVehicle.GetVehicleInFront(DistanceToCheck);
                         // Safe Checks
                         if (targetVehicle == null) return;
                         if (targetVehicle.Driver.IsPlayer) return;
                         if (targetVehicle.Driver == null) return;
                         if (targetVehicle.Driver.IsDead) return;
 
-                        if (Decorators.GetBoolean(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
+                        if (Decorators.GetBoolean(targetVehicle.Handle, PluginManager.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
                         {
                             Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle has already been stopped.");
                             return;
                         }
 
-                        if (Decorators.GetBoolean(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE))
+                        if (Decorators.GetBoolean(targetVehicle.Handle, PluginManager.DECOR_VEHICLE_IGNORE))
                         {
                             Screen.DisplayHelpTextThisFrame($"~b~Traffic Stops: ~r~This vehicle is being ignored.");
                             return;
@@ -165,7 +165,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
                         long gameTime = GetGameTimer();
                         while ((API.GetGameTimer() - gameTime) < 5000)
                         {
-                            if (Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck) == null)
+                            if (PluginManager.CurrentVehicle.GetVehicleInFront(DistanceToCheck) == null)
                             {
                                 loadingMessage = "Vehicle: Lost";
                                 await BaseScript.Delay(2000);
@@ -176,7 +176,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
                             await BaseScript.Delay(0);
                         }
 
-                        bool hasBeenPulledOver = Decorators.GetBoolean(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED);
+                        bool hasBeenPulledOver = Decorators.GetBoolean(targetVehicle.Handle, PluginManager.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED);
 
                         if (hasBeenPulledOver)
                         {
@@ -185,7 +185,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
                             return;
                         }
 
-                        int playerIdOnDetectedVehicle = Decorators.GetInteger(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY);
+                        int playerIdOnDetectedVehicle = Decorators.GetInteger(targetVehicle.Handle, PluginManager.DECOR_VEHICLE_DETECTED_BY);
 
                         if (playerIdOnDetectedVehicle != Game.Player.ServerId)
                         {
@@ -193,13 +193,13 @@ namespace Curiosity.Missions.Client.Scripts.Police
                             loadingMessage = string.Empty;
                         };
 
-                        Decorators.Set(targetVehicle.Handle, Client.DECOR_VEHICLE_DETECTED_BY, Game.Player.ServerId);
+                        Decorators.Set(targetVehicle.Handle, PluginManager.DECOR_VEHICLE_DETECTED_BY, Game.Player.ServerId);
 
                         // request network control
                         Wrappers.Helpers.RequestControlOfEnt(targetVehicle);
 
                         bool awaitingPullover = true;
-                        if (targetVehicle == Client.CurrentVehicle.GetVehicleInFront(DistanceToCheck))
+                        if (targetVehicle == PluginManager.CurrentVehicle.GetVehicleInFront(DistanceToCheck))
                         {
                             loadingMessage = "Awaiting Confirmation";
 
@@ -231,7 +231,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
 
                                     targetVehicle.AttachedBlip.Color = BlipColor.MichaelBlue;
 
-                                    Decorators.Set(targetVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, true);
+                                    Decorators.Set(targetVehicle.Handle, PluginManager.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, true);
 
                                     VehicleCreators.CreateVehicles.TrafficStop(targetVehicle);
                                     return;
@@ -245,11 +245,11 @@ namespace Curiosity.Missions.Client.Scripts.Police
                                     if (targetVehicle.AttachedBlip != null)
                                         targetVehicle.AttachedBlip.Delete();
 
-                                    Decorators.Set(targetVehicle.Handle, Client.DECOR_VEHICLE_IGNORE, true);
+                                    Decorators.Set(targetVehicle.Handle, PluginManager.DECOR_VEHICLE_IGNORE, true);
                                     return;
                                 }
 
-                                if (targetVehicle.Position.Distance(Client.CurrentVehicle.Position) > 40f)
+                                if (targetVehicle.Position.Distance(PluginManager.CurrentVehicle.Position) > 40f)
                                 {
                                     loadingMessage = string.Empty;
 
@@ -272,8 +272,8 @@ namespace Curiosity.Missions.Client.Scripts.Police
                         if (Game.PlayerPed.IsInVehicle())
                         {
                             Screen.ShowNotification($"~b~Traffic Stop: ~w~Current vehicle type of ~r~{Game.PlayerPed.CurrentVehicle.ClassType} ~w~is not valid.");
-                            await Client.Delay(2000);
-                            Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
+                            await PluginManager.Delay(2000);
+                            PluginManager.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
                             Dispose();
                             loadingMessage = string.Empty;
                         }
@@ -337,28 +337,28 @@ namespace Curiosity.Missions.Client.Scripts.Police
             _vehicle = null;
             loadingMessage = string.Empty;
 
-            client.DeregisterTickHandler(OnCooldownTask);
+            PluginInstance.DeregisterTickHandler(OnCooldownTask);
         }
 
         private static void OnVehicleHasBeenReleased(int networkId)
         {
             Log.Info($"OnVehicleHasBeenReleased -> Traffic Stop reset called");
 
-            List<Vehicle> vehicles = World.GetAllVehicles().Where(x => Decorators.GetBoolean(x.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)).ToList();
+            List<Vehicle> vehicles = World.GetAllVehicles().Where(x => Decorators.GetBoolean(x.Handle, PluginManager.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)).ToList();
 
             if (vehicles.Count > 0)
             {
                 if (!IsCooldownActive)
-                    client.RegisterTickHandler(OnCooldownTask);
+                    PluginInstance.RegisterTickHandler(OnCooldownTask);
             }
             else if (!VehicleExsits())
             {
                 if (!IsCooldownActive)
-                    client.RegisterTickHandler(OnCooldownTask);
+                    PluginInstance.RegisterTickHandler(OnCooldownTask);
             }
             else
             {
-                client.RegisterTickHandler(OnCooldownTask);
+                PluginInstance.RegisterTickHandler(OnCooldownTask);
             }
         }
 

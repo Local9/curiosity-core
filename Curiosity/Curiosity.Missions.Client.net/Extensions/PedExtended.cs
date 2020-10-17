@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
 using System;
 
@@ -158,7 +159,7 @@ namespace Curiosity.Missions.Client.Extensions
                 ped.Weapons.Give(WeaponHash.AssaultRifle, 1, false, true);
                 ped.Weapons.Give(WeaponHash.Pistol, 1, false, true);
 
-                if (!Decorators.GetBoolean(ped.Handle, Decorators.DECOR_GROUP_MEMBER))
+                if (!Decorators.GetBoolean(ped.Handle, Decorators.PED_GROUP_MEMBER))
                 {
                     ped.Health = 200;
                     ped.Armor = 100;
@@ -188,7 +189,7 @@ namespace Curiosity.Missions.Client.Extensions
                     entityEventWrapper.Dispose();
                 });
                 ped.PlayAmbientSpeech("GENERIC_HI", SpeechModifier.Standard);
-                Decorators.Set(ped.Handle, Decorators.DECOR_GROUP_MEMBER, true);
+                Decorators.Set(ped.Handle, Decorators.PED_GROUP_MEMBER, true);
             }
         }
 
@@ -294,7 +295,7 @@ namespace Curiosity.Missions.Client.Extensions
                         break;
                     }
                     Function.Call((Hash)7972635428772450029L, new InputArgument[] { animation });
-                    await Client.Delay(0);
+                    await PluginManager.Delay(0);
                 }
                 Function.Call(unchecked((Hash)(-5797657820774978577L)), new InputArgument[] { ped.Handle, animation, 1048576000 });
             }

@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.EventWrapper;
+using Curiosity.Global.Shared.Utils;
 using System;
 
 namespace Curiosity.Missions.Client.Utils
@@ -41,8 +42,8 @@ namespace Curiosity.Missions.Client.Utils
 
         private static Vector3 Around(this Vector3 vector, float min, float max)
         {
-            Vector3 rotatedVector = Vector3.UnitY.Rotate((float)(Shared.Utils.Utility.RANDOM.NextDouble() * 360f));
-            var scale = (float)(min + Shared.Utils.Utility.RANDOM.NextDouble() * (max - min));
+            Vector3 rotatedVector = Vector3.UnitY.Rotate((float)(Utility.RANDOM.NextDouble() * 360f));
+            var scale = (float)(min + Utility.RANDOM.NextDouble() * (max - min));
             Vector3 result = vector + Vector3.Multiply(rotatedVector, scale);
             Debug.WriteLine(result.ToString());
 
@@ -57,11 +58,6 @@ namespace Curiosity.Missions.Client.Utils
             return new Vector3(x, y, vector.Z);
         }
 
-        public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
-        {
-            return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
-        }
-
         public static bool IsPlayingAnim(this Entity entity, string animSet, string animName)
         {
             return API.IsEntityPlayingAnim(entity.Handle, animSet, animName, 3);
@@ -72,6 +68,10 @@ namespace Curiosity.Missions.Client.Utils
             return API.Vdist(v.X, v.Y, v.Z, to.X, to.Y, to.Z);
         }
 
-        
+        public static bool HasClearLineOfSight(this Entity entity, Entity target, float visionDistance)
+        {
+            return API.HasEntityClearLosToEntityInFront(entity.Handle, target.Handle) ? false : entity.Position.VDist(target.Position) < visionDistance;
+        }
+
     }
 }

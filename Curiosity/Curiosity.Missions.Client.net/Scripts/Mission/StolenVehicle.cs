@@ -1,10 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Missions.Client.DataClasses.Mission;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.Scripts.Mission
 {
@@ -44,7 +40,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         internal static void Create(MissionData mission)
         {
-            
+
         }
     }
 }

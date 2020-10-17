@@ -2,7 +2,9 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.NPC;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
@@ -18,7 +20,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
         public readonly Ped Ped;
         public readonly Vehicle Vehicle;
-        private Client Client;
+        private PluginManager PluginInstance => PluginManager.Instance;
 
         public NpcProfile Profile;
 
@@ -28,13 +30,12 @@ namespace Curiosity.Missions.Client.MissionPeds
 
         protected WorldPed(int handle) : base(handle)
         {
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+            if (ClientInformation.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
             {
                 Screen.ShowNotification($"~r~[~g~D~b~E~y~V~o~]~w~ Creating World Ped");
             }
 
             Ped = new Ped(handle);
-            Client = Client.GetInstance();
 
             Wrappers.Helpers.RequestControlOfEnt(Ped);
 
@@ -49,11 +50,11 @@ namespace Curiosity.Missions.Client.MissionPeds
             }
 
             int netId = API.NetworkGetNetworkIdFromEntity(Ped.Handle);
-            Decorators.Set(Ped.Handle, Decorators.DECOR_PED_NETWORKID, netId);
+            Decorators.Set(Ped.Handle, Decorators.PED_NETWORKID, netId);
             API.SetNetworkIdCanMigrate(netId, true);
 
-            Decorators.Set(Ped.Handle, Decorators.DECOR_PED_INTERACTIVE, true);
-            Decorators.Set(Ped.Handle, Decorators.DECOR_PED_MISSION, true);
+            Decorators.Set(Ped.Handle, Decorators.PED_INTERACTIVE, true);
+            Decorators.Set(Ped.Handle, Decorators.PED_MISSION, true);
 
             API.SetPedFleeAttributes(Ped.Handle, 0, false);
             API.SetBlockingOfNonTemporaryEvents(Ped.Handle, true);
@@ -69,12 +70,12 @@ namespace Curiosity.Missions.Client.MissionPeds
             Ped.Health = 200;
             Ped.IsPersistent = true;
 
-            Client.RegisterTickHandler(OnArrestablePedTick);
+            PluginInstance.RegisterTickHandler(OnArrestablePedTick);
         }
 
         private void Abort(EntityEventWrapper sender, Entity entity)
         {
-            Client.DeregisterTickHandler(OnArrestablePedTick);
+            PluginInstance.DeregisterTickHandler(OnArrestablePedTick);
 
             base.Delete();
         }
@@ -98,7 +99,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
         private async void OnDied(EntityEventWrapper sender, Entity entity)
         {
-            Client.DeregisterTickHandler(OnArrestablePedTick);
+            PluginInstance.DeregisterTickHandler(OnArrestablePedTick);
 
             Blip currentBlip = base.AttachedBlip;
             if (currentBlip != null)
@@ -106,9 +107,9 @@ namespace Curiosity.Missions.Client.MissionPeds
                 currentBlip.Delete();
             }
 
-            await Client.Delay(3000);
+            await PluginManager.Delay(3000);
             API.NetworkFadeOutEntity(this.Handle, false, false);
-            await Client.Delay(1000);
+            await PluginManager.Delay(1000);
             sender.Dispose();
         }
 

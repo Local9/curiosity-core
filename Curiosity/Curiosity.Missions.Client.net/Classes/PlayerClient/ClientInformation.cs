@@ -11,7 +11,7 @@ namespace Curiosity.Missions.Client.Classes.PlayerClient
 {
     static class ClientInformation
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
         public static PlayerInformationModel playerInfo = new PlayerInformationModel();
 
         public static Privilege privilege;
@@ -28,19 +28,19 @@ namespace Curiosity.Missions.Client.Classes.PlayerClient
 
         public static void Init()
         {
-            client.RegisterEventHandler("curiosity:Client:Mission:SetJobActive", new Action<bool, string>(OnSetJobActive));
-            client.RegisterEventHandler("curiosity:Client:Mission:SetPlayerAvailable", new Action<bool>(OnSetPlayerAvailable));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:SetJobActive", new Action<bool, string>(OnSetJobActive));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:SetPlayerAvailable", new Action<bool>(OnSetPlayerAvailable));
 
-            client.RegisterEventHandler("curiosity:Client:Mission:IsPlayerCalloutActive", new Action(OnIsPlayerCalloutActive));
-            client.RegisterEventHandler("curiosity:Client:Mission:IsPlayerAvailable", new Action(OnIsPlayerAvailable));
-            client.RegisterEventHandler("curiosity:Client:Mission:IsPlayerJobActive", new Action(OnIsPlayerJobActive));
-            client.RegisterEventHandler("curiosity:Client:Mission:IsPlayerOnActiveBackup", new Action(OnIsPlayerOnActiveBackup));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:IsPlayerCalloutActive", new Action(OnIsPlayerCalloutActive));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:IsPlayerAvailable", new Action(OnIsPlayerAvailable));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:IsPlayerJobActive", new Action(OnIsPlayerJobActive));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:IsPlayerOnActiveBackup", new Action(OnIsPlayerOnActiveBackup));
 
-            client.RegisterEventHandler("curiosity:Client:Mission:SetLocation", new Action<int>(OnSetMissionLocation));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:SetLocation", new Action<int>(OnSetMissionLocation));
 
-            client.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
-            client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
-            client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Player:InternalInformation", new Action<string>(PlayerInfo));
+            PluginInstance.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+            PluginInstance.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
         }
 
         static void OnSetMissionLocation(int location)
@@ -53,29 +53,26 @@ namespace Curiosity.Missions.Client.Classes.PlayerClient
             return privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER;
         }
 
-        public static bool IsDeveloper()
-        {
-            return privilege == Privilege.DEVELOPER;
-        }
+        public static bool IsDeveloper => privilege == Privilege.DEVELOPER;
 
         static void OnIsPlayerCalloutActive()
         {
-            Client.TriggerEvent("curiosity:Client:Mission:CalloutState", IsPlayerCalloutActive);
+            PluginManager.TriggerEvent("curiosity:Client:Mission:CalloutState", IsPlayerCalloutActive);
         }
 
         static void OnIsPlayerAvailable()
         {
-            Client.TriggerEvent("curiosity:Client:Mission:PlayerAvailable", IsPlayerAvailable);
+            PluginManager.TriggerEvent("curiosity:Client:Mission:PlayerAvailable", IsPlayerAvailable);
         }
 
         static void OnIsPlayerJobActive()
         {
-            Client.TriggerEvent("curiosity:Client:Mission:PlayerRole", $"{ClientJob}", IsPlayerJobActive);
+            PluginManager.TriggerEvent("curiosity:Client:Mission:PlayerRole", $"{ClientJob}", IsPlayerJobActive);
         }
 
         static void OnIsPlayerOnActiveBackup()
         {
-            Client.TriggerEvent("curiosity:Client:Mission:PlayerOnActiveBackup", IsPlayerOnActiveBackup);
+            PluginManager.TriggerEvent("curiosity:Client:Mission:PlayerOnActiveBackup", IsPlayerOnActiveBackup);
         }
 
         static void OnSetJobActive(bool active, string role)
@@ -101,12 +98,12 @@ namespace Curiosity.Missions.Client.Classes.PlayerClient
         {
             if (CitizenFX.Core.Native.API.GetCurrentResourceName() != resourceName) return;
 
-            Client.TriggerEvent("curiosity:Client:Player:Information");
+            PluginManager.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         static void OnPlayerSpawned()
         {
-            Client.TriggerEvent("curiosity:Client:Player:Information");
+            PluginManager.TriggerEvent("curiosity:Client:Player:Information");
         }
 
 

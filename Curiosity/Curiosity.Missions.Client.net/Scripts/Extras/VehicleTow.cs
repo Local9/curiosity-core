@@ -12,7 +12,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
 {
     class VehicleTow
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static public void Init()
         {
@@ -41,7 +41,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
 
                 if (vehToRemove != null)
                 {
-                    if (DecorGetInt(vehToRemove.Handle, Client.DECOR_PLAYER_VEHICLE) > 0)
+                    if (DecorGetInt(vehToRemove.Handle, PluginManager.DECOR_PLAYER_VEHICLE) > 0)
                     {
                         CitizenFX.Core.UI.Screen.ShowNotification("~o~Player Vehicle");
                         return;
@@ -49,9 +49,9 @@ namespace Curiosity.Missions.Client.Scripts.Extras
 
                     int tfVehHandle = 0;
 
-                    if (DecorIsRegisteredAsType(Client.DECOR_NPC_ACTIVE_TRAFFIC_STOP, 2))
+                    if (DecorIsRegisteredAsType(PluginManager.DECOR_NPC_ACTIVE_TRAFFIC_STOP, 2))
                     {
-                        tfVehHandle = DecorGetInt(vehToRemove.Handle, Client.DECOR_TRAFFIC_STOP_VEHICLE_HANDLE);
+                        tfVehHandle = DecorGetInt(vehToRemove.Handle, PluginManager.DECOR_TRAFFIC_STOP_VEHICLE_HANDLE);
                     }
                     else
                     {
@@ -93,7 +93,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
         {
             NetworkFadeOutEntity(vehToRemove.Handle, true, false);
             API.SetNetworkIdCanMigrate(vehToRemove.NetworkId, true);
-            await Client.Delay(1000);
+            await PluginManager.Delay(1000);
             string encodedString = Encode.StringToBase64($"{vehToRemove.NetworkId}");
             string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
@@ -115,7 +115,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
                 Wrappers.Helpers.ShowNotification("City Impound", "Vehicle Impounded", $"", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
             }
 
-            client.RegisterTickHandler(OnCooldownTask);
+            PluginInstance.RegisterTickHandler(OnCooldownTask);
         }
 
         static async Task OnCooldownTask()
@@ -127,11 +127,11 @@ namespace Curiosity.Missions.Client.Scripts.Extras
 
             while ((GetGameTimer() - gameTime) < countdown)
             {
-                await Client.Delay(500);
+                await PluginManager.Delay(500);
             }
 
             IsServiceActive = false;
-            client.DeregisterTickHandler(OnCooldownTask);
+            PluginInstance.DeregisterTickHandler(OnCooldownTask);
             Wrappers.Helpers.ShowNotification("City Impound", "Impound Available", $"", NotificationCharacter.CHAR_PROPERTY_TOWING_IMPOUND);
         }
     }

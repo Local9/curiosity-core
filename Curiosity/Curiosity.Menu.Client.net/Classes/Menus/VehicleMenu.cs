@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
@@ -45,7 +46,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         {
             MenuBase.MenuOpen(true);
 
-            if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+            if (Player.PlayerInformation.privilege == Privilege.DEVELOPER)
             {
                 MainVehicleMenu.AddMenuItem(mItemDetinateVehicle);
             }

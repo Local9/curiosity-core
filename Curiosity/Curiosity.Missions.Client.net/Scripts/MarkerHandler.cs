@@ -11,7 +11,7 @@ namespace Curiosity.Missions.Client.Scripts
 {
     class MarkerHandler
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
         // For e.g. cinematic mode
         static public bool HideAllMarkers = false;
         static float contextAoe = 2f; // How close you need to be to see instruction
@@ -21,14 +21,14 @@ namespace Curiosity.Missions.Client.Scripts
 
         static public void Init()
         {
-            client.RegisterTickHandler(OnTickMarkerHandler);
-            client.RegisterTickHandler(PeriodicUpdate);
+            PluginInstance.RegisterTickHandler(OnTickMarkerHandler);
+            PluginInstance.RegisterTickHandler(PeriodicUpdate);
         }
 
         static public void Dispose()
         {
-            client.DeregisterTickHandler(OnTickMarkerHandler);
-            client.DeregisterTickHandler(PeriodicUpdate);
+            PluginInstance.DeregisterTickHandler(OnTickMarkerHandler);
+            PluginInstance.DeregisterTickHandler(PeriodicUpdate);
             MarkersAll.Clear();
             MarkersClose.Clear();
         }
@@ -58,7 +58,7 @@ namespace Curiosity.Missions.Client.Scripts
             while (true)
             {
                 await RefreshClose();
-                await Client.Delay(1000);
+                await PluginManager.Delay(1000);
             }
         }
 

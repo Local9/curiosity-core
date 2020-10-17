@@ -26,7 +26,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
             //    return;
             //}
 
-            //if (Police.TrafficStop.StoppedDriver.CurrentVehicle != Client.CurrentVehicle)
+            //if (Police.TrafficStop.StoppedDriver.CurrentVehicle != PluginInstance.CurrentVehicle)
             //{
             //    Wrappers.Helpers.ShowNotification("Dispatch", "Must be detained", string.Empty);
             //    return;
@@ -38,7 +38,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
                 return;
             }
 
-            int spawnDistance = Client.Random.Next(300, 800);
+            int spawnDistance = PluginManager.Random.Next(300, 800);
             RaycastResult raycastResult = World.RaycastCapsule(Game.PlayerPed.Position, Game.PlayerPed.Position, 5.0f, IntersectOptions.Peds1, Game.Player.Character);
 
 

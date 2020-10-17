@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.MissionPeds;
 using System;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 {
     class Cpr
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         private static TaskSequence _introAndIdleMedic;
         private static TaskSequence _introAndIdleVictim;
@@ -36,11 +37,11 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 
         public static void Init()
         {
-            client.DeregisterTickHandler(OnTask);
+            PluginInstance.DeregisterTickHandler(OnTask);
 
-            client.RegisterTickHandler(OnTask);
+            PluginInstance.RegisterTickHandler(OnTask);
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+            if (ClientInformation.IsDeveloper)
             {
                 Debug.WriteLine("Initiated CPR -> Init");
                 //var l = -6539555060529535670L;
@@ -49,16 +50,16 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
         }
         public static void Dispose()
         {
-            client.DeregisterTickHandler(OnTask);
+            PluginInstance.DeregisterTickHandler(OnTask);
 
-            Client.TriggerEvent("curiosity:interaction:cpr", _victim.Handle, false);
+            PluginManager.TriggerEvent("curiosity:interaction:cpr", _victim.Handle, false);
 
             if (!_hasSucceeded)
             {
-                Client.TriggerEvent("curiosity:interaction:cpr:failed", _victim.Handle);
+                PluginManager.TriggerEvent("curiosity:interaction:cpr:failed", _victim.Handle);
             }
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+            if (ClientInformation.IsDeveloper)
             {
                 Debug.WriteLine("Initiated CPR -> Dispose");
             }
@@ -72,7 +73,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 
         public static void InteractionCPR(InteractivePed interactivePed)
         {
-            Client.TriggerEvent("curiosity:interaction:cpr", interactivePed.Handle, true);
+            PluginManager.TriggerEvent("curiosity:interaction:cpr", interactivePed.Handle, true);
 
             _chance = _seconds - _cprStart + 4;
             // START
@@ -91,7 +92,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             Game.PlayerPed.Task.PerformSequence(_introAndIdleMedic);
             _victim.Task.PerformSequence(_introAndIdleVictim);
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+            if (ClientInformation.IsDeveloper)
             {
                 Debug.WriteLine("Initiated CPR");
             }
@@ -178,7 +179,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 if (Game.IsControlJustPressed(0, Control.Jump) && !_hasSucceeded && Game.PlayerPed.TaskSequenceProgress == 1 && !_cprFinished)
                 {
-                    _hasSucceeded = Client.Random.Next(_chance) == 0;
+                    _hasSucceeded = PluginManager.Random.Next(_chance) == 0;
                     if (!_hasSucceeded)
                     {
                         Game.PlayerPed.Task.PerformSequence(_pumpAndIdleMedic);
@@ -197,7 +198,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                     _cprFinished = true;
                     Game.PlayerPed.Task.PerformSequence(_failMedic);
                     _victim.Task.PerformSequence(_failVictim);
-                    await Client.Delay(1000);
+                    await PluginManager.Delay(1000);
                     Dispose();
                 }
                 return;

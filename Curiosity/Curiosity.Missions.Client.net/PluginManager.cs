@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using System;
@@ -8,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client
 {
-    public class Client : BaseScript
+    public class PluginManager : BaseScript
     {
-        private static Client _instance;
+        internal static PluginManager Instance { get; private set; }
+
         public static PlayerList players;
         public static Random Random;
 
@@ -56,10 +58,6 @@ namespace Curiosity.Missions.Client
         public const string DECOR_INTERACTION_CORONER_CALLED = "curiosity::police::ped::coronerCalled";
         public const string DECOR_INTERACTION_WANTED = "curiosity::police::ped::wanted";
 
-        public const string DECOR_PED_MISSION = "c::ped::mission";
-        public const string DECOR_VEHICLE_MISSION = "curiosity::police::vehicle::mission";
-        public const string DECOR_PED_HOSTAGE = "c::ped::hostage";
-
         public static Vehicle CurrentVehicle
         {
             get
@@ -82,19 +80,9 @@ namespace Curiosity.Missions.Client
 
         private const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
 
-        public static Client GetInstance()
+        public PluginManager()
         {
-            if (Random == null)
-            {
-                Random = new Random();
-            }
-
-            return _instance;
-        }
-
-        public Client()
-        {
-            _instance = this;
+            Instance = this;
 
             players = Players;
 
@@ -139,7 +127,7 @@ namespace Curiosity.Missions.Client
                 long gameTimer = API.GetGameTimer();
                 while ((API.GetGameTimer() - gameTimer) < 30000)
                 {
-                    await Client.Delay(100);
+                    await PluginManager.Delay(100);
                 }
 
                 TriggerServerEvent("curiosity:server:special");
@@ -179,17 +167,17 @@ namespace Curiosity.Missions.Client
 
         public static void OnVehicleId(int vehicleId)
         {
-            if (Client.CurrentVehicle == null)
+            if (PluginManager.CurrentVehicle == null)
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
-                Client.CurrentVehicle = new Vehicle(vehicleId);
-                API.DecorSetBool(Client.CurrentVehicle.Handle, DECOR_PLAYER_VEHICLE, true);
+                PluginManager.CurrentVehicle = new Vehicle(vehicleId);
+                API.DecorSetBool(PluginManager.CurrentVehicle.Handle, DECOR_PLAYER_VEHICLE, true);
             }
-            else if (Client.CurrentVehicle.Handle != vehicleId)
+            else if (PluginManager.CurrentVehicle.Handle != vehicleId)
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
-                Client.CurrentVehicle = new Vehicle(vehicleId);
-                API.DecorSetBool(Client.CurrentVehicle.Handle, DECOR_PLAYER_VEHICLE, true);
+                PluginManager.CurrentVehicle = new Vehicle(vehicleId);
+                API.DecorSetBool(PluginManager.CurrentVehicle.Handle, DECOR_PLAYER_VEHICLE, true);
             }
 
             if (CurrentVehicle == null)
@@ -197,7 +185,7 @@ namespace Curiosity.Missions.Client
                 if (Game.PlayerPed.IsInVehicle())
                 {
                     CurrentVehicle = Game.PlayerPed.CurrentVehicle;
-                    API.DecorSetBool(Client.CurrentVehicle.Handle, DECOR_PLAYER_VEHICLE, true);
+                    API.DecorSetBool(PluginManager.CurrentVehicle.Handle, DECOR_PLAYER_VEHICLE, true);
                 }
             }
         }
@@ -245,7 +233,7 @@ namespace Curiosity.Missions.Client
         {
             try
             {
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                if (ClientInformation.IsDeveloper)
                     Debug.WriteLine($"REGISTERED: {action.Method.Name}");
 
                 Tick += action;
@@ -264,7 +252,7 @@ namespace Curiosity.Missions.Client
         {
             try
             {
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
+                if (ClientInformation.IsDeveloper)
                     Debug.WriteLine($"DEREGISTERED: {action.Method.Name}");
 
                 Tick -= action;

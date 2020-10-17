@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.NPCType;
-using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Utils;
 
 namespace Curiosity.Missions.Client.MissionPedTypes
 {
@@ -14,18 +14,18 @@ namespace Curiosity.Missions.Client.MissionPedTypes
         {
             Ped = this;
 
-            if (Decorators.GetBoolean(Ped.Handle, Decorators.DECOR_PED_INFLUENCE_ALCOHOL)
-                || Decorators.GetBoolean(Ped.Handle, Client.DECOR_NPC_DRUG_ALCOHOL))
+            if (Decorators.GetBoolean(Ped.Handle, Decorators.PED_INFLUENCE_ALCOHOL)
+                || Decorators.GetBoolean(Ped.Handle, Decorators.PED_INFLUENCE_DRUG))
             {
                 Profile = new NpcArrestable(true, (int)Ped.Gender);
             }
             else
             {
-                bool influence = (Client.Random.Next(30) >= 28);
+                bool influence = (PluginManager.Random.Next(30) >= 28);
                 Profile = new NpcArrestable(influence, (int)Ped.Gender);
             }
 
-            Decorators.Set(Ped.Handle, Client.DECOR_PED_MISSION, true);
+            Decorators.Set(Ped.Handle, Decorators.PED_MISSION, true);
 
             SetDrunkMovementSet();
         }
@@ -34,16 +34,16 @@ namespace Curiosity.Missions.Client.MissionPedTypes
         {
             if (Profile.IsUnderAlcaholInfluence)
             {
-                if (!API.HasAnimSetLoaded(Client.MOVEMENT_ANIMATION_SET_DRUNK))
+                if (!API.HasAnimSetLoaded(PluginManager.MOVEMENT_ANIMATION_SET_DRUNK))
                 {
-                    API.RequestAnimSet(Client.MOVEMENT_ANIMATION_SET_DRUNK);
+                    API.RequestAnimSet(PluginManager.MOVEMENT_ANIMATION_SET_DRUNK);
 
-                    while (!API.HasAnimSetLoaded(Client.MOVEMENT_ANIMATION_SET_DRUNK))
+                    while (!API.HasAnimSetLoaded(PluginManager.MOVEMENT_ANIMATION_SET_DRUNK))
                     {
-                        await Client.Delay(100);
+                        await PluginManager.Delay(100);
                     }
                 }
-                Ped.MovementAnimationSet = Client.MOVEMENT_ANIMATION_SET_DRUNK;
+                Ped.MovementAnimationSet = PluginManager.MOVEMENT_ANIMATION_SET_DRUNK;
             }
         }
     }

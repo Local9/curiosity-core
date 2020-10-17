@@ -8,7 +8,7 @@ namespace Curiosity.Missions.Client.DataClasses
 {
     class ItemPreview
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         private static Vector3 _currentOffset;
 
@@ -124,10 +124,10 @@ namespace Curiosity.Missions.Client.DataClasses
                         _currentPreview = null;
                         _currnetPropHash = string.Empty;
                         PreviewComplete = true;
-                        client.DeregisterTickHandler(OnTick);
+                        PluginInstance.DeregisterTickHandler(OnTick);
 
-                        Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
-                        Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
+                        PluginManager.TriggerEvent("curiosity:Client:UI:LocationHide", false);
+                        PluginManager.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
                     }
                 }
                 else
@@ -139,10 +139,10 @@ namespace Curiosity.Missions.Client.DataClasses
                     _currentPreview = prop;
                     _preview = false;
                     PreviewComplete = true;
-                    client.DeregisterTickHandler(OnTick);
+                    PluginInstance.DeregisterTickHandler(OnTick);
 
-                    Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
-                    Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
+                    PluginManager.TriggerEvent("curiosity:Client:UI:LocationHide", false);
+                    PluginManager.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
                 }
             }
             else
@@ -172,8 +172,8 @@ namespace Curiosity.Missions.Client.DataClasses
 
                 if (PreviewComplete)
                 {
-                    Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
-                    Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
+                    PluginManager.TriggerEvent("curiosity:Client:UI:LocationHide", false);
+                    PluginManager.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
                 }
             }
         }
@@ -230,10 +230,10 @@ namespace Curiosity.Missions.Client.DataClasses
                 _currnetPropHash = propHash;
                 _isDoor = isDoor;
 
-                client.RegisterTickHandler(OnTick);
+                PluginInstance.RegisterTickHandler(OnTick);
 
-                Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
-                Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
+                PluginManager.TriggerEvent("curiosity:Client:UI:LocationHide", true);
+                PluginManager.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
             }
         }
     }

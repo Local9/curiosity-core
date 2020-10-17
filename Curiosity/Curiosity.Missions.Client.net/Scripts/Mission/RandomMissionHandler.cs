@@ -16,7 +16,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 {
     class RandomMissionHandler
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static bool StopSpam = false;
         static public bool HasAcceptedCallout = false;
@@ -24,7 +24,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         static long TimeStampOfLastCallout;
 
-        static public int RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);
+        static public int RandomTimeBetweenCallouts = PluginManager.Random.Next(60000, 180000);
         static int PreviousMissionId = 0;
 
         static public bool IsOnDuty = false;
@@ -39,12 +39,12 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         static public void Init()
         {
-            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
-            client.RegisterEventHandler("curiosity:Client:Mission:TrafficStops", new Action<bool>(OnTrafficStops));
-            client.RegisterEventHandler("curiosity:Client:Mission:RandomEvents", new Action<bool>(OnRandomEvents));
-            client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
-            client.RegisterEventHandler("curiosity:Client:Mission:NotAvailable", new Action(OnMissionNotAvailable));
-            client.RegisterEventHandler("curiosity:Client:Missions:MissionComplete", new Action(OnMissionComplete));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:TrafficStops", new Action<bool>(OnTrafficStops));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:RandomEvents", new Action<bool>(OnRandomEvents));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:NotAvailable", new Action(OnMissionNotAvailable));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Missions:MissionComplete", new Action(OnMissionComplete));
         }
 
         static void OnRandomEvents(bool state)
@@ -64,46 +64,46 @@ namespace Curiosity.Missions.Client.Scripts.Mission
         {
             _IsTrafficStopActive = state;
 
-            if (Client.CurrentVehicle == null)
+            if (PluginManager.CurrentVehicle == null)
             {
                 Screen.ShowNotification("~b~Traffic Stops: ~r~You currently do not have a Personal Vehicle for Traffic Stops.");
-                Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
+                PluginManager.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
                 return;
             }
 
-            if (Game.PlayerPed.CurrentVehicle != Client.CurrentVehicle)
+            if (Game.PlayerPed.CurrentVehicle != PluginManager.CurrentVehicle)
             {
                 Screen.ShowNotification("~b~Traffic Stops: ~r~This vehicle is not your personal vehicle.");
-                Client.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
+                PluginManager.TriggerEvent("curiosity:Client:Police:TrafficStops", false);
                 return;
             }
 
             if (state)
             {
-                Client.TriggerEvent("curiosity:Client:Context:TrafficStopActive", true);
+                PluginManager.TriggerEvent("curiosity:Client:Context:TrafficStopActive", true);
                 Police.TrafficStop.Setup();
             }
             else
             {
-                Client.TriggerEvent("curiosity:Client:Context:TrafficStopActive", false);
+                PluginManager.TriggerEvent("curiosity:Client:Context:TrafficStopActive", false);
                 Police.TrafficStop.Dispose();
             }
         }
 
         static void OnMissionComplete()
         {
-            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)}");
+            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)}");
         }
 
         static void OnMissionNotAvailable()
         {
-            if (ClientInformation.IsDeveloper())
+            if (ClientInformation.IsDeveloper)
             {
                 Log.Info($"Requesting Mission, none Available");
             }
 
             SetDispatchMessageRecieved(false);
-            RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);
+            RandomTimeBetweenCallouts = PluginManager.Random.Next(60000, 180000);
             TimeStampOfLastCallout = GetGameTimer();
 
             IsRequestingCallout = false;
@@ -125,7 +125,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                 HasAcceptedCallout = false;
 
                 // clean up and stop everything
-                client.DeregisterTickHandler(OnGenerateRandomMission);
+                PluginInstance.DeregisterTickHandler(OnGenerateRandomMission);
 
                 if (IsOnActiveCallout)
                     CreateStoreMission.CleanUp(true);
@@ -154,7 +154,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
             if (IsOnDuty != onduty)
             {
-                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)}");
+                SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)}");
             }
 
             IsOnDuty = onduty;
@@ -164,15 +164,15 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             if (!onduty)
             {
                 if (PreviousMissionId > 0)
-                    Client.TriggerServerEvent("curiosity:Server:Missions:Ended", PreviousMissionId);
+                    PluginManager.TriggerServerEvent("curiosity:Server:Missions:Ended", PreviousMissionId);
 
-                client.DeregisterTickHandler(OnGenerateRandomMission);
+                PluginInstance.DeregisterTickHandler(OnGenerateRandomMission);
             }
 
             if (!onduty && IsOnActiveCallout)
             {
                 CreateStoreMission.CleanUp(true);
-                client.DeregisterTickHandler(OnGenerateRandomMission);
+                PluginInstance.DeregisterTickHandler(OnGenerateRandomMission);
             }
             else
             {
@@ -181,13 +181,13 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                     IsRequestingCallout = false;
                     IsOnActiveCallout = false;
                     TimeStampOfLastCallout = GetGameTimer();
-                    client.RegisterTickHandler(OnGenerateRandomMission);
+                    PluginInstance.RegisterTickHandler(OnGenerateRandomMission);
                     Log.Info($"Player is on duty");
                     Static.Relationships.Init();
                 }
             }
 
-            await Client.Delay(3000);
+            await PluginManager.Delay(3000);
             StopSpam = false;
         }
 
@@ -195,7 +195,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
         {
             IsOnActiveCallout = state;
             if (IsOnActiveCallout)
-                client.DeregisterTickHandler(OnGenerateRandomMission);
+                PluginInstance.DeregisterTickHandler(OnGenerateRandomMission);
         }
 
         static public void AllowNextMission()
@@ -204,18 +204,18 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
             if (PreviousMissionId > 0)
             {
-                Client.TriggerServerEvent("curiosity:Server:Missions:EndMission");
-                Client.TriggerServerEvent("curiosity:Server:Missions:Ended", PreviousMissionId);
+                PluginManager.TriggerServerEvent("curiosity:Server:Missions:EndMission");
+                PluginManager.TriggerServerEvent("curiosity:Server:Missions:Ended", PreviousMissionId);
             }
 
             SetDispatchMessageRecieved(false);
-            RandomTimeBetweenCallouts = Client.Random.Next(60000, 180000);
+            RandomTimeBetweenCallouts = PluginManager.Random.Next(60000, 180000);
             TimeStampOfLastCallout = GetGameTimer();
 
             IsRequestingCallout = false;
             HasAcceptedCallout = false;
 
-            client.RegisterTickHandler(OnGenerateRandomMission);
+            PluginInstance.RegisterTickHandler(OnGenerateRandomMission);
         }
 
         static async Task OnGenerateRandomMission()
@@ -224,13 +224,13 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             {
                 while ((GetGameTimer() - TimeStampOfLastCallout) < RandomTimeBetweenCallouts)
                 {
-                    if (ClientInformation.IsDeveloper())
+                    if (ClientInformation.IsDeveloper)
                     {
                         Log.Info($"Waiting to create mission {RandomTimeBetweenCallouts}");
                         Log.Info($"Waiting to create mission {(GetGameTimer() - TimeStampOfLastCallout)}");
                     }
 
-                    await Client.Delay(10000);
+                    await PluginManager.Delay(10000);
 
                     if (!IsOnDuty)
                     {
@@ -239,7 +239,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                         IsRequestingCallout = false;
                         HasAcceptedCallout = false;
 
-                        client.DeregisterTickHandler(OnGenerateRandomMission);
+                        PluginInstance.DeregisterTickHandler(OnGenerateRandomMission);
                         return;
                     }
                 }
@@ -256,7 +256,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
         {
             HasAcceptedCallout = true;
 
-            if (Client.Random.Next(20) == 1 && DataClasses.Mission.PoliceCallouts.ruralCallouts.Count > 0)
+            if (PluginManager.Random.Next(20) == 1 && DataClasses.Mission.PoliceCallouts.ruralCallouts.Count > 0)
             {
                 ChooseRandomMissionAsync(DataClasses.Mission.PoliceCallouts.ruralCallouts, PatrolZone.Rural);
                 return;
@@ -275,7 +275,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
 
         static async Task ChooseRandomMissionAsync(Dictionary<int, DataClasses.Mission.MissionData> missions, PatrolZone missionPatrolZone)
         {
-            int randomMissionNumber = missions.Count == 1 ? 0 : Client.Random.Next(0, missions.Count);
+            int randomMissionNumber = missions.Count == 1 ? 0 : PluginManager.Random.Next(0, missions.Count);
             int missionId = missions.ElementAt(randomMissionNumber).Key;
 
             bool foundNewCallout = false;
@@ -283,7 +283,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
             while (!foundNewCallout)
             {
                 if (!IsOnDuty) return;
-                randomMissionNumber = missions.Count == 1 ? 0 : Client.Random.Next(0, missions.Count);
+                randomMissionNumber = missions.Count == 1 ? 0 : PluginManager.Random.Next(0, missions.Count);
                 missionId = missions.ElementAt(randomMissionNumber).Key;
 
                 if (missionId != PreviousMissionId)
@@ -291,7 +291,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                     foundNewCallout = true;
                 }
 
-                await Client.Delay(1000);
+                await PluginManager.Delay(1000);
             }
 
             PreviousMissionId = missionId;
@@ -302,14 +302,14 @@ namespace Curiosity.Missions.Client.Scripts.Mission
                 PatrolZone = (int)missionPatrolZone
             };
 
-            if (ClientInformation.IsDeveloper())
+            if (ClientInformation.IsDeveloper)
             {
                 Log.Info($"Requesting Mission");
             }
 
             string message = Encode.StringToBase64(JsonConvert.SerializeObject(missionMessage));
 
-            Client.TriggerServerEvent("curiosity:Server:Missions:Available", message);
+            PluginManager.TriggerServerEvent("curiosity:Server:Missions:Available", message);
         }
     }
 }

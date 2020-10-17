@@ -17,22 +17,22 @@ namespace Curiosity.Missions.Client.Scripts
 {
     class MissionEvents
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static long GameTime;
         static public bool HasAcceptedCallout = false;
 
         public static void Init()
         {
-            client.RegisterEventHandler("curiosity:Client:Mission:Start", new Action<string>(OnPlayerCanStartMission));
-            client.RegisterEventHandler("curiosity:Client:Mission:Dispatch", new Action<string>(OnDispatch));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:Start", new Action<string>(OnPlayerCanStartMission));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Mission:Dispatch", new Action<string>(OnDispatch));
 
             RegisterCommand("dispatch", new Action(OnDispatchRequest), false);
         }
 
         static void OnDispatchRequest()
         {
-            Client.TriggerServerEvent("curiosity:Server:Missions:Dispatch");
+            PluginManager.TriggerServerEvent("curiosity:Server:Missions:Dispatch");
         }
 
         static void OnDispatch(string missionData)
@@ -59,7 +59,7 @@ namespace Curiosity.Missions.Client.Scripts
                 }
             }
 
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Current Active", $"~b~{CityDispatch}/{DataClasses.Mission.PoliceCallouts.cityCallouts.Count} ~s~City~n~~b~{RuralDispatch}/{DataClasses.Mission.PoliceCallouts.ruralCallouts.Count} ~s~Rural~n~~b~{CountyDispatch}/{DataClasses.Mission.PoliceCallouts.countyCallouts.Count} ~s~Country", 2);
+            PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Current Active", $"~b~{CityDispatch}/{DataClasses.Mission.PoliceCallouts.cityCallouts.Count} ~s~City~n~~b~{RuralDispatch}/{DataClasses.Mission.PoliceCallouts.ruralCallouts.Count} ~s~Rural~n~~b~{CountyDispatch}/{DataClasses.Mission.PoliceCallouts.countyCallouts.Count} ~s~Country", 2);
         }
 
         static async void OnPlayerCanStartMission(string missionData)
@@ -71,14 +71,14 @@ namespace Curiosity.Missions.Client.Scripts
 
             MissionCreate missionMessage = JsonConvert.DeserializeObject<MissionCreate>(Encode.Base64ToString(missionData));
 
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Response Required", $"", 2);
+            PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Dispatch", $"Response Required", $"", 2);
 
             while (!HasAcceptedCallout)
             {
                 DisableControlAction(0, (int)Control.FrontendDelete, true);
                 DisableControlAction(0, (int)Control.FrontendAccept, true);
 
-                await Client.Delay(0);
+                await PluginManager.Delay(0);
 
                 if ((GetGameTimer() - GameTime) > (1000 * 30))
                 {
@@ -109,7 +109,7 @@ namespace Curiosity.Missions.Client.Scripts
             EnableControlAction(0, (int)Control.FrontendDelete, true);
             EnableControlAction(0, (int)Control.FrontendAccept, true);
 
-            if (ClientInformation.IsDeveloper())
+            if (ClientInformation.IsDeveloper)
             {
                 Log.Info($"Mission Message {missionMessage}");
             }
@@ -133,9 +133,9 @@ namespace Curiosity.Missions.Client.Scripts
 
             DataClasses.Mission.MissionData mission = missions[missionMessage.MissionId];
 
-            Client.TriggerServerEvent("curiosity:Server:Missions:StartedMission", missionMessage.MissionId);
+            PluginManager.TriggerServerEvent("curiosity:Server:Missions:StartedMission", missionMessage.MissionId);
 
-            switch(mission.MissionType)
+            switch (mission.MissionType)
             {
                 case MissionType.STORE:
                     Mission.CreateStoreMission.Create(mission);

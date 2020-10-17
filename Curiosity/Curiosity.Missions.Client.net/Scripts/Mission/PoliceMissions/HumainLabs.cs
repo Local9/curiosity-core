@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Global.Shared.Data;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Exceptions;
-using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Scripts.PedCreators;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Extensions;
@@ -34,7 +34,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
         private const string TRIGGER9 = "hlTrigger9";
         private const string TRIGGER10 = "hlTrigger10";
         private const string MISSIONTRIGGER = "hlTriggerMissionLocation";
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static ConcurrentDictionary<string, AreaSphere> _missionTriggers = new ConcurrentDictionary<string, AreaSphere>();
 
@@ -51,23 +51,23 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             API.RegisterCommand("boss", new Action<int, List<object>, string>(BossTest), false);
             API.RegisterCommand("zombie", new Action<int, List<object>, string>(OnZombieCommand), false);
 
-            client.RegisterEventHandler("curiosity:missions:player:spawn", new Action(CreateMission));
-            client.RegisterEventHandler("curiosity:missions:player:invalid", new Action(InvalidMission));
-            client.RegisterEventHandler("curiosity:missions:player:clean", new Action(CleanMission));
+            PluginInstance.RegisterEventHandler("curiosity:missions:player:spawn", new Action(CreateMission));
+            PluginInstance.RegisterEventHandler("curiosity:missions:player:invalid", new Action(InvalidMission));
+            PluginInstance.RegisterEventHandler("curiosity:missions:player:clean", new Action(CleanMission));
 
-            client.RegisterEventHandler("curiosity:Client:Player:Environment:OnEnterArea", new Action<string, dynamic>(OnAreaEnter));
-            client.RegisterEventHandler("curiosity:Client:Player:Environment:OnExitArea", new Action<string, dynamic>(OnAreaExit));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Player:Environment:OnEnterArea", new Action<string, dynamic>(OnAreaEnter));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Player:Environment:OnExitArea", new Action<string, dynamic>(OnAreaExit));
 
-            client.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action<bool>(OnDrawAreas));
+            PluginInstance.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action<bool>(OnDrawAreas));
         }
 
         private static async void OnZombieCommand(int playerHandle, List<object> arguments, string raw)
         {
             try
             {
-                if (!Classes.PlayerClient.ClientInformation.IsTrusted()) return;
+                if (!ClientInformation.IsTrusted()) return;
 
-                int numberToSpawn = Client.Random.Next(3, 8);
+                int numberToSpawn = PluginManager.Random.Next(3, 8);
 
                 int runs = arguments.Count > 0 ? int.Parse($"{arguments[0]}") : 1;
 
@@ -76,10 +76,10 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
                 for (int r = 0; r < runs; r++)
                 {
-                    await Client.Delay(50);
+                    await PluginManager.Delay(50);
                     for (int i = 0; i < numberToSpawn; i++)
                     {
-                        await Client.Delay(50);
+                        await PluginManager.Delay(50);
                         CreateZombie();
                     }
                 }
@@ -92,34 +92,34 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         static async void CreateZombie()
         {
-            float rnd = Client.Random.Next(-15, 15);
-            float rnd2 = Client.Random.Next(-15, 15);
+            float rnd = PluginManager.Random.Next(-15, 15);
+            float rnd2 = PluginManager.Random.Next(-15, 15);
             Vector3 offset = Game.PlayerPed.Position + new Vector3(rnd, rnd2, 0f);
             float groundPosZ = 0f;
 
-            if(API.GetGroundZFor_3dCoord(offset.X, offset.Y, offset.Z, ref groundPosZ, false))
+            if (API.GetGroundZFor_3dCoord(offset.X, offset.Y, offset.Z, ref groundPosZ, false))
             {
                 offset.Z = groundPosZ;
             }
 
             List<dynamic> pedHashList = PedModelListUniqueFemale;
 
-            if (Client.Random.NextBool(50))
+            if (PluginManager.Random.NextBool(50))
             {
                 pedHashList = PedModelListUniqueMale;
             }
 
-            if (Client.Random.NextBool(10))
+            if (PluginManager.Random.NextBool(10))
             {
                 pedHashList = PedModelListSpecialMale;
             }
 
-            if (Client.Random.NextBool(10))
+            if (PluginManager.Random.NextBool(10))
             {
                 pedHashList = PedModelListSpecialFemale;
             }
 
-            object pedHash = pedHashList[Client.Random.Next(0, pedHashList.Count - 1)];
+            object pedHash = pedHashList[PluginManager.Random.Next(0, pedHashList.Count - 1)];
 
             await CreateZombiePed(offset.X, offset.Y, offset.Z, Game.PlayerPed.Heading, API.GetHashKey($"{pedHash}"));
         }
@@ -282,7 +282,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         private static async void BossTest(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsTrusted()) return;
+            if (!ClientInformation.IsTrusted()) return;
 
             Vector3 offset = Game.PlayerPed.Position + new Vector3(0f, 3f, 0f);
 
@@ -342,7 +342,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         private static void CommandHlMission(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!ClientInformation.IsDeveloper) return;
 
             if (arguments.Count > 0)
                 DebugAreas = true;
@@ -581,7 +581,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         static void OnDrawAreas(bool state)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!ClientInformation.IsDeveloper) return;
 
             DebugAreas = state;
         }
@@ -589,7 +589,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
         private static void InvalidMission()
         {
             CleanMission();
-            Client.TriggerEvent("curiosity:Client:Player:UpdateExtraFlags");
+            PluginManager.TriggerEvent("curiosity:Client:Player:UpdateExtraFlags");
         }
 
         private static void CleanMission()
@@ -644,8 +644,8 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             Alert();
             CreateMissionBlip();
 
-            client.RegisterTickHandler(OnTriggerCheck);
-            client.RegisterTickHandler(OnCompleteCheck);
+            PluginInstance.RegisterTickHandler(OnTriggerCheck);
+            PluginInstance.RegisterTickHandler(OnCompleteCheck);
         }
 
         private static async Task OnTriggerCheck()
@@ -683,9 +683,9 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         private static void Alert()
         {
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 3", $"Humain Labs", "Humain labs is being raided!", 2);
+            PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{NotificationCharacter.CHAR_CALL911}", 2, "Code 3", $"Humain Labs", "Humain labs is being raided!", 2);
             PlaySoundFrontend(-1, "Menu_Accept", "Phone_SoundSet_Default", true);
-            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} ATTENTION_ALL_UNITS/ATTENTION_ALL_UNITS_0{Client.Random.Next(1, 5)} WE_HAVE/WE_HAVE_0{Client.Random.Next(1, 3)} CRIMES/CRIME_GUNFIRE_0{Client.Random.Next(1, 4)} CONJUNCTIVES/AT_0{Client.Random.Next(1, 3)} AREAS/AREA_HUMANE_LABS");
+            SoundManager.PlayAudio($"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} ATTENTION_ALL_UNITS/ATTENTION_ALL_UNITS_0{PluginManager.Random.Next(1, 5)} WE_HAVE/WE_HAVE_0{PluginManager.Random.Next(1, 3)} CRIMES/CRIME_GUNFIRE_0{PluginManager.Random.Next(1, 4)} CONJUNCTIVES/AT_0{PluginManager.Random.Next(1, 3)} AREAS/AREA_HUMANE_LABS");
         }
 
         private static void CreateMissionBlip()
@@ -704,7 +704,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
         private static async Task CreatePed(float x, float y, float z, float heading)
         {
-            Model model = Client.Random.Next(2) == 1 ? PedHash.Lost01GMY : Client.Random.Next(2) == 1 ? PedHash.Lost03GMY : PedHash.Lost02GMY;
+            Model model = PluginManager.Random.Next(2) == 1 ? PedHash.Lost01GMY : PluginManager.Random.Next(2) == 1 ? PedHash.Lost03GMY : PedHash.Lost02GMY;
             await CreatePed(x, y, z, heading, model);
         }
 
@@ -713,7 +713,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             await BaseScript.Delay(10);
             if (DebugAreas)
             {
-                AddTrigger($"npc_{Client.Random.Next(999999999)}", new Vector3(x, y, z), Color.FromArgb(255, 0, 0), 2f);
+                AddTrigger($"npc_{PluginManager.Random.Next(999999999)}", new Vector3(x, y, z), Color.FromArgb(255, 0, 0), 2f);
                 return;
             }
 
@@ -734,7 +734,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
             spawnedPed.DropsWeaponsOnDeath = false;
             // mission maker
-            ZombieCreator.InfectPed(spawnedPed, 300, Client.Random.NextBool(20));
+            ZombieCreator.InfectPed(spawnedPed, 300, PluginManager.Random.NextBool(20));
             model.MarkAsNoLongerNeeded();
 
         }
@@ -744,7 +744,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             await BaseScript.Delay(10);
             if (DebugAreas)
             {
-                AddTrigger($"npc_{Client.Random.Next(999999999)}", new Vector3(x, y, z), Color.FromArgb(255, 0, 0), 2f);
+                AddTrigger($"npc_{PluginManager.Random.Next(999999999)}", new Vector3(x, y, z), Color.FromArgb(255, 0, 0), 2f);
                 return;
             }
 
@@ -761,7 +761,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 
             Ped spawnedPed = await World.CreatePed(model, position, heading);
             // settings
-            WeaponHash weaponHash = Client.Random.Next(2) == 1 ? WeaponHash.SawnOffShotgun : Client.Random.Next(2) == 1 ? WeaponHash.AssaultRifle : WeaponHash.MicroSMG;
+            WeaponHash weaponHash = PluginManager.Random.Next(2) == 1 ? WeaponHash.SawnOffShotgun : PluginManager.Random.Next(2) == 1 ? WeaponHash.AssaultRifle : WeaponHash.MicroSMG;
             spawnedPed.Armor = 100;
 
             if (spawnedPed.Model.Hash == API.GetHashKey("u_m_y_juggernaut_01"))
@@ -779,13 +779,13 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             spawnedPed.DropsWeaponsOnDeath = false;
             // mission maker
             MissionPed missionPed = MissionPedCreator.Ped(spawnedPed, Extensions.Alertness.FullyAlert, Extensions.Difficulty.BringItOn);
-            Decorators.Set(missionPed.Handle, Client.DECOR_PED_MISSION, true);
+            Decorators.Set(missionPed.Handle, Decorators.PED_MISSION, true);
             model.MarkAsNoLongerNeeded();
         }
 
         private static List<Player> GetPlayersInArea()
         {
-            return Client.players.Select(p => p).Where(x => x.Character.Position.Distance(_location) <= 250).ToList();
+            return PluginManager.players.Select(p => p).Where(x => x.Character.Position.Distance(_location) <= 250).ToList();
         }
     }
 }

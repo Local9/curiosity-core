@@ -10,7 +10,7 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu
 {
     class MenuBase
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
         static public Menu MainMenu;
         static InteractivePed _interactivePed;
 
@@ -19,7 +19,7 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu
 
         static public void Init()
         {
-            client.RegisterEventHandler("curiosity:interaction:closeMenu", new Action(OnCloseMenus));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:closeMenu", new Action(OnCloseMenus));
 
         }
 
@@ -52,7 +52,7 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu
                 MenuController.AddMenu(MainMenu);
             }
 
-            client.RegisterTickHandler(OnDistanceTask);
+            PluginInstance.RegisterTickHandler(OnDistanceTask);
             MainMenu.OpenMenu();
         }
 
@@ -62,7 +62,7 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu
                 MenuController.CloseAllMenus();
 
             if (!MenuController.IsAnyMenuOpen())
-                client.DeregisterTickHandler(OnDistanceTask);
+                PluginInstance.DeregisterTickHandler(OnDistanceTask);
         }
 
         private static void MainMenu_OnListIndexChange(Menu menu, MenuListItem listItem, int oldSelectionIndex, int newSelectionIndex, int itemIndex)
@@ -106,8 +106,8 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu
         public static void MenuState(bool IsOpen)
         {
             MenuController.DontOpenAnyMenu = !IsOpen;
-            Client.TriggerEvent("curiosity:Client:UI:LocationHide", IsOpen);
-            Client.TriggerEvent("curiosity:Client:Menu:IsOpened", IsOpen);
+            PluginManager.TriggerEvent("curiosity:Client:UI:LocationHide", IsOpen);
+            PluginManager.TriggerEvent("curiosity:Client:Menu:IsOpened", IsOpen);
         }
 
         public static bool AnyMenuVisible()

@@ -5,7 +5,7 @@ namespace Curiosity.Missions.Client.Static
 {
     static class Relationships
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         public static RelationshipGroup PlayerRelationship;
         public static RelationshipGroup HostileRelationship;
@@ -31,7 +31,7 @@ namespace Curiosity.Missions.Client.Static
         {
             SetupRelationShips();
 
-            client.RegisterEventHandler("playerSpawned", new Action(SetupRelationShips));
+            PluginInstance.RegisterEventHandler("playerSpawned", new Action(SetupRelationShips));
         }
 
         public static void SetupRelationShips()

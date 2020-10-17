@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Scripts;
@@ -18,7 +19,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 {
     class ChatCommands
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static AreaSphere areaSphere = new AreaSphere();
 
@@ -50,7 +51,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private async static void OnParticleTest(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!ClientInformation.IsDeveloper) return;
 
             ParticleEffectsAsset particleEffectsAsset = new ParticleEffectsAsset("scr_martin1");
             await particleEffectsAsset.Request(1000);
@@ -61,7 +62,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void OnAudioFile(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!ClientInformation.IsDeveloper) return;
 
             if (arguments.Count == 0) return;
 
@@ -74,7 +75,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void OnSfxFile(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!ClientInformation.IsDeveloper) return;
 
             if (arguments.Count == 0) return;
 
@@ -87,11 +88,11 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void OnBirthdayTest(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!ClientInformation.IsDeveloper) return;
 
-            Client.IsBirthday = !Client.IsBirthday;
+            PluginManager.IsBirthday = !PluginManager.IsBirthday;
 
-            if (Client.IsBirthday)
+            if (PluginManager.IsBirthday)
             {
                 Screen.ShowNotification($"~g~Activated");
             }
@@ -103,14 +104,14 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void OnArea(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!ClientInformation.IsDeveloper) return;
 
             try
             {
 
                 if (arguments.Count == 0)
                 {
-                    client.DeregisterTickHandler(AreaSphereCheck);
+                    PluginInstance.DeregisterTickHandler(AreaSphereCheck);
                     CancelEvent();
                     return;
                 }
@@ -127,7 +128,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
                     areaSphere.Identifier = "DEV_TEST_TRIGGER";
                     areaSphere.Color = System.Drawing.Color.FromArgb(255, 255, 255);
 
-                    client.RegisterTickHandler(AreaSphereCheck);
+                    PluginInstance.RegisterTickHandler(AreaSphereCheck);
                 }
                 else
                 {
@@ -143,7 +144,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         private static void StartItemPreview(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Classes.PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!ClientInformation.IsDeveloper) return;
 
             string prop = "prop_bin_beach_01d";
 
@@ -156,16 +157,16 @@ namespace Curiosity.Missions.Client.Classes.Environment
         static async void OnPlaySound(int playerHandle, List<object> arguments, string raw)
         {
             await BaseScript.Delay(0);
-            if (!PlayerClient.ClientInformation.IsDeveloper()) return;
+            if (!ClientInformation.IsDeveloper) return;
 
-            string sending = $"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{Client.Random.Next(1, 5)}";
+            string sending = $"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} REPORT_RESPONSE/REPORT_RESPONSE_COPY_0{PluginManager.Random.Next(1, 5)}";
 
             if (arguments.Count > 0)
             {
                 if ($"{arguments[0]}" == "1")
                 {
-                    sending = $"RESIDENT/DISPATCH_INTRO_0{Client.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{Client.Random.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{Client.Random.Next(1, 5)} " +
-                        $"CONJUNCTIVES/IN_0{Client.Random.Next(1, 6)} AREAS/AREA_DAVIS_01 UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{Client.Random.Next(1, 3)}";
+                    sending = $"RESIDENT/DISPATCH_INTRO_0{PluginManager.Random.Next(1, 3)} WE_HAVE/WE_HAVE_0{PluginManager.Random.Next(1, 3)} CRIMES/CRIME_ROBBERY_0{PluginManager.Random.Next(1, 5)} " +
+                        $"CONJUNCTIVES/IN_0{PluginManager.Random.Next(1, 6)} AREAS/AREA_DAVIS_01 UNITS_RESPOND/UNITS_RESPOND_CODE_02_0{PluginManager.Random.Next(1, 3)}";
                 }
             }
 
@@ -176,7 +177,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         static async void OnCreateCommand(int playerHandle, List<object> arguments, string raw)
         {
-            if (!PlayerClient.ClientInformation.IsDeveloper())
+            if (!ClientInformation.IsDeveloper)
             {
                 Screen.ShowNotification("~r~Method Protected");
             }
@@ -198,7 +199,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
                     spawnPosition.Z = z;
                 }
 
-                Ped ped = await World.CreatePed(PedHash.JimmyDisanto, spawnPosition);
+                CitizenFX.Core.Ped ped = await World.CreatePed(PedHash.JimmyDisanto, spawnPosition);
                 API.NetworkFadeInEntity(ped.Handle, false);
                 API.PlaceObjectOnGroundProperly(ped.Handle);
 
@@ -228,7 +229,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
                     if (killPed)
                     {
-                        Ped p = interactivePed;
+                        CitizenFX.Core.Ped p = interactivePed;
                         p.Kill();
                     }
                 }
@@ -243,12 +244,12 @@ namespace Curiosity.Missions.Client.Classes.Environment
                 Model model = PedHash.Abigail;
                 await model.Request(10000);
 
-                Ped ped = await World.CreatePed(model, spawnPosition);
+                CitizenFX.Core.Ped ped = await World.CreatePed(model, spawnPosition);
 
                 model.MarkAsNoLongerNeeded();
                 Model vehmod = VehicleHash.Adder;
                 await vehmod.Request(10000);
-                Vehicle vehicle = await World.CreateVehicle(vehmod, vehSpawn, Game.PlayerPed.Heading);
+                CitizenFX.Core.Vehicle vehicle = await World.CreateVehicle(vehmod, vehSpawn, Game.PlayerPed.Heading);
                 vehmod.MarkAsNoLongerNeeded();
 
                 ped.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
@@ -277,7 +278,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         static void OnTestCallout(int playerHandle, List<object> arguments, string raw)
         {
-            if (PlayerClient.ClientInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER)
+            if (ClientInformation.privilege != Privilege.DEVELOPER)
             {
                 Debug.WriteLine("Not Enough Permissions");
                 return;
@@ -341,7 +342,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
         //    try
         //    {
 
-        //        await Client.Delay(0);
+        //        await PluginInstance.Delay(0);
 
         //        // start callout
         //        Vector3 location = new Vector3(1662.625f, -27.41396f, 173.7747f);

@@ -1,18 +1,15 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Global.Shared.Entity;
-using Curiosity.Missions.Client.Classes.PlayerClient;
-using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Missions.Client.Scripts.Interactions.PedInteractions;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.Scripts
@@ -23,12 +20,12 @@ namespace Curiosity.Missions.Client.Scripts
         public static bool IsPerformingCpr = false;
         public static bool IsCoronerCalled = false;
 
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
         static ConcurrentDictionary<int, InteractivePed> NpcNetworkIds = new ConcurrentDictionary<int, InteractivePed>();
 
         static public void Init()
         {
-            client.RegisterTickHandler(OnNpcInteraction);
+            PluginInstance.RegisterTickHandler(OnNpcInteraction);
         }
 
         private static async Task OnNpcInteraction()

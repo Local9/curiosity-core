@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Shared.Client.net.Extensions;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 
                 Wrappers.Helpers.ShowSimpleNotification("~w~Performing ~b~Breathalyzer~w~ test...");
 
-                await Client.Delay(3000);
+                await PluginManager.Delay(3000);
                 string bac = $"~g~0.{interactivePed.BloodAlcaholLimit:00}";
                 if (interactivePed.BloodAlcaholLimit >= 8)
                 {
@@ -96,7 +97,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                 string cocaine = interactivePed.IsUsingCocaine ? "~r~" : "~g~";
                 Helpers.Animations.AnimationSearch();
                 Wrappers.Helpers.ShowSimpleNotification("~w~Performing ~b~Drugalyzer~w~ test...");
-                await Client.Delay(3000);
+                await PluginManager.Delay(3000);
                 Wrappers.Helpers.ShowSimpleNotification($"~w~Results:\n~b~  Cannabis~w~: {cannabis}{interactivePed.IsUsingCannabis}\n~b~  Cocaine~w~: {cocaine}{interactivePed.IsUsingCocaine}");
             }
             else
@@ -144,10 +145,10 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
             {
                 if (interactivePed.IsAllowedToBeSearched)
                 {
-                    int chanceOfFlee = Client.Random.Next(20);
-                    int chanceOfShooting = Client.Random.Next(20);
+                    int chanceOfFlee = PluginManager.Random.Next(20);
+                    int chanceOfShooting = PluginManager.Random.Next(20);
 
-                    Wrappers.Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[Client.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
+                    Wrappers.Helpers.ShowSimpleNotification($"~w~Found ~r~{DataClasses.Police.ItemData.illegalItems[PluginManager.Random.Next(DataClasses.Police.ItemData.illegalItems.Count)]}");
                     if (chanceOfFlee >= 13)
                     {
                         List<Vehicle> vehicles = World.GetAllVehicles().Select(m => m).Where(x => x.Position.Distance(interactivePed.Position) < 50f).ToList();
@@ -157,7 +158,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                             CitizenFX.Core.Native.API.SetVehicleCanBeUsedByFleeingPeds(v.Handle, false);
                         });
 
-                        Client.TriggerEvent("curiosity:setting:group:leave", interactivePed.Ped.Handle);
+                        PluginManager.TriggerEvent("curiosity:setting:group:leave", interactivePed.Ped.Handle);
 
                         interactivePed.Ped.Task.ReactAndFlee(Game.PlayerPed);
                         interactivePed.RanFromPolice = true;
@@ -169,7 +170,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                             Game.PlayerPed.Task.ClearAll();
                             Game.PlayerPed.Task.ClearAllImmediately();
 
-                            Client.TriggerEvent("curiosity:interaction:closeMenu");
+                            PluginManager.TriggerEvent("curiosity:interaction:closeMenu");
 
                             interactivePed.Ped.DropsWeaponsOnDeath = false;
 
@@ -178,7 +179,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
                             interactivePed.IsWanted = true;
                         }
                     }
-                    Client.TriggerEvent("curiosity:interaction:searched", interactivePed.Handle, true);
+                    PluginManager.TriggerEvent("curiosity:interaction:searched", interactivePed.Handle, true);
                 }
             }
             IsAnInteractionActive = false;
@@ -186,14 +187,14 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 
         public async static void InteractionEnterVehicle(InteractivePed interactivePed)
         {
-            if (!DecorExistOn(interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE)) return;
+            if (!DecorExistOn(interactivePed.Ped.Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE)) return;
 
             if (interactivePed.Ped.IsInVehicle()) return;
 
-            int vehicleHandle = DecorGetInt(interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE);
+            int vehicleHandle = DecorGetInt(interactivePed.Ped.Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE);
             Vehicle vehicle = new Vehicle(vehicleHandle);
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+            if (ClientInformation.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
             {
                 CitizenFX.Core.UI.Screen.ShowNotification($"Vehicle: {vehicle.Handle}");
             }
@@ -214,33 +215,33 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 
         public static async void InteractionLeaveVehicle(InteractivePed interactivePed)
         {
-            int resistExitChance = Client.Random.Next(30);
+            int resistExitChance = PluginManager.Random.Next(30);
 
             if (!interactivePed.Ped.IsInVehicle()) return;
 
-            DecorSetInt(interactivePed.Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE, interactivePed.Ped.CurrentVehicle.Handle);
+            DecorSetInt(interactivePed.Ped.Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE, interactivePed.Ped.CurrentVehicle.Handle);
 
             if (resistExitChance == 25 || resistExitChance == 29)
             {
-                await Client.Delay(500);
+                await PluginManager.Delay(500);
                 List<string> driverResponse = new List<string>() { "No way!", "Fuck off!", "Not today!", "Shit!", "Uhm.. Nope.", "Get away from me!", "Pig!", "No.", "Never!", "You'll never take me alive, pig!" };
-                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
-                await Client.Delay(3000);
+                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[PluginManager.Random.Next(driverResponse.Count)]);
+                await PluginManager.Delay(3000);
 
-                int willRam = Client.Random.Next(5);
+                int willRam = PluginManager.Random.Next(5);
                 if (willRam == 4)
                     TaskVehicleTempAction(interactivePed.Ped.Handle, interactivePed.Ped.CurrentVehicle.Handle, 28, 3000);
 
-                await Client.Delay(2000);
+                await PluginManager.Delay(2000);
                 TaskVehicleTempAction(interactivePed.Ped.Handle, interactivePed.Ped.CurrentVehicle.Handle, 32, 30000);
                 interactivePed.Ped.Task.FleeFrom(Game.PlayerPed);
 
-                Client.TriggerEvent("curiosity:interaction:veh:flee", interactivePed.Handle);
+                PluginManager.TriggerEvent("curiosity:interaction:veh:flee", interactivePed.Handle);
             }
             else
             {
                 List<string> driverResponse = new List<string>() { "What's the problem?", "What seems to be the problem, officer?", "Yeah, sure.", "Okay.", "Fine.", "What now?", "Whats up?", "Ummm... O-okay.", "This is ridiculous...", "I'm kind of in a hurry right now.", "Oh what now?!", "No problem.", "Am I being detained?", "Yeah, okay... One moment.", "Okay.", "Uh huh.", "Yep." };
-                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[Client.Random.Next(driverResponse.Count)]);
+                Wrappers.Helpers.ShowSuspectSubtitle(driverResponse[PluginManager.Random.Next(driverResponse.Count)]);
 
                 interactivePed.Ped.SetConfigFlag(292, false);
 
@@ -248,7 +249,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 
                 await BaseScript.Delay(100);
 
-                Client.TriggerEvent("curiosity:setting:group:join", interactivePed.Ped.Handle);
+                PluginManager.TriggerEvent("curiosity:setting:group:join", interactivePed.Ped.Handle);
             }
         }
     }

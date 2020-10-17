@@ -159,7 +159,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static void OnTennisMode(int playerHandle, List<object> arguments, string raw)
         {
-            if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER) return;
+            if (Player.PlayerInformation.privilege != Global.Shared.Enums.Privilege.DEVELOPER) return;
 
             TennisMode = !TennisMode;
             EnableTennisMode(Game.PlayerPed.Handle, TennisMode, Game.PlayerPed.Gender == Gender.Female);
@@ -418,7 +418,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static void Weather(int playerHandle, List<object> arguments, string raw)
         {
-            if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER) return;
+            if (Player.PlayerInformation.privilege != Global.Shared.Enums.Privilege.DEVELOPER) return;
 
             Client.TriggerEvent("curiosity:Client:Weather:Check");
         }
@@ -510,9 +510,9 @@ namespace Curiosity.Client.net.Classes.Actions
         {
             try
             {
-                if (Player.PlayerInformation.privilege != Global.Shared.net.Enums.Privilege.DEVELOPER) return;
+                if (Player.PlayerInformation.privilege != Global.Shared.Enums.Privilege.DEVELOPER) return;
 
-                Client.TriggerServerEvent("curiosity:Server:Event:ForAll", Newtonsoft.Json.JsonConvert.SerializeObject(new Global.Shared.net.Entity.TriggerEventForAll("curiosity:Client:Command:OnFire", $"{Game.PlayerPed.NetworkId}")));
+                Client.TriggerServerEvent("curiosity:Server:Event:ForAll", Newtonsoft.Json.JsonConvert.SerializeObject(new Global.Shared.Entity.TriggerEventForAll("curiosity:Client:Command:OnFire", $"{Game.PlayerPed.NetworkId}")));
             }
             catch (Exception ex)
             {
@@ -540,7 +540,7 @@ namespace Curiosity.Client.net.Classes.Actions
                     ped.SetConfigFlag(421, true);
                 }
 
-                if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DEVELOPER)
+                if (Player.PlayerInformation.privilege == Global.Shared.Enums.Privilege.DEVELOPER)
                 {
                     Debug.WriteLine($"PlayerPedNetId: {playerPedNetworkId}");
                     Debug.WriteLine($"Player Found: {ped != null}");

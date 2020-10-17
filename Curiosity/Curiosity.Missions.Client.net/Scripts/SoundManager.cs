@@ -6,7 +6,7 @@ namespace Curiosity.Missions.Client.Scripts
 {
     static class SoundManager
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static public float AudioVolume = 0.5f;
 

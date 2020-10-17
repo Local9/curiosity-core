@@ -1,39 +1,37 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.Scripts;
-using Curiosity.Missions.Client.Static;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Shared.Client.net;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Missions.Client.Classes.Environment
 {
     public delegate void PlayerKillPlayerEvent(Player attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
-    public delegate void PlayerKillPedEvent(Player attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
-    public delegate void PedKillPlayerEvent(Ped attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
-    public delegate void PedKillPedEvent(Ped attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
+    public delegate void PlayerKillPedEvent(Player attacker, CitizenFX.Core.Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
+    public delegate void PedKillPlayerEvent(CitizenFX.Core.Ped attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
+    public delegate void PedKillPedEvent(CitizenFX.Core.Ped attacker, CitizenFX.Core.Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
     public delegate void EntityKillEntityEvent(Entity attacker, Entity victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
     public delegate void DeadEvent(Player victim, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag);
 
     class GameEventHandlers
     {
-        static int numberOfPedsKilled = 0;
-        static int numberOfTimesKilledByPedTracker = 0;
-
-        static Ped juggernaut;
-        static bool juggernautSpawned;
-
         static bool wasKilledByScript = false;
 
         static List<string> knockedOut = new List<string>()
         {
-            "got knocked the f' out!", "got given a black eye", "got into a fist fight and lost"
+            "got knocked the f' out!",
+            "got given a black eye",
+            "got into a fist fight and lost",
+            "got given a noggy",
+            "got given a weggie",
+            "got given a chinese burn",
+            "got told their mom has an onlyfans",
         };
 
         public static void Init()
@@ -42,33 +40,11 @@ namespace Curiosity.Missions.Client.Classes.Environment
             GameEvents.OnPedKillPlayer += GameEventManager_OnPedKillPlayer;
             GameEvents.OnPlayerKillPlayer += GameEventManager_OnPlayerKillPlayer;
             GameEvents.OnDeath += GameEventManager_OnDeath;
-
-            Client.GetInstance().RegisterTickHandler(OnPedDeathCooldown);
-        }
-
-        private async static Task OnPedDeathCooldown()
-        {
-            long gameTimer = API.GetGameTimer();
-            while (numberOfPedsKilled > 0)
-            {
-                if ((API.GetGameTimer() - gameTimer) > 15000)
-                {
-                    gameTimer = API.GetGameTimer();
-                    numberOfPedsKilled--;
-                }
-
-                if (numberOfPedsKilled < 0)
-                {
-                    numberOfPedsKilled = 0;
-                }
-
-                await Client.Delay(100);
-            }
         }
 
         private static void GameEventManager_OnDeath(Player victim, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag)
         {
-            if (victim.Character.GetKiller() == null && Client.IsPlayerSpawned && !wasKilledByScript)
+            if (victim.Character.GetKiller() == null && PluginManager.IsPlayerSpawned && !wasKilledByScript)
             {
                 string message = "killed themselves";
 
@@ -89,7 +65,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
                 if (victim == Game.Player && victim.IsDead)
                 {
-                    Client.TriggerEvent("curiosity:Client:Player:Revive");
+                    PluginManager.TriggerEvent("curiosity:Client:Player:Revive");
                 }
 
                 if (attacker != Game.Player) return;
@@ -133,12 +109,12 @@ namespace Curiosity.Missions.Client.Classes.Environment
             }
         }
 
-        private static void GameEventManager_OnPedKillPlayer(Ped attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
+        private static void GameEventManager_OnPedKillPlayer(CitizenFX.Core.Ped attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
         {
             string message = "died in mysterious ways";
             if (isMeleeDamage)
             {
-                message = knockedOut[Client.Random.Next(knockedOut.Count)];
+                message = knockedOut[PluginManager.Random.Next(knockedOut.Count)];
             }
             else if (damageTypeFlag == 0)
             {
@@ -151,17 +127,17 @@ namespace Curiosity.Missions.Client.Classes.Environment
             BaseScript.TriggerServerEvent("curiosity:Server:Log:Message", $"{victim.Name} {message}");
         }
 
-        private static async void GameEventManager_OnPlayerKillPed(Player attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
+        private static async void GameEventManager_OnPlayerKillPed(Player attacker, CitizenFX.Core.Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
         {
             try
             {
                 bool headshot = victim.LastDamagedBone() == Bone.SKEL_Head;
 
-                if (Decorators.GetBoolean(victim.Handle, Client.DECOR_PED_MISSION))
+                if (Decorators.GetBoolean(victim.Handle, Decorators.PED_MISSION))
                 {
                     if (headshot)
                     {
-                        if (Client.IsBirthday)
+                        if (PluginManager.IsBirthday)
                         {
                             Vector3 coord = Game.PlayerPed.Position;
                             Vector3 target = victim.Position;
@@ -184,14 +160,14 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
                 if (attacker != Game.Player) return;
 
-                if (Decorators.GetBoolean(victim.Handle, Client.DECOR_PED_MISSION))
+                if (Decorators.GetBoolean(victim.Handle, Decorators.PED_MISSION))
                 {
 
                     SkillMessage skillMessage = new SkillMessage();
                     skillMessage.PlayerHandle = $"{attacker.ServerId}";
                     skillMessage.IsHeadshot = headshot;
 
-                    if (Decorators.GetBoolean(victim.Handle, Client.DECOR_PED_HOSTAGE))
+                    if (Decorators.GetBoolean(victim.Handle, Decorators.PED_HOSTAGE))
                     {
                         skillMessage.MissionPed = true;
                         skillMessage.Increase = false;
@@ -206,154 +182,10 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
                     BaseScript.TriggerServerEvent("curiosity:Server:Missions:KilledPed", Encode.StringToBase64(json));
                 }
-                //else
-                //{
-                //    numberOfPedsKilled++;
-
-                //    if (numberOfPedsKilled == 3)
-                //        Screen.ShowNotification($"~r~Warning:~w~ You will be punished if you killing random peds.");
-
-                //    if (numberOfPedsKilled >= 5)
-                //    {
-                //        if (numberOfPedsKilled == 5)
-                //            Screen.ShowNotification($"~r~Warning:~w~ Damage to peds is now reflected");
-
-                //        int damage = (int)((1 * numberOfPedsKilled) * (numberOfTimesKilledByPedTracker + 1));
-
-                //        if (attacker.Character.IsInvincible)
-                //        {
-                //            wasKilledByScript = true;
-                //            attacker.Character.Kill();
-                //        }
-
-                //        if (attacker.Character.Health == 0)
-                //        {
-                //            wasKilledByScript = true;
-                //            attacker.Character.Kill();
-                //        }
-                //        else
-                //        {
-                //            wasKilledByScript = false;
-                //            attacker.Character.ApplyDamage(damage);
-
-                //            await Client.Delay(100);
-
-                //            Log.Verbose($"{numberOfTimesKilledByPedTracker}:{juggernautSpawned}");
-
-                //            if (attacker.IsDead)
-                //            {
-                //                numberOfTimesKilledByPedTracker++;
-                //                Log.Verbose($"{numberOfTimesKilledByPedTracker}:{juggernautSpawned}");
-                //            }
-                //        }
-
-                //        if (numberOfTimesKilledByPedTracker >= 2 && !juggernautSpawned)
-                //        {
-                //            CreateKiller();
-                //        }
-                //    }
-                //}
             }
             catch (Exception ex)
             {
 
-            }
-        }
-
-        static async void CreateKiller()
-        {
-            if (juggernautSpawned) return;
-
-            Model model = (PedHash)API.GetHashKey("u_m_y_juggernaut_01");
-
-            float posX = (float)Client.Random.Next(50, 90);
-            float posY = (float)Client.Random.Next(50, 90);
-
-            Vector3 position = World.GetNextPositionOnStreet(Game.PlayerPed.GetOffsetPosition(new Vector3(posX, posY, 0f)), false);
-
-            Ped ped = await World.CreatePed(model, position);
-            juggernaut = ped;
-            ped = null;
-            
-            if (model.IsLoaded)
-                model.MarkAsNoLongerNeeded();
-
-            model = null;
-
-            juggernaut.AlwaysKeepTask = true;
-            juggernaut.BlockPermanentEvents = true;
-            juggernaut.CanSufferCriticalHits = false;
-            juggernaut.Weapons.Give(WeaponHash.Minigun, 999, true, true);
-            juggernaut.Health = 3000;
-
-            juggernaut.FiringPattern = FiringPattern.FullAuto;
-
-            juggernaut.RelationshipGroup = Relationships.HostileRelationship;
-            juggernaut.Task.GoTo(Game.PlayerPed);
-
-            Client.GetInstance().RegisterTickHandler(OnCleanUpJuggernaut);
-
-            Blip b = juggernaut.AttachBlip();
-            b.Alpha = 0;
-            b.Color = BlipColor.Red;
-            b.IsShortRange = true;
-
-            juggernautSpawned = true;
-        }
-
-        static async Task OnCleanUpJuggernaut()
-        {
-            while (Game.PlayerPed.IsAlive)
-            {
-                await Client.Delay(500);
-
-                if (juggernaut != null)
-                {
-                    if (juggernaut.Exists())
-                    {
-                        if (!juggernaut.HasClearLineOfSight(Game.PlayerPed, 100f))
-                        {
-                            juggernaut.Task.GoTo(Game.PlayerPed);
-                        }
-                        else
-                        {
-                            juggernaut.Task.ShootAt(Game.PlayerPed);
-                        }
-                    }
-                }
-            }
-
-            if (Game.PlayerPed.IsDead)
-            {
-                if (juggernaut != null)
-                {
-                    if (juggernaut.Exists())
-                    {
-                        API.NetworkFadeOutEntity(juggernaut.Handle, false, false);
-                        await BaseScript.Delay(1000);
-                        juggernaut.Delete();
-                        juggernaut = null;
-
-                        Client.GetInstance().DeregisterTickHandler(OnCleanUpJuggernaut);
-                        juggernautSpawned = false;
-                    }
-                }
-            }
-            else
-            {
-                if (juggernaut != null)
-                {
-                    if (juggernaut.Exists() && juggernaut.IsDead)
-                    {
-                        API.NetworkFadeOutEntity(juggernaut.Handle, false, false);
-                        await BaseScript.Delay(1000);
-                        juggernaut.Delete();
-                        juggernaut = null;
-
-                        Client.GetInstance().DeregisterTickHandler(OnCleanUpJuggernaut);
-                        juggernautSpawned = false;
-                    }
-                }
             }
         }
     }
@@ -369,7 +201,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
 
         public static void Init()
         {
-            Client.GetInstance().RegisterEventHandler("gameEventTriggered", new Action<string, List<dynamic>>(OnGameEventTriggered));
+            PluginManager.Instance.RegisterEventHandler("gameEventTriggered", new Action<string, List<dynamic>>(OnGameEventTriggered));
         }
 
         private static void OnGameEventTriggered(string name, List<dynamic> args)
@@ -426,12 +258,12 @@ namespace Curiosity.Missions.Client.Classes.Environment
             {
                 bool isAttackerPed = false;
                 bool isAttackerPlayer = false;
-                Ped pedAttacker = null;
+                CitizenFX.Core.Ped pedAttacker = null;
                 Player playerAttacker = null;
                 // Ped
-                if (attacker is Ped)
+                if (attacker is CitizenFX.Core.Ped)
                 {
-                    pedAttacker = (Ped)attacker;
+                    pedAttacker = (CitizenFX.Core.Ped)attacker;
                     isAttackerPed = true;
                     // Player
                     if (pedAttacker.IsPlayer)
@@ -443,12 +275,12 @@ namespace Curiosity.Missions.Client.Classes.Environment
                 bool isVictimPed = false;
                 bool isVictimPlayer = false;
                 bool isVictimThisPlayer = false;
-                Ped pedVictim = null;
+                CitizenFX.Core.Ped pedVictim = null;
                 Player playerVictim = null;
                 // Ped
-                if (victim is Ped)
+                if (victim is CitizenFX.Core.Ped)
                 {
-                    pedVictim = (Ped)victim;
+                    pedVictim = (CitizenFX.Core.Ped)victim;
                     isVictimPed = true;
                     // Player
                     if (pedVictim.IsPlayer)

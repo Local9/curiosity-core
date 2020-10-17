@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Menus.Client.net.Extensions;
 using MenuAPI;
 using System;
@@ -59,13 +60,13 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
 
 
-                if (Player.PlayerInformation.Job == Global.Shared.net.Enums.Job.Police && !AddedPoliceOptions)
+                if (Player.PlayerInformation.Job == Job.Police && !AddedPoliceOptions)
                 {
                     Menu.AddMenuItem(showPoliceMenu);
                     AddedPoliceOptions = true;
                 }
 
-                if (Player.PlayerInformation.Job != Global.Shared.net.Enums.Job.Police)
+                if (Player.PlayerInformation.Job != Job.Police)
                 {
                     Menu.RemoveMenuItem(showPoliceMenu);
                     AddedPoliceOptions = false;

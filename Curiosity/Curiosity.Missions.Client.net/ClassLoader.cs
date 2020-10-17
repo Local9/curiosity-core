@@ -1,6 +1,13 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Missions.Client.Classes.Environment;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses.Mission;
+using Curiosity.Missions.Client.Scripts;
+using Curiosity.Missions.Client.Scripts.Extras;
+using Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu;
+using Curiosity.Missions.Client.Scripts.Mission;
+using Curiosity.Missions.Client.Scripts.Mission.PoliceMissions;
+using Curiosity.Missions.Client.Scripts.Police;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System.Collections.Generic;
@@ -16,36 +23,36 @@ namespace Curiosity.Missions.Client
     /// </summary>
     static class ClassLoader
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         public static void Init()
         {
             Log.Verbose("Entering ClassLoader Init");
 
-            Classes.PlayerClient.ClientInformation.Init();
+            ClientInformation.Init();
 
             // Game Code
-            Static.Relationships.Init();
+            Missions.Client.Static.Relationships.Init();
 
             // DATA
-            DataClasses.Mission.PoliceCallouts.Init();
+            PoliceCallouts.Init();
 
-            Classes.Environment.ChatCommands.Init();
+            ChatCommands.Init();
 
             // extras
-            Scripts.Extras.Coroner.Init();
-            Scripts.Extras.VehicleTow.Init();
+            Coroner.Init();
+            VehicleTow.Init();
 
             // MISSION HANDLER
-            Scripts.Police.RandomCallouts.Init();
-            Scripts.Mission.RandomMissionHandler.Init();
-            Scripts.MissionEvents.Init();
-            Scripts.NpcHandler.Init();
+            RandomCallouts.Init();
+            RandomMissionHandler.Init();
+            MissionEvents.Init();
+            NpcHandler.Init();
 
-            Scripts.Menus.PedInteractionMenu.MenuBase.Init();
-            client.RegisterTickHandler(OnCleanup);
+            MenuBase.Init();
+            PluginInstance.RegisterTickHandler(OnCleanup);
 
-            Scripts.Mission.PoliceMissions.HumainLabs.Init();
+            HumainLabs.Init();
 
             GameEvents.Init();
             GameEventHandlers.Init();
@@ -62,9 +69,9 @@ namespace Curiosity.Missions.Client
 
             peds.ForEach(async p =>
             {
-                if (DecorExistOn(p.Handle, Client.DECOR_NPC_WAS_RELEASED))
+                if (DecorExistOn(p.Handle, PluginManager.DECOR_NPC_WAS_RELEASED))
                 {
-                    if (DecorGetBool(p.Handle, Client.DECOR_NPC_WAS_RELEASED))
+                    if (DecorGetBool(p.Handle, PluginManager.DECOR_NPC_WAS_RELEASED))
                     {
                         p.MarkAsNoLongerNeeded();
                         p.IsPersistent = false;

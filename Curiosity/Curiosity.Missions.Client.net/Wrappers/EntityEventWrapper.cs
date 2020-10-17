@@ -7,7 +7,7 @@ namespace Curiosity.Missions.Client.Wrappers
 {
     class EntityEventWrapper
     {
-        private static Client client = Client.GetInstance();
+        private static PluginManager PluginInstance => PluginManager.Instance;
 
         private readonly static List<EntityEventWrapper> Wrappers;
 
@@ -47,7 +47,7 @@ namespace Curiosity.Missions.Client.Wrappers
         {
             this.Entity = ent;
 
-            client.RegisterTickHandler(this.EntityEventWrapperOnTick);
+            PluginInstance.RegisterTickHandler(this.EntityEventWrapperOnTick);
             EntityEventWrapper.Wrappers.Add(this);
         }
 
@@ -62,7 +62,7 @@ namespace Curiosity.Missions.Client.Wrappers
 
         public void Dispose()
         {
-            client.DeregisterTickHandler(this.EntityEventWrapperOnTick);
+            PluginInstance.DeregisterTickHandler(this.EntityEventWrapperOnTick);
 
             EntityEventWrapper.Wrappers.Remove(this);
             EntityEventWrapper.OnWrapperDisposedEvent onWrapperDisposedEvent = this.Disposed;
@@ -97,7 +97,7 @@ namespace Curiosity.Missions.Client.Wrappers
             {
                 this.Dispose();
             }
-            await Client.Delay(100);
+            await PluginManager.Delay(100);
         }
 
         public event EntityEventWrapper.OnWrapperAbortedEvent Aborted;

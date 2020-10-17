@@ -2,9 +2,10 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Data;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.DataClasses;
-using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.Static;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
@@ -17,7 +18,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
 {
     abstract class InteractiveVehicle : Entity, IEquatable<Vehicle>
     {
-        private static Client client = Client.GetInstance();
+        private static PluginManager PluginInstance => PluginManager.Instance;
 
         public readonly Vehicle Vehicle;
         public MissionPeds.InteractivePed InteractivePed;
@@ -84,7 +85,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
         {
             get
             {
-                return GetBoolean(Client.DECOR_VEHICLE_SPEEDING);
+                return GetBoolean(PluginManager.DECOR_VEHICLE_SPEEDING);
             }
         }
 
@@ -93,7 +94,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
 
         public InteractiveVehicle(int handle) : base(handle)
         {
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+            if (ClientInformation.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
             {
                 Screen.ShowNotification($"~r~[~g~D~b~E~y~V~o~]~w~ Creating Interactive Vehicle");
             }
@@ -109,7 +110,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
                 SetEntityAsMissionEntity(Vehicle.Handle, true, true);
 
             this.InteractivePed = Scripts.PedCreators.InteractivePedCreator.Ped(this.Vehicle.Driver);
-            this.InteractivePed.Set(Client.DECOR_NPC_VEHICLE_HANDLE, this.Vehicle.Handle);
+            this.InteractivePed.Set(PluginManager.DECOR_NPC_VEHICLE_HANDLE, this.Vehicle.Handle);
 
             _chanceOfFlee = 0;
             _chanceOfShootAndFlee = 0;
@@ -119,23 +120,23 @@ namespace Curiosity.Missions.Client.MissionVehicles
             string currentZoneName = Zones.Locations[zoneKey];
             if (currentZoneName == "Davis" || currentZoneName == "Rancho" || currentZoneName == "Strawberry")
             {
-                _chanceOfFlee = Client.Random.Next(23, 30);
-                _chanceOfShootAndFlee = Client.Random.Next(1, 5);
+                _chanceOfFlee = PluginManager.Random.Next(23, 30);
+                _chanceOfShootAndFlee = PluginManager.Random.Next(1, 5);
             }
             else if (this.Vehicle.Model.IsBike)
             {
-                _chanceOfFlee = Client.Random.Next(23, 30);
+                _chanceOfFlee = PluginManager.Random.Next(23, 30);
                 _chanceOfShootAndFlee = 0;
             }
             else
             {
-                _chanceOfFlee = Client.Random.Next(30);
-                _chanceOfShootAndFlee = Client.Random.Next(5);
+                _chanceOfFlee = PluginManager.Random.Next(30);
+                _chanceOfShootAndFlee = PluginManager.Random.Next(5);
             }
 
-            int chanceOfStolen = Client.Random.Next(25);
-            int chanceOfRegistered = Client.Random.Next(13);
-            int chanceOfInsured = Client.Random.Next(9);
+            int chanceOfStolen = PluginManager.Random.Next(25);
+            int chanceOfRegistered = PluginManager.Random.Next(13);
+            int chanceOfInsured = PluginManager.Random.Next(9);
 
             _vehicleRegistered = true; // we presume all drivers are registered and insured
             _vehicleInsured = true;
@@ -143,30 +144,30 @@ namespace Curiosity.Missions.Client.MissionVehicles
             if (chanceOfStolen == 20)
             {
                 _vehicleStolen = true;
-                InteractivePed.Set(Client.DECOR_VEHICLE_STOLEN, true);
+                InteractivePed.Set(PluginManager.DECOR_VEHICLE_STOLEN, true);
                 // generate new registration name
                 _firstname = string.Empty;
                 _surname = string.Empty;
 
-                if (Client.Random.Next(2) == 1)
+                if (PluginManager.Random.Next(2) == 1)
                 {
-                    _firstname = PedNames.FirstNameFemale[Client.Random.Next(PedNames.FirstNameFemale.Count)];
+                    _firstname = PedNames.FirstNameFemale[PluginManager.Random.Next(PedNames.FirstNameFemale.Count)];
                 }
                 else
                 {
-                    _firstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count)];
+                    _firstname = PedNames.FirstNameMale[PluginManager.Random.Next(PedNames.FirstNameMale.Count)];
                 }
-                _surname = PedNames.Surname[Client.Random.Next(PedNames.Surname.Count)];
+                _surname = PedNames.Surname[PluginManager.Random.Next(PedNames.Surname.Count)];
 
                 DateTime StartDateForDriverDoB = new DateTime(1949, 1, 1);
                 double Range = (DateTime.Today - StartDateForDriverDoB).TotalDays;
                 Range = Range - 6570; // MINUS 18 YEARS
-                _dateOfBirth = StartDateForDriverDoB.AddDays(Client.Random.Next((int)Range)).ToString("yyyy-MM-dd");
+                _dateOfBirth = StartDateForDriverDoB.AddDays(PluginManager.Random.Next((int)Range)).ToString("yyyy-MM-dd");
 
-                _chanceOfFlee = Client.Random.Next(25, 30);
-                _chanceOfShootAndFlee = Client.Random.Next(1, 5);
+                _chanceOfFlee = PluginManager.Random.Next(25, 30);
+                _chanceOfShootAndFlee = PluginManager.Random.Next(1, 5);
                 // Add event to interactive ped to update LostID Flag
-                InteractivePed.Set(Client.DECOR_INTERACTION_LOST_ID, true);
+                InteractivePed.Set(PluginManager.DECOR_INTERACTION_LOST_ID, true);
             }
             else if (chanceOfRegistered == 10)
             {
@@ -178,11 +179,11 @@ namespace Curiosity.Missions.Client.MissionVehicles
             }
 
             _canSearchVehicle = false;
-            int searchChance = Client.Random.Next(100);
+            int searchChance = PluginManager.Random.Next(100);
             if (searchChance >= 90)
             {
                 _canSearchVehicle = true;
-                InteractivePed.Set(Client.DECOR_INTERACTION_LOST_ID, true);
+                InteractivePed.Set(PluginManager.DECOR_INTERACTION_LOST_ID, true);
             }
 
             _vehicleReleased = false;
@@ -197,15 +198,15 @@ namespace Curiosity.Missions.Client.MissionVehicles
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
-            client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
-            client.RegisterEventHandler("curiosity:interaction:veh:flee", new Action<int>(OnFlee));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:veh:flee", new Action<int>(OnFlee));
 
-            client.RegisterTickHandler(OnShowHelpTextTask);
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
-                client.RegisterTickHandler(OnShowDeveloperOverlayTask);
+            PluginInstance.RegisterTickHandler(OnShowHelpTextTask);
+            if (ClientInformation.IsDeveloper)
+                PluginInstance.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
-            Set(Client.DECOR_TRAFFIC_STOP_VEHICLE_HANDLE, Handle);
-            InteractivePed.Set(Client.DECOR_VEHICLE_SPEEDING, this.CaughtSpeeding);
+            Set(PluginManager.DECOR_TRAFFIC_STOP_VEHICLE_HANDLE, Handle);
+            InteractivePed.Set(PluginManager.DECOR_VEHICLE_SPEEDING, this.CaughtSpeeding);
 
             // Should we do anything?
             if (_chanceOfFlee == 29)
@@ -217,12 +218,12 @@ namespace Curiosity.Missions.Client.MissionVehicles
                 // SHOOT?
                 if (_chanceOfShootAndFlee == 4)
                 {
-                    int timeAfterStop = Client.Random.Next(5, 30) * 1000;
-                    int timeAfterStoot = Client.Random.Next(5, 30) * 1000;
+                    int timeAfterStop = PluginManager.Random.Next(5, 30) * 1000;
+                    int timeAfterStoot = PluginManager.Random.Next(5, 30) * 1000;
                     TaskStopVehicle();
-                    await Client.Delay(timeAfterStop);
+                    await PluginManager.Delay(timeAfterStop);
                     TaskShootAtPlayer();
-                    await Client.Delay(timeAfterStoot);
+                    await PluginManager.Delay(timeAfterStoot);
                     TaskFlee();
                 }
                 else
@@ -231,7 +232,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
                     TaskStopVehicle();
                     while (isDriverGoingToFlee)
                     {
-                        await Client.Delay(100);
+                        await PluginManager.Delay(100);
                         if (!Game.PlayerPed.IsInVehicle() && Game.PlayerPed.Position.Distance(this.InteractivePed.Position) <= 3)
                         {
                             TaskFlee();
@@ -245,7 +246,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
                 TaskStopVehicle();
             }
 
-            Decorators.Set(this.Vehicle.Handle, Client.DECOR_VEHICLE_MISSION, true);
+            Decorators.Set(this.Vehicle.Handle, Decorators.VEHICLE_MISSION, true);
         }
 
         protected bool Equals(InteractiveVehicle other)
@@ -340,15 +341,15 @@ namespace Curiosity.Missions.Client.MissionVehicles
 
             if (Game.PlayerPed.Position.Distance(this.Vehicle.Position) >= 300f)
             {
-                Client.TriggerEvent("curiosity:interaction:released", this.Vehicle.Driver.Handle);
+                PluginManager.TriggerEvent("curiosity:interaction:released", this.Vehicle.Driver.Handle);
                 // BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", this.Vehicle.NetworkId);
 
                 this.Delete();
 
-                client.DeregisterTickHandler(OnShowHelpTextTask);
+                PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
-                    client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+                if (ClientInformation.IsDeveloper)
+                    PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
         }
 
@@ -365,10 +366,10 @@ namespace Curiosity.Missions.Client.MissionVehicles
         {
             base.Delete();
 
-            client.DeregisterTickHandler(OnShowHelpTextTask);
+            PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
-                client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+            if (ClientInformation.IsDeveloper)
+                PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
         }
 
         private async void TaskStopVehicle()
@@ -399,7 +400,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
             Vehicle.IsHandbrakeForcedOn = true;
             TaskSetBlockingOfNonTemporaryEvents(this.InteractivePed.Handle, true);
             _vehicleStopped = true;
-            Set(Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, true);
+            Set(PluginManager.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED, true);
         }
 
         private async void TaskShootAtPlayer()
@@ -409,7 +410,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
             this.InteractivePed.Ped.SetConfigFlag(292, false);
 
             WeaponHash weaponHash = WeaponHash.Pistol;
-            int chanceOfScale = Client.Random.Next(30);
+            int chanceOfScale = PluginManager.Random.Next(30);
 
             if (chanceOfScale >= 25)
             {
@@ -423,7 +424,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
 
             this.InteractivePed.Ped.Weapons.Give(weaponHash, 30, false, true);
             this.InteractivePed.Ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
-            await Client.Delay(1000);
+            await PluginManager.Delay(1000);
             this.InteractivePed.Ped.Task.ShootAt(Game.PlayerPed, 10000000, FiringPattern.FullAuto);
 
             InteractivePed.Ped.RelationshipGroup = Relationships.HostileRelationship;
@@ -446,16 +447,16 @@ namespace Curiosity.Missions.Client.MissionVehicles
                 if (this.Vehicle.Driver == null)
                     this.InteractivePed.Ped.Task.EnterVehicle(this.Vehicle, VehicleSeat.Driver, 20000, 5f);
 
-                await Client.Delay(1000);
+                await PluginManager.Delay(1000);
 
-                int willRam = Client.Random.Next(5);
+                int willRam = PluginManager.Random.Next(5);
 
                 if (willRam == 4)
                 {
                     TaskVehicleTempAction(this.Vehicle.Driver.Handle, this.Vehicle.Handle, 28, 3000);
                 }
 
-                await Client.Delay(2000);
+                await PluginManager.Delay(2000);
 
                 TaskVehicleTempAction(this.Vehicle.Driver.Handle, this.Vehicle.Handle, 32, 30000);
                 this.Vehicle.Driver.Task.FleeFrom(Game.PlayerPed);
@@ -512,15 +513,15 @@ namespace Curiosity.Missions.Client.MissionVehicles
                 _vehicleStopped = false;
                 _vehicleReleased = true;
 
-                client.DeregisterTickHandler(OnShowHelpTextTask);
-                client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+                PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
+                PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
 
                 BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Vehicle.Handle);
             }
 
             if (this.InteractivePed.Handle == handle)
             {
-                client.DeregisterTickHandler(OnShowHelpTextTask);
+                PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
                 this.InteractivePed.Ped.LeaveGroup();
 
@@ -542,8 +543,8 @@ namespace Curiosity.Missions.Client.MissionVehicles
 
                 InteractivePed.Ped.RelationshipGroup = Relationships.NeutralRelationship;
 
-                client.DeregisterTickHandler(OnShowHelpTextTask);
-                client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+                PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
+                PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
             }
 
             BaseScript.TriggerEvent("curiosity:interaction:leaveAllGroups", handle);
@@ -559,7 +560,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
         {
             await Task.FromResult(0);
 
-            if (Client.DeveloperVehUiEnabled)
+            if (PluginManager.DeveloperVehUiEnabled)
             {
                 if (this.Position.Distance(Game.PlayerPed.Position) >= 30) return;
 
@@ -578,15 +579,15 @@ namespace Curiosity.Missions.Client.MissionVehicles
                 keyValuePairs.Add("_vehicleRegistered", $"{this._vehicleRegistered}");
                 keyValuePairs.Add("_canSearchVehicle", $"{this._canSearchVehicle}");
                 keyValuePairs.Add("---", $"");
-                keyValuePairs.Add("Vehicle traffic stop", $"{GetBoolean(Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)}");
-                keyValuePairs.Add("Vehicle Ignored", $"{GetBoolean(Client.DECOR_VEHICLE_IGNORE)}");
-                keyValuePairs.Add("Vehicle caught speeding", $"{GetBoolean(Client.DECOR_VEHICLE_SPEEDING)}");
+                keyValuePairs.Add("Vehicle traffic stop", $"{GetBoolean(PluginManager.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED)}");
+                keyValuePairs.Add("Vehicle Ignored", $"{GetBoolean(PluginManager.DECOR_VEHICLE_IGNORE)}");
+                keyValuePairs.Add("Vehicle caught speeding", $"{GetBoolean(PluginManager.DECOR_VEHICLE_SPEEDING)}");
 
                 Wrappers.Helpers.DrawData(this, keyValuePairs);
             }
             else
             {
-                await Client.Delay(1000);
+                await PluginManager.Delay(1000);
             }
         }
 

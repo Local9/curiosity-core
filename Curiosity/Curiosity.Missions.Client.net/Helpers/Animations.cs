@@ -12,7 +12,7 @@ namespace Curiosity.Missions.Client.Helpers
             if (!Game.PlayerPed.IsInVehicle())
             {
                 TaskStartScenarioInPlace(Game.PlayerPed.Handle, scenario, 0, true);
-                await Client.Delay(5000);
+                await PluginManager.Delay(5000);
                 Game.PlayerPed.Task.ClearAll();
             }
         }
@@ -22,7 +22,7 @@ namespace Curiosity.Missions.Client.Helpers
             if (!Game.PlayerPed.IsInVehicle())
             {
                 TaskStartScenarioInPlace(Game.PlayerPed.Handle, scenario, 0, true);
-                await Client.Delay(5000);
+                await PluginManager.Delay(5000);
                 Game.PlayerPed.Task.ClearAll();
             }
         }
@@ -31,7 +31,7 @@ namespace Curiosity.Missions.Client.Helpers
         {
             LoadAnimation("random@arrests");
             Game.PlayerPed.Task.PlayAnimation("random@arrests", "generic_radio_enter", 1.5f, 2.0f, -1, (AnimationFlags)50, 2.0f);
-            await Client.Delay(6000);
+            await PluginManager.Delay(6000);
             Game.PlayerPed.Task.ClearAll();
         }
 
@@ -39,7 +39,7 @@ namespace Curiosity.Missions.Client.Helpers
         {
             while (!HasAnimDictLoaded(dict))
             {
-                await Client.Delay(0);
+                await PluginManager.Delay(0);
                 RequestAnimDict(dict);
             }
             return true;

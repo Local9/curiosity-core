@@ -17,7 +17,7 @@ namespace Curiosity.Missions.Client.Scripts.PedCreators
             ped.SetCanEvasiveDive(true);
             ped.SetPathCanUseLadders(true);
             ped.SetPathCanClimb(true);
-            ped.AlwaysDiesOnLowHealth = Client.Random.Next(2) == 1;
+            ped.AlwaysDiesOnLowHealth = PluginManager.Random.Next(2) == 1;
             ped.SetAlertness(alertness);
             Function.Call((Hash)8116279360099375049L, new InputArgument[] { ped.Handle, 0, 0 });
             ped.SetConfigFlag(281, true);

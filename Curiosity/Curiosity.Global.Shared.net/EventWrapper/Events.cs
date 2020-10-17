@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Curiosity.Global.Shared.EventWrapper
+﻿namespace Curiosity.Global.Shared.EventWrapper
 {
     public static class Events
     {
         public static Event<string, dynamic> Sync => new Event<string, dynamic>("curiosity:sync");
+
+        public static object PluginInstance { get; set; }
 
         public static class Client
         {
@@ -31,6 +27,8 @@ namespace Curiosity.Global.Shared.EventWrapper
 
         public static class Native
         {
+            public static object PluginInstance { get; set; }
+
             public static class Client
             {
                 public static Event<string> OnClientResourceStart => new Event<string>("onClientResourceStart");

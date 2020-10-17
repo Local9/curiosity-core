@@ -1,9 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using Curiosity.Global.Shared.Entity;
-using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
@@ -146,11 +144,11 @@ namespace Curiosity.Missions.Client.MissionPeds
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
             // 1/10 chance of armor
-            if (Client.Random.Next(10) == 9)
-                this._ped.Armor = Client.Random.Next(100);
+            if (PluginManager.Random.Next(10) == 9)
+                this._ped.Armor = PluginManager.Random.Next(100);
 
-            Decorators.Set(this._ped.Handle, Client.DECOR_PED_MISSION, true);
-            Decorators.Set(this._ped.Handle, Client.DECOR_PED_HOSTAGE, isHostage);
+            Decorators.Set(this._ped.Handle, Decorators.PED_MISSION, true);
+            Decorators.Set(this._ped.Handle, Decorators.PED_HOSTAGE, isHostage);
 
             VisionDistance = visionDistance;
             AttackRange = visionDistance;
@@ -170,7 +168,7 @@ namespace Curiosity.Missions.Client.MissionPeds
             if (!IsEntityAMissionEntity(this._ped.Handle))
                 SetEntityAsMissionEntity(this._ped.Handle, true, true);
 
-            Client.GetInstance().RegisterTickHandler(OnDevUI);
+            PluginManager.Instance.RegisterTickHandler(OnDevUI);
         }
 
         private async Task OnDevUI()
@@ -194,7 +192,7 @@ namespace Curiosity.Missions.Client.MissionPeds
         public void Abort(EntityEventWrapper sender, Entity entity)
         {
             base.Delete();
-            Client.GetInstance().DeregisterTickHandler(OnDevUI);
+            PluginManager.Instance.DeregisterTickHandler(OnDevUI);
         }
 
         private bool CanHearPed(Ped ped)
@@ -278,7 +276,7 @@ namespace Curiosity.Missions.Client.MissionPeds
             Relationship rel = ped.GetRelationshipWithPed(this._ped);
             bool isTarget = rel == Relationship.Hate;
 
-            //if (ClientInformation.IsDeveloper())
+            //if (ClientInformation.IsDeveloper)
             //{
             //    if (ped.Handle == Game.PlayerPed.Handle)
             //    {
@@ -290,7 +288,7 @@ namespace Curiosity.Missions.Client.MissionPeds
             //        Screen.ShowSubtitle($"isT: {isTarget}");
             //    }
 
-                
+
             //}
 
             return isTarget;
@@ -325,11 +323,11 @@ namespace Curiosity.Missions.Client.MissionPeds
                 currentBlip.Delete();
             }
 
-            Client.GetInstance().DeregisterTickHandler(OnDevUI);
+            PluginManager.Instance.DeregisterTickHandler(OnDevUI);
 
-            await Client.Delay(3000);
+            await PluginManager.Delay(3000);
             API.NetworkFadeOutEntity(this.Handle, false, false);
-            await Client.Delay(1000);
+            await PluginManager.Delay(1000);
             sender.Dispose();
         }
 
@@ -402,7 +400,7 @@ namespace Curiosity.Missions.Client.MissionPeds
                 }
             }
 
-            
+
         }
 
         public event MissionPed.OnAttackingTargetEvent AttackTarget;

@@ -7,7 +7,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
 {
     class Coroner
     {
-        static Client client = Client.GetInstance();
+        static PluginManager PluginInstance => PluginManager.Instance;
 
         static public void Init()
         {
@@ -32,7 +32,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
                     return;
                 }
 
-                int spawnDistance = Client.Random.Next(100, 200);
+                int spawnDistance = PluginManager.Random.Next(100, 200);
                 RaycastResult raycastResult = World.RaycastCapsule(Game.PlayerPed.Position, Game.PlayerPed.Position, 2.0f, IntersectOptions.Peds1, Game.Player.Character);
                 if (raycastResult.DitHitEntity)
                 {
@@ -54,7 +54,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
                             return;
                         }
 
-                        Client.TriggerEvent("curiosity:interaction:coroner", PedToRecover.Handle); // PED UPDATE
+                        PluginManager.TriggerEvent("curiosity:interaction:coroner", PedToRecover.Handle); // PED UPDATE
 
                         CleanUpPed();
                     }
@@ -69,7 +69,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
         static async void CleanUpPed()
         {
             NetworkFadeOutEntity(PedToRecover.Handle, true, false);
-            await Client.Delay(1000);
+            await PluginManager.Delay(1000);
 
             if (PedToRecover.IsPlayer)
             {
@@ -90,7 +90,7 @@ namespace Curiosity.Missions.Client.Scripts.Extras
                 Wrappers.Helpers.ShowNotification("Dispatch", "Scene has been cleared", $"");
             }
 
-            client.RegisterTickHandler(OnCooldownTask);
+            PluginInstance.RegisterTickHandler(OnCooldownTask);
         }
 
         static async Task OnCooldownTask()
@@ -102,11 +102,11 @@ namespace Curiosity.Missions.Client.Scripts.Extras
 
             while ((GetGameTimer() - gameTime) < countdown)
             {
-                await Client.Delay(500);
+                await PluginManager.Delay(500);
             }
 
             IsServiceActive = false;
-            client.DeregisterTickHandler(OnCooldownTask);
+            PluginInstance.DeregisterTickHandler(OnCooldownTask);
             Wrappers.Helpers.ShowNotification("Dispatch", "Coroner Available", $"");
         }
     }

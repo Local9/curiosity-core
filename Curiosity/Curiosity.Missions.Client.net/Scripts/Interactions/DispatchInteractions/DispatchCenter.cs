@@ -8,7 +8,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.DispatchInteractions
     {
         static public void InteractionArrestPed(InteractivePed interactivePed)
         {
-            Client.TriggerEvent("curiosity:interaction:arrest", interactivePed.Handle, true);
+            PluginManager.TriggerEvent("curiosity:interaction:arrest", interactivePed.Handle, true);
         }
 
         static public async void InteractionRunPedIdentification(InteractivePed interactivePed)
@@ -21,11 +21,11 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.DispatchInteractions
 
             Helpers.Animations.AnimationRadio();
             Wrappers.Helpers.ShowNotification("Dispatch", $"Running ~o~{interactivePed.Name}", string.Empty);
-            await Client.Delay(2000);
+            await PluginManager.Delay(2000);
 
             if (!interactivePed.HasIdentifcationBeenRan)
             {
-                interactivePed.Set(Client.DECOR_INTERACTION_RAN_ID, true);
+                interactivePed.Set(PluginManager.DECOR_INTERACTION_RAN_ID, true);
             }
 
             Wrappers.Helpers.ShowNotification("Dispatch", $"LSPD Database", $"~w~Name: ~y~{interactivePed.Name}~w~\nGender: ~b~{interactivePed.Ped.Gender}~w~\nDOB: ~b~{interactivePed.DateOfBirth}");
@@ -33,7 +33,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.DispatchInteractions
         }
         static public async void InteractionRunPedVehicle(InteractivePed interactivePed)
         {
-            int vehicleHandle = interactivePed.GetInteger(Client.DECOR_NPC_VEHICLE_HANDLE);
+            int vehicleHandle = interactivePed.GetInteger(PluginManager.DECOR_NPC_VEHICLE_HANDLE);
 
             if (vehicleHandle == 0) return;
 
@@ -41,7 +41,7 @@ namespace Curiosity.Missions.Client.Scripts.Interactions.DispatchInteractions
 
             Helpers.Animations.AnimationRadio();
             Wrappers.Helpers.ShowNotification("Dispatch", $"Running ~o~{vehicle.Mods.LicensePlate}", string.Empty);
-            await Client.Delay(2000);
+            await PluginManager.Delay(2000);
 
             bool stolen = interactivePed.HasStolenCar;
 

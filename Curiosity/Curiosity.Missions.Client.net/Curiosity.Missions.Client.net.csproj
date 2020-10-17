@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Classes\Environment\ChatCommands.cs" />
     <Compile Include="Classes\Environment\GameEvents.cs" />
+    <Compile Include="Classes\Ped.cs" />
     <Compile Include="Classes\Vehicle.cs" />
     <Compile Include="DataClasses\Mission\PoliceMissionData.cs" />
     <Compile Include="DataClasses\PedType.cs" />
@@ -60,8 +61,10 @@
     <Compile Include="DataClasses\Police\LinesOfSpeech.cs" />
     <Compile Include="DataClasses\SoundMessage.cs" />
     <Compile Include="DataClasses\Zones.cs" />
-    <Compile Include="Extensions\Decorators.cs" />
+    <Compile Include="Utils\Decorators.cs" />
     <Compile Include="Helpers\Animations.cs" />
+    <Compile Include="Managers\CalloutManager.cs" />
+    <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="MissionPeds\TemplateCode\PedTemplate.cs" />
     <Compile Include="MissionPeds\WorldPed.cs" />
     <Compile Include="MissionPeds\InteractivePed.cs" />
@@ -82,7 +85,7 @@
     <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuQuestions.cs" />
     <Compile Include="Scripts\Menus\PedInteractionMenu\SubMenus\MenuInteraction.cs" />
     <Compile Include="Scripts\MissionEvents.cs" />
-    <Compile Include="Scripts\Mission\Callout.cs" />
+    <Compile Include="Managers\Callout.cs" />
     <Compile Include="Scripts\Mission\PoliceMissions\HumainLabs.cs" />
     <Compile Include="Exceptions\InvalidOrderException.cs" />
     <Compile Include="Scripts\Mission\RandomMissionHandler.cs" />
@@ -93,7 +96,7 @@
     <Compile Include="Scripts\PedCreators\PedCreator.cs" />
     <Compile Include="Classes\PlayerClient\ClientInformation.cs" />
     <Compile Include="ClassLoader.cs" />
-    <Compile Include="Client.cs" />
+    <Compile Include="PluginManager.cs" />
     <Compile Include="DataClasses\ItemPreview.cs" />
     <Compile Include="DataClasses\Mission\MissionPedData.cs" />
     <Compile Include="DataClasses\Mission\MissionData.cs" />
@@ -108,14 +111,10 @@
     <Compile Include="Extensions\DamagePack.cs" />
     <Compile Include="Extensions\Difficulty.cs" />
     <Compile Include="Extensions\DoorState.cs" />
-    <Compile Include="Extensions\EntityExtended.cs" />
     <Compile Include="Extensions\PedExtended.cs" />
     <Compile Include="Extensions\PropExt.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
-    <Compile Include="Extensions\ScriptExtended.cs" />
     <Compile Include="Extensions\SubTask.cs" />
-    <Compile Include="Extensions\SystemExtended.cs" />
-    <Compile Include="Extensions\V3Extended.cs" />
     <Compile Include="Extensions\WorldExtended.cs" />
     <Compile Include="Extensions\FriendlyFireType.cs" />
     <Compile Include="MissionPeds\MissionPed.cs" />
@@ -140,7 +139,8 @@
     <Compile Include="Scripts\SoundManager.cs" />
     <Compile Include="Scripts\VehicleCreators\CreateVehicles.cs" />
     <Compile Include="Static\Relationships.cs" />
-    <Compile Include="Utils\Decorators.cs" />
+    <Compile Include="Utils\Collections.cs" />
+    <Compile Include="Utils\DebuggingTools.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Wrappers\EntityEventWrapper.cs" />

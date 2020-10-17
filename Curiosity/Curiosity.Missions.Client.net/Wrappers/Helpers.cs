@@ -24,7 +24,7 @@ namespace Curiosity.Missions.Client.Wrappers
 
         static public void ShowNotification(string title, string subtitle, string message, NotificationCharacter notificationCharacter = NotificationCharacter.CHAR_CALL911)
         {
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{notificationCharacter}", 2, title, subtitle, message, 2);
+            PluginManager.TriggerEvent("curiosity:Client:Notification:Advanced", $"{notificationCharacter}", 2, title, subtitle, message, 2);
         }
 
         // internal methods
@@ -135,7 +135,7 @@ namespace Curiosity.Missions.Client.Wrappers
             {
                 if (NetworkRequestControlOfEntity(netId))
                 {
-                    if (ClientInformation.IsDeveloper())
+                    if (ClientInformation.IsDeveloper)
                     {
                         Debug.WriteLine($"Gained Control of {netId}");
                     }

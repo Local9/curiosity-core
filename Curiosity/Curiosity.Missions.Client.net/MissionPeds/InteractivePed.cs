@@ -10,6 +10,7 @@ using Curiosity.Missions.Client.Scripts;
 // INTERACTIONS
 using Curiosity.Missions.Client.Scripts.Interactions.PedInteractions;
 using Curiosity.Missions.Client.Static;
+using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
@@ -24,7 +25,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 {
     abstract class InteractivePed : Entity, IEquatable<Ped>
     {
-        private static Client client = Client.GetInstance();
+        private static PluginManager PluginInstance => PluginManager.Instance;
 
         public const int MovementUpdateInterval = 10;
         private const string MOVEMENT_ANIMATION_SET_DRUNK = "MOVE_M@DRUNK@VERYDRUNK";
@@ -45,11 +46,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_NPC_CAN_BE_ARRESTED);
+                return GetBoolean(PluginManager.DECOR_NPC_CAN_BE_ARRESTED);
             }
             set
             {
-                Set(Client.DECOR_NPC_CAN_BE_ARRESTED, value);
+                Set(PluginManager.DECOR_NPC_CAN_BE_ARRESTED, value);
             }
         }
 
@@ -57,22 +58,22 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_NPC_HANDCUFF);
+                return GetBoolean(PluginManager.DECOR_NPC_HANDCUFF);
             }
             set
             {
-                Set(Client.DECOR_NPC_HANDCUFF, value);
+                Set(PluginManager.DECOR_NPC_HANDCUFF, value);
             }
         }
         public bool IsArrested
         {
             get
             {
-                return GetBoolean(Client.DECOR_NPC_ARRESTED);
+                return GetBoolean(PluginManager.DECOR_NPC_ARRESTED);
             }
             set
             {
-                Set(Client.DECOR_NPC_ARRESTED, value);
+                Set(PluginManager.DECOR_NPC_ARRESTED, value);
             }
         }
 
@@ -81,11 +82,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_NPC_DRUG_ALCOHOL);
+                return GetBoolean(PluginManager.DECOR_NPC_DRUG_ALCOHOL);
             }
             set
             {
-                Set(Client.DECOR_NPC_DRUG_ALCOHOL, value);
+                Set(PluginManager.DECOR_NPC_DRUG_ALCOHOL, value);
             }
         }
 
@@ -93,11 +94,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_NPC_ITEM_ILLEGAL);
+                return GetBoolean(PluginManager.DECOR_NPC_ITEM_ILLEGAL);
             }
             set
             {
-                Set(Client.DECOR_NPC_ITEM_ILLEGAL, value);
+                Set(PluginManager.DECOR_NPC_ITEM_ILLEGAL, value);
             }
         }
 
@@ -105,11 +106,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_NPC_ITEM_STOLEN);
+                return GetBoolean(PluginManager.DECOR_NPC_ITEM_STOLEN);
             }
             set
             {
-                Set(Client.DECOR_NPC_ITEM_STOLEN, value);
+                Set(PluginManager.DECOR_NPC_ITEM_STOLEN, value);
             }
         }
 
@@ -117,11 +118,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_NPC_DRUG_CANNABIS);
+                return GetBoolean(PluginManager.DECOR_NPC_DRUG_CANNABIS);
             }
             set
             {
-                Set(Client.DECOR_NPC_DRUG_CANNABIS, value);
+                Set(PluginManager.DECOR_NPC_DRUG_CANNABIS, value);
             }
         }
 
@@ -129,11 +130,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_NPC_DRUG_COCAINE);
+                return GetBoolean(PluginManager.DECOR_NPC_DRUG_COCAINE);
             }
             set
             {
-                Set(Client.DECOR_NPC_DRUG_COCAINE, value);
+                Set(PluginManager.DECOR_NPC_DRUG_COCAINE, value);
             }
         }
 
@@ -141,11 +142,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_INTERACTION_CAN_BE_SEARCHED);
+                return GetBoolean(PluginManager.DECOR_INTERACTION_CAN_BE_SEARCHED);
             }
             set
             {
-                Set(Client.DECOR_INTERACTION_CAN_BE_SEARCHED, value);
+                Set(PluginManager.DECOR_INTERACTION_CAN_BE_SEARCHED, value);
             }
         }
 
@@ -153,11 +154,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_INTERACTION_HAS_BEEN_SEARCHED);
+                return GetBoolean(PluginManager.DECOR_INTERACTION_HAS_BEEN_SEARCHED);
             }
             set
             {
-                Set(Client.DECOR_INTERACTION_HAS_BEEN_SEARCHED, value);
+                Set(PluginManager.DECOR_INTERACTION_HAS_BEEN_SEARCHED, value);
             }
         }
 
@@ -165,11 +166,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_INTERACTION_LOST_ID);
+                return GetBoolean(PluginManager.DECOR_INTERACTION_LOST_ID);
             }
             set
             {
-                Set(Client.DECOR_INTERACTION_LOST_ID, value);
+                Set(PluginManager.DECOR_INTERACTION_LOST_ID, value);
             }
         }
 
@@ -177,11 +178,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_INTERACTION_PROVIDED_ID);
+                return GetBoolean(PluginManager.DECOR_INTERACTION_PROVIDED_ID);
             }
             set
             {
-                Set(Client.DECOR_INTERACTION_PROVIDED_ID, value);
+                Set(PluginManager.DECOR_INTERACTION_PROVIDED_ID, value);
             }
         }
 
@@ -189,11 +190,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_INTERACTION_GRABBED);
+                return GetBoolean(PluginManager.DECOR_INTERACTION_GRABBED);
             }
             set
             {
-                Set(Client.DECOR_INTERACTION_GRABBED, value);
+                Set(PluginManager.DECOR_INTERACTION_GRABBED, value);
             }
         }
 
@@ -201,11 +202,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_VEHICLE_STOLEN);
+                return GetBoolean(PluginManager.DECOR_VEHICLE_STOLEN);
             }
             set
             {
-                Set(Client.DECOR_VEHICLE_STOLEN, value);
+                Set(PluginManager.DECOR_VEHICLE_STOLEN, value);
             }
         }
 
@@ -213,11 +214,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_VEHICLE_SPEEDING);
+                return GetBoolean(PluginManager.DECOR_VEHICLE_SPEEDING);
             }
             set
             {
-                Set(Client.DECOR_VEHICLE_SPEEDING, value);
+                Set(PluginManager.DECOR_VEHICLE_SPEEDING, value);
             }
         }
 
@@ -225,11 +226,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_INTERACTION_WANTED);
+                return GetBoolean(PluginManager.DECOR_INTERACTION_WANTED);
             }
             set
             {
-                Set(Client.DECOR_INTERACTION_WANTED, value);
+                Set(PluginManager.DECOR_INTERACTION_WANTED, value);
             }
         }
 
@@ -237,11 +238,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_NPC_RAN_FROM_POLICE);
+                return GetBoolean(PluginManager.DECOR_NPC_RAN_FROM_POLICE);
             }
             set
             {
-                Set(Client.DECOR_NPC_RAN_FROM_POLICE, value);
+                Set(PluginManager.DECOR_NPC_RAN_FROM_POLICE, value);
             }
         }
 
@@ -250,11 +251,11 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             get
             {
-                return GetBoolean(Client.DECOR_INTERACTION_CORONER_CALLED);
+                return GetBoolean(PluginManager.DECOR_INTERACTION_CORONER_CALLED);
             }
             set
             {
-                Set(Client.DECOR_INTERACTION_CORONER_CALLED, value);
+                Set(PluginManager.DECOR_INTERACTION_CORONER_CALLED, value);
             }
         }
 
@@ -398,12 +399,12 @@ namespace Curiosity.Missions.Client.MissionPeds
 
         protected InteractivePed(int handle) : base(handle)
         {
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper() && Client.DeveloperNpcUiEnabled)
+            if (ClientInformation.IsDeveloper && PluginManager.DeveloperNpcUiEnabled)
             {
                 Screen.ShowNotification($"~r~[~g~D~b~E~y~V~o~]~w~ Creating Interactive Ped");
             }
 
-            if (DecorGetBool(handle, Client.DECOR_NPC_WAS_RELEASED))
+            if (DecorGetBool(handle, PluginManager.DECOR_NPC_WAS_RELEASED))
             {
                 Screen.ShowNotification("~r~This pedestrian was recently released.");
                 return;
@@ -411,7 +412,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             this.Ped = new Ped(handle);
 
-            Decorators.Set(this.Ped.Handle, Decorators.DECOR_PED_INTERACTIVE, true);
+            Decorators.Set(this.Ped.Handle, Decorators.PED_INTERACTIVE, true);
 
             if (this.Ped.IsInVehicle())
                 this.Vehicle = this.Ped.CurrentVehicle;
@@ -459,42 +460,42 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             if (this.Ped.Gender == Gender.Female)
             {
-                _firstname = PedNames.FirstNameFemale[Client.Random.Next(PedNames.FirstNameFemale.Count)];
+                _firstname = PedNames.FirstNameFemale[PluginManager.Random.Next(PedNames.FirstNameFemale.Count)];
             }
             else
             {
-                _firstname = PedNames.FirstNameMale[Client.Random.Next(PedNames.FirstNameMale.Count)];
+                _firstname = PedNames.FirstNameMale[PluginManager.Random.Next(PedNames.FirstNameMale.Count)];
             }
-            _surname = PedNames.Surname[Client.Random.Next(PedNames.Surname.Count)];
+            _surname = PedNames.Surname[PluginManager.Random.Next(PedNames.Surname.Count)];
 
             DateTime StartDateForDriverDoB = new DateTime(1949, 1, 1);
             double Range = (DateTime.Today - StartDateForDriverDoB).TotalDays;
             Range = Range - 6570; // MINUS 18 YEARS
-            _dateOfBirth = StartDateForDriverDoB.AddDays(Client.Random.Next((int)Range)).ToString("yyyy-MM-dd");
+            _dateOfBirth = StartDateForDriverDoB.AddDays(PluginManager.Random.Next((int)Range)).ToString("yyyy-MM-dd");
 
-            _attitude = Client.Random.Next(100);
+            _attitude = PluginManager.Random.Next(100);
 
 
             if (IsUnderTheInfluence)
             {
-                int breathlyzerLimit = Client.Random.Next(60, 100);
+                int breathlyzerLimit = PluginManager.Random.Next(60, 100);
                 _bloodAlcaholLimit = 0;
 
                 if (breathlyzerLimit >= 60)
                 {
-                    _bloodAlcaholLimit = Client.Random.Next(1, 7);
+                    _bloodAlcaholLimit = PluginManager.Random.Next(1, 7);
                     if (breathlyzerLimit >= 88)
                     {
                         IsUnderTheInfluence = true;
                         IsAllowedToBeSearched = true;
                         CanBeArrested = true;
-                        _bloodAlcaholLimit = Client.Random.Next(8, 10);
-                        _chanceOfFlee = Client.Random.Next(25, 30);
+                        _bloodAlcaholLimit = PluginManager.Random.Next(8, 10);
+                        _chanceOfFlee = PluginManager.Random.Next(25, 30);
 
                         if (breathlyzerLimit >= 95)
                         {
-                            _bloodAlcaholLimit = Client.Random.Next(10, 20);
-                            _chanceOfShootAndFlee = Client.Random.Next(1, 5);
+                            _bloodAlcaholLimit = PluginManager.Random.Next(10, 20);
+                            _chanceOfShootAndFlee = PluginManager.Random.Next(1, 5);
                         }
                     }
                 }
@@ -502,63 +503,63 @@ namespace Curiosity.Missions.Client.MissionPeds
             }
             else
             {
-                int breathlyzerLimit = Client.Random.Next(100);
+                int breathlyzerLimit = PluginManager.Random.Next(100);
                 _bloodAlcaholLimit = 0;
                 IsUnderTheInfluence = false;
                 IsAllowedToBeSearched = false;
 
                 if (breathlyzerLimit >= 60)
                 {
-                    _bloodAlcaholLimit = Client.Random.Next(1, 7);
+                    _bloodAlcaholLimit = PluginManager.Random.Next(1, 7);
                     if (breathlyzerLimit >= 88)
                     {
                         IsUnderTheInfluence = true;
                         IsAllowedToBeSearched = true;
                         CanBeArrested = true;
-                        _bloodAlcaholLimit = Client.Random.Next(8, 10);
-                        _chanceOfFlee = Client.Random.Next(25, 30);
+                        _bloodAlcaholLimit = PluginManager.Random.Next(8, 10);
+                        _chanceOfFlee = PluginManager.Random.Next(25, 30);
 
                         if (breathlyzerLimit >= 95)
                         {
-                            _bloodAlcaholLimit = Client.Random.Next(10, 20);
-                            _chanceOfShootAndFlee = Client.Random.Next(1, 5);
+                            _bloodAlcaholLimit = PluginManager.Random.Next(10, 20);
+                            _chanceOfShootAndFlee = PluginManager.Random.Next(1, 5);
                         }
                     }
                 }
             }
 
-            if (Client.Random.Next(100) >= 85)
+            if (PluginManager.Random.Next(100) >= 85)
             {
                 IsUsingCannabis = true; // Its weed ffs
                 CanBeArrested = true;
                 IsAllowedToBeSearched = true;
             }
 
-            if (Client.Random.Next(100) >= 90)
+            if (PluginManager.Random.Next(100) >= 90)
             {
                 IsUsingCocaine = true;
                 CanBeArrested = true;
                 IsAllowedToBeSearched = true;
             }
 
-            if (Client.Random.Next(100) >= 95)
+            if (PluginManager.Random.Next(100) >= 95)
             {
                 HasLostId = true;
                 IsAllowedToBeSearched = true;
             }
 
-            if (Client.Random.Next(100) >= 95)
+            if (PluginManager.Random.Next(100) >= 95)
             {
                 IsAllowedToBeSearched = true;
             }
 
-            _numberOfCitations = Client.Random.Next(8);
+            _numberOfCitations = PluginManager.Random.Next(8);
 
             _offence = "~g~NONE";
-            if (Client.Random.Next(100) >= 75)
+            if (PluginManager.Random.Next(100) >= 75)
             {
                 List<string> Offense = new List<string>() { "WANTED BY LSPD", "WANTED FOR ASSAULT", "WANTED FOR UNPAID FINES", "WANTED FOR RUNNING FROM THE POLICE", "WANTED FOR EVADING LAW", "WANTED FOR HIT AND RUN", "WANTED FOR DUI" };
-                _offence = $"~r~{Offense[Client.Random.Next(Offense.Count)]}";
+                _offence = $"~r~{Offense[PluginManager.Random.Next(Offense.Count)]}";
                 CanBeArrested = true;
                 IsWanted = true;
                 IsAllowedToBeSearched = true;
@@ -566,8 +567,8 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             _hasBeenReleased = false;
 
-            Set(Client.DECOR_PED_MISSION, true);
-            Set(Client.DECOR_PED_HOSTAGE, CanBeArrested);
+            Set(Decorators.PED_MISSION, true);
+            Set(Decorators.PED_ARRESTABLE, CanBeArrested);
 
             Create();
         }
@@ -579,36 +580,36 @@ namespace Curiosity.Missions.Client.MissionPeds
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
-            Decorators.Set(this.Ped.Handle, Client.DECOR_PED_MISSION, false);
+            Decorators.Set(this.Ped.Handle, Decorators.PED_MISSION, false);
 
             InteractivePed MissionPed = this;
             this.GoToTarget += new InteractivePed.OnGoingToTargetEvent(MissionPed.OnGoToTarget);
             InteractivePed MissionPed1 = this;
             this.AttackTarget += new InteractivePed.OnAttackingTargetEvent(MissionPed1.OnAttackTarget);
 
-            client.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
-            client.RegisterEventHandler("curiosity:interaction:arrest", new Action<int, bool>(OnArrest));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:idRequesed", new Action<int>(OnIdRequested));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:arrest", new Action<int, bool>(OnArrest));
 
-            client.RegisterEventHandler("curiosity:interaction:handcuffs", new Action<int, bool>(OnHandcuffs));
-            client.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
-            client.RegisterEventHandler("curiosity:interaction:cpr:failed", new Action<int>(OnCprFailed));
-            client.RegisterEventHandler("curiosity:interaction:coroner", new Action<int>(OnCoronerCalled));
-            client.RegisterEventHandler("curiosity:interaction:searched", new Action<int, bool>(OnPedHasBeenSearched));
-            client.RegisterEventHandler("curiosity:interaction:leaveAllGroups", new Action<int>(OnPedLeaveGroups));
-            client.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
-            client.RegisterEventHandler("curiosity:interaction:stolencar", new Action<int>(OnStolenCar));
-            client.RegisterEventHandler("curiosity:interaction:flagRelease", new Action<int>(OnFlagRelease));
-            client.RegisterEventHandler("curiosity:interaction:grab", new Action<int>(OnGrabPed));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:handcuffs", new Action<int, bool>(OnHandcuffs));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:cpr", new Action<int, bool>(OnCpr));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:cpr:failed", new Action<int>(OnCprFailed));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:coroner", new Action<int>(OnCoronerCalled));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:searched", new Action<int, bool>(OnPedHasBeenSearched));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:leaveAllGroups", new Action<int>(OnPedLeaveGroups));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:released", new Action<int>(OnPedHasBeenReleased));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:stolencar", new Action<int>(OnStolenCar));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:flagRelease", new Action<int>(OnFlagRelease));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:grab", new Action<int>(OnGrabPed));
             // group management
-            client.RegisterEventHandler("curiosity:setting:group:join", new Action<int>(OnGroupJoin));
-            client.RegisterEventHandler("curiosity:setting:group:leave", new Action<int>(OnGroupLeave));
+            PluginInstance.RegisterEventHandler("curiosity:setting:group:join", new Action<int>(OnGroupJoin));
+            PluginInstance.RegisterEventHandler("curiosity:setting:group:leave", new Action<int>(OnGroupLeave));
             // car stolen
-            client.RegisterEventHandler("curiosity:interaction:hasLostId", new Action<int>(OnHasLostId));
+            PluginInstance.RegisterEventHandler("curiosity:interaction:hasLostId", new Action<int>(OnHasLostId));
 
-            client.RegisterTickHandler(OnShowHelpTextTask);
+            PluginInstance.RegisterTickHandler(OnShowHelpTextTask);
 
-            if (ClientInformation.IsDeveloper())
-                client.RegisterTickHandler(OnShowDeveloperOverlayTask);
+            if (ClientInformation.IsDeveloper)
+                PluginInstance.RegisterTickHandler(OnShowDeveloperOverlayTask);
 
             if (Ped.AttachedBlip == null)
             {
@@ -625,7 +626,7 @@ namespace Curiosity.Missions.Client.MissionPeds
                     RequestAnimSet(MOVEMENT_ANIMATION_SET_DRUNK);
                     while (!HasAnimSetLoaded(MOVEMENT_ANIMATION_SET_DRUNK))
                     {
-                        await Client.Delay(0);
+                        await PluginManager.Delay(0);
                     }
                 }
                 this.Ped.MovementAnimationSet = MOVEMENT_ANIMATION_SET_DRUNK;
@@ -638,13 +639,13 @@ namespace Curiosity.Missions.Client.MissionPeds
                 if (_chanceOfShootAndFlee == 4)
                 {
                     WeaponHash weaponHash = WeaponHash.Pistol;
-                    if (Client.Random.Next(5) == 4)
+                    if (PluginManager.Random.Next(5) == 4)
                     {
                         weaponHash = WeaponHash.SawnOffShotgun;
                     }
                     this.Ped.Weapons.Give(weaponHash, 1, true, true);
                     this.Ped.Task.ShootAt(Game.PlayerPed);
-                    await Client.Delay(3000);
+                    await PluginManager.Delay(3000);
                     this.Ped.Task.FleeFrom(Game.PlayerPed);
 
                     Ped.RelationshipGroup = Relationships.HostileRelationship;
@@ -668,7 +669,7 @@ namespace Curiosity.Missions.Client.MissionPeds
             NpcHandler.AddNpc(base.Handle, this);
             if (Ped.IsInVehicle())
             {
-                DecorSetInt(Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE, Ped.CurrentVehicle.Handle);
+                DecorSetInt(Ped.Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE, Ped.CurrentVehicle.Handle);
             }
         }
 
@@ -722,9 +723,9 @@ namespace Curiosity.Missions.Client.MissionPeds
                 base.Delete();
             }
 
-            await Client.Delay(3000);
+            await PluginManager.Delay(3000);
             API.NetworkFadeOutEntity(this.Handle, false, false);
-            await Client.Delay(1000);
+            await PluginManager.Delay(1000);
             sender.Dispose();
         }
 
@@ -806,10 +807,10 @@ namespace Curiosity.Missions.Client.MissionPeds
                     Scripts.NpcHandler.RemoveNpc(base.Handle);
                     base.Delete();
 
-                    client.DeregisterTickHandler(OnShowHelpTextTask);
+                    PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                    if (ClientInformation.IsDeveloper())
-                        client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+                    if (ClientInformation.IsDeveloper)
+                        PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
                 }
 
                 if (this.Ped == null)
@@ -817,10 +818,10 @@ namespace Curiosity.Missions.Client.MissionPeds
                     Scripts.NpcHandler.RemoveNpc(base.Handle);
                     base.Delete();
 
-                    client.DeregisterTickHandler(OnShowHelpTextTask);
+                    PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                    if (ClientInformation.IsDeveloper())
-                        client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+                    if (ClientInformation.IsDeveloper)
+                        PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
 
                     return;
                 }
@@ -855,7 +856,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                     Ped.LeaveGroup();
 
-                    await Client.Delay(100);
+                    await PluginManager.Delay(100);
 
                     Ped.Task.WanderAround();
 
@@ -871,7 +872,7 @@ namespace Curiosity.Missions.Client.MissionPeds
                 {
                     this.Ped.Health = 200;
 
-                    if (Client.Random.Next(5) >= 3 && !IsArrested)
+                    if (PluginManager.Random.Next(5) >= 3 && !IsArrested)
                     {
                         IsArrested = true;
                         ArrestInteractions.InteractionArrestInit(this);
@@ -880,9 +881,9 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                 if (this.Ped.IsInjured)
                 {
-                    if (Client.Random.Next(5) >= 3 && !IsArrested)
+                    if (PluginManager.Random.Next(5) >= 3 && !IsArrested)
                     {
-                        if (Client.Random.Next(30) == 28)
+                        if (PluginManager.Random.Next(30) == 28)
                         {
                             this.Ped.SetConfigFlag(187, true);
                         }
@@ -953,12 +954,12 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             base.Delete();
 
-            client.DeregisterTickHandler(OnShowHelpTextTask);
+            PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-            //  Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+            //  PluginInstance.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
 
-            if (Classes.PlayerClient.ClientInformation.IsDeveloper())
-                client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+            if (ClientInformation.IsDeveloper)
+                PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
         }
 
 
@@ -988,7 +989,7 @@ namespace Curiosity.Missions.Client.MissionPeds
                 HasBeenGrabbed = false;
 
                 IsCoronerCalled = true;
-                // Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+                // PluginInstance.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
             }
         }
 
@@ -1020,7 +1021,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                 IsHandcuffed = state;
                 IsArrested = state;
-                DecorSetBool(handle, Client.DECOR_NPC_ARRESTED, state);
+                DecorSetBool(handle, PluginManager.DECOR_NPC_ARRESTED, state);
 
                 if (!IsArrested)
                 {
@@ -1036,7 +1037,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             if (Handle == handle)
             {
-                if (Client.Random.Next(80, 100) >= 95)
+                if (PluginManager.Random.Next(80, 100) >= 95)
                 {
                     HasLostId = true;
                     IsAllowedToBeSearched = true;
@@ -1096,7 +1097,7 @@ namespace Curiosity.Missions.Client.MissionPeds
             if (Handle == handle)
             {
                 _hasBeenReleased = true;
-                // Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+                // PluginInstance.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
             }
         }
 
@@ -1104,7 +1105,7 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             await BaseScript.Delay(100);
 
-            if (Client.DeveloperNpcUiEnabled)
+            if (PluginManager.DeveloperNpcUiEnabled)
             {
                 Screen.ShowNotification("~b~NPC: ~w~OnPedLeaveGroups");
                 Screen.ShowNotification($"~b~NPC: ~w~{Handle}\nEvent: {handle}");
@@ -1123,7 +1124,7 @@ namespace Curiosity.Missions.Client.MissionPeds
                 if (Ped.IsInGroup)
                     Ped.PedGroup.Delete();
 
-                if (Client.DeveloperNpcUiEnabled)
+                if (PluginManager.DeveloperNpcUiEnabled)
                 {
                     Screen.ShowNotification("~b~NPC: ~w~OnPedLeaveGroups: ~r~Success");
                 }
@@ -1142,12 +1143,12 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                 Scripts.NpcHandler.RemoveNpc(base.Handle);
 
-                DecorSetBool(handle, Client.DECOR_NPC_ARRESTED, false);
+                DecorSetBool(handle, PluginManager.DECOR_NPC_ARRESTED, false);
 
                 Ped.SetConfigFlag(292, false);
                 Ped.SetConfigFlag(301, false);
 
-                if (Ped.IsInVehicle() && Ped.CurrentVehicle == Client.CurrentVehicle)
+                if (Ped.IsInVehicle() && Ped.CurrentVehicle == PluginManager.CurrentVehicle)
                 {
                     Ped.Task.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
                 }
@@ -1182,21 +1183,21 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                 API.TaskSetBlockingOfNonTemporaryEvents(Ped.Handle, false);
 
-                DecorSetBool(Handle, Client.DECOR_NPC_WAS_RELEASED, _hasBeenReleased);
+                DecorSetBool(Handle, PluginManager.DECOR_NPC_WAS_RELEASED, _hasBeenReleased);
 
-                client.DeregisterTickHandler(OnShowHelpTextTask);
+                PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
-                    client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+                if (ClientInformation.IsDeveloper)
+                    PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
 
-                if (DecorExistOn(Handle, Client.DECOR_NPC_CURRENT_VEHICLE))
+                if (DecorExistOn(Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE))
                 {
-                    int vehId = DecorGetInt(Handle, Client.DECOR_NPC_CURRENT_VEHICLE);
+                    int vehId = DecorGetInt(Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE);
                     if (DoesEntityExist(vehId))
                     {
                         Vehicle vehicle = new Vehicle(vehId);
                         Ped.Task.EnterVehicle(vehicle, VehicleSeat.Driver, 5000, 5f);
-                        await Client.Delay(5000);
+                        await PluginManager.Delay(5000);
                         Ped.Task.WanderAround(Ped.Position, 1000f);
 
                         if (vehicle.AttachedBlip != null)
@@ -1205,7 +1206,7 @@ namespace Curiosity.Missions.Client.MissionPeds
                                 vehicle.AttachedBlip.Delete();
                         }
 
-                        if (Decorators.GetBoolean(vehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
+                        if (Decorators.GetBoolean(vehicle.Handle, PluginManager.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
                         {
                             BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", vehicle.Handle);
                         }
@@ -1217,14 +1218,14 @@ namespace Curiosity.Missions.Client.MissionPeds
 
                     if (Ped.IsInVehicle())
                     {
-                        if (Decorators.GetBoolean(Ped.CurrentVehicle.Handle, Client.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
+                        if (Decorators.GetBoolean(Ped.CurrentVehicle.Handle, PluginManager.DECOR_VEHICLE_HAS_BEEN_TRAFFIC_STOPPED))
                         {
                             BaseScript.TriggerEvent("curiosity:interaction:vehicle:released", Ped.CurrentVehicle.Handle);
                         }
                     }
                 }
 
-                // Client.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
+                // PluginInstance.TriggerEvent("curiosity:Client:Missions:RandomEventCompleted");
             }
         }
 
@@ -1257,10 +1258,10 @@ namespace Curiosity.Missions.Client.MissionPeds
             {
                 base.Delete();
 
-                client.DeregisterTickHandler(OnShowHelpTextTask);
+                PluginInstance.DeregisterTickHandler(OnShowHelpTextTask);
 
-                if (Classes.PlayerClient.ClientInformation.IsDeveloper())
-                    client.DeregisterTickHandler(OnShowDeveloperOverlayTask);
+                if (ClientInformation.IsDeveloper)
+                    PluginInstance.DeregisterTickHandler(OnShowDeveloperOverlayTask);
 
                 return;
             }
@@ -1273,10 +1274,10 @@ namespace Curiosity.Missions.Client.MissionPeds
                     "idiot", "fool", "muppet", "pleb", "maguire"
                 };
 
-                string randomInsult = insults[Client.Random.Next(insults.Count + 1)];
+                string randomInsult = insults[PluginManager.Random.Next(insults.Count + 1)];
 
                 List<string> vs = new List<string> { $"~o~WHY AREN'T THEY CUFFED!", $"~o~Handcuff them you {randomInsult}!!", "~r~WHAT IS YOUR MAJOR MALFUNCTION! PUT ON THE CUFFS!!!", $"~r~Cuff them, fecking {randomInsult}!" };
-                Screen.ShowNotification(vs[Client.Random.Next(vs.Count + 1)]);
+                Screen.ShowNotification(vs[PluginManager.Random.Next(vs.Count + 1)]);
                 return;
             }
 
@@ -1291,8 +1292,8 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             arrestedPedData.DispatchJail = interaction;
 
-            if (Client.CurrentVehicle != null)
-                arrestedPedData.IsBike = Client.CurrentVehicle.Model.IsBike;
+            if (PluginManager.CurrentVehicle != null)
+                arrestedPedData.IsBike = PluginManager.CurrentVehicle.Model.IsBike;
 
             arrestedPedData.IsAllowedToBeArrested = (
                 arrestedPedData.IsDrunk
@@ -1306,7 +1307,7 @@ namespace Curiosity.Missions.Client.MissionPeds
 
             string encoded = Encode.StringToBase64(JsonConvert.SerializeObject(arrestedPedData));
 
-            Client.TriggerServerEvent("curiosity:Server:Missions:ArrestedPed", encoded);
+            PluginManager.TriggerServerEvent("curiosity:Server:Missions:ArrestedPed", encoded);
 
             if (CanBeArrested)
             {
@@ -1321,7 +1322,7 @@ namespace Curiosity.Missions.Client.MissionPeds
             }
             API.NetworkFadeOutEntity(Handle, true, false);
             _hasBeenReleased = true;
-            await Client.Delay(500);
+            await PluginManager.Delay(500);
 
             Ped.Detach();
             HasBeenGrabbed = false;
@@ -1335,7 +1336,7 @@ namespace Curiosity.Missions.Client.MissionPeds
         {
             await Task.FromResult(0);
 
-            if (!Client.DeveloperNpcUiEnabled)
+            if (!PluginManager.DeveloperNpcUiEnabled)
             {
                 await BaseScript.Delay(1000);
                 return;
@@ -1378,7 +1379,7 @@ namespace Curiosity.Missions.Client.MissionPeds
             if (Vehicle != null)
             {
                 keyValuePairs.Add("-----", "");
-                keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(Ped.Handle, Client.DECOR_NPC_CURRENT_VEHICLE)}");
+                keyValuePairs.Add("NPC_CURRENT_VEHICLE", $"{DecorGetInt(Ped.Handle, PluginManager.DECOR_NPC_CURRENT_VEHICLE)}");
                 keyValuePairs.Add("Local Vehicle", $"{Vehicle.Handle}");
             }
 

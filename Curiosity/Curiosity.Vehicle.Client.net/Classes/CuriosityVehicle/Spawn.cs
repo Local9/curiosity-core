@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
@@ -393,7 +394,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
             long timerToWait = 5000 * numberOfVehiclesSpawned;
 
-            if (Player.PlayerInformation.privilege == Global.Shared.net.Enums.Privilege.DONATOR)
+            if (Player.PlayerInformation.privilege == Privilege.DONATOR)
             {
                 timerToWait = 2500 * numberOfVehiclesSpawned;
             }

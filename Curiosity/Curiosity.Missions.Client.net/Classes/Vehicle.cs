@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Utils;
 using System;
 using System.Threading.Tasks;
 
@@ -114,7 +114,7 @@ namespace Curiosity.Missions.Client.Classes
 
         internal void Impound()
         {
-            ImpoundManager.Tow(this);
+
         }
     }
 }

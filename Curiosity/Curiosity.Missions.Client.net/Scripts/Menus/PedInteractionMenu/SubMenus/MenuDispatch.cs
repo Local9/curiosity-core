@@ -48,7 +48,7 @@ namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
 
             menu.ClearMenuItems();
 
-            mItemRunVehiclePlate.Enabled = _interactivePed.GetInteger(Client.DECOR_NPC_VEHICLE_HANDLE) > 0;
+            mItemRunVehiclePlate.Enabled = _interactivePed.GetInteger(PluginManager.DECOR_NPC_VEHICLE_HANDLE) > 0;
             menu.AddMenuItem(mItemRunVehiclePlate);
 
             mItemRunIdentifcation.Enabled = _interactivePed.HasProvidedId && !_interactivePed.HasLostId;
