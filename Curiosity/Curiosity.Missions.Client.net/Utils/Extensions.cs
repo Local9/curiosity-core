@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Callouts.Shared.EventWrapper;
+using Curiosity.Global.Shared.EventWrapper;
 using System;
 
 namespace Curiosity.Missions.Client.Utils
