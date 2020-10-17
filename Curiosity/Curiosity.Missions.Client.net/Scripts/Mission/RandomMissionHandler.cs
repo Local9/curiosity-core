@@ -2,7 +2,7 @@
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Newtonsoft.Json;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Mission
+namespace Curiosity.Missions.Client.Scripts.Mission
 {
     class RandomMissionHandler
     {

@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 
-namespace Curiosity.Missions.Client.net.Extensions
+namespace Curiosity.Missions.Client.Extensions
 {
     static class EntityExtended
     {

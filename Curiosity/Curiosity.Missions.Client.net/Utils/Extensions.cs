@@ -3,7 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Callouts.Shared.EventWrapper;
 using System;
 
-namespace Curiosity.Missions.Client.net.Utils
+namespace Curiosity.Missions.Client.Utils
 {
     public static class Extensions
     {

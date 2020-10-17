@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.MissionPeds;
 
-namespace Curiosity.Missions.Client.net.Scripts.Interactions.DispatchInteractions
+namespace Curiosity.Missions.Client.Scripts.Interactions.DispatchInteractions
 {
     class DispatchCenter
     {

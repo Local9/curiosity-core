@@ -1,15 +1,15 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts;
-using Curiosity.Missions.Client.net.Scripts.PedCreators;
-using Curiosity.Missions.Client.net.Static;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts;
+using Curiosity.Missions.Client.Scripts.PedCreators;
+using Curiosity.Missions.Client.Static;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.DataClasses.Mission
+namespace Curiosity.Missions.Client.DataClasses.Mission
 {
     class PoliceMissionData
     {

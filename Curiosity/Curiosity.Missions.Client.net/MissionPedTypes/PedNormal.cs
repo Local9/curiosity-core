@@ -1,8 +1,8 @@
 ﻿
 using CitizenFX.Core;
-using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.MissionPeds;
 
-namespace Curiosity.Missions.Client.net.MissionPedTypes
+namespace Curiosity.Missions.Client.MissionPedTypes
 {
     internal class PedNormal : NormalPed
     {

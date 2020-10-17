@@ -2,15 +2,15 @@
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Wrappers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.MissionPeds
+namespace Curiosity.Missions.Client.MissionPeds
 {
     abstract class NormalPed : Entity, IEquatable<Ped>
     {

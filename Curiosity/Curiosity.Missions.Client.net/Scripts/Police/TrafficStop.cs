@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.Extensions;
+using Curiosity.Missions.Client.Extensions;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Police
+namespace Curiosity.Missions.Client.Scripts.Police
 {
     /*
      * Current Bugs;

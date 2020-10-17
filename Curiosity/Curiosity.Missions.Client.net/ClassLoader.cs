@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Missions.Client.net.Classes.Environment;
-using Curiosity.Missions.Client.net.DataClasses.Mission;
+using Curiosity.Missions.Client.Classes.Environment;
+using Curiosity.Missions.Client.DataClasses.Mission;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net
+namespace Curiosity.Missions.Client
 {
     /// <summary>
     /// For initialization of all these static classes

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Curiosity.Missions.Client.net.DataClasses.Police
+namespace Curiosity.Missions.Client.DataClasses.Police
 {
     class LinesOfSpeech
     {

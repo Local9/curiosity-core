@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core.Native;
 
-namespace Curiosity.Missions.Client.net.Utils
+namespace Curiosity.Missions.Client.Utils
 {
     class Decorators
     {

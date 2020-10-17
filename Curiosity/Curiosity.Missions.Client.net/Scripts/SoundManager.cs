@@ -1,8 +1,8 @@
-﻿using Curiosity.Missions.Client.net.DataClasses;
+﻿using Curiosity.Missions.Client.DataClasses;
 using Newtonsoft.Json;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts
+namespace Curiosity.Missions.Client.Scripts
 {
     static class SoundManager
     {

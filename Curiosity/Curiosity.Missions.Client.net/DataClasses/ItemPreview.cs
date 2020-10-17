@@ -4,7 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net.Classes.Environment;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.DataClasses
+namespace Curiosity.Missions.Client.DataClasses
 {
     class ItemPreview
     {

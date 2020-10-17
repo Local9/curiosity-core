@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Curiosity.Missions.Client.net.Exceptions
+namespace Curiosity.Missions.Client.Exceptions
 {
     [Serializable]
     internal class InvalidOrderException : Exception

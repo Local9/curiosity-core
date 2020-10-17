@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net;
 
-namespace Curiosity.Missions.Client.net.Extensions
+namespace Curiosity.Missions.Client.Extensions
 {
     class Decorators
     {

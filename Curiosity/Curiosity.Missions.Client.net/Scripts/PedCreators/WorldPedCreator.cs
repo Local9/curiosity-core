@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Missions.Client.net.DataClasses;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.MissionPedTypes;
+using Curiosity.Missions.Client.DataClasses;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.MissionPedTypes;
 
-namespace Curiosity.Missions.Client.net.Scripts.PedCreators
+namespace Curiosity.Missions.Client.Scripts.PedCreators
 {
     static class WorldPedCreator
     {

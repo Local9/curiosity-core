@@ -1,12 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Wrappers;
 using System;
 using System.Linq;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.MissionPeds
+namespace Curiosity.Missions.Client.MissionPeds
 {
     abstract class ZombiePed : Entity, IEquatable<Ped>
     {

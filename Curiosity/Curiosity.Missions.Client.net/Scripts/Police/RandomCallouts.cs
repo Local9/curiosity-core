@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.Mission;
-using Curiosity.Missions.Client.net.Scripts.PedCreators;
+using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts.Mission;
+using Curiosity.Missions.Client.Scripts.PedCreators;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Police
+namespace Curiosity.Missions.Client.Scripts.Police
 {
     class RandomCallouts
     {

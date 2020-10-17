@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.Scripts
+namespace Curiosity.Missions.Client.Scripts
 {
     class MarkerHandler
     {

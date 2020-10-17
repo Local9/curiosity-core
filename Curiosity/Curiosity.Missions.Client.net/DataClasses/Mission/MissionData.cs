@@ -2,7 +2,7 @@
 using Curiosity.Global.Shared.Enums;
 using System.Collections.Generic;
 
-namespace Curiosity.Missions.Client.net.DataClasses.Mission
+namespace Curiosity.Missions.Client.DataClasses.Mission
 {
     class MissionData
     {

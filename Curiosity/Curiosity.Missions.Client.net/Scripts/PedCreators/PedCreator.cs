@@ -2,11 +2,11 @@
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
-using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Missions.Client.Wrappers;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.Scripts.PedCreators
+namespace Curiosity.Missions.Client.Scripts.PedCreators
 {
     class PedCreator
     {

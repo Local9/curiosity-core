@@ -2,10 +2,10 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Enums;
-using Curiosity.Missions.Client.net.DataClasses;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts;
-using Curiosity.Missions.Client.net.Scripts.PedCreators;
+using Curiosity.Missions.Client.DataClasses;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts;
+using Curiosity.Missions.Client.Scripts.PedCreators;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper.Area;
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Classes.Environment
+namespace Curiosity.Missions.Client.Classes.Environment
 {
     class ChatCommands
     {

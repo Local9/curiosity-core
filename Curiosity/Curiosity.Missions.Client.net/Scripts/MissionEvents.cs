@@ -3,7 +3,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Enums.Patrol;
@@ -13,7 +13,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts
+namespace Curiosity.Missions.Client.Scripts
 {
     class MissionEvents
     {

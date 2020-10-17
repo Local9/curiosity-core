@@ -1,10 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Missions.Client.net.Extensions;
+using Curiosity.Missions.Client.Extensions;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.Classes
+namespace Curiosity.Missions.Client.Classes
 {
     [Serializable] // WORK on entity inheritance
     internal class Vehicle : Entity, IEquatable<Vehicle>

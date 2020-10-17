@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+// using Ped = Curiosity.Callouts.Client.Classes.Ped;
+using Vehicle = Curiosity.Missions.Client.Classes.Vehicle;
 
-namespace Curiosity.Missions.Client.net.Scripts.Mission
+namespace Curiosity.Missions.Client.Scripts.Mission
 {
     [Serializable]
     internal abstract class Callout

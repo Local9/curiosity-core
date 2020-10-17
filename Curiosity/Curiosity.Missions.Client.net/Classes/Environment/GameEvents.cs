@@ -3,16 +3,16 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Scripts;
-using Curiosity.Missions.Client.net.Static;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Scripts;
+using Curiosity.Missions.Client.Static;
 using Curiosity.Shared.Client.net;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.Classes.Environment
+namespace Curiosity.Missions.Client.Classes.Environment
 {
     public delegate void PlayerKillPlayerEvent(Player attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);
     public delegate void PlayerKillPedEvent(Player attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag);

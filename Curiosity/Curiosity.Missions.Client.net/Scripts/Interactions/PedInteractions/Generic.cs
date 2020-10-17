@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.MissionPeds;
 using Curiosity.Shared.Client.net.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
+namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 {
     class Generic
     {

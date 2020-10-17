@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
+using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using System;
@@ -10,7 +10,7 @@ using System.Drawing;
 using static CitizenFX.Core.Native.API;
 using Font = CitizenFX.Core.UI.Font;
 
-namespace Curiosity.Missions.Client.net.Wrappers
+namespace Curiosity.Missions.Client.Wrappers
 {
     internal class Helpers
     {

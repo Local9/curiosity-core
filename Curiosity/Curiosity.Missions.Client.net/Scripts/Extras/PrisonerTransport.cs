@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 
-namespace Curiosity.Missions.Client.net.Scripts.Extras
+namespace Curiosity.Missions.Client.Scripts.Extras
 {
     class PrisonerTransport
     {

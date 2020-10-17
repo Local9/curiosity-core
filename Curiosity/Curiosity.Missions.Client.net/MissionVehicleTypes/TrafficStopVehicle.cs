@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Missions.Client.net.MissionVehicles;
+using Curiosity.Missions.Client.MissionVehicles;
 
-namespace Curiosity.Missions.Client.net.MissionVehicleTypes
+namespace Curiosity.Missions.Client.MissionVehicleTypes
 {
     internal class TrafficStopVehicle : InteractiveVehicle
     {

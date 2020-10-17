@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using System;
 
-namespace Curiosity.Missions.Client.net.MissionPeds
+namespace Curiosity.Missions.Client.MissionPeds
 {
     abstract class PedTemplate : Entity, IEquatable<Ped>
     {

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.DataClasses.Mission
+namespace Curiosity.Missions.Client.DataClasses.Mission
 {
     class PoliceCallouts
     {

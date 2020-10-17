@@ -1,10 +1,10 @@
 ﻿
 using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.MissionVehicles;
-using Curiosity.Missions.Client.net.MissionVehicleTypes;
+using Curiosity.Missions.Client.MissionVehicles;
+using Curiosity.Missions.Client.MissionVehicleTypes;
 
-namespace Curiosity.Missions.Client.net.Scripts.VehicleCreators
+namespace Curiosity.Missions.Client.Scripts.VehicleCreators
 {
     static class CreateVehicles
     {

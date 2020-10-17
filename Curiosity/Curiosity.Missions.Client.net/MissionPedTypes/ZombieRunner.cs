@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.MissionPeds;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.MissionPeds;
 
-namespace Curiosity.Missions.Client.net.MissionPedTypes
+namespace Curiosity.Missions.Client.MissionPedTypes
 {
     class ZombieRunner : ZombiePed
     {

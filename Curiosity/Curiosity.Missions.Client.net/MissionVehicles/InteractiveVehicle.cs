@@ -2,10 +2,10 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Data;
-using Curiosity.Missions.Client.net.DataClasses;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Static;
-using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Missions.Client.DataClasses;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Static;
+using Curiosity.Missions.Client.Wrappers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.MissionVehicles
+namespace Curiosity.Missions.Client.MissionVehicles
 {
     abstract class InteractiveVehicle : Entity, IEquatable<Vehicle>
     {

@@ -1,8 +1,8 @@
-﻿using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
+﻿using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts.Interactions.PedInteractions;
 using MenuAPI;
 
-namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenus
+namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
 {
     class MenuQuestions
     {

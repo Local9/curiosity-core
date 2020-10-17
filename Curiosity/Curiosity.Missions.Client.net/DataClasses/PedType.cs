@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Missions.Client.net.DataClasses
+﻿namespace Curiosity.Missions.Client.DataClasses
 {
     enum PedType
     {

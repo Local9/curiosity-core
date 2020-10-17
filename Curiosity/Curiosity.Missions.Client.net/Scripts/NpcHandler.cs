@@ -2,10 +2,10 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Entity;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
+using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
@@ -15,7 +15,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.Scripts
+namespace Curiosity.Missions.Client.Scripts
 {
     class NpcHandler
     {

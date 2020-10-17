@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Curiosity.Missions.Client.net.Extensions
+namespace Curiosity.Missions.Client.Extensions
 {
     static class RandomExtensions
     {

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Police
+namespace Curiosity.Missions.Client.Scripts.Police
 {
     class ArrestPed
     {

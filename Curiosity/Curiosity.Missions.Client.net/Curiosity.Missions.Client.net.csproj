@@ -7,7 +7,7 @@
     <ProjectGuid>{D9D6CDD2-D3CF-47BD-AB3B-BD7BAE469DE1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.Missions.Client.net</RootNamespace>
+    <RootNamespace>Curiosity.Missions.Client</RootNamespace>
     <AssemblyName>Curiosity.Missions.Client.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.DataClasses.Mission;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Static;
+using Curiosity.Missions.Client.DataClasses.Mission;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Static;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Classes.Environment;
 using Curiosity.Shared.Client.net.Enums;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
 
-namespace Curiosity.Missions.Client.net.Scripts.Mission
+namespace Curiosity.Missions.Client.Scripts.Mission
 {
     class CreateStoreMission
     {

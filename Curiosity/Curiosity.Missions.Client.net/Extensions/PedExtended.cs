@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Missions.Client.Wrappers;
 using System;
 
-namespace Curiosity.Missions.Client.net.Extensions
+namespace Curiosity.Missions.Client.Extensions
 {
     static class PedExtended
     {

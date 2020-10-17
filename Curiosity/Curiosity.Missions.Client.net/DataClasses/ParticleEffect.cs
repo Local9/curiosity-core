@@ -2,7 +2,7 @@
 using CitizenFX.Core.Native;
 using System.Drawing;
 
-namespace Curiosity.Missions.Client.net.DataClasses
+namespace Curiosity.Missions.Client.DataClasses
 {
     class ParticleEffect : IDeletable
     {

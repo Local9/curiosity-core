@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
-namespace Curiosity.Missions.Client.net.Utils
+namespace Curiosity.Missions.Client.Utils
 {
     class Logger
     {

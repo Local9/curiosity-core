@@ -1,13 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.Interactions.VehicleInteractions;
-using Curiosity.Missions.Client.net.Static;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts.Interactions.VehicleInteractions;
+using Curiosity.Missions.Client.Static;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using System.Collections.Generic;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
+namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 {
     class Social
     {

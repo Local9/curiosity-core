@@ -6,7 +6,7 @@ using Curiosity.Shared.Client.net.Enums.Patrol;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net
+namespace Curiosity.Missions.Client
 {
     public class Client : BaseScript
     {
@@ -122,7 +122,7 @@ namespace Curiosity.Missions.Client.net
 
             ClassLoader.Init();
 
-            Log.Info("Curiosity.Missions.Client.net loaded\n");
+            Log.Info("Curiosity.Missions.Client loaded\n");
         }
 
         private void OnPlayerSpawned(dynamic obj)

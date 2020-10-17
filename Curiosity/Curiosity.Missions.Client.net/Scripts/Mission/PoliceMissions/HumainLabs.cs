@@ -2,10 +2,10 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Data;
-using Curiosity.Missions.Client.net.Exceptions;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.PedCreators;
+using Curiosity.Missions.Client.Exceptions;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts.PedCreators;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Extensions;
@@ -19,7 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Mission.PoliceMissions
+namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
 {
     class HumainLabs
     {

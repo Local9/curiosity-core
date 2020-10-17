@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using System;
 
-namespace Curiosity.Missions.Client.net.Static
+namespace Curiosity.Missions.Client.Static
 {
     static class Relationships
     {

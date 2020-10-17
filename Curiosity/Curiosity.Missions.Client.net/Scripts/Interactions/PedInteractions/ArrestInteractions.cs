@@ -1,15 +1,15 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.Interactions.VehicleInteractions;
-using Curiosity.Missions.Client.net.Static;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts.Interactions.VehicleInteractions;
+using Curiosity.Missions.Client.Static;
 using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Extensions;
 using System.Collections.Generic;
 
-namespace Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions
+namespace Curiosity.Missions.Client.Scripts.Interactions.PedInteractions
 {
     class ArrestInteractions
     {

@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 
-namespace Curiosity.Missions.Client.net.DataClasses.Mission
+namespace Curiosity.Missions.Client.DataClasses.Mission
 {
     class MissionPedData
     {

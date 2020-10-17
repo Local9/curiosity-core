@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
-namespace Curiosity.Missions.Client.net.Wrappers
+namespace Curiosity.Missions.Client.Wrappers
 {
     class EntityEventWrapper
     {

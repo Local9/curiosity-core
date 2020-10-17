@@ -2,14 +2,14 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.NPC;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Wrappers;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.MissionPeds
+namespace Curiosity.Missions.Client.MissionPeds
 {
     abstract class WorldPed : Entity, IEquatable<Ped>
     {

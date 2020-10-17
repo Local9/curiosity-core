@@ -1,12 +1,12 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu
+namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu
 {
     class MenuBase
     {

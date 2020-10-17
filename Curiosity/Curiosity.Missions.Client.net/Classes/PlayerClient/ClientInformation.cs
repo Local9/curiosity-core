@@ -7,7 +7,7 @@ using Curiosity.Shared.Client.net.Enums.Patrol;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 
-namespace Curiosity.Missions.Client.net.Classes.PlayerClient
+namespace Curiosity.Missions.Client.Classes.PlayerClient
 {
     static class ClientInformation
     {

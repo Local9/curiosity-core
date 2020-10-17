@@ -1,16 +1,16 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
-using Curiosity.Missions.Client.net.Helpers;
-using Curiosity.Missions.Client.net.MissionPeds;
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
+using Curiosity.Missions.Client.Helpers;
+using Curiosity.Missions.Client.MissionPeds;
+using Curiosity.Missions.Client.Scripts.Interactions.PedInteractions;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using MenuAPI;
 using Newtonsoft.Json;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Menus.PedInteractionMenu.SubMenus
+namespace Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu.SubMenus
 {
     class MenuInteraction
     {

@@ -8,7 +8,7 @@ using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Extras
+namespace Curiosity.Missions.Client.Scripts.Extras
 {
     class VehicleTow
     {

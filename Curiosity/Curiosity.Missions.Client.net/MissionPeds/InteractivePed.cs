@@ -4,13 +4,13 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Entity;
-using Curiosity.Missions.Client.net.Classes.PlayerClient;
-using Curiosity.Missions.Client.net.Extensions;
-using Curiosity.Missions.Client.net.Scripts;
+using Curiosity.Missions.Client.Classes.PlayerClient;
+using Curiosity.Missions.Client.Extensions;
+using Curiosity.Missions.Client.Scripts;
 // INTERACTIONS
-using Curiosity.Missions.Client.net.Scripts.Interactions.PedInteractions;
-using Curiosity.Missions.Client.net.Static;
-using Curiosity.Missions.Client.net.Wrappers;
+using Curiosity.Missions.Client.Scripts.Interactions.PedInteractions;
+using Curiosity.Missions.Client.Static;
+using Curiosity.Missions.Client.Wrappers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using Newtonsoft.Json;
@@ -20,7 +20,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.MissionPeds
+namespace Curiosity.Missions.Client.MissionPeds
 {
     abstract class InteractivePed : Entity, IEquatable<Ped>
     {

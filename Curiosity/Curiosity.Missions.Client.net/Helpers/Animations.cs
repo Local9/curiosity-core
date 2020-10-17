@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Helpers
+namespace Curiosity.Missions.Client.Helpers
 {
     class Animations
     {

@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Missions.Client.net.Extensions
+﻿namespace Curiosity.Missions.Client.Extensions
 {
     public enum DamagePack
     {

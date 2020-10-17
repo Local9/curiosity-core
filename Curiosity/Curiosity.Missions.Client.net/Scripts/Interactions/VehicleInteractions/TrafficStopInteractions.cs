@@ -2,7 +2,7 @@
 using System;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Missions.Client.net.Scripts.Interactions.VehicleInteractions
+namespace Curiosity.Missions.Client.Scripts.Interactions.VehicleInteractions
 {
     static class TrafficStopInteractions
     {
