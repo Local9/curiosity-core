@@ -61,7 +61,7 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             while (true)
             {
-                bool trails = CitizenFX.Core.World.Weather == Weather.Christmas;
+                bool trails = World.Weather == Weather.Christmas;
                 API.SetForceVehicleTrails(trails);
                 API.SetForcePedFootstepsTracks(trails);
                 await Client.Delay(0);
