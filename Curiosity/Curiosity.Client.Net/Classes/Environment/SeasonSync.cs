@@ -3,13 +3,9 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Global.Shared.Data;
-using Curiosity.Global.Shared.Utils;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -166,7 +162,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 _lastWeatherBeforeXmas = (WeatherTypes)weather;
             }
 
-            switch((WeatherTypes)weather)
+            switch ((WeatherTypes)weather)
             {
                 case WeatherTypes.XMAS_STORM:
                 case WeatherTypes.XMAS:

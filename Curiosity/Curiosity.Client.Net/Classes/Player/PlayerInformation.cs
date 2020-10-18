@@ -3,7 +3,6 @@ using CitizenFX.Core.Native;
 using Curiosity.Client.net.Extensions;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
-using Curiosity.Shared.Client.net.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -55,7 +54,7 @@ namespace Curiosity.Client.net.Classes.Player
 
         static void SetDutyIcon(bool onDuty, bool active, string job)
         {
-            if (string.IsNullOrEmpty(job) || job == "undefined") 
+            if (string.IsNullOrEmpty(job) || job == "undefined")
                 job = "Unemployed";
 
             API.SendNuiMessage(JsonConvert.SerializeObject(new DutyMessage { duty = onDuty, dutyActive = active, job = job }));

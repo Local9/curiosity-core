@@ -2,15 +2,10 @@
 using CitizenFX.Core.Native;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Helpers;
-using Curiosity.Shared.Client.net.Enums;
 using Curiosity.Shared.Client.net.Helper;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static Curiosity.Shared.Client.net.Helper.NativeWrappers;
 
 namespace Curiosity.Client.net.Classes.Environment.PDA
 {

@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Shared.Client.net;
 using Newtonsoft.Json;

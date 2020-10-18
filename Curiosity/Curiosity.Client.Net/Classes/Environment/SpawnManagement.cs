@@ -1,10 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Client.net.Classes.Player;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
-using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Collections.Generic;
