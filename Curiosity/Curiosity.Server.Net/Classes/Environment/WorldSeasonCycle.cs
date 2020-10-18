@@ -35,6 +35,8 @@ namespace Curiosity.Server.net.Classes.Environment
         static WeatherTypes _serverWeather = _summerWeather[Server.random.Next(_summerWeather.Count)];
         static float _windSpeed;
         static float _windDirection;
+        static int _maxWindDirectionMultiplier;
+        static int _maxWindSpeedMultiplier;
 
         // SEASONS
         static int _baseSeasonTimer = 60;
@@ -76,8 +78,8 @@ namespace Curiosity.Server.net.Classes.Environment
 
         private static void RandomWind()
         {
-            _windDirection = (float)(Server.random.NextDouble() * Server.random.Next(8));
-            _windSpeed = (float)(Server.random.NextDouble() * Server.random.Next(13));
+            _windDirection = (float)(Server.random.NextDouble() * Server.random.Next(_maxWindDirectionMultiplier));
+            _windSpeed = (float)(Server.random.NextDouble() * Server.random.Next(_maxWindSpeedMultiplier));
         }
 
         private static void OnFreezeTimeCommand(int playerHandle, List<object> args, string raw)
@@ -290,18 +292,26 @@ namespace Curiosity.Server.net.Classes.Environment
                     case Seasons.SPRING:
                         weathers = SeasonData.WeatherSpringList();
                         _serverTemp = Server.random.Next(60, 88);
+                        _maxWindDirectionMultiplier = 5;
+                        _maxWindSpeedMultiplier = 5;
                         break;
                     case Seasons.SUMMER:
                         weathers = SeasonData.WeatherSummerList();
                         _serverTemp = Server.random.Next(73, 102);
+                        _maxWindDirectionMultiplier = 3;
+                        _maxWindSpeedMultiplier = 2;
                         break;
                     case Seasons.AUTUMN:
                         weathers = SeasonData.WeatherAutumnList();
                         _serverTemp = Server.random.Next(53, 77);
+                        _maxWindDirectionMultiplier = 9;
+                        _maxWindSpeedMultiplier = 8;
                         break;
                     case Seasons.WINTER:
                         _serverWeather = WeatherTypes.XMAS;
                         _serverTemp = Server.random.Next(29, 43);
+                        _maxWindDirectionMultiplier = 10;
+                        _maxWindSpeedMultiplier = 8;
                         break;
                 }
 
