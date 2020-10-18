@@ -138,11 +138,11 @@ namespace Curiosity.Missions.Client.Scripts
 
             switch (mission.MissionType)
             {
-                case MissionType.STORE:
-                    Mission.CreateStoreMission.Create(mission);
-                    break;
                 case MissionType.STOLEN_VEHICLE:
                     Mission.StolenVehicle.Create(mission);
+                    break;
+                default:
+                    Mission.CreateStoreMission.Create(mission);
                     break;
             }
 

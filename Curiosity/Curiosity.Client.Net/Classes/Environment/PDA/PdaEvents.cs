@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper;
 using Microsoft.Win32;
 using System;
@@ -21,6 +22,7 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
         static public void Init()
         {
             client.RegisterNuiEventHandler("PlayerProfile", new Action<IDictionary<string, object>, CallbackDelegate>(OnPlayerProfile));
+            client.RegisterNuiEventHandler("PlayerExperience", new Action<IDictionary<string, object>, CallbackDelegate>(OnPlayerExperience));
             client.RegisterNuiEventHandler("ClosePanel", new Action<IDictionary<string, object>, CallbackDelegate>(OnClosePda));
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
 
@@ -28,13 +30,25 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
 
         }
 
+        private static void OnPlayerExperience(IDictionary<string, object> data, CallbackDelegate cb)
+        {
+            string jsn = new JsonBuilder().Add("operation", "EXPERIENCE")
+                .Add("skills", PlayerInformation.playerInfo.Skills)
+                .Build();
+
+            API.SendNuiMessage(jsn);
+
+            cb(new { ok = true });
+        }
+
         private static void OnDutyState(bool active, bool onduty, string job)
         {
             string jsn = new JsonBuilder().Add("operation", "DUTY")
                     .Add("isActive", active)
                     .Add("isDutyActive", onduty)
-                    .Add("job", job.ToUpperInvariant())
+                    .Add("job", job.ToTitleCase())
                     .Build();
+
             API.SendNuiMessage(jsn);
         }
 
