@@ -26,6 +26,8 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
             client.RegisterNuiEventHandler("PlayerProfile", new Action<IDictionary<string, object>, CallbackDelegate>(OnPlayerProfile));
             client.RegisterNuiEventHandler("ClosePanel", new Action<IDictionary<string, object>, CallbackDelegate>(OnClosePda));
 
+
+
             client.RegisterTickHandler(OnPdaCoreControls);
         }
 

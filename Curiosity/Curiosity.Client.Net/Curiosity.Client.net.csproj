@@ -66,6 +66,7 @@
     <Compile Include="Classes\Environment\MarqueeMessages.cs" />
     <Compile Include="Classes\Environment\PDA\PdaEvents.cs" />
     <Compile Include="Classes\Environment\PedClasses\PedHandler.cs" />
+    <Compile Include="Classes\Environment\SeasonSync.cs" />
     <Compile Include="Classes\Environment\SpawnManagement.cs" />
     <Compile Include="Classes\Environment\Trains.cs" />
     <Compile Include="Classes\Environment\UI\Bank.cs" />

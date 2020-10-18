@@ -15,7 +15,7 @@ namespace Curiosity.GameWorld.Client.net
             Classes.Player.PlayerInformation.Init();
             Classes.Player.LoadoutManagement.Init();
 
-            Classes.Environment.SeasonSync.Init();
+            // Classes.Environment.SeasonSync.Init();
             // Classes.Environment.TimeSync.Init(); // DEPRECATED
             // Classes.Environment.WeatherSystem.Init(); // DEPRECATED
 
