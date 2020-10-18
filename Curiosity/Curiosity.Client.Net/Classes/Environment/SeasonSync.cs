@@ -94,7 +94,6 @@ namespace Curiosity.Client.net.Classes.Environment
             if (API.GetCurrentResourceName() != resourceName) return;
 
             Client.TriggerServerEvent("curiosity:server:seasons:sync:connection");
-            Client.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         private static void OnWeatherDebug(int arg1, List<object> arg2, string arg3)
