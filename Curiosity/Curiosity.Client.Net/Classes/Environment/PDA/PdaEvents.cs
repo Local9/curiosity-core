@@ -22,10 +22,20 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
         {
             client.RegisterNuiEventHandler("PlayerProfile", new Action<IDictionary<string, object>, CallbackDelegate>(OnPlayerProfile));
             client.RegisterNuiEventHandler("ClosePanel", new Action<IDictionary<string, object>, CallbackDelegate>(OnClosePda));
-
-
+            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
 
             client.RegisterTickHandler(OnPdaCoreControls);
+
+        }
+
+        private static void OnDutyState(bool active, bool onduty, string job)
+        {
+            string jsn = new JsonBuilder().Add("operation", "DUTY")
+                    .Add("isActive", active)
+                    .Add("isDutyActive", onduty)
+                    .Add("job", job.ToUpperInvariant())
+                    .Build();
+            API.SendNuiMessage(jsn);
         }
 
         private static void OnPlayerProfile(IDictionary<string, object> data, CallbackDelegate cb)

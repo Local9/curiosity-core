@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Client.net.Extensions;
+using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Newtonsoft.Json;
@@ -166,7 +167,42 @@ namespace Curiosity.Client.net.Classes.Player
                 Decorators.Set(Game.PlayerPed.Handle, Decorators.DECOR_PLAYER_STAFF, IsStaff());
 
             GetPlayerInfo();
+
+            UpdateNUI();
+
             await BaseScript.Delay(0);
+        }
+
+        private static void UpdateNUI()
+        {
+            string role = "USER";
+
+            switch (privilege)
+            {
+                case Privilege.DONATOR:
+                    role = "LifeV Early Supporter";
+                    break;
+                case Privilege.DONATOR1:
+                    role = "LifeV Supporter I";
+                    break;
+                case Privilege.DONATOR2:
+                    role = "LifeV Supporter II";
+                    break;
+                case Privilege.DONATOR3:
+                    role = "LifeV Supporter III";
+                    break;
+                default:
+                    role = playerInfo.Role;
+                    break;
+            }
+
+            string jsn = new JsonBuilder().Add("operation", "PROFILE")
+                    .Add("name", playerInfo.Name)
+                    .Add("userId", playerInfo.UserId)
+                    .Add("role", role.ToUpperInvariant())
+                    .Add("wallet", playerInfo.Wallet)
+                    .Build();
+            API.SendNuiMessage(jsn);
         }
 
         public static bool IsStaff()
