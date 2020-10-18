@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.GameWorld.Client.net.Classes.Player;
 using Curiosity.Global.Shared.Data;
@@ -50,8 +51,41 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
             client.RegisterTickHandler(OnSeasonTimerTick);
             client.RegisterTickHandler(OnPopulationManagement);
+            client.RegisterTickHandler(OnSnowCheck);
 
             Log.Verbose($"[WORLD WEATHER] Init");
+        }
+
+        private static async Task OnSnowCheck()
+        {
+            while (true)
+            {
+                bool trails = CitizenFX.Core.World.Weather == Weather.Christmas;
+                API.SetForceVehicleTrails(trails);
+                API.SetForcePedFootstepsTracks(trails);
+                await Client.Delay(0);
+
+                if (trails
+                    && (Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Unarmed || Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Snowball)
+                    && Game.IsControlPressed(0, Control.ThrowGrenade)
+                    && !Game.PlayerPed.IsInVehicle())
+                {
+                    API.RequestAnimDict("anim@mp_snowball");
+
+                    if (!Game.PlayerPed.Weapons.HasWeapon(WeaponHash.Snowball))
+                    {
+                        Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
+                        Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
+                    }
+                    else if (Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo < 10)
+                    {
+                        Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
+                        Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo++;
+                        Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
+                    }
+                    await Client.Delay(1000);
+                }
+            }
         }
 
         private static void OnResourceStart(string resourceName)
