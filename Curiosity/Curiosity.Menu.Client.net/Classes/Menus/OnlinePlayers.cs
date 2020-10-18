@@ -261,7 +261,6 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 Client.TriggerEvent("curioisty:UI:IsSpectating", false);
                 API.NetworkSetInSpectatorMode(false, playerPedId);
 
-                Game.Player.IsInvincible = false;
                 Game.PlayerPed.IsVisible = true;
                 Game.PlayerPed.IsPositionFrozen = false;
 
@@ -282,6 +281,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 await BaseScript.Delay(50);
 
                 API.DoScreenFadeIn(200);
+                Game.Player.IsInvincible = false;
 
                 return;
             }
