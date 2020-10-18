@@ -190,6 +190,7 @@ namespace Curiosity.Client.net.Classes.Environment.IPL.Nightclub
             DisableControlAction(0, 257, state);
             DisableControlAction(0, 263, state);
             DisableControlAction(0, 264, state);
+            DisableControlAction(0, (int)Control.Jump, state);
         }
 
 
