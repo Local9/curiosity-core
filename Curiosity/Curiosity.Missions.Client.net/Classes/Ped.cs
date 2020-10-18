@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Utils;
+using Curiosity.Missions.Client.Extensions;
 using Curiosity.Missions.Client.Managers;
 using Curiosity.Missions.Client.Utils;
 using Curiosity.Missions.Client.Wrappers;
@@ -460,7 +461,7 @@ namespace Curiosity.Missions.Client.Classes
             return blip;
         }
 
-        internal void Dismiss()
+        internal async void Dismiss()
         {
             //if (Fx.AttachedBlips.Length > 0)
             //    foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
@@ -479,6 +480,10 @@ namespace Curiosity.Missions.Client.Classes
             }
 
             Fx.IsPersistent = false;
+
+            Fx.Fade(true, false);
+
+            await PluginManager.Delay(3000);
 
             base.Delete();
         }
