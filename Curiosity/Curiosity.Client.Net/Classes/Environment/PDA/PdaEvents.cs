@@ -2,7 +2,9 @@
 using CitizenFX.Core.Native;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Helpers;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net.Helper;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,8 +30,33 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
 
         private static void OnPlayerProfile(IDictionary<string, object> data, CallbackDelegate cb)
         {
-            string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
-                    .Add("profile", PlayerInformation.playerInfo).Build();
+            string role = "USER";
+
+            switch(PlayerInformation.privilege)
+            {
+                case Privilege.DONATOR:
+                    role = "LifeV Early Supporter";
+                    break;
+                case Privilege.DONATOR1:
+                    role = "LifeV Supporter I";
+                    break;
+                case Privilege.DONATOR2:
+                    role = "LifeV Supporter II";
+                    break;
+                case Privilege.DONATOR3:
+                    role = "LifeV Supporter III";
+                    break;
+                default:
+                    role = PlayerInformation.playerInfo.Role;
+                    break;
+            }
+
+            string jsn = new JsonBuilder().Add("operation", "PROFILE")
+                    .Add("name", PlayerInformation.playerInfo.Name)
+                    .Add("userId", PlayerInformation.playerInfo.UserId)
+                    .Add("role", PlayerInformation.playerInfo.Role)
+                    .Add("wallet", PlayerInformation.playerInfo.Wallet)
+                    .Build();
             API.SendNuiMessage(jsn);
 
             cb(new { ok = true });

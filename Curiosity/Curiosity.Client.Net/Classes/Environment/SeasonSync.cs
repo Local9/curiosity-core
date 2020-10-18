@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Client.net.Classes.Player;
+using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Shared.Client.net;
 using System;
@@ -28,6 +29,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static WeatherTypes _lastWeather;
         static WeatherTypes _lastWeatherBeforeXmas;
         static Seasons _lastSeason;
+        static int _temp;
 
         // population
         static float PED_MULTIPLIER;
@@ -46,11 +48,20 @@ namespace Curiosity.Client.net.Classes.Environment
             client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
             client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int, float, float>(OnSeasonsWeatherSync));
 
+            client.RegisterNuiEventHandler("GetWeather", new Action<IDictionary<string, object>, CallbackDelegate>(OnGetWeather));
+
             client.RegisterTickHandler(OnSeasonTimerTick);
             client.RegisterTickHandler(OnPopulationManagement);
             client.RegisterTickHandler(OnSnowCheck);
 
             Log.Verbose($"[WORLD WEATHER] Init");
+        }
+
+        private static void OnGetWeather(IDictionary<string, object> arg1, CallbackDelegate cb)
+        {
+            WeatherNuiMessage(_lastWeather);
+
+            cb(new { ok = true });
         }
 
         private static async Task OnSnowCheck()
@@ -140,6 +151,12 @@ namespace Curiosity.Client.net.Classes.Environment
 
             NetworkOverrideClockTime(hour, minute, 0);
             SetClockTime(hour, minute, 0);
+
+            JsonBuilder jsonBuilder = new JsonBuilder()
+                .Add("operation", "TIME")
+                .Add("hour", $"{hour:00}")
+                .Add("minute", $"{minute:00}");
+            API.SendNuiMessage(jsonBuilder.Build());
         }
 
         private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp, float windSpeed, float windDirection)
@@ -191,12 +208,7 @@ namespace Curiosity.Client.net.Classes.Environment
             ClearOverrideWeather();
             ClearWeatherTypePersist();
 
-            string w = $"{weather}";
-            SetWeatherTypeNow(w);
-            SetWeatherTypePersist(w);
-            SetWeatherTypeNowPersist(w);
-
-            SetPopulationValues(weather);
+            SetWeather(weather);
         }
 
         private static void SetWeather(WeatherTypes weather)
@@ -207,13 +219,15 @@ namespace Curiosity.Client.net.Classes.Environment
             SetWeatherTypeNowPersist(w);
 
             SetPopulationValues(weather);
+
+            WeatherNuiMessage(weather);
         }
 
         private static async void GetOnSeasonsTimeSync(int season, int weather, int temp)
         {
             if (_lastSeason == (Seasons)season) return;
             _lastSeason = (Seasons)season;
-
+            _temp = temp;
             SetPopulationValues((WeatherTypes)weather);
 
             string message = "";
@@ -302,6 +316,47 @@ namespace Curiosity.Client.net.Classes.Environment
                     VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
             }
+        }
+
+        private static void WeatherNuiMessage(WeatherTypes weather)
+        {
+            JsonBuilder jsonBuilder = new JsonBuilder();
+            jsonBuilder.Add("operation", "WEATHER");
+            jsonBuilder.Add("temp", _temp);
+
+            switch (weather)
+            {
+                case WeatherTypes.XMAS_STORM:
+                case WeatherTypes.XMAS:
+                    jsonBuilder.Add("type", "Snow");
+                    break;
+                case WeatherTypes.HALLOWEEN:
+                    jsonBuilder.Add("type", "Halloween");
+                    break;
+                case WeatherTypes.CLEAR:
+                case WeatherTypes.CLEARING:
+                case WeatherTypes.NEUTRAL:
+                    jsonBuilder.Add("type", "Clear");
+                    break;
+                case WeatherTypes.EXTRASUNNY:
+                    jsonBuilder.Add("type", "Sunny");
+                    break;
+                case WeatherTypes.FOGGY:
+                case WeatherTypes.SMOG:
+                    jsonBuilder.Add("type", "Foggy");
+                    break;
+                case WeatherTypes.OVERCAST:
+                case WeatherTypes.CLOUDS:
+                    jsonBuilder.Add("type", "Cloudy");
+                    break;
+                case WeatherTypes.RAIN:
+                    jsonBuilder.Add("type", "Raining");
+                    break;
+                case WeatherTypes.THUNDER:
+                    jsonBuilder.Add("type", "Thunder Storm");
+                    break;
+            }
+            API.SendNuiMessage(jsonBuilder.Build());
         }
     }
 }

@@ -207,18 +207,18 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 Privilege privilege = session.Privilege;
 
-                switch(session.Privilege)
-                {
-                    case Privilege.DONATOR:
-                    case Privilege.DONATOR1:
-                    case Privilege.DONATOR2:
-                    case Privilege.DONATOR3:
-                        privilege = Privilege.DONATOR;
-                        break;
-                    default:
-                        privilege = session.Privilege;
-                        break;
-                }
+                //switch(session.Privilege)
+                //{
+                //    case Privilege.DONATOR:
+                //    case Privilege.DONATOR1:
+                //    case Privilege.DONATOR2:
+                //    case Privilege.DONATOR3:
+                //        privilege = Privilege.DONATOR;
+                //        break;
+                //    default:
+                //        privilege = session.Privilege;
+                //        break;
+                //}
 
                 chatMessage.Name = $"[{session.Player.Handle}] {session.Player.Name}";
                 chatMessage.Message = message;
