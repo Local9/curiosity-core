@@ -46,7 +46,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
             client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
             client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
-            client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int, float, float>(OnSeasonsWeatherSync));
+            client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int, float, float, float>(OnSeasonsWeatherSync));
 
             client.RegisterNuiEventHandler("GetWeather", new Action<IDictionary<string, object>, CallbackDelegate>(OnGetWeather));
 
@@ -60,6 +60,12 @@ namespace Curiosity.Client.net.Classes.Environment
         private static void OnGetWeather(IDictionary<string, object> arg1, CallbackDelegate cb)
         {
             WeatherNuiMessage(_lastWeather);
+
+            JsonBuilder jsonBuilder = new JsonBuilder()
+                .Add("operation", "TIME")
+                .Add("hour", $"{hour:00}")
+                .Add("minute", $"{minute:00}");
+            API.SendNuiMessage(jsonBuilder.Build());
 
             cb(new { ok = true });
         }
@@ -152,14 +158,22 @@ namespace Curiosity.Client.net.Classes.Environment
             NetworkOverrideClockTime(hour, minute, 0);
             SetClockTime(hour, minute, 0);
 
-            JsonBuilder jsonBuilder = new JsonBuilder()
-                .Add("operation", "TIME")
-                .Add("hour", $"{hour:00}")
-                .Add("minute", $"{minute:00}");
-            API.SendNuiMessage(jsonBuilder.Build());
+            if (minute%10 == 0)
+            {
+                JsonBuilder jsonBuilder = new JsonBuilder()
+                    .Add("operation", "TIME")
+                    .Add("hour", $"{hour:00}")
+                    .Add("minute", $"{minute:00}");
+                API.SendNuiMessage(jsonBuilder.Build());
+            }
         }
 
-        private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp, float windSpeed, float windDirection)
+        private static void ShowTimeAndWeather()
+        {
+
+        }
+
+        private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp, float windSpeed, float windDirection, float rainIntensity)
         {
             if (_lastWeather == (WeatherTypes)weather) return;
 
@@ -168,7 +182,8 @@ namespace Curiosity.Client.net.Classes.Environment
             SetWeatherTypeOverTime($"{weather}", 30.0f);
 
             await Client.Delay(30000);
-
+            
+            SetRainFxIntensity(0.0f);
             ClearOverrideWeather();
             ClearWeatherTypePersist();
             SetBlackout(blackout);
@@ -186,6 +201,9 @@ namespace Curiosity.Client.net.Classes.Environment
                     SetForceVehicleTrails(true);
                     SetForcePedFootstepsTracks(true);
                     SetWeather(WeatherTypes.XMAS);
+                    break;
+                case WeatherTypes.RAIN:
+                    SetRainFxIntensity(rainIntensity);
                     break;
                 default:
                     SetForceVehicleTrails(false);

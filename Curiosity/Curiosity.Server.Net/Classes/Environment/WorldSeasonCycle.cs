@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Data;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Server.net.Extensions;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
@@ -28,6 +29,7 @@ namespace Curiosity.Server.net.Classes.Environment
         static int _baseWeatherTimer = 10;
         static int _newWeatherTimer = 10;
         static bool _dynamicWeatherEnabled = true;
+        static float _rainIntensity;
 
         static List<WeatherTypes> _springWeather = SeasonData.WeatherSpringList();
         static List<WeatherTypes> _summerWeather = SeasonData.WeatherSummerList();
@@ -80,6 +82,13 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             _windDirection = (float)(Server.random.NextDouble() * Server.random.Next(_maxWindDirectionMultiplier));
             _windSpeed = (float)(Server.random.NextDouble() * Server.random.Next(_maxWindSpeedMultiplier));
+
+            if (_serverWeather == WeatherTypes.RAIN)
+            {
+                _rainIntensity = (float)Utility.RANDOM.NextDouble();
+                if (_rainIntensity < .5f)
+                    _rainIntensity = .5f;
+            }
         }
 
         private static void OnFreezeTimeCommand(int playerHandle, List<object> args, string raw)
@@ -380,14 +389,14 @@ namespace Curiosity.Server.net.Classes.Environment
 
         private static void SyncAllUsers()
         {
-            Server.TriggerClientEvent("curiosity:client:seasons:sync:weather", (int)_serverWeather, _blackout, _serverTemp); // inform clients
-            Server.TriggerClientEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp, _windSpeed, _windDirection); // inform clients
+            Server.TriggerClientEvent("curiosity:client:seasons:sync:weather", (int)_serverWeather, _blackout, _serverTemp, _windSpeed, _windDirection, _rainIntensity); // inform clients
+            Server.TriggerClientEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp); // inform clients
         }
 
         private static void OnSeasonConnectionSync([FromSource]CitizenFX.Core.Player player)
         {
-            player.TriggerEvent("curiosity:client:seasons:sync:weather", (int)_serverWeather, _blackout, _serverTemp); // inform clients
-            player.TriggerEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp, _windSpeed, _windDirection); // inform clients   
+            player.TriggerEvent("curiosity:client:seasons:sync:weather", (int)_serverWeather, _blackout, _serverTemp, _windSpeed, _windDirection, _rainIntensity); // inform clients
+            player.TriggerEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp); // inform clients   
         }
     }
 }
