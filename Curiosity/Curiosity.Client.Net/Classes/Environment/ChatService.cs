@@ -55,6 +55,8 @@ namespace Curiosity.Client.net.Classes.Environment
         static void OnNuiCloseChat(IDictionary<string, object> data, CallbackDelegate cb)
         {
             EnableChatbox(false);
+
+            cb(new { ok = true });
         }
 
         static void OnCloseChat()
