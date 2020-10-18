@@ -33,6 +33,8 @@ namespace Curiosity.Server.net.Classes.Environment
         static List<WeatherTypes> _summerWeather = SeasonData.WeatherSummerList();
         static List<WeatherTypes> _autumnWeather = SeasonData.WeatherAutumnList();
         static WeatherTypes _serverWeather = _summerWeather[Server.random.Next(_summerWeather.Count)];
+        static float _windSpeed;
+        static float _windDirection;
 
         // SEASONS
         static int _baseSeasonTimer = 60;
@@ -70,6 +72,12 @@ namespace Curiosity.Server.net.Classes.Environment
             API.RegisterCommand("night", new Action<int, List<object>, string>(OnNightCommand), false);
             API.RegisterCommand("freezeweather", new Action<int, List<object>, string>(OnFreezeWeatherCommand), false);
             API.RegisterCommand("freezetime", new Action<int, List<object>, string>(OnFreezeTimeCommand), false);
+        }
+
+        private static void RandomWind()
+        {
+            _windDirection = (float)(Server.random.NextDouble() * Server.random.Next(8));
+            _windSpeed = (float)(Server.random.NextDouble() * Server.random.Next(13));
         }
 
         private static void OnFreezeTimeCommand(int playerHandle, List<object> args, string raw)
@@ -244,6 +252,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             _serverWeather = weatherType;
             _newWeatherTimer = _baseWeatherTimer;
+            RandomWind();
 
             session.Player.NotificationCuriosity($"Weather", $"Weather changed: {_serverWeather}");
 
@@ -314,6 +323,7 @@ namespace Curiosity.Server.net.Classes.Environment
                 }
 
                 weathers.Clear(); // clear the list
+                RandomWind();
 
                 SyncAllUsers(); // sync all players
             }
@@ -348,7 +358,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 _serverSeason = _seasonsList[_season]; // set new season based on the increase
 
-                Server.TriggerClientEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp); // inform clients
+                Server.TriggerClientEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp, _windSpeed, _windDirection); // inform clients
 
                 Log.Success($"[SEASONS] Changed Season {_serverSeason}:{_season}");
             }
@@ -361,13 +371,13 @@ namespace Curiosity.Server.net.Classes.Environment
         private static void SyncAllUsers()
         {
             Server.TriggerClientEvent("curiosity:client:seasons:sync:weather", (int)_serverWeather, _blackout, _serverTemp); // inform clients
-            Server.TriggerClientEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp); // inform clients
+            Server.TriggerClientEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp, _windSpeed, _windDirection); // inform clients
         }
 
         private static void OnSeasonConnectionSync([FromSource]CitizenFX.Core.Player player)
         {
             player.TriggerEvent("curiosity:client:seasons:sync:weather", (int)_serverWeather, _blackout, _serverTemp); // inform clients
-            player.TriggerEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp); // inform clients   
+            player.TriggerEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp, _windSpeed, _windDirection); // inform clients   
         }
     }
 }

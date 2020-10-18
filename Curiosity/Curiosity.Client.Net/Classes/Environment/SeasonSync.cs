@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Global.Shared.Data;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
             client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
             client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
-            client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int>(OnSeasonsWeatherSync));
+            client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int, float, float>(OnSeasonsWeatherSync));
 
             client.RegisterTickHandler(OnSeasonTimerTick);
             client.RegisterTickHandler(OnPopulationManagement);
@@ -146,15 +147,15 @@ namespace Curiosity.Client.net.Classes.Environment
             SetClockTime(hour, minute, 0);
         }
 
-        private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp)
+        private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp, float windSpeed, float windDirection)
         {
             if (_lastWeather == (WeatherTypes)weather) return;
 
             _lastWeather = (WeatherTypes)weather;
 
-            SetWeatherTypeOverTime($"{weather}", 15.0f);
+            SetWeatherTypeOverTime($"{weather}", 30.0f);
 
-            await Client.Delay(15000);
+            await Client.Delay(30000);
 
             ClearOverrideWeather();
             ClearWeatherTypePersist();
@@ -180,6 +181,10 @@ namespace Curiosity.Client.net.Classes.Environment
                     SetWeather(_lastWeather);
                     break;
             }
+
+            API.SetWind(windSpeed);
+            API.SetWindDirection(windDirection); // 0-7.9
+
         }
 
         private static async void SetWeatherDelay(WeatherTypes weather)

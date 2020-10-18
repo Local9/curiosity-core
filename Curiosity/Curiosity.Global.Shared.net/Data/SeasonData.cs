@@ -66,7 +66,6 @@ namespace Curiosity.Global.Shared.Data
                 WeatherTypes.THUNDER,
                 WeatherTypes.SMOG,
                 WeatherTypes.FOGGY,
-                WeatherTypes.RAIN
             };
         }
         static public List<WeatherTypes> WeatherAutumnList()
