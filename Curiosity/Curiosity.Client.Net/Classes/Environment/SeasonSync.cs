@@ -37,6 +37,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static float VEH_PARKED_MULTIPLIER;
 
         static bool weatherDebug = false;
+        static bool _connected = false;
 
         public static void Init()
         {
@@ -61,11 +62,16 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             WeatherNuiMessage(_lastWeather);
 
-            JsonBuilder jsonBuilder = new JsonBuilder()
-                .Add("operation", "TIME")
-                .Add("hour", $"{hour:00}")
-                .Add("minute", $"{minute:00}");
-            API.SendNuiMessage(jsonBuilder.Build());
+            if (!_connected)
+            {
+                _connected = !_connected;
+
+                JsonBuilder jsonBuilder = new JsonBuilder()
+                    .Add("operation", "TIME")
+                    .Add("hour", $"{hour:00}")
+                    .Add("minute", $"{minute:00}");
+                API.SendNuiMessage(jsonBuilder.Build());
+            }
 
             cb(new { ok = true });
         }
