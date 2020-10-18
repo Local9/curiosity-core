@@ -29,6 +29,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static WeatherTypes _lastWeather;
         static WeatherTypes _lastWeatherBeforeXmas;
         static Seasons _lastSeason;
+        static string _seasonString;
         static int _temp;
 
         // population
@@ -267,16 +268,19 @@ namespace Curiosity.Client.net.Classes.Environment
                     SetForceVehicleTrails(false);
                     SetForcePedFootstepsTracks(false);
                     message = "Ah, early spring morning. Listen to those birds.";
+                    _seasonString = "Spring";
                     break;
                 case Seasons.SUMMER:
                     SetForceVehicleTrails(false);
                     SetForcePedFootstepsTracks(false);
                     message = "Its hot out side, look out for the lizard people!";
+                    _seasonString = "Summer";
                     break;
                 case Seasons.AUTUMN:
                     SetForceVehicleTrails(false);
                     SetForcePedFootstepsTracks(false);
                     message = "Leaf falls down, thats why we call it Fall.";
+                    _seasonString = "Autumn";
                     break;
                 case Seasons.WINTER: // OVERRIDE ALL THE THINGS!
                     message = "It's as cold a my sex life.";
@@ -284,9 +288,12 @@ namespace Curiosity.Client.net.Classes.Environment
                     _lastWeather = WeatherTypes.XMAS;
                     SetForceVehicleTrails(true);
                     SetForcePedFootstepsTracks(true);
+                    _seasonString = "Winter";
                     SetWeatherDelay(_lastWeather);
                     break;
             }
+
+            WeatherNuiMessage(_lastWeather);
 
             // Client.TriggerEvent("curiosity:Client:Notification:Advanced", "CHAR_LS_TOURIST_BOARD", 1, "Seasonal Change", "", $"{message}", 2);
         }
@@ -350,6 +357,7 @@ namespace Curiosity.Client.net.Classes.Environment
             JsonBuilder jsonBuilder = new JsonBuilder();
             jsonBuilder.Add("operation", "WEATHER");
             jsonBuilder.Add("temp", _temp);
+            jsonBuilder.Add("season", _seasonString);
 
             switch (weather)
             {
