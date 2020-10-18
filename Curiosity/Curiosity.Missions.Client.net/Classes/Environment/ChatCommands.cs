@@ -202,7 +202,11 @@ namespace Curiosity.Missions.Client.Classes.Environment
                 }
 
                 CitizenFX.Core.Ped ped = await World.CreatePed(PedHash.JimmyDisanto, spawnPosition);
+
+                await PluginManager.Delay(100);
+
                 API.NetworkFadeInEntity(ped.Handle, false);
+
                 API.PlaceObjectOnGroundProperly(ped.Handle);
 
                 Screen.ShowNotification($"~g~Spawning an {argument.ToTitleCase()} Ped");

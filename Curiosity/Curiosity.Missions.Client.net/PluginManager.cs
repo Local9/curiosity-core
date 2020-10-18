@@ -203,7 +203,7 @@ namespace Curiosity.Missions.Client
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error(ex, "RegisterEventHandler");
             }
         }
 
@@ -221,7 +221,7 @@ namespace Curiosity.Missions.Client
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error(ex, "RegisterNuiEventHandler");
             }
         }
 
@@ -240,7 +240,7 @@ namespace Curiosity.Missions.Client
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error(ex, "RegisterTickHandler");
             }
         }
 
@@ -259,7 +259,7 @@ namespace Curiosity.Missions.Client
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error(ex, "DeregisterTickHandler");
             }
         }
 

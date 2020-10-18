@@ -89,7 +89,7 @@ namespace Curiosity.Missions.Client.Managers
                 playerInfo.Role = Privilege;
         }
 
-        public static bool IsDeveloper => playerInfo.Role == Privilege.DEVELOPER || playerInfo.Role == Privilege.PROJECTMANAGER;
+        public static bool IsDeveloper => playerInfo?.Role == Privilege.DEVELOPER || playerInfo?.Role == Privilege.PROJECTMANAGER;
         public static bool IsDeveloperUIActive => (IsDeveloper) && Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_UI);
 
         public class PlayerInformationModel

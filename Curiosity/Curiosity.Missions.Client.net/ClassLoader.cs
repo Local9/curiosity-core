@@ -8,6 +8,7 @@ using Curiosity.Missions.Client.Scripts.Menus.PedInteractionMenu;
 using Curiosity.Missions.Client.Scripts.Mission;
 using Curiosity.Missions.Client.Scripts.Mission.PoliceMissions;
 using Curiosity.Missions.Client.Scripts.Police;
+using Curiosity.Missions.Client.Static;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace Curiosity.Missions.Client
             ClientInformation.Init();
 
             // Game Code
-            Missions.Client.Static.Relationships.Init();
+            Relationships.Init();
 
             // DATA
             PoliceCallouts.Init();

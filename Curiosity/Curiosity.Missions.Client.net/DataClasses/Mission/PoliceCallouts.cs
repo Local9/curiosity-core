@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

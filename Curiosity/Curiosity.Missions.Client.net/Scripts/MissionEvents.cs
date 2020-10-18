@@ -3,7 +3,6 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
-using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Managers;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
