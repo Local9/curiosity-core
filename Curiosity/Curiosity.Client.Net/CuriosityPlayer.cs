@@ -400,6 +400,9 @@ namespace Curiosity.Client.net
 
             API.SetPlayerCanBeHassledByGangs(Game.Player.Handle, true);
 
+            API.ExpandWorldLimits(-10000.0f, -12000.0f, -30.0f);
+            API.ExpandWorldLimits(10000.0f, 12000.0f, 30.0f);
+
             try
             {
                 int deathCheck = API.GetResourceKvpInt("DEATH");

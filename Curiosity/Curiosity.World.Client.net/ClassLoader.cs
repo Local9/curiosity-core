@@ -19,8 +19,6 @@ namespace Curiosity.GameWorld.Client.net
             // Classes.Environment.TimeSync.Init(); // DEPRECATED
             // Classes.Environment.WeatherSystem.Init(); // DEPRECATED
 
-            Classes.Environment.WorldLimits.Init();
-
             // Animals
             Classes.Environment.AquaticSpawner.Init();
             Classes.Environment.Birds.Init();
