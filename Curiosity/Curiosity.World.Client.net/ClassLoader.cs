@@ -29,9 +29,6 @@ namespace Curiosity.GameWorld.Client.net
             // EE
             Classes.Environment.EasterEggs.DeveloperWall.Init();
 
-            // Scenarios
-            Classes.Environment.WorldScenarios.Init();
-
             Log.Verbose("Leaving ClassLoader Init");
         }
     }

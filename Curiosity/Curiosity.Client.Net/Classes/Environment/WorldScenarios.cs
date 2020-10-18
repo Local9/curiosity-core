@@ -1,11 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.GameWorld.Client.net.Classes.Environment
+namespace Curiosity.Client.net.Classes.Environment
 {
     class WorldScenarios
     {
