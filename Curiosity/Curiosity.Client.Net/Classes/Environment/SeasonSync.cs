@@ -340,6 +340,9 @@ namespace Curiosity.Client.net.Classes.Environment
                     VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
             }
+
+
+            WeatherNuiMessage(weather);
         }
 
         private static void WeatherNuiMessage(WeatherTypes weather)

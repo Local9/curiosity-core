@@ -97,7 +97,7 @@ namespace Curiosity.Missions.Client.Wrappers
             {
                 this.Dispose();
             }
-            await PluginManager.Delay(100);
+            await PluginManager.Delay(500);
         }
 
         public event EntityEventWrapper.OnWrapperAbortedEvent Aborted;

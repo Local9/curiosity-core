@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Global.Shared.Utils;
 using Curiosity.Missions.Client.Classes.PlayerClient;
 using Curiosity.Missions.Client.Exceptions;
@@ -52,6 +53,7 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             API.RegisterCommand("hlmission", new Action<int, List<object>, string>(CommandHlMission), false);
             API.RegisterCommand("boss", new Action<int, List<object>, string>(BossTest), false);
             API.RegisterCommand("zombie", new Action<int, List<object>, string>(OnZombieCommand), false);
+            API.RegisterCommand("makePed", new Action<int, List<object>, string>(OnMakePed), false);
 
             PluginInstance.RegisterEventHandler("curiosity:missions:player:spawn", new Action(CreateMission));
             PluginInstance.RegisterEventHandler("curiosity:missions:player:invalid", new Action(InvalidMission));
@@ -61,6 +63,21 @@ namespace Curiosity.Missions.Client.Scripts.Mission.PoliceMissions
             PluginInstance.RegisterEventHandler("curiosity:Client:Player:Environment:OnExitArea", new Action<string, dynamic>(OnAreaExit));
 
             PluginInstance.RegisterEventHandler("curiosity:Client:Player:Environment:DrawAreas", new Action<bool>(OnDrawAreas));
+        }
+
+        private static async void OnMakePed(int arg1, List<object> arg2, string arg3)
+        {
+            Vector3 offset = Game.PlayerPed.Position + new Vector3(0f, 3f, 0f);
+
+            Model model = PedHash.Acult02AMY;
+            model.Request(10000);
+
+            while (!model.IsLoaded)
+            {
+                await PluginManager.Delay(100);
+            }
+
+            int pedId = API.CreatePed((int)PedTypes.PED_TYPE_CRIMINAL, (uint)model.Hash, offset.X, offset.Y, offset.Z, 0f, false, false);
         }
 
         private static async void OnZombieCommand(int playerHandle, List<object> arguments, string raw)
