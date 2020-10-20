@@ -5,6 +5,7 @@ using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper;
@@ -12,6 +13,7 @@ using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment.PDA
@@ -26,19 +28,37 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
 
         static public void Init()
         {
+            // PDA Basics
             client.RegisterNuiEventHandler("PlayerProfile", new Action<IDictionary<string, object>, CallbackDelegate>(OnPlayerProfile));
             client.RegisterNuiEventHandler("PlayerExperience", new Action<IDictionary<string, object>, CallbackDelegate>(OnPlayerExperience));
             client.RegisterNuiEventHandler("ClosePanel", new Action<IDictionary<string, object>, CallbackDelegate>(OnClosePda));
+
+            // LEGACY
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
 
             // VehicleShop
             client.RegisterNuiEventHandler("GetVehicleShopItems", new Action<IDictionary<string, object>, CallbackDelegate>(OnNuiEventGetVehicleShopItems));
+            client.RegisterNuiEventHandler("VehicleStoreAction", new Action<IDictionary<string, object>, CallbackDelegate>(OnNuiEventVehicleStoreAction));
             client.RegisterEventHandler("curiosity:Client:Vehicle:Shop:Items", new Action<string>(OnGotVehicleShopItems));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:Shop:Update", new Action(OnGotVehicleShopItemsUpdate));
 
             client.RegisterTickHandler(OnPdaCoreControls);
 
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
 
+        }
+
+        private static void OnGotVehicleShopItemsUpdate()
+        {
+            BaseScript.TriggerServerEvent("curiosity:Server:Vehicle:Shop:Get");
+        }
+
+        private static void OnNuiEventVehicleStoreAction(IDictionary<string, object> args, CallbackDelegate cb)
+        {
+            int vehicleStoreId = $"{args["0"]}".ToInt();
+            BaseScript.TriggerServerEvent("curiosity:Server:Vehicle:Shop:Action", vehicleStoreId);
+
+            cb(new { ok = true });
         }
 
         private static void OnPlayerSpawned()

@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net.Helper;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -92,7 +93,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         static private int currentUpdate = -1;
         static private int lastUpdate;
 
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         private static Random random = new Random();
         private static double PlayerToVehicleRefuelRange = 5f;
@@ -138,7 +139,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             while (true)
             {
                 BaseScript.TriggerServerEvent("curiosity:Server:Settings:InstantRefuel");
-                await Client.Delay(1000 * 60);
+                await Plugin.Delay(1000 * 60);
             }
         }
 
@@ -369,25 +370,25 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 if (vehicle.Driver != Game.PlayerPed)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Must be the driver to refuel vehicle.", 8);
+                    Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Must be the driver to refuel vehicle.", 8);
                     return;
                 }
 
                 if (refueling)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Currently Refueling.", 8);
+                    Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Currently Refueling.", 8);
                     return;
                 }
 
                 refueling = true;
 
-                PlayerInformationModel playerInfo = Player.PlayerInformation.playerInfo;
+                PlayerInformationModel playerInfo = PlayerInformation.playerInfo;
 
                 int cashTotal = playerInfo.Wallet + playerInfo.BankAccount;
 
                 if (cashTotal < (int)amount)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "You don't have enough money.", 8);
+                    Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "You don't have enough money.", 8);
                     return;
                 }
 
@@ -406,7 +407,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 if (!NearbyPumps.Any())
                 {
                     refueling = false;
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "You are not close enough to a pump.", 8);
+                    Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "You are not close enough to a pump.", 8);
                     return;
                 }
 
@@ -426,7 +427,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         if (startingPosition != vehicle.Position)
                         {
                             refueling = false;
-                            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Your vehicle moved while refuelling. You can try refuelling again.", 8);
+                            Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Your vehicle moved while refuelling. You can try refuelling again.", 8);
                             CitizenFX.Core.UI.Screen.ShowSubtitle("~s~Vehicle is ~r~no longer refueling.");
                             Charge((int)(refueled));
                             return;
@@ -435,7 +436,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         if (Game.PlayerPed.CurrentVehicle.IsEngineRunning)
                         {
                             refueling = false;
-                            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Your vehicles engine started while refuelling.", 8);
+                            Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Your vehicles engine started while refuelling.", 8);
                             CitizenFX.Core.UI.Screen.ShowSubtitle("~s~Vehicle is ~r~no longer refuelling.");
                             Charge((int)(refueled));
                             return;
@@ -449,7 +450,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         Function.Call(Hash._DECOR_SET_FLOAT, vehicle.Handle, "Vehicle.Fuel", vehicleFuel);
                     }
                     await BaseScript.Delay(0);
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "You have finished refuelling.", 20);
+                    Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "You have finished refuelling.", 20);
                     CitizenFX.Core.UI.Screen.ShowSubtitle("~s~Vehicle is ~r~no longer refuelling.");
                     Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
                     refueling = false;
@@ -483,20 +484,20 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
             cost = (int)(cost * 1.5);
 
-            PlayerInformationModel playerInfo = Player.PlayerInformation.playerInfo;
+            PlayerInformationModel playerInfo = PlayerInformation.playerInfo;
 
             if ((playerInfo.Wallet - cost) > 0)
             {
-                Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", playerInfo.Wallet, cost);
+                Plugin.TriggerServerEvent("curiosity:Server:Bank:DecreaseCash", playerInfo.Wallet, cost);
             }
             else if ((playerInfo.BankAccount - cost) > 0)
             {
-                Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseBank", playerInfo.BankAccount, cost);
+                Plugin.TriggerServerEvent("curiosity:Server:Bank:DecreaseBank", playerInfo.BankAccount, cost);
             }
             else
             {
                 // Put bank into debt
-                Client.TriggerServerEvent("curiosity:Server:Bank:DecreaseBank", playerInfo.BankAccount, cost);
+                Plugin.TriggerServerEvent("curiosity:Server:Bank:DecreaseBank", playerInfo.BankAccount, cost);
             }
 
             await BaseScript.Delay(0);
@@ -504,7 +505,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
         static void DevRefuel()
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
             API.DecorSetFloat(Game.PlayerPed.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
             Game.PlayerPed.CurrentVehicle.IsEngineRunning = true;
             warning1Played = false;
@@ -518,13 +519,13 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 return;
             }
 
-            float currentFuel = API.DecorGetFloat(Client.CurrentVehicle.Handle, "Vehicle.Fuel");
+            float currentFuel = API.DecorGetFloat(Plugin.CurrentVehicle.Handle, "Vehicle.Fuel");
 
             Charge((int)(100f - currentFuel));
             warning1Played = false;
             warning2Played = false;
 
-            Function.Call(Hash._DECOR_SET_FLOAT, Client.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
+            Function.Call(Hash._DECOR_SET_FLOAT, Plugin.CurrentVehicle.Handle, "Vehicle.Fuel", 100f);
 
             await BaseScript.Delay(0);
         }
@@ -539,7 +540,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         {
             IsFuelFree = setting;
 
-            if (Player.PlayerInformation.IsDeveloper())
+            if (PlayerInformation.IsDeveloper())
             {
                 Debug.WriteLine($"IsInstantRefuelDisabled: {IsInstantRefuelDisabled}");
             }
@@ -549,7 +550,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         {
             IsInstantRefuelDisabled = IsInstantRefuelDisabledSetting;
 
-            if (Player.PlayerInformation.IsDeveloper())
+            if (PlayerInformation.IsDeveloper())
             {
                 Debug.WriteLine($"IsInstantRefuelDisabled: {IsInstantRefuelDisabled}");
             }

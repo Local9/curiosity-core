@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Enums;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -23,7 +24,7 @@ namespace Curiosity.Vehicles.Client.net.Wrappers
 
         static public void ShowNotification(string title, string subtitle, string message, NotificationCharacter notificationCharacter = NotificationCharacter.CHAR_CALL911)
         {
-            Client.TriggerEvent("curiosity:Client:Notification:Advanced", $"{notificationCharacter}", 2, title, subtitle, message, 2);
+            Plugin.TriggerEvent("curiosity:Client:Notification:Advanced", $"{notificationCharacter}", 2, title, subtitle, message, 2);
         }
 
         // internal methods
@@ -134,7 +135,7 @@ namespace Curiosity.Vehicles.Client.net.Wrappers
             {
                 if (NetworkRequestControlOfEntity(netId))
                 {
-                    if (Classes.Player.PlayerInformation.IsDeveloper())
+                    if (PlayerInformation.IsDeveloper())
                     {
                         Debug.WriteLine($"Gained Control of {netId}");
                     }

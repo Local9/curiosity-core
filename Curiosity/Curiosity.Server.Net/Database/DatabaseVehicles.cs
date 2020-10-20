@@ -157,10 +157,17 @@ namespace Curiosity.Server.net.Database
                         Cost = $"{k["cost"]}".ToInt(),
                     };
 
-                    if (k.ContainsValue("limitedNumber"))
-                        vehicleShopItem.NumberRemaining = $"{k["limitedNumber"]}".ToInt();
+                    string limitedNumber = $"{k["limitedNumber"]}";
+                    string image = $"{k["image"]}";
+                    string charId = $"{k["characterId"]}";
 
-                    vehicleShopItem.IsOwned = k.ContainsValue("characterId");
+                    if (!string.IsNullOrEmpty(limitedNumber))
+                        vehicleShopItem.NumberRemaining = limitedNumber.ToInt();
+
+                    if (!string.IsNullOrEmpty(image))
+                        vehicleShopItem.ImageUri = image;
+
+                    vehicleShopItem.IsOwned = !string.IsNullOrEmpty(charId);
 
                     vehicleShopItems.Add(vehicleShopItem);
                 }
@@ -178,18 +185,92 @@ namespace Curiosity.Server.net.Database
             using (var result = mySql.QueryResult(sql, myParams))
             {
                 ResultSet keyValuePairs = await result;
-                await Delay(0);
+                await Delay(10);
                 if (keyValuePairs.Count == 0)
                 {
                     return false;
                 }
 
-                foreach (Dictionary<string, object> k in keyValuePairs)
-                {
-                    return bool.Parse($"{k[$"success"]}");
-                }
+                bool success = $"{keyValuePairs[0]["success"]}" == "1";
+
+                // Log.Info($"{keyValuePairs[0]["success"]}/{success}");
+
+                return success;
             }
-            return false;
         }
+
+        public static async Task DeleteCharacterVehicle(long characterId, int vehShopId)
+        {
+            string sql = "CALL curiosity.delCharacterVehicle(@charId, @vehShopId);";
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@charId", characterId);
+            myParams.Add("@vehShopId", vehShopId);
+
+            using (var result = mySql.QueryResult(sql, myParams)) { 
+
+            }
+        }
+
+        public static async Task<bool> SelectCharacterVehicle(long characterId, int vehShopId)
+        {
+            string sql = "CALL curiosity.selCharacterVehicle(@charId, @vehShopId);";
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@charId", characterId);
+            myParams.Add("@vehShopId", vehShopId);
+
+            using (var result = mySql.QueryResult(sql, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+                await Delay(0);
+                if (keyValuePairs.Count == 0)
+                {
+                    // doesn't own it
+                    return false;
+                }
+
+                // owns it
+                return true;
+            }
+        }
+
+        public static async Task<VehicleShopItem> SelectVehicleShopItem(int vehShopId)
+        {
+            string sql = "CALL curiosity.selVehicleFromShop(@vehShopId);";
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@vehShopId", vehShopId);
+
+            using (var result = mySql.QueryResult(sql, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+                await Delay(0);
+                if (keyValuePairs.Count == 0)
+                {
+                    return null;
+                }
+
+                Dictionary<string, object> k = keyValuePairs[0];
+
+                VehicleShopItem vehicleShopItem = new VehicleShopItem
+                {
+                    Id = $"{k["vehicleShopId"]}".ToInt(),
+                    Label = $"{k["label"]}",
+                    Cost = $"{k["cost"]}".ToInt(),
+                    VehicleHash = $"{k["vehicleHash"]}",
+                };
+
+                string limitedNumber = $"{k["limitedNumber"]}";
+                string image = $"{k["image"]}";
+
+                if (!string.IsNullOrEmpty(limitedNumber))
+                    vehicleShopItem.NumberRemaining = limitedNumber.ToInt();
+
+                if (!string.IsNullOrEmpty(image))
+                    vehicleShopItem.ImageUri = image;
+
+                return vehicleShopItem;
+            }
+        }
+
+        
     }
 }

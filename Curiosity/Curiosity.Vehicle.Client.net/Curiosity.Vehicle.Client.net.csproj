@@ -63,8 +63,9 @@
     <Compile Include="Classes\CuriosityVehicle\DeleteVehicle.cs" />
     <Compile Include="Classes\CuriosityVehicle\Spawn.cs" />
     <Compile Include="Classes\CuriosityVehicle\VehicleBlip.cs" />
+    <Compile Include="Classes\VehicleCreator.cs" />
     <Compile Include="ClassLoader.cs" />
-    <Compile Include="Client.cs" />
+    <Compile Include="Plugin.cs" />
     <Compile Include="Data\VehicleData.cs" />
     <Compile Include="Models\FuelPump.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

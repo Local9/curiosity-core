@@ -1,4 +1,6 @@
 ﻿using Curiosity.Shared.Client.net;
+using Curiosity.Vehicle.Client.net.Classes;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 
 namespace Curiosity.Vehicles.Client.net
 {
@@ -8,13 +10,13 @@ namespace Curiosity.Vehicles.Client.net
     /// </summary>
     static class ClassLoader
     {
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         public static void Init()
         {
             Log.Verbose("Entering ClassLoader Init");
 
-            Classes.Player.PlayerInformation.Init();
+            PlayerInformation.Init();
 
             Classes.CuriosityVehicle.BrakeSignals.Init();
             Classes.CuriosityVehicle.CruiseControl.Init();
@@ -24,6 +26,7 @@ namespace Curiosity.Vehicles.Client.net
             Classes.CuriosityVehicle.VehicleDamage.Init();
             Classes.CuriosityVehicle.DeleteVehicle.Init();
             Classes.CuriosityVehicle.VehicleBlip.Init();
+            VehicleCreator.Init();
 
             // Environment
             Classes.Environment.VehicleSpawnMarkerHandler.Init();

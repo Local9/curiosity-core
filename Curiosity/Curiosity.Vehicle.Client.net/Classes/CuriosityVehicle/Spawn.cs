@@ -4,6 +4,7 @@ using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
     class Spawn
     {
         static Random random = new Random();
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         static public bool IsSpawning = false;
         static int numberOfVehiclesSpawned = 0;
@@ -38,19 +39,19 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 float fuelLevel = random.Next(60, 100);
 
-                if (Client.CurrentVehicle != null)
+                if (Plugin.CurrentVehicle != null)
                 {
-                    if (Client.CurrentVehicle.Exists())
+                    if (Plugin.CurrentVehicle.Exists())
                     {
-                        if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Client.CurrentVehicle)
+                        if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Plugin.CurrentVehicle)
                         {
                             Game.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
                         }
 
-                        fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Client.CurrentVehicle.Handle, "Vehicle.Fuel");
-                        API.DecorRemove(Client.CurrentVehicle.Handle, "Player_Vehicle");
-                        API.DecorRemove(Client.CurrentVehicle.Handle, "Vehicle.SirensInstalled");
-                        SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
+                        fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Plugin.CurrentVehicle.Handle, "Vehicle.Fuel");
+                        API.DecorRemove(Plugin.CurrentVehicle.Handle, "Player_Vehicle");
+                        API.DecorRemove(Plugin.CurrentVehicle.Handle, "Vehicle.SirensInstalled");
+                        SendDeletionEvent($"{Plugin.CurrentVehicle.NetworkId}");
                     }
                 }
 
@@ -65,7 +66,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                     return false;
                 }
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 API.SetEntityLoadCollisionFlag(veh.Handle, true);
 
@@ -75,26 +76,26 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 API.SetNetworkIdExistsOnAllMachines(veh.NetworkId, true);
                 API.SetNetworkIdSyncToPlayer(veh.NetworkId, Game.Player.Handle, true);
                 API.SetVehicleIsStolen(veh.Handle, false);
-                await Client.Delay(0);
+                await Plugin.Delay(0);
                 // API.SetEntityCollision(veh.Handle, false, false);
                 // API.SetEntityProofs(veh.Handle, true, true, true, true, true, true, true, true);
                 API.SetVehicleOnGroundProperly(veh.Handle);
                 veh.IsPersistent = true;
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
-                if (API.DecorIsRegisteredAsType(Client.PLAYER_VEHICLE, 3))
+                if (API.DecorIsRegisteredAsType(Plugin.PLAYER_VEHICLE, 3))
                 {
-                    API.DecorSetInt(veh.Handle, Client.PLAYER_VEHICLE, Game.Player.ServerId);
+                    API.DecorSetInt(veh.Handle, Plugin.PLAYER_VEHICLE, Game.Player.ServerId);
                 }
 
-                if (API.DecorIsRegisteredAsType("Vehicle.SirensInstalled", 2) && installSirens)
-                {
-                    API.DecorSetBool(veh.Handle, "Vehicle.SirensInstalled", installSirens);
-                    Classes.Environment.ChatCommands.ShowSirenKeys();
-                }
+                //if (API.DecorIsRegisteredAsType("Vehicle.SirensInstalled", 2) && installSirens)
+                //{
+                //    API.DecorSetBool(veh.Handle, "Vehicle.SirensInstalled", installSirens);
+                //    Classes.Environment.ChatCommands.ShowSirenKeys();
+                //}
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 API.NetworkFadeInEntity(veh.Handle, true);
 
@@ -103,7 +104,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 veh.NeedsToBeHotwired = false;
                 veh.IsEngineRunning = true;
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 if (fuelLevel < 5f)
                 {
@@ -112,14 +113,14 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 Function.Call(Hash._DECOR_SET_FLOAT, veh.Handle, "Vehicle.Fuel", fuelLevel);
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 veh.Health = 1000;
                 veh.BodyHealth = 1000f;
                 veh.EngineHealth = 1000f;
                 veh.PetrolTankHealth = 1000f;
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 Blip blip = veh.AttachBlip();
                 blip.IsShortRange = false;
@@ -144,22 +145,22 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 blip.Priority = 100;
                 blip.Name = "Personal Vehicle";
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 API.SetVehicleHasBeenOwnedByPlayer(veh.Handle, true);
 
-                Client.CurrentVehicle = veh;
+                Plugin.CurrentVehicle = veh;
 
                 API.SetResourceKvpInt("curiosity:vehicle", veh.Handle);
 
-                Client.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
+                Plugin.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 if (staffSpawn)
                 {
@@ -171,19 +172,19 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                             listOfExtras.Add(i);
                     }
 
-                    Client.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
+                    Plugin.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
                     Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
                     if (listOfExtras.Count > 0)
                     {
                         Debug.WriteLine($"Vehicle Extras: '/mod extra number true/false' avaiable: {string.Join(", ", listOfExtras)}");
                     }
-                    Client.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"~b~Engine: ~y~MAX~n~~b~Brakes: ~y~MAX~n~~b~Transmission: ~y~MAX", 2);
+                    Plugin.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"~b~Engine: ~y~MAX~n~~b~Brakes: ~y~MAX~n~~b~Transmission: ~y~MAX", 2);
 
                     veh.Mods.LicensePlate = numberPlate;
                     veh.Mods.LicensePlateStyle = LicensePlateStyle.YellowOnBlack;
                 }
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 veh.IsVisible = true;
                 veh.IsInvincible = false;
@@ -219,19 +220,19 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 float fuelLevel = random.Next(60, 100);
 
-                if (Client.CurrentVehicle != null)
+                if (Plugin.CurrentVehicle != null)
                 {
-                    if (Client.CurrentVehicle.Exists())
+                    if (Plugin.CurrentVehicle.Exists())
                     {
-                        if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Client.CurrentVehicle)
+                        if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Plugin.CurrentVehicle)
                         {
                             Game.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
                         }
 
-                        fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Client.CurrentVehicle.Handle, "Vehicle.Fuel");
-                        API.DecorRemove(Client.CurrentVehicle.Handle, "Player_Vehicle");
-                        API.DecorRemove(Client.CurrentVehicle.Handle, "Vehicle.SirensInstalled");
-                        SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
+                        fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Plugin.CurrentVehicle.Handle, "Vehicle.Fuel");
+                        API.DecorRemove(Plugin.CurrentVehicle.Handle, "Player_Vehicle");
+                        API.DecorRemove(Plugin.CurrentVehicle.Handle, "Vehicle.SirensInstalled");
+                        SendDeletionEvent($"{Plugin.CurrentVehicle.NetworkId}");
                     }
                 }
 
@@ -246,7 +247,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                     return default;
                 }
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 API.SetEntityLoadCollisionFlag(veh.Handle, true);
 
@@ -256,26 +257,26 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 API.SetNetworkIdExistsOnAllMachines(veh.NetworkId, true);
                 API.SetNetworkIdSyncToPlayer(veh.NetworkId, Game.Player.Handle, true);
                 API.SetVehicleIsStolen(veh.Handle, false);
-                await Client.Delay(0);
+                await Plugin.Delay(0);
                 // API.SetEntityCollision(veh.Handle, false, false);
                 // API.SetEntityProofs(veh.Handle, true, true, true, true, true, true, true, true);
                 API.SetVehicleOnGroundProperly(veh.Handle);
                 veh.IsPersistent = true;
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
-                if (API.DecorIsRegisteredAsType(Client.PLAYER_VEHICLE, 3))
+                if (API.DecorIsRegisteredAsType(Plugin.PLAYER_VEHICLE, 3))
                 {
-                    API.DecorSetInt(veh.Handle, Client.PLAYER_VEHICLE, Game.Player.ServerId);
+                    API.DecorSetInt(veh.Handle, Plugin.PLAYER_VEHICLE, Game.Player.ServerId);
                 }
 
-                if (API.DecorIsRegisteredAsType("Vehicle.SirensInstalled", 2) && installSirens)
-                {
-                    API.DecorSetBool(veh.Handle, "Vehicle.SirensInstalled", installSirens);
-                    Classes.Environment.ChatCommands.ShowSirenKeys();
-                }
+                //if (API.DecorIsRegisteredAsType("Vehicle.SirensInstalled", 2) && installSirens)
+                //{
+                //    API.DecorSetBool(veh.Handle, "Vehicle.SirensInstalled", installSirens);
+                //    Classes.Environment.ChatCommands.ShowSirenKeys();
+                //}
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 API.NetworkFadeInEntity(veh.Handle, true);
 
@@ -283,7 +284,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 veh.NeedsToBeHotwired = false;
                 veh.IsEngineRunning = true;
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 if (fuelLevel < 5f)
                 {
@@ -292,14 +293,14 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 API.DecorSetFloat(veh.Handle, "Vehicle.Fuel", fuelLevel);
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 veh.Health = 1000;
                 veh.BodyHealth = 1000f;
                 veh.EngineHealth = 1000f;
                 veh.PetrolTankHealth = 1000f;
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 Blip blip = veh.AttachBlip();
                 blip.IsShortRange = false;
@@ -324,26 +325,26 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 blip.Priority = 100;
                 blip.Name = "Personal Vehicle";
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 API.SetVehicleHasBeenOwnedByPlayer(veh.Handle, true);
 
-                Client.CurrentVehicle = veh;
+                Plugin.CurrentVehicle = veh;
 
                 API.DecorSetFloat(veh.Handle, "Vehicle.Fuel", fuelLevel);
 
                 API.SetResourceKvpInt("curiosity:vehicle", veh.Handle);
 
-                Client.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
+                Plugin.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
                 veh.LockStatus = VehicleLockStatus.Unlocked;
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 if (staffSpawn)
                 {
@@ -355,19 +356,19 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                             listOfExtras.Add(i);
                     }
 
-                    Client.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
+                    Plugin.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"Available Mods can be found in the Debug Console", 2);
                     Debug.WriteLine($"Vehicle Mods: {string.Join(", ", veh.Mods.GetAllMods().Select(m => Enum.GetName(typeof(VehicleModType), m.ModType)))}");
                     if (listOfExtras.Count > 0)
                     {
                         Debug.WriteLine($"Vehicle Extras: '/mod extra number true/false' avaiable: {string.Join(", ", listOfExtras)}");
                     }
-                    Client.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"~b~Engine: ~y~MAX~n~~b~Brakes: ~y~MAX~n~~b~Transmission: ~y~MAX", 2);
+                    Plugin.TriggerEvent("", 1, "Curiosity", "Vehicle Spawned", $"~b~Engine: ~y~MAX~n~~b~Brakes: ~y~MAX~n~~b~Transmission: ~y~MAX", 2);
 
                     veh.Mods.LicensePlate = numberPlate;
                     veh.Mods.LicensePlateStyle = LicensePlateStyle.YellowOnBlack;
                 }
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
 
                 veh.IsVisible = true;
                 veh.IsInvincible = false;
@@ -394,12 +395,12 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
             long timerToWait = 5000 * numberOfVehiclesSpawned;
 
-            if (Player.PlayerInformation.privilege == Privilege.DONATOR)
+            if (PlayerInformation.privilege == Privilege.DONATOR)
             {
                 timerToWait = 2500 * numberOfVehiclesSpawned;
             }
 
-            if (Player.PlayerInformation.IsStaff())
+            if (PlayerInformation.IsStaff())
             {
                 timerToWait = 1000;
             }
@@ -411,7 +412,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
             while ((API.GetGameTimer() - gameTime) < timerToWait)
             {
-                await Client.Delay(1000);
+                await Plugin.Delay(1000);
             }
             CitizenFX.Core.UI.Screen.ShowNotification("~b~Vehicle Spawn:\n~g~Cooldown Ended");
             client.DeregisterTickHandler(OnCooldown);

@@ -5,6 +5,7 @@ using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper.Area;
 using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using Curiosity.Vehicles.Client.net.Extensions;
 using Newtonsoft.Json;
 using System;
@@ -18,7 +19,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
     class SafeZoneVehicle
     {
-        Client client = Client.GetInstance();
+        Plugin client = Plugin.GetInstance();
         CitizenFX.Core.Vehicle _vehicle;
 
         public SafeZoneVehicle(CitizenFX.Core.Vehicle vehicle)
@@ -76,7 +77,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
     class SafeZone
     {
         private const string SAFE_ZONE = "safezone";
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         static List<AreaBox> safeZones = new List<AreaBox>();
 
@@ -119,19 +120,19 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
         private static async Task ShowDebugInformation()
         {
-            if (!Player.PlayerInformation.IsDeveloper())
+            if (!PlayerInformation.IsDeveloper())
             {
                 client.DeregisterTickHandler(ShowDebugInformation);
             }
 
             if (Decorators.GetBoolean(Game.PlayerPed.Handle, "player::veh::debug"))
             {
-                Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
+                CitizenFX.Core.Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
 
                 if (vehicle == null) return;
 
-                bool insideSafeZone = Decorators.GetBoolean(vehicle.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE);
-                int insideSafeZoneTime = Decorators.GetInteger(vehicle.Handle, Client.DECOR_VEHICLE_SAFEZONE_TIME);
+                bool insideSafeZone = Decorators.GetBoolean(vehicle.Handle, Plugin.DECOR_VEHICLE_SAFEZONE_INSIDE);
+                int insideSafeZoneTime = Decorators.GetInteger(vehicle.Handle, Plugin.DECOR_VEHICLE_SAFEZONE_TIME);
 
                 Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                 keyValuePairs.Add("Inside SZ", $"{insideSafeZone}");
@@ -155,14 +156,14 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
         static void OnDrawAreas()
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
 
             DebugAreas = !DebugAreas;
         }
 
         static async Task SafeZoneVehicles()
         {
-            await Client.Delay(0);
+            await Plugin.Delay(0);
             int PlayerHandle = Game.PlayerPed.Handle;
 
             List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.Distance(Game.PlayerPed.Position) < 30f).ToList();
@@ -214,7 +215,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
             //});
 
             if (Game.PlayerPed.IsInVehicle())
-                Decorators.Set(Game.PlayerPed.CurrentVehicle.Handle, Client.DECOR_VEHICLE_SAFEZONE_INSIDE, IsInsideSafeZone);
+                Decorators.Set(Game.PlayerPed.CurrentVehicle.Handle, Plugin.DECOR_VEHICLE_SAFEZONE_INSIDE, IsInsideSafeZone);
 
             if (IsInsideSafeZone)
             {
@@ -222,14 +223,14 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
                 if (Game.PlayerPed.IsInVehicle())
                 {
-                    Decorators.Set(Game.PlayerPed.CurrentVehicle.Handle, Client.DECOR_VEHICLE_SAFEZONE_TIME, API.GetGameTimer());
+                    Decorators.Set(Game.PlayerPed.CurrentVehicle.Handle, Plugin.DECOR_VEHICLE_SAFEZONE_TIME, API.GetGameTimer());
                     Game.PlayerPed.CurrentVehicle.Opacity = Opacity;
                 }
 
-                if ((API.GetGameTimer() - TimeEntered) > ONE_MINUITE && !Warning && Client.CurrentVehicle != null)
+                if ((API.GetGameTimer() - TimeEntered) > ONE_MINUITE && !Warning && Plugin.CurrentVehicle != null)
                 {
-                    if (Client.CurrentVehicle == null) return;
-                    if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Client.CurrentVehicle) return;
+                    if (Plugin.CurrentVehicle == null) return;
+                    if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Plugin.CurrentVehicle) return;
 
                     Warning = true;
                     Screen.ShowNotification($"~y~WARNING~n~~w~After 4 mins your vehicle will be deleted from the safe zone.");
@@ -237,15 +238,15 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
                 if ((API.GetGameTimer() - TimeEntered) > FIVE_MINUTES && Warning)
                 {
-                    if (Client.CurrentVehicle == null) return;
-                    if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Client.CurrentVehicle) return;
+                    if (Plugin.CurrentVehicle == null) return;
+                    if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == Plugin.CurrentVehicle) return;
 
-                    API.NetworkFadeOutEntity(Client.CurrentVehicle.Handle, false, false);
+                    API.NetworkFadeOutEntity(Plugin.CurrentVehicle.Handle, false, false);
                     await BaseScript.Delay(500);
                     // API.SetNetworkIdCanMigrate(Client.CurrentVehicle.NetworkId, true);
                     // Spawn.SendDeletionEvent($"{Client.CurrentVehicle.NetworkId}");
 
-                    Client.CurrentVehicle.Delete();
+                    Plugin.CurrentVehicle.Delete();
                 }
             }
             else
@@ -255,8 +256,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
                 if (Game.PlayerPed.IsInVehicle())
                     Game.PlayerPed.CurrentVehicle.ResetOpacity();
 
-                if (Client.CurrentVehicle != null)
-                    Client.CurrentVehicle.ResetOpacity();
+                if (Plugin.CurrentVehicle != null)
+                    Plugin.CurrentVehicle.ResetOpacity();
 
                 Warning = false;
             }
@@ -272,7 +273,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
             IsInsideSafeZone = true;
             TimeEntered = API.GetGameTimer();
 
-            if (Player.PlayerInformation.IsDeveloper())
+            if (PlayerInformation.IsDeveloper())
             {
                 Log.Info("Entered Safezone");
             }
@@ -293,7 +294,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
                 foreach (CitizenFX.Core.Vehicle vehicle in vehs)
                 {
-                    await Client.Delay(0);
+                    await Plugin.Delay(0);
                     if (vehicle.Exists())
                     {
                         vehicle.ResetOpacity();
@@ -318,7 +319,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
                     }
                 }
 
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Info("Left Safezone");
                 }

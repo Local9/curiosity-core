@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using Curiosity.Vehicles.Client.net.Data;
 using MenuAPI;
 using System;
@@ -13,7 +14,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
 {
     class Staff
     {
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         static Menu staffMenu;
 
@@ -25,7 +26,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
 
         private async static void OpenMenu()
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
+            if (!PlayerInformation.IsStaff()) return;
 
             Screen.ShowNotification("Open Staff Vehicles");
 

@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
 using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,13 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 {
     class ChatCommands
     {
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         static public void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Command:SpawnCar", new Action<string, string>(SpawnCar));
 
-            RegisterCommand("sirens", new Action<int, List<object>, string>(SirensCommand), false);
+            // RegisterCommand("sirens", new Action<int, List<object>, string>(SirensCommand), false);
             RegisterCommand("vf", new Action<int, List<object>, string>(OnVehicleForceSpawn), false);
         }
 
@@ -24,7 +25,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
         {
             try
             {
-                if (!Player.PlayerInformation.IsDeveloper()) return;
+                if (!PlayerInformation.IsDeveloper()) return;
 
                 string prop = "xs_prop_arena_drone_01";
 
@@ -47,15 +48,15 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
         static public void ShowSirenKeys()
         {
-            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Sirens", "How To Keyboard...", "Enable Sirens: ~b~G/L-ALT~n~~s~Change Siren: ~b~Y~n~~s~Horn: ~b~CTRL~n~~s~Blip Siren: ~b~B", 2);
-            Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Sirens", "How To XBOX Controls...", "Enable Sirens: ~b~DPAD Down~n~~s~Change Siren: ~b~L3~n~~s~Horn: ~b~B~n~~s~Blip Siren: ~b~R3", 2);
+            Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Sirens", "How To Keyboard...", "Enable Sirens: ~b~G/L-ALT~n~~s~Change Siren: ~b~Y~n~~s~Horn: ~b~CTRL~n~~s~Blip Siren: ~b~B", 2);
+            Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Sirens", "How To XBOX Controls...", "Enable Sirens: ~b~DPAD Down~n~~s~Change Siren: ~b~L3~n~~s~Horn: ~b~B~n~~s~Blip Siren: ~b~R3", 2);
         }
 
         static async void SpawnCar(string car, string numberPlate)
         {
             try
             {
-                if (!Player.PlayerInformation.IsStaff()) return;
+                if (!PlayerInformation.IsStaff()) return;
                 if (string.IsNullOrEmpty(car)) return;
 
                 Model model = null;
@@ -83,7 +84,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
                         modelName = enumName;
                         found = true;
 
-                        if (Classes.Player.PlayerInformation.IsDeveloper())
+                        if (PlayerInformation.IsDeveloper())
                         {
                             Screen.ShowNotification($"~r~Info~s~:~n~Model Valid: {model.IsValid}~n~Model: {modelName}");
                         }
@@ -111,7 +112,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
                 if (!await Spawn.SpawnVehicle(model, Game.PlayerPed.Position, Game.PlayerPed.Heading, false, true, numberPlate))
                 {
-                    Client.TriggerEvent("", 1, "Curiosity", "Vehicle Error", $"Could not load model {modelName}", 2);
+                    Plugin.TriggerEvent("", 1, "Curiosity", "Vehicle Error", $"Could not load model {modelName}", 2);
                 }
 
             }

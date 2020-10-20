@@ -4,6 +4,7 @@ using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +68,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 
     internal static class VehicleSpawnMarkerHandler
     {
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
         // For e.g. cinematic mode
         static public bool HideAllMarkers = false;
         static public bool IsMenuOpen = false;
@@ -98,18 +99,18 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
         static async void OnPlayerSpawned(dynamic spawnObj)
         {
             IsSpawning = true;
-            await Client.Delay(5000);
-            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleSpawnLocations");
+            await Plugin.Delay(5000);
+            Plugin.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleSpawnLocations");
         }
 
         static async void OnClientResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
-            await Client.Delay(10000);
+            await Plugin.Delay(10000);
             if (!IsSpawning)
             {
-                Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleSpawnLocations");
+                Plugin.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleSpawnLocations");
             }
         }
 
@@ -141,7 +142,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
                     Menus.VehicleSpawn.CloseMenu();
                 }
 
-                await Client.Delay(0);
+                await Plugin.Delay(0);
                 await Task.FromResult(0);
             }
         }
@@ -193,7 +194,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
                 {
                     if (!MarkersAll.ContainsKey(vehicleSpawnLocation.spawnId))
                     {
-                        await Client.Delay(5);
+                        await Plugin.Delay(5);
                         Vector3 markerLocation = new Vector3(vehicleSpawnLocation.X, vehicleSpawnLocation.Y, vehicleSpawnLocation.Z);
                         Marker marker = new Marker((VehicleSpawnTypes)vehicleSpawnLocation.spawnTypeId, vehicleSpawnLocation.spawnId, markerLocation, (MarkerType)vehicleSpawnLocation.spawnMarker, System.Drawing.Color.FromArgb(255, 255, 255, 255), 1.0f, 15f);
                         MarkersAll.Add(vehicleSpawnLocation.spawnId, marker);
@@ -203,14 +204,14 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
                     }
                 }
 
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 2, "Vehicle Resource", $"Markers & Blips Setup", string.Empty, 2);
+                    Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 2, "Vehicle Resource", $"Markers & Blips Setup", string.Empty, 2);
                 }
             }
             catch (Exception ex)
             {
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Error($"{ex.Message}");
                     Log.Error($"{ex.ToString()}");

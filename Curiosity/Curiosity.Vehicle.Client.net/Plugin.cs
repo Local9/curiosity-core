@@ -7,9 +7,9 @@ using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Vehicles.Client.net
 {
-    public class Client : BaseScript
+    public class Plugin : BaseScript
     {
-        private static Client _instance;
+        private static Plugin _instance;
         public static PlayerList players;
         public static CitizenFX.Core.Vehicle CurrentVehicle;
 
@@ -29,12 +29,12 @@ namespace Curiosity.Vehicles.Client.net
         // decor
         public const string PLAYER_VEHICLE = "Player_Vehicle";
 
-        public static Client GetInstance()
+        public static Plugin GetInstance()
         {
             return _instance;
         }
 
-        public Client()
+        public Plugin()
         {
             _instance = this;
 
@@ -59,7 +59,7 @@ namespace Curiosity.Vehicles.Client.net
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
-            Client.TriggerEvent("curiosity:Client:Player:Information");
+            Plugin.TriggerEvent("curiosity:Client:Player:Information");
 
             Game.PlayerPed.RelationshipGroup = PlayerRelationshipGroup;
 
@@ -83,7 +83,7 @@ namespace Curiosity.Vehicles.Client.net
             {
                 if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
                 {
-                    float fuel = API.DecorGetFloat(Client.CurrentVehicle.Handle, "Vehicle.Fuel");
+                    float fuel = API.DecorGetFloat(Plugin.CurrentVehicle.Handle, "Vehicle.Fuel");
                     API.SetResourceKvpFloat("VR_FUEL", fuel);
                 }
             }

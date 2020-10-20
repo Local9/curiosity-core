@@ -3,7 +3,9 @@ using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
+using Curiosity.Vehicle.Client.net.Classes;
 using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
@@ -15,7 +17,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
     class DonatorVehicles
     {
         static Menu donatorVehicleMenu;
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         static Random random = new Random();
 
@@ -33,14 +35,14 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
 
             MenuController.DontOpenAnyMenu = false;
 
-            bool canActivate = (Player.PlayerInformation.IsStaff() || Player.PlayerInformation.IsDonator());
+            bool canActivate = (PlayerInformation.IsStaff() || PlayerInformation.IsDonator());
             if (!canActivate)
             {
                 Log.Info("Donators Only!");
                 return;
             }
 
-            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetDonatorVehicleList");
+            Plugin.TriggerServerEvent("curiosity:Server:Vehicle:GetDonatorVehicleList");
 
             if (donatorVehicleMenu == null)
             {
@@ -89,7 +91,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
                 string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
                 List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
 
-                if (Player.PlayerInformation.privilege == Privilege.DEVELOPER)
+                if (PlayerInformation.privilege == Privilege.DEVELOPER)
                 {
                     VehicleItem refVeh = vehicleItems[0];
                     VehicleItem dev = new VehicleItem();
@@ -127,126 +129,23 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
             {
                 menu.CloseMenu();
 
-                if (Classes.Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Info($"~r~Info~s~:~n~Trying to spawn {menuItem.ItemData}");
                 }
 
-                if (!Player.PlayerInformation.IsDonator() || !Player.PlayerInformation.IsStaff())
+                if (!PlayerInformation.IsDonator() || !PlayerInformation.IsStaff())
                 {
                     Log.Info("Donator Only!");
                 }
-
-                Model model = null;
                 VehicleItem vehicleItem = menuItem.ItemData;
                 string car = vehicleItem.VehicleHashString;
-                var enumName = Enum.GetNames(typeof(VehicleHash)).FirstOrDefault(s => s.ToLower().StartsWith(car.ToLower())) ?? "";
 
-                if (Player.PlayerInformation.IsDeveloper())
-                {
-                    Log.Info(vehicleItem.ToString());
-                }
-
-                var modelName = "";
-
-                if (int.TryParse(car, out var hash))
-                {
-                    model = new Model(hash);
-                    modelName = $"{hash}";
-
-                    if (Player.PlayerInformation.IsDeveloper())
-                    {
-                        Log.Info("INT TryParse Valid");
-                    }
-                }
-                else if (!string.IsNullOrEmpty(enumName))
-                {
-                    var found = false;
-                    foreach (VehicleHash p in Enum.GetValues(typeof(VehicleHash)))
-                    {
-                        if (!(Enum.GetName(typeof(VehicleHash), p)?.Equals(enumName, StringComparison.InvariantCultureIgnoreCase) ?? false))
-                        {
-                            continue;
-                        }
-
-                        model = new Model(p);
-                        modelName = enumName;
-                        found = true;
-
-                        if (Classes.Player.PlayerInformation.IsDeveloper())
-                        {
-                            Log.Info($"~r~Info~s~:~n~Model Valid: {model.IsValid}~n~Model: {modelName}");
-                        }
-
-                        break;
-                    }
-
-                    if (!model.IsValid)
-                    {
-                        Log.Info($"~r~ERROR~s~: Could not model {car}");
-                        return;
-                    }
-
-                    if (!found)
-                    {
-                        Log.Info($"~r~ERROR~s~: Could not load model {car}");
-                        return;
-                    }
-                }
-                else
-                {
-                    model = new Model(car);
-                    modelName = car;
-                }
-
-                if (Classes.Player.PlayerInformation.IsDeveloper())
-                {
-                    Log.Info($"~r~Info~s~:~n~Model found");
-                }
-
-                Vector3 outPos = new Vector3();
-                if (GetNthClosestVehicleNode(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, 3, ref outPos, 0, 0, 0))
-                {
-                    Vector3 spawningPosition = new Vector3();
-                    float heading = 0f;
-                    int u = 0;
-
-                    if (GetNthClosestVehicleNodeWithHeading(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z, 3, ref spawningPosition, ref heading, ref u, 9, 3.0f, 2.5f))
-                    {
-                        Vector3 safespaceOut = new Vector3();
-                        if (GetSafeCoordForPed(spawningPosition.X, spawningPosition.Y, spawningPosition.Z, true, ref safespaceOut, 16))
-                        {
-                            spawningPosition = safespaceOut;
-                        }
-
-                        if (Classes.Player.PlayerInformation.IsDeveloper())
-                        {
-                            Log.Info($"~r~Info~s~:~n~Found a safe location");
-                        }
-
-                        CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, spawningPosition, heading, vehicleItem.InstallSirens);
-
-                        Game.PlayerPed.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
-                    }
-                    else
-                    {
-                        Game.PlayerPed.IsInvincible = true;
-                        CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, Game.PlayerPed.Position, Game.PlayerPed.Heading, vehicleItem.InstallSirens);
-                        Game.PlayerPed.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
-                        Game.PlayerPed.IsInvincible = false;
-                    }
-                }
-                else
-                {
-                    Game.PlayerPed.IsInvincible = true;
-                    CitizenFX.Core.Vehicle spawnedVechicle = await Spawn.SpawnVehicleEmpty(model, Game.PlayerPed.Position, Game.PlayerPed.Heading, vehicleItem.InstallSirens);
-                    Game.PlayerPed.Task.WarpIntoVehicle(spawnedVechicle, VehicleSeat.Driver);
-                    Game.PlayerPed.IsInvincible = false;
-                }
+                VehicleCreator.SpawnVehicle(car);
             }
             catch (Exception ex)
             {
-                if (Classes.Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Error($"Menu_OnItemSelect -> {ex.Message}");
                 }

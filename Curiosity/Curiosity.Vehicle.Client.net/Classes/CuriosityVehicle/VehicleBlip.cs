@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using System;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     class VehicleBlip
     {
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         public static void Init()
         {
@@ -22,39 +23,39 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 {
                     if (Game.PlayerPed.CurrentVehicle.Driver.Handle == Game.PlayerPed.Handle)
                     {
-                        if (Game.PlayerPed.CurrentVehicle != null && Client.CurrentVehicle != null)
+                        if (Game.PlayerPed.CurrentVehicle != null && Plugin.CurrentVehicle != null)
                         {
-                            if (Game.PlayerPed.CurrentVehicle.Handle == Client.CurrentVehicle.Handle)
+                            if (Game.PlayerPed.CurrentVehicle.Handle == Plugin.CurrentVehicle.Handle)
                             {
-                                if (Client.CurrentVehicle.AttachedBlip != null)
-                                    if (Client.CurrentVehicle.AttachedBlip.Exists())
-                                        Client.CurrentVehicle.AttachedBlip.Alpha = 0;
+                                if (Plugin.CurrentVehicle.AttachedBlip != null)
+                                    if (Plugin.CurrentVehicle.AttachedBlip.Exists())
+                                        Plugin.CurrentVehicle.AttachedBlip.Alpha = 0;
                             }
                         }
                     }
                 }
                 else
                 {
-                    if (Client.CurrentVehicle != null)
+                    if (Plugin.CurrentVehicle != null)
                     {
-                        if (Client.CurrentVehicle.IsAlive)
+                        if (Plugin.CurrentVehicle.IsAlive)
                         {
-                            if (Client.CurrentVehicle.AttachedBlip != null)
-                                if (Client.CurrentVehicle.AttachedBlip.Exists())
-                                    Client.CurrentVehicle.AttachedBlip.Alpha = 255;
+                            if (Plugin.CurrentVehicle.AttachedBlip != null)
+                                if (Plugin.CurrentVehicle.AttachedBlip.Exists())
+                                    Plugin.CurrentVehicle.AttachedBlip.Alpha = 255;
                         }
                         else
                         {
-                            if (Client.CurrentVehicle.AttachedBlip != null)
-                                if (Client.CurrentVehicle.AttachedBlip.Exists())
-                                    Client.CurrentVehicle.AttachedBlip.Delete();
+                            if (Plugin.CurrentVehicle.AttachedBlip != null)
+                                if (Plugin.CurrentVehicle.AttachedBlip.Exists())
+                                    Plugin.CurrentVehicle.AttachedBlip.Delete();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Debug.WriteLine($"{ex}");
                 }

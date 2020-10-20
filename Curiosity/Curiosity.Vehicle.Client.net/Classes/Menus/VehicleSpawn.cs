@@ -5,6 +5,7 @@ using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
 using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
     class VehicleSpawn
     {
         static Menu menu;
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
         static Random random = new Random();
 
         public static void Init()
@@ -26,7 +27,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
         public static void OpenMenu(int spawnId)
         {
             MenuController.DontOpenAnyMenu = false;
-            Client.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleList", spawnId);
+            Plugin.TriggerServerEvent("curiosity:Server:Vehicle:GetVehicleList", spawnId);
 
             if (menu == null)
             {
@@ -73,7 +74,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
                 string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
                 List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
 
-                if (Player.PlayerInformation.privilege == Privilege.DEVELOPER)
+                if (PlayerInformation.privilege == Privilege.DEVELOPER)
                 {
                     VehicleItem refVeh = vehicleItems[0];
                     VehicleItem dev = new VehicleItem();
@@ -91,7 +92,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
                 {
                     MenuItem item = new MenuItem(vehicle.Name) { ItemData = vehicle };
 
-                    if (Player.PlayerInformation.privilege == Privilege.DEVELOPER)
+                    if (PlayerInformation.privilege == Privilege.DEVELOPER)
                     {
                         item.Enabled = true;
                     }
@@ -101,13 +102,13 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
                     }
                     else
                     {
-                        if (!Player.PlayerInformation.playerInfo.Skills.ContainsKey(vehicle.UnlockRequiredSkill))
+                        if (!PlayerInformation.playerInfo.Skills.ContainsKey(vehicle.UnlockRequiredSkill))
                         {
                             item.Enabled = false;
                         }
                         else
                         {
-                            item.Enabled = (Player.PlayerInformation.playerInfo.Skills[vehicle.UnlockRequiredSkill].Value >= vehicle.UnlockRequirementValue);
+                            item.Enabled = (PlayerInformation.playerInfo.Skills[vehicle.UnlockRequiredSkill].Value >= vehicle.UnlockRequirementValue);
                         }
                     }
 
@@ -137,7 +138,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
                 string car = vehicleItem.VehicleHashString;
                 var enumName = Enum.GetNames(typeof(VehicleHash)).FirstOrDefault(s => s.ToLower().StartsWith(car.ToLower())) ?? "";
 
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Info(vehicleItem.ToString());
                 }
@@ -149,7 +150,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
                     model = new Model(hash);
                     modelName = $"{hash}";
 
-                    if (Player.PlayerInformation.IsDeveloper())
+                    if (PlayerInformation.IsDeveloper())
                     {
                         Log.Info("INT TryParse Valid");
                     }
@@ -168,7 +169,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
                         modelName = enumName;
                         found = true;
 
-                        if (Classes.Player.PlayerInformation.IsDeveloper())
+                        if (PlayerInformation.IsDeveloper())
                         {
                             Screen.ShowNotification($"~r~Info~s~:~n~Model Valid: {model.IsValid}~n~Model: {modelName}");
                         }
@@ -200,12 +201,12 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
 
                 if (!spawnSuccess)
                 {
-                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Sorry...", "It took too long to load the vehicle or a cooldown is active, please try again later.", 2);
+                    Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Unable to spawn vehicle", "Sorry...", "It took too long to load the vehicle or a cooldown is active, please try again later.", 2);
                 }
             }
             catch (Exception ex)
             {
-                if (Classes.Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Error($"Menu_OnItemSelect -> {ex.Message}");
                 }

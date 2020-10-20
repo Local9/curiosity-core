@@ -8,7 +8,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
     {
         public static void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Plugin.GetInstance().RegisterTickHandler(OnTick);
         }
 
         private static Task OnTick()

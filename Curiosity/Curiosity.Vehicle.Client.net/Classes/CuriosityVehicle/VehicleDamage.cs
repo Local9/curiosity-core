@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     static class VehicleDamage
     {
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         // TODO: Move to config
         static bool preventVehicleFlip = true;
@@ -223,7 +224,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         {
             while (true)
             {
-                await Client.Delay(50);
+                await Plugin.Delay(50);
 
                 if (IsPlayerDrivingAVehicle())
                 {
@@ -404,7 +405,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                     API.DisableControlAction(2, 59, true);
                     API.DisableControlAction(2, 60, true);
                     Game.PlayerPed.CurrentVehicle.IsEngineRunning = false;
-                    await Client.Delay(2000);
+                    await Plugin.Delay(2000);
                     Game.PlayerPed.Task.LeaveVehicle((LeaveVehicleFlags)4160);
                 }
             }
@@ -413,7 +414,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
         public static void DevRepair()
         {
-            if (Game.PlayerPed.IsInVehicle() && Player.PlayerInformation.IsDeveloper())
+            if (Game.PlayerPed.IsInVehicle() && PlayerInformation.IsDeveloper())
             {
                 Game.PlayerPed.CurrentVehicle.Repair();
                 Game.PlayerPed.CurrentVehicle.EngineHealth = 1000f;

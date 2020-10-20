@@ -6,7 +6,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Environment
 {
     class VehicleTicks
     {
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
 
         static public void Init()
         {

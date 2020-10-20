@@ -2,6 +2,7 @@
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.Server.net.Extensions;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
@@ -21,8 +22,69 @@ namespace Curiosity.Server.net.Classes.Environment
             server.RegisterEventHandler("curiosity:Server:Vehicle:GetVehicleList", new Action<CitizenFX.Core.Player, int>(OnGetVehicleList));
             server.RegisterEventHandler("curiosity:Server:Vehicle:GetDonatorVehicleList", new Action<CitizenFX.Core.Player>(OnGetDonatorVehicleList));
             server.RegisterEventHandler("curiosity:Server:Vehicle:Shop:Get", new Action<CitizenFX.Core.Player>(OnGetVehiclesForShop));
+            server.RegisterEventHandler("curiosity:Server:Vehicle:Shop:Action", new Action<CitizenFX.Core.Player, int>(OnVehicleShopAction));
 
             Log.Verbose("Vehicle Manager Init");
+        }
+
+        // check if vehicle is owned
+        // if not owned then purchase
+        // on purchase success, spawn
+        // if owned, spawn
+
+        private async static void OnVehicleShopAction([FromSource] CitizenFX.Core.Player player, int vehicleShopId)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            long characterId = session.User.CharacterId;
+
+            bool isOwned = await Database.DatabaseVehicles.SelectCharacterVehicle(characterId, vehicleShopId);
+            await BaseScript.Delay(10);
+            VehicleShopItem vehicleShopItem = await Database.DatabaseVehicles.SelectVehicleShopItem(vehicleShopId);
+            await BaseScript.Delay(10);
+            if (!isOwned)
+            {
+                if (vehicleShopItem.NumberRemaining != null && vehicleShopItem.NumberRemaining == 0)
+                {
+                    player.NotificationCuriosity("Vehicle Shop", "Sorry, no more are remaining");
+                    return;
+                }
+
+                if (session.User.Wallet < vehicleShopItem.Cost)
+                {
+                    player.NotificationCuriosity("Vehicle Shop", "Sorry, not enough cash");
+                    return;
+                }
+
+                await BaseScript.Delay(10);
+
+                bool purchased = await Database.DatabaseVehicles.InsertCharacterVehicle(characterId, vehicleShopId);
+
+                await BaseScript.Delay(10);
+
+                if (purchased)
+                {
+                    session.DecreaseWallet(vehicleShopItem.Cost);
+                    Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, vehicleShopItem.Cost);
+                    await BaseScript.Delay(10);
+                    player.TriggerEvent("curiosity:Client:Vehicle:Create", vehicleShopItem.VehicleHash);
+                    await BaseScript.Delay(10);
+                    player.TriggerEvent("curiosity:Client:Vehicle:Shop:Update");
+                    return;
+                }
+                else
+                {
+                    await Database.DatabaseVehicles.DeleteCharacterVehicle(characterId, vehicleShopId);
+                    player.NotificationCuriosity("Vehicle Shop", "Sorry, please try again later");
+                    return;
+                }
+            }
+            else
+            {
+                player.TriggerEvent("curiosity:Client:Vehicle:Create", vehicleShopItem.VehicleHash);
+            }
         }
 
         static async void OnGetVehicleList([FromSource]CitizenFX.Core.Player player, int spawnId)

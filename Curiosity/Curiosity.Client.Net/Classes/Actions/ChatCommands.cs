@@ -121,7 +121,7 @@ namespace Curiosity.Client.net.Classes.Actions
             API.RegisterCommand("die", new Action<int, List<object>, string>(Die), false);
             API.RegisterCommand("emote", new Action<int, List<object>, string>(OnEmote), false);
 
-            API.RegisterCommand("installsirens", new Action<int, List<object>, string>(OnInstallSirens), false);
+            // API.RegisterCommand("installsirens", new Action<int, List<object>, string>(OnInstallSirens), false);
             API.RegisterCommand("onfire", new Action<int, List<object>, string>(OnFireFootprints), false);
 
             // FUCK PLAYER

@@ -264,7 +264,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
             menu.AddMenuItem(menuItemShowRadar);
             menu.AddMenuItem(menuItemDispatch);
             menu.AddMenuItem(menuItemBreaker);
-            menu.AddMenuItem(menuCheckboxAlternateSirens);
+            // menu.AddMenuItem(menuCheckboxAlternateSirens);
             menu.AddMenuItem(menuCheckboxDispatchMessages);
             menu.AddMenuItem(menuCheckboxRandomCallouts);
             menu.AddMenuItem(menuCheckboxBackup);

@@ -8,10 +8,10 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     static class BrakeSignals
     {
-        static PlayerList PlayerList = Client.players;
+        static PlayerList PlayerList = Plugin.players;
         static public void Init()
         {
-            Client.GetInstance().RegisterTickHandler(OnTick);
+            Plugin.GetInstance().RegisterTickHandler(OnTick);
         }
 
         static private Task OnTick()

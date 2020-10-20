@@ -8,7 +8,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 {
     class CruiseControl
     {
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
         static public bool IsCruiseControlDisabled = true;
         static bool IsCruiseControlActive = false;
         static float SpeedToKeep = -1;

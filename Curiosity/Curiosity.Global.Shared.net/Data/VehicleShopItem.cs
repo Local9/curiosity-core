@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace Curiosity.Global.Shared.Data
 {
@@ -11,13 +12,19 @@ namespace Curiosity.Global.Shared.Data
         [DataMember(Name = "label", IsRequired = true)]
         public string Label;
 
+        [JsonIgnore]
+        public string VehicleHash;
+
         [DataMember(Name = "cost", IsRequired = true)]
         public int Cost;
 
-        [DataMember(Name = "numberRemaining", IsRequired = true)]
-        public int NumberRemaining;
+        [DataMember(Name = "numberRemaining")]
+        public int? NumberRemaining;
 
         [DataMember(Name = "isOwned", IsRequired = true)]
         public bool IsOwned;
+
+        [DataMember(Name = "uri")]
+        public string ImageUri;
     }
 }

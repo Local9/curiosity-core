@@ -6,8 +6,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
     {
         public static void MenuOpen()
         {
-            Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
-            Client.TriggerEvent("curiosity:Client:UI:LocationHide", true);
+            Plugin.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
+            Plugin.TriggerEvent("curiosity:Client:UI:LocationHide", true);
             try
             {
                 Environment.VehicleSpawnMarkerHandler.IsMenuOpen = true;
@@ -28,8 +28,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
             {
                 // 
             }
-            Client.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
-            Client.TriggerEvent("curiosity:Client:UI:LocationHide", false);
+            Plugin.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
+            Plugin.TriggerEvent("curiosity:Client:UI:LocationHide", false);
         }
     }
 }

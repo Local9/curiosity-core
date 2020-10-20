@@ -3,11 +3,11 @@ using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using System;
 
-namespace Curiosity.Vehicles.Client.net.Classes.Player
+namespace Curiosity.Vehicles.Client.net.Classes.CurPlayer
 {
     static class PlayerInformation
     {
-        static Client client = Client.GetInstance();
+        static Plugin client = Plugin.GetInstance();
         public static PlayerInformationModel playerInfo = new PlayerInformationModel();
 
         public static Privilege privilege;
@@ -22,7 +22,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.Player
         }
         static void OnPlayerSpawned()
         {
-            Client.TriggerEvent("curiosity:Client:Player:Information");
+            Plugin.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         static void PlayerInfo(string json)
