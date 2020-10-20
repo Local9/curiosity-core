@@ -307,6 +307,9 @@ namespace Curiosity.Client.net.Classes.Environment
 
         private static void SetPopulationValues(WeatherTypes weather)
         {
+            PED_MULTIPLIER = 1f;
+            VEH_MULTIPLIER = 1f;
+
             switch (weather)
             {
                 case WeatherTypes.XMAS_STORM:
@@ -320,24 +323,18 @@ namespace Curiosity.Client.net.Classes.Environment
                 case WeatherTypes.CLEARING:
                 case WeatherTypes.EXTRASUNNY:
                 case WeatherTypes.NEUTRAL:
-                    PED_MULTIPLIER = 1f;
-                    VEH_MULTIPLIER = 1f;
                     VEH_PARKED_MULTIPLIER = 0.5f;
                     break;
                 case WeatherTypes.FOGGY:
                 case WeatherTypes.SMOG:
-                    PED_MULTIPLIER = 0.5f;
-                    VEH_MULTIPLIER = 1f;
                     VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
                 case WeatherTypes.OVERCAST:
                 case WeatherTypes.CLOUDS:
-                    PED_MULTIPLIER = 0.8f;
-                    VEH_MULTIPLIER = 1f;
                     VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
                 case WeatherTypes.RAIN:
-                    PED_MULTIPLIER = 0.3f;
+                    PED_MULTIPLIER = 0.5f;
                     VEH_MULTIPLIER = 1f;
                     VEH_PARKED_MULTIPLIER = 0.1f;
                     break;
