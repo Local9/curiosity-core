@@ -18,5 +18,10 @@ namespace Curiosity.Global.Shared.Utils
             int index = Utility.RANDOM.Next(list.Count);
             return list[index];
         }
+
+        public static int ToInt(this string str)
+        {
+            return int.Parse(str);
+        }
     }
 }

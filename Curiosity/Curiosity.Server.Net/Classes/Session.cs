@@ -23,7 +23,7 @@ namespace Curiosity.Server.net.Classes
         public ulong DiscordId { get; private set; } = 0;
 
         // Player data
-        public int UserID { get; set; }
+        public long UserID { get; set; }
         public Privilege Privilege { get; set; }
         public long LocationId { get; set; }
 

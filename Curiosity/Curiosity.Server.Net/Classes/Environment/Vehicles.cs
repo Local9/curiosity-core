@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Global.Shared;
+using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Server.net.Extensions;
 using Curiosity.Shared.Server.net.Helpers;
@@ -19,6 +20,7 @@ namespace Curiosity.Server.net.Classes.Environment
             server.RegisterEventHandler("curiosity:Server:Vehicle:GetVehicleSpawnLocations", new Action<CitizenFX.Core.Player>(OnGetVehicleSpawnLocations));
             server.RegisterEventHandler("curiosity:Server:Vehicle:GetVehicleList", new Action<CitizenFX.Core.Player, int>(OnGetVehicleList));
             server.RegisterEventHandler("curiosity:Server:Vehicle:GetDonatorVehicleList", new Action<CitizenFX.Core.Player>(OnGetDonatorVehicleList));
+            server.RegisterEventHandler("curiosity:Server:Vehicle:Shop:Get", new Action<CitizenFX.Core.Player>(OnGetVehiclesForShop));
 
             Log.Verbose("Vehicle Manager Init");
         }
@@ -39,6 +41,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
             }
         }
+
         static async void OnGetDonatorVehicleList([FromSource]CitizenFX.Core.Player player)
         {
             try
@@ -69,6 +72,28 @@ namespace Curiosity.Server.net.Classes.Environment
             catch (Exception ex)
             {
 
+            }
+        }
+
+        static async void OnGetVehiclesForShop([FromSource] CitizenFX.Core.Player player)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+
+                Session session = SessionManager.PlayerList[player.Handle];
+
+                List<VehicleShopItem> vehicles = await Database.DatabaseVehicles.GetVehicleShopItems(Server.serverId, session.User.CharacterId);
+
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicles);
+
+                string encodedJson = Encode.StringToBase64(json);
+
+                player.TriggerEvent("curiosity:Client:Vehicle:Shop:Items", encodedJson);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "OnGetVehiclesForShop");
             }
         }
 

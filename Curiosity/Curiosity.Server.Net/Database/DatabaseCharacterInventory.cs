@@ -16,7 +16,7 @@ namespace Curiosity.Server.net.Database
             mySql = Database.mySQL;
         }
 
-        public static async Task<List<Inventory>> GetInventoryAsync(int characterId)
+        public static async Task<List<Inventory>> GetInventoryAsync(long characterId)
         {
             List<Inventory> inventoryList = new List<Inventory>();
 

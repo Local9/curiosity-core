@@ -63,7 +63,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public static async Task<ConcurrentDictionary<string, GlobalEntity.Skills>> GetSkills(int characterId)
+        public static async Task<ConcurrentDictionary<string, GlobalEntity.Skills>> GetSkills(long characterId)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace Curiosity.Server.net.Database
             mySql.Query(query, myParams);
         }
 
-        public async Task<List<GlobalEntity.Skills>> GetSkills(int characterId, GlobalEnum.SkillType skillType)
+        public async Task<List<GlobalEntity.Skills>> GetSkills(long characterId, GlobalEnum.SkillType skillType)
         {
             List<GlobalEntity.Skills> skillsList = new List<GlobalEntity.Skills>();
 

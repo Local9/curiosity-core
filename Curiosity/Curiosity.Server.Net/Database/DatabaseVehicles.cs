@@ -1,9 +1,13 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Utils;
+using Curiosity.Shared.Server.net.Helpers;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Curiosity.Server.net.Database
 {
@@ -94,7 +98,7 @@ namespace Curiosity.Server.net.Database
             return vehicleItems;
         }
 
-        public static async Task<List<VehicleItem>> GetVehiclesForDonators(int userID)
+        public static async Task<List<VehicleItem>> GetVehiclesForDonators(long userID)
         {
             List<VehicleItem> vehicleItems = new List<VehicleItem>();
 
@@ -124,6 +128,68 @@ namespace Curiosity.Server.net.Database
                 }
             }
             return vehicleItems;
+        }
+
+        public static async Task<List<VehicleShopItem>> GetVehicleShopItems(int serverId, long characterId)
+        {
+            List<VehicleShopItem> vehicleShopItems = new List<VehicleShopItem>();
+
+            string sql = "CALL curiosity.selVehiclesFromShop(@serverId, @charId);";
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@serverId", serverId);
+            myParams.Add("@charId", characterId);
+
+            using (var result = mySql.QueryResult(sql, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+                await Delay(0);
+                if (keyValuePairs.Count == 0)
+                {
+                    return vehicleShopItems;
+                }
+
+                foreach (Dictionary<string, object> k in keyValuePairs)
+                {
+                    VehicleShopItem vehicleShopItem = new VehicleShopItem
+                    {
+                        Id = $"{k["vehicleShopId"]}".ToInt(),
+                        Label = $"{k["label"]}",
+                        Cost = $"{k["cost"]}".ToInt(),
+                    };
+
+                    if (k.ContainsValue("limitedNumber"))
+                        vehicleShopItem.NumberRemaining = $"{k["limitedNumber"]}".ToInt();
+
+                    vehicleShopItem.IsOwned = k.ContainsValue("characterId");
+
+                    vehicleShopItems.Add(vehicleShopItem);
+                }
+            }
+            return vehicleShopItems;
+        }
+
+        public static async Task<bool> InsertCharacterVehicle(long characterId, int vehShopId)
+        {
+            string sql = "CALL curiosity.insCharacterVehicle(@charId, @vehShopId);";
+            Dictionary<string, object> myParams = new Dictionary<string, object>();
+            myParams.Add("@charId", characterId);
+            myParams.Add("@vehShopId", vehShopId);
+
+            using (var result = mySql.QueryResult(sql, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+                await Delay(0);
+                if (keyValuePairs.Count == 0)
+                {
+                    return false;
+                }
+
+                foreach (Dictionary<string, object> k in keyValuePairs)
+                {
+                    return bool.Parse($"{k[$"success"]}");
+                }
+            }
+            return false;
         }
     }
 }

@@ -217,7 +217,7 @@ namespace Curiosity.Server.net.Classes
                     experience = (int)(experience * experienceModifier);
                 }
 
-                int characterId = session.User.CharacterId;
+                long characterId = session.User.CharacterId;
 
                 if (!(characterId > 0))
                 {
@@ -306,7 +306,7 @@ namespace Curiosity.Server.net.Classes
                     experience = (int)(experience * experienceModifier);
                 }
 
-                int characterId = session.User.CharacterId;
+                long characterId = session.User.CharacterId;
 
                 if (!(characterId > 0))
                 {
@@ -359,7 +359,7 @@ namespace Curiosity.Server.net.Classes
 
                 Session session = SessionManager.PlayerList[player.Handle];
 
-                int characterId = session.User.CharacterId;
+                long characterId = session.User.CharacterId;
 
 
                 if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
@@ -453,7 +453,7 @@ namespace Curiosity.Server.net.Classes
                     experience = (int)(experience * experienceModifier);
                 }
 
-                int characterId = session.User.CharacterId;
+                long characterId = session.User.CharacterId;
 
                 if (!(characterId > 0))
                 {
@@ -506,7 +506,7 @@ namespace Curiosity.Server.net.Classes
 
                 Session session = SessionManager.PlayerList[source];
 
-                int characterId = session.User.CharacterId;
+                long characterId = session.User.CharacterId;
 
                 if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
                 {

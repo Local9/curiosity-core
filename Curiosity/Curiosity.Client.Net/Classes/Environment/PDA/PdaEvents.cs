@@ -2,10 +2,14 @@
 using CitizenFX.Core.Native;
 using Curiosity.Client.net.Classes.Player;
 using Curiosity.Client.net.Helpers;
+using Curiosity.Global.Shared;
+using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,6 +22,7 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
 
         static bool IsCoreOpen;
         private static Prop TabletProp;
+        static bool _PlayerSpawned;
 
         static public void Init()
         {
@@ -26,8 +31,38 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
             client.RegisterNuiEventHandler("ClosePanel", new Action<IDictionary<string, object>, CallbackDelegate>(OnClosePda));
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
 
+            // VehicleShop
+            client.RegisterNuiEventHandler("GetVehicleShopItems", new Action<IDictionary<string, object>, CallbackDelegate>(OnNuiEventGetVehicleShopItems));
+            client.RegisterEventHandler("curiosity:Client:Vehicle:Shop:Items", new Action<string>(OnGotVehicleShopItems));
+
             client.RegisterTickHandler(OnPdaCoreControls);
 
+            client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
+
+        }
+
+        private static void OnPlayerSpawned()
+        {
+            _PlayerSpawned = true;
+        }
+
+        private static void OnNuiEventGetVehicleShopItems(IDictionary<string, object> args, CallbackDelegate cb)
+        {
+            BaseScript.TriggerServerEvent("curiosity:Server:Vehicle:Shop:Get");
+
+            cb(new { ok = true });
+        }
+
+        private static void OnGotVehicleShopItems(string shopItems)
+        {
+            List<VehicleShopItem> list = JsonConvert.DeserializeObject<List<VehicleShopItem>>(Encode.Base64ToString(shopItems));
+            
+            string jsn = new JsonBuilder()
+                .Add("operation", "VEHICLE_SHOP_ITEMS")
+                .Add("items", list)
+                .Build();
+
+            API.SendNuiMessage(jsn);
         }
 
         private static void OnPlayerExperience(IDictionary<string, object> data, CallbackDelegate cb)
@@ -98,6 +133,9 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
         private static async Task OnPdaCoreControls()
         {
             if (!Client.isSessionActive) return;
+
+            if (!_PlayerSpawned) return;
+
             if (!IsCoreOpen && (ControlHelper.IsControlJustPressed(Control.SwitchVisor, true) || ControlHelper.IsControlJustPressed(Control.FrontendSocialClubSecondary, true)))
             {
                 IsCoreOpen = !IsCoreOpen;

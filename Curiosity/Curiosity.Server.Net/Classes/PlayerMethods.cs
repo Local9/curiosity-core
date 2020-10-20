@@ -545,8 +545,8 @@ namespace Curiosity.Server.net.Classes
     class PlayerInformation
     {
         public string Handle;
-        public int UserId;
-        public int CharacterId;
+        public long UserId;
+        public long CharacterId;
         public int RoleId;
         public int Wallet;
         public int BankAccount;

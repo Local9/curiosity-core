@@ -62,7 +62,7 @@ namespace Curiosity.Server.net.Database
             mySql.Query("CALL curiosity.spProcessBans();");
         }
 
-        internal static void SaveCharacterSkins(int characterId, string characterData)
+        internal static void SaveCharacterSkins(long characterId, string characterData)
         {
             string query = "CALL curiosity.upCharacterSkin(@characterId, @skin);";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
@@ -71,7 +71,7 @@ namespace Curiosity.Server.net.Database
             mySql.Query(query, myParams);
         }
 
-        internal static void UpdateCharacterRole(int characterId, Privilege privilege)
+        internal static void UpdateCharacterRole(long characterId, Privilege privilege)
         {
             string query = "CALL curiosity.upCharacterRole(@characterId, @roleId);";
             Dictionary<string, object> myParams = new Dictionary<string, object>();
@@ -173,7 +173,7 @@ namespace Curiosity.Server.net.Database
             }
         }
 
-        public static void LogReport(int userId, int userIdLogging, int logTypeId, int characterId)
+        public static void LogReport(long userId, long userIdLogging, int logTypeId, long characterId)
         {
             string query = "call spLogReportUser(@userId, @loggedById, @logTypeId, @characterId);";
 
@@ -186,7 +186,7 @@ namespace Curiosity.Server.net.Database
             mySql.Query(query, myParams);
         }
 
-        public static void LogKick(int userId, int userIdLogging, int logTypeId, int characterId)
+        public static void LogKick(long userId, long userIdLogging, int logTypeId, long characterId)
         {
             string query = "call spLogKickedUser(@userId, @loggedById, @logTypeId, @characterId);";
 
@@ -199,7 +199,7 @@ namespace Curiosity.Server.net.Database
             mySql.Query(query, myParams);
         }
 
-        public static void LogBan(int userId, int userIdLogging, int logTypeId, int characterId, bool permBan, DateTime bannedUntil)
+        public static void LogBan(long userId, long userIdLogging, int logTypeId, long characterId, bool permBan, DateTime bannedUntil)
         {
             string query = "call spLogBannedUser(@userId, @loggedById, @logTypeId, @characterId, @permBan, @bannedUntil);";
 

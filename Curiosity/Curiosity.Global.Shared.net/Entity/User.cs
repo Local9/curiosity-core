@@ -13,7 +13,7 @@ namespace Curiosity.Global.Shared.Entity
         private int _mentalState;
 
         // USER
-        public int UserId;
+        public long UserId;
         public int LifeExperience;
         public DateTime DateCreated;
         public bool Banned;
@@ -22,7 +22,7 @@ namespace Curiosity.Global.Shared.Entity
         public int QueuePriority;
         public int QueueLevel;
         // CHARACTER
-        public int CharacterId;
+        public long CharacterId;
         public int LocationId;
         public int RoleId;
         public string Role;
