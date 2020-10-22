@@ -1,9 +1,6 @@
 ﻿using CitizenFX.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client
 {
@@ -44,7 +41,7 @@ namespace Curiosity.MissionManager.Client
                 // trigger success
             }
 
-            foreach(Blip blip in PluginManager.Blips)
+            foreach (Blip blip in PluginManager.Blips)
             {
                 blip.Delete();
             }
@@ -58,7 +55,7 @@ namespace Curiosity.MissionManager.Client
         /// <param name="failReason">The reason the mission failed</param>
         public void Fail(string failReason)
         {
-            
+
         }
 
         public void Pass()
@@ -75,7 +72,8 @@ namespace Curiosity.MissionManager.Client
         Mission,
         Stranger,
         Heist,
-        HeistSetup
+        HeistSetup,
+        StolenVehicle
     }
 
 

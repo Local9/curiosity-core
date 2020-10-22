@@ -1,11 +1,8 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Attributes;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client
 {
@@ -28,6 +25,7 @@ namespace Curiosity.MissionManager.Client
         /// <param name="mission">The mission to start</param>
         public static async void StartMission(Type mission)
         {
+            // Remove any blips if they are left around
             foreach (Blip blip in PluginManager.Blips)
             {
                 blip.Delete();

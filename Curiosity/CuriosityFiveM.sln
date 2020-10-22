@@ -159,6 +159,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_missions", "2_missions", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.MissionManager.Client", "Curiosity.MissionManager.Client\Curiosity.MissionManager.Client.csproj", "{5E0E335B-83B4-46F7-92CF-8139BE4209F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.StolenVehicle", "Curiosity.Mission.StolenVehicle\Curiosity.StolenVehicle.csproj", "{A2821D87-4A18-4DED-A7C2-B0219244CBA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "missions", "missions", "{9C30A4C9-700E-4779-BD9B-9850F5E200E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -373,6 +377,10 @@ Global
 		{5E0E335B-83B4-46F7-92CF-8139BE4209F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E0E335B-83B4-46F7-92CF-8139BE4209F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E0E335B-83B4-46F7-92CF-8139BE4209F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2821D87-4A18-4DED-A7C2-B0219244CBA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2821D87-4A18-4DED-A7C2-B0219244CBA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2821D87-4A18-4DED-A7C2-B0219244CBA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2821D87-4A18-4DED-A7C2-B0219244CBA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -434,6 +442,8 @@ Global
 		{EEB0ED60-CAA6-41BF-968E-6C7FF47C9639} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{D2B12E3F-BCED-4BD8-80CD-8A7FA042025A} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{5E0E335B-83B4-46F7-92CF-8139BE4209F4} = {2B60D295-C62E-474A-AC46-98905FB99A42}
+		{A2821D87-4A18-4DED-A7C2-B0219244CBA1} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
+		{9C30A4C9-700E-4779-BD9B-9850F5E200E2} = {2B60D295-C62E-474A-AC46-98905FB99A42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
