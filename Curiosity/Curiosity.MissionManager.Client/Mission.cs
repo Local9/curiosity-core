@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client
 {
-    public abstract class Mission
+    public abstract class Mission : BaseScript
     {
         internal static List<MissionType> missions = new List<MissionType>();
         internal static bool isOnMission = false;
@@ -21,7 +21,8 @@ namespace Curiosity.MissionManager.Client
         /// <summary>
         /// This is called on every tick even from ScriptHookVDotNet
         /// </summary>
-        public abstract void Tick();
+        [Tick]
+        public abstract void OnMissionTick();
         /// <summary>
         /// This is called as soon as the mission is ended. Typically this would be used for cleanup such as removing peds and vehicles
         /// </summary>
@@ -61,7 +62,9 @@ namespace Curiosity.MissionManager.Client
         }
 
         public void Pass()
-        { }
+        {
+
+        }
 
     }
     /// <summary>
