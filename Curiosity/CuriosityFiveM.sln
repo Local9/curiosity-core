@@ -155,6 +155,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{458C5D8F
 		notes.txt = notes.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_missions", "2_missions", "{2B60D295-C62E-474A-AC46-98905FB99A42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.MissionManager.Client", "Curiosity.MissionManager.Client\Curiosity.MissionManager.Client.csproj", "{5E0E335B-83B4-46F7-92CF-8139BE4209F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -365,6 +369,10 @@ Global
 		{D2B12E3F-BCED-4BD8-80CD-8A7FA042025A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2B12E3F-BCED-4BD8-80CD-8A7FA042025A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2B12E3F-BCED-4BD8-80CD-8A7FA042025A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E0E335B-83B4-46F7-92CF-8139BE4209F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E0E335B-83B4-46F7-92CF-8139BE4209F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E0E335B-83B4-46F7-92CF-8139BE4209F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E0E335B-83B4-46F7-92CF-8139BE4209F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -425,6 +433,7 @@ Global
 		{7443F620-BE8E-4C52-9F99-5ABF6B71141E} = {5B08BD43-975A-44DD-9AD8-4B96EB32B987}
 		{EEB0ED60-CAA6-41BF-968E-6C7FF47C9639} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{D2B12E3F-BCED-4BD8-80CD-8A7FA042025A} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
+		{5E0E335B-83B4-46F7-92CF-8139BE4209F4} = {2B60D295-C62E-474A-AC46-98905FB99A42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
