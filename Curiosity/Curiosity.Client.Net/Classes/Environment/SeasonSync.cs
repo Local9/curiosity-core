@@ -212,6 +212,9 @@ namespace Curiosity.Client.net.Classes.Environment
                 case WeatherTypes.RAIN:
                     SetRainFxIntensity(rainIntensity);
                     break;
+                case WeatherTypes.THUNDER:
+                    SetRainFxIntensity(1f);
+                    break;
                 default:
                     SetForceVehicleTrails(false);
                     SetForcePedFootstepsTracks(false);
