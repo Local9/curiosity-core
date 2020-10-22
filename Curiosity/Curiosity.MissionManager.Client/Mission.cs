@@ -9,10 +9,10 @@ namespace Curiosity.MissionManager.Client
 {
     public abstract class Mission : BaseScript
     {
-        internal static List<MissionType> missions = new List<MissionType>();
+        internal static List<Type> missions = new List<Type>();
         internal static bool isOnMission = false;
         internal static Mission currentMission = null;
-        internal static MissionType missionType;
+        internal static Type missionType = null;
 
         /// <summary>
         /// This is called when a mission is started by the user. Typically this would be used to set up the mission by spawning things like peds and vehicles
@@ -35,7 +35,7 @@ namespace Curiosity.MissionManager.Client
         public void Stop(EndState reason)
         {
             isOnMission = false;
-            missionType = MissionType.NotSet;
+            missionType = null;
             currentMission.End();
             currentMission = null;
 
@@ -72,7 +72,6 @@ namespace Curiosity.MissionManager.Client
     /// </summary>
     public enum MissionType
     {
-        NotSet,
         Mission,
         Stranger,
         Heist,

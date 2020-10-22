@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\MissionInfo.cs" />
+    <Compile Include="Func.cs" />
     <Compile Include="Mission.cs" />
     <Compile Include="NativeUI\BigMessageHandler.cs" />
     <Compile Include="PluginManager.cs" />
