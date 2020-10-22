@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.StolenVehicle.Missions;
 using Curiosity.MissionManager.Client;
+using Curiosity.StolenVehicle.Missions;
 using System;
 using System.Collections.Generic;
 
