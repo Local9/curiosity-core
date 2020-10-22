@@ -34,54 +34,67 @@ namespace Curiosity.Server.net.Classes.Environment
 
         private async static void OnVehicleShopAction([FromSource] CitizenFX.Core.Player player, int vehicleShopId)
         {
-            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
-
-            Session session = SessionManager.PlayerList[player.Handle];
-
-            long characterId = session.User.CharacterId;
-
-            bool isOwned = await Database.DatabaseVehicles.SelectCharacterVehicle(characterId, vehicleShopId);
-            await BaseScript.Delay(10);
-            VehicleShopItem vehicleShopItem = await Database.DatabaseVehicles.SelectVehicleShopItem(vehicleShopId);
-            await BaseScript.Delay(10);
-            if (!isOwned)
+            try
             {
-                if (vehicleShopItem.NumberRemaining != null && vehicleShopItem.NumberRemaining == 0)
-                {
-                    player.NotificationCuriosity("Vehicle Shop", "Sorry, no more are remaining");
-                    return;
-                }
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
 
-                if (session.User.Wallet < vehicleShopItem.Cost)
-                {
-                    player.NotificationCuriosity("Vehicle Shop", "Sorry, not enough cash");
-                    return;
-                }
+                Session session = SessionManager.PlayerList[player.Handle];
 
+                long characterId = session.User.CharacterId;
+
+                bool isOwned = await Database.DatabaseVehicles.SelectCharacterVehicle(characterId, vehicleShopId);
                 await BaseScript.Delay(10);
-
-                bool purchased = await Database.DatabaseVehicles.InsertCharacterVehicle(characterId, vehicleShopId);
-
+                VehicleShopItem vehicleShopItem = await Database.DatabaseVehicles.SelectVehicleShopItem(vehicleShopId);
                 await BaseScript.Delay(10);
-
-                if (purchased)
+                if (!isOwned)
                 {
-                    session.DecreaseWallet(vehicleShopItem.Cost);
-                    Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, vehicleShopItem.Cost);
+                    if (vehicleShopItem == null)
+                    {
+                        player.NotificationCuriosity("Vehicle Shop", "Sorry, try again later.");
+                        return;
+                    }
+
+                    if (vehicleShopItem.NumberRemaining != null && vehicleShopItem.NumberRemaining == 0)
+                    {
+                        player.NotificationCuriosity("Vehicle Shop", "Sorry, no more are remaining");
+                        return;
+                    }
+
+                    if (session.User.Wallet < vehicleShopItem.Cost)
+                    {
+                        player.NotificationCuriosity("Vehicle Shop", "Sorry, not enough cash");
+                        return;
+                    }
+
                     await BaseScript.Delay(10);
-                    player.TriggerEvent("curiosity:Client:Vehicle:Shop:Update");
-                    return;
+
+                    bool purchased = await Database.DatabaseVehicles.InsertCharacterVehicle(characterId, vehicleShopId);
+
+                    await BaseScript.Delay(10);
+
+                    if (purchased)
+                    {
+                        session.DecreaseWallet(vehicleShopItem.Cost);
+                        Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, vehicleShopItem.Cost);
+                        await BaseScript.Delay(10);
+                        player.TriggerEvent("curiosity:Client:Vehicle:Shop:Update");
+                        return;
+                    }
+                    else
+                    {
+                        await Database.DatabaseVehicles.DeleteCharacterVehicle(characterId, vehicleShopId);
+                        player.NotificationCuriosity("Vehicle Shop", "Sorry, please try again later");
+                        return;
+                    }
                 }
                 else
                 {
-                    await Database.DatabaseVehicles.DeleteCharacterVehicle(characterId, vehicleShopId);
-                    player.NotificationCuriosity("Vehicle Shop", "Sorry, please try again later");
-                    return;
+                    player.TriggerEvent("curiosity:Client:Vehicle:Create", vehicleShopItem.VehicleHash);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                player.TriggerEvent("curiosity:Client:Vehicle:Create", vehicleShopItem.VehicleHash);
+                Log.Error(ex, "OnVehicleShopAction");
             }
         }
 
