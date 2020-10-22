@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.Shared.Client.net;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -16,6 +17,9 @@ namespace Curiosity.MissionManager.Client
         {
             if (mission.GetCustomAttributes(false).FirstOrDefault(x => x.GetType() == typeof(MissionInfo)) == null)
                 throw new Exception("Mission must have the MissionInfo attribute!");
+
+            Log.Info($"[MissionManager] Registered: {mission.Name}");
+
             Mission.missions.Add(mission);
         }
 
@@ -26,7 +30,7 @@ namespace Curiosity.MissionManager.Client
         public static async void StartMission(Type mission)
         {
             // Remove any blips if they are left around
-            foreach (Blip blip in PluginManager.Blips)
+            foreach (Blip blip in MissionManager.Blips)
             {
                 blip.Delete();
             }

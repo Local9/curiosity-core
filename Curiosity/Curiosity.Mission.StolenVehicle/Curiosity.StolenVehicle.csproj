@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Curiosity.StolenVehicle</RootNamespace>
-    <AssemblyName>Curiosity.StolenVehicle</AssemblyName>
+    <AssemblyName>Curiosity.StolenVehicle.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CitizenFX.Core.Client.1.0.3080\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +53,7 @@
     <ProjectReference Include="..\Curiosity.MissionManager.Client\Curiosity.MissionManager.Client.csproj">
       <Project>{5e0e335b-83b4-46f7-92cf-8139be4209f4}</Project>
       <Name>Curiosity.MissionManager.Client</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

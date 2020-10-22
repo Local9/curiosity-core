@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client
 {
-    public class PluginManager : BaseScript
+    public class MissionManager : BaseScript
     {
         internal static List<Blip> Blips = new List<Blip>();
 
-        public PluginManager()
+        public MissionManager()
         {
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
         }

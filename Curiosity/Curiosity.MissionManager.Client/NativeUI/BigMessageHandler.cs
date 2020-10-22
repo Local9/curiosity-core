@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.NativeUI
 {
@@ -15,13 +16,13 @@ namespace Curiosity.MissionManager.Client.NativeUI
 
         }
 
-        public void Load()
+        public async void Load()
         {
             if (_sc != null) return;
             _sc = new Scaleform("MP_BIG_MESSAGE_FREEMODE");
             var timeout = 1000;
             var start = DateTime.Now;
-            while (!Function.Call<bool>(Hash.HAS_SCALEFORM_MOVIE_LOADED, _sc.Handle) && DateTime.Now.Subtract(start).TotalMilliseconds < timeout) Script.Yield();
+            while (!Function.Call<bool>(Hash.HAS_SCALEFORM_MOVIE_LOADED, _sc.Handle) && DateTime.Now.Subtract(start).TotalMilliseconds < timeout) await BaseScript.Delay(0);
         }
 
         public void Dispose()
@@ -94,7 +95,7 @@ namespace Curiosity.MissionManager.Client.NativeUI
         }
 
         [Tick]
-        internal void Update()
+        internal async Task Update()
         {
             if (_sc == null) return;
             _sc.Render2D();

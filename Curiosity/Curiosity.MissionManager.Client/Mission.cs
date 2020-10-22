@@ -41,12 +41,12 @@ namespace Curiosity.MissionManager.Client
                 // trigger success
             }
 
-            foreach (Blip blip in PluginManager.Blips)
+            foreach (Blip blip in MissionManager.Blips)
             {
                 blip.Delete();
             }
 
-            PluginManager.Blips.Clear();
+            MissionManager.Blips.Clear();
         }
 
         /// <summary>
