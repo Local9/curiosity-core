@@ -69,8 +69,6 @@ namespace Curiosity.Server.net.Classes.Environment
                     session.DecreaseWallet(vehicleShopItem.Cost);
                     Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, vehicleShopItem.Cost);
                     await BaseScript.Delay(10);
-                    player.TriggerEvent("curiosity:Client:Vehicle:Create", vehicleShopItem.VehicleHash);
-                    await BaseScript.Delay(10);
                     player.TriggerEvent("curiosity:Client:Vehicle:Shop:Update");
                     return;
                 }
