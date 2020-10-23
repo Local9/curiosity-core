@@ -205,10 +205,7 @@ namespace Curiosity.Server.net.Database
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@charId", characterId);
             myParams.Add("@vehShopId", vehShopId);
-
-            using (var result = mySql.QueryResult(sql, myParams)) { 
-
-            }
+            mySql.Query(sql, myParams);
         }
 
         public static async Task<bool> SelectCharacterVehicle(long characterId, int vehShopId)

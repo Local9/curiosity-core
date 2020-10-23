@@ -43,9 +43,9 @@ namespace Curiosity.Server.net.Classes.Environment
                 long characterId = session.User.CharacterId;
 
                 bool isOwned = await Database.DatabaseVehicles.SelectCharacterVehicle(characterId, vehicleShopId);
-                await BaseScript.Delay(10);
+                await BaseScript.Delay(100);
                 VehicleShopItem vehicleShopItem = await Database.DatabaseVehicles.SelectVehicleShopItem(vehicleShopId);
-                await BaseScript.Delay(10);
+                await BaseScript.Delay(100);
                 if (!isOwned)
                 {
                     if (vehicleShopItem == null)
@@ -66,22 +66,23 @@ namespace Curiosity.Server.net.Classes.Environment
                         return;
                     }
 
-                    await BaseScript.Delay(10);
+                    await BaseScript.Delay(100);
 
                     bool purchased = await Database.DatabaseVehicles.InsertCharacterVehicle(characterId, vehicleShopId);
 
-                    await BaseScript.Delay(10);
+                    await BaseScript.Delay(100);
 
                     if (purchased)
                     {
                         session.DecreaseWallet(vehicleShopItem.Cost);
                         Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, vehicleShopItem.Cost);
-                        await BaseScript.Delay(10);
+                        await BaseScript.Delay(100);
                         player.TriggerEvent("curiosity:Client:Vehicle:Shop:Update");
                         return;
                     }
                     else
                     {
+                        await BaseScript.Delay(100);
                         await Database.DatabaseVehicles.DeleteCharacterVehicle(characterId, vehicleShopId);
                         player.NotificationCuriosity("Vehicle Shop", "Sorry, please try again later");
                         return;
