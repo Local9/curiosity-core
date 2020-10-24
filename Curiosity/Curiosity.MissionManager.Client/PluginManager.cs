@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client
 {
-    public class MissionManager : BaseScript
+    public class PluginManager : BaseScript
     {
         internal static List<Blip> Blips = new List<Blip>();
 
-        public MissionManager()
+        public PluginManager()
         {
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
         }
@@ -18,6 +18,11 @@ namespace Curiosity.MissionManager.Client
         [Tick]
         private async Task OnMissionHandlerTick()
         {
+            //if (Game.PlayerPed.IsDead && Mission.isOnMission)
+            //{
+            //    Mission.currentMission.Fail("The player died."); // need to think about how this should work given respawning
+            //}
+
 
         }
 

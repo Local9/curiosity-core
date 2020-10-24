@@ -30,7 +30,7 @@ namespace Curiosity.MissionManager.Client
         public static async void StartMission(Type mission)
         {
             // Remove any blips if they are left around
-            foreach (Blip blip in MissionManager.Blips)
+            foreach (Blip blip in PluginManager.Blips)
             {
                 blip.Delete();
             }
