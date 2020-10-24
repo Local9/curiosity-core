@@ -33,7 +33,7 @@ namespace Curiosity.MissionManager.Client.Environment
             EventHandlers[Events.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
             EventHandlers[Events.Client.CurrentVehicle] += new Action<int>(OnVehicleId);
 
-            EventHandlers[Events.Native.Client.PlayerSpawned.Path] += Events.Native.Client.PlayerSpawned.Action += OnPlayerSpawned;
+            EventHandlers[Events.Native.Client.PlayerSpawned] += new Action<dynamic>(OnPlayerSpawned);
             EventHandlers[Events.Native.Client.OnClientResourceStart.Path] += Events.Native.Client.OnClientResourceStart.Action += OnClientResourceStart;
         }
 

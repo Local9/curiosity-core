@@ -3,7 +3,7 @@ using CitizenFX.Core.Native;
 
 namespace Curiosity.MissionManager.Client.Utils
 {
-    class UiTools : BaseScript
+    public class UiTools : BaseScript
     {
         static public void Impound(string subject, string message)
         {

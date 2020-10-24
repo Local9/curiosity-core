@@ -1,13 +1,10 @@
 ﻿using CitizenFX.Core;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Managers
 {
-    class EntityEventWrapper
+    public class EntityEventWrapper
     {
         private PluginManager plugin = PluginManager.Instance;
         private readonly static List<EntityEventWrapper> Wrappers;

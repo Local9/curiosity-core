@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.MissionManager.Shared.Classes;
 using System;
 
 namespace Curiosity.MissionManager.Client.Attributes
@@ -13,6 +14,7 @@ namespace Curiosity.MissionManager.Client.Attributes
         public float xPos, yPos, zPos;
         public Vector3 startPoint;
         public MissionType type;
+        public PatrolZone patrolZone;
 
         /// <summary>
         /// The basic information about a mission
@@ -25,7 +27,7 @@ namespace Curiosity.MissionManager.Client.Attributes
         /// <param name="type">The type of mission, this determines things like the blip and end screen</param>
         /// <param name="canBeReplayed">Whether or not the mission is replayable</param>
         /// <param name="preRequisites">The mission(s) that must be completed before this mission can be triggered. This MUST be formatted as follows: "[Mission1ID] [Mission2ID]" and so on.</param>
-        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None")
+        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None", PatrolZone patrolZone = PatrolZone.City)
         {
             // Might be worth working on roles availability?
 
@@ -38,6 +40,7 @@ namespace Curiosity.MissionManager.Client.Attributes
             this.yPos = yPos;
             this.zPos = zPos;
             this.type = type;
+            this.patrolZone = patrolZone;
         }
     }
 }

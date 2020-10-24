@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Curiosity.MissionManager.Client.Utils
 {
-    internal static class Collections
+    public static class Collections
     {
-        internal static class Peds
+        public static class Peds
         {
-            internal static readonly List<PedHash> ALL = new List<PedHash>()
+            public static readonly List<PedHash> ALL = new List<PedHash>()
             {
                 PedHash.Ammucity01SMY,
                 PedHash.AmmuCountrySMM,
@@ -25,9 +25,9 @@ namespace Curiosity.MissionManager.Client.Utils
             };
         }
 
-        internal static class PoliceCars
+        public static class PoliceCars
         {
-            internal static readonly List<VehicleHash> ALL = new List<VehicleHash>()
+            public static readonly List<VehicleHash> ALL = new List<VehicleHash>()
             {
                 VehicleHash.Police,
                 VehicleHash.Police2,
@@ -41,52 +41,52 @@ namespace Curiosity.MissionManager.Client.Utils
                 VehicleHash.Riot
             };
 
-            internal static readonly List<VehicleHash> URBAN = new List<VehicleHash>()
+            public static readonly List<VehicleHash> URBAN = new List<VehicleHash>()
             {
                 VehicleHash.Police,
                 VehicleHash.Police2,
                 VehicleHash.Police3
             };
 
-            internal static readonly List<VehicleHash> RURAL = new List<VehicleHash>()
+            public static readonly List<VehicleHash> RURAL = new List<VehicleHash>()
             {
                 VehicleHash.Sheriff,
                 VehicleHash.Sheriff2
             };
 
-            internal static readonly List<VehicleHash> HIGHWAY = new List<VehicleHash>()
+            public static readonly List<VehicleHash> HIGHWAY = new List<VehicleHash>()
             {
                 VehicleHash.Sheriff,
                 VehicleHash.Policeb
             };
 
-            internal static readonly List<VehicleHash> UNDERCOVER = new List<VehicleHash>()
+            public static readonly List<VehicleHash> UNDERCOVER = new List<VehicleHash>()
             {
                 VehicleHash.FBI,
                 VehicleHash.FBI2,
                 VehicleHash.Police4
             };
 
-            internal static readonly List<VehicleHash> NOOSE = new List<VehicleHash>()
+            public static readonly List<VehicleHash> NOOSE = new List<VehicleHash>()
             {
                 VehicleHash.FBI2,
                 VehicleHash.Riot
             };
         }
 
-        internal static class PolicePeds
+        public static class PolicePeds
         {
-            internal static List<PedHash> URBAN = new List<PedHash>() { PedHash.Cop01SFY, PedHash.Cop01SMY };
-            internal static List<PedHash> RURAL = new List<PedHash>() { PedHash.Sheriff01SFY, PedHash.Sheriff01SFY };
-            internal static List<PedHash> HIGHWAY = new List<PedHash>() { PedHash.Cop01SFY, PedHash.Cop01SMY, PedHash.Sheriff01SFY, PedHash.Sheriff01SFY };
+            public static List<PedHash> URBAN = new List<PedHash>() { PedHash.Cop01SFY, PedHash.Cop01SMY };
+            public static List<PedHash> RURAL = new List<PedHash>() { PedHash.Sheriff01SFY, PedHash.Sheriff01SFY };
+            public static List<PedHash> HIGHWAY = new List<PedHash>() { PedHash.Cop01SFY, PedHash.Cop01SMY, PedHash.Sheriff01SFY, PedHash.Sheriff01SFY };
         }
 
-        internal static class PoliceWeapons
+        public static class PoliceWeapons
         {
-            internal static List<WeaponHash> WEAPONS = new List<WeaponHash>() { WeaponHash.CarbineRifle, WeaponHash.APPistol, WeaponHash.PumpShotgun };
+            public static List<WeaponHash> WEAPONS = new List<WeaponHash>() { WeaponHash.CarbineRifle, WeaponHash.APPistol, WeaponHash.PumpShotgun };
         }
 
-        internal enum RelationshipHash : uint
+        public enum RelationshipHash : uint
         {
             Player = 0x6F0783F5,
             Civmale = 0x02B8FA80,

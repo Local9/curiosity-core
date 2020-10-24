@@ -50,8 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\MissionInfo.cs" />
-    <Compile Include="Classes\Ped.cs" />
-    <Compile Include="Classes\Vehicle.cs" />
     <Compile Include="Commands\MissionCommands.cs" />
     <Compile Include="Environment\CurPlayer.cs" />
     <Compile Include="Func.cs" />
@@ -61,7 +59,6 @@
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Collections.cs" />
-    <Compile Include="Utils\DebuggingTools.cs" />
     <Compile Include="Utils\Decorators.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Logger.cs" />

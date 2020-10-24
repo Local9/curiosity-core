@@ -33,8 +33,9 @@ namespace Curiosity.MissionManager.Shared.EventWrapper
         {
             public static class Client
             {
+                public const string PlayerSpawned = "playerSpawned";
+
                 public static Event<string> OnClientResourceStart => new Event<string>("onClientResourceStart");
-                public static Event<string> PlayerSpawned => new Event<string>("playerSpawned");
             }
 
             public static class Server
