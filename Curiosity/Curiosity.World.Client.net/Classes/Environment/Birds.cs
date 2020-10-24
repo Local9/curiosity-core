@@ -13,11 +13,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
         static async Task OnTick()
         {
-            while (true)
-            {
-                CitizenFX.Core.Native.API.SetGlobalMinBirdFlightHeight(20.0f);
-                await Client.Delay(0);
-            }
+            CitizenFX.Core.Native.API.SetGlobalMinBirdFlightHeight(20.0f);
         }
     }
 }
