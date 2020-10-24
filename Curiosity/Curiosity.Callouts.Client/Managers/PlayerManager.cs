@@ -26,6 +26,7 @@ namespace Curiosity.Callouts.Client.Managers
         {
             EventHandlers[Events.Client.ServerPlayerInformationUpdate] += new Action<string>(OnPlayerInformationUpdate);
             EventHandlers[Events.Client.ReceivePlayerInformation] += new Action<string>(OnPlayerInformationUpdate);
+
             EventHandlers[Events.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
             EventHandlers[Events.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
             EventHandlers[Events.Client.CurrentVehicle] += new Action<int>(OnVehicleId);

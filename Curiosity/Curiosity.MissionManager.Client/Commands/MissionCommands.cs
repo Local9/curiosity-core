@@ -17,7 +17,7 @@ namespace Curiosity.MissionManager.Client.Commands
 
         private void CommandMissionTest(int playerHandle, List<object> args, string raw)
         {
-            if (!PlayerInformation.IsDeveloper) return;
+            if (!CurPlayer.IsDeveloper) return;
 
             if (args.Count == 0) Screen.ShowNotification("Mission Argument~n~/missionTest <MissionId>");
 

@@ -4,20 +4,20 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0EC8EE3B-AF28-4826-A27D-45987046C420}</ProjectGuid>
+    <ProjectGuid>{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.MissionManager.Server</RootNamespace>
-    <AssemblyName>Curiosity.MissionManager.Server.net</AssemblyName>
+    <RootNamespace>Curiosity.MissionManager.Shared</RootNamespace>
+    <AssemblyName>Curiosity.MissionManager.Shared.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity-missions-v2\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -31,10 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\CitizenFX.Core.Server.1.0.3087\lib\net45\CitizenFX.Core.Server.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,21 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PluginManager.cs" />
+    <Compile Include="Classes\PatrolZone.cs" />
+    <Compile Include="EventWrapper\Event.cs" />
+    <Compile Include="EventWrapper\Events.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Curiosity.MissionManager.Shared\Curiosity.MissionManager.Shared.csproj">
-      <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>
-      <Name>Curiosity.MissionManager.Shared</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Classes\" />
+    <Compile Include="Utils\Encode.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\PedType.cs" />
+    <Compile Include="Utils\Utility.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

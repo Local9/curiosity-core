@@ -165,6 +165,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "missions", "missions", "{9C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.MissionManager.Server", "Curiosity.MissionManager.Server\Curiosity.MissionManager.Server.csproj", "{0EC8EE3B-AF28-4826-A27D-45987046C420}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.MissionManager.Shared", "Curiosity.MissionManager.Shared\Curiosity.MissionManager.Shared.csproj", "{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -387,6 +389,10 @@ Global
 		{0EC8EE3B-AF28-4826-A27D-45987046C420}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EC8EE3B-AF28-4826-A27D-45987046C420}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EC8EE3B-AF28-4826-A27D-45987046C420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -451,6 +457,7 @@ Global
 		{A2821D87-4A18-4DED-A7C2-B0219244CBA1} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
 		{9C30A4C9-700E-4779-BD9B-9850F5E200E2} = {2B60D295-C62E-474A-AC46-98905FB99A42}
 		{0EC8EE3B-AF28-4826-A27D-45987046C420} = {2B60D295-C62E-474A-AC46-98905FB99A42}
+		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9} = {2B60D295-C62E-474A-AC46-98905FB99A42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}

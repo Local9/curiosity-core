@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.MissionManager.Client.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,10 +9,13 @@ namespace Curiosity.MissionManager.Client
 {
     public class PluginManager : BaseScript
     {
+        internal static PluginManager Instance;
         internal static List<Blip> Blips = new List<Blip>();
 
         public PluginManager()
         {
+            Instance = this;
+
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
         }
 
@@ -31,6 +35,38 @@ namespace Curiosity.MissionManager.Client
             if (API.GetCurrentResourceName() != resourceName) return;
 
             foreach (Blip blip in Blips) blip.Delete();
+        }
+
+        /// <summary>
+        /// Registers a tick function
+        /// </summary>
+        /// <param name="action"></param>
+        public void RegisterTickHandler(Func<Task> action)
+        {
+            try
+            {
+                Tick += action;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Removes a tick function from the registry
+        /// </summary>
+        /// <param name="action"></param>
+        public void DeregisterTickHandler(Func<Task> action)
+        {
+            try
+            {
+                Tick -= action;
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex.Message);
+            }
         }
     }
 }

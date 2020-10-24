@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,13 +50,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\MissionInfo.cs" />
+    <Compile Include="Classes\Ped.cs" />
+    <Compile Include="Classes\Vehicle.cs" />
     <Compile Include="Commands\MissionCommands.cs" />
-    <Compile Include="Environment\PlayerInformation.cs" />
+    <Compile Include="Environment\CurPlayer.cs" />
     <Compile Include="Func.cs" />
+    <Compile Include="Managers\EntityEventWrapper.cs" />
     <Compile Include="Mission.cs" />
     <Compile Include="NativeUI\BigMessageHandler.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Collections.cs" />
+    <Compile Include="Utils\DebuggingTools.cs" />
+    <Compile Include="Utils\Decorators.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\UiTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -64,6 +74,10 @@
     <ProjectReference Include="..\Curiosity.Global.Shared.net\Curiosity.Global.Shared.net.csproj">
       <Project>{fe7f0756-cfe5-4bb9-a822-e9e1cfbc412b}</Project>
       <Name>Curiosity.Global.Shared.net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Curiosity.MissionManager.Shared\Curiosity.MissionManager.Shared.csproj">
+      <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>
+      <Name>Curiosity.MissionManager.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\Curiosity.Shared.Client.net\Curiosity.Shared.Client.net.csproj">
       <Project>{37F1F478-BE0B-4C2B-A062-24077F851B69}</Project>
