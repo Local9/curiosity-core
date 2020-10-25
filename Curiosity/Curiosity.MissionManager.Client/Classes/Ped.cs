@@ -107,11 +107,11 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 if (value)
                 {
-                    RunSequence(Sequence.HANDCUFFED);
+                    RunSequence(Sequence.HANDCUFF_APPLY);
                 }
                 else
                 {
-                    RunSequence(Sequence.UNHANDCUFFED);
+                    RunSequence(Sequence.HANDCUFF_REMOVE);
                 }
 
                 Decorators.Set(Fx.Handle, Decorators.PED_HANDCUFFED, value);
@@ -281,7 +281,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     Dismiss();
 
                     break;
-                case Sequence.HANDCUFFED:
+                case Sequence.HANDCUFF_APPLY:
                     Game.PlayerPed.IsPositionFrozen = true;
 
                     API.SetPedFleeAttributes(Fx.Handle, 0, false);
@@ -319,7 +319,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     Game.PlayerPed.IsPositionFrozen = false;
 
                     break;
-                case Sequence.UNHANDCUFFED:
+                case Sequence.HANDCUFF_REMOVE:
 
                     Game.PlayerPed.IsPositionFrozen = true;
 
@@ -516,8 +516,8 @@ namespace Curiosity.MissionManager.Client.Classes
             UNKNEEL,
             UNKNEEL_AND_FLEE,
             REMOVE_FROM_WORLD,
-            HANDCUFFED,
-            UNHANDCUFFED,
+            HANDCUFF_APPLY,
+            HANDCUFF_REMOVE,
             DETAIN_IN_CURRENT_VEHICLE,
             LEAVE_VEHICLE,
             ARRESTED
