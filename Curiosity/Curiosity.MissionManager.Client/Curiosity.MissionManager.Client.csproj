@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\MissionInfo.cs" />
+    <Compile Include="Classes\Vehicle.cs" />
     <Compile Include="Commands\MissionCommands.cs" />
     <Compile Include="Environment\CurPlayer.cs" />
     <Compile Include="Func.cs" />

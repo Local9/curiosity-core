@@ -5,6 +5,7 @@ using Curiosity.MissionManager.Client.Utils;
 using NativeUI;
 using System;
 using System.Collections.Generic;
+using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.MissionManager.Client
 {
@@ -15,7 +16,29 @@ namespace Curiosity.MissionManager.Client
         internal static Mission currentMission = null;
         internal static Type missionType = null;
 
-        protected internal List<Player> Players { get; }
+        public static List<Player> Players { get; internal set; }
+
+        public static List<Vehicle> RegisteredVehicles { get; }
+        // public static List<Ped> RegisteredPeds { get; }
+
+        public static void AddPlayer(Player player)
+        {
+            Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, true);
+
+            if (Players == null)
+            {
+                Players = new List<Player> { player };
+                return;
+            }
+
+            Players.Add(player);
+        }
+
+        public static void RemovePlayer(Player player)
+        {
+            Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, false);
+            Players.Remove(player);
+        }
 
         /// <summary>
         /// This is called when a mission is started by the user. Typically this would be used to set up the mission by spawning things like peds and vehicles
@@ -26,6 +49,20 @@ namespace Curiosity.MissionManager.Client
         /// This is called as soon as the mission is ended. Typically this would be used for cleanup such as removing peds and vehicles
         /// </summary>
         public abstract void End();
+
+        public static void RegisterVehicle(Vehicle vehicle)
+        {
+            try
+            {
+                vehicle.Fx.IsPersistent = true;
+                RegisteredVehicles.Add(vehicle);
+                Logger.Log($"Registered vehicle {vehicle.Hash}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error: {ex.Message}");
+            }
+        }
 
         /// <summary>
         /// Stops a mission
@@ -58,6 +95,8 @@ namespace Curiosity.MissionManager.Client
 
                 Players.Clear();
             }
+
+            RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
 
             foreach (Blip blip in PluginManager.Blips)
             {

@@ -3,9 +3,11 @@ using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Utils;
+using Curiosity.MissionManager.Shared.Utils;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.StolenVehicle.Missions
 {
@@ -51,6 +53,10 @@ namespace Curiosity.StolenVehicle.Missions
         public async override void Start()
         {
             missionState = MissionState.Started;
+
+            stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
+                Players[0].Character.Position.AroundStreet(200f, 400f));
+            Mission.RegisterVehicle(stolenVehicle);
 
             Screen.ShowNotification("Mission Started...");
         }

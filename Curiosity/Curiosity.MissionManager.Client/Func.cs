@@ -41,6 +41,7 @@ namespace Curiosity.MissionManager.Client
 
             Mission.currentMission = mis;
             Mission.missionType = mission;
+            Mission.AddPlayer(Game.Player);
             Mission.isOnMission = true;
             Mission.currentMission.Start();
         }
