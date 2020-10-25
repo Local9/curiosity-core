@@ -108,12 +108,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 if (Ped.Fx.IsInVehicle())
                 {
                     Ped.RunSequence(Ped.Sequence.LEAVE_VEHICLE);
-                    menuItemDetain.Text = "Remove from Vehicle";
+                    menuItemDetain.Text = "Detain from Vehicle";
                 }
                 else
                 {
                     Ped.RunSequence(Ped.Sequence.DETAIN_IN_CURRENT_VEHICLE);
-                    menuItemDetain.Text = "Detain in Vehicle";
+                    menuItemDetain.Text = "Remove in Vehicle";
                 }
                 return;
             }

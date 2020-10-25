@@ -78,7 +78,6 @@ namespace Curiosity.StolenVehicle.Missions
                 return;
             }
 
-            criminal.IsPersistent = true;
             criminal.IsImportant = true;
             criminal.IsMission = true;
             criminal.IsSuspect = true;

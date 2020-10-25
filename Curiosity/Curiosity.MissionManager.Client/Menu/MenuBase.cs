@@ -124,7 +124,7 @@ namespace Curiosity.MissionManager.Client.Menu
         {
             if (!IsCalloutActive) return null;
 
-            return Mission.RegisteredPeds.Select(x => x).Where(p => p.Position.Distance(Game.PlayerPed.Position) < 1.5f && p.IsSuspect && p.IsMission).FirstOrDefault();
+            return Mission.RegisteredPeds.Select(x => x).Where(p => p.Position.Distance(Game.PlayerPed.Position) < 2f && p.IsSuspect && p.IsMission).FirstOrDefault();
         }
 
         public static Vehicle GetClosestVehicle()

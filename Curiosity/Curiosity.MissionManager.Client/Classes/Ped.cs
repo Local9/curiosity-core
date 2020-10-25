@@ -380,7 +380,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 case Sequence.LEAVE_VEHICLE:
                     if (Fx.IsInVehicle())
                     {
-                        Fx.SetConfigFlag(293, false);
+                        Fx.SetConfigFlag(292, false);
                         Fx.Task.LeaveVehicle();
                     }
                     break;

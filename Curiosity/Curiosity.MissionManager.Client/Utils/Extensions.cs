@@ -39,7 +39,7 @@ namespace Curiosity.MissionManager.Client.Utils
             return World.GetNextPositionOnStreet(vector.Around(min, max));
         }
 
-        private static Vector3 Around(this Vector3 vector, float min, float max)
+        public static Vector3 Around(this Vector3 vector, float min, float max)
         {
             Vector3 rotatedVector = Vector3.UnitY.Rotate((float)(Shared.Utils.Utility.RANDOM.NextDouble() * 360f));
             var scale = (float)(min + Shared.Utils.Utility.RANDOM.NextDouble() * (max - min));
@@ -49,7 +49,7 @@ namespace Curiosity.MissionManager.Client.Utils
             return result;
         }
 
-        private static Vector3 Rotate(this Vector3 vector, float degrees)
+        public static Vector3 Rotate(this Vector3 vector, float degrees)
         {
             var x = (float)(vector.X * Math.Cos(degrees) - vector.Y * Math.Sin(degrees));
             var y = (float)(vector.Y * Math.Cos(degrees) + vector.X * Math.Sin(degrees));
