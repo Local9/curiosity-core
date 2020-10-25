@@ -18,10 +18,10 @@ namespace Curiosity.MissionManager.Client.Classes
         internal PluginManager PluginIntance => PluginManager.Instance;
         public Vector3 Position => Fx.Position;
         public Tasks Task => Fx.Task;
-        internal bool IsDead => Fx.IsDead;
+        public bool IsDead => Fx.IsDead;
         internal string Name => Fx.Model.ToString();
-        internal bool IsBeingStunned => Fx.IsBeingStunned;
-        internal bool IsInVehicle { get; set; }
+        public bool IsBeingStunned => Fx.IsBeingStunned;
+        public bool IsInVehicle { get; set; }
         private bool _DEBUG_ENABLED { get; set; } = false;
 
         public bool IsSuspect

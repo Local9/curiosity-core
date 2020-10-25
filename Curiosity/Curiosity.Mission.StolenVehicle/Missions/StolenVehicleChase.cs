@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.StolenVehicle.Missions
 {
@@ -57,9 +58,22 @@ namespace Curiosity.StolenVehicle.Missions
 
             stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
                 Players[0].Character.Position.AroundStreet(200f, 400f));
+
+            if (stolenVehicle == null)
+            {
+                Stop(EndState.Error);
+                return;
+            }
+
             Mission.RegisterVehicle(stolenVehicle);
 
             criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, true);
+
+            if (criminal == null)
+            {
+                Stop(EndState.Error);
+                return;
+            }
 
             criminal.IsPersistent = true;
             criminal.IsImportant = true;
@@ -92,11 +106,38 @@ namespace Curiosity.StolenVehicle.Missions
         public override void End()
         {
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
-
         }
 
         async Task OnMissionTick()
         {
+            float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
+            if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 4f)
+            {
+                TaskSequence taskSequence = new TaskSequence();
+                taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
+                taskSequence.AddTask.FleeFrom(Game.PlayerPed);
+                criminal.Task.PerformSequence(taskSequence);
+                taskSequence.Close();
+            }
+
+            if (stolenVehicle.Fx.Speed < 4.0f && criminal.IsInVehicle)
+            {
+                long gameTimer = API.GetGameTimer();
+                Vector3 location = stolenVehicle.Position;
+                while (criminal.IsInVehicle && stolenVehicle.Position.Distance(location) < 4.0f)
+                {
+                    await BaseScript.Delay(100);
+                    if ((API.GetGameTimer() - gameTimer) > 10000)
+                    {
+                        TaskSequence fleeVehicle = new TaskSequence();
+                        fleeVehicle.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
+                        fleeVehicle.AddTask.FleeFrom(Game.PlayerPed);
+                        criminal.Task.PerformSequence(fleeVehicle);
+                        fleeVehicle.Close();
+                    }
+                }
+            }
+
             if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f)
             {
                 missionState = MissionState.Escaped;
