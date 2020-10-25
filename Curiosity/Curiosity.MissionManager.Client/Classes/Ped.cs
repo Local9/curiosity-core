@@ -184,7 +184,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
                 await BaseScript.Delay(10);
 
-                if (Utility.RANDOM.Bool(0.2f) && !IsKneeling)
+                if (Utility.RANDOM.Bool(0.75f) && !IsKneeling)
                 {
                     RunSequence(Sequence.KNEEL);
                 }

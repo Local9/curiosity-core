@@ -20,6 +20,9 @@ namespace Curiosity.StolenVehicle.Missions
         private Ped criminal;
         private Vehicle stolenVehicle;
 
+        private bool isMissionStarted = false;
+        private bool isFleeing = false;
+
         List<VehicleHash> vehicleHashes = new List<VehicleHash>()
         {
             VehicleHash.Oracle2,
@@ -98,7 +101,7 @@ namespace Curiosity.StolenVehicle.Missions
             stolenVehicle.IsMission = true;
             stolenVehicle.IsTowable = true;
 
-            UiTools.Dispatch("~r~CODE 3~s~: Stolen Vehicle", $"~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}");
+            UiTools.Dispatch("~r~CODE 3~s~: Stolen Vehicle", $"~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}~n~~g~GPS Updated");
 
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
@@ -113,11 +116,7 @@ namespace Curiosity.StolenVehicle.Missions
             float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
             if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 4f)
             {
-                TaskSequence taskSequence = new TaskSequence();
-                taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
-                taskSequence.AddTask.FleeFrom(Game.PlayerPed);
-                criminal.Task.PerformSequence(taskSequence);
-                taskSequence.Close();
+                TaskFleeVehicle();
             }
 
             if (stolenVehicle.Fx.Speed < 4.0f && criminal.IsInVehicle)
@@ -129,16 +128,27 @@ namespace Curiosity.StolenVehicle.Missions
                     await BaseScript.Delay(100);
                     if ((API.GetGameTimer() - gameTimer) > 10000)
                     {
-                        TaskSequence fleeVehicle = new TaskSequence();
-                        fleeVehicle.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
-                        fleeVehicle.AddTask.FleeFrom(Game.PlayerPed);
-                        criminal.Task.PerformSequence(fleeVehicle);
-                        fleeVehicle.Close();
+                        TaskFleeVehicle();
                     }
                 }
             }
 
-            if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f)
+            if (stolenVehicle.Health < 200)
+            {
+                TaskFleeVehicle();
+            }
+
+            if (!criminal.IsKneeling && !criminal.IsInVehicle && !criminal.IsHandcuffed)
+            {
+                TaskFleeVehicle();
+            }
+
+            if (criminal.Position.Distance(Game.PlayerPed.Position) < 400f && !isMissionStarted)
+            {
+                isMissionStarted = true;
+            }
+
+            if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f && isMissionStarted)
             {
                 missionState = MissionState.Escaped;
             }
@@ -155,6 +165,22 @@ namespace Curiosity.StolenVehicle.Missions
                     Pass();
                     break;
             }
+        }
+
+        void TaskFleeVehicle()
+        {
+            if (isFleeing) return;
+
+            isFleeing = true;
+
+            TaskSequence taskSequence = new TaskSequence();
+            
+            if (criminal.IsInVehicle)
+                taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
+
+            taskSequence.AddTask.FleeFrom(Game.PlayerPed);
+            criminal.Task.PerformSequence(taskSequence);
+            taskSequence.Close();
         }
     }
 
