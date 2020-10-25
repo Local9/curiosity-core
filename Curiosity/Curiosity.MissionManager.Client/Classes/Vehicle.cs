@@ -9,13 +9,13 @@ namespace Curiosity.MissionManager.Client.Classes
     [Serializable] // WORK on entity inheritance
     public class Vehicle : Entity, IEquatable<Vehicle>
     {
-        internal CitizenFX.Core.Vehicle Fx { get; private set; }
+        public CitizenFX.Core.Vehicle Fx { get; private set; }
         public Vector3 Position => Fx.Position;
         public string Hash => Fx.Model.ToString();
 
         public string Name => API.GetLabelText(API.GetDisplayNameFromVehicleModel((uint)Fx.Model.Hash));
 
-        internal bool IsTowable
+        public bool IsTowable
         {
             get
             {
@@ -27,7 +27,7 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
-        internal bool IsSearchable
+        public bool IsSearchable
         {
             get
             {
@@ -39,7 +39,7 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
-        internal bool IsMission
+        public bool IsMission
         {
             get
             {

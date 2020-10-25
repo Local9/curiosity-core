@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
+using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.StolenVehicle.Missions
 {
@@ -58,14 +59,40 @@ namespace Curiosity.StolenVehicle.Missions
                 Players[0].Character.Position.AroundStreet(200f, 400f));
             Mission.RegisterVehicle(stolenVehicle);
 
-            Screen.ShowNotification("Mission Started...");
+            criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, true);
+
+            criminal.IsPersistent = true;
+            criminal.IsImportant = true;
+            criminal.IsMission = true;
+            criminal.IsSuspect = true;
+
+            if (Utility.RANDOM.Bool(0.8f))
+            {
+                criminal.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
+                criminal.Fx.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate);
+                criminal.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
+            }
+
+            Mission.RegisterPed(criminal);
+
+            criminal.PutInVehicle(stolenVehicle);
+            criminal.Task.CruiseWithVehicle(stolenVehicle.Fx, float.MaxValue,
+                (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
+            criminal.AttachBlip(BlipColor.Red, true);
+
+            stolenVehicle.IsSpikable = true;
+            stolenVehicle.IsMission = true;
+            stolenVehicle.IsTowable = true;
+
+            UiTools.Dispatch("~r~CODE 3~s~: Stolen Vehicle", $"~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}");
+
+            MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
 
         public override void End()
         {
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
 
-            Screen.ShowNotification("Mission Ended...");
         }
 
         async Task OnMissionTick()

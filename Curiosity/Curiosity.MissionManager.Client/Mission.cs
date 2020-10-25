@@ -6,6 +6,7 @@ using NativeUI;
 using System;
 using System.Collections.Generic;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
+using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.MissionManager.Client
 {
@@ -18,8 +19,8 @@ namespace Curiosity.MissionManager.Client
 
         public static List<Player> Players { get; internal set; }
 
-        public static List<Vehicle> RegisteredVehicles { get; }
-        // public static List<Ped> RegisteredPeds { get; }
+        public static List<Vehicle> RegisteredVehicles { get; internal set; }
+        public static List<Ped> RegisteredPeds { get; internal set; }
 
         public static void AddPlayer(Player player)
         {
@@ -60,7 +61,21 @@ namespace Curiosity.MissionManager.Client
             }
             catch (Exception ex)
             {
-                Logger.Log($"Error: {ex.Message}");
+                Logger.Log($"Error: {ex}");
+            }
+        }
+
+        public static void RegisterPed(Ped ped)
+        {
+            try
+            {
+                ped.Fx.IsPersistent = true;
+                RegisteredPeds.Add(ped);
+                Logger.Log($"Registered ped {ped.Name}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error: {ex}");
             }
         }
 
@@ -96,6 +111,7 @@ namespace Curiosity.MissionManager.Client
                 Players.Clear();
             }
 
+            RegisteredPeds.ForEach(ped => ped?.Dismiss());
             RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
 
             foreach (Blip blip in PluginManager.Blips)

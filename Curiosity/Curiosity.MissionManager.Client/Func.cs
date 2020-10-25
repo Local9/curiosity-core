@@ -2,6 +2,7 @@
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.Shared.Client.net;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -42,6 +43,10 @@ namespace Curiosity.MissionManager.Client
             Mission.currentMission = mis;
             Mission.missionType = mission;
             Mission.AddPlayer(Game.Player);
+
+            Mission.RegisteredPeds = new List<Classes.Ped>();
+            Mission.RegisteredVehicles = new List<Classes.Vehicle>();
+
             Mission.isOnMission = true;
             Mission.currentMission.Start();
         }
