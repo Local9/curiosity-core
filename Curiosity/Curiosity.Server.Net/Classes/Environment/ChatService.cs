@@ -220,7 +220,7 @@ namespace Curiosity.Server.net.Classes.Environment
                 //        break;
                 //}
 
-                chatMessage.Name = $"[{session.Player.Handle}] {session.Player.Name}";
+                chatMessage.Name = $"{DateTime.Now.ToString("HH:mm")} [{session.Player.Handle}] {session.Player.Name}";
                 chatMessage.Message = message;
                 chatMessage.Channel = chatChannel;
                 chatMessage.Role = $"{privilege}";
