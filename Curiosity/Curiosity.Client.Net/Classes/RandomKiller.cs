@@ -56,7 +56,7 @@ namespace Curiosity.Client.net.Classes
                     return;
             }
 
-            if (Utility.RANDOM.Bool(0.05f))
+            if (Utility.RANDOM.Bool(0.02f))
             {
                 Model model = PedHash.ChemWork01GMM;
                 await model.Request(10000);
