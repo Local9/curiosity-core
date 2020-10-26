@@ -92,6 +92,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static internal async Task ShowName(CitizenFX.Core.Player player)
         {
             if (!API.NetworkIsPlayerActive(player.Handle) && Game.Player.Handle == player.Handle) return;
+            if (CinematicMode.DoHideHud) return;
 
             bool staffMember = Decorators.GetBoolean(player.Character.Handle, Decorators.DECOR_PLAYER_STAFF);
             string staffTag = staffMember ? "[STAFF]" : string.Empty;
