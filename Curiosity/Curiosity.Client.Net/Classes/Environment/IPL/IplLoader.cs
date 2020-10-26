@@ -1,4 +1,6 @@
 ﻿using CitizenFX.Core.Native;
+using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment.IPL
 {
@@ -8,6 +10,8 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
         {
             API.LoadMpDlcMaps();
             API.EnableMpDlcMaps(true);
+
+            Client.GetInstance().RegisterTickHandler(OnIplLoop);
 
             // Ferris Wheel
             API.RequestIpl("ferris_finale_anim");
@@ -51,13 +55,16 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
             API.RequestIpl("ld_rail_02_track");
             API.RequestIpl("FBI_repair");
 
-            API.RemoveIpl("cargoship");
-            API.RemoveIpl("sunkcargoship");
-
             // golf flags
             API.RequestIpl("golfflags");
 
             // API.RequestIpl("xm_mpchristmasadditions");
+        }
+
+        private async static Task OnIplLoop()
+        {
+            API.RemoveIpl("cargoship");
+            API.RemoveIpl("sunkcargoship");
         }
     }
 }
