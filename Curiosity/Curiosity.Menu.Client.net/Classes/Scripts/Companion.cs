@@ -255,6 +255,10 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
             if (Game.PlayerPed.IsInVehicle() && !ped.IsInVehicle() && ped.Position.Distance(Game.PlayerPed.Position) > 50f)
             {
                 ped.Task.WarpIntoVehicle(Game.PlayerPed.CurrentVehicle, VehicleSeat.Any);
+            }
+
+            if (Game.PlayerPed.IsInVehicle() && ped.IsInVehicle())
+            {
                 ped.SetConfigFlag(292, true);
             }
 
@@ -312,12 +316,15 @@ namespace Curiosity.Menus.Client.net.Classes.Scripts
 
             }
 
-            if (!Game.PlayerPed.IsInVehicle() && ped.IsInVehicle() && !IsHuman)
+            if (!Game.PlayerPed.IsInVehicle() && ped.IsInVehicle())
             {
                 ped.SetConfigFlag(292, false);
-                API.NetworkFadeOutEntity(ped.Handle, false, false);
-                ped.Position = Client.CurrentVehicle.GetOffsetPosition(new Vector3(2f, 0f, 0f));
-                API.NetworkFadeInEntity(ped.Handle, false);
+                if (!IsHuman)
+                {
+                    API.NetworkFadeOutEntity(ped.Handle, false, false);
+                    ped.Position = Client.CurrentVehicle.GetOffsetPosition(new Vector3(2f, 0f, 0f));
+                    API.NetworkFadeInEntity(ped.Handle, false);
+                }
             }
 
             if (currentCompanion.CanInteract && hasNotMoved && companionInteraction == 0)
