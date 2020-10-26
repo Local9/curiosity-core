@@ -92,12 +92,17 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static internal async Task ShowName(CitizenFX.Core.Player player)
         {
             if (!API.NetworkIsPlayerActive(player.Handle) && Game.Player.Handle == player.Handle) return;
-            if (CinematicMode.DoHideHud) return;
 
             bool staffMember = Decorators.GetBoolean(player.Character.Handle, Decorators.DECOR_PLAYER_STAFF);
             string staffTag = staffMember ? "[STAFF]" : string.Empty;
 
             int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, staffMember, staffTag, staffMember ? 1 : 0);
+
+            if (CinematicMode.DoHideHud)
+            {
+                API.SetMpGamerTagVisibility(gamerTagId, 0, false);
+                return;
+            }
 
             if (staffMember)
             {
