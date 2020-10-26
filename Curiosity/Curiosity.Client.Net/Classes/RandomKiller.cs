@@ -72,6 +72,8 @@ namespace Curiosity.Client.net.Classes
 
                 int pedId = API.CreatePed((int)PedTypes.PED_TYPE_CRIMINAL, (uint)model.Hash, pos.X, pos.Y, pos.Z, 0f, false, false);
 
+                API.NetworkFadeOutEntity(pedId, false, false);
+
                 model.MarkAsNoLongerNeeded();
 
                 killer = new Ped(pedId);
