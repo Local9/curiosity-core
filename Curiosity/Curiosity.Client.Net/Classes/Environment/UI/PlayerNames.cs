@@ -125,10 +125,6 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             {
                 API.SetMpGamerTagVisibility(gamerTagId, 0, false);
             }
-            else if (CinematicMode.DoHideHud)
-            {
-                API.SetMpGamerTagVisibility(gamerTagId, 0, false);
-            }
             else if (API.HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17) || isSpectating)
             {
                 API.SetMpGamerTagName(gamerTagId, player.Name);
