@@ -186,11 +186,10 @@ namespace Curiosity.Client.net.Classes.Environment
 
             _lastWeather = (WeatherTypes)weather;
 
-            SetWeatherTypeOverTime($"{weather}", 30.0f);
+            SetWeatherTypeOverTime($"{weather}", 15.0f);
 
-            await Client.Delay(30000);
+            await Client.Delay(15000);
             
-            SetRainFxIntensity(0.0f);
             ClearOverrideWeather();
             ClearWeatherTypePersist();
             SetBlackout(blackout);
@@ -208,12 +207,6 @@ namespace Curiosity.Client.net.Classes.Environment
                     SetForceVehicleTrails(true);
                     SetForcePedFootstepsTracks(true);
                     SetWeather(WeatherTypes.XMAS);
-                    break;
-                case WeatherTypes.RAIN:
-                    SetRainFxIntensity(rainIntensity);
-                    break;
-                case WeatherTypes.THUNDER:
-                    SetRainFxIntensity(1f);
                     break;
                 default:
                     SetForceVehicleTrails(false);

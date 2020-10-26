@@ -41,6 +41,8 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
             bool isCloseEnough;
 
+            if (CinematicMode.DoHideHud) return false;
+
             if (!player.Character.IsVisible) return false;
 
             if (!API.IsEntityVisible(player.Character.Handle)) return false;

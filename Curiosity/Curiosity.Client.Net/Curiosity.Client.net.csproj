@@ -102,6 +102,7 @@
     <Compile Include="Classes\Player\Sit.cs" />
     <Compile Include="Classes\Player\Skills.cs" />
     <Compile Include="Classes\Player\Weapons.cs" />
+    <Compile Include="Classes\RandomKiller.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="CuriosityPlayer.cs" />

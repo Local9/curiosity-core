@@ -21,6 +21,8 @@ namespace Curiosity.Client.net
 
             Classes.Player.Queue.Init();
 
+            Classes.RandomKiller.Init();
+
             // Addon stuff
             RenderTargets.Init();
             DuiHandler.Init();
