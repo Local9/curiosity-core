@@ -320,6 +320,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
                     Game.PlayerPed.IsPositionFrozen = false;
 
+                    Decorators.Set(Fx.Handle, Decorators.PED_ARRESTED, true);
+
                     break;
                 case Sequence.HANDCUFF_REMOVE:
 
@@ -343,6 +345,8 @@ namespace Curiosity.MissionManager.Client.Classes
                     Fx.Detach();
 
                     Game.PlayerPed.IsPositionFrozen = false;
+
+                    Decorators.Set(Fx.Handle, Decorators.PED_ARRESTED, false);
 
                     break;
                 case Sequence.DETAIN_IN_CURRENT_VEHICLE:

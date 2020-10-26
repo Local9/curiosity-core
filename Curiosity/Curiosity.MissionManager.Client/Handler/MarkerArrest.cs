@@ -75,7 +75,7 @@ namespace Curiosity.MissionManager.Client.Handler
 
             if (Game.IsControlJustPressed(0, Control.Pickup))
             {
-                List<Ped> peds = World.GetAllPeds().Where(x => x.Position.Distance(activeMarker.Position) < 20f).Select(p => p).ToList();
+                List<Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(activeMarker.Position, 20f)).Select(p => p).ToList();
 
                 if (peds.Count == 0)
                 {
@@ -84,7 +84,7 @@ namespace Curiosity.MissionManager.Client.Handler
 
                 peds.ForEach(p =>
                 {
-                    bool arrested = Decorators.GetBoolean(p.Handle, Decorators.PED_ARRESTED);
+                    bool arrested = Decorators.GetBoolean(p.Handle, Decorators.PED_ARRESTED) && Decorators.GetBoolean(p.Handle, Decorators.PED_HANDCUFFED);
 
                     if (arrested)
                     {
