@@ -1,10 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.MissionManager.Client.Environment;
+using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.MissionManager.Shared.Utils;
+using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -463,7 +464,7 @@ namespace Curiosity.MissionManager.Client.Classes
             return blip;
         }
 
-        internal void Dismiss()
+        internal async void Dismiss()
         {
             //if (Fx.AttachedBlips.Length > 0)
             //    foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
@@ -473,6 +474,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
             if (Fx == null) return;
             if (!base.Exists()) return;
+
+            Fx.FadeOut();
 
             Blip singleBlip = Fx.AttachedBlip;
             if (singleBlip != null)

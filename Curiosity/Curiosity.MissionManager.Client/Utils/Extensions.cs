@@ -57,11 +57,6 @@ namespace Curiosity.MissionManager.Client.Utils
             return new Vector3(x, y, vector.Z);
         }
 
-        public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
-        {
-            return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
-        }
-
         public static bool IsPlayingAnim(this Entity entity, string animSet, string animName)
         {
             return API.IsEntityPlayingAnim(entity.Handle, animSet, animName, 3);

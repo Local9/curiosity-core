@@ -65,6 +65,7 @@
     <Compile Include="Extensions\ColorExtension.cs" />
     <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\FloatExtension.cs" />
     <Compile Include="Extensions\ListExtension.cs" />
     <Compile Include="Extensions\NumberExtension.cs" />

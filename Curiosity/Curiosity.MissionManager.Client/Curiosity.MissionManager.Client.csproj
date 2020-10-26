@@ -53,7 +53,8 @@
     <Compile Include="Classes\Ped.cs" />
     <Compile Include="Classes\Vehicle.cs" />
     <Compile Include="Commands\MissionCommands.cs" />
-    <Compile Include="Environment\CurPlayer.cs" />
+    <Compile Include="Handler\MarkerArrest.cs" />
+    <Compile Include="Handler\CurPlayer.cs" />
     <Compile Include="Func.cs" />
     <Compile Include="Managers\EntityEventWrapper.cs" />
     <Compile Include="Menu\MenuBase.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Utils\Decorators.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Handler\MarkerHandler.cs" />
     <Compile Include="Utils\UiTools.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +91,9 @@
       <Project>{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}</Project>
       <Name>NativeUI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Environment\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using CitizenFX.Core.Native;
+using Curiosity.Shared.Client.net.Extensions;
 
 namespace Curiosity.StolenVehicle.Missions
 {

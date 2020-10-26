@@ -8,7 +8,7 @@ using Curiosity.MissionManager.Shared.EventWrapper;
 using Newtonsoft.Json;
 using System;
 
-namespace Curiosity.MissionManager.Client.Environment
+namespace Curiosity.MissionManager.Client.Handler
 {
     class CurPlayer : BaseScript
     {

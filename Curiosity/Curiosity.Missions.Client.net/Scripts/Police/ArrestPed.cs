@@ -39,7 +39,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
             MarkerHandler.HideAllMarkers = true;
             MarkerHandler.Dispose();
 
-            jailHouseBlips.ForEach(m => BlipHandler.RemoveBlip(m.BlipId));
+            jailHouseBlips.ForEach(m => BlipHandler.RemoveBlip(m.BlipName));
 
             PluginInstance.DeregisterTickHandler(OnTaskJailPed);
         }
@@ -66,7 +66,7 @@ namespace Curiosity.Missions.Client.Scripts.Police
             foreach (Marker m in jailHouseMarkers)
             {
                 int id = jailHouseBlips.Count + 1;
-                jailHouseBlips.Add(new BlipData(id, "Jail", m.Position, BlipSprite.Handcuffs, BlipCategory.Unknown, BlipColor.Blue, true));
+                jailHouseBlips.Add(new BlipData($"{id}", "Jail", m.Position, BlipSprite.Handcuffs, BlipCategory.Unknown, BlipColor.Blue, true));
                 MarkerHandler.MarkersAll.Add(m);
             }
 

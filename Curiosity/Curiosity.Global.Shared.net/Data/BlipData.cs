@@ -24,12 +24,12 @@ namespace Curiosity.Global.Shared.Data
         private BlipColor Color { get; set; }
         private bool IsShortRange { get; set; }
         private string Name { get; set; }
-        public int BlipId { get; set; }
+        public string BlipName { get; set; }
 
-        public BlipData(int spawnId, string name, Vector3 position, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
+        public BlipData(string blipName, string name, Vector3 position, BlipSprite sprite, BlipCategory category, BlipColor color = BlipColor.White, bool isShortRange = true)
         {
             this.Name = name;
-            this.BlipId = spawnId;
+            this.BlipName = blipName;
             this.isEntityBlip = false;
             this.Position = position;
             this.Sprite = sprite;
@@ -57,8 +57,8 @@ namespace Curiosity.Global.Shared.Data
 
     public static class BlipHandler
     {
-        public static Dictionary<int, BlipData> AllBlips = new Dictionary<int, BlipData>(); // All registered blips
-        public static Dictionary<int, BlipData> CurrentBlips = new Dictionary<int, BlipData>(); // Currently visible blips
+        public static Dictionary<string, BlipData> AllBlips = new Dictionary<string, BlipData>(); // All registered blips
+        public static Dictionary<string, BlipData> CurrentBlips = new Dictionary<string, BlipData>(); // Currently visible blips
 
         public static void Init()
         {
@@ -67,15 +67,15 @@ namespace Curiosity.Global.Shared.Data
             // Even if this is empty, it needs to stay to init the method early
         }
 
-        public static int AddBlip(BlipData blip)
+        public static string AddBlip(BlipData blip)
         {
-            if (AllBlips.ContainsKey(blip.BlipId)) return blip.BlipId;
+            if (AllBlips.ContainsKey(blip.BlipName)) return blip.BlipName;
 
-            AllBlips.Add(blip.BlipId, blip);
-            return blip.BlipId;
+            AllBlips.Add(blip.BlipName, blip);
+            return blip.BlipName;
         }
 
-        public static void RemoveBlip(int id)
+        public static void RemoveBlip(string id)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace Curiosity.Global.Shared.Data
         /// <param name="bitFilter">Bitwise combination of BlipCategory flags to show</param>
         public static void FilterBlips(BlipCategory bitFilter)
         {
-            Dictionary<int, BlipData> New = AllBlips
+            Dictionary<string, BlipData> New = AllBlips
                 .Where(b => ((b.Value.Category & bitFilter) != 0))
                 .ToDictionary(b => b.Key, b => b.Value);
             // Delete blips that were filtered out

@@ -21,6 +21,7 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string PED_FLEE = "c::ped::flee";
         public const string PED_SHOOT = "c::ped::shoot";
         public const string PED_ARREST = "c::ped::arrest";
+        public const string PED_ARRESTED = "c::ped::arrested";
         public const string PED_ARRESTABLE = "c::ped::arrestable";
         public const string PED_SUSPECT = "c::ped::suspect";
         public const string PED_MISSION = "c::ped::mission";
@@ -28,6 +29,12 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string PED_HOSTAGE = "c::ped::hostage";
         public const string PED_RELEASED = "c::ped::released";
         public const string PED_HANDCUFFED = "c::ped::handcuffed";
+
+        // ARREST REASONS
+        public const string PED_ARREST_INFLUENCE_DRUNK = "c::ped::arrest::influence::drunk";
+        public const string PED_ARREST_INFLUENCE_COCAINE = "c::ped::arrest::influence::cocaine";
+        public const string PED_ARREST_INFLUENCE_HEROIN = "c::ped::arrest::influence::heroin";
+        public const string PED_ARREST_INFLUENCE_WEED = "c::ped::arrest::influence::weed";
 
         public static void Set(int handle, string property, object value)
         {

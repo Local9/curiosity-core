@@ -88,7 +88,7 @@ namespace Curiosity.Police.Client.net.Environment.Job
                 {
                     foreach (KeyValuePair<int, Marker> keyValuePair in MarkersAll)
                     {
-                        AddBlip(new BlipData(keyValuePair.Key, "Police Duty", keyValuePair.Value.Position, BlipSprite.PoliceStation, BlipCategory.Unknown, BlipColor.Blue));
+                        AddBlip(new BlipData($"{keyValuePair.Key}", "Police Duty", keyValuePair.Value.Position, BlipSprite.PoliceStation, BlipCategory.Unknown, BlipColor.Blue));
                     }
                 }
             }
