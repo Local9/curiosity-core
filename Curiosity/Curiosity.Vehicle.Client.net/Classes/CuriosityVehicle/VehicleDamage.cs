@@ -77,7 +77,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         {
             //InteractionListMenu.RegisterInteractionMenuItem(menuItemFix, () => Game.PlayerPed.IsInVehicle() && Player.PlayerInformation.IsDeveloper(), 999);
             client.RegisterTickHandler(VehicleFuckery);
-            client.RegisterTickHandler(AdditionalVehicleFuckery);
+            // client.RegisterTickHandler(AdditionalVehicleFuckery);
 
             client.RegisterEventHandler("curiosity:Client:Vehicle:Detonate", new Action<int>(OnVehicleDetonate));
 
