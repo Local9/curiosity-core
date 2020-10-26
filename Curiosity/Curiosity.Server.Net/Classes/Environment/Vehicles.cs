@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Entity;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Global.Shared.Utils;
 using Curiosity.Server.net.Extensions;
 using Curiosity.Shared.Server.net.Helpers;
@@ -74,7 +76,31 @@ namespace Curiosity.Server.net.Classes.Environment
 
                     if (purchased)
                     {
-                        session.DecreaseWallet(vehicleShopItem.Cost);
+                        int cost = vehicleShopItem.Cost;
+                        float costDiscount = 0f;
+                        Privilege privilege = (Privilege)session.User.RoleId;
+
+                        switch (privilege)
+                        {
+                            case Privilege.DONATOR:
+                                costDiscount += float.Parse(API.GetConvar("shop_donator_discount_life", "0"));
+                                break;
+                            case Privilege.DONATOR1:
+                                costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier1", "0"));
+                                break;
+                            case Privilege.DONATOR2:
+                                costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier2", "0"));
+                                break;
+                            case Privilege.DONATOR3:
+                                costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier3", "0"));
+                                break;
+                        }
+
+                        costDiscount += float.Parse(API.GetConvar("shop_event_discount", "0"));
+
+                        int finalCost = (int)(cost * costDiscount);
+
+                        session.DecreaseWallet(finalCost);
                         Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, vehicleShopItem.Cost);
                         await BaseScript.Delay(100);
                         player.TriggerEvent("curiosity:Client:Vehicle:Shop:Update");
@@ -103,6 +129,8 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             try
             {
+                if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+
                 List<VehicleItem> vehicles = await Database.DatabaseVehicles.GetVehiclesForSpawn(spawnId);
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicles);
@@ -158,6 +186,35 @@ namespace Curiosity.Server.net.Classes.Environment
                 Session session = SessionManager.PlayerList[player.Handle];
 
                 List<VehicleShopItem> vehicles = await Database.DatabaseVehicles.GetVehicleShopItems(Server.serverId, session.User.CharacterId);
+
+                foreach (VehicleShopItem vehicleItem in vehicles)
+                {
+                    Privilege privilege = (Privilege)session.User.RoleId;
+                    int cost = vehicleItem.Cost;
+                    float costDiscount = 0f;
+
+                    switch (privilege)
+                    {
+                        case Privilege.DONATOR:
+                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_life", "0"));
+                            break;
+                        case Privilege.DONATOR1:
+                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier1", "0"));
+                            break;
+                        case Privilege.DONATOR2:
+                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier2", "0"));
+                            break;
+                        case Privilege.DONATOR3:
+                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier3", "0"));
+                            break;
+                    }
+
+                    costDiscount += float.Parse(API.GetConvar("shop_event_discount", "0"));
+
+                    int finalCost = (int)(cost * costDiscount);
+
+                    vehicleItem.Cost = finalCost;
+                }
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicles);
 
