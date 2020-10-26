@@ -71,7 +71,7 @@ namespace Curiosity.MissionManager.Client.Handler
                 return;
             }
 
-            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to book the ped.");
+            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_PICKUP~ to book the ~b~suspect(s)~s~.");
 
             if (Game.IsControlJustPressed(0, Control.Pickup))
             {
@@ -79,7 +79,7 @@ namespace Curiosity.MissionManager.Client.Handler
 
                 if (peds.Count == 0)
                 {
-                    Screen.ShowNotification("~b~Arrests: ~w~No peds to arrest found near");
+                    Screen.ShowNotification("~b~Arrests: ~s~No peds to arrest found near by.");
                 }
 
                 peds.ForEach(p =>
