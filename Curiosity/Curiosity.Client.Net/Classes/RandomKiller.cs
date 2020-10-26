@@ -34,6 +34,8 @@ namespace Curiosity.Client.net.Classes
                 API.NetworkFadeOutEntity(killer.Handle, false, false);
                 await Client.Delay(3000);
                 killer?.Delete();
+
+                killer = null;
             }
         }
 
@@ -45,6 +47,8 @@ namespace Curiosity.Client.net.Classes
             }
 
             gameTime = API.GetGameTimer();
+
+            if (killer != null) return;
 
             if (Game.PlayerPed.IsInVehicle())
             {
@@ -80,16 +84,17 @@ namespace Curiosity.Client.net.Classes
                 if (Game.PlayerPed.IsInVehicle())
                 {
                     killer.Weapons.Give(WeaponHash.Pistol, 1, true, true);
+                    killer.Task.ShootAt(Game.PlayerPed);
                 }
                 else
                 {
                     killer.Weapons.Give(WeaponHash.Knife, 1, true, true);
+                    killer.Task.FightAgainst(Game.PlayerPed);
                 }
                 killer.Armor = 200;
                 killer.Health = 200;
                 killer.DropsWeaponsOnDeath = false;
 
-                killer.Task.ShootAt(Game.PlayerPed);
             }
         }
     }
