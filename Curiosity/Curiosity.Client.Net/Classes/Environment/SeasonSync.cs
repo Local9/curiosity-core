@@ -39,6 +39,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static bool weatherDebug = false;
         static bool _connected = false;
+        static bool _startup = false;
 
         public static void Init()
         {
@@ -79,33 +80,30 @@ namespace Curiosity.Client.net.Classes.Environment
 
         private static async Task OnSnowCheck()
         {
-            while (true)
+            bool trails = World.Weather == Weather.Christmas;
+            API.SetForceVehicleTrails(trails);
+            API.SetForcePedFootstepsTracks(trails);
+            await Client.Delay(0);
+
+            if (trails
+                && (Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Unarmed || Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Snowball)
+                && Game.IsControlPressed(0, Control.ThrowGrenade)
+                && !Game.PlayerPed.IsInVehicle())
             {
-                bool trails = World.Weather == Weather.Christmas;
-                API.SetForceVehicleTrails(trails);
-                API.SetForcePedFootstepsTracks(trails);
-                await Client.Delay(0);
+                API.RequestAnimDict("anim@mp_snowball");
 
-                if (trails
-                    && (Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Unarmed || Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Snowball)
-                    && Game.IsControlPressed(0, Control.ThrowGrenade)
-                    && !Game.PlayerPed.IsInVehicle())
+                if (!Game.PlayerPed.Weapons.HasWeapon(WeaponHash.Snowball))
                 {
-                    API.RequestAnimDict("anim@mp_snowball");
-
-                    if (!Game.PlayerPed.Weapons.HasWeapon(WeaponHash.Snowball))
-                    {
-                        Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
-                        Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
-                    }
-                    else if (Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo < 10)
-                    {
-                        Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
-                        Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo++;
-                        Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
-                    }
-                    await Client.Delay(1000);
+                    Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
+                    Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
                 }
+                else if (Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo < 10)
+                {
+                    Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
+                    Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo++;
+                    Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
+                }
+                await Client.Delay(1000);
             }
         }
 
@@ -246,7 +244,10 @@ namespace Curiosity.Client.net.Classes.Environment
 
         private static async void GetOnSeasonsTimeSync(int season, int weather, int temp)
         {
-            if (_lastSeason == (Seasons)season) return;
+            if (_lastSeason == (Seasons)season && _startup) return;
+            
+            _startup = true;
+
             _lastSeason = (Seasons)season;
             _temp = temp;
             SetPopulationValues((WeatherTypes)weather);
