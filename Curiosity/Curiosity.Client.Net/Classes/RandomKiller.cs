@@ -56,6 +56,19 @@ namespace Curiosity.Client.net.Classes
                     return;
             }
 
+            float waterHeight = 0f;
+
+            Vector3 posNow = Game.PlayerPed.Position;
+            if (API.GetWaterHeight(posNow.X, posNow.Y, posNow.Z, ref waterHeight))
+            {
+                return;
+            }
+
+            if (waterHeight > 0)
+            {
+                return;
+            }
+
             if (Utility.RANDOM.Bool(0.02f))
             {
                 Model model = PedHash.ChemWork01GMM;
