@@ -79,7 +79,7 @@ namespace Curiosity.MissionManager.Client.Handler
 
                 if (peds.Count == 0)
                 {
-                    Screen.ShowNotification("~b~Arrests: ~s~No peds to arrest found near by.");
+                    Screen.ShowNotification("~b~Arrests: ~s~No suspect(s) to book found near by.");
                 }
 
                 peds.ForEach(p =>
