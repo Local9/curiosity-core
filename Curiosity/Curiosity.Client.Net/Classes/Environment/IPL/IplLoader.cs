@@ -51,6 +51,9 @@ namespace Curiosity.Client.net.Classes.Environment.IPL
             API.RequestIpl("ld_rail_02_track");
             API.RequestIpl("FBI_repair");
 
+            API.RemoveIpl("cargoship");
+            API.RemoveIpl("sunkcargoship");
+
             // golf flags
             API.RequestIpl("golfflags");
 
