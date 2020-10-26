@@ -87,7 +87,8 @@ namespace Curiosity.Vehicle.Client.net.Classes
 
                     Plugin.CurrentVehicle = await Spawn.SpawnVehicleEmpty(model, spawningPosition, heading);
 
-                    Game.PlayerPed.Task.WarpIntoVehicle(Plugin.CurrentVehicle, VehicleSeat.Driver);
+                    if (Plugin.CurrentVehicle != null)
+                        Game.PlayerPed.Task.WarpIntoVehicle(Plugin.CurrentVehicle, VehicleSeat.Driver);
                 }
                 else
                 {
