@@ -242,7 +242,7 @@ namespace Curiosity.Server.net.Classes.Environment
                 //if (!regex.Match(message).Success)
                 //{
 
-                DiscordWrapper.SendDiscordChatMessage($"[{player.Handle}] {player.Name}#{session.UserID}", message.Trim('"'));
+                DiscordWrapper.SendDiscordChatMessage($"{DateTime.Now.ToString("HH:mm")} [{player.Handle}] {player.Name}#{session.UserID}", message.Trim('"'));
                 //}
                 
             }
