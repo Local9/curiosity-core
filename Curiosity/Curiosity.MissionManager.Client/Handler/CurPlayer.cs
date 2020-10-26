@@ -59,10 +59,15 @@ namespace Curiosity.MissionManager.Client.Handler
             if (IsOfficer)
             {
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
+
+                MarkerHandler.Init();
+                MarkerArrest.Init();
             }
             else
             {
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
+                MarkerHandler.Dispose();
+                MarkerArrest.Dispose();
             }
         }
 

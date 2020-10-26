@@ -120,6 +120,7 @@ namespace Curiosity.MissionManager.Client.Classes
         }
 
         public bool IsKneeling { get; set; }
+        public bool IsGrabbed { get; set; }
 
         private EntityEventWrapper _eventWrapper;
         private long TimeOfDeath = 0;
@@ -392,6 +393,16 @@ namespace Curiosity.MissionManager.Client.Classes
                         // Mission.NumberArrested++;
                     }
                     break;
+                case Sequence.GRAB_HOLD:
+                    Vector3 attachedPos = new Vector3(-0.3f, 0.4f, 0.0f);
+                    Fx.AttachTo(Game.PlayerPed, attachedPos);
+                    API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
+                    IsGrabbed = true;
+                    break;
+                case Sequence.GRAB_RELEASE:
+                    Fx.Detach();
+                    IsGrabbed = false;
+                    break;
             }
         }
 
@@ -523,7 +534,10 @@ namespace Curiosity.MissionManager.Client.Classes
             HANDCUFF_REMOVE,
             DETAIN_IN_CURRENT_VEHICLE,
             LEAVE_VEHICLE,
-            ARRESTED
+            ARRESTED,
+            FOLLOW,
+            GRAB_HOLD,
+            GRAB_RELEASE
         }
     }
 }

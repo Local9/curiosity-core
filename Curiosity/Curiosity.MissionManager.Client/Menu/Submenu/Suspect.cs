@@ -18,13 +18,16 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         UIMenu Menu;
         UIMenuItem menuItemHandcuff;
         UIMenuItem menuItemDetain;
+        UIMenuItem menuItemGrab;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
             menuItemHandcuff = new UIMenuItem("Apply Handcuffs");
             menu.AddItem(menuItemHandcuff);
-            menuItemDetain = new UIMenuItem("Detain");
+            menuItemDetain = new UIMenuItem("Detain in Vehicle");
             menu.AddItem(menuItemDetain);
+            menuItemGrab = new UIMenuItem("Lead Suspect");
+            menu.AddItem(menuItemGrab);
 
             menu.OnItemSelect += Menu_OnItemSelect;
             menu.OnMenuOpen += Menu_OnMenuOpen;
@@ -74,6 +77,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 menuItemDetain.Text = Ped.Fx.IsInVehicle() ? "Remove from Vehicle" : "Detain in Vehicle";
                 menuItemDetain.Enabled = Ped.IsHandcuffed;
 
+                menuItemGrab.Text = Ped.IsGrabbed ? "Let go of Suspect" : "Grab Suspect";
+                menuItemGrab.Enabled = isControlable && Ped.IsHandcuffed;
+
                 PluginInstance.RegisterTickHandler(OnSuspectDistanceCheck);
             }
 
@@ -97,8 +103,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             if (selectedItem == menuItemHandcuff)
             {
                 Ped.IsHandcuffed = !Ped.IsHandcuffed;
-                menuItemHandcuff.Text = Ped.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
+                selectedItem.Text = Ped.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
                 menuItemDetain.Enabled = Ped.IsHandcuffed;
+                menuItemGrab.Enabled = Ped.IsHandcuffed;
 
                 await BaseScript.Delay(500);
                 return;
@@ -109,13 +116,32 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 if (Ped.Fx.IsInVehicle())
                 {
                     Ped.RunSequence(Ped.Sequence.LEAVE_VEHICLE);
-                    menuItemDetain.Text = "Detain from Vehicle";
+                    selectedItem.Text = "Detain from Vehicle";
                 }
                 else
                 {
                     Ped.RunSequence(Ped.Sequence.DETAIN_IN_CURRENT_VEHICLE);
-                    menuItemDetain.Text = "Remove in Vehicle";
+                    selectedItem.Text = "Remove in Vehicle";
                 }
+
+                await BaseScript.Delay(500);
+                return;
+            }
+
+            if (selectedItem == menuItemGrab)
+            {
+                if (Ped.IsGrabbed)
+                {
+                    Ped.RunSequence(Ped.Sequence.GRAB_RELEASE);
+                    selectedItem.Text = "Grab Suspect";
+                }
+                else
+                {
+                    Ped.RunSequence(Ped.Sequence.GRAB_HOLD);
+                    selectedItem.Text = "Let go of Suspect";
+                }
+
+                await BaseScript.Delay(500);
                 return;
             }
         }

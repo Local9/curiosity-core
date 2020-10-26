@@ -22,7 +22,7 @@ namespace Curiosity.MissionManager.Client.Handler
 
         static System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 65, 105, 225);
 
-        internal static void Setup()
+        internal static void Init()
         {
             MarkerHandler.HideAllMarkers = false;
 
@@ -48,6 +48,17 @@ namespace Curiosity.MissionManager.Client.Handler
             }
 
             PluginInstance.RegisterTickHandler(OnArrestPedTick);
+        }
+
+        public static void Dispose()
+        {
+            MarkerHandler.HideAllMarkers = true;
+            MarkerHandler.Dispose();
+
+            blips.ForEach(m => BlipHandler.RemoveBlip(m.BlipName));
+            markers.Clear();
+
+            PluginInstance.DeregisterTickHandler(OnArrestPedTick);
         }
 
         private async static Task OnArrestPedTick()
