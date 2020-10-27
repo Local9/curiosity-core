@@ -1,10 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.EventWrapper;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Shared.Client.net.Extensions;
 using NativeUI;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
@@ -41,6 +43,21 @@ namespace Curiosity.MissionManager.Client.Menu
 
                     Setup();
                 };
+
+            Tick += OnMenuPrompt;
+        }
+
+        async Task OnMenuPrompt()
+        {
+            List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
+
+            if (peds.Count == 0)
+            {
+                await BaseScript.Delay(1000);
+                return;
+            }
+
+            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to interact."); // need to look into control binds
         }
 
         void Setup()

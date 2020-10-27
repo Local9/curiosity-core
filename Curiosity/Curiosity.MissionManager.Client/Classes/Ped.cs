@@ -479,7 +479,7 @@ namespace Curiosity.MissionManager.Client.Classes
             return blip;
         }
 
-        internal async void Dismiss()
+        internal async void Dismiss(bool arrested = false)
         {
             //if (Fx.AttachedBlips.Length > 0)
             //    foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
