@@ -27,6 +27,12 @@ namespace Curiosity.Client.net.Classes
         {
             if (killer == null) return;
 
+            if (Game.PlayerPed.IsDead)
+            {
+                killer.Kill();
+                await Client.Delay(1000);
+            }
+
             if (killer.IsDead)
             {
                 await Client.Delay(10000);
