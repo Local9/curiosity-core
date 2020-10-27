@@ -19,15 +19,17 @@ namespace Curiosity.MissionManager.Client.Menu
         private PluginManager PluginInstance => PluginManager.Instance;
         public static MenuPool _MenuPool;
         private UIMenu menuMain;
-        public static bool IsCalloutActive;
+        public static bool IsCalloutActive = false;
 
         private bool isMenuOpen => Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_MENU);
 
         // sub menus
         private Submenu.Dispatch _dispatch = new Submenu.Dispatch();
-        private Submenu.Suspect _suspect = new Submenu.Suspect();
+        private Submenu.SuspectPed _suspectPed = new Submenu.SuspectPed();
+        private Submenu.SuspectVehicle _suspectVehicle = new Submenu.SuspectVehicle();
         private UIMenu menuDispatch;
-        private UIMenu menuSuspect;
+        private UIMenu menuSuspectPed;
+        private UIMenu menuSuspectVehicle;
 
         // menu items - Maybe move these???
         private UIMenuItem mItemRequestAssistance = new UIMenuItem($"Request Assistance", "Call for support during an active pursuit."); // Call players?
@@ -43,21 +45,6 @@ namespace Curiosity.MissionManager.Client.Menu
 
                     Setup();
                 };
-
-            Tick += OnMenuPrompt;
-        }
-
-        async Task OnMenuPrompt()
-        {
-            List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
-
-            if (peds.Count == 0)
-            {
-                await BaseScript.Delay(1000);
-                return;
-            }
-
-            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to interact."); // need to look into control binds
         }
 
         void Setup()
@@ -77,9 +64,13 @@ namespace Curiosity.MissionManager.Client.Menu
             menuDispatch.MouseControlsEnabled = false;
             _dispatch.CreateMenu(menuDispatch);
 
-            menuSuspect = _MenuPool.AddSubMenu(menuMain, "Suspect", "Suspect Options~n~~o~Options are available when a callout is active.");
-            menuSuspect.MouseControlsEnabled = false;
-            _suspect.CreateMenu(menuSuspect);
+            menuSuspectPed = _MenuPool.AddSubMenu(menuMain, "Suspect", "Suspect Options~n~~o~Options are available when a callout is active.");
+            menuSuspectPed.MouseControlsEnabled = false;
+            _suspectPed.CreateMenu(menuSuspectPed);
+
+            menuSuspectVehicle = _MenuPool.AddSubMenu(menuMain, "Vehicle", "Suspect Vehicle Options~n~~o~Options are available when a callout is active.");
+            menuSuspectVehicle.MouseControlsEnabled = false;
+            _suspectVehicle.CreateMenu(menuSuspectVehicle);
 
             _MenuPool.RefreshIndex();
         }
@@ -128,6 +119,25 @@ namespace Curiosity.MissionManager.Client.Menu
         [Tick]
         private async Task OnMenuControls()
         {
+            if (!CurPlayer.IsOfficer) return; // no point in showing if their're not an officer
+
+            if (MarkerHandler.GetActiveMarker() != null) return; // hide base menu prompt if near a marker
+            
+            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 4f) return; // driving? hide it
+
+            List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
+            List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f) && (Decorators.GetBoolean(x.Handle, Decorators.VEHICLE_MISSION) || Decorators.GetBoolean(x.Handle, Decorators.PLAYER_VEHICLE))).Select(p => p).ToList();
+
+            int interactables = peds.Count + vehicles.Count; // near any interactives?
+
+            if (interactables == 0)
+            {
+                await BaseScript.Delay(1000);
+                return;
+            }
+
+            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to open menu."); // need to look into control binds
+
             if (Game.PlayerPed.IsAlive && CurPlayer.IsOfficer && !isMenuOpen)
             {
                 if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F2
@@ -138,11 +148,11 @@ namespace Curiosity.MissionManager.Client.Menu
             }
         }
 
-        public static Ped GetClosestSuspect()
+        public static Ped GetClosestInteractivePed()
         {
             if (!IsCalloutActive) return null;
 
-            return Mission.RegisteredPeds.Select(x => x).Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 2f) && p.IsSuspect && p.IsMission).FirstOrDefault();
+            return Mission.RegisteredPeds.Select(x => x).Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 2f) && p.IsMission).FirstOrDefault();
         }
 
         public static Vehicle GetClosestVehicle()
