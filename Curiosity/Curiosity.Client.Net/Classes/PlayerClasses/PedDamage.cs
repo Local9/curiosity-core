@@ -10,7 +10,7 @@
 //using System.Linq;
 //using System.Threading.Tasks;
 
-//namespace Curiosity.Client.net.Classes.Player
+//namespace Curiosity.Client.net.Classes.PlayerClasses
 //{
 //    enum KillerCategory
 //    {

@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Client.net.Extensions;
 using Curiosity.Shared.Client.net;
 using System;
@@ -27,7 +28,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
         static void OnIsSpectating(bool isSpec)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
+            if (!PlayerInformation.IsStaff()) return;
 
             isSpectating = isSpec;
         }
@@ -81,7 +82,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
                 MarkerPlayers = Client.players.Where(ShouldShowName);
                 List<CitizenFX.Core.Player> playerList = MarkerPlayers.ToList();
+
                 playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowName(p.player));
+
             }
             catch (Exception ex)
             {

@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Client.net.Classes.Player
+﻿namespace Curiosity.Shared.Client.net.Classes
 {
     public class DutyMessage
     {

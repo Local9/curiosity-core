@@ -4,6 +4,7 @@ using Curiosity.Client.net.Extensions;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.Shared.Client.net.Classes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Security;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Client.net.Classes.Player
+namespace Curiosity.Client.net.Classes.PlayerClasses
 {
     static class PlayerInformation
     {
@@ -245,7 +246,7 @@ namespace Curiosity.Client.net.Classes.Player
     {
         public RequiresPermissionFlags(Privilege privilege)
         {
-            if (Player.PlayerInformation.privilege != privilege)
+            if (PlayerInformation.privilege != privilege)
                 throw new SecurityException("You don't have the access rights to perform this action");
         }
     }

@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Client.net.Classes.Player;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Shared.Client.net.Helper;
 using System;
 using System.Collections.Generic;
@@ -132,7 +132,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     CitizenFX.Core.Vehicle vehicle = new CitizenFX.Core.Vehicle(handleId);
 
-                    if (Player.PlayerInformation.IsDeveloper())
+                    if (PlayerInformation.IsDeveloper())
                     {
                         Debug.WriteLine("OnVehicleRemove Starting");
                     }
@@ -205,14 +205,14 @@ namespace Curiosity.Client.net.Classes.Environment
 
                 if (!API.DoesEntityExist(vehicle.Handle))
                 {
-                    if (Player.PlayerInformation.IsDeveloper())
+                    if (PlayerInformation.IsDeveloper())
                     {
                         Debug.WriteLine($"OnVehicleRemove -> Removed vehicle with handle {copyRef}");
                     }
                 }
                 else
                 {
-                    if (Player.PlayerInformation.IsDeveloper())
+                    if (PlayerInformation.IsDeveloper())
                     {
                         Debug.WriteLine($"OnVehicleRemove -> Failed to remove vehicle with handle {copyRef}");
                     }

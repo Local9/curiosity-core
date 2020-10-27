@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Client.net.Classes.Player;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Shared.Client.net;
@@ -163,7 +163,7 @@ namespace Curiosity.Client.net.Classes.Environment
             NetworkOverrideClockTime(hour, minute, 0);
             SetClockTime(hour, minute, 0);
 
-            if (minute%10 == 0)
+            if (minute % 10 == 0)
             {
                 JsonBuilder jsonBuilder = new JsonBuilder()
                     .Add("operation", "TIME")
@@ -187,7 +187,7 @@ namespace Curiosity.Client.net.Classes.Environment
             SetWeatherTypeOverTime($"{weather}", 15.0f);
 
             await Client.Delay(15000);
-            
+
             ClearOverrideWeather();
             ClearWeatherTypePersist();
             SetBlackout(blackout);
@@ -245,7 +245,7 @@ namespace Curiosity.Client.net.Classes.Environment
         private static async void GetOnSeasonsTimeSync(int season, int weather, int temp)
         {
             if (_lastSeason == (Seasons)season && _startup) return;
-            
+
             _startup = true;
 
             _lastSeason = (Seasons)season;

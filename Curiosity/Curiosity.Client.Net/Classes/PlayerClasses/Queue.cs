@@ -3,7 +3,7 @@ using CitizenFX.Core.Native;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Client.net.Classes.Player
+namespace Curiosity.Client.net.Classes.PlayerClasses
 {
     class Queue
     {

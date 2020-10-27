@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Shared.Client.net.Helper;
@@ -178,7 +179,7 @@ namespace Curiosity.Client.net.Classes.Environment
             NativeWrappers.Draw3DText(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z - 0.4f, messageText, 75f, 10f);
             NativeWrappers.Draw3DText(Game.PlayerPed.Position.X, Game.PlayerPed.Position.Y, Game.PlayerPed.Position.Z - 0.5f, messageText2, 75f, 10f);
 
-            if (Player.PlayerInformation.IsDeveloper())
+            if (PlayerInformation.IsDeveloper())
             {
                 Debug.WriteLine(messageText);
             }
@@ -220,7 +221,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
                     client.RegisterTickHandler(ShowText);
 
-                    if (!Player.PlayerInformation.IsStaff())
+                    if (!PlayerInformation.IsStaff())
                     {
                         while (!forceRespawn)
                         {

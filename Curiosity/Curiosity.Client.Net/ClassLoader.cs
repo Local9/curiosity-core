@@ -4,6 +4,7 @@ using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Environment.IPL;
 using Curiosity.Client.net.Classes.Environment.PDA;
 using Curiosity.Client.net.Classes.Environment.UI;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Client.net.Helpers.Dictionary;
 
@@ -19,7 +20,7 @@ namespace Curiosity.Client.net
         {
             // https://github.com/GroovyGiantPanda/FiveMRpServerResources/tree/master/src/FiveM/RPClient/Classes
 
-            Classes.Player.Queue.Init();
+            Queue.Init();
 
             Classes.RandomKiller.Init();
 
@@ -57,14 +58,14 @@ namespace Curiosity.Client.net
             Voip.Init();
             VideoLoader.Init();
             Vehicles.Init();
-            Classes.Player.Sit.Init();
+            Sit.Init();
             SpawnManagement.Init();
             Classes.Environment.PedClasses.PedHandler.Init();
-            Classes.Player.Skills.Init();
+            Skills.Init();
             Bank.Init();
-            Classes.Player.PlayerInformation.Init();
+            PlayerInformation.Init();
             WantedLevels.Init();
-            Classes.Player.Weapons.Init();
+            Weapons.Init();
 
             MarqueeMessages.Init();
             ChatService.Init();

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Entity = Curiosity.Global.Shared.Entity;
 
-namespace Curiosity.Client.net.Classes.Player
+namespace Curiosity.Client.net.Classes.PlayerClasses
 {
     static class Inventory
     {

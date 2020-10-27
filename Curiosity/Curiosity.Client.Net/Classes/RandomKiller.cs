@@ -2,10 +2,6 @@
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Global.Shared.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes

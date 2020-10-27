@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.Player;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Shared.Client.net.Helper;
 using System.Threading.Tasks;
 

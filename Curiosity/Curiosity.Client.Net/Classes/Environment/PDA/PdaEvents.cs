@@ -1,19 +1,16 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.Player;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Global.Shared.Utils;
-using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment.PDA
@@ -76,7 +73,7 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
         private static void OnGotVehicleShopItems(string shopItems)
         {
             List<VehicleShopItem> list = JsonConvert.DeserializeObject<List<VehicleShopItem>>(Encode.Base64ToString(shopItems));
-            
+
             string jsn = new JsonBuilder()
                 .Add("operation", "VEHICLE_SHOP_ITEMS")
                 .Add("items", list)
@@ -111,7 +108,7 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
         {
             string role = "USER";
 
-            switch(PlayerInformation.privilege)
+            switch (PlayerInformation.privilege)
             {
                 case Privilege.DONATOR:
                     role = "LifeV Early Supporter";

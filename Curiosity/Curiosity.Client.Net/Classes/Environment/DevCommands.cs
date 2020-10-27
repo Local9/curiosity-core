@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Shared.Client.net;
 using System;
@@ -142,7 +143,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         private static void SetTime(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
 
             int hour = 9, minute = 0;
 
@@ -161,7 +162,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         private static void SetWeather(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
 
             string weather = "EXTRASUNNY";
 
@@ -175,7 +176,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         private static void OnBones(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
             if (Client.CurrentVehicle == null) return;
 
             string bones = string.Empty;
@@ -191,7 +192,7 @@ namespace Curiosity.Client.net.Classes.Environment
         // [RequiresPermissionFlags(Privilege.PROJECTMANAGER)]
         private static void GiveAllWeapons(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
 
             Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
             {
@@ -1610,7 +1611,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static void OnDeleteEntity(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
+            if (!PlayerInformation.IsStaff()) return;
 
             IsEnabled = !IsEnabled;
             if (IsEnabled)

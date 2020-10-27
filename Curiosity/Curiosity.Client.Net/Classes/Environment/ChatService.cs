@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Shared.Client.net;
 using Newtonsoft.Json;
@@ -98,7 +99,7 @@ namespace Curiosity.Client.net.Classes.Environment
             }
             catch (Exception ex)
             {
-                if (!Player.PlayerInformation.IsDeveloper()) return;
+                if (!PlayerInformation.IsDeveloper()) return;
 
                 Debug.WriteLine($"{ex.Message}");
                 Debug.WriteLine($"{encodedMessage}");
@@ -120,7 +121,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 string message = (String)chatResult["0"];
                 string chatChannel = (String)chatResult["1"];
 
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Verbose($"{chatChannel} - {message}");
                 }

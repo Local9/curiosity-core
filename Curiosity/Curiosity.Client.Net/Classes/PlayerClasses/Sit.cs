@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.Client.net.Classes.Player
+namespace Curiosity.Client.net.Classes.PlayerClasses
 {
     class Sit
     {

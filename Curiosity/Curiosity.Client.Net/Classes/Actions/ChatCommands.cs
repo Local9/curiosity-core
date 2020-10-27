@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Shared.Client.net;
@@ -159,7 +160,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static void OnTennisMode(int playerHandle, List<object> arguments, string raw)
         {
-            if (Player.PlayerInformation.privilege != Global.Shared.Enums.Privilege.DEVELOPER) return;
+            if (PlayerInformation.privilege != Global.Shared.Enums.Privilege.DEVELOPER) return;
 
             TennisMode = !TennisMode;
             EnableTennisMode(Game.PlayerPed.Handle, TennisMode, Game.PlayerPed.Gender == Gender.Female);
@@ -418,7 +419,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static void Weather(int playerHandle, List<object> arguments, string raw)
         {
-            if (Player.PlayerInformation.privilege != Global.Shared.Enums.Privilege.DEVELOPER) return;
+            if (PlayerInformation.privilege != Global.Shared.Enums.Privilege.DEVELOPER) return;
 
             Client.TriggerEvent("curiosity:Client:Weather:Check");
         }
@@ -445,7 +446,7 @@ namespace Curiosity.Client.net.Classes.Actions
                 //if (randomEvent == 1)
                 if (randomEvent == 1)
                 {
-                    if (Player.PlayerInformation.IsDeveloper())
+                    if (PlayerInformation.IsDeveloper())
                     {
                         Log.Info("Suicide: Pill");
                     }
@@ -457,7 +458,7 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
                 else if (randomEvent == 0)
                 {
-                    if (Player.PlayerInformation.IsDeveloper())
+                    if (PlayerInformation.IsDeveloper())
                     {
                         Log.Info("Suicide: Pistol");
                     }
@@ -470,7 +471,7 @@ namespace Curiosity.Client.net.Classes.Actions
                 }
                 else
                 {
-                    if (Player.PlayerInformation.IsDeveloper())
+                    if (PlayerInformation.IsDeveloper())
                     {
                         Log.Info("Suicide: Bleach");
                     }
@@ -510,7 +511,7 @@ namespace Curiosity.Client.net.Classes.Actions
         {
             try
             {
-                if (Player.PlayerInformation.privilege != Global.Shared.Enums.Privilege.DEVELOPER) return;
+                if (PlayerInformation.privilege != Global.Shared.Enums.Privilege.DEVELOPER) return;
 
                 Client.TriggerServerEvent("curiosity:Server:Event:ForAll", Newtonsoft.Json.JsonConvert.SerializeObject(new Global.Shared.Entity.TriggerEventForAll("curiosity:Client:Command:OnFire", $"{Game.PlayerPed.NetworkId}")));
             }
@@ -540,7 +541,7 @@ namespace Curiosity.Client.net.Classes.Actions
                     ped.SetConfigFlag(421, true);
                 }
 
-                if (Player.PlayerInformation.privilege == Global.Shared.Enums.Privilege.DEVELOPER)
+                if (PlayerInformation.privilege == Global.Shared.Enums.Privilege.DEVELOPER)
                 {
                     Debug.WriteLine($"PlayerPedNetId: {playerPedNetworkId}");
                     Debug.WriteLine($"Player Found: {ped != null}");
@@ -583,7 +584,7 @@ namespace Curiosity.Client.net.Classes.Actions
         {
             try
             {
-                if (!Player.PlayerInformation.IsDeveloper()) return;
+                if (!PlayerInformation.IsDeveloper()) return;
 
                 if (!Game.PlayerPed.IsInVehicle()) return;
 
@@ -668,7 +669,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static async void KnifeCallout(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
 
             int numberToSpawn = 1;
             if (arguments.Count > 0)
@@ -710,7 +711,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static void Fire(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
 
             Random random = new Random();
 
@@ -724,7 +725,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static async void Pulse(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
             Screen.Fading.FadeOut(10000);
             while (Screen.Fading.IsFadingOut)
             {
@@ -742,7 +743,7 @@ namespace Curiosity.Client.net.Classes.Actions
             try
             {
                 await Client.Delay(0);
-                if (!Player.PlayerInformation.IsStaff()) return;
+                if (!PlayerInformation.IsStaff()) return;
 
                 int totalFound = 0;
                 int totalNotDeleted = 0;
@@ -798,7 +799,7 @@ namespace Curiosity.Client.net.Classes.Actions
             try
             {
                 await Client.Delay(0);
-                if (!Player.PlayerInformation.IsStaff()) return;
+                if (!PlayerInformation.IsStaff()) return;
 
                 Vector3 pos = Game.PlayerPed.Position;
 
@@ -812,7 +813,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static async void DeleteVehicleNuke(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
+            if (!PlayerInformation.IsStaff()) return;
 
             int totalFound = 0;
             int totalNotDeleted = 0;
@@ -846,7 +847,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static async void DeleteVehicle(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsStaff()) return;
+            if (!PlayerInformation.IsStaff()) return;
 
             CitizenFX.Core.Vehicle veh = null;
 
@@ -891,7 +892,7 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static async void SaveCoords(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
             if (arguments.Count < 1) return;
 
             Vector3 pos = Game.PlayerPed.Position;
@@ -903,13 +904,13 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static void SpawnWeapon(string weapon)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
 
         }
 
         static async void Teleport(int playerHandle, List<object> arguments, string raw)
         {
-            if (!Player.PlayerInformation.IsDeveloper()) return;
+            if (!PlayerInformation.IsDeveloper()) return;
 
             float posX = 0;
             float posY = 0;
@@ -954,7 +955,7 @@ namespace Curiosity.Client.net.Classes.Actions
         {
             try
             {
-                if (!Player.PlayerInformation.IsDeveloper()) return;
+                if (!PlayerInformation.IsDeveloper()) return;
 
                 CitizenFX.Core.Vehicle veh = Game.PlayerPed.CurrentVehicle;
                 if (veh == null || arguments.Count < 2) return;

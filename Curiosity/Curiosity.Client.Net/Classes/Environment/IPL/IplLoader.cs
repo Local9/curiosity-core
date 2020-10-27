@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core.Native;
-using System;
 using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment.IPL
