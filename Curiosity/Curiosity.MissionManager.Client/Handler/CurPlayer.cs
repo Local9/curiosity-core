@@ -43,11 +43,13 @@ namespace Curiosity.MissionManager.Client.Handler
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
                 PersonalVehicle = new Vehicle(vehicleId);
+                Decorators.Set(vehicleId, Decorators.PLAYER_VEHICLE, true);
             }
             else if (PersonalVehicle.Handle != vehicleId)
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
                 PersonalVehicle = new Vehicle(vehicleId);
+                Decorators.Set(vehicleId, Decorators.PLAYER_VEHICLE, true);
             }
         }
 
@@ -83,7 +85,10 @@ namespace Curiosity.MissionManager.Client.Handler
                 if (kvpVehicle.Exists())
                 {
                     if (!kvpVehicle.IsDead)
+                    {
                         PersonalVehicle = kvpVehicle;
+                        Decorators.Set(vehicleId, Decorators.PLAYER_VEHICLE, true);
+                    }
                 }
             }
 
