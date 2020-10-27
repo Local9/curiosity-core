@@ -8,6 +8,7 @@ namespace Curiosity.Client.net.Classes
 {
     internal class RandomKiller
     {
+        private const int MINUTES_BETWEEN_CHECKS = ((1000 * 60) * 30);
         static Client Instance = Client.GetInstance();
         private static int gameTime;
         private static Ped killer;
@@ -43,7 +44,7 @@ namespace Curiosity.Client.net.Classes
 
         private async static Task OnRandomPed()
         {
-            while ((API.GetGameTimer() - gameTime) < (60000 * 30))
+            while ((API.GetGameTimer() - gameTime) < MINUTES_BETWEEN_CHECKS)
             {
                 await Client.Delay(1000);
             }
