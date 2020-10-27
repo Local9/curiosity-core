@@ -10,7 +10,7 @@ using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.MissionManager.Client.Menu.Submenu
 {
-    class Suspect
+    class SuspectPed
     {
         private PluginManager PluginInstance => PluginManager.Instance;
         private Ped Ped;
@@ -48,7 +48,11 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             if (Game.PlayerPed.IsInVehicle())
             {
                 MenuBase._MenuPool.CloseAllMenus();
-                Screen.ShowNotification($"Cannot interact with suspects while in a vehicle.");
+
+                Screen.ShowNotification($"Cannot interact with suspect(s) while inside the vehicle.");
+
+                Menu.MenuItems.ForEach(m => m.Enabled = false);
+
                 return;
             }
 
@@ -56,12 +60,11 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (!isCalloutActive)
             {
-                menuItemHandcuff.Enabled = false;
-                menuItemDetain.Enabled = false;
+                Menu.MenuItems.ForEach(m => m.Enabled = false);
             }
             else
             {
-                Ped = MenuBase.GetClosestSuspect();
+                Ped = MenuBase.GetClosestInteractivePed();
                 bool isControlable = PedCanBeControled();
 
                 if (Ped == null)

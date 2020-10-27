@@ -77,7 +77,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemCode16) // prison transport
             {
-                Ped ped = MenuBase.GetClosestSuspect();
+                Ped ped = MenuBase.GetClosestInteractivePed();
                 if (ped != null)
                 {
                     ped.PrisonTransport();
