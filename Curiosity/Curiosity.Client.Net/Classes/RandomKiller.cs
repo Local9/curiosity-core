@@ -43,7 +43,7 @@ namespace Curiosity.Client.net.Classes
 
         private async static Task OnRandomPed()
         {
-            while ((API.GetGameTimer() - gameTime) < 60000)
+            while ((API.GetGameTimer() - gameTime) < (60000 * 30))
             {
                 await Client.Delay(1000);
             }
