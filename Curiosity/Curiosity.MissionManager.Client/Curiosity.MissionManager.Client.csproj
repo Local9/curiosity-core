@@ -59,7 +59,8 @@
     <Compile Include="Managers\EntityEventWrapper.cs" />
     <Compile Include="Menu\MenuBase.cs" />
     <Compile Include="Menu\Submenu\Dispatch.cs" />
-    <Compile Include="Menu\Submenu\Suspect.cs" />
+    <Compile Include="Menu\Submenu\SuspectVehicle.cs" />
+    <Compile Include="Menu\Submenu\SuspectPed.cs" />
     <Compile Include="Mission.cs" />
     <Compile Include="NativeUI\BigMessageHandler.cs" />
     <Compile Include="PluginManager.cs" />
