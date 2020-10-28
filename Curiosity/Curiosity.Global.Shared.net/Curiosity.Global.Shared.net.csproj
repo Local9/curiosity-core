@@ -55,6 +55,7 @@
     <Compile Include="Data\MissionDataLists.cs" />
     <Compile Include="Data\MissionFile.cs" />
     <Compile Include="Data\PedNames.cs" />
+    <Compile Include="Data\PlayerSessionItem.cs" />
     <Compile Include="Data\SeasonData.cs" />
     <Compile Include="Data\VehicleShopItem.cs" />
     <Compile Include="Enums\PedType.cs" />

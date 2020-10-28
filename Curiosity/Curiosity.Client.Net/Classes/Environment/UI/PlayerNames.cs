@@ -2,7 +2,9 @@
 using CitizenFX.Core.Native;
 using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Client.net.Extensions;
+using Curiosity.Global.Shared.Data;
 using Curiosity.Shared.Client.net;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +17,57 @@ namespace Curiosity.Client.net.Classes.Environment.UI
         static Client client = Client.GetInstance();
 
         static internal IEnumerable<CitizenFX.Core.Player> MarkerPlayers;
-        static internal float namePlateDistance = 250;
-        static internal float namePlateVehicleDistance = 250;
+
+        static internal List<PlayerSessionItem> playerSessionItems = new List<PlayerSessionItem>();
+
+        static internal float namePlateDistance = 250f;
+        static internal float namePlateVehicleDistance = 250f;
+
+        static int GameTime;
+        static int PlayerNameUpdate = (1000 * 10);
 
         static bool isSpectating = false;
 
         static public void Init()
         {
+            GameTime = API.GetGameTimer();
+
             client.RegisterTickHandler(OnPlayerNamesTick);
             client.RegisterEventHandler("curioisty:UI:IsSpectating", new Action<bool>(OnIsSpectating));
+
+            client.RegisterEventHandler("curioisty:client:player:name:update", new Action<string>(OnPlayerNameUpdate));
+        }
+
+        private static void OnPlayerNameUpdate(string json)
+        {
+            PlayerSessionItem playerSessionItem = JsonConvert.DeserializeObject<PlayerSessionItem>(json);
+
+            if (playerSessionItem.Disconnected)
+            {
+                playerSessionItems.Remove(playerSessionItem);
+                return;
+            }
+
+            playerSessionItems.Add(playerSessionItem);
+            Log.Verbose($"Received player data for {playerSessionItem.Username}");
+
+            int serverHandle = int.Parse(playerSessionItem.ServerId);
+            
+            int playerEntity = API.GetPlayerFromServerId(serverHandle);
+
+            Player player = new Player(playerEntity);
+
+            if (player == null) return;
+
+            if (player.Character.Exists())
+            {
+                Log.Verbose($"Appended player data for {playerSessionItem.Username}");
+                if (playerSessionItem.IsStaff)
+                {
+                    Decorators.Set(player.Character.Handle, Decorators.DECOR_PLAYER_STAFF, playerSessionItem.IsStaff);
+                    return;
+                }
+            }
         }
 
         static void OnIsSpectating(bool isSpec)
@@ -50,11 +94,11 @@ namespace Curiosity.Client.net.Classes.Environment.UI
 
             if (!player.Character.IsInVehicle())
             {
-                isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < namePlateDistance;
+                isCloseEnough = player.Character.IsInRangeOf(Game.PlayerPed.Position, namePlateDistance);
             }
             else
             {
-                isCloseEnough = Math.Sqrt(player.Character.Position.DistanceToSquared(Game.PlayerPed.Position)) < namePlateVehicleDistance;
+                isCloseEnough = player.Character.IsInRangeOf(Game.PlayerPed.Position, namePlateVehicleDistance);
             }
             bool isCurrentPlayer = (Game.Player == player);
             if (isCloseEnough && !isCurrentPlayer)
@@ -92,7 +136,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
             }
         }
 
-        static internal async Task ShowName(CitizenFX.Core.Player player)
+        static internal async Task ShowName(Player player)
         {
             if (!API.NetworkIsPlayerActive(player.Handle) && Game.Player.Handle == player.Handle) return;
 

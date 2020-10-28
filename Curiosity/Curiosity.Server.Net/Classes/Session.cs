@@ -1,7 +1,9 @@
-﻿using Curiosity.Global.Shared.Data;
+﻿using CitizenFX.Core;
+using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -69,6 +71,8 @@ namespace Curiosity.Server.net.Classes
         public bool JobMessages { get; internal set; }
 
         public PartyData Party = new PartyData();
+
+        private PlayerSessionItem playerSessionItem = new PlayerSessionItem();
 
         internal void UpdateLastDonationCheck()
         {
@@ -212,6 +216,15 @@ namespace Curiosity.Server.net.Classes
 
             ChatLog.SendLogMessage($"Connected: [{Player.Handle}] {Name}#{UserID} (Ping: {Ping}ms)", discord: true);
 
+            playerSessionItem.Privilege = Privilege;
+            playerSessionItem.ServerId = NetId;
+            playerSessionItem.Username = Name;
+            playerSessionItem.UserId = UserID;
+
+            string js = JsonConvert.SerializeObject(playerSessionItem);
+
+            BaseScript.TriggerClientEvent("curioisty:client:player:name:update", js);
+
             return true;
         }
 
@@ -219,6 +232,12 @@ namespace Curiosity.Server.net.Classes
         {
             try
             {
+                playerSessionItem.Disconnected = true;
+
+                string js = JsonConvert.SerializeObject(playerSessionItem);
+
+                BaseScript.TriggerClientEvent("curioisty:client:player:name:update", js);
+
                 SessionManager.PlayerList.Remove(NetId);
             }
             catch (Exception ex)

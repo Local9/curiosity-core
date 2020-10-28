@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Server.net.Business;
 using Curiosity.Shared.Server.net.Helpers;
@@ -46,7 +47,7 @@ namespace Curiosity.Server.net.Classes
 
         static void OnGetSessions()
         {
-
+            
         }
 
         static async Task UpdateSessions()
