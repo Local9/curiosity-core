@@ -62,7 +62,31 @@ namespace Curiosity.Server.net.Classes.Environment
                         return;
                     }
 
-                    if (session.User.Wallet < vehicleShopItem.Cost)
+                    int cost = vehicleShopItem.Cost;
+                    float costDiscount = 0f;
+                    Privilege privilege = (Privilege)session.User.RoleId;
+
+                    switch (privilege)
+                    {
+                        case Privilege.DONATOR:
+                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_life", "0"));
+                            break;
+                        case Privilege.DONATOR1:
+                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier1", "0"));
+                            break;
+                        case Privilege.DONATOR2:
+                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier2", "0"));
+                            break;
+                        case Privilege.DONATOR3:
+                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier3", "0"));
+                            break;
+                    }
+
+                    costDiscount += float.Parse(API.GetConvar("shop_event_discount", "0"));
+
+                    int finalCost = (int)(cost * costDiscount);
+
+                    if (session.User.Wallet < finalCost)
                     {
                         player.NotificationCuriosity("Vehicle Shop", "Sorry, not enough cash");
                         return;
@@ -76,32 +100,8 @@ namespace Curiosity.Server.net.Classes.Environment
 
                     if (purchased)
                     {
-                        int cost = vehicleShopItem.Cost;
-                        float costDiscount = 0f;
-                        Privilege privilege = (Privilege)session.User.RoleId;
-
-                        switch (privilege)
-                        {
-                            case Privilege.DONATOR:
-                                costDiscount += float.Parse(API.GetConvar("shop_donator_discount_life", "0"));
-                                break;
-                            case Privilege.DONATOR1:
-                                costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier1", "0"));
-                                break;
-                            case Privilege.DONATOR2:
-                                costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier2", "0"));
-                                break;
-                            case Privilege.DONATOR3:
-                                costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier3", "0"));
-                                break;
-                        }
-
-                        costDiscount += float.Parse(API.GetConvar("shop_event_discount", "0"));
-
-                        int finalCost = (int)(cost * costDiscount);
-
                         session.DecreaseWallet(finalCost);
-                        Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, vehicleShopItem.Cost);
+                        Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, finalCost);
                         await BaseScript.Delay(100);
                         player.TriggerEvent("curiosity:Client:Vehicle:Shop:Update");
                         return;
