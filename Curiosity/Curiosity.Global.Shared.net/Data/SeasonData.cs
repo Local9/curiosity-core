@@ -52,6 +52,7 @@ namespace Curiosity.Global.Shared.Data
                 WeatherTypes.CLOUDS,
                 WeatherTypes.EXTRASUNNY,
                 WeatherTypes.RAIN,
+                WeatherTypes.FOGGY,
             };
         }
         static public List<WeatherTypes> WeatherSummerList()
@@ -60,12 +61,8 @@ namespace Curiosity.Global.Shared.Data
             {
                 WeatherTypes.CLEAR,
                 WeatherTypes.CLEARING,
-                WeatherTypes.OVERCAST,
-                WeatherTypes.CLOUDS,
                 WeatherTypes.EXTRASUNNY,
-                WeatherTypes.THUNDER,
                 WeatherTypes.SMOG,
-                WeatherTypes.FOGGY,
             };
         }
         static public List<WeatherTypes> WeatherAutumnList()
@@ -78,7 +75,8 @@ namespace Curiosity.Global.Shared.Data
                 WeatherTypes.CLOUDS,
                 WeatherTypes.EXTRASUNNY,
                 WeatherTypes.RAIN,
-                WeatherTypes.FOGGY
+                WeatherTypes.FOGGY,
+                WeatherTypes.THUNDER
             };
         }
     }
