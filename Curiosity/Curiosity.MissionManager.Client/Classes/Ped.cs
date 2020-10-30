@@ -152,6 +152,8 @@ namespace Curiosity.MissionManager.Client.Classes
             API.RequestAnimDict("mp_arresting");
             API.RequestAnimDict("random@arrests@busted");
             API.RequestAnimDict("random@arrests");
+
+            API.NetworkFadeInEntity(fx.Handle, false);
         }
 
         internal void PrisonTransport()
