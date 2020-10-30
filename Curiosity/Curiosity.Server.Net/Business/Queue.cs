@@ -141,7 +141,7 @@ namespace Curiosity.Server.net.Business
             messages.Add(Messages.Whitelist, "You are not whitelisted");
             messages.Add(Messages.Queue, "You are in queue");
             messages.Add(Messages.PriorityQueue, "You are in priority queue");
-            messages.Add(Messages.Canceled, "Canceled from queue");
+            messages.Add(Messages.Canceled, "Cancelled from queue");
             messages.Add(Messages.Error, "An error prevented deferrals");
             messages.Add(Messages.Timeout, "Exceeded server owners maximum loading time threshold");
             messages.Add(Messages.QueueCount, "[Queue: {0}]");
@@ -290,6 +290,7 @@ namespace Curiosity.Server.net.Business
                     {
                         UpdateTimer(license);
                         deferrals.done($"{messages[Messages.Canceled]}");
+                        // RemoveFrom(license, true, true, true, true, true, true);
                         if (stateChangeMessages) { Log.Verbose($"[UpdateStates] Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
                         return;
                     }
@@ -836,7 +837,7 @@ namespace Curiosity.Server.net.Business
                 if (discordId == "191686898450825217")
                     Server.TriggerClientEvent("curiosity:Client:Player:Developer:Online");
 
-                Server.TriggerEvent("environment:train:activate");
+                RemoveFrom(license, false, true, true, true, false, false);
             }
             catch (Exception ex)
             {
