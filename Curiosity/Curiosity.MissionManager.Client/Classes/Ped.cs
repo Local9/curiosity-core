@@ -144,9 +144,9 @@ namespace Curiosity.MissionManager.Client.Classes
             API.TaskSetBlockingOfNonTemporaryEvents(Fx.Handle, true);
             API.SetPedDiesInWater(Fx.Handle, false);
             API.SetPedDiesWhenInjured(Fx.Handle, false);
-            API.SetPedCombatAttributes(Fx.Handle, 17, false);
-            API.SetPedCombatAttributes(Fx.Handle, 46, false);
-            API.SetPedCombatAttributes(Fx.Handle, 5, false);
+            API.SetPedCombatAttributes(Fx.Handle, 17, false); // Flee if faced with weapon
+            API.SetPedCombatAttributes(Fx.Handle, 46, false); // BF_AlwaysFight 
+            API.SetPedCombatAttributes(Fx.Handle, 5, false); // BF_CanFightArmedPedsWhenNotArmed 
             Fx.SetConfigFlag(281, true); // No more rolling about
 
             API.RequestAnimDict("mp_arresting");
