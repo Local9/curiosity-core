@@ -21,6 +21,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static double _clientTimeOffset = 0;
         static double _clientTimer = 0;
         static bool _clientFreezeTime = false;
+        static bool _singleTimeSent = false;
 
         static int hour = 0;
         static int minute = 0;
@@ -163,12 +164,22 @@ namespace Curiosity.Client.net.Classes.Environment
             NetworkOverrideClockTime(hour, minute, 0);
             SetClockTime(hour, minute, 0);
 
-            if (minute % 10 == 0)
+            if (minute % 10 == 0 && _lastWeather != WeatherTypes.HALLOWEEN)
             {
                 JsonBuilder jsonBuilder = new JsonBuilder()
                     .Add("operation", "TIME")
                     .Add("hour", $"{hour:00}")
                     .Add("minute", $"{minute:00}");
+                API.SendNuiMessage(jsonBuilder.Build());
+            }
+            else if (_lastWeather == WeatherTypes.HALLOWEEN && !_singleTimeSent)
+            {
+                _singleTimeSent = true;
+
+                JsonBuilder jsonBuilder = new JsonBuilder()
+                    .Add("operation", "TIME")
+                    .Add("hour", $"{0:00}")
+                    .Add("minute", $"{0:00}");
                 API.SendNuiMessage(jsonBuilder.Build());
             }
         }
@@ -182,18 +193,6 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             WeatherTypes newWeather = (WeatherTypes)weather;
             if (_lastWeather == newWeather) return;
-
-            if (newWeather == WeatherTypes.HALLOWEEN)
-            {
-                API.ClearOverrideWeather();
-                API.SetWeatherTypePersist("HALLOWEEN");
-                API.SetWeatherTypeNowPersist("HALLOWEEN");
-                API.SetWeatherTypeNow("HALLOWEEN");
-                API.SetOverrideWeather("HALLOWEEN");
-
-                WeatherNuiMessage(newWeather);
-                return;
-            }
 
             _lastWeather = newWeather;
 
@@ -228,7 +227,6 @@ namespace Curiosity.Client.net.Classes.Environment
 
             API.SetWind(windSpeed);
             API.SetWindDirection(windDirection); // 0-7.9
-
         }
 
         private static async void SetWeatherDelay(WeatherTypes weather)
@@ -246,6 +244,7 @@ namespace Curiosity.Client.net.Classes.Environment
         private static void SetWeather(WeatherTypes weather)
         {
             string w = $"{weather}";
+            SetOverrideWeather(w);
             SetWeatherTypeNow(w);
             SetWeatherTypePersist(w);
             SetWeatherTypeNowPersist(w);
@@ -323,10 +322,14 @@ namespace Curiosity.Client.net.Classes.Environment
             switch (weather)
             {
                 case WeatherTypes.XMAS_STORM:
-                case WeatherTypes.HALLOWEEN:
                 case WeatherTypes.XMAS:
                     PED_MULTIPLIER = 0.2f;
                     VEH_MULTIPLIER = 0.5f;
+                    VEH_PARKED_MULTIPLIER = 1f;
+                    break;
+                case WeatherTypes.HALLOWEEN:
+                    PED_MULTIPLIER = 0.2f;
+                    VEH_MULTIPLIER = 1f;
                     VEH_PARKED_MULTIPLIER = 1f;
                     break;
                 case WeatherTypes.CLEAR:
