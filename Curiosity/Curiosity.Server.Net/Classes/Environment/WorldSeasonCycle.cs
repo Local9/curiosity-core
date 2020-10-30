@@ -31,6 +31,9 @@ namespace Curiosity.Server.net.Classes.Environment
         static bool _dynamicWeatherEnabled = true;
         static float _rainIntensity;
 
+        static bool _isChristmas;
+        static bool _isHalloween;
+
         static List<WeatherTypes> _springWeather = SeasonData.WeatherSpringList();
         static List<WeatherTypes> _summerWeather = SeasonData.WeatherSummerList();
         static List<WeatherTypes> _autumnWeather = SeasonData.WeatherAutumnList();
@@ -53,6 +56,8 @@ namespace Curiosity.Server.net.Classes.Environment
         {
             // must run while loading in the air
             server.RegisterEventHandler("curiosity:server:seasons:sync:connection", new Action<CitizenFX.Core.Player>(OnSeasonConnectionSync));
+
+            IsStaticWeather();
 
             // server.RegisterTickHandler(OnSeasonTick);
             server.RegisterTickHandler(OnWorldTimeTick);
@@ -290,7 +295,7 @@ namespace Curiosity.Server.net.Classes.Environment
             _newWeatherTimer = _baseWeatherTimer; // set back to base timer
         }
 
-        private static async void SetNextWeather()
+        private static async void SetNextWeather(bool sync = true)
         {
             try
             {
@@ -344,7 +349,10 @@ namespace Curiosity.Server.net.Classes.Environment
                 weathers.Clear(); // clear the list
                 RandomWind();
 
-                SyncAllUsers(); // sync all players
+                IsStaticWeather();
+                
+                if (sync)
+                    SyncAllUsers(); // sync all players
             }
             catch (Exception ex)
             {
@@ -377,13 +385,39 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 _serverSeason = _seasonsList[_season]; // set new season based on the increase
 
-                Server.TriggerClientEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp, _windSpeed, _windDirection); // inform clients
+                SetNextWeather(false);
+
+                SyncAllUsers();
 
                 Log.Success($"[SEASONS] Changed Season {_serverSeason}:{_season}");
             }
             else if (hour != 5 && _hasChangedSeason)
             {
                 _hasChangedSeason = false;
+            }
+        }
+
+        private static void IsStaticWeather()
+        {
+            _isChristmas = API.GetConvar("christmas_weather", "false") == "true";
+            _isHalloween = API.GetConvar("halloween_weather", "false") == "true";
+
+            if (_isChristmas)
+            {
+                _serverSeason = Seasons.WINTER;
+                _serverWeather = WeatherTypes.XMAS;
+                _serverTemp = Utility.RANDOM.Next(20, 30);
+            }
+
+            if (_isHalloween)
+            {
+                ShiftTimeToHour(1);
+                ShiftTimeToMinute(0);
+                _freezeTime = true;
+
+                _serverSeason = Seasons.AUTUMN;
+                _serverWeather = WeatherTypes.HALLOWEEN;
+                _serverTemp = Utility.RANDOM.Next(40, 60);
             }
         }
 

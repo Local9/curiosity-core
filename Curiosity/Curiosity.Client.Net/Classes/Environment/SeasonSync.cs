@@ -180,9 +180,22 @@ namespace Curiosity.Client.net.Classes.Environment
 
         private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp, float windSpeed, float windDirection, float rainIntensity)
         {
-            if (_lastWeather == (WeatherTypes)weather) return;
+            WeatherTypes newWeather = (WeatherTypes)weather;
+            if (_lastWeather == newWeather) return;
 
-            _lastWeather = (WeatherTypes)weather;
+            if (newWeather == WeatherTypes.HALLOWEEN)
+            {
+                API.ClearOverrideWeather();
+                API.SetWeatherTypePersist("HALLOWEEN");
+                API.SetWeatherTypeNowPersist("HALLOWEEN");
+                API.SetWeatherTypeNow("HALLOWEEN");
+                API.SetOverrideWeather("HALLOWEEN");
+
+                WeatherNuiMessage(newWeather);
+                return;
+            }
+
+            _lastWeather = newWeather;
 
             SetWeatherTypeOverTime($"{weather}", 15.0f);
 
