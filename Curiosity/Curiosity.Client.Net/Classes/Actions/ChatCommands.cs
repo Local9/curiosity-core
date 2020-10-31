@@ -923,11 +923,15 @@ namespace Curiosity.Client.net.Classes.Actions
                 {
                     Vector3 pos = GetBlipInfoIdCoord(blip);
 
-                    pos = await pos.Ground();
+                    float groundZ = 0f;
 
                     posX = pos.X;
                     posY = pos.Y;
                     posZ = pos.Z;
+
+                    if (API.GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z, ref groundZ, false))
+                        posZ = groundZ;
+                    
                 }
                 else
                 {
@@ -944,9 +948,6 @@ namespace Curiosity.Client.net.Classes.Actions
             API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
 
             Game.PlayerPed.Position = new Vector3(posX, posY, posZ);
-
-            PlaceObjectOnGroundProperly(Game.PlayerPed.Handle);
-            PlaceObjectOnGroundProperly_2(Game.PlayerPed.Handle);
 
             API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
         }
