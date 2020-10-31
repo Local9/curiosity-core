@@ -36,7 +36,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
         private static float Discount(Privilege privilege)
         {
-            float discount = float.Parse(API.GetConvar("shop_event_discount", "0"));
+            float discount = float.Parse(API.GetConvar("shop_event_discount", "1.0"));
 
             if (discount > 0)
                 return discount;
@@ -44,15 +44,15 @@ namespace Curiosity.Server.net.Classes.Environment
             switch (privilege)
             {
                 case Privilege.DONATOR:
-                    return float.Parse(API.GetConvar("shop_donator_discount_life", "0"));
+                    return float.Parse(API.GetConvar("shop_donator_discount_life", "1.0"));
                 case Privilege.DONATOR1:
-                    return float.Parse(API.GetConvar("shop_donator_discount_tier1", "0"));
+                    return float.Parse(API.GetConvar("shop_donator_discount_tier1", "1.0"));
                 case Privilege.DONATOR2:
-                    return float.Parse(API.GetConvar("shop_donator_discount_tier2", "0"));
+                    return float.Parse(API.GetConvar("shop_donator_discount_tier2", "1.0"));
                 case Privilege.DONATOR3:
-                    return float.Parse(API.GetConvar("shop_donator_discount_tier3", "0"));
+                    return float.Parse(API.GetConvar("shop_donator_discount_tier3", "1.0"));
                 default:
-                    return 0f;
+                    return 1.0f;
             }
         }
 
