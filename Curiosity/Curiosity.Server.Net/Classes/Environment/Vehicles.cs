@@ -34,6 +34,28 @@ namespace Curiosity.Server.net.Classes.Environment
         // on purchase success, spawn
         // if owned, spawn
 
+        private static float Discount(Privilege privilege)
+        {
+            float discount = float.Parse(API.GetConvar("shop_event_discount", "0"));
+
+            if (discount > 0)
+                return discount;
+
+            switch (privilege)
+            {
+                case Privilege.DONATOR:
+                    return float.Parse(API.GetConvar("shop_donator_discount_life", "0"));
+                case Privilege.DONATOR1:
+                    return float.Parse(API.GetConvar("shop_donator_discount_tier1", "0"));
+                case Privilege.DONATOR2:
+                    return float.Parse(API.GetConvar("shop_donator_discount_tier2", "0"));
+                case Privilege.DONATOR3:
+                    return float.Parse(API.GetConvar("shop_donator_discount_tier3", "0"));
+                default:
+                    return 0f;
+            }
+        }
+
         private async static void OnVehicleShopAction([FromSource] CitizenFX.Core.Player player, int vehicleShopId)
         {
             try
@@ -63,26 +85,8 @@ namespace Curiosity.Server.net.Classes.Environment
                     }
 
                     int cost = vehicleShopItem.Cost;
-                    float costDiscount = 0f;
-                    Privilege privilege = (Privilege)session.User.RoleId;
 
-                    switch (privilege)
-                    {
-                        case Privilege.DONATOR:
-                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_life", "0"));
-                            break;
-                        case Privilege.DONATOR1:
-                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier1", "0"));
-                            break;
-                        case Privilege.DONATOR2:
-                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier2", "0"));
-                            break;
-                        case Privilege.DONATOR3:
-                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier3", "0"));
-                            break;
-                    }
-
-                    costDiscount += float.Parse(API.GetConvar("shop_event_discount", "0"));
+                    float costDiscount = Discount(session.Privilege);                    
 
                     int finalCost = (int)(cost * costDiscount);
 
@@ -189,27 +193,9 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 foreach (VehicleShopItem vehicleItem in vehicles)
                 {
-                    Privilege privilege = (Privilege)session.User.RoleId;
                     int cost = vehicleItem.Cost;
-                    float costDiscount = 0f;
 
-                    switch (privilege)
-                    {
-                        case Privilege.DONATOR:
-                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_life", "0"));
-                            break;
-                        case Privilege.DONATOR1:
-                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier1", "0"));
-                            break;
-                        case Privilege.DONATOR2:
-                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier2", "0"));
-                            break;
-                        case Privilege.DONATOR3:
-                            costDiscount += float.Parse(API.GetConvar("shop_donator_discount_tier3", "0"));
-                            break;
-                    }
-
-                    costDiscount += float.Parse(API.GetConvar("shop_event_discount", "0"));
+                    float costDiscount = Discount(session.Privilege);
 
                     int finalCost = (int)(cost * costDiscount);
 
