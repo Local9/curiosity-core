@@ -226,20 +226,24 @@ namespace Curiosity.LifeV.Bot.Modules
                 hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588444129722105856);
 
                 int donatorRoleId = 9;
+                string tier = "Life V Life Time Supporter";
 
                 if (roleIdList.Contains(588443443496222720)) // Lv1
                 {
                     donatorRoleId = 11;
+                    tier = "Life V Supporter I";
                 }
 
                 if (roleIdList.Contains(588440994543042560)) // Lv2
                 {
                     donatorRoleId = 12;
+                    tier = "Life V Supporter II";
                 }
 
                 if (roleIdList.Contains(588444129722105856)) // Lv3
                 {
                     donatorRoleId = 13;
+                    tier = "Life V Supporter III";
                 }
 
                 string statusStr = "Failed";
@@ -247,7 +251,7 @@ namespace Curiosity.LifeV.Bot.Modules
                 if (hasDonatorRole)
                 {
                     await dbUser.AddDonatorStatus(donatorRoleId);
-                    statusStr = "Is a Donator";
+                    statusStr = $"Is a {tier} Donator";
                 }
                 else
                 {
