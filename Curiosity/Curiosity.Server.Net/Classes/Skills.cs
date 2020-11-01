@@ -255,18 +255,14 @@ namespace Curiosity.Server.net.Classes
         {
             switch (privilege)
             {
-                case GlobalEnum.Privilege.DONATOR1:
+                case Privilege.DONATOR1:
                     return float.Parse(API.GetConvar("experience_modifier_donator1", $"0.1"));
-                    break;
-                case GlobalEnum.Privilege.DONATOR2:
+                case Privilege.DONATOR2:
                     return float.Parse(API.GetConvar("experience_modifier_donator2", $"0.25"));
-                    break;
-                case GlobalEnum.Privilege.DONATOR3:
+                case Privilege.DONATOR3:
                     return float.Parse(API.GetConvar("experience_modifier_donator3", $"0.5"));
-                    break;
                 default:
                     return float.Parse(API.GetConvar("experience_modifier_lifeTime", $"0.05"));
-                    break;
             }
         }
 

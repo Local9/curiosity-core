@@ -44,6 +44,13 @@ namespace Curiosity.Server.net.Classes.Environment
             switch (privilege)
             {
                 case Privilege.DONATOR:
+                case Privilege.ADMINISTRATOR:
+                case Privilege.COMMUNITYMANAGER:
+                case Privilege.DEVELOPER:
+                case Privilege.HEADADMIN:
+                case Privilege.MODERATOR:
+                case Privilege.PROJECTMANAGER:
+                case Privilege.SENIORADMIN:
                     return float.Parse(API.GetConvar("shop_donator_discount_life", "1.0"));
                 case Privilege.DONATOR1:
                     return float.Parse(API.GetConvar("shop_donator_discount_tier1", "1.0"));
