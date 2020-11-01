@@ -36,7 +36,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
         private static float Discount(Privilege privilege)
         {
-            float discount = float.Parse(API.GetConvar("shop_event_discount", "1.0"));
+            float discount = float.Parse(API.GetConvar("shop_event_discount", "0.0"));
 
             if (discount > 0)
                 return discount;

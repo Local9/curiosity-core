@@ -51,7 +51,6 @@ namespace Curiosity.Server.net.Classes.Environment
 
             // API.RegisterCommand("pia", new Action<int, List<object>, string>(PIA), false);
 
-            API.RegisterCommand("test", new Action<int, List<object>, string>(Test), false);
             API.RegisterCommand("sessions", new Action<int, List<object>, string>(OnSessions), false);
             API.RegisterCommand("guide", new Action<int, List<object>, string>(Guide), false);
             API.RegisterCommand("help", new Action<int, List<object>, string>(Guide), false);
