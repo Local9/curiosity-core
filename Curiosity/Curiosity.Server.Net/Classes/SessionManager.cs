@@ -33,7 +33,7 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Session:Ping", new Action<CitizenFX.Core.Player>(OnSessionPing));
         }
 
-        private static Task UpdatePlayerInformation()
+        private  async static Task UpdatePlayerInformation()
         {
             List<PlayerSessionItem> psi = new List<PlayerSessionItem>();
 
