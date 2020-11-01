@@ -154,7 +154,7 @@ namespace Curiosity.LifeV.Bot.Models
                 await connection.OpenAsync();
                 using var cmd = connection.CreateCommand();
 
-                cmd.CommandText = @"call upUserAddDonatorRole(@userId);";
+                cmd.CommandText = @"call upUserAddDonatorRole(@userId, @DonatorRoleId);";
                 cmd.Parameters.Add(new MySqlParameter
                 {
                     ParameterName = "@userId",

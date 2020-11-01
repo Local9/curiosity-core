@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Data;
+using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Server.net.Business;
 using Curiosity.Shared.Server.net.Helpers;
@@ -24,11 +25,19 @@ namespace Curiosity.Server.net.Classes
         public static void Init()
         {
             server.RegisterTickHandler(UpdateSessions);
+            server.RegisterTickHandler(UpdatePlayerInformation);
 
             GameTimer = API.GetGameTimer();
 
             server.RegisterEventHandler("curiosity:Server:SessionManager:GetSessions", new Action(OnGetSessions));
             server.RegisterEventHandler("curiosity:Server:Session:Ping", new Action<CitizenFX.Core.Player>(OnSessionPing));
+        }
+
+        private static Task UpdatePlayerInformation()
+        {
+            List<PlayerSessionItem> psi = new List<PlayerSessionItem>();
+
+            
         }
 
         static void OnSessionPing([FromSource]CitizenFX.Core.Player player)
