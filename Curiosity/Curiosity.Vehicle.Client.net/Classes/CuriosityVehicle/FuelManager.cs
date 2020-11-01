@@ -112,9 +112,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
             client.RegisterTickHandler(PeriodicCheckRefuel);
             client.RegisterTickHandler(GasStationBlips);
+            client.RegisterTickHandler(ShowHelpText);
 
             CheckFuelPumpDistance();
-            ShowHelpText();
 
             GameTimer = API.GetGameTimer();
 
@@ -206,19 +206,22 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             }
         }
 
-        static async void ShowHelpText()
+        static async Task ShowHelpText()
         {
-            while (true)
+            if (isNearFuelPump && !refueling)
             {
-                if (isNearFuelPump && !refueling)
+                NativeWrappers.DrawHelpText("Press ~INPUT_REPLAY_START_STOP_RECORDING_SECONDARY~ to ~y~refuel vehicle");
+
+
+                if (isNearFuelPump && ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecordingSecondary, false) && Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver.IsPlayer)
                 {
-                    NativeWrappers.DrawHelpText("Press ~INPUT_PICKUP~ to ~y~refuel vehicle");
-                    await BaseScript.Delay(0);
+                    Refuel(100.0f - vehicleFuel);
+                    await BaseScript.Delay(5000);
                 }
-                else
-                {
-                    await BaseScript.Delay(2000);
-                }
+            }
+            else
+            {
+                await BaseScript.Delay(2000);
             }
         }
 
@@ -252,12 +255,6 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         {
             try
             {
-                if (isNearFuelPump && ControlHelper.IsControlPressed(Control.Pickup, false) && Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver.IsPlayer)
-                {
-                    Refuel(100.0f - vehicleFuel);
-                    return;
-                }
-
                 if (Game.PlayerPed.IsInVehicle())
                 {
                     if (ControlHelper.IsControlPressed(Control.VehicleAccelerate, false) && !Game.PlayerPed.CurrentVehicle.IsEngineRunning && isNearFuelPump)
