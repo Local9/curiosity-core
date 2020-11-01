@@ -5,6 +5,7 @@ using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Server.net.Business;
 using Curiosity.Shared.Server.net.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,13 @@ namespace Curiosity.Server.net.Classes
         {
             List<PlayerSessionItem> psi = new List<PlayerSessionItem>();
 
-            
+            foreach(KeyValuePair<string, Session> keyValuePair in PlayerList)
+            {
+
+            }
+
+            string json = JsonConvert.SerializeObject(psi);
+            BaseScript.TriggerClientEvent("curiosity:client:player:list:update", json);
         }
 
         static void OnSessionPing([FromSource]CitizenFX.Core.Player player)
