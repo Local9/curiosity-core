@@ -131,8 +131,8 @@ namespace Curiosity.LifeV.Bot
             catch (Exception ex)
             {
                 Console.WriteLine($"ERROR: EXCEPTION");
-                Console.WriteLine($"ERROR: Message causing error '{message.Content}'");
-                Console.WriteLine($"ERROR: Message Posted by '{message.Author}'");
+                Console.WriteLine($"ERROR: Message causing error '{message?.Content}'");
+                Console.WriteLine($"ERROR: Message Posted by '{message?.Author}'");
                 Console.WriteLine(ex);
             }
         }
