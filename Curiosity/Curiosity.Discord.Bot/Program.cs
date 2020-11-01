@@ -97,8 +97,8 @@ namespace Curiosity.LifeV.Bot
 
             try
             {
-                var context = new SocketCommandContext(_client, message);
                 if (message is null || message.Author.IsBot) return;
+                var context = new SocketCommandContext(_client, message);
 
                 int argPos = 0;
 
