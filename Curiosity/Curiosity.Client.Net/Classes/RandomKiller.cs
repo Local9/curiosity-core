@@ -8,7 +8,7 @@ namespace Curiosity.Client.net.Classes
 {
     internal class RandomKiller
     {
-        private const int MINUTES_BETWEEN_CHECKS = ((1000 * 60) * 30);
+        private const int MINUTES_BETWEEN_CHECKS = ((1000 * 60) * 120);
         static Client Instance = Client.GetInstance();
         private static int gameTime;
         private static Ped killer;
