@@ -116,5 +116,45 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             // ImpoundManager.Tow(this);
         }
+
+        public void BurstWheel(Wheels wheel, bool onRim = false, float dmg = 1000f)
+        {
+            API.SetVehicleTyreBurst(Fx.Handle, (int)wheel, onRim, dmg);
+        }
+
+        public void DamageTop(float force = 1000f, float radius = 1000f, int numberOfHits = 1)
+        {
+            for (var i = 0; i < numberOfHits; i++)
+                API.SetVehicleDamage(Fx.Handle, 0f, 1f, 1f, force, radius, true);
+        }
+
+        public void DamageFront(bool increaseDamage = false)
+        {
+
+            API.SetVehicleDamage(Fx.Handle, 0f, 1.2f, 0f, 1600f, 1600f, true);
+            API.SetVehicleDamage(Fx.Handle, 0f, 0.75f, 0.05f, 1600f, 1600f, true);
+            API.SetVehicleDamage(Fx.Handle, -0.7f, 0f, 0f, 1600f, 1600f, true);
+            API.SetVehicleDamage(Fx.Handle, 0.7f, 0f, 0f, 1600f, 1600f, true);
+
+            if (increaseDamage)
+            {
+                API.SetVehicleDamage(Fx.Handle, 0f, 1.2f, 0f, 1600f, 1600f, true);
+                API.SetVehicleDamage(Fx.Handle, 0f, 0.75f, 0.05f, 1600f, 1600f, true);
+                API.SetVehicleDamage(Fx.Handle, -0.7f, 0f, 0f, 1600f, 1600f, true);
+                API.SetVehicleDamage(Fx.Handle, 0.7f, 0f, 0f, 1600f, 1600f, true);
+            }
+        }
+    }
+
+    public enum Wheels
+    {
+        FRONT_LEFT = 0,
+        FRONT_RIGHT = 1,
+        MID_LEFT = 2,
+        MID_RIGHT = 3,
+        REAR_LEFT = 4,
+        REAR_RIGHT = 5,
+        TRAILER_MID_LEFT = 45,
+        TRAILER_MID_RIGHT = 46,
     }
 }
