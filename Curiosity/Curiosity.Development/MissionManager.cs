@@ -23,6 +23,7 @@ namespace Curiosity.Development
 
             Func.RegisterMission(typeof(SpawnPed));
             Func.RegisterMission(typeof(SpawnVehicleDamaged));
+            Func.RegisterMission(typeof(SpawnVehicle));
         }
 
         private void OnClientResourceStop(string resourceName)

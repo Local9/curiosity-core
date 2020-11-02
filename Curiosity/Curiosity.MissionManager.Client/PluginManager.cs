@@ -17,6 +17,21 @@ namespace Curiosity.MissionManager.Client
             Instance = this;
 
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
+            EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
+        }
+
+        private void OnClientResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            if (!API.HasAnimDictLoaded("veh@low@front_ps@enter_exit"))
+                API.RequestAnimDict("veh@low@front_ps@enter_exit");
+
+            if (!API.HasAnimDictLoaded("rcmnigel3_trunk"))
+                API.RequestAnimDict("rcmnigel3_trunk");
+
+            if (!API.HasAnimDictLoaded("rcmepsilonism8"))
+                API.RequestAnimDict("rcmepsilonism8");
         }
 
         [Tick]

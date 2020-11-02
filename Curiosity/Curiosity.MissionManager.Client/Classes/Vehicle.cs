@@ -1,9 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.NaturalMotion;
+using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Classes
@@ -11,9 +13,22 @@ namespace Curiosity.MissionManager.Client.Classes
     [Serializable] // WORK on entity inheritance
     public class Vehicle : Entity, IEquatable<Vehicle>
     {
+        private bool _canExecuteAnimation = true;
+        private bool _doAnimBonnetOpen = false;
+        private bool _doAnimBonnetClose = false;
+        private bool _doAnimBootOpen = false;
+        private bool _doAnimBootClose = false;
+
+        private int _counterBonnetOpen = 0;
+        private int _counterBonnetClose = 0;
+        private int _counterBootOpen = 0;
+        private int _counterBootClose = 0;
+
         public CitizenFX.Core.Vehicle Fx { get; private set; }
         public Vector3 Position => Fx.Position;
         public string Hash => Fx.Model.ToString();
+
+        private PluginManager PluginInstance => PluginManager.Instance;
 
         public string Name => API.GetLabelText(API.GetDisplayNameFromVehicleModel((uint)Fx.Model.Hash));
 
@@ -87,7 +102,6 @@ namespace Curiosity.MissionManager.Client.Classes
         internal async void Dismiss()
         {
             Fx.IsPersistent = false;
-
             API.NetworkFadeOutEntity(base.Handle, false, false);
             await BaseScript.Delay(2000);
             base.Delete();
@@ -162,17 +176,168 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             EntityHandler.ParticleEffect(NetworkId, dict, fx, offset, scale);
         }
-    }
 
-    public enum Wheels
-    {
-        FRONT_LEFT = 0,
-        FRONT_RIGHT = 1,
-        MID_LEFT = 2,
-        MID_RIGHT = 3,
-        REAR_LEFT = 4,
-        REAR_RIGHT = 5,
-        TRAILER_MID_LEFT = 45,
-        TRAILER_MID_RIGHT = 46,
+        public async void Sequence(VehicleSequence vehicleSequence)
+        {
+            switch (vehicleSequence)
+            {
+                case VehicleSequence.SEARCH:
+
+                    if (!_canExecuteAnimation) return;
+
+                    string[] vehicleDoorNames = new string[] { "handle_dside_f", "handle_dside_r", "handle_pside_f", "handle_pside_r", "bonnet", "boot" };
+                    string closestDoor = "";
+                    double num = 100;
+                    string[] vehicleDoorNamesCopy = vehicleDoorNames;
+
+                    for (int i = 0; i < (int)vehicleDoorNamesCopy.Length; i++)
+                    {
+                        string boneName = vehicleDoorNamesCopy[i];
+                        int entityBoneIndex = API.GetEntityBoneIndexByName(Handle, boneName);
+                        if (entityBoneIndex != -1)
+                        {
+                            Vector3 worldPositioinOfBone = API.GetWorldPositionOfEntityBone(Handle, entityBoneIndex);
+                            float single = Vector3.Distance(worldPositioinOfBone, Game.PlayerPed.Position);
+                            if ((double)single < num)
+                            {
+                                num = (double)single;
+                                closestDoor = boneName;
+                            }
+                        }
+                    }
+
+                    if (num > 5)
+                    {
+                        Screen.ShowNotification("Sorry, unable to search this door");
+                        return;
+                    }
+
+                    if (closestDoor == "handle_dside_f")
+                    {
+                        if (API.GetVehicleDoorAngleRatio(Handle, 0) < 0.25f)
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading - 90f;
+                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
+                            Fx.Doors[VehicleDoorIndex.FrontLeftDoor].Open();
+                            await BaseScript.Delay(500);
+                            AnimationHandler.AnimationSearch();
+                        }
+                        else
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading;
+                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
+                            Fx.Doors[VehicleDoorIndex.FrontLeftDoor].Close();
+                        }
+                    }
+                    else if (closestDoor == "handle_dside_r")
+                    {
+                        if (API.GetVehicleDoorAngleRatio(Handle, 2) < 0.25f)
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading - 90f;
+                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
+                            Fx.Doors[VehicleDoorIndex.BackLeftDoor].Open();
+                            await BaseScript.Delay(500);
+                            AnimationHandler.AnimationSearch();
+                        }
+                        else
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading;
+                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
+                            Fx.Doors[VehicleDoorIndex.BackLeftDoor].Close();
+                        }
+                    }
+                    else if (closestDoor == "handle_pside_f")
+                    {
+                        if (API.GetVehicleDoorAngleRatio(Handle, 1) < 0.25f)
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading + 90f;
+                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
+                            Fx.Doors[VehicleDoorIndex.FrontRightDoor].Open();
+                            await BaseScript.Delay(500);
+                            AnimationHandler.AnimationSearch();
+                        }
+                        else
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading;
+                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
+                            Fx.Doors[VehicleDoorIndex.FrontRightDoor].Close();
+                        }
+                    }
+                    else if (closestDoor == "handle_pside_r")
+                    {
+                        if (API.GetVehicleDoorAngleRatio(Handle, 3) < 0.25f)
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading + 90f;
+                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
+                            Fx.Doors[VehicleDoorIndex.BackRightDoor].Open();
+                            await BaseScript.Delay(500);
+                            AnimationHandler.AnimationSearch();
+                        }
+                        else
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading;
+                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
+                            Fx.Doors[VehicleDoorIndex.BackRightDoor].Close();
+                        }
+                    }
+                    else if (closestDoor == "bonnet")
+                    {
+                        if (API.GetVehicleDoorAngleRatio(Handle, 4) < 0.25f)
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading - 180f;
+                            Game.PlayerPed.Task.PlayAnimation("rcmnigel3_trunk", "out_trunk_trevor", 4f, 2500, AnimationFlags.None);
+                            await BaseScript.Delay(750);
+                            Fx.Doors[VehicleDoorIndex.Hood].Open();
+                            await BaseScript.Delay(1000);
+                            AnimationHandler.AnimationSearch();
+                        }
+                        else
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading - 180f;
+                            Game.PlayerPed.Task.PlayAnimation("rcmepsilonism8", "bag_handler_close_trunk_walk_left", 4f, 2500, AnimationFlags.None);
+                            await BaseScript.Delay(1250);
+                            Fx.Doors[VehicleDoorIndex.Hood].Close();
+                        }
+                    }
+                    else if (closestDoor == "boot")
+                    {
+                        if (API.GetVehicleDoorAngleRatio(Handle, 5) < 0.25f)
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading;
+                            Game.PlayerPed.Task.PlayAnimation("rcmnigel3_trunk", "out_trunk_trevor", 4f, 2500, AnimationFlags.None);
+                            await BaseScript.Delay(750);
+                            Fx.Doors[VehicleDoorIndex.Trunk].Open();
+                            await BaseScript.Delay(1000);
+                            AnimationHandler.AnimationSearch();
+                        }
+                        else
+                        {
+                            Game.PlayerPed.Heading = Fx.Heading;
+                            Game.PlayerPed.Task.PlayAnimation("rcmepsilonism8", "bag_handler_close_trunk_walk_left", 4f, 2500, AnimationFlags.None);
+                            await BaseScript.Delay(1250);
+                            Fx.Doors[VehicleDoorIndex.Trunk].Close();
+                        }
+                    }
+
+                    break;
+            }
+        }
+
+        public enum VehicleSequence
+        {
+            SEARCH
+        }
+
+        public enum Wheels
+        {
+            FRONT_LEFT = 0,
+            FRONT_RIGHT = 1,
+            MID_LEFT = 2,
+            MID_RIGHT = 3,
+            REAR_LEFT = 4,
+            REAR_RIGHT = 5,
+            TRAILER_MID_LEFT = 45,
+            TRAILER_MID_RIGHT = 46,
+        }
     }
 }

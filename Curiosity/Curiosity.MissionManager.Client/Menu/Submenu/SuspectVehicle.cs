@@ -20,7 +20,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         public UIMenu CreateMenu(UIMenu menu)
         {
-            menuItemSearchVehicle = new UIMenuItem("Search Vehicle");
+            menuItemSearchVehicle = new UIMenuItem("Search");
             menu.AddItem(menuItemSearchVehicle);
 
             menu.OnItemSelect += Menu_OnItemSelect;
@@ -75,6 +75,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         {
             if (selectedItem == menuItemSearchVehicle)
             {
+                vehicle.Sequence(Vehicle.VehicleSequence.SEARCH);
                 await BaseScript.Delay(500);
                 return;
             }
