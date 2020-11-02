@@ -22,6 +22,9 @@ namespace Curiosity.Development.Missions
 
             RegisteredVehicles.Add(_vehicle);
 
+            _vehicle.Fx.IsEngineRunning = false;
+            _vehicle.Fx.IsDriveable = false;
+
             // windscreen
             _vehicle.DamageTop(numberOfHits: 2);
             _vehicle.DamageFront();
