@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.NaturalMotion;
+using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
 using System;
 using System.Threading.Tasks;
@@ -127,30 +129,38 @@ namespace Curiosity.MissionManager.Client.Classes
 
         public void DamageTop(float force = 1000f, float radius = 1000f, int numberOfHits = 1)
         {
-            for (var i = 0; i < numberOfHits; i++)
-                API.SetVehicleDamage(Fx.Handle, 0f, 1f, 1f, force, radius, true);
+            EntityHandler.TriggerDamageEvent(NetworkId, 0f, 1f, 1f, force, radius, true, numberOfHits);
         }
 
-        public void DamageFront(bool increaseDamage = false)
+        public async void DamageFront(bool increaseDamage = false)
         {
+            float force = 1600f;
+            float radius = 1600f;
 
-            API.SetVehicleDamage(Fx.Handle, 0f, 1.2f, 0f, 1600f, 1600f, true);
-            API.SetVehicleDamage(Fx.Handle, 0f, 0.75f, 0.05f, 1600f, 1600f, true);
-            API.SetVehicleDamage(Fx.Handle, -0.7f, 0f, 0f, 1600f, 1600f, true);
-            API.SetVehicleDamage(Fx.Handle, 0.7f, 0f, 0f, 1600f, 1600f, true);
+            EntityHandler.TriggerDamageEvent(NetworkId, 0f, 1.2f, 0f, force, radius, true, 1);
+            await BaseScript.Delay(10);
+            EntityHandler.TriggerDamageEvent(NetworkId, 0f, 0.75f, 0.05f, force, radius, true, 1);
+            await BaseScript.Delay(10);
+            EntityHandler.TriggerDamageEvent(NetworkId, -0.7f, 0f, 0f, force, radius, true, 1);
+            await BaseScript.Delay(10);
+            EntityHandler.TriggerDamageEvent(NetworkId, 0.7f, 0f, 0f, force, radius, true, 1);
 
             if (increaseDamage)
             {
-                API.SetVehicleDamage(Fx.Handle, 0f, 1.2f, 0f, 1600f, 1600f, true);
-                API.SetVehicleDamage(Fx.Handle, 0f, 0.75f, 0.05f, 1600f, 1600f, true);
-                API.SetVehicleDamage(Fx.Handle, -0.7f, 0f, 0f, 1600f, 1600f, true);
-                API.SetVehicleDamage(Fx.Handle, 0.7f, 0f, 0f, 1600f, 1600f, true);
+                await BaseScript.Delay(10);
+                EntityHandler.TriggerDamageEvent(NetworkId, 0f, 1.2f, 0f, force, radius, true, 1);
+                await BaseScript.Delay(10);
+                EntityHandler.TriggerDamageEvent(NetworkId, 0f, 0.75f, 0.05f, force, radius, true, 1);
+                await BaseScript.Delay(10);
+                EntityHandler.TriggerDamageEvent(NetworkId, -0.7f, 0f, 0f, force, radius, true, 1);
+                await BaseScript.Delay(10);
+                EntityHandler.TriggerDamageEvent(NetworkId, 0.7f, 0f, 0f, force, radius, true, 1);
             }
         }
 
         public void ParticleEffect(string dict, string fx, Vector3 offset, float scale)
         {
-            BaseScript.TriggerServerEvent("s:mm:particle", Fx.NetworkId, dict, fx, offset.X, offset.Y, offset.Z, scale);
+            EntityHandler.ParticleEffect(NetworkId, dict, fx, offset, scale);
         }
     }
 

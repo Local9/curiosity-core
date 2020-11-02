@@ -15,17 +15,13 @@ namespace Curiosity.MissionManager.Client.Handler
             EventHandlers["c:mm:particle"] += new Action<int, string, string, float, float, float, float>(OnParticleEvent);
         }
 
-        private void OnParticleEvent(int vehNetworkId, string dict, string fx, float x, float y, float z, float scale)
+        private void OnParticleEvent(int networkId, string dict, string fx, float x, float y, float z, float scale)
         {
-            if (!API.NetworkDoesNetworkIdExist(vehNetworkId)) return;
+            int handle = EntityHandler.GetEntityFromNetworkId(networkId);
+
+            Vehicle vehicle = new Vehicle(handle);
 
             Vector3 pos = new Vector3(x, y, z);
-
-            int vehHandle = API.NetworkGetEntityFromNetworkId(vehNetworkId);
-
-            if (!API.DoesEntityExist(vehHandle)) return;
-
-            Vehicle vehicle = new Vehicle(vehHandle);
 
             ParticleEffectsAsset particleEffectsAsset = new ParticleEffectsAsset(dict);
             particleEffectsAsset.CreateEffectOnEntity(fx, vehicle, pos, scale: scale, startNow: true);

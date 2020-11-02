@@ -53,6 +53,8 @@
     <Compile Include="Classes\Ped.cs" />
     <Compile Include="Classes\Vehicle.cs" />
     <Compile Include="Commands\MissionCommands.cs" />
+    <Compile Include="Handler\DamageHandler.cs" />
+    <Compile Include="Handler\EntityHandler.cs" />
     <Compile Include="Handler\MarkerArrest.cs" />
     <Compile Include="Handler\CurPlayer.cs" />
     <Compile Include="Func.cs" />
