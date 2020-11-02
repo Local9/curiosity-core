@@ -525,6 +525,11 @@ namespace Curiosity.MissionManager.Client.Classes
             return flag;
         }
 
+        public void ParticleEffect(string dict, string fx, Vector3 offset, float scale)
+        {
+            BaseScript.TriggerServerEvent("s:mm:particle", Fx.NetworkId, dict, fx, offset.X, offset.Y, offset.Z, scale);
+        }
+
         bool IEquatable<Ped>.Equals(Ped other)
         {
             return (!base.Equals(other) ? false : object.Equals(this.Fx, other.Fx));
