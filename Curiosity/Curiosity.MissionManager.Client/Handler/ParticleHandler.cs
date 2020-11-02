@@ -12,7 +12,7 @@ namespace Curiosity.MissionManager.Client.Handler
     {
         public ParticleHandler()
         {
-            EventHandlers["c:mm:particle"] += new Action<int, string, string, float, float, float, float>(OnParticleEvent); // NOTE MOVE
+            EventHandlers["c:mm:particle"] += new Action<int, string, string, float, float, float, float>(OnParticleEvent);
         }
 
         private void OnParticleEvent(int vehNetworkId, string dict, string fx, float x, float y, float z, float scale)
