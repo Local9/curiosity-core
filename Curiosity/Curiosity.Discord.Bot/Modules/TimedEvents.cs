@@ -1,7 +1,9 @@
-﻿using Curiosity.LifeV.Bot.Models;
+﻿using Curiosity.LifeV.Bot.Entities.CitizenFX;
+using Curiosity.LifeV.Bot.Models;
 using Discord.Commands;
 using Discord.WebSocket;
 using MySqlConnector;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,9 @@ namespace Curiosity.LifeV.Bot
 {
     internal class TimedEvents : ModuleBase<SocketCommandContext>
     {
-        static Timer aTimer;
+        static Timer donationTimer;
+        static Timer statusUpdater;
+
         private static DiscordSocketClient _client;
         private static ulong _guildId;
 
@@ -21,10 +25,33 @@ namespace Curiosity.LifeV.Bot
             _client = client;
             _guildId = guildId;
 
-            aTimer = new Timer();
-            aTimer.Elapsed += new ElapsedEventHandler(OnDiscordDonationChecker);
-            aTimer.Interval = (1000 * 60) * 60; // EVERY HOUR
-            aTimer.Enabled = true;
+            donationTimer = new Timer();
+            donationTimer.Elapsed += new ElapsedEventHandler(OnDiscordDonationChecker);
+            donationTimer.Interval = (1000 * 60) * 60; // EVERY HOUR
+            donationTimer.Enabled = true;
+
+            statusUpdater = new Timer();
+            statusUpdater.Elapsed += new ElapsedEventHandler(OnStatusUpdater);
+            statusUpdater.Interval = (1000 * 30); // EVERY 30 Seconds
+            statusUpdater.Enabled = true;
+        }
+
+        private async void OnStatusUpdater(object sender, ElapsedEventArgs e)
+        {
+            string serverInformation = await Tools.HttpTools.GetUrlResultAsync($"http://5.9.0.85:30120/info.json");
+
+            if (string.IsNullOrEmpty(serverInformation))
+            {
+                _client.SetGameAsync($"Server Offline");
+                return;
+            }
+
+            string result = await Tools.HttpTools.GetUrlResultAsync($"http://5.9.0.85:30120/players.json");
+
+            List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
+            CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
+
+            _client.SetGameAsync($"P: {lst.Count}/32 | UT: {info.Variables["Uptime"]}");
         }
 
         private async void OnDiscordDonationChecker(object sender, ElapsedEventArgs e)
