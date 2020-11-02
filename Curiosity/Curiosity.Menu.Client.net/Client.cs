@@ -9,6 +9,7 @@ namespace Curiosity.Menus.Client.net
 {
     public class Client : BaseScript
     {
+        private const string PERSONAL_VEHICLE_ID = "PERSONAL_VEHICLE_ID";
         private static Client _instance;
         public static PlayerList players;
         public static GlobalEntity.User User;
@@ -39,14 +40,41 @@ namespace Curiosity.Menus.Client.net
 
             RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
             RegisterEventHandler("curiosity:Client:Player:Setup", new Action<string>(OnPlayerSetup));
+            RegisterEventHandler("curiosity:Player:Menu:VehicleId", new Action<int>(OnVehicleId));
 
             Log.Info("Curiosity.Menus.Client.net loaded\n");
+        }
+
+        private void OnVehicleId(int vehicleHandle)
+        {
+            if (CurrentVehicle == null)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_ID, vehicleHandle);
+                CurrentVehicle = new Vehicle(vehicleHandle);
+            }
+            else if (Client.CurrentVehicle.Handle != vehicleHandle)
+            {
+                API.SetResourceKvpInt(PERSONAL_VEHICLE_ID, vehicleHandle);
+                CurrentVehicle = new Vehicle(vehicleHandle);
+            }
         }
 
         static void OnClientResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
             Client.TriggerEvent("curiosity:Client:Player:Information");
+
+            int vehicleHandle = API.GetResourceKvpInt(PERSONAL_VEHICLE_ID);
+            if (vehicleHandle > 0)
+            {
+                if (API.DoesEntityExist(vehicleHandle))
+                {
+                    if (!API.IsEntityDead(vehicleHandle))
+                    {
+                        CurrentVehicle = new Vehicle(vehicleHandle);
+                    }
+                }
+            }
         }
 
         async void OnPlayerSetup(string jsonUser)
