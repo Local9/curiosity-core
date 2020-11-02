@@ -96,7 +96,7 @@ namespace Curiosity.LifeV.Bot
                                                     donatorRoleId = 12;
                                                 }
 
-                                                if (roleIdList.Contains(588444129722105856)) // Lv2
+                                                if (roleIdList.Contains(588444129722105856)) // Lv3
                                                 {
                                                     donatorRoleId = 13;
                                                 }
