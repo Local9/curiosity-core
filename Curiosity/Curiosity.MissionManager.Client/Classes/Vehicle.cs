@@ -72,6 +72,9 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             Vector3 streetPosition = position.Street();
             CitizenFX.Core.Vehicle fxVehicle = await World.CreateVehicle(model, streetPosition);
+            
+            API.ClearAreaOfEverything(streetPosition.X, streetPosition.Y, streetPosition.Z, 5f, false, false, false, false);
+
             Logger.Log(fxVehicle.ToString());
 
             API.NetworkFadeInEntity(fxVehicle.Handle, false);
@@ -143,6 +146,11 @@ namespace Curiosity.MissionManager.Client.Classes
                 API.SetVehicleDamage(Fx.Handle, -0.7f, 0f, 0f, 1600f, 1600f, true);
                 API.SetVehicleDamage(Fx.Handle, 0.7f, 0f, 0f, 1600f, 1600f, true);
             }
+        }
+
+        public void ParticleEffect(string dict, string fx, Vector3 offset, float scale)
+        {
+            BaseScript.TriggerServerEvent("s:mm:particle", Fx.NetworkId, dict, fx, offset.X, offset.Y, offset.Z, scale);
         }
     }
 

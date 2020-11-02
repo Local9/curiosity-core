@@ -56,6 +56,7 @@
     <Compile Include="Handler\MarkerArrest.cs" />
     <Compile Include="Handler\CurPlayer.cs" />
     <Compile Include="Func.cs" />
+    <Compile Include="Handler\ParticleHandler.cs" />
     <Compile Include="Managers\EntityEventWrapper.cs" />
     <Compile Include="Menu\MenuBase.cs" />
     <Compile Include="Menu\Submenu\Dispatch.cs" />
@@ -93,8 +94,6 @@
       <Name>NativeUI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Environment\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

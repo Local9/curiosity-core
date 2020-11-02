@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Classes;
@@ -15,6 +16,8 @@ namespace Curiosity.Development.Missions
     public class SpawnVehicleDamaged : Mission
     {
         Vehicle _vehicle;
+
+        Vector3 fireOffset = new Vector3(0.0f, -1.6f, 0f);
 
         public async override void Start()
         {
@@ -34,12 +37,17 @@ namespace Curiosity.Development.Missions
             _vehicle.BurstWheel(Wheels.REAR_LEFT);
             _vehicle.BurstWheel(Wheels.REAR_RIGHT);
 
-            Vector3 offset = new Vector3(-1.2f, -2.2f, 0f);
+            await BaseScript.Delay(10);
+
+            // X : - LEFT/RIGHT +
+            // Y : - BACK/FORWARD +
+            // Z : - DOWN/UP +
+
+            Vector3 offset = fireOffset;
+            Vector3 rotation = new Vector3(0f);
             Vector3 vehOffset = _vehicle.Fx.GetOffsetPosition(offset);
 
-            Model fire = "vfx_it3_38";
-
-            Prop prop = await World.CreateProp(fire, offset, false, true);
+            _vehicle.ParticleEffect("core", "fire_wrecked_car", offset, 1.5f);
 
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
@@ -51,7 +59,11 @@ namespace Curiosity.Development.Missions
 
         async Task OnMissionTick()
         {
-            
+            if (API.IsShockingEventInSphere(88, fireOffset.X, fireOffset.Y, fireOffset.Z, 10f))
+                Screen.ShowSubtitle("Hit");
+
+            if (API.IsShockingEventInSphere(89, fireOffset.X, fireOffset.Y, fireOffset.Z, 10f))
+                Screen.ShowSubtitle("Hit 2");
         }
     }
 }

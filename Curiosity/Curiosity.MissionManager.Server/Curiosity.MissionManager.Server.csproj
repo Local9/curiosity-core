@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\ParticleEvents.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
