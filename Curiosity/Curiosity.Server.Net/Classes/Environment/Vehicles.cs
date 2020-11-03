@@ -178,13 +178,12 @@ namespace Curiosity.Server.net.Classes.Environment
                 }
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicles);
-                string encodedJson = Encode.StringToBase64(json);
 
-                player.TriggerEvent("curiosity:Client:Vehicle:DonatorVehicleList", encodedJson);
+                player.TriggerEvent("curiosity:Client:Vehicle:DonatorVehicleList", json);
             }
             catch (Exception ex)
             {
-
+                Log.Error(ex, "[VEHICLE] DONOR LIST");
             }
         }
 

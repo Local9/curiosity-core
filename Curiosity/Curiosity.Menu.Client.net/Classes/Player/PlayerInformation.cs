@@ -53,14 +53,15 @@ namespace Curiosity.Menus.Client.net.Classes.Player
             if (privilege != (Privilege)playerInfo.RoleId)
             {
                 privilege = (Privilege)playerInfo.RoleId;
+                Menus.Donator.UpdateSubmenu();
             }
 
             if (!startup)
             {
                 startup = true;
                 // MENU 2.0
-                Classes.Menus.MenuBase.Init();
-                Classes.Menus.Donator.Init();
+                Menus.MenuBase.Init();
+                Menus.Donator.Init();
             }
 
             await BaseScript.Delay(0);

@@ -80,35 +80,19 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
             menu.AddMenuItem(new MenuItem("Loading...") { Enabled = false });
         }
 
-        private static void OnUpdateMenu(string encodedJson)
+        private static void OnUpdateMenu(string json)
         {
-
             try
             {
                 donatorVehicleMenu.ClearMenuItems();
                 Log.Info("Data returned");
 
-                string json = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedJson));
                 List<VehicleItem> vehicleItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VehicleItem>>(json);
-
-                if (PlayerInformation.privilege == Privilege.DEVELOPER)
-                {
-                    VehicleItem refVeh = vehicleItems[0];
-                    VehicleItem dev = new VehicleItem();
-                    dev.InstallSirens = false;
-                    dev.VehicleHashString = "tezeract";
-
-                    donatorVehicleMenu.AddMenuItem(new MenuItem("Developer Car") { ItemData = dev });
-
-                    Log.Info($"Data Added: {dev}");
-                }
 
                 foreach (VehicleItem vehicle in vehicleItems)
                 {
                     MenuItem item = new MenuItem(vehicle.Name) { ItemData = vehicle };
                     donatorVehicleMenu.AddMenuItem(item);
-
-                    Log.Info($"Data Added: {vehicle}");
                 }
 
                 if (!donatorVehicleMenu.Visible)
@@ -119,6 +103,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.Menus
             }
             catch (Exception ex)
             {
+                MenuItem item = new MenuItem("Error loading menu") { };
+                donatorVehicleMenu.AddMenuItem(item);
+
                 Log.Error($"Error getting list, possible that you have no experience in the required skill.");
             }
         }

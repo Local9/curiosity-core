@@ -38,6 +38,15 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             new CompanionData("Sheriff: Male", PedHash.Sheriff01SMY, true),
         };
 
+        internal static void UpdateSubmenu()
+        {
+            if (subMenuItem != null)
+            {
+                bool isItemEnabled = (PlayerInformation.IsStaff() || PlayerInformation.IsDonator());
+                subMenuItem.Enabled = isItemEnabled;
+            }
+        }
+
         static int selectedCompanion = 0;
 
         static MenuListItem menuListItemCompanion = new MenuListItem("Companion", companions.Select(x => x.Label).ToList(), selectedCompanion);
@@ -46,6 +55,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         {
             client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+
             SetupMenu();
         }
 
