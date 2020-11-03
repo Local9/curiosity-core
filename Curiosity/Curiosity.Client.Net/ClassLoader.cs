@@ -22,11 +22,12 @@ namespace Curiosity.Client.net
 
             Queue.Init();
 
-            Classes.RandomKiller.Init();
+            // Classes.RandomKiller.Init();
 
             // Addon stuff
-            RenderTargets.Init();
-            DuiHandler.Init();
+            // RenderTargets.Init();
+            // DuiHandler.Init();
+
             Scaleforms.Init();
             ChatCommands.Init();
 
@@ -39,7 +40,7 @@ namespace Curiosity.Client.net
             Pointing.Init();
 
             // UI
-            ButtonInstructions.Init(); // To be tested
+            // ButtonInstructions.Init(); // To be tested
             CinematicMode.Init();
             HideReticle.Init();
             Location.Init();
@@ -58,7 +59,7 @@ namespace Curiosity.Client.net
             Voip.Init();
             VideoLoader.Init();
             Vehicles.Init();
-            Sit.Init();
+            // Sit.Init();
             SpawnManagement.Init();
             Classes.Environment.PedClasses.PedHandler.Init();
             Skills.Init();
