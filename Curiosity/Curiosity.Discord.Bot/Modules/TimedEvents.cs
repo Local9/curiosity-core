@@ -87,7 +87,7 @@ namespace Curiosity.LifeV.Bot
 
                                     while (socketGuildUser == null)
                                     {
-                                        await Task.Delay(5000);
+                                        await Task.Delay(10000);
                                         socketGuildUser = socketGuild.GetUser(discordId);
 
                                         if (failureCount >= 3)
