@@ -139,7 +139,6 @@ namespace Curiosity.LifeV.Bot
                                     }
                                     else
                                     {
-                                        await user.RemoveDonatorStatus();
                                         Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
                                         _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} is null or no longer apart of the guild");
                                     }
@@ -157,7 +156,7 @@ namespace Curiosity.LifeV.Bot
                             }
                         }
 
-                        await Task.Delay(1000);
+                        await Task.Delay(5000);
                     });
                 }
 
