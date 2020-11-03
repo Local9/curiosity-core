@@ -179,7 +179,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(vehicles);
 
-                player.TriggerEvent("curiosity:Client:Vehicle:DonatorVehicleList", json);
+                player.TriggerLatentEvent("curiosity:Client:Vehicle:DonatorVehicleList", 750000, json);
             }
             catch (Exception ex)
             {
