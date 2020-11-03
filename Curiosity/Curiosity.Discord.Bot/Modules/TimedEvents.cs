@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -124,6 +125,8 @@ namespace Curiosity.LifeV.Bot
 
                                             if (hasDonatorRole)
                                             {
+                                                if (user.UserRole == (Role)defaultDonatorRole) return;
+
                                                 await user.AddDonatorStatus(defaultDonatorRole);
                                                 _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId}, Original Role: {user.UserRole}, New Role: {(Role)defaultDonatorRole}");
                                             }
