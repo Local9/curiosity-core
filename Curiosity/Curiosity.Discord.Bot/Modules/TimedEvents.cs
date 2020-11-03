@@ -1,4 +1,5 @@
 ﻿using Curiosity.LifeV.Bot.Entities.CitizenFX;
+using Curiosity.LifeV.Bot.Entities.Curiosity;
 using Curiosity.LifeV.Bot.Models;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -14,6 +15,7 @@ namespace Curiosity.LifeV.Bot
 {
     internal class TimedEvents : ModuleBase<SocketCommandContext>
     {
+        private const long CURIOSITY_BOT_TEXT_CHANNEL = 773248492939247626;
         static Timer donationTimer;
         static Timer statusUpdater;
 
@@ -66,98 +68,93 @@ namespace Curiosity.LifeV.Bot
                 {
                     donators.ForEach(async user =>
                     {
-                        if (user.DiscordId == null)
+                        int defaultDonatorRole = 9;
+                        ulong discordId = 0;
+                        if (ulong.TryParse($"{user.DiscordId}", out discordId))
                         {
-                            await user.RemoveDonatorStatus();
-                        }
-                        else if (user.DiscordId == 0)
-                        {
-                            await user.RemoveDonatorStatus();
-                        }
-                        else
-                        {
-                            ulong discordId = 0;
-                            if (ulong.TryParse($"{user.DiscordId}", out discordId))
+                            bool hasDonatorRole = false;
+
+                            if (_client != null)
                             {
-                                bool hasDonatorRole = false;
+                                SocketGuild socketGuild = _client.GetGuild(_guildId);
 
-                                if (_client != null)
+                                if (socketGuild != null)
                                 {
-                                    SocketGuild socketGuild = _client.GetGuild(_guildId);
+                                    SocketGuildUser socketGuildUser = socketGuild.GetUser(discordId);
 
-                                    if (socketGuild != null)
+                                    if (socketGuildUser != null)
                                     {
-                                        SocketGuildUser socketGuildUser = socketGuild.GetUser(discordId);
 
-                                        if (socketGuildUser != null)
+                                        IReadOnlyCollection<SocketRole> roles = socketGuildUser.Roles;
+
+                                        if (roles.Count == 0)
                                         {
-
-                                            IReadOnlyCollection<SocketRole> roles = socketGuildUser.Roles;
-
-                                            if (roles.Count == 0)
-                                            {
-                                                Console.WriteLine($"[INFO] Discord Donation Checker: No roles found; {discordId}");
-                                                await user.RemoveDonatorStatus();
-                                            }
-                                            else
-                                            {
-
-                                                List<ulong> roleIdList = new List<ulong>();
-
-                                                roles.ToList().ForEach(role =>
-                                                {
-                                                    roleIdList.Add(role.Id);
-                                                });
-
-                                                hasDonatorRole = roleIdList.Contains(541955570601558036) || roleIdList.Contains(588440994543042560) || roleIdList.Contains(588443443496222720) || roleIdList.Contains(588444129722105856);
-
-                                                int donatorRoleId = 9;
-
-                                                if (roleIdList.Contains(588443443496222720)) // Lv1
-                                                {
-                                                    donatorRoleId = 11;
-                                                }
-
-                                                if (roleIdList.Contains(541955570601558036)) // Lv2
-                                                {
-                                                    donatorRoleId = 12;
-                                                }
-
-                                                if (roleIdList.Contains(588444129722105856)) // Lv3
-                                                {
-                                                    donatorRoleId = 13;
-                                                }
-
-                                                if (hasDonatorRole)
-                                                {
-                                                    await user.AddDonatorStatus(donatorRoleId);
-                                                }
-                                                else
-                                                {
-                                                    await user.RemoveDonatorStatus();
-                                                }
-                                            }
+                                            Console.WriteLine($"[INFO] Discord Donation Checker: No roles found; {discordId}");
+                                            await user.RemoveDonatorStatus();
                                         }
                                         else
                                         {
-                                            await user.RemoveDonatorStatus();
-                                            Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
+
+                                            List<ulong> roleIdList = new List<ulong>();
+
+                                            roles.ToList().ForEach(role =>
+                                            {
+                                                roleIdList.Add(role.Id);
+                                            });
+
+                                            hasDonatorRole = roleIdList.Contains(541955570601558036) // LIFE
+                                                || roleIdList.Contains(588440994543042560) // L2
+                                                || roleIdList.Contains(588443443496222720) // L1
+                                                || roleIdList.Contains(588444129722105856); // L3
+
+                                            if (roleIdList.Contains(588443443496222720)) // Lv1
+                                            {
+                                                defaultDonatorRole = 11;
+                                            }
+
+                                            if (roleIdList.Contains(588440994543042560)) // Lv2
+                                            {
+                                                defaultDonatorRole = 12;
+                                            }
+
+                                            if (roleIdList.Contains(588444129722105856)) // Lv3
+                                            {
+                                                defaultDonatorRole = 13;
+                                            }
+
+                                            if (hasDonatorRole)
+                                            {
+                                                await user.AddDonatorStatus(defaultDonatorRole);
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}, Original Role: {user.UserRole}, New Role: {(Role)defaultDonatorRole}");
+                                            }
+                                            else
+                                            {
+                                                await user.RemoveDonatorStatus();
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}, Original Role: {user.UserRole}, New Role: {(Role)defaultDonatorRole}");
+                                            }
                                         }
                                     }
                                     else
                                     {
                                         await user.RemoveDonatorStatus();
-                                        Console.WriteLine("[ERROR] Discord Donation Checker: socketGuild is null");
+                                        Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
+                                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username} is null or no longer apart of the guild");
                                     }
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"[ERROR] Discord Donation Checker: Client is null for ID {_guildId}");
+                                    Console.WriteLine("[ERROR] Discord Donation Checker: socketGuild is null");
+                                    _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[ERROR] socketGuild is null.");
                                 }
                             }
-
-                            await Task.Delay(2000);
+                            else
+                            {
+                                Console.WriteLine($"[ERROR] Discord Donation Checker: Client is null for ID {_guildId}");
+                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[ERROR] Discord Donation Checker: Client is null for ID {_guildId}");
+                            }
                         }
+
+                        await Task.Delay(1000);
                     });
                 }
 

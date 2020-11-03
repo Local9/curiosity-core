@@ -13,10 +13,11 @@ namespace Curiosity.LifeV.Bot.Entities.Curiosity
         SENIOR_ADMIN = 6,
         HELPER = 7,
         HEAD_ADMIN = 8,
-        DONATOR_LEVEL_1 = 9,
+        DONATOR_LIFE = 9,
         COMMUNITYMANAGER = 10,
-        DONATOR_LEVEL_2 = 11,
-        DONATOR_LEVEL_3 = 12,
+        DONATOR_LEVEL_1 = 11,
+        DONATOR_LEVEL_2 = 12,
+        DONATOR_LEVEL_3 = 13,
     }
 
     public class Roles
@@ -35,6 +36,7 @@ namespace Curiosity.LifeV.Bot.Entities.Curiosity
             { 541956055958028298, Role.SENIOR_ADMIN },
             { 559081233511088140, Role.HELPER },
             { 568072517311397889, Role.HEAD_ADMIN },
+            { 541955570601558036, Role.DONATOR_LIFE },
             { 588443443496222720, Role.DONATOR_LEVEL_1 },
             { 588440994543042560, Role.DONATOR_LEVEL_2 },
             { 588444129722105856, Role.DONATOR_LEVEL_3 },
