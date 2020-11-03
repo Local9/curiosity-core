@@ -74,7 +74,7 @@ namespace Curiosity.LifeV.Bot.Modules
 
                     Dictionary<string, (string, string, string)> servers = new Dictionary<string, (string, string, string)>();
                     servers.Add("elv", ("Emergency Life V", "5.9.0.85", "30120"));
-                    servers.Add("dlv", ("Drugs Life V", "5.9.0.85", "30121"));
+                    // servers.Add("dlv", ("Drugs Life V", "5.9.0.85", "30121"));
 
                     string serverKey = args[0];
 
@@ -150,10 +150,10 @@ namespace Curiosity.LifeV.Bot.Modules
             builder
                 .AddField("Help Commands",
                 "lv!help - What you're looking at right now" +
-                "\nlv!server dlv|elv - Will display server information" +
+                "\nlv!server elv - Will display server information" +
                 "\nlv!account - Show you're Curiosity Server account" +
-                "\nlv!top - Top 10 Players by Life V Experience" +
-                "\nlv!donate - Check users donation status and update if required"
+                "\nlv!top <param> - pilot, trucking, fire, police, knowledge, train, taxi, fishing, hunting, farming, bus, mechanic, ems, freight" +
+                "\nlv!donate - Update users donation status"
                 ).WithColor(Color.Blue)
                     .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
                     .WithCurrentTimestamp()
@@ -208,7 +208,7 @@ namespace Curiosity.LifeV.Bot.Modules
 
             if (dbUser == null)
             {
-                await ReplyAsync("User was not found or has not connected to the server.");
+                await ReplyAsync($"User '{user.Username}' was not found, they may have never connected to the server.");
             }
             else
             {
