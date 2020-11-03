@@ -125,12 +125,12 @@ namespace Curiosity.LifeV.Bot
                                             if (hasDonatorRole)
                                             {
                                                 await user.AddDonatorStatus(defaultDonatorRole);
-                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}, Original Role: {user.UserRole}, New Role: {(Role)defaultDonatorRole}");
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId}, Original Role: {user.UserRole}, New Role: {(Role)defaultDonatorRole}");
                                             }
                                             else
                                             {
                                                 await user.RemoveDonatorStatus();
-                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}, Original Role: {user.UserRole}, New Role: {(Role)defaultDonatorRole}");
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId}, Original Role: {user.UserRole}, New Role: {(Role)defaultDonatorRole}");
                                             }
                                         }
                                     }
@@ -138,7 +138,7 @@ namespace Curiosity.LifeV.Bot
                                     {
                                         await user.RemoveDonatorStatus();
                                         Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
-                                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username} is null or no longer apart of the guild");
+                                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} is null or no longer apart of the guild");
                                     }
                                 }
                                 else
