@@ -83,6 +83,19 @@ namespace Curiosity.LifeV.Bot
                                 {
                                     SocketGuildUser socketGuildUser = socketGuild.GetUser(discordId);
 
+                                    int failureCount = 0;
+
+                                    while (socketGuildUser == null)
+                                    {
+                                        await Task.Delay(2000);
+                                        socketGuildUser = socketGuild.GetUser(discordId);
+
+                                        if (failureCount >= 3)
+                                            break;
+
+                                        failureCount++;
+                                    }
+
                                     if (socketGuildUser != null)
                                     {
 
@@ -139,8 +152,9 @@ namespace Curiosity.LifeV.Bot
                                     }
                                     else
                                     {
+                                        // await user.RemoveDonatorStatus();
                                         Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
-                                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} is null or no longer apart of the guild");
+                                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} is null or no longer apart of the guild (Attempted 3 times)");
                                     }
                                 }
                                 else
@@ -156,7 +170,7 @@ namespace Curiosity.LifeV.Bot
                             }
                         }
 
-                        await Task.Delay(5000);
+                        await Task.Delay(1000);
                     });
                 }
 
