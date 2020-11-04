@@ -29,6 +29,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         static bool warning1Played = false;
         static bool warning2Played = false;
 
+        static Blip currentGasBlip = null;
+
         // Just placeholders for testing, feel free to change
         static Dictionary<VehicleClass, float> FuelConsumptionClassMultiplier = new Dictionary<VehicleClass, float>()
         {
@@ -145,8 +147,6 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
         static async Task GasStationBlips()
         {
-            Blip currentGasBlip = null;
-
             if (IsFuelFree)
             {
                 if (currentGasBlip != null)
