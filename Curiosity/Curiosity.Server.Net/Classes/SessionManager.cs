@@ -40,11 +40,23 @@ namespace Curiosity.Server.net.Classes
 
             foreach(KeyValuePair<string, Session> keyValuePair in PlayerList)
             {
-
+                PlayerSessionItem playerSessionItem = new PlayerSessionItem();
+                playerSessionItem.Privilege = keyValuePair.Value.Privilege;
+                playerSessionItem.ServerId = keyValuePair.Value.NetId;
+                playerSessionItem.UserId = keyValuePair.Value.UserID;
+                playerSessionItem.Username = keyValuePair.Value.Name;
+                playerSessionItem.Job = $"{keyValuePair.Value.job}";
+                playerSessionItem.Disconnected = keyValuePair.Value.Player.EndPoint == null;
+                psi.Add(playerSessionItem);
             }
 
             string json = JsonConvert.SerializeObject(psi);
+            
             BaseScript.TriggerClientEvent("curiosity:client:player:list:update", json);
+
+            psi = null;
+
+            await BaseScript.Delay(10000);
         }
 
         static void OnSessionPing([FromSource]CitizenFX.Core.Player player)
@@ -73,7 +85,6 @@ namespace Curiosity.Server.net.Classes
                 GameTimer = API.GetGameTimer();
                 try
                 {
-
                     UpdatePlayersInformation();
                 }
                 catch (Exception ex)
