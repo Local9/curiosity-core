@@ -51,13 +51,13 @@ namespace Curiosity.Client.net
             Notifications.Init();
 
             // MENU
-            NuiEventHandler.Init();
+            // NuiEventHandler.Init();
 
             // Environment
             AfkKick.Init();
             WarpPoints.Init();
             Voip.Init();
-            VideoLoader.Init();
+            // VideoLoader.Init();
             Vehicles.Init();
             // Sit.Init();
             SpawnManagement.Init();

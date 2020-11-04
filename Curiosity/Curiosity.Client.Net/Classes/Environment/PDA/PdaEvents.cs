@@ -188,12 +188,14 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
             string animationBase = "base";
 
             Game.PlayerPed.Task.PlayAnimation(animationDict, animationBase, -8f, -1, AnimationFlags.Loop);
+            API.SetTransitionTimecycleModifier($"BLACKOUT", 5.0f);
         }
 
         private static void CloseTablet()
         {
             RemoveProp();
             Game.PlayerPed.Task.ClearAll();
+            API.SetTransitionTimecycleModifier("DEFAULT", 5.0f);
         }
 
         private static async void AddProp()
