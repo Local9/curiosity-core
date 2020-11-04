@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Server, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\CitizenFX.Core.Server.1.0.2941\lib\net45\CitizenFX.Core.Server.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Server.1.0.3141\lib\net45\CitizenFX.Core.Server.dll</HintPath>
     </Reference>
     <Reference Include="GHMattiMySQL.net, Version=0.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -148,12 +148,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\MSBump.2.3.2\build\MSBump.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBump.2.3.2\build\MSBump.props'))" />
     <Error Condition="!Exists('..\packages\MSBump.2.3.2\build\MSBump.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBump.2.3.2\build\MSBump.targets'))" />
-    <Error Condition="!Exists('..\packages\Nerdbank.GitVersioning.3.2.31\build\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Nerdbank.GitVersioning.3.2.31\build\Nerdbank.GitVersioning.targets'))" />
+    <Error Condition="!Exists('..\packages\Nerdbank.GitVersioning.3.3.37\build\Nerdbank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Nerdbank.GitVersioning.3.3.37\build\Nerdbank.GitVersioning.targets'))" />
   </Target>
   <Import Project="..\packages\MSBump.2.3.2\build\MSBump.targets" Condition="Exists('..\packages\MSBump.2.3.2\build\MSBump.targets')" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\Nerdbank.GitVersioning.3.2.31\build\Nerdbank.GitVersioning.targets" Condition="Exists('..\packages\Nerdbank.GitVersioning.3.2.31\build\Nerdbank.GitVersioning.targets')" />
+  <Import Project="..\packages\Nerdbank.GitVersioning.3.3.37\build\Nerdbank.GitVersioning.targets" Condition="Exists('..\packages\Nerdbank.GitVersioning.3.3.37\build\Nerdbank.GitVersioning.targets')" />
 </Project>
