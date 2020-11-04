@@ -48,17 +48,40 @@ namespace Curiosity.Client.net.Classes.Environment
 
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnResourceStart));
 
-            client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
+            //client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
             client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
             client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int, float, float, float>(OnSeasonsWeatherSync));
+            client.RegisterEventHandler("curiosity:client:seasons:sync:clock", new Action<int, int>(OnSeasonsSyncClock));
 
             client.RegisterNuiEventHandler("GetWeather", new Action<IDictionary<string, object>, CallbackDelegate>(OnGetWeather));
 
-            client.RegisterTickHandler(OnSeasonTimerTick);
+            // client.RegisterTickHandler(OnSeasonTimerTick);
             client.RegisterTickHandler(OnPopulationManagement);
             client.RegisterTickHandler(OnSnowCheck);
 
             Log.Verbose($"[WORLD WEATHER] Init");
+        }
+
+        private static void OnSeasonsSyncClock(int hour, int minute)
+        {
+            if (minute % 10 == 0 && _lastWeather != WeatherTypes.HALLOWEEN)
+            {
+                JsonBuilder jsonBuilder = new JsonBuilder()
+                    .Add("operation", "TIME")
+                    .Add("hour", $"{hour:00}")
+                    .Add("minute", $"{minute:00}");
+                API.SendNuiMessage(jsonBuilder.Build());
+            }
+            else if (_lastWeather == WeatherTypes.HALLOWEEN && !_singleTimeSent)
+            {
+                _singleTimeSent = true;
+
+                JsonBuilder jsonBuilder = new JsonBuilder()
+                    .Add("operation", "TIME")
+                    .Add("hour", $"{0:00}")
+                    .Add("minute", $"{0:00}");
+                API.SendNuiMessage(jsonBuilder.Build());
+            }
         }
 
         private static void OnGetWeather(IDictionary<string, object> arg1, CallbackDelegate cb)

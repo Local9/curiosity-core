@@ -46,12 +46,12 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnResourceStart));
 
             client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
-            client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
-            client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int>(OnSeasonsWeatherSync));
+            //client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
+            //client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int>(OnSeasonsWeatherSync));
 
             client.RegisterTickHandler(OnSeasonTimerTick);
-            client.RegisterTickHandler(OnPopulationManagement);
-            client.RegisterTickHandler(OnSnowCheck);
+            // client.RegisterTickHandler(OnPopulationManagement);
+            // client.RegisterTickHandler(OnSnowCheck);
 
             Log.Verbose($"[WORLD WEATHER] Init");
         }
@@ -144,6 +144,11 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
             NetworkOverrideClockTime(hour, minute, 0);
             SetClockTime(hour, minute, 0);
+            
+            if (minute % 10 == 0)
+            {
+                BaseScript.TriggerEvent("curiosity:client:seasons:sync:clock", hour, minute);
+            }
         }
 
         private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp)
