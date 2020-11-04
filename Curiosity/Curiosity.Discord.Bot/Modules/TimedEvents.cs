@@ -67,17 +67,29 @@ namespace Curiosity.LifeV.Bot
 
                 if (donators.Count > 0)
                 {
-                    donators.ForEach(async user =>
+                    if (_client != null)
                     {
-                        int defaultDonatorRole = 9;
-                        ulong discordId = 0;
-                        if (ulong.TryParse($"{user.DiscordId}", out discordId))
-                        {
-                            bool hasDonatorRole = false;
+                        SocketGuild socketGuild = _client.GetGuild(_guildId);
 
-                            if (_client != null)
+                        if (socketGuild == null)
+                        {
+                            Console.WriteLine("[ERROR] Guild was unable to be found");
+                            return;
+                        }
+
+                        donators.ForEach(async user =>
+                        {
+                            int defaultDonatorRole = 9;
+                            ulong discordId = 0;
+                            if (ulong.TryParse($"{user.DiscordId}", out discordId))
                             {
-                                SocketGuild socketGuild = _client.GetGuild(_guildId);
+                                if (discordId == 0)
+                                {
+                                    _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} invalid discordId {discordId}, issue with conversion");
+                                    return;
+                                }
+
+                                bool hasDonatorRole = false;
 
                                 if (socketGuild != null)
                                 {
@@ -163,15 +175,10 @@ namespace Curiosity.LifeV.Bot
                                     _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[ERROR] socketGuild is null.");
                                 }
                             }
-                            else
-                            {
-                                Console.WriteLine($"[ERROR] Discord Donation Checker: Client is null for ID {_guildId}");
-                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[ERROR] Discord Donation Checker: Client is null for ID {_guildId}");
-                            }
-                        }
 
-                        await Task.Delay(10000);
-                    });
+                            await Task.Delay(10000);
+                        });
+                    }
                 }
 
                 Console.WriteLine("Discord Donation Checker Completed");
