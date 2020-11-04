@@ -141,20 +141,20 @@ namespace Curiosity.LifeV.Bot
                                                 if (user.UserRole == (Role)defaultDonatorRole) return;
 
                                                 await user.AddDonatorStatus(defaultDonatorRole);
-                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId}, Original Role: {user.UserRole}, New Role: {(Role)defaultDonatorRole}");
                                             }
                                             else
                                             {
                                                 await user.RemoveDonatorStatus();
-                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId}, Original Role: {user.UserRole}, New Role: {(Role)defaultDonatorRole}");
                                             }
+
+                                            _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, OR: {user.UserRole}, NR: {(Role)defaultDonatorRole}, D: {discordId}");
                                         }
                                     }
                                     else
                                     {
                                         // await user.RemoveDonatorStatus();
                                         Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
-                                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} is null or no longer apart of the guild (Attempted 3 times)");
+                                        _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} is null or no longer apart of the guild (Attempted 3 times, D: {discordId})");
                                     }
                                 }
                                 else
