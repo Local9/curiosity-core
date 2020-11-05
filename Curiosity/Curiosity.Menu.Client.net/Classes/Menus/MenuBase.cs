@@ -73,7 +73,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 }
             };
 
-            Menu.AddMenuItem(showForum);
+            // Menu.AddMenuItem(showForum);
 
             MenuController.AddMenu(Menu);
 
