@@ -22,6 +22,7 @@ namespace Curiosity.Server.net
         public static bool showPlayerLocation = true;
         public static int startingLocationId = 0;
         public static int minutesAFK = 15;
+        public static bool IsSupporterAccess = false;
 
         public static bool IsBirthday = false;
 
@@ -73,6 +74,14 @@ namespace Curiosity.Server.net
             showPlayerBlips = API.GetConvarInt("player_blips", 1) == 1;
             showPlayerLocation = API.GetConvarInt("player_location_display", 1) == 1;
             minutesAFK = API.GetConvarInt("player_afk_timer", 15);
+            IsSupporterAccess = API.GetConvarInt("supporter_access_only", 0) == 1;
+
+            if (IsSupporterAccess)
+            {
+                Log.Info("*****************************************************************");
+                Log.Info("*> SERVER IN SUPPORTER ONLY STATE <******************************");
+                Log.Info("*****************************************************************");
+            }
 
             API.SetConvar("sv_authMaxVariance", "");
             API.SetConvar("sv_authMinTrust", "");

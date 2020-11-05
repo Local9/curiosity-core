@@ -52,6 +52,7 @@ namespace Curiosity.Server.net.Database
                     user.Banned = ($"{keyValues["banned"]}" == "1");
                     user.QueueLevel = int.Parse($"{keyValues["queueLevel"]}");
                     user.QueuePriority = int.Parse($"{keyValues["queuePriority"]}");
+                    user.RoleId = int.Parse($"{keyValues["roleId"]}");
                 }
                 return user;
             }

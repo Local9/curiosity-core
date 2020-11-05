@@ -233,13 +233,20 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
+                if (Server.IsSupporterAccess && !user.IsSupporterAccess)
+                {
+                    Log.Info($"Queue Player not allowed access: {player.Name} ({(Privilege)user.RoleId}) [{user.IsSupporterAccess}]");
+                    deferrals.done($"Server is only allowing connections from supporters.\n\nDiscord URL: discord.lifev.net");
+                    return;
+                }
+
                 if (sentLoading.ContainsKey(license))
                 {
                     sentLoading.TryRemove(license, out Player oldPlayer);
                 }
                 sentLoading.TryAdd(license, player);
 
-                if (user.QueuePriority > 0)
+                if (user.IsStaff || user.QueuePriority > 0)
                 {
                     if (!priority.TryAdd(license, user.QueuePriority))
                     {

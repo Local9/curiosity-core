@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Curiosity.Global.Shared.Enums;
+using System;
 
 namespace Curiosity.Global.Shared.Entity
 {
@@ -26,6 +27,15 @@ namespace Curiosity.Global.Shared.Entity
         public int LocationId;
         public int RoleId;
         public string Role;
+        
+        public Privilege privilege
+        {
+            get
+            {
+                return (Privilege)RoleId;
+            }
+        }
+
         public int StatId;
         public int BankId;
         public int Wallet = 0;
@@ -35,6 +45,15 @@ namespace Curiosity.Global.Shared.Entity
         public float PosZ;
         public int ServerId;
         public PlayerCharacter Skin = new PlayerCharacter();
+
+        public bool IsDonator => ((Privilege)RoleId == Privilege.DONATOR || privilege == Privilege.DONATOR1 || privilege == Privilege.DONATOR2 || privilege == Privilege.DONATOR3);
+        public bool IsStaff => (privilege == Privilege.COMMUNITYMANAGER || privilege == Privilege.MODERATOR || privilege == Privilege.ADMINISTRATOR || privilege == Privilege.SENIORADMIN || privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+        public bool IsAdmin => (privilege == Privilege.COMMUNITYMANAGER || privilege == Privilege.ADMINISTRATOR || privilege == Privilege.SENIORADMIN || privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+        public bool IsTrustedAdmin => (privilege == Privilege.COMMUNITYMANAGER || privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+        public bool IsDeveloper => (privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
+        public bool IsProjectManager => (privilege == Privilege.PROJECTMANAGER);
+        public bool IsSupporterAccess => (IsStaff || IsDonator);
+
         // CHARACTER STATS
         public int Stamina
         {
