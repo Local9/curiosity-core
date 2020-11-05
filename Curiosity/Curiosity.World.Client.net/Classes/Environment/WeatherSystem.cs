@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.GameWorld.Client.net.Classes.PlayerClasses;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Threading.Tasks;
@@ -92,7 +93,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
             if (isChristmas)
             {
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Verbose("WeatherSync -> Setting weather to XMAS");
                 }
@@ -106,7 +107,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
             if (IsHalloween)
             {
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Verbose($"WeatherSync -> Setting weather to HALLOWEEN");
                 }
@@ -122,7 +123,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
             if (!isChristmas && !isHalloween)
             {
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Verbose($"WeatherSync -> Setting weather to {weather}");
                 }
@@ -148,7 +149,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             await Client.Delay(0);
             WeatherCheckSync();
 
-            if (Player.PlayerInformation.IsDeveloper())
+            if (PlayerInformation.IsDeveloper())
             {
                 Log.Verbose($"weather: {weather}, wind: {wind}, windSpeed: {windSpeed}, windHeading: {windHeading}, isChristmas: {isChristmas}, isHalloween: {isHalloween}");
             }

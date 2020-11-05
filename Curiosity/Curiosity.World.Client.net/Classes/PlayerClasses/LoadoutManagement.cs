@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.GameWorld.Client.net.Classes.Player
+namespace Curiosity.GameWorld.Client.net.Classes.PlayerClasses
 {
     class LoadoutManagement
     {
@@ -113,7 +113,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Player
 
         static async Task CheckCurrentWeaponIsAllowed()
         {
-            if (Player.PlayerInformation.IsDeveloper())
+            if (PlayerInformation.IsDeveloper())
             {
                 client.DeregisterTickHandler(CheckCurrentWeaponIsAllowed);
             }

@@ -4,7 +4,7 @@ using Curiosity.Global.Shared.Enums;
 using System;
 using static CitizenFX.Core.Native.API;
 
-namespace Curiosity.GameWorld.Client.net.Classes.Player
+namespace Curiosity.GameWorld.Client.net.Classes.PlayerClasses
 {
     static class PlayerInformation
     {

@@ -1,4 +1,5 @@
-﻿using Curiosity.Shared.Client.net;
+﻿using Curiosity.GameWorld.Client.net.Classes.PlayerClasses;
+using Curiosity.Shared.Client.net;
 
 namespace Curiosity.GameWorld.Client.net
 {
@@ -12,8 +13,8 @@ namespace Curiosity.GameWorld.Client.net
         {
             Log.Verbose("Entering ClassLoader Init");
 
-            Classes.Player.PlayerInformation.Init();
-            Classes.Player.LoadoutManagement.Init();
+            PlayerInformation.Init();
+            LoadoutManagement.Init();
 
             Classes.Environment.SeasonSync.Init();
             // Classes.Environment.TimeSync.Init(); // DEPRECATED
@@ -22,6 +23,10 @@ namespace Curiosity.GameWorld.Client.net
             // Animals
             Classes.Environment.AquaticSpawner.Init();
             Classes.Environment.Birds.Init();
+
+            Classes.Environment.UI.PlayerBlips.Init();
+            Classes.Environment.UI.PlayerNames.Init();
+            Classes.Environment.UI.CinematicMode.Init();
 
 
             // EE

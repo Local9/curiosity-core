@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.GameWorld.Client.net.Classes.PlayerClasses;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Classes;
 using Curiosity.Shared.Client.net.Helper;
@@ -89,7 +90,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
             }
             catch (Exception ex)
             {
-                if (Player.PlayerInformation.IsDeveloper())
+                if (PlayerInformation.IsDeveloper())
                 {
                     Log.Error($"DeveloperWall -> {ex.Message}");
                 }

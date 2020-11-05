@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.GameWorld.Client.net.Classes.Player;
+using Curiosity.GameWorld.Client.net.Classes.PlayerClasses;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Shared.Client.net;
 using System;
@@ -145,10 +145,10 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             NetworkOverrideClockTime(hour, minute, 0);
             SetClockTime(hour, minute, 0);
             
-            if (minute % 10 == 0)
-            {
-                BaseScript.TriggerEvent("curiosity:client:seasons:sync:clock", hour, minute);
-            }
+            //if (minute % 10 == 0)
+            //{
+            //    BaseScript.TriggerEvent("curiosity:client:seasons:sync:clock", hour, minute);
+            //}
         }
 
         private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp)

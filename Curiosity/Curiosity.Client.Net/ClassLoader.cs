@@ -32,22 +32,22 @@ namespace Curiosity.Client.net
             ChatCommands.Init();
 
             // IPLs
-            Classes.Environment.IPL.NightclubBase.Init();
+            // Classes.Environment.IPL.NightclubBase.Init();
             Classes.Environment.IPL.Nightclub.IplManager.Init();
-            Classes.Environment.IPL.Nightclub.EffectsManager.Init();
+            // Classes.Environment.IPL.Nightclub.EffectsManager.Init();
 
             // Emotes
             Pointing.Init();
 
             // UI
             // ButtonInstructions.Init(); // To be tested
-            CinematicMode.Init();
+            // CinematicMode.Init();
             HideReticle.Init();
-            Location.Init();
+            // Location.Init();
             PlayerOverheadMarkers.Init();
-            PlayerNames.Init();
-            PlayerBlips.Init();
-            Scoreboard.Init();
+            // PlayerNames.Init();
+            // PlayerBlips.Init();
+            // Scoreboard.Init();
             Notifications.Init();
 
             // MENU
@@ -62,8 +62,8 @@ namespace Curiosity.Client.net
             // Sit.Init();
             SpawnManagement.Init();
             Classes.Environment.PedClasses.PedHandler.Init();
-            Skills.Init();
-            Bank.Init();
+            // Skills.Init(); Not used
+            // Bank.Init();
             PlayerInformation.Init();
             WantedLevels.Init();
             Weapons.Init();

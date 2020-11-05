@@ -14,6 +14,9 @@ namespace Curiosity.GameWorld.Client.net
         private static Client _instance;
         static public RelationshipGroup PlayerRelationshipGroup;
 
+        public static bool ShowPlayerNames = true;
+        public static bool StaffShowPlayerNames = false;
+
         public static Client GetInstance()
         {
             return _instance;

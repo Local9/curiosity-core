@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.Client.net.Classes.Environment.UI
+namespace Curiosity.GameWorld.Client.net.Classes.Environment.UI
 {
     static class CinematicMode
     {

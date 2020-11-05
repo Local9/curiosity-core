@@ -96,38 +96,32 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
         static public async Task OnTickInformationPanel()
         {
-            while (true)
+            Marker marker = GetActiveMarker();
+            if (marker != null)
             {
-                Marker marker = GetActiveMarker();
-                if (marker != null)
+                API.SetTextComponentFormat("STRING");
+
+                string dutyText = (!DutyManager.IsPoliceJobActive) ? "go on Duty" : "go off Duty";
+
+                API.AddTextComponentString($"Press ~INPUT_PICKUP~ to {dutyText}.");
+                API.DisplayHelpTextFromStringLabel(0, false, true, -1);
+
+                if (Game.IsControlJustPressed(0, Control.Pickup) ||
+                Game.IsControlJustReleased(0, Control.Pickup))
                 {
-                    API.SetTextComponentFormat("STRING");
+                    Classes.Menus.MenuLoadout.OpenMenu();
 
-                    string dutyText = (!DutyManager.IsPoliceJobActive) ? "go on Duty" : "go off Duty";
-
-                    API.AddTextComponentString($"Press ~INPUT_PICKUP~ to {dutyText}.");
-                    API.DisplayHelpTextFromStringLabel(0, false, true, -1);
-
-                    if (Game.IsControlJustPressed(0, Control.Pickup) ||
-                    Game.IsControlJustReleased(0, Control.Pickup))
+                    if (!DutyManager.IsPoliceJobActive)
                     {
-                        Classes.Menus.MenuLoadout.OpenMenu();
-
-                        if (!DutyManager.IsPoliceJobActive)
-                        {
-                            Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "police");
-                            Client.TriggerEvent("curiosity:Client:Police:PatrolZone", (int)marker.PatrolZone);
-                        }
-                        else
-                        {
-                            Client.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "jobless");
-                        }
-                        await Client.Delay(5000);
+                        Client.TriggerEvent("curiosity:Client:Interface:Duty", true, false, "police");
+                        Client.TriggerEvent("curiosity:Client:Police:PatrolZone", (int)marker.PatrolZone);
                     }
+                    else
+                    {
+                        Client.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "jobless");
+                    }
+                    await Client.Delay(5000);
                 }
-
-                await Client.Delay(0);
-                await Task.FromResult(0);
             }
         }
 

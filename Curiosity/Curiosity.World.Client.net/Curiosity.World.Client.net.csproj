@@ -52,14 +52,18 @@
     <Compile Include="Classes\Environment\AquaticSpawner.cs" />
     <Compile Include="Classes\Environment\Birds.cs" />
     <Compile Include="Classes\Environment\EasterEggs\DeveloperWall.cs" />
+    <Compile Include="Classes\Environment\UI\CinematicMode.cs" />
+    <Compile Include="Classes\Environment\UI\PlayerBlips.cs" />
+    <Compile Include="Classes\Environment\UI\PlayerNames.cs" />
     <Compile Include="Classes\Environment\SeasonSync.cs" />
     <Compile Include="Classes\Environment\TimeSync.cs" />
     <Compile Include="Classes\Environment\WeatherSystem.cs" />
-    <Compile Include="Classes\Player\LoadoutManagement.cs" />
-    <Compile Include="Classes\Player\PlayerInformation.cs" />
+    <Compile Include="Classes\PlayerClasses\LoadoutManagement.cs" />
+    <Compile Include="Classes\PlayerClasses\PlayerInformation.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Extensions\BoolExtension.cs" />
+    <Compile Include="Extensions\Decorators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
