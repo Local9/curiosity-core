@@ -116,14 +116,11 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.UI
             {
                 if (!CinematicMode.DoHideHud)
                 {
-                    if (Client.players?.Count() > 0)
-                    {
-                        MarkerPlayers = Client.players.Where(ShouldShowName).ToList();
+                    MarkerPlayers = Client.playerList.Where(ShouldShowName).ToList();
 
-                        List<CitizenFX.Core.Player> playerList = MarkerPlayers.ToList();
+                    List<CitizenFX.Core.Player> playerList = MarkerPlayers.ToList();
 
-                        playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowName(p.player));
-                    }
+                    playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowName(p.player));
                 }
 
             }

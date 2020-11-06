@@ -8,7 +8,7 @@ namespace Curiosity.GameWorld.Client.net
 {
     public class Client : BaseScript
     {
-        public static PlayerList players;
+        public static PlayerList playerList;
         public static int PedHandle { get { return Game.PlayerPed.Handle; } }
 
         private static Client _instance;
@@ -26,6 +26,8 @@ namespace Curiosity.GameWorld.Client.net
         {
             _instance = this;
             ClassLoader.Init();
+
+            playerList = Players;
 
             RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
             RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));

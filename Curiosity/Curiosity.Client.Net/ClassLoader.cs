@@ -41,12 +41,12 @@ namespace Curiosity.Client.net
 
             // UI
             // ButtonInstructions.Init(); // To be tested
-            // CinematicMode.Init();
+            CinematicMode.Init();
             HideReticle.Init();
             // Location.Init();
             PlayerOverheadMarkers.Init();
-            // PlayerNames.Init();
-            // PlayerBlips.Init();
+            PlayerNames.Init();
+            PlayerBlips.Init();
             // Scoreboard.Init();
             Notifications.Init();
 

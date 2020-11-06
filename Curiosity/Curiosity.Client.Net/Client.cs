@@ -77,11 +77,11 @@ namespace Curiosity.Client.net
 
         async void OnSessionActive(bool showBlips, bool showLocation, int afkMinutes)
         {
-            // if (showBlips)
-                // RegisterTickHandler(PlayerBlips.OnTickShowPlayerBlips);
+            if (showBlips)
+                RegisterTickHandler(PlayerBlips.OnTickShowPlayerBlips);
 
             // if (showLocation)
-                // RegisterTickHandler(Location.OnShowStreetNameTick);
+            // RegisterTickHandler(Location.OnShowStreetNameTick);
 
             minutesAfkKick = afkMinutes;
 

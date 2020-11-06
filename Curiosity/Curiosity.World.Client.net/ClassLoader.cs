@@ -24,9 +24,9 @@ namespace Curiosity.GameWorld.Client.net
             Classes.Environment.AquaticSpawner.Init();
             Classes.Environment.Birds.Init();
 
-            Classes.Environment.UI.PlayerBlips.Init();
-            Classes.Environment.UI.PlayerNames.Init();
-            Classes.Environment.UI.CinematicMode.Init();
+            // Classes.Environment.UI.PlayerBlips.Init();
+            // Classes.Environment.UI.PlayerNames.Init();
+            // Classes.Environment.UI.CinematicMode.Init();
 
 
             // EE

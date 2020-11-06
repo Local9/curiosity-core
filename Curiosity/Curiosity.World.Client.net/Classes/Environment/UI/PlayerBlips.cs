@@ -69,13 +69,10 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.UI
         static public async Task OnTickShowPlayerBlips()
         {
             try
-            {
-                if (Client.players?.Count() > 0)
-                {
-                    BlipPlayersList = Client.players.Where(ShouldShowBlip);
-                    List<CitizenFX.Core.Player> playerList = BlipPlayersList.ToList();
-                    playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowBlip(p.player));
-                }
+        {
+                BlipPlayersList = Client.playerList.Where(ShouldShowBlip);
+                List<CitizenFX.Core.Player> playerList = BlipPlayersList.ToList();
+                playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowBlip(p.player));
             }
             catch (Exception ex)
             {
