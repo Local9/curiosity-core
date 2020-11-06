@@ -26,9 +26,12 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.UI
 
         static internal bool ShouldShowBlip(CitizenFX.Core.Player player)
         {
-            bool isSneaking = player.Character.IsInStealthMode || player.Character.IsInCover() || Function.Call<bool>(Hash.IS_PED_USING_SCENARIO, player.Character.Handle, "WORLD_HUMAN_SMOKING");
+            if (player == null) return false;
+
+            if (!API.NetworkIsPlayerActive(player.Handle) && Game.Player.Handle == player.Handle) return false;
+
             bool isCurrentPlayer = (Game.Player == player);
-            if (!isSneaking && !isCurrentPlayer)
+            if (!isCurrentPlayer)
                 return true;
             return false;
         }
@@ -67,9 +70,12 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.UI
         {
             try
             {
-                BlipPlayersList = Client.players.Where(ShouldShowBlip);
-                List<CitizenFX.Core.Player> playerList = BlipPlayersList.ToList();
-                playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowBlip(p.player));
+                if (Client.players?.Count() > 0)
+                {
+                    BlipPlayersList = Client.players.Where(ShouldShowBlip);
+                    List<CitizenFX.Core.Player> playerList = BlipPlayersList.ToList();
+                    playerList.OrderBy(p => p.Character.Position.DistanceToSquared(Game.PlayerPed.Position)).Select((player, rank) => new { player, rank }).ToList().ForEach(async p => await ShowBlip(p.player));
+                }
             }
             catch (Exception ex)
             {
