@@ -131,9 +131,20 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             client.RegisterEventHandler("curiosity:Client:Vehicle:DevRefuel", new Action(DevRefuel));
         }
 
+        private static void AddVehicle(string vehicle, float fuelMultiplier)
+        {
+            int handle = API.GetHashKey(vehicle);
+
+            if (handle > 0)
+                FuelConsumptionModelMultiplier.Add((VehicleHash)handle, fuelMultiplier);
+        }
+
         static void OnPlayerSpawn(dynamic dynData)
         {
             OnUpdateSettings();
+
+            AddVehicle("p90d", .5f);
+            AddVehicle("teslasemi", .5f);
         }
 
         static async void OnUpdateSettings()
