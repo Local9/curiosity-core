@@ -98,7 +98,7 @@ namespace Curiosity.LifeV.Bot
 
                         donators.ForEach(async user =>
                         {
-                            int donatorRoleId = 1;
+                            Role donatorRole = Role.USER;
                             ulong discordId = 0;
                             if (ulong.TryParse($"{user.DiscordId}", out discordId))
                             {
@@ -154,31 +154,31 @@ namespace Curiosity.LifeV.Bot
 
                                             if (roleIdList.Contains(541955570601558036))
                                             {
-                                                donatorRoleId = 9;
+                                                donatorRole = Role.DONATOR_LIFE;
                                             }
 
                                             if (roleIdList.Contains(588443443496222720)) // Lv1
                                             {
-                                                donatorRoleId = 11;
+                                                donatorRole = Role.DONATOR_LEVEL_1;
                                             }
 
                                             if (roleIdList.Contains(588440994543042560)) // Lv2
                                             {
-                                                donatorRoleId = 12;
+                                                donatorRole = Role.DONATOR_LEVEL_2;
                                             }
 
                                             if (roleIdList.Contains(588444129722105856)) // Lv3
                                             {
-                                                donatorRoleId = 13;
+                                                donatorRole = Role.DONATOR_LEVEL_3;
                                             }
 
                                             if (hasDonatorRole)
                                             {
-                                                if (user.UserRole == (Role)donatorRoleId) return;
+                                                if (user.UserRole == donatorRole) return;
 
-                                                await user.AddDonatorStatus(donatorRoleId);
+                                                await user.AddDonatorStatus((int)donatorRole);
 
-                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, OR: {user.UserRole}, NR: {(Role)donatorRoleId}, D: {discordId}");
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, OR: {user.UserRole}, NR: {donatorRole}, D: {discordId}");
                                             }
                                             else
                                             {
