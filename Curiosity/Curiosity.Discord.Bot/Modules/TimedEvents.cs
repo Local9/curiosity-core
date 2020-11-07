@@ -198,10 +198,5 @@ namespace Curiosity.LifeV.Bot
                 Console.WriteLine($"[CRITICAL] OnDiscordDonationChecker -> {ex}");
             }
         }
-
-        private bool CheckListForValue(List<ulong> lst, ulong value)
-        {
-
-        }
     }
 }
