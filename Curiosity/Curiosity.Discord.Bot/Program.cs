@@ -48,7 +48,6 @@ namespace Curiosity.LifeV.Bot
 
             await RegisterCommandsAsync();
 
-
             bool testing = Convert.ToBoolean(discordConfiguration.BotSettings["Testing"]);
 
             string discordToken = testing ? discordConfiguration.BotSettings["TokenBeta"] : discordConfiguration.BotSettings["TokenLive"];
@@ -59,16 +58,7 @@ namespace Curiosity.LifeV.Bot
             await _client.StartAsync();
 
             await _client.SetStatusAsync(UserStatus.Online);
-
-            List<string> startupScripts = new List<string>() {
-                "Happy Troublesum? happy are we now?",
-                "Troublesum wanted me to say something",
-                "Don't ping me",
-                "I have a million ideas. They all point to certain death.",
-                "It hated me because I talked to it.",
-                "I’d give you advice, but you wouldn’t listen. No one ever does."
-            };
-            await _client.SetGameAsync(startupScripts[new Random().Next(startupScripts.Count)]);
+            await _client.SetGameAsync("Starting up...");
 
             if (ulong.TryParse(guildIdStr, out guildId))
             {
