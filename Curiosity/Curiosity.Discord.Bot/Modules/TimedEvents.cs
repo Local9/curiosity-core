@@ -153,13 +153,14 @@ namespace Curiosity.LifeV.Bot
                                                 if (user.UserRole == (Role)defaultDonatorRole) return;
 
                                                 await user.AddDonatorStatus(defaultDonatorRole);
+
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, OR: {user.UserRole}, NR: {(Role)defaultDonatorRole}, D: {discordId}");
                                             }
                                             else
                                             {
                                                 await user.RemoveDonatorStatus();
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, D: {discordId} | Removed Role");
                                             }
-
-                                            _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, OR: {user.UserRole}, NR: {(Role)defaultDonatorRole}, D: {discordId}");
                                         }
                                     }
                                     else
