@@ -79,7 +79,7 @@ namespace Curiosity.LifeV.Bot
 
                         donators.ForEach(async user =>
                         {
-                            int defaultDonatorRole = 9;
+                            int donatorRoleId = 1;
                             ulong discordId = 0;
                             if (ulong.TryParse($"{user.DiscordId}", out discordId))
                             {
@@ -133,28 +133,33 @@ namespace Curiosity.LifeV.Bot
                                                 || roleIdList.Contains(588443443496222720) // L1
                                                 || roleIdList.Contains(588444129722105856); // L3
 
+                                            if (roleIdList.Contains(541955570601558036))
+                                            {
+                                                donatorRoleId = 9;
+                                            }
+
                                             if (roleIdList.Contains(588443443496222720)) // Lv1
                                             {
-                                                defaultDonatorRole = 11;
+                                                donatorRoleId = 11;
                                             }
 
                                             if (roleIdList.Contains(588440994543042560)) // Lv2
                                             {
-                                                defaultDonatorRole = 12;
+                                                donatorRoleId = 12;
                                             }
 
                                             if (roleIdList.Contains(588444129722105856)) // Lv3
                                             {
-                                                defaultDonatorRole = 13;
+                                                donatorRoleId = 13;
                                             }
 
                                             if (hasDonatorRole)
                                             {
-                                                if (user.UserRole == (Role)defaultDonatorRole) return;
+                                                if (user.UserRole == (Role)donatorRoleId) return;
 
-                                                await user.AddDonatorStatus(defaultDonatorRole);
+                                                await user.AddDonatorStatus(donatorRoleId);
 
-                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, OR: {user.UserRole}, NR: {(Role)defaultDonatorRole}, D: {discordId}");
+                                                _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] U: {user.Username}#{user.UserId}, OR: {user.UserRole}, NR: {(Role)donatorRoleId}, D: {discordId}");
                                             }
                                             else
                                             {
@@ -192,6 +197,11 @@ namespace Curiosity.LifeV.Bot
             {
                 Console.WriteLine($"[CRITICAL] OnDiscordDonationChecker -> {ex}");
             }
+        }
+
+        private bool CheckListForValue(List<ulong> lst, ulong value)
+        {
+
         }
     }
 }

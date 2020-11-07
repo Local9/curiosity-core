@@ -1,4 +1,5 @@
 ﻿using Curiosity.LifeV.Bot.Entities.CitizenFX;
+using Curiosity.LifeV.Bot.Entities.Curiosity;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
