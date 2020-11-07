@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -22,6 +21,13 @@ namespace Curiosity.LifeV.Bot
 
         private static DiscordSocketClient _client;
         private static ulong _guildId;
+
+        private Dictionary<string, string> servers = new Dictionary<string, string>()
+        {
+            { "Public", "5.9.0.85:30120" },
+            { "Members", "5.9.0.85:30121" }
+        };
+        private int currentServer = 0;
 
         public TimedEvents(DiscordSocketClient client, ulong guildId)
         {
@@ -40,21 +46,34 @@ namespace Curiosity.LifeV.Bot
         }
 
         private async void OnStatusUpdater(object sender, ElapsedEventArgs e)
-        {
-            string serverInformation = await Tools.HttpTools.GetUrlResultAsync($"http://5.9.0.85:30120/info.json");
-
-            if (string.IsNullOrEmpty(serverInformation))
+        {try
             {
-                _client.SetGameAsync($"Server Offline");
-                return;
+                currentServer++;
+
+                if (currentServer >= servers.Count)
+                    currentServer = 0;
+
+                KeyValuePair<string, string> server = servers.ElementAt(currentServer);
+
+                string serverInformation = await Tools.HttpTools.GetUrlResultAsync($"http://{server.Value}/info.json");
+
+                if (string.IsNullOrEmpty(serverInformation))
+                {
+                    _client.SetGameAsync($"{server.Key} : Server Offline");
+                    return;
+                }
+
+                string result = await Tools.HttpTools.GetUrlResultAsync($"http://{server.Value}/players.json");
+
+                List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
+                CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
+
+                _client.SetGameAsync($"{server.Key} {lst.Count}/32 | UT: {info.Variables["Uptime"]}");
             }
-
-            string result = await Tools.HttpTools.GetUrlResultAsync($"http://5.9.0.85:30120/players.json");
-
-            List<CitizenFxPlayers> lst = JsonConvert.DeserializeObject<List<CitizenFxPlayers>>(result);
-            CitizenFxInfo info = JsonConvert.DeserializeObject<CitizenFxInfo>(serverInformation);
-
-            _client.SetGameAsync($"P: {lst.Count}/32 | UT: {info.Variables["Uptime"]}");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[CRITICAL] OnStatusUpdater -> {ex}");
+            }
         }
 
         private async void OnDiscordDonationChecker(object sender, ElapsedEventArgs e)
