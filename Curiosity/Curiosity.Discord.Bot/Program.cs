@@ -75,8 +75,6 @@ namespace Curiosity.LifeV.Bot
                 _timedEvents = new TimedEvents(_client, guildId);
             }
 
-            _client.GetGuild(guildId).GetTextChannel(773248492939247626).SendMessageAsync($"Bot Started - System Time: {DateTime.Now}"); // MOVE TO CONFIG
-
             await Task.Delay(-1);
         }
 
