@@ -21,9 +21,10 @@ namespace Curiosity.Development
 
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
 
-            Func.RegisterMission(typeof(SpawnPed));
-            Func.RegisterMission(typeof(SpawnVehicleDamaged));
-            Func.RegisterMission(typeof(SpawnVehicle));
+            Functions.RegisterMission(typeof(SpawnPed));
+            Functions.RegisterMission(typeof(SpawnVehicleDamaged));
+            Functions.RegisterMission(typeof(SpawnVehicle));
+            Functions.RegisterMission(typeof(Particle));
         }
 
         private void OnClientResourceStop(string resourceName)

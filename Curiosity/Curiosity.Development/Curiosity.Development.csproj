@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MissionManager.cs" />
+    <Compile Include="Missions\Particle.cs" />
     <Compile Include="Missions\SpawnVehicle.cs" />
     <Compile Include="Missions\SpawnVehicleDamaged.cs" />
     <Compile Include="Missions\SpawnPed.cs" />
