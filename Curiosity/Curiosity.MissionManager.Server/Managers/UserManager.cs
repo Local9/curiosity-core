@@ -4,13 +4,14 @@ using Curiosity.MissionManager.Server.Diagnostics;
 using Curiosity.MissionManager.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Newtonsoft.Json;
 using System;
 
 namespace Curiosity.MissionManager.Server.Managers
 {
     public class UserManager : Manager<UserManager>
     {
-        public override void Begin()
+        public override async void Begin()
         {
             EventSystem.GetModule().Attach("user:login", new AsyncEventCallback(async metadata =>
             {
@@ -33,7 +34,17 @@ namespace Curiosity.MissionManager.Server.Managers
                     return null;
                 }
 
-                CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player, discordId);
+                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
+
+                while (string.IsNullOrEmpty(exportResponse))
+                {
+                    await BaseScript.Delay(500);
+                    exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
+                }
+
+                Logger.Success($"{exportResponse}");
+
+                CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{exportResponse}");
 
                 Logger.Info($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}] Has connected to the server");
 
@@ -42,6 +53,8 @@ namespace Curiosity.MissionManager.Server.Managers
                 PluginManager.ActiveUsers.Add(metadata.Sender, curiosityUser);
 
                 return curiosityUser;
+
+                return null;
             }));
 
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);

@@ -34,11 +34,10 @@ namespace Curiosity.Systems.Library.Models
         public bool IsTrustedAdmin => (Role == Role.COMMUNITY_MANAGER || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);
         public bool IsDeveloper => (Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);
         public bool IsProjectManager => (Role == Role.PROJECT_MANAGER);
-        public bool IsDonator => (Role == Role.DONATOR_LEVEL_1 || Role == Role.DONATOR_LEVEL_2 || Role == Role.DONATOR_LEVEL_3);
+        public bool IsDonator => (Role == Role.DONATOR_LEVEL_1 || Role == Role.DONATOR_LEVEL_2 || Role == Role.DONATOR_LEVEL_3 || Role == Role.DONATOR_LIFE);
         public bool IsDonatorLevel1 => (Role == Role.DONATOR_LEVEL_1);
         public bool IsDonatorLevel2 => (Role == Role.DONATOR_LEVEL_2);
         public bool IsDonatorLevel3 => (Role == Role.DONATOR_LEVEL_3);
-        public bool IsAllowedSupportXp => (IsStaff || IsDonator || DiscordRoles.Contains(Roles.EARLY_ACCESS) || DiscordRoles.Contains(Roles.RESPECTED) || DiscordRoles.Contains(Roles.VETERAN));
-        // public bool IsDiscordNitroBooster => (DiscordRoles.Contains(Roles.NITRO));
+        public bool IsDonatorLife => (Role == Role.DONATOR_LIFE);
     }
 }

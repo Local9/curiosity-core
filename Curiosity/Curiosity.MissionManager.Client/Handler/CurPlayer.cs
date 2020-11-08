@@ -4,9 +4,10 @@ using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Classes;
+using Curiosity.Systems.Library.EventWrapperLegacy;
 using Newtonsoft.Json;
 using System;
-using static Curiosity.Systems.Library.EventWrapperLegacy.Events;
+using static Curiosity.Systems.Library.EventWrapperLegacy.LegacyEvents;
 
 namespace Curiosity.MissionManager.Client.Handler
 {
@@ -27,11 +28,9 @@ namespace Curiosity.MissionManager.Client.Handler
 
         public CurPlayer()
         {
-            EventHandlers[Systems.Library.EventWrapperLegacy.Events.Client.ReceivePlayerInformation] += new Action<string>(OnPlayerInformationUpdate);
-
-            EventHandlers[Systems.Library.EventWrapperLegacy.Events.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
-            EventHandlers[Systems.Library.EventWrapperLegacy.Events.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
-            EventHandlers[Systems.Library.EventWrapperLegacy.Events.Client.CurrentVehicle] += new Action<int>(OnVehicleId);
+            EventHandlers[LegacyEvents.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
+            EventHandlers[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
+            EventHandlers[LegacyEvents.Client.CurrentVehicle] += new Action<int>(OnVehicleId);
 
             EventHandlers[Native.Client.PlayerSpawned] += new Action<dynamic>(OnPlayerSpawned);
             EventHandlers[Native.Client.OnClientResourceStart.Path] += Native.Client.OnClientResourceStart.Action += OnClientResourceStart;
@@ -92,27 +91,15 @@ namespace Curiosity.MissionManager.Client.Handler
                 }
             }
 
-            BaseScript.TriggerEvent("curiosity:Client:Player:Information");
         }
 
         private void OnPlayerSpawned(dynamic spawnObject)
         {
-            BaseScript.TriggerEvent("curiosity:Client:Player:Information");
-        }
-
-        private void OnPlayerInformationUpdate(string jsonString)
-        {
-            playerInfo = JsonConvert.DeserializeObject<PlayerInformationModel>(jsonString);
-            privilege = (Privilege)playerInfo.RoleId;
         }
 
         private void OnPlayerPatrolZone(int zone)
         {
             PatrolZone = (PatrolZone)zone;
         }
-
-        internal static bool IsDeveloper => privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER;
-        internal static bool IsDonator => privilege == Privilege.DONATOR || privilege == Privilege.DONATOR1 || privilege == Privilege.DONATOR2 || privilege == Privilege.DONATOR3;
-        internal static bool IsStaff => privilege == Privilege.HEADADMIN || privilege == Privilege.SENIORADMIN || privilege == Privilege.MODERATOR || privilege == Privilege.ADMINISTRATOR || privilege == Privilege.COMMUNITYMANAGER;
     }
 }

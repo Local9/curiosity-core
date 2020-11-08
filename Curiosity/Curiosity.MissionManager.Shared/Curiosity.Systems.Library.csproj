@@ -31,9 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_Dependancies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,8 +56,8 @@
     <Compile Include="Events\EventMetadata.cs" />
     <Compile Include="Events\EventRequest.cs" />
     <Compile Include="Events\EventType.cs" />
-    <Compile Include="EventWrapper\Event.cs" />
-    <Compile Include="EventWrapper\Events.cs" />
+    <Compile Include="EventWrapper\LegacyEvent.cs" />
+    <Compile Include="EventWrapper\LegacyEvents.cs" />
     <Compile Include="Generators.cs" />
     <Compile Include="Models\CharacterAppearance.cs" />
     <Compile Include="Models\CharacterHeritage.cs" />

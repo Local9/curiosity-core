@@ -28,6 +28,9 @@ namespace Curiosity.MissionManager.Client.Managers
                 User = user
             };
 
+            Instance.DiscordRichPresence.Status = $"Freeroam";
+            Instance.DiscordRichPresence.Commit();
+
             Logger.Info($"[User] [{user.DiscordId}] Logged in with `{user.Role}`");
         }
     }

@@ -31,13 +31,13 @@ namespace Curiosity.Systems.Library.EventWrapperLegacy
         }
     }
 
-    public class Event<T1, T2> : BaseEvent
+    public class LegacyEvent<T1, T2> : BaseEvent
     {
         public Action<T1, T2> Action { get; set; } = (arg1, arg2) => { };
         public Type Field1 => typeof(T1);
         public Type Field2 => typeof(T2);
 
-        public Event(string path) : base(path)
+        public LegacyEvent(string path) : base(path)
         {
         }
     }

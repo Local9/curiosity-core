@@ -31,39 +31,115 @@ namespace Curiosity.Server.net.Classes
 
             server.RegisterTickHandler(UpdateSkillsDictionary);
 
-            server.ExportDictionary.Add("increaseSkill", new Func<string, string, string, string>(
-                (player, skill, amt) =>
+            server.ExportDictionary.Add("increaseSkill", new Func<string, string, int, bool>(
+                (player, skill, xp) =>
                 {
                     try
                     {
                         if (!SessionManager.PlayerList.ContainsKey(player))
                         {
                             Log.Error($"No player found with the handle {player}");
-                            return null;
-                        }
-
-                        int xp = 0;
-
-                        if (!int.TryParse(amt, out xp))
-                        {
-                            Log.Error($"XP of '{xp}' is not a valid number!");
-                            return null;
+                            return false;
                         }
 
                         IncreaseSkillByPlayerExport(player, skill, xp);
 
                         if (Server.ShowExportMessages)
                             Log.Success($"[EXPORT] increaseSkill called, {player}, {skill}, {xp}");
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
                         Log.Error($"[EXPORT] increaseSkill : {ex.Message}");
-                    }
 
-                    return null;
+                        return false;
+                    }
                 }
             ));
 
+            server.ExportDictionary.Add("decreaseSkill", new Func<string, string, int, bool>(
+                (player, skill, xp) =>
+                {
+                    try
+                    {
+                        if (!SessionManager.PlayerList.ContainsKey(player))
+                        {
+                            Log.Error($"No player found with the handle {player}");
+                            return false;
+                        }
+
+                        DecreaseSkillByPlayerExport(player, skill, xp);
+
+                        if (Server.ShowExportMessages)
+                            Log.Success($"[EXPORT] decreaseSkill called, {player}, {skill}, {xp}");
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"[EXPORT] increaseSkill : {ex.Message}");
+
+                        return false;
+                    }
+                }
+            ));
+
+        }
+
+        private static void DecreaseSkillByPlayerExport(string playerId, string skill, int experience)
+        {
+            try
+            {
+                if (!SessionManager.PlayerList.ContainsKey(playerId))
+                {
+                    Log.Error($"DecreaseSkill: Player session missing.");
+                    return;
+                }
+
+                if (!skills.ContainsKey(skill))
+                {
+                    Log.Error($"DecreaseSkill: Skill is missing.");
+                    Log.Error($"DecreaseSkill: Known Skills -> {String.Join("-", skills.Select(x => x.Key))}");
+                    return;
+                }
+
+                Session session = SessionManager.PlayerList[playerId];
+
+                GlobalEntity.Skills skillEnt = skills[skill];
+
+                long characterId = session.User.CharacterId;
+
+                if (!(characterId > 0))
+                {
+                    Log.Error($"DecreaseSkill: characterId Missing");
+                    return;
+                }
+
+                if (!Server.isLive)
+                {
+                    Log.Success($"DecreaseSkill {session.Player.Name}: {skill} + {experience}");
+                }
+
+                Database.DatabaseUsersSkills.DecreaseSkill(characterId, skills[skill].Id, experience);
+
+                if (skills[skill].TypeId == GlobalEnum.SkillType.Experience)
+                    UpdateLifeExperience(session, experience, true);
+
+                session.DecreaseSkill(skill, skills[skill], experience);
+
+                PlayerMethods.SendUpdatedInformation(session);
+
+                if (!Server.isLive)
+                {
+                    session.Player.TriggerEvent("curiosity:Client:Chat:Message", "SERVER", "#FF0000", $"DecreaseSkill: {skill} + {experience}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "DecreaseSkill", $"{ex}");
+                Log.Error($"DecreaseSkill -> {ex.Message}");
+            }
         }
 
         async static void GetListData([FromSource]CitizenFX.Core.Player player, int skillTypeId)

@@ -152,6 +152,7 @@ namespace Curiosity.Server.net
 
             // menu options
             Classes.Menu.Player.Init();
+            ServerExports.ExportFuncs.Init();
 
             // Config
             Classes.DiscordWrapper.Init();

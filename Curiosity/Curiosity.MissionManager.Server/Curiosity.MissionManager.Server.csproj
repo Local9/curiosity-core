@@ -35,9 +35,9 @@
       <HintPath>..\packages\CitizenFX.Core.Server.1.0.3141\lib\net45\CitizenFX.Core.Server.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_Dependancies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,7 +55,6 @@
     <Compile Include="Commands\CommandInfo.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\Impl\DeveloperTools.cs" />
-    <Compile Include="Database\Store\UserDatabase.cs" />
     <Compile Include="Diagnostics\ErrorText.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Events\DamageHandler.cs" />

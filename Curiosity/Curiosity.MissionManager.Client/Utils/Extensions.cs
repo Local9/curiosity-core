@@ -14,7 +14,7 @@ namespace Curiosity.MissionManager.Client.Utils
         public static void TriggerServer<T1>(this Event<T1> @event, T1 field1) =>
             BaseScript.TriggerServerEvent(@event.Path, field1);
 
-        public static void TriggerServer<T1, T2>(this Event<T1, T2> @event, T1 field1, T2 field2) =>
+        public static void TriggerServer<T1, T2>(this LegacyEvent<T1, T2> @event, T1 field1, T2 field2) =>
             BaseScript.TriggerServerEvent(@event.Path, field1, field2);
 
         public static void TriggerServer<T1, T2, T3>(this Event<T1, T2, T3> @event, T1 field1, T2 field2, T3 field3) =>

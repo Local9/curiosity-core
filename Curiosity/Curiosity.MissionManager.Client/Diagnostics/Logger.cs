@@ -39,7 +39,8 @@ namespace Curiosity.MissionManager.Client.Diagnostics
 
         public static void Debug(string msg)
         {
-            if (!CurPlayer.IsDeveloper) return;
+            if (Cache.Player == null) return;
+            if (!Cache.Player.User.IsDeveloper) return;
             WriteLine("DEBUG", msg);
         }
 

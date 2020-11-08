@@ -1,8 +1,8 @@
 ﻿namespace Curiosity.Systems.Library.EventWrapperLegacy
 {
-    public static class Events
+    public static class LegacyEvents
     {
-        public static Event<string, dynamic> Sync => new Event<string, dynamic>("curiosity:sync");
+        public static LegacyEvent<string, dynamic> Sync => new LegacyEvent<string, dynamic>("curiosity:sync");
 
         public static class Client
         {

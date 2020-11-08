@@ -9,7 +9,7 @@ using NativeUI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Curiosity.Systems.Library.EventWrapperLegacy.Events;
+using static Curiosity.Systems.Library.EventWrapperLegacy.LegacyEvents;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
