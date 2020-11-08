@@ -82,7 +82,7 @@
     <Compile Include="Handler\EntityHandler.cs" />
     <Compile Include="Handler\MarkerArrest.cs" />
     <Compile Include="Handler\CurPlayer.cs" />
-    <Compile Include="Func.cs" />
+    <Compile Include="Functions.cs" />
     <Compile Include="Handler\ParticleHandler.cs" />
     <Compile Include="Interface\Chat.cs" />
     <Compile Include="Interface\Notification.cs" />

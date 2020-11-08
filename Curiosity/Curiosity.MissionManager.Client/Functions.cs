@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Curiosity.MissionManager.Client
 {
-    public class Func
+    public class Functions
     {
         /// <summary>
         /// Registers a mission so it can be seen and used in-game
@@ -46,6 +46,7 @@ namespace Curiosity.MissionManager.Client
 
             Mission.RegisteredPeds = new List<Classes.Ped>();
             Mission.RegisteredVehicles = new List<Classes.Vehicle>();
+            Mission.RegisteredParticles = new List<ParticleEffect>();
 
             Mission.isOnMission = true;
             Mission.currentMission.Start();
@@ -57,6 +58,8 @@ namespace Curiosity.MissionManager.Client
         /// <param name="mission">The mission to get info on</param>
         internal static MissionInfo GetMissionInfo(Type mission)
         {
+            if (mission == null) return null;
+
             MissionInfo info = (MissionInfo)mission.GetCustomAttribute(typeof(MissionInfo));
             return info;
         }

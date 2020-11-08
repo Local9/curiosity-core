@@ -23,7 +23,7 @@ namespace Curiosity.MissionManager.Client.Handler
 
         public static void ParticleEffect(int networkId, string dict, string fx, Vector3 offset, float scale)
         {
-            BaseScript.TriggerServerEvent("s:mm:particle", networkId, dict, fx, offset.X, offset.Y, offset.Z, scale);
+            BaseScript.TriggerServerEvent("s:mm:particle:entity", networkId, dict, fx, offset.X, offset.Y, offset.Z, scale);
         }
     }
 }

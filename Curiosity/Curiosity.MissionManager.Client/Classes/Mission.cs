@@ -22,6 +22,7 @@ namespace Curiosity.MissionManager.Client
 
         public static List<Vehicle> RegisteredVehicles { get; internal set; }
         public static List<Ped> RegisteredPeds { get; internal set; }
+        public static List<ParticleEffect> RegisteredParticles { get; internal set; }
 
         public static void AddPlayer(Player player)
         {
@@ -51,6 +52,11 @@ namespace Curiosity.MissionManager.Client
         /// This is called as soon as the mission is ended. Typically this would be used for cleanup such as removing peds and vehicles
         /// </summary>
         public abstract void End();
+
+        public static void CreateParticleAtLocation(string dict, string fx, Vector3 location, float scale = 1.0f, bool placeOnGround = true)
+        {
+            BaseScript.TriggerServerEvent("s:mm:particle:location", dict, fx, location.X, location.Y, location.Z, scale, placeOnGround);
+        }
 
         public static void RegisterVehicle(Vehicle vehicle)
         {
@@ -114,6 +120,7 @@ namespace Curiosity.MissionManager.Client
 
             RegisteredPeds.ForEach(ped => ped?.Dismiss());
             RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
+            RegisteredParticles.ForEach(particle => particle?.Stop());
 
             foreach (Blip blip in PluginManager.Blips)
             {
@@ -130,7 +137,9 @@ namespace Curiosity.MissionManager.Client
         /// <param name="failReason">The reason the mission failed</param>
         public async void Fail(string failReason)
         {
-            MissionInfo info = Func.GetMissionInfo(missionType);
+            MissionInfo info = Functions.GetMissionInfo(missionType);
+
+            if (info == null) return;
 
             Function.Call(Hash.PLAY_MISSION_COMPLETE_AUDIO, "GENERIC_FAILED");
             while (!Function.Call<bool>(Hash.IS_MISSION_COMPLETE_PLAYING)) await BaseScript.Delay(0);
@@ -143,7 +152,9 @@ namespace Curiosity.MissionManager.Client
 
         public async void Pass()
         {
-            MissionInfo info = Func.GetMissionInfo(missionType);
+            MissionInfo info = Functions.GetMissionInfo(missionType);
+
+            if (info == null) return;
 
             API.PlayMissionCompleteAudio("FRANKLIN_BIG_01");
 

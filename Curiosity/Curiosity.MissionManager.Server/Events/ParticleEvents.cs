@@ -7,12 +7,18 @@ namespace Curiosity.MissionManager.Server.Events
     {
         public ParticleEvents()
         {
-            EventHandlers["s:mm:particle"] += new Action<int, string, string, float, float, float, float>(OnParticle); // MOVE
+            EventHandlers["s:mm:particle:entity"] += new Action<int, string, string, float, float, float, float>(OnParticleEntity);
+            EventHandlers["s:mm:particle:location"] += new Action<string, string, float, float, float, float, bool>(OnParticleLocation);
         }
 
-        private void OnParticle(int vehNetworkId, string dict, string fx, float x, float y, float z, float scale)
+        private void OnParticleLocation(string dict, string fx, float x, float y, float z, float scale, bool placeOnGround)
         {
-            BaseScript.TriggerClientEvent("c:mm:particle", vehNetworkId, dict, fx, x, y, z, scale);
+            BaseScript.TriggerClientEvent("c:mm:particle:location", dict, fx, x, y, z, scale, placeOnGround);
+        }
+
+        private void OnParticleEntity(int vehNetworkId, string dict, string fx, float x, float y, float z, float scale)
+        {
+            BaseScript.TriggerClientEvent("c:mm:particle:entity", vehNetworkId, dict, fx, x, y, z, scale);
         }
     }
 }

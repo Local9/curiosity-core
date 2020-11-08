@@ -29,7 +29,7 @@ namespace Curiosity.MissionManager.Client.Commands
 
             Mission.missions.ForEach(mission =>
             {
-                MissionInfo missionInfo = Func.GetMissionInfo(mission);
+                MissionInfo missionInfo = Functions.GetMissionInfo(mission);
 
                 if (missionInfo == null)
                 {
@@ -38,7 +38,7 @@ namespace Curiosity.MissionManager.Client.Commands
                 }
 
                 if (missionInfo.id == missionId)
-                    Func.StartMission(mission);
+                    Functions.StartMission(mission);
             });
         }
     }
