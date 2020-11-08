@@ -105,6 +105,7 @@
     <Compile Include="Classes\RandomKiller.cs" />
     <Compile Include="ClassLoader.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="ClientExports\NotificationExport.cs" />
     <Compile Include="CuriosityPlayer.cs" />
     <Compile Include="Extensions\Decorators.cs" />
     <Compile Include="Helpers\CommandProcessor.cs" />
@@ -137,5 +138,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
