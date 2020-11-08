@@ -88,6 +88,7 @@
     <Compile Include="Interface\Notification.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="ClientEvents\EntityEventWrapper.cs" />
+    <Compile Include="Managers\ExportsManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Menu\MenuBase.cs" />
