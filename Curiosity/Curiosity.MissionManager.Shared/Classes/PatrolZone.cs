@@ -2,7 +2,8 @@
 {
     public enum PatrolZone
     {
-        City = 1,
+        Anywhere,
+        City,
         Country,
         Ocean,
         Highway,

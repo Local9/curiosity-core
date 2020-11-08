@@ -27,7 +27,7 @@ namespace Curiosity.MissionManager.Client.Attributes
         /// <param name="type">The type of mission, this determines things like the blip and end screen</param>
         /// <param name="canBeReplayed">Whether or not the mission is replayable</param>
         /// <param name="preRequisites">The mission(s) that must be completed before this mission can be triggered. This MUST be formatted as follows: "[Mission1ID] [Mission2ID]" and so on.</param>
-        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None", PatrolZone patrolZone = PatrolZone.City, float chanceOfSpawn = 1f)
+        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None", PatrolZone patrolZone = PatrolZone.Anywhere, float chanceOfSpawn = 1f)
         {
             // Might be worth working on roles availability?
 
