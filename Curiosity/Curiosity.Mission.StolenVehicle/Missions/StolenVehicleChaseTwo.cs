@@ -12,7 +12,7 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.StolenVehicle.Missions
 {
-    [MissionInfo("Stolen Vehicle", "misSvChase2", 485.979f, -1311.222f, 29.249f, MissionType.StolenVehicle, true, "None", chanceOfSpawn: .5f)]
+    [MissionInfo("Stolen Vehicle (2 Suspects)", "misSvChase2", 485.979f, -1311.222f, 29.249f, MissionType.StolenVehicle, true, "None", chanceOfSpawn: .5f)]
     public class StolenVehicleChaseTwo : Mission
     {
         private MissionState missionState;
