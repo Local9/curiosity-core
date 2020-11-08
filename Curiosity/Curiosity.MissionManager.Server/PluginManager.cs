@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Server.Commands;
-using Curiosity.MissionManager.Server.Commands.Impl;
 using Curiosity.MissionManager.Server.Diagnostics;
 using Curiosity.MissionManager.Server.Managers;
 using Curiosity.MissionManager.Server.Web;
@@ -125,7 +124,7 @@ namespace Curiosity.MissionManager.Server
             }
 
             var commands = new CommandFramework();
-            commands.Bind(typeof(DeveloperTools));
+            // commands.Bind(typeof(DeveloperTools));
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
 

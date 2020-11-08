@@ -54,7 +54,6 @@
     <Compile Include="Commands\CommandFramework.cs" />
     <Compile Include="Commands\CommandInfo.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\Impl\DeveloperTools.cs" />
     <Compile Include="Diagnostics\ErrorText.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Events\DamageHandler.cs" />
@@ -80,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\" />
+    <Folder Include="Commands\Impl\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
