@@ -46,7 +46,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{exportResponse}");
 
-                Logger.Info($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}] Has connected to the server");
+                Logger.Info($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}] Has successfully connected to the server");
 
                 curiosityUser.Handle = metadata.Sender;
 
