@@ -42,7 +42,7 @@ namespace Curiosity.MissionManager.Server.Managers
                     exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
                 }
 
-                Logger.Success($"{exportResponse}");
+                // Logger.Success($"{exportResponse}");
 
                 CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{exportResponse}");
 
