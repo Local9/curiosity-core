@@ -26,6 +26,19 @@ namespace Curiosity.MissionManager.Client.Classes
         public bool IsInVehicle { get; set; }
         private bool _DEBUG_ENABLED { get; set; } = false;
 
+        public bool IsFleeing
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_FLEE);
+            }
+            set
+            {
+                this.IsArrestable = true;
+                Decorators.Set(Fx.Handle, Decorators.PED_FLEE, value);
+            }
+        }
+
         public bool IsSuspect
         {
             get

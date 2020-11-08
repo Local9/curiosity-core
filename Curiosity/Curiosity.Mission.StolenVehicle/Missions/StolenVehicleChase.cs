@@ -17,10 +17,10 @@ namespace Curiosity.StolenVehicle.Missions
     {
         private MissionState missionState;
         private Ped criminal;
+        private Ped criminalPassenger;
         private Vehicle stolenVehicle;
 
         private bool isMissionStarted = false;
-        private bool isFleeing = false;
 
         List<VehicleHash> vehicleHashes = new List<VehicleHash>()
         {
@@ -70,6 +70,7 @@ namespace Curiosity.StolenVehicle.Missions
             Mission.RegisterVehicle(stolenVehicle);
 
             criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, true);
+            criminalPassenger = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, true);
 
             if (criminal == null)
             {
@@ -95,6 +96,32 @@ namespace Curiosity.StolenVehicle.Missions
                 (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
             criminal.AttachBlip(BlipColor.Red, true);
 
+            if (criminalPassenger != null)
+            {
+                criminalPassenger.IsImportant = true;
+                criminalPassenger.IsMission = true;
+                criminalPassenger.IsSuspect = true;
+                
+                if (Utility.RANDOM.Bool(0.8f))
+                {
+                    criminalPassenger.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
+                    criminalPassenger.Fx.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate);
+                    criminalPassenger.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
+                }
+
+                if (Utility.RANDOM.Bool(0.2f))
+                {
+                    criminalPassenger.Fx.DropsWeaponsOnDeath = false;
+                    criminalPassenger.Fx.Weapons.Give(WeaponHash.Pistol, 90, true, true);
+                    API.SetPedCombatAttributes(criminalPassenger.Handle, 2, true);
+                    API.SetPedCombatAttributes(criminalPassenger.Handle, 46, true);
+                }
+
+                Mission.RegisterPed(criminalPassenger);
+
+                criminalPassenger.PutInVehicle(stolenVehicle, VehicleSeat.Any);
+            }
+
             stolenVehicle.IsSpikable = true;
             stolenVehicle.IsMission = true;
             stolenVehicle.IsTowable = true;
@@ -114,7 +141,10 @@ namespace Curiosity.StolenVehicle.Missions
             float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
             if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 4f)
             {
-                TaskFleeVehicle();
+                TaskFleeVehicle(criminal);
+
+                if (criminalPassenger != null)
+                    TaskFleeVehicle(criminalPassenger);
             }
 
             if (stolenVehicle.Fx.Speed < 4.0f && criminal.IsInVehicle)
@@ -126,19 +156,34 @@ namespace Curiosity.StolenVehicle.Missions
                     await BaseScript.Delay(100);
                     if ((API.GetGameTimer() - gameTimer) > 10000)
                     {
-                        TaskFleeVehicle();
+                        TaskFleeVehicle(criminal);
+
+                        if (criminalPassenger != null)
+                            TaskFleeVehicle(criminalPassenger);
                     }
                 }
             }
 
             if (stolenVehicle.Health < 200)
             {
-                TaskFleeVehicle();
+                TaskFleeVehicle(criminal);
+
+                if (criminalPassenger != null)
+                    TaskFleeVehicle(criminalPassenger);
             }
 
             if (!criminal.IsKneeling && !criminal.IsInVehicle && !criminal.IsHandcuffed)
             {
-                TaskFleeVehicle();
+                TaskFleeVehicle(criminal);
+            }
+
+
+            if (criminalPassenger != null)
+            {
+                if (!criminalPassenger.IsKneeling && !criminalPassenger.IsInVehicle && !criminalPassenger.IsHandcuffed)
+                {
+                    TaskFleeVehicle(criminalPassenger);
+                }
             }
 
             if (criminal.Position.Distance(Game.PlayerPed.Position) < 400f && !isMissionStarted)
@@ -165,19 +210,19 @@ namespace Curiosity.StolenVehicle.Missions
             }
         }
 
-        void TaskFleeVehicle()
+        void TaskFleeVehicle(Ped ped)
         {
-            if (isFleeing) return;
+            if (ped.IsFleeing) return;
 
-            isFleeing = true;
+            ped.IsFleeing = true;
 
             TaskSequence taskSequence = new TaskSequence();
 
-            if (criminal.IsInVehicle)
+            if (ped.IsInVehicle)
                 taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
 
             taskSequence.AddTask.FleeFrom(Game.PlayerPed);
-            criminal.Task.PerformSequence(taskSequence);
+            ped.Task.PerformSequence(taskSequence);
             taskSequence.Close();
         }
     }
