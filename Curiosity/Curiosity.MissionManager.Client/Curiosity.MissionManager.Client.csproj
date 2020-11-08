@@ -50,11 +50,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\MissionInfo.cs" />
+    <Compile Include="Cache.cs" />
     <Compile Include="Classes\Ped.cs" />
     <Compile Include="Classes\Vehicle.cs" />
+    <Compile Include="ClientEvents\EventSystem.cs" />
+    <Compile Include="Commands\CommandContext.cs" />
+    <Compile Include="Commands\CommandFramework.cs" />
+    <Compile Include="Commands\CommandInfo.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\MissionCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="Environment\BlipInfo.cs" />
+    <Compile Include="Environment\CuriosityPed.cs" />
+    <Compile Include="Environment\Entities\CuriosityEntity.cs" />
+    <Compile Include="Environment\Entities\CuriosityPlayer.cs" />
+    <Compile Include="Environment\Entities\Models\AnimationQueue.cs" />
+    <Compile Include="Environment\Entities\Models\CameraViewmodel.cs" />
+    <Compile Include="Environment\Entities\Models\SoundSystem.cs" />
+    <Compile Include="Environment\Entities\Modules\EntityModule.cs" />
+    <Compile Include="Environment\Entities\Modules\EntityModuleRegistry.cs" />
+    <Compile Include="Environment\Entities\Modules\Impl\EntityDecorModule.cs" />
+    <Compile Include="Environment\Entities\Modules\Impl\EntityNetworkModule.cs" />
+    <Compile Include="Environment\Marker.cs" />
+    <Compile Include="Environment\SafeTeleport.cs" />
+    <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Handler\AnimationHandler.cs" />
     <Compile Include="Handler\DamageHandler.cs" />
     <Compile Include="Handler\EntityHandler.cs" />
@@ -62,9 +82,11 @@
     <Compile Include="Handler\CurPlayer.cs" />
     <Compile Include="Func.cs" />
     <Compile Include="Handler\ParticleHandler.cs" />
+    <Compile Include="Interface\Chat.cs" />
     <Compile Include="Interface\Notification.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="ClientEvents\EntityEventWrapper.cs" />
+    <Compile Include="Managers\Manager.cs" />
     <Compile Include="Menu\MenuBase.cs" />
     <Compile Include="Menu\Submenu\Dispatch.cs" />
     <Compile Include="Menu\Submenu\SuspectVehicle.cs" />
@@ -81,6 +103,7 @@
     <Compile Include="Utils\UiTools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Commands\Impl\.keep" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -88,9 +111,9 @@
       <Project>{fe7f0756-cfe5-4bb9-a822-e9e1cfbc412b}</Project>
       <Name>Curiosity.Global.Shared.net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Curiosity.MissionManager.Shared\Curiosity.MissionManager.Shared.csproj">
+    <ProjectReference Include="..\Curiosity.MissionManager.Shared\Curiosity.Systems.Library.csproj">
       <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>
-      <Name>Curiosity.MissionManager.Shared</Name>
+      <Name>Curiosity.Systems.Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\Curiosity.Shared.Client.net\Curiosity.Shared.Client.net.csproj">
       <Project>{37F1F478-BE0B-4C2B-A062-24077F851B69}</Project>
@@ -102,7 +125,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Managers\" />
     <Folder Include="NativeUI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

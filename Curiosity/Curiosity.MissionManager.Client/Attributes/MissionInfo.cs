@@ -1,5 +1,5 @@
 ﻿using CitizenFX.Core;
-using Curiosity.MissionManager.Shared.Classes;
+using Curiosity.Systems.Library.Classes;
 using System;
 
 namespace Curiosity.MissionManager.Client.Attributes

@@ -1,16 +1,14 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
+using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.MissionManager.Shared.Utils;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
-using Ped = Curiosity.MissionManager.Client.Classes.Ped;
-using CitizenFX.Core.Native;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Systems.Library.Utils;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Ped = Curiosity.MissionManager.Client.Classes.Ped;
+using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.StolenVehicle.Missions
 {
@@ -174,7 +172,7 @@ namespace Curiosity.StolenVehicle.Missions
             isFleeing = true;
 
             TaskSequence taskSequence = new TaskSequence();
-            
+
             if (criminal.IsInVehicle)
                 taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
 

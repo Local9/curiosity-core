@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.MissionManager.Shared.EventWrapper;
+using Curiosity.Systems.Library.EventWrapperLegacy;
+using Curiosity.Systems.Library.Utils;
 using System;
 
 namespace Curiosity.MissionManager.Client.Utils
@@ -41,8 +42,8 @@ namespace Curiosity.MissionManager.Client.Utils
 
         public static Vector3 Around(this Vector3 vector, float min, float max)
         {
-            Vector3 rotatedVector = Vector3.UnitY.Rotate((float)(Shared.Utils.Utility.RANDOM.NextDouble() * 360f));
-            var scale = (float)(min + Shared.Utils.Utility.RANDOM.NextDouble() * (max - min));
+            Vector3 rotatedVector = Vector3.UnitY.Rotate((float)(Utility.RANDOM.NextDouble() * 360f));
+            var scale = (float)(min + Utility.RANDOM.NextDouble() * (max - min));
             Vector3 result = vector + Vector3.Multiply(rotatedVector, scale);
             Debug.WriteLine(result.ToString());
 

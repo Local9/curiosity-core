@@ -9,6 +9,7 @@ using NativeUI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Curiosity.Systems.Library.EventWrapperLegacy.Events;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
@@ -36,7 +37,7 @@ namespace Curiosity.MissionManager.Client.Menu
 
         public MenuBase()
         {
-            EventHandlers[Events.Native.Client.OnClientResourceStart.Path] += Events.Native.Client.OnClientResourceStart.Action +=
+            EventHandlers[Native.Client.OnClientResourceStart.Path] += Native.Client.OnClientResourceStart.Action +=
                 resourceName =>
                 {
                     if (resourceName != API.GetCurrentResourceName()) return;

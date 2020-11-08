@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Curiosity.MissionManager.Shared.EventWrapper
+namespace Curiosity.Systems.Library.EventWrapperLegacy
 {
     public abstract class BaseEvent
     {

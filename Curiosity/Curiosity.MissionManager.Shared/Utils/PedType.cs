@@ -1,4 +1,4 @@
-﻿namespace Curiosity.MissionManager.Shared.Utils
+﻿namespace Curiosity.Systems.Library.Utils
 {
     public enum PedType
     {

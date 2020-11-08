@@ -3,10 +3,10 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.MissionManager.Shared.Classes;
-using Curiosity.MissionManager.Shared.EventWrapper;
+using Curiosity.Systems.Library.Classes;
 using Newtonsoft.Json;
 using System;
+using static Curiosity.Systems.Library.EventWrapperLegacy.Events;
 
 namespace Curiosity.MissionManager.Client.Handler
 {
@@ -27,14 +27,14 @@ namespace Curiosity.MissionManager.Client.Handler
 
         public CurPlayer()
         {
-            EventHandlers[Events.Client.ReceivePlayerInformation] += new Action<string>(OnPlayerInformationUpdate);
+            EventHandlers[Systems.Library.EventWrapperLegacy.Events.Client.ReceivePlayerInformation] += new Action<string>(OnPlayerInformationUpdate);
 
-            EventHandlers[Events.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
-            EventHandlers[Events.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
-            EventHandlers[Events.Client.CurrentVehicle] += new Action<int>(OnVehicleId);
+            EventHandlers[Systems.Library.EventWrapperLegacy.Events.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
+            EventHandlers[Systems.Library.EventWrapperLegacy.Events.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
+            EventHandlers[Systems.Library.EventWrapperLegacy.Events.Client.CurrentVehicle] += new Action<int>(OnVehicleId);
 
-            EventHandlers[Events.Native.Client.PlayerSpawned] += new Action<dynamic>(OnPlayerSpawned);
-            EventHandlers[Events.Native.Client.OnClientResourceStart.Path] += Events.Native.Client.OnClientResourceStart.Action += OnClientResourceStart;
+            EventHandlers[Native.Client.PlayerSpawned] += new Action<dynamic>(OnPlayerSpawned);
+            EventHandlers[Native.Client.OnClientResourceStart.Path] += Native.Client.OnClientResourceStart.Action += OnClientResourceStart;
         }
 
         private static void OnVehicleId(int vehicleId)

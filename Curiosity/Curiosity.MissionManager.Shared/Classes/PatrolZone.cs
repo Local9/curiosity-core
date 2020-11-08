@@ -1,4 +1,4 @@
-﻿namespace Curiosity.MissionManager.Shared.Classes
+﻿namespace Curiosity.Systems.Library.Classes
 {
     public enum PatrolZone
     {

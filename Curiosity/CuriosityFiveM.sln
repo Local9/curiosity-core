@@ -165,7 +165,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "missions", "missions", "{9C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.MissionManager.Server", "Curiosity.MissionManager.Server\Curiosity.MissionManager.Server.csproj", "{0EC8EE3B-AF28-4826-A27D-45987046C420}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.MissionManager.Shared", "Curiosity.MissionManager.Shared\Curiosity.MissionManager.Shared.csproj", "{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Systems.Library", "Curiosity.MissionManager.Shared\Curiosity.Systems.Library.csproj", "{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Development", "Curiosity.Development\Curiosity.Development.csproj", "{FF12DB29-0E4A-4421-8B9F-D0B929BF18F0}"
 EndProject

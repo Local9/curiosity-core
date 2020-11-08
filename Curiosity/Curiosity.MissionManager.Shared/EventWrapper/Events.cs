@@ -1,4 +1,4 @@
-﻿namespace Curiosity.MissionManager.Shared.EventWrapper
+﻿namespace Curiosity.Systems.Library.EventWrapperLegacy
 {
     public static class Events
     {

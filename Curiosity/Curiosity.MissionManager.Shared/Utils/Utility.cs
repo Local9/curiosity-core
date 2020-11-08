@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Curiosity.MissionManager.Shared.Utils
+namespace Curiosity.Systems.Library.Utils
 {
     public static class Utility
     {

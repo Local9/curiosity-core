@@ -10,6 +10,7 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string PLAYER_MENU = "player::npc::menu";
         public const string PLAYER_ASSISTING = "player::npc::assisting";
         public const string PLAYER_VEHICLE = "player::vehicle";
+        public const string PLAYER_OWNER = "player::owner";
 
         public const string VEHICLE_STOLEN = "c::vehicle::stolen";
         public const string VEHICLE_FLEE = "c::vehicle::flee";

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Curiosity.MissionManager.Shared.Utils
+namespace Curiosity.Systems.Library.Utils
 {
     public static class Extensions
     {

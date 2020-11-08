@@ -1,12 +1,7 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
-using Curiosity.MissionManager.Client.Classes;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.MissionManager.Shared.Utils;
-using Curiosity.Shared.Client.net;
 using System.Threading.Tasks;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 

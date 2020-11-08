@@ -7,8 +7,8 @@
     <ProjectGuid>{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.MissionManager.Shared</RootNamespace>
-    <AssemblyName>Curiosity.MissionManager.Shared.net</AssemblyName>
+    <RootNamespace>Curiosity.Systems.Shared</RootNamespace>
+    <AssemblyName>Curiosity.Systems.Shared.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,13 +46,45 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\PatrolZone.cs" />
+    <Compile Include="Date.cs" />
+    <Compile Include="Decors.cs" />
+    <Compile Include="Enums\PedType.cs" />
+    <Compile Include="Events\AsyncEventCallback.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\EventAttachment.cs" />
+    <Compile Include="Events\EventCallback.cs" />
+    <Compile Include="Events\EventMetadata.cs" />
+    <Compile Include="Events\EventRequest.cs" />
+    <Compile Include="Events\EventType.cs" />
     <Compile Include="EventWrapper\Event.cs" />
     <Compile Include="EventWrapper\Events.cs" />
+    <Compile Include="Generators.cs" />
+    <Compile Include="Models\CharacterAppearance.cs" />
+    <Compile Include="Models\CharacterHeritage.cs" />
+    <Compile Include="Models\ChatMessage.cs" />
+    <Compile Include="Models\CuriosityCharacter.cs" />
+    <Compile Include="Models\CuriosityUser.cs" />
+    <Compile Include="Models\Discord\Member.cs" />
+    <Compile Include="Models\FiveM\FiveMPlayer.cs" />
+    <Compile Include="Models\FiveM\FiveMPlayerList.cs" />
+    <Compile Include="Models\JsonBuilder.cs" />
+    <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Models\Party.cs" />
+    <Compile Include="Models\PartyMember.cs" />
+    <Compile Include="Models\Position.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\SessionCollection.cs" />
+    <Compile Include="Models\VehicleInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seed.cs" />
+    <Compile Include="Threading\ThreadLock.cs" />
     <Compile Include="Utils\Encode.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\PedType.cs" />
     <Compile Include="Utils\Utility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
