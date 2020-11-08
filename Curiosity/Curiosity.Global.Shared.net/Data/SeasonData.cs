@@ -59,7 +59,6 @@ namespace Curiosity.Global.Shared.Data
         {
             return new List<WeatherTypes>()
             {
-                WeatherTypes.CLEAR,
                 WeatherTypes.CLEARING,
                 WeatherTypes.EXTRASUNNY,
                 WeatherTypes.SMOG,
