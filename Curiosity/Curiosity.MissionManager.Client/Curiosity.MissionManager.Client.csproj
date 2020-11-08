@@ -64,7 +64,7 @@
     <Compile Include="Handler\ParticleHandler.cs" />
     <Compile Include="Interface\Notification.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
-    <Compile Include="Managers\EntityEventWrapper.cs" />
+    <Compile Include="ClientEvents\EntityEventWrapper.cs" />
     <Compile Include="Menu\MenuBase.cs" />
     <Compile Include="Menu\Submenu\Dispatch.cs" />
     <Compile Include="Menu\Submenu\SuspectVehicle.cs" />
@@ -102,6 +102,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Managers\" />
     <Folder Include="NativeUI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

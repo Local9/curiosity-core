@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.MissionManager.Client.Managers
+namespace Curiosity.MissionManager.Client.ClientEvents
 {
     public class EntityEventWrapper
     {

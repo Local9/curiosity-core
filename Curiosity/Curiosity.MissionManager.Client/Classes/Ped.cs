@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.ClientEvents;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
-using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.MissionManager.Shared.Utils;
 using Curiosity.Shared.Client.net.Extensions;
