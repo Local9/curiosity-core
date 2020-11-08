@@ -53,6 +53,8 @@
     <Compile Include="Classes\Ped.cs" />
     <Compile Include="Classes\Vehicle.cs" />
     <Compile Include="Commands\MissionCommands.cs" />
+    <Compile Include="CommonFunctions.cs" />
+    <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Handler\AnimationHandler.cs" />
     <Compile Include="Handler\DamageHandler.cs" />
     <Compile Include="Handler\EntityHandler.cs" />
@@ -60,20 +62,21 @@
     <Compile Include="Handler\CurPlayer.cs" />
     <Compile Include="Func.cs" />
     <Compile Include="Handler\ParticleHandler.cs" />
+    <Compile Include="Interface\Notification.cs" />
+    <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="Managers\EntityEventWrapper.cs" />
     <Compile Include="Menu\MenuBase.cs" />
     <Compile Include="Menu\Submenu\Dispatch.cs" />
     <Compile Include="Menu\Submenu\SuspectVehicle.cs" />
     <Compile Include="Menu\Submenu\SuspectPed.cs" />
-    <Compile Include="Mission.cs" />
-    <Compile Include="NativeUI\BigMessageHandler.cs" />
+    <Compile Include="Classes\Mission.cs" />
+    <Compile Include="Interface\BigMessageHandler.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Attributes\TickHandler.cs" />
     <Compile Include="Utils\Collections.cs" />
-    <Compile Include="Utils\Decorators.cs" />
+    <Compile Include="Extensions\Decorators.cs" />
     <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Utils\Logger.cs" />
     <Compile Include="Handler\MarkerHandler.cs" />
     <Compile Include="Utils\UiTools.cs" />
   </ItemGroup>
@@ -98,6 +101,8 @@
       <Name>NativeUI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="NativeUI\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.Native;
+using Curiosity.MissionManager.Client.Diagnostics;
 
 namespace Curiosity.MissionManager.Client.Utils
 {
@@ -68,7 +69,7 @@ namespace Curiosity.MissionManager.Client.Utils
             }
             else
             {
-                Logger.Log("[Decor] Could not set decor object due to it not being a supported type.");
+                Logger.Debug("[Decor] Could not set decor object due to it not being a supported type.");
             }
         }
 

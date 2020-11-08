@@ -1,12 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Utils;
 using NativeUI;
 using System;
 using System.Collections.Generic;
-using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
+using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.MissionManager.Client
 {
@@ -57,11 +58,11 @@ namespace Curiosity.MissionManager.Client
             {
                 vehicle.Fx.IsPersistent = true;
                 RegisteredVehicles.Add(vehicle);
-                Logger.Log($"Registered vehicle {vehicle.Hash}");
+                Logger.Debug($"Registered vehicle {vehicle.Hash}");
             }
             catch (Exception ex)
             {
-                Logger.Log($"Error: {ex}");
+                Logger.Error($"{ex}");
             }
         }
 
@@ -71,11 +72,11 @@ namespace Curiosity.MissionManager.Client
             {
                 ped.Fx.IsPersistent = true;
                 RegisteredPeds.Add(ped);
-                Logger.Log($"Registered ped {ped.Name}");
+                Logger.Debug($"Registered ped {ped.Name}");
             }
             catch (Exception ex)
             {
-                Logger.Log($"Error: {ex}");
+                Logger.Error($"{ex}");
             }
         }
 

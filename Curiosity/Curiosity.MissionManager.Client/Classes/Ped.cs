@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
@@ -436,7 +437,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             API.NetworkFadeInEntity(fxPed.Handle, false);
 
-            Logger.Log(fxPed.ToString());
+            Logger.Debug(fxPed.ToString());
             var ped = new Ped(fxPed);
             return ped;
         }
@@ -464,7 +465,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             API.NetworkFadeInEntity(fxPed.Handle, false);
 
-            Logger.Log(fxPed.ToString());
+            Logger.Debug(fxPed.ToString());
             var ped = new Ped(fxPed);
             return ped;
         }

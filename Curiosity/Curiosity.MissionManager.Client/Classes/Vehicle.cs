@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.NaturalMotion;
 using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
 using System;
@@ -92,7 +93,7 @@ namespace Curiosity.MissionManager.Client.Classes
             
             API.ClearAreaOfEverything(streetPosition.X, streetPosition.Y, streetPosition.Z, 5f, false, false, false, false);
 
-            Logger.Log(fxVehicle.ToString());
+            Logger.Debug(fxVehicle.ToString());
 
             API.NetworkFadeInEntity(fxVehicle.Handle, false);
 

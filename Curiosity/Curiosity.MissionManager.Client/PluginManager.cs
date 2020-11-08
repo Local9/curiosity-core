@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Utils;
 using System;
 using System.Collections.Generic;
@@ -64,7 +65,7 @@ namespace Curiosity.MissionManager.Client
             }
             catch (Exception ex)
             {
-                Logger.Log(ex.Message);
+                Logger.Debug(ex.Message);
             }
         }
 
@@ -80,7 +81,7 @@ namespace Curiosity.MissionManager.Client
             }
             catch (Exception ex)
             {
-                Logger.Log(ex.Message);
+                Logger.Debug(ex.Message);
             }
         }
     }

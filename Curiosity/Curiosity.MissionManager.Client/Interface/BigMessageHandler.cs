@@ -3,7 +3,7 @@ using CitizenFX.Core.Native;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.MissionManager.Client.NativeUI
+namespace Curiosity.MissionManager.Client.Interface
 {
     public class BigMessageHandler : BaseScript
     {
