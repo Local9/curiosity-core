@@ -54,9 +54,11 @@ namespace Curiosity.MissionManager.Server
 
                 if (IsDebugging)
                 {
+                    Logger.Warn(string.Empty);
                     Logger.Warn($"----------------------------------------");
-                    Logger.Warn($"------------ DEBUG ACTIVE --------------");
+                    Logger.Warn($"-------- MISSION DEBUG ACTIVE ----------");
                     Logger.Warn($"----------------------------------------");
+                    Logger.Warn(string.Empty);
                 }
 
                 ulong defDiscordGuildId = 0;
