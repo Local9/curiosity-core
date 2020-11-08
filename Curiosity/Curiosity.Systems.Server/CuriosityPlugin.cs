@@ -196,7 +196,7 @@ namespace Curiosity.Systems.Server
                 API.SetConvarServerInfo("Curiosity", CURIOSITY_VERSION);
 
                 // Disable client side entity creation
-                Function.Call((Hash)0x0071321B, "relaxed");
+                // Function.Call((Hash)0x0071321B, "relaxed"); // ONESYNC
             }
             catch (Exception ex)
             {

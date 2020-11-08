@@ -33,10 +33,11 @@
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CitizenFX.Core.Client.1.0.3141\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -61,6 +62,7 @@
     <Compile Include="Commands\MissionCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
+    <Compile Include="Discord\DiscordRichPresence.cs" />
     <Compile Include="Environment\BlipInfo.cs" />
     <Compile Include="Environment\CuriosityPed.cs" />
     <Compile Include="Environment\Entities\CuriosityEntity.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="Interface\Notification.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="ClientEvents\EntityEventWrapper.cs" />
+    <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Menu\MenuBase.cs" />
     <Compile Include="Menu\Submenu\Dispatch.cs" />

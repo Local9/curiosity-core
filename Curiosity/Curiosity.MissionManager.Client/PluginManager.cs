@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Commands;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Discord;
 using Curiosity.MissionManager.Client.Environment.Entities;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Managers;
@@ -29,6 +30,15 @@ namespace Curiosity.MissionManager.Client
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
+        public static int MaximumPlayers { get; } = 32;
+
+        public readonly DiscordRichPresence DiscordRichPresence =
+            new DiscordRichPresence(MaximumPlayers, "590126930066407424", "Live V", "forums.lifev.net")
+            {
+                SmallAsset = "fivem",
+                SmallAssetText = "fivem.net",
+                Status = "Connecting..."
+            };
 
         public PluginManager()
         {
@@ -47,6 +57,8 @@ namespace Curiosity.MissionManager.Client
         private async Task Load()
         {
             Logger.Info("[Curiosity]: Loading managers, please wait...");
+
+            DiscordRichPresence.Commit();
 
             Assembly.GetExecutingAssembly().GetExportedTypes()
                 .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
