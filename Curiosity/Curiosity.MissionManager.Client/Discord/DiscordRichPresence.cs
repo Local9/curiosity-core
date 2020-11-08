@@ -31,9 +31,9 @@ namespace Curiosity.MissionManager.Client.Discord
             }
 
             API.SetDiscordAppId(AppId);
-            API.SetDiscordRichPresenceAssetSmall(Asset);
+            API.SetDiscordRichPresenceAsset(Asset);
             API.SetDiscordRichPresenceAssetText(AssetText);
-
+            
             if (SmallAsset != null && SmallAssetText != null)
             {
                 API.SetDiscordRichPresenceAssetSmall(SmallAsset);

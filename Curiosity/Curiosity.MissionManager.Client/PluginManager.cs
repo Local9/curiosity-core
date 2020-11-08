@@ -33,7 +33,7 @@ namespace Curiosity.MissionManager.Client
         public static int MaximumPlayers { get; } = 32;
 
         public readonly DiscordRichPresence DiscordRichPresence =
-            new DiscordRichPresence(MaximumPlayers, "590126930066407424", "Live V", "forums.lifev.net")
+            new DiscordRichPresence(MaximumPlayers, "590126930066407424", "banner", "forums.lifev.net")
             {
                 SmallAsset = "fivem",
                 SmallAssetText = "fivem.net",

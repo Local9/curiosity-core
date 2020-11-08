@@ -6,9 +6,15 @@ namespace Curiosity.MissionManager.Client.Managers
     {
         public override async void Begin()
         {
-            Instance.ExportRegistry.Add("Discord", new Func<string, string, string, bool>(
-                (smallAsset, smallAssetTest, status) =>
+            Instance.ExportRegistry.Add("Discord", new Func<string, string, string, string, string, bool>(
+                (asset, assetText, smallAsset, smallAssetTest, status) =>
                 {
+                    if (!string.IsNullOrEmpty(asset))
+                        Instance.DiscordRichPresence.Asset = asset;
+
+                    if (!string.IsNullOrEmpty(assetText))
+                        Instance.DiscordRichPresence.AssetText = assetText;
+
                     if (!string.IsNullOrEmpty(smallAsset))
                         Instance.DiscordRichPresence.SmallAsset = smallAsset;
 
