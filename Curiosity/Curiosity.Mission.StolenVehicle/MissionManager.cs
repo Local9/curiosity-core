@@ -21,7 +21,7 @@ namespace Curiosity.StolenVehicle
 
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
 
-            Functions.RegisterMission(typeof(StolenVehicleChase));
+            Functions.RegisterMission(typeof(StolenVehicleChaseTwo));
         }
 
         private void OnClientResourceStop(string resourceName)
@@ -59,5 +59,13 @@ namespace Curiosity.StolenVehicle
                 Log.Error(ex.Message);
             }
         }
+    }
+
+    internal enum MissionState
+    {
+        Started,
+        ChaseActive,
+        Escaped,
+        End
     }
 }

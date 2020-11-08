@@ -12,11 +12,12 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.StolenVehicle.Missions
 {
-    [MissionInfo("Stolen Vehicle", "misSvChase", 485.979f, -1311.222f, 29.249f, MissionType.StolenVehicle, true, "None")]
-    public class StolenVehicleChase : Mission
+    [MissionInfo("Stolen Vehicle", "misSvChase2", 485.979f, -1311.222f, 29.249f, MissionType.StolenVehicle, true, "None")]
+    public class StolenVehicleChaseTwo : Mission
     {
         private MissionState missionState;
         private Ped criminal;
+        private Ped criminalPassenger;
         private Vehicle stolenVehicle;
 
         private bool isMissionStarted = false;
@@ -95,6 +96,43 @@ namespace Curiosity.StolenVehicle.Missions
                 (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
             criminal.AttachBlip(BlipColor.Red, true);
 
+
+            await BaseScript.Delay(100);
+
+            criminalPassenger = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, true);
+
+            if (criminalPassenger != null)
+            {
+                criminalPassenger.IsImportant = true;
+                criminalPassenger.IsMission = true;
+                criminalPassenger.IsSuspect = true;
+                
+                if (Utility.RANDOM.Bool(0.8f))
+                {
+                    criminalPassenger.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
+                    criminalPassenger.Fx.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate);
+                    criminalPassenger.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
+                }
+
+                if (Utility.RANDOM.Bool(0.3f))
+                {
+                    criminalPassenger.Fx.DropsWeaponsOnDeath = false;
+                    criminalPassenger.Fx.Weapons.Give(WeaponHash.Pistol, 90, true, true);
+
+                    API.SetPedCombatAttributes(criminalPassenger.Handle, 2, true);
+                    API.SetPedCombatAttributes(criminalPassenger.Handle, 46, true);
+
+                    API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 50f);
+                    criminalPassenger.Task.FightAgainstHatedTargets(50f);
+                }
+
+                criminalPassenger.AttachBlip(BlipColor.Red, false);
+
+                Mission.RegisterPed(criminalPassenger);
+
+                criminalPassenger.PutInVehicle(stolenVehicle, VehicleSeat.Any);
+            }
+
             stolenVehicle.IsSpikable = true;
             stolenVehicle.IsMission = true;
             stolenVehicle.IsTowable = true;
@@ -108,7 +146,7 @@ namespace Curiosity.StolenVehicle.Missions
 
         public override void End()
         {
-            if (criminal != null)
+            if (criminal != null && criminalPassenger != null)
             {
                 Fail("Failed to capture and arrest the perps");
             }
@@ -127,6 +165,9 @@ namespace Curiosity.StolenVehicle.Missions
             if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 4f)
             {
                 TaskFleeVehicle(criminal);
+
+                if (criminalPassenger != null)
+                    TaskFleeVehicle(criminalPassenger);
             }
 
             if (stolenVehicle.Fx.Speed < 4.0f && criminal.IsInVehicle)
@@ -139,6 +180,9 @@ namespace Curiosity.StolenVehicle.Missions
                     if ((API.GetGameTimer() - gameTimer) > 20000)
                     {
                         TaskFleeVehicle(criminal);
+
+                        if (criminalPassenger != null)
+                            TaskFleeVehicle(criminalPassenger);
                     }
                 }
             }
@@ -146,6 +190,9 @@ namespace Curiosity.StolenVehicle.Missions
             if (stolenVehicle.Health < 200)
             {
                 TaskFleeVehicle(criminal);
+
+                if (criminalPassenger != null)
+                    TaskFleeVehicle(criminalPassenger);
             }
 
             if (!criminal.IsKneeling && !criminal.IsInVehicle && !criminal.IsHandcuffed)
@@ -153,8 +200,20 @@ namespace Curiosity.StolenVehicle.Missions
                 TaskFleeVehicle(criminal);
             }
 
+
+            if (criminalPassenger != null)
+            {
+                if (!criminalPassenger.IsKneeling && !criminalPassenger.IsInVehicle && !criminalPassenger.IsHandcuffed)
+                {
+                    TaskFleeVehicle(criminalPassenger);
+                }
+            }
+
             if (criminal.Position.Distance(Game.PlayerPed.Position) < 400f && !isMissionStarted)
             {
+                if (criminalPassenger != null && criminalPassenger.Fx.Weapons.HasWeapon(WeaponHash.Pistol))
+                    API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 400f);
+
                 isMissionStarted = true;
             }
 
