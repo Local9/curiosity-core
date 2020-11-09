@@ -45,7 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\PatrolZone.cs" />
+    <Compile Include="Entity\MissionData.cs" />
+    <Compile Include="Enums\PatrolZone.cs" />
     <Compile Include="Date.cs" />
     <Compile Include="Decors.cs" />
     <Compile Include="Enums\PedType.cs" />
@@ -86,5 +87,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
