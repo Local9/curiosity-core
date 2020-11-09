@@ -1,5 +1,5 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Systems.Library.Classes;
+using Curiosity.Systems.Library.Enums;
 using System;
 
 namespace Curiosity.MissionManager.Client.Attributes
