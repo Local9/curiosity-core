@@ -23,6 +23,7 @@ namespace Curiosity.Systems.Library.Models
         public int QueuePriority { get; set; }
         public CuriosityCharacter Character { get; set; }
         public Guid PartyId { get; internal set; } = Guid.Empty;
+        public string CurrentJob { get; set; }
 
         public void SetPartyId(Guid partyId)
         {
