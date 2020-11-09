@@ -179,8 +179,8 @@ namespace Curiosity.Server.net.Classes
 
             if (arrestedPed.CaughtSpeeding)
             {
-                experienceMultiplier += 1.5f;
-                moneyMultiplier += 1.5f;
+                experienceMultiplier += 0.5f;
+                moneyMultiplier += 0.5f;
                 wrapSheet.Add("Caught Speeding");
             }
 
