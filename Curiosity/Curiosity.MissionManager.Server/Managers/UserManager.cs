@@ -4,6 +4,7 @@ using Curiosity.MissionManager.Server.Diagnostics;
 using Curiosity.MissionManager.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Shared.Entity;
 using Newtonsoft.Json;
 using System;
 
@@ -53,8 +54,6 @@ namespace Curiosity.MissionManager.Server.Managers
                 PluginManager.ActiveUsers.Add(metadata.Sender, curiosityUser);
 
                 return curiosityUser;
-
-                return null;
             }));
 
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
@@ -67,6 +66,7 @@ namespace Curiosity.MissionManager.Server.Managers
             {
                 Logger.Info($"Player: {player.Name} disconnected ({reason})");
                 PluginManager.ActiveUsers.Remove(playerHandle);
+                MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
             }
         }
     }
