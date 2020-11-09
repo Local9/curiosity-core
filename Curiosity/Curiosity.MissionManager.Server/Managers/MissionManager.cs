@@ -19,7 +19,8 @@ namespace Curiosity.MissionManager.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("mission:isActive", new AsyncEventCallback(async metadata => {
+            EventSystem.GetModule().Attach("mission:isActive", new AsyncEventCallback(async metadata =>
+            {
 
                 int senderHandle = metadata.Sender;
                 string missionId = metadata.Find<string>(0);
@@ -35,7 +36,8 @@ namespace Curiosity.MissionManager.Server.Managers
                 return false;
             }));
 
-            EventSystem.GetModule().Attach("mission:activate", new AsyncEventCallback(async metadata => {
+            EventSystem.GetModule().Attach("mission:activate", new AsyncEventCallback(async metadata =>
+            {
 
                 int senderHandle = metadata.Sender;
                 string missionId = metadata.Find<string>(0);
@@ -53,7 +55,8 @@ namespace Curiosity.MissionManager.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("mission:deactivate", new AsyncEventCallback(async metadata => {
+            EventSystem.GetModule().Attach("mission:deactivate", new AsyncEventCallback(async metadata =>
+            {
 
                 int senderHandle = metadata.Sender;
 
@@ -66,6 +69,21 @@ namespace Curiosity.MissionManager.Server.Managers
                     Logger.Error(ex, "Failed to activate mission");
                     return false;
                 }
+            }));
+
+            EventSystem.GetModule().Attach("mission:assistance:request", new AsyncEventCallback(async metadata =>
+            {
+                return false;
+            }));
+
+            EventSystem.GetModule().Attach("mission:assistance:accept", new AsyncEventCallback(async metadata =>
+            {
+                return false;
+            }));
+
+            EventSystem.GetModule().Attach("mission:completed", new AsyncEventCallback(async metadata =>
+            {
+                return false;
             }));
         }
     }
