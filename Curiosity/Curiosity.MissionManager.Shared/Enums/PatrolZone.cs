@@ -1,4 +1,4 @@
-﻿namespace Curiosity.Systems.Library.Classes
+﻿namespace Curiosity.Systems.Library.Enums
 {
     public enum PatrolZone
     {
