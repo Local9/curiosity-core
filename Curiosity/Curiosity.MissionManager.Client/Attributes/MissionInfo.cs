@@ -15,6 +15,8 @@ namespace Curiosity.MissionManager.Client.Attributes
         public Vector3 startPoint;
         public MissionType type;
         public PatrolZone patrolZone;
+        public float chanceOfSpawn;
+        public bool unique;
 
         /// <summary>
         /// The basic information about a mission
@@ -27,7 +29,11 @@ namespace Curiosity.MissionManager.Client.Attributes
         /// <param name="type">The type of mission, this determines things like the blip and end screen</param>
         /// <param name="canBeReplayed">Whether or not the mission is replayable</param>
         /// <param name="preRequisites">The mission(s) that must be completed before this mission can be triggered. This MUST be formatted as follows: "[Mission1ID] [Mission2ID]" and so on.</param>
-        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None", PatrolZone patrolZone = PatrolZone.Anywhere, float chanceOfSpawn = 1f)
+        /// <param name="patrolZone">Zone the mission is active to</param>
+        /// <param name="chanceOfSpawn">chance of the mission activating</param>
+        /// <param name="unique">If the mission is unique, this is to stop duplication</param>
+
+        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None", PatrolZone patrolZone = PatrolZone.Anywhere, float chanceOfSpawn = 1f, bool unique = false)
         {
             // Might be worth working on roles availability?
 
@@ -41,6 +47,8 @@ namespace Curiosity.MissionManager.Client.Attributes
             this.zPos = zPos;
             this.type = type;
             this.patrolZone = patrolZone;
+            this.chanceOfSpawn = chanceOfSpawn;
+            this.unique = unique;
         }
     }
 }
