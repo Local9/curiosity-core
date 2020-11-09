@@ -46,7 +46,8 @@ namespace Curiosity.LifeV.Bot
         }
 
         private async void OnStatusUpdater(object sender, ElapsedEventArgs e)
-        {try
+        {
+            try
             {
                 currentServer++;
 
