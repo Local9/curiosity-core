@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MissionManager.cs" />
+    <Compile Include="Missions\StolenTank.cs" />
     <Compile Include="Missions\StolenVehicleChase.cs" />
     <Compile Include="Missions\StolenVehicleChaseTwo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

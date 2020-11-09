@@ -12,7 +12,7 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.StolenVehicle.Missions
 {
-    [MissionInfo("Stolen Vehicle (2 Suspects)", "misSvChase2", 485.979f, -1311.222f, 29.249f, MissionType.StolenVehicle, true, "None", chanceOfSpawn: .5f)]
+    [MissionInfo("Stolen Vehicle (2 Suspects)", "misSvChase2", 0f, 0f, 0f, MissionType.StolenVehicle, true, "None", chanceOfSpawn: .5f)]
     public class StolenVehicleChaseTwo : Mission
     {
         private MissionState missionState;
@@ -107,24 +107,16 @@ namespace Curiosity.StolenVehicle.Missions
                 criminalPassenger.IsMission = true;
                 criminalPassenger.IsSuspect = true;
                 
-                if (Utility.RANDOM.Bool(0.8f))
-                {
-                    criminalPassenger.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
-                    criminalPassenger.Fx.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate);
-                    criminalPassenger.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
-                }
+                criminalPassenger.Fx.DropsWeaponsOnDeath = false;
+                criminalPassenger.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
+                criminalPassenger.Fx.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate);
+                criminalPassenger.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
 
-                if (Utility.RANDOM.Bool(0.3f))
-                {
-                    criminalPassenger.Fx.DropsWeaponsOnDeath = false;
-                    criminalPassenger.Fx.Weapons.Give(WeaponHash.Pistol, 90, true, true);
+                API.SetPedCombatAttributes(criminalPassenger.Handle, 2, true);
+                API.SetPedCombatAttributes(criminalPassenger.Handle, 46, true);
 
-                    API.SetPedCombatAttributes(criminalPassenger.Handle, 2, true);
-                    API.SetPedCombatAttributes(criminalPassenger.Handle, 46, true);
-
-                    API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 50f);
-                    criminalPassenger.Task.FightAgainstHatedTargets(50f);
-                }
+                API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 50f);
+                criminalPassenger.Task.FightAgainstHatedTargets(50f);
 
                 criminalPassenger.AttachBlip(BlipColor.Red, false);
 
@@ -137,7 +129,7 @@ namespace Curiosity.StolenVehicle.Missions
             stolenVehicle.IsMission = true;
             stolenVehicle.IsTowable = true;
 
-            UiTools.Dispatch("~r~CODE 3~s~: Stolen Vehicle", $"~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}~n~~g~GPS Updated");
+            UiTools.Dispatch("~r~CODE 3~s~: Stolen Vehicle - ARMED", $"~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}~n~~g~GPS Updated");
 
             isMissionReady = true;
 
@@ -211,7 +203,7 @@ namespace Curiosity.StolenVehicle.Missions
 
             if (criminal.Position.Distance(Game.PlayerPed.Position) < 400f && !isMissionStarted)
             {
-                if (criminalPassenger != null && criminalPassenger.Fx.Weapons.HasWeapon(WeaponHash.Pistol))
+                if (criminalPassenger != null)
                     API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 400f);
 
                 isMissionStarted = true;

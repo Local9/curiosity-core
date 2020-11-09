@@ -386,7 +386,7 @@ namespace Curiosity.Missions.Client.MissionVehicles
                     outPos = roadside;
 
                 ClearPedTasks(InteractivePed.Handle);
-                TaskVehiclePark(InteractivePed.Handle, Handle, outPos.X, outPos.Y, outPos.Z, InteractivePed.Heading, 3, 60f, true);
+                TaskVehiclePark(InteractivePed.Handle, Handle, outPos.X, outPos.Y, outPos.Z, InteractivePed.Heading, 3, 20f, true);
                 long gameTimer = API.GetGameTimer();
                 while (Vehicle.Position.DistanceToSquared2D(outPos) > 3f)
                 {

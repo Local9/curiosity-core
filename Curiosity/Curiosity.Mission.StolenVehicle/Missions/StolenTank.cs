@@ -1,19 +1,22 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Systems.Library.Utils;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.StolenVehicle.Missions
 {
-    [MissionInfo("Stolen Vehicle (1 Suspect)", "misSvChase", 0f, 0f, 0f, MissionType.StolenVehicle, true, "None", chanceOfSpawn: .8f)]
-    public class StolenVehicleChase : Mission
+    [MissionInfo("Stolen Tank", "misSvTank", 0f, 0f, 0f, MissionType.StolenVehicle, true, "None", chanceOfSpawn: .05f)]
+    public class StolenTank : Mission
     {
         private MissionState missionState;
         private Ped criminal;
@@ -21,23 +24,15 @@ namespace Curiosity.StolenVehicle.Missions
 
         private bool isMissionStarted = false;
         private bool isMissionReady = false;
+        private bool hasLeftVehicle = false;
 
-        List<VehicleHash> vehicleHashes = new List<VehicleHash>()
-        {
-            VehicleHash.Oracle2,
-            VehicleHash.Panto,
-            VehicleHash.Sandking,
-            VehicleHash.SlamVan,
-            VehicleHash.Adder,
-            VehicleHash.Faggio,
-            VehicleHash.Issi2,
-            VehicleHash.Kuruma,
-            VehicleHash.F620,
-            VehicleHash.Dukes,
-            VehicleHash.Baller,
-            VehicleHash.Boxville,
-            VehicleHash.Rumpo
-        };
+        private int missionStart = API.GetGameTimer();
+        private int lastShot = API.GetGameTimer();
+        private int lastShotReset = API.GetGameTimer();
+        private int SHOT_TIMER = 60000;
+        private int SHOT_TIMER_FLEE = 10000;
+        private int MISSION_TIMER = (1000 * 60);
+        private bool isShooting = false;
 
         List<PedHash> pedHashes = new List<PedHash>()
         {
@@ -58,7 +53,9 @@ namespace Curiosity.StolenVehicle.Missions
         {
             missionState = MissionState.Started;
 
-            stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
+            MISSION_TIMER *= Utility.RANDOM.Next(10, 30);
+
+            stolenVehicle = await Vehicle.Spawn(VehicleHash.Rhino,
                 Players[0].Character.Position.AroundStreet(200f, 400f));
 
             if (stolenVehicle == null)
@@ -81,12 +78,11 @@ namespace Curiosity.StolenVehicle.Missions
             criminal.IsMission = true;
             criminal.IsSuspect = true;
 
-            if (Utility.RANDOM.Bool(0.8f))
-            {
-                criminal.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
-                criminal.Fx.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate);
-                criminal.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
-            }
+            criminal.Fx.RelationshipGroup = (uint)Collections.RelationshipHash.Prisoner;
+            criminal.Fx.RelationshipGroup.SetRelationshipBetweenGroups(Game.PlayerPed.RelationshipGroup, Relationship.Hate);
+            criminal.Fx.Weapons.Give(weaponHashes.Random(), 20, true, true);
+
+            criminal.Fx.Task.FightAgainstHatedTargets(50f);
 
             Mission.RegisterPed(criminal);
 
@@ -98,6 +94,7 @@ namespace Curiosity.StolenVehicle.Missions
             stolenVehicle.IsSpikable = true;
             stolenVehicle.IsMission = true;
             stolenVehicle.IsTowable = true;
+            stolenVehicle.Fx.LockStatus = VehicleLockStatus.LockedForPlayer;
 
             UiTools.Dispatch("~r~CODE 3~s~: Stolen Vehicle", $"~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}~n~~g~GPS Updated");
 
@@ -110,7 +107,7 @@ namespace Curiosity.StolenVehicle.Missions
         {
             if (criminal != null)
             {
-                Fail("Failed to capture and arrest the perps");
+                Fail("Failed to capture and arrest the perp");
             }
 
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
@@ -163,6 +160,38 @@ namespace Curiosity.StolenVehicle.Missions
                 missionState = MissionState.Escaped;
             }
 
+            if ((API.GetGameTimer() - lastShot) > SHOT_TIMER && !hasLeftVehicle && !isShooting)
+            {
+                lastShot = API.GetGameTimer();
+
+                int driver = criminal.Handle;
+
+                API.TaskVehicleAimAtPed(driver, Players.Random().Character.Handle);
+
+                isShooting = true;
+            }
+
+            if ((API.GetGameTimer() - lastShotReset) > SHOT_TIMER_FLEE && isShooting && !hasLeftVehicle)
+            {
+                isShooting = false;
+                lastShotReset = API.GetGameTimer();
+
+                criminal.Task.CruiseWithVehicle(stolenVehicle.Fx, float.MaxValue,
+                (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
+            }
+
+            if ((API.GetGameTimer() - missionStart) > MISSION_TIMER && !hasLeftVehicle)
+            {
+                stolenVehicle.Fx.FuelLevel = 0f;
+                stolenVehicle.Fx.IsEngineRunning = false;
+                stolenVehicle.Fx.IsDriveable = false;
+                stolenVehicle.Fx.LockStatus = VehicleLockStatus.LockedForPlayer;
+
+                API.TaskVehiclePark(criminal.Handle, stolenVehicle.Handle, stolenVehicle.Position.X, stolenVehicle.Position.Y, stolenVehicle.Position.Z, stolenVehicle.Heading, 3, 20f, true);
+
+                TaskFleeVehicle(criminal);
+            }
+
             switch (missionState)
             {
                 case MissionState.Started:
@@ -181,6 +210,8 @@ namespace Curiosity.StolenVehicle.Missions
         {
             if (ped == null) return;
             if (ped.IsFleeing) return;
+
+            hasLeftVehicle = true;
 
             ped.IsFleeing = true;
 
