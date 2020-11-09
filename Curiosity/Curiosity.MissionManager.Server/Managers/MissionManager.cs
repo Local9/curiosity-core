@@ -1,15 +1,11 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.MissionManager.Server.Diagnostics;
+﻿using Curiosity.MissionManager.Server.Diagnostics;
 using Curiosity.MissionManager.Server.Events;
 using Curiosity.Systems.Library.Events;
-using Curiosity.Systems.Library.Models;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using Curiosity.Systems.Shared.Entity;
-using System.Linq;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.MissionManager.Server.Managers
 {
