@@ -114,6 +114,7 @@ namespace Curiosity.Server.net.Classes
             HasSpawned = false;
             Wallet = 0;
             BankAccount = 0;
+            Player = player;
 
             ChatLog.SendLogMessage($"Connecting: {Name}", discord: true);
         }
@@ -220,6 +221,11 @@ namespace Curiosity.Server.net.Classes
             playerSessionItem.ServerId = NetId;
             playerSessionItem.Username = Name;
             playerSessionItem.UserId = UserID;
+
+            Ped ped = this.Player.Character;
+
+            if (ped != null)
+                ped.State["data"] = new { isStaff = IsStaff, role = Privilege };
 
             string js = JsonConvert.SerializeObject(playerSessionItem);
 

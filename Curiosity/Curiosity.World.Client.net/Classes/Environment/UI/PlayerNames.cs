@@ -136,14 +136,16 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.UI
 
             bool staffMember = false;
 
-            if (player.Character.State["data"] != null)
+            dynamic playerData = player.State.Get("data");
+
+            if (playerData != null)
             {
-                staffMember = player.Character.State["data"].isStaff;
+                staffMember = playerData.isStaff;
             }
 
-            string staffTag = staffMember ? "[STAFF]" : string.Empty;
+            string staffTag = staffMember ? "[STAFF] " : string.Empty;
 
-            int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, staffMember, staffTag, staffMember ? 1 : 0);
+            int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, $"{staffTag}{player.Name}", false, staffMember, staffTag, staffMember ? 1 : 0);
 
             if (CinematicMode.DoHideHud)
             {
@@ -153,7 +155,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.UI
 
             if (staffMember)
             {
-                API.CreateMpGamerTagWithCrewColor(player.Character.Handle, player.Name, false, staffMember, staffTag, staffMember ? 1 : 0, 255, 215, 0);
+                API.CreateMpGamerTagWithCrewColor(player.Character.Handle, $"{staffTag}{player.Name}", false, staffMember, staffTag, staffMember ? 1 : 0, 255, 215, 0);
             }
 
             if (!API.NetworkIsPlayerActive(player.Handle))
@@ -174,7 +176,6 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.UI
             }
             else if (API.HasEntityClearLosToEntity(Game.PlayerPed.Handle, player.Character.Handle, 17) || isSpectating)
             {
-                API.SetMpGamerTagName(gamerTagId, player.Name);
                 API.SetMpGamerTagVisibility(gamerTagId, 0, true);
             }
             else

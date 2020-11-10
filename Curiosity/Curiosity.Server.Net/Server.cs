@@ -70,6 +70,8 @@ namespace Curiosity.Server.net
 
             _server = this;
 
+            GlobalState["mode"] = "open";
+
             startingLocationId = API.GetConvarInt("starting_location_id", 1);
             showPlayerBlips = API.GetConvarInt("player_blips", 1) == 1;
             showPlayerLocation = API.GetConvarInt("player_location_display", 1) == 1;

@@ -427,7 +427,7 @@ namespace Curiosity.Server.net.Business
                             {
                                 if (sentLoading.ContainsKey(license) && players.FirstOrDefault(i => i.Identifiers["license"] == license) != null)
                                 {
-                                    Server.TriggerEvent("curiosity:Server:Queue:NewLoading", sentLoading[license]);
+                                    // Server.TriggerEvent("curiosity:Server:Queue:NewLoading", sentLoading[license]);
                                     sentLoading.TryRemove(license, out Player oldPlayer);
                                 }
                             }
@@ -461,7 +461,7 @@ namespace Curiosity.Server.net.Business
             catch (Exception ex)
             {
                 Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerErrors, "EXCEPTION", "Curiosity Queue Manager : UpdateStates", $"{ex}");
-                Log.Error($"Curiosity Queue Manager : UpdateStates()");
+                Log.Error(ex, $"Curiosity Queue Manager : UpdateStates()");
             }
         }
 

@@ -44,7 +44,6 @@ namespace Curiosity.Development.Missions
 
         public override void End()
         {
-            Pass();
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
         }
 

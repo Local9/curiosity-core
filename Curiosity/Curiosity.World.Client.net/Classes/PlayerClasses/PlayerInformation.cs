@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using System;
@@ -20,8 +21,15 @@ namespace Curiosity.GameWorld.Client.net.Classes.PlayerClasses
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:Information", new Action(GetPlayerInfo));
+            client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
 
             client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
+        }
+
+        private static void OnClientResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+            GetPlayerInfo();
         }
 
         static void OnDutyState(bool hasJob, bool jobActive, string job)
@@ -36,10 +44,9 @@ namespace Curiosity.GameWorld.Client.net.Classes.PlayerClasses
             }
         }
 
-        static async void GetPlayerInfo()
+        static void GetPlayerInfo()
         {
             Client.TriggerEvent("curiosity:Client:Player:InternalInformation", Newtonsoft.Json.JsonConvert.SerializeObject(playerInfo));
-            await BaseScript.Delay(0);
         }
 
         static async void PlayerInfo(string json)
@@ -47,6 +54,8 @@ namespace Curiosity.GameWorld.Client.net.Classes.PlayerClasses
             playerInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<PlayerInformationModel>(json);
 
             privilege = (Privilege)playerInfo.RoleId;
+
+            Game.Player.State.Set("data", new { isStaff = IsStaff(), role = playerInfo.Role }, true);
 
             if (privilege == Privilege.DEVELOPER && !statsSet)
             {

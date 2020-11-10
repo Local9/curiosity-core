@@ -1,12 +1,7 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.MissionManager.Client;
+﻿using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.Systems.Library.Utils;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.Development.Missions
 {
@@ -22,7 +17,6 @@ namespace Curiosity.Development.Missions
 
         public override void End()
         {
-            Pass();
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
         }
 
