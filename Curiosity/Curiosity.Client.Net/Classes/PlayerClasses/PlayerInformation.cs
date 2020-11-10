@@ -141,6 +141,8 @@ namespace Curiosity.Client.net.Classes.PlayerClasses
 
             privilege = (Privilege)playerInfo.RoleId;
 
+            Game.PlayerPed.State.Set("data", new { isStaff = IsStaff(), role = playerInfo.Role }, true);
+
             if (IsDeveloper())
             {
                 client.RegisterTickHandler(NoClip.OnNoClipTick);

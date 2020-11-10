@@ -134,7 +134,13 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.UI
         {
             if (!API.NetworkIsPlayerActive(player.Handle) && Game.Player.Handle == player.Handle) return;
 
-            bool staffMember = Decorators.GetBoolean(player.Character.Handle, Decorators.DECOR_PLAYER_STAFF);
+            bool staffMember = false;
+
+            if (player.Character.State["data"] != null)
+            {
+                staffMember = player.Character.State["data"].isStaff;
+            }
+
             string staffTag = staffMember ? "[STAFF]" : string.Empty;
 
             int gamerTagId = API.CreateMpGamerTag(player.Character.Handle, player.Name, false, staffMember, staffTag, staffMember ? 1 : 0);

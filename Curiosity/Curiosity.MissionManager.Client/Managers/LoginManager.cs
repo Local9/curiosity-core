@@ -28,6 +28,8 @@ namespace Curiosity.MissionManager.Client.Managers
                 User = user
             };
 
+            Game.PlayerPed.State.Set("role", new { role = user.Role }, true);
+
             Instance.DiscordRichPresence.Status = $"Freeroam";
             Instance.DiscordRichPresence.Commit();
 
