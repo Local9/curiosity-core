@@ -475,6 +475,7 @@ namespace Curiosity.Client.net
 
             string description = "~r~Zero Tolerance Server~w~\n";
             description += "~w~If you fail to follow the rules, you'll be removed.~w~\n";
+            description += "~r~THIS IS NOT ~w~a role play server, forcing any role play will see you removed from the server.~w~\n";
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";

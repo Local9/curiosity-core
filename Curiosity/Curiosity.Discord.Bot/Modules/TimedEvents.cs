@@ -202,7 +202,7 @@ namespace Curiosity.LifeV.Bot
                                 }
                             }
 
-                            await Task.Delay(2000);
+                            await Task.Delay(5000);
                         });
                     }
                 }
