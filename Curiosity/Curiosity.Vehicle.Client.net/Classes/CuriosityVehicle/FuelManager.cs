@@ -48,6 +48,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             // [VehicleHash.Infernus] = 100f // For testing
         };
 
+        static List<VehicleHash> EletricVehicles = new List<VehicleHash>();
+
         static List<ObjectHash> FuelPumpModelHashes = new List<ObjectHash>()
         {
             ObjectHash.prop_gas_pump_1a,
@@ -107,6 +109,8 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         private static bool IsInstantRefuelDisabled = false;
         private static bool IsFuelFree = false;
 
+        private static uint eletricRefuelingStation = 2140883938;
+        
         static public void Init()
         {
             Function.Call(Hash.DECOR_REGISTER, "Vehicle.Fuel", 1);
@@ -116,11 +120,12 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             client.RegisterTickHandler(GasStationBlips);
             client.RegisterTickHandler(ShowHelpText);
 
-            CheckFuelPumpDistance();
+            client.RegisterTickHandler(CheckFuelPumpDistance);
 
             GameTimer = API.GetGameTimer();
 
             client.RegisterEventHandler("playerSpawn", new Action<dynamic>(OnPlayerSpawn));
+            client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnResourceStart));
 
             client.RegisterEventHandler("curiosity:Client:Vehicle:Refuel", new Action(ClientRefuel));
             client.RegisterEventHandler("curiosity:Client:Vehicle:GetCurrentFuelLevel", new Action(GetCurrentFuelLevel));
@@ -131,20 +136,41 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             client.RegisterEventHandler("curiosity:Client:Vehicle:DevRefuel", new Action(DevRefuel));
         }
 
-        private static void AddVehicle(string vehicle, float fuelMultiplier)
+        private static int AddVehicle(string vehicle, float fuelMultiplier)
         {
             int handle = API.GetHashKey(vehicle);
 
             if (handle > 0)
+            {
                 FuelConsumptionModelMultiplier.Add((VehicleHash)handle, fuelMultiplier);
+                return handle;
+            }
+            return 0;
+        }
+
+        static void OnResourceStart(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+            OnPlayerSpawn(null);
         }
 
         static void OnPlayerSpawn(dynamic dynData)
         {
             OnUpdateSettings();
 
-            AddVehicle("p90d", .5f);
-            AddVehicle("teslasemi", .5f);
+            int veh1 = AddVehicle("p90d", .5f);
+            if (veh1 > 0)
+                EletricVehicles.Add((VehicleHash)veh1);
+
+            int veh2 = AddVehicle("teslasemi", .5f);
+            if (veh2 > 0)
+                EletricVehicles.Add((VehicleHash)veh2);
+
+            int veh3 = AddVehicle("tezeract", .5f);
+            if (veh3 > 0)
+                EletricVehicles.Add((VehicleHash)veh3);
+
+            // eletricRefuelingStation = API.GetHashKey("teslasupercharger");
         }
 
         static async void OnUpdateSettings()
@@ -236,27 +262,39 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             }
         }
 
-        static async void CheckFuelPumpDistance()
+        static async Task CheckFuelPumpDistance()
         {
-            while (true)
+            try
             {
-                try
+                await BaseScript.Delay(500);
+                if (Game.PlayerPed.IsInVehicle())
                 {
-                    await BaseScript.Delay(500);
-                    if (Game.PlayerPed.IsInVehicle())
+                    CitizenFX.Core.Vehicle veh = Plugin.CurrentVehicle;
+                    if (veh != null)
                     {
-                        isNearFuelPump = World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                        if (EletricVehicles.Contains((VehicleHash)veh.Model.Hash))
+                        {
+                            isNearFuelPump = World.GetAllProps().Where(o => (ObjectHash)eletricRefuelingStation == (ObjectHash)o.Model.Hash).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                        }
+                        else
+                        {
+                            isNearFuelPump = World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                        }
                     }
                     else
                     {
-                        isNearFuelPump = false;
-                        refueling = false;
+                        isNearFuelPump = World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Debug.WriteLine($"CheckFuelPumpDistance() -> {ex.Message}");
+                    isNearFuelPump = false;
+                    refueling = false;
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"CheckFuelPumpDistance() -> {ex.Message}");
             }
         }
 
@@ -411,8 +449,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 amount = Math.Max(0f, amount); // Selling gas to gas stations... Why not?
                 amount = Math.Min(100f - vehicleFuel, amount);
 
-                var NearbyPumps = World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Where(o => o.Position.DistanceToSquared(vehicle.Position) < Math.Pow(FuelPumpRange, 2));
-                if (!NearbyPumps.Any())
+                if (!isNearFuelPump)
                 {
                     refueling = false;
                     Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "You are not close enough to a pump.", 8);
@@ -550,7 +587,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
             if (PlayerInformation.IsDeveloper())
             {
-                Debug.WriteLine($"IsInstantRefuelDisabled: {IsInstantRefuelDisabled}");
+                Debug.WriteLine($"Chargeable: {IsFuelFree}");
             }
         }
 
