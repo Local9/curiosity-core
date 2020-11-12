@@ -278,12 +278,12 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         }
                         else
                         {
-                            isNearFuelPump = World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                            isNearFuelPump = IsNearNormalFuelPump();
                         }
                     }
                     else
                     {
-                        isNearFuelPump = World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
+                        isNearFuelPump = IsNearNormalFuelPump();
                     }
                 }
                 else
@@ -296,6 +296,11 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             {
                 Debug.WriteLine($"CheckFuelPumpDistance() -> {ex.Message}");
             }
+        }
+
+        static bool IsNearNormalFuelPump()
+        {
+            return World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FuelPumpRange, 2));
         }
 
         /// <summary>
