@@ -22,6 +22,8 @@ namespace Curiosity.StolenVehicle.Missions
         Ped storeClerk;
         Ped thief;
 
+        PedHash storeClerkHash = PedHash.ShopKeep01;
+
         public async override void Start()
         {
 
