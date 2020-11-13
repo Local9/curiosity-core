@@ -10,6 +10,8 @@
         Stranger,
         Heist,
         HeistSetup,
-        StolenVehicle
+        StolenVehicle,
+        Store,
+        StoreUnique
     }
 }
