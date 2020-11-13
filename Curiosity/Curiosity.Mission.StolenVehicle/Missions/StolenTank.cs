@@ -64,7 +64,7 @@ namespace Curiosity.StolenVehicle.Missions
 
             Mission.RegisterVehicle(stolenVehicle);
 
-            criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, true);
+            criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, sidewalk: true);
 
             if (criminal == null)
             {

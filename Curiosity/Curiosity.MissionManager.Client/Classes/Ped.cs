@@ -455,7 +455,7 @@ namespace Curiosity.MissionManager.Client.Classes
             return ped;
         }
 
-        public static async Task<Ped> Spawn(Model model, Vector3 position, bool sidewalk = true)
+        public static async Task<Ped> Spawn(Model model, Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE, bool isNetworked = true, bool isMission = true)
         {
             Vector3 spawnPosition = position;
 
@@ -474,7 +474,16 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            CitizenFX.Core.Ped fxPed = await World.CreatePed(model, spawnPosition);
+            await model.Request(10000);
+
+            while(!model.IsLoaded)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            int pedId = API.CreatePed((int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+
+            CitizenFX.Core.Ped fxPed = new CitizenFX.Core.Ped(pedId);
 
             API.NetworkFadeInEntity(fxPed.Handle, false);
 

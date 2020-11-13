@@ -11,7 +11,7 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.StolenVehicle.Missions
 {
-    [MissionInfo("City Store Robery", "misSrCity", 0f, 0f, 0f, MissionType.Mission, true, "None", PatrolZone.City)]
+    [MissionInfo("City Store Robery", "misSrCity", 0f, 0f, 0f, MissionType.Store, true, "None", PatrolZone.City)]
     public class CityStores : Mission
     {
         Dictionary<string, Tuple<Vector3, float>> storeClerkSpawns = new Dictionary<string, Tuple<Vector3, float>>()

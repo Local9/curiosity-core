@@ -26,7 +26,7 @@ namespace Curiosity.Development.Missions
 
         public async override void Start()
         {
-            criminal = await Ped.Spawn(pedHashes.Random(), Players[0].Character.Position.Around(3f, 4f), true);
+            criminal = await Ped.Spawn(pedHashes.Random(), Players[0].Character.Position.Around(3f, 4f), sidewalk: true);
 
             if (criminal == null)
             {
