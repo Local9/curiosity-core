@@ -7,8 +7,8 @@
     <ProjectGuid>{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.Systems.Shared</RootNamespace>
-    <AssemblyName>Curiosity.Systems.Shared.net</AssemblyName>
+    <RootNamespace>Curiosity.Systems.Library</RootNamespace>
+    <AssemblyName>Curiosity.Systems.Library.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\MissionType.cs" />
     <Compile Include="Models\MissionData.cs" />
     <Compile Include="Enums\PatrolZone.cs" />
     <Compile Include="Date.cs" />

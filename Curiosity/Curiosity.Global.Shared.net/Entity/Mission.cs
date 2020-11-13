@@ -11,7 +11,6 @@ namespace Curiosity.Global.Shared.Entity
         public string description;
         public Vector3 location;
         // Mission Settings
-        public MissionType missionType;
         public MissionDifficulty missionDifficulty;
         public ObjectiveType objectiveType;
         // Objectives...

@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Utils;
+using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System;
 using System.Collections.Generic;
@@ -170,18 +171,6 @@ namespace Curiosity.MissionManager.Client
             Stop(EndState.Pass);
         }
     }
-    /// <summary>
-    /// The type of mission, this determines what kind of blip and mission passed screen the mission has
-    /// </summary>
-    public enum MissionType
-    {
-        Mission,
-        Stranger,
-        Heist,
-        HeistSetup,
-        StolenVehicle
-    }
-
 
     /// <summary>
     /// The reason a mission ended, this is exclusively used for the Stop function

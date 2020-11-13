@@ -1,14 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Shared.Client.net.Extensions;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;

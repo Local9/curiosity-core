@@ -21,7 +21,7 @@ namespace Curiosity.StolenVehicle
 
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
 
-            Functions.RegisterMission(typeof(Template));
+            Functions.RegisterMission(typeof(CityStores));
         }
 
         private void OnClientResourceStop(string resourceName)

@@ -1,11 +1,5 @@
 ﻿namespace Curiosity.Global.Shared.Enums
 {
-    public enum MissionType
-    {
-        STORE,
-        STOLEN_VEHICLE
-    }
-
     public enum MissionDifficulty
     {
         Unknown = 0,

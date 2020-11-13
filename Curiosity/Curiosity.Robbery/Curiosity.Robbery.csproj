@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MissionManager.cs" />
-    <Compile Include="Missions\Template.cs" />
+    <Compile Include="Missions\CityStores.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +58,6 @@
     <ProjectReference Include="..\Curiosity.MissionManager.Shared\Curiosity.Systems.Library.csproj">
       <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>
       <Name>Curiosity.Systems.Library</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Curiosity.Shared.Client.net\Curiosity.Shared.Client.net.csproj">
       <Project>{37f1f478-be0b-4c2b-a062-24077f851b69}</Project>
