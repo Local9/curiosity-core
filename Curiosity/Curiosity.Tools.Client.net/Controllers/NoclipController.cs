@@ -43,7 +43,7 @@ namespace Curiosity.Tools.Client.net.Controllers
             try
             {
 
-                if (Shared.Client.net.Helper.ControlHelper.IsControlJustPressed(Control.SaveReplayClip, true) && Client.IsDeveloper)
+                if (Shared.Client.net.Helper.ControlHelper.IsControlJustPressed(Control.SaveReplayClip, true) && Client.IsDeveloper && true == false)
                 {
                     IsEnabled = !IsEnabled;
                 }
