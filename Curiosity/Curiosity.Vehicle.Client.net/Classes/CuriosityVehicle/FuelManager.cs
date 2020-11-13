@@ -170,7 +170,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             if (veh3 > 0)
                 EletricVehicles.Add((VehicleHash)veh3);
 
-            // eletricRefuelingStation = API.GetHashKey("teslasupercharger");
+            int stationHash = API.GetHashKey("teslasupercharger");
+            if (stationHash > 0)
+                eletricRefuelingStation = (uint)stationHash;
         }
 
         static async void OnUpdateSettings()
