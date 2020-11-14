@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
@@ -24,6 +26,8 @@ namespace Curiosity.StolenVehicle.Missions
         };
 
         MissionState missionState;
+
+        Blip storeClerkBlip;
 
         Ped storeClerk;
         Ped thief;
@@ -57,17 +61,15 @@ namespace Curiosity.StolenVehicle.Missions
 
                 storeClerk.IsImportant = true;
 
-                thief = await Ped.SpawnRandom(storeClerkPosition.AroundStreet(200f, 400f), isNetworked: false);
+                storeClerkBlip = storeClerk.AttachBlip();
+                storeClerkBlip.Sprite = BlipSprite.Information;
+                storeClerkBlip.IsShortRange = false;
+                storeClerkBlip.ShowRoute = true;
 
-                if (thief == null)
-                {
-                    Stop(EndState.Error);
-                    return;
-                }
 
-                storeClerk.IsImportant = true;
-                storeClerk.IsMission = true;
-                storeClerk.Fx.Task.WanderAround();
+                await BaseScript.Delay(100);
+
+                
 
                 MissionManager.Instance.RegisterTickHandler(OnMissionTick);
             }
@@ -93,17 +95,73 @@ namespace Curiosity.StolenVehicle.Missions
 
                     if (Game.PlayerPed.Position.DistanceTo(storeClerk.Position) < 2f)
                     {
-                        Screen.DisplayHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to talk to the ~b~Store Clerk~w~.");
+                        HelpMessage.CustomLooped(HelpMessage.Label.MISSION_CLERK_SPEAK_WITH);
+
+                        if (storeClerk.AttachedBlip != null)
+                        {
+                            if (storeClerk.AttachedBlip.Exists())
+                            {
+                                storeClerk.AttachedBlip.Delete();
+                            }
+                        }
 
                         if (Game.IsControlJustPressed(0, Control.Context))
                         {
-                            Screen.ShowSubtitle($"The perp has just ran off, he's not far away.");
-                            missionState = MissionState.LookingForSuspect;
+                            while (Game.PlayerPed.Position.DistanceTo(storeClerk.Position) < 2f)
+                            {
+                                HelpMessage.CustomLooped(HelpMessage.Label.MISSION_CLERK_RESPONSE_SUSPECT_RAN);
+                                await BaseScript.Delay(0);
+                            }
+
+                            missionState = MissionState.SetupSuspectLocation;
                         }
                     }
 
                     break;
+                case MissionState.SetupSuspectLocation:
+
+                    thief = await Ped.SpawnRandom(storeClerk.Position.AroundStreet(200f, 400f), isNetworked: false);
+
+                    if (thief == null)
+                    {
+                        Stop(EndState.Error);
+                        return;
+                    }
+
+                    thief.IsImportant = true;
+                    thief.IsMission = true;
+                    thief.IsSuspect = true;
+
+                    thief.Fx.Task.WanderAround(thief.Position, 20f);
+
+                    Blip blip = World.CreateBlip(thief.Position.Around(10f, 20f));
+                    blip.Sprite = BlipSprite.BigCircle;
+                    blip.Scale = 0.5f;
+                    blip.Color = (BlipColor)5;
+                    blip.Alpha = 126;
+                    blip.ShowRoute = false;
+                    blip.Priority = 9;
+                    blip.IsShortRange = true;
+
+                    RegisterBlip(blip);
+
+                    missionState = MissionState.LookingForSuspect;
+
+                    break;
                 case MissionState.LookingForSuspect:
+
+                    if (Game.PlayerPed.Position.Distance(thief.Position) < 10f)
+                    {
+                        thief.Task.ClearAllImmediately();
+                        thief.Task.ReactAndFlee(Game.PlayerPed);
+
+                        Blip b = thief.AttachBlip();
+                        b.Sprite = BlipSprite.Enemy;
+                        b.Color = BlipColor.Red;
+                        b.Priority = 9;
+
+                        missionState = MissionState.SuspectFlee;
+                    }
 
                     break;
             }
@@ -115,6 +173,8 @@ namespace Curiosity.StolenVehicle.Missions
         Started,
         End,
         SpokenToClerk,
-        LookingForSuspect
+        SetupSuspectLocation,
+        LookingForSuspect,
+        SuspectFlee
     }
 }

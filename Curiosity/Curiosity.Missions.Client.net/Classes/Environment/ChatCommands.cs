@@ -338,8 +338,7 @@ namespace Curiosity.Missions.Client.Classes.Environment
             }
             else
             {
-                if (missionData.MissionType == MissionType.STORE)
-                    Scripts.Mission.CreateStoreMission.Create(missionData);
+                Scripts.Mission.CreateStoreMission.Create(missionData);
             }
         }
 

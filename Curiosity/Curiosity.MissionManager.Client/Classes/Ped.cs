@@ -5,7 +5,6 @@ using Curiosity.MissionManager.Client.ClientEvents;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Linq;
@@ -538,7 +537,7 @@ namespace Curiosity.MissionManager.Client.Classes
             if (Fx == null) return;
             if (!base.Exists()) return;
 
-            Fx.FadeOut();
+            await Fx.FadeOut();
 
             Blip singleBlip = Fx.AttachedBlip;
             if (singleBlip != null)

@@ -15,8 +15,6 @@ namespace Curiosity.Missions.Client.DataClasses.Mission
         public List<MissionPedData> MissionGangTwo = new List<MissionPedData>();
         public List<MissionPedData> Hostages = new List<MissionPedData>();
 
-        public MissionType MissionType;
-
         public float ResurectionRange { get; internal set; }
         public float SpawnRange { get; internal set; }
         public Blip Blip { get; internal set; }

@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Utils;
 using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Utils
 {
@@ -73,6 +74,30 @@ namespace Curiosity.MissionManager.Client.Utils
         public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
         {
             return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
+        }
+
+        public async static Task FadeOut(this Ped ped, bool slow = false)
+        {
+            await Fade(ped, false, slow);
+        }
+
+        public async static Task FadeIn(this Ped ped, bool slow = false)
+        {
+            await Fade(ped, true, slow);
+        }
+
+        public async static Task Fade(this Ped ped, bool fadeIn, bool slow = false)
+        {
+            if (fadeIn)
+            {
+                API.NetworkFadeInEntity(ped.Handle, slow);
+            }
+            else
+            {
+                API.NetworkFadeOutEntity(ped.Handle, false, slow);
+            }
+
+            await BaseScript.Delay(3000);
         }
 
 

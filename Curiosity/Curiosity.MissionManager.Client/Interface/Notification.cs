@@ -181,12 +181,18 @@ namespace Curiosity.MissionManager.Client.Interface
 
         public enum Label
         {
-            EXIT_INTERIOR_HELP_MESSAGE
+            EXIT_INTERIOR_HELP_MESSAGE,
+            ENTER_INTERIOR_HELP_MESSAGE,
+            MISSION_CLERK_SPEAK_WITH,
+            MISSION_CLERK_RESPONSE_SUSPECT_RAN,
         }
 
         private static Dictionary<Label, KeyValuePair<string, string>> labels = new Dictionary<Label, KeyValuePair<string, string>>()
         {
-            [Label.EXIT_INTERIOR_HELP_MESSAGE] = new KeyValuePair<string, string>("EXIT_INTERIOR_HELP_MESSAGE", "Press ~INPUT_CONTEXT~ to exit the building.")
+            [Label.EXIT_INTERIOR_HELP_MESSAGE] = new KeyValuePair<string, string>("EXIT_INTERIOR_HELP_MESSAGE", "Press ~INPUT_CONTEXT~ to exit the building."),
+            [Label.ENTER_INTERIOR_HELP_MESSAGE] = new KeyValuePair<string, string>("ENTER_INTERIOR_HELP_MESSAGE", "Press ~INPUT_CONTEXT~ to enter the building."),
+            [Label.MISSION_CLERK_SPEAK_WITH] = new KeyValuePair<string, string>("MISSION_CLERK_SPEAK_WITH", "Press ~INPUT_CONTEXT~ to speak with the ~b~Store Clerk~w~."),
+            [Label.MISSION_CLERK_RESPONSE_SUSPECT_RAN] = new KeyValuePair<string, string>("MISSION_CLERK_RESPONSE_SUSPECT_RAN", $"The perp has just ran off, he's not far away."),
         };
 
 

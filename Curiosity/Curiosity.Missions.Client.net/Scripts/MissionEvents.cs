@@ -135,15 +135,7 @@ namespace Curiosity.Missions.Client.Scripts
 
             PluginManager.TriggerServerEvent("curiosity:Server:Missions:StartedMission", missionMessage.MissionId);
 
-            switch (mission.MissionType)
-            {
-                case MissionType.STOLEN_VEHICLE:
-                    Mission.StolenVehicle.Create(mission);
-                    break;
-                default:
-                    Mission.CreateStoreMission.Create(mission);
-                    break;
-            }
+            Mission.CreateStoreMission.Create(mission);
 
         }
 

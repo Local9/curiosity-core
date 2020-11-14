@@ -87,6 +87,19 @@ namespace Curiosity.MissionManager.Client
             }
         }
 
+        public static void RegisterBlip(Blip blip)
+        {
+            try
+            {
+                PluginManager.Blips.Add(blip);
+                Logger.Debug($"Registered blip {blip.Handle}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+            }
+        }
+
         /// <summary>
         /// Stops a mission
         /// </summary>
