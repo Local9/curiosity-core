@@ -32,6 +32,7 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string PED_HOSTAGE = "c::ped::hostage";
         public const string PED_RELEASED = "c::ped::released";
         public const string PED_HANDCUFFED = "c::ped::handcuffed";
+        public const string PED_DIALOGUE = "c::ped::dialogue";
 
         // ARREST REASONS
         public const string PED_ARREST_INFLUENCE_DRUNK = "c::ped::arrest::influence::drunk";

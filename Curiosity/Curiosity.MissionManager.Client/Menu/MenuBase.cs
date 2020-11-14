@@ -107,12 +107,10 @@ namespace Curiosity.MissionManager.Client.Menu
 
             if (isOpen)
             {
-                BaseScript.TriggerEvent("curiosity:Client:UI:LocationHide", true);
                 BaseScript.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
             }
             else
             {
-                BaseScript.TriggerEvent("curiosity:Client:UI:LocationHide", false);
                 BaseScript.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
             }
         }

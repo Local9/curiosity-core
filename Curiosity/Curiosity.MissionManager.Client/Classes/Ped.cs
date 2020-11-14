@@ -76,6 +76,18 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
+        public bool HasDialogue
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_DIALOGUE);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.PED_DIALOGUE, value);
+            }
+        }
+
         public bool IsImportant
         {
             get

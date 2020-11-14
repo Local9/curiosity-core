@@ -68,6 +68,13 @@ namespace Curiosity.MissionManager.Client.Utils
             return API.Vdist(v.X, v.Y, v.Z, to.X, to.Y, to.Z);
         }
 
+        public static float DistanceTo(this Vector3 position, Vector3 target) => (position - target).Length();
+
+        public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
+        {
+            return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
+        }
+
 
     }
 }
