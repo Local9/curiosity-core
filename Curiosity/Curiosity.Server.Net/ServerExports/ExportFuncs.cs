@@ -43,27 +43,38 @@ namespace Curiosity.Server.net.ServerExports
             // Func<string, ReturnValue>
             // Func<string, int, ReturnValue>
 
-            Instance.ExportDictionary.Add("UpdateWallet", new Func<string, int, bool>(
-                (handle, amount) =>
+            Instance.ExportDictionary.Add("AdjustWallet", new Func<string, int, bool, bool>(
+                (handle, amount, increase) =>
                 {
-                    if (!SessionManager.PlayerList.ContainsKey(handle)) return false;
-
-                    Session session = SessionManager.PlayerList[handle];
-
-                    if (amount > 0)
+                    try
                     {
-                        Database.DatabaseUsersBank.IncreaseCash(session.User.BankId, amount);
-                        session.IncreaseWallet(amount);
-                        session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-                    }
-                    else
-                    {
-                        Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, amount);
-                        session.DecreaseWallet(amount);
-                        session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-                    }
+                        if (!SessionManager.PlayerList.ContainsKey(handle)) return false;
 
-                    return true;
+                        Session session = SessionManager.PlayerList[handle];
+
+                        if (increase)
+                        {
+                            Database.DatabaseUsersBank.IncreaseCash(session.User.BankId, amount);
+                            session.IncreaseWallet(amount);
+                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                        }
+                        else
+                        {
+                            if (session.Wallet < amount)
+                                return false;
+
+                            Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, amount);
+                            session.DecreaseWallet(amount);
+                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+                        }
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"UpdateWallet: {ex.Message}");
+                        return false;
+                    }
                 }
             ));
         }
