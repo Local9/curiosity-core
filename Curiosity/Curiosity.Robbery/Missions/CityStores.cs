@@ -66,11 +66,6 @@ namespace Curiosity.StolenVehicle.Missions
                 storeClerkBlip.IsShortRange = false;
                 storeClerkBlip.ShowRoute = true;
 
-
-                await BaseScript.Delay(100);
-
-                
-
                 MissionManager.Instance.RegisterTickHandler(OnMissionTick);
             }
             catch (Exception ex)
