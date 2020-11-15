@@ -56,7 +56,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                     return;
                 }
 
-                menuItemSearchVehicle.Enabled = true;
+                menuItemSearchVehicle.Enabled = vehicle.IsSearchable;
+                menuItemSearchVehicle.Description = vehicle.IsSearchable ? "Able to search the vehicle" : "Unable to search this vehicle";
 
                 PluginInstance.RegisterTickHandler(OnSuspectVehicleDistanceCheck);
             }

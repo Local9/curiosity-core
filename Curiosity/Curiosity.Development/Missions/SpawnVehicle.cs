@@ -22,6 +22,7 @@ namespace Curiosity.Development.Missions
             RegisteredVehicles.Add(_vehicle);
 
             _vehicle.Fx.IsEngineRunning = false;
+            _vehicle.IsSearchable = true;
             _vehicle.Fx.IsDriveable = false;
             _vehicle.Fx.FuelLevel = 0;
             _vehicle.Fx.LockStatus = VehicleLockStatus.Locked;
