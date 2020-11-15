@@ -79,6 +79,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:completed", new AsyncEventCallback(async metadata =>
             {
+                // mission type pulls values
                 return false;
             }));
         }

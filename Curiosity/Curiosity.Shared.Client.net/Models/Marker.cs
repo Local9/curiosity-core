@@ -17,10 +17,7 @@ namespace Curiosity.Shared.Client.net.Models
         public Marker(string markerMessage, Vector3 position, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 5f)
         {
             this.Message = markerMessage;
-
             this.Position = position;
-            // position.Z = position.Z - 0.5f;
-
             this.Color = System.Drawing.Color.FromArgb(255, 255, 255, 255);
             this.Type = type;
             this.Scale = 1.0f * new Vector3(1f, 1f, 1f);
@@ -32,10 +29,7 @@ namespace Curiosity.Shared.Client.net.Models
         public Marker(string markerMessage, Vector3 position, System.Drawing.Color color, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 5f)
         {
             this.Message = markerMessage;
-
             this.Position = position;
-            // position.Z = position.Z - 0.5f;
-
             this.Color = color;
             this.Type = type;
             this.Scale = 1.0f * new Vector3(1f, 1f, 1f);

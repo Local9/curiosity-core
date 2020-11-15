@@ -40,7 +40,7 @@ namespace Curiosity.MissionManager.Client.Handler
 
             foreach (Marker mark in markers)
             {
-                BlipData blipData = new BlipData($"arrestBlip{blipId}", "Jail", mark.Position, BlipSprite.Handcuffs, BlipCategory.Unknown, BlipColor.Blue, true);
+                BlipData blipData = new BlipData($"arrestBlip{blipId}", "Arrest Ped", mark.Position, BlipSprite.Handcuffs, BlipCategory.Unknown, BlipColor.Blue, true);
                 blips.Add(blipData);
                 BlipHandler.AddBlip(blipData);
 
