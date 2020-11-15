@@ -51,7 +51,7 @@ namespace Curiosity.MissionManager.Client.Handler
             }
         }
 
-        private void OnPoliceDuty(bool active, bool onduty, string job)
+        private async void OnPoliceDuty(bool active, bool onduty, string job)
         {
             IsOnDuty = onduty;
             IsOfficer = (job == "police");
@@ -61,12 +61,14 @@ namespace Curiosity.MissionManager.Client.Handler
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
 
                 MarkerHandler.Init();
+                await BaseScript.Delay(100);
                 MarkerArrest.Init();
             }
             else
             {
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
                 MarkerHandler.Dispose();
+                await BaseScript.Delay(100);
                 MarkerArrest.Dispose();
             }
         }
