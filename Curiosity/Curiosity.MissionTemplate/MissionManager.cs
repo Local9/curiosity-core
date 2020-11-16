@@ -2,12 +2,12 @@
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.Shared.Client.net;
-using Curiosity.StolenVehicle.Missions;
+using Curiosity.MissionTemplate.Missions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.StolenVehicle
+namespace Curiosity.MissionTemplate
 {
     public class MissionManager : BaseScript
     {
