@@ -3,12 +3,9 @@ using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Handler
@@ -94,6 +91,7 @@ namespace Curiosity.MissionManager.Client.Handler
                             if (ped.Handle == p.Handle)
                             {
                                 ped.Dismiss();
+                                Mission.CountArrest();
                             };
                         });
                     }

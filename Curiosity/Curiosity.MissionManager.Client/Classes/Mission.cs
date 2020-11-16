@@ -20,10 +20,11 @@ namespace Curiosity.MissionManager.Client
         internal static Type missionType = null;
 
         public static List<Player> Players { get; internal set; }
-
         public static List<Vehicle> RegisteredVehicles { get; internal set; }
         public static List<Ped> RegisteredPeds { get; internal set; }
         public static List<ParticleEffect> RegisteredParticles { get; internal set; }
+
+        public static int NumberPedsArrested { get; internal set; } = 0;
 
         public static void AddPlayer(Player player)
         {
@@ -57,6 +58,11 @@ namespace Curiosity.MissionManager.Client
         public static void CreateParticleAtLocation(string dict, string fx, Vector3 location, float scale = 1.0f, bool placeOnGround = true)
         {
             BaseScript.TriggerServerEvent("s:mm:particle:location", dict, fx, location.X, location.Y, location.Z, scale, placeOnGround);
+        }
+
+        public static void CountArrest()
+        {
+            NumberPedsArrested++;
         }
 
         public static void RegisterVehicle(Vehicle vehicle)
@@ -106,20 +112,21 @@ namespace Curiosity.MissionManager.Client
         /// <param name="reason">The reason the mission was stopped</param>
         public void Stop(EndState reason)
         {
-            isOnMission = false;
-            missionType = null;
-
-            currentMission?.End();
-
-            currentMission = null;
-
-            switch(reason)
+            switch (reason)
             {
                 case EndState.Pass:
+                case EndState.Fail:
+
                     break;
                 case EndState.Error:
                     break;
             }
+
+            isOnMission = false;
+            missionType = null;
+
+            currentMission?.End();
+            currentMission = null;
 
             if (Players.Count > 0)
             {
@@ -155,8 +162,10 @@ namespace Curiosity.MissionManager.Client
 
             if (info == null) return;
 
-            Function.Call(Hash.PLAY_MISSION_COMPLETE_AUDIO, "GENERIC_FAILED");
-            while (!Function.Call<bool>(Hash.IS_MISSION_COMPLETE_PLAYING)) await BaseScript.Delay(0);
+            API.PlayMissionCompleteAudio("GENERIC_FAILED");
+
+            while (!API.IsMissionCompletePlaying()) await BaseScript.Delay(0);
+
             if (info.type == MissionType.Heist) BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Heist Failed", failReason);
             else if (info.type == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Heist Setup Failed", failReason);
             else BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Mission Failed", failReason);
@@ -172,10 +181,7 @@ namespace Curiosity.MissionManager.Client
 
             API.PlayMissionCompleteAudio("FRANKLIN_BIG_01");
 
-            while (!API.IsMissionCompletePlaying())
-            {
-                await BaseScript.Delay(0);
-            }
+            while (!API.IsMissionCompletePlaying()) await BaseScript.Delay(0);
 
             if (info.type == MissionType.Heist) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Passed", info.displayName);
             else if (info.type == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Heist Setup Passed", info.displayName);
