@@ -83,7 +83,7 @@
     <Compile Include="Handler\DamageHandler.cs" />
     <Compile Include="Handler\EntityHandler.cs" />
     <Compile Include="Handler\MarkerArrest.cs" />
-    <Compile Include="Handler\CurPlayer.cs" />
+    <Compile Include="Handler\PlayerHandler.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Handler\ParticleHandler.cs" />
     <Compile Include="Interface\Chat.cs" />

@@ -118,7 +118,7 @@ namespace Curiosity.MissionManager.Client.Menu
         [Tick]
         private async Task OnMenuControls()
         {
-            if (!CurPlayer.IsOfficer) return; // no point in showing if their're not an officer
+            if (!PlayerHandler.IsOfficer) return; // no point in showing if their're not an officer
 
             if (MarkerHandler.GetActiveMarker() != null) return; // hide base menu prompt if near a marker
             
@@ -140,7 +140,7 @@ namespace Curiosity.MissionManager.Client.Menu
 
             Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to open menu."); // need to look into control binds
 
-            if (Game.PlayerPed.IsAlive && CurPlayer.IsOfficer && !isMenuOpen)
+            if (Game.PlayerPed.IsAlive && PlayerHandler.IsOfficer && !isMenuOpen)
             {
                 if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F2
                 {

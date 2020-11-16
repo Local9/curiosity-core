@@ -10,7 +10,7 @@ using static Curiosity.Systems.Library.EventWrapperLegacy.LegacyEvents;
 
 namespace Curiosity.MissionManager.Client.Handler
 {
-    class CurPlayer : BaseScript
+    class PlayerHandler : BaseScript
     {
         const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
 
@@ -25,7 +25,7 @@ namespace Curiosity.MissionManager.Client.Handler
         internal static bool IsOnDuty;
         internal static bool IsOfficer;
 
-        public CurPlayer()
+        public PlayerHandler()
         {
             EventHandlers[LegacyEvents.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
             EventHandlers[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
