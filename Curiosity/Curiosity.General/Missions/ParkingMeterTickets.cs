@@ -96,9 +96,9 @@ namespace Curiosity.ParkingMeters.Missions
                     break;
                 case MissionState.WritingTicket:
 
-                    await Game.PlayerPed.PlayScenario("WORLD_HUMAN_CLIPBOARD", 5000, true);
-
                     missionState = MissionState.Completion;
+
+                    Game.PlayerPed.PlayScenario("WORLD_HUMAN_CLIPBOARD", 3000, true);
 
                     break;
                 case MissionState.Completion:
