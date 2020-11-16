@@ -60,6 +60,8 @@ namespace Curiosity.ParkingMeters.Missions
                     vehicle.IsPersistent = true;
                     vehicle.IsPositionFrozen = true;
                     vehicle.IsInvincible = true;
+                    vehicle.IsCollisionEnabled = false;
+                    vehicle.IsRecordingCollisions = false;
                     
                     if (vehicle == null)
                     {
