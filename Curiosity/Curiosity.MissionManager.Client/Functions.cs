@@ -22,6 +22,12 @@ namespace Curiosity.MissionManager.Client
 
             Log.Info($"[MissionManager] Registered: {mission.Name}");
 
+            MissionInfo missionInfo = GetMissionInfo(mission);
+            if (missionInfo.startPoint.X > 0f && missionInfo.startPoint.Y > 0f)
+            {
+                // world blips for set mission locations
+            }
+
             Mission.missions.Add(mission);
         }
 
