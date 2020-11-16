@@ -1,12 +1,9 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
-using Curiosity.MissionManager.Client.Environment.Entities.Models;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
-using Curiosity.MissionManager.Client.Utils;
 using Curiosity.ParkingMeters.Data;
 using Curiosity.ParkingMeters.Models;
 using Curiosity.Systems.Library.Enums;
@@ -16,7 +13,7 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.ParkingMeters.Missions
 {
-    [MissionInfo("Parking Meter", "misParkingMeterTickets", 0f, 0f, 0f, MissionType.Mission, true, "None")]
+    [MissionInfo("Parking Meter", "misParkingMeterTickets", 0f, 0f, 0f, MissionType.Mission, true, "None", PatrolZone.City)]
     public class ParkingMeterTickets : Mission
     {
         ParkingMeter parkingMeter;
@@ -29,18 +26,7 @@ namespace Curiosity.ParkingMeters.Missions
 
         public override void Start()
         {
-            switch(PatrolZone)
-            {
-                case PatrolZone.City:
-                    parkingMeter = ParkingMeterData.ParkingMetersCity[Utility.RANDOM.Next(ParkingMeterData.ParkingMetersCity.Count)];
-                    break;
-                case PatrolZone.County:
-                    parkingMeter = ParkingMeterData.ParkingMetersCounty[Utility.RANDOM.Next(ParkingMeterData.ParkingMetersCounty.Count)];
-                    break;
-                default:
-                    Stop(EndState.Error); // Unknown Patrol Zone
-                    break;
-            }
+            parkingMeter = ParkingMeterData.ParkingMetersCity[Utility.RANDOM.Next(ParkingMeterData.ParkingMetersCity.Count)];
 
             if (parkingMeter == null)
                 Stop(EndState.Error);
