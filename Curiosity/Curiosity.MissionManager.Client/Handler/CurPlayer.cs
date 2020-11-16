@@ -42,12 +42,14 @@ namespace Curiosity.MissionManager.Client.Handler
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
                 PersonalVehicle = new Vehicle(vehicleId);
                 Decorators.Set(vehicleId, Decorators.PLAYER_VEHICLE, true);
+                Decorators.Set(vehicleId, Decorators.PLAYER_OWNER, Game.Player.ServerId);
             }
             else if (PersonalVehicle.Handle != vehicleId)
             {
                 API.SetResourceKvpInt(PERSONAL_VEHICLE_KEY, vehicleId);
                 PersonalVehicle = new Vehicle(vehicleId);
                 Decorators.Set(vehicleId, Decorators.PLAYER_VEHICLE, true);
+                Decorators.Set(vehicleId, Decorators.PLAYER_OWNER, Game.Player.ServerId);
             }
         }
 
