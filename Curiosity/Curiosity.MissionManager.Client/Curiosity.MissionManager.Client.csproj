@@ -76,7 +76,9 @@
     <Compile Include="Environment\Entities\Modules\Impl\EntityNetworkModule.cs" />
     <Compile Include="Environment\Marker.cs" />
     <Compile Include="Environment\SafeTeleport.cs" />
+    <Compile Include="Extensions\PedExtensions.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
+    <Compile Include="Extensions\VehicleExtensions.cs" />
     <Compile Include="Handler\AnimationHandler.cs" />
     <Compile Include="Handler\DamageHandler.cs" />
     <Compile Include="Handler\EntityHandler.cs" />
