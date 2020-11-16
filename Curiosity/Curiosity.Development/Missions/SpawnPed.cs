@@ -10,7 +10,7 @@ using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.Development.Missions
 {
-    [MissionInfo("Development Ped", "devPed", 485.979f, -1311.222f, 29.249f, MissionType.Mission, true, "None")]
+    [MissionInfo("Development Ped", "devPed", 0f, 0f, 0f, MissionType.Mission, true, "None")]
     public class SpawnPed : Mission
     {
         private Ped criminal;

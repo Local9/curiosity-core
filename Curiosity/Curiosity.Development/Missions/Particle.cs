@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Development.Missions
 {
-    [MissionInfo("Development Particle", "devPart", 485.979f, -1311.222f, 29.249f, MissionType.Mission, true, "None")]
+    [MissionInfo("Development Particle", "devPart", 0f, 0f, 0f, MissionType.Mission, true, "None")]
     public class Particle : Mission
     {
         public async override void Start()
