@@ -51,6 +51,20 @@ namespace Curiosity.MissionManager.Client.Handler
                 Decorators.Set(vehicleId, Decorators.PLAYER_VEHICLE, true);
                 Decorators.Set(vehicleId, Decorators.PLAYER_OWNER, Game.Player.ServerId);
             }
+            else
+            {
+                int vehId = API.GetResourceKvpInt(PERSONAL_VEHICLE_KEY);
+                if (vehId > 0)
+                {
+                    Vehicle v = new Vehicle(vehId);
+                    if (v == null) return;
+                    if (!v.Exists()) return;
+                    if (v.IsDead) return;
+                    PersonalVehicle = v;
+                    Decorators.Set(vehicleId, Decorators.PLAYER_VEHICLE, true);
+                    Decorators.Set(vehicleId, Decorators.PLAYER_OWNER, Game.Player.ServerId);
+                }
+            }
         }
 
         private async void OnPoliceDuty(bool active, bool onduty, string job)
