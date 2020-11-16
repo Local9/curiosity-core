@@ -57,6 +57,9 @@ namespace Curiosity.ParkingMeters.Missions
                     break;
                 case MissionState.SpawnVehicle:
                     vehicle = await Vehicle.Spawn(parkingMeter.ParkingMeterVehicle.Vehicle, parkingMeter.ParkingMeterVehicle.Position, parkingMeter.ParkingMeterVehicle.Heading, false, false, true);
+                    vehicle.IsPersistent = true;
+                    vehicle.IsPositionFrozen = true;
+                    vehicle.IsInvincible = true;
                     
                     if (vehicle == null)
                     {
