@@ -25,7 +25,7 @@ namespace Curiosity.ParkingMeters.Missions
 
         public override void Start()
         {
-            switch(Mission.PatrolZone)
+            switch(PatrolZone)
             {
                 case PatrolZone.City:
                     parkingMeter = ParkingMeterData.ParkingMetersCity[Utility.RANDOM.Next(ParkingMeterData.ParkingMetersCity.Count)];
