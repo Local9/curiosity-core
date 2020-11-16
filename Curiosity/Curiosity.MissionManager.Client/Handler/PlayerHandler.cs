@@ -61,8 +61,8 @@ namespace Curiosity.MissionManager.Client.Handler
                     if (!v.Exists()) return;
                     if (v.IsDead) return;
                     PersonalVehicle = v;
-                    Decorators.Set(vehicleId, Decorators.PLAYER_VEHICLE, true);
-                    Decorators.Set(vehicleId, Decorators.PLAYER_OWNER, Game.Player.ServerId);
+                    Decorators.Set(vehId, Decorators.PLAYER_VEHICLE, true);
+                    Decorators.Set(vehId, Decorators.PLAYER_OWNER, Game.Player.ServerId);
                 }
             }
         }
@@ -105,6 +105,7 @@ namespace Curiosity.MissionManager.Client.Handler
                     {
                         PersonalVehicle = kvpVehicle;
                         Decorators.Set(vehicleId, Decorators.PLAYER_VEHICLE, true);
+                        Decorators.Set(vehicleId, Decorators.PLAYER_OWNER, Game.Player.ServerId);
                     }
                 }
             }
