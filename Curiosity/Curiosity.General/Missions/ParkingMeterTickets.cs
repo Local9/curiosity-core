@@ -11,16 +11,37 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
+using Curiosity.ParkingMeters.Data;
+using Curiosity.MissionManager.Client.Interface;
 
 namespace Curiosity.ParkingMeters.Missions
 {
-    [MissionInfo("Parking Meters", "misGenParkingMeter", 0f, 0f, 0f, MissionType.Mission, true, "None")]
+    [MissionInfo("City Parking Meters", "misPmCity", 0f, 0f, 0f, MissionType.Mission, true, "None")]
     public class ParkingMeterTickets : Mission
     {
-        List<ParkingMeter> parkingMeters = new List<ParkingMeter>();
+        ParkingMeter parkingMeter;
+        MissionState missionState;
+        Vehicle vehicle;
 
-        public async override void Start()
+        public override void Start()
         {
+            switch(Mission.PatrolZone)
+            {
+                case PatrolZone.City:
+                    parkingMeter = ParkingMeterData.ParkingMetersCity[Utility.RANDOM.Next(ParkingMeterData.ParkingMetersCity.Count)];
+                    break;
+                case PatrolZone.County:
+                    parkingMeter = ParkingMeterData.ParkingMetersCounty[Utility.RANDOM.Next(ParkingMeterData.ParkingMetersCounty.Count)];
+                    break;
+                default:
+                    Stop(EndState.Error); // Unknown Patrol Zone
+                    break;
+            }
+
+            if (parkingMeter == null)
+                Stop(EndState.Error);
+
+            missionState = MissionState.Start;
 
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
@@ -32,7 +53,48 @@ namespace Curiosity.ParkingMeters.Missions
 
         async Task OnMissionTick()
         {
+            switch(missionState)
+            {
+                case MissionState.Start:
+                    if (Game.PlayerPed.Position.Distance(parkingMeter.Position) < 100f)
+                        missionState = MissionState.SpawnVehicle;
+                    break;
+                case MissionState.SpawnVehicle:
+                    vehicle = await Vehicle.Spawn(parkingMeter.ParkingMeterVehicle.Vehicle, parkingMeter.ParkingMeterVehicle.Position, parkingMeter.ParkingMeterVehicle.Heading, false, false, true);
+                    
+                    if (vehicle == null)
+                    {
+                        Stop(EndState.Error);
+                        return;
+                    }
+                    
+                    vehicle.Fx.LockStatus = VehicleLockStatus.Locked;
+                    vehicle.Fx.IsEngineRunning = false;
 
+                    break;
+                case MissionState.TicketVehicle:
+
+                    if (Game.PlayerPed.Position.Distance(parkingMeter.Position) < 2f)
+                    {
+                        HelpMessage.CustomLooped(HelpMessage.Label.MISSION_CLERK_SPEAK_WITH);
+
+                        if (Game.IsControlJustPressed(0, Control.Context))
+                            missionState = MissionState.Completion;
+                    }
+
+                    break;
+                case MissionState.Completion:
+                    Pass();
+                    break;
+            }
+        }
+
+        internal enum MissionState
+        {
+            Start,
+            SpawnVehicle,
+            TicketVehicle,
+            Completion
         }
     }
 }

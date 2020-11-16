@@ -2,13 +2,18 @@
 
 namespace Curiosity.ParkingMeters.Models
 {
-    internal class ParkingMeter
+    public class ParkingMeter
     {
         public ParkingMeterVehicle ParkingMeterVehicle;
         public Vector3 Position;
+
+        public ParkingMeter(Vector3 position)
+        {
+            this.Position = position;
+        }
     }
 
-    internal class ParkingMeterVehicle
+    public class ParkingMeterVehicle
     {
         public VehicleHash Vehicle;
         public Vector3 Position;

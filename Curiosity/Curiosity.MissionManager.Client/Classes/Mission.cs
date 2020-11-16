@@ -18,6 +18,7 @@ namespace Curiosity.MissionManager.Client
         internal static bool isOnMission = false;
         internal static Mission currentMission = null;
         internal static Type missionType = null;
+        public static PatrolZone PatrolZone = PatrolZone.Anywhere;
 
         public static List<Player> Players { get; internal set; }
         public static List<Vehicle> RegisteredVehicles { get; internal set; }

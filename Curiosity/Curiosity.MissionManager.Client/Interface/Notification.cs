@@ -21,6 +21,7 @@ namespace Curiosity.MissionManager.Client.Interface
         WalkingStyleNotForMale,
         WalkingStyleNotForFemale,
         RightAlignedNotSupported,
+        PatrolZoneUnknown,
     };
 
     public static class ErrorMessage
@@ -31,6 +32,9 @@ namespace Curiosity.MissionManager.Client.Interface
             string placeholder = placeholderValue != null ? " " + placeholderValue : "";
             switch (errorType)
             {
+                case CommonErrors.PatrolZoneUnknown:
+                    outputMessage = "Unknown Patrol Zone.";
+                    break;
                 case CommonErrors.NeedToBeTheDriver:
                     outputMessage = "You need to be the driver of this vehicle.";
                     break;
@@ -131,14 +135,14 @@ namespace Curiosity.MissionManager.Client.Interface
 
         public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, int iconType = 0, int bgColor = 0)
         {
-            API.SetNotificationTextEntry("CELL_EMAIL_BCON"); // 10x ~a~
+            API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
             foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
             {
                 API.AddTextComponentSubstringPlayerName(s);
             }
             API.SetNotificationMessage(textureName, textureDict, false, iconType, title, subtitle);
             API.SetNotificationBackgroundColor(bgColor);
-            API.DrawNotification(false, saveToBrief);
+            API.EndTextCommandThefeedPostTicker(false, saveToBrief);
         }
     }
 
@@ -185,6 +189,7 @@ namespace Curiosity.MissionManager.Client.Interface
             ENTER_INTERIOR_HELP_MESSAGE,
             MISSION_CLERK_SPEAK_WITH,
             MISSION_CLERK_RESPONSE_SUSPECT_RAN,
+            MISSION_PARKING_METER_CONTEXT
         }
 
         private static Dictionary<Label, KeyValuePair<string, string>> labels = new Dictionary<Label, KeyValuePair<string, string>>()
@@ -193,6 +198,7 @@ namespace Curiosity.MissionManager.Client.Interface
             [Label.ENTER_INTERIOR_HELP_MESSAGE] = new KeyValuePair<string, string>("ENTER_INTERIOR_HELP_MESSAGE", "Press ~INPUT_CONTEXT~ to enter the building."),
             [Label.MISSION_CLERK_SPEAK_WITH] = new KeyValuePair<string, string>("MISSION_CLERK_SPEAK_WITH", "Press ~INPUT_CONTEXT~ to speak with the ~b~Store Clerk~w~."),
             [Label.MISSION_CLERK_RESPONSE_SUSPECT_RAN] = new KeyValuePair<string, string>("MISSION_CLERK_RESPONSE_SUSPECT_RAN", $"The perp has just ran off, he's not far away."),
+            [Label.MISSION_PARKING_METER_CONTEXT] = new KeyValuePair<string, string>("MISSION_PARKING_METER_CONTEXT", $"Press ~INPUT_CONTEXT~ to ticket the ~b~Vehicle~w~."),
         };
 
 

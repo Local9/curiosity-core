@@ -40,9 +40,12 @@ namespace Curiosity.MissionManager.Client
             var typeClass = constructor.Invoke(new object[] { });
             var mis = (Mission)typeClass;
 
+            MissionInfo missionInfo = GetMissionInfo(mission);
+
             Mission.currentMission = mis;
             Mission.missionType = mission;
             Mission.AddPlayer(Game.Player);
+            Mission.PatrolZone = missionInfo.patrolZone;
 
             Mission.RegisteredPeds = new List<Classes.Ped>();
             Mission.RegisteredVehicles = new List<Classes.Vehicle>();

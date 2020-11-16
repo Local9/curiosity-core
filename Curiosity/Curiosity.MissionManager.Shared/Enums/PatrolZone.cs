@@ -4,7 +4,7 @@
     {
         Anywhere,
         City,
-        Country,
+        County,
         Ocean,
         Highway,
         Rural
