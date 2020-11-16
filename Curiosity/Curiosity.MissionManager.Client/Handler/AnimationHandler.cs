@@ -1,52 +1,35 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Curiosity.MissionManager.Client.Environment.Entities.Models;
 using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Handler
 {
     public class AnimationHandler
     {
-        static public async void AnimationSearch()
+        public static void AnimationSearch()
         {
-            string scenario = "PROP_HUMAN_BUM_BIN";
-            if (!Game.PlayerPed.IsInVehicle())
-            {
-                API.TaskStartScenarioInPlace(Game.PlayerPed.Handle, scenario, 0, true);
-                await PluginManager.Delay(5000);
-                Game.PlayerPed.Task.ClearAll();
-            }
-        }
-        static public async void AnimationClipboard()
-        {
-            string scenario = "WORLD_HUMAN_CLIPBOARD";
-            if (!Game.PlayerPed.IsInVehicle())
-            {
-                API.TaskStartScenarioInPlace(Game.PlayerPed.Handle, scenario, 0, true);
-                await PluginManager.Delay(5000);
-                Game.PlayerPed.Task.ClearAll();
-            }
+            AnimationBuilder animationBuilder1 = new AnimationBuilder().Select("PROP_HUMAN_BUM_BIN");
+            Cache.Entity.AnimationQueue.PlayDirectInQueue(animationBuilder1);
         }
 
-        static public async void AnimationRadio()
+        public static void AnimationClipboard()
         {
-            LoadAnimation("random@arrests");
-            Game.PlayerPed.Task.PlayAnimation("random@arrests", "generic_radio_enter", 1.5f, 2.0f, -1, (AnimationFlags)50, 2.0f);
-            await PluginManager.Delay(6000);
-            Game.PlayerPed.Task.ClearAll();
+            AnimationBuilder animationBuilder1 = new AnimationBuilder().Select("WORLD_HUMAN_CLIPBOARD");
+            Cache.Entity.AnimationQueue.PlayDirectInQueue(animationBuilder1);
         }
 
-        static public async Task<bool> LoadAnimation(string dict)
+        public static void AnimationRadio()
         {
-            while (!API.HasAnimDictLoaded(dict))
-            {
-                await PluginManager.Delay(0);
-                API.RequestAnimDict(dict);
-            }
-            return true;
+            AnimationBuilder animationBuilder1 = new AnimationBuilder().Select("random@arrests", "generic_radio_chatter");
+            AnimationBuilder animationBuilder2 = new AnimationBuilder().Select("random@arrests", "generic_radio_emter");
+            AnimationBuilder animationBuilder3 = new AnimationBuilder().Select("random@arrests", "generic_radio_exit");
+
+            Cache.Entity.AnimationQueue.AddToQueue(animationBuilder1);
+            Cache.Entity.AnimationQueue.AddToQueue(animationBuilder2);
+            Cache.Entity.AnimationQueue.AddToQueue(animationBuilder3);
+
+            Cache.Entity.AnimationQueue.PlayQueue();
         }
     }
 }

@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Environment.Entities.Models;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
@@ -21,6 +22,9 @@ namespace Curiosity.ParkingMeters.Missions
         MissionState missionState;
         Vehicle vehicle;
         Blip missionBlip;
+
+        System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 65, 105, 225);
+        Vector3 scale = new Vector3(0.5f);
 
         public override void Start()
         {
@@ -83,6 +87,11 @@ namespace Curiosity.ParkingMeters.Missions
                     break;
                 case MissionState.TicketVehicle:
 
+                    Vector3 pos = missionBlip.Position;
+                    pos.Z += 1f;
+
+                    World.DrawMarker(MarkerType.UpsideDownCone, pos, Vector3.Zero, Vector3.Zero, scale, markerColor, bobUpAndDown: true);
+
                     if (Game.PlayerPed.Position.Distance(parkingMeter.Position) < 2f)
                     {
                         missionBlip.ShowRoute = false;
@@ -98,7 +107,7 @@ namespace Curiosity.ParkingMeters.Missions
 
                     missionState = MissionState.Completion;
 
-                    Game.PlayerPed.PlayScenario("WORLD_HUMAN_CLIPBOARD", 3000, true);
+                    Game.PlayerPed.AnimationClipboard();
 
                     break;
                 case MissionState.Completion:
