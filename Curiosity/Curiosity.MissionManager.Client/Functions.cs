@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Handler;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
@@ -45,7 +46,9 @@ namespace Curiosity.MissionManager.Client
             Mission.currentMission = mis;
             Mission.missionType = mission;
             Mission.AddPlayer(Game.Player);
-            Mission.PatrolZone = missionInfo.patrolZone;
+            
+            Mission.PatrolZone = CurPlayer.PatrolZone; // Always get the current zone from the player at this point
+            // Mission randomiser will also use the PatrolZone of the player to select a mission, but the mission needs to know the players state IF the mission doesn't have a PatrolZone assigned
 
             Mission.RegisteredPeds = new List<Classes.Ped>();
             Mission.RegisteredVehicles = new List<Classes.Vehicle>();
