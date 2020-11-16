@@ -30,5 +30,10 @@ namespace Curiosity.MissionManager.Client.Extensions
 
             await BaseScript.Delay(3000);
         }
+
+        public static bool IsPlayingAnim(this Ped ped, string animSet, string animName)
+        {
+            return API.IsEntityPlayingAnim(ped.Handle, animSet, animName, 3);
+        }
     }
 }

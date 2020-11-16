@@ -24,10 +24,6 @@ namespace Curiosity.MissionManager.Client.Utils
             T4 field4) =>
             BaseScript.TriggerServerEvent(@event.Path, field1, field2, field3, field4);
 
-        public static bool IsPlayingAnim(this Entity entity, string animSet, string animName)
-        {
-            return API.IsEntityPlayingAnim(entity.Handle, animSet, animName, 3);
-        }
 
 
     }
