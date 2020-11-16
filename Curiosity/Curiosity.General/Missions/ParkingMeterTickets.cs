@@ -98,6 +98,7 @@ namespace Curiosity.ParkingMeters.Missions
 
                     break;
                 case MissionState.Completion:
+                    missionState = MissionState.MissionEnded;
                     Pass();
                     break;
             }
@@ -109,7 +110,8 @@ namespace Curiosity.ParkingMeters.Missions
             SpawnVehicle,
             TicketVehicle,
             WritingTicket,
-            Completion
+            Completion,
+            MissionEnded
         }
     }
 }
