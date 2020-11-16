@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Utils;
 using NativeUI;
 using System.Threading.Tasks;

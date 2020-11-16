@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.ParkingMeters.Data;

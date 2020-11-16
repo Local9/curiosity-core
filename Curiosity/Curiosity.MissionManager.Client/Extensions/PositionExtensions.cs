@@ -65,5 +65,17 @@ namespace Curiosity.MissionManager.Client.Extensions
 
             return new Vector3(x, y, vector.Z);
         }
+
+        public static float VDist(this Vector3 v, Vector3 to)
+        {
+            return API.Vdist(v.X, v.Y, v.Z, to.X, to.Y, to.Z);
+        }
+
+        public static float DistanceTo(this Vector3 position, Vector3 target) => (position - target).Length();
+
+        public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
+        {
+            return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
+        }
     }
 }

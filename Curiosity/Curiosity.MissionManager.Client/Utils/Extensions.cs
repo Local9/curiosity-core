@@ -31,18 +31,6 @@ namespace Curiosity.MissionManager.Client.Utils
             return API.IsEntityPlayingAnim(entity.Handle, animSet, animName, 3);
         }
 
-        public static float VDist(this Vector3 v, Vector3 to)
-        {
-            return API.Vdist(v.X, v.Y, v.Z, to.X, to.Y, to.Z);
-        }
-
-        public static float DistanceTo(this Vector3 position, Vector3 target) => (position - target).Length();
-
-        public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
-        {
-            return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
-        }
-
         public async static Task FadeOut(this Ped ped, bool slow = false)
         {
             await Fade(ped, false, slow);
