@@ -95,14 +95,8 @@ namespace Curiosity.ParkingMeters.Missions
 
                     break;
                 case MissionState.WritingTicket:
-                    Game.PlayerPed.AnimationClipboard();
 
-                    int startTime = API.GetGameTimer();
-
-                    while ((API.GetGameTimer() - startTime) < 5000)
-                    {
-                        await BaseScript.Delay(100);
-                    }
+                    await Game.PlayerPed.PlayScenario("WORLD_HUMAN_CLIPBOARD", 5000, true);
 
                     missionState = MissionState.Completion;
 

@@ -36,32 +36,44 @@ namespace Curiosity.MissionManager.Client.Extensions
             return API.IsEntityPlayingAnim(ped.Handle, animSet, animName, 3);
         }
 
-        public static async void AnimationSearch(this Ped ped)
+        public static async Task PlayScenario(this Ped ped, string scenario, int waitTime, bool enterAnim = false)
         {
-            string scenario = "PROP_HUMAN_BUM_BIN";
             if (!ped.IsInVehicle())
             {
-                API.TaskStartScenarioInPlace(ped.Handle, scenario, 0, true);
-                await BaseScript.Delay(5000);
+                API.TaskStartScenarioInPlace(ped.Handle, scenario, 0, enterAnim);
+
+                int startTime = API.GetGameTimer();
+
+                while ((API.GetGameTimer() - startTime) < waitTime)
+                {
+                    await BaseScript.Delay(100);
+                }
+
                 ped.Task.ClearAll();
             }
         }
+
+        public static async void AnimationSearch(this Ped ped)
+        {
+            await PlayScenario(ped, "PROP_HUMAN_BUM_BIN", 5000, true);
+        }
         public static async void AnimationClipboard(this Ped ped)
         {
-            string scenario = "WORLD_HUMAN_CLIPBOARD";
-            if (!ped.IsInVehicle())
-            {
-                API.TaskStartScenarioInPlace(ped.Handle, scenario, 0, true);
-                await BaseScript.Delay(5000);
-                ped.Task.ClearAll();
-            }
+            await PlayScenario(ped, "WORLD_HUMAN_CLIPBOARD", 5000, true);
         }
 
         public static async void AnimationRadio(this Ped ped)
         {
             LoadAnimation("random@arrests");
             ped.Task.PlayAnimation("random@arrests", "generic_radio_enter", 1.5f, 2.0f, -1, (AnimationFlags)50, 2.0f);
-            await BaseScript.Delay(6000);
+
+            int startTime = API.GetGameTimer();
+
+            while ((API.GetGameTimer() - startTime) < 6000)
+            {
+                await BaseScript.Delay(100);
+            }
+
             ped.Task.ClearAll();
         }
 
