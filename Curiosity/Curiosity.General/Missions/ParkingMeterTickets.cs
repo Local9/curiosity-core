@@ -39,6 +39,11 @@ namespace Curiosity.ParkingMeters.Missions
 
             missionState = MissionState.Start;
 
+            Blip blip = World.CreateBlip(parkingMeter.Position);
+            blip.Sprite = BlipSprite.PointOfInterest;
+
+            RegisterBlip(blip);
+
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
 
