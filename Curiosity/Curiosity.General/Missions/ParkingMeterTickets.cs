@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Extensions;
@@ -94,7 +95,17 @@ namespace Curiosity.ParkingMeters.Missions
 
                     break;
                 case MissionState.WritingTicket:
-                    
+                    Game.PlayerPed.AnimationClipboard();
+
+                    int startTime = API.GetGameTimer();
+
+                    while ((API.GetGameTimer() - startTime) < 5000)
+                    {
+                        await BaseScript.Delay(100);
+                    }
+
+                    missionState = MissionState.Completion;
+
                     break;
                 case MissionState.Completion:
                     Pass();
