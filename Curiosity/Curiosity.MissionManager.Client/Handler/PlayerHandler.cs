@@ -83,6 +83,7 @@ namespace Curiosity.MissionManager.Client.Handler
             else
             {
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
+
                 MarkerHandler.Dispose();
                 await BaseScript.Delay(100);
                 MarkerArrest.Dispose();
