@@ -1,18 +1,14 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
-using Curiosity.ParkingMeters.Models;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
+using Curiosity.ParkingMeters.Data;
+using Curiosity.ParkingMeters.Models;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
-using Curiosity.ParkingMeters.Data;
-using Curiosity.MissionManager.Client.Interface;
 
 namespace Curiosity.ParkingMeters.Missions
 {
