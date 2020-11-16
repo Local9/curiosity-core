@@ -1,12 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.NaturalMotion;
 using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
 using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Classes

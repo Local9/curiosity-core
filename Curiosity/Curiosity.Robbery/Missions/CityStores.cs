@@ -1,8 +1,7 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
@@ -13,7 +12,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
-using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.StolenVehicle.Missions
 {

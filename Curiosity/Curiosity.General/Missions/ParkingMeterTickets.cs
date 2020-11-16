@@ -88,9 +88,12 @@ namespace Curiosity.ParkingMeters.Missions
                         HelpMessage.CustomLooped(HelpMessage.Label.MISSION_PARKING_METER_CONTEXT);
 
                         if (Game.IsControlJustPressed(0, Control.Context))
-                            missionState = MissionState.Completion;
+                            missionState = MissionState.WritingTicket;
                     }
 
+                    break;
+                case MissionState.WritingTicket:
+                    
                     break;
                 case MissionState.Completion:
                     Pass();
@@ -103,6 +106,7 @@ namespace Curiosity.ParkingMeters.Missions
             Start,
             SpawnVehicle,
             TicketVehicle,
+            WritingTicket,
             Completion
         }
     }
