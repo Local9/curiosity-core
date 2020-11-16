@@ -52,39 +52,5 @@ namespace Curiosity.MissionManager.Client.Extensions
                 ped.Task.ClearAll();
             }
         }
-
-        public static async void AnimationSearch(this Ped ped)
-        {
-            await PlayScenario(ped, "PROP_HUMAN_BUM_BIN", 5000, true);
-        }
-        public static async void AnimationClipboard(this Ped ped)
-        {
-            await PlayScenario(ped, "WORLD_HUMAN_CLIPBOARD", 5000, true);
-        }
-
-        public static async void AnimationRadio(this Ped ped)
-        {
-            LoadAnimation("random@arrests");
-            ped.Task.PlayAnimation("random@arrests", "generic_radio_enter", 1.5f, 2.0f, -1, (AnimationFlags)50, 2.0f);
-
-            int startTime = API.GetGameTimer();
-
-            while ((API.GetGameTimer() - startTime) < 6000)
-            {
-                await BaseScript.Delay(100);
-            }
-
-            ped.Task.ClearAll();
-        }
-
-        public static async Task<bool> LoadAnimation(string dict)
-        {
-            while (!API.HasAnimDictLoaded(dict))
-            {
-                await BaseScript.Delay(100);
-                API.RequestAnimDict(dict);
-            }
-            return true;
-        }
     }
 }

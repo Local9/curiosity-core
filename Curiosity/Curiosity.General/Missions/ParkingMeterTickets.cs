@@ -4,6 +4,7 @@ using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Environment.Entities.Models;
 using Curiosity.MissionManager.Client.Extensions;
+using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.ParkingMeters.Data;
@@ -105,9 +106,9 @@ namespace Curiosity.ParkingMeters.Missions
                     break;
                 case MissionState.WritingTicket:
 
-                    missionState = MissionState.Completion;
+                    await AnimationHandler.AnimationClipboard();
 
-                    Game.PlayerPed.AnimationClipboard();
+                    missionState = MissionState.Completion;
 
                     break;
                 case MissionState.Completion:
