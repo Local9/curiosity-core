@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
-using Curiosity.MissionManager.Client.Utils;
+using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
 using System.Collections.Generic;
