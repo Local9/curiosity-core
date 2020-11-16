@@ -470,7 +470,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             CitizenFX.Core.Ped fxPed = new CitizenFX.Core.Ped(pedId);
 
-            API.NetworkFadeInEntity(fxPed.Handle, false);
+            fxPed.FadeIn();
 
             Logger.Debug(fxPed.ToString());
             var ped = new Ped(fxPed);
@@ -507,7 +507,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             CitizenFX.Core.Ped fxPed = new CitizenFX.Core.Ped(pedId);
 
-            API.NetworkFadeInEntity(fxPed.Handle, false);
+            fxPed.FadeIn();
 
             Logger.Debug(fxPed.ToString());
             var ped = new Ped(fxPed);

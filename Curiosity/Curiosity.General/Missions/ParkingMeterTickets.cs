@@ -12,12 +12,13 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.ParkingMeters.Missions
 {
-    [MissionInfo("City Parking Meters", "misPmCity", 0f, 0f, 0f, MissionType.Mission, true, "None")]
+    [MissionInfo("Parking Meter", "misParkingMeterTickets", 0f, 0f, 0f, MissionType.Mission, true, "None")]
     public class ParkingMeterTickets : Mission
     {
         ParkingMeter parkingMeter;
         MissionState missionState;
         Vehicle vehicle;
+        Blip missionBlip;
 
         public override void Start()
         {
@@ -39,10 +40,11 @@ namespace Curiosity.ParkingMeters.Missions
 
             missionState = MissionState.Start;
 
-            Blip blip = World.CreateBlip(parkingMeter.Position);
-            blip.Sprite = BlipSprite.PointOfInterest;
+            missionBlip = World.CreateBlip(parkingMeter.Position);
+            missionBlip.Sprite = BlipSprite.PointOfInterest;
+            missionBlip.ShowRoute = true;
 
-            RegisterBlip(blip);
+            RegisterBlip(missionBlip);
 
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
@@ -72,12 +74,18 @@ namespace Curiosity.ParkingMeters.Missions
                     vehicle.Fx.LockStatus = VehicleLockStatus.Locked;
                     vehicle.Fx.IsEngineRunning = false;
 
+                    RegisterVehicle(vehicle);
+
+                    missionState = MissionState.TicketVehicle;
+
                     break;
                 case MissionState.TicketVehicle:
 
                     if (Game.PlayerPed.Position.Distance(parkingMeter.Position) < 2f)
                     {
-                        HelpMessage.CustomLooped(HelpMessage.Label.MISSION_CLERK_SPEAK_WITH);
+                        missionBlip.ShowRoute = false;
+
+                        HelpMessage.CustomLooped(HelpMessage.Label.MISSION_PARKING_METER_CONTEXT);
 
                         if (Game.IsControlJustPressed(0, Control.Context))
                             missionState = MissionState.Completion;

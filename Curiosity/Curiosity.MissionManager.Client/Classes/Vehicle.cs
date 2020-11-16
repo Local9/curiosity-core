@@ -105,7 +105,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             Logger.Debug(fxVehicle.ToString());
 
-            API.NetworkFadeInEntity(fxVehicle.Handle, false);
+            fxVehicle.FadeIn();
 
             return new Vehicle(fxVehicle);
         }
@@ -113,7 +113,7 @@ namespace Curiosity.MissionManager.Client.Classes
         internal async void Dismiss()
         {
             Fx.IsPersistent = false;
-            API.NetworkFadeOutEntity(base.Handle, false, false);
+            Fx.FadeOut();
             await BaseScript.Delay(2000);
             base.Delete();
         }
