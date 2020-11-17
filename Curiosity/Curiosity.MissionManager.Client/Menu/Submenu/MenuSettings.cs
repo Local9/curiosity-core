@@ -17,6 +17,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menu.AddItem(menuCheckboxEnableCallouts);
 
             menu.OnItemSelect += Menu_OnItemSelect;
+            menu.OnCheckboxChange += Menu_OnCheckboxChange;
             menu.OnMenuOpen += Menu_OnMenuOpen;
             menu.OnMenuClose += Menu_OnMenuClose;
 
@@ -24,21 +25,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             return menu;
         }
 
-        private void Menu_OnMenuClose(UIMenu sender)
+        private async void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
         {
-            MenuBase.OnMenuState();
-        }
-
-        private void Menu_OnMenuOpen(UIMenu sender)
-        {
-            
-
-            MenuBase.OnMenuState(true);
-        }
-
-        private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
-        {
-            if (selectedItem == menuCheckboxEnableCallouts)
+            if (checkboxItem == menuCheckboxEnableCallouts)
             {
                 menuCheckboxEnableCallouts.Enabled = false;
                 MissionDirectorManager.ToggleMissionDirector();
@@ -48,6 +37,21 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 menuCheckboxEnableCallouts.Enabled = true;
                 return;
             }
+        }
+
+        private void Menu_OnMenuClose(UIMenu sender)
+        {
+            MenuBase.OnMenuState();
+        }
+
+        private void Menu_OnMenuOpen(UIMenu sender)
+        {
+            MenuBase.OnMenuState(true);
+        }
+
+        private void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        {
+
         }
     }
 }
