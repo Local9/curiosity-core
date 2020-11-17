@@ -170,7 +170,6 @@ namespace Curiosity.MissionManager.Client.Interface
             // 9 : $ Icon
             ///
 
-
             API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
             foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
             {
