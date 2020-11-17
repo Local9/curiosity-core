@@ -95,7 +95,7 @@ namespace Curiosity.StolenVehicle.Missions
             stolenVehicle.IsTowable = true;
             stolenVehicle.Fx.LockStatus = VehicleLockStatus.LockedForPlayer;
 
-            Notify.Dispatch("~r~CODE 3", $"~y~Stolen Vehicle~s~~n~~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}~n~~g~GPS Updated");
+            Notify.Dispatch("~o~CODE 3", $"~y~Stolen Vehicle~s~~n~~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}~n~~g~GPS Updated");
 
             isMissionReady = true;
 
