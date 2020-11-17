@@ -32,7 +32,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menuItemCode78 = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance.");
             menuItemCode80 = new UIMenuItem("10-80: Persuit in progress", "This will call on other players for assistance.");
 
-            menuItemCode16 = new UIMenuItem("10-16: Request prison transport", "Will remove the suspect from the world for ~r~$100.");
+            menuItemCode16 = new UIMenuItem("10-16: Request prison transport", "Will remove the suspect from the world for ~o~$100.");
             menuItemCode27 = new UIMenuItem("10-27: Request drivers license check", "Contact dispatch for more information on the Suspect.");
             menuItemCode28 = new UIMenuItem("10-28: Check registration on vehicle", "Contact dispatch for more information on the vehicle.");
             menuItemCode29 = new UIMenuItem("10-29: Check Wants", "Contact dispatch to find out if the suspect is wanted.");
