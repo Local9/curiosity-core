@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Diagnostics;
 using System.Collections.Generic;
 
@@ -155,7 +156,7 @@ namespace Curiosity.MissionManager.Client.Interface
             CustomImage("CHAR_CALL911", "CHAR_CALL911", message, "Dispatch", subtitle, saveToBrief, blink, iconType, 140);
         }
 
-        public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, bool blink = false, int iconType = 0, int bgColor = 0)
+        public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, bool blink = false, int iconType = 0, int bgColor = 2)
         {
             ///
             /// iconTypes:  
@@ -178,6 +179,37 @@ namespace Curiosity.MissionManager.Client.Interface
             API.EndTextCommandThefeedPostMessagetext(textureName, textureDict, blink, iconType, title, subtitle);
             API.ThefeedNextPostBackgroundColor(bgColor);
             API.EndTextCommandThefeedPostTicker(false, saveToBrief);
+        }
+
+        public static async void CustomControl(string message, bool saveToBrief, int bgColor = 2, Control control = Control.Context, int timeToDisplay = 10000)
+        {
+            API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
+            foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
+            {
+                API.AddTextComponentSubstringPlayerName(s);
+            }
+
+            string controlToShow = "~INPUT_CONTEXT~";
+
+            switch(control)
+            {
+                case Control.ContextSecondary:
+                    controlToShow = "~INPUT_CONTEXT_SECONDARY~";
+                    break;
+            }
+
+            int notificationId = API.EndTextCommandThefeedPostReplayInput(1, controlToShow, message);
+            API.ThefeedNextPostBackgroundColor(bgColor);
+            API.EndTextCommandThefeedPostTicker(false, saveToBrief);
+
+            int gameTime = API.GetGameTimer();
+
+            while ((API.GetGameTimer() - gameTime) < timeToDisplay)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            API.ThefeedRemoveItem(notificationId);
         }
     }
 
