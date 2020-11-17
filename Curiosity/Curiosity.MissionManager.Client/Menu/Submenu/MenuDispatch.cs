@@ -26,7 +26,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         public UIMenu CreateMenu(UIMenu menu)
         {
-            menuItemCode4 = new UIMenuItem("Code 4: No further assistance required", "~r~This will complete/end the current callout.");
+            menuItemCode4 = new UIMenuItem("Code 4: No further assistance required", "~o~This will complete/end the current callout.");
             menuItemCode92 = new UIMenuItem("10-92: Suspect in Custody", "This will inform other players.");
 
             menuItemCode78 = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance.");
