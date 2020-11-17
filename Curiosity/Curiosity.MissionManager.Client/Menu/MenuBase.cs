@@ -34,9 +34,6 @@ namespace Curiosity.MissionManager.Client.Menu
         private UIMenu menuSuspectVehicle;
         private UIMenu menuSettings;
 
-        // menu items - Maybe move these???
-        private UIMenuItem mItemRequestAssistance = new UIMenuItem($"Request Assistance", "Call for support during an active pursuit."); // Call players?
-
         public MenuBase()
         {
             EventHandlers[Native.Client.OnClientResourceStart.Path] += Native.Client.OnClientResourceStart.Action +=
