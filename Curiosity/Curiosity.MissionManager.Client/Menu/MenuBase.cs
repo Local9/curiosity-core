@@ -25,12 +25,14 @@ namespace Curiosity.MissionManager.Client.Menu
         private bool isMenuOpen => Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_MENU);
 
         // sub menus
-        private Submenu.Dispatch _dispatch = new Submenu.Dispatch();
-        private Submenu.SuspectPed _suspectPed = new Submenu.SuspectPed();
-        private Submenu.SuspectVehicle _suspectVehicle = new Submenu.SuspectVehicle();
+        private Submenu.MenuDispatch _dispatch = new Submenu.MenuDispatch();
+        private Submenu.MenuSuspect _suspectPed = new Submenu.MenuSuspect();
+        private Submenu.MenuVehicle _suspectVehicle = new Submenu.MenuVehicle();
+        private Submenu.MenuSettings _menuSettings = new Submenu.MenuSettings();
         private UIMenu menuDispatch;
         private UIMenu menuSuspectPed;
         private UIMenu menuSuspectVehicle;
+        private UIMenu menuSettings;
 
         // menu items - Maybe move these???
         private UIMenuItem mItemRequestAssistance = new UIMenuItem($"Request Assistance", "Call for support during an active pursuit."); // Call players?
@@ -72,6 +74,10 @@ namespace Curiosity.MissionManager.Client.Menu
             menuSuspectVehicle = _MenuPool.AddSubMenu(menuMain, "Vehicle", "Suspect Vehicle Options~n~~o~Options are available when a callout is active.");
             menuSuspectVehicle.MouseControlsEnabled = false;
             _suspectVehicle.CreateMenu(menuSuspectVehicle);
+
+            menuSettings = _MenuPool.AddSubMenu(menuMain, "Settings", "General Options.");
+            menuSettings.MouseControlsEnabled = false;
+            _menuSettings.CreateMenu(menuSettings);
 
             _MenuPool.RefreshIndex();
         }

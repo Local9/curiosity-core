@@ -8,7 +8,7 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class MissionDirectorManager : Manager<MissionDirectorManager>
     {
-        static bool missionDirectorState = false;
+        public static bool MissionDirectorState = false;
 
         public static void ToggleMissionDirector()
         {

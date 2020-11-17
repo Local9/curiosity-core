@@ -8,7 +8,7 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.MissionManager.Client.Menu.Submenu
 {
-    class Dispatch
+    class MenuDispatch
     {
         UIMenuItem menuItemCode4;
         UIMenuItem menuItemCode16;

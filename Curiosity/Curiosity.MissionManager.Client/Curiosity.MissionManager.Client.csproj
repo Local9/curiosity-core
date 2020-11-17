@@ -95,9 +95,10 @@
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\MissionDirectorManager.cs" />
     <Compile Include="Menu\MenuBase.cs" />
-    <Compile Include="Menu\Submenu\Dispatch.cs" />
-    <Compile Include="Menu\Submenu\SuspectVehicle.cs" />
-    <Compile Include="Menu\Submenu\SuspectPed.cs" />
+    <Compile Include="Menu\Submenu\MenuDispatch.cs" />
+    <Compile Include="Menu\Submenu\MenuSettings.cs" />
+    <Compile Include="Menu\Submenu\MenuVehicle.cs" />
+    <Compile Include="Menu\Submenu\MenuSuspect.cs" />
     <Compile Include="Classes\Mission.cs" />
     <Compile Include="Interface\BigMessageHandler.cs" />
     <Compile Include="PluginManager.cs" />

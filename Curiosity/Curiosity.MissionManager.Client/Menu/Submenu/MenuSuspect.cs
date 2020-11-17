@@ -9,7 +9,7 @@ using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.MissionManager.Client.Menu.Submenu
 {
-    class SuspectPed
+    class MenuSuspect
     {
         private PluginManager PluginInstance => PluginManager.Instance;
         private Ped Ped;

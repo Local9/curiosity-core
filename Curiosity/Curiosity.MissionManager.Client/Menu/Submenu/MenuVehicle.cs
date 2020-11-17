@@ -9,7 +9,7 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.MissionManager.Client.Menu.Submenu
 {
-    class SuspectVehicle
+    class MenuVehicle
     {
         private PluginManager PluginInstance => PluginManager.Instance;
         private Vehicle vehicle;
