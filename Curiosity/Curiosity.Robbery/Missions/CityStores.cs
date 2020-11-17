@@ -58,6 +58,9 @@ namespace Curiosity.StolenVehicle.Missions
                 }
 
                 storeClerk.IsImportant = true;
+                storeClerk.IsPositionFrozen = true;
+                storeClerk.IsCollisionEnabled = false;
+                storeClerk.IsInvincible = true;
 
                 storeClerkBlip = storeClerk.AttachBlip();
                 storeClerkBlip.Sprite = BlipSprite.Information;
