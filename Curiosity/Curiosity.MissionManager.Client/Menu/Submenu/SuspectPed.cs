@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Extensions;
-using Curiosity.MissionManager.Client.Utils;
+using Curiosity.MissionManager.Client.Interface;
 using NativeUI;
 using System.Threading.Tasks;
 
@@ -49,7 +48,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             {
                 MenuBase._MenuPool.CloseAllMenus();
 
-                Screen.ShowNotification($"Cannot interact with suspect(s) while inside the vehicle.");
+                Notify.Alert(CommonErrors.OutsideVehicle);
 
                 Menu.MenuItems.ForEach(m => m.Enabled = false);
 
@@ -69,7 +68,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
                 if (Ped == null)
                 {
-                    UiTools.Dispatch("No suspect nearby", $"");
+                    Notify.Alert(CommonErrors.MustBeCloserToSubject);
                     MenuBase._MenuPool.CloseAllMenus();
                     return;
                 }
@@ -99,7 +98,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         {
             if (Ped == null)
             {
-                UiTools.Dispatch("Suspect", "Currently you don't have one", true, true);
+                Notify.Alert(CommonErrors.SubjectNotFound);
                 return;
             }
 
@@ -119,12 +118,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 if (Ped.Fx.IsInVehicle())
                 {
                     Ped.RunSequence(Ped.Sequence.LEAVE_VEHICLE);
-                    selectedItem.Text = "Detain from Vehicle";
+                    selectedItem.Text = "Detain in Vehicle";
                 }
                 else
                 {
                     Ped.RunSequence(Ped.Sequence.DETAIN_IN_CURRENT_VEHICLE);
-                    selectedItem.Text = "Remove in Vehicle";
+                    selectedItem.Text = "Remove from Vehicle";
                 }
 
                 await BaseScript.Delay(500);

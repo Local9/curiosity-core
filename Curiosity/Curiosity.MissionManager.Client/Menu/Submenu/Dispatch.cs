@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
 using NativeUI;
 
@@ -67,11 +68,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 Vehicle suspectVehicle = MenuBase.GetClosestVehicle();
                 if (suspectVehicle != null)
                 {
-                    suspectVehicle.Impound();
+                    suspectVehicle?.Dismiss();
+
+                    Notify.Impound("Vehicle Impounded", "");
                 }
                 else
                 {
-                    UiTools.Impound("Sorry...?", "Whats the registration again? Get closer so you can read it better.");
+                    Notify.Impound("Sorry...?", "");
                 }
             }
 
@@ -80,11 +83,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 Ped ped = MenuBase.GetClosestInteractivePed();
                 if (ped != null)
                 {
-                    ped.PrisonTransport();
+                    ped?.Dismiss();
+
+                    Notify.Dispatch("Prison Transport", "Suspect has been picked up");
                 }
                 else
                 {
-                    Screen.ShowSubtitle($"Must be closer to the suspect.");
+                    Notify.Alert(CommonErrors.MustBeCloserToSubject);
                 }
             }
         }

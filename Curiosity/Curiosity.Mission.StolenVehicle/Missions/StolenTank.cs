@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Extensions;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
@@ -94,7 +95,7 @@ namespace Curiosity.StolenVehicle.Missions
             stolenVehicle.IsTowable = true;
             stolenVehicle.Fx.LockStatus = VehicleLockStatus.LockedForPlayer;
 
-            UiTools.Dispatch("~r~CODE 3~s~: Stolen Vehicle", $"~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}~n~~g~GPS Updated");
+            Notify.Dispatch("~r~CODE 3", $"~y~Stolen Vehicle~s~~n~~b~Make~s~: {stolenVehicle.Name}~n~~b~Plate~s~: {stolenVehicle.Fx.Mods.LicensePlate}~n~~g~GPS Updated");
 
             isMissionReady = true;
 

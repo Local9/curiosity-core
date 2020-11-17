@@ -93,6 +93,7 @@
     <Compile Include="Managers\ExportsManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
+    <Compile Include="Managers\MissionDirectorManager.cs" />
     <Compile Include="Menu\MenuBase.cs" />
     <Compile Include="Menu\Submenu\Dispatch.cs" />
     <Compile Include="Menu\Submenu\SuspectVehicle.cs" />
@@ -106,7 +107,6 @@
     <Compile Include="Extensions\Decorators.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Handler\MarkerHandler.cs" />
-    <Compile Include="Utils\UiTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Commands\Impl\.keep" />

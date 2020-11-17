@@ -22,6 +22,9 @@ namespace Curiosity.MissionManager.Client.Interface
         WalkingStyleNotForFemale,
         RightAlignedNotSupported,
         PatrolZoneUnknown,
+        MustBeCloserToSubject,
+        OutsideVehicle,
+        SubjectNotFound,
     };
 
     public static class ErrorMessage
@@ -32,6 +35,15 @@ namespace Curiosity.MissionManager.Client.Interface
             string placeholder = placeholderValue != null ? " " + placeholderValue : "";
             switch (errorType)
             {
+                case CommonErrors.SubjectNotFound:
+                    outputMessage = "Subject not found.";
+                    break;
+                case CommonErrors.OutsideVehicle:
+                    outputMessage = "You need to be outside the vehicle.";
+                    break;
+                case CommonErrors.MustBeCloserToSubject:
+                    outputMessage = "You need to be closer to the subject.";
+                    break;
                 case CommonErrors.PatrolZoneUnknown:
                     outputMessage = "Unknown Patrol Zone.";
                     break;
@@ -133,14 +145,24 @@ namespace Curiosity.MissionManager.Client.Interface
             Custom("~g~~h~Success~h~~s~: " + message, blink, saveToBrief, 20);
         }
 
-        public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, int iconType = 0, int bgColor = 0)
+        public static void Impound(string subtitle, string message, bool blink = true, bool saveToBrief = true)
+        {
+            CustomImage("CHAR_PROPERTY_TOWING_IMPOUND", "CHAR_PROPERTY_TOWING_IMPOUND", message, "SA Impound", subtitle, saveToBrief, blink, 2);
+        }
+
+        public static void Dispatch(string subtitle, string message, bool blink = true, bool saveToBrief = true)
+        {
+            CustomImage("CHAR_CALL911", "CHAR_CALL911", message, "Dispatch", subtitle, saveToBrief, blink, 2);
+        }
+
+        public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, bool blink = false, int iconType = 0, int bgColor = 0)
         {
             API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
             foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
             {
                 API.AddTextComponentSubstringPlayerName(s);
             }
-            API.SetNotificationMessage(textureName, textureDict, false, iconType, title, subtitle);
+            API.SetNotificationMessage(textureName, textureDict, blink, iconType, title, subtitle);
             API.SetNotificationBackgroundColor(bgColor);
             API.EndTextCommandThefeedPostTicker(false, saveToBrief);
         }

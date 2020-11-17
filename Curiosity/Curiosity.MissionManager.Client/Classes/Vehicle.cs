@@ -141,11 +141,6 @@ namespace Curiosity.MissionManager.Client.Classes
             return (!base.Equals(other) ? false : object.Equals(this.Fx, other.Fx));
         }
 
-        internal void Impound()
-        {
-            // ImpoundManager.Tow(this);
-        }
-
         public void BurstWheel(Wheels wheel, bool onRim = false, float dmg = 1000f)
         {
             API.SetVehicleTyreBurst(Fx.Handle, (int)wheel, onRim, dmg);
