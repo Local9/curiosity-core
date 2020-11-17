@@ -145,25 +145,39 @@ namespace Curiosity.MissionManager.Client.Interface
             Custom("~g~~h~Success~h~~s~: " + message, blink, saveToBrief, 20);
         }
 
-        public static void Impound(string subtitle, string message, bool blink = true, bool saveToBrief = true)
+        public static void Impound(string subtitle, string message, bool blink = true, bool saveToBrief = true, int iconType = 1)
         {
-            CustomImage("CHAR_PROPERTY_TOWING_IMPOUND", "CHAR_PROPERTY_TOWING_IMPOUND", message, "SA Impound", subtitle, saveToBrief, blink, 2);
+            CustomImage("CHAR_PROPERTY_TOWING_IMPOUND", "CHAR_PROPERTY_TOWING_IMPOUND", message, "SA Impound", subtitle, saveToBrief, blink, iconType, 200);
         }
 
-        public static void Dispatch(string subtitle, string message, bool blink = true, bool saveToBrief = true)
+        public static void Dispatch(string subtitle, string message, bool blink = true, bool saveToBrief = true, int iconType = 1)
         {
-            CustomImage("CHAR_CALL911", "CHAR_CALL911", message, "Dispatch", subtitle, saveToBrief, blink, 2);
+            CustomImage("CHAR_CALL911", "CHAR_CALL911", message, "Dispatch", subtitle, saveToBrief, blink, iconType, 140);
         }
 
         public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, bool blink = false, int iconType = 0, int bgColor = 0)
         {
+            ///
+            /// iconTypes:  
+            // 1 : Chat Box
+            // 2 : Email
+            // 3 : Add Friend Request
+            // 4 : Nothing
+            // 5 : Nothing
+            // 6 : Nothing
+            // 7 : Right Jumping Arrow
+            // 8 : RP Icon
+            // 9 : $ Icon
+            ///
+
+
             API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
             foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
             {
                 API.AddTextComponentSubstringPlayerName(s);
             }
-            API.SetNotificationMessage(textureName, textureDict, blink, iconType, title, subtitle);
-            API.SetNotificationBackgroundColor(bgColor);
+            API.EndTextCommandThefeedPostMessagetext(textureName, textureDict, blink, iconType, title, subtitle);
+            API.ThefeedNextPostBackgroundColor(bgColor);
             API.EndTextCommandThefeedPostTicker(false, saveToBrief);
         }
     }
