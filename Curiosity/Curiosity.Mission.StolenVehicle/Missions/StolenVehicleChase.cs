@@ -160,7 +160,7 @@ namespace Curiosity.StolenVehicle.Missions
                 isMissionStarted = true;
             }
 
-            if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f && isMissionStarted && !criminal.IsHandcuffed)
+            if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f && isMissionStarted && NumberPedsArrested == 0)
             {
                 missionState = MissionState.Escaped;
             }
