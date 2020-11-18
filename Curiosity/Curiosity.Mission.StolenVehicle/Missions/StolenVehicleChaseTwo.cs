@@ -216,6 +216,9 @@ namespace Curiosity.StolenVehicle.Missions
                 missionState = MissionState.Escaped;
             }
 
+            if (NumberPedsArrested > 0)
+                missionState = MissionState.End;
+
             switch (missionState)
             {
                 case MissionState.Started:
@@ -224,6 +227,7 @@ namespace Curiosity.StolenVehicle.Missions
                     Fail("Vehicle got away....");
                     break;
                 case MissionState.End:
+                    Pass();
                     break;
             }
         }
