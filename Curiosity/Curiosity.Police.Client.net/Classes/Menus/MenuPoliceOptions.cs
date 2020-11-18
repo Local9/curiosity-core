@@ -45,7 +45,7 @@ namespace Curiosity.Police.Client.net.Classes.Menus
         static public void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Police:ShowOptions", new Action(OpenMenu));
-            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
+            // client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
 
             client.RegisterEventHandler("curiosity:Client:Police:TrafficStops", new Action<bool>(OnTrafficStopState));
 

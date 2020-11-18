@@ -17,7 +17,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         public static MenuItem showForum = new MenuItem("Open Player Guides", "Select this to view our player guides") { LeftIcon = MenuItem.Icon.GLOBE_BLUE };
 
-        public static MenuItem showPoliceMenu = new MenuItem("Police Options", "Options for the Police Activities") { LeftIcon = MenuItem.Icon.MISSION_STAR };
+        // public static MenuItem showPoliceMenu = new MenuItem("Police Options", "Options for the Police Activities") { LeftIcon = MenuItem.Icon.MISSION_STAR };
         static bool AddedPoliceOptions = false;
 
         public static void Init()
@@ -41,11 +41,11 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                     _menu.CloseMenu();
                 }
 
-                if (_item == showPoliceMenu)
-                {
-                    Client.TriggerEvent("curiosity:Client:Police:ShowOptions");
-                    _menu.CloseMenu();
-                }
+                //if (_item == showPoliceMenu)
+                //{
+                //    Client.TriggerEvent("curiosity:Client:Police:ShowOptions");
+                //    _menu.CloseMenu();
+                //}
             };
 
             Menu.OnMenuClose += (_menu) =>
@@ -60,17 +60,17 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 Client.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
 
 
-                if (Player.PlayerInformation.Job == Job.Police && !AddedPoliceOptions)
-                {
-                    Menu.AddMenuItem(showPoliceMenu);
-                    AddedPoliceOptions = true;
-                }
+                //if (Player.PlayerInformation.Job == Job.Police && !AddedPoliceOptions)
+                //{
+                //    Menu.AddMenuItem(showPoliceMenu);
+                //    AddedPoliceOptions = true;
+                //}
 
-                if (Player.PlayerInformation.Job != Job.Police)
-                {
-                    Menu.RemoveMenuItem(showPoliceMenu);
-                    AddedPoliceOptions = false;
-                }
+                //if (Player.PlayerInformation.Job != Job.Police)
+                //{
+                //    Menu.RemoveMenuItem(showPoliceMenu);
+                //    AddedPoliceOptions = false;
+                //}
             };
 
             // Menu.AddMenuItem(showForum);

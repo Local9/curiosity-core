@@ -38,8 +38,6 @@ namespace Curiosity.Client.net.Classes.PlayerClasses
             client.RegisterEventHandler("curiosity:Client:Player:Developer:Online", new Action(DeveloperOnline));
             client.RegisterEventHandler("curiosity:Client:Player:RemoveAllWeapons", new Action(OnRemoveAllWeapons));
 
-            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(SetDutyIcon));
-
             await BaseScript.Delay(1000);
             PeriodicCheck();
         }
@@ -52,14 +50,6 @@ namespace Curiosity.Client.net.Classes.PlayerClasses
         public static int GetTotalEarnings()
         {
             return playerInfo.Wallet + playerInfo.BankAccount;
-        }
-
-        static void SetDutyIcon(bool onDuty, bool active, string job)
-        {
-            if (string.IsNullOrEmpty(job) || job == "undefined")
-                job = "Unemployed";
-
-            API.SendNuiMessage(JsonConvert.SerializeObject(new DutyMessage { duty = onDuty, dutyActive = active, job = job }));
         }
 
         static void DeveloperOnline()
