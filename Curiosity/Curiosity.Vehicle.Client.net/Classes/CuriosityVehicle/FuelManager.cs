@@ -405,13 +405,13 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             string warning = final ? "5_SEC_WARNING" : "10_SEC_WARNING";
 
             API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
-            await BaseScript.Delay(500);
+            await BaseScript.Delay(1500);
             API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
-            await BaseScript.Delay(500);
+            await BaseScript.Delay(1500);
             API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
-            await BaseScript.Delay(500);
+            await BaseScript.Delay(1500);
             API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
-            await BaseScript.Delay(500);
+            await BaseScript.Delay(1500);
             API.PlaySoundFrontend(-1, warning, "HUD_MINI_GAME_SOUNDSET", true);
         }
 
@@ -582,30 +582,29 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             await BaseScript.Delay(0);
         }
 
-        static async void GetCurrentFuelLevel()
+        static void GetCurrentFuelLevel()
         {
             BaseScript.TriggerEvent("curiosity:Client:Vehicle:CurrentFuel", vehicleFuel);
-            await BaseScript.Delay(0);
         }
 
         static void Chargeable(bool setting)
         {
             IsFuelFree = setting;
 
-            if (PlayerInformation.IsDeveloper())
-            {
-                Debug.WriteLine($"Chargeable: {IsFuelFree}");
-            }
+            //if (PlayerInformation.IsDeveloper())
+            //{
+            //    Debug.WriteLine($"Chargeable: {IsFuelFree}");
+            //}
         }
 
         static void InstantRefuel(bool IsInstantRefuelDisabledSetting)
         {
             IsInstantRefuelDisabled = IsInstantRefuelDisabledSetting;
 
-            if (PlayerInformation.IsDeveloper())
-            {
-                Debug.WriteLine($"IsInstantRefuelDisabled: {IsInstantRefuelDisabled}");
-            }
+            //if (PlayerInformation.IsDeveloper())
+            //{
+            //    Debug.WriteLine($"IsInstantRefuelDisabled: {IsInstantRefuelDisabled}");
+            //}
         }
 
         ///// <summary>
