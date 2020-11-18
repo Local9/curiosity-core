@@ -146,6 +146,7 @@ namespace Curiosity.MissionManager.Client.Managers
             // if they are not on a mission because they didn't accept it, reset for a new mission
             if (!Mission.isOnMission)
             {
+                await BaseScript.Delay(100);
                 GameTimeOfLastMission = API.GetGameTimer();
                 GameTimeTillNextMission = (1000 * 60) * Utility.RANDOM.Next(2, 6);
                 // by not accepting a mission, a user will wait longer next time
