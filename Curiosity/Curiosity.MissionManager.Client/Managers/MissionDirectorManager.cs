@@ -147,7 +147,9 @@ namespace Curiosity.MissionManager.Client.Managers
             if (!Mission.isOnMission)
             {
                 GameTimeOfLastMission = API.GetGameTimer();
-                GameTimeTillNextMission = (1000 * 60) * Utility.RANDOM.Next(3);
+                GameTimeTillNextMission = (1000 * 60) * Utility.RANDOM.Next(2, 6);
+                // by not accepting a mission, a user will wait longer next time
+                Notify.DispatchAI("Wasting Dispatch Time", "Not accepting my calls will mean you'll have to wait longer.");
             }
         }
     }
