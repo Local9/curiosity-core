@@ -185,8 +185,16 @@ namespace Curiosity.MissionManager.Client.Interface
             API.ThefeedNextPostBackgroundColor(bgColor);
             API.EndTextCommandThefeedPostTicker(false, saveToBrief);
         }
-
-        public static int CustomControl(string message, bool saveToBrief, int bgColor = 2, Control control = Control.Context, int timeToDisplay = 10000)
+        
+        /// <summary>
+        /// Returns a notification ID, this is so that the notification can be removed manually.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="saveToBrief"></param>
+        /// <param name="bgColor"></param>
+        /// <param name="control"></param>
+        /// <returns></returns>
+        public static int CustomControl(string message, bool saveToBrief, int bgColor = 2, Control control = Control.Context)
         {
             API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
             foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))

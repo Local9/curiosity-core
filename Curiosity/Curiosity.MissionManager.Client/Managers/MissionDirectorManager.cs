@@ -135,9 +135,9 @@ namespace Curiosity.MissionManager.Client.Managers
 
             int notificationId = Notify.CustomControl("~b~~h~Dispatch A.I.~h~~s~: Press to accept call.", true);
 
-            int timerStarted = API.GetGameTimer();
+            DateTime timerStarted = DateTime.Now;
 
-            while((API.GetGameTimer() - timerStarted) < 10000 && !Mission.isOnMission)
+            while(DateTime.Now.Subtract(timerStarted).TotalSeconds < 10 && !Mission.isOnMission)
             {
                 if (Game.IsControlJustPressed(0, Control.Context))
                 {
