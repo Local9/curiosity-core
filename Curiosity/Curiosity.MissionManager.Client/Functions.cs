@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.Shared.Client.net;
 using System;
@@ -48,6 +49,8 @@ namespace Curiosity.MissionManager.Client
             var mis = (Mission)typeClass;
 
             MissionInfo missionInfo = GetMissionInfo(mission);
+
+            Logger.Debug($"StartMission : {missionInfo.displayName}");
 
             Mission.currentMission = mis;
             Mission.missionType = mission;

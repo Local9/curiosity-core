@@ -181,7 +181,7 @@ namespace Curiosity.MissionManager.Client.Interface
             API.EndTextCommandThefeedPostTicker(false, saveToBrief);
         }
 
-        public static async void CustomControl(string message, bool saveToBrief, int bgColor = 2, Control control = Control.Context, int timeToDisplay = 10000)
+        public static int CustomControl(string message, bool saveToBrief, int bgColor = 2, Control control = Control.Context, int timeToDisplay = 10000)
         {
             API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
             foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
@@ -202,14 +202,7 @@ namespace Curiosity.MissionManager.Client.Interface
             API.ThefeedNextPostBackgroundColor(bgColor);
             API.EndTextCommandThefeedPostTicker(false, saveToBrief);
 
-            int gameTime = API.GetGameTimer();
-
-            while ((API.GetGameTimer() - gameTime) < timeToDisplay)
-            {
-                await BaseScript.Delay(100);
-            }
-
-            API.ThefeedRemoveItem(notificationId);
+            return notificationId;
         }
     }
 

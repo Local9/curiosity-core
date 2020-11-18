@@ -126,9 +126,29 @@ namespace Curiosity.MissionManager.Client.Managers
             }
 
             Type mission = missionsByChance[Utility.RANDOM.Next(missionsByChance.Count)];
-            Functions.StartMission(mission);
 
+            int notificationId = Notify.CustomControl("~b~~h~Dispatch A.I.~h~~s~: Press to accept call.", true);
+
+            int timerStarted = API.GetGameTimer();
+
+            while((API.GetGameTimer() - timerStarted) < 10000 && !Mission.isOnMission)
+            {
+                if (Game.IsControlJustPressed(0, Control.Context))
+                {
+                    Functions.StartMission(mission);
+                }
+                await BaseScript.Delay(0);
+            }
+
+            API.ThefeedRemoveItem(notificationId); // remove the notification
             missionsByChance = null; // clear it, don't need it in memory
+
+            // if they are not on a mission because they didn't accept it, reset for a new mission
+            if (!Mission.isOnMission)
+            {
+                GameTimeOfLastMission = API.GetGameTimer();
+                GameTimeTillNextMission = (1000 * 60) * Utility.RANDOM.Next(3);
+            }
         }
     }
 }
