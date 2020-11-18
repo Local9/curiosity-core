@@ -31,8 +31,8 @@ namespace Curiosity.Police.Client.net.Environment.Job
 
             API.RegisterCommand("duty", new Action(OnPoliceDuty), false);
 
-            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
-            client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
+            // client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
+            // client.RegisterEventHandler("curiosity:Client:Police:PatrolZone", new Action<int>(OnPatrolZone));
 
             client.RegisterEventHandler("curiosity:client:special", new Action<bool>(OnSpecialDay));
         }
