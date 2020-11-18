@@ -171,10 +171,8 @@ namespace Curiosity.StolenVehicle.Missions
                     break;
                 case MissionState.Escaped:
                     Fail("Vehicle got away....");
-                    missionState = MissionState.End;
                     break;
                 case MissionState.End:
-                    Pass();
                     break;
             }
         }
