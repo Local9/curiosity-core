@@ -1,5 +1,5 @@
-﻿using Curiosity.Systems.Library.Models;
-using Curiosity.MissionManager.Server.Events;
+﻿using Curiosity.MissionManager.Server.Events;
+using Curiosity.Systems.Library.Models;
 
 namespace Curiosity.MissionManager.Server.Extensions
 {
