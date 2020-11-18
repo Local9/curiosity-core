@@ -23,16 +23,16 @@ namespace Curiosity.MissionManager.Client.Handler
         {
             MarkerHandler.HideAllMarkers = false;
 
-            markers.Add(new Marker("~b~Bolingbroke Penitentiary\n~w~Book Suspect(s)", new Vector3(1690.975f, 2592.581f, 44.71336f - 0.5f), markerColor));
-            markers.Add(new Marker("~b~Paleto Bay PD\n~w~Book Suspect(s)", new Vector3(-449.3008f, 6012.623f, 30.71638f - 0.5f), markerColor));
-            markers.Add(new Marker("~b~Vespucci PD\n~w~Book Suspect(s)", new Vector3(-1113.08f, -848.6609f, 12.4414f - 0.5f), markerColor));
-            markers.Add(new Marker("~b~Eastbourn PD\n~w~Book Suspect(s)", new Vector3(-583.1123f, -146.7518f, 38.23016f - 0.5f), markerColor));
-            markers.Add(new Marker("~b~La Mesa\n~w~Book Suspect(s)", new Vector3(830.4728f, -1310.793f, 27.13673f - 0.5f), markerColor));
-            markers.Add(new Marker("~b~Rancho\n~w~Book Suspect(s)", new Vector3(370.3031f, -1608.2098f, 28.2919f - 0.5f), markerColor));
-            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(458.9393f, -1001.6194f, 23.9148f - 0.5f), markerColor));
-            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(458.9213f, -997.9607f, 23.9148f - 0.5f), markerColor));
-            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(460.7617f, -994.2283f, 23.9148f - 0.5f), markerColor));
-            markers.Add(new Marker("~b~County Sheriff\n~w~Book Suspect(s)", new Vector3(1852.139f, 3691.1f, 33.26702f - 0.5f), markerColor));
+            markers.Add(new Marker("~b~Bolingbroke Penitentiary\n~w~Book Suspect(s)", new Vector3(1690.975f, 2592.581f, 44.71336f - 1f), markerColor));
+            markers.Add(new Marker("~b~Paleto Bay PD\n~w~Book Suspect(s)", new Vector3(-449.3008f, 6012.623f, 30.71638f - 1f), markerColor));
+            markers.Add(new Marker("~b~Vespucci PD\n~w~Book Suspect(s)", new Vector3(-1113.08f, -848.6609f, 12.4414f - 1f), markerColor));
+            markers.Add(new Marker("~b~Eastbourn PD\n~w~Book Suspect(s)", new Vector3(-583.1123f, -146.7518f, 38.23016f - 1f), markerColor));
+            markers.Add(new Marker("~b~La Mesa\n~w~Book Suspect(s)", new Vector3(830.4728f, -1310.793f, 27.13673f - 1f), markerColor));
+            markers.Add(new Marker("~b~Rancho\n~w~Book Suspect(s)", new Vector3(370.3031f, -1608.2098f, 28.2919f - 1f), markerColor));
+            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(458.9393f, -1001.6194f, 23.9148f - 1f), markerColor));
+            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(458.9213f, -997.9607f, 23.9148f - 1f), markerColor));
+            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(460.7617f, -994.2283f, 23.9148f - 1f), markerColor));
+            markers.Add(new Marker("~b~County Sheriff\n~w~Book Suspect(s)", new Vector3(1852.139f, 3691.1f, 33.26702f - 1f), markerColor));
 
             int blipId = 0;
 
