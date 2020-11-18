@@ -117,17 +117,20 @@ namespace Curiosity.MissionManager.Client
         /// <param name="reason">The reason the mission was stopped</param>
         public void Stop(EndState reason)
         {
+            MissionDirectorManager.GameTimeOfLastMission = DateTime.Now;
+
             switch (reason)
             {
                 case EndState.Pass:
+                    MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
+                    break;
                 case EndState.Fail:
+                    MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(3, 6));
                     break;
                 case EndState.Error:
+                    MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(1);
                     break;
-            }
-
-            MissionDirectorManager.GameTimeOfLastMission = API.GetGameTimer();
-            MissionDirectorManager.GameTimeTillNextMission = (1000 * 60) * Utility.RANDOM.Next(1, 4);
+            }            
 
             isOnMission = false;
             missionType = null;

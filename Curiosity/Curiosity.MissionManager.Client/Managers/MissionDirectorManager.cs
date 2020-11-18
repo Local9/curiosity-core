@@ -18,8 +18,8 @@ namespace Curiosity.MissionManager.Client.Managers
         public static bool MissionDirectorState = false;
         static PluginManager Instance => PluginManager.Instance;
         static PatrolZone LatestPatrolZone;
-        public static int GameTimeOfLastMission = 0;
-        public static int GameTimeTillNextMission = 120000;
+        public static DateTime GameTimeOfLastMission;
+        public static DateTime GameTimeTillNextMission;
 
         static List<Type> currentMissionSelection = new List<Type>();
 
@@ -33,7 +33,8 @@ namespace Curiosity.MissionManager.Client.Managers
 
             if (MissionDirectorState)
             {
-                GameTimeOfLastMission = API.GetGameTimer() + ((1000 * 60) * Utility.RANDOM.Next(2, 4));
+                GameTimeOfLastMission = DateTime.Now;
+                GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
 
                 Instance.RegisterTickHandler(OnMissionDirectorTick);
             }
@@ -56,7 +57,7 @@ namespace Curiosity.MissionManager.Client.Managers
             }
             else
             {
-                while ((API.GetGameTimer() - GameTimeOfLastMission) < GameTimeTillNextMission)
+                while (DateTime.Now.Subtract(GameTimeOfLastMission).TotalMilliseconds < TimeSpan.FromTicks(GameTimeTillNextMission.Ticks).TotalMilliseconds)
                 {
                     await BaseScript.Delay(1500);
                 }
@@ -152,8 +153,8 @@ namespace Curiosity.MissionManager.Client.Managers
             if (!Mission.isOnMission)
             {
                 await BaseScript.Delay(100);
-                GameTimeOfLastMission = API.GetGameTimer();
-                GameTimeTillNextMission = (1000 * 60) * Utility.RANDOM.Next(2, 6);
+                GameTimeOfLastMission = DateTime.Now;
+                GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(4, 6));
                 // by not accepting a mission, a user will wait longer next time
                 Notify.DispatchAI("Wasting Dispatch Time", "Not accepting my calls will mean you'll have to wait longer.");
             }
