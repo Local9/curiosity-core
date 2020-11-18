@@ -17,7 +17,7 @@ namespace Curiosity.MissionManager.Client.Managers
         public static bool MissionDirectorState = false;
         static PluginManager Instance => PluginManager.Instance;
         static PatrolZone LatestPatrolZone;
-        public static int GameTimeOfLastMission;
+        public static int GameTimeOfLastMission = 0;
         public static int GameTimeTillNextMission = 120000;
 
         static List<Type> currentMissionSelection = new List<Type>();
@@ -32,7 +32,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
             if (MissionDirectorState)
             {
-                GameTimeOfLastMission = API.GetGameTimer() + 120000;
+                GameTimeOfLastMission = API.GetGameTimer() + ((1000 * 60) * Utility.RANDOM.Next(2, 4));
 
                 Instance.RegisterTickHandler(OnMissionDirectorTick);
             }
