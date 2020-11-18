@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Global.Shared.Utils;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using NativeUI;
@@ -117,11 +119,13 @@ namespace Curiosity.MissionManager.Client
             {
                 case EndState.Pass:
                 case EndState.Fail:
-
                     break;
                 case EndState.Error:
                     break;
             }
+
+            MissionDirectorManager.GameTimeOfLastMission = API.GetGameTimer();
+            MissionDirectorManager.GameTimeTillNextMission = (1000 * 60) * Utility.RANDOM.Next(3);
 
             isOnMission = false;
             missionType = null;

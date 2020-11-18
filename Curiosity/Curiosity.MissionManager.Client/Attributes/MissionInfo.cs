@@ -15,7 +15,7 @@ namespace Curiosity.MissionManager.Client.Attributes
         public Vector3 startPoint;
         public MissionType type;
         public PatrolZone patrolZone;
-        public float chanceOfSpawn;
+        public double chanceOfSpawn;
         public bool unique;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Curiosity.MissionManager.Client.Attributes
         /// <param name="chanceOfSpawn">chance of the mission activating</param>
         /// <param name="unique">If the mission is unique, this is to stop duplication</param>
 
-        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None", PatrolZone patrolZone = PatrolZone.Anywhere, float chanceOfSpawn = 1f, bool unique = false)
+        public MissionInfo(string displayName, string id, float xPos, float yPos, float zPos, MissionType type, bool canBeReplayed = false, string preRequisites = "None", PatrolZone patrolZone = PatrolZone.Anywhere, double chanceOfSpawn = 1.0, bool unique = false)
         {
             // Might be worth working on roles availability?
 
@@ -41,7 +41,7 @@ namespace Curiosity.MissionManager.Client.Attributes
             this.id = id;
             this.preRequisites = preRequisites;
             this.canBeReplayed = canBeReplayed;
-            this.startPoint = new Vector3();
+            this.startPoint = new Vector3(xPos, yPos, zPos);
             this.xPos = xPos;
             this.yPos = yPos;
             this.zPos = zPos;

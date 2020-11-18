@@ -6,6 +6,7 @@
     /// </summary>
     public enum MissionType
     {
+        Developer,
         Mission,
         Stranger,
         Heist,

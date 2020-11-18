@@ -28,6 +28,7 @@
         }
         public enum PatrolZone
         {
+            Anywhere,
             City = 1,
             Country,
             Ocean,
