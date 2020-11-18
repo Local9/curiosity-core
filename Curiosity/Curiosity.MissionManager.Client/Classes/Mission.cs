@@ -127,7 +127,7 @@ namespace Curiosity.MissionManager.Client
             }
 
             MissionDirectorManager.GameTimeOfLastMission = API.GetGameTimer();
-            MissionDirectorManager.GameTimeTillNextMission = (1000 * 60) * Utility.RANDOM.Next(3);
+            MissionDirectorManager.GameTimeTillNextMission = (1000 * 60) * Utility.RANDOM.Next(1, 4);
 
             isOnMission = false;
             missionType = null;
