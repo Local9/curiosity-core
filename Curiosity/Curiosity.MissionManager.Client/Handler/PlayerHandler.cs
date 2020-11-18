@@ -6,7 +6,6 @@ using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
-using static Curiosity.Systems.Library.EventWrapperLegacy.LegacyEvents;
 
 namespace Curiosity.MissionManager.Client.Handler
 {
@@ -31,8 +30,8 @@ namespace Curiosity.MissionManager.Client.Handler
             EventHandlers[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
             EventHandlers[LegacyEvents.Client.CurrentVehicle] += new Action<int>(OnVehicleId);
 
-            EventHandlers[Native.Client.PlayerSpawned] += new Action<dynamic>(OnPlayerSpawned);
-            EventHandlers[Native.Client.OnClientResourceStart.Path] += Native.Client.OnClientResourceStart.Action += OnClientResourceStart;
+            EventHandlers[LegacyEvents.Native.Client.PlayerSpawned] += new Action<dynamic>(OnPlayerSpawned);
+            EventHandlers[LegacyEvents.Native.Client.OnClientResourceStart.Path] += LegacyEvents.Native.Client.OnClientResourceStart.Action += OnClientResourceStart;
         }
 
         private static void OnVehicleId(int vehicleId)

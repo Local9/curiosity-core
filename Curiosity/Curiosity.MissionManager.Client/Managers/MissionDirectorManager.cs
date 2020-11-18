@@ -5,6 +5,7 @@ using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,8 @@ namespace Curiosity.MissionManager.Client.Managers
             MissionDirectorState = !MissionDirectorState;
             string state = MissionDirectorState ? "~g~Enabled" : "~o~Disabled";
             Notify.Info($"~b~Dispatch A.I. {state}");
+
+            BaseScript.TriggerEvent(LegacyEvents.Client.PoliceDutyEvent, true, MissionDirectorState, "Police");
 
             if (MissionDirectorState)
             {
