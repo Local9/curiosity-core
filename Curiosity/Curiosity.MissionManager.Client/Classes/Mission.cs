@@ -68,6 +68,8 @@ namespace Curiosity.MissionManager.Client
             NumberPedsArrested++;
         }
 
+        public static void ResetCountOfArrested() => NumberPedsArrested = 0;
+
         public static void RegisterVehicle(Vehicle vehicle)
         {
             try
