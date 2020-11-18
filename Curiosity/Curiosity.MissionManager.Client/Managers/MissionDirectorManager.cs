@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
@@ -62,6 +63,8 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 if (!LatestPatrolZone.Equals(PlayerHandler.PatrolZone))
                 {
+                    Logger.Debug($"Patrol Zone changed since last check");
+
                     LatestPatrolZone = PlayerHandler.PatrolZone;
 
                     List<Type> missions = Mission.missions; // make a copy of the list for this instance
@@ -103,6 +106,8 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             if (missions == null)
                 return;
+
+            Logger.Debug($"{missions.Count} Random Missions");
 
             double randomSpawn = Utility.RANDOM.NextDouble();
 
