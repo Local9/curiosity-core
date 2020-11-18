@@ -108,6 +108,9 @@ namespace Curiosity.Vehicle.Client.net.Classes
                 Game.PlayerPed.IsInvincible = false;
 
                 BaseScript.TriggerEvent("curiosity:Player:Menu:VehicleId", Plugin.CurrentVehicle.Handle);
+
+                if (Plugin.CurrentVehicle != null)
+                    BaseScript.TriggerServerEvent("curiosity:Server:SessionManager:VehicleID", Plugin.CurrentVehicle.NetworkId);
             }
         }
     }

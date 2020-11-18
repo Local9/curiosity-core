@@ -155,6 +155,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 Plugin.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
 
+                if (Plugin.CurrentVehicle != null)
+                    BaseScript.TriggerServerEvent("curiosity:Server:SessionManager:VehicleID", Plugin.CurrentVehicle.NetworkId);
+
                 await Plugin.Delay(0);
 
                 API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
@@ -336,6 +339,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                 API.SetResourceKvpInt("curiosity:vehicle", veh.Handle);
 
                 Plugin.TriggerEvent("curiosity:Player:Menu:VehicleId", veh.Handle);
+
+                if (Plugin.CurrentVehicle != null)
+                    BaseScript.TriggerServerEvent("curiosity:Server:SessionManager:VehicleID", Plugin.CurrentVehicle.NetworkId);
 
                 await Plugin.Delay(0);
 

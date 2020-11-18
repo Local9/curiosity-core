@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Server.net.Helpers;
@@ -69,6 +70,7 @@ namespace Curiosity.Server.net.Classes
 
         public DateTime LastDonationCheck { get; private set; }
         public bool JobMessages { get; internal set; }
+        public int VehicleNetworkId { get; internal set; }
 
         public PartyData Party = new PartyData();
 
@@ -239,6 +241,9 @@ namespace Curiosity.Server.net.Classes
             try
             {
                 playerSessionItem.Disconnected = true;
+
+                string encodedString = Encode.StringToBase64($"{VehicleNetworkId}");
+                BaseScript.TriggerClientEvent("curiosity:Player:Vehicle:Delete", encodedString);
 
                 string js = JsonConvert.SerializeObject(playerSessionItem);
 

@@ -31,7 +31,17 @@ namespace Curiosity.Server.net.Classes
             GameTimer = API.GetGameTimer();
 
             server.RegisterEventHandler("curiosity:Server:SessionManager:GetSessions", new Action(OnGetSessions));
+            server.RegisterEventHandler("curiosity:Server:SessionManager:VehicleID", new Action<CitizenFX.Core.Player, int>(OnStoreVehicleId));
             server.RegisterEventHandler("curiosity:Server:Session:Ping", new Action<CitizenFX.Core.Player>(OnSessionPing));
+        }
+
+        private static void OnStoreVehicleId([FromSource] CitizenFX.Core.Player player, int networkId)
+        {
+            if (!PlayerList.ContainsKey(player.Handle)) return;
+
+            Session session = PlayerList[player.Handle];
+
+            session.VehicleNetworkId = networkId;
         }
 
         private  async static Task UpdatePlayerInformation()

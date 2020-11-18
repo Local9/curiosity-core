@@ -39,6 +39,22 @@ namespace Curiosity.Server.net.ServerExports
                 }
             ));
 
+            Instance.ExportDictionary.Add("GetSkillUserValue", new Func<string, string, int>(
+                (handle, skill) =>
+                {
+                    if (!SessionManager.PlayerList.ContainsKey(handle)) return -1;
+
+                    Session session = SessionManager.PlayerList[handle];
+
+                    if (session.Skills.ContainsKey(skill))
+                    {
+                        return session.Skills[skill].Value;
+                    }
+
+                    return -1;
+                }
+            ));
+
             // Func<ReturnValue>
             // Func<string, ReturnValue>
             // Func<string, int, ReturnValue>

@@ -71,6 +71,8 @@ namespace Curiosity.Vehicles.Client.net
                     float fuel = API.GetResourceKvpFloat("VR_FUEL");
                     API.DecorSetFloat(CurrentVehicle.Handle, "Vehicle.Fuel", fuel);
                     CurrentVehicle.IsEngineRunning = true;
+
+                    BaseScript.TriggerServerEvent("curiosity:Server:SessionManager:VehicleID", CurrentVehicle.NetworkId);
                 }
             }
         }
