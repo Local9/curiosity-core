@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core.UI;
-using Curiosity.MissionManager.Client.Interface;
-using Curiosity.MissionManager.Client.Utils;
+﻿using Curiosity.MissionManager.Client.Interface;
 using NativeUI;
 
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;

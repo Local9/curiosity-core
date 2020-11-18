@@ -2,7 +2,6 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Attributes;
-using Curiosity.MissionManager.Client.Handler;
 using System;
 using System.Collections.Generic;
 

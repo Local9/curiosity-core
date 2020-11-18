@@ -1,7 +1,7 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using Newtonsoft.Json;
 using System;

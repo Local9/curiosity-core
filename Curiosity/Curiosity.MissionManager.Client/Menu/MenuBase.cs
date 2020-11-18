@@ -1,10 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
-using Curiosity.Global.Shared.EventWrapper;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.Shared.Client.net.Extensions;
 using NativeUI;
 using System.Collections.Generic;
 using System.Linq;

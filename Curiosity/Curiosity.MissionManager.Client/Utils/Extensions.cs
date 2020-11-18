@@ -1,7 +1,5 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.EventWrapperLegacy;
-using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Utils
 {

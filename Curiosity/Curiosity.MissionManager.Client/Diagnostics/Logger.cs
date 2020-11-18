@@ -1,5 +1,4 @@
-﻿using Curiosity.MissionManager.Client.Handler;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Reflection;
 
