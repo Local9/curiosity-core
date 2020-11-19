@@ -124,7 +124,7 @@ namespace Curiosity.MissionManager.Client.Managers
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
             description += "~r~∑\n";
-            description += "~o~REMEMBER Press ~b~~h~M~h~~o~ to read the guides for more information!~w~\n";
+            description += "~o~REMEMBER Press ~b~~h~F11/HOME~h~~o~ to read the guides for more information!~w~\n";
             description += "~b~Forums~w~: forums.lifev.net / ~b~Discord~w~: discord.lifev.net";
 
             scaleform.CallFunction("SETUP_TABS", 1, false);
@@ -139,8 +139,6 @@ namespace Curiosity.MissionManager.Client.Managers
                 await BaseScript.Delay(0);
                 scaleform.Render2D();
             }
-
-            Screen.ShowNotification("~w~If you are stuck, use ~b~/stuck~w~ to respawn safely.");
 
             API.SetStreamedTextureDictAsNoLongerNeeded(dictTexture);
         }
