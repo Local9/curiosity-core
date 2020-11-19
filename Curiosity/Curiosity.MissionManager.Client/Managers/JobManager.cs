@@ -110,6 +110,7 @@ namespace Curiosity.MissionManager.Client.Managers
             description += "~r~~h~DO NOT~h~~w~ Pull over other players.\n";
             description += "~r~~h~DO NOT~h~~w~ Drive recklessly.\n";
             description += "~r~~h~DO NOT~h~~w~ Force people to RolePlay, doing so will get you kicked.\n";
+            description += "~r~~h~DO NOT~h~~w~ Give us a reason to add another rule!\n";
             description += "\n";
             description += "~g~To Get Started:\n";
             description += "~w~Open the Activity Menu [~o~F1~w~]\n";
