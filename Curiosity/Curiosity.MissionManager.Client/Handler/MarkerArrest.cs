@@ -43,6 +43,7 @@ namespace Curiosity.MissionManager.Client.Handler
                 BlipHandler.AddBlip(blipData);
 
                 MarkerHandler.MarkersAll.Add(mark);
+                blipId++;
             }
 
             PluginInstance.RegisterTickHandler(OnArrestPedTick);
