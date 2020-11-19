@@ -15,7 +15,7 @@ namespace Curiosity.MissionManager.Client.Interface
             chatMessage.Message = message;
 
             string json = JsonConvert.SerializeObject(chatMessage);
-            BaseScript.TriggerEvent("chat:receive", json);
+            BaseScript.TriggerEvent("curiosity:Client:Chat:Message", json);
         }
     }
 }

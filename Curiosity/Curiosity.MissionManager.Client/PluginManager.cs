@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Commands;
+using Curiosity.MissionManager.Client.Commands.Impl;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Discord;
 using Curiosity.MissionManager.Client.Environment.Entities;
@@ -108,7 +109,7 @@ namespace Curiosity.MissionManager.Client
 
             var commands = new CommandFramework();
 
-            // commands.Bind(typeof(DeveloperTools));
+            commands.Bind(typeof(DeveloperTools));
 
             AttachTickHandlers(this);
 
