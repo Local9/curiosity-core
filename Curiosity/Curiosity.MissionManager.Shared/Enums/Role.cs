@@ -1,22 +1,37 @@
+using Curiosity.Systems.Library.Attributes;
 using System.Collections.Generic;
 
-namespace Curiosity.Systems.Library.Models
+namespace Curiosity.Systems.Library.Enums
 {
-    public enum Role
+    public enum Role : int
     {
+        [StringValue("Unknown")]
         UNDEFINED = 0,
+        [StringValue("User")]
         USER = 1,
+        [StringValue("Moderator")]
         MODERATOR = 2,
+        [StringValue("Administrator")]
         ADMINISTRATOR = 3,
+        [StringValue("Developer")]
         DEVELOPER = 4,
+        [StringValue("Project Manager")]
         PROJECT_MANAGER = 5,
+        [StringValue("Senior Admin")]
         SENIOR_ADMIN = 6,
+        [StringValue("Helper")]
         HELPER = 7,
+        [StringValue("Head Admin")]
         HEAD_ADMIN = 8,
+        [StringValue("Life V: Life Time Supporter")]
         DONATOR_LIFE = 9,
+        [StringValue("Community Manager")]
         COMMUNITY_MANAGER = 10,
+        [StringValue("Life V: Supporter I")]
         DONATOR_LEVEL_1 = 11,
+        [StringValue("Life V: Supporter II")]
         DONATOR_LEVEL_2 = 12,
+        [StringValue("Life V: Supporter III")]
         DONATOR_LEVEL_3 = 13,
     }
 

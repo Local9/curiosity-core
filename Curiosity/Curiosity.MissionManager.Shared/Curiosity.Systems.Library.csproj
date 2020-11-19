@@ -77,7 +77,7 @@
     <Compile Include="Models\Party.cs" />
     <Compile Include="Models\PartyMember.cs" />
     <Compile Include="Models\Position.cs" />
-    <Compile Include="Models\Role.cs" />
+    <Compile Include="Enums\Role.cs" />
     <Compile Include="Models\SessionCollection.cs" />
     <Compile Include="Models\VehicleInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,3 +1,4 @@
+using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 
