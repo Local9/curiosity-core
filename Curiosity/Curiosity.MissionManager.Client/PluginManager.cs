@@ -85,6 +85,8 @@ namespace Curiosity.MissionManager.Client
             // Load event system first
             LoadManager(typeof(EventSystem));
 
+            Logger.Info($"--------------------------------------------------");
+
             foreach (var type in Assembly.GetExecutingAssembly().GetExportedTypes())
             {
                 if (type.BaseType == null) continue;
@@ -104,6 +106,8 @@ namespace Curiosity.MissionManager.Client
                 var method = manager.Key.GetMethod("Begin", BindingFlags.Public | BindingFlags.Instance);
                 method?.Invoke(manager.Value, null);
             }
+
+            Logger.Info($"--------------------------------------------------");
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
 
