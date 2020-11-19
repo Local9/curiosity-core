@@ -45,8 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\StringValueAttribute.cs" />
     <Compile Include="Enums\EndState.cs" />
     <Compile Include="Enums\MissionType.cs" />
+    <Compile Include="Extensions\GeneralExtensions.cs" />
     <Compile Include="Models\MissionData.cs" />
     <Compile Include="Enums\PatrolZone.cs" />
     <Compile Include="Date.cs" />
