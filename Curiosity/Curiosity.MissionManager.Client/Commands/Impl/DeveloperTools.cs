@@ -5,6 +5,7 @@ using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -58,7 +59,8 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
                     dutyActive = arguments[1] == "1";
                 }
 
-                BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", true, dutyActive, job);
+                // EventSystem.GetModule().Request<object>(LegacyEvents.Client.PoliceDutyEvent, true, dutyActive, job);
+                BaseScript.TriggerEvent(LegacyEvents.Client.PoliceDutyEvent, true, dutyActive, job); // for legacy resources
             }
         }
         #endregion
