@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Handler;
+using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using NativeUI;
 using System.Collections.Generic;
@@ -119,7 +120,7 @@ namespace Curiosity.MissionManager.Client.Menu
         [Tick]
         private async Task OnMenuControls()
         {
-            if (!PlayerHandler.IsOfficer) return; // no point in showing if their're not an officer
+            if (!JobManager.IsOfficer) return; // no point in showing if their're not an officer
 
             if (MarkerHandler.GetActiveMarker() != null) return; // hide base menu prompt if near a marker
             
@@ -141,7 +142,7 @@ namespace Curiosity.MissionManager.Client.Menu
 
             Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to open menu."); // need to look into control binds
 
-            if (Game.PlayerPed.IsAlive && PlayerHandler.IsOfficer && !isMenuOpen)
+            if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
             {
                 if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F2
                 {

@@ -379,23 +379,23 @@ namespace Curiosity.MissionManager.Client.Classes
                     break;
                 case Sequence.DETAIN_IN_CURRENT_VEHICLE:
 
-                    if (PlayerHandler.PersonalVehicle == null)
+                    if (PlayerManager.PersonalVehicle == null)
                     {
                         Screen.ShowNotification("~r~Vehicle not found.");
                         return;
                     }
 
-                    if (PlayerHandler.PersonalVehicle.IsSeatFree(VehicleSeat.LeftRear))
+                    if (PlayerManager.PersonalVehicle.IsSeatFree(VehicleSeat.LeftRear))
                     {
-                        Fx.Task.EnterVehicle(PlayerHandler.PersonalVehicle, VehicleSeat.LeftRear);
+                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.LeftRear);
                     }
-                    else if (PlayerHandler.PersonalVehicle.IsSeatFree(VehicleSeat.RightRear))
+                    else if (PlayerManager.PersonalVehicle.IsSeatFree(VehicleSeat.RightRear))
                     {
-                        Fx.Task.EnterVehicle(PlayerHandler.PersonalVehicle, VehicleSeat.RightRear);
+                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.RightRear);
                     }
-                    else if (PlayerHandler.PersonalVehicle.IsSeatFree(VehicleSeat.Passenger))
+                    else if (PlayerManager.PersonalVehicle.IsSeatFree(VehicleSeat.Passenger))
                     {
-                        Fx.Task.EnterVehicle(PlayerHandler.PersonalVehicle, VehicleSeat.Passenger);
+                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.Passenger);
                     }
                     else
                     {

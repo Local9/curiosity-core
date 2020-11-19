@@ -2,6 +2,7 @@
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
+using Curiosity.MissionManager.Client.Managers;
 using Curiosity.Shared.Client.net;
 using System;
 using System.Collections.Generic;
@@ -57,7 +58,7 @@ namespace Curiosity.MissionManager.Client
             Mission.AddPlayer(Game.Player);
             Mission.ResetCountOfArrested();
             
-            Mission.PatrolZone = PlayerHandler.PatrolZone; // Always get the current zone from the player at this point
+            Mission.PatrolZone = JobManager.PatrolZone; // Always get the current zone from the player at this point
             // Mission randomiser will also use the PatrolZone of the player to select a mission, but the mission needs to know the players state IF the mission doesn't have a PatrolZone assigned
 
             Mission.RegisteredPeds = new List<Classes.Ped>();

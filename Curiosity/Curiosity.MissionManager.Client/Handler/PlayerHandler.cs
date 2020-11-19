@@ -9,7 +9,7 @@ using System;
 
 namespace Curiosity.MissionManager.Client.Handler
 {
-    class PlayerHandler : BaseScript
+    class PlayerManager : BaseScript
     {
         const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
 
@@ -17,17 +17,11 @@ namespace Curiosity.MissionManager.Client.Handler
 
         internal static PlayerInformationModel playerInfo = new PlayerInformationModel();
         internal static Privilege privilege;
-        internal static PatrolZone PatrolZone = PatrolZone.City;
         internal static Vehicle PersonalVehicle;
         internal static Vehicle PersonalTrailer;
 
-        internal static bool IsOnDuty;
-        internal static bool IsOfficer;
-
-        public PlayerHandler()
+        public PlayerManager()
         {
-            EventHandlers[LegacyEvents.Client.PolicePatrolZone] += new Action<int>(OnPlayerPatrolZone);
-            EventHandlers[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnPoliceDuty);
             EventHandlers[LegacyEvents.Client.CurrentVehicle] += new Action<int>(OnVehicleId);
 
             EventHandlers[LegacyEvents.Native.Client.PlayerSpawned] += new Action<dynamic>(OnPlayerSpawned);
@@ -66,29 +60,6 @@ namespace Curiosity.MissionManager.Client.Handler
             }
         }
 
-        private async void OnPoliceDuty(bool active, bool onduty, string job)
-        {
-            IsOnDuty = onduty;
-            IsOfficer = (job == "police");
-
-            if (IsOfficer)
-            {
-                Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
-
-                MarkerHandler.Init();
-                await BaseScript.Delay(100);
-                MarkerArrest.Init();
-            }
-            else
-            {
-                Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
-
-                MarkerHandler.Dispose();
-                await BaseScript.Delay(100);
-                MarkerArrest.Dispose();
-            }
-        }
-
         private void OnClientResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
@@ -113,11 +84,6 @@ namespace Curiosity.MissionManager.Client.Handler
 
         private void OnPlayerSpawned(dynamic spawnObject)
         {
-        }
-
-        private void OnPlayerPatrolZone(int zone)
-        {
-            PatrolZone = (PatrolZone)zone;
         }
     }
 }

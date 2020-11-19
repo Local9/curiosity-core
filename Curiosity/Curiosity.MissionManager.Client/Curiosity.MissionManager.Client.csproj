@@ -92,6 +92,7 @@
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="ClientEvents\EntityEventWrapper.cs" />
     <Compile Include="Managers\ExportsManager.cs" />
+    <Compile Include="Managers\JobManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\MissionDirectorManager.cs" />

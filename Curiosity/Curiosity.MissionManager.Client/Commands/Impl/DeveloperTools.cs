@@ -46,13 +46,19 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 bool dutyActive = false;
+                string job = "police";
 
-                if (arguments.Count > 0)
+                if (arguments.Count >= 1)
                 {
-                    dutyActive = arguments[0] == "1";
+                    job = arguments[0];
                 }
 
-                BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", true, dutyActive, "police");
+                if (arguments.Count == 2)
+                {
+                    dutyActive = arguments[1] == "1";
+                }
+
+                BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", true, dutyActive, job);
             }
         }
         #endregion

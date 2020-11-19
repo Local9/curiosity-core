@@ -62,11 +62,11 @@ namespace Curiosity.MissionManager.Client.Managers
                     await BaseScript.Delay(1500);
                 }
 
-                if (!LatestPatrolZone.Equals(PlayerHandler.PatrolZone))
+                if (!LatestPatrolZone.Equals(JobManager.PatrolZone))
                 {
                     Logger.Debug($"Patrol Zone changed since last check");
 
-                    LatestPatrolZone = PlayerHandler.PatrolZone;
+                    LatestPatrolZone = JobManager.PatrolZone;
 
                     List<Type> missions = Mission.missions; // make a copy of the list for this instance
                     currentMissionSelection.Clear();
