@@ -24,7 +24,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
         public override void Begin()
         {
-            Logger.Info($"------------- [JobManager] Begin -----------------");
+            Logger.Info($"- [JobManager] Begin -----------------------------");
 
             Instance.EventRegistry[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnJobDutyEvent);
             Instance.EventRegistry[LegacyEvents.Client.PolicePatrolZone] += new Action<int>(OnJobPatrolZone);
@@ -61,17 +61,15 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
 
-                MarkerHandler.Init();
                 await BaseScript.Delay(100);
-                MarkerArrest.Init();
+                MarkerArrestHandler.Init();
             }
             else
             {
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
 
-                MarkerHandler.Dispose();
                 await BaseScript.Delay(100);
-                MarkerArrest.Dispose();
+                MarkerArrestHandler.Dispose();
             }
         }
 

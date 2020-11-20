@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.Environment.Enums;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
@@ -122,7 +123,7 @@ namespace Curiosity.MissionManager.Client.Menu
         {
             if (!JobManager.IsOfficer) return; // no point in showing if their're not an officer
 
-            if (MarkerHandler.GetActiveMarker() != null) return; // hide base menu prompt if near a marker
+            if (MarkerManager.GetActiveMarker(MarkerFilter.Unknown) != null) return; // hide base menu prompt if near a marker
             
             if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 4f) return; // driving? hide it
 

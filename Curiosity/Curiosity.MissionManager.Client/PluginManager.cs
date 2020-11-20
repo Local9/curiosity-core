@@ -134,17 +134,6 @@ namespace Curiosity.MissionManager.Client
                 API.RequestAnimDict("rcmepsilonism8");
         }
 
-        [Tick]
-        private async Task OnMissionHandlerTick()
-        {
-            //if (Game.PlayerPed.IsDead && Mission.isOnMission)
-            //{
-            //    Mission.currentMission.Fail("The player died."); // need to think about how this should work given respawning
-            //}
-
-
-        }
-
         private void OnClientResourceStop(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
@@ -210,7 +199,7 @@ namespace Curiosity.MissionManager.Client
 
                 if (handler.SessionWait)
                 {
-                    // await Session.Loading();
+                    await Session.Loading();
                 }
 
                 Tick += (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), instance, self);

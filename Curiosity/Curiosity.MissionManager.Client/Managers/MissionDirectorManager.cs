@@ -2,10 +2,8 @@
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
-using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
@@ -46,7 +44,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
         public override void Begin()
         {
-            
+            Logger.Info($"- [MissionDirectorManager] Begin -----------------");
         }
 
         private static async Task OnMissionDirectorTick()

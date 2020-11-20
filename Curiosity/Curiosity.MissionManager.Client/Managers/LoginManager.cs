@@ -9,7 +9,7 @@ namespace Curiosity.MissionManager.Client.Managers
     {
         public override async void Begin()
         {
-            Logger.Info($"------------ [LoginManager] Begin ----------------");
+            Logger.Info($"- [LoginManager] Begin ---------------------------");
 
             var handle = Game.Player.Handle;
             var serverHandle = Game.Player.ServerId;

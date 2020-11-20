@@ -2,37 +2,37 @@
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.MissionManager.Client.Environment.Entities.Models;
+using Curiosity.MissionManager.Client.Environment.Enums;
+using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.Shared.Client.net.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Handler
 {
-    internal class MarkerArrest
+    internal class MarkerArrestHandler
     {
         static PluginManager PluginInstance => PluginManager.Instance;
 
         static List<Marker> markers = new List<Marker>();
         static List<BlipData> blips = new List<BlipData>();
 
-        static System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 65, 105, 225);
+        static System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 0, 128, 0);
 
         internal static void Init()
         {
-            MarkerHandler.HideAllMarkers = false;
-
-            markers.Add(new Marker("~b~Bolingbroke Penitentiary\n~w~Book Suspect(s)", new Vector3(1690.975f, 2592.581f, 44.71336f - 1f), markerColor));
-            markers.Add(new Marker("~b~Paleto Bay PD\n~w~Book Suspect(s)", new Vector3(-449.3008f, 6012.623f, 30.71638f - 1f), markerColor));
-            markers.Add(new Marker("~b~Vespucci PD\n~w~Book Suspect(s)", new Vector3(-1113.08f, -848.6609f, 12.4414f - 1f), markerColor));
-            markers.Add(new Marker("~b~Eastbourn PD\n~w~Book Suspect(s)", new Vector3(-583.1123f, -146.7518f, 38.23016f - 1f), markerColor));
-            markers.Add(new Marker("~b~La Mesa\n~w~Book Suspect(s)", new Vector3(830.4728f, -1310.793f, 27.13673f - 1f), markerColor));
-            markers.Add(new Marker("~b~Rancho\n~w~Book Suspect(s)", new Vector3(370.3031f, -1608.2098f, 28.2919f - 1f), markerColor));
-            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(458.9393f, -1001.6194f, 23.9148f - 1f), markerColor));
-            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(458.9213f, -997.9607f, 23.9148f - 1f), markerColor));
-            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(460.7617f, -994.2283f, 23.9148f - 1f), markerColor));
-            markers.Add(new Marker("~b~County Sheriff\n~w~Book Suspect(s)", new Vector3(1852.139f, 3691.1f, 33.26702f - 1f), markerColor));
+            markers.Add(new Marker("~b~Bolingbroke Penitentiary\n~w~Book Suspect(s)", new Vector3(1690.975f, 2592.581f, 44.41336f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
+            markers.Add(new Marker("~b~Paleto Bay PD\n~w~Book Suspect(s)", new Vector3(-449.3008f, 6012.623f, 30.71638f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
+            markers.Add(new Marker("~b~Vespucci PD\n~w~Book Suspect(s)", new Vector3(-1113.08f, -848.6609f, 12.4414f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
+            markers.Add(new Marker("~b~Eastbourn PD\n~w~Book Suspect(s)", new Vector3(-583.1123f, -146.7518f, 37.23016f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
+            markers.Add(new Marker("~b~La Mesa\n~w~Book Suspect(s)", new Vector3(830.4728f, -1310.793f, 27.13673f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
+            markers.Add(new Marker("~b~Rancho\n~w~Book Suspect(s)", new Vector3(370.3031f, -1608.2098f, 28.2919f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
+            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(458.9393f, -1001.6194f, 23.9148f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
+            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(458.9213f, -997.9607f, 23.9148f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
+            markers.Add(new Marker("~b~LSPD\n~w~Book Suspect(s)", new Vector3(460.7617f, -994.2283f, 23.9148f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
+            markers.Add(new Marker("~b~County Sheriff\n~w~Book Suspect(s)", new Vector3(1852.139f, 3691.1f, 33.26702f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
 
             int blipId = 0;
 
@@ -42,7 +42,7 @@ namespace Curiosity.MissionManager.Client.Handler
                 blips.Add(blipData);
                 BlipHandler.AddBlip(blipData);
 
-                MarkerHandler.MarkersAll.Add(mark);
+                MarkerManager.MarkersAll.Add(mark);
                 blipId++;
             }
 
@@ -51,18 +51,20 @@ namespace Curiosity.MissionManager.Client.Handler
 
         public static void Dispose()
         {
-            MarkerHandler.HideAllMarkers = true;
-            MarkerHandler.Dispose();
+            markers.ForEach(m =>
+            {
+                MarkerManager.RemoveMarker(m);
+            });
 
-            blips.ForEach(m => BlipHandler.RemoveBlip(m.BlipName));
             markers.Clear();
 
+            blips.ForEach(m => BlipHandler.RemoveBlip(m.BlipName));
             PluginInstance.DeregisterTickHandler(OnArrestPedTick);
         }
 
         private async static Task OnArrestPedTick()
         {
-            Marker activeMarker = MarkerHandler.GetActiveMarker();
+            Marker activeMarker = MarkerManager.GetActiveMarker(MarkerFilter.PoliceArrest);
 
             if (activeMarker == null)
             {
