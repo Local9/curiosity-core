@@ -54,12 +54,15 @@ namespace Curiosity.MissionManager.Client.Managers
 
             IsOfficer = (job == JOB_POLICE);
 
+            Game.PlayerPed.Weapons.RemoveAll();
+
             if (IsOfficer)
             {
                 if (!HasShownScaleform)
                     ShowScaleformRules();
 
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
+                Game.PlayerPed.IsInvincible = false; // trip because of legacy fireman
 
                 await BaseScript.Delay(100);
                 MarkerArrestHandler.Init();
