@@ -15,7 +15,7 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class MarkerManager : Manager<MarkerManager>
     {
-        static float contextAoe = 2f; // How close you need to be to see instruction
+        static float contextAoe = 1.5f; // How close you need to be to see instruction
         static internal List<Marker> MarkersAll = new List<Marker>();
         static internal List<Marker> MarkersClose = new List<Marker>();
 
