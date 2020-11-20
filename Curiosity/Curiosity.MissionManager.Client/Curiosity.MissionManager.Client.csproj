@@ -100,7 +100,7 @@
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\MarkerManager.cs" />
     <Compile Include="Managers\MissionDirectorManager.cs" />
-    <Compile Include="Menu\MenuBase.cs" />
+    <Compile Include="Menu\MenuManager.cs" />
     <Compile Include="Menu\Submenu\MenuDispatch.cs" />
     <Compile Include="Menu\Submenu\MenuSettings.cs" />
     <Compile Include="Menu\Submenu\MenuVehicle.cs" />

@@ -38,7 +38,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private void Menu_OnMenuClose(UIMenu sender)
         {
-            MenuBase.OnMenuState();
+            MenuManager.OnMenuState();
             PluginInstance.DeregisterTickHandler(OnSuspectDistanceCheck);
         }
 
@@ -46,7 +46,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         {
             if (Game.PlayerPed.IsInVehicle())
             {
-                MenuBase._MenuPool.CloseAllMenus();
+                MenuManager._MenuPool.CloseAllMenus();
 
                 Notify.Alert(CommonErrors.OutsideVehicle);
 
@@ -55,7 +55,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 return;
             }
 
-            bool isCalloutActive = MenuBase.IsCalloutActive;
+            bool isCalloutActive = MenuManager.IsCalloutActive;
 
             if (!isCalloutActive)
             {
@@ -63,13 +63,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             }
             else
             {
-                Ped = MenuBase.GetClosestInteractivePed();
+                Ped = MenuManager.GetClosestInteractivePed();
                 bool isControlable = PedCanBeControled();
 
                 if (Ped == null)
                 {
                     Notify.Alert(CommonErrors.MustBeCloserToSubject);
-                    MenuBase._MenuPool.CloseAllMenus();
+                    MenuManager._MenuPool.CloseAllMenus();
                     return;
                 }
 
@@ -85,13 +85,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 PluginInstance.RegisterTickHandler(OnSuspectDistanceCheck);
             }
 
-            MenuBase.OnMenuState(true);
+            MenuManager.OnMenuState(true);
         }
 
         private async Task OnSuspectDistanceCheck()
         {
             if (Ped.Position.Distance(Game.PlayerPed.Position) > 3f)
-                MenuBase._MenuPool.CloseAllMenus();
+                MenuManager._MenuPool.CloseAllMenus();
         }
 
         private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)

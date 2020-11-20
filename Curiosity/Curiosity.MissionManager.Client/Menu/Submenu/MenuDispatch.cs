@@ -72,7 +72,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemCode51) // impound
             {
-                Vehicle suspectVehicle = MenuBase.GetClosestVehicle();
+                Vehicle suspectVehicle = MenuManager.GetClosestVehicle();
                 if (suspectVehicle != null)
                 {
                     suspectVehicle?.Dismiss();
@@ -87,7 +87,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemCode16) // prison transport
             {
-                Ped ped = MenuBase.GetClosestInteractivePed();
+                Ped ped = MenuManager.GetClosestInteractivePed();
                 if (ped != null)
                 {
                     ped?.Dismiss();
@@ -103,15 +103,15 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private void Menu_OnMenuClose(UIMenu sender)
         {
-            MenuBase.OnMenuState();
+            MenuManager.OnMenuState();
         }
 
         private void Menu_OnMenuOpen(UIMenu sender)
         {
-            MenuBase.OnMenuState(true);
+            MenuManager.OnMenuState(true);
 
-            bool isCalloutActive = MenuBase.IsCalloutActive;
-            bool isVehicleTowable = MenuBase.GetClosestVehicle() != null;
+            bool isCalloutActive = MenuManager.IsCalloutActive;
+            bool isVehicleTowable = MenuManager.GetClosestVehicle() != null;
 
             menuItemCode4.Enabled = isCalloutActive;
             menuItemCode16.Enabled = isCalloutActive;

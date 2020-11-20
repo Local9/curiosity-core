@@ -32,13 +32,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private void Menu_OnMenuClose(UIMenu sender)
         {
-            MenuBase.OnMenuState();
+            MenuManager.OnMenuState();
             PluginInstance.DeregisterTickHandler(OnSuspectVehicleDistanceCheck);
         }
 
         private void Menu_OnMenuOpen(UIMenu sender)
         {
-            bool isCalloutActive = MenuBase.IsCalloutActive;
+            bool isCalloutActive = MenuManager.IsCalloutActive;
 
             if (!isCalloutActive)
             {
@@ -46,12 +46,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             }
             else
             {
-                vehicle = MenuBase.GetClosestVehicle();
+                vehicle = MenuManager.GetClosestVehicle();
 
                 if (vehicle == null)
                 {
                     Notify.Alert(CommonErrors.SubjectNotFound);
-                    MenuBase._MenuPool.CloseAllMenus();
+                    MenuManager._MenuPool.CloseAllMenus();
                     Menu.MenuItems.ForEach(m => m.Enabled = false);
                     return;
                 }
@@ -62,13 +62,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 PluginInstance.RegisterTickHandler(OnSuspectVehicleDistanceCheck);
             }
 
-            MenuBase.OnMenuState(true);
+            MenuManager.OnMenuState(true);
         }
 
         private async Task OnSuspectVehicleDistanceCheck()
         {
             if (vehicle.Position.Distance(Game.PlayerPed.Position) > 3f)
-                MenuBase._MenuPool.CloseAllMenus();
+                MenuManager._MenuPool.CloseAllMenus();
         }
 
         private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)

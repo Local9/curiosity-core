@@ -1,8 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Enums;
-using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using NativeUI;
@@ -15,9 +16,8 @@ using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.MissionManager.Client.Menu
 {
-    class MenuBase : BaseScript
+    public class MenuManager : Manager<MenuManager>
     {
-        private PluginManager PluginInstance => PluginManager.Instance;
         public static MenuPool _MenuPool;
         private UIMenu menuMain;
         public static bool IsCalloutActive = false;
@@ -34,9 +34,11 @@ namespace Curiosity.MissionManager.Client.Menu
         private UIMenu menuSuspectVehicle;
         private UIMenu menuSettings;
 
-        public MenuBase()
+        public override void Begin()
         {
-            EventHandlers[Native.Client.OnClientResourceStart.Path] += Native.Client.OnClientResourceStart.Action +=
+            Logger.Info($"- [MenuManager] Begin ----------------------------");
+
+            Instance.EventRegistry[Native.Client.OnClientResourceStart.Path] += Native.Client.OnClientResourceStart.Action +=
                 resourceName =>
                 {
                     if (resourceName != API.GetCurrentResourceName()) return;
@@ -93,6 +95,7 @@ namespace Curiosity.MissionManager.Client.Menu
         private void MenuMain_OnMenuClose(UIMenu sender)
         {
             OnMenuState();
+            // Instance.DeregisterTickHandler(OnMenuDisplay);
         }
 
         private async Task OnMenuDisplay()
@@ -118,7 +121,7 @@ namespace Curiosity.MissionManager.Client.Menu
             }
         }
 
-        [Tick]
+        [TickHandler]
         private async Task OnMenuControls()
         {
             if (!JobManager.IsOfficer) return; // no point in showing if their're not an officer
@@ -147,7 +150,7 @@ namespace Curiosity.MissionManager.Client.Menu
             {
                 if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F2
                 {
-                    PluginInstance.RegisterTickHandler(OnMenuDisplay);
+                    Instance.RegisterTickHandler(OnMenuDisplay);
                     menuMain.Visible = true;
                 }
             }
