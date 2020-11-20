@@ -64,6 +64,11 @@ namespace Curiosity.MissionManager.Client.Managers
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
                 Game.PlayerPed.IsInvincible = false; // trip because of legacy fireman
 
+                Game.PlayerPed.Armor = 100;
+                Game.PlayerPed.Weapons.Give(WeaponHash.Nightstick, 1, false, false);
+                Game.PlayerPed.Weapons.Give(WeaponHash.StunGun, 1, false, false);
+                Game.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, false, false);
+
                 await BaseScript.Delay(100);
                 MarkerArrestHandler.Init();
             }
@@ -117,6 +122,8 @@ namespace Curiosity.MissionManager.Client.Managers
             description += "~w~Open the Activity Menu [~o~F1~w~]\n";
             description += "~w~Here you will find all your options to your job.\n";
             description += "Finally, keep it friendly and we'll all get along.\n";
+            description += "\n";
+            description += "You've been given some basic tools to get you started.\n";
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
