@@ -53,7 +53,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                         break;
                 }
 
-                Notify.Info($"~g~~h~New Zone~h~~w~: {JobManager.PatrolZone}");
+                Notify.Info($"~g~New Zone~w~: {JobManager.PatrolZone}");
             }
 
             await BaseScript.Delay(1000);
