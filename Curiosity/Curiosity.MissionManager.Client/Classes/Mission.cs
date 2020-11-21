@@ -149,6 +149,10 @@ namespace Curiosity.MissionManager.Client
                 Players.Clear();
             }
 
+            API.RemoveAnimDict("mp_arresting");
+            API.RemoveAnimDict("random@arrests@busted");
+            API.RemoveAnimDict("random@arrests");
+
             RegisteredPeds.ForEach(ped => ped?.Dismiss());
             RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
             RegisteredParticles.ForEach(particle => particle?.Stop());

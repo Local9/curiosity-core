@@ -175,10 +175,6 @@ namespace Curiosity.MissionManager.Client.Classes
             API.SetPedCombatAttributes(Fx.Handle, 5, false); // BF_CanFightArmedPedsWhenNotArmed 
             Fx.SetConfigFlag(281, true); // No more rolling about
 
-            API.RequestAnimDict("mp_arresting");
-            API.RequestAnimDict("random@arrests@busted");
-            API.RequestAnimDict("random@arrests");
-
             API.NetworkFadeInEntity(fx.Handle, false);
         }
 
@@ -529,10 +525,6 @@ namespace Curiosity.MissionManager.Client.Classes
 
         internal async void Dismiss()
         {
-            API.RemoveAnimDict("mp_arresting");
-            API.RemoveAnimDict("random@arrests@busted");
-            API.RemoveAnimDict("random@arrests");
-
             if (Fx == null) return;
             if (!base.Exists()) return;
 

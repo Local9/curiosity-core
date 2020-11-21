@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
-using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.Shared.Client.net;
 using System;
@@ -64,6 +64,10 @@ namespace Curiosity.MissionManager.Client
             Mission.RegisteredPeds = new List<Classes.Ped>();
             Mission.RegisteredVehicles = new List<Classes.Vehicle>();
             Mission.RegisteredParticles = new List<ParticleEffect>();
+
+            API.RequestAnimDict("mp_arresting");
+            API.RequestAnimDict("random@arrests@busted");
+            API.RequestAnimDict("random@arrests");
 
             Mission.isOnMission = true;
             Mission.currentMission.Start();
