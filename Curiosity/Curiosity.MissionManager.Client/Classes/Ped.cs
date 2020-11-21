@@ -527,10 +527,8 @@ namespace Curiosity.MissionManager.Client.Classes
             return blip;
         }
 
-        internal async void Dismiss(bool arrested = false)
+        internal async void Dismiss()
         {
-            //if (Fx.AttachedBlips.Length > 0)
-            //    foreach (Blip blip in Fx.AttachedBlips) blip.Delete();
             API.RemoveAnimDict("mp_arresting");
             API.RemoveAnimDict("random@arrests@busted");
             API.RemoveAnimDict("random@arrests");
