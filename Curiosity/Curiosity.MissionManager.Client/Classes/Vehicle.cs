@@ -112,6 +112,7 @@ namespace Curiosity.MissionManager.Client.Classes
         internal async void Dismiss()
         {
             Fx.IsPersistent = false;
+            Fx.MarkAsNoLongerNeeded();
             Fx.FadeOut();
             await BaseScript.Delay(2000);
             base.Delete();

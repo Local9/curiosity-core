@@ -548,6 +548,7 @@ namespace Curiosity.MissionManager.Client.Classes
             }
 
             Fx.IsPersistent = false;
+            Fx.MarkAsNoLongerNeeded();
 
             base.Delete();
         }
