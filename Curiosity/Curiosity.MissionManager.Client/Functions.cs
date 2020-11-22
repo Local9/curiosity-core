@@ -84,5 +84,10 @@ namespace Curiosity.MissionManager.Client
             MissionInfo info = (MissionInfo)mission.GetCustomAttribute(typeof(MissionInfo));
             return info;
         }
+
+        public static void PlayScannerAudio(string audio)
+        {
+
+        }
     }
 }
