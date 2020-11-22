@@ -45,12 +45,14 @@ namespace Curiosity.Development.Missions
 
             Game.PlayerPed.Task.TurnTo(criminal.Fx);
             Game.PlayerPed.Task.ClearAllImmediately();
+            Game.PlayerPed.Task.StartScenario("forcestop", Game.PlayerPed.Position);
 
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
 
         public override void End()
         {
+            Stop(EndState.Error);
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
         }
 

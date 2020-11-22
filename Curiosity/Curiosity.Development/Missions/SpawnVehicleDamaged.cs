@@ -63,6 +63,7 @@ namespace Curiosity.Development.Missions
 
         public override void End()
         {
+            Stop(EndState.Error);
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
         }
 
