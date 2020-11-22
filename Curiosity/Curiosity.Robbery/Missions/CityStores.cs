@@ -77,6 +77,8 @@ namespace Curiosity.StolenVehicle.Missions
 
                 Notify.DispatchAI("Report of Shoplifting", "Report of a shiplifter, please goto location to gain information.");
 
+                DiscordStatus("Traveling to the scene");
+
                 MissionManager.Instance.RegisterTickHandler(OnMissionTick);
             }
             catch (Exception ex)
@@ -146,6 +148,8 @@ namespace Curiosity.StolenVehicle.Missions
                     RegisteredPeds.Add(thief);
 
                     missionState = MissionState.LookingForSuspect;
+
+                    DiscordStatus("Looking for a suspect");
 
                     break;
                 case MissionState.LookingForSuspect:

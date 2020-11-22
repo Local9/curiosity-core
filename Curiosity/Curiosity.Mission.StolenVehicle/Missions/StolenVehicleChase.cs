@@ -105,6 +105,8 @@ namespace Curiosity.StolenVehicle.Missions
 
             isMissionReady = true;
 
+            DiscordStatus("Chasing a Stolen Vehicle");
+
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
 
@@ -202,6 +204,8 @@ namespace Curiosity.StolenVehicle.Missions
             taskSequence.AddTask.FleeFrom(Game.PlayerPed);
             ped.Task.PerformSequence(taskSequence);
             taskSequence.Close();
+
+            DiscordStatus("Chasing a Suspect on Foot");
         }
     }
 }

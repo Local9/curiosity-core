@@ -13,6 +13,8 @@ namespace Curiosity.MissionManager.Client
 {
     public class Functions
     {
+        static PluginManager Instance => PluginManager.Instance;
+
         /// <summary>
         /// Registers a mission so it can be seen and used in-game
         /// </summary>
@@ -52,6 +54,9 @@ namespace Curiosity.MissionManager.Client
             MissionInfo missionInfo = GetMissionInfo(mission);
 
             Logger.Debug($"StartMission : {missionInfo.displayName}");
+
+            Instance.DiscordRichPresence.Status = "Responding to a call";
+            Instance.DiscordRichPresence.Commit();
 
             Mission.currentMission = mis;
             Mission.missionType = mission;

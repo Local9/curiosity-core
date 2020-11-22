@@ -75,6 +75,8 @@ namespace Curiosity.StolenVehicle.Missions
                 RegisteredPeds.Add(storeClerk);
 
                 Notify.DispatchAI("Report of Shoplifting", "Report of a shiplifter, please goto location to gain information.");
+                
+                DiscordStatus("Traveling to the scene");
 
                 MissionManager.Instance.RegisterTickHandler(OnMissionTick);
             }
@@ -152,6 +154,8 @@ namespace Curiosity.StolenVehicle.Missions
                     RegisterBlip(blip);
 
                     missionState = MissionState.LookingForSuspect;
+
+                    DiscordStatus("Looking for a suspect");
 
                     break;
                 case MissionState.LookingForSuspect:

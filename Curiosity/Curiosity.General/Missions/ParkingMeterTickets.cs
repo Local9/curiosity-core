@@ -39,6 +39,8 @@ namespace Curiosity.ParkingMeters.Missions
 
             RegisterBlip(missionBlip);
 
+            DiscordStatus($"Monitoring a Parking Meter");
+
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
 

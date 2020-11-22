@@ -21,6 +21,7 @@ namespace Curiosity.MissionManager.Client
         internal static bool isOnMission = false;
         internal static Mission currentMission = null;
         internal static Type missionType = null;
+        internal static PluginManager Instance => PluginManager.Instance;
         public static PatrolZone PatrolZone = PatrolZone.Anywhere;
 
         public static List<Player> Players { get; internal set; }
@@ -168,6 +169,9 @@ namespace Curiosity.MissionManager.Client
                         blip.Delete();
                 }
 
+                Instance.DiscordRichPresence.Status = "On Duty";
+                Instance.DiscordRichPresence.Commit();
+
                 PluginManager.Blips.Clear();
             }
             catch(Exception ex)
@@ -212,6 +216,12 @@ namespace Curiosity.MissionManager.Client
             else BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Mission Passed", info.displayName);
 
             Stop(EndState.Pass);
+        }
+
+        public void DiscordStatus(string status)
+        {
+            Instance.DiscordRichPresence.Status = status;
+            Instance.DiscordRichPresence.Commit();
         }
     }
 }

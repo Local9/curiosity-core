@@ -17,7 +17,8 @@ namespace Curiosity.MissionManager.Client.Managers
         internal static PatrolZone PatrolZone;
         internal static bool IsOnDuty;
         internal static bool IsOfficer;
-        
+        internal static bool WasOfficer;
+
         private static bool HasShownScaleform;
         private static Scaleform scaleform;
 
@@ -61,6 +62,13 @@ namespace Curiosity.MissionManager.Client.Managers
                 if (!HasShownScaleform)
                     ShowScaleformRules();
 
+                WasOfficer = true;
+
+                Instance.DiscordRichPresence.Status = "On Duty";
+                Instance.DiscordRichPresence.SmallAsset = "police";
+                Instance.DiscordRichPresence.SmallAssetText = "Police Officer";
+                Instance.DiscordRichPresence.Commit();
+
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
                 Game.PlayerPed.IsInvincible = false; // trip because of legacy fireman
 
@@ -75,6 +83,15 @@ namespace Curiosity.MissionManager.Client.Managers
             else
             {
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
+
+                if (IsOfficer != WasOfficer)
+                {
+                    WasOfficer = false;
+                    Instance.DiscordRichPresence.Status = "Roaming around";
+                    Instance.DiscordRichPresence.SmallAsset = "fivem";
+                    Instance.DiscordRichPresence.SmallAssetText = "FiveM";
+                    Instance.DiscordRichPresence.Commit();
+                }
 
                 await BaseScript.Delay(100);
                 MarkerArrestHandler.Dispose();
