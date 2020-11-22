@@ -50,12 +50,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             menu.AddItem(menuSeparatorItem2);
 
-            menu.AddItem(menuItemCode16);
+            menu.AddItem(menuItemCode16); //
             menu.AddItem(menuItemCode27);
             menu.AddItem(menuItemCode28);
             menu.AddItem(menuItemCode29);
-            menu.AddItem(menuItemCode51);
-            menu.AddItem(menuItemCode55d);
+            menu.AddItem(menuItemCode51); //
+            menu.AddItem(menuItemCode55d); // 
 
             menu.OnMenuOpen += Menu_OnMenuOpen;
             menu.OnMenuClose += Menu_OnMenuClose;
@@ -66,6 +66,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
+            Ped ped = MenuManager.GetClosestInteractivePed();
+            Vehicle suspectVehicle = MenuManager.GetClosestVehicle();
+
             if (selectedItem == menuItemCode4) // end callout
             {
                 try
@@ -82,7 +85,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemCode51) // impound
             {
-                Vehicle suspectVehicle = MenuManager.GetClosestVehicle();
+                
                 if (suspectVehicle != null)
                 {
                     suspectVehicle?.Dismiss();
@@ -97,12 +100,31 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemCode16) // prison transport
             {
-                Ped ped = MenuManager.GetClosestInteractivePed();
                 if (ped != null)
                 {
                     ped?.Dismiss();
 
-                    Notify.Dispatch("Prison Transport", "Suspect has been picked up");
+                    Notify.Dispatch("Prison Transport", "Suspect has been picked up.");
+                }
+                else
+                {
+                    Notify.Alert(CommonErrors.MustBeCloserToSubject);
+                }
+            }
+
+            if (selectedItem == menuItemCode55d)
+            {
+                if (ped != null)
+                {
+                    if (ped.IsAlive)
+                    {
+                        Notify.Dispatch("Coroner", "We don't collect the living.");
+                        return;
+                    }
+
+                    ped?.Dismiss();
+
+                    Notify.Dispatch("Coroner", "Coroner has collected the body.");
                 }
                 else
                 {
