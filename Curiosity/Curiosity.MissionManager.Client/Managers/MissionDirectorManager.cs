@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Interface;
@@ -31,7 +32,6 @@ namespace Curiosity.MissionManager.Client.Managers
 
             if (MissionDirectorState)
             {
-                GameTimeOfLastMission = DateTime.Now;
                 GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
 
                 Instance.RegisterTickHandler(OnMissionDirectorTick);
@@ -55,8 +55,9 @@ namespace Curiosity.MissionManager.Client.Managers
             }
             else
             {
-                while (DateTime.Now.Subtract(GameTimeOfLastMission).TotalMilliseconds < TimeSpan.FromTicks(GameTimeTillNextMission.Ticks).TotalMilliseconds)
+                while (DateTime.Now.TimeOfDay.TotalMilliseconds < GameTimeTillNextMission.TimeOfDay.TotalMilliseconds)
                 {
+                    Screen.ShowSubtitle($"TimeSpan: {DateTime.Now.TimeOfDay.TotalMilliseconds}~n~Req: {GameTimeTillNextMission.TimeOfDay.TotalMilliseconds}");
                     await BaseScript.Delay(1500);
                 }
 
