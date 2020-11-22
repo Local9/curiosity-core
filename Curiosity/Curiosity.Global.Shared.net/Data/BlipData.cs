@@ -79,7 +79,14 @@ namespace Curiosity.Global.Shared.Data
         {
             try
             {
-                AllBlips.Where(b => b.Key == id).First().Value.Blip.Delete();
+                BlipData blipData = AllBlips.Where(b => b.Key == id).Select(b => b.Value).FirstOrDefault();
+
+                if (blipData != null)
+                {
+                    if (blipData.Blip.Exists())
+                        blipData.Blip.Delete();
+                }
+
                 AllBlips.Remove(id);
             }
             catch (Exception ex)
