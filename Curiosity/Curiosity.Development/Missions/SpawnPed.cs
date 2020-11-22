@@ -44,6 +44,7 @@ namespace Curiosity.Development.Missions
             Notify.Info($"Ped Created");
 
             Game.PlayerPed.Task.TurnTo(criminal.Fx);
+            Game.PlayerPed.Task.ClearAllImmediately();
 
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
