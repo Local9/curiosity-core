@@ -44,6 +44,9 @@ namespace Curiosity.Development.Missions
             Notify.Info($"Ped Created");
 
             Game.PlayerPed.Task.TurnTo(criminal.Fx);
+
+            await BaseScript.Delay(2000);
+
             Game.PlayerPed.Task.ClearAllImmediately();
             Game.PlayerPed.Task.StartScenario("forcestop", Game.PlayerPed.Position);
 
