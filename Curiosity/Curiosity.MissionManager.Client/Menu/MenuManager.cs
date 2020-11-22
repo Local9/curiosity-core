@@ -147,7 +147,7 @@ namespace Curiosity.MissionManager.Client.Menu
 
             if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
             {
-                if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F2
+                if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F1
                 {
                     if (menuMain.Visible) return;
 
