@@ -1,15 +1,9 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Environment.Entities;
-using Curiosity.MissionManager.Client.Events;
-using Curiosity.MissionManager.Client.Extensions;
-using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.EventWrapperLegacy;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace Curiosity.MissionManager.Client.Commands.Impl
 {

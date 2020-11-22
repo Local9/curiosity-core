@@ -3,7 +3,6 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
 
