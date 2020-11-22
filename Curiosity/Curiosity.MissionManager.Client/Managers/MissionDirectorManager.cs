@@ -5,6 +5,7 @@ using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
@@ -26,8 +27,6 @@ namespace Curiosity.MissionManager.Client.Managers
             MissionDirectorState = !MissionDirectorState;
             string state = MissionDirectorState ? "~g~Enabled" : "~o~Disabled";
             Notify.Info($"~b~Dispatch A.I. {state}");
-
-            // BaseScript.TriggerEvent(LegacyEvents.Client.PoliceDutyEvent, true, MissionDirectorState, "Police");
 
             if (MissionDirectorState)
             {
@@ -56,11 +55,15 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 Logger.Debug($"OnMissionDirectorTick Init");
 
-                while (DateTime.Now.TimeOfDay.TotalMilliseconds < GameTimeTillNextMission.TimeOfDay.TotalMilliseconds && JobManager.IsOnDuty)
+                while (DateTime.Now.TimeOfDay.TotalMilliseconds < GameTimeTillNextMission.TimeOfDay.TotalMilliseconds)
                 {
+                    if (!MissionDirectorState) return;
+
                     Screen.ShowSubtitle($"TimeSpan: {DateTime.Now.TimeOfDay.TotalMilliseconds}~n~Req: {GameTimeTillNextMission.TimeOfDay.TotalMilliseconds}");
                     await BaseScript.Delay(1500);
                 }
+
+                if (!MissionDirectorState) return;
 
                 if (!LatestPatrolZone.Equals(JobManager.PatrolZone))
                 {
