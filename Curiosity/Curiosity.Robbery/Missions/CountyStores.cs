@@ -170,14 +170,4 @@ namespace Curiosity.StolenVehicle.Missions
             }
         }
     }
-
-    internal enum MissionState
-    {
-        Started,
-        End,
-        SpokenToClerk,
-        SetupSuspectLocation,
-        LookingForSuspect,
-        SuspectFlee
-    }
 }
