@@ -19,13 +19,13 @@ namespace Curiosity.StolenVehicle.Missions
     {
         Dictionary<string, Tuple<Vector3, float>> storeClerkSpawns = new Dictionary<string, Tuple<Vector3, float>>()
         {
-            { "county1", new Tuple<Vector3, float>(new Vector3(1965.702f, 3739.749f, 32.31993f), 212.7391f) },
-            { "county2", new Tuple<Vector3, float>(new Vector3(1166.458f, 2702.856f, 38.17479f), 179.9841f) },
-            { "county3", new Tuple<Vector3, float>(new Vector3(2683.345f, 3281.904f, 55.24051f), 234.5024f) },
-            { "county4", new Tuple<Vector3, float>(new Vector3(1698.414f, 4930.02f, 42.0781f), 39.50763f) },
-            { "county5", new Tuple<Vector3, float>(new Vector3(543.7537f, 2674.644f, 42.15426f), 19.35232f) },
-            { "county6", new Tuple<Vector3, float>(new Vector3(1730.481f, 6410.729f, 35.00061f), 159.2767f) },
-            { "county7", new Tuple<Vector3, float>(new Vector3(1394.649f, 3598.51f, 34.98967f), 198.4347f) },
+            { "county1", new Tuple<Vector3, float>(new Vector3(1965.702f, 3739.749f, 31.31993f), 212.7391f) },
+            { "county2", new Tuple<Vector3, float>(new Vector3(1166.458f, 2702.856f, 37.17479f), 179.9841f) },
+            { "county3", new Tuple<Vector3, float>(new Vector3(2683.345f, 3281.904f, 54.24051f), 234.5024f) },
+            { "county4", new Tuple<Vector3, float>(new Vector3(1698.414f, 4930.02f, 41.0781f), 39.50763f) },
+            { "county5", new Tuple<Vector3, float>(new Vector3(543.7537f, 2674.644f, 41.15426f), 19.35232f) },
+            { "county6", new Tuple<Vector3, float>(new Vector3(1730.481f, 6410.729f, 34.00061f), 159.2767f) },
+            { "county7", new Tuple<Vector3, float>(new Vector3(1394.649f, 3598.51f, 33.98967f), 198.4347f) },
         };
 
         MissionState missionState;
