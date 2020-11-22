@@ -95,7 +95,6 @@ namespace Curiosity.MissionManager.Client.Menu
         private void MenuMain_OnMenuClose(UIMenu sender)
         {
             OnMenuState();
-            // Instance.DeregisterTickHandler(OnMenuDisplay);
         }
 
         private async Task OnMenuDisplay()
