@@ -73,6 +73,8 @@ namespace Curiosity.StolenVehicle.Missions
                 storeClerkBlip.IsShortRange = false;
                 storeClerkBlip.ShowRoute = true;
 
+                RegisteredPeds.Add(storeClerk);
+
                 Notify.DispatchAI("Report of Shoplifting", "Report of a shiplifter, please goto location to gain information.");
 
                 MissionManager.Instance.RegisterTickHandler(OnMissionTick);
@@ -140,6 +142,8 @@ namespace Curiosity.StolenVehicle.Missions
 
                     Blip blip = Functions.SetupLocationBlip(thief.Position.Around(10f, 20f));
                     RegisterBlip(blip);
+
+                    RegisteredPeds.Add(thief);
 
                     missionState = MissionState.LookingForSuspect;
 

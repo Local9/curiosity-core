@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Utils;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
@@ -117,52 +118,62 @@ namespace Curiosity.MissionManager.Client
         /// <param name="reason">The reason the mission was stopped</param>
         public void Stop(EndState reason)
         {
-            switch (reason)
+            try
             {
-                case EndState.Pass:
-                    MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
-                    break;
-                case EndState.Fail:
-                case EndState.ForceEnd:
-                    MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(3, 6));
-                    break;
-                case EndState.Error:
-                    MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(1);
-                    break;
-            }            
-
-            isOnMission = false;
-            missionType = null;
-
-            currentMission?.End();
-            currentMission = null;
-
-            if (Players.Count > 0)
-            {
-                Players.ForEach(player =>
+                switch (reason)
                 {
-                    if (player.Character.Exists())
-                        Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, false);
-                });
+                    case EndState.Pass:
+                        MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
+                        break;
+                    case EndState.Fail:
+                        MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(3, 6));
+                        break;
+                    case EndState.ForceEnd:
+                        MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(4, 10));
+                        Notify.DispatchAI("Callout Ended", $"We'll take note of this Officer {Game.Player.Name}, please complete our calls in the future.");
+                        break;
+                    case EndState.Error:
+                        MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(1);
+                        break;
+                }
 
-                Players.Clear();
+                isOnMission = false;
+                missionType = null;
+
+                currentMission?.End();
+                currentMission = null;
+
+                if (Players.Count > 0)
+                {
+                    Players.ForEach(player =>
+                    {
+                        if (player.Character.Exists())
+                            Decorators.Set(player.Character.Handle, Decorators.PLAYER_ASSISTING, false);
+                    });
+
+                    Players.Clear();
+                }
+
+                API.RemoveAnimDict("mp_arresting");
+                API.RemoveAnimDict("random@arrests@busted");
+                API.RemoveAnimDict("random@arrests");
+
+                RegisteredPeds.ForEach(ped => ped?.Dismiss());
+                RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
+                RegisteredParticles.ForEach(particle => particle?.Stop());
+
+                foreach (Blip blip in PluginManager.Blips)
+                {
+                    if (blip.Exists())
+                        blip.Delete();
+                }
+
+                PluginManager.Blips.Clear();
             }
-
-            API.RemoveAnimDict("mp_arresting");
-            API.RemoveAnimDict("random@arrests@busted");
-            API.RemoveAnimDict("random@arrests");
-
-            RegisteredPeds.ForEach(ped => ped?.Dismiss());
-            RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
-            RegisteredParticles.ForEach(particle => particle?.Stop());
-
-            foreach (Blip blip in PluginManager.Blips)
+            catch(Exception ex)
             {
-                if (blip.Exists())
-                    blip.Delete();
+                Logger.Debug($"Mission.Stop {ex}");
             }
-
-            PluginManager.Blips.Clear();
         }
 
         /// <summary>

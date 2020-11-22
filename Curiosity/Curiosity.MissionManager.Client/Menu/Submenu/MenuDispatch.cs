@@ -1,7 +1,8 @@
-﻿using Curiosity.MissionManager.Client.Interface;
+﻿using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using NativeUI;
-
+using System;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
@@ -67,7 +68,15 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         {
             if (selectedItem == menuItemCode4) // end callout
             {
-                Mission.currentMission?.Stop(EndState.ForceEnd); // need a success state
+                try
+                {
+                    Mission.currentMission?.Stop(EndState.ForceEnd); // need a success state
+                    MenuManager._MenuPool?.CloseAllMenus();
+                }
+                catch(Exception ex)
+                {
+                    Logger.Debug($"CODE 4: {ex}");                
+                }
                 return;
             }
 
