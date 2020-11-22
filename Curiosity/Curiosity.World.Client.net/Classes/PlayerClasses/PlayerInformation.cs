@@ -15,33 +15,17 @@ namespace Curiosity.GameWorld.Client.net.Classes.PlayerClasses
         public static Privilege privilege;
         static bool statsSet = false;
 
-        static string CurrentJob;
-
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:Information", new Action(GetPlayerInfo));
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
-
-            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
         }
 
         private static void OnClientResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
             GetPlayerInfo();
-        }
-
-        static void OnDutyState(bool hasJob, bool jobActive, string job)
-        {
-            if (hasJob)
-            {
-                CurrentJob = job;
-            }
-            else
-            {
-                CurrentJob = string.Empty;
-            }
         }
 
         static void GetPlayerInfo()
