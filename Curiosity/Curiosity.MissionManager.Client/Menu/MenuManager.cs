@@ -149,6 +149,8 @@ namespace Curiosity.MissionManager.Client.Menu
             {
                 if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F2
                 {
+                    if (menuMain.Visible) return;
+
                     Instance.RegisterTickHandler(OnMenuDisplay);
                     menuMain.Visible = true;
                 }
