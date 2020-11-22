@@ -31,7 +31,7 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             Logger.Info($"- [GameEventManager] Begin -----------------------");
 
-            Instance.EventRegistry["gameEventTriggered"] += new Action<string, List<dynamic>>(OnGameEventTriggered));
+            Instance.EventRegistry["gameEventTriggered"] += new Action<string, List<dynamic>>(OnGameEventTriggered);
         }
 
         private void OnGameEventTriggered(string name, List<dynamic> args)
