@@ -84,7 +84,7 @@ namespace Curiosity.Global.Shared.Data
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Removing blip {id} threw {ex.GetType().ToString()}");
+                Debug.WriteLine($"Removing blip {id} threw {ex.GetType()}");
             }
         }
 
