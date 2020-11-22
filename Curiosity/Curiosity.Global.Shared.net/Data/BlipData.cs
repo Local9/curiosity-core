@@ -60,13 +60,6 @@ namespace Curiosity.Global.Shared.Data
         public static Dictionary<string, BlipData> AllBlips = new Dictionary<string, BlipData>(); // All registered blips
         public static Dictionary<string, BlipData> CurrentBlips = new Dictionary<string, BlipData>(); // Currently visible blips
 
-        public static void Init()
-        {
-            AllBlips.Clear();
-            CurrentBlips.Clear();
-            // Even if this is empty, it needs to stay to init the method early
-        }
-
         public static string AddBlip(BlipData blip)
         {
             if (AllBlips.ContainsKey(blip.BlipName)) return blip.BlipName;
