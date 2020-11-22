@@ -56,7 +56,7 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 Logger.Debug($"OnMissionDirectorTick Init");
 
-                while (DateTime.Now.TimeOfDay.TotalMilliseconds < GameTimeTillNextMission.TimeOfDay.TotalMilliseconds)
+                while (DateTime.Now.TimeOfDay.TotalMilliseconds < GameTimeTillNextMission.TimeOfDay.TotalMilliseconds && JobManager.IsOnDuty)
                 {
                     Screen.ShowSubtitle($"TimeSpan: {DateTime.Now.TimeOfDay.TotalMilliseconds}~n~Req: {GameTimeTillNextMission.TimeOfDay.TotalMilliseconds}");
                     await BaseScript.Delay(1500);
