@@ -117,8 +117,6 @@ namespace Curiosity.MissionManager.Client
         /// <param name="reason">The reason the mission was stopped</param>
         public void Stop(EndState reason)
         {
-            MissionDirectorManager.GameTimeOfLastMission = DateTime.Now;
-
             switch (reason)
             {
                 case EndState.Pass:

@@ -17,7 +17,6 @@ namespace Curiosity.MissionManager.Client.Managers
         public static bool MissionDirectorState = false;
         static PluginManager Instance => PluginManager.Instance;
         static PatrolZone LatestPatrolZone;
-        public static DateTime GameTimeOfLastMission;
         public static DateTime GameTimeTillNextMission;
 
         static List<Type> currentMissionSelection = new List<Type>();
@@ -152,7 +151,6 @@ namespace Curiosity.MissionManager.Client.Managers
             if (!Mission.isOnMission)
             {
                 await BaseScript.Delay(100);
-                GameTimeOfLastMission = DateTime.Now;
                 GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(4, 6));
                 // by not accepting a mission, a user will wait longer next time
                 Notify.DispatchAI("Wasting Dispatch Time", "Not accepting my calls will mean you'll have to wait longer.");
