@@ -1,5 +1,7 @@
 ﻿using CitizenFX.Core;
+using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Environment.Entities;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System.Collections.Generic;
@@ -55,6 +57,35 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
 
                 // EventSystem.GetModule().Request<object>(LegacyEvents.Client.PoliceDutyEvent, true, dutyActive, job);
                 BaseScript.TriggerEvent(LegacyEvents.Client.PoliceDutyEvent, true, dutyActive, job); // for legacy resources
+            }
+        }
+
+        [CommandInfo(new [] { "mission" })]
+        public class CreateMission : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (arguments.Count == 0) Notify.Error("Mission Argument~n~/mission <MissionId>");
+
+                if (Mission.isOnMission)
+                    Mission.currentMission.End();
+
+
+                string missionId = $"{arguments[0]}";
+
+                Mission.missions.ForEach(mission =>
+                {
+                    MissionInfo missionInfo = Functions.GetMissionInfo(mission);
+
+                    if (missionInfo == null)
+                    {
+                        Notify.Error("Mission Info Attribute not found.");
+                        return;
+                    }
+
+                    if (missionInfo.id == missionId)
+                        Functions.StartMission(mission);
+                });
             }
         }
         #endregion
