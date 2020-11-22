@@ -1,4 +1,5 @@
 ﻿using Curiosity.MissionManager.Client.Interface;
+using Curiosity.Systems.Library.Enums;
 using NativeUI;
 
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
@@ -66,7 +67,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         {
             if (selectedItem == menuItemCode4) // end callout
             {
-                Mission.currentMission?.End(); // need a success state
+                Mission.currentMission?.Stop(EndState.ForceEnd); // need a success state
                 return;
             }
 

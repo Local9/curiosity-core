@@ -216,8 +216,11 @@ namespace Curiosity.StolenVehicle.Missions
                 missionState = MissionState.Escaped;
             }
 
-            if (NumberPedsArrested > 0)
+            if (NumberPedsArrested >= 1)
                 missionState = MissionState.End;
+
+            if (criminal.IsDead && criminalPassenger.IsDead)
+                missionState = MissionState.SuspectDied;
 
             switch (missionState)
             {
@@ -225,6 +228,9 @@ namespace Curiosity.StolenVehicle.Missions
                     break;
                 case MissionState.Escaped:
                     Fail("Vehicle got away....");
+                    break;
+                case MissionState.SuspectDied:
+                    Fail("Suspect(s) dead.");
                     break;
                 case MissionState.End:
                     Pass();

@@ -123,7 +123,14 @@ namespace Curiosity.StolenVehicle.Missions
                     break;
                 case MissionState.SetupSuspectLocation:
 
-                    thief = await Ped.SpawnRandom(storeClerk.Position.AroundStreet(200f, 400f), isNetworked: false);
+                    Vector3 spawnLocation = storeClerk.Position.AroundStreet(200f, 400f);
+
+                    if (spawnLocation == Vector3.Zero)
+                    {
+                        spawnLocation = storeClerk.Position.Around(200f, 400f);
+                    }
+
+                    thief = await Ped.SpawnRandom(spawnLocation, isNetworked: false);
 
                     if (thief == null)
                     {

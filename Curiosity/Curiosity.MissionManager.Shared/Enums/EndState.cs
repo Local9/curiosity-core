@@ -7,6 +7,7 @@
     {
         Fail,
         Pass,
-        Error
+        Error,
+        ForceEnd
     }
 }

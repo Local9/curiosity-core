@@ -123,6 +123,7 @@ namespace Curiosity.MissionManager.Client
                     MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
                     break;
                 case EndState.Fail:
+                case EndState.ForceEnd:
                     MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(3, 6));
                     break;
                 case EndState.Error:

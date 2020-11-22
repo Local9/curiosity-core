@@ -53,8 +53,6 @@ namespace Curiosity.MissionManager.Client.Extensions
             Vector3 rotatedVector = Vector3.UnitY.Rotate((float)(Utility.RANDOM.NextDouble() * 360f));
             var scale = (float)(min + Utility.RANDOM.NextDouble() * (max - min));
             Vector3 result = vector + Vector3.Multiply(rotatedVector, scale);
-            Debug.WriteLine(result.ToString());
-
             return result;
         }
 
