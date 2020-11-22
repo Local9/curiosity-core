@@ -85,6 +85,22 @@ namespace Curiosity.MissionManager.Client
             return info;
         }
 
+        public static Blip SetupLocationBlip(Vector3 location)
+        {
+            Blip locationBlip = World.CreateBlip(location);
+            locationBlip.Sprite = BlipSprite.BigCircle;
+            locationBlip.Scale = 0.5f;
+            locationBlip.Color = (BlipColor)5;
+            locationBlip.Alpha = 126;
+            locationBlip.ShowRoute = true;
+            locationBlip.Priority = 9;
+            locationBlip.IsShortRange = true;
+
+            API.SetBlipDisplay(locationBlip.Handle, 5);
+
+            return locationBlip;
+        }
+
         public static void PlayScannerAudio(string audio)
         {
 

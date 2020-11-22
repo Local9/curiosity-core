@@ -54,6 +54,8 @@ namespace Curiosity.MissionManager.Client.Managers
             }
             else
             {
+                Logger.Debug($"OnMissionDirectorTick Init");
+
                 while (DateTime.Now.TimeOfDay.TotalMilliseconds < GameTimeTillNextMission.TimeOfDay.TotalMilliseconds)
                 {
                     Screen.ShowSubtitle($"TimeSpan: {DateTime.Now.TimeOfDay.TotalMilliseconds}~n~Req: {GameTimeTillNextMission.TimeOfDay.TotalMilliseconds}");

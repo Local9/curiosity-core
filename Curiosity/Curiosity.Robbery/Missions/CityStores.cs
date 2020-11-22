@@ -138,15 +138,7 @@ namespace Curiosity.StolenVehicle.Missions
 
                     thief.Fx.Task.WanderAround(thief.Position, 20f);
 
-                    Blip blip = World.CreateBlip(thief.Position.Around(10f, 20f));
-                    blip.Sprite = BlipSprite.BigCircle;
-                    blip.Scale = 0.5f;
-                    blip.Color = (BlipColor)5;
-                    blip.Alpha = 126;
-                    blip.ShowRoute = false;
-                    blip.Priority = 9;
-                    blip.IsShortRange = true;
-
+                    Blip blip = Functions.SetupLocationBlip(thief.Position.Around(10f, 20f));
                     RegisterBlip(blip);
 
                     missionState = MissionState.LookingForSuspect;
