@@ -70,6 +70,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 {
                     Notify.Alert(CommonErrors.MustBeCloserToSubject);
                     MenuManager._MenuPool.CloseAllMenus();
+                    Menu.MenuItems.ForEach(m => m.Enabled = false);
                     return;
                 }
 
