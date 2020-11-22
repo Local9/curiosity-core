@@ -2,6 +2,7 @@
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Extensions;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
 using System.Collections.Generic;
@@ -39,6 +40,10 @@ namespace Curiosity.Development.Missions
             criminal.IsSuspect = true;
 
             Mission.RegisterPed(criminal);
+
+            Notify.Info($"Ped Created");
+
+            Game.PlayerPed.Task.TurnTo(criminal.Fx);
 
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }

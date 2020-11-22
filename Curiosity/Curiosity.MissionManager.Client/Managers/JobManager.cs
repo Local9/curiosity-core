@@ -53,7 +53,8 @@ namespace Curiosity.MissionManager.Client.Managers
 
             IsOfficer = (job == JOB_POLICE);
 
-            Game.PlayerPed.Weapons.RemoveAll();
+            if (!Cache.Player.User.IsDeveloper)
+                Game.PlayerPed.Weapons.RemoveAll();
 
             if (IsOfficer)
             {
