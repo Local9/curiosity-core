@@ -52,5 +52,14 @@ namespace Curiosity.MissionManager.Client.Extensions
                 ped.Task.ClearAll();
             }
         }
+
+        public static Bone LastDamagedBone(this Ped ped)
+        {
+            int num = 0;
+            Bone bone;
+            API.GetPedLastDamageBone(ped.Handle, ref num);
+            bone = (Bone)num;
+            return bone;
+        }
     }
 }
