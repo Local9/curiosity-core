@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <!-- Need to include jQuery! -->
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
+    <script>
+        var audioPlayer = null;
+		var playlist = null;
+		var index = null;
+
+        function autoplay(i, list, finalCycle, currentCycle) {
+			currentCycle = currentCycle || 1;	
+			finalCycle   = finalCycle   || 'infinite repeat'; // [1-n]: numeral value expected.
+			var sound = new Howl({
+				src: [list[i]],
+				preload: true,
+				onend: function () {
+					if ((i + 1) == list.length) {
+						autoplay(0, list, finalCycle, currentCycle)
+					} else {
+						autoplay(i + 1, list, finalCycle, currentCycle)
+					}
+				}
+			})
+			currentCycle===finalCycle+1 && i===0? sound.stop(): sound.play();
+			console.log('currentCycle: ',currentCycle,
+    					'finalCycle: ',finalCycle,
+						'Objet number: ',i)
+			if(i==list.length-1){ currentCycle++ }
+		}
+
+        // Listen for NUI Messages.
+        window.addEventListener('message', function (event) {
+            // Check for playSound transaction
+            if (event.data.transactionType == "playSound") {
+
+                if (audioPlayer != null) {
+                    audioPlayer.pause();
+                }
+
+				Howler.volume(event.data.transactionVolume);
+
+                if (event.data.audioQueue.length > 0) {
+                    autoplay(0, event.data.audioQueue, 1);
+                } else {
+                    audioPlayer = new Howl({
+                        src: [event.data.transactionFile]
+                    });
+                    audioPlayer.play();
+                }
+
+            }
+        });
+    </script>
+</head>
+
+</html>

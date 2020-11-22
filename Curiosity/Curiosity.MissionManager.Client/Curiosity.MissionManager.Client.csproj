@@ -71,6 +71,7 @@
     <Compile Include="Environment\Entities\Models\AnimationQueue.cs" />
     <Compile Include="Environment\Entities\Models\CameraViewmodel.cs" />
     <Compile Include="Environment\Entities\Models\Marker.cs" />
+    <Compile Include="Environment\Entities\Models\SoundMessage.cs" />
     <Compile Include="Environment\Entities\Models\SoundSystem.cs" />
     <Compile Include="Environment\Entities\Modules\EntityModule.cs" />
     <Compile Include="Environment\Entities\Modules\EntityModuleRegistry.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Handler\AnimationHandler.cs" />
     <Compile Include="Handler\DamageHandler.cs" />
     <Compile Include="Handler\EntityHandler.cs" />
+    <Compile Include="Handler\HowlerHandler.cs" />
     <Compile Include="Handler\MarkerArrestHandler.cs" />
     <Compile Include="Handler\PlayerHandler.cs" />
     <Compile Include="Functions.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="ClientEvents\EntityEventWrapper.cs" />
     <Compile Include="Managers\ExportsManager.cs" />
+    <Compile Include="Managers\GameEventManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
     <Compile Include="Managers\JobMarkerPoliceManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
@@ -137,6 +140,10 @@
       <Name>NativeUI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Html\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
