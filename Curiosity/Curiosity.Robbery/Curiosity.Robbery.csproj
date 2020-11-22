@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MissionManager.cs" />
+    <Compile Include="Missions\CountyStores.cs" />
     <Compile Include="Missions\CityStores.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
