@@ -7,6 +7,7 @@ using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Discord;
 using Curiosity.MissionManager.Client.Environment.Entities;
 using Curiosity.MissionManager.Client.Events;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using System;
@@ -32,6 +33,8 @@ namespace Curiosity.MissionManager.Client
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
         public static int MaximumPlayers { get; } = 32;
+        public static bool IsBirthday { get; internal set; } = false;
+        public static bool IsPlayerSpawned { get; internal set; } = false;
 
         public readonly DiscordRichPresence DiscordRichPresence =
             new DiscordRichPresence(MaximumPlayers, "590126930066407424", "banner", "forums.lifev.net")
@@ -51,6 +54,8 @@ namespace Curiosity.MissionManager.Client
 
             EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
+            EventHandlers["playerSpawned"] += new Action<string>(OnPlayerSpawned);
+            EventHandlers["curiosity:client:special"] += new Action<bool>(OnSpecialDay);
 
             Load();
         }
@@ -139,6 +144,10 @@ namespace Curiosity.MissionManager.Client
             if (API.GetCurrentResourceName() != resourceName) return;
 
             foreach (Blip blip in Blips) blip.Delete();
+        }
+        private void OnPlayerSpawned(dynamic obj)
+        {
+            IsPlayerSpawned = true;
         }
 
         /// <summary>
@@ -267,6 +276,36 @@ namespace Curiosity.MissionManager.Client
                     callback.Task(metadata);
                 }
             });
+        }
+
+        [TickHandler]
+        private async Task OnSpecialDayTick()
+        {
+            if (IsPlayerSpawned)
+            {
+                long gameTimer = API.GetGameTimer();
+                while ((API.GetGameTimer() - gameTimer) < 30000)
+                {
+                    await PluginManager.Delay(100);
+                }
+
+                TriggerServerEvent("curiosity:server:special");
+            }
+        }
+
+        private void OnSpecialDay(bool isBirthday)
+        {
+            if (!isBirthday && IsBirthday)
+            {
+                Notify.Info("The event has now ended, thank you all!");
+            }
+
+            if (!IsBirthday && isBirthday)
+            {
+                Notify.Info("~w~Its ~g~127.0.0.1~w~ Birthday!!!~n~~g~Enjoy increased XP!");
+            }
+
+            IsBirthday = isBirthday;
         }
     }
 }
