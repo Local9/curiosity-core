@@ -426,10 +426,12 @@ namespace Curiosity.MissionManager.Client.Classes
                     Fx.AttachTo(Game.PlayerPed, attachedPos);
                     API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
                     IsGrabbed = true;
+                    Fx.IsInvincible = true;
                     break;
                 case Sequence.GRAB_RELEASE:
                     Fx.Detach();
                     IsGrabbed = false;
+                    Fx.IsInvincible = false;
                     break;
             }
         }
