@@ -20,6 +20,13 @@ namespace Curiosity.StolenVehicle.Missions
         Dictionary<string, Tuple<Vector3, float>> storeClerkSpawns = new Dictionary<string, Tuple<Vector3, float>>()
         {
             { "city1", new Tuple<Vector3, float>(new Vector3(376.4324f, 321.6145f, 103.4308f), 172.1828f) },
+            { "city2", new Tuple<Vector3, float>(new Vector3(-53.92025f, -1757.879f, 29.161f), 131.7822f) },
+            { "city3", new Tuple<Vector3, float>(new Vector3(-712.5158f, -917.6412f, 19.21438f), 190.433f) },
+            { "city4", new Tuple<Vector3, float>(new Vector3(1159.815f, -327.3766f, 69.20947f), 179.9835f) },
+            { "city5", new Tuple<Vector3, float>(new Vector3(1142.246f, -980.7135f, 46.20635f), 269.9512f) },
+            { "city6", new Tuple<Vector3, float>(new Vector3(-1491.585f, -384.2828f, 40.0344f), 121.8301f) },
+            { "city7", new Tuple<Vector3, float>(new Vector3(-1226.831f, -901.288f, 12.29286f), 35.64202f) },
+            { "city8", new Tuple<Vector3, float>(new Vector3(29.44036f, -1349.905f, 29.33013f), 179.9829f) },
         };
 
         MissionState missionState;
@@ -65,6 +72,8 @@ namespace Curiosity.StolenVehicle.Missions
                 storeClerkBlip.Sprite = BlipSprite.Information;
                 storeClerkBlip.IsShortRange = false;
                 storeClerkBlip.ShowRoute = true;
+
+                Notify.DispatchAI("Report of Shoplifting", "Report of a shiplifter, please goto location to gain information.");
 
                 MissionManager.Instance.RegisterTickHandler(OnMissionTick);
             }
