@@ -12,9 +12,37 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         static public void Init()
         {
             client.RegisterEventHandler("curiosity:Player:Vehicle:Delete", new Action<string>(OnDelete));
+            client.RegisterEventHandler("curiosity:Player:Vehicle:Delete:NetworkId", new Action<int>(OnDeleteNetworkID));
         }
 
-        static void OnDelete(string encodedNetworkId)
+        static void OnDeleteNetworkID(int networkId)
+        {
+            try
+            {
+                int vehicleId = NetworkGetEntityFromNetworkId(networkId);
+
+                if (vehicleId > 0)
+                {
+
+                    if (DoesEntityExist(vehicleId))
+                    {
+
+                        FreezeEntityPosition(vehicleId, true);
+                        SetEntityAsMissionEntity(vehicleId, false, false);
+                        NetworkFadeOutEntity(vehicleId, true, false);
+                        SetEntityCoords(vehicleId, -2000f, -6000f, 0f, false, false, false, true);
+                        SetEntityAsNoLongerNeeded(ref vehicleId);
+                        DeleteEntity(ref vehicleId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"OnDelete -> {ex.Message}");
+            }
+        }
+
+        static async void OnDelete(string encodedNetworkId)
         {
             try
             {
@@ -29,61 +57,26 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                     if (DoesEntityExist(vehicleId))
                     {
-                        //Vehicle veh = new Vehicle(vehicleId);
-                        //if (veh != null)
-                        //{
-                        //    Blip blip = veh.AttachedBlip;
-                        //    if (blip.Exists())
-                        //        blip.Delete();
+                        CitizenFX.Core.Vehicle veh = new CitizenFX.Core.Vehicle(vehicleId);
 
-                        //    if (Client.CurrentVehicle != null)
-                        //    {
-                        //        if (Client.CurrentVehicle.Handle == veh.Handle)
-                        //            Client.CurrentVehicle = null;
-                        //    }
-                        //}
+                        if (veh == null) return;
 
-                        FreezeEntityPosition(vehicleId, true);
-                        SetEntityAsMissionEntity(vehicleId, false, false);
-                        NetworkFadeOutEntity(vehicleId, true, false);
-                        SetEntityCoords(vehicleId, -2000f, -6000f, 0f, false, false, false, true);
-                        SetEntityAsNoLongerNeeded(ref vehicleId);
-                        DeleteEntity(ref vehicleId);
+                        if (!veh.Exists()) return;
+
+                        if (veh.Driver.Handle == Game.PlayerPed.Handle)
+                        {
+                            Game.PlayerPed.Task.WarpOutOfVehicle(veh);
+                            await BaseScript.Delay(500);
+                            NetworkFadeOutEntity(vehicleId, false, false);
+                            await BaseScript.Delay(500);
+                            veh.Position = new Vector3(-2000f, -6000f, 0f);
+                            await BaseScript.Delay(500);
+                            veh.MarkAsNoLongerNeeded();
+                            veh.Delete();
+
+                            Plugin.CurrentVehicle = null;
+                        }
                     }
-
-                    //if (vehicle.Exists())
-                    //{
-                    //    if (vehicle.AttachedBlip.Exists())
-                    //    {
-                    //        vehicle.AttachedBlip.Delete();
-                    //    }
-
-                    //    if (NetworkRequestControlOfEntity(vehicle.Handle))
-                    //    {
-                    //        vehicle.IsPersistent = false;
-                    //        vehicle.IsPositionFrozen = false;
-                    //        vehicle.Position = new Vector3(-2000f, -6000f, 0f);
-
-                    //        int objectHandle = vehicle.Handle;
-                    //        int objectHandleToDelete = vehicle.Handle;
-
-                    //        SetEntityAsNoLongerNeeded(ref objectHandle);
-                    //        DeleteEntity(ref objectHandleToDelete);
-
-                    //        if (vehicle.Exists())
-                    //            vehicle.Delete();
-                    //    }
-
-                    //    NetworkFadeOutEntity(vehicleId, true, false);
-                    //    vehicle.IsEngineRunning = false;
-                    //    vehicle.Delete();
-                    //    vehicle.MarkAsNoLongerNeeded();
-
-                    //    if (vehicle.Exists())
-                    //    {
-                    //        DeleteEntity(ref vehicleId);
-                    //    }
-                    //}
                 }
             }
             catch (Exception ex)
