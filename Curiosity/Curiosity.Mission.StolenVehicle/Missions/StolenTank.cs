@@ -222,6 +222,10 @@ namespace Curiosity.StolenVehicle.Missions
 
             hasLeftVehicle = true;
 
+            Blip b = ped.AttachBlip(BlipColor.Red, false);
+            b.Scale = .5f;
+            b.Sprite = BlipSprite.Enemy;
+
             ped.IsFleeing = true;
 
             TaskSequence taskSequence = new TaskSequence();

@@ -120,9 +120,6 @@ namespace Curiosity.StolenVehicle.Missions
                 API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 50f);
                 criminalPassenger.Task.FightAgainstHatedTargets(50f);
 
-                criminalPassenger.AttachBlip(BlipColor.Red, false);
-                criminalPassenger.IsFriendly = false;
-
                 Mission.RegisterPed(criminalPassenger);
 
                 criminalPassenger.PutInVehicle(stolenVehicle, VehicleSeat.Any);
@@ -247,6 +244,12 @@ namespace Curiosity.StolenVehicle.Missions
             if (ped.IsFleeing) return;
 
             ped.IsFleeing = true;
+
+            Blip b = ped.AttachBlip(BlipColor.Red, false);
+            b.Scale = .5f;
+            b.Sprite = BlipSprite.Enemy;
+
+            ped.IsFriendly = false;
 
             TaskSequence taskSequence = new TaskSequence();
 

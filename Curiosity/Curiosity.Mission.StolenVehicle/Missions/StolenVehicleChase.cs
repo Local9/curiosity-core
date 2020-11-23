@@ -194,6 +194,10 @@ namespace Curiosity.StolenVehicle.Missions
             if (ped == null) return;
             if (ped.IsFleeing) return;
 
+            Blip b = ped.AttachBlip(BlipColor.Red, false);
+            b.Scale = .5f;
+            b.Sprite = BlipSprite.Enemy;
+
             ped.IsFleeing = true;
 
             TaskSequence taskSequence = new TaskSequence();
