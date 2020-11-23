@@ -121,6 +121,7 @@ namespace Curiosity.StolenVehicle.Missions
                 criminalPassenger.Task.FightAgainstHatedTargets(50f);
 
                 criminalPassenger.AttachBlip(BlipColor.Red, false);
+                criminalPassenger.IsFriendly = false;
 
                 Mission.RegisterPed(criminalPassenger);
 
