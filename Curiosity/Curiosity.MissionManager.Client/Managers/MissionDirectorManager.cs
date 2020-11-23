@@ -60,7 +60,8 @@ namespace Curiosity.MissionManager.Client.Managers
                 {
                     if (!MissionDirectorState) return;
 
-                    Screen.ShowSubtitle($"TimeSpan: {DateTime.Now.TimeOfDay.TotalMilliseconds}~n~Req: {GameTimeTillNextMission.TimeOfDay.TotalMilliseconds}");
+                    // Screen.ShowSubtitle($"TimeSpan: {DateTime.Now.TimeOfDay.TotalMilliseconds}~n~Req: {GameTimeTillNextMission.TimeOfDay.TotalMilliseconds}");
+
                     await BaseScript.Delay(1500);
                 }
 
