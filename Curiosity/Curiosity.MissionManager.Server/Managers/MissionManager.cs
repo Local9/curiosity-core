@@ -84,9 +84,12 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:completed", new AsyncEventCallback(async metadata =>
             {
+                if (!ActiveMissions.ContainsKey(metadata.Sender)) return null;
+
                 var player = PluginManager.PlayersList[metadata.Sender];
 
                 if (player == null) return false;
+                
 
                 string missionId = ActiveMissions[metadata.Sender].ID;
                 bool passed = metadata.Find<bool>(0);

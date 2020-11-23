@@ -32,6 +32,7 @@ namespace Curiosity.StolenVehicle.Missions
         MissionState missionState;
 
         Blip storeClerkBlip;
+        Blip locationBlip;
 
         Ped storeClerk;
         Ped thief;
@@ -142,8 +143,8 @@ namespace Curiosity.StolenVehicle.Missions
 
                     thief.Fx.Task.WanderAround(thief.Position, 20f);
 
-                    Blip blip = Functions.SetupLocationBlip(thief.Position.Around(10f, 20f));
-                    RegisterBlip(blip);
+                    locationBlip = Functions.SetupLocationBlip(thief.Position.Around(10f, 20f));
+                    RegisterBlip(locationBlip);
 
                     RegisteredPeds.Add(thief);
 
@@ -156,6 +157,9 @@ namespace Curiosity.StolenVehicle.Missions
 
                     if (Game.PlayerPed.Position.Distance(thief.Position) < 10f)
                     {
+                        if (locationBlip.Exists())
+                            locationBlip.Delete();
+
                         thief.Task.ClearAllImmediately();
                         thief.Task.ReactAndFlee(Game.PlayerPed);
 

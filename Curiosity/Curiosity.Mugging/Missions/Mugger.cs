@@ -57,8 +57,9 @@ namespace Curiosity.Mugging.Missions
                         return;
                     }
 
-                    criminal.IsSuspect = true;
+                    criminal.IsImportant = true;
                     criminal.IsMission = true;
+                    criminal.IsSuspect = true;
 
                     victim.IsMission = true;
 
@@ -80,6 +81,9 @@ namespace Curiosity.Mugging.Missions
                         missionState = MissionState.StartScene;
                     break;
                 case MissionState.StartScene:
+
+                    if (locationBlip.Exists())
+                        locationBlip.Delete();
 
                     int r = Utility.RANDOM.Next(1, 4);
 
