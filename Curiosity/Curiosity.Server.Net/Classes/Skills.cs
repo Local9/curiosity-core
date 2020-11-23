@@ -87,7 +87,7 @@ namespace Curiosity.Server.net.Classes
 
         }
 
-        private static void DecreaseSkillByPlayerExport(string playerId, string skill, int experience)
+        public static void DecreaseSkillByPlayerExport(string playerId, string skill, int experience)
         {
             try
             {
@@ -255,7 +255,7 @@ namespace Curiosity.Server.net.Classes
             IncreaseSkillByPlayer(session.Player, skill, experience);
         }
 
-        static void IncreaseSkillByPlayerExport(string playerId, string skill, int experience)
+        public static void IncreaseSkillByPlayerExport(string playerId, string skill, int experience)
         {
             try
             {

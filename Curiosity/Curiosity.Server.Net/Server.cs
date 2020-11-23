@@ -116,6 +116,7 @@ namespace Curiosity.Server.net
             Database.DatabaseCharacterInventory.Init();
             Database.DatabaseLog.Init();
             Database.DatabaseVehicles.Init();
+            Database.DatabaseMission.Init();
             Database.Config.Init();
 
             Classes.Missions.Init();

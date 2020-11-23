@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Server.net.Business;
 using Curiosity.Server.net.Classes;
 using Curiosity.Server.net.Entity;
 using Curiosity.Shared.Server.net.Helpers;
@@ -93,6 +94,15 @@ namespace Curiosity.Server.net.ServerExports
                     }
                 }
             ));
+
+            Instance.ExportDictionary.Add("MissionComplete", new Func<string, string, bool, bool>(
+                (source, missionId, passed) =>
+                {
+                    Mission.RecordMissionCompletion(source, missionId, passed);
+
+                    return false;
+                }
+                ));
         }
     }
 }
