@@ -98,9 +98,18 @@ namespace Curiosity.Server.net.ServerExports
             Instance.ExportDictionary.Add("MissionComplete", new Func<string, string, bool, bool>(
                 (source, missionId, passed) =>
                 {
-                    Mission.RecordMissionCompletion(source, missionId, passed);
+                    try
+                    {
+                        Mission.RecordMissionCompletion(source, missionId, passed);
 
-                    return false;
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"MissionComplete: {ex.Message}");
+
+                        return false;
+                    }
                 }
                 ));
         }

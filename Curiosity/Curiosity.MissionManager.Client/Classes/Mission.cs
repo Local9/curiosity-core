@@ -166,6 +166,9 @@ namespace Curiosity.MissionManager.Client
                 RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
                 RegisteredParticles.ForEach(particle => particle?.Stop());
 
+                if (reason != EndState.Error)
+                    EventSystem.Request<bool>("mission:completed", reason == EndState.Pass);
+
                 EventSystem.Request<bool>("mission:deactivate");
 
                 foreach (Blip blip in PluginManager.Blips)

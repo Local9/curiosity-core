@@ -2,6 +2,7 @@
 using Curiosity.Server.net.Classes;
 using Curiosity.Server.net.Database;
 using Curiosity.Server.net.Entity;
+using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Business
 {
@@ -12,9 +13,9 @@ namespace Curiosity.Server.net.Business
 
         }
 
-        public async static void RecordMissionCompletion(string playerSource, string missionId, bool passed)
+        public async static Task<MissionData> RecordMissionCompletion(string playerSource, string missionId, bool passed)
         {
-            if (!SessionManager.PlayerList.ContainsKey(playerSource)) return;
+            if (!SessionManager.PlayerList.ContainsKey(playerSource)) return null;
 
             Session session = SessionManager.PlayerList[playerSource];
 
@@ -42,14 +43,23 @@ namespace Curiosity.Server.net.Business
 
                 await BaseScript.Delay(100);
                 Skills.IncreaseSkillByPlayerExport(playerSource, "policerep", repReward);
+
+                missionData.RepFailure = 0;
             }
             else
             {
+                missionData.XpReward = 0;
+                missionData.RepReward = 0;
+                missionData.CashMax = 0;
+                missionData.CashMin = 0;
+
                 await BaseScript.Delay(100);
                 Skills.DecreaseSkillByPlayerExport(playerSource, "knowledge", 4);
                 await BaseScript.Delay(100);
                 Skills.DecreaseSkillByPlayerExport(playerSource, "policerep", repFailure);
             }
+
+            return missionData;
         }
     }
 }

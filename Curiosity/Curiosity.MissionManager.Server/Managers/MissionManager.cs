@@ -84,8 +84,16 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:completed", new AsyncEventCallback(async metadata =>
             {
-                // mission type pulls values
-                return false;
+                var player = PluginManager.PlayersList[metadata.Sender];
+
+                if (player == null) return false;
+
+                string missionId = ActiveMissions[metadata.Sender].ID;
+                bool passed = metadata.Find<bool>(0);
+
+                bool res = Instance.ExportDictionary["curiosity-server"].MissionComplete(player.Handle);
+
+                return res;
             }));
         }
     }

@@ -20,7 +20,7 @@ namespace Curiosity.Server.net.Database
         {
             MissionData missionData = new MissionData();
 
-            string query = "call selMissionInformation(missionId);";
+            string query = "call selMissionInformation(@missionId);";
 
             Dictionary<string, object> myParams = new Dictionary<string, object>();
             myParams.Add("@missionId", missionId);
