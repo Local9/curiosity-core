@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Utils;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
@@ -17,6 +18,8 @@ namespace Curiosity.MissionManager.Client
 {
     public abstract class Mission
     {
+        public static EventSystem EventSystem => EventSystem.GetModule();
+
         internal static List<Type> missions = new List<Type>();
         internal static bool isOnMission = false;
         internal static Mission currentMission = null;
@@ -162,6 +165,8 @@ namespace Curiosity.MissionManager.Client
                 RegisteredPeds.ForEach(ped => ped?.Dismiss());
                 RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
                 RegisteredParticles.ForEach(particle => particle?.Stop());
+
+                EventSystem.Request<bool>("mission:deactivate");
 
                 foreach (Blip blip in PluginManager.Blips)
                 {

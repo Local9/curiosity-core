@@ -138,16 +138,43 @@ namespace Curiosity.MissionManager.Client.Managers
             }
 
             Type mission = missionsByChance[Utility.RANDOM.Next(missionsByChance.Count)];
+            MissionInfo selectedMission = Functions.GetMissionInfo(mission);
+
+            bool isUniqueMissionCurrentlyActive = false;
+
+            if (selectedMission.unique)
+                isUniqueMissionCurrentlyActive = await EventSystem.Request<bool>("mission:isActive", selectedMission.id);
+
+            while (isUniqueMissionCurrentlyActive)
+            {
+                await BaseScript.Delay(1000);
+
+                mission = missionsByChance[Utility.RANDOM.Next(missionsByChance.Count)];
+                selectedMission = Functions.GetMissionInfo(mission);
+
+                isUniqueMissionCurrentlyActive = await EventSystem.Request<bool>("mission:isActive", selectedMission.id);
+            }
 
             int notificationId = Notify.CustomControl("~b~~h~Dispatch A.I.~h~~s~: Press to accept call.", true);
 
             DateTime timerStarted = DateTime.Now;
+            bool failedToActivateMission = false;
 
             while (DateTime.Now.Subtract(timerStarted).TotalSeconds < 10 && !Mission.isOnMission)
             {
                 if (Game.IsControlJustPressed(0, Control.Context))
                 {
-                    Functions.StartMission(mission);
+                    bool missionActivated = await EventSystem.Request<bool>("mission:activate", selectedMission.id, selectedMission.unique);
+
+                    if (missionActivated)
+                    {
+                        Functions.StartMission(mission);
+                    }
+                    else
+                    {
+                        failedToActivateMission = true;
+                        Notify.DispatchAI("Sorry...", "Another Officer is now responding to this call.");
+                    }
                 }
                 await BaseScript.Delay(0);
             }
@@ -156,7 +183,7 @@ namespace Curiosity.MissionManager.Client.Managers
             missionsByChance = null; // clear it, don't need it in memory
 
             // if they are not on a mission because they didn't accept it, reset for a new mission
-            if (!Mission.isOnMission)
+            if (!Mission.isOnMission && !failedToActivateMission)
             {
                 await BaseScript.Delay(100);
                 GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(4, 6));
