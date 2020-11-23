@@ -102,6 +102,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             {
                 if (ped != null)
                 {
+                    Mission.CountArrest();
+                    Mission.CountTransportArrest();
                     ped?.Dismiss();
 
                     Notify.Dispatch("Prison Transport", "Suspect has been picked up.");

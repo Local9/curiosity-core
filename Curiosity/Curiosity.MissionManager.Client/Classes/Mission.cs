@@ -34,6 +34,7 @@ namespace Curiosity.MissionManager.Client
         public static List<ParticleEffect> RegisteredParticles { get; internal set; }
 
         public static int NumberPedsArrested { get; internal set; } = 0;
+        public static int NumberTransportArrested { get; internal set; } = 0;
 
         public static void AddPlayer(Player player)
         {
@@ -117,6 +118,11 @@ namespace Curiosity.MissionManager.Client
             }
         }
 
+        internal static void CountTransportArrest()
+        {
+            NumberTransportArrested++;
+        }
+
         /// <summary>
         /// Stops a mission
         /// </summary>
@@ -168,7 +174,7 @@ namespace Curiosity.MissionManager.Client
                 RegisteredParticles.ForEach(particle => particle?.Stop());
 
                 if (reason != EndState.Error)
-                    EventSystem.Request<bool>("mission:completed", reason == EndState.Pass);
+                    EventSystem.Request<bool>("mission:completed", reason == EndState.Pass, NumberTransportArrested);
 
                 EventSystem.Request<bool>("mission:deactivate");
 
