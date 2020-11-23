@@ -180,6 +180,12 @@ namespace Curiosity.StolenVehicle.Missions
 
                     break;
             }
+
+            if (thief.IsDead)
+                Fail("Suspect is dead");
+
+            if (NumberPedsArrested > 0)
+                Pass();
         }
     }
 }
