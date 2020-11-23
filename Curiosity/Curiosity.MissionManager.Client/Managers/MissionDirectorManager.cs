@@ -108,58 +108,58 @@ namespace Curiosity.MissionManager.Client.Managers
 
         private static async Task SelectRandomMission(List<Type> missions)
         {
-            if (missions == null)
-                return;
+            //if (missions == null)
+            //    return;
 
-            Logger.Debug($"{missions.Count} Random Missions");
+            //Logger.Debug($"{missions.Count} Random Missions");
 
-            double randomSpawn = Utility.RANDOM.NextDouble();
+            //double randomSpawn = Utility.RANDOM.NextDouble();
 
-            List<Type> missionsByChance = new List<Type>();
+            //List<Type> missionsByChance = new List<Type>();
 
-            missions.ForEach(m =>
-            {
-                MissionInfo missionInfo = Functions.GetMissionInfo(m);
+            //missions.ForEach(m =>
+            //{
+            //    MissionInfo missionInfo = Functions.GetMissionInfo(m);
 
-                if (missionInfo.chanceOfSpawn > randomSpawn)
-                    missionsByChance.Add(m);
-            });
+            //    if (missionInfo.chanceOfSpawn > randomSpawn)
+            //        missionsByChance.Add(m);
+            //});
 
-            // try again if nothing was added, this should be fucking RARE because there should
-            // always be missions with a chance at 100%, this is for the rare chance of something
-            // different to spawn, like who knows, a fucking tank or something!
-            if (missionsByChance.Count == 0)
-            {
-                SelectRandomMission(missions);
-                return;
-            }
+            //// try again if nothing was added, this should be fucking RARE because there should
+            //// always be missions with a chance at 100%, this is for the rare chance of something
+            //// different to spawn, like who knows, a fucking tank or something!
+            //if (missionsByChance.Count == 0)
+            //{
+            //    SelectRandomMission(missions);
+            //    return;
+            //}
 
-            Type mission = missionsByChance[Utility.RANDOM.Next(missionsByChance.Count)];
+            //Type mission = missionsByChance[Utility.RANDOM.Next(missionsByChance.Count)];
 
-            int notificationId = Notify.CustomControl("~b~~h~Dispatch A.I.~h~~s~: Press to accept call.", true);
+            //int notificationId = Notify.CustomControl("~b~~h~Dispatch A.I.~h~~s~: Press to accept call.", true);
 
-            DateTime timerStarted = DateTime.Now;
+            //DateTime timerStarted = DateTime.Now;
 
-            while(DateTime.Now.Subtract(timerStarted).TotalSeconds < 10 && !Mission.isOnMission)
-            {
-                if (Game.IsControlJustPressed(0, Control.Context))
-                {
-                    Functions.StartMission(mission);
-                }
-                await BaseScript.Delay(0);
-            }
+            //while(DateTime.Now.Subtract(timerStarted).TotalSeconds < 10 && !Mission.isOnMission)
+            //{
+            //    if (Game.IsControlJustPressed(0, Control.Context))
+            //    {
+            //        Functions.StartMission(mission);
+            //    }
+            //    await BaseScript.Delay(0);
+            //}
 
-            API.ThefeedRemoveItem(notificationId); // remove the notification
-            missionsByChance = null; // clear it, don't need it in memory
+            //API.ThefeedRemoveItem(notificationId); // remove the notification
+            //missionsByChance = null; // clear it, don't need it in memory
 
-            // if they are not on a mission because they didn't accept it, reset for a new mission
-            if (!Mission.isOnMission)
-            {
-                await BaseScript.Delay(100);
-                GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(4, 6));
-                // by not accepting a mission, a user will wait longer next time
-                Notify.DispatchAI("Wasting Dispatch Time", "Not accepting my calls will mean you'll have to wait longer.");
-            }
+            //// if they are not on a mission because they didn't accept it, reset for a new mission
+            //if (!Mission.isOnMission)
+            //{
+            //    await BaseScript.Delay(100);
+            //    GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(4, 6));
+            //    // by not accepting a mission, a user will wait longer next time
+            //    Notify.DispatchAI("Wasting Dispatch Time", "Not accepting my calls will mean you'll have to wait longer.");
+            //}
         }
     }
 }
