@@ -4,6 +4,7 @@
     {
         Unknown,
         PoliceDuty,
-        PoliceArrest
+        PoliceArrest,
+        VehicleDeletion
     }
 }
