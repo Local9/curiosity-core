@@ -385,6 +385,9 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 _serverSeason = _seasonsList[_season]; // set new season based on the increase
 
+                if (DateTime.Now.Month == 12)
+                    _serverSeason = Seasons.WINTER;
+
                 SetNextWeather(false);
 
                 SyncAllUsers();
