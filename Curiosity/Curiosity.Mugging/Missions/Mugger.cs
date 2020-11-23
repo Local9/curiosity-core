@@ -57,6 +57,11 @@ namespace Curiosity.Mugging.Missions
                         return;
                     }
 
+                    criminal.IsSuspect = true;
+                    criminal.IsMission = true;
+
+                    victim.IsMission = true;
+
                     RegisterPed(criminal);
                     RegisterPed(victim);
 
