@@ -23,6 +23,7 @@ namespace Curiosity.MissionManager.Client.Utils
 
         public const string PED_FLEE = "c::ped::flee";
         public const string PED_SHOOT = "c::ped::shoot";
+        public const string PED_FRIENDLY = "c::ped::friendly";
         public const string PED_ARREST = "c::ped::arrest";
         public const string PED_ARRESTED = "c::ped::arrested";
         public const string PED_ARRESTABLE = "c::ped::arrestable";
