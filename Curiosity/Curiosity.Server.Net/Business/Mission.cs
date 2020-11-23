@@ -46,7 +46,7 @@ namespace Curiosity.Server.net.Business
                 session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
 
                 await BaseScript.Delay(100);
-                Skills.IncreaseSkillByPlayerExport(playerSource, "police", xpReward);
+                Skills.IncreaseSkillByPlayerExport(playerSource, "policexp", xpReward);
 
                 await BaseScript.Delay(100);
                 Skills.IncreaseSkillByPlayerExport(playerSource, "policerep", repReward);
