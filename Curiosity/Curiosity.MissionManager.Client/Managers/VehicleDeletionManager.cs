@@ -8,8 +8,6 @@ using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Entities.Models;
 using Curiosity.MissionManager.Client.Environment.Enums;
 using Curiosity.MissionManager.Client.Events;
-using Curiosity.MissionManager.Client.Manager;
-using Curiosity.Systems.Library.EventWrapperLegacy;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,7 +20,7 @@ namespace Curiosity.MissionManager.Client.Managers
         List<Marker> markers = new List<Marker>();
         List<BlipData> blips = new List<BlipData>();
 
-        System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 226, 110, 110);
+        System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 161, 40, 48);
         Vector3 scale = new Vector3(4f, 4f, 1f);
 
         public override void Begin()
@@ -39,7 +37,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
             foreach (Marker mark in markers)
             {
-                BlipData blipData = new BlipData($"vehicleDeletion{blipId}", "Vehicle Deletion", mark.Position, BlipSprite.Garage, BlipCategory.Unknown, BlipColor.Red, true);
+                BlipData blipData = new BlipData($"vehicleDeletion{blipId}", "Vehicle Deletion", mark.Position, BlipSprite.Garage2, BlipCategory.Unknown, BlipColor.Red, true);
                 blips.Add(blipData);
                 BlipHandler.AddBlip(blipData);
 
@@ -71,18 +69,7 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
 
-                Game.PlayerPed.Task.WarpOutOfVehicle(vehicle);
-
-                API.NetworkFadeOutEntity(vehicle.Handle, false, false);
-
-                await PluginManager.Delay(500);
-
                 eventSystem.Request<bool>("vehicle:delete", vehicle.NetworkId);
-
-                await PluginManager.Delay(500);
-
-                if (vehicle.Exists())
-                    vehicle.Delete();
 
                 await PluginManager.Delay(5000);
             }

@@ -15,7 +15,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             client.RegisterEventHandler("curiosity:Player:Vehicle:Delete:NetworkId", new Action<int>(OnDeleteNetworkID));
         }
 
-        static void OnDeleteNetworkID(int networkId)
+        async static void OnDeleteNetworkID(int networkId)
         {
             try
             {
@@ -23,16 +23,30 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 if (vehicleId > 0)
                 {
-
                     if (DoesEntityExist(vehicleId))
                     {
+                        CitizenFX.Core.Vehicle veh = new CitizenFX.Core.Vehicle(vehicleId);
 
-                        FreezeEntityPosition(vehicleId, true);
-                        SetEntityAsMissionEntity(vehicleId, false, false);
-                        NetworkFadeOutEntity(vehicleId, true, false);
-                        SetEntityCoords(vehicleId, -2000f, -6000f, 0f, false, false, false, true);
-                        SetEntityAsNoLongerNeeded(ref vehicleId);
-                        DeleteEntity(ref vehicleId);
+                        if (veh == null) return;
+
+                        if (!veh.Exists()) return;
+
+                        if (veh.Driver.Handle == Game.PlayerPed.Handle)
+                        {
+                            if (veh.Handle == Plugin.CurrentVehicle.Handle)
+                                Plugin.CurrentVehicle = null;
+
+                            Game.PlayerPed.Task.WarpOutOfVehicle(veh);
+
+                            await BaseScript.Delay(2000);
+
+                            NetworkFadeOutEntity(vehicleId, false, false);
+                            await BaseScript.Delay(500);
+                            veh.Position = new Vector3(-2000f, -6000f, 0f);
+                            await BaseScript.Delay(500);
+                            veh.MarkAsNoLongerNeeded();
+                            veh.Delete();
+                        }
                     }
                 }
             }
