@@ -90,6 +90,7 @@ namespace Curiosity.Mugging.Missions
                         if (Utility.RANDOM.Next(1, 3) == 2)
                         {
                             criminal.Task.FightAgainst(Game.PlayerPed);
+                            criminal.IsFriendly = false;
                         }
                     }
                     else
