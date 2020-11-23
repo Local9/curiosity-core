@@ -63,6 +63,7 @@
     <Compile Include="Extensions\UserExtensions.cs" />
     <Compile Include="Managers\ChatManager.cs" />
     <Compile Include="Managers\Manager.cs" />
+    <Compile Include="Managers\LegacyEventManager.cs" />
     <Compile Include="Managers\MissionManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="PluginManager.cs" />
