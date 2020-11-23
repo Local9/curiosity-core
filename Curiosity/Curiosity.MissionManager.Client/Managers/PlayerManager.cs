@@ -6,7 +6,7 @@ using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
 
-namespace Curiosity.MissionManager.Client.Handler
+namespace Curiosity.MissionManager.Client.Manager
 {
     class PlayerManager : BaseScript
     {
