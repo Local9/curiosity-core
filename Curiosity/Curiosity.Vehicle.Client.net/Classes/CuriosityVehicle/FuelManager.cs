@@ -249,8 +249,10 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         {
             if (isNearFuelPump && !refueling)
             {
-                NativeWrappers.DrawHelpText("Press ~INPUT_REPLAY_START_STOP_RECORDING_SECONDARY~ to ~y~refuel vehicle");
+                NativeWrappers.DrawHelpText("Press ~INPUT_REPLAY_START_STOP_RECORDING_SECONDARY~ to ~y~Refuel ~s~the ~b~Vehicle");
 
+                Vector3 pos = Game.PlayerPed.Position;
+                NativeWrappers.Draw3DText(pos.X, pos.Y, pos.Z, "~w~Press ~b~F2~w~ to ~y~Refuel ~s~the ~b~Vehicle~n~~w~~b~X~w~ Button on Controller", 40);
 
                 if (isNearFuelPump && ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecordingSecondary, false) && Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle.Driver.IsPlayer)
                 {
