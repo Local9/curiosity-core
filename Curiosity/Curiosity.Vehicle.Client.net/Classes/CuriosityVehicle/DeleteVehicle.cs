@@ -65,16 +65,19 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                         if (veh.Driver.Handle == Game.PlayerPed.Handle)
                         {
+                            if (veh.Handle == Plugin.CurrentVehicle.Handle)
+                                Plugin.CurrentVehicle = null;
+
                             Game.PlayerPed.Task.WarpOutOfVehicle(veh);
-                            await BaseScript.Delay(500);
+
+                            await BaseScript.Delay(2000);
+
                             NetworkFadeOutEntity(vehicleId, false, false);
                             await BaseScript.Delay(500);
                             veh.Position = new Vector3(-2000f, -6000f, 0f);
                             await BaseScript.Delay(500);
                             veh.MarkAsNoLongerNeeded();
                             veh.Delete();
-
-                            Plugin.CurrentVehicle = null;
                         }
                     }
                 }

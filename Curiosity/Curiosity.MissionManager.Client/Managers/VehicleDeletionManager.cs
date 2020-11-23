@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
@@ -21,17 +22,18 @@ namespace Curiosity.MissionManager.Client.Managers
         List<Marker> markers = new List<Marker>();
         List<BlipData> blips = new List<BlipData>();
 
-        System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 65, 105, 225);
+        System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 226, 110, 110);
+        Vector3 scale = new Vector3(4f, 4f, 1f);
 
         public override void Begin()
         {
             Logger.Info($"- [VehicleDeletionManager] Begin -----------------");
 
-            markers.Add(new Marker("~b~Vehicle Deletion Point", new Vector3(-1110.701f, -844.0428f, 18.31688f), markerColor, markerFilter: MarkerFilter.VehicleDeletion));
-            markers.Add(new Marker("~b~Vehicle Deletion Point", new Vector3(441.0764f, -981.1343f, 29.6896f), markerColor, markerFilter: MarkerFilter.VehicleDeletion));
-            markers.Add(new Marker("~b~Vehicle Deletion Point", new Vector3(622.13f, 17.52761f, 86.86286f), markerColor, markerFilter: MarkerFilter.VehicleDeletion));
-            markers.Add(new Marker("~b~Vehicle Deletion Point", new Vector3(1851.431f, 3683.458f, 33.26704f), markerColor, markerFilter: MarkerFilter.VehicleDeletion));
-            markers.Add(new Marker("~b~Vehicle Deletion Point", new Vector3(-448.4843f, 6008.57f, 30.71637f), markerColor, markerFilter: MarkerFilter.VehicleDeletion));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(462.7421f, -1019.469f, 27.1043f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(463.3558f, -1015.196f, 27.07401f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(-356.0414f, -115.358f, 37.69658f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(2366.087f, 3167.133f, 46.84825f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(-449.2261f, 6052.743f, 30.34053f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
 
             int blipId = 0;
 
@@ -51,6 +53,12 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             Marker activeMarker = MarkerManager.GetActiveMarker(MarkerFilter.VehicleDeletion);
 
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                await BaseScript.Delay(500);
+                return;
+            }
+
             if (activeMarker == null)
             {
                 await BaseScript.Delay(500);
@@ -61,12 +69,20 @@ namespace Curiosity.MissionManager.Client.Managers
 
             if (Game.IsControlJustPressed(0, Control.Pickup))
             {
-                if (PlayerManager.PersonalVehicle == null) return;
+                Vehicle vehicle = Game.PlayerPed.CurrentVehicle;
 
-                if (PlayerManager.PersonalVehicle.Exists())
-                {
-                    eventSystem.Request<bool>("vehicle:delete", PlayerManager.PersonalVehicle.NetworkId);
-                }
+                Game.PlayerPed.Task.WarpOutOfVehicle(vehicle);
+
+                API.NetworkFadeOutEntity(vehicle.Handle, false, false);
+
+                await PluginManager.Delay(500);
+
+                eventSystem.Request<bool>("vehicle:delete", vehicle.NetworkId);
+
+                await PluginManager.Delay(500);
+
+                if (vehicle.Exists())
+                    vehicle.Delete();
 
                 await PluginManager.Delay(5000);
             }
