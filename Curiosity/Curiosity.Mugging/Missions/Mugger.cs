@@ -98,6 +98,7 @@ namespace Curiosity.Mugging.Missions
                         victim.Task.ReactAndFlee(criminal.Fx);
                         await BaseScript.Delay(5000);
                         criminal.Task.ReactAndFlee(Game.PlayerPed);
+                        victim.Fx.Kill();
 
                         if (Utility.RANDOM.Next(1, 3) == 2)
                         {
