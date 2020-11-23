@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
 using Curiosity.Vehicles.Client.net.Classes.CurPlayer;

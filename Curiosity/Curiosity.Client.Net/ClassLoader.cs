@@ -6,8 +6,6 @@ using Curiosity.Client.net.Classes.Environment.PDA;
 using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Client.net.ClientExports;
-using Curiosity.Client.net.Helpers;
-using Curiosity.Client.net.Helpers.Dictionary;
 
 namespace Curiosity.Client.net
 {

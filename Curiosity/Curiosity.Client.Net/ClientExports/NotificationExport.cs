@@ -1,10 +1,6 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Client.net.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.ClientExports
 {

@@ -8,7 +8,6 @@ using Curiosity.Systems.Client.net.Extensions;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using System;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Managers

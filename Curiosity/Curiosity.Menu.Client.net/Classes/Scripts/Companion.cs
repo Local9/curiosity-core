@@ -2,19 +2,9 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Menus.Client.net.Classes.Data;
-using Curiosity.Menus.Client.net.Extensions;
 using Curiosity.Menus.Client.net.Static;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
-using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Curiosity.Menus.Client.net.Classes.Scripts

@@ -1,5 +1,4 @@
 using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.Systems.Client.Environment.Entities.Modules.Impl;
 using Curiosity.Systems.Library.Events;
 

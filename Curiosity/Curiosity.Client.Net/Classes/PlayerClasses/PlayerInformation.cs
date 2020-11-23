@@ -4,7 +4,6 @@ using Curiosity.Client.net.Extensions;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
-using Curiosity.Shared.Client.net.Classes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

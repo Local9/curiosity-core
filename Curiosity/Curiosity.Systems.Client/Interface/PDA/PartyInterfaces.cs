@@ -4,10 +4,6 @@ using Curiosity.Systems.Client.Diagnostics;
 using Curiosity.Systems.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Models.FiveM;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Systems.Client.Interface.PDA

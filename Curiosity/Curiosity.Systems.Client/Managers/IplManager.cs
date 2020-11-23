@@ -1,8 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
-using Curiosity.Systems.Client.Diagnostics;
-using System.Threading.Tasks;
+﻿using Curiosity.Systems.Client.Diagnostics;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Systems.Client.Managers

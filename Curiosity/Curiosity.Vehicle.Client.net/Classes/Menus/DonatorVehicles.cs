@@ -1,16 +1,11 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
-using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
 using Curiosity.Vehicle.Client.net.Classes;
-using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
 using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using MenuAPI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Vehicles.Client.net.Classes.Menus
 {

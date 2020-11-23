@@ -2,12 +2,10 @@
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Utils;
-using Curiosity.Shared.Server.net.Helpers;
 using GHMatti.Data.MySQL;
 using GHMatti.Data.MySQL.Core;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Curiosity.Server.net.Database
 {

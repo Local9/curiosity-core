@@ -1,12 +1,6 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Menus.Client.net.Classes.Data;
-using Curiosity.Menus.Client.net.Classes.Player;
-using Curiosity.Menus.Client.net.Classes.Scripts;
+﻿using Curiosity.Menus.Client.net.Classes.Player;
 using MenuAPI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Menus.Client.net.Classes.Menus

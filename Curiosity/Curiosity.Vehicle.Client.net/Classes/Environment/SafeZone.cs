@@ -4,13 +4,11 @@ using CitizenFX.Core.UI;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Helper.Area;
-using Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle;
 using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using Curiosity.Vehicles.Client.net.Extensions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 

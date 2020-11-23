@@ -1,11 +1,9 @@
-﻿using CitizenFX.Core;
-using Curiosity.Server.net.Business;
+﻿using Curiosity.Server.net.Business;
 using Curiosity.Server.net.Classes;
 using Curiosity.Server.net.Entity;
 using Curiosity.Shared.Server.net.Helpers;
 using Newtonsoft.Json;
 using System;
-using System.Dynamic;
 
 namespace Curiosity.Server.net.ServerExports
 {

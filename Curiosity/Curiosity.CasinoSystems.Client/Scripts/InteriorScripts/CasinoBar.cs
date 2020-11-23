@@ -2,11 +2,6 @@
 using CitizenFX.Core.Native;
 using Curiosity.CasinoSystems.Client.Extensions;
 using Curiosity.Global.Shared.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Curiosity.CasinoSystems.Client.Scripts.InteriorScripts
 {

@@ -7,7 +7,6 @@ using Curiosity.Shared.Client.net.Helper;
 using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Debug = CitizenFX.Core.Debug;

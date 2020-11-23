@@ -52,6 +52,8 @@ namespace Curiosity.Server.net.Business
                 Skills.IncreaseSkillByPlayerExport(playerSource, "policerep", repReward);
 
                 missionData.RepFailure = 0;
+
+                // send success notification
             }
             else
             {
@@ -64,6 +66,8 @@ namespace Curiosity.Server.net.Business
                 Skills.DecreaseSkillByPlayerExport(playerSource, "knowledge", 4);
                 await BaseScript.Delay(100);
                 Skills.DecreaseSkillByPlayerExport(playerSource, "policerep", repFailure);
+
+                // send failure notification
             }
 
             return missionData;
