@@ -39,7 +39,7 @@ namespace Curiosity.Server.net.Database
                 foreach (Dictionary<string, object> keyValues in keyValuePairs)
                 {
                     missionData.MissionId = $"{keyValues["id"]}";
-                    missionData.XpReward = int.Parse($"{keyValues["xpReqard"]}");
+                    missionData.XpReward = int.Parse($"{keyValues["xpReward"]}");
                     missionData.RepReward = int.Parse($"{keyValues["repReward"]}");
                     missionData.RepFailure = int.Parse($"{keyValues["repFailure"]}");
                     missionData.CashMin = int.Parse($"{keyValues["cashMin"]}");
