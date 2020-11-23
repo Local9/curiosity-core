@@ -2,6 +2,7 @@
 using Curiosity.Server.net.Classes;
 using Curiosity.Server.net.Database;
 using Curiosity.Server.net.Entity;
+using Curiosity.Shared.Server.net.Helpers;
 using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Business
@@ -20,6 +21,12 @@ namespace Curiosity.Server.net.Business
             Session session = SessionManager.PlayerList[playerSource];
 
             MissionData missionData = await DatabaseMission.GetMissionAsync(missionId);
+
+            if (missionData == null)
+            {
+                Log.Error($"No mission returned matching the ID {missionId} [{playerSource}|{missionId}|{passed}]");
+                return null;
+            }
 
             int xpReward = missionData.XpReward;
             int repReward = missionData.RepReward;
