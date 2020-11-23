@@ -129,7 +129,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     Fx.RelationshipGroup = (uint)Collections.RelationshipHash.NoRelationship;
                 }
 
-                Decorators.Set(Fx.Handle, Decorators.PED_FRIENDLY, value);
+                Decorators.Set(Fx.Handle, Decorators.PED_FRIENDLY, !value);
             }
         }
 
