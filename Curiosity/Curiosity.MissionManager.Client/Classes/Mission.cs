@@ -24,6 +24,7 @@ namespace Curiosity.MissionManager.Client
         internal static bool isOnMission = false;
         internal static Mission currentMission = null;
         internal static Type missionType = null;
+        public static bool isMessagingServer = false;
         internal static PluginManager Instance => PluginManager.Instance;
         public static PatrolZone PatrolZone = PatrolZone.Anywhere;
 
@@ -194,6 +195,9 @@ namespace Curiosity.MissionManager.Client
         /// <param name="failReason">The reason the mission failed</param>
         public async void Fail(string failReason)
         {
+            if (isMessagingServer) return;
+            isMessagingServer = true;
+
             MissionInfo info = Functions.GetMissionInfo(missionType);
 
             if (info == null) return;
@@ -211,6 +215,9 @@ namespace Curiosity.MissionManager.Client
 
         public async void Pass()
         {
+            if (isMessagingServer) return;
+            isMessagingServer = true;
+
             MissionInfo info = Functions.GetMissionInfo(missionType);
 
             if (info == null) return;

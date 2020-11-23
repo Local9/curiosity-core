@@ -94,7 +94,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 string missionId = ActiveMissions[metadata.Sender].ID;
                 bool passed = metadata.Find<bool>(0);
 
-                bool res = Instance.ExportDictionary["curiosity-server"].MissionComplete(player.Handle);
+                bool res = Instance.ExportDictionary["curiosity-server"].MissionComplete(player.Handle, missionId, passed);
 
                 return res;
             }));

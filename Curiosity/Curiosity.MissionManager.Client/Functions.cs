@@ -75,6 +75,7 @@ namespace Curiosity.MissionManager.Client
             API.RequestAnimDict("random@arrests");
 
             Mission.isOnMission = true;
+            Mission.isMessagingServer = false;
             Mission.currentMission.Start();
         }
 
