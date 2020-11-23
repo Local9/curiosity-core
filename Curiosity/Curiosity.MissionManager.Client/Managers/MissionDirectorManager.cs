@@ -69,7 +69,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 {
                     Logger.Debug($"Patrol Zone changed since last check");
 
-                    LatestPatrolZone = JobManager.PatrolZone;
+                    LatestPatrolZone = JobManager.PatrolZone == PatrolZone.Anywhere ? PatrolZone.City : JobManager.PatrolZone;
 
                     List<Type> missions = Mission.missions; // make a copy of the list for this instance
                     currentMissionSelection.Clear();
