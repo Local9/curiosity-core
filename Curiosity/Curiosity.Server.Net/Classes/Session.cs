@@ -242,8 +242,7 @@ namespace Curiosity.Server.net.Classes
             {
                 playerSessionItem.Disconnected = true;
 
-                string encodedString = Encode.StringToBase64($"{VehicleNetworkId}");
-                BaseScript.TriggerClientEvent("curiosity:Player:Vehicle:Delete", encodedString);
+                BaseScript.TriggerClientEvent("curiosity:Player:Vehicle:Delete:NetworkId", VehicleNetworkId);
 
                 string js = JsonConvert.SerializeObject(playerSessionItem);
 
