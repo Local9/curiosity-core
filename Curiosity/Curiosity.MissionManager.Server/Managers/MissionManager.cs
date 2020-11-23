@@ -67,7 +67,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex, "Failed to activate mission");
+                    Logger.Error(ex, "Failed to deactivate mission");
                     return false;
                 }
             }));
