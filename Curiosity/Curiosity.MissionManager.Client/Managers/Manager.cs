@@ -12,7 +12,7 @@ namespace Curiosity.MissionManager.Client.Managers
         }
 
         public PluginManager Instance { get; set; }
-        public EventSystem EventSystem => EventSystem.GetModule();
+        public static EventSystem EventSystem => EventSystem.GetModule();
 
         protected Manager()
         {
