@@ -112,6 +112,27 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
+        public bool IsFriendly
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_FRIENDLY);
+            }
+            set
+            {
+                if (value)
+                {
+                    Fx.RelationshipGroup = (uint)Collections.RelationshipHash.HatesPlayer;
+                }
+                else
+                {
+                    Fx.RelationshipGroup = (uint)Collections.RelationshipHash.NoRelationship;
+                }
+
+                Decorators.Set(Fx.Handle, Decorators.PED_FRIENDLY, value);
+            }
+        }
+
         public bool IsReleased
         {
             get
