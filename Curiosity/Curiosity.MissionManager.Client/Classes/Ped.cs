@@ -120,7 +120,7 @@ namespace Curiosity.MissionManager.Client.Classes
             }
             set
             {
-                if (value)
+                if (!value)
                 {
                     Fx.RelationshipGroup = (uint)Collections.RelationshipHash.HatesPlayer;
                 }
