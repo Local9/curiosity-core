@@ -70,6 +70,9 @@ namespace Curiosity.Mugging.Missions
 
                     Blip blip = criminal.AttachBlip();
                     blip.Sprite = BlipSprite.Enemy;
+                    blip.Color = BlipColor.Red;
+                    blip.Scale = 0.5f;
+                    blip.Priority = 9;
 
                     criminal.Task.AimAt(victim, -1);
                     victim.Task.HandsUp(-1);

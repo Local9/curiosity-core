@@ -172,6 +172,7 @@ namespace Curiosity.StolenVehicle.Missions
                         Blip b = thief.AttachBlip();
                         b.Sprite = BlipSprite.Enemy;
                         b.Color = BlipColor.Red;
+                        b.Scale = 0.5f;
                         b.Priority = 9;
 
                         missionState = MissionState.SuspectFlee;
