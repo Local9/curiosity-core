@@ -177,6 +177,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.ParkingMeters", "Curiosity.General\Curiosity.ParkingMeters.csproj", "{756D0DE7-13CC-4A44-B5A6-FA6E254D4AC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Mugging", "Curiosity.Mugging\Curiosity.Mugging.csproj", "{D74DA0AD-DBAD-49AF-9A38-9146040E2AD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -419,6 +421,10 @@ Global
 		{756D0DE7-13CC-4A44-B5A6-FA6E254D4AC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{756D0DE7-13CC-4A44-B5A6-FA6E254D4AC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{756D0DE7-13CC-4A44-B5A6-FA6E254D4AC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D74DA0AD-DBAD-49AF-9A38-9146040E2AD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D74DA0AD-DBAD-49AF-9A38-9146040E2AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D74DA0AD-DBAD-49AF-9A38-9146040E2AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D74DA0AD-DBAD-49AF-9A38-9146040E2AD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -488,6 +494,7 @@ Global
 		{39A8E93E-F140-4D91-AEAD-C45F12DB7545} = {996E6F14-59F0-40C8-8870-882FAF32A036}
 		{C4D528C7-71A1-40A0-9BC0-B1ED4383D16F} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
 		{756D0DE7-13CC-4A44-B5A6-FA6E254D4AC4} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
+		{D74DA0AD-DBAD-49AF-9A38-9146040E2AD8} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
