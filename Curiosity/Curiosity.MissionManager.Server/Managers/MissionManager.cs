@@ -17,7 +17,6 @@ namespace Curiosity.MissionManager.Server.Managers
         {
             EventSystem.GetModule().Attach("mission:isActive", new AsyncEventCallback(async metadata =>
             {
-
                 int senderHandle = metadata.Sender;
                 string missionId = metadata.Find<string>(0);
 
@@ -41,6 +40,8 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 try
                 {
+                    Logger.Debug($"mission:activate > {missionId}");
+
                     MissionData missionData = new MissionData(missionId, senderHandle, missionUnique);
                     return ActiveMissions.TryAdd(senderHandle, missionData);
                 }
@@ -58,7 +59,11 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 try
                 {
-                    return ActiveMissions.TryRemove(senderHandle, out MissionData old);
+                    bool removed = ActiveMissions.TryRemove(senderHandle, out MissionData old);
+
+                    Logger.Debug($"mission:deactivate > {removed}:{old.ID}");
+
+                    return removed;
                 }
                 catch (Exception ex)
                 {
