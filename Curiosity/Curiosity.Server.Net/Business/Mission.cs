@@ -2,6 +2,7 @@
 using Curiosity.Server.net.Classes;
 using Curiosity.Server.net.Database;
 using Curiosity.Server.net.Entity;
+using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using System.Threading.Tasks;
 
@@ -64,6 +65,7 @@ namespace Curiosity.Server.net.Business
                 missionData.RepFailure = 0;
 
                 // send success notification
+                session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Completed", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
             }
             else
             {
@@ -78,6 +80,7 @@ namespace Curiosity.Server.net.Business
                 Skills.DecreaseSkillByPlayerExport(playerSource, "policerep", repFailure);
 
                 // send failure notification
+                session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Failed", $"~b~Rep Lost~w~: {repFailure:d0}");
             }
 
             return missionData;
