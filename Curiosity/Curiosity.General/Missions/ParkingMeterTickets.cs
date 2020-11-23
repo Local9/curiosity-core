@@ -41,6 +41,8 @@ namespace Curiosity.ParkingMeters.Missions
 
             DiscordStatus($"Monitoring a Parking Meter");
 
+            Notify.DispatchAI("Parking Meter Report", "Automated report of a parking meter running out, please ticket the vehicle.", iconType: 2);
+
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
 
