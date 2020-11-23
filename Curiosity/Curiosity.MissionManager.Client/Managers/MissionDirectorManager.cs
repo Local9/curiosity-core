@@ -88,9 +88,11 @@ namespace Curiosity.MissionManager.Client.Managers
                         {
                             currentMissionSelection.Add(mis);
                         }
+
                         else if (missionInfo.patrolZone.Equals(PatrolZone.Anywhere))
                         {
-                            currentMissionSelection.Add(mis);
+                            if (!currentMissionSelection.Contains(mis))
+                                currentMissionSelection.Add(mis);
                         }
 
                     });
