@@ -66,7 +66,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (checkboxItem == menuCheckboxEnableCallouts)
             {
-                MissionDirectorManager.ToggleMissionDirector();
+                MissionDirectorManager.Director.ToggleMissionDirector();
                 await BaseScript.Delay(100);
                 menuCheckboxEnableCallouts.Checked = MissionDirectorManager.MissionDirectorState;
                 await BaseScript.Delay(1000);

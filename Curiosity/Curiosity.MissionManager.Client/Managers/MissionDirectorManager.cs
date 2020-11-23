@@ -5,7 +5,6 @@ using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
@@ -16,13 +15,14 @@ namespace Curiosity.MissionManager.Client.Managers
     public class MissionDirectorManager : Manager<MissionDirectorManager>
     {
         public static bool MissionDirectorState = false;
+        public static MissionDirectorManager Director;
         static PluginManager Instance => PluginManager.Instance;
         static PatrolZone LatestPatrolZone;
         public static DateTime GameTimeTillNextMission;
 
         static List<Type> currentMissionSelection = new List<Type>();
 
-        public static void ToggleMissionDirector()
+        public void ToggleMissionDirector()
         {
             MissionDirectorState = !MissionDirectorState;
             string state = MissionDirectorState ? "~g~Enabled" : "~o~Disabled";
@@ -43,9 +43,10 @@ namespace Curiosity.MissionManager.Client.Managers
         public override void Begin()
         {
             Logger.Info($"- [MissionDirectorManager] Begin -----------------");
+            Director = this;
         }
 
-        private static async Task OnMissionDirectorTick()
+        private async Task OnMissionDirectorTick()
         {
             if (Mission.isOnMission)
             {
@@ -108,7 +109,7 @@ namespace Curiosity.MissionManager.Client.Managers
             }
         }
 
-        private static async Task SelectRandomMission(List<Type> missions)
+        private async Task SelectRandomMission(List<Type> missions)
         {
             if (missions == null)
                 return;
