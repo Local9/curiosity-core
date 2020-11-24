@@ -39,6 +39,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                             foreach(Ped p in veh.Passengers)
                             {
                                 p.Task.WarpOutOfVehicle(veh);
+                                await BaseScript.Delay(500);
                             }
 
                             Game.PlayerPed.Task.WarpOutOfVehicle(veh);
@@ -90,6 +91,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                             foreach (Ped p in veh.Passengers)
                             {
                                 p.Task.WarpOutOfVehicle(veh);
+                                await BaseScript.Delay(500);
                             }
 
                             Game.PlayerPed.Task.WarpOutOfVehicle(veh);
