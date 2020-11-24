@@ -22,7 +22,18 @@ namespace Curiosity.MissionManager.Client.Menu
         private UIMenu menuMain;
         public static bool IsCalloutActive = false;
 
-        private bool isMenuOpen => Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_MENU);
+        private bool isMenuOpen
+        {
+            get
+            {
+                return Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_MENU);
+            }
+            set
+            {
+                Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_MENU, value);
+            }
+
+        }
 
         // sub menus
         private Submenu.MenuDispatch _dispatch = new Submenu.MenuDispatch();
@@ -94,6 +105,7 @@ namespace Curiosity.MissionManager.Client.Menu
 
         private void MenuMain_OnMenuClose(UIMenu sender)
         {
+            isMenuOpen = false;
             OnMenuState();
         }
 
@@ -149,10 +161,12 @@ namespace Curiosity.MissionManager.Client.Menu
             {
                 if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F1
                 {
-                    if (menuMain.Visible) return;
+                    isMenuOpen = true;
+
+                    if (!menuMain.Visible)
+                        menuMain.Visible = true;
 
                     Instance.RegisterTickHandler(OnMenuDisplay);
-                    menuMain.Visible = true;
                 }
             }
         }
