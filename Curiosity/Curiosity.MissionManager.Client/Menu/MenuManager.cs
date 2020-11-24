@@ -22,7 +22,7 @@ namespace Curiosity.MissionManager.Client.Menu
         private UIMenu menuMain;
         public static bool IsCalloutActive = false;
 
-        private bool isMenuOpen
+        private static bool isMenuOpen
         {
             get
             {
@@ -119,17 +119,8 @@ namespace Curiosity.MissionManager.Client.Menu
         public static void OnMenuState(bool isOpen = false)
         {
             _MenuPool.MouseEdgeEnabled = false;
-
-            Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_MENU, isOpen);
-
-            if (isOpen)
-            {
-                BaseScript.TriggerEvent("curiosity:Client:Menu:IsOpened", true);
-            }
-            else
-            {
-                BaseScript.TriggerEvent("curiosity:Client:Menu:IsOpened", false);
-            }
+            isMenuOpen = isOpen;
+            BaseScript.TriggerEvent("curiosity:Client:Menu:IsOpened", isMenuOpen);
         }
 
         [TickHandler]
