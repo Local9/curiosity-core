@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
+using Curiosity.MissionManager.Client.Manager;
 using NativeUI;
 using System.Threading.Tasks;
 
@@ -116,6 +117,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemDetain)
             {
+                if (Ped.Position.DistanceTo(PlayerManager.PersonalVehicle.Position) > 10f)
+                {
+                    Notify.Alert($"You're too far from your vehicle.");
+                    return;
+                }
+
                 if (Ped.Fx.IsInVehicle())
                 {
                     Ped.RunSequence(Ped.Sequence.LEAVE_VEHICLE);
