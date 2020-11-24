@@ -143,6 +143,9 @@ namespace Curiosity.MissionManager.Client
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
+            if (JobManager.IsOfficer)
+                BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "unemployed");
+
             foreach (Blip blip in Blips) blip.Delete();
         }
         private void OnPlayerSpawned(dynamic obj)
