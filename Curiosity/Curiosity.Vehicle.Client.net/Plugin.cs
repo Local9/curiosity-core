@@ -12,6 +12,7 @@ namespace Curiosity.Vehicles.Client.net
         private static Plugin _instance;
         public static PlayerList players;
         public static CitizenFX.Core.Vehicle CurrentVehicle;
+        public static CitizenFX.Core.Vehicle CurrentTrailer;
 
         public static Random random = new Random();
 
