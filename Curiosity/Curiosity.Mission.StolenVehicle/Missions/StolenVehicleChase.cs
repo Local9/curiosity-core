@@ -95,7 +95,10 @@ namespace Curiosity.StolenVehicle.Missions
             criminal.PutInVehicle(stolenVehicle);
             criminal.Task.CruiseWithVehicle(stolenVehicle.Fx, float.MaxValue,
                 (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
-            criminal.AttachBlip(BlipColor.Red, true);
+
+            Blip b = stolenVehicle.AttachBlip();
+            b.Color = BlipColor.Red;
+            b.ShowRoute = true;
 
             stolenVehicle.IsSpikable = true;
             stolenVehicle.IsMission = true;
@@ -194,7 +197,9 @@ namespace Curiosity.StolenVehicle.Missions
             if (ped == null) return;
             if (ped.IsFleeing) return;
 
-            Blip b = ped.AttachBlip(BlipColor.Red, false);
+            Blip b = ped.AttachBlip();
+            b.Color = BlipColor.Red;
+            b.ShowRoute = false;
             b.Scale = .5f;
             b.Sprite = BlipSprite.Enemy;
 

@@ -111,6 +111,12 @@ namespace Curiosity.MissionManager.Client.Classes
 
         internal async void Dismiss()
         {
+            if (Fx.AttachedBlip != null)
+            {
+                if (Fx.AttachedBlip.Exists())
+                    Fx.AttachedBlip.Delete();
+            }
+
             Fx.IsPersistent = false;
             Fx.MarkAsNoLongerNeeded();
             Fx.FadeOut();
