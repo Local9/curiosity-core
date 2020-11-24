@@ -278,6 +278,14 @@ namespace Curiosity.MissionManager.Client.Classes
             if (TimeOfDeath == 0)
                 TimeOfDeath = API.GetGameTimer();
 
+            Blip b = Fx.AttachedBlip;
+
+            if (b != null)
+            {
+                if (b.Exists())
+                    b.Delete();
+            }
+
             if (base.IsOccluded)
             {
                 Dismiss();
