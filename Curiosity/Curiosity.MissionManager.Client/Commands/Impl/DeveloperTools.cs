@@ -1,11 +1,15 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Environment.Entities;
+using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.EventWrapperLegacy;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Curiosity.MissionManager.Client.Commands.Impl
 {
@@ -31,6 +35,34 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
         //        else
         //        {
         //            Chat.SendLocalMessage("God Mode: Disabled");
+        //        }
+        //    }
+        //}
+
+        //[CommandInfo(new[] { "vehicle", "veh", "car" })]
+        //public class VehicleSpawner : ICommand
+        //{
+        //    public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+        //    {
+        //        try
+        //        {
+        //            if (arguments.Count <= 0) return;
+
+        //            var model = new Model(API.GetHashKey(arguments.ElementAt(0)));
+
+        //            if (!model.IsValid || !model.IsVehicle) return;
+
+        //            if (Game.PlayerPed.IsInVehicle())
+        //                Game.PlayerPed.CurrentVehicle.Delete();
+
+        //            var position = entity.Position;
+        //            var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
+
+        //            entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+        //        }
+        //        catch (Exception)
+        //        {
+        //            // Ignored
         //        }
         //    }
         //}
