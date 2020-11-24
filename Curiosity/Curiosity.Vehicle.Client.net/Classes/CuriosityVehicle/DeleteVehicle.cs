@@ -36,6 +36,11 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                             if (veh.Handle == Plugin.CurrentVehicle.Handle)
                                 Plugin.CurrentVehicle = null;
 
+                            foreach(Ped p in veh.Passengers)
+                            {
+                                p.Task.WarpOutOfVehicle(veh);
+                            }
+
                             Game.PlayerPed.Task.WarpOutOfVehicle(veh);
 
                             await BaseScript.Delay(2000);
@@ -81,6 +86,11 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         {
                             if (veh.Handle == Plugin.CurrentVehicle.Handle)
                                 Plugin.CurrentVehicle = null;
+
+                            foreach (Ped p in veh.Passengers)
+                            {
+                                p.Task.WarpOutOfVehicle(veh);
+                            }
 
                             Game.PlayerPed.Task.WarpOutOfVehicle(veh);
 
