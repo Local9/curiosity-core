@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Environment.Entities;
+using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
@@ -15,6 +16,8 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
 {
     public class DeveloperTools : CommandContext
     {
+        static EventSystem EventSystem => EventSystem.GetModule();
+
         public override string[] Aliases { get; set; } = { "dev", "d" };
         public override string Title { get; set; } = "Developer Commands";
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
@@ -116,7 +119,11 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
                     }
 
                     if (missionInfo.id == missionId)
+                    {
+                        EventSystem.Request<bool>("mission:activate", missionInfo.id, missionInfo.unique);
+
                         Functions.StartMission(mission);
+                    }
                 });
             }
         }
