@@ -929,7 +929,7 @@ namespace Curiosity.Client.net.Classes.Actions
                     posZ = pos.Z + 100f;
 
                     if (API.GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z, ref groundZ, false))
-                        posZ = groundZ;
+                        posZ = groundZ + 0.5f;
                     
                 }
                 else
