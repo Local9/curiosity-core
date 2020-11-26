@@ -112,6 +112,8 @@ namespace Curiosity.MissionManager.Client.Classes
                     Fx.AttachedBlip.Delete();
             }
 
+            EventSystem.Request<bool>("mission:remove:vehicle", Fx.NetworkId);
+
             Fx.IsPersistent = false;
             Fx.MarkAsNoLongerNeeded();
             Fx.FadeOut();

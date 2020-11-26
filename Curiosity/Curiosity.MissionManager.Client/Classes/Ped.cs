@@ -566,6 +566,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
             await Fx.FadeOut();
 
+            EventSystem.Request<bool>("mission:remove:ped", Fx.NetworkId);
+
             Blip singleBlip = Fx.AttachedBlip;
             if (singleBlip != null)
             {
