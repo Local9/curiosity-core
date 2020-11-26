@@ -78,7 +78,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 }
                 catch(Exception ex)
                 {
-                    Logger.Debug($"CODE 4: {ex}");                
+                    Logger.Debug($"CODE 4: {ex}");
                 }
                 return;
             }
