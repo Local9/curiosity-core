@@ -119,7 +119,7 @@ namespace Curiosity.Server.net
             Database.DatabaseMission.Init();
             Database.Config.Init();
 
-            Classes.Missions.Init();
+            // Classes.Missions.Init();
             Business.Queue.Init();
 
             // Session Manager
