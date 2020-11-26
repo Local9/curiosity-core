@@ -7,3 +7,6 @@
 [submodule "ProfanityDetector"]
 	path = ProfanityDetector
 	url = https://github.com/stephenhaunts/ProfanityDetector.git
+[submodule "thirdparty/FiveM_Queue"]
+	path = thirdparty/FiveM_Queue
+	url = https://github.com/Local9/FiveM_Queue.git
