@@ -327,7 +327,7 @@ namespace Curiosity.Server.net.Classes
             }
         }
 
-        static float ExperienceModifier(Privilege privilege)
+        public static float ExperienceModifier(Privilege privilege)
         {
             switch (privilege)
             {

@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Server.net.Classes;
 using Curiosity.Server.net.Database;
 using Curiosity.Server.net.Entity;
@@ -63,6 +64,20 @@ namespace Curiosity.Server.net.Business
                 Skills.IncreaseSkillByPlayerExport(playerSource, "policerep", repReward);
 
                 missionData.RepFailure = 0;
+
+                float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+                if (experienceModifier > 1.0f && (session.IsStaff || session.IsDonator))
+                {
+                    experienceModifier += 0.1f;
+                }
+
+                if (session.IsStaff || session.IsDonator)
+                {
+                    experienceModifier += Skills.ExperienceModifier(session.Privilege);
+                }
+
+                xpReward = (int)(xpReward * experienceModifier);
 
                 // send success notification
                 session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Completed", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
