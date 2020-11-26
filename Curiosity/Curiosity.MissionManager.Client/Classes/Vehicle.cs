@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
@@ -14,21 +15,13 @@ namespace Curiosity.MissionManager.Client.Classes
     public class Vehicle : Entity, IEquatable<Vehicle>
     {
         private bool _canExecuteAnimation = true;
-        private bool _doAnimBonnetOpen = false;
-        private bool _doAnimBonnetClose = false;
-        private bool _doAnimBootOpen = false;
-        private bool _doAnimBootClose = false;
-
-        private int _counterBonnetOpen = 0;
-        private int _counterBonnetClose = 0;
-        private int _counterBootOpen = 0;
-        private int _counterBootClose = 0;
 
         public CitizenFX.Core.Vehicle Fx { get; private set; }
         public Vector3 Position => Fx.Position;
         public string Hash => Fx.Model.ToString();
 
         private PluginManager PluginInstance => PluginManager.Instance;
+        internal EventSystem EventSystem => EventSystem.GetModule();
 
         public string Name => API.GetLabelText(API.GetDisplayNameFromVehicleModel((uint)Fx.Model.Hash));
 
@@ -83,6 +76,8 @@ namespace Curiosity.MissionManager.Client.Classes
         private Vehicle(CitizenFX.Core.Vehicle fx) : base(fx.Handle)
         {
             Fx = fx;
+
+            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId);
         }
 
         public static async Task<Vehicle> Spawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true, bool isNetworked = true, bool isMission = true)

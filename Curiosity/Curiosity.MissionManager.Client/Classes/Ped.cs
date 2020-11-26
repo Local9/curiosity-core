@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.ClientEvents;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Manager;
@@ -19,6 +20,7 @@ namespace Curiosity.MissionManager.Client.Classes
     {
         public CitizenFX.Core.Ped Fx { get; set; }
         internal PluginManager PluginIntance => PluginManager.Instance;
+        internal EventSystem EventSystem => EventSystem.GetModule();
         public Vector3 Position => Fx.Position;
         public Tasks Task => Fx.Task;
         public bool IsDead => Fx.IsDead;
@@ -186,6 +188,8 @@ namespace Curiosity.MissionManager.Client.Classes
             Fx.DropsWeaponsOnDeath = false;
             Fx.IsPersistent = true;
             Fx.Health = 200;
+
+            EventSystem.Request<bool>("mission:add:ped", fx.NetworkId);
 
             API.SetPedFleeAttributes(Fx.Handle, 0, false);
             API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
