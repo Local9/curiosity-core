@@ -51,5 +51,29 @@ namespace Curiosity.Systems.Shared.Entity
             NetworkPeds.Add(newtworkId);
             return true;
         }
+
+        public bool RemoveMember(int playerHandle)
+        {
+            if (!PartyMembers.Contains(playerHandle)) return false;
+
+            PartyMembers.Remove(playerHandle);
+            return true;
+        }
+
+        public bool RemoveNetworkVehicle(int newtworkId)
+        {
+            if (!NetworkVehicles.Contains(newtworkId)) return false;
+
+            NetworkVehicles.Remove(newtworkId);
+            return true;
+        }
+
+        public bool RemoveNetworkPed(int newtworkId)
+        {
+            if (!NetworkPeds.Contains(newtworkId)) return false;
+
+            NetworkPeds.Remove(newtworkId);
+            return true;
+        }
     }
 }

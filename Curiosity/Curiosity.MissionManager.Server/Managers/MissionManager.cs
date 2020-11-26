@@ -82,9 +82,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 int networkId = metadata.Find<int>(0);
 
-                missionData.AddNetworkPed(networkId);
-
-                return true;
+                return missionData.AddNetworkPed(networkId);
             }));
 
             EventSystem.GetModule().Attach("mission:add:vehicle", new EventCallback(metadata =>
@@ -97,9 +95,33 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 int networkId = metadata.Find<int>(0);
 
-                missionData.AddNetworkVehicle(networkId);
+                return missionData.AddNetworkVehicle(networkId);
+            }));
 
-                return true;
+            EventSystem.GetModule().Attach("mission:remove:ped", new EventCallback(metadata =>
+            {
+                int senderHandle = metadata.Sender;
+
+                if (!ActiveMissions.ContainsKey(senderHandle)) return false;
+
+                MissionData missionData = ActiveMissions[senderHandle];
+
+                int networkId = metadata.Find<int>(0);
+
+                return missionData.RemoveNetworkPed(networkId);
+            }));
+
+            EventSystem.GetModule().Attach("mission:remove:vehicle", new EventCallback(metadata =>
+            {
+                int senderHandle = metadata.Sender;
+
+                if (!ActiveMissions.ContainsKey(senderHandle)) return false;
+
+                MissionData missionData = ActiveMissions[senderHandle];
+
+                int networkId = metadata.Find<int>(0);
+
+                return missionData.RemoveNetworkVehicle(networkId);
             }));
 
             EventSystem.GetModule().Attach("mission:assistance:request", new AsyncEventCallback(async metadata =>
