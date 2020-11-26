@@ -26,7 +26,7 @@ namespace Curiosity.Server.net.Business
 
             if (missionData == null)
             {
-                Log.Error($"No mission returned matching the ID {missionId} [{playerSource}|{missionId}|{passed}]");
+                Log.Error($"No mission returned from the database matching the ID {missionId} [{playerSource}|{missionId}|{passed}]");
                 return null;
             }
 
