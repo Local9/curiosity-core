@@ -120,7 +120,7 @@ namespace Curiosity.Mugging.Missions
                 Pass();
             }
 
-            if (criminal.IsDead)
+            if (criminal != null && criminal.IsDead)
             {
                 Fail($"Suspect is dead...");
             }

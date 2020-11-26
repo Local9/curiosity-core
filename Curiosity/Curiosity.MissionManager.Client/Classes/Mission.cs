@@ -28,6 +28,8 @@ namespace Curiosity.MissionManager.Client
         internal static PluginManager Instance => PluginManager.Instance;
         public static PatrolZone PatrolZone = PatrolZone.Anywhere;
 
+        public static EndState endState = EndState.Unknown;
+
         public static List<Player> Players { get; internal set; }
         public static List<Vehicle> RegisteredVehicles { get; internal set; }
         public static List<Ped> RegisteredPeds { get; internal set; }

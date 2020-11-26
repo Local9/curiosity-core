@@ -5,9 +5,10 @@
     /// </summary>
     public enum EndState
     {
+        Unknown,
         Fail,
         Pass,
         Error,
-        ForceEnd
+        ForceEnd,
     }
 }

@@ -173,7 +173,7 @@ namespace Curiosity.StolenVehicle.Missions
             if (NumberPedsArrested > 0)
                 missionState = MissionState.End;
 
-            if (criminal.IsDead)
+            if (criminal != null && criminal.IsDead)
                 missionState = MissionState.SuspectDied;
 
             switch (missionState)
