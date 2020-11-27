@@ -299,6 +299,9 @@ namespace Curiosity.MissionManager.Client
 
         private static void UpdateMissionPeds(Dictionary<int, MissionDataPed> networkPeds)
         {
+            // Need to monitor if a ped was arrested and update as required, add requirements to the server for best results
+            // this way the completion and success comes from the server and not from the client.
+
             foreach (KeyValuePair<int, MissionDataPed> keyValuePair in networkPeds)
             {
                 bool found = false;
