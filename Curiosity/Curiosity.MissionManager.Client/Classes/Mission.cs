@@ -35,9 +35,9 @@ namespace Curiosity.MissionManager.Client
         static DateTime LastUpdate = DateTime.Now.AddSeconds(5);
 
         public static List<Player> Players { get; internal set; }
-        public static List<Vehicle> RegisteredVehicles { get; internal set; }
-        public static List<Ped> RegisteredPeds { get; internal set; }
-        public static List<ParticleEffect> RegisteredParticles { get; internal set; }
+        public static List<Vehicle> RegisteredVehicles { get; internal set; } = new List<Vehicle>();
+        public static List<Ped> RegisteredPeds { get; internal set; } = new List<Ped>();
+        public static List<ParticleEffect> RegisteredParticles { get; internal set; } = new List<ParticleEffect>();
 
         public static int NumberPedsArrested { get; internal set; } = 0;
         public static int NumberTransportArrested { get; internal set; } = 0;
@@ -252,20 +252,23 @@ namespace Curiosity.MissionManager.Client
 
         public static async Task OnMissionUpdateTick()
         {
-            if (DateTime.Now.Subtract(LastUpdate).TotalSeconds >= 5)
+            if (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 5)
             {
-                LastUpdate = DateTime.Now.AddSeconds(5);
+                await BaseScript.Delay(500);
+                return;
+            };
 
-                MissionData md = await EventSystem.Request<MissionData>("mission:get:data");
+            LastUpdate = DateTime.Now.AddSeconds(5);
 
-                // Update player information for those in the mission
+            MissionData md = await EventSystem.Request<MissionData>("mission:get:data");
 
-                UpdateMissionPlayers(md.PartyMembers);
-                UpdateMissionPeds(md.NetworkPeds);
-                UpdateMissionVehicles(md.NetworkVehicles);
+            // Update player information for those in the mission
 
-                Logger.Debug($"{md}");
-            }
+            UpdateMissionPlayers(md.PartyMembers);
+            UpdateMissionPeds(md.NetworkPeds);
+            UpdateMissionVehicles(md.NetworkVehicles);
+
+            Logger.Debug($"{md}");
         }
 
         private static void UpdateMissionVehicles(List<int> networkVehicles)
