@@ -73,7 +73,7 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
-        private Vehicle(CitizenFX.Core.Vehicle fx) : base(fx.Handle)
+        internal Vehicle(CitizenFX.Core.Vehicle fx) : base(fx.Handle)
         {
             Fx = fx;
 

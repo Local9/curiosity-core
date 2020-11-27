@@ -52,6 +52,7 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 this.IsArrestable = true;
                 Decorators.Set(Fx.Handle, Decorators.PED_SUSPECT, value);
+                UpdateServerMissionData();
             }
         }
 
@@ -189,7 +190,7 @@ namespace Curiosity.MissionManager.Client.Classes
             Fx.IsPersistent = true;
             Fx.Health = 200;
 
-            EventSystem.Request<bool>("mission:add:ped", fx.NetworkId);
+            UpdateServerMissionData();
 
             API.SetPedFleeAttributes(Fx.Handle, 0, false);
             API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
@@ -202,6 +203,11 @@ namespace Curiosity.MissionManager.Client.Classes
             Fx.SetConfigFlag(281, true); // No more rolling about
 
             API.NetworkFadeInEntity(fx.Handle, false);
+        }
+
+        private void UpdateServerMissionData()
+        {
+            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect);
         }
 
         internal void PrisonTransport()

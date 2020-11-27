@@ -252,11 +252,77 @@ namespace Curiosity.MissionManager.Client
 
         public static async Task OnMissionUpdateTick()
         {
-            if (DateTime.Now.Subtract(LastUpdate).TotalMinutes >= 1)
+            if (DateTime.Now.Subtract(LastUpdate).TotalSeconds >= 5)
             {
                 LastUpdate = DateTime.Now.AddSeconds(5);
 
                 MissionData md = await EventSystem.Request<MissionData>("mission:get:data");
+
+                // Update player information for those in the mission
+
+                md.PartyMembers.ForEach(memberServerID =>
+                {
+                    if (memberServerID == Game.Player.ServerId) return;
+
+                });
+
+                foreach(KeyValuePair<int, MissionDataPed> keyValuePair in md.NetworkPeds)
+                {
+                    bool found = false;
+                    RegisteredPeds.ForEach(ped =>
+                    {
+                        // check if the ped is registered
+                        found = (ped.NetworkId == keyValuePair.Key);
+                    });
+
+                    // if they are not registered then set up the ped
+                    if (!found)
+                    {
+                        int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
+                        CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
+
+                        if (cfxPed != null)
+                        {
+                            Ped curPed = new Ped(cfxPed);
+                            RegisteredPeds.Add(curPed);
+
+                            curPed.IsSuspect = keyValuePair.Value.IsSuspect;
+
+                            if (curPed.IsSuspect)
+                            {
+                                Blip b = curPed.AttachBlip();
+                                b.Color = BlipColor.Red;
+                                b.Scale = .5f;
+                                b.Sprite = BlipSprite.Enemy;
+                            }
+                        }
+                    }
+                }
+
+                md.NetworkVehicles.ForEach(vehNetworkId =>
+                {
+                    bool found = false;
+                    RegisteredVehicles.ForEach(veh =>
+                    {
+                        // check if the vehicle is registered
+                        found = (veh.NetworkId == vehNetworkId);
+                    });
+
+                    // if its not registered then set up the veh
+                    if (!found)
+                    {
+                        int entityId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
+                        CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
+
+                        if (cfxVehicle != null)
+                        {
+                            Vehicle curVehicle = new Vehicle(cfxVehicle);
+                            RegisteredVehicles.Add(curVehicle);
+                        }
+                    }
+                });
+
+                Logger.Debug($"{md}");
             }
         }
 

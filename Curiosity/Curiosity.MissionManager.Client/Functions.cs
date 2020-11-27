@@ -66,6 +66,24 @@ namespace Curiosity.MissionManager.Client
             Mission.PatrolZone = JobManager.PatrolZone; // Always get the current zone from the player at this point
             // Mission randomiser will also use the PatrolZone of the player to select a mission, but the mission needs to know the players state IF the mission doesn't have a PatrolZone assigned
 
+            if (Mission.RegisteredPeds.Count > 0)
+            {
+                Mission.RegisteredPeds.Clear();
+                Mission.RegisteredPeds = null;
+            }
+
+            if (Mission.RegisteredVehicles.Count > 0)
+            {
+                Mission.RegisteredVehicles.Clear();
+                Mission.RegisteredVehicles = null;
+            }
+
+            if (Mission.RegisteredParticles.Count > 0)
+            {
+                Mission.RegisteredParticles.Clear();
+                Mission.RegisteredParticles = null;
+            }
+
             Mission.RegisteredPeds = new List<Classes.Ped>();
             Mission.RegisteredVehicles = new List<Classes.Vehicle>();
             Mission.RegisteredParticles = new List<ParticleEffect>();

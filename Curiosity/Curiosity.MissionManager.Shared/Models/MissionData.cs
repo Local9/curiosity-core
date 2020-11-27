@@ -9,10 +9,15 @@ namespace Curiosity.Systems.Shared.Entity
         public bool IsMissionUnique { get; set; }
         public int OwnerHandleId { get; set; }
         public List<int> PartyMembers { get; set; } = new List<int>();
+        public Dictionary<int, MissionDataPed> NetworkPeds { get; set; } = new Dictionary<int, MissionDataPed>();
         public List<int> NetworkVehicles { get; set; } = new List<int>();
-        public List<int> NetworkPeds { get; set; } = new List<int>();
         public DateTime Creation { get; set; } = DateTime.Now;
         public bool AssistanceRequested { get; set; }
+
+        public override string ToString()
+        {
+            return $"Mission: {ID}, OH: {OwnerHandleId}, P: {PartyMembers.Count}, NV: {NetworkVehicles.Count}, NP: {NetworkPeds.Count}, Assistance: {AssistanceRequested}";
+        }
 
         public bool AddMember(int playerHandle)
         {
@@ -30,11 +35,20 @@ namespace Curiosity.Systems.Shared.Entity
             return true;
         }
 
-        public bool AddNetworkPed(int newtworkId)
+        public bool AddNetworkPed(int networkId, bool isSuspect)
         {
-            if (NetworkPeds.Contains(newtworkId)) return false;
+            if (NetworkPeds.ContainsKey(networkId))
+            {
+                NetworkPeds[networkId].IsSuspect = isSuspect;
+            }
+            else
+            {
+                MissionDataPed missionDataPed = new MissionDataPed();
+                missionDataPed.IsSuspect = isSuspect;
 
-            NetworkPeds.Add(newtworkId);
+                NetworkPeds.Add(networkId, missionDataPed);
+            }
+            
             return true;
         }
 
@@ -54,11 +68,11 @@ namespace Curiosity.Systems.Shared.Entity
             return true;
         }
 
-        public bool RemoveNetworkPed(int newtworkId)
+        public bool RemoveNetworkPed(int networkId)
         {
-            if (!NetworkPeds.Contains(newtworkId)) return false;
+            if (!NetworkPeds.ContainsKey(networkId)) return false;
 
-            NetworkPeds.Remove(newtworkId);
+            NetworkPeds.Remove(networkId);
             return true;
         }
     }
