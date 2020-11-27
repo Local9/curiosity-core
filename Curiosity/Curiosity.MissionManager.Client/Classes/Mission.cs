@@ -8,6 +8,7 @@ using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Shared.Entity;
 using NativeUI;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace Curiosity.MissionManager.Client
         public static PatrolZone PatrolZone = PatrolZone.Anywhere;
 
         public static EndState endState = EndState.Unknown;
+        static DateTime LastUpdate = DateTime.Now.AddSeconds(5);
 
         public static List<Player> Players { get; internal set; }
         public static List<Vehicle> RegisteredVehicles { get; internal set; }
@@ -243,6 +245,16 @@ namespace Curiosity.MissionManager.Client
             else BigMessageThread.MessageInstance.ShowSimpleShard($"~y~Mission Passed", info.displayName);
 
             Stop(EndState.Pass);
+        }
+
+        public async void OnMissionUpdateTick()
+        {
+            if (DateTime.Now.Subtract(LastUpdate).TotalMinutes >= 1)
+            {
+                LastUpdate = DateTime.Now;
+
+                MissionData md = await EventSystem.Request<MissionData>("mission:get:data");
+            }
         }
 
         public void DiscordStatus(string status)

@@ -42,7 +42,18 @@ namespace Curiosity.MissionManager.Server.Managers
                 {
                     Logger.Debug($"mission:activate > {missionId}");
 
-                    MissionData missionData = new MissionData(missionId, senderHandle, missionUnique);
+                    MissionData missionData = new MissionData();
+
+                    missionData.ID = missionId;
+                    missionData.OwnerHandleId = senderHandle;
+                    missionData.IsMissionUnique = missionUnique;
+
+                    missionData.PartyMembers = new List<int>();
+                    missionData.NetworkVehicles = new List<int>();
+                    missionData.NetworkPeds = new List<int>();
+
+                    missionData.Creation = DateTime.Now;
+
                     return ActiveMissions.TryAdd(senderHandle, missionData);
                 }
                 catch (Exception ex)

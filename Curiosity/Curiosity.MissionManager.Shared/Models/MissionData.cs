@@ -5,27 +5,14 @@ namespace Curiosity.Systems.Shared.Entity
 {
     public class MissionData
     {
-        public string ID { get; private set; }
-        public bool IsMissionUnique { get; private set; }
-        public int OwnerHandleId { get; private set; }
-        public List<int> PartyMembers { get; private set; }
-        public List<int> NetworkVehicles { get; private set; }
-        public List<int> NetworkPeds { get; private set; }
-        public DateTime Creation { get; private set; }
+        public string ID { get; set; }
+        public bool IsMissionUnique { get; set; }
+        public int OwnerHandleId { get; set; }
+        public List<int> PartyMembers { get; set; }
+        public List<int> NetworkVehicles { get; set; }
+        public List<int> NetworkPeds { get; set; }
+        public DateTime Creation { get; set; }
         public bool AssistanceRequested { get; set; }
-
-        public MissionData(string missionName, int owner, bool unique = false)
-        {
-            PartyMembers = new List<int>();
-            NetworkVehicles = new List<int>();
-            NetworkPeds = new List<int>();
-
-            OwnerHandleId = owner;
-            ID = missionName;
-            IsMissionUnique = unique;
-
-            Creation = DateTime.Now;
-        }
 
         public bool AddMember(int playerHandle)
         {
