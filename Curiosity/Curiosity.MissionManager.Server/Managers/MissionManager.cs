@@ -50,7 +50,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
                     bool missionCreated = ActiveMissions.TryAdd(senderHandle, missionData);
 
-                    Logger.Debug($"mission:activate Success? > {missionCreated}");
+                    Logger.Debug($"mission:activate Success? > {missionCreated}:{ActiveMissions.Count}");
 
                     return missionCreated;
                 }

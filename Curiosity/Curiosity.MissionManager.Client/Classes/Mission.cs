@@ -12,6 +12,7 @@ using Curiosity.Systems.Shared.Entity;
 using NativeUI;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
@@ -196,6 +197,8 @@ namespace Curiosity.MissionManager.Client
                 Instance.DiscordRichPresence.Commit();
 
                 PluginManager.Blips.Clear();
+
+                Instance.DeregisterTickHandler(OnMissionUpdateTick);
             }
             catch(Exception ex)
             {
@@ -247,7 +250,7 @@ namespace Curiosity.MissionManager.Client
             Stop(EndState.Pass);
         }
 
-        public async void OnMissionUpdateTick()
+        public static async Task OnMissionUpdateTick()
         {
             if (DateTime.Now.Subtract(LastUpdate).TotalMinutes >= 1)
             {
