@@ -254,7 +254,7 @@ namespace Curiosity.MissionManager.Client
         {
             if (DateTime.Now.Subtract(LastUpdate).TotalMinutes >= 1)
             {
-                LastUpdate = DateTime.Now;
+                LastUpdate = DateTime.Now.AddSeconds(5);
 
                 MissionData md = await EventSystem.Request<MissionData>("mission:get:data");
             }
