@@ -25,6 +25,7 @@ namespace Curiosity.MissionManager.Client
         internal static Mission currentMission = null;
         internal static Type missionType = null;
         public static bool isMessagingServer = false;
+        public static bool isEndingMission = false;
         internal static PluginManager Instance => PluginManager.Instance;
         public static PatrolZone PatrolZone = PatrolZone.Anywhere;
 
@@ -131,6 +132,9 @@ namespace Curiosity.MissionManager.Client
         /// <param name="reason">The reason the mission was stopped</param>
         public void Stop(EndState reason)
         {
+            if (isMessagingServer) return;
+            isMessagingServer = true;
+
             try
             {
                 switch (reason)
@@ -203,8 +207,8 @@ namespace Curiosity.MissionManager.Client
         /// <param name="failReason">The reason the mission failed</param>
         public async void Fail(string failReason)
         {
-            if (isMessagingServer) return;
-            isMessagingServer = true;
+            if (isEndingMission) return;
+            isEndingMission = true;
 
             MissionInfo info = Functions.GetMissionInfo(missionType);
 
@@ -223,8 +227,8 @@ namespace Curiosity.MissionManager.Client
 
         public async void Pass()
         {
-            if (isMessagingServer) return;
-            isMessagingServer = true;
+            if (isEndingMission) return;
+            isEndingMission = true;
 
             MissionInfo info = Functions.GetMissionInfo(missionType);
 

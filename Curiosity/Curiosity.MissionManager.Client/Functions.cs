@@ -76,6 +76,8 @@ namespace Curiosity.MissionManager.Client
 
             Mission.isOnMission = true;
             Mission.isMessagingServer = false;
+            Mission.isEndingMission = false;
+
             Mission.currentMission.Start();
         }
 

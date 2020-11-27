@@ -9,11 +9,10 @@ namespace Curiosity.Systems.Shared.Entity
         public bool IsMissionUnique { get; private set; }
         public int OwnerHandleId { get; private set; }
         public List<int> PartyMembers { get; private set; }
-
         public List<int> NetworkVehicles { get; private set; }
         public List<int> NetworkPeds { get; private set; }
-
         public DateTime Creation { get; private set; }
+        public bool AssistanceRequested { get; set; }
 
         public MissionData(string missionName, int owner, bool unique = false)
         {
