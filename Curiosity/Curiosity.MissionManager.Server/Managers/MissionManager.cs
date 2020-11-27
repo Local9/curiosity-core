@@ -48,13 +48,11 @@ namespace Curiosity.MissionManager.Server.Managers
                     missionData.OwnerHandleId = senderHandle;
                     missionData.IsMissionUnique = missionUnique;
 
-                    missionData.PartyMembers = new List<int>();
-                    missionData.NetworkVehicles = new List<int>();
-                    missionData.NetworkPeds = new List<int>();
+                    bool missionCreated = ActiveMissions.TryAdd(senderHandle, missionData);
 
-                    missionData.Creation = DateTime.Now;
+                    Logger.Debug($"mission:activate Success? > {missionCreated}");
 
-                    return ActiveMissions.TryAdd(senderHandle, missionData);
+                    return missionCreated;
                 }
                 catch (Exception ex)
                 {
@@ -72,7 +70,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 {
                     bool removed = ActiveMissions.TryRemove(senderHandle, out MissionData old);
 
-                    Logger.Debug($"mission:deactivate > {removed}:{old.ID}");
+                    Logger.Debug($"mission:deactivate > {removed}:{old?.ID}:{ActiveMissions.Count}");
 
                     return removed;
                 }

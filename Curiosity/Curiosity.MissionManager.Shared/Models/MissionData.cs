@@ -8,10 +8,10 @@ namespace Curiosity.Systems.Shared.Entity
         public string ID { get; set; }
         public bool IsMissionUnique { get; set; }
         public int OwnerHandleId { get; set; }
-        public List<int> PartyMembers { get; set; }
-        public List<int> NetworkVehicles { get; set; }
-        public List<int> NetworkPeds { get; set; }
-        public DateTime Creation { get; set; }
+        public List<int> PartyMembers { get; set; } = new List<int>();
+        public List<int> NetworkVehicles { get; set; } = new List<int>();
+        public List<int> NetworkPeds { get; set; } = new List<int>();
+        public DateTime Creation { get; set; } = DateTime.Now;
         public bool AssistanceRequested { get; set; }
 
         public bool AddMember(int playerHandle)
