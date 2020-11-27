@@ -260,70 +260,91 @@ namespace Curiosity.MissionManager.Client
 
                 // Update player information for those in the mission
 
-                md.PartyMembers.ForEach(memberServerID =>
-                {
-                    if (memberServerID == Game.Player.ServerId) return;
-
-                });
-
-                foreach(KeyValuePair<int, MissionDataPed> keyValuePair in md.NetworkPeds)
-                {
-                    bool found = false;
-                    RegisteredPeds.ForEach(ped =>
-                    {
-                        // check if the ped is registered
-                        found = (ped.NetworkId == keyValuePair.Key);
-                    });
-
-                    // if they are not registered then set up the ped
-                    if (!found)
-                    {
-                        int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
-                        CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
-
-                        if (cfxPed != null)
-                        {
-                            Ped curPed = new Ped(cfxPed);
-                            RegisteredPeds.Add(curPed);
-
-                            curPed.IsSuspect = keyValuePair.Value.IsSuspect;
-
-                            if (curPed.IsSuspect)
-                            {
-                                Blip b = curPed.AttachBlip();
-                                b.Color = BlipColor.Red;
-                                b.Scale = .5f;
-                                b.Sprite = BlipSprite.Enemy;
-                            }
-                        }
-                    }
-                }
-
-                md.NetworkVehicles.ForEach(vehNetworkId =>
-                {
-                    bool found = false;
-                    RegisteredVehicles.ForEach(veh =>
-                    {
-                        // check if the vehicle is registered
-                        found = (veh.NetworkId == vehNetworkId);
-                    });
-
-                    // if its not registered then set up the veh
-                    if (!found)
-                    {
-                        int entityId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
-                        CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
-
-                        if (cfxVehicle != null)
-                        {
-                            Vehicle curVehicle = new Vehicle(cfxVehicle);
-                            RegisteredVehicles.Add(curVehicle);
-                        }
-                    }
-                });
+                UpdateMissionPlayers(md.PartyMembers);
+                UpdateMissionPeds(md.NetworkPeds);
+                UpdateMissionVehicles(md.NetworkVehicles);
 
                 Logger.Debug($"{md}");
             }
+        }
+
+        private static void UpdateMissionVehicles(List<int> networkVehicles)
+        {
+            networkVehicles.ForEach(vehNetworkId =>
+            {
+                bool found = false;
+                RegisteredVehicles.ForEach(veh =>
+                {
+                    // check if the vehicle is registered
+                    found = (veh.NetworkId == vehNetworkId);
+                });
+
+                // if its not registered then set up the veh
+                if (!found)
+                {
+                    int entityId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
+                    CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
+
+                    if (cfxVehicle != null)
+                    {
+                        Vehicle curVehicle = new Vehicle(cfxVehicle);
+                        RegisteredVehicles.Add(curVehicle);
+                    }
+                }
+            });
+        }
+
+        private static void UpdateMissionPeds(Dictionary<int, MissionDataPed> networkPeds)
+        {
+            foreach (KeyValuePair<int, MissionDataPed> keyValuePair in networkPeds)
+            {
+                bool found = false;
+                RegisteredPeds.ForEach(ped =>
+                {
+                    // check if the ped is registered
+                    found = (ped.NetworkId == keyValuePair.Key);
+                });
+
+                // if they are not registered then set up the ped
+                if (!found)
+                {
+                    int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
+                    CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
+
+                    if (cfxPed != null)
+                    {
+                        Ped curPed = new Ped(cfxPed);
+                        RegisteredPeds.Add(curPed);
+
+                        curPed.IsSuspect = keyValuePair.Value.IsSuspect;
+
+                        if (curPed.IsSuspect)
+                        {
+                            Blip b = curPed.AttachBlip();
+                            b.Color = BlipColor.Red;
+                            b.Scale = .5f;
+                            b.Sprite = BlipSprite.Enemy;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void UpdateMissionPlayers(List<int> partyMembers)
+        {
+            partyMembers.ForEach(memberServerID =>
+            {
+                if (memberServerID == Game.Player.ServerId) return;
+
+                Player player = new Player(memberServerID);
+
+                if (Players.Contains(player)) return;
+
+                if (player != null)
+                {
+                    AddPlayer(player);
+                }
+            });
         }
 
         public void DiscordStatus(string status)
