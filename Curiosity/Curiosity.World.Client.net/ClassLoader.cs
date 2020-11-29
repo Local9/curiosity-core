@@ -26,11 +26,11 @@ namespace Curiosity.GameWorld.Client.net
 
             Classes.Environment.UI.PlayerBlips.Init();
             Classes.Environment.UI.PlayerNames.Init();
-            Classes.Environment.UI.CinematicMode.Init();
+            Classes.Environment.UI.CinematicMode.Init(); // consider killing this off
 
 
             // EE
-            Classes.Environment.EasterEggs.DeveloperWall.Init();
+            Classes.Environment.EasterEggs.DeveloperWall.Init(); // need to change this to something else
 
             Log.Verbose("Leaving ClassLoader Init");
         }
