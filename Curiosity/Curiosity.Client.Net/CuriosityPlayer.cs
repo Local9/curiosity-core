@@ -450,7 +450,7 @@ namespace Curiosity.Client.net
 
         async void ShowScaleformRules()
         {
-            ScaleformTask();
+            ScaleformTask(true);
             await Client.Delay(10000);
             scaleform.Dispose();
         }
@@ -464,7 +464,7 @@ namespace Curiosity.Client.net
             }
         }
 
-        async void ScaleformTask()
+        async void ScaleformTask(bool rules = false)
         {
             scaleform = new Scaleform("GTAV_ONLINE");
 
@@ -484,6 +484,24 @@ namespace Curiosity.Client.net
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
             description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
             description += "~r~∑\n";
+
+            if (rules)
+            {
+                description = "~o~Zero Tolerance Server, breaking the rules will result in a kick.~w~\n";
+                description += "~o~If you keep breaking the rules, you will be banned.~w~\n";
+                description += "~o~THIS IS NOT ~w~a role play server, forcing any role play will see you removed from the server.~w~\n";
+                description += "~o~Any form of hate speach or racisim will result in a Ban.~w~\n";
+                description += "~o~Listen to staff, they are shown in chat with a Star Icon.~w~\n";
+                description += "~w~PRESS F11 TO READ MORE.~w~\n";
+                description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+                description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+                description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+                description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+                description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+                description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+                description += "~r~∑~b~∑~g~∑~y~∑~p~∑~o~∑";
+                description += "~r~∑\n";
+            }
 
             scaleform.CallFunction("SETUP_TABS", 1, false);
             const string dictTexture = "www_arenawar_tv";
