@@ -14,7 +14,7 @@ namespace Curiosity.GameWorld.Client.net
             Log.Verbose("Entering ClassLoader Init");
 
             PlayerInformation.Init();
-            LoadoutManagement.Init();
+            // LoadoutManagement.Init();
 
             Classes.Environment.SeasonSync.Init();
             // Classes.Environment.TimeSync.Init(); // DEPRECATED
