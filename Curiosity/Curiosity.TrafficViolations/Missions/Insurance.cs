@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Extensions;
@@ -148,6 +149,11 @@ namespace Curiosity.TrafficViolations.Missions
                 case MissionState.VehicleParking:
                     if (suspectVehicle.Fx.Speed < 4.0f && Game.PlayerPed.IsInVehicle())
                     {
+                        suspectVehicle.Fx.IsEngineRunning = false;
+                        API.TaskSetBlockingOfNonTemporaryEvents(suspect.Handle, true);
+                        API.SetVehicleHalt(suspectVehicle.Handle, 3f, 0, false);
+                        API.SetVehicleHandbrake(suspectVehicle.Handle, true);
+
                         HelpMessage.CustomLooped(HelpMessage.Label.MISSION_VEHICLE_STOPPED);
                     }
                     else
