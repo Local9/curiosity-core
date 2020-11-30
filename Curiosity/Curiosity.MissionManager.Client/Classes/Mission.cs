@@ -323,34 +323,46 @@ namespace Curiosity.MissionManager.Client
                     {
                         // check if the vehicle is registered
                         found = (veh.NetworkId == keyValuePair.Key);
-                    });
 
-                    // if its not registered then set up the veh
-                    if (!found)
-                    {
-                        int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
-                        CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
-
-                        if (cfxVehicle != null)
+                        MissionDataVehicle mdv = keyValuePair.Value;
+                        if (found)
                         {
-                            MissionDataVehicle mdv = keyValuePair.Value;
-
-                            Logger.Debug($"ID: {keyValuePair.Key} / {mdv}");
-
-                            Vehicle curVehicle = new Vehicle(cfxVehicle);
-                            curVehicle.IsMission = true;
-                            curVehicle.IsTowable = mdv.IsTowable;
+                            veh.IsMission = true;
+                            veh.IsTowable = mdv.IsTowable;
 
                             if (mdv.AttachBlip)
                             {
-                                Blip b = curVehicle.AttachBlip();
+                                Blip b = veh.AttachBlip();
                                 b.Color = BlipColor.Red;
                                 b.Scale = .5f;
                             }
-
-                            RegisteredVehicles.Add(curVehicle);
                         }
-                    }
+                        else
+                        {
+                            int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
+                            CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
+
+                            if (cfxVehicle != null)
+                            {
+                                Logger.Debug($"ID: {keyValuePair.Key} / {mdv}");
+
+                                Vehicle curVehicle = new Vehicle(cfxVehicle, false);
+                                curVehicle.IsMission = true;
+                                curVehicle.IsTowable = mdv.IsTowable;
+
+                                if (mdv.AttachBlip)
+                                {
+                                    Blip b = curVehicle.AttachBlip();
+                                    b.Color = BlipColor.Red;
+                                    b.Scale = .5f;
+                                }
+
+                                RegisteredVehicles.Add(curVehicle);
+                            }
+                        }
+                    });
+
+                    // if its not registered then set up the veh
                 }
             }
             catch (Exception ex)
@@ -376,36 +388,51 @@ namespace Curiosity.MissionManager.Client
                     RegisteredPeds.ForEach(ped =>
                     {
                     // check if the ped is registered
-                    found = (ped.NetworkId == keyValuePair.Key);
-                    });
+                        found = (ped.NetworkId == keyValuePair.Key);
 
-                    // if they are not registered then set up the ped
-                    if (!found)
-                    {
                         MissionDataPed mdp = keyValuePair.Value;
 
-                        int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
-                        CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
-
-                        if (cfxPed != null)
+                        if (found)
                         {
-                            Ped curPed = new Ped(cfxPed);
-                            RegisteredPeds.Add(curPed);
-
-                            curPed.IsSuspect = mdp.IsSuspect;
-                            curPed.IsMission = true;
+                            ped.IsSuspect = mdp.IsSuspect;
+                            ped.IsMission = true;
 
                             Logger.Debug($"ID: {keyValuePair.Key} / {mdp}");
 
                             if (mdp.AttachBlip)
                             {
-                                Blip b = curPed.AttachBlip();
+                                Blip b = ped.AttachBlip();
                                 b.Sprite = BlipSprite.Enemy;
                                 b.Color = BlipColor.Red;
                                 b.Scale = .5f;
                             }
                         }
-                    }
+                        else
+                        {
+                            int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
+                            CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
+
+                            if (cfxPed != null)
+                            {
+                                Ped curPed = new Ped(cfxPed, false);
+                                RegisteredPeds.Add(curPed);
+
+                                curPed.IsSuspect = mdp.IsSuspect;
+                                curPed.IsMission = true;
+
+                                Logger.Debug($"ID: {keyValuePair.Key} / {mdp}");
+
+                                if (mdp.AttachBlip)
+                                {
+                                    Blip b = curPed.AttachBlip();
+                                    b.Sprite = BlipSprite.Enemy;
+                                    b.Color = BlipColor.Red;
+                                    b.Scale = .5f;
+                                }
+                            }
+                        }
+
+                    });
                 }
             }
             catch (Exception ex)
