@@ -61,6 +61,12 @@ namespace Curiosity.MissionManager.Client.Managers
                 return null;
             }));
 
+            EventSystem.Attach("mission:backup:completed", new EventCallback(metadata =>
+            {
+                Mission.isOnMission = false;
+                return null;
+            }));
+
         }
 
         private async Task OnMissionDirectorTick()

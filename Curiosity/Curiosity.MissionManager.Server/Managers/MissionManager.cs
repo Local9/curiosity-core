@@ -233,6 +233,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 {
                     await BaseScript.Delay(500);
                     Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, numberTransportArrested);
+                    EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
                 });
 
                 ActiveMissions.TryRemove(metadata.Sender, out MissionData old);
