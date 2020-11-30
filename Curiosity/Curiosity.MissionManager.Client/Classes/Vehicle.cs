@@ -20,7 +20,7 @@ namespace Curiosity.MissionManager.Client.Classes
         public Vector3 Position => Fx.Position;
         public string Hash => Fx.Model.ToString();
 
-        private PluginManager PluginInstance => PluginManager.Instance;
+        private PluginManager Instance => PluginManager.Instance;
         internal EventSystem EventSystem => EventSystem.GetModule();
 
         public string Name => API.GetLabelText(API.GetDisplayNameFromVehicleModel((uint)Fx.Model.Hash));
@@ -81,7 +81,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             API.NetworkRegisterEntityAsNetworked(fx.Handle);
 
-            PluginInstance.AttachTickHandler(OnVehicleUpdateTick);
+            Instance.AttachTickHandler(OnVehicleUpdateTick);
         }
 
         private async Task OnVehicleUpdateTick()
@@ -89,6 +89,12 @@ namespace Curiosity.MissionManager.Client.Classes
             if (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 5)
             {
                 await BaseScript.Delay(1000);
+                return;
+            }
+
+            if (!Fx.Exists())
+            {
+                Instance.DetachTickHandler(OnVehicleUpdateTick);
                 return;
             }
 
@@ -133,7 +139,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     Fx.AttachedBlip.Delete();
             }
 
-            PluginInstance.DetachTickHandler(OnVehicleUpdateTick);
+            Instance.DetachTickHandler(OnVehicleUpdateTick);
 
             EventSystem.Request<bool>("mission:remove:vehicle", Fx.NetworkId);
 

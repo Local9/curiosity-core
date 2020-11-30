@@ -215,6 +215,12 @@ namespace Curiosity.MissionManager.Client.Classes
                 return;
             }
 
+            if (!Fx.Exists())
+            {
+                Instance.DetachTickHandler(OnUpdatePedTick);
+                return;
+            }
+
             LastUpdate = DateTime.Now;
 
             bool attachBlip = false;
