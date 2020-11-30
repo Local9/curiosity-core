@@ -140,21 +140,26 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
-                foreach(KeyValuePair<int, CuriosityUser> keyValuePair in PluginManager.ActiveUsers)
+                foreach (KeyValuePair<int, CuriosityUser> keyValuePair in PluginManager.ActiveUsers)
                 {
+                    if (keyValuePair.Key == metadata.Sender) continue;
+
                     CuriosityUser curiosityUser = keyValuePair.Value;
+
+                    if (curiosityUser == null) continue;
+
                     if (curiosityUser.CurrentJob == "police")
                     {
-                        if (curiosityUser.AcceptingJobNotification)
+                        if (curiosityUser.NotificationBackup)
                         {
-                            EventSystem.Send("mission:notification", curiosityUser.Handle, "Dispatch A.I.", "Back up request", $"Player {player.Name} has requested back up.");
+                            EventSystem.GetModule().Send("mission:notification", curiosityUser.Handle, "Dispatch A.I.", "Back up request", $"Player {player.Name} has requested back up.");
                         }
                     }
                 }
 
                 missionData.AssistanceRequested = true;
 
-                return false;
+                return true;
             }));
 
             EventSystem.GetModule().Attach("mission:assistance:accept", new EventCallback(metadata =>

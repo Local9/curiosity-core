@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.Systems.Library.Enums;
@@ -13,15 +14,21 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         UIMenu Menu;
         UIMenuCheckboxItem menuCheckboxEnableCallouts;
+        UIMenuCheckboxItem menuCheckboxEnableNotificationsBackup;
         UIMenuListItem menuListItemPatrolZone;
 
         int patrolZoneIndex = 0;
         List<dynamic> lst = new List<dynamic>() { "City", "County" };
 
+        bool notificationBackup = false;
+
         public UIMenu CreateMenu(UIMenu menu)
         {
             menuCheckboxEnableCallouts = new UIMenuCheckboxItem("Callouts", MissionDirectorManager.MissionDirectorState, "If enabled ~b~Dispatch A.I.~s~ will assign random callouts.");
             menu.AddItem(menuCheckboxEnableCallouts);
+
+            menuCheckboxEnableNotificationsBackup = new UIMenuCheckboxItem("Back Up Notifications", notificationBackup, "Show Notifications when a player is requesting back up");
+            menu.AddItem(menuCheckboxEnableNotificationsBackup);
 
             menuListItemPatrolZone = new UIMenuListItem("Patrol Zone", lst, patrolZoneIndex, "This will change the area of missions provided by ~b~Dispatch A.I.");
             menu.AddItem(menuListItemPatrolZone);
@@ -70,6 +77,21 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 await BaseScript.Delay(100);
                 menuCheckboxEnableCallouts.Checked = MissionDirectorManager.MissionDirectorState;
                 await BaseScript.Delay(1000);
+            }
+
+            if (checkboxItem == menuCheckboxEnableNotificationsBackup)
+            {
+                notificationBackup = Checked;
+                bool setup = await EventSystem.GetModule().Request<bool>("user:job:notification:backup", notificationBackup);
+
+                if (setup)
+                {
+                    Notify.Success($"Accepting Backup Notifications");
+                }
+                else
+                {
+                    Notify.Info($"Disabled Backup Notifications");
+                }
             }
 
             await BaseScript.Delay(500);

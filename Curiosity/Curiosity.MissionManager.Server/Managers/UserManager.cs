@@ -66,6 +66,16 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 return null;
             }));
+
+            EventSystem.GetModule().Attach("user:job:notification:backup", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                curiosityUser.NotificationBackup = metadata.Find<bool>(0);
+
+                return curiosityUser.NotificationBackup;
+            }));
         }
 
         static void OnPlayerDropped([FromSource]Player player, string reason)

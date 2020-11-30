@@ -24,7 +24,7 @@ namespace Curiosity.Systems.Library.Models
         public int QueuePriority { get; set; }
         public CuriosityCharacter Character { get; set; }
         public Guid PartyId { get; internal set; } = Guid.Empty;
-        public string CurrentJob { get; set; }
+        public string CurrentJob { get; set; } = string.Empty;
 
         public void SetPartyId(Guid partyId)
         {
@@ -42,6 +42,6 @@ namespace Curiosity.Systems.Library.Models
         public bool IsDonatorLevel3 => (Role == Role.DONATOR_LEVEL_3);
         public bool IsDonatorLife => (Role == Role.DONATOR_LIFE);
 
-        public bool AcceptingJobNotification { get; set; }
+        public bool NotificationBackup { get; set; } = false;
     }
 }
