@@ -274,7 +274,12 @@ namespace Curiosity.MissionManager.Client.Classes
                 if ((API.GetGameTimer() - TimeOfDeath) > 5000)
                 {
                     API.NetworkFadeOutEntity(base.Handle, false, false);
-                    await BaseScript.Delay(2000);
+                    
+                    while(API.NetworkIsEntityFading(base.Handle))
+                    {
+                        await BaseScript.Delay(10);
+                    }
+
                     Dismiss();
                 }
             }

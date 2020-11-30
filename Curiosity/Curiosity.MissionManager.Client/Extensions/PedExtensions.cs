@@ -28,7 +28,10 @@ namespace Curiosity.MissionManager.Client.Extensions
                 API.NetworkFadeOutEntity(ped.Handle, false, slow);
             }
 
-            await BaseScript.Delay(3000);
+            while (API.NetworkIsEntityFading(ped.Handle))
+            {
+                await BaseScript.Delay(10);
+            }
         }
 
         public static bool IsPlayingAnim(this Ped ped, string animSet, string animName)

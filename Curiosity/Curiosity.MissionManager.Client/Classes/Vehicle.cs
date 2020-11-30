@@ -146,7 +146,12 @@ namespace Curiosity.MissionManager.Client.Classes
             Fx.IsPersistent = false;
             Fx.MarkAsNoLongerNeeded();
             Fx.FadeOut();
-            await BaseScript.Delay(2000);
+            
+            while (API.NetworkIsEntityFading(base.Handle))
+            {
+                await BaseScript.Delay(10);
+            }
+
             base.Delete();
         }
 

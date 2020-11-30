@@ -28,7 +28,10 @@ namespace Curiosity.MissionManager.Client.Extensions
                 API.NetworkFadeOutEntity(vehicle.Handle, false, slow);
             }
 
-            await BaseScript.Delay(3000);
+            while (API.NetworkIsEntityFading(vehicle.Handle))
+            {
+                await BaseScript.Delay(10);
+            }
         }
     }
 }
