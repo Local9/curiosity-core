@@ -28,7 +28,7 @@ namespace Curiosity.MissionManager.Client.Managers
             markers.Add(new Marker("~b~Police Duty Registration", new Vector3(622.13f, 17.52761f, 86.86286f), markerColor, markerFilter: MarkerFilter.PoliceDuty));
             markers.Add(new Marker("~b~Police Duty Registration", new Vector3(1851.431f, 3683.458f, 33.26704f), markerColor, markerFilter: MarkerFilter.PoliceDuty));
             markers.Add(new Marker("~b~Police Duty Registration", new Vector3(-448.4843f, 6008.57f, 30.71637f), markerColor, markerFilter: MarkerFilter.PoliceDuty));
-            markers.Add(new Marker("~b~Police Duty Registration", new Vector3(368.8574f, -1610.202f, 28.29193f), markerColor, markerFilter: MarkerFilter.PoliceDuty));
+            markers.Add(new Marker("~b~Police Duty Registration", new Vector3(360.6692f, -1583.806f, 28.29195f), markerColor, markerFilter: MarkerFilter.PoliceDuty));
             markers.Add(new Marker("~b~Police Duty Registration", new Vector3(826.2648f, -1288.504f, 27.24066f), markerColor, markerFilter: MarkerFilter.PoliceDuty));
             markers.Add(new Marker("~b~Police Duty Registration", new Vector3(-561.2444f, -132.6783f, 37.04274f), markerColor, markerFilter: MarkerFilter.PoliceDuty));
 

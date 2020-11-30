@@ -23,9 +23,12 @@ namespace Curiosity.MissionManager.Client.Managers
 
         public void TurnOffMissionDirector()
         {
-            MissionDirectorState = false;
-            Notify.Info($"~b~Dispatch A.I. ~o~Disabled");
-            Instance.DetachTickHandler(OnMissionDirectorTick);
+            if (MissionDirectorState)
+            {
+                Notify.Info($"~b~Dispatch A.I. ~o~Disabled");
+                Instance.DetachTickHandler(OnMissionDirectorTick);
+                MissionDirectorState = false;
+            }
         }
 
         public void ToggleMissionDirector()
