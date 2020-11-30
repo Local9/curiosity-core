@@ -60,6 +60,13 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
                 return;
             }
 
+            int rnd = new Random().Next(100);
+
+            if (rnd < 90)
+            {
+                return;
+            }
+
             mdFlamingo = (int)phFlamingo;
             await mdFlamingo.Request(10000);
 
