@@ -283,6 +283,10 @@ namespace Curiosity.MissionManager.Client
                     return;
                 }
 
+                if (!Mission.isOnMission) return;
+
+                if (Mission.isEndingMission) return;
+
                 // Update player information for those in the mission
                 UpdateMissionPeds(currentMissionData.NetworkPeds);
                 UpdateMissionVehicles(currentMissionData.NetworkVehicles);
