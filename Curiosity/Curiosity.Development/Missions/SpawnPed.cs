@@ -39,6 +39,11 @@ namespace Curiosity.Development.Missions
             criminal.IsMission = true;
             criminal.IsSuspect = true;
 
+            Blip b = criminal.AttachBlip();
+            b.Color = BlipColor.Red;
+            b.Scale = .5f;
+            b.Sprite = BlipSprite.Enemy;
+
             Mission.RegisterPed(criminal);
 
             Notify.Info($"Ped Created");

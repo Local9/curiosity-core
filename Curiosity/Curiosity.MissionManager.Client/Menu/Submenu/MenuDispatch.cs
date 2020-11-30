@@ -51,15 +51,15 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             menu.AddItem(menuSeparatorItem1);
 
-            // menu.AddItem(menuItemCode78);
+            menu.AddItem(menuItemCode78);
 
-            //menuAssistanceRequesters = MenuManager._MenuPool.AddSubMenu(MenuManager.menuDispatch, "Assistance Response", "Users requesting assistance will be found here.");
-            //menuAssistanceRequesters.MouseControlsEnabled = false;
-            //_menuAssitianceRequesters.CreateMenu(menuAssistanceRequesters);
+            menuAssistanceRequesters = MenuManager._MenuPool.AddSubMenu(MenuManager.menuDispatch, "Assistance Response", "Users requesting assistance will be found here.");
+            menuAssistanceRequesters.MouseControlsEnabled = false;
+            _menuAssitianceRequesters.CreateMenu(menuAssistanceRequesters);
 
             // menu.AddItem(menuItemCode80);
 
-            // menu.AddItem(menuSeparatorItem2);
+            menu.AddItem(menuSeparatorItem2);
 
             menu.AddItem(menuItemCode16); //
             // menu.AddItem(menuItemCode27);

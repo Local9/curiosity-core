@@ -28,37 +28,43 @@ namespace Curiosity.Systems.Shared.Entity
             return true;
         }
 
-        public bool AddNetworkVehicle(int networkId, bool isTowable)
+        public bool AddNetworkVehicle(int networkId, bool isTowable, bool attachBlip)
         {
             if (NetworkVehicles.ContainsKey(networkId))
             {
-                NetworkVehicles[networkId].IsTowable = isTowable;
+                MissionDataVehicle mdv = NetworkVehicles[networkId];
+                mdv.IsTowable = isTowable;
+                mdv.AttachBlip = attachBlip;
             }
             else
             {
-                MissionDataVehicle missionDataVeh = new MissionDataVehicle();
-                missionDataVeh.IsTowable = isTowable;
+                MissionDataVehicle mdv = new MissionDataVehicle();
+                mdv.IsTowable = isTowable;
+                mdv.AttachBlip = attachBlip;
 
-                NetworkVehicles.Add(networkId, missionDataVeh);
+                NetworkVehicles.Add(networkId, mdv);
             }
 
             return true;
         }
 
-        public bool AddNetworkPed(int networkId, bool isSuspect, bool isHandcuffed)
+        public bool AddNetworkPed(int networkId, bool isSuspect, bool isHandcuffed, bool attachBlip)
         {
             if (NetworkPeds.ContainsKey(networkId))
             {
-                NetworkPeds[networkId].IsSuspect = isSuspect;
-                NetworkPeds[networkId].IsHandcuffed = isHandcuffed;
+                MissionDataPed mpd = NetworkPeds[networkId];
+                mpd.IsHandcuffed = isHandcuffed;
+                mpd.IsSuspect = isSuspect;
+                mpd.AttachBlip = attachBlip;
             }
             else
             {
-                MissionDataPed missionDataPed = new MissionDataPed();
-                missionDataPed.IsSuspect = isSuspect;
-                missionDataPed.IsHandcuffed = isHandcuffed;
+                MissionDataPed mpd = new MissionDataPed();
+                mpd.IsSuspect = isSuspect;
+                mpd.IsHandcuffed = isHandcuffed;
+                mpd.AttachBlip = attachBlip;
 
-                NetworkPeds.Add(networkId, missionDataPed);
+                NetworkPeds.Add(networkId, mpd);
             }
             
             return true;

@@ -91,7 +91,11 @@ namespace Curiosity.MissionManager.Client.Classes
 
             LastUpdate = DateTime.Now;
 
-            EventSystem.Request<bool>("mission:add:vehicle", Fx.NetworkId, IsTowable);
+            bool attachBlip = false;
+            if (Fx.AttachedBlip != null)
+                attachBlip = true;
+
+            EventSystem.Request<bool>("mission:add:vehicle", Fx.NetworkId, IsTowable, attachBlip);
         }
 
         public static async Task<Vehicle> Spawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true, bool isNetworked = true, bool isMission = true)
@@ -125,7 +129,6 @@ namespace Curiosity.MissionManager.Client.Classes
                 if (Fx.AttachedBlip.Exists())
                     Fx.AttachedBlip.Delete();
             }
-
 
             PluginInstance.DetachTickHandler(OnVehicleUpdateTick);
 

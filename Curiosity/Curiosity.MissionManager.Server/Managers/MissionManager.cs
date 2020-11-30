@@ -92,8 +92,9 @@ namespace Curiosity.MissionManager.Server.Managers
                 int networkId = metadata.Find<int>(0);
                 bool isSuspect = metadata.Find<bool>(1);
                 bool isHandcuffed = metadata.Find<bool>(2);
+                bool attachBlip = metadata.Find<bool>(3);
 
-                return missionData.AddNetworkPed(networkId, isSuspect, isHandcuffed);
+                return missionData.AddNetworkPed(networkId, isSuspect, isHandcuffed, attachBlip);
             }));
 
             EventSystem.GetModule().Attach("mission:add:vehicle", new EventCallback(metadata =>
@@ -104,8 +105,9 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 int networkId = metadata.Find<int>(0);
                 bool isTowable = metadata.Find<bool>(1);
+                bool attachBlip = metadata.Find<bool>(2);
 
-                return missionData.AddNetworkVehicle(networkId, isTowable);
+                return missionData.AddNetworkVehicle(networkId, isTowable, attachBlip);
             }));
 
             EventSystem.GetModule().Attach("mission:remove:ped", new EventCallback(metadata =>

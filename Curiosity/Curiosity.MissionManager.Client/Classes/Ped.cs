@@ -215,7 +215,12 @@ namespace Curiosity.MissionManager.Client.Classes
 
             LastUpdate = DateTime.Now;
 
-            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect, IsHandcuffed);
+            bool attachBlip = false;
+
+            if (Fx.AttachedBlip != null)
+                attachBlip = true;
+
+            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect, IsHandcuffed, attachBlip);
         }
 
         internal void PrisonTransport()
@@ -256,13 +261,10 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (TimeOfDeath > 0 && !IsImportant) // Remove the ped from the world
+            if (TimeOfDeath > 0) // Remove the ped from the world
             {
                 if ((API.GetGameTimer() - TimeOfDeath) > 5000)
                 {
-                    int handle = Fx.Handle;
-                    API.RemovePedElegantly(ref handle);
-
                     API.NetworkFadeOutEntity(base.Handle, false, false);
                     await BaseScript.Delay(2000);
                     Dismiss();
@@ -577,6 +579,9 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             if (Fx == null) return;
             if (!base.Exists()) return;
+
+            int handle = Fx.Handle;
+            API.RemovePedElegantly(ref handle);
 
             await Fx.FadeOut();
 

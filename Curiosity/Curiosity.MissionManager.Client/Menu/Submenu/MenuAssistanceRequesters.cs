@@ -15,6 +15,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         UIMenu Menu;
 
+        Dictionary<UIMenuItem, MissionData> menuMissions = new Dictionary<UIMenuItem, MissionData>();
+
         public UIMenu CreateMenu(UIMenu menu)
         {
             menu.OnItemSelect += Menu_OnItemSelect;
@@ -33,6 +35,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         private async void Menu_OnMenuOpen(UIMenu sender)
         {
             Menu.MenuItems.Clear();
+            menuMissions.Clear();
 
             bool isCalloutActive = MenuManager.IsCalloutActive;
             List<MissionData> missions = await eventSystem.Request<List<MissionData>>("mission:assistance:list");
@@ -55,6 +58,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 Logger.Debug($"Mission: {mis.OwnerHandleId}, {mis.ID}, {mis.Creation} / PlayerID: {player?.Name}#{player?.Handle}");
                 
                 UIMenuItem uIMenuItem = new UIMenuItem($"{player?.Name}");
+
+                menuMissions.Add(uIMenuItem, mis);
+
                 Menu.AddItem(uIMenuItem);
             });
 
@@ -71,7 +77,19 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
+            if (menuMissions.ContainsKey(selectedItem))
+            {
+                MissionData missionData = menuMissions[selectedItem];
 
+                MissionData response = await eventSystem.Request<MissionData>("mission:assistance:accept", missionData.OwnerHandleId);
+
+                if (response != null)
+                {
+                    Mission.currentMissionData = response;
+                    await BaseScript.Delay(500);
+                    Mission.AttachMissionUpdateTick();
+                }
+            }
         }
     }
 }

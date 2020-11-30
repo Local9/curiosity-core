@@ -199,7 +199,7 @@ namespace Curiosity.MissionManager.Client
 
                 PluginManager.Blips.Clear();
 
-                Instance.DetachTickHandler(OnMissionUpdateTick);
+                DetachMissionUpdateTick();
 
                 currentMissionData = null;
             }
@@ -207,6 +207,16 @@ namespace Curiosity.MissionManager.Client
             {
                 Logger.Debug($"Mission.Stop {ex}");
             }
+        }
+
+        internal static void DetachMissionUpdateTick()
+        {
+            Instance.DetachTickHandler(OnMissionUpdateTick);
+        }
+
+        internal static void AttachMissionUpdateTick()
+        {
+            Instance.AttachTickHandler(OnMissionUpdateTick);
         }
 
         /// <summary>
@@ -302,9 +312,19 @@ namespace Curiosity.MissionManager.Client
 
                     if (cfxVehicle != null)
                     {
+                        MissionDataVehicle mdv = keyValuePair.Value;
+
                         Vehicle curVehicle = new Vehicle(cfxVehicle);
                         curVehicle.IsMission = true;
-                        curVehicle.IsTowable = keyValuePair.Value.IsTowable;
+                        curVehicle.IsTowable = mdv.IsTowable;
+
+                        if (mdv.AttachBlip)
+                        {
+                            Blip b = curVehicle.AttachBlip();
+                            b.Color = BlipColor.Red;
+                            b.Scale = .5f;
+                        }
+
                         RegisteredVehicles.Add(curVehicle);
                     }
                 }
@@ -328,6 +348,8 @@ namespace Curiosity.MissionManager.Client
                 // if they are not registered then set up the ped
                 if (!found)
                 {
+                    MissionDataPed mpd = keyValuePair.Value;
+
                     int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
                     CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
 
@@ -336,10 +358,10 @@ namespace Curiosity.MissionManager.Client
                         Ped curPed = new Ped(cfxPed);
                         RegisteredPeds.Add(curPed);
 
-                        curPed.IsSuspect = keyValuePair.Value.IsSuspect;
+                        curPed.IsSuspect = mpd.IsSuspect;
                         curPed.IsMission = true;
 
-                        if (curPed.IsSuspect)
+                        if (mpd.AttachBlip)
                         {
                             Blip b = curPed.AttachBlip();
                             b.Color = BlipColor.Red;
