@@ -21,6 +21,13 @@ namespace Curiosity.MissionManager.Client.Managers
 
         static List<Type> currentMissionSelection = new List<Type>();
 
+        public void TurnOffMissionDirector()
+        {
+            MissionDirectorState = false;
+            Notify.Info($"~b~Dispatch A.I. ~o~Disabled");
+            Instance.DetachTickHandler(OnMissionDirectorTick);
+        }
+
         public void ToggleMissionDirector()
         {
             MissionDirectorState = !MissionDirectorState;

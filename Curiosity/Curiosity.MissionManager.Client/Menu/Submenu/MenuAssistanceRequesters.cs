@@ -89,7 +89,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
                 if (response != null)
                 {
-                    MissionDirectorManager.Director.ToggleMissionDirector();
+                    MissionDirectorManager.Director.TurnOffMissionDirector();
 
                     if (Mission.currentMission != null)
                     {

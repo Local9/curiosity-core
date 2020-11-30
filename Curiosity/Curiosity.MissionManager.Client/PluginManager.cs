@@ -52,7 +52,7 @@ namespace Curiosity.MissionManager.Client
 
             Instance = this;
 
-            EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
+            EventHandlers["onResourceStop"] += new Action<string>(OnClientResourceStop);
             EventHandlers["onClientResourceStart"] += new Action<string>(OnClientResourceStart);
             EventHandlers["playerSpawned"] += new Action<string>(OnPlayerSpawned);
             EventHandlers["curiosity:client:special"] += new Action<bool>(OnSpecialDay);

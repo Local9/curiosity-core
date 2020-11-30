@@ -160,7 +160,7 @@ namespace Curiosity.MissionManager.Client.Menu
                 return;
             }
 
-            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to open menu."); // need to look into control binds
+            Screen.DisplayHelpTextThisFrame($"~w~Press ~b~~h~F1~h~ ~w~to open menu."); // need to look into control binds
 
             if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
             {
