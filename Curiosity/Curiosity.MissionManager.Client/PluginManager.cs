@@ -153,38 +153,6 @@ namespace Curiosity.MissionManager.Client
             IsPlayerSpawned = true;
         }
 
-        /// <summary>
-        /// Registers a tick function
-        /// </summary>
-        /// <param name="action"></param>
-        public void RegisterTickHandler(Func<Task> action)
-        {
-            try
-            {
-                Tick += action;
-            }
-            catch (Exception ex)
-            {
-                Logger.Debug(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Removes a tick function from the registry
-        /// </summary>
-        /// <param name="action"></param>
-        public void DeregisterTickHandler(Func<Task> action)
-        {
-            try
-            {
-                Tick -= action;
-            }
-            catch (Exception ex)
-            {
-                Logger.Debug(ex.Message);
-            }
-        }
-
         public object LoadManager(Type type)
         {
             if (GetManager(type) != null) return null;

@@ -73,11 +73,25 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
+        public DateTime LastUpdate { get; private set; }
+
         internal Vehicle(CitizenFX.Core.Vehicle fx) : base(fx.Handle)
         {
             Fx = fx;
+            PluginInstance.AttachTickHandler(OnVehicleUpdateTick);
+        }
 
-            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId);
+        private async Task OnVehicleUpdateTick()
+        {
+            if (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 5)
+            {
+                await BaseScript.Delay(1000);
+                return;
+            }
+
+            LastUpdate = DateTime.Now;
+
+            EventSystem.Request<bool>("mission:add:vehicle", Fx.NetworkId, IsTowable);
         }
 
         public static async Task<Vehicle> Spawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true, bool isNetworked = true, bool isMission = true)
@@ -111,6 +125,9 @@ namespace Curiosity.MissionManager.Client.Classes
                 if (Fx.AttachedBlip.Exists())
                     Fx.AttachedBlip.Delete();
             }
+
+
+            PluginInstance.DetachTickHandler(OnVehicleUpdateTick);
 
             EventSystem.Request<bool>("mission:remove:vehicle", Fx.NetworkId);
 

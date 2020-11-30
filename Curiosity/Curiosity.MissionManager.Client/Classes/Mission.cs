@@ -28,6 +28,7 @@ namespace Curiosity.MissionManager.Client
         internal static Type missionType = null;
         public static bool isMessagingServer = false;
         public static bool isEndingMission = false;
+        internal static MissionData currentMissionData;
         internal static PluginManager Instance => PluginManager.Instance;
         public static PatrolZone PatrolZone = PatrolZone.Anywhere;
 
@@ -198,7 +199,9 @@ namespace Curiosity.MissionManager.Client
 
                 PluginManager.Blips.Clear();
 
-                Instance.DeregisterTickHandler(OnMissionUpdateTick);
+                Instance.DetachTickHandler(OnMissionUpdateTick);
+
+                currentMissionData = null;
             }
             catch(Exception ex)
             {
@@ -260,41 +263,52 @@ namespace Curiosity.MissionManager.Client
 
             LastUpdate = DateTime.Now.AddSeconds(5);
 
-            MissionData md = await EventSystem.Request<MissionData>("mission:get:data");
+            currentMissionData = await EventSystem.Request<MissionData>("mission:get:data", Game.Player.ServerId);
+
+            if (currentMission == null)
+            {
+                Instance.DetachTickHandler(OnMissionUpdateTick);
+                return;
+            }
 
             // Update player information for those in the mission
 
-            UpdateMissionPlayers(md.PartyMembers);
-            UpdateMissionPeds(md.NetworkPeds);
-            UpdateMissionVehicles(md.NetworkVehicles);
+            UpdateMissionPlayers(currentMissionData.PartyMembers);
+            UpdateMissionPeds(currentMissionData.NetworkPeds);
+            UpdateMissionVehicles(currentMissionData.NetworkVehicles);
 
-            Logger.Debug($"{md}");
+            if (currentMissionData.IsCompleted)
+                Instance.DetachTickHandler(OnMissionUpdateTick);
+
+            Logger.Debug($"{currentMissionData}");
         }
 
-        private static void UpdateMissionVehicles(List<int> networkVehicles)
+        private static void UpdateMissionVehicles(Dictionary<int, MissionDataVehicle> networkVehicles)
         {
-            networkVehicles.ForEach(vehNetworkId =>
+            foreach (KeyValuePair<int, MissionDataVehicle> keyValuePair in networkVehicles)
             {
                 bool found = false;
                 RegisteredVehicles.ForEach(veh =>
                 {
                     // check if the vehicle is registered
-                    found = (veh.NetworkId == vehNetworkId);
+                    found = (veh.NetworkId == keyValuePair.Key);
                 });
 
                 // if its not registered then set up the veh
                 if (!found)
                 {
-                    int entityId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
+                    int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
                     CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
 
                     if (cfxVehicle != null)
                     {
                         Vehicle curVehicle = new Vehicle(cfxVehicle);
+                        curVehicle.IsMission = true;
+                        curVehicle.IsTowable = keyValuePair.Value.IsTowable;
                         RegisteredVehicles.Add(curVehicle);
                     }
                 }
-            });
+            }
         }
 
         private static void UpdateMissionPeds(Dictionary<int, MissionDataPed> networkPeds)
@@ -323,6 +337,7 @@ namespace Curiosity.MissionManager.Client
                         RegisteredPeds.Add(curPed);
 
                         curPed.IsSuspect = keyValuePair.Value.IsSuspect;
+                        curPed.IsMission = true;
 
                         if (curPed.IsSuspect)
                         {

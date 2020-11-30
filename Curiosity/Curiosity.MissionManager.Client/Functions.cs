@@ -96,7 +96,7 @@ namespace Curiosity.MissionManager.Client
             Mission.isMessagingServer = false;
             Mission.isEndingMission = false;
 
-            Instance.RegisterTickHandler(Mission.OnMissionUpdateTick);
+            Instance.AttachTickHandler(Mission.OnMissionUpdateTick);
 
             Mission.currentMission.Start();
         }

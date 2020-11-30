@@ -1,4 +1,5 @@
-﻿using Curiosity.MissionManager.Server.Diagnostics;
+﻿using CitizenFX.Core;
+using Curiosity.MissionManager.Server.Diagnostics;
 using Curiosity.MissionManager.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -101,8 +102,9 @@ namespace Curiosity.MissionManager.Server.Managers
                 if (missionData == null) return false;
 
                 int networkId = metadata.Find<int>(0);
+                bool isTowable = metadata.Find<bool>(1);
 
-                return missionData.AddNetworkVehicle(networkId);
+                return missionData.AddNetworkVehicle(networkId, isTowable);
             }));
 
             EventSystem.GetModule().Attach("mission:remove:ped", new EventCallback(metadata =>
@@ -159,6 +161,10 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:get:data", new EventCallback(metadata =>
             {
+                int senderHandle = metadata.Find<int>(0);
+
+
+
                 return GetMissionData(metadata.Sender);
             }));
 
@@ -168,10 +174,13 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 if (!ActiveMissions.ContainsKey(missionOwnerId)) return false;
 
-                return ActiveMissions[missionOwnerId].AddMember(metadata.Sender);
+                MissionData missionData = ActiveMissions[missionOwnerId];
+                missionData.AddMember(metadata.Sender);
+
+                return missionData;
             }));
 
-            EventSystem.GetModule().Attach("mission:completed", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("mission:completed", new AsyncEventCallback(async metadata =>
             {
                 if (!ActiveMissions.ContainsKey(metadata.Sender)) return null;
 
@@ -179,11 +188,22 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 if (player == null) return false;
 
-                string missionId = ActiveMissions[metadata.Sender].ID;
+                MissionData missionData = ActiveMissions[metadata.Sender];
+                missionData.IsCompleted = true;
+
+                await BaseScript.Delay(5000);
+
+                string missionId = missionData.ID;
                 bool passed = metadata.Find<bool>(0);
                 int numberTransportArrested = metadata.Find<int>(1);
 
                 bool res = Instance.ExportDictionary["curiosity-server"].MissionComplete(player.Handle, missionId, passed, numberTransportArrested);
+
+                missionData.PartyMembers.ForEach(async serverHandle =>
+                {
+                    await BaseScript.Delay(500);
+                    Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, numberTransportArrested);
+                });
 
                 ActiveMissions.TryRemove(metadata.Sender, out MissionData old);
 
@@ -193,8 +213,19 @@ namespace Curiosity.MissionManager.Server.Managers
 
         MissionData GetMissionData(int senderHandle)
         {
-            if (!ActiveMissions.ContainsKey(senderHandle)) return null;
-            return ActiveMissions[senderHandle];
+            if (ActiveMissions.ContainsKey(senderHandle))
+                return ActiveMissions[senderHandle];
+
+            foreach(KeyValuePair<int, MissionData> keyValuePair in ActiveMissions)
+            {
+                foreach(int playerId in keyValuePair.Value.PartyMembers)
+                {
+                    if (playerId == senderHandle)
+                        return keyValuePair.Value;
+                }
+            }
+
+            return null;
         }
     }
 }

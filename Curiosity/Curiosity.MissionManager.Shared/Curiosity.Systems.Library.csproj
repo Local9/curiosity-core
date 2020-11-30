@@ -73,7 +73,9 @@
     <Compile Include="Models\FiveM\FiveMPlayerList.cs" />
     <Compile Include="Models\JsonBuilder.cs" />
     <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Models\MissionDataEntity.cs" />
     <Compile Include="Models\MissionDataPed.cs" />
+    <Compile Include="Models\MissionDataVehicle.cs" />
     <Compile Include="Models\Party.cs" />
     <Compile Include="Models\PartyMember.cs" />
     <Compile Include="Models\Position.cs" />

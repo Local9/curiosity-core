@@ -31,11 +31,11 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
 
-                Instance.RegisterTickHandler(OnMissionDirectorTick);
+                Instance.AttachTickHandler(OnMissionDirectorTick);
             }
             else
             {
-                Instance.DeregisterTickHandler(OnMissionDirectorTick);
+                Instance.DetachTickHandler(OnMissionDirectorTick);
             }
         }
 

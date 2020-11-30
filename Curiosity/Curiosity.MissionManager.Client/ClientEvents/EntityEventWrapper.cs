@@ -45,7 +45,7 @@ namespace Curiosity.MissionManager.Client.ClientEvents
         {
             this.Entity = ent;
 
-            plugin.RegisterTickHandler(this.EntityEventWrapperOnTick);
+            plugin.AttachTickHandler(this.EntityEventWrapperOnTick);
             EntityEventWrapper.Wrappers.Add(this);
         }
 
@@ -60,7 +60,7 @@ namespace Curiosity.MissionManager.Client.ClientEvents
 
         public void Dispose()
         {
-            plugin.DeregisterTickHandler(this.EntityEventWrapperOnTick);
+            plugin.DetachTickHandler(this.EntityEventWrapperOnTick);
 
             EntityEventWrapper.Wrappers.Remove(this);
             EntityEventWrapper.OnWrapperDisposedEvent onWrapperDisposedEvent = this.Disposed;

@@ -33,7 +33,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         private void Menu_OnMenuClose(UIMenu sender)
         {
             MenuManager.OnMenuState();
-            PluginInstance.DeregisterTickHandler(OnSuspectVehicleDistanceCheck);
+            PluginInstance.DetachTickHandler(OnSuspectVehicleDistanceCheck);
         }
 
         private void Menu_OnMenuOpen(UIMenu sender)
@@ -59,7 +59,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 menuItemSearchVehicle.Enabled = vehicle.IsSearchable;
                 menuItemSearchVehicle.Description = vehicle.IsSearchable ? "Able to search the vehicle" : "Unable to search this vehicle";
 
-                PluginInstance.RegisterTickHandler(OnSuspectVehicleDistanceCheck);
+                PluginInstance.AttachTickHandler(OnSuspectVehicleDistanceCheck);
             }
 
             MenuManager.OnMenuState(true);

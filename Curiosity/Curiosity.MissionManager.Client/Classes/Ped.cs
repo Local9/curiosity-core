@@ -19,7 +19,7 @@ namespace Curiosity.MissionManager.Client.Classes
     public class Ped : Entity, IEquatable<Ped>
     {
         public CitizenFX.Core.Ped Fx { get; set; }
-        internal PluginManager PluginIntance => PluginManager.Instance;
+        internal PluginManager Instance => PluginManager.Instance;
         internal EventSystem EventSystem => EventSystem.GetModule();
         public Vector3 Position => Fx.Position;
         public Tasks Task => Fx.Task;
@@ -52,7 +52,6 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 this.IsArrestable = true;
                 Decorators.Set(Fx.Handle, Decorators.PED_SUSPECT, value);
-                UpdateServerMissionData();
             }
         }
 
@@ -172,6 +171,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
         public bool IsKneeling { get; set; }
         public bool IsGrabbed { get; set; }
+        public DateTime LastUpdate { get; private set; }
 
         private EntityEventWrapper _eventWrapper;
         private long TimeOfDeath = 0;
@@ -190,8 +190,6 @@ namespace Curiosity.MissionManager.Client.Classes
             Fx.IsPersistent = true;
             Fx.Health = 200;
 
-            UpdateServerMissionData();
-
             API.SetPedFleeAttributes(Fx.Handle, 0, false);
             API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
             API.TaskSetBlockingOfNonTemporaryEvents(Fx.Handle, true);
@@ -203,10 +201,20 @@ namespace Curiosity.MissionManager.Client.Classes
             Fx.SetConfigFlag(281, true); // No more rolling about
 
             API.NetworkFadeInEntity(fx.Handle, false);
+
+            Instance.AttachTickHandler(OnUpdatePedTick);
         }
 
-        private void UpdateServerMissionData()
+        private async Task OnUpdatePedTick()
         {
+            if (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 5)
+            {
+                await BaseScript.Delay(1000);
+                return;
+            }
+
+            LastUpdate = DateTime.Now;
+
             EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect);
         }
 
@@ -263,13 +271,13 @@ namespace Curiosity.MissionManager.Client.Classes
 
             if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
-                PluginIntance.RegisterTickHandler(OnDeveloperOverlay);
+                Instance.AttachTickHandler(OnDeveloperOverlay);
                 _DEBUG_ENABLED = true;
             }
             else if (!Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG) && _DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
                 _DEBUG_ENABLED = false;
-                PluginIntance.DeregisterTickHandler(OnDeveloperOverlay);
+                Instance.DetachTickHandler(OnDeveloperOverlay);
             }
         }
 
@@ -573,6 +581,8 @@ namespace Curiosity.MissionManager.Client.Classes
             await Fx.FadeOut();
 
             EventSystem.Request<bool>("mission:remove:ped", Fx.NetworkId);
+
+            Instance.DetachTickHandler(OnUpdatePedTick);
 
             Blip singleBlip = Fx.AttachedBlip;
             if (singleBlip != null)

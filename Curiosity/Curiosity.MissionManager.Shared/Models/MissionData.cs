@@ -10,9 +10,10 @@ namespace Curiosity.Systems.Shared.Entity
         public int OwnerHandleId { get; set; }
         public List<int> PartyMembers { get; set; } = new List<int>();
         public Dictionary<int, MissionDataPed> NetworkPeds { get; set; } = new Dictionary<int, MissionDataPed>();
-        public List<int> NetworkVehicles { get; set; } = new List<int>();
+        public Dictionary<int, MissionDataVehicle> NetworkVehicles { get; set; } = new Dictionary<int, MissionDataVehicle>();
         public DateTime Creation { get; set; } = DateTime.Now;
         public bool AssistanceRequested { get; set; }
+        public bool IsCompleted { get; set; }
 
         public override string ToString()
         {
@@ -27,11 +28,20 @@ namespace Curiosity.Systems.Shared.Entity
             return true;
         }
 
-        public bool AddNetworkVehicle(int newtworkId)
+        public bool AddNetworkVehicle(int networkId, bool isTowable)
         {
-            if (NetworkVehicles.Contains(newtworkId)) return false;
+            if (NetworkVehicles.ContainsKey(networkId))
+            {
+                NetworkVehicles[networkId].IsTowable = isTowable;
+            }
+            else
+            {
+                MissionDataVehicle missionDataVeh = new MissionDataVehicle();
+                missionDataVeh.IsTowable = isTowable;
 
-            NetworkVehicles.Add(newtworkId);
+                NetworkVehicles.Add(networkId, missionDataVeh);
+            }
+
             return true;
         }
 
@@ -62,7 +72,7 @@ namespace Curiosity.Systems.Shared.Entity
 
         public bool RemoveNetworkVehicle(int newtworkId)
         {
-            if (!NetworkVehicles.Contains(newtworkId)) return false;
+            if (!NetworkVehicles.ContainsKey(newtworkId)) return false;
 
             NetworkVehicles.Remove(newtworkId);
             return true;

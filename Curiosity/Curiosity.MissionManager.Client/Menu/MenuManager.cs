@@ -164,7 +164,7 @@ namespace Curiosity.MissionManager.Client.Menu
                     {
                         menuMain.Visible = true;
                         isMenuOpen = true;
-                        Instance.RegisterTickHandler(OnMenuDisplay);
+                        Instance.AttachTickHandler(OnMenuDisplay);
                     }
                 }
             }

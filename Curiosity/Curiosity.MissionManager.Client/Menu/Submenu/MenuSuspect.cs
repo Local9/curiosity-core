@@ -40,7 +40,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         private void Menu_OnMenuClose(UIMenu sender)
         {
             MenuManager.OnMenuState();
-            PluginInstance.DeregisterTickHandler(OnSuspectDistanceCheck);
+            PluginInstance.DetachTickHandler(OnSuspectDistanceCheck);
         }
 
         private void Menu_OnMenuOpen(UIMenu sender)
@@ -84,7 +84,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 menuItemGrab.Text = Ped.IsGrabbed ? "Let go of Suspect" : "Grab Suspect";
                 menuItemGrab.Enabled = isControlable && Ped.IsHandcuffed;
 
-                PluginInstance.RegisterTickHandler(OnSuspectDistanceCheck);
+                PluginInstance.AttachTickHandler(OnSuspectDistanceCheck);
             }
 
             MenuManager.OnMenuState(true);

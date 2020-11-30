@@ -46,7 +46,7 @@ namespace Curiosity.MissionManager.Client.Handler
                 blipId++;
             }
 
-            PluginInstance.RegisterTickHandler(OnArrestPedTick);
+            PluginInstance.AttachTickHandler(OnArrestPedTick);
         }
 
         public static void Dispose()
@@ -59,7 +59,7 @@ namespace Curiosity.MissionManager.Client.Handler
             markers.Clear();
 
             blips.ForEach(m => BlipHandler.RemoveBlip(m.BlipName));
-            PluginInstance.DeregisterTickHandler(OnArrestPedTick);
+            PluginInstance.DetachTickHandler(OnArrestPedTick);
         }
 
         private async static Task OnArrestPedTick()
