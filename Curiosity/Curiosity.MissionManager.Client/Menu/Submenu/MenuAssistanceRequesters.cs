@@ -32,13 +32,19 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private async void Menu_OnMenuOpen(UIMenu sender)
         {
+            Menu.MenuItems.Clear();
+
             bool isCalloutActive = MenuManager.IsCalloutActive;
             List<MissionData> missions = await eventSystem.Request<List<MissionData>>("mission:assistance:list");
 
             Logger.Debug($"missions: {missions.Count}");
 
-            if (missions == null)
+            if (missions?.Count == 0)
             {
+                UIMenuItem uIMenuItem = new UIMenuItem($"No requests");
+                uIMenuItem.Enabled = false;
+                uIMenuItem.Description = "No back up requests active.";
+                Menu.AddItem(uIMenuItem);
                 return;
             }
 
@@ -56,7 +62,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             {
                 Menu.MenuItems.ForEach(m => {
                     m.Enabled = false;
-                    m.Description = "~o~Currently on an active callout, cannot join another players callout until its completed or if you leave the current one.";
+                    m.Description = "~o~Currently on an active callout.";
                 });
             }
 
