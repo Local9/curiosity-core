@@ -204,10 +204,11 @@ namespace Curiosity.MissionManager.Client.Classes
             API.SetPedCombatAttributes(Fx.Handle, 5, false); // BF_CanFightArmedPedsWhenNotArmed 
             Fx.SetConfigFlag(281, true); // No more rolling about
 
-            API.NetworkFadeInEntity(fx.Handle, false);
-
             if (updateData)
+            {
+                API.NetworkFadeInEntity(fx.Handle, false);
                 UpdatePed();
+            }
         }
 
         public void AttachSuspectBlip()
@@ -220,8 +221,12 @@ namespace Curiosity.MissionManager.Client.Classes
             UpdatePed();
         }
 
-        internal void UpdatePed()
+        internal async void UpdatePed()
         {
+            while (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 2)
+            {
+                await BaseScript.Delay(100);
+            };
 
             LastUpdate = DateTime.Now;
 
