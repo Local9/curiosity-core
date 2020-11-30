@@ -4,6 +4,7 @@ using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
@@ -53,6 +54,13 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             Logger.Info($"- [MissionDirectorManager] Begin -----------------");
             Director = this;
+
+            EventSystem.Attach("mission:notification", new EventCallback(metadata =>
+            {
+                Notify.DispatchAI(metadata.Find<string>(1), metadata.Find<string>(2));
+                return null;
+            }));
+
         }
 
         private async Task OnMissionDirectorTick()

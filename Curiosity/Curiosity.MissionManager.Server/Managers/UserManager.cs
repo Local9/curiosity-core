@@ -58,7 +58,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
 
-            EventSystem.Attach("user:job", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("user:job", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
 
