@@ -42,8 +42,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menuItemCode27 = new UIMenuItem("10-27: Request drivers license check", "Contact dispatch for more information on the Suspect.");
             menuItemCode28 = new UIMenuItem("10-28: Check registration on vehicle", "Contact dispatch for more information on the vehicle.");
             menuItemCode29 = new UIMenuItem("10-29: Check Wants", "Contact dispatch to find out if the suspect is wanted.");
-            menuItemCode51 = new UIMenuItem("10-51: Tow Vehicle", "Will remove the vehicle from the world.");
-            menuItemCode55d = new UIMenuItem("10-55d: Send Coroner", "Will clear deceased NPC(s).");
+            menuItemCode51 = new UIMenuItem("10-51: Tow Vehicle", "Will remove the vehicle from the world.~n~~o~Callout Only");
+            menuItemCode55d = new UIMenuItem("10-55d: Send Coroner", "Will clear deceased NPC(s).~n~~o~Callout Only");
             
 
             menu.AddItem(menuItemCode4);
