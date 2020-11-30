@@ -282,10 +282,11 @@ namespace Curiosity.MissionManager.Client
             }
 
             // Update player information for those in the mission
-
-            UpdateMissionPlayers(currentMissionData.PartyMembers);
             UpdateMissionPeds(currentMissionData.NetworkPeds);
             UpdateMissionVehicles(currentMissionData.NetworkVehicles);
+            UpdateMissionPlayers(currentMissionData.PartyMembers);
+
+            isOnMission = true;
 
             if (currentMissionData.IsCompleted)
             {
@@ -294,6 +295,8 @@ namespace Curiosity.MissionManager.Client
                 RegisteredParticles.ForEach(particle => particle?.Stop());
 
                 Instance.DetachTickHandler(OnMissionUpdateTick);
+
+                isOnMission = false;
             }
 
             Logger.Debug($"{currentMissionData}");
@@ -408,6 +411,11 @@ namespace Curiosity.MissionManager.Client
         {
             try
             {
+                if (partyMembers.Count == 0)
+                {
+                    return;
+                }
+
                 partyMembers.ForEach(memberServerID =>
                 {
                     if (memberServerID == Game.Player.ServerId) return;
