@@ -26,6 +26,7 @@ namespace Curiosity.MissionManager.Client.Utils
 
         static ControlHelper()
         {
+
         }
 
         public static bool WasLastInputFromController()
