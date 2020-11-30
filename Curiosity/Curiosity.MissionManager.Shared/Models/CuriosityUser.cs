@@ -43,5 +43,6 @@ namespace Curiosity.Systems.Library.Models
         public bool IsDonatorLife => (Role == Role.DONATOR_LIFE);
 
         public bool NotificationBackup { get; set; } = false;
+        public DateTime LastNotificationBackup { get; set; }
     }
 }

@@ -143,22 +143,32 @@ namespace Curiosity.MissionManager.Server.Managers
                 if (missionData == null) return false;
 
                 Player player = PluginManager.PlayersList[metadata.Sender];
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
-                foreach (KeyValuePair<int, CuriosityUser> keyValuePair in PluginManager.ActiveUsers)
+                if (DateTime.Now.Subtract(curiosityUser.LastNotificationBackup).TotalMinutes > 2)
                 {
-                    if (keyValuePair.Key == metadata.Sender) continue;
+                    curiosityUser.LastNotificationBackup = DateTime.Now;
 
-                    CuriosityUser curiosityUser = keyValuePair.Value;
-
-                    if (curiosityUser == null) continue;
-
-                    if (curiosityUser.CurrentJob == "police")
+                    foreach (KeyValuePair<int, CuriosityUser> keyValuePair in PluginManager.ActiveUsers)
                     {
-                        if (curiosityUser.NotificationBackup)
+                        if (keyValuePair.Key == metadata.Sender) continue;
+
+                        CuriosityUser curiosityUserList = keyValuePair.Value;
+
+                        if (curiosityUserList == null) continue;
+
+                        if (curiosityUserList.CurrentJob == "police")
                         {
-                            EventSystem.GetModule().Send("mission:notification", curiosityUser.Handle, "Dispatch A.I.", "Back up request", $"Player {player.Name} has requested back up.");
+                            if (curiosityUserList.NotificationBackup)
+                            {
+                                EventSystem.GetModule().Send("mission:notification", curiosityUserList.Handle, "Dispatch A.I.", "Back up request", $"Player {player.Name} has requested back up.");
+                            }
                         }
                     }
+                }
+                else
+                {
+                    EventSystem.GetModule().Send("mission:notification", curiosityUser.Handle, "Dispatch A.I.", "Back up request", $"Sorry, you cannot request backup currently.");
                 }
 
                 missionData.AssistanceRequested = true;
