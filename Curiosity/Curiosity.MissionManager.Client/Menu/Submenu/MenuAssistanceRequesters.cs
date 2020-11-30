@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Managers;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Shared.Entity;
 using NativeUI;
 using System.Collections.Generic;
@@ -89,6 +90,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 if (response != null)
                 {
                     MissionDirectorManager.Director.ToggleMissionDirector();
+
+                    if (Mission.currentMission != null)
+                    {
+                        Mission.currentMission.Stop(EndState.ForceEnd);
+                    }
+
                     await BaseScript.Delay(500);
                     Mission.currentMissionData = response;
                     await BaseScript.Delay(500);
