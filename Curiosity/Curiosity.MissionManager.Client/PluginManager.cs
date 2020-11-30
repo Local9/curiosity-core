@@ -137,13 +137,15 @@ namespace Curiosity.MissionManager.Client
 
             if (!API.HasAnimDictLoaded("rcmepsilonism8"))
                 API.RequestAnimDict("rcmepsilonism8");
+
+            Notify.Alert($"~b~Mission Resource ~g~Started");
         }
 
         private void OnClientResourceStop(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
-            Notify.Alert($"~b~Mission Resource ~g~Restarting");
+            Notify.Alert($"~b~Mission Resource ~r~Stopped");
 
             if (JobManager.IsOfficer)
                 BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "unemployed");
