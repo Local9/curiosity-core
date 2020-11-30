@@ -551,6 +551,9 @@ namespace Curiosity.MissionManager.Client.Classes
                 float groundZ = position.Z;
                 Vector3 normal = Vector3.Zero;
 
+                if (API.GetNextWeatherType() == (int)WeatherTypeHash.Christmas)
+                    position.Z += 10f;
+
                 if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
                 {
                     spawnPosition.Z = groundZ;
