@@ -47,7 +47,7 @@ namespace Curiosity.Vehicles.Client.net
             MechanicRelationshipGroup = World.AddRelationshipGroup("MECH");
 
             RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
-            RegisterEventHandler("onClientResourceStop", new Action<string>(OnClientResourceStop));
+            RegisterEventHandler("onResourceStop", new Action<string>(OnClientResourceStop));
 
             Log.Info("Curiosity.Vehicles.Client.net loaded\n");
 
@@ -82,13 +82,11 @@ namespace Curiosity.Vehicles.Client.net
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
-            if (Game.PlayerPed.IsInVehicle())
+
+            if (CurrentVehicle != null)
             {
-                if (Game.PlayerPed.CurrentVehicle.Driver == Game.PlayerPed)
-                {
-                    float fuel = API.DecorGetFloat(Plugin.CurrentVehicle.Handle, "Vehicle.Fuel");
-                    API.SetResourceKvpFloat("VR_FUEL", fuel);
-                }
+                if (CurrentVehicle.Exists())
+                    CurrentVehicle.Delete();
             }
         }
 

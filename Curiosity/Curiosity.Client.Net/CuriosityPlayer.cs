@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Shared.Client.net.Extensions;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace Curiosity.Client.net
         public CuriosityPlayer()
         {
             EventHandlers["onClientResourceStart"] += new Action<string>(OnResourceStart);
-            EventHandlers["onClientResourceStop"] += new Action<string>(OnClientResourceStop);
+            EventHandlers["onResourceStop"] += new Action<string>(OnClientResourceStop);
 
             EventHandlers["curiosity:Client:Player:Setup"] += new Action<string>(OnPlayerSetup);
             EventHandlers["curiosity:Client:Player:Role"] += new Action<string>(UpdatePlayerRole);
