@@ -215,7 +215,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             LastUpdate = DateTime.Now;
 
-            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect);
+            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect, IsHandcuffed);
         }
 
         internal void PrisonTransport()

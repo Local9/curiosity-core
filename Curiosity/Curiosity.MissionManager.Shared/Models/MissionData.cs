@@ -45,16 +45,18 @@ namespace Curiosity.Systems.Shared.Entity
             return true;
         }
 
-        public bool AddNetworkPed(int networkId, bool isSuspect)
+        public bool AddNetworkPed(int networkId, bool isSuspect, bool isHandcuffed)
         {
             if (NetworkPeds.ContainsKey(networkId))
             {
                 NetworkPeds[networkId].IsSuspect = isSuspect;
+                NetworkPeds[networkId].IsHandcuffed = isHandcuffed;
             }
             else
             {
                 MissionDataPed missionDataPed = new MissionDataPed();
                 missionDataPed.IsSuspect = isSuspect;
+                missionDataPed.IsHandcuffed = isHandcuffed;
 
                 NetworkPeds.Add(networkId, missionDataPed);
             }

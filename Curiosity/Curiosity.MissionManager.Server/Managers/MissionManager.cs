@@ -91,8 +91,9 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 int networkId = metadata.Find<int>(0);
                 bool isSuspect = metadata.Find<bool>(1);
+                bool isHandcuffed = metadata.Find<bool>(2);
 
-                return missionData.AddNetworkPed(networkId, isSuspect);
+                return missionData.AddNetworkPed(networkId, isSuspect, isHandcuffed);
             }));
 
             EventSystem.GetModule().Attach("mission:add:vehicle", new EventCallback(metadata =>
