@@ -143,6 +143,8 @@ namespace Curiosity.MissionManager.Client
         {
             if (API.GetCurrentResourceName() != resourceName) return;
 
+            Notify.Alert($"~b~Mission Resource ~g~Restarting");
+
             if (JobManager.IsOfficer)
                 BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "unemployed");
 
