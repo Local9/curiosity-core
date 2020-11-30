@@ -169,7 +169,7 @@ namespace Curiosity.Server.net.Classes.Environment
 
         static void OnRconCommand(string commandName, List<object> arguments)
         {
-            Log.Verbose($"[SERVER] Running command: {commandName}");
+            // Log.Verbose($"[SERVER] Running command: {commandName}");
 
             if (commandName.ToLower() == "session")
             {
