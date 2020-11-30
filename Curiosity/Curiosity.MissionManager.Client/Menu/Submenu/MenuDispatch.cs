@@ -13,9 +13,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
     {
         EventSystem eventSystem => EventSystem.GetModule();
 
-        private MenuAssistanceRequesters _menuAssitianceRequesters = new MenuAssistanceRequesters();
-        private UIMenu menuAssistanceRequesters;
-
         UIMenuItem menuItemCode4;
         UIMenuItem menuItemCode16;
         UIMenuItem menuItemCode27;
@@ -52,10 +49,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menu.AddItem(menuSeparatorItem1);
 
             menu.AddItem(menuItemCode78);
-
-            menuAssistanceRequesters = MenuManager._MenuPool.AddSubMenu(MenuManager.menuDispatch, "Assistance Response", "Users requesting assistance will be found here.");
-            menuAssistanceRequesters.MouseControlsEnabled = false;
-            _menuAssitianceRequesters.CreateMenu(menuAssistanceRequesters);
 
             // menu.AddItem(menuItemCode80);
 

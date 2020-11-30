@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Enums;
+using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using NativeUI;
@@ -40,10 +41,13 @@ namespace Curiosity.MissionManager.Client.Menu
         private Submenu.MenuSuspect _suspectPed = new Submenu.MenuSuspect();
         private Submenu.MenuVehicle _suspectVehicle = new Submenu.MenuVehicle();
         private Submenu.MenuSettings _menuSettings = new Submenu.MenuSettings();
-        internal static UIMenu menuDispatch;
+        private Submenu.MenuAssistanceRequesters _menuAssitianceRequesters = new Submenu.MenuAssistanceRequesters();
+        private UIMenu menuDispatch;
         private UIMenu menuSuspectPed;
         private UIMenu menuSuspectVehicle;
         private UIMenu menuSettings;
+
+        private UIMenu menuAssistanceRequesters;
 
         public override void Begin()
         {
@@ -77,6 +81,10 @@ namespace Curiosity.MissionManager.Client.Menu
             menuDispatch = _MenuPool.AddSubMenu(menuMain, "Dispatch", "Dispatch Options~n~~o~Options are available when a callout is active.");
             menuDispatch.MouseControlsEnabled = false;
             _dispatch.CreateMenu(menuDispatch);
+
+            menuAssistanceRequesters = _MenuPool.AddSubMenu(menuMain, "Respond to Backup", "Users requesting back up will be found here.");
+            menuAssistanceRequesters.MouseControlsEnabled = false;
+            _menuAssitianceRequesters.CreateMenu(menuAssistanceRequesters);
 
             menuSuspectPed = _MenuPool.AddSubMenu(menuMain, "Suspect", "Suspect Options~n~~o~Options are available when a callout is active.");
             menuSuspectPed.MouseControlsEnabled = false;
@@ -141,7 +149,7 @@ namespace Curiosity.MissionManager.Client.Menu
             List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
             List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f)
                 && (Decorators.GetBoolean(x.Handle, Decorators.VEHICLE_MISSION)
-                || (Decorators.GetBoolean(x.Handle, Decorators.PLAYER_VEHICLE) && Decorators.GetInteger(x.Handle, Decorators.PLAYER_OWNER) == Game.Player.ServerId))
+                || (Decorators.GetBoolean(x.Handle, Decorators.PLAYER_VEHICLE) && Decorators.GetInteger(x.Handle, Decorators.PLAYER_OWNER) == Game.Player.ServerId && PlayerManager.PersonalVehicle.ClassType == VehicleClass.Emergency))
                 ).Select(p => p).ToList();
 
             int interactables = peds.Count + vehicles.Count; // near any interactives?
@@ -152,16 +160,11 @@ namespace Curiosity.MissionManager.Client.Menu
                 return;
             }
 
-            if (!Game.PlayerPed.IsInVehicle())
-                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to open menu."); // need to look into control binds
+            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to open menu."); // need to look into control binds
 
             if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
             {
-                //if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F1
-                if (
-                    ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording, true)
-                    || (!Game.PlayerPed.IsInVehicle() && ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording, false))
-                    )
+                if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording))
                 {
                     if (menuMain.Visible) return;
 
