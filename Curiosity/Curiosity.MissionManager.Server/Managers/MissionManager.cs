@@ -153,22 +153,12 @@ namespace Curiosity.MissionManager.Server.Managers
                 {
                     curiosityUser.LastNotificationBackup = DateTime.Now;
 
-                    foreach (KeyValuePair<int, CuriosityUser> keyValuePair in PluginManager.ActiveUsers)
+                    List<CuriosityUser> users = PluginManager.ActiveUsers.Where(x => x.Value.CurrentJob == "police" && x.Value.NotificationBackup).Select(y => y.Value).ToList();
+
+                    users.ForEach(u =>
                     {
-                        if (keyValuePair.Key == metadata.Sender) continue;
-
-                        CuriosityUser curiosityUserList = keyValuePair.Value;
-
-                        if (curiosityUserList == null) continue;
-
-                        if (curiosityUserList.CurrentJob == "police")
-                        {
-                            if (curiosityUserList.NotificationBackup)
-                            {
-                                EventSystem.GetModule().Send("mission:notification", curiosityUserList.Handle, "Dispatch A.I.", "Back up request", $"Player {player.Name} has requested back up.");
-                            }
-                        }
-                    }
+                        EventSystem.GetModule().Send("mission:notification", u.Handle, "Dispatch A.I.", "Back up request", $"Player {player.Name} has requested back up.");
+                    });
                 }
                 else
                 {
