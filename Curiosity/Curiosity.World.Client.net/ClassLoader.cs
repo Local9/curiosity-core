@@ -31,6 +31,7 @@ namespace Curiosity.GameWorld.Client.net
 
             // EE
             Classes.Environment.EasterEggs.DeveloperWall.Init(); // need to change this to something else
+            Classes.Environment.EasterEggs.Flamingo.Init();
 
             Log.Verbose("Leaving ClassLoader Init");
         }

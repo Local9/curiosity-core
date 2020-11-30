@@ -1,10 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.GameWorld.Client.net.Classes.PlayerClasses;
+using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Classes;
 using Curiosity.Shared.Client.net.Helper;
-using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

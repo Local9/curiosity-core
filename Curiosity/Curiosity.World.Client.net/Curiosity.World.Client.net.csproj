@@ -52,6 +52,7 @@
     <Compile Include="Classes\Environment\AquaticSpawner.cs" />
     <Compile Include="Classes\Environment\Birds.cs" />
     <Compile Include="Classes\Environment\EasterEggs\DeveloperWall.cs" />
+    <Compile Include="Classes\Environment\EasterEggs\Flamingo.cs" />
     <Compile Include="Classes\Environment\UI\CinematicMode.cs" />
     <Compile Include="Classes\Environment\UI\PlayerBlips.cs" />
     <Compile Include="Classes\Environment\UI\PlayerNames.cs" />
@@ -74,10 +75,6 @@
     <ProjectReference Include="..\Curiosity.Shared.Client.net\Curiosity.Shared.Client.net.csproj">
       <Project>{37f1f478-be0b-4c2b-a062-24077f851b69}</Project>
       <Name>Curiosity.Shared.Client.net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Curiosity.Systems.Library\Curiosity.Systems.Library.csproj">
-      <Project>{7D0DF956-549B-4251-9B6B-B05EEB53832C}</Project>
-      <Name>Curiosity.Systems.Library</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
