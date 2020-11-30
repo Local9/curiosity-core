@@ -335,7 +335,7 @@ namespace Curiosity.MissionManager.Client
                         {
                             MissionDataVehicle mdv = keyValuePair.Value;
 
-                            Logger.Debug($"{mdv}");
+                            Logger.Debug($"ID: {keyValuePair.Key} / {mdv}");
 
                             Vehicle curVehicle = new Vehicle(cfxVehicle);
                             curVehicle.IsMission = true;
@@ -395,7 +395,7 @@ namespace Curiosity.MissionManager.Client
                             curPed.IsSuspect = mdp.IsSuspect;
                             curPed.IsMission = true;
 
-                            Logger.Debug($"{mdp}");
+                            Logger.Debug($"ID: {keyValuePair.Key} / {mdp}");
 
                             if (mdp.AttachBlip)
                             {

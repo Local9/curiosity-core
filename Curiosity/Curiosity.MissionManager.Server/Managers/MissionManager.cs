@@ -94,6 +94,8 @@ namespace Curiosity.MissionManager.Server.Managers
                 bool isHandcuffed = metadata.Find<bool>(2);
                 bool attachBlip = metadata.Find<bool>(3);
 
+                Logger.Debug($"NetworkID: {networkId}, Suspect: {isSuspect}, HandCuffed: {isHandcuffed}, Blip: {attachBlip}");
+
                 return missionData.AddNetworkPed(networkId, isSuspect, isHandcuffed, attachBlip);
             }));
 
@@ -106,6 +108,8 @@ namespace Curiosity.MissionManager.Server.Managers
                 int networkId = metadata.Find<int>(0);
                 bool isTowable = metadata.Find<bool>(1);
                 bool attachBlip = metadata.Find<bool>(2);
+
+                Logger.Debug($"NetworkID: {networkId}, Towable: {isTowable}, Blip: {attachBlip}");
 
                 return missionData.AddNetworkVehicle(networkId, isTowable, attachBlip);
             }));
