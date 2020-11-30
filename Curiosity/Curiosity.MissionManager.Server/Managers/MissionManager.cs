@@ -1,6 +1,7 @@
 ﻿using Curiosity.MissionManager.Server.Diagnostics;
 using Curiosity.MissionManager.Server.Events;
 using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Shared.Entity;
 using System;
 using System.Collections.Concurrent;
@@ -139,7 +140,12 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:assistance:list", new EventCallback(metadata =>
             {
-                return ActiveMissions.Where(x => x.Value.AssistanceRequested && x.Key != metadata.Sender);
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                if (curiosityUser.IsDeveloper)
+                    return ActiveMissions.Where(x => x.Value.AssistanceRequested).Select(x => x.Value).ToList();
+
+                return ActiveMissions.Where(x => x.Value.AssistanceRequested && x.Key != metadata.Sender).Select(x => x.Value).ToList();
             }));
 
             EventSystem.GetModule().Attach("mission:leave", new EventCallback(metadata =>

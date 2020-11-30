@@ -19,7 +19,7 @@ namespace Curiosity.MissionManager.Client.Menu
     public class MenuManager : Manager<MenuManager>
     {
         public static MenuPool _MenuPool;
-        private UIMenu menuMain;
+        internal static UIMenu menuMain;
         public static bool IsCalloutActive = false;
 
         private static bool isMenuOpen
@@ -36,11 +36,11 @@ namespace Curiosity.MissionManager.Client.Menu
         }
 
         // sub menus
-        private Submenu.MenuDispatch _dispatch = new Submenu.MenuDispatch();
+        internal static Submenu.MenuDispatch _dispatch = new Submenu.MenuDispatch();
         private Submenu.MenuSuspect _suspectPed = new Submenu.MenuSuspect();
         private Submenu.MenuVehicle _suspectVehicle = new Submenu.MenuVehicle();
         private Submenu.MenuSettings _menuSettings = new Submenu.MenuSettings();
-        private UIMenu menuDispatch;
+        internal static UIMenu menuDispatch;
         private UIMenu menuSuspectPed;
         private UIMenu menuSuspectVehicle;
         private UIMenu menuSettings;

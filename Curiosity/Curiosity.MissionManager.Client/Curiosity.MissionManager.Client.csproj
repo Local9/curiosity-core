@@ -106,6 +106,7 @@
     <Compile Include="Menu\MenuManager.cs" />
     <Compile Include="Menu\Submenu\MenuDispatch.cs" />
     <Compile Include="Menu\Submenu\MenuSettings.cs" />
+    <Compile Include="Menu\Submenu\MenuAssistanceRequesters.cs" />
     <Compile Include="Menu\Submenu\MenuVehicle.cs" />
     <Compile Include="Menu\Submenu\MenuSuspect.cs" />
     <Compile Include="Classes\Mission.cs" />

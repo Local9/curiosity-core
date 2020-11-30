@@ -24,7 +24,7 @@ namespace Curiosity.MissionManager.Client
         public static PluginManager Instance { get; private set; }
         internal static List<Blip> Blips = new List<Blip>();
 
-        public PlayerList PlayerList;
+        public static PlayerList PlayerList;
 
         public CuriosityPlayer Local { get; set; }
         public EventHandlerDictionary EventRegistry => EventHandlers;
