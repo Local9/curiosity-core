@@ -319,48 +319,50 @@ namespace Curiosity.MissionManager.Client
                 foreach (KeyValuePair<int, MissionDataVehicle> keyValuePair in networkVehicles)
                 {
                     bool found = false;
+
+                    MissionDataVehicle mdv = keyValuePair.Value;
+
                     RegisteredVehicles.ForEach(veh =>
                     {
                         // check if the vehicle is registered
                         found = (veh.NetworkId == keyValuePair.Key);
-
-                        MissionDataVehicle mdv = keyValuePair.Value;
                         if (found)
                         {
                             veh.IsMission = true;
                             veh.IsTowable = mdv.IsTowable;
 
-                            if (mdv.AttachBlip)
+                            if (mdv.AttachBlip && veh.AttachedBlip == null)
                             {
                                 Blip b = veh.AttachBlip();
                                 b.Color = BlipColor.Red;
                                 b.Scale = .5f;
                             }
                         }
-                        else
-                        {
-                            int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
-                            CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
-
-                            if (cfxVehicle != null)
-                            {
-                                Logger.Debug($"ID: {keyValuePair.Key} / {mdv}");
-
-                                Vehicle curVehicle = new Vehicle(cfxVehicle, false);
-                                curVehicle.IsMission = true;
-                                curVehicle.IsTowable = mdv.IsTowable;
-
-                                if (mdv.AttachBlip)
-                                {
-                                    Blip b = curVehicle.AttachBlip();
-                                    b.Color = BlipColor.Red;
-                                    b.Scale = .5f;
-                                }
-
-                                RegisteredVehicles.Add(curVehicle);
-                            }
-                        }
                     });
+
+                    if (!found)
+                    {
+                        int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
+                        CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
+
+                        if (cfxVehicle != null)
+                        {
+                            Logger.Debug($"ID: {keyValuePair.Key} / {mdv}");
+
+                            Vehicle curVehicle = new Vehicle(cfxVehicle, false);
+                            curVehicle.IsMission = true;
+                            curVehicle.IsTowable = mdv.IsTowable;
+
+                            if (mdv.AttachBlip)
+                            {
+                                Blip b = curVehicle.AttachBlip();
+                                b.Color = BlipColor.Red;
+                                b.Scale = .5f;
+                            }
+
+                            RegisteredVehicles.Add(curVehicle);
+                        }
+                    }
 
                     // if its not registered then set up the veh
                 }
@@ -385,12 +387,13 @@ namespace Curiosity.MissionManager.Client
                 foreach (KeyValuePair<int, MissionDataPed> keyValuePair in networkPeds)
                 {
                     bool found = false;
+
+                    MissionDataPed mdp = keyValuePair.Value;
+
                     RegisteredPeds.ForEach(ped =>
                     {
                     // check if the ped is registered
                         found = (ped.NetworkId == keyValuePair.Key);
-
-                        MissionDataPed mdp = keyValuePair.Value;
 
                         if (found)
                         {
@@ -407,32 +410,34 @@ namespace Curiosity.MissionManager.Client
                                 b.Scale = .5f;
                             }
                         }
-                        else
-                        {
-                            int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
-                            CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
-
-                            if (cfxPed != null)
-                            {
-                                Ped curPed = new Ped(cfxPed, false);
-                                RegisteredPeds.Add(curPed);
-
-                                curPed.IsSuspect = mdp.IsSuspect;
-                                curPed.IsMission = true;
-
-                                Logger.Debug($"ID: {keyValuePair.Key} / {mdp}");
-
-                                if (mdp.AttachBlip)
-                                {
-                                    Blip b = curPed.AttachBlip();
-                                    b.Sprite = BlipSprite.Enemy;
-                                    b.Color = BlipColor.Red;
-                                    b.Scale = .5f;
-                                }
-                            }
-                        }
 
                     });
+
+                    if (!found)
+                    {
+                        int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
+                        CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
+
+                        if (cfxPed != null)
+                        {
+                            Ped curPed = new Ped(cfxPed, false);
+
+                            curPed.IsSuspect = mdp.IsSuspect;
+                            curPed.IsMission = true;
+
+                            Logger.Debug($"ID: {keyValuePair.Key} / {mdp}");
+
+                            if (mdp.AttachBlip && curPed.AttachedBlip == null)
+                            {
+                                Blip b = curPed.AttachBlip();
+                                b.Sprite = BlipSprite.Enemy;
+                                b.Color = BlipColor.Red;
+                                b.Scale = .5f;
+                            }
+
+                            RegisteredPeds.Add(curPed);
+                        }
+                    }
                 }
             }
             catch (Exception ex)
