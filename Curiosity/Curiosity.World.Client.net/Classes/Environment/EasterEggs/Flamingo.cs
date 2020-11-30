@@ -42,12 +42,9 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
             {
                 await Client.Delay(5000);
 
-                Log.Info("Flamingo Check");
-
                 return;
             }
 
-            Log.Info("Flamingo Check Update");
             lastCheck = DateTime.Now;
 
             Tuple<Vector3, float> pos = lstFlamingoPositions.Where(x=> x.Item1.Distance(Game.PlayerPed.Position) < 20f).FirstOrDefault();
@@ -79,8 +76,6 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
             mdFlamingo.MarkAsNoLongerNeeded();
 
             API.NetworkFadeInEntity(propFlamingo.Handle, false);
-
-            Log.Info("Flamingo Spawn");
         }
 
         static void DespawnProp()
@@ -95,8 +90,6 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
                     propFlamingo = null;
                 }
             }
-
-            Log.Info("Flamingo Despawned");
         }
     }
 }
