@@ -262,7 +262,10 @@ namespace Curiosity.MissionManager.Client.Interface
             ENTER_INTERIOR_HELP_MESSAGE,
             MISSION_CLERK_SPEAK_WITH,
             MISSION_CLERK_RESPONSE_SUSPECT_RAN,
-            MISSION_PARKING_METER_CONTEXT
+            MISSION_PARKING_METER_CONTEXT,
+            MISSION_STOP_VEHICLE,
+            MISSION_VEHICLE_TICKET_DRIVER,
+            MISSION_VEHICLE_STOPPED
         }
 
         private static Dictionary<Label, KeyValuePair<string, string>> labels = new Dictionary<Label, KeyValuePair<string, string>>()
@@ -272,6 +275,9 @@ namespace Curiosity.MissionManager.Client.Interface
             [Label.MISSION_CLERK_SPEAK_WITH] = new KeyValuePair<string, string>("MISSION_CLERK_SPEAK_WITH", "Press ~INPUT_CONTEXT~ to speak with the ~b~Store Clerk~w~."),
             [Label.MISSION_CLERK_RESPONSE_SUSPECT_RAN] = new KeyValuePair<string, string>("MISSION_CLERK_RESPONSE_SUSPECT_RAN", $"The perp has just ran off, he's not far away."),
             [Label.MISSION_PARKING_METER_CONTEXT] = new KeyValuePair<string, string>("MISSION_PARKING_METER_CONTEXT", $"Press ~INPUT_CONTEXT~ to ticket the ~b~Vehicle~w~."),
+            [Label.MISSION_STOP_VEHICLE] = new KeyValuePair<string, string>("MISSION_STOP_VEHICLE", $"Press ~INPUT_CONTEXT~ to stop the ~b~Vehicle~w~."),
+            [Label.MISSION_VEHICLE_TICKET_DRIVER] = new KeyValuePair<string, string>("MISSION_VEHICLE_TICKET_DRIVER", $"Press ~INPUT_CONTEXT~ to ticket the ~b~Driver~w~."),
+            [Label.MISSION_VEHICLE_STOPPED] = new KeyValuePair<string, string>("MISSION_VEHICLE_STOPPED", $"Leave your vehicle and walk up to the drivers window."),
         };
 
 

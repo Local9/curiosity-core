@@ -183,6 +183,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FiveMQueue", "FiveMQueue", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server_Queue", "..\thirdparty\FiveM_Queue\FiveM_Queue\Server_Queue\Server_Queue.csproj", "{A0D85DA2-D419-46F8-9415-DD080F54AD5B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.TrafficViolations", "Curiosity.TrafficViolations\Curiosity.TrafficViolations.csproj", "{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -433,6 +435,10 @@ Global
 		{A0D85DA2-D419-46F8-9415-DD080F54AD5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0D85DA2-D419-46F8-9415-DD080F54AD5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0D85DA2-D419-46F8-9415-DD080F54AD5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -505,6 +511,7 @@ Global
 		{4A219325-ABDF-4F0A-A825-B454F96B4A1D} = {7DD2915A-8D5C-4489-A4B3-863465EB5B27}
 		{7DD2915A-8D5C-4489-A4B3-863465EB5B27} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{A0D85DA2-D419-46F8-9415-DD080F54AD5B} = {7DD2915A-8D5C-4489-A4B3-863465EB5B27}
+		{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
