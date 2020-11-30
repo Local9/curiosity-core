@@ -176,7 +176,7 @@ namespace Curiosity.MissionManager.Client.Classes
         private EntityEventWrapper _eventWrapper;
         private long TimeOfDeath = 0;
 
-        internal Ped(CitizenFX.Core.Ped fx) : base(fx.Handle)
+        internal Ped(CitizenFX.Core.Ped fx, bool updateData = true) : base(fx.Handle)
         {
             Fx = fx;
 
@@ -204,7 +204,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
             API.NetworkFadeInEntity(fx.Handle, false);
 
-            Instance.AttachTickHandler(OnUpdatePedTick);
+            if (updateData)
+                Instance.AttachTickHandler(OnUpdatePedTick);
         }
 
         private async Task OnUpdatePedTick()

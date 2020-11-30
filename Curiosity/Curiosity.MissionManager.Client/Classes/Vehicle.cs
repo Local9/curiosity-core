@@ -75,13 +75,14 @@ namespace Curiosity.MissionManager.Client.Classes
 
         public DateTime LastUpdate { get; private set; }
 
-        internal Vehicle(CitizenFX.Core.Vehicle fx) : base(fx.Handle)
+        internal Vehicle(CitizenFX.Core.Vehicle fx, bool updateData = true) : base(fx.Handle)
         {
             Fx = fx;
 
             API.NetworkRegisterEntityAsNetworked(fx.Handle);
 
-            Instance.AttachTickHandler(OnVehicleUpdateTick);
+            if (updateData)
+                Instance.AttachTickHandler(OnVehicleUpdateTick);
         }
 
         private async Task OnVehicleUpdateTick()
