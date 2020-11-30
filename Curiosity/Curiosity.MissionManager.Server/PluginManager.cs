@@ -27,7 +27,7 @@ namespace Curiosity.MissionManager.Server
         public static Dictionary<int, CuriosityUser> ActiveUsers { get; } = new Dictionary<int, CuriosityUser>();
         public EventHandlerDictionary EventRegistry => EventHandlers;
         public ExportDictionary ExportDictionary => Exports;
-        public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
+        public Dictionary<Type, object> ActiveManagers { get; } = new Dictionary<Type, object>();
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
 
@@ -116,7 +116,7 @@ namespace Curiosity.MissionManager.Server
                 loaded++;
             }
 
-            foreach (var manager in Managers)
+            foreach (var manager in ActiveManagers)
             {
                 var method = manager.Key.GetMethod("Begin", BindingFlags.Public | BindingFlags.Instance);
 
@@ -154,6 +154,14 @@ namespace Curiosity.MissionManager.Server
         {
             try
             {
+                if (commandName.ToLower() == "missions")
+                {
+                    Logger.Info($"<- Mission Manager Start ->");
+                    Logger.Info($"Active: {Managers.MissionManager.ActiveMissions.Count()}");
+                    Logger.Info($"Assistance Requests: {Managers.MissionManager.ActiveMissions.Where(x => x.Value.AssistanceRequested).Count()}");
+                    Logger.Info($"<- Mission Manager End ->");
+                }
+
                 API.CancelEvent();
             }
             catch (Exception ex)
@@ -168,28 +176,28 @@ namespace Curiosity.MissionManager.Server
 
             Logger.Debug($"Loading in manager of type `{type.FullName}`");
 
-            Managers.Add(type, default(Type));
+            ActiveManagers.Add(type, default(Type));
 
             var instance = Activator.CreateInstance(type);
 
-            Managers[type] = instance;
+            ActiveManagers[type] = instance;
 
             return instance;
         }
 
         public bool IsLoadingManager<T>() where T : Manager<T>, new()
         {
-            return Managers.FirstOrDefault(self => self.Key == typeof(T)).Value is bool == false;
+            return ActiveManagers.FirstOrDefault(self => self.Key == typeof(T)).Value is bool == false;
         }
 
         public object GetManager(Type type)
         {
-            return Managers.FirstOrDefault(self => self.Key == type).Value;
+            return ActiveManagers.FirstOrDefault(self => self.Key == type).Value;
         }
 
         public T GetManager<T>() where T : Manager<T>, new()
         {
-            return (T)Managers.FirstOrDefault(self => self.Key == typeof(T)).Value;
+            return (T)ActiveManagers.FirstOrDefault(self => self.Key == typeof(T)).Value;
         }
 
         public void AttachTickHandlers(object instance)

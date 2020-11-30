@@ -1,4 +1,5 @@
 ﻿using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using NativeUI;
@@ -10,6 +11,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 {
     class MenuDispatch
     {
+        EventSystem eventSystem => EventSystem.GetModule();
+
         UIMenuItem menuItemCode4;
         UIMenuItem menuItemCode16;
         UIMenuItem menuItemCode27;
@@ -45,10 +48,10 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             menu.AddItem(menuSeparatorItem1);
 
-            // menu.AddItem(menuItemCode78);
+            menu.AddItem(menuItemCode78);
             // menu.AddItem(menuItemCode80);
 
-            // menu.AddItem(menuSeparatorItem2);
+            menu.AddItem(menuSeparatorItem2);
 
             menu.AddItem(menuItemCode16); //
             // menu.AddItem(menuItemCode27);
@@ -79,6 +82,20 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 catch(Exception ex)
                 {
                     Logger.Debug($"CODE 4: {ex}");
+                }
+                return;
+            }
+
+            if (selectedItem == menuItemCode78) // end callout
+            {
+                try
+                {
+                    eventSystem.Request<bool>("mission:assistance:request");
+                    MenuManager._MenuPool?.CloseAllMenus();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Debug($"10-78: Need Assistance: {ex}");
                 }
                 return;
             }
