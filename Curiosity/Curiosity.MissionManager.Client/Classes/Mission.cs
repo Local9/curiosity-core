@@ -35,7 +35,7 @@ namespace Curiosity.MissionManager.Client
         public static EndState endState = EndState.Unknown;
         static DateTime LastUpdate = DateTime.Now.AddSeconds(5);
 
-        public static List<Player> Players { get; internal set; }
+        public static List<Player> Players { get; internal set; } = new List<Player>();
         public static List<Vehicle> RegisteredVehicles { get; internal set; } = new List<Vehicle>();
         public static List<Ped> RegisteredPeds { get; internal set; } = new List<Ped>();
         public static List<ParticleEffect> RegisteredParticles { get; internal set; } = new List<ParticleEffect>();
