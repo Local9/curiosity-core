@@ -41,5 +41,7 @@ namespace Curiosity.Systems.Library.Models
         public bool IsDonatorLevel2 => (Role == Role.DONATOR_LEVEL_2);
         public bool IsDonatorLevel3 => (Role == Role.DONATOR_LEVEL_3);
         public bool IsDonatorLife => (Role == Role.DONATOR_LIFE);
+
+        public bool AcceptingJobNotification { get; set; }
     }
 }

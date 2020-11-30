@@ -275,7 +275,7 @@ namespace Curiosity.MissionManager.Client
 
             currentMissionData = await EventSystem.Request<MissionData>("mission:get:data", Game.Player.ServerId);
 
-            if (currentMission == null)
+            if (currentMissionData == null)
             {
                 Instance.DetachTickHandler(OnMissionUpdateTick);
                 return;
@@ -288,7 +288,13 @@ namespace Curiosity.MissionManager.Client
             UpdateMissionVehicles(currentMissionData.NetworkVehicles);
 
             if (currentMissionData.IsCompleted)
+            {
+                RegisteredPeds.ForEach(ped => ped?.Dismiss());
+                RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
+                RegisteredParticles.ForEach(particle => particle?.Stop());
+
                 Instance.DetachTickHandler(OnMissionUpdateTick);
+            }
 
             Logger.Debug($"{currentMissionData}");
         }
@@ -318,6 +324,8 @@ namespace Curiosity.MissionManager.Client
                         if (cfxVehicle != null)
                         {
                             MissionDataVehicle mdv = keyValuePair.Value;
+
+                            Logger.Debug($"{mdv}");
 
                             Vehicle curVehicle = new Vehicle(cfxVehicle);
                             curVehicle.IsMission = true;
@@ -364,7 +372,7 @@ namespace Curiosity.MissionManager.Client
                     // if they are not registered then set up the ped
                     if (!found)
                     {
-                        MissionDataPed mpd = keyValuePair.Value;
+                        MissionDataPed mdp = keyValuePair.Value;
 
                         int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
                         CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
@@ -374,10 +382,12 @@ namespace Curiosity.MissionManager.Client
                             Ped curPed = new Ped(cfxPed);
                             RegisteredPeds.Add(curPed);
 
-                            curPed.IsSuspect = mpd.IsSuspect;
+                            curPed.IsSuspect = mdp.IsSuspect;
                             curPed.IsMission = true;
 
-                            if (mpd.AttachBlip)
+                            Logger.Debug($"{mdp}");
+
+                            if (mdp.AttachBlip)
                             {
                                 Blip b = curPed.AttachBlip();
                                 b.Sprite = BlipSprite.Enemy;

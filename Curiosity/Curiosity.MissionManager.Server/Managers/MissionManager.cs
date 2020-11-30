@@ -138,6 +138,18 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 if (missionData == null) return false;
 
+                foreach(KeyValuePair<int, CuriosityUser> keyValuePair in PluginManager.ActiveUsers)
+                {
+                    CuriosityUser curiosityUser = keyValuePair.Value;
+                    if (curiosityUser.CurrentJob == "Police")
+                    {
+                        if (curiosityUser.AcceptingJobNotification)
+                        {
+                            // EventSystem.Send("", curiosityUser.)
+                        }
+                    }
+                }
+
                 missionData.AssistanceRequested = true;
 
                 return false;

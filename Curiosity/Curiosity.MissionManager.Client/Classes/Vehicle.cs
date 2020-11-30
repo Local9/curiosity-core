@@ -78,6 +78,9 @@ namespace Curiosity.MissionManager.Client.Classes
         internal Vehicle(CitizenFX.Core.Vehicle fx) : base(fx.Handle)
         {
             Fx = fx;
+
+            API.NetworkRegisterEntityAsNetworked(fx.Handle);
+
             PluginInstance.AttachTickHandler(OnVehicleUpdateTick);
         }
 

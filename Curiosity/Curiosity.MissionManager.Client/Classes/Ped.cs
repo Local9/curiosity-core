@@ -180,6 +180,8 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             Fx = fx;
 
+            API.NetworkRegisterEntityAsNetworked(fx.Handle);
+
             this._eventWrapper = new EntityEventWrapper(this.Fx);
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
