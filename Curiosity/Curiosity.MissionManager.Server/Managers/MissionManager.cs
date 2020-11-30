@@ -232,7 +232,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 missionData.PartyMembers.ForEach(async serverHandle =>
                 {
                     await BaseScript.Delay(500);
-                    Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, numberTransportArrested);
+                    Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, 1);
                     EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
                 });
 
