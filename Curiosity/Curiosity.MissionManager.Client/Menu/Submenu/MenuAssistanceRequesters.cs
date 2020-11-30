@@ -10,7 +10,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 {
     class MenuAssistanceRequesters
     {
-        private PluginManager PluginInstance => PluginManager.Instance;
+        private PluginManager Instance => PluginManager.Instance;
         private EventSystem eventSystem => EventSystem.GetModule();
 
         UIMenu Menu;
@@ -80,6 +80,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             if (menuMissions.ContainsKey(selectedItem))
             {
                 MissionData missionData = menuMissions[selectedItem];
+
+                Logger.Debug($"Selected Response: {missionData}");
 
                 MissionData response = await eventSystem.Request<MissionData>("mission:assistance:accept", missionData.OwnerHandleId);
 

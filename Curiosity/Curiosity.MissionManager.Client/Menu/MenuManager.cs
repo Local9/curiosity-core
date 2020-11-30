@@ -152,11 +152,16 @@ namespace Curiosity.MissionManager.Client.Menu
                 return;
             }
 
-            Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to open menu."); // need to look into control binds
+            if (!Game.PlayerPed.IsInVehicle())
+                Screen.DisplayHelpTextThisFrame($"Press ~INPUT_REPLAY_START_STOP_RECORDING~ to open menu."); // need to look into control binds
 
             if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
             {
-                if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F1
+                //if (Game.IsControlJustPressed(0, Control.ReplayStartStopRecording)) // F1
+                if (
+                    ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording, true)
+                    || (!Game.PlayerPed.IsInVehicle() && ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording, false))
+                    )
                 {
                     if (menuMain.Visible) return;
 

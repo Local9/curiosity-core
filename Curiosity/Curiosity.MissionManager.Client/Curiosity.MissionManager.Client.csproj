@@ -117,6 +117,7 @@
     <Compile Include="Session.cs" />
     <Compile Include="Utils\Collections.cs" />
     <Compile Include="Extensions\Decorators.cs" />
+    <Compile Include="Utils\ControlHelper.cs" />
     <Compile Include="Utils\Extensions.cs" />
   </ItemGroup>
   <ItemGroup>

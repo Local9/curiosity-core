@@ -143,6 +143,18 @@ namespace Curiosity.MissionManager.Server.Managers
                 return false;
             }));
 
+            EventSystem.GetModule().Attach("mission:assistance:accept", new EventCallback(metadata =>
+            {
+                int missionOwnerId = metadata.Find<int>(0);
+
+                if (!ActiveMissions.ContainsKey(missionOwnerId)) return false;
+
+                MissionData missionData = ActiveMissions[missionOwnerId];
+                missionData.AddMember(metadata.Sender);
+
+                return missionData;
+            }));
+
             EventSystem.GetModule().Attach("mission:assistance:list", new EventCallback(metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
@@ -153,7 +165,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 return ActiveMissions.Where(x => x.Value.AssistanceRequested && x.Key != metadata.Sender).Select(x => x.Value).ToList();
             }));
 
-            EventSystem.GetModule().Attach("mission:leave", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("mission:assistance:leave", new EventCallback(metadata =>
             {
                 int missionOwnerId = metadata.Find<int>(0);
 
@@ -169,18 +181,6 @@ namespace Curiosity.MissionManager.Server.Managers
 
 
                 return GetMissionData(metadata.Sender);
-            }));
-
-            EventSystem.GetModule().Attach("mission:assistance:accept", new EventCallback(metadata =>
-            {
-                int missionOwnerId = metadata.Find<int>(0);
-
-                if (!ActiveMissions.ContainsKey(missionOwnerId)) return false;
-
-                MissionData missionData = ActiveMissions[missionOwnerId];
-                missionData.AddMember(metadata.Sender);
-
-                return missionData;
             }));
 
             EventSystem.GetModule().Attach("mission:completed", new AsyncEventCallback(async metadata =>

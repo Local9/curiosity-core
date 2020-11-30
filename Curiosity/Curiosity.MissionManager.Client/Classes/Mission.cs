@@ -295,39 +295,49 @@ namespace Curiosity.MissionManager.Client
 
         private static void UpdateMissionVehicles(Dictionary<int, MissionDataVehicle> networkVehicles)
         {
-            foreach (KeyValuePair<int, MissionDataVehicle> keyValuePair in networkVehicles)
+            if (currentMission != null)
+                return;
+
+            try
             {
-                bool found = false;
-                RegisteredVehicles.ForEach(veh =>
+                foreach (KeyValuePair<int, MissionDataVehicle> keyValuePair in networkVehicles)
                 {
-                    // check if the vehicle is registered
-                    found = (veh.NetworkId == keyValuePair.Key);
-                });
-
-                // if its not registered then set up the veh
-                if (!found)
-                {
-                    int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
-                    CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
-
-                    if (cfxVehicle != null)
+                    bool found = false;
+                    RegisteredVehicles.ForEach(veh =>
                     {
-                        MissionDataVehicle mdv = keyValuePair.Value;
+                        // check if the vehicle is registered
+                        found = (veh.NetworkId == keyValuePair.Key);
+                    });
 
-                        Vehicle curVehicle = new Vehicle(cfxVehicle);
-                        curVehicle.IsMission = true;
-                        curVehicle.IsTowable = mdv.IsTowable;
+                    // if its not registered then set up the veh
+                    if (!found)
+                    {
+                        int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
+                        CitizenFX.Core.Vehicle cfxVehicle = new CitizenFX.Core.Vehicle(entityId);
 
-                        if (mdv.AttachBlip)
+                        if (cfxVehicle != null)
                         {
-                            Blip b = curVehicle.AttachBlip();
-                            b.Color = BlipColor.Red;
-                            b.Scale = .5f;
-                        }
+                            MissionDataVehicle mdv = keyValuePair.Value;
 
-                        RegisteredVehicles.Add(curVehicle);
+                            Vehicle curVehicle = new Vehicle(cfxVehicle);
+                            curVehicle.IsMission = true;
+                            curVehicle.IsTowable = mdv.IsTowable;
+
+                            if (mdv.AttachBlip)
+                            {
+                                Blip b = curVehicle.AttachBlip();
+                                b.Color = BlipColor.Red;
+                                b.Scale = .5f;
+                            }
+
+                            RegisteredVehicles.Add(curVehicle);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"UpdateMissionVehicles -> {ex}");
             }
         }
 
@@ -336,58 +346,76 @@ namespace Curiosity.MissionManager.Client
             // Need to monitor if a ped was arrested and update as required, add requirements to the server for best results
             // this way the completion and success comes from the server and not from the client.
 
-            foreach (KeyValuePair<int, MissionDataPed> keyValuePair in networkPeds)
+            if (currentMission != null)
+                return;
+
+            try
             {
-                bool found = false;
-                RegisteredPeds.ForEach(ped =>
+
+                foreach (KeyValuePair<int, MissionDataPed> keyValuePair in networkPeds)
                 {
+                    bool found = false;
+                    RegisteredPeds.ForEach(ped =>
+                    {
                     // check if the ped is registered
                     found = (ped.NetworkId == keyValuePair.Key);
-                });
+                    });
 
-                // if they are not registered then set up the ped
-                if (!found)
-                {
-                    MissionDataPed mpd = keyValuePair.Value;
-
-                    int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
-                    CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
-
-                    if (cfxPed != null)
+                    // if they are not registered then set up the ped
+                    if (!found)
                     {
-                        Ped curPed = new Ped(cfxPed);
-                        RegisteredPeds.Add(curPed);
+                        MissionDataPed mpd = keyValuePair.Value;
 
-                        curPed.IsSuspect = mpd.IsSuspect;
-                        curPed.IsMission = true;
+                        int entityId = API.NetworkGetEntityFromNetworkId(keyValuePair.Key);
+                        CitizenFX.Core.Ped cfxPed = new CitizenFX.Core.Ped(entityId);
 
-                        if (mpd.AttachBlip)
+                        if (cfxPed != null)
                         {
-                            Blip b = curPed.AttachBlip();
-                            b.Color = BlipColor.Red;
-                            b.Scale = .5f;
-                            b.Sprite = BlipSprite.Enemy;
+                            Ped curPed = new Ped(cfxPed);
+                            RegisteredPeds.Add(curPed);
+
+                            curPed.IsSuspect = mpd.IsSuspect;
+                            curPed.IsMission = true;
+
+                            if (mpd.AttachBlip)
+                            {
+                                Blip b = curPed.AttachBlip();
+                                b.Sprite = BlipSprite.Enemy;
+                                b.Color = BlipColor.Red;
+                                b.Scale = .5f;
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"UpdateMissionPeds -> {ex}");
             }
         }
 
         private static void UpdateMissionPlayers(List<int> partyMembers)
         {
-            partyMembers.ForEach(memberServerID =>
+            try
             {
-                if (memberServerID == Game.Player.ServerId) return;
-
-                Player player = new Player(memberServerID);
-
-                if (Players.Contains(player)) return;
-
-                if (player != null)
+                partyMembers.ForEach(memberServerID =>
                 {
-                    AddPlayer(player);
-                }
-            });
+                    if (memberServerID == Game.Player.ServerId) return;
+
+                    Player player = new Player(memberServerID);
+
+                    if (Players.Contains(player)) return;
+
+                    if (player != null)
+                    {
+                        AddPlayer(player);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"UpdateMissionPlayers -> {ex}");
+            }
         }
 
         public void DiscordStatus(string status)

@@ -24,6 +24,7 @@ namespace Curiosity.Development.Missions
             PedHash.Lost01GMY,
         };
 
+        bool missionPassed = false;
 
         public async override void Start()
         {
@@ -40,9 +41,9 @@ namespace Curiosity.Development.Missions
             criminal.IsSuspect = true;
 
             Blip b = criminal.AttachBlip();
+            b.Sprite = BlipSprite.Enemy;
             b.Color = BlipColor.Red;
             b.Scale = .5f;
-            b.Sprite = BlipSprite.Enemy;
 
             Mission.RegisterPed(criminal);
 
@@ -65,6 +66,11 @@ namespace Curiosity.Development.Missions
 
         async Task OnMissionTick()
         {
+            if (Mission.NumberPedsArrested > 0 && !missionPassed)
+            {
+                missionPassed = true;
+                Pass();
+            }
 
         }
     }
