@@ -265,41 +265,48 @@ namespace Curiosity.MissionManager.Client
 
         public static async Task OnMissionUpdateTick()
         {
-            if (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 5)
+            try
             {
-                await BaseScript.Delay(500);
-                return;
-            };
+                if (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 5)
+                {
+                    await BaseScript.Delay(500);
+                    return;
+                };
 
-            LastUpdate = DateTime.Now.AddSeconds(5);
+                LastUpdate = DateTime.Now.AddSeconds(5);
 
-            currentMissionData = await EventSystem.Request<MissionData>("mission:get:data", Game.Player.ServerId);
+                currentMissionData = await EventSystem.Request<MissionData>("mission:get:data", Game.Player.ServerId);
 
-            if (currentMissionData == null)
-            {
-                Instance.DetachTickHandler(OnMissionUpdateTick);
-                return;
+                if (currentMissionData == null)
+                {
+                    Instance.DetachTickHandler(OnMissionUpdateTick);
+                    return;
+                }
+
+                // Update player information for those in the mission
+                UpdateMissionPeds(currentMissionData.NetworkPeds);
+                UpdateMissionVehicles(currentMissionData.NetworkVehicles);
+                UpdateMissionPlayers(currentMissionData.PartyMembers);
+
+                isOnMission = true;
+
+                if (currentMissionData.IsCompleted)
+                {
+                    RegisteredPeds.ForEach(ped => ped?.Dismiss());
+                    RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
+                    RegisteredParticles.ForEach(particle => particle?.Stop());
+
+                    Instance.DetachTickHandler(OnMissionUpdateTick);
+
+                    isOnMission = false;
+                }
+
+                Logger.Debug($"{currentMissionData}");
             }
-
-            // Update player information for those in the mission
-            UpdateMissionPeds(currentMissionData.NetworkPeds);
-            UpdateMissionVehicles(currentMissionData.NetworkVehicles);
-            UpdateMissionPlayers(currentMissionData.PartyMembers);
-
-            isOnMission = true;
-
-            if (currentMissionData.IsCompleted)
+            catch (Exception ex)
             {
-                RegisteredPeds.ForEach(ped => ped?.Dismiss());
-                RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
-                RegisteredParticles.ForEach(particle => particle?.Stop());
-
-                Instance.DetachTickHandler(OnMissionUpdateTick);
-
-                isOnMission = false;
+                Logger.Error($"OnMissionUpdateTick -> {ex}");
             }
-
-            Logger.Debug($"{currentMissionData}");
         }
 
         private static void UpdateMissionVehicles(Dictionary<int, MissionDataVehicle> networkVehicles)

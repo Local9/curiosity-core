@@ -96,6 +96,8 @@ namespace Curiosity.MissionManager.Client.Managers
                 await BaseScript.Delay(100);
                 MarkerArrestHandler.Dispose();
             }
+
+            EventSystem.Request<object>("user:job", job);
         }
 
         static async void ShowScaleformRules()
