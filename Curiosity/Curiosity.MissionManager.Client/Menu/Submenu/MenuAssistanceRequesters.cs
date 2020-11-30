@@ -100,6 +100,22 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                     Mission.currentMissionData = response;
                     await BaseScript.Delay(500);
                     Mission.AttachMissionUpdateTick();
+
+                    Player player = PluginManager.PlayerList[missionData.OwnerHandleId];
+
+                    if (player != null)
+                    {
+                        Blip blip = World.CreateBlip(player.Character.Position);
+                        blip.IsFlashing = true;
+                        blip.Sprite = (BlipSprite)458;
+                        blip.Color = BlipColor.Red;
+                        blip.Name = $"Back Up Request: {player.Name}";
+
+                        API.SetNewWaypoint(player.Character.Position.X, player.Character.Position.Y);
+
+                        await BaseScript.Delay(500);
+                        blip.Delete();
+                    }
                 }
             }
         }

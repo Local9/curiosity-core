@@ -52,6 +52,7 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 this.IsArrestable = true;
                 Decorators.Set(Fx.Handle, Decorators.PED_SUSPECT, value);
+                UpdatePed();
             }
         }
 
@@ -166,6 +167,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
 
                 Decorators.Set(Fx.Handle, Decorators.PED_HANDCUFFED, value);
+                UpdatePed();
             }
         }
 
@@ -205,30 +207,26 @@ namespace Curiosity.MissionManager.Client.Classes
             API.NetworkFadeInEntity(fx.Handle, false);
 
             if (updateData)
-                Instance.AttachTickHandler(OnUpdatePedTick);
+                UpdatePed();
         }
 
-        private async Task OnUpdatePedTick()
+        public void AttachSuspectBlip()
         {
-            if (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 5)
-            {
-                await BaseScript.Delay(1000);
-                return;
-            }
+            Blip blip = Fx.AttachBlip();
+            blip.Sprite = BlipSprite.Enemy;
+            blip.Color = BlipColor.Red;
+            blip.Scale = .75f;
 
-            if (!Fx.Exists())
-            {
-                Instance.DetachTickHandler(OnUpdatePedTick);
-                return;
-            }
+            UpdatePed();
+        }
+
+        internal void UpdatePed()
+        {
 
             LastUpdate = DateTime.Now;
 
-            bool attachBlip = false;
-
-            if (Fx.AttachedBlip != null)
-                attachBlip = true;
-
+            bool attachBlip = Fx.AttachedBlip != null;
+            
             EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect, IsHandcuffed, attachBlip);
         }
 
@@ -600,8 +598,6 @@ namespace Curiosity.MissionManager.Client.Classes
             await Fx.FadeOut();
 
             EventSystem.Request<bool>("mission:remove:ped", Fx.NetworkId);
-
-            Instance.DetachTickHandler(OnUpdatePedTick);
 
             Blip singleBlip = Fx.AttachedBlip;
             if (singleBlip != null)

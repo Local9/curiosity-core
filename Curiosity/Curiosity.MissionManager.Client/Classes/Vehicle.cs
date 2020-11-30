@@ -34,6 +34,7 @@ namespace Curiosity.MissionManager.Client.Classes
             set
             {
                 Decorators.Set(Fx.Handle, Decorators.VEHICLE_TOW, value);
+                VehicleUpdate();
             }
         }
 
@@ -82,28 +83,25 @@ namespace Curiosity.MissionManager.Client.Classes
             API.NetworkRegisterEntityAsNetworked(fx.Handle);
 
             if (updateData)
-                Instance.AttachTickHandler(OnVehicleUpdateTick);
+                VehicleUpdate();
         }
 
-        private async Task OnVehicleUpdateTick()
+        public Blip AttachSuspectBlip()
         {
-            if (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 5)
-            {
-                await BaseScript.Delay(1000);
-                return;
-            }
+            Blip blip = Fx.AttachBlip();
+            blip.Color = BlipColor.Red;
+            blip.Scale = .75f;
 
-            if (!Fx.Exists())
-            {
-                Instance.DetachTickHandler(OnVehicleUpdateTick);
-                return;
-            }
+            VehicleUpdate();
 
+            return blip;
+        }
+
+        private void VehicleUpdate()
+        {
             LastUpdate = DateTime.Now;
 
-            bool attachBlip = false;
-            if (Fx.AttachedBlip != null)
-                attachBlip = true;
+            bool attachBlip = (Fx.AttachedBlip != null);
 
             EventSystem.Request<bool>("mission:add:vehicle", Fx.NetworkId, IsTowable, attachBlip);
         }
@@ -139,8 +137,6 @@ namespace Curiosity.MissionManager.Client.Classes
                 if (Fx.AttachedBlip.Exists())
                     Fx.AttachedBlip.Delete();
             }
-
-            Instance.DetachTickHandler(OnVehicleUpdateTick);
 
             EventSystem.Request<bool>("mission:remove:vehicle", Fx.NetworkId);
 

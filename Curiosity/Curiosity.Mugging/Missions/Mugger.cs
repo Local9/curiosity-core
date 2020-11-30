@@ -68,11 +68,7 @@ namespace Curiosity.Mugging.Missions
 
                     criminal.Fx.Weapons.Give(WeaponHash.Pistol, 60, true, true);
 
-                    Blip blip = criminal.AttachBlip();
-                    blip.Sprite = BlipSprite.Enemy;
-                    blip.Color = BlipColor.Red;
-                    blip.Scale = 0.5f;
-                    blip.Priority = 9;
+                    criminal.AttachSuspectBlip();
 
                     criminal.Task.AimAt(victim, -1);
                     victim.Task.HandsUp(-1);

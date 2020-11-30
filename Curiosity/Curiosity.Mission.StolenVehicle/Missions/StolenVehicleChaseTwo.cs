@@ -97,10 +97,8 @@ namespace Curiosity.StolenVehicle.Missions
             criminal.Task.CruiseWithVehicle(stolenVehicle.Fx, float.MaxValue,
                 (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
 
-            Blip b = stolenVehicle.AttachBlip();
-            b.Color = BlipColor.Red;
+            Blip b = stolenVehicle.AttachSuspectBlip();
             b.ShowRoute = true;
-
 
             await BaseScript.Delay(100);
 
@@ -248,11 +246,7 @@ namespace Curiosity.StolenVehicle.Missions
 
             ped.IsFleeing = true;
 
-            Blip b = ped.AttachBlip();
-            b.Color = BlipColor.Red;
-            b.ShowRoute = false;
-            b.Scale = .5f;
-            b.Sprite = BlipSprite.Enemy;
+            ped.AttachSuspectBlip();
 
             ped.IsFriendly = false;
 
