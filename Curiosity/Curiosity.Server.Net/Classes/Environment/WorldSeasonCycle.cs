@@ -32,6 +32,7 @@ namespace Curiosity.Server.net.Classes.Environment
         static float _rainIntensity;
 
         static bool _isChristmas;
+        static bool _startedResource;
         static bool _isHalloween;
 
         static List<WeatherTypes> _springWeather = SeasonData.WeatherSpringList();
@@ -385,9 +386,6 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 _serverSeason = _seasonsList[_season]; // set new season based on the increase
 
-                if (DateTime.Now.Month == 12)
-                    _serverSeason = Seasons.WINTER;
-
                 SetNextWeather(false);
 
                 SyncAllUsers();
@@ -402,8 +400,26 @@ namespace Curiosity.Server.net.Classes.Environment
 
         private static void IsStaticWeather()
         {
-            _isChristmas = API.GetConvar("christmas_weather", "false") == "true";
+            _isChristmas = DateTime.Now.Month == 12 || API.GetConvar("christmas_weather", "false") == "true";
             _isHalloween = API.GetConvar("halloween_weather", "false") == "true";
+
+
+            if (_startedResource != _isChristmas)
+            {
+                if (_startedResource)
+                {
+                    Log.Success($"Stopping Resource: nve_iced_alamo");
+                    _startedResource = !_startedResource;
+                    API.StopResource("nve_iced_alamo");
+                }
+
+                if (!_startedResource)
+                {
+                    Log.Success($"Started Resource: nve_iced_alamo");
+                    _startedResource = !_startedResource;
+                    API.StartResource("nve_iced_alamo");
+                }
+            }
 
             if (_isChristmas)
             {
