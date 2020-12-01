@@ -877,15 +877,13 @@ namespace Curiosity.Client.net.Classes.Actions
 
         static void SendPropDeletionEvent(string propEntityId)
         {
-            string encodedString = Encode.StringToBase64(propEntityId);
-            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Prop:Delete", encodedString));
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Prop:Delete", propEntityId));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
 
         static void SendVehicleDeletionEvent(string vehicleNetworkId)
         {
-            string encodedString = Encode.StringToBase64(vehicleNetworkId);
-            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", vehicleNetworkId));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
 

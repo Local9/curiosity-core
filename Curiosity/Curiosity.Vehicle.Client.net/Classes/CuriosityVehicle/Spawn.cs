@@ -428,7 +428,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         public static void SendDeletionEvent(int vehicleNetworkId)
         {
             API.SetNetworkIdCanMigrate(vehicleNetworkId, true);
-            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", $"{vehicleNetworkId}"));
+            TriggerEventForAll triggerEventForAll = new TriggerEventForAll("curiosity:Player:Vehicle:Delete", $"{vehicleNetworkId}");
+            triggerEventForAll.passFullSerializedModel = false;
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(triggerEventForAll);
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
     }

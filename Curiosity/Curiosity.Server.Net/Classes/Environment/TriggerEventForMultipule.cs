@@ -61,6 +61,9 @@ namespace Curiosity.Server.net.Classes.Environment
             try
             {
                 var eventData = Newtonsoft.Json.JsonConvert.DeserializeObject<TriggerEventForAll>(serializedModel);
+
+                // Log.Verbose($"Delete Vehicle: {eventData.EventName} {eventData.Payload}");
+
                 if (eventData.passFullSerializedModel)
                 {
                     eventData.PlayerServerId = Int32.Parse(player.Handle);

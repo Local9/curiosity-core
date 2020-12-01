@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Global.Shared;
+using Curiosity.Vehicles.Client.net.Classes.CurPlayer;
 using System;
 using static CitizenFX.Core.Native.API;
 
@@ -19,46 +20,54 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
         {
             try
             {
+                if (PlayerInformation.IsDeveloper())
+                    Debug.WriteLine($"OnDeleteNetworkID -> {networkId}");
+
                 int vehicleId = NetworkGetEntityFromNetworkId(networkId);
 
                 if (vehicleId > 0)
                 {
                     if (DoesEntityExist(vehicleId))
                     {
+                        if (PlayerInformation.IsDeveloper())
+                            Debug.WriteLine($"DoesEntityExist -> true");
+
                         CitizenFX.Core.Vehicle veh = new CitizenFX.Core.Vehicle(vehicleId);
 
                         if (veh == null) return;
 
                         if (!veh.Exists()) return;
 
-                        if (veh.Driver.Handle == Game.PlayerPed.Handle)
+
+                        if (veh.Handle == Plugin.CurrentVehicle.Handle)
+                            Plugin.CurrentVehicle = null;
+
+                        foreach (Ped p in veh.Passengers)
                         {
-                            if (veh.Handle == Plugin.CurrentVehicle.Handle)
-                                Plugin.CurrentVehicle = null;
-
-                            foreach(Ped p in veh.Passengers)
-                            {
-                                p.Task.WarpOutOfVehicle(veh);
-                                await BaseScript.Delay(500);
-                            }
-
-                            Game.PlayerPed.Task.WarpOutOfVehicle(veh);
-
-                            await BaseScript.Delay(2000);
-
-                            NetworkFadeOutEntity(vehicleId, false, false);
+                            p.Task.WarpOutOfVehicle(veh);
                             await BaseScript.Delay(500);
-                            veh.Position = new Vector3(-2000f, -6000f, 0f);
-                            await BaseScript.Delay(500);
-                            veh.MarkAsNoLongerNeeded();
-                            veh.Delete();
                         }
+
+                        Game.PlayerPed.Task.WarpOutOfVehicle(veh);
+
+                        await BaseScript.Delay(2000);
+
+                        NetworkFadeOutEntity(vehicleId, false, false);
+                        await BaseScript.Delay(500);
+                        veh.Position = new Vector3(-2000f, -6000f, 0f);
+                        await BaseScript.Delay(500);
+                        veh.MarkAsNoLongerNeeded();
+                        veh.Delete();
+
+                        if (PlayerInformation.IsDeveloper())
+                            Debug.WriteLine($"Deleted vehicle");
+
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"OnDelete -> {ex.Message}");
+                Debug.WriteLine($"OnDeleteNetworkID -> {ex.Message}");
             }
         }
 
@@ -68,9 +77,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             {
                 if (string.IsNullOrEmpty(encodedNetworkId)) return;
 
-                string decryptedNetworkId = Encode.BytesToStringConverted(System.Convert.FromBase64String(encodedNetworkId));
-
-                int vehicleId = NetworkGetEntityFromNetworkId(int.Parse(decryptedNetworkId));
+                int vehicleId = NetworkGetEntityFromNetworkId(int.Parse(encodedNetworkId));
 
                 if (vehicleId > 0)
                 {
@@ -83,34 +90,31 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                         if (!veh.Exists()) return;
 
-                        if (veh.Driver.Handle == Game.PlayerPed.Handle)
+                        if (veh.Handle == Plugin.CurrentVehicle.Handle)
+                            Plugin.CurrentVehicle = null;
+
+                        foreach (Ped p in veh.Passengers)
                         {
-                            if (veh.Handle == Plugin.CurrentVehicle.Handle)
-                                Plugin.CurrentVehicle = null;
-
-                            foreach (Ped p in veh.Passengers)
-                            {
-                                p.Task.WarpOutOfVehicle(veh);
-                                await BaseScript.Delay(500);
-                            }
-
-                            Game.PlayerPed.Task.WarpOutOfVehicle(veh);
-
-                            await BaseScript.Delay(2000);
-
-                            NetworkFadeOutEntity(vehicleId, false, false);
+                            p.Task.WarpOutOfVehicle(veh);
                             await BaseScript.Delay(500);
-                            veh.Position = new Vector3(-2000f, -6000f, 0f);
-                            await BaseScript.Delay(500);
-                            veh.MarkAsNoLongerNeeded();
-                            veh.Delete();
                         }
+
+                        Game.PlayerPed.Task.WarpOutOfVehicle(veh);
+
+                        await BaseScript.Delay(2000);
+
+                        NetworkFadeOutEntity(vehicleId, false, false);
+                        await BaseScript.Delay(500);
+                        veh.Position = new Vector3(-2000f, -6000f, 0f);
+                        await BaseScript.Delay(500);
+                        veh.MarkAsNoLongerNeeded();
+                        veh.Delete();
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"OnDelete -> {ex.Message}");
+                Debug.WriteLine($"OnDelete -> {encodedNetworkId} / {ex.Message}");
             }
         }
     }
