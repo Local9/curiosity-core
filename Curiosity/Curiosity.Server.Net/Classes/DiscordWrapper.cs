@@ -4,6 +4,7 @@ using Curiosity.Server.net.Enums.Discord;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Classes
@@ -19,6 +20,13 @@ namespace Curiosity.Server.net.Classes
 
         static bool IsDelayRunnning = false;
         static long DelayMillis = 0;
+
+        private static Regex _compiledUnicodeRegex = new Regex(@"[^\u0000-\u007F]", RegexOptions.Compiled);
+
+        public static String StripUnicodeCharactersFromString(string inputValue)
+        {
+            return _compiledUnicodeRegex.Replace(inputValue, String.Empty);
+        }
 
         public static void Init()
         {
@@ -73,8 +81,8 @@ namespace Curiosity.Server.net.Classes
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}";
-                webhook.Username = Server.hostname;
+                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}");
+                webhook.Username = StripUnicodeCharactersFromString(Server.hostname);
 
                 await webhook.Send();
 
@@ -109,11 +117,11 @@ namespace Curiosity.Server.net.Classes
 
                 Embed embed = new Embed();
                 embed.Author = new EmbedAuthor { Name = adminName, IconUrl = discordWebhook.Avatar };
-                embed.Title = $"Player: {player}";
+                embed.Title = StripUnicodeCharactersFromString($"Player: {player}");
 
-                embed.Description = $" **{action}**: {reason}";
+                embed.Description = StripUnicodeCharactersFromString($" **{action}**: {reason}");
                 if (!string.IsNullOrEmpty(duration))
-                    embed.Description = $" **{action}**: {reason} \n **Duration**: {duration}";
+                    embed.Description = StripUnicodeCharactersFromString($" **{action}**: {reason} \n **Duration**: {duration}");
 
                 embed.Color = (int)DiscordColor.Orange;
                 if (action == "Ban")
@@ -151,17 +159,17 @@ namespace Curiosity.Server.net.Classes
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
                 webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
-                webhook.Username = $"Report made by {reporterName}";
+                webhook.Username = StripUnicodeCharactersFromString($"Report made by {reporterName}");
 
                 Embed embed = new Embed();
                 embed.Author = new EmbedAuthor { Name = reporterName, IconUrl = discordWebhook.Avatar };
-                embed.Title = $"Player: {playerBeingReported}";
+                embed.Title = StripUnicodeCharactersFromString($"Player: {playerBeingReported}");
                 embed.Description = $"Reason: {reason}";
                 embed.Color = (int)DiscordColor.Blue;
                 embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
                 Embed embedServerName = new Embed();
                 embed.Title = "Server";
-                embed.Description = Server.hostname;
+                embed.Description = StripUnicodeCharactersFromString(Server.hostname);
 
                 webhook.Embeds.Add(embed);
                 webhook.Embeds.Add(embedServerName);
@@ -195,12 +203,12 @@ namespace Curiosity.Server.net.Classes
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
                 webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
-                webhook.Username = name;
+                webhook.Username = StripUnicodeCharactersFromString(name);
 
                 Embed embed = new Embed();
                 embed.Author = new EmbedAuthor { Name = name, IconUrl = discordWebhook.Avatar };
-                embed.Title = title;
-                embed.Description = description;
+                embed.Title = StripUnicodeCharactersFromString(title);
+                embed.Description = StripUnicodeCharactersFromString(description);
                 embed.Color = (int)discordColor;
                 embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
 
@@ -244,8 +252,8 @@ namespace Curiosity.Server.net.Classes
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $"{name} > {message}";
-                webhook.Username = username;
+                webhook.Content = StripUnicodeCharactersFromString($"{name} > {message}");
+                webhook.Username = StripUnicodeCharactersFromString(username);
 
                 await webhook.Send();
 
