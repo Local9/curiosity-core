@@ -75,6 +75,10 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 await BaseScript.Delay(5000);
             }
+            else if (!JobManager.IsOfficer)
+            {
+                Instance.DetachTickHandler(OnMissionDirectorTick);
+            }
             else
             {
                 Logger.Debug($"OnMissionDirectorTick Init");
