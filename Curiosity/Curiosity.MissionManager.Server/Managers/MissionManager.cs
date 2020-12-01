@@ -65,7 +65,6 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:deactivate", new EventCallback(metadata =>
             {
-
                 int senderHandle = metadata.Sender;
 
                 try
@@ -235,8 +234,6 @@ namespace Curiosity.MissionManager.Server.Managers
                     Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, 1);
                     EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
                 });
-
-                ActiveMissions.TryRemove(metadata.Sender, out MissionData old);
 
                 return res;
             }));
