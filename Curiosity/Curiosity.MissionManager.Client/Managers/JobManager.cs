@@ -140,7 +140,7 @@ namespace Curiosity.MissionManager.Client.Managers
             description += "~r~~h~DO NOT~h~~w~ Give us a reason to add another rule!\n";
             description += "\n";
             description += "~g~To Get Started:\n";
-            description += "~w~Open the Activity Menu [~o~F1~w~]\n";
+            description += "~w~Spawn a ~b~car~w~ at the garage, open the Activity Menu [~o~F1~w~]\n";
             description += "~w~Here you will find all your options to your job.\n";
             description += "Finally, keep it friendly and we'll all get along.\n";
             description += "\n";
