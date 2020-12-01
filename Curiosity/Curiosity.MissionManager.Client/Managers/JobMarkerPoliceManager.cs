@@ -79,7 +79,14 @@ namespace Curiosity.MissionManager.Client.Managers
             try
             {
                 List<Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 15f)).ToList();
-                peds.ForEach(ped =>
+
+                if (peds.Count == 0)
+                {
+                    await BaseScript.Delay(100);
+                    return;
+                }
+
+                peds.ForEach(async ped =>
                 {
                     if (ped.IsBeingStunned)
                     {
@@ -94,6 +101,8 @@ namespace Curiosity.MissionManager.Client.Managers
                             curPed.IsArrestable = false;
                         }
                     }
+
+                    await BaseScript.Delay(100);
 
                     // NativeWrapper.Draw3DText(ped.Position.X, ped.Position.Y, ped.Position.Z, $"A: {ped.IsAlive}, H: {ped.Health}, S: {ped.IsBeingStunned}", 40f, 15f);
                 });
