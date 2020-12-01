@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Diagnostics;
+using System;
 
 namespace Curiosity.MissionManager.Client.Utils
 {
@@ -34,6 +35,7 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string PED_RELEASED = "c::ped::released";
         public const string PED_HANDCUFFED = "c::ped::handcuffed";
         public const string PED_DIALOGUE = "c::ped::dialogue";
+        public const string PED_SETUP = "c::ped::setup";
 
         // ARREST REASONS
         public const string PED_ARREST_INFLUENCE_DRUNK = "c::ped::arrest::influence::drunk";
@@ -89,6 +91,11 @@ namespace Curiosity.MissionManager.Client.Utils
         public static bool GetBoolean(int handle, string property)
         {
             return API.DecorExistOn(handle, property) && API.DecorGetBool(handle, property);
+        }
+
+        internal static bool GetBoolean(int handle, object pED_SETUP)
+        {
+            throw new NotImplementedException();
         }
     }
 }

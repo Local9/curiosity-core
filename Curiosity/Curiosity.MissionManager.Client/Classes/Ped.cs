@@ -25,9 +25,9 @@ namespace Curiosity.MissionManager.Client.Classes
         public Tasks Task => Fx.Task;
         public bool IsDead => Fx.IsDead;
         internal string Name => Fx.Model.ToString();
-        public bool IsBeingStunned => Fx.IsBeingStunned;
         public bool IsInVehicle { get; set; }
         private bool _DEBUG_ENABLED { get; set; } = false;
+        private bool isRandomPed { get; set; } = false;
 
         public bool IsFleeing
         {
@@ -178,7 +178,7 @@ namespace Curiosity.MissionManager.Client.Classes
         private EntityEventWrapper _eventWrapper;
         private long TimeOfDeath = 0;
 
-        internal Ped(CitizenFX.Core.Ped fx, bool updateData = true) : base(fx.Handle)
+        internal Ped(CitizenFX.Core.Ped fx, bool updateData = true, bool isRandomPed = false) : base(fx.Handle)
         {
             Fx = fx;
 
@@ -189,20 +189,35 @@ namespace Curiosity.MissionManager.Client.Classes
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
-            Fx.AlwaysKeepTask = true;
-            Fx.DropsWeaponsOnDeath = false;
-            Fx.IsPersistent = true;
+            this.isRandomPed = isRandomPed;
             Fx.Health = 200;
 
-            API.SetPedFleeAttributes(Fx.Handle, 0, false);
-            API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
-            API.TaskSetBlockingOfNonTemporaryEvents(Fx.Handle, true);
-            API.SetPedDiesInWater(Fx.Handle, false);
-            API.SetPedDiesWhenInjured(Fx.Handle, false);
-            API.SetPedCombatAttributes(Fx.Handle, 17, false); // Flee if faced with weapon
-            API.SetPedCombatAttributes(Fx.Handle, 46, false); // BF_AlwaysFight 
-            API.SetPedCombatAttributes(Fx.Handle, 5, false); // BF_CanFightArmedPedsWhenNotArmed 
-            Fx.SetConfigFlag(281, true); // No more rolling about
+            if (!this.isRandomPed)
+            {
+                Fx.AlwaysKeepTask = true;
+                Fx.DropsWeaponsOnDeath = false;
+                Fx.IsPersistent = true;
+
+                API.SetPedFleeAttributes(Fx.Handle, 0, false);
+                API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
+                API.TaskSetBlockingOfNonTemporaryEvents(Fx.Handle, true);
+                API.SetPedDiesInWater(Fx.Handle, false);
+                API.SetPedDiesWhenInjured(Fx.Handle, false);
+                API.SetPedCombatAttributes(Fx.Handle, 17, false); // Flee if faced with weapon
+                API.SetPedCombatAttributes(Fx.Handle, 46, false); // BF_AlwaysFight 
+                API.SetPedCombatAttributes(Fx.Handle, 5, false); // BF_CanFightArmedPedsWhenNotArmed 
+                Fx.SetConfigFlag(281, true); // No more rolling about
+            }
+            else
+            {
+                Fx.SetConfigFlag(281, true); // No more rolling about
+                API.SetPedCombatAttributes(Fx.Handle, 17, true); // Flee if faced with weapon
+                API.SetPedCombatAttributes(Fx.Handle, 46, true); // BF_AlwaysFight 
+                API.SetPedDiesInWater(Fx.Handle, false);
+                API.SetPedDiesWhenInjured(Fx.Handle, false);
+            }
+
+            Decorators.Set(fx.Handle, Decorators.PED_SETUP, true);
 
             if (updateData)
             {
@@ -223,6 +238,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
         internal async void UpdatePed()
         {
+            if (isRandomPed) return;
+
             while (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 2)
             {
                 await BaseScript.Delay(100);
@@ -260,14 +277,14 @@ namespace Curiosity.MissionManager.Client.Classes
                 base.Delete();
             }
 
-            if (Fx.IsBeingStunned && Fx.IsAlive && IsArrestable)
+            if (Fx.IsBeingStunned && Fx.IsAlive)
             {
                 base.MaxHealth = 200;
                 base.Health = 200;
 
                 await BaseScript.Delay(10);
 
-                if (Utility.RANDOM.Bool(0.75f) && !IsKneeling)
+                if (Utility.RANDOM.Bool(0.75f) && !IsKneeling && IsArrestable)
                 {
                     RunSequence(Sequence.KNEEL);
                 }
@@ -605,7 +622,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
             await Fx.FadeOut();
 
-            EventSystem.Request<bool>("mission:remove:ped", Fx.NetworkId);
+            if (!isRandomPed)
+                EventSystem.Request<bool>("mission:remove:ped", Fx.NetworkId);
 
             Blip singleBlip = Fx.AttachedBlip;
             if (singleBlip != null)

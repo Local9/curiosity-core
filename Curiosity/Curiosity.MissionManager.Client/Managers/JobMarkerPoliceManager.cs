@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Data;
 using Curiosity.Global.Shared.Enums;
@@ -6,8 +7,12 @@ using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Entities.Models;
 using Curiosity.MissionManager.Client.Environment.Enums;
+using Curiosity.MissionManager.Client.Extensions;
+using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.EventWrapperLegacy;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Managers
@@ -65,6 +70,37 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 BaseScript.TriggerEvent(LegacyEvents.Client.PoliceDutyEvent, true, false, job); // for legacy resources
                 await PluginManager.Delay(5000);
+            }
+        }
+
+        [TickHandler]
+        private async Task OnPedStunnedProtectionTick()
+        {
+            try
+            {
+                List<Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 15f)).ToList();
+                peds.ForEach(ped =>
+                {
+                    if (ped.IsBeingStunned)
+                    {
+                        bool setup = Decorators.GetBoolean(ped.Handle, Decorators.PED_SETUP);
+
+                        if (!setup)
+                        {
+                            Classes.Ped curPed = new Classes.Ped(ped, false, true);
+                            curPed.IsImportant = false;
+                            curPed.IsMission = false;
+                            curPed.IsSuspect = false;
+                            curPed.IsArrestable = false;
+                        }
+                    }
+
+                    NativeWrapper.Draw3DText(ped.Position.X, ped.Position.Y, ped.Position.Z, $"A: {ped.IsAlive}, H: {ped.Health}, S: {ped.IsBeingStunned}", 40f, 15f);
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"OnPedStunnedProtectionTick -> {ex}");
             }
         }
     }
