@@ -51,7 +51,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Plugin.CurrentVehicle.Handle, "Vehicle.Fuel");
                         API.DecorRemove(Plugin.CurrentVehicle.Handle, "Player_Vehicle");
                         API.DecorRemove(Plugin.CurrentVehicle.Handle, "Vehicle.SirensInstalled");
-                        SendDeletionEvent($"{Plugin.CurrentVehicle.NetworkId}");
+                        SendDeletionEvent(Plugin.CurrentVehicle.NetworkId);
                     }
                 }
 
@@ -235,7 +235,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         fuelLevel = Function.Call<float>(Hash._DECOR_GET_FLOAT, Plugin.CurrentVehicle.Handle, "Vehicle.Fuel");
                         API.DecorRemove(Plugin.CurrentVehicle.Handle, "Player_Vehicle");
                         API.DecorRemove(Plugin.CurrentVehicle.Handle, "Vehicle.SirensInstalled");
-                        SendDeletionEvent($"{Plugin.CurrentVehicle.NetworkId}");
+                        SendDeletionEvent(Plugin.CurrentVehicle.NetworkId);
                     }
                 }
 
@@ -425,12 +425,10 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             IsSpawning = false;
         }
 
-        public static void SendDeletionEvent(string vehicleNetworkId)
+        public static void SendDeletionEvent(int vehicleNetworkId)
         {
-            int netId = int.Parse(vehicleNetworkId);
-            API.SetNetworkIdCanMigrate(netId, true);
-            string encodedString = Encode.StringToBase64(vehicleNetworkId);
-            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", encodedString));
+            API.SetNetworkIdCanMigrate(vehicleNetworkId, true);
+            string serializedEvent = Newtonsoft.Json.JsonConvert.SerializeObject(new TriggerEventForAll("curiosity:Player:Vehicle:Delete", $"{vehicleNetworkId}"));
             BaseScript.TriggerServerEvent("curiosity:Server:Event:ForAll", serializedEvent);
         }
     }
