@@ -384,6 +384,9 @@ namespace Curiosity.Server.net.Classes.Environment
                 if (_season >= 4) // cannot have more seasons than whats in the list, 4 seasons known and arrays start at zero
                     _season = 0; // reset to base season
 
+                if (_serverSeason == Seasons.WINTER)
+                    _season = 0;
+
                 _serverSeason = _seasonsList[_season]; // set new season based on the increase
 
                 SetNextWeather(false);
