@@ -23,6 +23,7 @@ namespace Curiosity.Server.net
         public static int startingLocationId = 0;
         public static int minutesAFK = 15;
         public static bool IsSupporterAccess = false;
+        public static string hostname = "";
 
         public static bool IsBirthday = false;
 
@@ -176,6 +177,8 @@ namespace Curiosity.Server.net
             {
                 API.SetConvar("tags", $"{curiosity}");
             }
+
+            hostname = API.GetConvar("sv_hostname", "unable to get hostname");
 
             API.SetConvarServerInfo("Map", $"Los Santos");
             API.SetConvarServerInfo("Curiosity", CURIOSITY_VERSION);
