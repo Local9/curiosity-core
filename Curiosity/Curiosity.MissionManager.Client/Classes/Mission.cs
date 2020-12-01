@@ -80,6 +80,7 @@ namespace Curiosity.MissionManager.Client
         public static void CountArrest()
         {
             NumberPedsArrested++;
+            BaseScript.TriggerEvent("elv:community:arrest");
         }
 
         public static void ResetCountOfArrested() => NumberPedsArrested = 0;
