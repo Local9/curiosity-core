@@ -14,7 +14,7 @@ using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.StolenVehicle.Missions
 {
-    [MissionInfo("County Store Robery", "misSrCounty", 0f, 0f, 0f, MissionType.Store, true, "None", PatrolZone.County)]
+    [MissionInfo("County Store Robbery", "misSrCounty", 0f, 0f, 0f, MissionType.Store, true, "None", PatrolZone.County)]
     public class CountyStores : Mission
     {
         Dictionary<string, Tuple<Vector3, float>> storeClerkSpawns = new Dictionary<string, Tuple<Vector3, float>>()
