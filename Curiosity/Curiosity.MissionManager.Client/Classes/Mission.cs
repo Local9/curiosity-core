@@ -80,7 +80,7 @@ namespace Curiosity.MissionManager.Client
         public static void CountArrest()
         {
             NumberPedsArrested++;
-            BaseScript.TriggerEvent("elv:community:arrest");
+            BaseScript.TriggerEvent("elv:community:arrest"); // kill this when adding the transport job
         }
 
         public static void ResetCountOfArrested() => NumberPedsArrested = 0;
