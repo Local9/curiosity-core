@@ -204,10 +204,10 @@ namespace Curiosity.StolenVehicle.Missions
                 }
             }
 
-            if (criminal.Position.Distance(Game.PlayerPed.Position) < 400f && !isMissionStarted)
+            if (criminal.Position.Distance(Game.PlayerPed.Position) < 200f && !isMissionStarted)
             {
                 if (criminalPassenger != null)
-                    API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 400f);
+                    API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 300f);
 
                 isMissionStarted = true;
             }

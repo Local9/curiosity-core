@@ -153,7 +153,7 @@ namespace Curiosity.StolenVehicle.Missions
                 TaskFleeVehicle(criminal);
             }
 
-            if (criminal.Position.Distance(Game.PlayerPed.Position) < 400f && !isMissionStarted)
+            if (criminal.Position.Distance(Game.PlayerPed.Position) < 200f && !isMissionStarted)
             {
                 isMissionStarted = true;
             }
