@@ -63,6 +63,12 @@ namespace Curiosity.MissionManager.Client.Managers
                 return;
             }
 
+            if (Game.PlayerPed.CurrentVehicle.Driver != Game.PlayerPed)
+            {
+                await BaseScript.Delay(500);
+                return;
+            }
+
             Screen.DisplayHelpTextThisFrame($"~w~Press ~INPUT_PICKUP~ to ~o~Delete ~w~your ~b~Vehicle~w~.");
 
             if (Game.IsControlJustPressed(0, Control.Pickup))
