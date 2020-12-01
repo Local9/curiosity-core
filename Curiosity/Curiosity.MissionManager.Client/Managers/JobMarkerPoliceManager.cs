@@ -95,7 +95,7 @@ namespace Curiosity.MissionManager.Client.Managers
                         }
                     }
 
-                    NativeWrapper.Draw3DText(ped.Position.X, ped.Position.Y, ped.Position.Z, $"A: {ped.IsAlive}, H: {ped.Health}, S: {ped.IsBeingStunned}", 40f, 15f);
+                    // NativeWrapper.Draw3DText(ped.Position.X, ped.Position.Y, ped.Position.Z, $"A: {ped.IsAlive}, H: {ped.Health}, S: {ped.IsBeingStunned}", 40f, 15f);
                 });
             }
             catch (Exception ex)
