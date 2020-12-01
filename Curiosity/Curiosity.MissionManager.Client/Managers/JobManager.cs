@@ -91,6 +91,8 @@ namespace Curiosity.MissionManager.Client.Managers
                     Instance.DiscordRichPresence.SmallAsset = "fivem";
                     Instance.DiscordRichPresence.SmallAssetText = "FiveM";
                     Instance.DiscordRichPresence.Commit();
+
+                    MissionDirectorManager.Director.TurnOffMissionDirector();
                 }
 
                 await BaseScript.Delay(100);
