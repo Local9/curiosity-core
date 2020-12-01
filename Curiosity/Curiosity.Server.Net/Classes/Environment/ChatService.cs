@@ -167,28 +167,18 @@ namespace Curiosity.Server.net.Classes.Environment
 
                 if (string.IsNullOrWhiteSpace(message))
                 {
-                    //Log.Verbose($"[ProcessMessage] IsNullOrWhiteSpace");
                     API.CancelEvent();
                     return;
                 }
 
-                //if (!regex.Match(message).Success)
-                //{
-                //    Log.Verbose($"[ProcessMessage] regex");
-                //    API.CancelEvent();
-                //    return;
-                //}
-
                 if (message.Length == 0)
                 {
-                    //Log.Verbose($"[ProcessMessage] Length");
                     API.CancelEvent();
                     return;
                 }
 
                 if (message.Length > 240)
                 {
-                    //Log.Verbose($"[ProcessMessage] Length too long");
                     message = message.Substring(0, 240);
                 }
 
@@ -200,41 +190,16 @@ namespace Curiosity.Server.net.Classes.Environment
                     message.ToLower();
                 }
 
-                //Log.Verbose($"[ProcessMessage] ProfanityFilter");
-
                 ChatMessage chatMessage = new ChatMessage();
 
                 Privilege privilege = session.Privilege;
-
-                //switch(session.Privilege)
-                //{
-                //    case Privilege.DONATOR:
-                //    case Privilege.DONATOR1:
-                //    case Privilege.DONATOR2:
-                //    case Privilege.DONATOR3:
-                //        privilege = Privilege.DONATOR;
-                //        break;
-                //    default:
-                //        privilege = session.Privilege;
-                //        break;
-                //}
 
                 chatMessage.Name = $"{DateTime.Now.ToString("HH:mm")} [{session.Player.Handle}] {session.Player.Name}";
                 chatMessage.Message = message;
                 chatMessage.Channel = chatChannel;
                 chatMessage.Role = $"{privilege}";
 
-                //chatMessage.color = $"{privilege}".ToLower();
-                //chatMessage.role = $"{privilege}";
-                //chatMessage.list = chatChannel;
-                //chatMessage.message = message;
-                //chatMessage.roleClass = $"{privilege}";
-                //chatMessage.name = $"[{session.Player.Handle}] {session.Player.Name}";
-                //chatMessage.job = $"{session.job}";
-
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
-
-                Log.Verbose($"[{player.Handle}] {player.Name}#{session.UserID} - {message}");
 
                 Server.TriggerClientEvent("curiosity:Client:Chat:Message", json);
 

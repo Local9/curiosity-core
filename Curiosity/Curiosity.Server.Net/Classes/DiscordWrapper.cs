@@ -244,8 +244,8 @@ namespace Curiosity.Server.net.Classes
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = $"{message}";
-                webhook.Username = name;
+                webhook.Content = $"{name} > {message}";
+                webhook.Username = username;
 
                 await webhook.Send();
 
