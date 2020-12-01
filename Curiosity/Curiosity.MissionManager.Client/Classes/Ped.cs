@@ -201,21 +201,14 @@ namespace Curiosity.MissionManager.Client.Classes
                 API.SetPedFleeAttributes(Fx.Handle, 0, false);
                 API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
                 API.TaskSetBlockingOfNonTemporaryEvents(Fx.Handle, true);
-                API.SetPedDiesInWater(Fx.Handle, false);
-                API.SetPedDiesWhenInjured(Fx.Handle, false);
                 API.SetPedCombatAttributes(Fx.Handle, 17, false); // Flee if faced with weapon
                 API.SetPedCombatAttributes(Fx.Handle, 46, false); // BF_AlwaysFight 
                 API.SetPedCombatAttributes(Fx.Handle, 5, false); // BF_CanFightArmedPedsWhenNotArmed 
-                Fx.SetConfigFlag(281, true); // No more rolling about
             }
-            else
-            {
-                Fx.SetConfigFlag(281, true); // No more rolling about
-                API.SetPedCombatAttributes(Fx.Handle, 17, true); // Flee if faced with weapon
-                API.SetPedCombatAttributes(Fx.Handle, 46, true); // BF_AlwaysFight 
-                API.SetPedDiesInWater(Fx.Handle, false);
-                API.SetPedDiesWhenInjured(Fx.Handle, false);
-            }
+
+            Fx.SetConfigFlag(281, true); // No more rolling about
+            API.SetPedDiesInWater(Fx.Handle, false);
+            API.SetPedDiesWhenInjured(Fx.Handle, false);
 
             Decorators.Set(fx.Handle, Decorators.PED_SETUP, true);
 
