@@ -187,7 +187,7 @@ namespace Curiosity.MissionManager.Client.Classes
         public DateTime LastUpdate { get; private set; }
 
         private EntityEventWrapper _eventWrapper;
-        private long TimeOfDeath = 0;
+        private DateTime TimeOfDeath = new DateTime(1900, 1, 1);
 
         internal Ped(CitizenFX.Core.Ped fx, bool updateData = true, bool isRandomPed = false) : base(fx.Handle)
         {
@@ -294,9 +294,9 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (TimeOfDeath > 0) // Remove the ped from the world
+            if (TimeOfDeath.Year != 1900) // Remove the ped from the world
             {
-                if ((API.GetGameTimer() - TimeOfDeath) > 5000)
+                if (DateTime.Now.Subtract(TimeOfDeath).TotalSeconds > 5)
                 {
                     API.NetworkFadeOutEntity(base.Handle, false, false);
                     
@@ -333,8 +333,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
         private void OnDied(EntityEventWrapper sender, Entity entity)
         {
-            if (TimeOfDeath == 0)
-                TimeOfDeath = API.GetGameTimer();
+            TimeOfDeath = DateTime.Now;
 
             Blip b = Fx.AttachedBlip;
 

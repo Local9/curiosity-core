@@ -24,7 +24,7 @@ namespace Curiosity.MissionManager.Client.Classes
         private PluginManager Instance => PluginManager.Instance;
         internal EventSystem EventSystem => EventSystem.GetModule();
 
-        private long TimeOfDeath = 0;
+        private DateTime TimeOfDeath = new DateTime(1900, 1, 1);
 
         private EntityEventWrapper _eventWrapper;
         private bool _DEBUG_ENABLED;
@@ -273,9 +273,9 @@ namespace Curiosity.MissionManager.Client.Classes
                 base.Delete();
             }
 
-            if (TimeOfDeath > 0)
+            if (TimeOfDeath.Year != 1900)
             {
-                if ((API.GetGameTimer() - TimeOfDeath) > 5000)
+                if (DateTime.Now.Subtract(TimeOfDeath).TotalSeconds > 5)
                 {
                     API.NetworkFadeOutEntity(base.Handle, false, false);
 
@@ -312,8 +312,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
         private void OnDied(EntityEventWrapper sender, Entity entity)
         {
-            if (TimeOfDeath == 0)
-                TimeOfDeath = API.GetGameTimer();
+            TimeOfDeath = DateTime.Now;
 
             Blip b = Fx.AttachedBlip;
 
