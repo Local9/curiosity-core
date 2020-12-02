@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.ClientEvents;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Classes
 {
-    [Serializable] // WORK on entity inheritance
+    [Serializable]
     public class Vehicle : Entity, IEquatable<Vehicle>
     {
         private bool _canExecuteAnimation = true;
@@ -23,7 +24,24 @@ namespace Curiosity.MissionManager.Client.Classes
         private PluginManager Instance => PluginManager.Instance;
         internal EventSystem EventSystem => EventSystem.GetModule();
 
+        private long TimeOfDeath = 0;
+
+        private EntityEventWrapper _eventWrapper;
+        private bool _DEBUG_ENABLED;
+
         public string Name => API.GetLabelText(API.GetDisplayNameFromVehicleModel((uint)Fx.Model.Hash));
+
+        public bool IsImportant
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_IMPORTANT);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.VEHICLE_IMPORTANT, value);
+            }
+        }
 
         public bool IsTowable
         {
@@ -79,8 +97,12 @@ namespace Curiosity.MissionManager.Client.Classes
         internal Vehicle(CitizenFX.Core.Vehicle fx, bool updateData = true) : base(fx.Handle)
         {
             Fx = fx;
-
             API.NetworkRegisterEntityAsNetworked(fx.Handle);
+
+            this._eventWrapper = new EntityEventWrapper(this.Fx);
+            this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
+            this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
+            this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
             if (updateData)
                 VehicleUpdate();
@@ -215,6 +237,84 @@ namespace Curiosity.MissionManager.Client.Classes
         public void ParticleEffect(string dict, string fx, Vector3 offset, float scale)
         {
             EntityHandler.ParticleEffect(NetworkId, dict, fx, offset, scale);
+        }
+
+
+
+        internal async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
+        {
+            bool flag;
+
+            // if the ped is marked as a mission related ped, do not allow them to be deleted unless they match the other criteria
+            // does require manual clean up also
+
+            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f || IsImportant)
+            {
+                flag = false;
+            }
+            else
+            {
+                flag = (!base.IsOnScreen ? true : base.IsDead && !IsImportant);
+            }
+            if (flag)
+            {
+                base.Delete();
+            }
+
+            if (TimeOfDeath > 0)
+            {
+                if ((API.GetGameTimer() - TimeOfDeath) > 5000)
+                {
+                    API.NetworkFadeOutEntity(base.Handle, false, false);
+
+                    while (API.NetworkIsEntityFading(base.Handle))
+                    {
+                        await BaseScript.Delay(10);
+                    }
+
+                    Dismiss();
+                }
+            }
+
+            if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
+            {
+                Instance.AttachTickHandler(OnDeveloperOverlay);
+                _DEBUG_ENABLED = true;
+            }
+            else if (!Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG) && _DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
+            {
+                _DEBUG_ENABLED = false;
+                Instance.DetachTickHandler(OnDeveloperOverlay);
+            }
+        }
+
+        async Task OnDeveloperOverlay()
+        {
+            Fx.DrawData();
+        }
+
+        public void Abort(EntityEventWrapper sender, Entity entity)
+        {
+            Dismiss();
+        }
+
+        private void OnDied(EntityEventWrapper sender, Entity entity)
+        {
+            if (TimeOfDeath == 0)
+                TimeOfDeath = API.GetGameTimer();
+
+            Blip b = Fx.AttachedBlip;
+
+            if (b != null)
+            {
+                if (b.Exists())
+                    b.Delete();
+            }
+
+            if (base.IsOccluded)
+            {
+                Dismiss();
+            }
         }
 
         public async void Sequence(VehicleSequence vehicleSequence)
