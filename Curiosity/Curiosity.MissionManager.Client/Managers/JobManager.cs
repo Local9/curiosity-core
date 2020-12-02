@@ -93,10 +93,10 @@ namespace Curiosity.MissionManager.Client.Managers
                     Instance.DiscordRichPresence.Commit();
 
                     MissionDirectorManager.Director.TurnOffMissionDirector();
+                    MarkerArrestHandler.Dispose();
                 }
 
                 await BaseScript.Delay(100);
-                MarkerArrestHandler.Dispose();
             }
 
             EventSystem.Request<object>("user:job", job);
