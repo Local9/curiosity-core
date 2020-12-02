@@ -25,11 +25,12 @@ namespace Curiosity.Client.net.Classes.Environment
         public static void Init()
         {
             client.RegisterEventHandler("curiosity:Client:Vehicles:Remove", new Action<int>(OnVehicleRemove));
-            client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
+            // client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
         }
+
         private static void OnPlayerSpawned(dynamic obj)
         {
-            if (MarkersAll.Count > 0) return;
+            // if (MarkersAll.Count > 0) return;
 
             //MarkersAll.Add(new Marker(new Vector3(1870.172f, 3693.716f, 33.6004f), markerType, color, scale));
             //MarkersAll.Add(new Marker(new Vector3(138.3844f, 6634.493f, 31.64594f), markerType, color, scale));
