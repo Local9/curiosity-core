@@ -14,7 +14,7 @@ namespace Curiosity.MissionManager.Client.Utils
         private static readonly Vector2 DefaultPos = new Vector2(0.6f, 0.5f);
         public static readonly Color DefaultColor = Color.FromArgb(255, 255, 255);
 
-        public static void DrawData(Entity entity)
+        public static void DrawData(this Entity entity)
         {
             var entityPos = entity.Position;
 
