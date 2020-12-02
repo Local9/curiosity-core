@@ -45,8 +45,6 @@ namespace Curiosity.MissionManager.Client.Managers
                 {
                     bool setup = Decorators.GetBoolean(veh.Handle, Decorators.VEHICLE_SETUP);
 
-                    // NativeWrapper.Draw3DText(veh.Position.X, veh.Position.Y, veh.Position.Z, $"H: {veh.Handle}, S: {setup}", 40f, 15f);
-
                     if (!setup)
                     {
                         Vehicle vehicle = new Vehicle(veh, false);
