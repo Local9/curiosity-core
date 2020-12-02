@@ -6,7 +6,7 @@ namespace Curiosity.Server.net.Helpers
     {
         public static void Debug(string message)
         {
-            if (!Server.isLive)
+            if (!Server.DEBUG)
                 Log.Debug(message);
         }
     }

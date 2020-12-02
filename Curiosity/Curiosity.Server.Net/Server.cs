@@ -50,6 +50,8 @@ namespace Curiosity.Server.net
             }
         }
 
+        public static bool DEBUG { get; internal set; }
+
         public static PlayerList players;
 
         static DateTime serverStarted;
@@ -78,6 +80,7 @@ namespace Curiosity.Server.net
             showPlayerLocation = API.GetConvarInt("player_location_display", 1) == 1;
             minutesAFK = API.GetConvarInt("player_afk_timer", 15);
             IsSupporterAccess = API.GetConvarInt("supporter_access_only", 0) == 1;
+            DEBUG = API.GetConvarInt("server_debug_messages", 0) == 1;
 
             if (IsSupporterAccess)
             {
