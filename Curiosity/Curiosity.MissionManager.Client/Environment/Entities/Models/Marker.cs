@@ -16,8 +16,9 @@ namespace Curiosity.MissionManager.Client.Environment.Entities.Models
         public Vector3 Direction { get; private set; }
 
         public MarkerFilter MarkerFilter { get; private set; }
+        public float ContextAoe { get; private set; } = 1.5f;
 
-        public Marker(string markerMessage, Vector3 position, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 3f, MarkerFilter markerFilter = MarkerFilter.Unknown)
+        public Marker(string markerMessage, Vector3 position, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 3f, MarkerFilter markerFilter = MarkerFilter.Unknown, float contextAoe = 1.5f)
         {
             this.Message = markerMessage;
             this.Position = position;
@@ -28,9 +29,10 @@ namespace Curiosity.MissionManager.Client.Environment.Entities.Models
             this.Rotation = new Vector3(0, 0, 0);
             this.Direction = new Vector3(0, 0, 0);
             this.MarkerFilter = markerFilter;
+            this.ContextAoe = contextAoe;
         }
 
-        public Marker(string markerMessage, Vector3 position, System.Drawing.Color color, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 3f, MarkerFilter markerFilter = MarkerFilter.Unknown)
+        public Marker(string markerMessage, Vector3 position, System.Drawing.Color color, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 3f, MarkerFilter markerFilter = MarkerFilter.Unknown, float contextAoe = 1.5f)
         {
             this.Message = markerMessage;
             this.Position = position;
@@ -41,9 +43,10 @@ namespace Curiosity.MissionManager.Client.Environment.Entities.Models
             this.Rotation = new Vector3(0, 0, 0);
             this.Direction = new Vector3(0, 0, 0);
             this.MarkerFilter = markerFilter;
+            this.ContextAoe = contextAoe;
         }
 
-        public Marker(string markerMessage, Vector3 position, System.Drawing.Color color, Vector3 scale, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 3f, MarkerFilter markerFilter = MarkerFilter.Unknown)
+        public Marker(string markerMessage, Vector3 position, System.Drawing.Color color, Vector3 scale, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 3f, MarkerFilter markerFilter = MarkerFilter.Unknown, float contextAoe = 1.5f)
         {
             this.Message = markerMessage;
             this.Position = position;
@@ -54,6 +57,7 @@ namespace Curiosity.MissionManager.Client.Environment.Entities.Models
             this.Rotation = new Vector3(0, 0, 0);
             this.Direction = new Vector3(0, 0, 0);
             this.MarkerFilter = markerFilter;
+            this.ContextAoe = contextAoe;
         }
     }
 }

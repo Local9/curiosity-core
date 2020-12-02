@@ -22,17 +22,18 @@ namespace Curiosity.MissionManager.Client.Managers
 
         System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 135, 206, 235);
         Vector3 scale = new Vector3(4f, 4f, 1f);
+        float ContextAoe = 2.5f;
 
         public override void Begin()
         {
             Logger.Info($"- [VehicleRepairManager] Begin -------------------");
 
-            markers.Add(new Marker("~r~Vehicle Repair Point", new Vector3(1870.172f, 3693.716f, 33.6004f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair));
-            markers.Add(new Marker("~r~Vehicle Repair Point", new Vector3(138.3844f, 6634.493f, 31.64594f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair));
-            markers.Add(new Marker("~r~Vehicle Repair Point", new Vector3(1183.209f, 2648.456f, 36.84267f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair));
-            markers.Add(new Marker("~r~Vehicle Repair Point", new Vector3(-356.0485f, -114.0199f, 37.69672f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair));
-            markers.Add(new Marker("~r~Vehicle Repair Point", new Vector3(717.1935f, -1078.147f, 21.25965f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair));
-            markers.Add(new Marker("~r~Vehicle Repair Point", new Vector3(-199.5225f, -1380.813f, 30.25824f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair));
+            markers.Add(new Marker("~g~Vehicle Repair Point", new Vector3(1870.172f, 3693.716f, 33.6004f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair, contextAoe: ContextAoe));
+            markers.Add(new Marker("~g~Vehicle Repair Point", new Vector3(138.3844f, 6634.493f, 31.64594f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair, contextAoe: ContextAoe));
+            markers.Add(new Marker("~g~Vehicle Repair Point", new Vector3(1183.209f, 2648.456f, 36.84267f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair, contextAoe: ContextAoe));
+            markers.Add(new Marker("~g~Vehicle Repair Point", new Vector3(-356.0485f, -114.0199f, 37.69672f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair, contextAoe: ContextAoe));
+            markers.Add(new Marker("~g~Vehicle Repair Point", new Vector3(717.1935f, -1078.147f, 21.25965f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair, contextAoe: ContextAoe));
+            markers.Add(new Marker("~g~Vehicle Repair Point", new Vector3(-199.5225f, -1380.813f, 30.25824f), markerColor, scale, markerFilter: MarkerFilter.VehicleRepair, contextAoe: ContextAoe));
 
             int blipId = 0;
 

@@ -21,16 +21,17 @@ namespace Curiosity.MissionManager.Client.Managers
 
         System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 161, 40, 48);
         Vector3 scale = new Vector3(4f, 4f, 1f);
+        float ContextAoe = 2.5f;
 
         public override void Begin()
         {
             Logger.Info($"- [VehicleDeletionManager] Begin -----------------");
 
-            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(462.7421f, -1019.469f, 27.1043f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
-            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(463.3558f, -1015.196f, 27.07401f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
-            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(-366.4681f, -109.5964f, 37.89588f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
-            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(2366.087f, 3167.133f, 46.84825f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
-            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(-449.2261f, 6052.743f, 30.34053f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(462.7421f, -1019.469f, 27.1043f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion, contextAoe: ContextAoe));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(463.3558f, -1015.196f, 27.07401f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion, contextAoe: ContextAoe));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(-366.4681f, -109.5964f, 37.89588f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion, contextAoe: ContextAoe));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(2366.087f, 3167.133f, 46.84825f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion, contextAoe: ContextAoe));
+            markers.Add(new Marker("~r~Vehicle Deletion Point", new Vector3(-449.2261f, 6052.743f, 30.34053f), markerColor, scale, markerFilter: MarkerFilter.VehicleDeletion, contextAoe: ContextAoe));
 
             int blipId = 0;
 

@@ -70,6 +70,7 @@ namespace Curiosity.Server.net.ServerExports
 
                         if (increase)
                         {
+                            Log.Info($"{session.Player.Name} : increase : {amount}");
                             Database.DatabaseUsersBank.IncreaseCash(session.User.BankId, amount);
                             session.IncreaseWallet(amount);
                             session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
@@ -79,6 +80,7 @@ namespace Curiosity.Server.net.ServerExports
                             if (session.Wallet < amount)
                                 return false;
 
+                            Log.Info($"{session.Player.Name} : decrease : {amount}");
                             Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, amount);
                             session.DecreaseWallet(amount);
                             session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);

@@ -14,7 +14,6 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class MarkerManager : Manager<MarkerManager>
     {
-        static float contextAoe = 1.5f; // How close you need to be to see instruction
         static internal List<Marker> MarkersAll = new List<Marker>();
         static internal List<Marker> MarkersClose = new List<Marker>();
 
@@ -31,7 +30,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 MarkersClose.ForEach(m =>
                 {
                     World.DrawMarker(m.Type, m.Position, m.Direction, m.Rotation, m.Scale, m.Color, false, false, true);
-                    NativeWrappers.Draw3DText(m.Position.X, m.Position.Y, m.Position.Z + 1, m.Message, 50f, 10f);
+                    NativeWrappers.Draw3DText(m.Position.X, m.Position.Y, m.Position.Z + 1, m.Message, 50f, 15f);
                 });
             }
             catch (Exception ex)
@@ -59,7 +58,7 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             try
             {
-                Marker closestMarker = closestMarker = MarkersClose.Where(w => w.Position.Distance(Game.PlayerPed.Position) < contextAoe).FirstOrDefault();
+                Marker closestMarker = closestMarker = MarkersClose.Where(w => w.Position.Distance(Game.PlayerPed.Position) < w.ContextAoe).FirstOrDefault();
 
                 if (markerFilter == MarkerFilter.Unknown)
                 {
