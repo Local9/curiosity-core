@@ -120,6 +120,7 @@
     <Compile Include="Utils\Collections.cs" />
     <Compile Include="Extensions\Decorators.cs" />
     <Compile Include="Utils\ControlHelper.cs" />
+    <Compile Include="Utils\DebugDisplay.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\NativeWrapper.cs" />
   </ItemGroup>
