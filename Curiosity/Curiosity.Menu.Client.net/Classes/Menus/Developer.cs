@@ -113,8 +113,6 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 _developerNpcUiEnable = newCheckedState;
 
                 Decorators.Set(Game.PlayerPed.Handle, "player::npc::debug", _developerNpcUiEnable);
-
-                Client.TriggerEvent("curiosity:Player:Mission:ShowDeveloperNpcUI", _developerNpcUiEnable);
             }
 
             if (menuItem == menuCheckboxItemDeveloperVehUi)
@@ -122,8 +120,6 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 __developerVehicleUiEnable = newCheckedState;
 
                 Decorators.Set(Game.PlayerPed.Handle, "player::veh::debug", __developerVehicleUiEnable);
-
-                Client.TriggerEvent("curiosity:Player:Mission:ShowDeveloperVehUI", __developerVehicleUiEnable);
             }
         }
 
