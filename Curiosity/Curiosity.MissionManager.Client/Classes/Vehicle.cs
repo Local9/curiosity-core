@@ -76,6 +76,16 @@ namespace Curiosity.MissionManager.Client.Classes
             }
             set
             {
+                if (value)
+                {
+                    API.SetEntityAsMissionEntity(this.Handle, false, false);
+                }
+                else
+                {
+                    int dummyHandle = this.Handle;
+                    API.SetEntityAsNoLongerNeeded(ref dummyHandle);
+                }
+
                 Decorators.Set(Fx.Handle, Decorators.VEHICLE_MISSION, value);
             }
         }

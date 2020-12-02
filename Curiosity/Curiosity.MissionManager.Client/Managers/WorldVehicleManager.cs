@@ -43,6 +43,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 vehicles.ForEach(veh =>
                 {
                     Vehicle vehicle = new Vehicle(veh, false);
+                    vehicle.IsImportant = false;
                 });
             }
             catch(Exception ex)
