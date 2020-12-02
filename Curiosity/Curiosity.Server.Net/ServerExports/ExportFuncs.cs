@@ -1,4 +1,5 @@
-﻿using Curiosity.Server.net.Business;
+﻿using CitizenFX.Core;
+using Curiosity.Server.net.Business;
 using Curiosity.Server.net.Classes;
 using Curiosity.Server.net.Entity;
 using Curiosity.Shared.Server.net.Helpers;
@@ -64,28 +65,7 @@ namespace Curiosity.Server.net.ServerExports
                 {
                     try
                     {
-                        if (!SessionManager.PlayerList.ContainsKey(handle)) return false;
-
-                        Session session = SessionManager.PlayerList[handle];
-
-                        if (increase)
-                        {
-                            Log.Info($"{session.Player.Name} : increase : {amount}");
-                            Database.DatabaseUsersBank.IncreaseCash(session.User.BankId, amount);
-                            session.IncreaseWallet(amount);
-                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-                        }
-                        else
-                        {
-                            if (session.Wallet < amount)
-                                return false;
-
-                            Log.Info($"{session.Player.Name} : decrease : {amount}");
-                            Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, amount);
-                            session.DecreaseWallet(amount);
-                            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
-                        }
-
+                        UpdateWalletValues(handle, amount, increase);
                         return true;
                     }
                     catch (Exception ex)
@@ -113,6 +93,34 @@ namespace Curiosity.Server.net.ServerExports
                     }
                 }
                 ));
+        }
+
+        static async void UpdateWalletValues(string source, int amount, bool increase)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(source)) throw new Exception("Player not found");
+
+            Session session = SessionManager.PlayerList[source];
+
+            if (increase)
+            {
+                Log.Info($"{session.Player.Name} : increase : {amount}");
+                Database.DatabaseUsersBank.IncreaseCash(session.User.BankId, amount);
+                await BaseScript.Delay(100);
+                session.IncreaseWallet(amount);
+                await BaseScript.Delay(100);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+            }
+            else
+            {
+                if (session.Wallet < amount) throw new Exception("Not enough cash");
+
+                Log.Info($"{session.Player.Name} : decrease : {amount}");
+                Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, amount);
+                await BaseScript.Delay(100);
+                session.DecreaseWallet(amount);
+                await BaseScript.Delay(100);
+                session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+            }
         }
     }
 }

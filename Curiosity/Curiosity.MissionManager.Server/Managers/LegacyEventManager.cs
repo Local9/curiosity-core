@@ -8,6 +8,8 @@ namespace Curiosity.MissionManager.Server.Managers
 {
     public class LegacyEventManager : Manager<LegacyEventManager>
     {
+        const int VEHICLE_REPAIR_CHARGE = 100;
+
         public override void Begin()
         {
             EventSystem.GetModule().Attach("vehicle:delete", new AsyncEventCallback(async metadata =>
@@ -34,20 +36,16 @@ namespace Curiosity.MissionManager.Server.Managers
                 }
 
                 CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{exportResponse}");
+                PluginManager.ActiveUsers.TryUpdate(senderHandle, curiosityUser, curiosityUser);
 
-                if (PluginManager.ActiveUsers.TryUpdate(senderHandle, curiosityUser, curiosityUser))
+                if (curiosityUser.Wallet < VEHICLE_REPAIR_CHARGE)
                 {
-                    if (curiosityUser.Wallet < 100)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return Instance.ExportDictionary["curiosity-server"].AdjustWallet(player.Handle, 100, false);
-                    }
+                    return false;
                 }
-
-                return true;
+                else
+                {
+                    return Instance.ExportDictionary["curiosity-server"].AdjustWallet(player.Handle, VEHICLE_REPAIR_CHARGE, false);
+                }
             }));
         }
     }
