@@ -306,6 +306,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     }
 
                     Dismiss();
+                    return;
                 }
             }
 
