@@ -14,6 +14,8 @@ namespace Curiosity.MissionManager.Client.Managers
         public static WorldVehicleManager VehicleManager;
         public override void Begin()
         {
+            Logger.Info($"- [WorldVehicleManager] Begin --------------------");
+
             VehicleManager = this;
         }
 
