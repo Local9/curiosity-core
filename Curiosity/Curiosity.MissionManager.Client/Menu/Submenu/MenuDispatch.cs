@@ -32,7 +32,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menuItemCode4 = new UIMenuItem("Code 4: Cancel Callout", "~o~This will complete/end the current callout, no rewards earned, will lose reputation.");
             menuItemCode92 = new UIMenuItem("10-92: Suspect in Custody", "This will inform other players.");
 
-            menuItemCode78 = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance.");
+            menuItemCode78 = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance. ~b~Shortcut: ~g~ALT+E");
             menuItemCode80 = new UIMenuItem("10-80: Persuit in progress", "This will call on other players for assistance.");
 
             menuItemCode16 = new UIMenuItem("10-16: Request prison transport", "Will remove the suspect from the world, ~o~50% of completion reward~w~.");
@@ -92,6 +92,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 try
                 {
                     eventSystem.Request<bool>("mission:assistance:request");
+                    Notify.DispatchAI("Back Up Requested", "We have informed all available officers that you have requested back up at your location.");
                     MenuManager._MenuPool?.CloseAllMenus();
                 }
                 catch (Exception ex)

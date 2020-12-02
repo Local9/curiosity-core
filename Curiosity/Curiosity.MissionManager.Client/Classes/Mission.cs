@@ -29,6 +29,7 @@ namespace Curiosity.MissionManager.Client
         public static bool isMessagingServer = false;
         public static bool isEndingMission = false;
         internal static MissionData currentMissionData;
+        static bool hasRequestedBackup;
         internal static PluginManager Instance => PluginManager.Instance;
         public static PatrolZone PatrolZone = PatrolZone.Anywhere;
 
@@ -203,6 +204,7 @@ namespace Curiosity.MissionManager.Client
                 DetachMissionUpdateTick();
 
                 currentMissionData = null;
+                hasRequestedBackup = false;
             }
             catch(Exception ex)
             {
@@ -212,11 +214,13 @@ namespace Curiosity.MissionManager.Client
 
         internal static void DetachMissionUpdateTick()
         {
+            Instance.DetachTickHandler(OnControlsPressedTick);
             Instance.DetachTickHandler(OnMissionUpdateTick);
         }
 
         internal static void AttachMissionUpdateTick()
         {
+            Instance.AttachTickHandler(OnControlsPressedTick);
             Instance.AttachTickHandler(OnMissionUpdateTick);
         }
 
@@ -264,7 +268,17 @@ namespace Curiosity.MissionManager.Client
             Stop(EndState.Pass);
         }
 
-        public static async Task OnMissionUpdateTick()
+        static async Task OnControlsPressedTick()
+        {
+            if (ControlHelper.IsControlJustPressed(Control.Context, modifier: ControlModifier.Alt) && Mission.isOnMission && currentMissionData.OwnerHandleId == Game.Player.ServerId && !hasRequestedBackup)
+            {
+                hasRequestedBackup = true;
+                EventSystem.Request<bool>("mission:assistance:request");
+                Notify.DispatchAI("Back Up Requested", "We have informed all available officers that you have requested back up at your location.");
+            }
+        }
+
+        static async Task OnMissionUpdateTick()
         {
             try
             {
