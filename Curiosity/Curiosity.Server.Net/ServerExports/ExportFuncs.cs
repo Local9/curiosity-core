@@ -2,6 +2,7 @@
 using Curiosity.Server.net.Business;
 using Curiosity.Server.net.Classes;
 using Curiosity.Server.net.Entity;
+using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using Newtonsoft.Json;
 using System;
@@ -103,7 +104,7 @@ namespace Curiosity.Server.net.ServerExports
 
             if (increase)
             {
-                Log.Info($"{session.Player.Name} : increase : {amount}");
+                Logger.Debug($"{session.Player.Name} : increase : {amount}");
                 Database.DatabaseUsersBank.IncreaseCash(session.User.BankId, amount);
                 await BaseScript.Delay(100);
                 session.IncreaseWallet(amount);
@@ -114,7 +115,7 @@ namespace Curiosity.Server.net.ServerExports
             {
                 if (session.Wallet < amount) throw new Exception("Not enough cash");
 
-                Log.Info($"{session.Player.Name} : decrease : {amount}");
+                Logger.Debug($"{session.Player.Name} : decrease : {amount}");
                 Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, amount);
                 await BaseScript.Delay(100);
                 session.DecreaseWallet(amount);

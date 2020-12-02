@@ -35,6 +35,11 @@ namespace Curiosity.Shared.Server.net.Helpers
             WriteLine("VERBOSE", msg, ConsoleColor.DarkGray);
         }
 
+        public static void Debug(string msg)
+        {
+            WriteLine("DEBUG", msg, ConsoleColor.Magenta);
+        }
+
         private static void WriteLine(string title, string msg, ConsoleColor color)
         {
             try

@@ -115,6 +115,7 @@
     <Compile Include="Extensions\PlayerExtentions.cs" />
     <Compile Include="Extensions\InternalFilter.cs" />
     <Compile Include="Helpers\ChatLog.cs" />
+    <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\Request.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
