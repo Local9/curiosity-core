@@ -460,15 +460,15 @@ namespace Curiosity.MissionManager.Client.Classes
 
                     if (PlayerManager.PersonalVehicle.IsSeatFree(VehicleSeat.LeftRear))
                     {
-                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.LeftRear);
+                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.LeftRear, 10000);
                     }
                     else if (PlayerManager.PersonalVehicle.IsSeatFree(VehicleSeat.RightRear))
                     {
-                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.RightRear);
+                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.RightRear, 10000);
                     }
                     else if (PlayerManager.PersonalVehicle.IsSeatFree(VehicleSeat.Passenger))
                     {
-                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.Passenger);
+                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.Passenger, 10000);
                     }
                     else
                     {
