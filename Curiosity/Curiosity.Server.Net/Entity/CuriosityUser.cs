@@ -33,5 +33,7 @@ namespace Curiosity.Server.net.Entity
         public bool IsDonatorLevel2 => (Role == Privilege.DONATOR2);
         public bool IsDonatorLevel3 => (Role == Privilege.DONATOR3);
         public bool IsAllowedSupportXp => (IsStaff || IsDonator);
+
+        public int Wallet { get; internal set; }
     }
 }
