@@ -6,6 +6,7 @@ using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Utils;
@@ -454,7 +455,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
                     if (PlayerManager.PersonalVehicle == null)
                     {
-                        Screen.ShowNotification("~r~Vehicle not found.");
+                        Notify.Alert("~r~Vehicle not found, you must have a personal vehicle.");
                         return;
                     }
 
@@ -472,7 +473,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     }
                     else
                     {
-                        Screen.ShowNotification("~r~Unable to find a free seat.");
+                        Notify.Alert("~r~Unable to find a free seat.");
                         return;
                     }
 
