@@ -57,7 +57,9 @@ namespace Curiosity.MissionManager.Client.Managers
 
             EventSystem.Attach("mission:notification", new EventCallback(metadata =>
             {
-                Notify.DispatchAI(metadata.Find<string>(1), metadata.Find<string>(2));
+                if (!Mission.isOnMission)
+                    Notify.DispatchAI(metadata.Find<string>(1), metadata.Find<string>(2));
+
                 return null;
             }));
 
