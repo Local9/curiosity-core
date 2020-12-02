@@ -6,8 +6,10 @@ namespace Curiosity.MissionManager.Client.Utils
 {
     class Decorators
     {
-        public const string PLAYER_DEBUG = "player::npc::debug";
+        public const string PLAYER_DEBUG_NPC = "player::npc::debug";
+        public const string PLAYER_DEBUG_VEH = "player::veh::debug";
         public const string PLAYER_DEBUG_UI = "player::ui::debug";
+
         public const string PLAYER_MENU = "player::npc::menu";
         public const string PLAYER_ASSISTING = "player::npc::assisting";
         public const string PLAYER_VEHICLE = "player::vehicle";
@@ -18,6 +20,7 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string VEHICLE_MISSION = "c::vehicle::mission";
         public const string VEHICLE_SEARCH = "c::vehicle::search";
         public const string VEHICLE_TOW = "c::vehicle::tow";
+        public const string VEHICLE_IMPORTANT = "c::vehicle::important";
 
         // LEGACY
         public const string VEHICLE_SPIKE_ALLOWED = "curiosity::police::vehicle::mission";
