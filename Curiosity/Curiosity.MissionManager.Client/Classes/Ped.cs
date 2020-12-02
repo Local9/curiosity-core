@@ -299,12 +299,12 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
+            if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
                 Instance.AttachTickHandler(OnDeveloperOverlay);
                 _DEBUG_ENABLED = true;
             }
-            else if (!Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG) && _DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
+            else if (!Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC) && _DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
                 _DEBUG_ENABLED = false;
                 Instance.DetachTickHandler(OnDeveloperOverlay);
