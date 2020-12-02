@@ -19,16 +19,18 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 return true;
             }));
+
             EventSystem.GetModule().Attach("vehicle:repair", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
+                var player = PluginManager.PlayersList[metadata.Sender];
 
-                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(senderHandle);
+                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
 
                 while (string.IsNullOrEmpty(exportResponse))
                 {
                     await BaseScript.Delay(500);
-                    exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(senderHandle);
+                    exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
                 }
 
                 CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{exportResponse}");
@@ -37,12 +39,11 @@ namespace Curiosity.MissionManager.Server.Managers
                 {
                     if (curiosityUser.Wallet < 100)
                     {
-
                         return false;
                     }
                     else
                     {
-                        return true;
+                        return Instance.ExportDictionary["curiosity-server"].AdjustWallet(player.Handle, 100, false);
                     }
                 }
 
