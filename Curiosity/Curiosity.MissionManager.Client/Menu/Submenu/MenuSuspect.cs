@@ -117,6 +117,18 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemDetain)
             {
+                if (PlayerManager.PersonalVehicle == null)
+                {
+                    Notify.Alert($"Unable to find vehicle vehicle.");
+                    return;
+                }
+
+                if (!PlayerManager.PersonalVehicle.Exists())
+                {
+                    Notify.Alert($"Unable to find vehicle vehicle.");
+                    return;
+                }
+
                 if (Ped.Position.DistanceTo(PlayerManager.PersonalVehicle.Position) > 10f)
                 {
                     Notify.Alert($"You're too far from your vehicle.");
