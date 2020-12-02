@@ -6,6 +6,8 @@ using Curiosity.MissionManager.Client.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Ped = Curiosity.MissionManager.Client.Classes.Ped;
+using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.MissionManager.Client.Utils
 {
@@ -62,13 +64,13 @@ namespace Curiosity.MissionManager.Client.Utils
 
                 if (entity is Vehicle veh)
                 {
-                    list["Engine Health"] = $"{veh.EngineHealth:n1} / 1,000.0";
-                    list["Body Health"] = $"{veh.BodyHealth:n1} / 1,000.0";
-                    list["Speed"] = $"{veh.Speed / 0.621371f:n3} MP/H";
-                    list["RPM"] = $"{veh.CurrentRPM:n3}";
-                    list["Current Gear"] = $"{veh.CurrentGear}";
-                    list["Acceleration"] = $"{veh.Acceleration:n3}";
-                    list["Lock Status"] = $"{veh.LockStatus}";
+                    list["Engine Health"] = $"{veh.Fx.EngineHealth:n1} / 1,000.0";
+                    list["Body Health"] = $"{veh.Fx.BodyHealth:n1} / 1,000.0";
+                    list["Speed"] = $"{veh.Fx.Speed / 0.621371f:n3} MP/H";
+                    list["RPM"] = $"{veh.Fx.CurrentRPM:n3}";
+                    list["Current Gear"] = $"{veh.Fx.CurrentGear}";
+                    list["Acceleration"] = $"{veh.Fx.Acceleration:n3}";
+                    list["Lock Status"] = $"{veh.Fx.LockStatus}";
                     list["Fuel"] = $"{API.DecorGetFloat(veh.Handle, "Vehicle.Fuel")}";
                 }
                 else if (entity is Ped ped)
