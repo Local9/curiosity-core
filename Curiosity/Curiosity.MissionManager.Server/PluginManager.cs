@@ -6,6 +6,7 @@ using Curiosity.MissionManager.Server.Managers;
 using Curiosity.MissionManager.Server.Web;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -24,7 +25,7 @@ namespace Curiosity.MissionManager.Server
         public static ulong DiscordGuildId { get; private set; }
         public static string DiscordBotKey { get; private set; }
         public static string DiscordUrl { get; private set; }
-        public static Dictionary<int, CuriosityUser> ActiveUsers { get; } = new Dictionary<int, CuriosityUser>();
+        public static ConcurrentDictionary<int, CuriosityUser> ActiveUsers { get; } = new ConcurrentDictionary<int, CuriosityUser>();
         public EventHandlerDictionary EventRegistry => EventHandlers;
         public ExportDictionary ExportDictionary => Exports;
         public Dictionary<Type, object> ActiveManagers { get; } = new Dictionary<Type, object>();

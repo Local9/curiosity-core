@@ -51,7 +51,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 curiosityUser.Handle = metadata.Sender;
 
-                PluginManager.ActiveUsers.Add(metadata.Sender, curiosityUser);
+                PluginManager.ActiveUsers.TryAdd(metadata.Sender, curiosityUser);
 
                 return curiosityUser;
             }));
@@ -83,7 +83,7 @@ namespace Curiosity.MissionManager.Server.Managers
             int playerHandle = int.Parse(player.Handle);
             if (PluginManager.ActiveUsers.ContainsKey(playerHandle))
             {
-                bool userRemoved = PluginManager.ActiveUsers.Remove(playerHandle);
+                bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
                 bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
                 bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
                 Logger.Debug($"Player: {player.Name} disconnected ({reason}), UserRemoved: {userRemoved}, HadMission: {userHadMission}, MissionRemoved: {missionRemoved}");

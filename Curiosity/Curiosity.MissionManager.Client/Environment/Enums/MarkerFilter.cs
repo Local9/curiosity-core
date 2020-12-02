@@ -5,6 +5,7 @@
         Unknown,
         PoliceDuty,
         PoliceArrest,
-        VehicleDeletion
+        VehicleDeletion,
+        VehicleRepair
     }
 }
