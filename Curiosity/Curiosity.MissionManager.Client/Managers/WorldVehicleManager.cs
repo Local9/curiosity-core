@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,17 +34,26 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             try
             {
-                List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 30f)).ToList();
+                List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 15f)).ToList();
 
                 if (vehicles.Count == 0)
                 {
                     await BaseScript.Delay(1500);
                 }
 
-                vehicles.ForEach(veh =>
+                vehicles.ForEach(async veh =>
                 {
-                    Vehicle vehicle = new Vehicle(veh, false);
-                    vehicle.IsImportant = false;
+                    bool setup = Decorators.GetBoolean(veh.Handle, Decorators.VEHICLE_SETUP);
+
+                    // NativeWrapper.Draw3DText(veh.Position.X, veh.Position.Y, veh.Position.Z, $"H: {veh.Handle}, S: {setup}", 40f, 15f);
+
+                    if (!setup)
+                    {
+                        Vehicle vehicle = new Vehicle(veh, false);
+                        vehicle.IsImportant = false;
+                    }
+
+                    await BaseScript.Delay(100);
                 });
             }
             catch(Exception ex)

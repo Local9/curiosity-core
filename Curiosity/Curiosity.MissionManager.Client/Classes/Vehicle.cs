@@ -114,6 +114,8 @@ namespace Curiosity.MissionManager.Client.Classes
             this._eventWrapper.Died += new EntityEventWrapper.OnDeathEvent(this.OnDied);
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
+            Decorators.Set(fx.Handle, Decorators.VEHICLE_SETUP, true);
+
             if (updateData)
                 VehicleUpdate();
         }

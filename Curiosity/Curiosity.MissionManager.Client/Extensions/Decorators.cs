@@ -21,6 +21,7 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string VEHICLE_SEARCH = "c::vehicle::search";
         public const string VEHICLE_TOW = "c::vehicle::tow";
         public const string VEHICLE_IMPORTANT = "c::vehicle::important";
+        public const string VEHICLE_SETUP = "c::vehicle::setup";
 
         // LEGACY
         public const string VEHICLE_SPIKE_ALLOWED = "curiosity::police::vehicle::mission";
