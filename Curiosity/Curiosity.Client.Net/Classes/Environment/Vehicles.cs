@@ -31,16 +31,16 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             if (MarkersAll.Count > 0) return;
 
-            MarkersAll.Add(new Marker(new Vector3(1870.172f, 3693.716f, 33.6004f), markerType, color, scale));
-            MarkersAll.Add(new Marker(new Vector3(138.3844f, 6634.493f, 31.64594f), markerType, color, scale));
-            MarkersAll.Add(new Marker(new Vector3(1183.209f, 2648.456f, 36.84267f), markerType, color, scale));
-            MarkersAll.Add(new Marker(new Vector3(-356.0485f, -114.0199f, 37.69672f), markerType, color, scale));
-            MarkersAll.Add(new Marker(new Vector3(717.1935f, -1078.147f, 21.25965f), markerType, color, scale));
-            MarkersAll.Add(new Marker(new Vector3(-199.5225f, -1380.813f, 30.25824f), markerType, color, scale));
+            //MarkersAll.Add(new Marker(new Vector3(1870.172f, 3693.716f, 33.6004f), markerType, color, scale));
+            //MarkersAll.Add(new Marker(new Vector3(138.3844f, 6634.493f, 31.64594f), markerType, color, scale));
+            //MarkersAll.Add(new Marker(new Vector3(1183.209f, 2648.456f, 36.84267f), markerType, color, scale));
+            //MarkersAll.Add(new Marker(new Vector3(-356.0485f, -114.0199f, 37.69672f), markerType, color, scale));
+            //MarkersAll.Add(new Marker(new Vector3(717.1935f, -1078.147f, 21.25965f), markerType, color, scale));
+            //MarkersAll.Add(new Marker(new Vector3(-199.5225f, -1380.813f, 30.25824f), markerType, color, scale));
 
-            client.RegisterTickHandler(OnClientVehicleRepair);
-            client.RegisterTickHandler(OnClientVehicleRepairMarker);
-            client.RegisterTickHandler(OnClientVehicleRepairMarkerUpdate);
+            //client.RegisterTickHandler(OnClientVehicleRepair);
+            //client.RegisterTickHandler(OnClientVehicleRepairMarker);
+            //client.RegisterTickHandler(OnClientVehicleRepairMarkerUpdate);
         }
 
         static public async Task OnClientVehicleRepairMarkerUpdate()
