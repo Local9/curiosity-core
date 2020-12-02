@@ -15,7 +15,7 @@ namespace Curiosity.Client.net.Classes.Environment
         static Client client = Client.GetInstance();
         static internal List<Marker> MarkersAll = new List<Marker>();
         static internal List<Marker> MarkersClose = new List<Marker>();
-        static float contextAoe = 3f; // How close you need to be to see instruction
+        static float contextAoe = 4f; // How close you need to be to see instruction
 
         static Vector3 scale = new Vector3(5f, 5f, 2f);
         static System.Drawing.Color color = System.Drawing.Color.FromArgb(135, 206, 235);
@@ -45,7 +45,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
         static public async Task OnClientVehicleRepairMarkerUpdate()
         {
-            MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(m.DrawThreshold, 2)).ToList();
+            MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => m.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(m.DrawThreshold, 5)).ToList();
             await BaseScript.Delay(1000);
         }
 
