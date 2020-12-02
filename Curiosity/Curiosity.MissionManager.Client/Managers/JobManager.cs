@@ -79,6 +79,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 await BaseScript.Delay(100);
                 MarkerArrestHandler.Init();
+                WorldVehicleManager.VehicleManager.Start();
             }
             else
             {
@@ -93,6 +94,7 @@ namespace Curiosity.MissionManager.Client.Managers
                     Instance.DiscordRichPresence.Commit();
 
                     MissionDirectorManager.Director.TurnOffMissionDirector();
+                    WorldVehicleManager.VehicleManager.Stop();
                     MarkerArrestHandler.Dispose();
                 }
 

@@ -19,17 +19,17 @@ namespace Curiosity.MissionManager.Client.Managers
             VehicleManager = this;
         }
 
-        public static void Start()
+        public void Start()
         {
             Instance.AttachTickHandler(OnVehicleCreator);
         }
 
-        public static void Stop()
+        public void Stop()
         {
             Instance.DetachTickHandler(OnVehicleCreator);
         }
 
-        private static async Task OnVehicleCreator()
+        private async Task OnVehicleCreator()
         {
             try
             {
