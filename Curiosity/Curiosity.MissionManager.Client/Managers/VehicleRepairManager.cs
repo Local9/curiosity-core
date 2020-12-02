@@ -20,7 +20,7 @@ namespace Curiosity.MissionManager.Client.Managers
         List<Marker> markers = new List<Marker>();
         List<BlipData> blips = new List<BlipData>();
 
-        System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 161, 40, 48);
+        System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 135, 206, 235);
         Vector3 scale = new Vector3(4f, 4f, 1f);
 
         public override void Begin()
