@@ -76,16 +76,7 @@ namespace Curiosity.MissionManager.Client.Classes
             }
             set
             {
-                if (value)
-                {
-                    API.SetEntityAsMissionEntity(this.Handle, false, false);
-                }
-                else
-                {
-                    int dummyHandle = this.Handle;
-                    API.SetEntityAsNoLongerNeeded(ref dummyHandle);
-                }
-
+                Fx.IsPersistent = value;
                 Decorators.Set(Fx.Handle, Decorators.VEHICLE_MISSION, value);
             }
         }
@@ -176,12 +167,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             Fx.IsPersistent = false;
             Fx.MarkAsNoLongerNeeded();
-            Fx.FadeOut();
-            
-            while (API.NetworkIsEntityFading(base.Handle))
-            {
-                await BaseScript.Delay(10);
-            }
+            await Fx.FadeOut();
 
             base.Delete();
         }
@@ -277,13 +263,6 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 if (DateTime.Now.Subtract(TimeOfDeath).TotalSeconds > 5)
                 {
-                    API.NetworkFadeOutEntity(base.Handle, false, false);
-
-                    while (API.NetworkIsEntityFading(base.Handle))
-                    {
-                        await BaseScript.Delay(10);
-                    }
-
                     Dismiss();
                     return;
                 }
