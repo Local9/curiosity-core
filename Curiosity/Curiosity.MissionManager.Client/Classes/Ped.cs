@@ -313,7 +313,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
         async Task OnDeveloperOverlay()
         {
-            // DebuggingTools.DrawData(this);
+            Fx.DrawData();
         }
 
         public void Abort(EntityEventWrapper sender, Entity entity)
