@@ -6,6 +6,9 @@ using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
+using Curiosity.MissionManager.Client.Interface;
+using Curiosity.MissionManager.Client.Manager;
+using Curiosity.MissionManager.Client.Menu;
 using Curiosity.MissionManager.Client.Utils;
 using System;
 using System.Threading.Tasks;
@@ -265,6 +268,16 @@ namespace Curiosity.MissionManager.Client.Classes
                 {
                     Dismiss();
                     return;
+                }
+            }
+
+            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && !Mission.isOnMission)
+            {
+                CitizenFX.Core.Vehicle playerVeh = PlayerManager.PersonalVehicle;
+
+                if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null)
+                {
+                    HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
                 }
             }
 
