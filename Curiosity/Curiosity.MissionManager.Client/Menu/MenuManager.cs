@@ -142,13 +142,15 @@ namespace Curiosity.MissionManager.Client.Menu
         [TickHandler]
         private async Task OnMenuControls()
         {
-                if (!JobManager.IsOfficer) return; // no point in showing if their're not an officer
+            if (!JobManager.IsOfficer) return; // no point in showing if their're not an officer
 
-                if (MarkerManager.GetActiveMarker(MarkerFilter.Unknown) != null) return;
+            if (MarkerManager.GetActiveMarker(MarkerFilter.Unknown) != null) return;
 
-            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 1f)
+            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 1f && !HasShownWarning)
             {
+                HasShownWarning = true;
                 HelpMessage.Custom($"Moving too fast to open the menu.", 2000, false);
+                await BaseScript.Delay(1000);
             }
             else
             {
@@ -167,7 +169,10 @@ namespace Curiosity.MissionManager.Client.Menu
                 }
 
                 if (!API.IsHelpMessageBeingDisplayed())
+                {
                     HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
+                    HasShownWarning = false;
+                }
 
                 if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
                 {
