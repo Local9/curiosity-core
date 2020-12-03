@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Enums;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
@@ -160,7 +161,7 @@ namespace Curiosity.MissionManager.Client.Menu
                 return;
             }
 
-            Screen.DisplayHelpTextThisFrame($"~w~Press ~b~~h~F1~h~ ~w~to open menu."); // need to look into control binds
+            HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
 
             if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
             {
