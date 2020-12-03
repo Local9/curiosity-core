@@ -265,10 +265,12 @@ namespace Curiosity.MissionManager.Client.Interface
             MISSION_PARKING_METER_CONTEXT,
             MISSION_STOP_VEHICLE,
             MISSION_VEHICLE_TICKET_DRIVER,
-            MISSION_VEHICLE_STOPPED
+            MISSION_VEHICLE_STOPPED,
+            TRAFFIC_STOP_INITIATE,
+            MENU_OPEN
         }
 
-        private static Dictionary<Label, KeyValuePair<string, string>> labels = new Dictionary<Label, KeyValuePair<string, string>>()
+        public static Dictionary<Label, KeyValuePair<string, string>> HelpTextLabels = new Dictionary<Label, KeyValuePair<string, string>>()
         {
             [Label.EXIT_INTERIOR_HELP_MESSAGE] = new KeyValuePair<string, string>("EXIT_INTERIOR_HELP_MESSAGE", "Press ~INPUT_CONTEXT~ to exit the building."),
             [Label.ENTER_INTERIOR_HELP_MESSAGE] = new KeyValuePair<string, string>("ENTER_INTERIOR_HELP_MESSAGE", "Press ~INPUT_CONTEXT~ to enter the building."),
@@ -278,6 +280,8 @@ namespace Curiosity.MissionManager.Client.Interface
             [Label.MISSION_STOP_VEHICLE] = new KeyValuePair<string, string>("MISSION_STOP_VEHICLE", $"Press ~INPUT_CONTEXT~ to stop the ~b~Vehicle~w~."),
             [Label.MISSION_VEHICLE_TICKET_DRIVER] = new KeyValuePair<string, string>("MISSION_VEHICLE_TICKET_DRIVER", $"Press ~INPUT_CONTEXT~ to ticket the ~b~Driver~w~."),
             [Label.MISSION_VEHICLE_STOPPED] = new KeyValuePair<string, string>("MISSION_VEHICLE_STOPPED", $"Leave your vehicle and walk up to the drivers window."),
+            [Label.TRAFFIC_STOP_INITIATE] = new KeyValuePair<string, string>("TRAFFIC_STOP_INITIATE", $"Press ~INPUT_CONTEXT~ to pull over the vehicle in front."),
+            [Label.MENU_OPEN] = new KeyValuePair<string, string>("MENU_OPEN", $"~w~Press ~b~~h~F1~h~ ~w~to open menu."),
         };
 
 
@@ -301,11 +305,12 @@ namespace Curiosity.MissionManager.Client.Interface
 
         public static void CustomLooped(Label label)
         {
-            if (API.GetLabelText(labels[label].Key) == "NULL")
+            if (API.GetLabelText(HelpTextLabels[label].Key) == "NULL")
             {
-                API.AddTextEntry(labels[label].Key, labels[label].Value);
+                API.AddTextEntry(HelpTextLabels[label].Key, HelpTextLabels[label].Value);
             }
-            API.DisplayHelpTextThisFrame(labels[label].Key, true);
+
+            API.DisplayHelpTextThisFrame(HelpTextLabels[label].Key, false);
         }
     }
 }
