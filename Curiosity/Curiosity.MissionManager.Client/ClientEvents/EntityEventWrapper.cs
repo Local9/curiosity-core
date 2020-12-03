@@ -95,7 +95,6 @@ namespace Curiosity.MissionManager.Client.ClientEvents
             {
                 this.Dispose();
             }
-            await BaseScript.Delay(100);
         }
 
         public event EntityEventWrapper.OnWrapperAbortedEvent Aborted;
