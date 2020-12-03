@@ -70,7 +70,9 @@ namespace Curiosity.Vehicle.Client.net.Classes
                 if (Game.PlayerPed.IsInVehicle())
                 {
                     if (Plugin.CurrentVehicle == Game.PlayerPed.CurrentVehicle)
+                    {
                         Game.PlayerPed.Task.WarpOutOfVehicle(Plugin.CurrentVehicle);
+                    }
                 }
 
                 Vector3 spawningPosition = new Vector3();

@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
@@ -31,13 +32,15 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
             {
                 if (IsSpawning)
                 {
-                    CitizenFX.Core.UI.Screen.ShowNotification("~b~Vehicle Spawn:\n~r~Cooldown Active");
+                    Screen.ShowNotification("~b~Vehicle Spawn:\n~r~Cooldown Active");
                     return false;
                 }
 
                 client.RegisterTickHandler(OnCooldown);
 
                 float fuelLevel = random.Next(60, 100);
+
+                Screen.ShowSubtitle("Trying to spawn requested vehicle, please wait...");
 
                 if (Plugin.CurrentVehicle != null)
                 {
@@ -52,12 +55,9 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         API.DecorRemove(Plugin.CurrentVehicle.Handle, "Player_Vehicle");
                         API.DecorRemove(Plugin.CurrentVehicle.Handle, "Vehicle.SirensInstalled");
                         SendDeletionEvent(Plugin.CurrentVehicle.NetworkId);
+                        await BaseScript.Delay(3000);
                     }
                 }
-
-                await BaseScript.Delay(500);
-
-                CitizenFX.Core.UI.Screen.ShowSubtitle("Trying to spawn requested vehicle, please wait...");
 
                 var veh = await World.CreateVehicle(model, spawnPosition, heading);
 
