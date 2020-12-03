@@ -174,8 +174,11 @@ namespace Curiosity.StolenVehicle.Missions
             if (NumberPedsArrested > 0)
                 Pass();
 
-            if (thief != null && thief.IsDead && NumberPedsArrested == 0)
-                Fail("Suspect is dead");
+            if (NumberPedsArrested == 0)
+            {
+                if (thief != null && thief.IsDead)
+                    Fail("Suspect is dead");
+            }
         }
     }
 

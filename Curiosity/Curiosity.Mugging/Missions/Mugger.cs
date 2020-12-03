@@ -114,8 +114,11 @@ namespace Curiosity.Mugging.Missions
             if (NumberPedsArrested > 0)
                 Pass();
 
-            if (criminal != null && criminal.IsDead && NumberPedsArrested == 0)
-                Fail($"Suspect is dead...");
+            if (NumberPedsArrested == 0)
+            {
+                if (criminal != null && criminal.IsDead)
+                    Fail($"Suspect is dead...");
+            }
         }
     }
 
