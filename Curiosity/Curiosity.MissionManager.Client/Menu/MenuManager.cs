@@ -23,6 +23,7 @@ namespace Curiosity.MissionManager.Client.Menu
         public static MenuPool _MenuPool;
         internal static UIMenu menuMain;
         public static bool IsCalloutActive = false;
+        public static bool HasShownWarning = false;
 
         private static bool isMenuOpen
         {
@@ -141,14 +142,16 @@ namespace Curiosity.MissionManager.Client.Menu
         [TickHandler]
         private async Task OnMenuControls()
         {
-            if (!API.IsHelpMessageBeingDisplayed())
-            {
                 if (!JobManager.IsOfficer) return; // no point in showing if their're not an officer
 
-                if (MarkerManager.GetActiveMarker(MarkerFilter.Unknown) != null) return; // hide base menu prompt if near a marker
+                if (MarkerManager.GetActiveMarker(MarkerFilter.Unknown) != null) return;
 
-                if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 4f) return; // driving? hide it
-
+            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 1f)
+            {
+                HelpMessage.Custom($"Moving too fast to open the menu.", 2000, false);
+            }
+            else
+            {
                 List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
                 List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f)
                     && (Decorators.GetBoolean(x.Handle, Decorators.VEHICLE_MISSION)
@@ -162,7 +165,9 @@ namespace Curiosity.MissionManager.Client.Menu
                     await BaseScript.Delay(1000);
                     return;
                 }
-                HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
+
+                if (!API.IsHelpMessageBeingDisplayed())
+                    HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
 
                 if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
                 {
@@ -178,10 +183,6 @@ namespace Curiosity.MissionManager.Client.Menu
                         }
                     }
                 }
-            }
-            else
-            {
-                await BaseScript.Delay(1500);
             }
         }
 
