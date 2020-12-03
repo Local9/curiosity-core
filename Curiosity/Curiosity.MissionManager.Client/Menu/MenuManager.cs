@@ -146,49 +146,51 @@ namespace Curiosity.MissionManager.Client.Menu
 
             if (MarkerManager.GetActiveMarker(MarkerFilter.Unknown) != null) return;
 
-            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 1f && !HasShownWarning)
+            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 1f)
             {
+                if (!HasShownWarning)
+                    HelpMessage.Custom($"", 1000, false);
+
                 HasShownWarning = true;
-                HelpMessage.Custom($"Moving too fast to open the menu.", 2000, false);
-                await BaseScript.Delay(1000);
+                
+                return;
             }
-            else
+
+            List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
+            List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f)
+                && (Decorators.GetBoolean(x.Handle, Decorators.VEHICLE_MISSION)
+                || (Decorators.GetBoolean(x.Handle, Decorators.PLAYER_VEHICLE) && Decorators.GetInteger(x.Handle, Decorators.PLAYER_OWNER) == Game.Player.ServerId && PlayerManager.PersonalVehicle.ClassType == VehicleClass.Emergency))
+                ).Select(p => p).ToList();
+
+            int interactables = peds.Count + vehicles.Count; // near any interactives?
+
+            if (interactables == 0)
             {
-                List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
-                List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f)
-                    && (Decorators.GetBoolean(x.Handle, Decorators.VEHICLE_MISSION)
-                    || (Decorators.GetBoolean(x.Handle, Decorators.PLAYER_VEHICLE) && Decorators.GetInteger(x.Handle, Decorators.PLAYER_OWNER) == Game.Player.ServerId && PlayerManager.PersonalVehicle.ClassType == VehicleClass.Emergency))
-                    ).Select(p => p).ToList();
+                await BaseScript.Delay(1000);
+                return;
+            }
 
-                int interactables = peds.Count + vehicles.Count; // near any interactives?
+            if (!API.IsHelpMessageBeingDisplayed())
+            {
+                HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
+                HasShownWarning = false;
+            }
 
-                if (interactables == 0)
+            if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
+            {
+                if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording))
                 {
-                    await BaseScript.Delay(1000);
-                    return;
-                }
+                    if (menuMain.Visible) return;
 
-                if (!API.IsHelpMessageBeingDisplayed())
-                {
-                    HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
-                    HasShownWarning = false;
-                }
-
-                if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
-                {
-                    if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording))
+                    if (!menuMain.Visible)
                     {
-                        if (menuMain.Visible) return;
-
-                        if (!menuMain.Visible)
-                        {
-                            menuMain.Visible = true;
-                            isMenuOpen = true;
-                            Instance.AttachTickHandler(OnMenuDisplay);
-                        }
+                        menuMain.Visible = true;
+                        isMenuOpen = true;
+                        Instance.AttachTickHandler(OnMenuDisplay);
                     }
                 }
             }
+
         }
 
         public static Ped GetClosestInteractivePed()
