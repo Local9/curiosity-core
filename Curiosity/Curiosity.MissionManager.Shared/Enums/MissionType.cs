@@ -13,6 +13,7 @@
         HeistSetup,
         StolenVehicle,
         Store,
-        StoreUnique
+        StoreUnique,
+        TrafficStop
     }
 }

@@ -112,7 +112,7 @@ namespace Curiosity.MissionManager.Client.Managers
                         MissionInfo missionInfo = Functions.GetMissionInfo(mis);
                         double chance = Utility.RANDOM.NextDouble();
 
-                        if (missionInfo.type.Equals(MissionType.Developer))
+                        if (missionInfo.type.Equals(MissionType.Developer) || missionInfo.type.Equals(MissionType.TrafficStop))
                             return;
 
                         if (missionInfo.patrolZone.Equals(LatestPatrolZone))

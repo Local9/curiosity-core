@@ -185,6 +185,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server_Queue", "..\thirdpar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.TrafficViolations", "Curiosity.TrafficViolations\Curiosity.TrafficViolations.csproj", "{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.TrafficStops", "Curiosity.TrafficStops\Curiosity.TrafficStops.csproj", "{BFF9EF96-9B15-4F18-8D7E-FAAC89C170EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -439,6 +441,10 @@ Global
 		{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFF9EF96-9B15-4F18-8D7E-FAAC89C170EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFF9EF96-9B15-4F18-8D7E-FAAC89C170EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFF9EF96-9B15-4F18-8D7E-FAAC89C170EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFF9EF96-9B15-4F18-8D7E-FAAC89C170EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -512,6 +518,7 @@ Global
 		{7DD2915A-8D5C-4489-A4B3-863465EB5B27} = {66CABDB7-46FF-4765-9C20-99EDC8282923}
 		{A0D85DA2-D419-46F8-9415-DD080F54AD5B} = {7DD2915A-8D5C-4489-A4B3-863465EB5B27}
 		{D6168CAE-092D-42EC-AD01-8DEB1C12ACF0} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
+		{BFF9EF96-9B15-4F18-8D7E-FAAC89C170EC} = {9C30A4C9-700E-4779-BD9B-9850F5E200E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
