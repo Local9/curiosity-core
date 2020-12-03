@@ -161,19 +161,22 @@ namespace Curiosity.MissionManager.Client.Menu
                 return;
             }
 
-            HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
-
-            if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
+            if (!API.IsHelpMessageBeingDisplayed())
             {
-                if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording))
-                {
-                    if (menuMain.Visible) return;
+                HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
 
-                    if (!menuMain.Visible)
+                if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
+                {
+                    if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording))
                     {
-                        menuMain.Visible = true;
-                        isMenuOpen = true;
-                        Instance.AttachTickHandler(OnMenuDisplay);
+                        if (menuMain.Visible) return;
+
+                        if (!menuMain.Visible)
+                        {
+                            menuMain.Visible = true;
+                            isMenuOpen = true;
+                            Instance.AttachTickHandler(OnMenuDisplay);
+                        }
                     }
                 }
             }
