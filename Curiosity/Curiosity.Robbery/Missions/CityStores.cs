@@ -142,7 +142,7 @@ namespace Curiosity.StolenVehicle.Missions
                     break;
                 case MissionState.SetupSuspectLocation:
 
-                    Vector3 spawnLocation = storeClerk.Position.Around(200f, 400f);
+                    Vector3 spawnLocation = storeClerk.Position.AroundStreet(200f, 400f);
 
                     locationBlip = Functions.SetupLocationBlip(spawnLocation.Around(10f, 20f));
                     RegisterBlip(locationBlip);
