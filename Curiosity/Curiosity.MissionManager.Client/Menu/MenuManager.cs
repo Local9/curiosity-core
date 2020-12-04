@@ -147,6 +147,11 @@ namespace Curiosity.MissionManager.Client.Menu
 
             if (MarkerManager.GetActiveMarker(MarkerFilter.Unknown) != null) return;
 
+            if (!Game.PlayerPed.IsInVehicle())
+            {
+                CanShowMessage = true;
+            }
+
             if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 4f)
             {
                 if (!HasShownWarning)
