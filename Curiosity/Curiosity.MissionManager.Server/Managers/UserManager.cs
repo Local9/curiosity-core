@@ -87,7 +87,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
                 bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
-                bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out long oldUserID);
+                bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
                 bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
                 
                 Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}, HM: {userHadMission}, MR: {missionRemoved}, FR: {failuresRemoved}");
