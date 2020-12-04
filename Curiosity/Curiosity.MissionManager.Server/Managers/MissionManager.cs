@@ -240,6 +240,8 @@ namespace Curiosity.MissionManager.Server.Managers
                     numberOfFailures = FailureTracker.AddOrUpdate(curUser.UserId, 0, (key, oldValue) => oldValue > 0 ? oldValue - 1 : 0);
                 }
 
+                Logger.Debug($"{curUser.LatestName} : NumFail: {numberOfFailures}");
+
                 bool res = Instance.ExportDictionary["curiosity-server"].MissionComplete(player.Handle, missionId, passed, numberTransportArrested, numberOfFailures);
 
                 missionData.PartyMembers.ForEach(async serverHandle =>
