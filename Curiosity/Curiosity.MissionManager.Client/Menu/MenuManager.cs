@@ -24,6 +24,7 @@ namespace Curiosity.MissionManager.Client.Menu
         internal static UIMenu menuMain;
         public static bool IsCalloutActive = false;
         public static bool HasShownWarning = false;
+        public static bool CanShowMessage = true;
 
         private static bool isMenuOpen
         {
@@ -152,7 +153,8 @@ namespace Curiosity.MissionManager.Client.Menu
                     HelpMessage.Custom($"", 1000, false);
 
                 HasShownWarning = true;
-                
+                CanShowMessage = true;
+
                 return;
             }
 
@@ -170,10 +172,11 @@ namespace Curiosity.MissionManager.Client.Menu
                 return;
             }
 
-            if (!API.IsHelpMessageBeingDisplayed())
+            if (!API.IsHelpMessageBeingDisplayed() && !menuMain.Visible && CanShowMessage)
             {
                 HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
                 HasShownWarning = false;
+                CanShowMessage = false;
             }
 
             if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
