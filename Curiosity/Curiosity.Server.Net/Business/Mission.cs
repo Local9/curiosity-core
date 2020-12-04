@@ -92,7 +92,7 @@ namespace Curiosity.Server.net.Business
                     // send success notification
                     session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Lowered Rewards", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
                     await BaseScript.Delay(500);
-                    session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Reason", $" $~w~You require ~y~{numberOfFailures - 3:d0} ~w~or more successful callout(s) to earn full rewards.");
+                    session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Reason", $"~w~You require ~y~{numberOfFailures - 3:d0} ~w~or more successful callout(s) to earn full rewards.");
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace Curiosity.Server.net.Business
                 if (numberOfFailures >= 3)
                 {
                     await BaseScript.Delay(500);
-                    session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Lowered Rewards", $" $~w~You have failed too many missions in a row and will now get lower rewards.");
+                    session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Lowered Rewards", $"~w~You have failed too many missions in a row and will now get lower rewards.");
                 }
             }
 
