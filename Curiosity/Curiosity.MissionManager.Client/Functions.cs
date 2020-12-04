@@ -113,16 +113,17 @@ namespace Curiosity.MissionManager.Client
             return info;
         }
 
-        public static Blip SetupLocationBlip(Vector3 location)
+        public static Blip SetupLocationBlip(Vector3 location, float scale = 0.5f, BlipColor blipColor = BlipColor.Yellow)
         {
             Blip locationBlip = World.CreateBlip(location);
             locationBlip.Sprite = BlipSprite.BigCircle;
-            locationBlip.Scale = 0.5f;
-            locationBlip.Color = (BlipColor)5;
+            locationBlip.Scale = scale;
+            locationBlip.Color = blipColor;
             locationBlip.Alpha = 126;
             locationBlip.ShowRoute = true;
             locationBlip.Priority = 9;
             locationBlip.IsShortRange = true;
+            locationBlip.Name = "Mission Area";
 
             API.SetBlipDisplay(locationBlip.Handle, 5);
 

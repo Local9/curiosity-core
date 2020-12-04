@@ -61,8 +61,20 @@ namespace Curiosity.StolenVehicle.Missions
         {
             missionState = MissionState.Started;
 
-            stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
-                Players[0].Character.Position.AroundStreet(200f, 400f));
+            Vector3 location = Players[0].Character.Position.AroundStreet(200f, 400f);
+
+            Blip locationBlip = Functions.SetupLocationBlip(location);
+            RegisterBlip(locationBlip);
+
+            while (location.Distance(Game.PlayerPed.Position) > 150f)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            if (locationBlip.Exists())
+                locationBlip.Delete();
+
+            stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(), location);
 
             if (stolenVehicle == null)
             {
@@ -141,11 +153,6 @@ namespace Curiosity.StolenVehicle.Missions
 
         public override void End()
         {
-            if (criminal != null && criminalPassenger != null)
-            {
-                Fail("Failed to capture and arrest the perps");
-            }
-
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
         }
 
@@ -154,6 +161,14 @@ namespace Curiosity.StolenVehicle.Missions
             while(!isMissionReady)
             {
                 await BaseScript.Delay(100);
+            }
+
+            if (criminal.Position.Distance(Game.PlayerPed.Position) < 200f && !isMissionStarted)
+            {
+                if (criminalPassenger != null)
+                    API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 300f);
+
+                isMissionStarted = true;
             }
 
             float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
@@ -202,14 +217,6 @@ namespace Curiosity.StolenVehicle.Missions
                 {
                     TaskFleeVehicle(criminalPassenger);
                 }
-            }
-
-            if (criminal.Position.Distance(Game.PlayerPed.Position) < 200f && !isMissionStarted)
-            {
-                if (criminalPassenger != null)
-                    API.RegisterHatedTargetsAroundPed(criminalPassenger.Handle, 300f);
-
-                isMissionStarted = true;
             }
 
             if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f && isMissionStarted && NumberPedsArrested == 0)

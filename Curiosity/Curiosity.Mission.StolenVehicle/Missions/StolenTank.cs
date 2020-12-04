@@ -54,8 +54,20 @@ namespace Curiosity.StolenVehicle.Missions
 
             MISSION_TIMER *= Utility.RANDOM.Next(10, 30);
 
-            stolenVehicle = await Vehicle.Spawn(VehicleHash.Rhino,
-                Players[0].Character.Position.AroundStreet(200f, 400f));
+            Vector3 location = Players[0].Character.Position.AroundStreet(200f, 400f);
+
+            Blip locationBlip = Functions.SetupLocationBlip(location);
+            RegisterBlip(locationBlip);
+
+            while (location.Distance(Game.PlayerPed.Position) > 150f)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            if (locationBlip.Exists())
+                locationBlip.Delete();
+
+            stolenVehicle = await Vehicle.Spawn(VehicleHash.Rhino, location);
 
             if (stolenVehicle == null)
             {
@@ -108,11 +120,6 @@ namespace Curiosity.StolenVehicle.Missions
 
         public override void End()
         {
-            if (criminal != null)
-            {
-                Fail("Failed to capture and arrest the perp");
-            }
-
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
         }
 
@@ -121,6 +128,12 @@ namespace Curiosity.StolenVehicle.Missions
             while(!isMissionReady)
             {
                 await BaseScript.Delay(100);
+            }
+
+            if (criminal.Position.Distance(Game.PlayerPed.Position) < 200f && !isMissionStarted)
+            {
+                isMissionStarted = true;
+                return;
             }
 
             float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
@@ -153,34 +166,9 @@ namespace Curiosity.StolenVehicle.Missions
                 TaskFleeVehicle(criminal);
             }
 
-            if (criminal.Position.Distance(Game.PlayerPed.Position) < 200f && !isMissionStarted)
-            {
-                isMissionStarted = true;
-            }
-
             if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f && isMissionStarted && NumberPedsArrested == 0)
             {
                 missionState = MissionState.Escaped;
-            }
-
-            if ((API.GetGameTimer() - lastShot) > SHOT_TIMER && !hasLeftVehicle && !isShooting)
-            {
-                lastShot = API.GetGameTimer();
-
-                int driver = criminal.Handle;
-
-                API.TaskVehicleAimAtPed(driver, Players.Random().Character.Handle);
-
-                isShooting = true;
-            }
-
-            if ((API.GetGameTimer() - lastShotReset) > SHOT_TIMER_FLEE && isShooting && !hasLeftVehicle)
-            {
-                isShooting = false;
-                lastShotReset = API.GetGameTimer();
-
-                criminal.Task.CruiseWithVehicle(stolenVehicle.Fx, float.MaxValue,
-                (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
             }
 
             if ((API.GetGameTimer() - missionStart) > MISSION_TIMER && !hasLeftVehicle)

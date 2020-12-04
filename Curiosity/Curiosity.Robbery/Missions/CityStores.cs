@@ -56,6 +56,19 @@ namespace Curiosity.StolenVehicle.Missions
                 Vector3 storeClerkPosition = randomStore.Value.Item1;
                 float storeClerkHeading = randomStore.Value.Item2;
 
+                Vector3 location = storeClerkPosition;
+
+                Blip locationBlip = Functions.SetupLocationBlip(location);
+                RegisterBlip(locationBlip);
+
+                while (location.Distance(Game.PlayerPed.Position) > 50f)
+                {
+                    await BaseScript.Delay(100);
+                }
+
+                if (locationBlip.Exists())
+                    locationBlip.Delete();
+
                 storeClerk = await Ped.Spawn(storeClerkHash, storeClerkPosition, storeClerkHeading, false, PedType.PED_TYPE_SPECIAL, false, true);
 
                 if (storeClerk == null)

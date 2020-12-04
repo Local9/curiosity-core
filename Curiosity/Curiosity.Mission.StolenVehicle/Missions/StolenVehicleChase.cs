@@ -60,8 +60,20 @@ namespace Curiosity.StolenVehicle.Missions
         {
             missionState = MissionState.Started;
 
-            stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
-                Players[0].Character.Position.AroundStreet(200f, 400f));
+            Vector3 location = Players[0].Character.Position.AroundStreet(200f, 400f);
+
+            Blip locationBlip = Functions.SetupLocationBlip(location);
+            RegisterBlip(locationBlip);
+
+            while (location.Distance(Game.PlayerPed.Position) > 150f)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            if (locationBlip.Exists())
+                locationBlip.Delete();
+
+            stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(), location);
 
             if (stolenVehicle == null)
             {
@@ -114,11 +126,6 @@ namespace Curiosity.StolenVehicle.Missions
 
         public override void End()
         {
-            if (criminal != null)
-            {
-                Fail("Failed to capture and arrest the perps");
-            }
-
             MissionManager.Instance.DeregisterTickHandler(OnMissionTick);
         }
 
@@ -127,6 +134,11 @@ namespace Curiosity.StolenVehicle.Missions
             while(!isMissionReady)
             {
                 await BaseScript.Delay(100);
+            }
+
+            if (criminal.Position.Distance(Game.PlayerPed.Position) < 200f && !isMissionStarted)
+            {
+                isMissionStarted = true;
             }
 
             float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
@@ -157,11 +169,6 @@ namespace Curiosity.StolenVehicle.Missions
             if (!criminal.IsKneeling && !criminal.IsInVehicle && !criminal.IsHandcuffed)
             {
                 TaskFleeVehicle(criminal);
-            }
-
-            if (criminal.Position.Distance(Game.PlayerPed.Position) < 200f && !isMissionStarted)
-            {
-                isMissionStarted = true;
             }
 
             if (criminal.Position.Distance(Game.PlayerPed.Position) > 600f && isMissionStarted && NumberPedsArrested == 0)

@@ -42,7 +42,7 @@ namespace Curiosity.Mugging.Missions
             switch(missionState)
             {
                 case MissionState.Start:
-                    if (Game.PlayerPed.Position.DistanceTo(spawnPoint) < 100f)
+                    if (Game.PlayerPed.Position.DistanceTo(spawnPoint) < 50f)
                         missionState = MissionState.SpawnPeds;
                     break;
                 case MissionState.SpawnPeds:
