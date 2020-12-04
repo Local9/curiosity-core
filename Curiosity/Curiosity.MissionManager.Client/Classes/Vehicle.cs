@@ -271,15 +271,15 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && !Mission.isOnMission)
-            {
-                CitizenFX.Core.Vehicle playerVeh = PlayerManager.PersonalVehicle;
+            //if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && !Mission.isOnMission)
+            //{
+            //    CitizenFX.Core.Vehicle playerVeh = PlayerManager.PersonalVehicle;
 
-                if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null)
-                {
-                    HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
-                }
-            }
+            //    if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null)
+            //    {
+            //        HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
+            //    }
+            //}
 
             if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_VEH) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
