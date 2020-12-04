@@ -77,12 +77,12 @@ namespace Curiosity.Server.net.ServerExports
                 }
             ));
 
-            Instance.ExportDictionary.Add("MissionComplete", new Func<string, string, bool, int, bool>(
-                (source, missionId, passed, numTransportArrested) =>
+            Instance.ExportDictionary.Add("MissionComplete", new Func<string, string, bool, int, int, bool>(
+                (source, missionId, passed, numTransportArrested, numberOfFailures) =>
                 {
                     try
                     {
-                        Mission.RecordMissionCompletion(source, missionId, passed, numTransportArrested);
+                        Mission.RecordMissionCompletion(source, missionId, passed, numTransportArrested, numberOfFailures);
 
                         return true;
                     }

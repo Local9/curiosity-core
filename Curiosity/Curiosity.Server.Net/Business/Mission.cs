@@ -16,7 +16,7 @@ namespace Curiosity.Server.net.Business
 
         }
 
-        public async static Task<MissionData> RecordMissionCompletion(string playerSource, string missionId, bool passed, int numTransportArrested)
+        public async static Task<MissionData> RecordMissionCompletion(string playerSource, string missionId, bool passed, int numTransportArrested, int numberOfFailures)
         {
             if (!SessionManager.PlayerList.ContainsKey(playerSource)) return null;
 
@@ -46,6 +46,14 @@ namespace Curiosity.Server.net.Business
                     repReward = (int)(repReward * .5f);
                     cashMin = (int)(cashMin * .5f);
                     cashMax = (int)(cashMax * .5f);
+                }
+
+                if (numberOfFailures >= 3)
+                {
+                    xpReward = (int)(xpReward * .1f);
+                    repReward = 0;
+                    cashMin = (int)(cashMin * .1f);
+                    cashMax = (int)(cashMax * .1f);
                 }
 
                 int money = Server.random.Next(cashMin, cashMax);

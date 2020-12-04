@@ -14,6 +14,7 @@ namespace Curiosity.MissionManager.Server.Managers
     public class MissionManager : Manager<MissionManager>
     {
         public static ConcurrentDictionary<int, MissionData> ActiveMissions = new ConcurrentDictionary<int, MissionData>();
+        public static ConcurrentDictionary<long, int> FailureTracker = new ConcurrentDictionary<long, int>();
 
         public override void Begin()
         {
@@ -217,6 +218,8 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 if (player == null) return false;
 
+                var curUser = PluginManager.ActiveUsers[metadata.Sender];
+
                 MissionData missionData = ActiveMissions[metadata.Sender];
                 missionData.IsCompleted = true;
 
@@ -226,13 +229,31 @@ namespace Curiosity.MissionManager.Server.Managers
                 bool passed = metadata.Find<bool>(0);
                 int numberTransportArrested = metadata.Find<int>(1);
 
-                bool res = Instance.ExportDictionary["curiosity-server"].MissionComplete(player.Handle, missionId, passed, numberTransportArrested);
+                int numberOfFailures = 0;
+
+                if (!passed)
+                {
+                    numberOfFailures = FailureTracker.AddOrUpdate(curUser.UserId, 1, (key, oldValue) => oldValue + 1);
+                }
+                else
+                {
+                    numberOfFailures = FailureTracker.AddOrUpdate(curUser.UserId, 0, (key, oldValue) => oldValue > 0 ? oldValue - 1 : 0);
+                }
+
+                bool res = Instance.ExportDictionary["curiosity-server"].MissionComplete(player.Handle, missionId, passed, numberTransportArrested, numberOfFailures);
 
                 missionData.PartyMembers.ForEach(async serverHandle =>
                 {
                     await BaseScript.Delay(500);
-                    Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, 1);
-                    EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
+                    if (numberOfFailures >= 3)
+                    {
+                        Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, 1, 0);
+                        EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
+                    }
+                    else
+                    {
+                        EventSystem.GetModule().Send("mission:notification", serverHandle, "No earnings", "The player you've assisted has failed too many times.");
+                    }
                 });
 
                 return res;
