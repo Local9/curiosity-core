@@ -97,12 +97,6 @@ namespace Curiosity.Server.net.Business
                 else
                 {
                     session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Completed", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
-
-                    if (numberOfFailures >= 3)
-                    {
-                        await BaseScript.Delay(500);
-                        session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Lowered Rewards", $" $~w~You have failed too many missions in a row and will now get lower rewards.");
-                    }
                 }
             }
             else
@@ -119,6 +113,12 @@ namespace Curiosity.Server.net.Business
 
                 // send failure notification
                 session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Failed", $"~b~Rep Lost~w~: {repFailure:d0}");
+
+                if (numberOfFailures >= 3)
+                {
+                    await BaseScript.Delay(500);
+                    session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Lowered Rewards", $" $~w~You have failed too many missions in a row and will now get lower rewards.");
+                }
             }
 
             return missionData;
