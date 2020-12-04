@@ -148,6 +148,19 @@ namespace Curiosity.StolenVehicle.Missions
                         spawnLocation = storeClerk.Position.Around(200f, 400f);
                     }
 
+                    locationBlip = Functions.SetupLocationBlip(spawnLocation.Around(10f, 20f));
+                    RegisterBlip(locationBlip);
+
+                    while (spawnLocation.Distance(Game.PlayerPed.Position) > 50f)
+                    {
+                        await BaseScript.Delay(100);
+                    }
+
+                    if (locationBlip.Exists())
+                        locationBlip.Delete();
+
+                    thief = await Ped.SpawnRandom(spawnLocation, isNetworked: false);
+
                     thief = await Ped.SpawnRandom(spawnLocation, isNetworked: false);
 
                     if (thief == null)

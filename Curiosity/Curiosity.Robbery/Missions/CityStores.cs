@@ -26,7 +26,7 @@ namespace Curiosity.StolenVehicle.Missions
             { "city5", new Tuple<Vector3, float>(new Vector3(1142.246f, -980.7135f, 45.20635f), 269.9512f) },
             { "city6", new Tuple<Vector3, float>(new Vector3(-1491.585f, -384.2828f, 39.0344f), 121.8301f) },
             { "city7", new Tuple<Vector3, float>(new Vector3(-1226.831f, -901.288f, 11.29286f), 35.64202f) },
-            { "city8", new Tuple<Vector3, float>(new Vector3(28.33368f, -1352.618f, 29.33898f), 200.2414f) },
+            { "city8", new Tuple<Vector3, float>(new Vector3(28.33368f, -1352.618f, 28.33898f), 200.2414f) },
         };
 
         MissionState missionState;
@@ -58,7 +58,7 @@ namespace Curiosity.StolenVehicle.Missions
 
                 Vector3 location = storeClerkPosition;
 
-                Blip locationBlip = Functions.SetupLocationBlip(location);
+                locationBlip = Functions.SetupLocationBlip(location);
                 RegisterBlip(locationBlip);
 
                 while (location.Distance(Game.PlayerPed.Position) > 50f)
@@ -142,7 +142,20 @@ namespace Curiosity.StolenVehicle.Missions
                     break;
                 case MissionState.SetupSuspectLocation:
 
-                    thief = await Ped.SpawnRandom(storeClerk.Position.AroundStreet(200f, 400f), isNetworked: false);
+                    Vector3 spawnLocation = storeClerk.Position.Around(200f, 400f);
+
+                    locationBlip = Functions.SetupLocationBlip(spawnLocation.Around(10f, 20f));
+                    RegisterBlip(locationBlip);
+
+                    while (spawnLocation.Distance(Game.PlayerPed.Position) > 50f)
+                    {
+                        await BaseScript.Delay(100);
+                    }
+
+                    if (locationBlip.Exists())
+                        locationBlip.Delete();
+
+                    thief = await Ped.SpawnRandom(spawnLocation, isNetworked: false);
 
                     if (thief == null)
                     {
@@ -156,9 +169,6 @@ namespace Curiosity.StolenVehicle.Missions
 
                     thief.Fx.Task.WanderAround(thief.Position, 20f);
 
-                    locationBlip = Functions.SetupLocationBlip(thief.Position.Around(10f, 20f));
-                    RegisterBlip(locationBlip);
-
                     RegisteredPeds.Add(thief);
 
                     missionState = MissionState.LookingForSuspect;
@@ -170,9 +180,6 @@ namespace Curiosity.StolenVehicle.Missions
 
                     if (Game.PlayerPed.Position.Distance(thief.Position) < 10f)
                     {
-                        if (locationBlip.Exists())
-                            locationBlip.Delete();
-
                         thief.Task.ClearAllImmediately();
                         thief.Task.ReactAndFlee(Game.PlayerPed);
 
