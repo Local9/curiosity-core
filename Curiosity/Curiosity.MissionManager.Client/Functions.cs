@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.Shared.Client.net;
 using System;
@@ -124,6 +125,8 @@ namespace Curiosity.MissionManager.Client
             locationBlip.Priority = 9;
             locationBlip.IsShortRange = true;
             locationBlip.Name = "Mission Area";
+
+            Notify.Dispatch("~g~GPS Updated", $"Please travel to the location shown on your ~b~GPS~s~.");
 
             API.SetBlipDisplay(locationBlip.Handle, 5);
 
