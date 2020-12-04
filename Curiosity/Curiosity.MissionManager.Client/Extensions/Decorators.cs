@@ -4,7 +4,7 @@ using System;
 
 namespace Curiosity.MissionManager.Client.Utils
 {
-    class Decorators
+    public class Decorators
     {
         public const string PLAYER_DEBUG_NPC = "player::npc::debug";
         public const string PLAYER_DEBUG_VEH = "player::veh::debug";
@@ -22,6 +22,8 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string VEHICLE_TOW = "c::vehicle::tow";
         public const string VEHICLE_IMPORTANT = "c::vehicle::important";
         public const string VEHICLE_SETUP = "c::vehicle::setup";
+        public const string VEHICLE_TRAFFIC_STOP_HANDLE = "c::vehicle::trafficstop::handle";
+        public const string VEHICLE_TRAFFIC_STOP_COMPLETED = "c::vehicle::trafficstop::completed";
 
         // LEGACY
         public const string VEHICLE_SPIKE_ALLOWED = "curiosity::police::vehicle::mission";
@@ -42,10 +44,6 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string PED_SETUP = "c::ped::setup";
 
         // ARREST REASONS
-        public const string PED_ARREST_INFLUENCE_DRUNK = "c::ped::arrest::influence::drunk";
-        public const string PED_ARREST_INFLUENCE_COCAINE = "c::ped::arrest::influence::cocaine";
-        public const string PED_ARREST_INFLUENCE_HEROIN = "c::ped::arrest::influence::heroin";
-        public const string PED_ARREST_INFLUENCE_WEED = "c::ped::arrest::influence::weed";
 
         public static void Set(int handle, string property, object value)
         {

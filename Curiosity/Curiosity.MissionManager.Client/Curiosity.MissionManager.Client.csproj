@@ -97,6 +97,7 @@
     <Compile Include="Managers\ExportsManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
+    <Compile Include="Managers\TrafficStopManager.cs" />
     <Compile Include="Managers\VehicleRepairManager.cs" />
     <Compile Include="Managers\VehicleDeletionManager.cs" />
     <Compile Include="Managers\JobMarkerPoliceManager.cs" />
