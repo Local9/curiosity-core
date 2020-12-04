@@ -47,6 +47,8 @@ namespace Curiosity.StolenVehicle.Missions
 
                 var randomStore = storeClerkSpawns.ToList()[Utility.RANDOM.Next(storeClerkSpawns.Count)];
 
+                DiscordStatus("Traveling to the scene");
+
                 if (randomStore.Value == null)
                 {
                     Stop(EndState.Error);
@@ -89,9 +91,7 @@ namespace Curiosity.StolenVehicle.Missions
 
                 RegisteredPeds.Add(storeClerk);
 
-                Notify.DispatchAI("Report of Shoplifting", "Report of a shiplifter, please goto location to gain information.");
-
-                DiscordStatus("Traveling to the scene");
+                Notify.DispatchAI("Shoplifter", "Speak with the store clerk to get more information.");
 
                 MissionManager.Instance.RegisterTickHandler(OnMissionTick);
             }
