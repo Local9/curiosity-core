@@ -9,6 +9,7 @@ using Curiosity.MissionManager.Client.Environment.Entities;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using System;
 using System.Collections.Generic;
@@ -146,6 +147,9 @@ namespace Curiosity.MissionManager.Client
             if (API.GetCurrentResourceName() != resourceName) return;
 
             Notify.Info($"~b~Mission Resource ~r~Stopped");
+
+            if (Mission.isOnMission)
+                Mission.currentMission.Stop(EndState.ForceEnd);
 
             if (JobManager.IsOfficer)
                 BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "unemployed");
