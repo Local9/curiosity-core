@@ -62,6 +62,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 Logger.Debug($"Mission: {mis.OwnerHandleId}, {mis.ID}, {mis.Creation} / PlayerID: {player?.Name}#{player?.Handle}");
                 
                 UIMenuItem uIMenuItem = new UIMenuItem($"{player?.Name}");
+                uIMenuItem.Description = $"Callout: {mis.DisplayName}";
 
                 menuMissions.Add(uIMenuItem, mis);
 
