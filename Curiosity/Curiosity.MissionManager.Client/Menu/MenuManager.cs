@@ -25,19 +25,6 @@ namespace Curiosity.MissionManager.Client.Menu
         public static bool HasShownWarning = false;
         public static bool CanShowMessage = true;
 
-        private static bool isMenuOpen
-        {
-            get
-            {
-                return Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_MENU);
-            }
-            set
-            {
-                Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_MENU, value);
-            }
-
-        }
-
         // sub menus
         internal static Submenu.MenuDispatch _dispatch = new Submenu.MenuDispatch();
         private Submenu.MenuSuspect _suspectPed = new Submenu.MenuSuspect();
@@ -121,7 +108,6 @@ namespace Curiosity.MissionManager.Client.Menu
 
         private void MenuMain_OnMenuClose(UIMenu sender)
         {
-            isMenuOpen = false;
             OnMenuState();
         }
 
@@ -135,8 +121,7 @@ namespace Curiosity.MissionManager.Client.Menu
         public static void OnMenuState(bool isOpen = false)
         {
             _MenuPool.MouseEdgeEnabled = false;
-            isMenuOpen = isOpen;
-            BaseScript.TriggerEvent("curiosity:Client:Menu:IsOpened", isMenuOpen);
+            BaseScript.TriggerEvent("curiosity:Client:Menu:IsOpened", isOpen);
         }
 
         [TickHandler]
@@ -178,14 +163,14 @@ namespace Curiosity.MissionManager.Client.Menu
                 return;
             }
 
-            if (!API.IsHelpMessageBeingDisplayed() && !menuMain.Visible && CanShowMessage)
+            if (!API.IsHelpMessageBeingDisplayed() && !_MenuPool.IsAnyMenuOpen() && CanShowMessage)
             {
                 HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
                 HasShownWarning = false;
                 CanShowMessage = false;
             }
 
-            if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !isMenuOpen)
+            if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !_MenuPool.IsAnyMenuOpen())
             {
                 if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording))
                 {
@@ -194,7 +179,6 @@ namespace Curiosity.MissionManager.Client.Menu
                     if (!menuMain.Visible)
                     {
                         menuMain.Visible = true;
-                        isMenuOpen = true;
                         Instance.AttachTickHandler(OnMenuDisplay);
                     }
                 }

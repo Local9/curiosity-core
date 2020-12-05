@@ -38,6 +38,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private void Menu_OnMenuOpen(UIMenu sender)
         {
+            MenuManager.OnMenuState(true);
+
             bool isCalloutActive = MenuManager.IsCalloutActive;
 
             if (!isCalloutActive)
@@ -61,8 +63,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
                 PluginInstance.AttachTickHandler(OnSuspectVehicleDistanceCheck);
             }
-
-            MenuManager.OnMenuState(true);
         }
 
         private async Task OnSuspectVehicleDistanceCheck()

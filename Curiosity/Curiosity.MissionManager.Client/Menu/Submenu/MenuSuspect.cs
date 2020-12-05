@@ -45,6 +45,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private void Menu_OnMenuOpen(UIMenu sender)
         {
+            MenuManager.OnMenuState(true);
+
             if (Game.PlayerPed.IsInVehicle())
             {
                 MenuManager._MenuPool.CloseAllMenus();
@@ -86,8 +88,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
                 PluginInstance.AttachTickHandler(OnSuspectDistanceCheck);
             }
-
-            MenuManager.OnMenuState(true);
         }
 
         private async Task OnSuspectDistanceCheck()

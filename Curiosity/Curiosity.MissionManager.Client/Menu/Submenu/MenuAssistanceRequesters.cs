@@ -36,6 +36,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private async void Menu_OnMenuOpen(UIMenu sender)
         {
+            MenuManager.OnMenuState(true);
+
             Menu.MenuItems.Clear();
             menuMissions.Clear();
 
@@ -73,8 +75,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                     m.Description = "~o~Currently on an active callout.";
                 });
             }
-
-            MenuManager.OnMenuState(true);
         }
 
         private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
