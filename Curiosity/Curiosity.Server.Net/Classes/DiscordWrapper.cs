@@ -159,25 +159,18 @@ namespace Curiosity.Server.net.Classes
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
                 webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
-                webhook.Username = StripUnicodeCharactersFromString($"Report made by {reporterName}");
+                webhook.Username = $"Report made by {reporterName}";
 
                 Embed embed = new Embed();
                 embed.Author = new EmbedAuthor { Name = reporterName, IconUrl = discordWebhook.Avatar };
-                embed.Title = StripUnicodeCharactersFromString($"Player: {playerBeingReported}");
+                embed.Title = $"Player: {playerBeingReported}");
                 embed.Description = $"Reason: {reason}";
                 embed.Color = (int)DiscordColor.Blue;
                 embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
-                Embed embedServerName = new Embed();
-                embed.Title = "Server";
-                embed.Description = StripUnicodeCharactersFromString(Server.hostname);
 
                 webhook.Embeds.Add(embed);
-                webhook.Embeds.Add(embedServerName);
 
-                await Server.Delay(0);
                 await webhook.Send();
-
-                await Task.FromResult(0);
             }
             catch (Exception ex)
             {
