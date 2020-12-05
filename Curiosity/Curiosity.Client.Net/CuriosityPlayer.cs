@@ -403,6 +403,7 @@ namespace Curiosity.Client.net
 
             API.ExpandWorldLimits(-10000.0f, -12000.0f, -30.0f);
             API.ExpandWorldLimits(10000.0f, 12000.0f, 30.0f);
+            API.DisablePlayerVehicleRewards(Game.Player.Handle);
 
             try
             {
