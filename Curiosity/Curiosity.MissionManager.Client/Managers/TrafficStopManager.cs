@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
+using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.MissionManager.Client.Managers
 {
@@ -12,6 +13,7 @@ namespace Curiosity.MissionManager.Client.Managers
         public static TrafficStopManager Manager;
 
         public Vehicle tsVehicle { get; private set; }
+        public Ped tsDriver { get; private set; }
 
         public override void Begin()
         {
@@ -21,11 +23,13 @@ namespace Curiosity.MissionManager.Client.Managers
         public void SetVehicle(Vehicle vehicle)
         {
             tsVehicle = vehicle;
+            tsDriver = new Ped(vehicle.Fx.Driver);
         }
 
         public void ClearVehicle()
         {
             tsVehicle = null;
+            tsDriver = null;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Managers;
@@ -14,10 +15,17 @@ namespace Curiosity.TrafficStops.Missions
     public class TrafficStop : Mission
     {
         Vehicle veh;
+        Ped driver;
 
         public override void Start()
         {
             veh = TrafficStopManager.Manager.tsVehicle;
+            driver = TrafficStopManager.Manager.tsDriver;
+
+
+            // https://runtime.fivem.net/doc/natives/?_0x0FA6E4B75F302400
+            // Pull over this will try to avoid
+            API.TaskVehicleEscort(driver.Handle, veh.Handle, Game.PlayerPed.CurrentVehicle.Handle, 0, 15f, (int)Collections.CombinedVehicleDrivingFlags.Normal, 8f, 0, 0f);
 
             if (veh == null)
                 Stop(EndState.Error);
