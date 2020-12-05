@@ -8,8 +8,9 @@ using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
-using Curiosity.MissionManager.Client.Menu;
+using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
+using Curiosity.Systems.Library.Utils;
 using System;
 using System.Threading.Tasks;
 
@@ -23,7 +24,6 @@ namespace Curiosity.MissionManager.Client.Classes
         public CitizenFX.Core.Vehicle Fx { get; private set; }
         public Vector3 Position => Fx.Position;
         public string Hash => Fx.Model.ToString();
-
         private PluginManager Instance => PluginManager.Instance;
         internal EventSystem EventSystem => EventSystem.GetModule();
 
@@ -271,15 +271,29 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            //if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && !Mission.isOnMission)
-            //{
-            //    CitizenFX.Core.Vehicle playerVeh = PlayerManager.PersonalVehicle;
+            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle
+                && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency
+                && !Mission.isOnMission)
+            {
+                bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
 
-            //    if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null)
-            //    {
-            //        HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
-            //    }
-            //}
+                if (Utility.RANDOM.Bool(0.1f) && !isMarked)
+                {
+                    Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_PULLOVER, true);
+                }
+
+                Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED, true);
+
+                CitizenFX.Core.Vehicle playerVeh = PlayerManager.PersonalVehicle;
+
+                if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null)
+                {
+                    HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
+                    
+                    if (ControlHelper.IsControlJustPressed(Control.Context, false))
+                        TrafficStopManager.Manager.SetVehicle(this);
+                }
+            }
 
             if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_VEH) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
