@@ -163,7 +163,7 @@ namespace Curiosity.Server.net.Classes
 
                 Embed embed = new Embed();
                 embed.Author = new EmbedAuthor { Name = reporterName, IconUrl = discordWebhook.Avatar };
-                embed.Title = $"Player: {playerBeingReported}");
+                embed.Title = $"Player: {playerBeingReported}";
                 embed.Description = $"Reason: {reason}";
                 embed.Color = (int)DiscordColor.Blue;
                 embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
