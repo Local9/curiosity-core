@@ -59,7 +59,7 @@ namespace Curiosity.StolenVehicle.Missions
             Blip locationBlip = Functions.SetupLocationBlip(location);
             RegisterBlip(locationBlip);
 
-            while (location.Distance(Game.PlayerPed.Position) > 200f)
+            while (location.Distance(Game.PlayerPed.Position) > 100f)
             {
                 await BaseScript.Delay(100);
             }
