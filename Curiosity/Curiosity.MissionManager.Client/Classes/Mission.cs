@@ -147,9 +147,11 @@ namespace Curiosity.MissionManager.Client
                 {
                     case EndState.Pass:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
+                        EventSystem.Request<bool>("mission:completed", true, NumberTransportArrested);
                         break;
                     case EndState.Fail:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(3, 6));
+                        EventSystem.Request<bool>("mission:completed", false, NumberTransportArrested);
                         break;
                     case EndState.ForceEnd:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(4, 10));
@@ -185,11 +187,6 @@ namespace Curiosity.MissionManager.Client
                 RegisteredVehicles.ForEach(vehicle => vehicle?.Dismiss());
                 RegisteredParticles.ForEach(particle => particle?.Stop());
 
-                if (reason != EndState.Error)
-                    EventSystem.Request<bool>("mission:completed", reason == EndState.Pass, NumberTransportArrested);
-
-                EventSystem.Request<bool>("mission:deactivate");
-
                 foreach (Blip blip in PluginManager.Blips)
                 {
                     if (blip.Exists())
@@ -205,6 +202,8 @@ namespace Curiosity.MissionManager.Client
 
                 currentMissionData = null;
                 hasRequestedBackup = false;
+
+                EventSystem.Request<bool>("mission:deactivate");
             }
             catch(Exception ex)
             {
