@@ -10,5 +10,6 @@
         Pass,
         Error,
         ForceEnd,
+        Restart,
     }
 }
