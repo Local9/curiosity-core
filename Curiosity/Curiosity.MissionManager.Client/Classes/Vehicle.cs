@@ -96,6 +96,18 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
+        public bool IsIgnored
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_IGNORED);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_IGNORED, value);
+            }
+        }
+
         public DateTime LastUpdate { get; private set; }
 
         internal Vehicle(CitizenFX.Core.Vehicle fx, bool updateData = true) : base(fx.Handle)
@@ -273,7 +285,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle
                 && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency
-                && !Mission.isOnMission)
+                && !Mission.isOnMission && !IsIgnored)
             {
                 bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
 
@@ -289,9 +301,18 @@ namespace Curiosity.MissionManager.Client.Classes
                 if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null)
                 {
                     HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
-                    
+
+                    API.DisableControlAction(0, (int)Control.VehicleRadioWheel, true);
+                    API.DisableControlAction(0, (int)Control.VehicleNextRadio, true);
+                    API.DisableControlAction(0, (int)Control.VehicleNextRadioTrack, true);
+                    API.DisableControlAction(0, (int)Control.VehiclePrevRadio, true);
+                    API.DisableControlAction(0, (int)Control.VehiclePrevRadioTrack, true);
+
                     if (ControlHelper.IsControlJustPressed(Control.Context, false))
                         TrafficStopManager.Manager.SetVehicle(this);
+
+                    if (ControlHelper.IsControlJustPressed(Control.Cover, false))
+                        IsIgnored = true;
                 }
             }
 
