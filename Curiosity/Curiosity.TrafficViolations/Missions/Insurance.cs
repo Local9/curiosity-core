@@ -57,8 +57,20 @@ namespace Curiosity.TrafficViolations.Missions
         {
             missionState = MissionState.Started;
 
-            suspectVehicle = await Vehicle.Spawn(vehicleHashes.Random(),
-                Players[0].Character.Position.AroundStreet(200f, 400f));
+            Vector3 location = Players[0].Character.Position.AroundStreet(200f, 400f);
+
+            Blip locationBlip = Functions.SetupLocationBlip(location);
+            RegisterBlip(locationBlip);
+
+            while (location.Distance(Game.PlayerPed.Position) > 200f)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            if (locationBlip.Exists())
+                locationBlip.Delete();
+
+            suspectVehicle = await Vehicle.Spawn(vehicleHashes.Random(), location);
 
             if (suspectVehicle == null)
             {
