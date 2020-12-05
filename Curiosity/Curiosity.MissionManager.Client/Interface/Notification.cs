@@ -280,7 +280,7 @@ namespace Curiosity.MissionManager.Client.Interface
             [Label.MISSION_STOP_VEHICLE] = new KeyValuePair<string, string>("MISSION_STOP_VEHICLE", $"Press ~INPUT_CONTEXT~ to stop the ~b~Vehicle~w~."),
             [Label.MISSION_VEHICLE_TICKET_DRIVER] = new KeyValuePair<string, string>("MISSION_VEHICLE_TICKET_DRIVER", $"Press ~INPUT_CONTEXT~ to ticket the ~b~Driver~w~."),
             [Label.MISSION_VEHICLE_STOPPED] = new KeyValuePair<string, string>("MISSION_VEHICLE_STOPPED", $"Leave your vehicle and walk up to the drivers window."),
-            [Label.TRAFFIC_STOP_INITIATE] = new KeyValuePair<string, string>("TRAFFIC_STOP_INITIATE", $"Press ~INPUT_CONTEXT~ to pull over the vehicle in front."),
+            [Label.TRAFFIC_STOP_INITIATE] = new KeyValuePair<string, string>("TRAFFIC_STOP_INITIATE", $"Press ~INPUT_CONTEXT~ to pull over the vehicle in front.~n~Press ~INPUT_COVER~ to ignore the vehicle."),
             [Label.MENU_OPEN] = new KeyValuePair<string, string>("MENU_OPEN", $"~w~Press ~b~~h~F1~h~ ~w~to open menu."),
         };
 
