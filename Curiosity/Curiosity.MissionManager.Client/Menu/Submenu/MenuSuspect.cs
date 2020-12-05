@@ -16,12 +16,19 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         private Ped Ped;
 
         UIMenu Menu;
+        UIMenu menuQuestions;
+        DefinedMenus.MenuQuestions _menuQuestions = new DefinedMenus.MenuQuestions();
+
         UIMenuItem menuItemHandcuff;
         UIMenuItem menuItemDetain;
         UIMenuItem menuItemGrab;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
+            menuQuestions = MenuManager._MenuPool.AddSubMenu(menu, "Questions", "Ask the suspect questions.");
+            menuQuestions.MouseControlsEnabled = false;
+            _menuQuestions.CreateMenu(menuQuestions);
+
             menuItemHandcuff = new UIMenuItem("Apply Handcuffs");
             menu.AddItem(menuItemHandcuff);
             menuItemDetain = new UIMenuItem("Detain in Vehicle");

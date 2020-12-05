@@ -107,6 +107,7 @@
     <Compile Include="Managers\MissionDirectorManager.cs" />
     <Compile Include="Managers\WorldVehicleManager.cs" />
     <Compile Include="Menu\MenuManager.cs" />
+    <Compile Include="Menu\Submenu\DefinedMenus\MenuQuestions.cs" />
     <Compile Include="Menu\Submenu\MenuDispatch.cs" />
     <Compile Include="Menu\Submenu\MenuSettings.cs" />
     <Compile Include="Menu\Submenu\MenuAssistanceRequesters.cs" />

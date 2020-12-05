@@ -18,6 +18,8 @@ namespace Curiosity.TrafficStops.Missions
         Vehicle veh;
         Ped driver;
 
+        MissionState missionState;
+
         public override void Start()
         {
             veh = TrafficStopManager.Manager.tsVehicle;
@@ -37,11 +39,7 @@ namespace Curiosity.TrafficStops.Missions
 
             Notify.Info($"Vehicle is attempting to pull over.");
 
-            if (veh == null)
-                Stop(EndState.Error);
-
-            if (!veh.Exists())
-                Stop(EndState.Error);
+            missionState = MissionState.AwaitingVehicleToStop;
 
             MissionManager.Instance.RegisterTickHandler(OnMissionTick);
         }
@@ -54,6 +52,11 @@ namespace Curiosity.TrafficStops.Missions
         async Task OnMissionTick()
         {
 
+        }
+
+        enum MissionState
+        {
+            AwaitingVehicleToStop,
         }
     }
 }
