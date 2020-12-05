@@ -134,6 +134,8 @@ namespace Curiosity.StolenVehicle.Missions
                                 await BaseScript.Delay(0);
                             }
 
+                            storeClerk.Dismiss();
+
                             missionState = MissionState.SetupSuspectLocation;
                         }
                     }

@@ -600,7 +600,7 @@ namespace Curiosity.MissionManager.Client.Classes
             return blip;
         }
 
-        internal async void Dismiss()
+        public async void Dismiss()
         {
             if (Fx == null) return;
             if (!base.Exists()) return;
