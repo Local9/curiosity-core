@@ -50,7 +50,7 @@ namespace Curiosity.MissionManager.Server
         {
             try
             {
-                API.SetConvarServerInfo("Curiosity Missions", "v1.0.0.2317");
+                API.SetConvarServerInfo("Curiosity Missions", "v1.0.0.2321");
 
                 IsDebugging = API.GetConvar("diagnostics_debug", "false") == "true";
 
