@@ -26,6 +26,8 @@ namespace Curiosity.MissionManager.Client.Managers
             tsVehicle.IsImportant = true;
             tsVehicle.IsMission = true;
 
+            tsVehicle.AttachSuspectBlip();
+
             tsDriver = new Ped(vehicle.Fx.Driver);
             tsDriver.IsMission = true;
             tsDriver.IsSuspect = true;

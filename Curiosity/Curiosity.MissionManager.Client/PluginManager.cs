@@ -149,7 +149,7 @@ namespace Curiosity.MissionManager.Client
             Notify.Info($"~b~Mission Resource ~r~Stopped");
 
             if (Mission.isOnMission)
-                Mission.currentMission.Stop(EndState.ForceEnd);
+                Mission.currentMission.Stop(EndState.Restart);
 
             if (JobManager.IsOfficer)
                 BaseScript.TriggerEvent("curiosity:Client:Interface:Duty", false, false, "unemployed");
