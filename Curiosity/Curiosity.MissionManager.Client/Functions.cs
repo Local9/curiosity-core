@@ -40,7 +40,7 @@ namespace Curiosity.MissionManager.Client
         /// Starts a mission
         /// </summary>
         /// <param name="mission">The mission to start</param>
-        public static async void StartMission(Type mission)
+        public static async void StartMission(Type mission, string discordStatus = "Responding to a call")
         {
             // Remove any blips if they are left around
             foreach (Blip blip in PluginManager.Blips)
@@ -56,7 +56,7 @@ namespace Curiosity.MissionManager.Client
 
             Logger.Debug($"StartMission : {missionInfo.displayName}");
 
-            Instance.DiscordRichPresence.Status = "Responding to a call";
+            Instance.DiscordRichPresence.Status = discordStatus;
             Instance.DiscordRichPresence.Commit();
 
             Mission.currentMission = mis;
