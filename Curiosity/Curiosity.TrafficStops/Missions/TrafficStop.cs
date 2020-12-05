@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
@@ -22,10 +23,19 @@ namespace Curiosity.TrafficStops.Missions
             veh = TrafficStopManager.Manager.tsVehicle;
             driver = TrafficStopManager.Manager.tsDriver;
 
+            RegisteredVehicles.Add(veh);
+            RegisteredPeds.Add(driver);
+
+            TrafficStopManager.Manager.tsPassengers.ForEach(p =>
+            {
+                RegisteredPeds.Add(p);
+            });
 
             // https://runtime.fivem.net/doc/natives/?_0x0FA6E4B75F302400
             // Pull over this will try to avoid
             API.TaskVehicleEscort(driver.Handle, veh.Handle, Game.PlayerPed.CurrentVehicle.Handle, 0, 15f, (int)Collections.CombinedVehicleDrivingFlags.Normal, 8f, 0, 0f);
+
+            Notify.Info($"Vehicle is attempting to pull over.");
 
             if (veh == null)
                 Stop(EndState.Error);
