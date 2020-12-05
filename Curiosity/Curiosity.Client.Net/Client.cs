@@ -130,6 +130,8 @@ namespace Curiosity.Client.net
                 CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.AreaName);
                 CitizenFX.Core.UI.Screen.Hud.HideComponentThisFrame(CitizenFX.Core.UI.HudComponent.StreetName);
                 API.DisplayCash(false);
+
+                API.DisablePlayerVehicleRewards(Game.Player.Handle);
             }
             catch (Exception ex)
             {
