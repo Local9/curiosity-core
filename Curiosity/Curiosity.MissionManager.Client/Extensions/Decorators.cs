@@ -25,6 +25,7 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string VEHICLE_TRAFFIC_STOP_HANDLE = "c::vehicle::trafficstop::handle";
         public const string VEHICLE_TRAFFIC_STOP_MARKED = "c::vehicle::trafficstop::marked";
         public const string VEHICLE_TRAFFIC_STOP_PULLOVER = "c::vehicle::trafficstop::pullover";
+        public const string VEHICLE_TRAFFIC_STOP_IGNORED = "c::vehicle::trafficstop::ignored";
         public const string VEHICLE_TRAFFIC_STOP_COMPLETED = "c::vehicle::trafficstop::completed";
 
         // LEGACY
