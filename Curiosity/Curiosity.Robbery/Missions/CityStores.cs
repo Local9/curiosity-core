@@ -24,9 +24,11 @@ namespace Curiosity.StolenVehicle.Missions
             { "city3", new Tuple<Vector3, float>(new Vector3(-712.5158f, -917.6412f, 18.21438f), 190.433f) },
             { "city4", new Tuple<Vector3, float>(new Vector3(1159.815f, -327.3766f, 68.20947f), 179.9835f) },
             { "city5", new Tuple<Vector3, float>(new Vector3(1142.246f, -980.7135f, 45.20635f), 269.9512f) },
-            { "city6", new Tuple<Vector3, float>(new Vector3(-1491.585f, -384.2828f, 39.0344f), 121.8301f) },
+            { "city6", new Tuple<Vector3, float>(new Vector3(-1494.856f, -386.7043f, 39.91644f), 121.8301f) },
             { "city7", new Tuple<Vector3, float>(new Vector3(-1226.831f, -901.288f, 11.29286f), 35.64202f) },
             { "city8", new Tuple<Vector3, float>(new Vector3(28.33368f, -1352.618f, 28.33898f), 200.2414f) },
+
+
         };
 
         MissionState missionState;
