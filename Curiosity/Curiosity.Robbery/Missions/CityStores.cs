@@ -167,6 +167,8 @@ namespace Curiosity.StolenVehicle.Missions
                         return;
                     }
 
+                    thief.AttachSuspectBlip();
+
                     thief.IsImportant = true;
                     thief.IsMission = true;
                     thief.IsSuspect = true;
@@ -186,8 +188,6 @@ namespace Curiosity.StolenVehicle.Missions
                     {
                         thief.Task.ClearAllImmediately();
                         thief.Task.ReactAndFlee(Game.PlayerPed);
-
-                        thief.AttachSuspectBlip();
 
                         missionState = MissionState.SuspectFlee;
                     }
