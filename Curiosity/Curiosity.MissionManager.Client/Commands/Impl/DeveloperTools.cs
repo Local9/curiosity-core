@@ -120,7 +120,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
 
                     if (missionInfo.id == missionId)
                     {
-                        EventSystem.Request<bool>("mission:activate", missionInfo.id, missionInfo.unique);
+                        EventSystem.Request<bool>("mission:activate", missionInfo.id, missionInfo.unique, missionInfo.displayName);
 
                         Functions.StartMission(mission);
                     }

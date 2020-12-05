@@ -6,6 +6,7 @@ namespace Curiosity.Systems.Shared.Entity
     public class MissionData
     {
         public string ID { get; set; }
+        public string DisplayName { get; set; }
         public bool IsMissionUnique { get; set; }
         public int OwnerHandleId { get; set; }
         public List<int> PartyMembers { get; set; } = new List<int>();

@@ -40,6 +40,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 int senderHandle = metadata.Sender;
                 string missionId = metadata.Find<string>(0);
                 bool missionUnique = metadata.Find<bool>(1);
+                string displayName = metadata.Find<string>(2);
 
                 try
                 {
@@ -48,6 +49,7 @@ namespace Curiosity.MissionManager.Server.Managers
                     MissionData missionData = new MissionData();
 
                     missionData.ID = missionId;
+                    missionData.DisplayName = displayName;
                     missionData.OwnerHandleId = senderHandle;
                     missionData.IsMissionUnique = missionUnique;
 

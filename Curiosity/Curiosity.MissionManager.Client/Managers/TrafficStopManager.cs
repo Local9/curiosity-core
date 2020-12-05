@@ -58,7 +58,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 if (missionInfo.id == missionId)
                 {
-                    EventSystem.Request<bool>("mission:activate", missionInfo.id, missionInfo.unique);
+                    EventSystem.Request<bool>("mission:activate", missionInfo.id, missionInfo.unique, missionInfo.displayName);
 
                     Functions.StartMission(mission, "Performing a traffic stop");
                 }

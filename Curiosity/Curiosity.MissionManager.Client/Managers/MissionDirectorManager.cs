@@ -194,7 +194,7 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 if (Game.IsControlJustPressed(0, Control.Context))
                 {
-                    bool missionActivated = await EventSystem.Request<bool>("mission:activate", selectedMission.id, selectedMission.unique);
+                    bool missionActivated = await EventSystem.Request<bool>("mission:activate", selectedMission.id, selectedMission.unique, selectedMission.displayName);
 
                     if (missionActivated)
                     {
