@@ -97,10 +97,11 @@ namespace Curiosity.MissionManager.Server.Managers
                 bool isSuspect = metadata.Find<bool>(1);
                 bool isHandcuffed = metadata.Find<bool>(2);
                 bool attachBlip = metadata.Find<bool>(3);
+                int gender = metadata.Find<int>(4);
 
                 // Logger.Debug($"NetworkID: {networkId}, Suspect: {isSuspect}, HandCuffed: {isHandcuffed}, Blip: {attachBlip}");
 
-                return missionData.AddNetworkPed(networkId, isSuspect, isHandcuffed, attachBlip);
+                return missionData.AddNetworkPed(networkId, isSuspect, isHandcuffed, attachBlip, gender);
             }));
 
             EventSystem.GetModule().Attach("mission:add:vehicle", new EventCallback(metadata =>
@@ -261,6 +262,34 @@ namespace Curiosity.MissionManager.Server.Managers
                 });
 
                 return res;
+            }));
+
+            EventSystem.GetModule().Attach("mission:ped:identification", new EventCallback(metadata =>
+            {
+
+                int senderHandle = metadata.Sender;
+                int ownerHandle = metadata.Find<int>(0);
+                int netId = metadata.Find<int>(1);
+
+                try
+                {
+                    MissionData missionData = GetMissionData(ownerHandle);
+
+                    if (missionData == null) return null;
+
+                    if (missionData.NetworkPeds.ContainsKey(netId))
+                    {
+                        return missionData.NetworkPeds[netId];
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
             }));
         }
 

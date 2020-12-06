@@ -29,6 +29,7 @@ namespace Curiosity.MissionManager.Client.Classes
         public bool IsInVehicle { get; set; }
         private bool _DEBUG_ENABLED { get; set; } = false;
         private bool isRandomPed { get; set; } = false;
+        public bool IsDriver { get; private set; } = false;
 
         public bool IsFleeing
         {
@@ -212,6 +213,8 @@ namespace Curiosity.MissionManager.Client.Classes
             API.SetPedDiesInWater(Fx.Handle, false);
             API.SetPedDiesWhenInjured(Fx.Handle, false);
 
+            IsDriver = fx.IsInVehicle();
+
             Decorators.Set(fx.Handle, Decorators.PED_SETUP, true);
 
             if (updateData)
@@ -244,7 +247,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             bool attachBlip = Fx.AttachedBlip != null;
             
-            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect, IsHandcuffed, attachBlip);
+            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect, IsHandcuffed, attachBlip, (int)Fx.Gender);
         }
 
         internal void PrisonTransport()

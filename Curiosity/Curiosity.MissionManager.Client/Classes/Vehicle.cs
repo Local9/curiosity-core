@@ -309,7 +309,16 @@ namespace Curiosity.MissionManager.Client.Classes
                     API.DisableControlAction(0, (int)Control.VehiclePrevRadioTrack, true);
 
                     if (ControlHelper.IsControlJustPressed(Control.Context, false))
+                    {
                         TrafficStopManager.Manager.SetVehicle(this);
+
+                        for(int i = 0; i < 8; i++)
+                        {
+                            Game.PlayerPed.CurrentVehicle.IsSirenActive = i % 2 == 0;
+                            await BaseScript.Delay(250);
+                        }
+                        Game.PlayerPed.CurrentVehicle.IsSirenActive = false;
+                    }
 
                     if (ControlHelper.IsControlJustPressed(Control.Cover, false))
                         IsIgnored = true;

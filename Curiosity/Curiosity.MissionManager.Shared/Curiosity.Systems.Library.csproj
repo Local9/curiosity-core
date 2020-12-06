@@ -78,6 +78,7 @@
     <Compile Include="Models\MissionDataVehicle.cs" />
     <Compile Include="Models\Party.cs" />
     <Compile Include="Models\PartyMember.cs" />
+    <Compile Include="Models\PedIdentifcationData.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Enums\Role.cs" />
     <Compile Include="Models\SessionCollection.cs" />
