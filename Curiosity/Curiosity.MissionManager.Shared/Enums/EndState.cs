@@ -11,5 +11,6 @@
         Error,
         ForceEnd,
         Restart,
+        FailPlayersDead,
     }
 }

@@ -216,6 +216,7 @@ namespace Curiosity.MissionManager.Client.Classes
             IsDriver = fx.IsInVehicle();
 
             Decorators.Set(fx.Handle, Decorators.PED_SETUP, true);
+            Decorators.Set(fx.Handle, Decorators.MENU_RANDOM_RESPONSE, Utility.RANDOM.Next(4));
 
             if (updateData)
             {
@@ -341,6 +342,13 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             switch (sequence)
             {
+                case Sequence.FLEE_IN_VEHICLE:
+                    Fx.Task.ClearAll();
+                    
+                    Fx.Task.CruiseWithVehicle(Fx.CurrentVehicle, float.MaxValue,
+                        (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
+
+                    break;
                 case Sequence.KNEEL:
                     Fx.CanRagdoll = true;
                     Fx.Weapons.RemoveAll();
@@ -671,7 +679,8 @@ namespace Curiosity.MissionManager.Client.Classes
             ARRESTED,
             FOLLOW,
             GRAB_HOLD,
-            GRAB_RELEASE
+            GRAB_RELEASE,
+            FLEE_IN_VEHICLE
         }
     }
 }

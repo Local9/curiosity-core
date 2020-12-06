@@ -46,6 +46,15 @@ namespace Curiosity.MissionManager.Client.Utils
         public const string PED_DIALOGUE = "c::ped::dialogue";
         public const string PED_SETUP = "c::ped::setup";
 
+        public const string MENU_RANDOM_RESPONSE = "c::menu::welcome";
+        public const string MENU_WELCOME = "c::menu::welcome";
+        public const string MENU_IDENTIFICATION = "c::menu::welcome";
+        public const string MENU_WHAT_YOU_DOING = "c::menu::welcome";
+        public const string MENU_RAN_RED_LIGHT = "c::menu::welcome";
+        public const string MENU_SPEEDING = "c::menu::welcome";
+        public const string MENU_LANE_CHANGE = "c::menu::welcome";
+        public const string MENU_TAILGATING = "c::menu::welcome";
+
         // ARREST REASONS
 
         public static void Set(int handle, string property, object value)

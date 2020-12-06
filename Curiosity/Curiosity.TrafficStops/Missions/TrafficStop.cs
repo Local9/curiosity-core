@@ -51,7 +51,16 @@ namespace Curiosity.TrafficStops.Missions
 
         async Task OnMissionTick()
         {
+            int totalNumberOfPlayers = Players.Count;
+            int playersDead = 0;
+            Players.ForEach(p =>
+            {
+                if (p.IsDead)
+                    playersDead++;
+            });
 
+            if (playersDead == totalNumberOfPlayers)
+                Fail("All Players have died.", EndState.FailPlayersDead);
         }
 
         enum MissionState

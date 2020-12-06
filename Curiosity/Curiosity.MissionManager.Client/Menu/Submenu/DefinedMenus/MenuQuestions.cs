@@ -3,6 +3,7 @@ using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
+using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Utils;
 using Curiosity.Systems.Shared.Entity;
 using NativeUI;
@@ -20,6 +21,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
         UIMenu Menu;
         UIMenuItem menuItemWelcome;
+        UIMenuItem menuItemStepOutOfTheCar;
         UIMenuItem menuItemIdentifcation;
         UIMenuItem menuItemWhatAreYouDoing;
         UIMenuItem menuItemRanRedLight;
@@ -31,6 +33,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
         {
             menuItemWelcome = new UIMenuItem("Hi, how are you today?");
             menu.AddItem(menuItemWelcome);
+
+            menuItemStepOutOfTheCar = new UIMenuItem("Step out of the vehicle for me please");
+            menu.AddItem(menuItemStepOutOfTheCar);
 
             menuItemIdentifcation = new UIMenuItem("License and Registration");
             menu.AddItem(menuItemIdentifcation);
@@ -98,14 +103,15 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                     return;
                 }
 
-                menuItemWelcome.Enabled = isControlable;
-                menuItemIdentifcation.Enabled = isControlable;
-                menuItemWhatAreYouDoing.Enabled = isControlable;
+                menuItemWelcome.Enabled = isControlable && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_WELCOME);
+                menuItemIdentifcation.Enabled = isControlable && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_IDENTIFICATION);
+                menuItemWhatAreYouDoing.Enabled = isControlable && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_WHAT_YOU_DOING);
 
-                menuItemRanRedLight.Enabled = Ped.IsDriver;
-                menuItemSpeeding.Enabled = Ped.IsDriver;
-                menuItemLaneChange.Enabled = Ped.IsDriver;
-                menuItemTailGating.Enabled = Ped.IsDriver;
+                menuItemRanRedLight.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_RAN_RED_LIGHT);
+                menuItemSpeeding.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_SPEEDING);
+                menuItemLaneChange.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_LANE_CHANGE);
+                menuItemTailGating.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_TAILGATING);
+                menuItemStepOutOfTheCar.Enabled = Ped.IsInVehicle;
 
                 PluginInstance.AttachTickHandler(OnSuspectDistanceCheck);
             }
@@ -126,7 +132,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 return;
             }
 
-            int randomResponse = Utility.RANDOM.Next(1, 4);
+            int randomResponse = Decorators.GetInteger(Ped.Handle, Decorators.MENU_RANDOM_RESPONSE);
+            bool runFleeChance = false;
 
             switch(randomResponse)
             {
@@ -145,6 +152,11 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("No, I think you're wrong");
                     if (selectedItem == menuItemTailGating)
                         ShowPersonSubtitle("Oh, my bad. I'll back off more in the future");
+                    if (selectedItem == menuItemStepOutOfTheCar)
+                    {
+                        runFleeChance = false;
+                        ShowPersonSubtitle("Yea, no worries");
+                    }
                     break;
                 case 2:
                     if (selectedItem == menuItemWelcome)
@@ -161,6 +173,11 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("I needed to get to the other lane else I would of gone the wrong way");
                     if (selectedItem == menuItemTailGating)
                         ShowPersonSubtitle("I was following my buddy, now I'm going to lose them");
+                    if (selectedItem == menuItemStepOutOfTheCar)
+                    {
+                        runFleeChance = false;
+                        ShowPersonSubtitle("Why, I've not done anything wrong");
+                    }
                     break;
                 case 3:
                     if (selectedItem == menuItemWelcome)
@@ -177,6 +194,11 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("They were cutting into me so I changed lanes");
                     if (selectedItem == menuItemTailGating)
                         ShowPersonSubtitle("Are you serious right now? Really, you pull me over for that?!");
+                    if (selectedItem == menuItemStepOutOfTheCar)
+                    {
+                        runFleeChance = true;
+                        ShowPersonSubtitle("Fuck you, I'm not doing anything you pigs say");
+                    }
                     break;
                 default:
                     if (selectedItem == menuItemWelcome)
@@ -193,7 +215,19 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("What lane? theres no lanes here, its mercia!");
                     if (selectedItem == menuItemTailGating)
                         ShowPersonSubtitle("I'll bend you over and tailgate you");
+                    if (selectedItem == menuItemStepOutOfTheCar)
+                    {
+                        runFleeChance = true;
+                        ShowPersonSubtitle("If you bend over first, let me grab some butter");
+                    }
                     break;
+            }
+
+            if (selectedItem == menuItemWelcome)
+            {
+                Decorators.Set(Ped.Handle, Decorators.MENU_WELCOME, true);
+                menuItemWelcome.Enabled = false;
+                menuItemWelcome.Description = "Question already answered";
             }
 
             if (selectedItem == menuItemIdentifcation)
@@ -201,8 +235,73 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 MissionDataPed pedData = await EventSystem.GetModule().Request<MissionDataPed>("mission:ped:identification", Mission.currentMissionData.OwnerHandleId, Ped.NetworkId);
 
                 Screen.ShowNotification($"~b~~h~Identification~h~~w~~n~~b~Name~w~: {pedData.FullName}~n~~b~DoB~w~: {pedData.DateOfBirth.ToString("yyyy-MM-dd")}");
-                // Server: name, age, address
-                // need to add them to the ped model on the server
+                
+                Decorators.Set(Ped.Handle, Decorators.MENU_IDENTIFICATION, true);
+                menuItemIdentifcation.Enabled = false;
+                menuItemIdentifcation.Description = $"~b~~h~Identification~h~~w~~n~~b~Name~w~: {pedData.FullName}~n~~b~DoB~w~: {pedData.DateOfBirth.ToString("yyyy-MM-dd")}";
+            }
+
+            if (selectedItem == menuItemWhatAreYouDoing)
+            {
+                Decorators.Set(Ped.Handle, Decorators.MENU_WHAT_YOU_DOING, true);
+                menuItemWhatAreYouDoing.Enabled = false;
+                menuItemWhatAreYouDoing.Description = "Question already answered";
+            }
+
+            if (selectedItem == menuItemRanRedLight)
+            {
+                Decorators.Set(Ped.Handle, Decorators.MENU_RAN_RED_LIGHT, true);
+                menuItemRanRedLight.Enabled = false;
+                menuItemRanRedLight.Description = "Question already answered";
+            }
+
+            if (selectedItem == menuItemSpeeding)
+            {
+                Decorators.Set(Ped.Handle, Decorators.MENU_SPEEDING, true);
+                menuItemSpeeding.Enabled = false;
+                menuItemSpeeding.Description = "Question already answered";
+            }
+
+            if (selectedItem == menuItemLaneChange)
+            {
+                Decorators.Set(Ped.Handle, Decorators.MENU_LANE_CHANGE, true);
+                menuItemLaneChange.Enabled = false;
+                menuItemLaneChange.Description = "Question already answered";
+            }
+
+            if (selectedItem == menuItemTailGating)
+            {
+                Decorators.Set(Ped.Handle, Decorators.MENU_TAILGATING, true);
+                menuItemTailGating.Enabled = false;
+                menuItemTailGating.Description = "Question already answered";
+            }
+
+            if (selectedItem == menuItemStepOutOfTheCar)
+            {
+                if (runFleeChance && Utility.RANDOM.Bool(0.05f))
+                {
+                    if (Ped.IsDriver)
+                    {
+                        Ped.RunSequence(Ped.Sequence.FLEE_IN_VEHICLE);
+                    }
+                    else
+                    {
+                        Ped.Fx.Weapons.Give(WeaponHash.Pistol, 12, true, true);
+                        Ped.Task.ShootAt(Game.PlayerPed, 5000, FiringPattern.Default);
+                        
+                        await BaseScript.Delay(2000);
+                        
+                        if (Ped.Fx.CurrentVehicle.Driver != null)
+                        {
+                            Ped.Fx.CurrentVehicle.Driver.Task.CruiseWithVehicle(Ped.Fx.CurrentVehicle, float.MaxValue,
+                                (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
+                        }
+                    }
+                }
+                else
+                {
+                    Ped.RunSequence(Ped.Sequence.LEAVE_VEHICLE);
+                }
             }
         }
 

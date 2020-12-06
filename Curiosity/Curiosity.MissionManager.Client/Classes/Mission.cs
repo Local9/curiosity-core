@@ -150,6 +150,7 @@ namespace Curiosity.MissionManager.Client
                         EventSystem.Request<bool>("mission:completed", true, NumberTransportArrested);
                         break;
                     case EndState.Fail:
+                    case EndState.FailPlayersDead:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(3, 6));
                         EventSystem.Request<bool>("mission:completed", false, NumberTransportArrested);
                         break;
@@ -227,7 +228,7 @@ namespace Curiosity.MissionManager.Client
         /// Fails the mission for the specified reason
         /// </summary>
         /// <param name="failReason">The reason the mission failed</param>
-        public async void Fail(string failReason)
+        public async void Fail(string failReason, EndState endState = EndState.Fail)
         {
             if (isEndingMission) return;
             isEndingMission = true;
@@ -244,7 +245,7 @@ namespace Curiosity.MissionManager.Client
             else if (info.type == MissionType.HeistSetup) BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Heist Setup Failed", failReason);
             else BigMessageThread.MessageInstance.ShowSimpleShard($"~r~Mission Failed", failReason);
 
-            Stop(EndState.Fail);
+            Stop(endState);
         }
 
         public async void Pass()
