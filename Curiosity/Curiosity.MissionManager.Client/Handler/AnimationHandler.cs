@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Client.Handler
 {
-    public class AnimationHandler
+    public static class AnimationHandler
     {
         static bool animationPlaying = false;
 
@@ -47,6 +47,21 @@ namespace Curiosity.MissionManager.Client.Handler
             Cache.Entity.AnimationQueue.AddToQueue(animationBuilder3);
 
             Cache.Entity.AnimationQueue.PlayQueue();
+
+            animationPlaying = false;
+        }
+
+        public async static Task AnimationTicket(this Ped officer, Ped pedBeingTicketed = null)
+        {
+            if (animationPlaying) return;
+            animationPlaying = true;
+
+            officer.Task.PlayAnimation("veh@busted_std", "issue_ticket_cop", 8f, 9000, AnimationFlags.UpperBodyOnly);
+            
+            if (pedBeingTicketed != null)
+                pedBeingTicketed.Task.PlayAnimation("veh@busted_std", "issue_ticket_crim", 8f, 9000, AnimationFlags.UpperBodyOnly);
+
+            await BaseScript.Delay(9000);
 
             animationPlaying = false;
         }

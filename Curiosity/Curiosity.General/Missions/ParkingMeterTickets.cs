@@ -101,7 +101,7 @@ namespace Curiosity.ParkingMeters.Missions
                     break;
                 case MissionState.WritingTicket:
 
-                    await AnimationHandler.AnimationClipboard();
+                    await Game.PlayerPed.AnimationTicket();
 
                     missionState = MissionState.Completion;
 

@@ -179,7 +179,7 @@ namespace Curiosity.TrafficViolations.Missions
                         HelpMessage.CustomLooped(HelpMessage.Label.MISSION_VEHICLE_TICKET_DRIVER);
                         if (Game.IsControlJustPressed(0, Control.Context))
                         {
-                            await AnimationHandler.AnimationClipboard();
+                            await Game.PlayerPed.AnimationTicket();
 
                             missionState = MissionState.Passed;
                         }
