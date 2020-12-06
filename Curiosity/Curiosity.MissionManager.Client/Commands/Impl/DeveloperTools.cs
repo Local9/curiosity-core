@@ -4,6 +4,7 @@ using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Environment.Entities;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
+using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.EventWrapperLegacy;
@@ -73,7 +74,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
 
         #region Mission Helper
         [CommandInfo(new[] { "duty" })]
-        public class Godmode : ICommand
+        public class DeveloperDuty : ICommand
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
@@ -92,6 +93,40 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
 
                 // EventSystem.GetModule().Request<object>(LegacyEvents.Client.PoliceDutyEvent, true, dutyActive, job);
                 BaseScript.TriggerEvent(LegacyEvents.Client.PoliceDutyEvent, true, dutyActive, job); // for legacy resources
+            }
+        }
+
+        [CommandInfo(new[] { "anim", "animation", "emote" })]
+        public class DeveloperAnimation : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    Notify.Alert($"Mission arguments");
+                    return;
+                }
+
+                string animation = arguments[0];
+
+                switch(animation)
+                {
+                    case "ticket":
+                        await Game.PlayerPed.AnimationTicket();
+                        break;
+                    case "radio":
+                        AnimationHandler.AnimationRadio();
+                        break;
+                    case "search":
+                        await AnimationHandler.AnimationSearch();
+                        break;
+                    case "clipboard":
+                        await AnimationHandler.AnimationClipboard();
+                        break;
+                    case "stop":
+                        Game.PlayerPed.Task.ClearAllImmediately();
+                        break;
+                }
             }
         }
 
