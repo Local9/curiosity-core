@@ -41,7 +41,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             Menu.MenuItems.Clear();
             menuMissions.Clear();
 
-            bool isCalloutActive = MenuManager.IsCalloutActive;
+            bool isCalloutActive = Mission.isOnMission;
             List<MissionData> missions = await eventSystem.Request<List<MissionData>>("mission:assistance:list");
 
             Logger.Debug($"missions: {missions.Count}");

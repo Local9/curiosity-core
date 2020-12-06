@@ -65,7 +65,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 return;
             }
 
-            bool isCalloutActive = MenuManager.IsCalloutActive;
+            bool isCalloutActive = Mission.isOnMission;
 
             if (!isCalloutActive)
             {

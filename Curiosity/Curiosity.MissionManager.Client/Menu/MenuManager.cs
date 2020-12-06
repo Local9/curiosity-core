@@ -21,7 +21,6 @@ namespace Curiosity.MissionManager.Client.Menu
     {
         public static MenuPool _MenuPool;
         internal static UIMenu menuMain;
-        public static bool IsCalloutActive = false;
         public static bool HasShownWarning = false;
         public static bool CanShowMessage = true;
 
@@ -98,7 +97,6 @@ namespace Curiosity.MissionManager.Client.Menu
         private void MenuMain_OnMenuOpen(UIMenu sender)
         {
             OnMenuState(true);
-            IsCalloutActive = Mission.isOnMission;
         }
 
         private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
@@ -188,14 +186,14 @@ namespace Curiosity.MissionManager.Client.Menu
 
         public static Ped GetClosestInteractivePed()
         {
-            if (!IsCalloutActive) return null;
+            if (!Mission.isOnMission) return null;
 
             return Mission.RegisteredPeds.Select(x => x).Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 2f) && p.IsMission).FirstOrDefault();
         }
 
         public static Vehicle GetClosestVehicle()
         {
-            if (!IsCalloutActive) return null;
+            if (!Mission.isOnMission) return null;
 
             return Mission.RegisteredVehicles.Select(x => x).Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 4f) && p.IsMission).FirstOrDefault();
         }

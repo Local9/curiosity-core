@@ -84,7 +84,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 return;
             }
 
-            bool isCalloutActive = MenuManager.IsCalloutActive;
+            bool isCalloutActive = Mission.isOnMission;
 
             if (!isCalloutActive)
             {
@@ -111,7 +111,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 menuItemSpeeding.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_SPEEDING);
                 menuItemLaneChange.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_LANE_CHANGE);
                 menuItemTailGating.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_TAILGATING);
-                menuItemStepOutOfTheCar.Enabled = Ped.IsInVehicle;
+                menuItemStepOutOfTheCar.Enabled = Ped.Fx.IsInVehicle();
 
                 PluginInstance.AttachTickHandler(OnSuspectDistanceCheck);
             }
@@ -302,7 +302,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 {
                     Ped.RunSequence(Ped.Sequence.LEAVE_VEHICLE);
                 }
+                menuItemStepOutOfTheCar.Enabled = false;
             }
+            await BaseScript.Delay(500);
         }
 
         private void ShowPersonSubtitle(string message)

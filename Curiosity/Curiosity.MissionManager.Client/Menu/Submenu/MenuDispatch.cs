@@ -163,7 +163,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         {
             MenuManager.OnMenuState(true);
 
-            bool isCalloutActive = MenuManager.IsCalloutActive;
+            bool isCalloutActive = Mission.isOnMission;
             bool isVehicleTowable = MenuManager.GetClosestVehicle() != null;
 
             menuItemCode4.Enabled = isCalloutActive;
