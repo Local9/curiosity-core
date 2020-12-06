@@ -38,8 +38,8 @@ namespace Curiosity.MissionManager.Client.Handler
             if (animationPlaying) return;
             animationPlaying = true;
 
-            AnimationBuilder animationBuilder1 = new AnimationBuilder().Select("random@arrests", "generic_radio_chatter");
-            AnimationBuilder animationBuilder2 = new AnimationBuilder().Select("random@arrests", "generic_radio_emter");
+            AnimationBuilder animationBuilder1 = new AnimationBuilder().Select("random@arrests", "generic_radio_enter");
+            AnimationBuilder animationBuilder2 = new AnimationBuilder().Select("random@arrests", "generic_radio_chatter");
             AnimationBuilder animationBuilder3 = new AnimationBuilder().Select("random@arrests", "generic_radio_exit");
 
             Cache.Entity.AnimationQueue.AddToQueue(animationBuilder1);
@@ -62,6 +62,8 @@ namespace Curiosity.MissionManager.Client.Handler
                 pedBeingTicketed.Task.PlayAnimation("veh@busted_std", "issue_ticket_crim", 8f, 9000, AnimationFlags.UpperBodyOnly);
 
             await BaseScript.Delay(9000);
+
+            Cache.Entity.Task.ClearAll();
 
             animationPlaying = false;
         }
