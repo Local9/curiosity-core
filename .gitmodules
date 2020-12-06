@@ -10,3 +10,6 @@
 [submodule "thirdparty/FiveM_Queue"]
 	path = thirdparty/FiveM_Queue
 	url = https://github.com/Local9/FiveM_Queue.git
+[submodule "thirdparty/NativeUI"]
+	path = thirdparty/NativeUI
+	url = https://github.com/citizenfx/NativeUI.git
