@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Client.net.Extensions;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Helper;
 using System;
@@ -215,6 +216,9 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     API.SetBlipScale(blip, 0.85f);
                     API.SetBlipCategory(blip, 7);
                     API.SetBlipPriority(blip, 11);
+
+                    bool isFriendly = Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.DECOR_PLAYER_STAFF);
+                    API.ShowFriendIndicatorOnBlip(blip, isFriendly);
 
                     if (API.IsPauseMenuActive())
                     {

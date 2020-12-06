@@ -484,6 +484,7 @@ namespace Curiosity.MissionManager.Client
 
                     if (player != null)
                     {
+                        Notify.Custom($"{player.Name} has joined your callout.");
                         AddPlayer(player);
                     }
                 });
