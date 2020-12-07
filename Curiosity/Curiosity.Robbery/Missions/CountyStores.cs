@@ -70,7 +70,8 @@ namespace Curiosity.StolenVehicle.Missions
                 if (locationBlip.Exists())
                     locationBlip.Delete();
 
-                storeClerk = await Ped.Spawn(storeClerkHash, storeClerkPosition, storeClerkHeading, false, PedType.PED_TYPE_SPECIAL, false, true);
+                if (storeClerk == null)
+                    storeClerk = await Ped.Spawn(storeClerkHash, storeClerkPosition, storeClerkHeading, false, PedType.PED_TYPE_SPECIAL, false, true);
 
                 if (storeClerk == null)
                 {
