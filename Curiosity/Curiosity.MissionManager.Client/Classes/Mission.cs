@@ -26,6 +26,7 @@ namespace Curiosity.MissionManager.Client
         internal static bool isOnMission = false;
         internal static Mission currentMission = null;
         internal static Type missionType = null;
+        internal static MissionType currentMissionType;
         public static bool isMessagingServer = false;
         public static bool isEndingMission = false;
         internal static MissionData currentMissionData;
@@ -146,6 +147,7 @@ namespace Curiosity.MissionManager.Client
                 switch (reason)
                 {
                     case EndState.Pass:
+                    case EndState.TrafficStop:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
                         EventSystem.Request<bool>("mission:completed", true, NumberTransportArrested);
                         break;

@@ -4,9 +4,11 @@ using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
 using Curiosity.Systems.Shared.Entity;
 using NativeUI;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -22,6 +24,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
         UIMenu Menu;
         UIMenuItem menuItemWelcome;
         UIMenuItem menuItemStepOutOfTheCar;
+        UIMenuItem menuItemRelease;
         UIMenuItem menuItemIdentifcation;
         UIMenuItem menuItemWhatAreYouDoing;
         UIMenuItem menuItemRanRedLight;
@@ -36,6 +39,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
             menuItemStepOutOfTheCar = new UIMenuItem("Step out of the vehicle for me please", "Ask Question");
             menu.AddItem(menuItemStepOutOfTheCar);
+
+            menuItemRelease = new UIMenuItem("You're good to go", "Let the person leave");
+            menu.AddItem(menuItemRelease);
 
             menuItemIdentifcation = new UIMenuItem("License and Registration please", "Ask Question");
             menu.AddItem(menuItemIdentifcation);
@@ -111,6 +117,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 menuItemSpeeding.Enabled = Ped.IsDriver;
                 menuItemLaneChange.Enabled = Ped.IsDriver;
                 menuItemTailGating.Enabled = Ped.IsDriver;
+                menuItemRelease.Enabled = Ped.IsDriver;
                 menuItemStepOutOfTheCar.Enabled = Ped.Fx.IsInVehicle();
 
                 if (!string.IsNullOrEmpty(Ped.Identity))
@@ -147,6 +154,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("I'm fine thanks for asking");
                     if (selectedItem == menuItemIdentifcation)
                         ShowPersonSubtitle("Yea no worries, give me a sec");
+                    if (selectedItem == menuItemRelease)
+                        ShowPersonSubtitle("Thank you, hope you have a good day");
                     if (selectedItem == menuItemWhatAreYouDoing)
                         ShowPersonSubtitle("I live around here");
                     if (selectedItem == menuItemRanRedLight)
@@ -168,6 +177,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("I'm good, whats the problem?");
                     if (selectedItem == menuItemIdentifcation)
                         ShowPersonSubtitle("I've got it around here somewhere");
+                    if (selectedItem == menuItemRelease)
+                        ShowPersonSubtitle("Good Bye");
                     if (selectedItem == menuItemWhatAreYouDoing)
                         ShowPersonSubtitle("I've gotten lost, I don't really know the area");
                     if (selectedItem == menuItemRanRedLight)
@@ -189,6 +200,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("I'm rather busy, can you make this quick");
                     if (selectedItem == menuItemIdentifcation)
                         ShowPersonSubtitle("Wait, its in my pants");
+                    if (selectedItem == menuItemRelease)
+                        ShowPersonSubtitle("Now to get to your wifes place");
                     if (selectedItem == menuItemWhatAreYouDoing)
                         ShowPersonSubtitle("Waiting for my friend, what business is it of yours?");
                     if (selectedItem == menuItemRanRedLight)
@@ -210,6 +223,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("Leave me alone");
                     if (selectedItem == menuItemIdentifcation)
                         ShowPersonSubtitle("Let me check my ass crack");
+                    if (selectedItem == menuItemRelease)
+                        ShowPersonSubtitle("Good, F&%* you.");
                     if (selectedItem == menuItemWhatAreYouDoing)
                         ShowPersonSubtitle("Watching your mother undress, what you going to do about it?");
                     if (selectedItem == menuItemRanRedLight)
@@ -297,6 +312,47 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 }
                 menuItemStepOutOfTheCar.Enabled = false;
             }
+
+            if (selectedItem == menuItemRelease)
+            {
+                if (Ped.IsDriver)
+                {
+                    if (Ped.IsInVehicle)
+                    {
+                        Ped.Task.ClearAllImmediately();
+                    }
+                    else
+                    {
+                        Vehicle veh = Ped.Fx.LastVehicle;
+                        Ped.Task.EnterVehicle(veh, VehicleSeat.Driver, 5000);
+                        await BaseScript.Delay(5100);
+                        Ped.Task.ClearAllImmediately();
+
+                        var vehicle = Mission.RegisteredVehicles.Select(x => x).Where(x => x.Handle == veh.Handle).FirstOrDefault();
+
+                        if (vehicle != null)
+                        {
+                            Mission.RegisteredVehicles.Remove(vehicle);
+                        }
+                        veh.MarkAsNoLongerNeeded();
+                    }
+                }
+                Ped.MarkAsNoLongerNeeded();
+                Ped.IsMission = false;
+                Ped.IsSuspect = false;
+
+                Mission.RegisteredPeds.Remove(Ped);
+
+                if (Mission.currentMissionType == MissionType.TrafficStop)
+                {
+                    Mission.currentMission.Stop(EndState.TrafficStop);
+                }
+                else
+                {
+                    Mission.currentMission.Stop(EndState.Unknown);
+                }
+            }
+
             await BaseScript.Delay(500);
         }
 

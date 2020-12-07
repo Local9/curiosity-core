@@ -12,5 +12,6 @@
         ForceEnd,
         Restart,
         FailPlayersDead,
+        TrafficStop,
     }
 }
