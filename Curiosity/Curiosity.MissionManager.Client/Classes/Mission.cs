@@ -147,7 +147,6 @@ namespace Curiosity.MissionManager.Client
                 switch (reason)
                 {
                     case EndState.Pass:
-                    case EndState.TrafficStop:
                         MissionDirectorManager.GameTimeTillNextMission = DateTime.Now.AddMinutes(Utility.RANDOM.Next(2, 4));
                         EventSystem.Request<bool>("mission:completed", true, NumberTransportArrested);
                         break;
@@ -363,7 +362,7 @@ namespace Curiosity.MissionManager.Client
                         {
                             Logger.Debug($"ID: {keyValuePair.Key} / {mdv}");
 
-                            Vehicle curVehicle = new Vehicle(cfxVehicle, false);
+                            Vehicle curVehicle = new Vehicle(cfxVehicle);
                             curVehicle.IsMission = mdv.IsMission;
                             curVehicle.IsTowable = mdv.IsTowable;
 

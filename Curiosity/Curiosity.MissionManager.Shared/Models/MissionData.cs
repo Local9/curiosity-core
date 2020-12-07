@@ -46,6 +46,8 @@ namespace Curiosity.Systems.Shared.Entity
 
         public MissionDataVehicle AddNetworkVehicle(int networkId)
         {
+            if (NetworkVehicles.ContainsKey(networkId)) return NetworkVehicles[networkId];
+
             MissionDataVehicle mdv = new MissionDataVehicle();
 
             NetworkVehicles.Add(networkId, mdv);
@@ -55,6 +57,8 @@ namespace Curiosity.Systems.Shared.Entity
 
         public MissionDataPed AddNetworkPed(int networkId, int gender)
         {
+            if (NetworkPeds.ContainsKey(networkId)) return NetworkPeds[networkId];
+
             MissionDataPed mpd = new MissionDataPed();
 
             mpd.Gender = gender; // 0 = M, 1 = F

@@ -27,6 +27,12 @@ namespace Curiosity.MissionManager.Client.Classes
         public Tasks Task => Fx.Task;
         public bool IsDead => Fx.IsDead;
         internal string Name => Fx.Model.ToString();
+
+        public void AddToMission()
+        {
+            EventSystem.Send("mission:add:ped", Fx.NetworkId, (int)Fx.Gender);
+        }
+
         public bool IsInVehicle { get; set; }
         private bool _DEBUG_ENABLED { get; set; } = false;
         private bool isRandomPed { get; set; } = false;
@@ -187,7 +193,7 @@ namespace Curiosity.MissionManager.Client.Classes
         private EntityEventWrapper _eventWrapper;
         private DateTime TimeOfDeath = new DateTime(1900, 1, 1);
 
-        internal Ped(CitizenFX.Core.Ped fx, bool updateData = true, bool isRandomPed = false) : base(fx.Handle)
+        public Ped(CitizenFX.Core.Ped fx, bool update = true, bool isRandomPed = false) : base(fx.Handle)
         {
             Fx = fx;
 
@@ -224,11 +230,8 @@ namespace Curiosity.MissionManager.Client.Classes
             Decorators.Set(fx.Handle, Decorators.PED_SETUP, true);
             Decorators.Set(fx.Handle, Decorators.MENU_RANDOM_RESPONSE, Utility.RANDOM.Next(4));
 
-            if (updateData)
-            {
-                API.NetworkFadeInEntity(fx.Handle, false);
+            if (update)
                 EventSystem.Send("mission:add:ped", fx.NetworkId, (int)fx.Gender);
-            }
         }
 
         public void AttachSuspectBlip()

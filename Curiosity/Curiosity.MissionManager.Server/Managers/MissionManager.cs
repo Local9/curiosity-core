@@ -91,9 +91,6 @@ namespace Curiosity.MissionManager.Server.Managers
             EventSystem.GetModule().Attach("mission:get:data", new EventCallback(metadata =>
             {
                 int senderHandle = metadata.Find<int>(0);
-
-
-
                 return GetMissionData(metadata.Sender);
             }));
 
@@ -156,14 +153,18 @@ namespace Curiosity.MissionManager.Server.Managers
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
 
-                if (missionData == null) return false;
+                if (missionData == null) return null;
 
-                if (missionData.OwnerHandleId != metadata.Sender) return false;
+                if (missionData.OwnerHandleId != metadata.Sender) return null;
 
                 int networkId = metadata.Find<int>(0);
                 int gender = metadata.Find<int>(1);
 
-                return missionData.AddNetworkPed(networkId, gender);
+                MissionDataPed missionDataPed = missionData.AddNetworkPed(networkId, gender);
+
+                Logger.Debug($"Added ped to mission;\n{missionDataPed}");
+
+                return missionDataPed;
             }));
 
             EventSystem.GetModule().Attach("mission:remove:ped", new EventCallback(metadata =>
@@ -188,11 +189,16 @@ namespace Curiosity.MissionManager.Server.Managers
                 {
                     MissionData missionData = GetMissionData(ownerHandle);
 
-                    if (missionData == null) return null;
+                    if (missionData == null)
+                    {
+                        Logger.Error($"Unable to find mission data");
+                        return null;
+                    }
 
                     if (missionData.NetworkPeds.ContainsKey(netId))
                         return missionData.NetworkPeds[netId];
-                    
+
+                    Logger.Error($"Unable to find ped in mission");
                     return null;
                 }
                 catch (Exception ex)
@@ -282,9 +288,9 @@ namespace Curiosity.MissionManager.Server.Managers
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
 
-                if (missionData == null) return false;
+                if (missionData == null) return null;
 
-                if (missionData.OwnerHandleId != metadata.Sender) return false;
+                if (missionData.OwnerHandleId != metadata.Sender) return null;
 
                 int networkId = metadata.Find<int>(0);
 
@@ -430,6 +436,8 @@ namespace Curiosity.MissionManager.Server.Managers
 
             if (missionData == null) return null;
 
+            if (!missionData.NetworkPeds.ContainsKey(networkId)) return null;
+
             MissionDataPed missionDataPed = missionData.NetworkPeds[networkId];
 
             if (missionDataPed == null) return null;
@@ -442,6 +450,8 @@ namespace Curiosity.MissionManager.Server.Managers
             MissionData missionData = GetMissionData(sender);
 
             if (missionData == null) return null;
+
+            if (!missionData.NetworkVehicles.ContainsKey(networkId)) return null;
 
             MissionDataVehicle missionDataVehicle = missionData.NetworkVehicles[networkId];
 

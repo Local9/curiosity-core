@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
@@ -23,13 +24,22 @@ namespace Curiosity.TrafficStops.Missions
         public override void Start()
         {
             veh = TrafficStopManager.Manager.tsVehicle;
+            veh.AddToMission();
+
+            Logger.Debug($"Traffic Stop -> Vehicle {veh.Handle}");
+
             driver = TrafficStopManager.Manager.tsDriver;
+            driver.AddToMission();
+
+            Logger.Debug($"Traffic Stop -> Driver {driver.Handle}");
 
             RegisteredVehicles.Add(veh);
             RegisteredPeds.Add(driver);
 
             TrafficStopManager.Manager.tsPassengers.ForEach(p =>
             {
+                Logger.Debug($"Traffic Stop -> Passenger {p.Handle}");
+
                 RegisteredPeds.Add(p);
             });
 

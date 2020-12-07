@@ -1,4 +1,6 @@
-﻿using Curiosity.MissionManager.Client.Attributes;
+﻿using CitizenFX.Core;
+using Curiosity.MissionManager.Client.Attributes;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Interface;
 using System.Collections.Generic;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
@@ -20,7 +22,7 @@ namespace Curiosity.MissionManager.Client.Managers
             Manager = this;
         }
 
-        public void SetVehicle(Vehicle vehicle)
+        public async void SetVehicle(Vehicle vehicle)
         {
             tsVehicle = vehicle;
             tsVehicle.IsImportant = true;
@@ -28,7 +30,12 @@ namespace Curiosity.MissionManager.Client.Managers
 
             tsVehicle.AttachSuspectBlip();
 
+            await BaseScript.Delay(100);
+
             tsDriver = new Ped(vehicle.Fx.Driver);
+
+            Logger.Debug($"Traffic Stop -> Ped {tsDriver.Handle}");
+
             tsDriver.IsMission = true;
             tsDriver.IsSuspect = true;
             tsDriver.IsImportant = true;
@@ -37,7 +44,11 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 if (ped != tsDriver)
                     tsPassengers.Add(new Ped(ped));
+
+                await BaseScript.Delay(100);
             }
+
+            await BaseScript.Delay(100);
 
             StartMission();
         }

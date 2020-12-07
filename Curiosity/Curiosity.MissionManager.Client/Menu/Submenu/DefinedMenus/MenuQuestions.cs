@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.UI;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
@@ -95,6 +96,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
             if (!isCalloutActive)
             {
                 Menu.MenuItems.ForEach(m => m.Enabled = false);
+                Ped = null;
             }
             else
             {
@@ -117,7 +119,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 menuItemSpeeding.Enabled = Ped.IsDriver;
                 menuItemLaneChange.Enabled = Ped.IsDriver;
                 menuItemTailGating.Enabled = Ped.IsDriver;
-                menuItemRelease.Enabled = Ped.IsDriver;
                 menuItemStepOutOfTheCar.Enabled = Ped.Fx.IsInVehicle();
 
                 if (!string.IsNullOrEmpty(Ped.Identity))
@@ -251,6 +252,10 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
             if (selectedItem == menuItemIdentifcation)
             {
                 MissionDataPed pedData = await EventSystem.GetModule().Request<MissionDataPed>("mission:ped:identification", Mission.currentMissionData.OwnerHandleId, Ped.NetworkId);
+                if (pedData == null)
+                {
+                    Logger.Error($"Ped Idenfication is null");
+                }
                 Ped.Identity = $"~b~~h~Identification~h~~w~~n~~b~Name~w~: {pedData.FullName}~n~~b~DoB~w~: {pedData.DateOfBirth.ToString("yyyy-MM-dd")}";
                 Screen.ShowNotification(Ped.Identity);
                 
@@ -319,14 +324,14 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 {
                     if (Ped.IsInVehicle)
                     {
-                        Ped.Task.ClearAllImmediately();
+                        Ped.Task.WanderAround();
                     }
                     else
                     {
                         Vehicle veh = Ped.Fx.LastVehicle;
                         Ped.Task.EnterVehicle(veh, VehicleSeat.Driver, 5000);
                         await BaseScript.Delay(5100);
-                        Ped.Task.ClearAllImmediately();
+                        Ped.Task.CruiseWithVehicle(veh, 20f, (int)Collections.CombinedVehicleDrivingFlags.Normal);
 
                         var vehicle = Mission.RegisteredVehicles.Select(x => x).Where(x => x.Handle == veh.Handle).FirstOrDefault();
 

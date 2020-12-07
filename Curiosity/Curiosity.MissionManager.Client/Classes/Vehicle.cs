@@ -24,6 +24,12 @@ namespace Curiosity.MissionManager.Client.Classes
         public CitizenFX.Core.Vehicle Fx { get; private set; }
         public Vector3 Position => Fx.Position;
         public string Hash => Fx.Model.ToString();
+
+        public void AddToMission()
+        {
+            EventSystem.Send("mission:add:vehicle", Fx.NetworkId);
+        }
+
         private PluginManager Instance => PluginManager.Instance;
         internal EventSystem EventSystem => EventSystem.GetModule();
 
@@ -113,7 +119,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
         public DateTime LastUpdate { get; private set; }
 
-        internal Vehicle(CitizenFX.Core.Vehicle fx, bool updateData = true) : base(fx.Handle)
+        public Vehicle(CitizenFX.Core.Vehicle fx, bool update = true) : base(fx.Handle)
         {
             Fx = fx;
             API.NetworkRegisterEntityAsNetworked(fx.Handle);
@@ -125,7 +131,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
             Decorators.Set(fx.Handle, Decorators.VEHICLE_SETUP, true);
 
-            if (updateData) EventSystem.Send("mission:add:vehicle", Fx.NetworkId);
+            if (update)
+                EventSystem.Send("mission:add:vehicle", Fx.NetworkId);
         }
 
         public Blip AttachSuspectBlip()
@@ -314,7 +321,7 @@ namespace Curiosity.MissionManager.Client.Classes
                             for (int i = 0; i < 8; i++)
                             {
                                 Game.PlayerPed.CurrentVehicle.IsSirenActive = i % 2 == 0;
-                                await BaseScript.Delay(250);
+                                await BaseScript.Delay(100);
                             }
                             Game.PlayerPed.CurrentVehicle.IsSirenActive = false;
                         }
