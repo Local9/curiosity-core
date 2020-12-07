@@ -182,6 +182,7 @@ namespace Curiosity.MissionManager.Client.Classes
         public bool IsKneeling { get; set; }
         public bool IsGrabbed { get; set; }
         public DateTime LastUpdate { get; private set; }
+        public string Identity { get; internal set; }
 
         private EntityEventWrapper _eventWrapper;
         private DateTime TimeOfDeath = new DateTime(1900, 1, 1);

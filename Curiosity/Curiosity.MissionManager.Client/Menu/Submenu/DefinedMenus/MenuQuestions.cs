@@ -103,15 +103,24 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                     return;
                 }
 
-                menuItemWelcome.Enabled = isControlable && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_WELCOME);
-                menuItemIdentifcation.Enabled = isControlable && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_IDENTIFICATION);
-                menuItemWhatAreYouDoing.Enabled = isControlable && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_WHAT_YOU_DOING);
+                menuItemWelcome.Enabled = isControlable;
+                menuItemIdentifcation.Enabled = isControlable;
+                menuItemWhatAreYouDoing.Enabled = isControlable;
 
-                menuItemRanRedLight.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_RAN_RED_LIGHT);
-                menuItemSpeeding.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_SPEEDING);
-                menuItemLaneChange.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_LANE_CHANGE);
-                menuItemTailGating.Enabled = Ped.IsDriver && !Decorators.GetBoolean(Ped.Handle, Decorators.MENU_TAILGATING);
+                menuItemRanRedLight.Enabled = Ped.IsDriver;
+                menuItemSpeeding.Enabled = Ped.IsDriver;
+                menuItemLaneChange.Enabled = Ped.IsDriver;
+                menuItemTailGating.Enabled = Ped.IsDriver;
                 menuItemStepOutOfTheCar.Enabled = Ped.Fx.IsInVehicle();
+
+                if (!string.IsNullOrEmpty(Ped.Identity))
+                {
+                    menuItemIdentifcation.Description = Ped.Identity;
+                }
+                else
+                {
+                    menuItemIdentifcation.Description = string.Empty;
+                }
 
                 PluginInstance.AttachTickHandler(OnSuspectDistanceCheck);
             }
@@ -232,11 +241,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
             if (selectedItem == menuItemIdentifcation)
             {
                 MissionDataPed pedData = await EventSystem.GetModule().Request<MissionDataPed>("mission:ped:identification", Mission.currentMissionData.OwnerHandleId, Ped.NetworkId);
-
-                Screen.ShowNotification($"~b~~h~Identification~h~~w~~n~~b~Name~w~: {pedData.FullName}~n~~b~DoB~w~: {pedData.DateOfBirth.ToString("yyyy-MM-dd")}");
+                Ped.Identity = $"~b~~h~Identification~h~~w~~n~~b~Name~w~: {pedData.FullName}~n~~b~DoB~w~: {pedData.DateOfBirth.ToString("yyyy-MM-dd")}";
+                Screen.ShowNotification(Ped.Identity);
                 
                 Decorators.Set(Ped.Handle, Decorators.MENU_IDENTIFICATION, true);
-                menuItemIdentifcation.Description = $"~b~~h~Identification~h~~w~~n~~b~Name~w~: {pedData.FullName}~n~~b~DoB~w~: {pedData.DateOfBirth.ToString("yyyy-MM-dd")}";
+                
+                menuItemIdentifcation.Description = Ped.Identity;
             }
 
             if (selectedItem == menuItemWhatAreYouDoing)
