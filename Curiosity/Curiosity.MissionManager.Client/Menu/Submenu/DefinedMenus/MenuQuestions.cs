@@ -226,7 +226,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
             if (selectedItem == menuItemWelcome)
             {
                 Decorators.Set(Ped.Handle, Decorators.MENU_WELCOME, true);
-                menuItemWelcome.Enabled = false;
                 menuItemWelcome.Description = "Question already answered";
             }
 
@@ -237,43 +236,32 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 Screen.ShowNotification($"~b~~h~Identification~h~~w~~n~~b~Name~w~: {pedData.FullName}~n~~b~DoB~w~: {pedData.DateOfBirth.ToString("yyyy-MM-dd")}");
                 
                 Decorators.Set(Ped.Handle, Decorators.MENU_IDENTIFICATION, true);
-                menuItemIdentifcation.Enabled = false;
                 menuItemIdentifcation.Description = $"~b~~h~Identification~h~~w~~n~~b~Name~w~: {pedData.FullName}~n~~b~DoB~w~: {pedData.DateOfBirth.ToString("yyyy-MM-dd")}";
             }
 
             if (selectedItem == menuItemWhatAreYouDoing)
             {
                 Decorators.Set(Ped.Handle, Decorators.MENU_WHAT_YOU_DOING, true);
-                menuItemWhatAreYouDoing.Enabled = false;
-                menuItemWhatAreYouDoing.Description = "Question already answered";
             }
 
             if (selectedItem == menuItemRanRedLight)
             {
                 Decorators.Set(Ped.Handle, Decorators.MENU_RAN_RED_LIGHT, true);
-                menuItemRanRedLight.Enabled = false;
-                menuItemRanRedLight.Description = "Question already answered";
             }
 
             if (selectedItem == menuItemSpeeding)
             {
                 Decorators.Set(Ped.Handle, Decorators.MENU_SPEEDING, true);
-                menuItemSpeeding.Enabled = false;
-                menuItemSpeeding.Description = "Question already answered";
             }
 
             if (selectedItem == menuItemLaneChange)
             {
                 Decorators.Set(Ped.Handle, Decorators.MENU_LANE_CHANGE, true);
-                menuItemLaneChange.Enabled = false;
-                menuItemLaneChange.Description = "Question already answered";
             }
 
             if (selectedItem == menuItemTailGating)
             {
                 Decorators.Set(Ped.Handle, Decorators.MENU_TAILGATING, true);
-                menuItemTailGating.Enabled = false;
-                menuItemTailGating.Description = "Question already answered";
             }
 
             if (selectedItem == menuItemStepOutOfTheCar)
