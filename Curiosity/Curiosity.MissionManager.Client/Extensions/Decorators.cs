@@ -106,10 +106,5 @@ namespace Curiosity.MissionManager.Client.Utils
         {
             return API.DecorExistOn(handle, property) && API.DecorGetBool(handle, property);
         }
-
-        internal static bool GetBoolean(int handle, object pED_SETUP)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
