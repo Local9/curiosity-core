@@ -120,6 +120,7 @@ namespace Curiosity.MissionManager.Client
             var commands = new CommandFramework();
 
             commands.Bind(typeof(DeveloperTools));
+            commands.Bind(typeof(PlayerCommands));
 
             AttachTickHandlers(this);
 

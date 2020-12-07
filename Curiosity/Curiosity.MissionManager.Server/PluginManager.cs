@@ -158,7 +158,7 @@ namespace Curiosity.MissionManager.Server
         {
             try
             {
-                Logger.Debug($"OnRconCommand -> {commandName}");
+                // Logger.Debug($"OnRconCommand -> {commandName}");
 
                 if (commandName.ToLower() == "missions")
                 {

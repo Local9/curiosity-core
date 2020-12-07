@@ -172,7 +172,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menuItemCode28.Enabled = isCalloutActive;
             menuItemCode29.Enabled = isCalloutActive;
             menuItemCode51.Enabled = isCalloutActive && isVehicleTowable;
-            menuItemCode55d.Enabled = isCalloutActive;
             menuItemCode78.Enabled = isCalloutActive;
             menuItemCode80.Enabled = isCalloutActive;
             menuItemCode92.Enabled = isCalloutActive;
