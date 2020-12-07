@@ -291,6 +291,34 @@ namespace Curiosity.MissionManager.Server.Managers
                     return null;
                 }
             }));
+
+            EventSystem.GetModule().Attach("mission:ped:wants", new EventCallback(metadata =>
+            {
+
+                int senderHandle = metadata.Sender;
+                int ownerHandle = metadata.Find<int>(0);
+                int netId = metadata.Find<int>(1);
+
+                try
+                {
+                    MissionData missionData = GetMissionData(ownerHandle);
+
+                    if (missionData == null) return null;
+
+                    if (missionData.NetworkPeds.ContainsKey(netId))
+                    {
+                        return missionData.NetworkPeds[netId];
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
+            }));
         }
 
         MissionData GetMissionData(int senderHandle)
