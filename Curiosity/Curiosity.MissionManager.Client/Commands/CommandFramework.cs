@@ -77,7 +77,7 @@ namespace Curiosity.MissionManager.Client.Commands
             {
                 if (entry.Item1.Aliases.Length >= 1) continue;
 
-                entry.Item2.On(player, player.Entity, arguments.Skip(entry.Item1.Aliases.Length > 1 ? 1 : 0).Select(self => self.ToString()).ToList());
+                entry.Item2.OnAsync(player, player.Entity, arguments.Skip(entry.Item1.Aliases.Length > 1 ? 1 : 0).Select(self => self.ToString()).ToList());
 
                 return;
             }
@@ -102,7 +102,7 @@ namespace Curiosity.MissionManager.Client.Commands
                 if (!entry.Item1.Aliases.Select(self => self.ToLower())
                     .Contains(subcommand.ToString().ToLower())) continue;
 
-                entry.Item2.On(player, player.Entity, arguments.Skip(1).Select(self => self.ToString()).ToList());
+                entry.Item2.OnAsync(player, player.Entity, arguments.Skip(1).Select(self => self.ToString()).ToList());
 
                 matched = true;
 

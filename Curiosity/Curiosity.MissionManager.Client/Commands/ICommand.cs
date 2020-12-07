@@ -5,6 +5,6 @@ namespace Curiosity.MissionManager.Client.Commands
 {
     public interface ICommand
     {
-        void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments);
+        void OnAsync(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments);
     }
 }

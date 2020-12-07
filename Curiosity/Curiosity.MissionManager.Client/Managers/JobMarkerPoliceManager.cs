@@ -78,7 +78,7 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             try
             {
-                List<Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 15f)).ToList();
+                List<Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 30f)).ToList();
 
                 if (peds.Count == 0)
                 {
@@ -88,25 +88,22 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 peds.ForEach(async ped =>
                 {
-                    if (ped.IsDead)
-                    {
-                        ped.MarkAsNoLongerNeeded();
-                        await ped.FadeOut();
-                        ped.Delete();
-                    }
+                    //if (ped.IsDead) // Brute force deletion
+                    //{
+                    //    await BaseScript.Delay(3000);
+                    //    await ped.FadeOut();
+                    //    ped.Delete();
+                    //}
 
-                    if (ped.IsBeingStunned)
-                    {
-                        bool setup = Decorators.GetBoolean(ped.Handle, Decorators.PED_SETUP);
+                    bool setup = Decorators.GetBoolean(ped.Handle, Decorators.PED_SETUP);
 
-                        if (!setup)
-                        {
-                            Classes.Ped curPed = new Classes.Ped(ped, false, true);
-                            curPed.IsImportant = false;
-                            curPed.IsMission = false;
-                            curPed.IsSuspect = false;
-                            curPed.IsArrestable = false;
-                        }
+                    if (!setup)
+                    {
+                        Classes.Ped curPed = new Classes.Ped(ped, false, true);
+                        curPed.IsImportant = false;
+                        curPed.IsMission = false;
+                        curPed.IsSuspect = false;
+                        curPed.IsArrestable = false;
                     }
 
                     await BaseScript.Delay(100);

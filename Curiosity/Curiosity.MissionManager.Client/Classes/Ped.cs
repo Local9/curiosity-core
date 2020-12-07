@@ -192,6 +192,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
         private EntityEventWrapper _eventWrapper;
         private DateTime TimeOfDeath = new DateTime(1900, 1, 1);
+        private bool isRemoving;
 
         public Ped(CitizenFX.Core.Ped fx, bool update = true, bool isRandomPed = false) : base(fx.Handle)
         {
@@ -315,7 +316,7 @@ namespace Curiosity.MissionManager.Client.Classes
             Dismiss();
         }
 
-        private void OnDied(EntityEventWrapper sender, Entity entity)
+        private async void OnDied(EntityEventWrapper sender, Entity entity)
         {
             TimeOfDeath = DateTime.Now;
 
@@ -327,10 +328,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     b.Delete();
             }
 
-            if (base.IsOccluded)
-            {
-                Dismiss();
-            }
+            Dismiss();
         }
 
         internal async void RunSequence(Sequence sequence)
@@ -610,6 +608,9 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             if (Fx == null) return;
             if (!base.Exists()) return;
+
+            if (isRemoving) return;
+            isRemoving = true;
 
             int handle = Fx.Handle;
             API.RemovePedElegantly(ref handle);

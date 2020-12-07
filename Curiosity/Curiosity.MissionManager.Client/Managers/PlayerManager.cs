@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
@@ -57,6 +58,9 @@ namespace Curiosity.MissionManager.Client.Manager
                     Decorators.Set(vehId, Decorators.PLAYER_OWNER, Game.Player.ServerId);
                 }
             }
+
+            if (PersonalVehicle != null)
+                EventSystem.GetModule().Send("user:personal:vehicle", PersonalVehicle.NetworkId);
         }
 
         private void OnClientResourceStart(string resourceName)

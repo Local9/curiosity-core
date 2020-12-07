@@ -67,6 +67,15 @@ namespace Curiosity.MissionManager.Server.Managers
                 return null;
             }));
 
+            EventSystem.GetModule().Attach("user:personal:vehicle", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                PluginManager.ActiveUsers[metadata.Sender].PersonalVehicle = metadata.Find<int>(0);
+
+                return null;
+            }));
+
             EventSystem.GetModule().Attach("user:job:notification:backup", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;

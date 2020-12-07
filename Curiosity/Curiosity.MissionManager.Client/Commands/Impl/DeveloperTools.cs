@@ -72,7 +72,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
         [CommandInfo(new[] { "duty" })]
         public class DeveloperDuty : ICommand
         {
-            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            public void OnAsync(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 bool dutyActive = false;
                 string job = "police";
@@ -94,7 +94,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
         [CommandInfo(new[] { "anim", "animation", "emote" })]
         public class DeveloperAnimation : ICommand
         {
-            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            public async void OnAsync(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 if (arguments.Count == 0)
                 {
@@ -128,7 +128,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
         [CommandInfo(new [] { "mission", "mis" })]
         public class CreateMission : ICommand
         {
-            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            public void OnAsync(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 if (arguments.Count == 0) Notify.Error("Mission Argument~n~/mission <MissionId>");
 

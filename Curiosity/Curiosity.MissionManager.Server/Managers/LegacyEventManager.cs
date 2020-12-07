@@ -3,6 +3,7 @@ using Curiosity.MissionManager.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Curiosity.MissionManager.Server.Managers
 {
@@ -12,7 +13,59 @@ namespace Curiosity.MissionManager.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("vehicle:delete", new AsyncEventCallback(async metadata =>
+            EventSystem.GetModule().Attach("vehicle:tow", new EventCallback(metadata =>
+            {
+                int senderHandle = metadata.Sender;
+                int networkId = metadata.Find<int>(0);
+
+                bool cannotTow = false;
+
+                foreach(KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
+                {
+                    CuriosityUser user = kvp.Value;
+
+                    if (user.PersonalVehicle == networkId)
+                        cannotTow = true;
+                }
+
+                if (cannotTow)
+                    return false;
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[senderHandle];
+
+                int rep = Instance.ExportDictionary["curiosity-server"].GetSkillUserValue($"{senderHandle}", "policerep");
+
+                if (rep > 1000)
+                {
+                    bool paymentMade = Instance.ExportDictionary["curiosity-server"].AdjustWallet($"{senderHandle}", 1000, false);
+
+                    if (paymentMade)
+                    {
+                        BaseScript.TriggerClientEvent("curiosity:Player:Vehicle:Delete:NetworkId", networkId);
+                        return true;
+                    }
+                }
+
+                return false;
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:owner", new EventCallback(metadata =>
+            {
+                int senderHandle = metadata.Sender;
+                int networkId = metadata.Find<int>(0);
+
+                foreach (KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
+                {
+                    CuriosityUser user = kvp.Value;
+
+                    if (user.PersonalVehicle == networkId)
+                        return user.LatestName;
+                }
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:delete", new EventCallback(metadata =>
             {
                 int senderHandle = metadata.Sender;
                 int networkId = metadata.Find<int>(0);
