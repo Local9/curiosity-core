@@ -222,7 +222,7 @@ namespace Curiosity.MissionManager.Server.Managers
                         return null;
 
                     if (missionData.NetworkPeds.ContainsKey(netId))
-                        return missionData.NetworkPeds[netId];
+                        return missionData.NetworkPeds[netId].Wants;
 
                     return null;
                 }
