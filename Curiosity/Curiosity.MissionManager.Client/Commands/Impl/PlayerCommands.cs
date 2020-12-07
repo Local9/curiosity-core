@@ -50,7 +50,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
         {
             public async void OnAsync(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Vehicle vehicle = World.GetAllVehicles().Select(x => x).Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f)).FirstOrDefault();
+                Vehicle vehicle = World.GetAllVehicles().Select(x => x).Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f) && (x.Driver == null || x.Driver.IsDead)).FirstOrDefault();
 
                 if (vehicle == null)
                 {
