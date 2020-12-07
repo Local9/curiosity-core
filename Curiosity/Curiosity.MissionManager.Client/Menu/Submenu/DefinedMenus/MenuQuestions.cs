@@ -31,28 +31,28 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
         public UIMenu CreateMenu(UIMenu menu)
         {
-            menuItemWelcome = new UIMenuItem("Hi, how are you today?");
+            menuItemWelcome = new UIMenuItem("Hi, how are you today?", "Ask Question");
             menu.AddItem(menuItemWelcome);
 
-            menuItemStepOutOfTheCar = new UIMenuItem("Step out of the vehicle for me please");
+            menuItemStepOutOfTheCar = new UIMenuItem("Step out of the vehicle for me please", "Ask Question");
             menu.AddItem(menuItemStepOutOfTheCar);
 
-            menuItemIdentifcation = new UIMenuItem("License and Registration");
+            menuItemIdentifcation = new UIMenuItem("License and Registration please", "Ask Question");
             menu.AddItem(menuItemIdentifcation);
 
-            menuItemWhatAreYouDoing = new UIMenuItem("What are you doing here?");
+            menuItemWhatAreYouDoing = new UIMenuItem("What are you doing here?", "Ask Question");
             menu.AddItem(menuItemWhatAreYouDoing);
 
-            menuItemRanRedLight = new UIMenuItem("You just ran a red light");
+            menuItemRanRedLight = new UIMenuItem("You just ran a red light", "Ask Question");
             menu.AddItem(menuItemRanRedLight);
 
-            menuItemSpeeding = new UIMenuItem("I saw you speeding back there");
+            menuItemSpeeding = new UIMenuItem("I saw you speeding back there", "Ask Question");
             menu.AddItem(menuItemSpeeding);
 
-            menuItemLaneChange = new UIMenuItem("You changed lanes rather incorrectly");
+            menuItemLaneChange = new UIMenuItem("You changed lanes rather incorrectly", "Ask Question");
             menu.AddItem(menuItemLaneChange);
 
-            menuItemTailGating = new UIMenuItem("I saw you tailgating");
+            menuItemTailGating = new UIMenuItem("I saw you tailgating", "Ask Question");
             menu.AddItem(menuItemTailGating);
 
             menu.OnItemSelect += Menu_OnItemSelect;
@@ -116,10 +116,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 if (!string.IsNullOrEmpty(Ped.Identity))
                 {
                     menuItemIdentifcation.Description = Ped.Identity;
-                }
-                else
-                {
-                    menuItemIdentifcation.Description = string.Empty;
                 }
 
                 PluginInstance.AttachTickHandler(OnSuspectDistanceCheck);
@@ -235,7 +231,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
             if (selectedItem == menuItemWelcome)
             {
                 Decorators.Set(Ped.Handle, Decorators.MENU_WELCOME, true);
-                menuItemWelcome.Description = "Question already answered";
             }
 
             if (selectedItem == menuItemIdentifcation)
