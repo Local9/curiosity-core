@@ -281,45 +281,47 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle
-                && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency
-                && !Mission.isOnMission && !IsIgnored)
+            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.IsInVehicle())
             {
-                bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
-
-                if (Utility.RANDOM.Bool(0.1f) && !isMarked)
+                if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency
+                && !Mission.isOnMission && !IsIgnored)
                 {
-                    Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_PULLOVER, true);
-                }
+                    bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
 
-                Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED, true);
-
-                CitizenFX.Core.Vehicle playerVeh = PlayerManager.PersonalVehicle;
-
-                if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null)
-                {
-                    HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
-
-                    API.DisableControlAction(0, (int)Control.VehicleRadioWheel, true);
-                    API.DisableControlAction(0, (int)Control.VehicleNextRadio, true);
-                    API.DisableControlAction(0, (int)Control.VehicleNextRadioTrack, true);
-                    API.DisableControlAction(0, (int)Control.VehiclePrevRadio, true);
-                    API.DisableControlAction(0, (int)Control.VehiclePrevRadioTrack, true);
-
-                    if (ControlHelper.IsControlJustPressed(Control.Context, false))
+                    if (Utility.RANDOM.Bool(0.1f) && !isMarked)
                     {
-                        TrafficStopManager.Manager.SetVehicle(this);
-
-                        for(int i = 0; i < 8; i++)
-                        {
-                            Game.PlayerPed.CurrentVehicle.IsSirenActive = i % 2 == 0;
-                            await BaseScript.Delay(250);
-                        }
-                        Game.PlayerPed.CurrentVehicle.IsSirenActive = false;
+                        Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_PULLOVER, true);
                     }
 
-                    if (ControlHelper.IsControlJustPressed(Control.Cover, false))
-                        IsIgnored = true;
+                    Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED, true);
+
+                    CitizenFX.Core.Vehicle playerVeh = PlayerManager.PersonalVehicle;
+
+                    if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null)
+                    {
+                        HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
+
+                        API.DisableControlAction(0, (int)Control.VehicleRadioWheel, true);
+                        API.DisableControlAction(0, (int)Control.VehicleNextRadio, true);
+                        API.DisableControlAction(0, (int)Control.VehicleNextRadioTrack, true);
+                        API.DisableControlAction(0, (int)Control.VehiclePrevRadio, true);
+                        API.DisableControlAction(0, (int)Control.VehiclePrevRadioTrack, true);
+
+                        if (ControlHelper.IsControlJustPressed(Control.Context, false))
+                        {
+                            TrafficStopManager.Manager.SetVehicle(this);
+
+                            for (int i = 0; i < 8; i++)
+                            {
+                                Game.PlayerPed.CurrentVehicle.IsSirenActive = i % 2 == 0;
+                                await BaseScript.Delay(250);
+                            }
+                            Game.PlayerPed.CurrentVehicle.IsSirenActive = false;
+                        }
+
+                        if (ControlHelper.IsControlJustPressed(Control.Cover, false))
+                            IsIgnored = true;
+                    }
                 }
             }
 
