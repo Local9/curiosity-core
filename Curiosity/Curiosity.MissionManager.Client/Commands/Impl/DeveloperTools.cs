@@ -1,17 +1,13 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Environment.Entities;
 using Curiosity.MissionManager.Client.Events;
-using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.EventWrapperLegacy;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace Curiosity.MissionManager.Client.Commands.Impl
 {
@@ -91,7 +87,6 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
                     dutyActive = arguments[1] == "1";
                 }
 
-                // EventSystem.GetModule().Request<object>(LegacyEvents.Client.PoliceDutyEvent, true, dutyActive, job);
                 BaseScript.TriggerEvent(LegacyEvents.Client.PoliceDutyEvent, true, dutyActive, job); // for legacy resources
             }
         }
@@ -130,7 +125,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
             }
         }
 
-        [CommandInfo(new [] { "mission" })]
+        [CommandInfo(new [] { "mission", "mis" })]
         public class CreateMission : ICommand
         {
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
