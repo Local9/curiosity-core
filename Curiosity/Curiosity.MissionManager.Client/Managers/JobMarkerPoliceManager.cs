@@ -88,6 +88,13 @@ namespace Curiosity.MissionManager.Client.Managers
 
                 peds.ForEach(async ped =>
                 {
+                    if (ped.IsDead)
+                    {
+                        ped.MarkAsNoLongerNeeded();
+                        await ped.FadeOut();
+                        ped.Delete();
+                    }
+
                     if (ped.IsBeingStunned)
                     {
                         bool setup = Decorators.GetBoolean(ped.Handle, Decorators.PED_SETUP);
