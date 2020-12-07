@@ -110,7 +110,11 @@ namespace Curiosity.StolenVehicle.Missions
                 (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
 
             Blip b = stolenVehicle.AttachSuspectBlip();
-            b.ShowRoute = true;
+
+            if (b != null)
+            {
+                b.ShowRoute = true;
+            }
 
             await BaseScript.Delay(100);
 

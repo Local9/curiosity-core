@@ -22,7 +22,18 @@ namespace Curiosity.Systems.Shared.Entity
 
         public override string ToString()
         {
-            return $"Mission: {ID}, OH: {OwnerHandleId}, P: {PartyMembers.Count}, NV: {NetworkVehicles.Count}, NP: {NetworkPeds.Count}, Assistance: {AssistanceRequested}";
+            string missionInformation = $"Mission: {DisplayName}\nOwner ID: {OwnerHandleId}\nNo. Party Members: {PartyMembers.Count}\nNo. NPC Vehicles: {NetworkVehicles.Count}\nNo. NPCs: {NetworkPeds.Count}\nAssistance: {AssistanceRequested}";
+
+            if (NetworkPeds.Count > 0)
+            {
+                missionInformation += "\n---- NPCs ----";
+
+                foreach(KeyValuePair<int, MissionDataPed> ped in NetworkPeds)
+                {
+                    missionInformation += $"\n{ped.Value}";
+                } 
+            }
+            return missionInformation;
         }
 
         public bool AddMember(int playerHandle)
@@ -33,63 +44,39 @@ namespace Curiosity.Systems.Shared.Entity
             return true;
         }
 
-        public bool AddNetworkVehicle(int networkId, bool isTowable, bool attachBlip)
+        public MissionDataVehicle AddNetworkVehicle(int networkId)
         {
-            if (NetworkVehicles.ContainsKey(networkId))
-            {
-                MissionDataVehicle mdv = NetworkVehicles[networkId];
-                mdv.IsTowable = isTowable;
-                mdv.AttachBlip = attachBlip;
-            }
-            else
-            {
-                MissionDataVehicle mdv = new MissionDataVehicle();
-                mdv.IsTowable = isTowable;
-                mdv.AttachBlip = attachBlip;
+            MissionDataVehicle mdv = new MissionDataVehicle();
 
-                NetworkVehicles.Add(networkId, mdv);
-            }
+            NetworkVehicles.Add(networkId, mdv);
 
-            return true;
+            return mdv;
         }
 
-        public bool AddNetworkPed(int networkId, bool isSuspect, bool isHandcuffed, bool attachBlip, int gender)
+        public MissionDataPed AddNetworkPed(int networkId, int gender)
         {
-            if (NetworkPeds.ContainsKey(networkId))
+            MissionDataPed mpd = new MissionDataPed();
+
+            mpd.Gender = gender; // 0 = M, 1 = F
+            if (mpd.Gender == 0)
             {
-                MissionDataPed mpd = NetworkPeds[networkId];
-                mpd.IsHandcuffed = isHandcuffed;
-                mpd.IsSuspect = isSuspect;
-                mpd.AttachBlip = attachBlip;
+                mpd.Firstname = PedIdentifcationData.FirstNameMale[Utility.RANDOM.Next(PedIdentifcationData.FirstNameMale.Count)];
             }
             else
             {
-                MissionDataPed mpd = new MissionDataPed();
-                mpd.IsSuspect = isSuspect;
-                mpd.IsHandcuffed = isHandcuffed;
-                mpd.AttachBlip = attachBlip;
-
-                mpd.Gender = gender; // 0 = M, 1 = F
-                if (mpd.Gender == 0)
-                {
-                    mpd.Firstname = PedIdentifcationData.FirstNameMale[Utility.RANDOM.Next(PedIdentifcationData.FirstNameMale.Count)];
-                }
-                else
-                {
-                    mpd.Firstname = PedIdentifcationData.FirstNameFemale[Utility.RANDOM.Next(PedIdentifcationData.FirstNameFemale.Count)];
-                }
-
-                mpd.Surname = PedIdentifcationData.Surname[Utility.RANDOM.Next(PedIdentifcationData.Surname.Count)];
-
-                DateTime StartDateForDriverDoB = new DateTime(1949, 1, 1);
-                double Range = (DateTime.Today - StartDateForDriverDoB).TotalDays;
-                Range -= EIGHTEEN_YEARS_IN_DAYS; // MINUS 18 YEARS
-                mpd.DateOfBirth = StartDateForDriverDoB.AddDays(Utility.RANDOM.Next((int)Range));
-
-                NetworkPeds.Add(networkId, mpd);
+                mpd.Firstname = PedIdentifcationData.FirstNameFemale[Utility.RANDOM.Next(PedIdentifcationData.FirstNameFemale.Count)];
             }
-            
-            return true;
+
+            mpd.Surname = PedIdentifcationData.Surname[Utility.RANDOM.Next(PedIdentifcationData.Surname.Count)];
+
+            DateTime StartDateForDriverDoB = new DateTime(1949, 1, 1);
+            double Range = (DateTime.Today - StartDateForDriverDoB).TotalDays;
+            Range -= EIGHTEEN_YEARS_IN_DAYS; // MINUS 18 YEARS
+            mpd.DateOfBirth = StartDateForDriverDoB.AddDays(Utility.RANDOM.Next((int)Range));
+
+            NetworkPeds.Add(networkId, mpd);
+
+            return mpd;
         }
 
         public bool RemoveMember(int playerHandle)

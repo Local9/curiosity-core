@@ -5,6 +5,7 @@ using Curiosity.MissionManager.Server.Diagnostics;
 using Curiosity.MissionManager.Server.Managers;
 using Curiosity.MissionManager.Server.Web;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Shared.Entity;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -157,6 +158,8 @@ namespace Curiosity.MissionManager.Server
         {
             try
             {
+                Logger.Debug($"OnRconCommand -> {commandName}");
+
                 if (commandName.ToLower() == "missions")
                 {
                     Logger.Info($"<- Mission Manager Start ->");
@@ -165,12 +168,44 @@ namespace Curiosity.MissionManager.Server
                     Logger.Info($"<- Mission Manager End ->");
                 }
 
-                API.CancelEvent();
+                if (commandName.ToLower() == "mission")
+                {
+                    if (Managers.MissionManager.ActiveMissions.Count > 0)
+                    {
+                        ConcurrentDictionary<int, MissionData> missions = Managers.MissionManager.ActiveMissions;
+
+                        if (missions.Count > 1)
+                        {
+                            if (args.Count == 0)
+                            {
+                                Logger.Info($"Must pass Players Server ID, too many missions to print");
+                            }
+                            else
+                            {
+                                int idx = (int)args[0];
+                                Logger.Info($"\n{missions[idx]}");
+                            }
+                        }
+                        else
+                        {
+                            foreach (KeyValuePair<int, MissionData> data in missions)
+                            {
+                                Logger.Info($"\nPlayer Handle: {data.Key}\n{data.Value}");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Logger.Info($"No active missions");
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Logger.Error($"Error when canceling event, possible changes made by FiveM Collective.");
+                Logger.Error($"Error when canceling event, possible changes made by FiveM Collective.\n{ex}");
             }
+
+            API.CancelEvent();
         }
 
         public object LoadManager(Type type)

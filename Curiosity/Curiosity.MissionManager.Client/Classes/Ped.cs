@@ -10,6 +10,7 @@ using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Utils;
+using Curiosity.Systems.Shared.Entity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,7 +55,8 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 this.IsArrestable = true;
                 Decorators.Set(Fx.Handle, Decorators.PED_SUSPECT, value);
-                UpdatePed();
+
+                EventSystem.Send("mission:update:ped:suspect", Fx.NetworkId, value);
             }
         }
 
@@ -80,6 +82,8 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 Fx.IsPersistent = value;
                 Decorators.Set(Fx.Handle, Decorators.PED_MISSION, value);
+
+                EventSystem.Send("mission:update:ped:mission", Fx.NetworkId, value);
             }
         }
 
@@ -170,7 +174,8 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
 
                 Decorators.Set(Fx.Handle, Decorators.PED_HANDCUFFED, value);
-                UpdatePed();
+
+                EventSystem.Send("mission:update:ped:handcuffed", Fx.NetworkId, value);
             }
         }
 
@@ -221,34 +226,20 @@ namespace Curiosity.MissionManager.Client.Classes
             if (updateData)
             {
                 API.NetworkFadeInEntity(fx.Handle, false);
-                UpdatePed();
+                EventSystem.Send("mission:add:ped", fx.NetworkId, (int)fx.Gender);
             }
         }
 
         public void AttachSuspectBlip()
         {
+            if (Fx.AttachedBlip != null) return;
+
             Blip blip = Fx.AttachBlip();
             blip.Sprite = BlipSprite.Enemy;
             blip.Color = BlipColor.Red;
             blip.Scale = .75f;
 
-            UpdatePed();
-        }
-
-        internal async void UpdatePed()
-        {
-            if (isRandomPed) return;
-
-            while (DateTime.Now.Subtract(LastUpdate).TotalSeconds < 2)
-            {
-                await BaseScript.Delay(100);
-            };
-
-            LastUpdate = DateTime.Now;
-
-            bool attachBlip = Fx.AttachedBlip != null;
-            
-            EventSystem.Request<bool>("mission:add:ped", Fx.NetworkId, IsSuspect, IsHandcuffed, attachBlip, (int)Fx.Gender);
+            EventSystem.Send("mission:update:ped:blip", Fx.NetworkId, true);
         }
 
         internal void PrisonTransport()

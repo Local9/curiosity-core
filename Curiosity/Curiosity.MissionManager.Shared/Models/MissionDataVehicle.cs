@@ -2,7 +2,7 @@
 {
     public class MissionDataVehicle : MissionDataEntity
     {
-        public bool IsTowable { get; internal set; }
+        public bool IsTowable { get; set; }
 
         public override string ToString()
         {

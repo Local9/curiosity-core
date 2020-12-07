@@ -319,8 +319,6 @@ namespace Curiosity.MissionManager.Client
 
                     isOnMission = false;
                 }
-
-                Logger.Debug($"{currentMissionData}");
             }
             catch (Exception ex)
             {
@@ -347,15 +345,10 @@ namespace Curiosity.MissionManager.Client
                         found = (veh.NetworkId == keyValuePair.Key);
                         if (found)
                         {
-                            veh.IsMission = true;
+                            veh.IsMission = mdv.IsMission;
                             veh.IsTowable = mdv.IsTowable;
 
-                            if (mdv.AttachBlip && veh.AttachedBlip == null)
-                            {
-                                Blip b = veh.AttachBlip();
-                                b.Color = BlipColor.Red;
-                                b.Scale = .5f;
-                            }
+                            if (mdv.AttachBlip) veh.AttachSuspectBlip();
                         }
                     });
 
@@ -369,15 +362,10 @@ namespace Curiosity.MissionManager.Client
                             Logger.Debug($"ID: {keyValuePair.Key} / {mdv}");
 
                             Vehicle curVehicle = new Vehicle(cfxVehicle, false);
-                            curVehicle.IsMission = true;
+                            curVehicle.IsMission = mdv.IsMission;
                             curVehicle.IsTowable = mdv.IsTowable;
 
-                            if (mdv.AttachBlip)
-                            {
-                                Blip b = curVehicle.AttachBlip();
-                                b.Color = BlipColor.Red;
-                                b.Scale = .5f;
-                            }
+                            if (mdv.AttachBlip) curVehicle.AttachSuspectBlip();
 
                             RegisteredVehicles.Add(curVehicle);
                         }
@@ -417,16 +405,13 @@ namespace Curiosity.MissionManager.Client
                         if (found)
                         {
                             ped.IsSuspect = mdp.IsSuspect;
-                            ped.IsMission = true;
+                            ped.IsMission = mdp.IsMission;
 
                             Logger.Debug($"ID: {keyValuePair.Key} / {mdp}");
 
                             if (mdp.AttachBlip)
                             {
-                                Blip b = ped.AttachBlip();
-                                b.Sprite = BlipSprite.Enemy;
-                                b.Color = BlipColor.Red;
-                                b.Scale = .5f;
+                                ped.AttachSuspectBlip();
                             }
                         }
 
@@ -442,16 +427,13 @@ namespace Curiosity.MissionManager.Client
                             Ped curPed = new Ped(cfxPed, false);
 
                             curPed.IsSuspect = mdp.IsSuspect;
-                            curPed.IsMission = true;
+                            curPed.IsMission = mdp.IsMission;
 
                             Logger.Debug($"ID: {keyValuePair.Key} / {mdp}");
 
                             if (mdp.AttachBlip && curPed.AttachedBlip == null)
                             {
-                                Blip b = curPed.AttachBlip();
-                                b.Sprite = BlipSprite.Enemy;
-                                b.Color = BlipColor.Red;
-                                b.Scale = .5f;
+                                curPed.AttachSuspectBlip();
                             }
 
                             RegisteredPeds.Add(curPed);

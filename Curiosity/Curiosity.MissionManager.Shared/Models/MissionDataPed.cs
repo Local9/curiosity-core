@@ -22,12 +22,27 @@ namespace Curiosity.Systems.Shared.Entity
 
         public List<string> Wants = new List<string>();
 
-        public bool IsDriver { get; internal set; }
-        public bool IsSuspect { get; internal set; }
-        public bool IsHandcuffed { get; internal set; }
+        public bool IsDriver { get; set; }
+        public bool IsSuspect { get; set; }
+        public bool IsHandcuffed { get; set; }
+        public bool IsUnderInfluence { get; internal set; }
+        public bool IsUsingDrugs { get; internal set; }
+        public bool IsCarryingDrugs { get; internal set; }
+        public bool IsCarringWeapon { get; internal set; }
         public override string ToString()
         {
-            return $"Ped: Suspect: {IsSuspect}, IsHandcuffed: {IsHandcuffed}, Blip: {AttachBlip}";
+            string dateOfBirth = DateOfBirth.ToString($"yyyy-MM-dd");
+            string gender = Gender == 0 ? "Male" : "Female";
+
+            string returnString = $"Ped: {FullName}" +
+                $"\nDOB: {dateOfBirth}" +
+                $"\nGender {gender}" +
+                $"\nSuspect: {IsSuspect}" +
+                $"\nIsHandcuffed: {IsHandcuffed}" +
+                $"\nBlip: {AttachBlip}";
+
+
+            return returnString;
         }
     }
 }

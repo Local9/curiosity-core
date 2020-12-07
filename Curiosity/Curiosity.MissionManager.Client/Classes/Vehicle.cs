@@ -55,7 +55,8 @@ namespace Curiosity.MissionManager.Client.Classes
             set
             {
                 Decorators.Set(Fx.Handle, Decorators.VEHICLE_TOW, value);
-                VehicleUpdate();
+
+                EventSystem.Send("mission:update:vehicle:towable", Fx.NetworkId, true);
             }
         }
 
@@ -81,6 +82,8 @@ namespace Curiosity.MissionManager.Client.Classes
             {
                 Fx.IsPersistent = value;
                 Decorators.Set(Fx.Handle, Decorators.VEHICLE_MISSION, value);
+
+                EventSystem.Send("mission:update:vehicle:mission", Fx.NetworkId, true);
             }
         }
 
@@ -122,28 +125,20 @@ namespace Curiosity.MissionManager.Client.Classes
 
             Decorators.Set(fx.Handle, Decorators.VEHICLE_SETUP, true);
 
-            if (updateData)
-                VehicleUpdate();
+            if (updateData) EventSystem.Send("mission:add:vehicle", Fx.NetworkId);
         }
 
         public Blip AttachSuspectBlip()
         {
+            if (Fx.AttachedBlip != null) return null;
+
             Blip blip = Fx.AttachBlip();
             blip.Color = BlipColor.Red;
             blip.Scale = .75f;
 
-            VehicleUpdate();
+            EventSystem.Send("mission:update:vehicle:blip", Fx.NetworkId, true);
 
             return blip;
-        }
-
-        private void VehicleUpdate()
-        {
-            LastUpdate = DateTime.Now;
-
-            bool attachBlip = (Fx.AttachedBlip != null);
-
-            EventSystem.Request<bool>("mission:add:vehicle", Fx.NetworkId, IsTowable, attachBlip);
         }
 
         public static async Task<Vehicle> Spawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true, bool isNetworked = true, bool isMission = true)
