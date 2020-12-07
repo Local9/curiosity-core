@@ -35,14 +35,14 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
         public UIMenu CreateMenu(UIMenu menu)
         {
+            menuItemRelease = new UIMenuItem("You're good to go", "Let the person leave");
+            menu.AddItem(menuItemRelease);
+
             menuItemWelcome = new UIMenuItem("Hi, how are you today?", "Ask Question");
             menu.AddItem(menuItemWelcome);
 
             menuItemStepOutOfTheCar = new UIMenuItem("Step out of the vehicle for me please", "Ask Question");
             menu.AddItem(menuItemStepOutOfTheCar);
-
-            menuItemRelease = new UIMenuItem("You're good to go", "Let the person leave");
-            menu.AddItem(menuItemRelease);
 
             menuItemIdentifcation = new UIMenuItem("License and Registration please", "Ask Question");
             menu.AddItem(menuItemIdentifcation);
