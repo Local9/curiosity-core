@@ -182,6 +182,9 @@ namespace Curiosity.MissionManager.Client.Classes
 
             Fx.IsPersistent = false;
             Fx.MarkAsNoLongerNeeded();
+
+            EventSystem.Send("entity:s:delete", Fx.NetworkId);
+
             await Fx.FadeOut();
 
             base.Delete();
