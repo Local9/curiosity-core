@@ -4,6 +4,7 @@ using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System;
+using System.Collections.Generic;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
@@ -15,13 +16,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         UIMenuItem menuItemCode4;
         UIMenuItem menuItemCode16;
-        UIMenuItem menuItemCode27;
-        UIMenuItem menuItemCode28;
-        UIMenuItem menuItemCode29;
         UIMenuItem menuItemCode51;
         UIMenuItem menuItemCode55d;
         UIMenuItem menuItemCode78;
-        UIMenuItem menuItemCode80;
         UIMenuItem menuItemCode92;
 
         UIMenuSeparatorItem menuSeparatorItem1 = new UIMenuSeparatorItem();
@@ -33,12 +30,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menuItemCode92 = new UIMenuItem("10-92: Suspect in Custody", "This will inform other players.");
 
             menuItemCode78 = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance. ~b~Shortcut: ~g~ALT+E");
-            menuItemCode80 = new UIMenuItem("10-80: Persuit in progress", "This will call on other players for assistance.");
 
             menuItemCode16 = new UIMenuItem("10-16: Request prison transport", "Will remove the suspect from the world, ~o~50% of completion reward~w~.");
-            menuItemCode27 = new UIMenuItem("10-27: Request drivers license check", "Contact dispatch for more information on the Suspect.");
-            menuItemCode28 = new UIMenuItem("10-28: Check registration on vehicle", "Contact dispatch for more information on the vehicle.");
-            menuItemCode29 = new UIMenuItem("10-29: Check Wants", "Contact dispatch to find out if the suspect is wanted.");
             menuItemCode51 = new UIMenuItem("10-51: Tow Vehicle", "Will remove the vehicle from the world.~n~~o~Callout Only");
             menuItemCode55d = new UIMenuItem("10-55d: Send Coroner", "Will clear deceased NPC(s).~n~~o~Callout Only");
             
@@ -50,14 +43,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             menu.AddItem(menuItemCode78);
 
-            // menu.AddItem(menuItemCode80);
-
             menu.AddItem(menuSeparatorItem2);
 
             menu.AddItem(menuItemCode16); //
-            // menu.AddItem(menuItemCode27);
-            // menu.AddItem(menuItemCode28);
-            // menu.AddItem(menuItemCode29);
             menu.AddItem(menuItemCode51); //
             menu.AddItem(menuItemCode55d); // 
 
@@ -168,12 +156,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             menuItemCode4.Enabled = isCalloutActive;
             menuItemCode16.Enabled = isCalloutActive;
-            menuItemCode27.Enabled = isCalloutActive;
-            menuItemCode28.Enabled = isCalloutActive;
-            menuItemCode29.Enabled = isCalloutActive;
             menuItemCode51.Enabled = isCalloutActive && isVehicleTowable;
             menuItemCode78.Enabled = isCalloutActive;
-            menuItemCode80.Enabled = isCalloutActive;
             menuItemCode92.Enabled = isCalloutActive;
         }
     }
