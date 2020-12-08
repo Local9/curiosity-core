@@ -58,15 +58,26 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
                     return;
                 }
 
-                bool vehicleDeletionSent = await EventSystem.Request<bool>("vehicle:tow", vehicle.NetworkId);
+                int vehicleDeletionSent = await EventSystem.Request<int>("vehicle:tow", vehicle.NetworkId);
+                CommonErrors commonErrors = (CommonErrors)vehicleDeletionSent;
 
-                if (vehicleDeletionSent)
+                switch(commonErrors)
                 {
-                    Notify.Impound($"Vehicle Impounded", "~b~Charge: ~g~$1000~n~~w~Pleasure doing business with ye");
-                }
-                else
-                {
-                    Notify.Impound($"We have an issue", "We cannot tow this vehicle, someone owns this.");
+                    case CommonErrors.PurchaseSuccessful:
+                        Notify.Impound($"Vehicle Impounded", "~b~Charge: ~g~$1000~n~~w~Pleasure doing business with ye");
+                        break;
+                    case CommonErrors.PurchaseUnSuccessful:
+                        Notify.Impound($"Payment Issue", "Looks like ur bank rejected it.");
+                        break;
+                    case CommonErrors.VehicleIsOwned:
+                        Notify.Impound($"Computer Warning", "Sorry bub, this vehicle is owned by someone.");
+                        break;
+                    case CommonErrors.NotEnoughPoliceRep1000:
+                        Notify.Alert(commonErrors);
+                        break;
+                    default:
+                        Notify.Impound($"Computer Error", "Computer said no...");
+                        break;
                 }
             }
         }

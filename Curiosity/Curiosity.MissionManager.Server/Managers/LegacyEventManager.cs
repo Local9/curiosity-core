@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Server.Events;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
@@ -18,18 +19,18 @@ namespace Curiosity.MissionManager.Server.Managers
                 int senderHandle = metadata.Sender;
                 int networkId = metadata.Find<int>(0);
 
-                bool cannotTow = false;
+                CommonErrors cannotTow = CommonErrors.UnknownError;
 
                 foreach(KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
                 {
                     CuriosityUser user = kvp.Value;
 
                     if (user.PersonalVehicle == networkId)
-                        cannotTow = true;
+                        cannotTow = CommonErrors.VehicleIsOwned;
                 }
 
-                if (cannotTow)
-                    return false;
+                if (cannotTow == CommonErrors.VehicleIsOwned)
+                    return CommonErrors.VehicleIsOwned;
 
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[senderHandle];
 
@@ -42,11 +43,15 @@ namespace Curiosity.MissionManager.Server.Managers
                     if (paymentMade)
                     {
                         BaseScript.TriggerClientEvent("curiosity:Player:Vehicle:Delete:NetworkId", networkId);
-                        return true;
+                        return CommonErrors.PurchaseSuccessful;
+                    }
+                    else
+                    {
+                        return CommonErrors.PurchaseUnSuccessful;
                     }
                 }
 
-                return false;
+                return CommonErrors.NotEnoughPoliceRep1000;
             }));
 
             EventSystem.GetModule().Attach("vehicle:owner", new EventCallback(metadata =>
