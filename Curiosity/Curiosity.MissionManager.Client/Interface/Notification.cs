@@ -26,6 +26,7 @@ namespace Curiosity.MissionManager.Client.Interface
         MustBeCloserToSubject,
         OutsideVehicle,
         SubjectNotFound,
+        InsideVehicle,
     };
 
     public static class ErrorMessage
@@ -36,6 +37,9 @@ namespace Curiosity.MissionManager.Client.Interface
             string placeholder = placeholderValue != null ? " " + placeholderValue : "";
             switch (errorType)
             {
+                case CommonErrors.InsideVehicle:
+                    outputMessage = "You need to be inside the vehicle.";
+                    break;
                 case CommonErrors.SubjectNotFound:
                     outputMessage = "Subject not found.";
                     break;

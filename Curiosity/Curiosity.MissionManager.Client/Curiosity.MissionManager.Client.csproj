@@ -62,6 +62,7 @@
     <Compile Include="Commands\Impl\PlayerCommands.cs" />
     <Compile Include="Commands\Impl\DeveloperTools.cs" />
     <Compile Include="CommonFunctions.cs" />
+    <Compile Include="DepartmentComputer\ComputerBase.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Discord\DiscordRichPresence.cs" />
     <Compile Include="Environment\BlipInfo.cs" />

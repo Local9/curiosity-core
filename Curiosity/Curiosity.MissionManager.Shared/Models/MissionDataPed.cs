@@ -29,6 +29,8 @@ namespace Curiosity.Systems.Shared.Entity
         public bool IsUsingDrugs { get; internal set; }
         public bool IsCarryingDrugs { get; internal set; }
         public bool IsCarringWeapon { get; internal set; }
+        public bool IsIdentified { get; set; }
+
         public override string ToString()
         {
             string dateOfBirth = DateOfBirth.ToString($"yyyy-MM-dd");
@@ -39,7 +41,8 @@ namespace Curiosity.Systems.Shared.Entity
                 $"\nGender {gender}" +
                 $"\nSuspect: {IsSuspect}" +
                 $"\nIsHandcuffed: {IsHandcuffed}" +
-                $"\nBlip: {AttachBlip}";
+                $"\nBlip: {AttachBlip}" +
+                $"\nIdentified: {IsIdentified}";
 
 
             return returnString;

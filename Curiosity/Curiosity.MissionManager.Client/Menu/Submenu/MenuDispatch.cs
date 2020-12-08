@@ -1,6 +1,8 @@
-﻿using Curiosity.MissionManager.Client.Diagnostics;
+﻿using CitizenFX.Core;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Interface;
+using Curiosity.MissionManager.Client.Manager;
 using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System;
@@ -19,7 +21,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         UIMenuItem menuItemCode51;
         UIMenuItem menuItemCode55d;
         UIMenuItem menuItemCode78;
-        UIMenuItem menuItemCode92;
+        UIMenuItem menuItemOpenComputer;
 
         UIMenuSeparatorItem menuSeparatorItem1 = new UIMenuSeparatorItem();
         UIMenuSeparatorItem menuSeparatorItem2 = new UIMenuSeparatorItem();
@@ -27,7 +29,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         public UIMenu CreateMenu(UIMenu menu)
         {
             menuItemCode4 = new UIMenuItem("Code 4: Cancel Callout", "~o~This will complete/end the current callout, no rewards earned, will lose reputation.");
-            menuItemCode92 = new UIMenuItem("10-92: Suspect in Custody", "This will inform other players.");
+            menuItemOpenComputer = new UIMenuItem("Open LSPD:NC", "Open the LSPD:NC, must be in vehicle");
 
             menuItemCode78 = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance. ~b~Shortcut: ~g~ALT+E");
 
@@ -37,7 +39,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             
 
             menu.AddItem(menuItemCode4);
-            // menu.AddItem(menuItemCode92);
+            menu.AddItem(menuItemOpenComputer);
 
             menu.AddItem(menuSeparatorItem1);
 
@@ -60,6 +62,19 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         {
             Ped ped = MenuManager.GetClosestInteractivePed();
             Vehicle suspectVehicle = MenuManager.GetClosestVehicle();
+
+            if (selectedItem == menuItemOpenComputer)
+            {
+                if (!(Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle))
+                {
+                    Notify.Alert(CommonErrors.InsideVehicle);
+                }
+
+
+                DepartmentComputer.ComputerBase.Instance.Open();
+                MenuManager._MenuPool?.CloseAllMenus();
+                return;
+            }
 
             if (selectedItem == menuItemCode4) // end callout
             {
@@ -158,7 +173,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menuItemCode16.Enabled = isCalloutActive;
             menuItemCode51.Enabled = isCalloutActive && isVehicleTowable;
             menuItemCode78.Enabled = isCalloutActive;
-            menuItemCode92.Enabled = isCalloutActive;
+            menuItemCode55d.Enabled = isCalloutActive;
+            menuItemOpenComputer.Enabled = (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle);
         }
     }
 }

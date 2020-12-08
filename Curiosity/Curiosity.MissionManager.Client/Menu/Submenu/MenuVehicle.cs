@@ -16,9 +16,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         UIMenu Menu;
         UIMenuItem menuItemSearchVehicle;
+        UIMenuItem menuItemRecordNumberPlate;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
+            menuItemRecordNumberPlate = new UIMenuItem("Note Number Plate", "Take recording of the number plate");
+            menu.AddItem(menuItemRecordNumberPlate);
+
             menuItemSearchVehicle = new UIMenuItem("Search");
             menu.AddItem(menuItemSearchVehicle);
 
@@ -61,6 +65,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 menuItemSearchVehicle.Enabled = vehicle.IsSearchable;
                 menuItemSearchVehicle.Description = vehicle.IsSearchable ? "Able to search the vehicle" : "Unable to search this vehicle";
 
+                menuItemSearchVehicle.Enabled = true;
+
                 PluginInstance.AttachTickHandler(OnSuspectVehicleDistanceCheck);
             }
         }
@@ -78,6 +84,11 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 vehicle.Sequence(Vehicle.VehicleSequence.SEARCH);
                 await BaseScript.Delay(500);
                 return;
+            }
+
+            if (selectedItem == menuItemRecordNumberPlate)
+            {
+                vehicle.RecordLicensePlate();
             }
         }
     }

@@ -93,6 +93,11 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
+        internal void RecordLicensePlate()
+        {
+            EventSystem.Send("mission:update:vehicle:license", Fx.NetworkId, Fx.Mods.LicensePlate, $"{Fx.DisplayName}", $"{Fx.Mods.PrimaryColor}", $"{Fx.Mods.SecondaryColor}");
+        }
+
         public bool IsSpikable
         {
             get

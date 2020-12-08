@@ -8,6 +8,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Curiosity.MissionManager.Server.Managers
 {
@@ -15,6 +16,11 @@ namespace Curiosity.MissionManager.Server.Managers
     {
         public static ConcurrentDictionary<int, MissionData> ActiveMissions = new ConcurrentDictionary<int, MissionData>();
         public static ConcurrentDictionary<long, int> FailureTracker = new ConcurrentDictionary<long, int>();
+
+        Regex r = new Regex(@"
+                (?<=[A-Z])(?=[A-Z][a-z]) |
+                 (?<=[^A-Z])(?=[A-Z]) |
+                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
 
         public override void Begin()
         {
@@ -196,7 +202,11 @@ namespace Curiosity.MissionManager.Server.Managers
                     }
 
                     if (missionData.NetworkPeds.ContainsKey(netId))
-                        return missionData.NetworkPeds[netId];
+                    {
+                        MissionDataPed mpd = missionData.NetworkPeds[netId];
+                        mpd.IsIdentified = true;
+                        return mpd;
+                    }
 
                     Logger.Error($"Unable to find ped in mission");
                     return null;
@@ -339,6 +349,22 @@ namespace Curiosity.MissionManager.Server.Managers
                 if (missionDataVehicle == null) return null;
 
                 missionDataVehicle.IsTowable = metadata.Find<bool>(1);
+
+                return missionDataVehicle;
+            }));
+
+            EventSystem.GetModule().Attach("mission:update:vehicle:license", new EventCallback(metadata =>
+            {
+                MissionDataVehicle missionDataVehicle = GetMissionVehicleToUpdate(metadata.Sender, metadata.Find<int>(0));
+
+                if (missionDataVehicle == null) return null;
+
+                missionDataVehicle.LicensePlate = metadata.Find<string>(1);
+                missionDataVehicle.DisplayName = r.Replace(metadata.Find<string>(2).ToLowerInvariant(), " ");
+                missionDataVehicle.PrimaryColor = r.Replace(metadata.Find<string>(3), " ");
+                missionDataVehicle.SecondaryColor = r.Replace(metadata.Find<string>(4), " ");
+
+                missionDataVehicle.RecordedLicensePlate = true;
 
                 return missionDataVehicle;
             }));
