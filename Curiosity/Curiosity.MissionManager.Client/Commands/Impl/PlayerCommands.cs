@@ -21,30 +21,6 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
         public override bool IsRestricted { get; set; } = false;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { };
 
-        [CommandInfo(new[] { "coroner", "c" })]
-        public class PlayerCoroner : ICommand
-        {
-            public void OnAsync(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
-            {
-                List<Ped> peds = World.GetAllPeds().Where(x => x.IsDead && x.IsInRangeOf(Game.PlayerPed.Position, 15f)).ToList();
-
-                peds.ForEach(async p =>
-                {
-                    p.MarkAsNoLongerNeeded();
-                    await p.FadeOut();
-                    p.Delete();
-
-                    int pedHandle = p.Handle;
-
-                    if (p.Exists())
-                    {
-                        API.RemovePedElegantly(ref pedHandle);
-                        API.DeleteEntity(ref pedHandle);
-                    }
-                });
-            }
-        }
-
         [CommandInfo(new[] { "tow" })]
         public class PlayerTow : ICommand
         {
