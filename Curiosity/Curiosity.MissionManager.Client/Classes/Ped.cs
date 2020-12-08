@@ -28,6 +28,8 @@ namespace Curiosity.MissionManager.Client.Classes
         public bool IsDead => Fx.IsDead;
         internal string Name => Fx.Model.ToString();
 
+        internal DateTime DateCreated { get; set; }
+
         public void AddToMission()
         {
             EventSystem.Send("mission:add:ped", Fx.NetworkId, (int)Fx.Gender);
@@ -207,6 +209,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
             this.isRandomPed = isRandomPed;
             Fx.Health = 200;
+
+            DateCreated = DateTime.Now;
 
             if (!this.isRandomPed)
             {
