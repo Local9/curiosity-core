@@ -99,11 +99,14 @@ namespace Curiosity.MissionManager.Client.Managers
 
                     if (!setup)
                     {
-                        Classes.Ped curPed = new Classes.Ped(ped, false, true);
-                        curPed.IsImportant = false;
-                        curPed.IsMission = false;
-                        curPed.IsSuspect = false;
-                        curPed.IsArrestable = false;
+                        if (ped.IsBeingStunned)
+                        {
+                            Classes.Ped curPed = new Classes.Ped(ped, false, true);
+                            curPed.IsImportant = false;
+                            curPed.IsMission = false;
+                            curPed.IsSuspect = false;
+                            curPed.IsArrestable = false;
+                        }
                     }
 
                     await BaseScript.Delay(100);
