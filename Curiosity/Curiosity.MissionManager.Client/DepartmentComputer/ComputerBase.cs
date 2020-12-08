@@ -138,8 +138,10 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 					registration[$"#{registrations} ~b~Plate"] = vehData.LicensePlate;
 					registration[$"#{registrations} ~b~Make"] = vehData.DisplayName;
 					registration[$"#{registrations} ~b~Color"] = string.IsNullOrEmpty(vehData.SecondaryColor) ? vehData.PrimaryColor : $"{vehData.PrimaryColor} / {vehData.SecondaryColor}";
-					registration[$"#{registrations} ~b~Registered To"] = string.Empty;
-					registration[$"#{registrations} ~b~Stolen"] = string.Empty;
+					registration[$"#{registrations} ~b~Registered To"] = vehData.OwnerName;
+
+					if (vehData.Stolen)
+						registration[$"#{registrations} ~b~Stolen"] = "~r~Reported Stolen";
 				}
 				else
 				{
