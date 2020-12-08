@@ -31,8 +31,18 @@ namespace Curiosity.Systems.Shared.Entity
                 foreach(KeyValuePair<int, MissionDataPed> ped in NetworkPeds)
                 {
                     missionInformation += $"\n{ped.Value}";
-                } 
+                }
             }
+            if (NetworkVehicles.Count > 0)
+            {
+                missionInformation += "\n---- VEHs ----";
+
+                foreach (KeyValuePair<int, MissionDataVehicle> veh in NetworkVehicles)
+                {
+                    missionInformation += $"\n{veh.Value}";
+                }
+            }
+
             return missionInformation;
         }
 

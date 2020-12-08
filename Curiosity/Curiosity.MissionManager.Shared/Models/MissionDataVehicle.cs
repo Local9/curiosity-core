@@ -8,10 +8,19 @@
         public string DisplayName { get; set; }
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
+        public bool Stolen { get; set; }
+        public bool OwnerName { get; set; }
 
         public override string ToString()
         {
-            return $"Vehicle: Towable: {IsTowable}, Blip: {AttachBlip}";
+            return $"Vehicle;" +
+                $"\n Display Name: {DisplayName}" +
+                $"\n License Plate: {LicensePlate}" +
+                $"\n Primary Color: {PrimaryColor}" +
+                $"\n Secondary Color: {SecondaryColor}" +
+                $"\n Stolen: {Stolen}" +
+                $"\n Owner: {OwnerName}" +
+                $"";
         }
     }
 }
