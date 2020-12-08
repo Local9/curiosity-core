@@ -24,6 +24,9 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
             new Tuple<Vector3, float>(new Vector3(-1865.116f, -1237.561f, 7.615778f), 99.98402f),
             new Tuple<Vector3, float>(new Vector3(-1274.903f, -1921.969f, 1.730884f), 142.5712f),
             new Tuple<Vector3, float>(new Vector3(2616.285f, 1694.555f, 34.86676f), 47.29236f),
+            new Tuple<Vector3, float>(new Vector3(2510.506f, 3787.817f, 50.85282f), 101.1173f),
+            new Tuple<Vector3, float>(new Vector3(711.2071f, 1198.193f, 348.5265f), 164.9149f),
+            new Tuple<Vector3, float>(new Vector3(-170.7412f, -1003.239f, 299.5232f), 116.2947f),
         };
 
         static Prop propFlamingo;
