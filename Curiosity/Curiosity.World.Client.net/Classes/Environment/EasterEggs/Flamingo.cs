@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.Shared.Client.net;
 using Curiosity.Shared.Client.net.Extensions;
@@ -19,14 +20,14 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
 
         static List<Tuple<Vector3, float>> lstFlamingoPositions = new List<Tuple<Vector3, float>>()
         {
-            new Tuple<Vector3, float>(new Vector3(455.5271f, 5566.663f, 780.1837f), 0f),
-            new Tuple<Vector3, float>(new Vector3(-901.8747f, 6051.04f, 43.53199f), 30.82964f),
-            new Tuple<Vector3, float>(new Vector3(-1865.116f, -1237.561f, 7.615778f), 99.98402f),
-            new Tuple<Vector3, float>(new Vector3(-1274.903f, -1921.969f, 1.730884f), 142.5712f),
-            new Tuple<Vector3, float>(new Vector3(2616.285f, 1694.555f, 34.86676f), 47.29236f),
-            new Tuple<Vector3, float>(new Vector3(2510.506f, 3787.817f, 50.85282f), 101.1173f),
-            new Tuple<Vector3, float>(new Vector3(711.2071f, 1198.193f, 348.5265f), 164.9149f),
-            new Tuple<Vector3, float>(new Vector3(-170.7412f, -1003.239f, 299.5232f), 116.2947f),
+            new Tuple<Vector3, float>(new Vector3(455.5271f, 5566.663f, 780.0837f), 0f),
+            new Tuple<Vector3, float>(new Vector3(-901.8747f, 6051.04f, 43.33199f), 30.82964f),
+            new Tuple<Vector3, float>(new Vector3(-1865.116f, -1237.561f, 7.415778f), 99.98402f),
+            new Tuple<Vector3, float>(new Vector3(-1274.903f, -1921.969f, 1.530884f), 142.5712f),
+            new Tuple<Vector3, float>(new Vector3(2616.285f, 1694.555f, 34.66676f), 47.29236f),
+            new Tuple<Vector3, float>(new Vector3(2510.506f, 3787.817f, 49.65282f), 101.1173f),
+            new Tuple<Vector3, float>(new Vector3(711.2071f, 1198.193f, 347.3265f), 164.9149f),
+            new Tuple<Vector3, float>(new Vector3(-170.7412f, -1003.239f, 298.3232f), 116.2947f),
         };
 
         static Prop propFlamingo;
@@ -36,16 +37,16 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
 
         public static void Init()
         {
+
+            lastCheck = DateTime.Now;
             client.RegisterTickHandler(OnFlamingoPropTick);
         }
 
         static async Task OnFlamingoPropTick()
         {
-            if (DateTime.Now.Subtract(lastCheck).TotalSeconds < 10)
+            while (DateTime.Now.Subtract(lastCheck).TotalSeconds < 10)
             {
                 await Client.Delay(1000);
-
-                return;
             }
 
             lastCheck = DateTime.Now;
@@ -65,7 +66,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
 
             int rnd = new Random().Next(100);
 
-            if (rnd < 90)
+            if (rnd < 50)
             {
                 return;
             }
