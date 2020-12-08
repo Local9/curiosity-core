@@ -347,7 +347,7 @@ namespace Curiosity.Client.net.Classes.Environment
                 case WeatherTypes.XMAS_STORM:
                 case WeatherTypes.XMAS:
                     PED_MULTIPLIER = 0.2f;
-                    VEH_MULTIPLIER = 0.5f;
+                    VEH_MULTIPLIER = 1f;
                     VEH_PARKED_MULTIPLIER = 1f;
                     break;
                 case WeatherTypes.HALLOWEEN:
