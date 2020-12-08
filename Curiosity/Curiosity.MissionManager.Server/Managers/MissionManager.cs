@@ -3,6 +3,7 @@ using Curiosity.MissionManager.Server.Diagnostics;
 using Curiosity.MissionManager.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Utils;
 using Curiosity.Systems.Shared.Entity;
 using System;
 using System.Collections.Concurrent;
@@ -355,6 +356,8 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:vehicle:license", new EventCallback(metadata =>
             {
+                MissionData missionData = GetMissionData(metadata.Sender);
+
                 MissionDataVehicle missionDataVehicle = GetMissionVehicleToUpdate(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataVehicle == null) return null;
@@ -363,6 +366,31 @@ namespace Curiosity.MissionManager.Server.Managers
                 missionDataVehicle.DisplayName = r.Replace(metadata.Find<string>(2).ToLowerInvariant(), " ");
                 missionDataVehicle.PrimaryColor = r.Replace(metadata.Find<string>(3), " ");
                 missionDataVehicle.SecondaryColor = r.Replace(metadata.Find<string>(4), " ");
+
+                MissionDataPed mdp = missionData.NetworkPeds.Select(x => x.Value).Where(x => x.IsDriver).FirstOrDefault();
+
+                missionDataVehicle.OwnerName = mdp.FullName;
+
+                if (Utility.RANDOM.Bool(0.2f))
+                {
+                    string firstname = "";
+                    string surname = "";
+
+                    if (0 == Utility.RANDOM.Next(2))
+                    {
+                        firstname = PedIdentifcationData.FirstNameMale[Utility.RANDOM.Next(PedIdentifcationData.FirstNameMale.Count)];
+                    }
+                    else
+                    {
+                        firstname = PedIdentifcationData.FirstNameFemale[Utility.RANDOM.Next(PedIdentifcationData.FirstNameFemale.Count)];
+                    }
+
+                    surname = PedIdentifcationData.Surname[Utility.RANDOM.Next(PedIdentifcationData.Surname.Count)];
+
+                    missionDataVehicle.Stolen = true;
+                    missionDataVehicle.OwnerName = $"{firstname} {surname}";
+                    mdp.StoleVehicle = true;
+                }
 
                 missionDataVehicle.RecordedLicensePlate = true;
 

@@ -30,6 +30,7 @@ namespace Curiosity.Systems.Shared.Entity
         public bool IsCarryingDrugs { get; internal set; }
         public bool IsCarringWeapon { get; internal set; }
         public bool IsIdentified { get; set; }
+        public bool StoleVehicle { get; set; }
 
         public override string ToString()
         {
@@ -43,7 +44,9 @@ namespace Curiosity.Systems.Shared.Entity
                 $"\n Suspect: {IsSuspect}" +
                 $"\n IsHandcuffed: {IsHandcuffed}" +
                 $"\n Blip: {AttachBlip}" +
-                $"\n Identified: {IsIdentified}";
+                $"\n Identified: {IsIdentified}" +
+                $"\n Stole Vehicle: {StoleVehicle}" +
+                $"";
 
 
             return returnString;

@@ -9,7 +9,7 @@
         public string PrimaryColor { get; set; }
         public string SecondaryColor { get; set; }
         public bool Stolen { get; set; }
-        public bool OwnerName { get; set; }
+        public string OwnerName { get; set; }
 
         public override string ToString()
         {
