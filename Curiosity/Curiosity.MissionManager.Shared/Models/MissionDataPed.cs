@@ -36,13 +36,14 @@ namespace Curiosity.Systems.Shared.Entity
             string dateOfBirth = DateOfBirth.ToString($"yyyy-MM-dd");
             string gender = Gender == 0 ? "Male" : "Female";
 
-            string returnString = $"Ped: {FullName}" +
-                $"\nDOB: {dateOfBirth}" +
-                $"\nGender {gender}" +
-                $"\nSuspect: {IsSuspect}" +
-                $"\nIsHandcuffed: {IsHandcuffed}" +
-                $"\nBlip: {AttachBlip}" +
-                $"\nIdentified: {IsIdentified}";
+            string returnString = $"Ped:" +
+                $"\n Name: {FullName}" +
+                $"\n DOB: {dateOfBirth}" +
+                $"\n Gender {gender}" +
+                $"\n Suspect: {IsSuspect}" +
+                $"\n IsHandcuffed: {IsHandcuffed}" +
+                $"\n Blip: {AttachBlip}" +
+                $"\n Identified: {IsIdentified}";
 
 
             return returnString;
