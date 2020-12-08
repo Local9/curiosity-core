@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Entities;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
@@ -67,9 +68,15 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
 
                 var nameOfOwner = await EventSystem.Request<object>("vehicle:owner", vehicle.NetworkId);
 
+                if (nameOfOwner == null)
+                {
+                    Notify.Impound($"Vehicle Owner", "Sorry, we cannot find that information right now.");
+                    return;
+                }
+
                 string nameValue = nameOfOwner.ToString();
 
-                if (string.IsNullOrEmpty(nameValue))
+                if (string.IsNullOrEmpty(nameValue) || nameValue.Length == 0)
                 {
                     Notify.Impound($"Vehicle Owner", "Sorry, we cannot find that information right now.");
                 }
