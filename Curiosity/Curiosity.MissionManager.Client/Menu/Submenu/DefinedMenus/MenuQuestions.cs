@@ -3,6 +3,7 @@ using CitizenFX.Core.UI;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
+using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
@@ -32,11 +33,10 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
         UIMenuItem menuItemSpeeding;
         UIMenuItem menuItemLaneChange;
         UIMenuItem menuItemTailGating;
+        UIMenuSeparatorItem separatorItem;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
-            menuItemRelease = new UIMenuItem("You're good to go", "Let the person leave");
-            menu.AddItem(menuItemRelease);
 
             menuItemWelcome = new UIMenuItem("Hi, how are you today?", "Ask Question");
             menu.AddItem(menuItemWelcome);
@@ -61,6 +61,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
             menuItemTailGating = new UIMenuItem("I saw you tailgating", "Ask Question");
             menu.AddItem(menuItemTailGating);
+
+            separatorItem = new UIMenuSeparatorItem();
+            menu.AddItem(separatorItem);
+
+            menuItemRelease = new UIMenuItem("You're good to go", "Let the person leave");
+            menu.AddItem(menuItemRelease);
 
             menu.OnItemSelect += Menu_OnItemSelect;
             menu.OnMenuOpen += Menu_OnMenuOpen;
@@ -260,7 +266,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 Screen.ShowNotification(Ped.Identity);
                 
                 Decorators.Set(Ped.Handle, Decorators.MENU_IDENTIFICATION, true);
-                
+                Game.PlayerPed.AnimationTicket();
+
                 menuItemIdentifcation.Description = Ped.Identity;
             }
 

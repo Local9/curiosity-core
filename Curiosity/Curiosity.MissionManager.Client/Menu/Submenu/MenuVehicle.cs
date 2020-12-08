@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Extensions;
+using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
+using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System.Threading.Tasks;
 
@@ -88,6 +90,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemRecordNumberPlate)
             {
+                Game.PlayerPed.AnimationTicket();
                 vehicle.RecordLicensePlate();
             }
         }

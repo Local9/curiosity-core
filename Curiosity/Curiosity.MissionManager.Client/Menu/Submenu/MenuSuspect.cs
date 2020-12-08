@@ -2,6 +2,7 @@
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
+using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System.Threading.Tasks;
 

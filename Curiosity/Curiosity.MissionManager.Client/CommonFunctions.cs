@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Interface;
+using Curiosity.Systems.Library.Enums;
 using System.Linq;
 using System.Threading.Tasks;
 
