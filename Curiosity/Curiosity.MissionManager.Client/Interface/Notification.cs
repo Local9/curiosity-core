@@ -82,14 +82,21 @@ namespace Curiosity.MissionManager.Client.Interface
             // 9 : $ Icon
             ///
 
-            API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
-            foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
-            {
-                API.AddTextComponentSubstringPlayerName(s);
-            }
-            API.EndTextCommandThefeedPostMessagetext(textureName, textureDict, blink, iconType, title, subtitle);
-            API.ThefeedNextPostBackgroundColor(bgColor);
-            API.EndTextCommandThefeedPostTicker(false, saveToBrief);
+            API.SetNotificationBackgroundColor(bgColor);
+            API.SetNotificationTextEntry("STRING");
+            API.AddTextComponentString(message);
+            API.SetNotificationMessage(textureName, textureDict, blink, iconType, title, subtitle);
+            API.DrawNotification(false, saveToBrief);
+
+            //API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
+            //foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
+            //{
+            //    API.AddTextComponentSubstringPlayerName(s);
+            //}
+            //API.EndTextCommandThefeedPostMessagetext(textureName, textureDict, blink, iconType, title, subtitle);
+            //API.ThefeedNextPostBackgroundColor(bgColor);
+            //API.SetNotificationBackgroundColor(bgColor);
+            //API.EndTextCommandThefeedPostTicker(false, saveToBrief);
         }
         
         /// <summary>
@@ -119,6 +126,7 @@ namespace Curiosity.MissionManager.Client.Interface
 
             int notificationId = API.EndTextCommandThefeedPostReplayInput(1, controlToShow, message);
             API.ThefeedNextPostBackgroundColor(bgColor);
+            API.SetNotificationBackgroundColor(bgColor);
             API.EndTextCommandThefeedPostTicker(false, saveToBrief);
 
             return notificationId;
