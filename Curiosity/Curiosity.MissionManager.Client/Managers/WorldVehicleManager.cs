@@ -2,6 +2,7 @@
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Utils;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class WorldVehicleManager : Manager<WorldVehicleManager>
     {
+        ConcurrentDictionary<int, Vehicle> WorldVehicles = new ConcurrentDictionary<int, Vehicle>();
+
         static PluginManager Instance => PluginManager.Instance;
         public static WorldVehicleManager VehicleManager;
         public override void Begin()
@@ -23,11 +26,53 @@ namespace Curiosity.MissionManager.Client.Managers
         public void Start()
         {
             Instance.AttachTickHandler(OnVehicleCreator);
+            Instance.AttachTickHandler(OnWorldVehicleList);
         }
 
         public void Stop()
         {
             Instance.DetachTickHandler(OnVehicleCreator);
+            Instance.DetachTickHandler(OnWorldVehicleList);
+
+            ConcurrentDictionary<int, Vehicle> WorldVehiclesCopy = WorldVehicles;
+            foreach (KeyValuePair<int, Vehicle> kvp in WorldVehiclesCopy)
+            {
+                Vehicle veh = kvp.Value;
+
+                if (veh.DateCreated.Subtract(DateTime.Now).TotalSeconds > 60 && !veh.IsMission)
+                {
+                    veh.Dismiss();
+                    WorldVehicles.TryRemove(kvp.Key, out Vehicle old);
+                }
+            }
+
+            WorldVehicles.Clear();
+        }
+
+        private async Task OnWorldVehicleList()
+        {
+            ConcurrentDictionary<int, Vehicle> WorldVehiclesCopy = WorldVehicles;
+
+            foreach (KeyValuePair<int, Vehicle> kvp in WorldVehiclesCopy)
+            {
+                Vehicle veh = kvp.Value;
+
+                if (!veh.Exists())
+                {
+                    WorldVehicles.TryRemove(kvp.Key, out Vehicle old);
+                }
+                else if (veh.DateCreated.Subtract(DateTime.Now).TotalSeconds > 60 && !veh.IsMission)
+                {
+                    veh.Dismiss();
+                    WorldVehicles.TryRemove(kvp.Key, out Vehicle old);
+                }
+            }
+
+            DateTime startPolling = DateTime.Now;
+            while (startPolling.Subtract(DateTime.Now).TotalSeconds < 10)
+            {
+                await BaseScript.Delay(1000);
+            }
         }
 
         private async Task OnVehicleCreator()

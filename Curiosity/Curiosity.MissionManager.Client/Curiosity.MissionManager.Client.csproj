@@ -108,6 +108,7 @@
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\MarkerManager.cs" />
     <Compile Include="Managers\MissionDirectorManager.cs" />
+    <Compile Include="Managers\WorldPedManager.cs" />
     <Compile Include="Managers\WorldVehicleManager.cs" />
     <Compile Include="Menu\MenuManager.cs" />
     <Compile Include="Menu\Submenu\DefinedMenus\MenuQuestions.cs" />
