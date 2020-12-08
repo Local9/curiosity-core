@@ -24,6 +24,7 @@ namespace Curiosity.MissionManager.Client.Classes
         public CitizenFX.Core.Vehicle Fx { get; private set; }
         public Vector3 Position => Fx.Position;
         public string Hash => Fx.Model.ToString();
+        public DateTime DateCreated;
 
         public void AddToMission()
         {
@@ -128,6 +129,8 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             Fx = fx;
             API.NetworkRegisterEntityAsNetworked(fx.Handle);
+
+            DateCreated = DateTime.Now;
 
             this._eventWrapper = new EntityEventWrapper(this.Fx);
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
