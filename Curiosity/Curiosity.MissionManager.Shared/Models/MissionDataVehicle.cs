@@ -10,6 +10,7 @@
         public string SecondaryColor { get; set; }
         public bool Stolen { get; set; }
         public string OwnerName { get; set; }
+        public bool InsuranceValid { get; set; }
 
         public override string ToString()
         {
@@ -20,6 +21,7 @@
                 $"\n Secondary Color: {SecondaryColor}" +
                 $"\n Stolen: {Stolen}" +
                 $"\n Owner: {OwnerName}" +
+                $"\n Insurance: {InsuranceValid}" +
                 $"";
         }
     }

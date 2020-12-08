@@ -369,7 +369,8 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 MissionDataPed mdp = missionData.NetworkPeds.Select(x => x.Value).Where(x => x.IsDriver).FirstOrDefault();
 
-                missionDataVehicle.OwnerName = mdp.FullName;
+                if (mdp != null)
+                    missionDataVehicle.OwnerName = mdp.FullName;
 
                 if (Utility.RANDOM.Bool(0.2f))
                 {
@@ -391,6 +392,8 @@ namespace Curiosity.MissionManager.Server.Managers
                     missionDataVehicle.OwnerName = $"{firstname} {surname}";
                     mdp.StoleVehicle = true;
                 }
+
+                missionDataVehicle.InsuranceValid = Utility.RANDOM.Bool(0.90f);
 
                 missionDataVehicle.RecordedLicensePlate = true;
 
