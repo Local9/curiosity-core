@@ -41,16 +41,16 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment.EasterEggs
 
         static async Task OnFlamingoPropTick()
         {
-            if (DateTime.Now.Subtract(lastCheck).TotalSeconds < 30)
+            if (DateTime.Now.Subtract(lastCheck).TotalSeconds < 10)
             {
-                await Client.Delay(5000);
+                await Client.Delay(1000);
 
                 return;
             }
 
             lastCheck = DateTime.Now;
 
-            Tuple<Vector3, float> pos = lstFlamingoPositions.Where(x=> x.Item1.Distance(Game.PlayerPed.Position) < 20f).FirstOrDefault();
+            Tuple<Vector3, float> pos = lstFlamingoPositions.Where(x=> x.Item1.Distance(Game.PlayerPed.Position, true) < 20f).FirstOrDefault();
 
             if (pos == null || pos.Item1.IsZero)
             {
