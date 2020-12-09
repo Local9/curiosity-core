@@ -303,9 +303,10 @@ namespace Curiosity.MissionManager.Client.Classes
                 {
                     bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
 
-                    if (Utility.RANDOM.Bool(0.3f) && !isMarked)
+                    if (Utility.RANDOM.Bool(0.35f) && !isMarked)
                     {
                         Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_PULLOVER, true);
+                        AttachSuspectBlip();
                     }
 
                     Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED, true);
