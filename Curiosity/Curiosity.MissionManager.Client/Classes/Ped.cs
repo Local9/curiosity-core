@@ -35,7 +35,7 @@ namespace Curiosity.MissionManager.Client.Classes
             EventSystem.Send("mission:add:ped", Fx.NetworkId, (int)Fx.Gender);
         }
 
-        public bool IsInVehicle { get; set; }
+        public bool IsInVehicle => Fx.IsInVehicle();
         private bool _DEBUG_ENABLED { get; set; } = false;
         private bool isRandomPed { get; set; } = false;
         public bool IsDriver

@@ -191,6 +191,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 int senderHandle = metadata.Sender;
                 int ownerHandle = metadata.Find<int>(0);
                 int netId = metadata.Find<int>(1);
+                bool isDriver = metadata.Find<bool>(2);
 
                 try
                 {
@@ -206,6 +207,7 @@ namespace Curiosity.MissionManager.Server.Managers
                     {
                         MissionDataPed mpd = missionData.NetworkPeds[netId];
                         mpd.IsIdentified = true;
+                        mpd.IsDriver = isDriver;
                         return mpd;
                     }
 

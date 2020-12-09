@@ -263,7 +263,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
             if (selectedItem == menuItemIdentifcation)
             {
-                MissionDataPed pedData = await EventSystem.GetModule().Request<MissionDataPed>("mission:ped:identification", Mission.currentMissionData.OwnerHandleId, Ped.NetworkId);
+                bool vehicleDriver = (Ped.IsInVehicle && Ped.Fx.CurrentVehicle.Driver.Handle == Ped.Handle);
+
+                MissionDataPed pedData = await EventSystem.GetModule().Request<MissionDataPed>("mission:ped:identification", Mission.currentMissionData.OwnerHandleId, Ped.NetworkId, vehicleDriver);
                 if (pedData == null)
                 {
                     Logger.Error($"Ped Idenfication is null");
