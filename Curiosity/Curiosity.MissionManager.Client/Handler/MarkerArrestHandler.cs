@@ -93,7 +93,7 @@ namespace Curiosity.MissionManager.Client.Handler
                         {
                             if (ped.Handle == p.Handle)
                             {
-                                ped.Dismiss();
+                                ped.ArrestPed();
                                 Mission.CountArrest();
                             };
                         });
