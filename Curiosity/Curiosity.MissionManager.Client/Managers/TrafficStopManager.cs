@@ -78,6 +78,12 @@ namespace Curiosity.MissionManager.Client.Managers
 
         public void Reset()
         {
+            if (tsVehicle.AttachedBlip != null)
+            {
+                if (tsVehicle.AttachedBlip.Exists())
+                    tsVehicle.AttachedBlip.Delete();
+            }
+
             tsVehicle = null;
             tsDriver = null;
         }
