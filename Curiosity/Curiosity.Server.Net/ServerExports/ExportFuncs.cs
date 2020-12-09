@@ -104,7 +104,7 @@ namespace Curiosity.Server.net.ServerExports
 
             if (increase)
             {
-                Logger.Debug($"{session.Player.Name} : increase : {amount}");
+                Logger.Debug($"Wallet : {session.Player.Name} : increase : ${amount}");
                 Database.DatabaseUsersBank.IncreaseCash(session.User.BankId, amount);
                 await BaseScript.Delay(100);
                 session.IncreaseWallet(amount);
@@ -115,7 +115,7 @@ namespace Curiosity.Server.net.ServerExports
             {
                 if (session.Wallet < amount) throw new Exception("Not enough cash");
 
-                Logger.Debug($"{session.Player.Name} : decrease : {amount}");
+                Logger.Debug($"Wallet : {session.Player.Name} : decrease : ${amount}");
                 Database.DatabaseUsersBank.DecreaseCash(session.User.BankId, amount);
                 await BaseScript.Delay(100);
                 session.DecreaseWallet(amount);
