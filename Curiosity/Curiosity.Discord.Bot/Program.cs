@@ -35,7 +35,23 @@ namespace Curiosity.LifeV.Bot
 
             discordConfiguration = JsonConvert.DeserializeObject<DiscordConfiguration>(json);
 
+            //DiscordSocketConfig discordSocketConfig = new DiscordSocketConfig()
+            //{
+            //    TotalShards = 1,
+            //    MessageCacheSize = 0,
+            //    ExclusiveBulkDelete = true,
+            //    AlwaysDownloadUsers = true,
+            //    LogLevel = LogSeverity.Info,
+            //    GatewayIntents =
+            //        GatewayIntents.Guilds |
+            //        GatewayIntents.GuildMembers |
+            //        GatewayIntents.GuildMessageReactions |
+            //        GatewayIntents.GuildMessages |
+            //        GatewayIntents.GuildVoiceStates
+            //};
+
             _client = new DiscordSocketClient();
+
             _commands = new CommandService();
 
             _services = new ServiceCollection()
