@@ -41,6 +41,7 @@ namespace Curiosity.TrafficStops.Missions
                 Logger.Debug($"Traffic Stop -> Passenger {p.Handle}");
 
                 RegisteredPeds.Add(p);
+                p.AddToMission();
             });
 
             // https://runtime.fivem.net/doc/natives/?_0x0FA6E4B75F302400
