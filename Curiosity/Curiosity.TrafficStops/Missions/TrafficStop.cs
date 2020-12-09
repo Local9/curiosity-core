@@ -23,7 +23,6 @@ namespace Curiosity.TrafficStops.Missions
 
         public async override void Start()
         {
-
             driver = TrafficStopManager.Manager.tsDriver;
             driver.AddToMission();
 
