@@ -247,7 +247,7 @@ namespace Curiosity.MissionManager.Client.Classes
             Decorators.Set(fx.Handle, Decorators.MENU_RANDOM_RESPONSE, Utility.RANDOM.Next(4));
 
             if (update)
-                EventSystem.Send("mission:add:ped", fx.NetworkId, (int)fx.Gender);
+                EventSystem.Send("mission:add:ped", fx.NetworkId, (int)fx.Gender, IsDriver);
         }
 
         public void AttachSuspectBlip()
