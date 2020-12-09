@@ -61,6 +61,8 @@ namespace Curiosity.LifeV.Bot
 
             _client.Log += Client_Log;
 
+            // _client.GuildMemberUpdated += _client_GuildMemberUpdated;
+
             await RegisterCommandsAsync();
 
             bool testing = Convert.ToBoolean(discordConfiguration.BotSettings["Testing"]);
@@ -82,6 +84,11 @@ namespace Curiosity.LifeV.Bot
 
             await Task.Delay(-1);
         }
+
+        //private Task _client_GuildMemberUpdated(SocketGuildUser before, SocketGuildUser after)
+        //{
+            
+        //}
 
         private Task Client_Log(LogMessage arg)
         {
