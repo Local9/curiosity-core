@@ -296,10 +296,9 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.IsInVehicle() && Fx.Driver.Exists())
+            if (!Mission.isOnMission && PlayerManager.PersonalVehicle != null && !IsIgnored && Fx.Driver.Exists())
             {
-                if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency
-                && !Mission.isOnMission && !IsIgnored)
+                if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Game.PlayerPed.IsInVehicle())
                 {
                     bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
 
