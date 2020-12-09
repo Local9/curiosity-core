@@ -32,7 +32,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
         public void AddToMission()
         {
-            EventSystem.Send("mission:add:ped", Fx.NetworkId, (int)Fx.Gender);
+            EventSystem.Send("mission:add:ped", Fx.NetworkId, (int)Fx.Gender, IsDriver);
         }
 
         public bool IsInVehicle => Fx.IsInVehicle();
@@ -241,13 +241,13 @@ namespace Curiosity.MissionManager.Client.Classes
             API.SetPedDiesInWater(Fx.Handle, false);
             API.SetPedDiesWhenInjured(Fx.Handle, false);
 
-            IsDriver = fx.IsInVehicle();
+            IsDriver = fx.IsInVehicle() && fx.CurrentVehicle.Driver == fx;
 
             Decorators.Set(fx.Handle, Decorators.PED_SETUP, true);
             Decorators.Set(fx.Handle, Decorators.MENU_RANDOM_RESPONSE, Utility.RANDOM.Next(4));
 
             if (update)
-                EventSystem.Send("mission:add:ped", fx.NetworkId, (int)fx.Gender);
+                EventSystem.Send("mission:add:ped", fx.NetworkId, (int)fx.Gender, IsDriver);
         }
 
         public void AttachSuspectBlip()

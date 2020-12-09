@@ -116,7 +116,7 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 							pedData.Wants.ForEach(s =>
 							{
 								wants++;
-								identification[$"#{suspects} ~r~Wanted #{wants}"] = s;
+								identification[$"#{suspects} ~o~Wanted #{wants}"] = s;
 							});
 						}
 					}
@@ -147,10 +147,10 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 						registration[$"#{registrations} ~b~Make"] = vehData.DisplayName;
 						registration[$"#{registrations} ~b~Color"] = string.IsNullOrEmpty(vehData.SecondaryColor) ? vehData.PrimaryColor : $"{vehData.PrimaryColor} / {vehData.SecondaryColor}";
 						registration[$"#{registrations} ~b~Registered To"] = vehData.OwnerName;
-						registration[$"#{registrations} ~b~Insurance"] = vehData.InsuranceValid ? "~g~Valid" : "~r~Invalid";
+						registration[$"#{registrations} ~b~Insurance"] = vehData.InsuranceValid ? "~g~Valid" : "~o~Invalid";
 
 						if (vehData.Stolen)
-							registration[$"#{registrations} ~b~Stolen"] = "~r~Reported Stolen";
+							registration[$"#{registrations} ~b~Stolen"] = "~o~Reported Stolen";
 					}
 					else
 					{

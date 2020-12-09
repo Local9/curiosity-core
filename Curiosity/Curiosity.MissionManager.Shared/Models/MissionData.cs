@@ -65,7 +65,7 @@ namespace Curiosity.Systems.Shared.Entity
             return mdv;
         }
 
-        public MissionDataPed AddNetworkPed(int networkId, int gender)
+        public MissionDataPed AddNetworkPed(int networkId, int gender, bool isDriver)
         {
             if (NetworkPeds.ContainsKey(networkId)) return NetworkPeds[networkId];
 
@@ -87,6 +87,8 @@ namespace Curiosity.Systems.Shared.Entity
             double Range = (DateTime.Today - StartDateForDriverDoB).TotalDays;
             Range -= EIGHTEEN_YEARS_IN_DAYS; // MINUS 18 YEARS
             mpd.DateOfBirth = StartDateForDriverDoB.AddDays(Utility.RANDOM.Next((int)Range));
+
+            mpd.IsDriver = isDriver;
 
             NetworkPeds.Add(networkId, mpd);
 
