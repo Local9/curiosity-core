@@ -33,6 +33,9 @@ namespace Curiosity.TrafficStops.Missions
 
             veh = TrafficStopManager.Manager.tsVehicle;
             veh.AddToMission();
+
+            await BaseScript.Delay(100);
+
             veh.RecordLicensePlate();
 
             Logger.Debug($"Traffic Stop -> Vehicle {veh.Handle}");
