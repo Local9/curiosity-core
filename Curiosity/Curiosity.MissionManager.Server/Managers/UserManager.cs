@@ -96,6 +96,16 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
                 bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
+
+                if (userHadMission)
+                {
+                    MissionData mission = MissionManager.ActiveMissions[playerHandle];
+                    foreach(int partyMember in mission.PartyMembers)
+                    {
+                        EventSystem.GetModule().Send("mission:backup:completed", partyMember);
+                    }
+                }
+
                 bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
                 bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
                 
