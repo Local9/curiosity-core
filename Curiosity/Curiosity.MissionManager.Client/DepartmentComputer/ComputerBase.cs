@@ -122,7 +122,7 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 					}
 					else
 					{
-						identification[$"~o~Error"] = "No Name Entered";
+						identification[$"#{suspects} ~o~Error"] = "No Name Entered";
 					}
 
 					identification[$"#{suspects} ~g~REQUEST END"] = "";
@@ -130,7 +130,7 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 
 				if (suspects == 0)
 				{
-					identification[$"#{suspects} ~o~Error"] = "No Name Entered";
+					identification[$"~o~Error"] = "No Name Entered";
 				}
 
 				int registrations = 0;
