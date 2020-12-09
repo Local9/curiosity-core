@@ -73,7 +73,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         static void SetupMenu()
         {
             bool isItemEnabled = (Player.PlayerInformation.IsStaff() || Player.PlayerInformation.IsDonator());
-            string description = isItemEnabled ? "Donator Options" : "~b~Pateron: ~y~https://www.patreon.com/lifev\n\n~w~If you have recently donated, please reconnect or contact support.";
+            string description = isItemEnabled ? "Donator Options" : "~b~Pateron: ~y~https://www.patreon.com/lifev~n~~w~If you have recently donated, please ~b~lv!donate ~w~in ~g~#off-topic~w~.";
             if (donatorMenu == null)
             {
                 donatorMenu = new Menu("Donator Menu", "Thank you for your support!");
