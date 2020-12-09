@@ -73,14 +73,14 @@ namespace Curiosity.LifeV.Bot.Modules
                 {
 
                     Dictionary<string, (string, string, string)> servers = new Dictionary<string, (string, string, string)>();
-                    servers.Add("elv", ("Emergency Life V", "5.9.0.85", "30120"));
-                    // servers.Add("dlv", ("Drugs Life V", "5.9.0.85", "30121"));
+                    servers.Add("1", ("Live V Public", "5.9.0.85", "30120"));
+                    servers.Add("2", ("Life V Patreon", "5.9.0.85", "30121"));
 
                     string serverKey = args[0];
 
                     if (!servers.ContainsKey(serverKey))
                     {
-                        await ReplyAsync("Servers available: elv, dlv", false);
+                        await ReplyAsync("Servers available: 1 - Public, 2 - Patreon", false);
                     }
                     else
                     {
@@ -150,7 +150,7 @@ namespace Curiosity.LifeV.Bot.Modules
             builder
                 .AddField("Help Commands",
                 "lv!help - What you're looking at right now" +
-                "\nlv!server elv - Will display server information" +
+                "\nlv!server 1/2 - Will display server information" +
                 "\nlv!account - Show you're Curiosity Server account" +
                 "\nlv!top <param> - pilot, trucking, fire, police, knowledge, train, taxi, fishing, hunting, farming, bus, mechanic, ems, freight" +
                 "\nlv!donate - Update users donation status"
@@ -272,7 +272,9 @@ namespace Curiosity.LifeV.Bot.Modules
                         .WithCurrentTimestamp()
                         .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
 
-                await ReplyAsync("Updated donator status", false, builder.Build());
+                await Context.User.SendMessageAsync(embed: builder.Build());
+
+                await ReplyAsync($"Updated donator status for {dbUser.Username} to {statusStr}", false);
             }
         }
 

@@ -50,6 +50,7 @@ namespace Curiosity.LifeV.Bot.Modules
             }
             else
             {
+                await Context.Message.DeleteAsync();
 
                 EmbedBuilder builder = new EmbedBuilder();
 
@@ -143,6 +144,7 @@ namespace Curiosity.LifeV.Bot.Modules
             }
             else
             {
+                await Context.Message.DeleteAsync();
 
                 string message = "Last 10 Logged Results" +
                     "```" +
