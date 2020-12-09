@@ -88,68 +88,87 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
         private void SetupComputer()
         {
 			MissionData missionData = Mission.currentMissionData;
+
 			Dictionary<string, string> identification = new Dictionary<string, string>();
 			Dictionary<string, string> registration = new Dictionary<string, string>();
 
-			int suspects = 0;
+			try
+			{
+				int suspects = 0;
 
-			foreach(KeyValuePair<int, MissionDataPed> kvp in missionData.NetworkPeds)
-            {
-				MissionDataPed pedData = kvp.Value;
-
-				suspects++;
-
-				identification[$"#{suspects} ~g~REQUEST"] = "";
-
-				if (pedData.IsIdentified)
+				foreach (KeyValuePair<int, MissionDataPed> kvp in missionData.NetworkPeds)
 				{
-					identification[$"#{suspects} ~b~Name"] = pedData.FullName;
-					identification[$"#{suspects} ~b~Date Of Birth"] = pedData.DateOfBirth.ToString($"yyyy-MM-dd");
-					identification[$"#{suspects} ~b~Gender"] = pedData.Gender == 0 ? "Male" : "Female";
+					MissionDataPed pedData = kvp.Value;
 
-					if (pedData.Wants.Count > 0)
-                    {
-						int wants = 0;
-						pedData.Wants.ForEach(s =>
+					suspects++;
+
+					identification[$"#{suspects} ~g~REQUEST"] = "";
+
+					if (pedData.IsIdentified)
+					{
+						identification[$"#{suspects} ~b~Name"] = pedData.FullName;
+						identification[$"#{suspects} ~b~Date Of Birth"] = pedData.DateOfBirth.ToString($"yyyy-MM-dd");
+						identification[$"#{suspects} ~b~Gender"] = pedData.Gender == 0 ? "Male" : "Female";
+
+						if (pedData.Wants.Count > 0)
 						{
-							wants++;
-							identification[$"#{suspects} ~r~Wanted #{wants}"] = s;
-						});
+							int wants = 0;
+							pedData.Wants.ForEach(s =>
+							{
+								wants++;
+								identification[$"#{suspects} ~r~Wanted #{wants}"] = s;
+							});
+						}
 					}
+					else
+					{
+						identification[$"#{suspects} ~o~Error"] = "No Name Entered";
+					}
+
+					identification[$"#{suspects} ~g~REQUEST END"] = "";
 				}
-				else
-                {
+
+				if (suspects == 0)
+				{
 					identification[$"#{suspects} ~o~Error"] = "No Name Entered";
 				}
 
-				identification[$"#{suspects} ~g~REQUEST END"] = "";
-			}
+				int registrations = 0;
 
-			int registrations = 0;
-
-			foreach (KeyValuePair<int, MissionDataVehicle> kvp in missionData.NetworkVehicles)
-            {
-				MissionDataVehicle vehData = kvp.Value;
-				registrations++;
-				registration[$"#{registrations} ~g~REQUEST"] = "";
-
-				if (vehData.RecordedLicensePlate)
+				foreach (KeyValuePair<int, MissionDataVehicle> kvp in missionData.NetworkVehicles)
 				{
-					registration[$"#{registrations} ~b~Plate"] = vehData.LicensePlate;
-					registration[$"#{registrations} ~b~Make"] = vehData.DisplayName;
-					registration[$"#{registrations} ~b~Color"] = string.IsNullOrEmpty(vehData.SecondaryColor) ? vehData.PrimaryColor : $"{vehData.PrimaryColor} / {vehData.SecondaryColor}";
-					registration[$"#{registrations} ~b~Registered To"] = vehData.OwnerName;
-					registration[$"#{registrations} ~b~Insurance"] = vehData.InsuranceValid ? "~g~Valid" : "~r~Invalid";
+					MissionDataVehicle vehData = kvp.Value;
+					registrations++;
+					registration[$"#{registrations} ~g~REQUEST"] = "";
 
-					if (vehData.Stolen)
-						registration[$"#{registrations} ~b~Stolen"] = "~r~Reported Stolen";
+					if (vehData.RecordedLicensePlate)
+					{
+						registration[$"#{registrations} ~b~Plate"] = vehData.LicensePlate;
+						registration[$"#{registrations} ~b~Make"] = vehData.DisplayName;
+						registration[$"#{registrations} ~b~Color"] = string.IsNullOrEmpty(vehData.SecondaryColor) ? vehData.PrimaryColor : $"{vehData.PrimaryColor} / {vehData.SecondaryColor}";
+						registration[$"#{registrations} ~b~Registered To"] = vehData.OwnerName;
+						registration[$"#{registrations} ~b~Insurance"] = vehData.InsuranceValid ? "~g~Valid" : "~r~Invalid";
+
+						if (vehData.Stolen)
+							registration[$"#{registrations} ~b~Stolen"] = "~r~Reported Stolen";
+					}
+					else
+					{
+						registration[$"#{registrations} ~o~Error"] = "No License Plate Entered";
+					}
+
+					registration[$"#{registrations} ~g~REQUEST END"] = "";
 				}
-				else
+
+				if (registrations == 0)
 				{
 					registration[$"#{registrations} ~o~Error"] = "No License Plate Entered";
 				}
-
-				registration[$"#{registrations} ~g~REQUEST END"] = "";
+			}
+			catch (Exception ex)
+			{
+				identification[$"~o~Error"] = "System Error";
+				registration[$"~o~Error"] = "System Error";
 			}
 
 			tabIdentifcation.Dictionary = identification;
