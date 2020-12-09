@@ -135,7 +135,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 await BaseScript.Delay(0);
             }
 
-            string description = "~w~Guides can be found via the Intraction Menu [~o~M~w~].\n";
+            string description = "~w~Guides can be found via the Tablet [~o~F11/HOME~w~].\n";
             description += "~r~~h~DO NOT~h~~w~ Pull over other players.\n";
             description += "~r~~h~DO NOT~h~~w~ Drive recklessly.\n";
             description += "~r~~h~DO NOT~h~~w~ Force people to RolePlay, doing so will get you kicked.\n";
