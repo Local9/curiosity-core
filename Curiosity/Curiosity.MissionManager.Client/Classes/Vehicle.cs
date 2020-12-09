@@ -296,7 +296,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.IsInVehicle() Fx.Driver.Exists())
+            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.IsInVehicle() && Fx.Driver.Exists())
             {
                 if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency
                 && !Mission.isOnMission && !IsIgnored)
