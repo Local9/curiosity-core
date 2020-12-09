@@ -164,6 +164,9 @@ namespace Curiosity.MissionManager.Client
                         break;
                 }
 
+                if (currentMissionType.Equals(MissionType.TrafficStop))
+                    TrafficStopManager.Manager.Reset();
+
                 isOnMission = false;
                 missionType = null;
 

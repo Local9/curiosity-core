@@ -76,7 +76,7 @@ namespace Curiosity.MissionManager.Client.Managers
             });
         }
 
-        public void ClearVehicle()
+        public void Reset()
         {
             tsVehicle = null;
             tsDriver = null;
