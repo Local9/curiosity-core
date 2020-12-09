@@ -72,6 +72,13 @@ namespace Curiosity.MissionManager.Client.Utils
                     list["Acceleration"] = $"{veh.Fx.Acceleration:n3}";
                     list["Lock Status"] = $"{veh.Fx.LockStatus}";
                     list["Fuel"] = $"{API.DecorGetFloat(veh.Handle, "Vehicle.Fuel")}";
+
+                    if (veh.Fx.Driver != null)
+                    {
+                        list["Driver"] = $"{veh.Fx.Driver.Handle}";
+                        list["Driver Visible"] = $"{veh.Fx.Driver.IsVisible}";
+                        list["Driver Opacity"] = $"{veh.Fx.Driver.Opacity}";
+                    }
                 }
                 else if (entity is Ped ped)
                 {
