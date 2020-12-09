@@ -296,14 +296,14 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.IsInVehicle())
+            if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.IsInVehicle() && Fx.Driver != null)
             {
                 if (Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency
                 && !Mission.isOnMission && !IsIgnored)
                 {
                     bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
 
-                    if (Utility.RANDOM.Bool(0.35f) && !isMarked)
+                    if (Utility.RANDOM.Bool(0.25f) && !isMarked && Fx.Driver != null)
                     {
                         Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_PULLOVER, true);
                         AttachSuspectBlip();
