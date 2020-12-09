@@ -303,7 +303,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 {
                     bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
 
-                    if (Utility.RANDOM.Bool(0.1f) && !isMarked)
+                    if (Utility.RANDOM.Bool(0.3f) && !isMarked)
                     {
                         Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_PULLOVER, true);
                     }
@@ -312,7 +312,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
                     CitizenFX.Core.Vehicle playerVeh = PlayerManager.PersonalVehicle;
 
-                    if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null)
+                    if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null && Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_PULLOVER))
                     {
                         HelpMessage.CustomLooped(HelpMessage.Label.TRAFFIC_STOP_INITIATE);
 
