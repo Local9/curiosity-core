@@ -94,7 +94,7 @@ namespace Curiosity.MissionManager.Client.Classes
             }
         }
 
-        public void RecordLicensePlate()
+        internal void RecordLicensePlate()
         {
             EventSystem.Send("mission:update:vehicle:license", Fx.NetworkId, Fx.Mods.LicensePlate, $"{Fx.DisplayName}", $"{Fx.Mods.PrimaryColor}", $"{Fx.Mods.SecondaryColor}");
         }
