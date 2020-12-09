@@ -145,7 +145,7 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 					{
 						registration[$"#{registrations} ~b~Plate"] = vehData.LicensePlate;
 						registration[$"#{registrations} ~b~Make"] = vehData.DisplayName;
-						registration[$"#{registrations} ~b~Color"] = string.IsNullOrEmpty(vehData.SecondaryColor) ? vehData.PrimaryColor : $"{vehData.PrimaryColor} / {vehData.SecondaryColor}";
+						registration[$"#{registrations} ~b~Color"] = (vehData.PrimaryColor == vehData.SecondaryColor) ? vehData.PrimaryColor : $"{vehData.PrimaryColor} / {vehData.SecondaryColor}";
 						registration[$"#{registrations} ~b~Registered To"] = vehData.OwnerName;
 						registration[$"#{registrations} ~b~Insurance"] = vehData.InsuranceValid ? "~g~Valid" : "~r~Invalid";
 
