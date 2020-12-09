@@ -85,6 +85,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                     return;
                 }
 
+                Menu.MenuItems.ForEach(m => m.Enabled = true);
+
                 menuItemHandcuff.Text = Ped.IsHandcuffed ? "Remove Handcuffs" : "Apply Handcuffs";
                 menuItemHandcuff.Enabled = isControlable;
 
