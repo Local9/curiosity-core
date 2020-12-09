@@ -166,9 +166,8 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 int networkId = metadata.Find<int>(0);
                 int gender = metadata.Find<int>(1);
-                bool isDriver = metadata.Find<bool>(2);
 
-                MissionDataPed missionDataPed = missionData.AddNetworkPed(networkId, gender, isDriver);
+                MissionDataPed missionDataPed = missionData.AddNetworkPed(networkId, gender);
 
                 Logger.Debug($"Added ped to mission;\n{missionDataPed}");
 
