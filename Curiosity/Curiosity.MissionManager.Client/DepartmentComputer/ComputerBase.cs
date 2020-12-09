@@ -122,7 +122,7 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 					}
 					else
 					{
-						identification[$"#{suspects} ~o~Error"] = "No Name Entered";
+						identification[$"~o~Error"] = "No Name Entered";
 					}
 
 					identification[$"#{suspects} ~g~REQUEST END"] = "";
@@ -162,7 +162,7 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 
 				if (registrations == 0)
 				{
-					registration[$"#{registrations} ~o~Error"] = "No License Plate Entered";
+					registration[$"~o~Error"] = "No License Plate Entered";
 				}
 			}
 			catch (Exception ex)
