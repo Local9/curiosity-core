@@ -21,20 +21,26 @@ namespace Curiosity.TrafficStops.Missions
 
         MissionState missionState;
 
-        public override void Start()
+        public async override void Start()
         {
-            veh = TrafficStopManager.Manager.tsVehicle;
-            veh.AddToMission();
-
-            Logger.Debug($"Traffic Stop -> Vehicle {veh.Handle}");
 
             driver = TrafficStopManager.Manager.tsDriver;
             driver.AddToMission();
 
             Logger.Debug($"Traffic Stop -> Driver {driver.Handle}");
+            RegisteredPeds.Add(driver);
+
+            await BaseScript.Delay(100);
+
+            veh = TrafficStopManager.Manager.tsVehicle;
+            veh.AddToMission();
+            veh.RecordLicensePlate();
+
+            Logger.Debug($"Traffic Stop -> Vehicle {veh.Handle}");
 
             RegisteredVehicles.Add(veh);
-            RegisteredPeds.Add(driver);
+
+            await BaseScript.Delay(100);
 
             TrafficStopManager.Manager.tsPassengers.ForEach(p =>
             {
