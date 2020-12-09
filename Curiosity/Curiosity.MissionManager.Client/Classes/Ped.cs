@@ -38,7 +38,18 @@ namespace Curiosity.MissionManager.Client.Classes
         public bool IsInVehicle { get; set; }
         private bool _DEBUG_ENABLED { get; set; } = false;
         private bool isRandomPed { get; set; } = false;
-        public bool IsDriver { get; private set; } = false;
+        public bool IsDriver
+        {
+            get
+            {
+                return Decorators.GetBoolean(Fx.Handle, Decorators.PED_IS_DRIVER);
+            }
+            set
+            {
+                Decorators.Set(Fx.Handle, Decorators.PED_IS_DRIVER, value);
+                EventSystem.Send("mission:update:ped:driver", Fx.NetworkId, value);
+            }
+        }
 
         public bool IsFleeing
         {

@@ -289,6 +289,17 @@ namespace Curiosity.MissionManager.Server.Managers
                 return missionDataPed;
             }));
 
+            EventSystem.GetModule().Attach("mission:update:ped:driver", new EventCallback(metadata =>
+            {
+                MissionDataPed missionDataPed = GetMissionPedToUpdate(metadata.Sender, metadata.Find<int>(0));
+
+                if (missionDataPed == null) return null;
+
+                missionDataPed.IsDriver = metadata.Find<bool>(1);
+
+                return missionDataPed;
+            }));
+
             #endregion
 
             #endregion
@@ -390,7 +401,9 @@ namespace Curiosity.MissionManager.Server.Managers
 
                     missionDataVehicle.Stolen = true;
                     missionDataVehicle.OwnerName = $"{firstname} {surname}";
-                    mdp.StoleVehicle = true;
+
+                    if (mdp != null)
+                        mdp.StoleVehicle = true;
                 }
 
                 missionDataVehicle.InsuranceValid = Utility.RANDOM.Bool(0.90f);

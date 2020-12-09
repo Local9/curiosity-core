@@ -45,6 +45,7 @@ namespace Curiosity.Systems.Shared.Entity
                 $"\n IsHandcuffed: {IsHandcuffed}" +
                 $"\n Blip: {AttachBlip}" +
                 $"\n Identified: {IsIdentified}" +
+                $"\n IsDriver: {IsDriver}" +
                 $"\n Stole Vehicle: {StoleVehicle}" +
                 $"";
 
