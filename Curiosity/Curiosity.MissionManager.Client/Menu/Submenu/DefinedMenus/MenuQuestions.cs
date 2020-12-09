@@ -208,7 +208,10 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                     if (selectedItem == menuItemIdentifcation)
                         ShowPersonSubtitle("Wait, its in my pants");
                     if (selectedItem == menuItemRelease)
-                        ShowPersonSubtitle("Now to get to your wifes place");
+                    {
+                        string spose = Game.PlayerPed.Gender == Gender.Male ? "wifes" : "husbands";
+                        ShowPersonSubtitle($"Now to get to your {spose} place");
+                    }
                     if (selectedItem == menuItemWhatAreYouDoing)
                         ShowPersonSubtitle("Waiting for my friend, what business is it of yours?");
                     if (selectedItem == menuItemRanRedLight)
@@ -237,7 +240,10 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                     if (selectedItem == menuItemRanRedLight)
                         ShowPersonSubtitle("What traffic lights? I'm rather blind when pigs are near me");
                     if (selectedItem == menuItemSpeeding)
-                        ShowPersonSubtitle("I was rushing to your wifes place, she said you were out");
+                    {
+                        string spose = Game.PlayerPed.Gender == Gender.Male ? "wifes" : "husbands";
+                        ShowPersonSubtitle($"I was rushing to your {spose} place, they said you were out");
+                    }
                     if (selectedItem == menuItemLaneChange)
                         ShowPersonSubtitle("What lane? theres no lanes here, its mercia!");
                     if (selectedItem == menuItemTailGating)
@@ -349,6 +355,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         veh.MarkAsNoLongerNeeded();
                     }
                 }
+
                 Ped.MarkAsNoLongerNeeded();
                 Ped.IsMission = false;
                 Ped.IsSuspect = false;
