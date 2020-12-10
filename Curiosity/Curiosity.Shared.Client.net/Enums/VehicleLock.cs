@@ -3,6 +3,7 @@
     public enum VehicleLock
     {
         Unlocked = 0,
-        Locked
+        Locked,
+        NoPassengers
     }
 }

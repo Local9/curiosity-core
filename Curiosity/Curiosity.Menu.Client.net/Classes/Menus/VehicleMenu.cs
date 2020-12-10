@@ -31,8 +31,6 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         public static void Init()
         {
-            client.RegisterEventHandler("curiosity:Client:Menu:CarLock", new Action<int>(OnToggleLockState));
-
             MainVehicleMenu.OnMenuOpen += OnMainMenuOpen;
             MainVehicleMenu.OnMenuClose += OnMainMenuClose;
             MainVehicleMenu.OnListIndexChange += OnMainMenuListIndexChange;
@@ -75,7 +73,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
         {
             if (listItem == mListItemVehicleLocks)
             {
-                OnToggleLockState(Client.CurrentVehicle.Handle);
+                OnToggleLockState(Client.CurrentVehicle.Handle, newSelectionIndex);
             }
 
             if (listItem == mItemHeadLights)
@@ -146,7 +144,7 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
             }
         }
 
-        static void OnToggleLockState(int vehicleId)
+        static void OnToggleLockState(int vehicleId, int index)
         {
             if (Client.CurrentVehicle == null) return;
 
@@ -156,25 +154,33 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 return;
             }
 
-            if (VehicleLockState == VehicleLock.Unlocked)
-            {
-                API.PlayVehicleDoorCloseSound(Client.CurrentVehicle.Handle, 1);
-                Client.CurrentVehicle.LockStatus = VehicleLockStatus.Locked;
-                VehicleLockState = VehicleLock.Locked;
-                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle Locked", "", "", 2);
-            }
-            else
-            {
-                API.PlayVehicleDoorOpenSound(Client.CurrentVehicle.Handle, 0);
-                Client.CurrentVehicle.LockStatus = VehicleLockStatus.None;
-                VehicleLockState = VehicleLock.Unlocked;
-                Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle Unlocked", "", "", 2);
-            }
+            VehicleLock vehicleLock = (VehicleLock)index;
 
-            bool isVehicleLocked = VehicleLockState == VehicleLock.Locked;
-
-            API.SetVehicleAllowNoPassengersLockon(Client.CurrentVehicle.Handle, isVehicleLocked);
-            API.SetVehicleDoorsLockedForAllPlayers(Client.CurrentVehicle.Handle, isVehicleLocked);
+            switch(vehicleLock)
+            {
+                case VehicleLock.Locked:
+                    API.PlayVehicleDoorCloseSound(Client.CurrentVehicle.Handle, 1);
+                    Client.CurrentVehicle.LockStatus = VehicleLockStatus.Locked;
+                    VehicleLockState = VehicleLock.Locked;
+                    API.SetVehicleDoorsLockedForAllPlayers(Client.CurrentVehicle.Handle, true);
+                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle Locked", "", "", 2);
+                    break;
+                case VehicleLock.NoPassengers:
+                    API.PlayVehicleDoorCloseSound(Client.CurrentVehicle.Handle, 1);
+                    API.SetVehicleDoorsLockedForAllPlayers(Client.CurrentVehicle.Handle, false);
+                    API.SetVehicleAllowNoPassengersLockon(Client.CurrentVehicle.Handle, true);
+                    VehicleLockState = VehicleLock.NoPassengers;
+                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "No Passengers", "", "", 2);
+                    break;
+                default:
+                    API.PlayVehicleDoorOpenSound(Client.CurrentVehicle.Handle, 0);
+                    Client.CurrentVehicle.LockStatus = VehicleLockStatus.None;
+                    VehicleLockState = VehicleLock.Unlocked;
+                    API.SetVehicleAllowNoPassengersLockon(Client.CurrentVehicle.Handle, false);
+                    API.SetVehicleDoorsLockedForAllPlayers(Client.CurrentVehicle.Handle, false);
+                    Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle Unlocked", "", "", 2);
+                    break;
+            }
         }
 
         public static void AddSubMenu(Menu submenu, bool enabled = true)
