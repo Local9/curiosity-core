@@ -25,12 +25,13 @@ namespace Curiosity.Systems.Shared.Entity
         public bool IsDriver { get; set; }
         public bool IsSuspect { get; set; }
         public bool IsHandcuffed { get; set; }
-        public bool IsUnderInfluence { get; internal set; }
-        public bool IsUsingDrugs { get; internal set; }
-        public bool IsCarryingDrugs { get; internal set; }
-        public bool IsCarringWeapon { get; internal set; }
+        public bool IsUnderInfluence { get; set; }
+        public bool IsCarryingIllegalItems { get; set; }
         public bool IsIdentified { get; set; }
         public bool StoleVehicle { get; set; }
+        public bool HasCarryLicense { get; set; }
+
+        public Dictionary<string, bool> Items = new Dictionary<string, bool>();
 
         public override string ToString()
         {
@@ -47,6 +48,8 @@ namespace Curiosity.Systems.Shared.Entity
                 $"\n Identified: {IsIdentified}" +
                 $"\n IsDriver: {IsDriver}" +
                 $"\n Stole Vehicle: {StoleVehicle}" +
+                $"\n Illegal Item(s): {IsCarryingIllegalItems}" +
+                $"\n HasCarryLicense: {HasCarryLicense}" +
                 $"";
 
 

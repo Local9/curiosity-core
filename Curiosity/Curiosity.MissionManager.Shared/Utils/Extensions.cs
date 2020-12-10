@@ -8,6 +8,18 @@ namespace Curiosity.Systems.Library.Utils
 {
     public static class Extensions
     {
+        public static T[] Append<T>(this T[] array, T item)
+        {
+            if (array == null)
+            {
+                return new T[] { item };
+            }
+            T[] result = new T[array.Length + 1];
+            array.CopyTo(result, 0);
+            result[array.Length] = item;
+            return result;
+        }
+
         public static bool Bool(this Random random, float propability) => random.NextDouble() < propability;
 
         public static T Random<T>(this T[] list)

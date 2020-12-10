@@ -15,6 +15,7 @@ namespace Curiosity.MissionManager.Server.Managers
 {
     public class MissionManager : Manager<MissionManager>
     {
+        private const string SEARCH_ITEM_GUN = "Gun";
         public static ConcurrentDictionary<int, MissionData> ActiveMissions = new ConcurrentDictionary<int, MissionData>();
         public static ConcurrentDictionary<long, int> FailureTracker = new ConcurrentDictionary<long, int>();
 
@@ -22,6 +23,37 @@ namespace Curiosity.MissionManager.Server.Managers
                 (?<=[A-Z])(?=[A-Z][a-z]) |
                  (?<=[^A-Z])(?=[A-Z]) |
                  (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
+
+        // Item - Illegal
+        Dictionary<string, bool> Items = new Dictionary<string, bool>()
+        {
+            { "Chewing Gum", false },
+            { SEARCH_ITEM_GUN, true },
+            { "Knife", true },
+            { "Keys", false },
+            { "Wallet", false },
+            { "Cocaine", true },
+            { "Marijuana", true },
+            { "Speed", true },
+            { "Heroine", true },
+            { "Sweet Wrapper", false },
+            { "Mobile Phone", false },
+            { "Loose Change", false },
+            { "Receipt", false },
+            { "Gloves", false },
+            { "Chapstick", false },
+            { "Comb", false },
+            { "Headphones", false },
+            { "Condom", false },
+            { "Camera", false },
+            { "Pack of Smokes", false },
+            { "Glasses", false },
+            { "Torch", false },
+            { "Knuckle Duster", true },
+            { "Pager", false },
+            { "Flick Knife", true },
+            { "Watch", false },
+        };
 
         public override void Begin()
         {
@@ -299,6 +331,45 @@ namespace Curiosity.MissionManager.Server.Managers
                 if (missionDataPed == null) return null;
 
                 missionDataPed.IsDriver = metadata.Find<bool>(1);
+
+                return missionDataPed;
+            }));
+
+            EventSystem.GetModule().Attach("mission:update:ped:search", new EventCallback(metadata =>
+            {
+                MissionDataPed missionDataPed = GetMissionPedToUpdate(metadata.Sender, metadata.Find<int>(0));
+
+                if (missionDataPed == null) return null;
+
+                if (missionDataPed.Items.Count > 0) return missionDataPed;
+
+                Dictionary<string, bool> randomItems = new Dictionary<string, bool>();
+
+                bool illegalItem = false;
+
+                int randomCountOfItems = Utility.RANDOM.Next(1, 6);
+
+                foreach (KeyValuePair<string, bool> kvp in Items)
+                {
+                    if (randomItems.Count == randomCountOfItems)
+                        continue;
+
+                    if (Utility.RANDOM.Bool(.5f))
+                    {
+                        bool itemLegality = kvp.Value;
+
+                        if (kvp.Key == SEARCH_ITEM_GUN) // if they have a gun and a carry license, cannot flag the gun
+                            itemLegality = !missionDataPed.HasCarryLicense;
+
+                        randomItems.Add(kvp.Key, itemLegality);
+
+                        if (!illegalItem)
+                            illegalItem = itemLegality;
+                    }
+                }
+
+                missionDataPed.IsCarryingIllegalItems = illegalItem;
+                missionDataPed.Items = randomItems;
 
                 return missionDataPed;
             }));

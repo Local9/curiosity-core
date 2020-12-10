@@ -88,6 +88,7 @@ namespace Curiosity.Systems.Shared.Entity
             Range -= EIGHTEEN_YEARS_IN_DAYS; // MINUS 18 YEARS
             mpd.DateOfBirth = StartDateForDriverDoB.AddDays(Utility.RANDOM.Next((int)Range));
             mpd.IsDriver = isDriver;
+            mpd.HasCarryLicense = Utility.RANDOM.Bool(.75f);
 
             NetworkPeds.Add(networkId, mpd);
 

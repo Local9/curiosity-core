@@ -26,6 +26,7 @@
         PurchaseSuccessful,
         PurchaseUnSuccessful,
         NotEnoughPoliceRep1000,
+        PedMustBeInFront,
     };
 
     public static class ErrorMessage
@@ -36,6 +37,9 @@
             string placeholder = placeholderValue != null ? " " + placeholderValue : "";
             switch (errorType)
             {
+                case CommonErrors.PedMustBeInFront:
+                    outputMessage = "Must be facing the NPC";
+                    break;
                 case CommonErrors.NotEnoughPoliceRep1000:
                     outputMessage = "Not enough Police Rep. Require ~b~1000";
                     break;

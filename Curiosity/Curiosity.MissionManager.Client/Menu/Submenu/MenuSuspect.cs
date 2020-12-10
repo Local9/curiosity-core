@@ -1,9 +1,15 @@
 ﻿using CitizenFX.Core;
+using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
+using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
+using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Shared.Entity;
 using NativeUI;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
@@ -23,6 +29,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         UIMenuItem menuItemHandcuff;
         UIMenuItem menuItemDetain;
         UIMenuItem menuItemGrab;
+        UIMenuItem menuItemSearch;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
@@ -36,6 +43,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menu.AddItem(menuItemDetain);
             menuItemGrab = new UIMenuItem("Lead Suspect");
             menu.AddItem(menuItemGrab);
+            menuItemSearch = new UIMenuItem("Search Suspect");
+            menu.AddItem(menuItemSearch);
 
             menu.OnItemSelect += Menu_OnItemSelect;
             menu.OnMenuOpen += Menu_OnMenuOpen;
@@ -171,6 +180,50 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 {
                     Ped.RunSequence(Ped.Sequence.GRAB_HOLD);
                     selectedItem.Text = "Let go of Suspect";
+                }
+
+                await BaseScript.Delay(500);
+                return;
+            }
+
+            if (selectedItem == menuItemSearch)
+            {
+                CitizenFX.Core.Ped ped = Game.PlayerPed.GetPedInFront(pedToCheck: Ped.Fx);
+
+                if (ped == null)
+                {
+                    Notify.Alert(CommonErrors.PedMustBeInFront);
+                    return;
+                }
+
+                AnimationHandler.AnimationSearch();
+
+                MissionDataPed missionDataPed = await EventSystem.GetModule().Request<MissionDataPed>("mission:update:ped:search", Ped.NetworkId);
+
+                DateTime searchStart = DateTime.Now;
+
+                while(DateTime.Now.Subtract(searchStart).TotalSeconds < 2)
+                {
+                    await BaseScript.Delay(500);
+                }
+
+                if (missionDataPed == null) return;
+
+                if (missionDataPed.Items.Count > 0)
+                {
+                    List<string> items = new List<string>();
+                    foreach(KeyValuePair<string, bool> kvp in missionDataPed.Items)
+                    {
+                        string item = kvp.Value ? $"~o~{kvp.Key}" : $"~g~{kvp.Key}";
+                        items.Add(item);
+                    }
+
+                    string found = string.Join("~n~", items);
+                    Notify.Info($"~n~{found}");
+                }
+                else
+                {
+                    Notify.Info($"Found nothing");
                 }
 
                 await BaseScript.Delay(500);
