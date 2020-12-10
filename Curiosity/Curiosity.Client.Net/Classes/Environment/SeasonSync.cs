@@ -56,7 +56,7 @@ namespace Curiosity.Client.net.Classes.Environment
             client.RegisterNuiEventHandler("GetWeather", new Action<IDictionary<string, object>, CallbackDelegate>(OnGetWeather));
 
             // client.RegisterTickHandler(OnSeasonTimerTick);
-            client.RegisterTickHandler(OnPopulationManagement);
+            // client.RegisterTickHandler(OnPopulationManagement);
             client.RegisterTickHandler(OnSnowCheck);
 
             Log.Verbose($"[WORLD WEATHER] Init");
@@ -272,7 +272,7 @@ namespace Curiosity.Client.net.Classes.Environment
             SetWeatherTypePersist(w);
             SetWeatherTypeNowPersist(w);
 
-            SetPopulationValues(weather);
+            // SetPopulationValues(weather);
 
             WeatherNuiMessage(weather);
         }
@@ -285,7 +285,7 @@ namespace Curiosity.Client.net.Classes.Environment
 
             _lastSeason = (Seasons)season;
             _temp = temp;
-            SetPopulationValues((WeatherTypes)weather);
+            // SetPopulationValues((WeatherTypes)weather);
 
             string message = "";
 
