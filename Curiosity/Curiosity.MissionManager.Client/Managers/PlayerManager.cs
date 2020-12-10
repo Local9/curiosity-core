@@ -60,7 +60,10 @@ namespace Curiosity.MissionManager.Client.Manager
             }
 
             if (PersonalVehicle != null)
+            {
+                API.SetVehicleCanBeLockedOn(PersonalVehicle.Handle, false, false);
                 EventSystem.GetModule().Send("user:personal:vehicle", PersonalVehicle.NetworkId);
+            }
         }
 
         private void OnClientResourceStart(string resourceName)
