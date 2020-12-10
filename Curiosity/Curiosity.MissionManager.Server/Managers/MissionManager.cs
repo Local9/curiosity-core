@@ -282,7 +282,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:ped:mission", new EventCallback(metadata =>
             {
-                MissionDataPed missionDataPed = GetMissionPedToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataPed == null) return null;
 
@@ -293,7 +293,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:ped:handcuffed", new EventCallback(metadata =>
             {
-                MissionDataPed missionDataPed = GetMissionPedToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataPed == null) return null;
 
@@ -304,7 +304,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:ped:suspect", new EventCallback(metadata =>
             {
-                MissionDataPed missionDataPed = GetMissionPedToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataPed == null) return null;
 
@@ -315,7 +315,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:ped:blip", new EventCallback(metadata =>
             {
-                MissionDataPed missionDataPed = GetMissionPedToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataPed == null) return null;
 
@@ -326,7 +326,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:ped:driver", new EventCallback(metadata =>
             {
-                MissionDataPed missionDataPed = GetMissionPedToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataPed == null) return null;
 
@@ -337,7 +337,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:ped:search", new EventCallback(metadata =>
             {
-                MissionDataPed missionDataPed = GetMissionPedToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataPed == null) return null;
 
@@ -370,6 +370,17 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 missionDataPed.IsCarryingIllegalItems = illegalItem;
                 missionDataPed.Items = randomItems;
+
+                return missionDataPed;
+            }));
+
+            EventSystem.GetModule().Attach("mission:update:ped:arrest", new EventCallback(metadata =>
+            {
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
+
+                if (missionDataPed == null) return null;
+
+                
 
                 return missionDataPed;
             }));
@@ -574,7 +585,7 @@ namespace Curiosity.MissionManager.Server.Managers
             return null;
         }
 
-        MissionDataPed GetMissionPedToUpdate(int sender, int networkId)
+        MissionDataPed GetMissionPed(int sender, int networkId)
         {
             MissionData missionData = GetMissionData(sender);
 
