@@ -90,7 +90,7 @@ namespace Curiosity.Server.net.Classes
             }
             catch (Exception ex)
             {
-                Log.Error($"SendDiscordSimpleMessage() -> {ex.Message}");
+                Log.Error($"SendDiscordPlayerLogMessage() -> {ex.Message}");
             }
 
         }
