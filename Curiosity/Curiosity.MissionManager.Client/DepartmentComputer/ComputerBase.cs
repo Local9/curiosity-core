@@ -119,6 +119,19 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 								identification[$"#{suspects} ~r~Wanted #{wants}"] = s;
 							});
 						}
+
+						if (pedData.Items.Count > 0)
+                        {
+							List<string> items = new List<string>();
+							int itemCount = 0;
+							foreach(KeyValuePair<string, bool> itm in pedData.Items)
+                            {
+								itemCount++;
+								items.Add(itm.Value ? $"~g~{itm.Key}" : $"~o~{itm.Key}");
+                            }
+							string itmLst = string.Join(", ", items);
+							identification[$"#{suspects} ~b~Items #{itemCount}"] = itmLst;
+						}
 					}
 					else
 					{
