@@ -104,9 +104,11 @@ namespace Curiosity.Server.net.Business
             stateChangeMessages = API.GetConvar("queue_enable_console_messages", "true") == "true";
             maxSession = API.GetConvarInt("queue_max_session_slots", maxSession);
 
-            if (API.GetConvar("onesync_enabled", "false") == "true")
+            string oneSync = API.GetConvar("onesync", "off");
+
+            if (oneSync == "on" || oneSync == "legacy")
             {
-                Log.Warn($"Curiosity Queue Manager : Server reports that OneSync is enabled. Ignoring regular 32 player limit, set slots to {maxSession}.");
+                Log.Warn($"Curiosity Queue Manager : Server reports that OneSync {oneSync} is enabled. Ignoring regular 32 player limit, set slots to {maxSession}.");
             }
             else
             {
