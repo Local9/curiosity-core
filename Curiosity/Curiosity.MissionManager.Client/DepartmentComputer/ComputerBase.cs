@@ -127,10 +127,10 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 							foreach(KeyValuePair<string, bool> itm in pedData.Items)
                             {
 								itemCount++;
-								items.Add(itm.Value ? $"~g~{itm.Key}" : $"~o~{itm.Key}");
+								items.Add(itm.Value ? $"~r~{itm.Key}~w~" : $"~g~{itm.Key}~w~");
                             }
 							string itmLst = string.Join(", ", items);
-							identification[$"#{suspects} ~b~Items #{itemCount}"] = itmLst;
+							identification[$"#{suspects} ~b~Items [{itemCount}]"] = itmLst;
 						}
 					}
 					else
