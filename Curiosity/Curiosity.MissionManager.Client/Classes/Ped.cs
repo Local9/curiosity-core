@@ -262,10 +262,19 @@ namespace Curiosity.MissionManager.Client.Classes
             EventSystem.Send("mission:update:ped:blip", Fx.NetworkId, true);
         }
 
-        internal void ArrestPed()
+        internal async void ArrestPed()
         {
             // Dismiss after informing the server
-            Dismiss();
+            bool result = await EventSystem.GetModule().Request<bool>("mission:update:ped:arrest", Fx.NetworkId);
+
+            if (result)
+            {
+                Dismiss();
+            }
+            else
+            {
+                Notify.Alert("Sorry, having issues logging this arrest.");
+            }
         }
 
         internal async void Update(EntityEventWrapper entityEventWrapper, Entity entity)
