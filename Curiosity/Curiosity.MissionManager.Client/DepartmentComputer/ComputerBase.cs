@@ -109,6 +109,12 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 						identification[$"#{suspects} ~b~Name"] = pedData.FullName;
 						identification[$"#{suspects} ~b~Date Of Birth"] = pedData.DateOfBirth.ToString($"yyyy-MM-dd");
 						identification[$"#{suspects} ~b~Gender"] = pedData.Gender == 0 ? "Male" : "Female";
+						identification[$"#{suspects} ~b~Carry License"] = pedData.HasCarryLicense ? "~g~Valid" : "~o~Unknown/Invalid";
+
+						if (pedData.HasBeenBreathalysed)
+                        {
+							identification[$"#{suspects} ~b~Blood Alcohol Level"] = pedData.BloodAlcoholLimit >= 8 ? $"~o~0.{pedData.BloodAlcoholLimit:00}" : $"~g~0.{pedData.BloodAlcoholLimit:00}";
+						}
 
 						if (pedData.Wants.Count > 0)
 						{
