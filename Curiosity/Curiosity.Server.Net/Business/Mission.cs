@@ -16,6 +16,30 @@ namespace Curiosity.Server.net.Business
 
         }
 
+        public async static Task<bool> RecordArrest(string playerSource, int xpEarned)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(playerSource)) return false;
+
+            Session session = SessionManager.PlayerList[playerSource];
+
+            xpEarned = XpEarned(session, xpEarned);
+
+            Skills.IncreaseSkillByPlayerExport(playerSource, "knowledge", 2);
+            await BaseScript.Delay(100);
+            Skills.IncreaseSkillByPlayerExport(playerSource, "policexp", xpEarned);
+            await BaseScript.Delay(100);
+            Skills.IncreaseSkillByPlayerExport(playerSource, "policerep", 5);
+            int money = 100;
+            await BaseScript.Delay(100);
+            DatabaseUsersBank.IncreaseCash(session.User.BankId, money);
+            session.IncreaseWallet(money);
+            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+
+            session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Arrest Booked", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${money:c0}");
+
+            return true;
+        }
+
         public async static Task<MissionData> RecordMissionCompletion(string playerSource, string missionId, bool passed, int numTransportArrested, int numberOfFailures)
         {
             if (!SessionManager.PlayerList.ContainsKey(playerSource)) return null;
@@ -73,19 +97,7 @@ namespace Curiosity.Server.net.Business
 
                 missionData.RepFailure = 0;
 
-                float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
-
-                if (experienceModifier > 1.0f && (session.IsStaff || session.IsDonator))
-                {
-                    experienceModifier += 0.1f;
-                }
-
-                if (session.IsStaff || session.IsDonator)
-                {
-                    experienceModifier += Skills.ExperienceModifier(session.Privilege);
-                }
-
-                xpReward = (int)(xpReward * experienceModifier);
+                xpReward = XpEarned(session, xpReward);
 
                 if (numberOfFailures >= 3)
                 {
@@ -122,6 +134,23 @@ namespace Curiosity.Server.net.Business
             }
 
             return missionData;
+        }
+
+        static int XpEarned(Session session, int xpReward)
+        {
+            float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+            if (experienceModifier > 1.0f && (session.IsStaff || session.IsDonator))
+            {
+                experienceModifier += 0.1f;
+            }
+
+            if (session.IsStaff || session.IsDonator)
+            {
+                experienceModifier += Skills.ExperienceModifier(session.Privilege);
+            }
+
+            return (int)(xpReward * experienceModifier);
         }
     }
 }

@@ -19,6 +19,8 @@ namespace Curiosity.MissionManager.Server.Managers
         public static ConcurrentDictionary<int, MissionData> ActiveMissions = new ConcurrentDictionary<int, MissionData>();
         public static ConcurrentDictionary<long, int> FailureTracker = new ConcurrentDictionary<long, int>();
 
+        static int _numberOfSuspectArrested = 0;
+
         Regex r = new Regex(@"
                 (?<=[A-Z])(?=[A-Z][a-z]) |
                  (?<=[^A-Z])(?=[A-Z]) |
@@ -253,31 +255,6 @@ namespace Curiosity.MissionManager.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("mission:ped:wants", new EventCallback(metadata =>
-            {
-
-                int senderHandle = metadata.Sender;
-                int ownerHandle = metadata.Find<int>(0);
-                int netId = metadata.Find<int>(1);
-
-                try
-                {
-                    MissionData missionData = GetMissionData(ownerHandle);
-
-                    if (missionData == null)
-                        return null;
-
-                    if (missionData.NetworkPeds.ContainsKey(netId))
-                        return missionData.NetworkPeds[netId].Wants;
-
-                    return null;
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                }
-            }));
-
             #region Mission Ped Updates
 
             EventSystem.GetModule().Attach("mission:update:ped:mission", new EventCallback(metadata =>
@@ -335,6 +312,17 @@ namespace Curiosity.MissionManager.Server.Managers
                 return missionDataPed;
             }));
 
+            EventSystem.GetModule().Attach("mission:update:ped:breath", new EventCallback(metadata =>
+            {
+                MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
+
+                if (missionDataPed == null) return null;
+
+                missionDataPed.HasBeenBreathalysed = true;
+
+                return missionDataPed;
+            }));
+
             EventSystem.GetModule().Attach("mission:update:ped:search", new EventCallback(metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
@@ -370,6 +358,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 missionDataPed.IsCarryingIllegalItems = illegalItem;
                 missionDataPed.Items = randomItems;
+                missionDataPed.HasBeenSearched = true;
 
                 return missionDataPed;
             }));
@@ -380,9 +369,39 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 if (missionDataPed == null) return null;
 
-                
+                int experienceEarned = 10;
 
-                return missionDataPed;
+                if (missionDataPed.StoleVehicle)
+                {
+                    experienceEarned += 100;
+                }
+
+                if (missionDataPed.HasBeenBreathalysed && missionDataPed.BloodAlcoholLimit >= 8)
+                {
+                    experienceEarned += 50;
+                }
+
+                if (missionDataPed.IsCarryingIllegalItems && missionDataPed.HasBeenSearched)
+                {
+                    experienceEarned += 50;
+                }
+
+                if (missionDataPed.IsWanted)
+                {
+                    missionDataPed.Wants.ForEach(s =>
+                    {
+                        experienceEarned += 25;
+                    });
+                }
+
+                missionDataPed.IsArrested = true;
+
+                bool res = Instance.ExportDictionary["curiosity-server"].TrafficStopArrest(metadata.Sender, experienceEarned);
+
+                if (res)
+                    _numberOfSuspectArrested++;
+
+                return res;
             }));
 
             #endregion

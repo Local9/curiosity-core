@@ -94,6 +94,24 @@ namespace Curiosity.Server.net.ServerExports
                     }
                 }
                 ));
+
+            Instance.ExportDictionary.Add("TrafficStopArrest", new Func<string, int, bool>(
+                (source, xpEarned) =>
+                {
+                    try
+                    {
+                        Mission.RecordArrest(source, xpEarned);
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"TrafficStopArrest: {ex.Message}");
+
+                        return false;
+                    }
+                }
+                ));
         }
 
         static async void UpdateWalletValues(string source, int amount, bool increase)
