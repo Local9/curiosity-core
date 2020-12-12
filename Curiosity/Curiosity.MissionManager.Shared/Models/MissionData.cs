@@ -9,6 +9,18 @@ namespace Curiosity.Systems.Shared.Entity
     {
         private const int EIGHTEEN_YEARS_IN_DAYS = 6570;
 
+        private List<string> WantedReasons = new List<string>()
+        {
+            "Outstanding Warrant",
+            "Missed Court Date",
+            "Wanted for Assualt",
+            "Unpaid Fines",
+            "Missed Bail",
+            "Connected with a Hit and Run",
+            "Connected with a Murder",
+            "Connected with hiding a wanted suspect",
+        };
+
         public string ID { get; set; }
         public string DisplayName { get; set; }
         public bool IsMissionUnique { get; set; }
@@ -89,6 +101,29 @@ namespace Curiosity.Systems.Shared.Entity
             mpd.DateOfBirth = StartDateForDriverDoB.AddDays(Utility.RANDOM.Next((int)Range));
             mpd.IsDriver = isDriver;
             mpd.HasCarryLicense = Utility.RANDOM.Bool(.75f);
+
+            mpd.BloodAlcoholLimit = Utility.RANDOM.Next(1, 7);
+            mpd.FleeFromPlayer = Utility.RANDOM.Bool(0.1f);
+
+            if (mpd.FleeFromPlayer)
+            {
+                mpd.BloodAlcoholLimit = Utility.RANDOM.Next(8, 20);
+            }
+
+            if (Utility.RANDOM.Bool(0.2f))
+            {
+                int maxWants = Utility.RANDOM.Next(1, 3);
+
+                WantedReasons.ForEach(want =>
+                {
+                    if (Utility.RANDOM.Bool(.5f))
+                    {
+                        mpd.Wants.Add(want);
+                    }
+                });
+
+                mpd.IsWanted = true;
+            }
 
             NetworkPeds.Add(networkId, mpd);
 

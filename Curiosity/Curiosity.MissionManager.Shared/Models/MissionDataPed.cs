@@ -30,6 +30,12 @@ namespace Curiosity.Systems.Shared.Entity
         public bool IsIdentified { get; set; }
         public bool StoleVehicle { get; set; }
         public bool HasCarryLicense { get; set; }
+        public float BloodAlcoholLimit { get; set; }
+        public bool FleeFromPlayer { get; internal set; }
+        public bool HasBeenBreathalysed { get; set; }
+        public bool IsWanted { get; internal set; }
+        public bool HasBeenSearched { get; set; }
+        public bool IsArrested { get; set; }
 
         public Dictionary<string, bool> Items = new Dictionary<string, bool>();
 
@@ -49,7 +55,10 @@ namespace Curiosity.Systems.Shared.Entity
                 $"\n IsDriver: {IsDriver}" +
                 $"\n Stole Vehicle: {StoleVehicle}" +
                 $"\n Illegal Item(s): {IsCarryingIllegalItems}" +
-                $"\n HasCarryLicense: {HasCarryLicense}" +
+                $"\n Has Carry License: {HasCarryLicense}" +
+                $"\n IsWanted: {IsWanted}" +
+                $"\n HasBeenBreathalysed: {HasBeenBreathalysed}" +
+                $"\n BloodAlcoholLimit: 0.{BloodAlcoholLimit:00}" +
                 $"";
 
 
