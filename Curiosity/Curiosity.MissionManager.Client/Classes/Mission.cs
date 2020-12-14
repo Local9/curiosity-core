@@ -83,6 +83,7 @@ namespace Curiosity.MissionManager.Client
         {
             NumberPedsArrested++;
             BaseScript.TriggerEvent("elv:community:arrest"); // kill this when adding the transport job
+            // NOTE : ELV LEGACY
         }
 
         public static void RegisterVehicle(Vehicle vehicle)
