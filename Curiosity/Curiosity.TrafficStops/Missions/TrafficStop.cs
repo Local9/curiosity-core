@@ -8,6 +8,7 @@ using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Utils;
 using System.Threading.Tasks;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
@@ -46,6 +47,8 @@ namespace Curiosity.TrafficStops.Missions
             RegisteredVehicles.Add(veh);
 
             await BaseScript.Delay(100);
+
+            vehicleFlee = Utility.RANDOM.Bool(0.15f);
 
             TrafficStopManager.Manager.tsPassengers.ForEach(p =>
             {
