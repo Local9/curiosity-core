@@ -62,8 +62,8 @@ namespace Curiosity.MissionManager.Client
             Mission.currentMission = mis;
             Mission.missionType = mission;
             Mission.AddPlayer(Game.Player);
-            Mission.ResetCountOfArrested();
             Mission.currentMissionType = missionInfo.type;
+            Mission.NumberPedsArrested = 0;
             
             Mission.PatrolZone = JobManager.PatrolZone; // Always get the current zone from the player at this point
             // Mission randomiser will also use the PatrolZone of the player to select a mission, but the mission needs to know the players state IF the mission doesn't have a PatrolZone assigned
