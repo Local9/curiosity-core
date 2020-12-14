@@ -47,20 +47,20 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
             menuItemIdentifcation = new UIMenuItem("License and Registration please", "Ask Question");
             menu.AddItem(menuItemIdentifcation);
 
-            menuItemWhatAreYouDoing = new UIMenuItem("What are you doing here?", "Ask Question");
-            menu.AddItem(menuItemWhatAreYouDoing);
+            //menuItemWhatAreYouDoing = new UIMenuItem("What are you doing here?", "Ask Question");
+            //menu.AddItem(menuItemWhatAreYouDoing);
 
-            menuItemRanRedLight = new UIMenuItem("You just ran a red light", "Ask Question");
-            menu.AddItem(menuItemRanRedLight);
+            //menuItemRanRedLight = new UIMenuItem("You just ran a red light", "Ask Question");
+            //menu.AddItem(menuItemRanRedLight);
 
-            menuItemSpeeding = new UIMenuItem("I saw you speeding back there", "Ask Question");
-            menu.AddItem(menuItemSpeeding);
+            //menuItemSpeeding = new UIMenuItem("I saw you speeding back there", "Ask Question");
+            //menu.AddItem(menuItemSpeeding);
 
-            menuItemLaneChange = new UIMenuItem("You changed lanes rather incorrectly", "Ask Question");
-            menu.AddItem(menuItemLaneChange);
+            //menuItemLaneChange = new UIMenuItem("You changed lanes rather incorrectly", "Ask Question");
+            //menu.AddItem(menuItemLaneChange);
 
-            menuItemTailGating = new UIMenuItem("I saw you tailgating", "Ask Question");
-            menu.AddItem(menuItemTailGating);
+            //menuItemTailGating = new UIMenuItem("I saw you tailgating", "Ask Question");
+            //menu.AddItem(menuItemTailGating);
 
             separatorItem = new UIMenuSeparatorItem();
             menu.AddItem(separatorItem);
