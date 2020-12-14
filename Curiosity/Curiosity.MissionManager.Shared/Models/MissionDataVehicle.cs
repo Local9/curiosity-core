@@ -1,4 +1,6 @@
-﻿namespace Curiosity.Systems.Shared.Entity
+﻿using System.Collections.Generic;
+
+namespace Curiosity.Systems.Shared.Entity
 {
     public class MissionDataVehicle : MissionDataEntity
     {
@@ -11,6 +13,8 @@
         public bool Stolen { get; set; }
         public string OwnerName { get; set; }
         public bool InsuranceValid { get; set; }
+        public Dictionary<string, bool> Items { get; set; } = new Dictionary<string, bool>();
+        public bool HasBeenSearched { get; set; }
 
         public override string ToString()
         {

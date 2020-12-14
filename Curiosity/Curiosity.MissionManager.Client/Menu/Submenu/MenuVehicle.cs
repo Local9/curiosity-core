@@ -1,9 +1,13 @@
 ﻿using CitizenFX.Core;
+using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Shared.Entity;
 using NativeUI;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
@@ -84,6 +88,35 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             if (selectedItem == menuItemSearchVehicle)
             {
                 vehicle.Sequence(Vehicle.VehicleSequence.SEARCH);
+
+                MissionDataVehicle missionDataVehicle = await EventSystem.GetModule().Request<MissionDataVehicle>("mission:update:vehicle:search", vehicle.NetworkId);
+
+                DateTime searchStart = DateTime.Now;
+
+                while (DateTime.Now.Subtract(searchStart).TotalSeconds < 2)
+                {
+                    await BaseScript.Delay(500);
+                }
+
+                if (missionDataVehicle == null) return;
+
+                if (missionDataVehicle.Items.Count > 0)
+                {
+                    List<string> items = new List<string>();
+                    foreach (KeyValuePair<string, bool> kvp in missionDataVehicle.Items)
+                    {
+                        string item = kvp.Value ? $"~o~{kvp.Key}" : $"~g~{kvp.Key}";
+                        items.Add(item);
+                    }
+
+                    string found = string.Join("~n~", items);
+                    Notify.Info($"~n~{found}");
+                }
+                else
+                {
+                    Notify.Info($"Found nothing");
+                }
+
                 await BaseScript.Delay(500);
                 return;
             }

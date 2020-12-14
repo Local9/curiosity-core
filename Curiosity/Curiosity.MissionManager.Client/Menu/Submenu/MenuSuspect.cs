@@ -30,6 +30,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         UIMenuItem menuItemDetain;
         UIMenuItem menuItemGrab;
         UIMenuItem menuItemSearch;
+        UIMenuItem menuItemBreathlyser;
+        UIMenuItem menuItemDrugTest;
 
         public UIMenu CreateMenu(UIMenu menu)
         {
@@ -45,6 +47,10 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menu.AddItem(menuItemGrab);
             menuItemSearch = new UIMenuItem("Search Suspect");
             menu.AddItem(menuItemSearch);
+            menuItemBreathlyser = new UIMenuItem("Breathlyzer");
+            menu.AddItem(menuItemBreathlyser);
+            menuItemDrugTest = new UIMenuItem("Drug Test");
+            menu.AddItem(menuItemDrugTest);
 
             menu.OnItemSelect += Menu_OnItemSelect;
             menu.OnMenuOpen += Menu_OnMenuOpen;
@@ -228,6 +234,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
                 await BaseScript.Delay(500);
                 return;
+            }
+
+            if (selectedItem == menuItemBreathlyser)
+            {
+                MissionDataPed missionDataPed = await EventSystem.GetModule().Request<MissionDataPed>("mission:update:ped:breathlyser", Ped.NetworkId);
+                string bloodLevel = missionDataPed.BloodAlcoholLimit >= 8 ? $"~o~0.{missionDataPed.BloodAlcoholLimit:00}" : $"~g~0.{missionDataPed.BloodAlcoholLimit:00}";
+                Notify.Info($"~n~~b~Blood Alcohol Level~w~: {bloodLevel}");
             }
         }
 

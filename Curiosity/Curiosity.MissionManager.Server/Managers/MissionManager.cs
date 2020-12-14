@@ -312,7 +312,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:breath", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("mission:update:ped:breathlyser", new EventCallback(metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
@@ -438,7 +438,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:vehicle:mission", new EventCallback(metadata =>
             {
-                MissionDataVehicle missionDataVehicle = GetMissionVehicleToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataVehicle == null) return null;
 
@@ -449,7 +449,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:vehicle:blip", new EventCallback(metadata =>
             {
-                MissionDataVehicle missionDataVehicle = GetMissionVehicleToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataVehicle == null) return null;
 
@@ -460,7 +460,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
             EventSystem.GetModule().Attach("mission:update:vehicle:towable", new EventCallback(metadata =>
             {
-                MissionDataVehicle missionDataVehicle = GetMissionVehicleToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataVehicle == null) return null;
 
@@ -473,7 +473,7 @@ namespace Curiosity.MissionManager.Server.Managers
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
 
-                MissionDataVehicle missionDataVehicle = GetMissionVehicleToUpdate(metadata.Sender, metadata.Find<int>(0));
+                MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
 
                 if (missionDataVehicle == null) return null;
 
@@ -513,6 +513,49 @@ namespace Curiosity.MissionManager.Server.Managers
                 missionDataVehicle.InsuranceValid = Utility.RANDOM.Bool(0.90f);
 
                 missionDataVehicle.RecordedLicensePlate = true;
+
+                return missionDataVehicle;
+            }));
+
+            EventSystem.GetModule().Attach("mission:update:vehicle:search", new EventCallback(metadata =>
+            {
+                MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
+                MissionDataPed missionDataPed = GetMissionData(metadata.Sender).NetworkPeds.Where(x => x.Value.IsDriver).Select(x => x.Value).FirstOrDefault();
+
+                if (missionDataPed == null) return null;
+
+                if (missionDataVehicle == null) return null;
+
+                if (missionDataVehicle.Items.Count > 0) return missionDataVehicle;
+
+                Dictionary<string, bool> randomItems = new Dictionary<string, bool>();
+
+                bool illegalItem = false;
+
+                int randomCountOfItems = Utility.RANDOM.Next(1, 6);
+
+                foreach (KeyValuePair<string, bool> kvp in Items)
+                {
+                    if (randomItems.Count == randomCountOfItems)
+                        continue;
+
+                    if (Utility.RANDOM.Bool(.5f))
+                    {
+                        bool itemLegality = kvp.Value;
+
+                        if (kvp.Key == SEARCH_ITEM_GUN) // if they have a gun and a carry license, cannot flag the gun
+                            itemLegality = !missionDataPed.HasCarryLicense;
+
+                        randomItems.Add(kvp.Key, itemLegality);
+
+                        if (!illegalItem)
+                            illegalItem = itemLegality;
+                    }
+                }
+
+                missionDataVehicle.HasBeenSearched = true;
+                missionDataPed.IsCarryingIllegalItems = illegalItem;
+                missionDataVehicle.Items = randomItems;
 
                 return missionDataVehicle;
             }));
@@ -619,7 +662,7 @@ namespace Curiosity.MissionManager.Server.Managers
             return missionDataPed;
         }
 
-        MissionDataVehicle GetMissionVehicleToUpdate(int sender, int networkId)
+        MissionDataVehicle GetMissionVehicle(int sender, int networkId)
         {
             MissionData missionData = GetMissionData(sender);
 

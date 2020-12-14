@@ -170,6 +170,19 @@ namespace Curiosity.MissionManager.Client.DepartmentComputer
 
 						if (vehData.Stolen)
 							registration[$"#{registrations} ~b~Stolen"] = "~r~Reported Stolen";
+
+						if (vehData.Items.Count > 0)
+						{
+							List<string> items = new List<string>();
+							int itemCount = 0;
+							foreach (KeyValuePair<string, bool> itm in vehData.Items)
+							{
+								itemCount++;
+								items.Add(itm.Value ? $"~r~{itm.Key}~w~" : $"~g~{itm.Key}~w~");
+							}
+							string itmLst = string.Join(", ", items);
+							identification[$"#{suspects} ~b~Items [{itemCount}]"] = itmLst;
+						}
 					}
 					else
 					{
