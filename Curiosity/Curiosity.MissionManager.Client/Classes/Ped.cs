@@ -319,6 +319,22 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
+            if (Fx.IsInVehicle())
+            {
+                CitizenFX.Core.Vehicle vehicle = Fx.CurrentVehicle;
+
+                float roll = API.GetEntityRoll(vehicle.Handle);
+                if ((roll > 75.0f || roll < -75.0f) && vehicle.Speed < 4f)
+                {
+                    FleeVehicleAndFleeFromPlayer();
+                }
+
+                if (vehicle.Health < 200)
+                {
+                    FleeVehicleAndFleeFromPlayer();
+                }
+            }
+
             if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
                 Instance.AttachTickHandler(OnDeveloperOverlay);
@@ -329,6 +345,15 @@ namespace Curiosity.MissionManager.Client.Classes
                 _DEBUG_ENABLED = false;
                 Instance.DetachTickHandler(OnDeveloperOverlay);
             }
+        }
+
+        private void FleeVehicleAndFleeFromPlayer()
+        {
+            TaskSequence taskSequence = new TaskSequence();
+            taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
+            taskSequence.AddTask.FleeFrom(Game.PlayerPed);
+            Task.PerformSequence(taskSequence);
+            taskSequence.Close();
         }
 
         async Task OnDeveloperOverlay()
@@ -365,6 +390,8 @@ namespace Curiosity.MissionManager.Client.Classes
                     
                     Fx.Task.CruiseWithVehicle(Fx.CurrentVehicle, float.MaxValue,
                         (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
+
+                    await BaseScript.Delay(10000);
 
                     break;
                 case Sequence.KNEEL:

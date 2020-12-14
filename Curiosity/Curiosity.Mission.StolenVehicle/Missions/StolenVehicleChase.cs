@@ -145,12 +145,6 @@ namespace Curiosity.StolenVehicle.Missions
                 isMissionStarted = true;
             }
 
-            float roll = API.GetEntityRoll(stolenVehicle.Fx.Handle);
-            if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 4f)
-            {
-                TaskFleeVehicle(criminal);
-            }
-
             if (stolenVehicle.Fx.Speed < 4.0f && criminal.IsInVehicle)
             {
                 long gameTimer = API.GetGameTimer();
@@ -163,11 +157,6 @@ namespace Curiosity.StolenVehicle.Missions
                         TaskFleeVehicle(criminal);
                     }
                 }
-            }
-
-            if (stolenVehicle.Health < 200)
-            {
-                TaskFleeVehicle(criminal);
             }
 
             if (!criminal.IsKneeling && !criminal.IsInVehicle && !criminal.IsHandcuffed)
