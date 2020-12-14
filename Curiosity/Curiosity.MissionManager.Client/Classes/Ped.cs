@@ -356,7 +356,7 @@ namespace Curiosity.MissionManager.Client.Classes
             Dismiss();
         }
 
-        internal async void RunSequence(Sequence sequence)
+        public async void RunSequence(Sequence sequence)
         {
             switch (sequence)
             {
@@ -689,7 +689,7 @@ namespace Curiosity.MissionManager.Client.Classes
             return (!base.Equals(other) ? false : object.Equals(this.Fx, other.Fx));
         }
 
-        internal enum Sequence
+        public enum Sequence
         {
             KNEEL,
             UNKNEEL,

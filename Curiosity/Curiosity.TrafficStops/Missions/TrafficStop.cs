@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
+using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
@@ -18,6 +19,8 @@ namespace Curiosity.TrafficStops.Missions
     {
         Vehicle veh;
         Ped driver;
+
+        bool vehicleFlee = false;
 
         MissionState missionState;
 
@@ -70,6 +73,17 @@ namespace Curiosity.TrafficStops.Missions
 
         async Task OnMissionTick()
         {
+            switch (missionState)
+            {
+                case MissionState.AwaitingVehicleToStop:
+                    if (vehicleFlee && Game.PlayerPed.Position.Distance(driver.Position) < 4f)
+                    {
+                        driver.RunSequence(Ped.Sequence.FLEE_IN_VEHICLE);
+                        missionState = MissionState.VehicleIsFleeing;
+                    }
+                    break;
+            }
+
             int totalNumberOfPlayers = Players.Count;
             int playersDead = 0;
             Players.ForEach(p =>
@@ -85,6 +99,7 @@ namespace Curiosity.TrafficStops.Missions
         enum MissionState
         {
             AwaitingVehicleToStop,
+            VehicleIsFleeing
         }
     }
 }
