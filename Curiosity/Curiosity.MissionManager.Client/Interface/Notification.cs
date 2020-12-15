@@ -54,7 +54,7 @@ namespace Curiosity.MissionManager.Client.Interface
 
         public static void Impound(string subtitle, string message, bool blink = true, bool saveToBrief = true, int iconType = 1)
         {
-            CustomImage("CHAR_PROPERTY_TOWING_IMPOUND", "CHAR_PROPERTY_TOWING_IMPOUND", message, "SA Impound", subtitle, saveToBrief, blink, iconType, 140);
+            CustomImage("CHAR_PROPERTY_TOWING_IMPOUND", "CHAR_PROPERTY_TOWING_IMPOUND", message, "Los Santos Impound", subtitle, saveToBrief, blink, iconType, 140);
         }
 
         public static void Dispatch(string subtitle, string message, bool blink = true, bool saveToBrief = true, int iconType = 1)
