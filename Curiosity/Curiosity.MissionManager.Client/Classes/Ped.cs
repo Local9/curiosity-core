@@ -327,11 +327,13 @@ namespace Curiosity.MissionManager.Client.Classes
                 if ((roll > 75.0f || roll < -75.0f) && vehicle.Speed < 4f)
                 {
                     FleeVehicleAndFleeFromPlayer();
+                    await BaseScript.Delay(100);
                 }
 
                 if (vehicle.Health < 200)
                 {
                     FleeVehicleAndFleeFromPlayer();
+                    await BaseScript.Delay(100);
                 }
             }
 
