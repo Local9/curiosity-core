@@ -399,7 +399,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 missionDataPed.IsArrested = true;
 
-                bool res = Instance.ExportDictionary["curiosity-server"].TrafficStopArrest(metadata.Sender, experienceEarned);
+                bool res = Instance.ExportDictionary["curiosity-server"].Arrest(metadata.Sender, experienceEarned);
 
                 if (res)
                     _numberOfSuspectArrested++;
@@ -472,6 +472,38 @@ namespace Curiosity.MissionManager.Server.Managers
                 return missionDataVehicle;
             }));
 
+            EventSystem.GetModule().Attach("mission:update:vehicle:towed", new EventCallback(metadata =>
+            {
+                MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
+
+                if (missionDataVehicle == null) return null;
+
+                int experienceEarned = 10;
+
+                if (missionDataVehicle.Stolen)
+                {
+                    experienceEarned += 100;
+                }
+
+                if (missionDataVehicle.HasBeenSearched)
+                {
+                    foreach(KeyValuePair<string, bool> kvp in missionDataVehicle.Items)
+                    {
+                        if (kvp.Value)
+                            experienceEarned += 25;
+                    }
+                }
+
+                if (!missionDataVehicle.InsuranceValid)
+                {
+                    experienceEarned += 50;
+                }
+
+                bool res = Instance.ExportDictionary["curiosity-server"].VehicleTowed(metadata.Sender, experienceEarned);
+
+                return res;
+            }));
+
             EventSystem.GetModule().Attach("mission:update:vehicle:license", new EventCallback(metadata =>
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
@@ -490,8 +522,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 if (mdp.Value != null)
                     missionDataVehicle.OwnerName = mdp.Value.FullName;
 
-                // if (Utility.RANDOM.Bool(0.2f))
-                if (true)
+                if (Utility.RANDOM.Bool(0.15f))
                 {
                     string firstname = "";
                     string surname = "";
