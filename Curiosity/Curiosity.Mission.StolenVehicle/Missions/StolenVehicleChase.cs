@@ -73,7 +73,7 @@ namespace Curiosity.StolenVehicle.Missions
             if (locationBlip.Exists())
                 locationBlip.Delete();
 
-            stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(), location);
+            stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(), location, Game.PlayerPed.Heading);
 
             if (stolenVehicle == null)
             {

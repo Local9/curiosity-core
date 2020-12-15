@@ -67,7 +67,7 @@ namespace Curiosity.StolenVehicle.Missions
             if (locationBlip.Exists())
                 locationBlip.Delete();
 
-            stolenVehicle = await Vehicle.Spawn(VehicleHash.Rhino, location);
+            stolenVehicle = await Vehicle.Spawn(VehicleHash.Rhino, location, Game.PlayerPed.Heading);
 
             if (stolenVehicle == null)
             {
