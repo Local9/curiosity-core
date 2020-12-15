@@ -49,8 +49,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menu.AddItem(menuItemSearch);
             menuItemBreathlyser = new UIMenuItem("Breathlyzer");
             menu.AddItem(menuItemBreathlyser);
-            menuItemDrugTest = new UIMenuItem("Drug Test");
-            menu.AddItem(menuItemDrugTest);
+            //menuItemDrugTest = new UIMenuItem("Drug Test");
+            //menu.AddItem(menuItemDrugTest);
 
             menu.OnItemSelect += Menu_OnItemSelect;
             menu.OnMenuOpen += Menu_OnMenuOpen;
