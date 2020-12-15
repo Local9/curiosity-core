@@ -734,5 +734,12 @@ namespace Curiosity.MissionManager.Client.Classes
             GRAB_RELEASE,
             FLEE_IN_VEHICLE
         }
+
+        private enum PedState
+        {
+            NORMAL,
+            LEAVE_VEHICLE,
+            LEAVING_VEHICLE
+        }
     }
 }
