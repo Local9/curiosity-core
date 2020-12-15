@@ -119,12 +119,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
                 menuItemWelcome.Enabled = isControlable;
                 menuItemIdentifcation.Enabled = isControlable;
-                menuItemWhatAreYouDoing.Enabled = isControlable;
+                //menuItemWhatAreYouDoing.Enabled = isControlable;
 
-                menuItemRanRedLight.Enabled = Ped.IsDriver;
-                menuItemSpeeding.Enabled = Ped.IsDriver;
-                menuItemLaneChange.Enabled = Ped.IsDriver;
-                menuItemTailGating.Enabled = Ped.IsDriver;
+                //menuItemRanRedLight.Enabled = Ped.IsDriver;
+                //menuItemSpeeding.Enabled = Ped.IsDriver;
+                //menuItemLaneChange.Enabled = Ped.IsDriver;
+                //menuItemTailGating.Enabled = Ped.IsDriver;
                 menuItemStepOutOfTheCar.Enabled = Ped.Fx.IsInVehicle();
 
                 if (!string.IsNullOrEmpty(Ped.Identity))
