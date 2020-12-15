@@ -202,6 +202,7 @@ namespace Curiosity.MissionManager.Client.Classes
         public bool IsGrabbed { get; set; }
         public DateTime LastUpdate { get; private set; }
         public string Identity { get; internal set; }
+        PedState pedState = PedState.NORMAL;
 
         private EntityEventWrapper _eventWrapper;
         private DateTime TimeOfDeath = new DateTime(1900, 1, 1);
@@ -241,7 +242,7 @@ namespace Curiosity.MissionManager.Client.Classes
             API.SetPedDiesInWater(Fx.Handle, false);
             API.SetPedDiesWhenInjured(Fx.Handle, false);
 
-            IsDriver = fx.IsInVehicle() && fx.CurrentVehicle.Driver == fx;
+            IsDriver = fx.IsInVehicle() && fx.CurrentVehicle.Driver.Handle == fx.Handle;
 
             Decorators.Set(fx.Handle, Decorators.PED_SETUP, true);
             Decorators.Set(fx.Handle, Decorators.MENU_RANDOM_RESPONSE, Utility.RANDOM.Next(4));
@@ -319,7 +320,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (Fx.IsInVehicle())
+            if (Fx.IsInVehicle() && pedState.Equals(PedState.NORMAL))
             {
                 CitizenFX.Core.Vehicle vehicle = Fx.CurrentVehicle;
 
@@ -327,13 +328,11 @@ namespace Curiosity.MissionManager.Client.Classes
                 if ((roll > 75.0f || roll < -75.0f) && vehicle.Speed < 4f)
                 {
                     FleeVehicleAndFleeFromPlayer();
-                    await BaseScript.Delay(100);
                 }
 
                 if (vehicle.Health < 200)
                 {
                     FleeVehicleAndFleeFromPlayer();
-                    await BaseScript.Delay(100);
                 }
             }
 
@@ -351,6 +350,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
         private void FleeVehicleAndFleeFromPlayer()
         {
+            pedState = PedState.LEAVE_VEHICLE;
+
             TaskSequence taskSequence = new TaskSequence();
             taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
             taskSequence.AddTask.FleeFrom(Game.PlayerPed);

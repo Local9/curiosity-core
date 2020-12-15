@@ -106,6 +106,9 @@ namespace Curiosity.StolenVehicle.Missions
             Mission.RegisterPed(criminal);
 
             criminal.PutInVehicle(stolenVehicle);
+
+            criminal.IsDriver = true;
+
             criminal.Task.CruiseWithVehicle(stolenVehicle.Fx, float.MaxValue,
                 (int)Collections.CombinedVehicleDrivingFlags.Fleeing);
 

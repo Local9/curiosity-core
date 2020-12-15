@@ -242,7 +242,10 @@ namespace Curiosity.MissionManager.Server.Managers
                     {
                         MissionDataPed mpd = missionData.NetworkPeds[netId];
                         mpd.IsIdentified = true;
-                        mpd.IsDriver = isDriver;
+
+                        if (!mpd.IsDriver)
+                            mpd.IsDriver = isDriver;
+
                         return mpd;
                     }
 
@@ -473,7 +476,7 @@ namespace Curiosity.MissionManager.Server.Managers
             {
                 MissionData missionData = GetMissionData(metadata.Sender);
 
-                MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
+                MissionDataVehicle missionDataVehicle = missionData.NetworkVehicles[metadata.Find<int>(0)];
 
                 if (missionDataVehicle == null) return null;
 
@@ -482,12 +485,13 @@ namespace Curiosity.MissionManager.Server.Managers
                 missionDataVehicle.PrimaryColor = r.Replace(metadata.Find<string>(3), " ");
                 missionDataVehicle.SecondaryColor = r.Replace(metadata.Find<string>(4), " ");
 
-                MissionDataPed mdp = missionData.NetworkPeds.Select(x => x.Value).Where(x => x.IsDriver).FirstOrDefault();
+                KeyValuePair<int, MissionDataPed> mdp = missionData.NetworkPeds.Where(x => x.Value.IsDriver).FirstOrDefault();
 
-                if (mdp != null)
-                    missionDataVehicle.OwnerName = mdp.FullName;
+                if (mdp.Value != null)
+                    missionDataVehicle.OwnerName = mdp.Value.FullName;
 
-                if (Utility.RANDOM.Bool(0.2f))
+                // if (Utility.RANDOM.Bool(0.2f))
+                if (true)
                 {
                     string firstname = "";
                     string surname = "";
@@ -506,13 +510,20 @@ namespace Curiosity.MissionManager.Server.Managers
                     missionDataVehicle.Stolen = true;
                     missionDataVehicle.OwnerName = $"{firstname} {surname}";
 
-                    if (mdp != null)
-                        mdp.StoleVehicle = true;
+                    if (mdp.Value != null)
+                        mdp.Value.StoleVehicle = true;
+                }
+
+                if (mdp.Value != null)
+                {
+                    missionData.NetworkPeds[mdp.Key] = mdp.Value;
                 }
 
                 missionDataVehicle.InsuranceValid = Utility.RANDOM.Bool(0.90f);
 
                 missionDataVehicle.RecordedLicensePlate = true;
+
+                Logger.Debug($"{missionData}");
 
                 return missionDataVehicle;
             }));
@@ -520,7 +531,10 @@ namespace Curiosity.MissionManager.Server.Managers
             EventSystem.GetModule().Attach("mission:update:vehicle:search", new EventCallback(metadata =>
             {
                 MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
-                MissionDataPed missionDataPed = GetMissionData(metadata.Sender).NetworkPeds.Where(x => x.Value.IsDriver).Select(x => x.Value).FirstOrDefault();
+                
+                MissionData missionData = GetMissionData(metadata.Sender);
+
+                MissionDataPed missionDataPed = missionData.NetworkPeds.Where(x => x.Value.IsDriver).Select(x => x.Value).FirstOrDefault();
 
                 if (missionDataPed == null) return null;
 
