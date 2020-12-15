@@ -95,7 +95,7 @@ namespace Curiosity.Server.net.ServerExports
                 }
                 ));
 
-            Instance.ExportDictionary.Add("TrafficStopArrest", new Func<string, int, bool>(
+            Instance.ExportDictionary.Add("Arrest", new Func<string, int, bool>(
                 (source, xpEarned) =>
                 {
                     try
@@ -106,7 +106,25 @@ namespace Curiosity.Server.net.ServerExports
                     }
                     catch (Exception ex)
                     {
-                        Log.Error($"TrafficStopArrest: {ex.Message}");
+                        Log.Error($"Arrest: {ex.Message}");
+
+                        return false;
+                    }
+                }
+                ));
+
+            Instance.ExportDictionary.Add("VehicleTowed", new Func<string, int, bool>(
+                (source, xpEarned) =>
+                {
+                    try
+                    {
+                        Mission.VehicleTowed(source, xpEarned);
+
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"VehicleTowed: {ex.Message}");
 
                         return false;
                     }

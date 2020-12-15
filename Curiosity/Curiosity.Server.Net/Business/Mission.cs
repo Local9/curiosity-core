@@ -40,6 +40,30 @@ namespace Curiosity.Server.net.Business
             return true;
         }
 
+        public async static Task<bool> VehicleTowed(string playerSource, int xpEarned)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(playerSource)) return false;
+
+            Session session = SessionManager.PlayerList[playerSource];
+
+            xpEarned = XpEarned(session, xpEarned);
+
+            Skills.IncreaseSkillByPlayerExport(playerSource, "knowledge", 2);
+            await BaseScript.Delay(100);
+            Skills.IncreaseSkillByPlayerExport(playerSource, "policexp", xpEarned);
+            await BaseScript.Delay(100);
+            Skills.IncreaseSkillByPlayerExport(playerSource, "policerep", 5);
+            int money = 100;
+            await BaseScript.Delay(100);
+            DatabaseUsersBank.IncreaseCash(session.User.BankId, money);
+            session.IncreaseWallet(money);
+            session.Player.TriggerEvent("curiosity:Client:Bank:UpdateWallet", session.Wallet);
+
+            session.Player.Send(NotificationType.CHAR_PROPERTY_TOWING_IMPOUND, 2, "Los Santos Impound", "Vehicle Logged", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${money:c0}");
+
+            return true;
+        }
+
         public async static Task<MissionData> RecordMissionCompletion(string playerSource, string missionId, bool passed, int numTransportArrested, int numberOfFailures)
         {
             if (!SessionManager.PlayerList.ContainsKey(playerSource)) return null;
