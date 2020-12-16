@@ -28,7 +28,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         public UIMenu CreateMenu(UIMenu menu)
         {
-            menuItemCode4 = new UIMenuItem("Code 4: Cancel Callout", "~o~This will complete/end the current callout, no rewards earned, will lose reputation.");
+            menuItemCode4 = new UIMenuItem("Code 4: End Callout", "~o~This will end the current callout.");
             menuItemOpenComputer = new UIMenuItem("Open LSPD:NC", "Open the LSPD:NC, must be in vehicle");
 
             menuItemCode78 = new UIMenuItem("10-78: Need Assistance", "This will call on other players for assistance. ~b~Shortcut: ~g~ALT+E");
