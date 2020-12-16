@@ -70,7 +70,6 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                     Notify.Alert(CommonErrors.InsideVehicle);
                 }
 
-
                 DepartmentComputer.ComputerBase.Instance.Open();
                 MenuManager._MenuPool?.CloseAllMenus();
                 return;
@@ -80,7 +79,22 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             {
                 try
                 {
-                    Mission.currentMission?.Stop(EndState.ForceEnd); // need a success state
+                    if (Mission.currentMissionType == MissionType.TrafficStop)
+                    {
+                        if (Mission.NumberPedsArrested > 0)
+                        {
+                            Mission.currentMission.Pass();
+                        }
+                        else
+                        {
+                            Mission.currentMission.Stop(EndState.TrafficStop);
+                        }
+                    }
+                    else
+                    {
+                        Mission.currentMission?.Stop(EndState.ForceEnd);
+                    }
+
                     MenuManager._MenuPool?.CloseAllMenus();
                 }
                 catch(Exception ex)
