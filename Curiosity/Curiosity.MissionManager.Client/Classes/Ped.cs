@@ -353,7 +353,16 @@ namespace Curiosity.MissionManager.Client.Classes
             pedState = PedState.LEAVE_VEHICLE;
 
             TaskSequence taskSequence = new TaskSequence();
-            taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
+
+            if (Fx.IsInVehicle() && Fx.CurrentVehicle.Speed > 10f)
+            {
+                taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.BailOut);
+            }
+            else
+            {
+                taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
+            }
+
             taskSequence.AddTask.FleeFrom(Game.PlayerPed);
             Task.PerformSequence(taskSequence);
             taskSequence.Close();
