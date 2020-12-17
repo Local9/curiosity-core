@@ -26,6 +26,13 @@ namespace Curiosity.Systems.Library.Models
         public Guid PartyId { get; internal set; } = Guid.Empty;
         public string CurrentJob { get; set; } = string.Empty;
 
+        public int TotalNumberOfPlayerKills { get; internal set; } = 0;
+
+        public void LogPlayerKill()
+        {
+            TotalNumberOfPlayerKills++;
+        }
+
         public void SetPartyId(Guid partyId)
         {
             this.PartyId = partyId;

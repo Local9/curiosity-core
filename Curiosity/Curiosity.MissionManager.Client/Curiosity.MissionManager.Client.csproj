@@ -90,6 +90,7 @@
     <Compile Include="Handler\HowlerHandler.cs" />
     <Compile Include="Handler\MarkerArrestHandler.cs" />
     <Compile Include="Managers\EntityManager.cs" />
+    <Compile Include="Managers\NotificationManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Handler\ParticleHandler.cs" />

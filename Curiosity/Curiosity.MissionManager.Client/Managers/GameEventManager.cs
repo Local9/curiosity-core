@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
+using Curiosity.Systems.Library.Events;
 using System;
 using System.Collections.Generic;
 
@@ -156,6 +157,30 @@ namespace Curiosity.MissionManager.Client.Managers
             Logger.Info($"- [GameEventTigger] Begin ------------------------");
 
             GameEventManager.OnPlayerKillPed += GameEventManager_OnPlayerKillPed;
+            GameEventManager.OnPlayerKillPlayer += GameEventManager_OnPlayerKillPlayer;
+
+            EventSystem.Attach("gameEvent:kill", new EventCallback(metadata =>
+            {
+                if (Game.PlayerPed.IsAlive)
+                    Game.PlayerPed.Kill();
+
+                return null;
+            }));
+        }
+
+        private void GameEventManager_OnPlayerKillPlayer(Player attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
+        {
+            try
+            {
+                if (victim == attacker) return;
+                if (attacker != Game.Player) return;
+
+                EventSystem.Send("gameEvent:playerKillPlayer", attacker.ServerId, victim.ServerId);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"OnPlayerKillPlayer -> {ex.Message}");
+            }
         }
 
         private static void GameEventManager_OnPlayerKillPed(Player attacker, Ped victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
