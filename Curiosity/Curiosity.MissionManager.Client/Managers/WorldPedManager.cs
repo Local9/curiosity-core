@@ -66,7 +66,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
                     bool setup = Decorators.GetBoolean(ped.Handle, Decorators.PED_SETUP);
 
-                    if (!setup)
+                    if (!setup && !ped.IsPlayer)
                     {
                         if (ped.IsBeingStunned)
                         {
