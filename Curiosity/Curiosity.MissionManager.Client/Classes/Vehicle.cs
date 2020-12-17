@@ -358,7 +358,17 @@ namespace Curiosity.MissionManager.Client.Classes
 
             if (Fx.Driver.IsDead) return false;
 
-            return Fx.ClassType.Equals(VehicleClass.Compacts) || Fx.ClassType.Equals(VehicleClass.Coupes) || Fx.ClassType.Equals(VehicleClass.Motorcycles) || Fx.ClassType.Equals(VehicleClass.Muscle) || Fx.ClassType.Equals(VehicleClass.OffRoad) || Fx.ClassType.Equals(VehicleClass.Sedans) || Fx.ClassType.Equals(VehicleClass.Sports) || Fx.ClassType.Equals(VehicleClass.SportsClassics) || Fx.ClassType.Equals(VehicleClass.Super) || Fx.ClassType.Equals(VehicleClass.SUVs) || Fx.ClassType.Equals(VehicleClass.Vans);
+            return Fx.ClassType.Equals(VehicleClass.Compacts)
+                || Fx.ClassType.Equals(VehicleClass.Coupes)
+                || Fx.ClassType.Equals(VehicleClass.Motorcycles)
+                || Fx.ClassType.Equals(VehicleClass.Muscle)
+                || Fx.ClassType.Equals(VehicleClass.OffRoad)
+                || Fx.ClassType.Equals(VehicleClass.Sedans)
+                || Fx.ClassType.Equals(VehicleClass.Sports)
+                || Fx.ClassType.Equals(VehicleClass.SportsClassics)
+                || Fx.ClassType.Equals(VehicleClass.Super)
+                || Fx.ClassType.Equals(VehicleClass.SUVs)
+                || Fx.ClassType.Equals(VehicleClass.Vans);
         }
 
         async Task OnDeveloperOverlay()
