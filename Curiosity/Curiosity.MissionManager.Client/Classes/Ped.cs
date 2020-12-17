@@ -567,11 +567,13 @@ namespace Curiosity.MissionManager.Client.Classes
                     API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
                     IsGrabbed = true;
                     Fx.IsInvincible = true;
+                    Fx.IsCollisionEnabled = false;
                     break;
                 case Sequence.GRAB_RELEASE:
                     Fx.Detach();
                     IsGrabbed = false;
                     Fx.IsInvincible = false;
+                    Fx.IsCollisionEnabled = true;
                     break;
             }
         }
@@ -678,6 +680,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
             int handle = Fx.Handle;
             API.RemovePedElegantly(ref handle);
+
+            Fx.Detach();
 
             await Fx.FadeOut();
 
