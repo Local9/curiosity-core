@@ -296,7 +296,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (!Mission.isOnMission && PlayerManager.PersonalVehicle != null && !IsIgnored && Fx.Driver.Exists())
+            if (!Mission.isOnMission && PlayerManager.PersonalVehicle != null && !IsIgnored && Fx.Driver.Exists() && IsValidVehicle())
             {
                 if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Game.PlayerPed.IsInVehicle())
                 {
@@ -350,6 +350,15 @@ namespace Curiosity.MissionManager.Client.Classes
                 _DEBUG_ENABLED = false;
                 Instance.DetachTickHandler(OnDeveloperOverlay);
             }
+        }
+
+        private bool IsValidVehicle()
+        {
+            if (Fx.Driver.IsPlayer) return false;
+
+            if (Fx.Driver.IsDead) return false;
+
+            return Fx.ClassType.Equals(VehicleClass.Compacts) || Fx.ClassType.Equals(VehicleClass.Coupes) || Fx.ClassType.Equals(VehicleClass.Motorcycles) || Fx.ClassType.Equals(VehicleClass.Muscle) || Fx.ClassType.Equals(VehicleClass.OffRoad) || Fx.ClassType.Equals(VehicleClass.Sedans) || Fx.ClassType.Equals(VehicleClass.Sports) || Fx.ClassType.Equals(VehicleClass.SportsClassics) || Fx.ClassType.Equals(VehicleClass.Super) || Fx.ClassType.Equals(VehicleClass.SUVs) || Fx.ClassType.Equals(VehicleClass.Vans);
         }
 
         async Task OnDeveloperOverlay()
