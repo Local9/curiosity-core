@@ -372,16 +372,20 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 if (missionDataPed == null) return null;
 
+                bool successfulArrest = false;
+
                 int experienceEarned = 10;
 
                 if (missionDataPed.StoleVehicle)
                 {
                     experienceEarned += 100;
+                    successfulArrest = true;
                 }
 
                 if (missionDataPed.HasBeenBreathalysed && missionDataPed.BloodAlcoholLimit >= 8)
                 {
                     experienceEarned += 50;
+                    successfulArrest = true;
                 }
 
                 if (missionDataPed.IsCarryingIllegalItems && missionDataPed.HasBeenSearched)
@@ -395,7 +399,11 @@ namespace Curiosity.MissionManager.Server.Managers
                     {
                         experienceEarned += 25;
                     });
+                    successfulArrest = true;
                 }
+
+                if (!successfulArrest)
+                    experienceEarned = 10;
 
                 missionDataPed.IsArrested = true;
 
