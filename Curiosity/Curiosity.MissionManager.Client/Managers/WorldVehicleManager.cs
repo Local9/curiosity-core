@@ -90,7 +90,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 {
                     bool setup = Decorators.GetBoolean(veh.Handle, Decorators.VEHICLE_SETUP);
 
-                    if (!setup)
+                    if (!setup && !veh.Driver.IsPlayer)
                     {
                         Vehicle vehicle = new Vehicle(veh, false);
                         vehicle.IsImportant = false;
