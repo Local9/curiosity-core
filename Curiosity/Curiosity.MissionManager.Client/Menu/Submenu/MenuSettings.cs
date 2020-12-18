@@ -106,6 +106,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         private void Menu_OnMenuOpen(UIMenu sender)
         {
             MenuManager.OnMenuState(true);
+
+            menuCheckboxEnableCallouts.Checked = MissionDirectorManager.MissionDirectorState;
         }
 
         private void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
