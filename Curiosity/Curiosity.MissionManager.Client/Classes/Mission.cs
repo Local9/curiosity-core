@@ -291,7 +291,7 @@ namespace Curiosity.MissionManager.Client
                     return;
                 };
 
-                LastUpdate = DateTime.Now.AddSeconds(5);
+                LastUpdate = DateTime.Now;
 
                 currentMissionData = await EventSystem.Request<MissionData>("mission:get:data", Game.Player.ServerId);
 
