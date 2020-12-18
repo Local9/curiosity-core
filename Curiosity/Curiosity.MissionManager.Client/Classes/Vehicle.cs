@@ -147,8 +147,15 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             if (Fx.AttachedBlip != null) return null;
 
+            API.SetPedAiBlip(Fx.Handle, true);
+            API.IsAiBlipAlwaysShown(Fx.Handle, false);
+            API.SetAiBlipMaxDistance(Fx.Handle, 50f);
+            API.HideSpecialAbilityLockonOperation(Fx.Handle, false);
+            API.SetAiBlipType(Fx.Handle, 0);
+
             Blip blip = Fx.AttachBlip();
             blip.Color = BlipColor.Red;
+            blip.Alpha = 0;
             blip.Scale = .75f;
 
             EventSystem.Send("mission:update:vehicle:blip", Fx.NetworkId, true);

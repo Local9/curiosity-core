@@ -255,10 +255,11 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             if (Fx.AttachedBlip != null) return;
 
-            Blip blip = Fx.AttachBlip();
-            blip.Sprite = BlipSprite.Enemy;
-            blip.Color = BlipColor.Red;
-            blip.Scale = .75f;
+            API.SetPedAiBlip(Fx.Handle, true);
+            API.IsAiBlipAlwaysShown(Fx.Handle, false);
+            API.SetAiBlipMaxDistance(Fx.Handle, 50f);
+            API.HideSpecialAbilityLockonOperation(Fx.Handle, false);
+            API.SetAiBlipType(Fx.Handle, 0);
 
             EventSystem.Send("mission:update:ped:blip", Fx.NetworkId, true);
         }
