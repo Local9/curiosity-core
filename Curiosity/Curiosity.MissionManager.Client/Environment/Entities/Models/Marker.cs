@@ -18,7 +18,7 @@ namespace Curiosity.MissionManager.Client.Environment.Entities.Models
         public MarkerFilter MarkerFilter { get; private set; }
         public float ContextAoe { get; private set; } = 1.5f;
 
-        public Marker(string markerMessage, Vector3 position, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 3f, MarkerFilter markerFilter = MarkerFilter.Unknown, float contextAoe = 1.5f)
+        public Marker(string markerMessage, Vector3 position, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 2f, MarkerFilter markerFilter = MarkerFilter.Unknown, float contextAoe = 1.5f)
         {
             this.Message = markerMessage;
             this.Position = position;
@@ -32,7 +32,7 @@ namespace Curiosity.MissionManager.Client.Environment.Entities.Models
             this.ContextAoe = contextAoe;
         }
 
-        public Marker(string markerMessage, Vector3 position, System.Drawing.Color color, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 3f, MarkerFilter markerFilter = MarkerFilter.Unknown, float contextAoe = 1.5f)
+        public Marker(string markerMessage, Vector3 position, System.Drawing.Color color, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 2f, MarkerFilter markerFilter = MarkerFilter.Unknown, float contextAoe = 1.5f)
         {
             this.Message = markerMessage;
             this.Position = position;
@@ -46,7 +46,7 @@ namespace Curiosity.MissionManager.Client.Environment.Entities.Models
             this.ContextAoe = contextAoe;
         }
 
-        public Marker(string markerMessage, Vector3 position, System.Drawing.Color color, Vector3 scale, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 3f, MarkerFilter markerFilter = MarkerFilter.Unknown, float contextAoe = 1.5f)
+        public Marker(string markerMessage, Vector3 position, System.Drawing.Color color, Vector3 scale, MarkerType type = MarkerType.VerticalCylinder, float drawThreshold = 2f, MarkerFilter markerFilter = MarkerFilter.Unknown, float contextAoe = 1.5f)
         {
             this.Message = markerMessage;
             this.Position = position;
