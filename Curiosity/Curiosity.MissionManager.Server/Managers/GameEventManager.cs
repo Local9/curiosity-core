@@ -11,28 +11,28 @@ namespace Curiosity.MissionManager.Server.Managers
         {
             EventSystem.GetModule().Attach("gameEvent:playerKillPlayer", new AsyncEventCallback(async metadata => {
 
-                int killerHandle = metadata.Find<int>(0);
+                int attackerHandle = metadata.Find<int>(0);
                 int victimHandle = metadata.Find<int>(1);
 
-                if (!PluginManager.ActiveUsers.ContainsKey(killerHandle)) return null;
+                if (!PluginManager.ActiveUsers.ContainsKey(attackerHandle)) return null;
                 if (!PluginManager.ActiveUsers.ContainsKey(victimHandle)) return null;
 
-                CuriosityUser curiosityUserKiller = PluginManager.ActiveUsers[killerHandle];
+                CuriosityUser curiosityUserKiller = PluginManager.ActiveUsers[attackerHandle];
                 CuriosityUser curiosityUserVictim = PluginManager.ActiveUsers[victimHandle];
 
                 curiosityUserKiller.LogPlayerKill();
 
-                Player player = PluginManager.PlayersList[killerHandle];
+                Player attacker = PluginManager.PlayersList[attackerHandle];
                 Player victim = PluginManager.PlayersList[victimHandle];
 
                 if (curiosityUserKiller.TotalNumberOfPlayerKills >= 3)
                 {
-                    player.Drop($"You've been kicked for killing other players.");
+                    attacker.Drop($"You've been kicked for killing other players.");
                     EventSystem.GetModule().Send("system:notification:basic", -1, $"{curiosityUserKiller.LatestName} has been kicked");
                     await BaseScript.Delay(100);
                 }
 
-                EventSystem.GetModule().Send("gameEvent:kill", int.Parse(player.Handle));
+                EventSystem.GetModule().Send("gameEvent:kill", int.Parse(attacker.Handle));
                 victim.TriggerEvent("curiosity:Client:Player:Revive", "Server");
                 
                 EventSystem.GetModule().Send("system:notification:basic", -1, $"{curiosityUserVictim.LatestName} killed by {curiosityUserKiller.LatestName}");
