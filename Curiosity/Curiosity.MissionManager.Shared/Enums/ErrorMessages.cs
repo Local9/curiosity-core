@@ -27,6 +27,8 @@
         PurchaseUnSuccessful,
         NotEnoughPoliceRep1000,
         PedMustBeInFront,
+        NpcOutsideVehicle,
+        MustBeHandcuffed,
     };
 
     public static class ErrorMessage
@@ -37,8 +39,14 @@
             string placeholder = placeholderValue != null ? " " + placeholderValue : "";
             switch (errorType)
             {
+                case CommonErrors.NpcOutsideVehicle:
+                    outputMessage = "Must be outside the vehicle.";
+                    break;
+                case CommonErrors.MustBeHandcuffed:
+                    outputMessage = "Must be handcuffed.";
+                    break;
                 case CommonErrors.PedMustBeInFront:
-                    outputMessage = "Must be facing the NPC";
+                    outputMessage = "Must be facing the NPC.";
                     break;
                 case CommonErrors.NotEnoughPoliceRep1000:
                     outputMessage = "Not enough Police Rep. Require ~b~1000";

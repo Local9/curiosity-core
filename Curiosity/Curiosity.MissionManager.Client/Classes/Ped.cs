@@ -9,6 +9,7 @@ using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Utils;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
 using Curiosity.Systems.Shared.Entity;
 using System;
@@ -266,6 +267,18 @@ namespace Curiosity.MissionManager.Client.Classes
 
         internal async void ArrestPed()
         {
+            if (!IsHandcuffed)
+            {
+                Notify.Alert(CommonErrors.MustBeHandcuffed);
+                return;
+            }
+
+            if (Fx.IsInVehicle())
+            {
+                Notify.Alert(CommonErrors.NpcOutsideVehicle);
+                return;
+            }
+
             // Dismiss after informing the server
             bool result = await EventSystem.GetModule().Request<bool>("mission:update:ped:arrest", Fx.NetworkId);
 

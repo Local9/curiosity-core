@@ -138,6 +138,18 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             {
                 if (ped != null)
                 {
+                    if (!ped.IsHandcuffed)
+                    {
+                        Notify.Alert(CommonErrors.MustBeHandcuffed);
+                        return;
+                    }
+
+                    if (ped.Fx.IsInVehicle())
+                    {
+                        Notify.Alert(CommonErrors.NpcOutsideVehicle);
+                        return;
+                    }
+
                     Mission.CountArrest();
                     Mission.CountTransportArrest();
                     ped?.Dismiss();
