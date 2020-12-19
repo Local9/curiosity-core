@@ -22,14 +22,19 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 curiosityUserKiller.LogPlayerKill();
 
+                Player player = PluginManager.PlayersList[killerHandle];
+                Player victim = PluginManager.PlayersList[victimHandle];
+
                 if (curiosityUserKiller.TotalNumberOfPlayerKills >= 3)
                 {
-                    Player player = PluginManager.PlayersList[killerHandle];
                     player.Drop($"You've been kicked for killing other players.");
                     EventSystem.GetModule().Send("system:notification:basic", -1, $"{curiosityUserKiller.LatestName} has been kicked");
                     await BaseScript.Delay(100);
                 }
 
+                EventSystem.GetModule().Send("gameEvent:kill", int.Parse(player.Handle));
+                victim.TriggerEvent("curiosity:Client:Player:Revive", "Server");
+                
                 EventSystem.GetModule().Send("system:notification:basic", -1, $"{curiosityUserVictim.LatestName} killed by {curiosityUserKiller.LatestName}");
                 
                 return null;
