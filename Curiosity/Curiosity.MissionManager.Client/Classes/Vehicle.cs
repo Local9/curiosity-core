@@ -155,7 +155,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             Blip blip = Fx.AttachBlip();
             blip.Color = BlipColor.Red;
-            blip.Alpha = 0;
+            blip.Alpha = 255;
             blip.Scale = .75f;
 
             EventSystem.Send("mission:update:vehicle:blip", Fx.NetworkId, true);
