@@ -174,11 +174,11 @@ namespace Curiosity.MissionManager.Server.Managers
                     await BaseScript.Delay(500);
                     if (numberOfFailures >= 3)
                     {
-                        Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, 1, 0);
+                        EventSystem.GetModule().Send("mission:notification", serverHandle, "No earnings", "The player you've assisted has failed too many times.");
                     }
                     else
                     {
-                        EventSystem.GetModule().Send("mission:notification", serverHandle, "No earnings", "The player you've assisted has failed too many times.");
+                        Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, 1, 0);
                     }
                     EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
                 });
