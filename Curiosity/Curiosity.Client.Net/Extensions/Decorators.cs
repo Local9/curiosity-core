@@ -7,6 +7,7 @@ namespace Curiosity.Client.net.Extensions
     {
         public const string DECOR_PLAYER_STAFF = "c::player::staff";
         public const string PLAYER_ASSISTING = "player::npc::assisting";
+        public const string PLAYER_CROSSHAIR = "player::ui::crosshair";
 
         public static void Set(int handle, string property, object value)
         {

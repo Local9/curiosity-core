@@ -1,5 +1,7 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.Menus.Client.net.Extensions;
 using Curiosity.Shared.Client.net.Classes;
 using Curiosity.Shared.Client.net.Classes.Data;
 using MenuAPI;
@@ -16,7 +18,10 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
         static MenuCheckboxItem setMinimapScale = new MenuCheckboxItem("Large Minimap", API.GetResourceKvpString("curiosity:minimap:scale") == "large");
 
+        static MenuCheckboxItem checkboxCrosshair = new MenuCheckboxItem("Crosshair", "Enable or disable the Crosshair");
+
         static bool _cinematic = false;
+        static bool _showCrosshair = false;
 
         public static void Init()
         {
@@ -27,17 +32,21 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
 
             menu.OnMenuOpen += (_menu) =>
             {
+                _showCrosshair = Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_CROSSHAIR);
 
                 MenuBase.MenuOpen(true);
                 menu.AddMenuItem(playerScenarios);
                 menu.AddMenuItem(stopScenario);
+
+                checkboxCrosshair.Checked = _showCrosshair;
+
+                menu.AddMenuItem(checkboxCrosshair);
 
                 //menu.AddMenuItem(new MenuItem("Open Skills", "View Skills") { ItemData = SkillType.Experience });
                 //menu.AddMenuItem(new MenuItem("Open Stats", "View Stats") { ItemData = SkillType.Statistic });
                 menu.AddMenuItem(setMinimapScale);
                 menu.AddMenuItem(new MenuCheckboxItem("Cinematic Mode", "Enable Cinematic Mode") { ItemData = "CINEMATIC", Checked = _cinematic });
                 menu.AddMenuItem(new MenuItem("Cinematic Bars", "Select to adjust Cinematic Bars") { ItemData = "CINEMATICBARS" });
-
             };
 
             menu.OnCheckboxChange += (Menu _menu, MenuCheckboxItem _menuItem, int _itemIndex, bool _newCheckedState) =>
@@ -51,6 +60,11 @@ namespace Curiosity.Menus.Client.net.Classes.Menus
                 if (_menuItem == setMinimapScale)
                 {
                     SetMapScale();
+                }
+
+                if (_menuItem == checkboxCrosshair)
+                {
+                    Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_CROSSHAIR, _newCheckedState);
                 }
             };
 

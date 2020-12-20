@@ -6,6 +6,8 @@ namespace Curiosity.Menus.Client.net.Extensions
     class Decorators
     {
         public const string PLAYER_MENU = "player::npc::menu";
+        public const string PLAYER_CROSSHAIR = "player::ui::crosshair";
+
         public static void Set(int handle, string property, object value)
         {
             if (value is int i)
