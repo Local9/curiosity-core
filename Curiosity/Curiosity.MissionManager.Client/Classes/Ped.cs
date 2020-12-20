@@ -221,7 +221,10 @@ namespace Curiosity.MissionManager.Client.Classes
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
             this.isRandomPed = isRandomPed;
+            fx.Health = 200;
             Fx.Health = 200;
+
+            fx.AlwaysDiesOnLowHealth = false;
 
             DateCreated = DateTime.Now;
 
