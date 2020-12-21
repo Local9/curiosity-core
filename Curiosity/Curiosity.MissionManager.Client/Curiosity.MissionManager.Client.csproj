@@ -102,6 +102,7 @@
     <Compile Include="Managers\GameEventManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
     <Compile Include="Managers\PlayerVehicleManager.cs" />
+    <Compile Include="Managers\PlayerWeaponManager.cs" />
     <Compile Include="Managers\TrafficStopManager.cs" />
     <Compile Include="Managers\VehicleRepairManager.cs" />
     <Compile Include="Managers\VehicleDeletionManager.cs" />
