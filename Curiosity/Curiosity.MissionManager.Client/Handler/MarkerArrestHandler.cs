@@ -87,11 +87,12 @@ namespace Curiosity.MissionManager.Client.Handler
 
                     if (arrested)
                     {
-                        Mission.RegisteredPeds.ForEach(ped =>
+                        Mission.RegisteredPeds.ForEach(async ped =>
                         {
                             if (ped.Handle == p.Handle)
                             {
                                 ped.ArrestPed();
+                                await BaseScript.Delay(100);
                                 Mission.CountArrest();
                             };
                         });
