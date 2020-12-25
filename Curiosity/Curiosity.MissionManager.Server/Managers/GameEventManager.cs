@@ -33,11 +33,8 @@ namespace Curiosity.MissionManager.Server.Managers
                 }
 
                 victim.TriggerEvent("curiosity:Client:Player:Revive", "Server");
-
                 string msg = $"{curiosityUserVictim.LatestName} killed by {curiosityUserKiller.LatestName}";
-
                 BaseScript.TriggerEvent("curiosity:Server:Log:Message", msg);
-                
                 EventSystem.GetModule().Send("system:notification:basic", -1, msg);
                 
                 return null;
