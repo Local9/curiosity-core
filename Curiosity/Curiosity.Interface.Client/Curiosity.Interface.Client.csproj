@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Curiosity.Interface.Client</RootNamespace>
-    <AssemblyName>Curiosity.Systems.Client.net</AssemblyName>
+    <AssemblyName>Curiosity.Interface.Client.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
