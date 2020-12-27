@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Enums;
+using Curiosity.Server.net.Classes;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Concurrent;
@@ -235,7 +236,7 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
-                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerLog, player.Name, $"{Server.hostname}", $"Player Role: {(Privilege)user.RoleId} [Supporter Access Enabled: {user.IsSupporterAccess}]");
+                DiscordWrapper.SendDiscordPlayerLogMessage($"Player {player.Name}#{user.UserId}, Role: {(Privilege)user.RoleId} [Supporter Access Enabled: {user.IsSupporterAccess}]");
 
                 if (Server.IsSupporterAccess && !user.IsSupporterAccess)
                 {
