@@ -22,11 +22,15 @@ namespace Curiosity.Server.net
         public static bool showPlayerLocation = true;
         public static int startingLocationId = 0;
         public static int minutesAFK = 15;
-        public static bool IsSupporterAccess = false;
-        public static string hostname = "";
+        public static string hostname
+        {
+            get
+            {
+                return API.GetConvar("sv_hostname", "unable to get hostname");
+            }
+        }
 
         public static bool IsBirthday = false;
-
         DateTime BirthdayDate = new DateTime(DateTime.Now.Year, 5, 15);
 
         public ExportDictionary ExportDictionary => Exports;
@@ -50,7 +54,21 @@ namespace Curiosity.Server.net
             }
         }
 
-        public static bool DEBUG { get; internal set; }
+        public static bool IsSupporterAccess
+        {
+            get
+            {
+                return API.GetConvarInt("supporter_access_only", 0) == 1;
+            }
+        }
+
+        public static bool DEBUG
+        {
+            get
+            {
+                return API.GetConvarInt("server_debug_messages", 0) == 1;
+            }
+        }
 
         public static PlayerList players;
 
@@ -79,8 +97,6 @@ namespace Curiosity.Server.net
             showPlayerBlips = API.GetConvarInt("player_blips", 1) == 1;
             showPlayerLocation = API.GetConvarInt("player_location_display", 1) == 1;
             minutesAFK = API.GetConvarInt("player_afk_timer", 15);
-            IsSupporterAccess = API.GetConvarInt("supporter_access_only", 0) == 1;
-            DEBUG = API.GetConvarInt("server_debug_messages", 0) == 1;
 
             if (IsSupporterAccess)
             {
@@ -180,8 +196,6 @@ namespace Curiosity.Server.net
             {
                 API.SetConvar("tags", $"{curiosity}");
             }
-
-            hostname = API.GetConvar("sv_hostname", "unable to get hostname");
 
             API.SetConvarServerInfo("Map", $"Los Santos");
             API.SetConvarServerInfo("Curiosity", CURIOSITY_VERSION);
