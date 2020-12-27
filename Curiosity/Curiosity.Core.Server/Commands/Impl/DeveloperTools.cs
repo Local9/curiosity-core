@@ -2,12 +2,12 @@
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Server.Extensions;
+using Curiosity.Core.Server.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Systems.Server.Commands.Impl
+namespace Curiosity.Core.Server.Commands.Impl
 {
     public class DeveloperTools : CommandContext
     {

@@ -1,7 +1,7 @@
-using Curiosity.Systems.Server.Diagnostics;
-using Curiosity.Systems.Server.Events;
+using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Events;
 
-namespace Curiosity.Systems.Server.Managers
+namespace Curiosity.Core.Server.Managers
 {
     public abstract class Manager<T> where T : Manager<T>, new()
     {

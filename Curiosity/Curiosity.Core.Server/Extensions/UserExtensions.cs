@@ -1,7 +1,7 @@
 ﻿using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Server.Events;
+using Curiosity.Core.Server.Events;
 
-namespace Curiosity.Systems.Server.Extensions
+namespace Curiosity.Core.Server.Extensions
 {
     static class UserExtensions
     {

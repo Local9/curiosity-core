@@ -1,8 +1,8 @@
-﻿using Curiosity.Systems.Server.Managers;
+﻿using Curiosity.Core.Server.Managers;
 using Newtonsoft.Json;
 using System;
 
-namespace Curiosity.Systems.Server.ServerExports
+namespace Curiosity.Core.Server.ServerExports
 {
     public class StatusExport : Manager<StatusExport>
     {

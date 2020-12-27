@@ -2,18 +2,18 @@
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Server.Commands;
-using Curiosity.Systems.Server.Commands.Impl;
-using Curiosity.Systems.Server.Diagnostics;
-using Curiosity.Systems.Server.Managers;
-using Curiosity.Systems.Server.Web;
+using Curiosity.Core.Server.Commands;
+using Curiosity.Core.Server.Commands.Impl;
+using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Managers;
+using Curiosity.Core.Server.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Curiosity.Systems.Server
+namespace Curiosity.Core.Server
 {
     public class CuriosityPlugin : BaseScript
     {

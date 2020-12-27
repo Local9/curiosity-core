@@ -3,7 +3,7 @@ using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
 
-namespace Curiosity.Systems.Server.Managers
+namespace Curiosity.Core.Server.Managers
 {
     public class ChatManager : Manager<ChatManager>
     {

@@ -1,11 +1,11 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Systems.Library.Models.Discord;
-using Curiosity.Systems.Server.Diagnostics;
+using Curiosity.Core.Server.Diagnostics;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.Systems.Server.Web
+namespace Curiosity.Core.Server.Web
 {
     class DiscordClient
     {

@@ -2,7 +2,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
 
-namespace Curiosity.Systems.Server.Environment.Entities
+namespace Curiosity.Core.Server.Environment.Entities
 {
     public class CuriosityEntity
     {

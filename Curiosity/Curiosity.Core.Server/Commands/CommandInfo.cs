@@ -1,6 +1,6 @@
 using System;
 
-namespace Curiosity.Systems.Server.Commands
+namespace Curiosity.Core.Server.Commands
 {
     public class CommandInfo : Attribute
     {

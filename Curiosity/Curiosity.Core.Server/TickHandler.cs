@@ -1,6 +1,6 @@
 using System;
 
-namespace Curiosity.Systems.Server
+namespace Curiosity.Core.Server
 {
     public class TickHandler : Attribute
     {

@@ -1,10 +1,10 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Systems.Server.Diagnostics;
+using Curiosity.Core.Server.Diagnostics;
 using System;
 using System.Collections.Generic;
 
-namespace Curiosity.Brain.Server.net
+namespace Curiosity.Core.Server.net
 {
     public class SessionManager : BaseScript
     {

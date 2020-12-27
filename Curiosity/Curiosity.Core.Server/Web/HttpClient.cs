@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Curiosity.Systems.Server.Web
+namespace Curiosity.Core.Server.Web
 {
     public struct RequestResponse
     {

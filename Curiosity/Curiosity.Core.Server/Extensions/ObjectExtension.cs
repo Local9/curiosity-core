@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Curiosity.Systems.Server.Extensions
+namespace Curiosity.Core.Server.Extensions
 {
     static class ObjectExtension
     {

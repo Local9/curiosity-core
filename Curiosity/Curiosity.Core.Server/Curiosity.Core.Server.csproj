@@ -7,8 +7,8 @@
     <ProjectGuid>{15FD70E1-F8BC-4670-A71D-16903BE7295F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Curiosity.Systems.Server</RootNamespace>
-    <AssemblyName>Curiosity.Systems.Server.net</AssemblyName>
+    <RootNamespace>Curiosity.Core.Server</RootNamespace>
+    <AssemblyName>Curiosity.Core.Server.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

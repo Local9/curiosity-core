@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
-namespace Curiosity.Systems.Server.Environment.Entities
+namespace Curiosity.Core.Server.Environment.Entities
 {
     public class CuriosityPlayer
     {

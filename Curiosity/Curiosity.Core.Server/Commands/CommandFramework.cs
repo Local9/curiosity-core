@@ -1,13 +1,13 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Server.Diagnostics;
-using Curiosity.Systems.Server.Managers;
+using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Curiosity.Systems.Server.Commands
+namespace Curiosity.Core.Server.Commands
 {
     public class CommandFramework
     {

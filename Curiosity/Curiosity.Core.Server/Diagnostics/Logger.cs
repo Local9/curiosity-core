@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using System;
 
-namespace Curiosity.Systems.Server.Diagnostics
+namespace Curiosity.Core.Server.Diagnostics
 {
     class Logger : BaseScript
     {

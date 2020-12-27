@@ -2,7 +2,7 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 
-namespace Curiosity.Systems.Server.Commands
+namespace Curiosity.Core.Server.Commands
 {
     public abstract class CommandContext
     {
