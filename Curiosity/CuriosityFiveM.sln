@@ -193,6 +193,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_Systems", "2_Systems", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Systems.Library", "Curiosity.Systems.Library\Curiosity.Systems.Library.csproj", "{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Systems.LibraryOld", "Curiosity.Systems.Library_old\Curiosity.Systems.LibraryOld.csproj", "{7D0DF956-549B-4251-9B6B-B05EEB53832C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -455,6 +457,10 @@ Global
 		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D0DF956-549B-4251-9B6B-B05EEB53832C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D0DF956-549B-4251-9B6B-B05EEB53832C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D0DF956-549B-4251-9B6B-B05EEB53832C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D0DF956-549B-4251-9B6B-B05EEB53832C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -530,6 +536,7 @@ Global
 		{2BEF800D-6F6D-4EC9-AF7F-67DEEAFB2229} = {CD4C2E62-C897-47F2-A14A-CA60F08A42ED}
 		{B2FF3F8A-A0EA-41C7-B7E7-08E381BE7CAA} = {996E6F14-59F0-40C8-8870-882FAF32A036}
 		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9} = {48DAA469-01DC-4A80-A7DA-717F71444A6B}
+		{7D0DF956-549B-4251-9B6B-B05EEB53832C} = {5B08BD43-975A-44DD-9AD8-4B96EB32B987}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}
