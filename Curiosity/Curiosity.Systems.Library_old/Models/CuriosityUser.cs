@@ -1,4 +1,3 @@
-using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -24,14 +23,6 @@ namespace Curiosity.Systems.Library.Models
         public int QueuePriority { get; set; }
         public CuriosityCharacter Character { get; set; }
         public Guid PartyId { get; internal set; } = Guid.Empty;
-        public string CurrentJob { get; set; } = string.Empty;
-
-        public int TotalNumberOfPlayerKills { get; internal set; } = 0;
-
-        public void LogPlayerKill()
-        {
-            TotalNumberOfPlayerKills++;
-        }
 
         public void SetPartyId(Guid partyId)
         {
@@ -43,15 +34,11 @@ namespace Curiosity.Systems.Library.Models
         public bool IsTrustedAdmin => (Role == Role.COMMUNITY_MANAGER || Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);
         public bool IsDeveloper => (Role == Role.DEVELOPER || Role == Role.PROJECT_MANAGER);
         public bool IsProjectManager => (Role == Role.PROJECT_MANAGER);
-        public bool IsDonator => (Role == Role.DONATOR_LEVEL_1 || Role == Role.DONATOR_LEVEL_2 || Role == Role.DONATOR_LEVEL_3 || Role == Role.DONATOR_LIFE);
+        public bool IsDonator => (Role == Role.DONATOR_LEVEL_1 || Role == Role.DONATOR_LEVEL_2 || Role == Role.DONATOR_LEVEL_3);
         public bool IsDonatorLevel1 => (Role == Role.DONATOR_LEVEL_1);
         public bool IsDonatorLevel2 => (Role == Role.DONATOR_LEVEL_2);
         public bool IsDonatorLevel3 => (Role == Role.DONATOR_LEVEL_3);
-        public bool IsDonatorLife => (Role == Role.DONATOR_LIFE);
-
-        public bool NotificationBackup { get; set; } = false;
-        public DateTime LastNotificationBackup { get; set; }
-        public int Wallet { get; set; }
-        public int PersonalVehicle { get; set; }
+        public bool IsAllowedSupportXp => (IsStaff || IsDonator || DiscordRoles.Contains(Roles.EARLY_ACCESS) || DiscordRoles.Contains(Roles.RESPECTED) || DiscordRoles.Contains(Roles.VETERAN));
+        // public bool IsDiscordNitroBooster => (DiscordRoles.Contains(Roles.NITRO));
     }
 }

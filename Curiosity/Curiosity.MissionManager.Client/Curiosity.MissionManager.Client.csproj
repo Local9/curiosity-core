@@ -146,13 +146,13 @@
       <Project>{fe7f0756-cfe5-4bb9-a822-e9e1cfbc412b}</Project>
       <Name>Curiosity.Global.Shared.net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Curiosity.MissionManager.Shared\Curiosity.Systems.Library.csproj">
-      <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>
-      <Name>Curiosity.Systems.Library</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Curiosity.Shared.Client.net\Curiosity.Shared.Client.net.csproj">
       <Project>{37F1F478-BE0B-4C2B-A062-24077F851B69}</Project>
       <Name>Curiosity.Shared.Client.net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Curiosity.Systems.Library\Curiosity.Systems.Library.csproj">
+      <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>
+      <Name>Curiosity.Systems.Library</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

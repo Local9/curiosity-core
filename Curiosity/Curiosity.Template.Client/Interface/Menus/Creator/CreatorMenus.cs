@@ -107,7 +107,7 @@ namespace Curiosity.Template.Client.Interface.Menus.Creator
 
                 if (Cache.Character.Heritage == null)
                 {
-                    Cache.Character.Heritage = new Library.Models.CharacterHeritage();
+                    Cache.Character.Heritage = new Systems.Library.Models.CharacterHeritage();
                 }
 
                 Cache.Character.Gender = newIndex;

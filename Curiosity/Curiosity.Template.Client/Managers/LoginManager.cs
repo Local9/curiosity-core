@@ -54,7 +54,7 @@ namespace Curiosity.Template.Client.Managers
             Curiosity.Local = new CuriosityPlayer(user.DiscordId, new CuriosityEntity(pedHandle))
             {
                 Handle = serverHandle,
-                Name = user.LastName,
+                Name = user.LatestName,
                 User = user
             };
 

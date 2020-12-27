@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Curiosity.Systems.Library")]
+[assembly: AssemblyTitle("Curiosity.MissionManager.Shared")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Curiosity.Systems.Library")]
+[assembly: AssemblyProduct("Curiosity.MissionManager.Shared")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7d0df956-549b-4251-9b6b-b05eeb53832c")]
+[assembly: Guid("e8a0e780-c0dd-4242-ae9a-3386877ba0e9")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -46,7 +46,7 @@ namespace Curiosity.Template.Client.Environment.Entities.Models
             {
                 API.PushScaleformMovieFunction(movie, "SET_BOARD");
                 API.PushScaleformMovieFunctionParameterString($"Life V #{player.User.UserId}"); // Top Line
-                API.PushScaleformMovieFunctionParameterString(player.User.LastName); // Main Line
+                API.PushScaleformMovieFunctionParameterString(player.User.LatestName); // Main Line
                 API.PushScaleformMovieFunctionParameterString($"LOS SANTOS POLICE DEPT"); // Bottom
                 API.PushScaleformMovieFunctionParameterString($"${player.Character.Cash}"); // Sub top line
                 API.PopScaleformMovieFunctionVoid();

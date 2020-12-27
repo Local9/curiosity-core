@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.MissionManager.Client;
 using Curiosity.MissionTemplate.Missions;
 using Curiosity.Shared.Client.net;
 using System;
