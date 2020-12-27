@@ -17,8 +17,6 @@ namespace Curiosity.Interface.Client
 {
     public class CuriosityPlugin : BaseScript
     {
-        public const string DECOR_PED_OWNER = "PED_OWNER";
-
         public static CuriosityPlugin Instance { get; private set; }
         public static Random Rand = new Random();
         public static int MaximumPlayers { get; } = 32;
@@ -33,11 +31,68 @@ namespace Curiosity.Interface.Client
 
         public CuriosityPlugin()
         {
-            Logger.Info("[Curiosity]: Constructor Call from CitizenFX - BaseScript");
+            Logger.Info("[Curiosity-UI]: Constructor Call from CitizenFX - BaseScript");
 
             PlayerList = Players;
 
             Instance = this;
+
+            Load();
+        }
+
+        private async Task Load()
+        {
+            Logger.Info("[Curiosity-UI]: Loading managers, please wait...");
+
+            Assembly.GetExecutingAssembly().GetExportedTypes()
+                .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+                .Where(self => self.GetCustomAttribute(typeof(TickHandler), false) != null).ToList()
+                .ForEach(self =>
+                {
+                    var type = self.DeclaringType;
+
+                    if (type == null) return;
+
+                    if (!TickHandlers.ContainsKey(type))
+                    {
+                        TickHandlers.Add(type, new List<MethodInfo>());
+                    }
+
+                    Logger.Debug($"[TickHandlers] {type.Name}::{self.Name}");
+
+                    TickHandlers[type].Add(self);
+                });
+
+            var loaded = 0;
+
+            // Load event system first
+            LoadManager(typeof(EventSystem));
+
+            foreach (var type in Assembly.GetExecutingAssembly().GetExportedTypes())
+            {
+                if (type.BaseType == null) continue;
+                if (!type.BaseType.IsGenericType) continue;
+
+                var generic = type.BaseType.GetGenericTypeDefinition();
+
+                if (generic != typeof(Manager<>) || type == typeof(Manager<>)) continue;
+
+                LoadManager(type);
+
+                loaded++;
+            }
+
+            foreach (var manager in Managers)
+            {
+                var method = manager.Key.GetMethod("Begin", BindingFlags.Public | BindingFlags.Instance);
+                method?.Invoke(manager.Value, null);
+            }
+
+            Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
+
+            AttachTickHandlers(this);
+
+            Logger.Info("Load method has been completed.");
         }
 
         public object LoadManager(Type type)
@@ -64,6 +119,11 @@ namespace Curiosity.Interface.Client
             {
                 var handler = (TickHandler)self.GetCustomAttribute(typeof(TickHandler));
 
+                if (handler.SessionWait)
+                {
+                    await Session.Loading();
+                }
+
                 Tick += (Func<Task>)Delegate.CreateDelegate(typeof(Func<Task>), instance, self);
 
                 RegisteredTickHandlers.Add(instance.GetType());
@@ -83,16 +143,6 @@ namespace Curiosity.Interface.Client
         public T GetManager<T>() where T : Manager<T>, new()
         {
             return (T)Managers.FirstOrDefault(self => self.Key == typeof(T)).Value;
-        }
-
-        public void AttachTickHandler(Func<Task> task)
-        {
-            Tick += task;
-        }
-
-        public void DetachTickHandler(Func<Task> task)
-        {
-            Tick -= task;
         }
 
         public void AttachNuiHandler(string pipe, EventCallback callback)

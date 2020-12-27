@@ -99,7 +99,8 @@ namespace Curiosity.Interface.Client.Managers
                 {
                     EnableChatbox(false);
                 }
-                else if (Game.IsControlJustPressed(0, Control.MpTextChatAll) || Game.IsControlJustReleased(0, Control.MpTextChatAll))
+                
+                if (Game.IsControlJustPressed(0, Control.MpTextChatAll))
                 {
                     EnableChatbox(true);
                 }
