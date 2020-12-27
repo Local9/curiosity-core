@@ -36,12 +36,12 @@ namespace Curiosity.Interface.Client.Diagnostics
 
         public static void Debug(string msg)
         {
-            if (Cache.Player != null)
-            {
-                if (!Cache.Player.User.IsDeveloper) return;
+            //if (Cache.Player != null)
+            //{
+            //    if (!Cache.Player.User.IsDeveloper) return;
 
-                WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
-            }
+            //    WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
+            //}
         }
 
         private static void WriteLine(string title, string msg, ConsoleColor color)

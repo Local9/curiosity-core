@@ -35,7 +35,7 @@ namespace Curiosity.Interface.Client.Managers
             Curiosity.AttachNuiHandler("PlayerProfile", new EventCallback(metadata =>
             {
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
-                    .Add("profile", Cache.Player).Build();
+                    .Add("profile", null).Build();
 
                 API.SendNuiMessage(jsn);
 
@@ -69,10 +69,8 @@ namespace Curiosity.Interface.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnCoreControls()
         {
-            if (Session.CreatingCharacter) return;
             if (!IsCoreOpen && Game.IsControlJustPressed(0, Control.FrontendSocialClubSecondary))
             {
-                Cache.Player.Handle = Game.Player.ServerId;
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
                 OpenTablet();
@@ -92,7 +90,7 @@ namespace Curiosity.Interface.Client.Managers
         {
             string jsn = new JsonBuilder().Add("operation", "PANEL")
             .Add("panel", "PDA")
-            .Add("playerHandle", Cache.Player.Handle)
+            .Add("playerHandle", Game.Player.ServerId)
             .Add("main", IsCoreOpen)
             .Build();
 
