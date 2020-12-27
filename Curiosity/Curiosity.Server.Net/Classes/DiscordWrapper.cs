@@ -159,12 +159,13 @@ namespace Curiosity.Server.net.Classes
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
                 webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
-                webhook.Username = $"Report made by {reporterName}";
+                string cleanName = StripUnicodeCharactersFromString(Server.hostname);
+                webhook.Username = cleanName;
 
                 Embed embed = new Embed();
-                embed.Author = new EmbedAuthor { Name = reporterName, IconUrl = discordWebhook.Avatar };
-                embed.Title = $"Player: {playerBeingReported}";
-                embed.Description = $"Reason: {reason}";
+                embed.Author = new EmbedAuthor { Name = $"Report By: {reporterName}", IconUrl = discordWebhook.Avatar };
+                embed.Title = $"Report";
+                embed.Description = $"Player: {playerBeingReported}\nReason: {reason}";
                 embed.Color = (int)DiscordColor.Blue;
                 embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
 
@@ -190,16 +191,18 @@ namespace Curiosity.Server.net.Classes
 
                 if (IsDelayRunnning) return;
 
+                string cleanName = StripUnicodeCharactersFromString(name);
+
                 Entity.DiscordWebhook discordWebhook = webhooks[webhookChannel];
 
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
                 webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
-                webhook.Username = StripUnicodeCharactersFromString(name);
+                webhook.Username = cleanName;
 
                 Embed embed = new Embed();
-                embed.Author = new EmbedAuthor { Name = name, IconUrl = discordWebhook.Avatar };
+                embed.Author = new EmbedAuthor { Name = cleanName, IconUrl = discordWebhook.Avatar };
                 embed.Title = StripUnicodeCharactersFromString(title);
                 embed.Description = StripUnicodeCharactersFromString(description);
                 embed.Color = (int)discordColor;
