@@ -4,33 +4,35 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class ExportsManager : Manager<ExportsManager>
     {
-        public override async void Begin()
+        public override void Begin()
         {
             Instance.ExportRegistry.Add("Discord", new Func<string, string, string, string, string, bool>(
-                (asset, assetText, smallAsset, smallAssetTest, status) =>
+                (asset, assetText, smallAsset, smallAssetText, status) =>
                 {
-                    if (!string.IsNullOrEmpty(asset))
-                        Instance.DiscordRichPresence.Asset = asset;
-
-                    if (!string.IsNullOrEmpty(assetText))
-                        Instance.DiscordRichPresence.AssetText = assetText;
-
-                    if (!string.IsNullOrEmpty(smallAsset))
-                        Instance.DiscordRichPresence.SmallAsset = smallAsset;
-
-                    if (!string.IsNullOrEmpty(smallAssetTest))
-                        Instance.DiscordRichPresence.SmallAssetText = smallAssetTest;
-
-                    if (!string.IsNullOrEmpty(status))
-                        Instance.DiscordRichPresence.Status = status;
-
-                    if (!string.IsNullOrEmpty(status) || !string.IsNullOrEmpty(smallAssetTest) || !string.IsNullOrEmpty(smallAsset))
+                    try
                     {
+                        if (!string.IsNullOrEmpty(asset))
+                            Instance.DiscordRichPresence.Asset = asset;
+
+                        if (!string.IsNullOrEmpty(assetText))
+                            Instance.DiscordRichPresence.AssetText = assetText;
+
+                        if (!string.IsNullOrEmpty(smallAsset))
+                            Instance.DiscordRichPresence.SmallAsset = smallAsset;
+
+                        if (!string.IsNullOrEmpty(smallAssetText))
+                            Instance.DiscordRichPresence.SmallAssetText = smallAssetText;
+
+                        if (!string.IsNullOrEmpty(status))
+                            Instance.DiscordRichPresence.Status = status;
+
                         Instance.DiscordRichPresence.Commit();
                         return true;
                     }
-
-                    return false;
+                    catch (Exception ex)
+                    {
+                        return false;
+                    }
                 }
             ));
         }
