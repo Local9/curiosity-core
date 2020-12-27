@@ -235,6 +235,8 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
+                Classes.DiscordWrapper.SendDiscordSimpleMessage(Enums.Discord.WebhookChannel.ServerLog, player.Name, $"{Server.hostname}", $"Player Role: {(Privilege)user.RoleId} [Supporter Access Enabled: {user.IsSupporterAccess}]");
+
                 if (Server.IsSupporterAccess && !user.IsSupporterAccess)
                 {
                     Log.Info($"Queue Player not allowed access: {player.Name} ({(Privilege)user.RoleId}) [{user.IsSupporterAccess}]");
