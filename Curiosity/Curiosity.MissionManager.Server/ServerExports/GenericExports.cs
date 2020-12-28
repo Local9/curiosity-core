@@ -5,7 +5,7 @@ using System;
 
 namespace Curiosity.MissionManager.Server.ServerExports
 {
-    public class StatusExport : Manager<StatusExport>
+    public class GenericExports : Manager<GenericExports>
     {
         public override void Begin()
         {

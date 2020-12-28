@@ -71,7 +71,7 @@
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerExports\StatusExport.cs" />
+    <Compile Include="ServerExports\GenericExports.cs" />
     <Compile Include="Web\DiscordClient.cs" />
     <Compile Include="Web\HttpClient.cs" />
   </ItemGroup>
