@@ -23,7 +23,7 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            Instance.ExportDictionary["curiosity-server"].ServerEventLog($"{player.Name} tried to give someone a weapon.");
+            Instance.ExportDictionary["curiosity-server"].ServerEventLog($"{player.Name} tried to give someone a weapon, or a script is badly written.");
         }
 
         private void OnClearPedTasksEvent(int source, bool immediately)
@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            Instance.ExportDictionary["curiosity-server"].ServerEventLog($"{player.Name} tried to remove someone from their vehicle.");
+            Instance.ExportDictionary["curiosity-server"].ServerEventLog($"{player.Name} tried to remove someone from their vehicle, or a script is badly written.");
         }
     }
 }
