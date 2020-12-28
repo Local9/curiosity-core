@@ -23,6 +23,16 @@ namespace Curiosity.Server.net.ServerExports
                 }
             ));
 
+            Instance.ExportDictionary.Add("ServerEventLog", new Func<string, bool>(
+                (message) =>
+                {
+                    Logger.Debug($"[ServerEventLog] {message}");
+
+                    DiscordWrapper.SendDiscordServerEventLogMessage(message);
+                    return true;
+                }
+            ));
+
             Instance.ExportDictionary.Add("GetUser", new Func<string, string>(
                 (handle) =>
                 {
