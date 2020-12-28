@@ -15,13 +15,13 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server
 {
-    public class CuriosityPlugin : BaseScript
+    public class PluginManager : BaseScript
     {
         const string CURIOSITY_VERSION = "v2.0.0.0001";
         private const string CONVAR_MISSING = "MISSING";
         private string SERVER_KEY;
 
-        public static CuriosityPlugin Instance { get; private set; }
+        public static PluginManager Instance { get; private set; }
         public static PlayerList PlayersList { get; private set; }
         public static int MaximumPlayers { get; } = 32;
         public static int ServerId { get; private set; }
@@ -43,9 +43,9 @@ namespace Curiosity.Core.Server
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
 
-        public CuriosityPlugin()
+        public PluginManager()
         {
-            Logger.Info("[CuriosityPlugin] Loading...");
+            Logger.Info("[CuriosityPlugin-CORE] Loading...");
 
             Instance = this;
             SetupConvars();
@@ -144,7 +144,7 @@ namespace Curiosity.Core.Server
 
                 string tags = API.GetConvar("tags", string.Empty);
                 string[] tagArr = tags.Split(',');
-                string curiosity = "Curiosity";
+                string curiosity = "Curiosity-Core";
 
                 if (tagArr.Length > 0)
                 {
@@ -154,7 +154,7 @@ namespace Curiosity.Core.Server
                 {
                     API.SetConvar("tags", $"{curiosity}");
                 }
-                API.SetConvarServerInfo("Curiosity", CURIOSITY_VERSION);
+                API.SetConvarServerInfo("Curiosity-Core", CURIOSITY_VERSION);
 
                 // Disable client side entity creation
                 // Function.Call((Hash)0x0071321B, "relaxed"); // ONESYNC

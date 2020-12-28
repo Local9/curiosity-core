@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server.Diagnostics
 
         public static void Debug(string msg)
         {
-            if (!CuriosityPlugin.IsDebugging) return;
+            if (!PluginManager.IsDebugging) return;
             WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
         }
 
@@ -45,7 +45,7 @@ namespace Curiosity.Core.Server.Diagnostics
         {
             try
             {
-                var m = $"[CURIOSITY][{title}] {msg}";
+                var m = $"[CURIOSITY-CORE][{title}] {msg}";
                 Console.ForegroundColor = color;
                 Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {m}");
                 Console.ResetColor();

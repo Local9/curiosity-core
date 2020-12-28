@@ -9,13 +9,13 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
-            Curiosity.EventRegistry["chat:global"] += new Action<Player, string, string>(OnChatMessage);
+            Instance.EventRegistry["chat:global"] += new Action<Player, string, string>(OnChatMessage);
         }
 
         public static void OnChatMessage([FromSource] Player player, string message, string channel)
         {
             int playerHandle = int.Parse(player.Handle);
-            CuriosityUser user = CuriosityPlugin.ActiveUsers[playerHandle];
+            CuriosityUser user = PluginManager.ActiveUsers[playerHandle];
 
             ChatMessage chatMessage = new ChatMessage();
 
@@ -26,7 +26,7 @@ namespace Curiosity.Core.Server.Managers
 
             string jsonMessage = JsonConvert.SerializeObject(chatMessage);
 
-            CuriosityPlugin.TriggerClientEvent("chat:receive", jsonMessage);
+            PluginManager.TriggerClientEvent("chat:receive", jsonMessage);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Curiosity.Core.Server.Web
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Content-Type", "application/json");
-            headers.Add("Authorization", $"Bot {CuriosityPlugin.DiscordBotKey}");
+            headers.Add("Authorization", $"Bot {PluginManager.DiscordBotKey}");
             return await request.Http($"{url}", method, jsonData, headers);
         }
 
@@ -23,7 +23,7 @@ namespace Curiosity.Core.Server.Web
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
             headers.Add("Content-Type", "application/json");
-            headers.Add("Authorization", $"Bot {CuriosityPlugin.DiscordBotKey}");
+            headers.Add("Authorization", $"Bot {PluginManager.DiscordBotKey}");
             return await request.Http($"https://discordapp.com/api/{endpoint}", method, jsonData, headers);
         }
 
@@ -31,12 +31,12 @@ namespace Curiosity.Core.Server.Web
         {
             bool IsMember = false;
 
-            RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{CuriosityPlugin.DiscordGuildId}/members/{discordId}", string.Empty);
+            RequestResponse requestResponse = await DiscordRequest("GET", $"guilds/{PluginManager.DiscordGuildId}/members/{discordId}", string.Empty);
 
             if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
             {
                 Logger.Info($"DiscordClient : {player.Name} is NOT a member of the Discord Guild.");
-                player.Drop($"This server requires that your are a member of their Discord.\nDiscord URL: {CuriosityPlugin.DiscordUrl}");
+                player.Drop($"This server requires that your are a member of their Discord.\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
             }
 

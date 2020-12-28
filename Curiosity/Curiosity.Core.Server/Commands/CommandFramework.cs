@@ -43,7 +43,7 @@ namespace Curiosity.Core.Server.Commands
 
                 var created = (ICommand)Activator.CreateInstance(nested);
 
-                CuriosityPlugin.Instance.AttachTickHandlers(created);
+                PluginManager.Instance.AttachTickHandlers(created);
 
                 Registry[context].Add(new Tuple<CommandInfo, ICommand>(commandInfo, created));
 
@@ -67,10 +67,10 @@ namespace Curiosity.Core.Server.Commands
             string alias,
             IReadOnlyList<object> arguments)
         {
-            if (!CuriosityPlugin.ActiveUsers.ContainsKey(playerHandle)) return;
+            if (!PluginManager.ActiveUsers.ContainsKey(playerHandle)) return;
 
-            CuriosityUser curiosityUser = CuriosityPlugin.ActiveUsers[playerHandle];
-            Player player = CuriosityPlugin.GetPlayer(playerHandle);
+            CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerHandle];
+            Player player = PluginManager.GetPlayer(playerHandle);
 
             if (context.IsRestricted && !context.RequiredRoles.Contains(curiosityUser.Role))
             {

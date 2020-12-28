@@ -8,10 +8,10 @@ namespace Curiosity.Core.Server.ServerExports
     {
         public override void Begin()
         {
-            Curiosity.ExportDictionary.Add("Status", new Func<string>(
+            Instance.ExportDictionary.Add("Status", new Func<string>(
                 () =>
                 {
-                    var returnObject = new { status = CuriosityPlugin.ServerReady };
+                    var returnObject = new { status = PluginManager.ServerReady };
                     return JsonConvert.SerializeObject(returnObject);
                 }
             ));

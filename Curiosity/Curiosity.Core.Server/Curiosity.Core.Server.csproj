@@ -39,7 +39,6 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_Dependancies\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -56,13 +55,14 @@
     <Compile Include="Commands\CommandInfo.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\Impl\DeveloperTools.cs" />
-    <Compile Include="CuriosityPlugin.cs" />
+    <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Environment\Entites\CuriosityEntity.cs" />
     <Compile Include="Environment\Entites\CuriosityPlayer.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Extensions\ObjectExtension.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Managers\ServerEventManager.cs" />
     <Compile Include="ServerExports\StatusExport.cs" />
     <Compile Include="Managers\ChatManager.cs" />
     <Compile Include="Managers\Manager.cs" />

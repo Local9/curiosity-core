@@ -7,17 +7,17 @@ namespace Curiosity.Core.Server.Managers
     {
         public static T GetModule()
         {
-            return CuriosityPlugin.Instance.GetManager<T>() ?? (!CuriosityPlugin.Instance.IsLoadingManager<T>()
-                       ? (T)CuriosityPlugin.Instance.LoadManager(typeof(T))
+            return PluginManager.Instance.GetManager<T>() ?? (!PluginManager.Instance.IsLoadingManager<T>()
+                       ? (T)PluginManager.Instance.LoadManager(typeof(T))
                        : null);
         }
 
-        public CuriosityPlugin Curiosity { get; set; }
+        public PluginManager Instance { get; set; }
         public EventSystem EventSystem { get; set; }
 
         protected Manager()
         {
-            Curiosity = CuriosityPlugin.Instance;
+            Instance = PluginManager.Instance;
             EventSystem = EventSystem.GetModule();
         }
 
