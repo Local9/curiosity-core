@@ -236,7 +236,7 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
-                DiscordWrapper.SendDiscordPlayerLogMessage($"Player {player.Name}#{user.UserId}, Role: {(Privilege)user.RoleId} [Supporter Access Enabled: {user.IsSupporterAccess}]");
+                DiscordWrapper.SendDiscordPlayerLogMessage($"Player {player.Name}#{user.UserId}, Role: {(Privilege)user.RoleId} [Supporter Access Enabled: {Server.IsSupporterAccess}]");
 
                 if (Server.IsSupporterAccess && !user.IsSupporterAccess)
                 {
