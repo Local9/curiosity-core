@@ -20,6 +20,7 @@ namespace Curiosity.Server.net.Classes
 
         static long skillTicker = API.GetGameTimer();
         static int skillMinuteUpdate = (Server.isLive ? 30 : 5);
+        static DateTime lastUpdate = DateTime.Now;
 
         public static void Init()
         {
@@ -234,9 +235,9 @@ namespace Curiosity.Server.net.Classes
                 skills = await Database.DatabaseUsersSkills.GetSkills();
                 Log.Verbose($"Skills -> {skills.Count} Found.");
             }
-            else if ((API.GetGameTimer() - skillTicker) > (1000 * 60) * skillMinuteUpdate)
+            else if (DateTime.Now.Subtract(lastUpdate).TotalMinutes >= skillMinuteUpdate)
             {
-                skillTicker = API.GetGameTimer();
+                lastUpdate = DateTime.Now;
                 skills = await Database.DatabaseUsersSkills.GetSkills();
                 Log.Verbose($"Skills -> {skills.Count} Found. Next update in {skillMinuteUpdate} mins.");
             }
