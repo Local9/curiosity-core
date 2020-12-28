@@ -47,12 +47,14 @@ namespace Curiosity.Server.net.Classes
         {
             if (DateTime.Now.Subtract(lastUpdate).TotalSeconds > 120)
             {
+                // update every 2 minutes
                 lastUpdate = DateTime.Now;
                 UpdateWebhooks();
             }
 
             if (webhooks.Count == 0)
             {
+                // init
                 UpdateWebhooks();
             }
 
@@ -61,14 +63,9 @@ namespace Curiosity.Server.net.Classes
 
         private static async Task UpdateWebhooks()
         {
-            if (Server.serverId != 0)
+            if (Server.serverId > 0)
             {
                 webhooks = await Database.Config.GetDiscordWebhooksAsync(Server.serverId);
-
-                if (webhooks.Count > 0)
-                {
-                    Logger.Debug($"Discord Webhooks Dictionary Updated [{webhooks.Count} found, ServerID: {Server.serverId}]");
-                }
             }
         }
 
