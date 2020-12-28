@@ -37,15 +37,16 @@ namespace Curiosity.Shared.Server.net.Helpers
 
         public static void Debug(string msg)
         {
-            WriteLine("DEBUG", msg, ConsoleColor.Magenta);
+            WriteLine("DEBUG", msg, ConsoleColor.Black, ConsoleColor.Gray);
         }
 
-        private static void WriteLine(string title, string msg, ConsoleColor color)
+        private static void WriteLine(string title, string msg, ConsoleColor color, ConsoleColor backgroundColor = ConsoleColor.Black)
         {
             try
             {
                 var m = $"[{title}] {msg}";
                 Console.ForegroundColor = color;
+                Console.BackgroundColor = backgroundColor;
                 Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {m}");
                 Console.ResetColor();
             }
