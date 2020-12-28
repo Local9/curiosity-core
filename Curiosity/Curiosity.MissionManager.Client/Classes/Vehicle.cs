@@ -130,6 +130,8 @@ namespace Curiosity.MissionManager.Client.Classes
             Fx = fx;
             API.NetworkRegisterEntityAsNetworked(fx.Handle);
 
+            API.NetworkRequestControlOfEntity(fx.Handle);
+
             DateCreated = DateTime.Now;
 
             this._eventWrapper = new EntityEventWrapper(this.Fx);
