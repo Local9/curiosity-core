@@ -27,20 +27,6 @@ namespace Curiosity.MissionManager.Client.Managers
             Logger.Info($"- [JobManager] Begin -----------------------------");
 
             Instance.EventRegistry[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnJobDutyEvent);
-            Instance.EventRegistry[LegacyEvents.Client.PolicePatrolZone] += new Action<int>(OnJobPatrolZone);
-
-            EventSystem.Attach(LegacyEvents.Client.PolicePatrolZone, new EventCallback(metadata =>
-            {
-                PatrolZone = (PatrolZone)metadata.Find<int>(0);
-                return null;
-            }));
-        }
-
-        private void OnJobPatrolZone(int patrolZone)
-        {
-            Logger.Debug($"OnJobPatrolZone: {patrolZone}");
-
-            PatrolZone = (PatrolZone)patrolZone;
         }
 
         private async void OnJobDutyEvent(bool active, bool onDuty, string job)
