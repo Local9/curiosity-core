@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Systems.Shared.Entity;
 using System;
 
 namespace Curiosity.Core.Server.Managers
@@ -23,7 +24,16 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            Instance.ExportDictionary["curiosity-server"].ServerEventLog($"{player.Name} tried to give someone a weapon, or a script is badly written.");
+            MissionData mission = Instance.ExportDictionary["curiosity-mission"].PlayerMission(source);
+
+            string msg = $"{player.Name} tried to give someone a weapon, or a script is badly written.";
+
+            if (mission != null)
+            {
+                msg += " Player is a mission owner.";
+            }
+
+            Instance.ExportDictionary["curiosity-server"].ServerEventLog(msg);
         }
 
         private void OnClearPedTasksEvent(int source, bool immediately)
