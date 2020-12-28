@@ -21,7 +21,7 @@ namespace Curiosity.Interface.Client.Events
 
         public EventSystem()
         {
-            Curiosity.EventRegistry[EVENT_KEY] += new Action<string>(payload =>
+            Instance.EventRegistry[EVENT_KEY] += new Action<string>(payload =>
             {
                 var wrapped = JsonConvert.DeserializeObject<Event>(payload.ToString());
 

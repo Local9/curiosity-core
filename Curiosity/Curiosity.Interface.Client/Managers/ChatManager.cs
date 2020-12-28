@@ -14,9 +14,9 @@ namespace Curiosity.Interface.Client.Managers
 
         public override void Begin()
         {
-            Curiosity.EventRegistry["chat:receive"] += new Action<string>(OnChatReceived);
+            Instance.EventRegistry["chat:receive"] += new Action<string>(OnChatReceived);
 
-            Curiosity.AttachNuiHandler("SendChatMessage", new EventCallback(metadata =>
+            Instance.AttachNuiHandler("SendChatMessage", new EventCallback(metadata =>
             {
                 EnableChatbox(false);
                 API.SetNuiFocus(false, false);
@@ -40,7 +40,7 @@ namespace Curiosity.Interface.Client.Managers
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("CloseChatMessage", new EventCallback(metadata =>
+            Instance.AttachNuiHandler("CloseChatMessage", new EventCallback(metadata =>
             {
                 EnableChatbox(false);
                 return null;

@@ -6,7 +6,7 @@ namespace Curiosity.Interface.Client.Managers
     {
         public override void Begin()
         {
-            Curiosity.EventRegistry["onPlayerSpawned"] += new Action<dynamic>(OnPlayerSpawned);
+            Instance.EventRegistry["onPlayerSpawned"] += new Action<dynamic>(OnPlayerSpawned);
         }
 
         private void OnPlayerSpawned(dynamic obj)

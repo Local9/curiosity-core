@@ -18,7 +18,7 @@ namespace Curiosity.Interface.Client.Interface.PDA
 
         public override void Begin()
         {
-            Curiosity.AttachNuiHandler("CreateParty", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("CreateParty", new AsyncEventCallback(async metadata =>
             {
                 Party = await EventSystem.Request<Party>("party:create", null);
 
@@ -30,7 +30,7 @@ namespace Curiosity.Interface.Client.Interface.PDA
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("GetPartyDetails", new EventCallback(metadata =>
+            Instance.AttachNuiHandler("GetPartyDetails", new EventCallback(metadata =>
             {
                 if (Party != null)
                 {
@@ -43,7 +43,7 @@ namespace Curiosity.Interface.Client.Interface.PDA
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("PartyInvite", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("PartyInvite", new AsyncEventCallback(async metadata =>
             {
                 int playerToInvite = metadata.Find<int>(0);
 
@@ -71,7 +71,7 @@ namespace Curiosity.Interface.Client.Interface.PDA
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("PartyAcceptInvite", new EventCallback(metadata =>
+            Instance.AttachNuiHandler("PartyAcceptInvite", new EventCallback(metadata =>
             {
                 string guid = metadata.Find<string>(0);
 
@@ -80,7 +80,7 @@ namespace Curiosity.Interface.Client.Interface.PDA
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("PartyDeclineInvite", new EventCallback(metadata =>
+            Instance.AttachNuiHandler("PartyDeclineInvite", new EventCallback(metadata =>
             {
                 string guid = metadata.Find<string>(0);
                 EventSystem.Send("party:invite:decline", guid);
@@ -88,14 +88,14 @@ namespace Curiosity.Interface.Client.Interface.PDA
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("PartyKick", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("PartyKick", new AsyncEventCallback(async metadata =>
             {
                 Logger.Debug($"{metadata}");
 
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("PartyPromote", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("PartyPromote", new AsyncEventCallback(async metadata =>
             {
                 Logger.Debug($"{metadata}");
 

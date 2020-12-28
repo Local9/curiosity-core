@@ -11,12 +11,12 @@ namespace Curiosity.Interface.Client.Managers
                        : null);
         }
 
-        public CuriosityPlugin Curiosity { get; set; }
+        public CuriosityPlugin Instance { get; set; }
         public EventSystem EventSystem => EventSystem.GetModule();
 
         protected Manager()
         {
-            Curiosity = CuriosityPlugin.Instance;
+            Instance = CuriosityPlugin.Instance;
         }
 
         public virtual void Begin()

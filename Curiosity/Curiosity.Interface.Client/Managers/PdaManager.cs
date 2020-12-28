@@ -24,7 +24,7 @@ namespace Curiosity.Interface.Client.Managers
 
         public override void Begin()
         {
-            Curiosity.AttachNuiHandler("ClosePanel", new EventCallback(metadata =>
+            Instance.AttachNuiHandler("ClosePanel", new EventCallback(metadata =>
             {
                 IsCoreOpen = false;
                 SendPanelMessage();
@@ -32,7 +32,7 @@ namespace Curiosity.Interface.Client.Managers
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("PlayerProfile", new EventCallback(metadata =>
+            Instance.AttachNuiHandler("PlayerProfile", new EventCallback(metadata =>
             {
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
                     .Add("profile", null).Build();
@@ -42,7 +42,7 @@ namespace Curiosity.Interface.Client.Managers
                 return null;
             }));
 
-            Curiosity.AttachNuiHandler("GetPlayerList", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("GetPlayerList", new AsyncEventCallback(async metadata =>
             {
                 FiveMPlayerList players = await EventSystem.Request<FiveMPlayerList>("server:playerList", null);
 
