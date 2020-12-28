@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Server.net.Entity.Discord;
 using Curiosity.Server.net.Enums.Discord;
+using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace Curiosity.Server.net.Classes
         static bool IsDelayRunnning = false;
         static long DelayMillis = 0;
 
+        static DateTime lastUpdate = DateTime.Now;
+
         private static Regex _compiledUnicodeRegex = new Regex(@"[^\u0000-\u007F]", RegexOptions.Compiled);
 
         public static String StripUnicodeCharactersFromString(string inputValue)
@@ -30,6 +33,8 @@ namespace Curiosity.Server.net.Classes
 
         public static void Init()
         {
+            Logger.Debug($"Init Discord Wrapper");
+
             if (Server.isLive)
             {
                 server.RegisterEventHandler("curiosity:Server:Discord:Report", new Action<string, string, string>(SendDiscordReportMessage));
@@ -40,17 +45,29 @@ namespace Curiosity.Server.net.Classes
 
         static async Task SetupDiscordWebhooksDictionary()
         {
-            if ((API.GetGameTimer() - setupChecker) > 5000)
+            if (DateTime.Now.Subtract(lastUpdate).TotalSeconds > 120)
             {
-                if (Server.serverId != 0)
-                {
-                    webhooks = await Database.Config.GetDiscordWebhooksAsync(Server.serverId);
+                lastUpdate = DateTime.Now;
+                UpdateWebhooks();
+            }
 
-                    if (webhooks.Count > 0)
-                    {
-                        isConfigured = true;
-                        server.DeregisterTickHandler(SetupDiscordWebhooksDictionary);
-                    }
+            if (webhooks.Count == 0)
+            {
+                UpdateWebhooks();
+            }
+
+            await Server.Delay(1000);
+        }
+
+        private static async Task UpdateWebhooks()
+        {
+            if (Server.serverId != 0)
+            {
+                webhooks = await Database.Config.GetDiscordWebhooksAsync(Server.serverId);
+
+                if (webhooks.Count > 0)
+                {
+                    Logger.Debug($"Discord Webhooks Dictionary Updated [{webhooks.Count} found, ServerID: {Server.serverId}]");
                 }
             }
         }
@@ -66,11 +83,40 @@ namespace Curiosity.Server.net.Classes
             await SendDiscordSimpleMessage(WebhookChannel.Chat, Server.hostname, name, message);
         }
 
+        public static async void SendDiscordServerEventLogMessage(string message)
+        {
+            if (!webhooks.ContainsKey(WebhookChannel.ServerEventLog))
+            {
+                Log.Warn($"SendDiscordChatMessage() -> Discord Server Event Webhook Missing");
+                return;
+            }
+
+            try
+            {
+                Entity.DiscordWebhook discordWebhook = webhooks[WebhookChannel.ServerEventLog];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}");
+                webhook.Username = StripUnicodeCharactersFromString(Server.hostname);
+
+                await webhook.Send();
+
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"SendDiscordPlayerLogMessage() -> {ex.Message}");
+            }
+
+        }
+
         public static async void SendDiscordPlayerLogMessage(string message)
         {
             if (!webhooks.ContainsKey(WebhookChannel.PlayerLog))
             {
-                Log.Warn($"SendDiscordChatMessage() -> Discord Player Webhook Missing");
+                Log.Warn($"SendDiscordChatMessage() -> Discord Player Log Webhook Missing");
                 return;
             }
 
