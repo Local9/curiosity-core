@@ -26,14 +26,14 @@ namespace Curiosity.Core.Server.Managers
 
             MissionData mission = Instance.ExportDictionary["curiosity-mission"].PlayerMission(source);
 
-            string msg = $"{player.Name} tried to give someone a weapon, or a script is badly written.";
+            string msg = $"[{source}] '{player.Name}' tried to give someone a weapon, or a script is badly written.";
 
             if (mission != null)
             {
                 msg += " Player is a mission owner.";
             }
 
-            Instance.ExportDictionary["curiosity-server"].ServerEventLog(msg);
+            Instance.ExportDictionary["curiosity-server"].DiscordServerEventLog(msg);
         }
 
         private void OnClearPedTasksEvent(int source, bool immediately)
@@ -47,7 +47,7 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            Instance.ExportDictionary["curiosity-server"].ServerEventLog($"{player.Name} tried to remove someone from their vehicle, or a script is badly written.");
+            Instance.ExportDictionary["curiosity-server"].DiscordServerEventLog($"[{source}] '{player.Name}' tried to remove someone from their vehicle, or a script is badly written.");
         }
     }
 }

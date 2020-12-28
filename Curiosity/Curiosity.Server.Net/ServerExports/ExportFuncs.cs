@@ -23,10 +23,20 @@ namespace Curiosity.Server.net.ServerExports
                 }
             ));
 
-            Instance.ExportDictionary.Add("ServerEventLog", new Func<string, bool>(
+            Instance.ExportDictionary.Add("DiscordPlayerLog", new Func<string, bool>(
                 (message) =>
                 {
-                    Logger.Debug($"[ServerEventLog] {message}");
+                    Logger.Debug($"[DiscordPlayerLog] {message}");
+
+                    DiscordWrapper.SendDiscordPlayerLogMessage(message);
+                    return true;
+                }
+            ));
+
+            Instance.ExportDictionary.Add("DiscordServerEventLog", new Func<string, bool>(
+                (message) =>
+                {
+                    Logger.Debug($"[DiscordServerEventLog] {message}");
 
                     DiscordWrapper.SendDiscordServerEventLogMessage(message);
                     return true;

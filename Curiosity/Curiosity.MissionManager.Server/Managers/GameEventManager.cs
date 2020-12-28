@@ -2,11 +2,16 @@
 using Curiosity.MissionManager.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.MissionManager.Server.Managers
 {
     public class GameEventManager : Manager<GameEventManager>
     {
+        DateTime lastRun = DateTime.Now;
+
         public override void Begin()
         {
             EventSystem.GetModule().Attach("gameEvent:playerKillPlayer", new AsyncEventCallback(async metadata => {
@@ -20,7 +25,7 @@ namespace Curiosity.MissionManager.Server.Managers
                 CuriosityUser curiosityUserKiller = PluginManager.ActiveUsers[attackerHandle];
                 CuriosityUser curiosityUserVictim = PluginManager.ActiveUsers[victimHandle];
 
-                curiosityUserKiller.LogPlayerKill();
+                curiosityUserKiller.IncreasePlayerKills();
 
                 Player attacker = PluginManager.PlayersList[attackerHandle];
                 Player victim = PluginManager.PlayersList[victimHandle];
@@ -34,11 +39,30 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 victim.TriggerEvent("curiosity:Client:Player:Revive", "Server");
                 string msg = $"{curiosityUserVictim.LatestName} killed by {curiosityUserKiller.LatestName}";
-                BaseScript.TriggerEvent("curiosity:Server:Log:Message", msg);
+                Instance.ExportDictionary["curiosity-server"].DiscordPlayerLog($"[Player Kill] {msg}");
                 EventSystem.GetModule().Send("system:notification:basic", -1, msg);
                 
                 return null;
             }));
+        }
+
+        [Tick]
+        private async Task OnPlayerKillDecreaseTick()
+        {
+            if (DateTime.Now.Subtract(lastRun).TotalMinutes >= 2)
+            {
+                lastRun = DateTime.Now;
+
+                foreach(KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
+                {
+                    if (kvp.Value.TotalNumberOfPlayerKills > 0)
+                    {
+                        kvp.Value.LowerPlayerKills();
+                    }
+                }
+            }
+
+            await BaseScript.Delay(10000);
         }
     }
 }

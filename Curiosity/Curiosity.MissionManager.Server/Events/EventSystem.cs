@@ -114,8 +114,15 @@ namespace Curiosity.MissionManager.Server.Events
             Logger.Debug(
                 $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the client `{handle}`.");
 
-            BaseScript.TriggerClientEvent(PluginManager.PlayersList[handle], EVENT_KEY,
-                JsonConvert.SerializeObject(wrapped));
+            if (handle == -1)
+            {
+                BaseScript.TriggerClientEvent(EVENT_KEY, JsonConvert.SerializeObject(wrapped));
+            }
+            else
+            {
+                BaseScript.TriggerClientEvent(PluginManager.PlayersList[handle], EVENT_KEY,
+                    JsonConvert.SerializeObject(wrapped));
+            }
         }
 
         public Event Construct(string target, int handle, object[] payloads)

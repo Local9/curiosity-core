@@ -28,9 +28,16 @@ namespace Curiosity.Systems.Library.Models
 
         public int TotalNumberOfPlayerKills { get; internal set; } = 0;
 
-        public void LogPlayerKill()
+        public void IncreasePlayerKills()
         {
             TotalNumberOfPlayerKills++;
+        }
+        public void LowerPlayerKills()
+        {
+            TotalNumberOfPlayerKills--;
+
+            if (TotalNumberOfPlayerKills == 0)
+                TotalNumberOfPlayerKills = 0;
         }
 
         public void SetPartyId(Guid partyId)
