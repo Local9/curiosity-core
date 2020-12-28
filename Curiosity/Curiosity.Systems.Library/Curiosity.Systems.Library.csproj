@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\StringValueAttribute.cs" />
+    <Compile Include="DataKeys.cs" />
     <Compile Include="Enums\EndState.cs" />
     <Compile Include="Enums\ErrorMessages.cs" />
     <Compile Include="Enums\MissionType.cs" />
