@@ -2,10 +2,8 @@
 using Curiosity.Client.net.Classes.Actions.Emotes;
 using Curiosity.Client.net.Classes.Environment;
 using Curiosity.Client.net.Classes.Environment.IPL;
-using Curiosity.Client.net.Classes.Environment.PDA;
 using Curiosity.Client.net.Classes.Environment.UI;
 using Curiosity.Client.net.Classes.PlayerClasses;
-using Curiosity.Client.net.ClientExports;
 
 namespace Curiosity.Client.net
 {

@@ -70,6 +70,7 @@
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Managers\PlayerSpawnedManager.cs" />
     <Compile Include="Managers\SeasonManager.cs" />
+    <Compile Include="Managers\StoreManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="TickHandler.cs" />

@@ -7,6 +7,7 @@ using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Server.net.ServerExports
 {
@@ -59,6 +60,48 @@ namespace Curiosity.Server.net.ServerExports
                     curUser.Wallet = session.Wallet;
 
                     return JsonConvert.SerializeObject(curUser);
+                }
+            ));
+
+            Instance.ExportDictionary.Add("GetSkills", new Func<string, string>(
+                (handle) =>
+                {
+                    if (!SessionManager.PlayerList.ContainsKey(handle)) return null;
+
+                    Session session = SessionManager.PlayerList[handle];
+
+                    List<Global.Shared.Entity.Skills> skillDict = new List<Global.Shared.Entity.Skills>();
+
+                    foreach (KeyValuePair<string, Global.Shared.Entity.Skills> skill in session.Skills)
+                    {
+                        Global.Shared.Entity.Skills s = skill.Value;
+
+                        if (s.TypeId == Global.Shared.Enums.SkillType.Experience)
+                            skillDict.Add(s);
+                    }
+
+                    return JsonConvert.SerializeObject(skillDict);
+                }
+            ));
+
+            Instance.ExportDictionary.Add("GetStats", new Func<string, string>(
+                (handle) =>
+                {
+                    if (!SessionManager.PlayerList.ContainsKey(handle)) return null;
+
+                    Session session = SessionManager.PlayerList[handle];
+
+                    List<Global.Shared.Entity.Skills> statDict = new List<Global.Shared.Entity.Skills>();
+
+                    foreach (KeyValuePair<string, Global.Shared.Entity.Skills> skill in session.Skills)
+                    {
+                        Global.Shared.Entity.Skills s = skill.Value;
+
+                        if (s.TypeId == Global.Shared.Enums.SkillType.Statistic)
+                            statDict.Add(s);
+                    }
+
+                    return JsonConvert.SerializeObject(statDict);
                 }
             ));
 

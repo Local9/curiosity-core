@@ -52,6 +52,7 @@
     <Compile Include="Enums\MissionType.cs" />
     <Compile Include="Enums\Notification.cs" />
     <Compile Include="Enums\Seasons.cs" />
+    <Compile Include="Enums\SkillType.cs" />
     <Compile Include="Models\MissionData.cs" />
     <Compile Include="Enums\PatrolZone.cs" />
     <Compile Include="Date.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Models\Position.cs" />
     <Compile Include="Enums\Role.cs" />
     <Compile Include="Models\SessionCollection.cs" />
+    <Compile Include="Models\Skill.cs" />
     <Compile Include="Models\VehicleInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seed.cs" />

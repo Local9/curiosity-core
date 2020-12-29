@@ -2,6 +2,7 @@
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using System.Collections.Generic;
 
 namespace Curiosity.Interface.Client.Managers
 {
@@ -34,7 +35,7 @@ namespace Curiosity.Interface.Client.Managers
                         break;
                 }
 
-                string jsn = new JsonBuilder().Add("operation", "PROFILE")
+                string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
                         .Add("name", curiosityUser.LatestName)
                         .Add("userId", curiosityUser.UserId)
                         .Add("role", role)
@@ -43,7 +44,33 @@ namespace Curiosity.Interface.Client.Managers
 
                 API.SendNuiMessage(jsn);
 
-                return jsn;
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("PlayerExperience", new AsyncEventCallback(async metadata =>
+            {
+                List<Skill> skills = await EventSystem.Request<List<Skill>>("user:getSkills");
+
+                string jsn = new JsonBuilder().Add("operation", "PLAYER_SKILLS")
+                    .Add("skills", skills)
+                    .Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("PlayerStats", new AsyncEventCallback(async metadata =>
+            {
+                List<Skill> stats = await EventSystem.Request<List<Skill>>("user:getStats");
+
+                string jsn = new JsonBuilder().Add("operation", "PLAYER_STATS")
+                    .Add("stats", stats)
+                    .Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
             }));
         }
     }

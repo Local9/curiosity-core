@@ -4,6 +4,7 @@ using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -47,6 +48,22 @@ namespace Curiosity.Core.Server.Managers
                 curiosityUser.Handle = metadata.Sender;
 
                 return curiosityUser;
+            }));
+
+            EventSystem.GetModule().Attach("user:getSkills", new EventCallback(metadata =>
+            {
+                var player = PluginManager.PlayersList[metadata.Sender];
+                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetSkills(player.Handle);
+                List<Skill> returnVal = JsonConvert.DeserializeObject<List<Skill>>(exportResponse);
+                return returnVal;
+            }));
+
+            EventSystem.GetModule().Attach("user:getStats", new EventCallback(metadata =>
+            {
+                var player = PluginManager.PlayersList[metadata.Sender];
+                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetStats(player.Handle);
+                List<Skill> returnVal = JsonConvert.DeserializeObject<List<Skill>>(exportResponse);
+                return returnVal;
             }));
         }
     }
