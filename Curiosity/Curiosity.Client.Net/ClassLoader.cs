@@ -71,7 +71,7 @@ namespace Curiosity.Client.net
             ChatService.Init();
             DevCommands.Init();
             IplLoader.Init();
-            PdaEvents.Init();
+            // PdaEvents.Init();
             WorldScenarios.Init();
             SeasonSync.Init();
 

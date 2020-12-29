@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Interface.Client.Diagnostics;
+using Curiosity.Library.Client;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -14,6 +16,8 @@ namespace Curiosity.Interface.Client.Managers
 {
     public class PdaManager : Manager<PdaManager>
     {
+        public static PdaManager PdaInstance;
+
         public class Panel
         {
             public bool Main;
@@ -21,10 +25,13 @@ namespace Curiosity.Interface.Client.Managers
 
         private Prop TabletProp;
 
-        private static bool IsCoreOpen = false;
+        public bool IsCoreOpen = false;
 
         public override void Begin()
         {
+
+            PdaInstance = this;
+
             Instance.AttachNuiHandler("ClosePanel", new EventCallback(metadata =>
             {
                 IsCoreOpen = false;
@@ -97,7 +104,7 @@ namespace Curiosity.Interface.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnCoreControls()
         {
-            if (!IsCoreOpen && (ControlUtility.IsControlJustPressed(Control.SwitchVisor, true) || ControlHelper.IsControlJustPressed(Control.FrontendSocialClubSecondary, true)))
+            if (!IsCoreOpen && (ControlUtility.IsControlJustPressed(Control.SwitchVisor, true) || ControlUtility.IsControlJustPressed(Control.FrontendSocialClubSecondary, true)))
             {
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
@@ -105,7 +112,6 @@ namespace Curiosity.Interface.Client.Managers
             }
 
             if (IsCoreOpen && (Game.IsControlJustPressed(0, Control.FrontendCancel)
-                // || Game.IsControlJustPressed(0, Control.PhoneCancel)
                 || Game.IsControlJustPressed(0, Control.CursorCancel)))
             {
                 IsCoreOpen = !IsCoreOpen;
@@ -114,11 +120,10 @@ namespace Curiosity.Interface.Client.Managers
             }
         }
 
-        private void SendPanelMessage()
+        public void SendPanelMessage()
         {
             string jsn = new JsonBuilder().Add("operation", "PANEL")
             .Add("panel", "PDA")
-            .Add("playerHandle", Game.Player.ServerId)
             .Add("main", IsCoreOpen)
             .Build();
 
@@ -133,12 +138,14 @@ namespace Curiosity.Interface.Client.Managers
             string animationBase = "base";
 
             Game.PlayerPed.Task.PlayAnimation(animationDict, animationBase, -8f, -1, AnimationFlags.Loop);
+            API.SetTransitionTimecycleModifier($"BLACKOUT", 5.0f);
         }
 
-        private void CloseTablet()
+        public void CloseTablet()
         {
             RemoveProp();
             Game.PlayerPed.Task.ClearAll();
+            API.SetTransitionTimecycleModifier("DEFAULT", 5.0f);
         }
 
         private async void AddProp()

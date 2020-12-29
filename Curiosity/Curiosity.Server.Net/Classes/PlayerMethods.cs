@@ -18,6 +18,8 @@ namespace Curiosity.Server.net.Classes
         {
             server = Server.GetInstance();
 
+            server.RegisterEventHandler("curiosity:Server:Player:IsActive", new Action<CitizenFX.Core.Player>(OnIsSessionActive));
+
             server.RegisterEventHandler("curiosity:Server:Player:GetInformation", new Action<CitizenFX.Core.Player>(GetInformation));
 
             server.RegisterEventHandler("curiosity:Server:Player:Setup", new Action<CitizenFX.Core.Player>(OnSetupPlayer));
@@ -39,6 +41,15 @@ namespace Curiosity.Server.net.Classes
             server.RegisterEventHandler("curiosity:Server:Player:Backup", new Action<CitizenFX.Core.Player, int, float, float, float>(OnBackupRequest));
 
             server.RegisterEventHandler("curiosity:Server:Player:Revive", new Action<CitizenFX.Core.Player, string, bool>(OnPlayerRevive));
+        }
+
+        private static void OnIsSessionActive([FromSource] CitizenFX.Core.Player player)
+        {
+            if (!SessionManager.PlayerList.ContainsKey(player.Handle)) return;
+            Session session = SessionManager.PlayerList[player.Handle];
+
+            if (session.HasSpawned)
+                player.TriggerEvent("curiosity:Client:Player:SessionActivated", Server.showPlayerBlips, Server.showPlayerLocation, Server.minutesAFK);
         }
 
         private static void OnBlockDispatchMessages([FromSource] CitizenFX.Core.Player player, bool toggle)
