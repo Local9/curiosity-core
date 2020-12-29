@@ -30,6 +30,8 @@ namespace Curiosity.MissionManager.Client.Managers
                 Instance.DetachTickHandler(OnMissionDirectorTick);
                 MissionDirectorState = false;
             }
+
+            Instance.ExportRegistry["curiosity-ui"].SetJobActivity(true, MissionDirectorState, "police");
         }
 
         public void ToggleMissionDirector()
@@ -48,6 +50,8 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 Instance.DetachTickHandler(OnMissionDirectorTick);
             }
+
+            Instance.ExportRegistry["curiosity-ui"].SetJobActivity(true, MissionDirectorState, "police");
         }
 
         public override void Begin()
