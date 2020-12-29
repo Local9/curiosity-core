@@ -12,7 +12,7 @@ namespace Curiosity.Interface.Client.Managers
                 (active, onDuty, job) =>
                 {
                     string msg = new JsonBuilder()
-                        .Add("operation", "DUTY")
+                        .Add("operation", "JOB_ACTIVITY")
                         .Add("jobActive", active)
                         .Add("jobOnDuty", onDuty)
                         .Add("jobTitle", job)

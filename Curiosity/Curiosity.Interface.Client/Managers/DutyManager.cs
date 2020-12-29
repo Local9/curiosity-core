@@ -15,10 +15,10 @@ namespace Curiosity.Interface.Client.Managers
 
         private static void OnDutyState(bool active, bool onduty, string job)
         {
-            string jsn = new JsonBuilder().Add("operation", "DUTY")
-                    .Add("isActive", active)
-                    .Add("isDutyActive", onduty)
-                    .Add("job", job.ToTitleCase())
+            string jsn = new JsonBuilder().Add("operation", "JOB_ACTIVITY")
+                    .Add("jobActive", active)
+                    .Add("jobOnDuty", onduty)
+                    .Add("jobTitle", job.ToTitleCase())
                     .Build();
 
             API.SendNuiMessage(jsn);
