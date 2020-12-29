@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
 
@@ -19,6 +20,17 @@ namespace Curiosity.Interface.Client.Managers
                     SendNuiMessage((Notification)notification, title, message);
                     return true;
                 }));
+
+            EventSystem.Attach("ui:notification", new EventCallback(metadata =>
+            {
+                Notification notification = (Notification)metadata.Find<int>(0);
+                string title = metadata.Find<string>(1);
+                string message = metadata.Find<string>(2);
+
+                SendNuiMessage(notification, title, message);
+
+                return true;
+            }));
         }
 
         private void SendNuiMessage(Notification notification, string title, string message)
