@@ -21,7 +21,6 @@ namespace Curiosity.Client.net.Classes.PlayerClasses
                     await Client.Delay(5000);
                 }
                 Client.TriggerServerEvent("curiosity:Server:Queue:PlayerConnected");
-                API.SendNuiMessage($@"{{ ""resname"" : ""{API.GetCurrentResourceName()}"" }}");
                 Client.GetInstance().DeregisterTickHandler(Connected);
             }
             catch (Exception)

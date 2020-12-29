@@ -29,6 +29,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
             JobManagerInstance = this;
 
+            // LEGACY
             Instance.EventRegistry[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnJobDutyEvent);
         }
 

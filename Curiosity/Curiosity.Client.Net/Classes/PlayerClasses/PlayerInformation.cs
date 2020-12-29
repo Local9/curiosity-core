@@ -26,10 +26,6 @@ namespace Curiosity.Client.net.Classes.PlayerClasses
 
         public static async void Init()
         {
-            //ExportDictionary.Add("IsDeveloper", new Func<bool>(() => {
-            //    return IsDeveloper();
-            //}));
-
             client.RegisterEventHandler("curiosity:Client:Player:GetInformation", new Action<string>(PlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:Information", new Action(GetPlayerInfo));
             client.RegisterEventHandler("curiosity:Client:Player:UpdateFlags", new Action(OnFlagUpdate));
@@ -160,41 +156,7 @@ namespace Curiosity.Client.net.Classes.PlayerClasses
 
             GetPlayerInfo();
 
-            UpdateNUI();
-
             await BaseScript.Delay(0);
-        }
-
-        private static void UpdateNUI()
-        {
-            string role = "USER";
-
-            switch (privilege)
-            {
-                case Privilege.DONATOR:
-                    role = "LifeV Early Supporter";
-                    break;
-                case Privilege.DONATOR1:
-                    role = "LifeV Supporter I";
-                    break;
-                case Privilege.DONATOR2:
-                    role = "LifeV Supporter II";
-                    break;
-                case Privilege.DONATOR3:
-                    role = "LifeV Supporter III";
-                    break;
-                default:
-                    role = playerInfo.Role;
-                    break;
-            }
-
-            string jsn = new JsonBuilder().Add("operation", "PROFILE")
-                    .Add("name", playerInfo.Name)
-                    .Add("userId", playerInfo.UserId)
-                    .Add("role", role.ToUpperInvariant())
-                    .Add("wallet", playerInfo.Wallet)
-                    .Build();
-            // API.SendNuiMessage(jsn);
         }
 
         public static bool IsStaff()
