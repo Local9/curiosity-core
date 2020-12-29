@@ -30,16 +30,13 @@ namespace Curiosity.Client.net.Classes.Environment.PDA
             client.RegisterNuiEventHandler("PlayerExperience", new Action<IDictionary<string, object>, CallbackDelegate>(OnPlayerExperience));
             client.RegisterNuiEventHandler("ClosePanel", new Action<IDictionary<string, object>, CallbackDelegate>(OnClosePda));
 
-            // LEGACY
-            client.RegisterEventHandler("curiosity:Client:Interface:Duty", new Action<bool, bool, string>(OnDutyState));
-
             // VehicleShop
             client.RegisterNuiEventHandler("GetVehicleShopItems", new Action<IDictionary<string, object>, CallbackDelegate>(OnNuiEventGetVehicleShopItems));
             client.RegisterNuiEventHandler("VehicleStoreAction", new Action<IDictionary<string, object>, CallbackDelegate>(OnNuiEventVehicleStoreAction));
             client.RegisterEventHandler("curiosity:Client:Vehicle:Shop:Items", new Action<string>(OnGotVehicleShopItems));
             client.RegisterEventHandler("curiosity:Client:Vehicle:Shop:Update", new Action(OnGotVehicleShopItemsUpdate));
 
-            client.RegisterTickHandler(OnPdaCoreControls);
+            // client.RegisterTickHandler(OnPdaCoreControls);
 
             client.RegisterEventHandler("playerSpawned", new Action(OnPlayerSpawned));
 

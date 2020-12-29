@@ -63,6 +63,8 @@ namespace Curiosity.MissionManager.Client.Managers
 
             if (Game.IsControlJustPressed(0, Control.Pickup))
             {
+                JobManager.JobManagerInstance.OnJobDutyEvent(true, false, job);
+
                 BaseScript.TriggerEvent(LegacyEvents.Client.PoliceDutyEvent, true, false, job); // for legacy resources
                 await PluginManager.Delay(5000);
             }

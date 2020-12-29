@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Interface.Client.Diagnostics;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.FiveM;
@@ -32,14 +33,41 @@ namespace Curiosity.Interface.Client.Managers
                 return null;
             }));
 
-            Instance.AttachNuiHandler("PlayerProfile", new EventCallback(metadata =>
+            Instance.AttachNuiHandler("PlayerProfile", new AsyncEventCallback(async metadata =>
             {
-                string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
-                    .Add("profile", null).Build();
+                string role = "USER";
 
-                API.SendNuiMessage(jsn);
+                CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("server:getUser");
 
-                return null;
+                switch (curiosityUser.Role)
+                {
+                    case Role.DONATOR_LIFE:
+                        role = "LifeV Early Supporter";
+                        break;
+                    case Role.DONATOR_LEVEL_1:
+                        role = "LifeV Supporter I";
+                        break;
+                    case Role.DONATOR_LEVEL_2:
+                        role = "LifeV Supporter II";
+                        break;
+                    case Role.DONATOR_LEVEL_3:
+                        role = "LifeV Supporter III";
+                        break;
+                    default:
+                        role = $"{curiosityUser.Role}".ToLowerInvariant();
+                        break;
+                }
+
+                string jsn = new JsonBuilder().Add("operation", "PROFILE")
+                        .Add("name", curiosityUser.LatestName)
+                        .Add("userId", curiosityUser.UserId)
+                        .Add("role", role)
+                        .Add("wallet", curiosityUser.Wallet)
+                        .Build();
+
+                // API.SendNuiMessage(jsn);
+
+                return jsn;
             }));
 
             Instance.AttachNuiHandler("GetPlayerList", new AsyncEventCallback(async metadata =>
@@ -69,7 +97,7 @@ namespace Curiosity.Interface.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnCoreControls()
         {
-            if (!IsCoreOpen && Game.IsControlJustPressed(0, Control.FrontendSocialClubSecondary))
+            if (!IsCoreOpen && (ControlUtility.IsControlJustPressed(Control.SwitchVisor, true) || ControlHelper.IsControlJustPressed(Control.FrontendSocialClubSecondary, true)))
             {
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();

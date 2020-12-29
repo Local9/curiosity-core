@@ -199,6 +199,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Core.Server", "Cu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_Library", "3_Library", "{094BF0B3-BBB4-4FFB-89C4-51B0C3F7FC58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Library.Client", "Curiosity.Library.Client\Curiosity.Library.Client.csproj", "{B4322E07-21AB-40D4-8ADA-BA3263E35B82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -469,6 +471,10 @@ Global
 		{15FD70E1-F8BC-4670-A71D-16903BE7295F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15FD70E1-F8BC-4670-A71D-16903BE7295F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15FD70E1-F8BC-4670-A71D-16903BE7295F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4322E07-21AB-40D4-8ADA-BA3263E35B82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4322E07-21AB-40D4-8ADA-BA3263E35B82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4322E07-21AB-40D4-8ADA-BA3263E35B82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4322E07-21AB-40D4-8ADA-BA3263E35B82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -546,6 +552,7 @@ Global
 		{E8A0E780-C0DD-4242-AE9A-3386877BA0E9} = {094BF0B3-BBB4-4FFB-89C4-51B0C3F7FC58}
 		{7D0DF956-549B-4251-9B6B-B05EEB53832C} = {5B08BD43-975A-44DD-9AD8-4B96EB32B987}
 		{15FD70E1-F8BC-4670-A71D-16903BE7295F} = {48DAA469-01DC-4A80-A7DA-717F71444A6B}
+		{B4322E07-21AB-40D4-8ADA-BA3263E35B82} = {094BF0B3-BBB4-4FFB-89C4-51B0C3F7FC58}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}

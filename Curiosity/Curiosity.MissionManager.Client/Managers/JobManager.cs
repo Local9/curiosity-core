@@ -4,7 +4,6 @@ using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
 using System.Threading.Tasks;
@@ -13,6 +12,8 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class JobManager : Manager<JobManager>
     {
+        public static JobManager JobManagerInstance;
+
         private const string JOB_POLICE = "police";
         internal static PatrolZone PatrolZone = PatrolZone.City;
         internal static bool IsOnDuty;
@@ -26,10 +27,12 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             Logger.Info($"- [JobManager] Begin -----------------------------");
 
+            JobManagerInstance = this;
+
             Instance.EventRegistry[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnJobDutyEvent);
         }
 
-        private async void OnJobDutyEvent(bool active, bool onDuty, string job)
+        public async void OnJobDutyEvent(bool active, bool onDuty, string job)
         {
             Logger.Debug($"OnJobDutyEvent: {job}:{onDuty}");
 
@@ -87,6 +90,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 await BaseScript.Delay(100);
             }
 
+            Instance.ExportRegistry["curiosity-ui"].SetJobActivity(active, onDuty, job);
             EventSystem.Request<object>("user:job", job);
         }
 
