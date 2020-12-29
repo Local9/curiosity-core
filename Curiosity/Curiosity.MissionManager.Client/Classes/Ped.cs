@@ -627,9 +627,19 @@ namespace Curiosity.MissionManager.Client.Classes
                 await BaseScript.Delay(100);
             }
 
-            int pedId = API.CreatePed((int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            CitizenFX.Core.Ped fxPed;
 
-            CitizenFX.Core.Ped fxPed = new CitizenFX.Core.Ped(pedId);
+            if (!isNetworked)
+            {
+                int pedId = API.CreatePed((int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+                fxPed = new CitizenFX.Core.Ped(pedId);
+            }
+            else
+            {
+                fxPed = await World.CreatePed(model, position, heading);
+            }
+
+            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
             fxPed.FadeIn();
 
@@ -667,9 +677,18 @@ namespace Curiosity.MissionManager.Client.Classes
                 await BaseScript.Delay(100);
             }
 
-            int pedId = API.CreatePed((int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            CitizenFX.Core.Ped fxPed;
 
-            CitizenFX.Core.Ped fxPed = new CitizenFX.Core.Ped(pedId);
+            if (!isNetworked) {
+                int pedId = API.CreatePed((int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+                fxPed = new CitizenFX.Core.Ped(pedId);
+            }
+            else
+            {
+                fxPed = await World.CreatePed(model, position, heading);
+            }
+
+            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
             fxPed.FadeIn();
 

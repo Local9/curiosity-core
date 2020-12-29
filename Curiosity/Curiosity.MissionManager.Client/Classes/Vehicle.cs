@@ -174,10 +174,17 @@ namespace Curiosity.MissionManager.Client.Classes
 
             while (!model.IsLoaded) await BaseScript.Delay(100);
 
-            int vehicleId = API.CreateVehicle((uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            CitizenFX.Core.Vehicle fxVehicle;
+            if (!isNetworked)
+            {
+                int vehicleId = API.CreateVehicle((uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+                fxVehicle = new CitizenFX.Core.Vehicle(vehicleId);
+            }
+            else
+            {
+                fxVehicle = await World.CreateVehicle(model, spawnPosition, heading);
+            }
 
-            CitizenFX.Core.Vehicle fxVehicle = new CitizenFX.Core.Vehicle(vehicleId);
-            
             API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
             Logger.Debug(fxVehicle.ToString());
