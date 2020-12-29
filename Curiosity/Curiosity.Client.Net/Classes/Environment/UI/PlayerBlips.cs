@@ -217,7 +217,7 @@ namespace Curiosity.Client.net.Classes.Environment.UI
                     API.SetBlipCategory(blip, 7);
                     API.SetBlipPriority(blip, 11);
 
-                    bool isFriendly = Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.DECOR_PLAYER_STAFF);
+                    bool isFriendly = Decorators.GetBoolean(player.Character.Handle, Decorators.PLAYER_ASSISTING);
                     API.ShowOutlineIndicatorOnBlip(blip, isFriendly);
                     API.ShowFriendIndicatorOnBlip(blip, isFriendly);
 
