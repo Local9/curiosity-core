@@ -62,6 +62,7 @@
     <Compile Include="Interface\PDA\PartyInterfaces.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="Managers\ChatManager.cs" />
+    <Compile Include="Managers\DutyManager.cs" />
     <Compile Include="Managers\ExportManager.cs" />
     <Compile Include="Managers\MarqueeManager.cs" />
     <Compile Include="Managers\NotificationManger.cs" />

@@ -1,17 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Client.net.Classes.PlayerClasses;
 using Curiosity.Client.net.Helpers;
 using Curiosity.Global.Shared;
 using Curiosity.Global.Shared.Data;
-using Curiosity.Global.Shared.Enums;
 using Curiosity.Global.Shared.Utils;
 using Curiosity.Shared.Client.net.Extensions;
-using Curiosity.Shared.Client.net.Helper;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Client.net.Classes.Environment.PDA
 {

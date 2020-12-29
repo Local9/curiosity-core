@@ -2,7 +2,6 @@
 using CitizenFX.Core.Native;
 using Curiosity.Interface.Client.Diagnostics;
 using Curiosity.Library.Client;
-using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.FiveM;
@@ -28,7 +27,6 @@ namespace Curiosity.Interface.Client.Managers
 
         public override void Begin()
         {
-
             PdaInstance = this;
 
             Instance.AttachNuiHandler("ClosePanel", new EventCallback(metadata =>

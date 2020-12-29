@@ -54,6 +54,7 @@
     <Compile Include="Enums\Notification.cs" />
     <Compile Include="Enums\Seasons.cs" />
     <Compile Include="Enums\SkillType.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Models\MissionData.cs" />
     <Compile Include="Enums\PatrolZone.cs" />
     <Compile Include="Date.cs" />
