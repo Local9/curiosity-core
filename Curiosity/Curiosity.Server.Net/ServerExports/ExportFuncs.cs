@@ -8,6 +8,7 @@ using Curiosity.Shared.Server.net.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.ServerExports
 {
