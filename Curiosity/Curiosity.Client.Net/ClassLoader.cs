@@ -67,7 +67,7 @@ namespace Curiosity.Client.net
             WantedLevels.Init();
             Weapons.Init();
 
-            MarqueeMessages.Init();
+            // MarqueeMessages.Init();
             ChatService.Init();
             DevCommands.Init();
             IplLoader.Init();
@@ -75,7 +75,7 @@ namespace Curiosity.Client.net
             WorldScenarios.Init();
             // SeasonSync.Init();
 
-            NotificationExport.Init();
+            //NotificationExport.Init();
         }
     }
 }
