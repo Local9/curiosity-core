@@ -17,7 +17,7 @@ namespace Curiosity.Interface.Client.Managers
             Instance.ExportRegistry.Add("Notification", new Func<int, string, string, bool>(
                 (notification, title, message) =>
                 {
-                    SendNuiMessage((Notification)notification, title, message);
+                    SendNui((Notification)notification, title, message);
                     return true;
                 }));
 
@@ -27,13 +27,13 @@ namespace Curiosity.Interface.Client.Managers
                 string title = metadata.Find<string>(1);
                 string message = metadata.Find<string>(2);
 
-                SendNuiMessage(notification, title, message);
+                SendNui(notification, title, message);
 
                 return true;
             }));
         }
 
-        private void SendNuiMessage(Notification notification, string title, string message)
+        private void SendNui(Notification notification, string title, string message)
         {
             JsonBuilder jb = new JsonBuilder()
             .Add("operation", $"{notification}")
