@@ -167,7 +167,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 return;
             }
 
-            Type mission = missionsByChance[Utility.RANDOM.Next(missionsByChance.Count)];
+            Type mission = missionsByChance[Utility.RANDOM.Next(missionsByChance.Count - 1)];
             MissionInfo selectedMission = Functions.GetMissionInfo(mission);
 
             bool isUniqueMissionCurrentlyActive = false;
@@ -179,7 +179,7 @@ namespace Curiosity.MissionManager.Client.Managers
             {
                 await BaseScript.Delay(1000);
 
-                mission = missionsByChance[Utility.RANDOM.Next(missionsByChance.Count)];
+                mission = missionsByChance[Utility.RANDOM.Next(missionsByChance.Count - 1)];
                 selectedMission = Functions.GetMissionInfo(mission);
 
                 isUniqueMissionCurrentlyActive = await EventSystem.Request<bool>("mission:isActive", selectedMission.id);
