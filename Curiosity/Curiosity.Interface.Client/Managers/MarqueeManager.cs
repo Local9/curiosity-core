@@ -16,12 +16,11 @@ namespace Curiosity.Interface.Client.Managers
             "Forums: forums.lifev.net",
             "Discord: discord.lifev.net",
             "Find any bugs? Please report them to our forums: forums.lifev.net",
-            "Would like to join our discord? discord.lifev.net",
             "Please use reports to notify us of rule breakers",
-            "Donation information can be found on our discord: discord.lifev.net",
             "Please remember to be friendly to one another",
-            "To read our rules by pressing the F11/HOME key",
-            "Support us: patreon.com/lifev"
+            "To read our rules Press the F11/HOME key",
+            "Support us: patreon.com/lifev",
+            "To read our guides press the F11/HOME key",
         };
 
         public override void Begin()
