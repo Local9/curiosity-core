@@ -44,7 +44,7 @@ namespace Curiosity.Interface.Client.Managers
             {
                 string role = "USER";
 
-                CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("server:getUser");
+                CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("user:getProfile");
 
                 switch (curiosityUser.Role)
                 {
@@ -72,7 +72,7 @@ namespace Curiosity.Interface.Client.Managers
                         .Add("wallet", curiosityUser.Wallet)
                         .Build();
 
-                // API.SendNuiMessage(jsn);
+                API.SendNuiMessage(jsn);
 
                 return jsn;
             }));
