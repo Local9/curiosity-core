@@ -25,7 +25,7 @@ namespace Curiosity.Global.Shared.Entity
         // CHARACTER
         public long CharacterId;
         public int LocationId;
-        public int RoleId;
+        public int RoleId = 1;
         public string Role;
         
         public Privilege privilege
