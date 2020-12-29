@@ -60,7 +60,6 @@ namespace Curiosity.Server.net.Classes.Environment
 
             IsStaticWeather();
 
-            // server.RegisterTickHandler(OnSeasonTick);
             server.RegisterTickHandler(OnWorldTimeTick);
             server.RegisterTickHandler(OnSeasonTimerSyncTick);
             server.RegisterTickHandler(OnSeasonWeatherTimerTick);
@@ -404,7 +403,7 @@ namespace Curiosity.Server.net.Classes.Environment
         private static void IsStaticWeather()
         {
             _isChristmas = DateTime.Now.Month == 12 || API.GetConvar("christmas_weather", "false") == "true";
-            _isHalloween = API.GetConvar("halloween_weather", "false") == "true";
+            _isHalloween = DateTime.Now.Month == 10 && DateTime.Now.Day == 31 || API.GetConvar("halloween_weather", "false") == "true";
 
 
             if (_startedResource != _isChristmas)

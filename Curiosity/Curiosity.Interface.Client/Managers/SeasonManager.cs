@@ -41,6 +41,7 @@ namespace Curiosity.Interface.Client.Managers
             SeasonInstance = this;
 
             Instance.EventRegistry["onClientResourceStart"] += new Action<string>(OnResourceStart);
+
             // Legacy Events
             Instance.EventRegistry["curiosity:client:seasons:sync:time"] += new Action<double, double, bool>(OnSyncTime);
             Instance.EventRegistry["curiosity:client:seasons:sync:season"] += new Action<int, int, int>(OnSeasonsTimeSync);
