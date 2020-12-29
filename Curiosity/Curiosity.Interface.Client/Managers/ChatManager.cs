@@ -14,7 +14,11 @@ namespace Curiosity.Interface.Client.Managers
 
         public override void Begin()
         {
-            Instance.EventRegistry["chat:receive"] += new Action<string>(OnChatReceived);
+            EventSystem.Attach("chat:receive", new EventCallback(metadata =>
+            {
+                API.SendNuiMessage(metadata.Find<string>(0));
+                return null;
+            }));
 
             Instance.AttachNuiHandler("SendChatMessage", new EventCallback(metadata =>
             {
@@ -45,11 +49,6 @@ namespace Curiosity.Interface.Client.Managers
                 EnableChatbox(false);
                 return null;
             }));
-        }
-
-        private void OnChatReceived(string message)
-        {
-            API.SendNuiMessage(message);
         }
 
         static void EnableChatbox(bool state)
@@ -92,14 +91,16 @@ namespace Curiosity.Interface.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnTick()
         {
+            API.SetTextChatEnabled(false);
+
             try
             {
-                if (Game.IsControlPressed(0, Control.FrontendCancel))
+                if (Game.IsControlPressed(0, Control.FrontendCancel) && PreviousChatboxState)
                 {
                     EnableChatbox(false);
                 }
                 
-                if (Game.IsControlJustPressed(0, Control.MpTextChatAll))
+                if (Game.IsControlPressed(0, Control.MpTextChatAll) && !PreviousChatboxState)
                 {
                     EnableChatbox(true);
                 }

@@ -25,6 +25,16 @@ namespace Curiosity.Server.net.ServerExports
                 }
             ));
 
+            Instance.ExportDictionary.Add("DiscordChatLog", new Func<string, string, bool>(
+                (init, message) =>
+                {
+                    Logger.Debug($"[DiscordChatLog] {init} > {message}");
+
+                    DiscordWrapper.SendDiscordChatMessage(init, message);
+                    return true;
+                }
+            ));
+
             Instance.ExportDictionary.Add("DiscordPlayerLog", new Func<string, bool>(
                 (message) =>
                 {
