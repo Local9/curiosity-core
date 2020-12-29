@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.Native;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
 
@@ -6,55 +7,24 @@ namespace Curiosity.Interface.Client.Managers
 {
     public class NotificationManger : Manager<NotificationManger>
     {
+        public static NotificationManger NotificationInstance;
+
         public override void Begin()
         {
-            Instance.ExportRegistry.Add("NotificationSuccess", new Func<string, string, bool>(
-                (title, message) =>
-                {
-                    SendNuiMessage("NOTIFICATION_SUCCESS", title, message);
-                    return true;
-                }));
+            NotificationInstance = this;
 
-            Instance.ExportRegistry.Add("NotificationError", new Func<string, string, bool>(
-                (title, message) =>
+            Instance.ExportRegistry.Add("Notification", new Func<int, string, string, bool>(
+                (notification, title, message) =>
                 {
-                    SendNuiMessage("NOTIFICATION_ERROR", title, message);
-                    return true;
-                }));
-
-            Instance.ExportRegistry.Add("NotificationInfo", new Func<string, string, bool>(
-                (title, message) =>
-                {
-                    SendNuiMessage("NOTIFICATION_INFO", title, message);
-                    return true;
-                }));
-
-            Instance.ExportRegistry.Add("NotificationWarning", new Func<string, string, bool>(
-                (title, message) =>
-                {
-                    SendNuiMessage("NOTIFICATION_WARNING", title, message);
-                    return true;
-                }));
-
-            Instance.ExportRegistry.Add("NotificationShow", new Func<string, string, bool>(
-                (title, message) =>
-                {
-                    SendNuiMessage("NOTIFICATION_SHOW", title, message);
-                    return true;
-                }));
-
-            Instance.ExportRegistry.Add("NotificationClear", new Func<bool>(
-                () =>
-                {
-                    SendNuiMessage("NOTIFICATION_CLEAR", string.Empty, string.Empty);
+                    SendNuiMessage((Notification)notification, title, message);
                     return true;
                 }));
         }
 
-        private static void SendNuiMessage(string type, string title, string message)
+        private void SendNuiMessage(Notification notification, string title, string message)
         {
             JsonBuilder jb = new JsonBuilder()
-            .Add("operation", type)
+            .Add("operation", $"{notification}")
             .Add("title", title)
             .Add("message", message);
 
