@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.Native;
+using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Models;
 using System;
 
@@ -15,7 +16,7 @@ namespace Curiosity.Interface.Client.Managers
                         .Add("operation", "JOB_ACTIVITY")
                         .Add("jobActive", active)
                         .Add("jobOnDuty", onDuty)
-                        .Add("jobTitle", job)
+                        .Add("jobTitle", job.ToTitleCase())
                         .Build();
 
                     API.SendNuiMessage(msg);
