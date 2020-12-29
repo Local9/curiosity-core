@@ -362,7 +362,8 @@ namespace Curiosity.Server.net.Classes.Environment
 
         private static async Task OnWorldTimeTick()
         {
-            await Server.Delay(0);
+            await Server.Delay(500);
+
             TimeSpan timeSpan = DateTime.UtcNow - new DateTime(1970, 1, 1);
             int secondsSinceEpoch = (int)timeSpan.TotalSeconds;
             
