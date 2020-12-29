@@ -22,6 +22,18 @@ namespace Curiosity.Interface.Client.Managers
 
                     return true;
                 }));
+
+            Instance.ExportRegistry.Add("GetClientWeather", new Func<string>(
+                () =>
+                {
+                    return $"{SeasonManager.SeasonInstance.CurrentWeather}".ToUpper();
+                }));
+
+            Instance.ExportRegistry.Add("GetClientSeason", new Func<string>(
+                () =>
+                {
+                    return $"{SeasonManager.SeasonInstance.CurrentSeason}".ToUpper();
+                }));
         }
     }
 }

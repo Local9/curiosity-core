@@ -11,31 +11,35 @@ namespace Curiosity.Interface.Client.Managers
 {
     public class SeasonManager : Manager<SeasonManager>
     {
+        public static SeasonManager SeasonInstance;
+
         private const string ANIM_DICT_SNOWBALL = "anim@mp_snowball";
 
         // TIME
-        static double _clientBaseTime = 0;
-        static double _clientTimeOffset = 0;
-        static double _clientTimer = 0;
-        static bool _clientFreezeTime = false;
-        static bool _singleTimeSent = false;
+        double _clientBaseTime = 0;
+        double _clientTimeOffset = 0;
+        double _clientTimer = 0;
+        bool _clientFreezeTime = false;
+        bool _singleTimeSent = false;
 
-        static int _hour = 0;
-        static int _minute = 0;
+        int _hour = 0;
+        int _minute = 0;
 
         // WEATHER
-        static WeatherTypes _lastWeather;
-        static WeatherTypes _lastWeatherBeforeXmas;
-        static Seasons _lastSeason;
-        static string _seasonString;
-        static int _temp;
+        public WeatherTypes CurrentWeather;
+        WeatherTypes _lastWeatherBeforeXmas;
+        public Seasons CurrentSeason;
+        string _seasonString;
+        int _temp;
 
-        static bool _snowCheckActive = false;
-        static bool _connected = false;
-        static bool _startup = false;
+        bool _snowCheckActive = false;
+        bool _connected = false;
+        bool _startup = false;
 
         public override void Begin()
         {
+            SeasonInstance = this;
+
             Instance.EventRegistry["onClientResourceStart"] += new Action<string>(OnResourceStart);
             // Legacy Events
             Instance.EventRegistry["curiosity:client:seasons:sync:time"] += new Action<double, double, bool>(OnSyncTime);
@@ -46,7 +50,7 @@ namespace Curiosity.Interface.Client.Managers
             // NUI
             Instance.AttachNuiHandler("GetWeather", new EventCallback(metadata =>
             {
-                WeatherNuiMessage(_lastWeather);
+                WeatherNuiMessage(CurrentWeather);
 
                 if (!_connected)
                 {
@@ -70,7 +74,7 @@ namespace Curiosity.Interface.Client.Managers
         }
 
         [TickHandler(SessionWait = true)]
-        private static async Task OnSeasonTimerTick()
+        private async Task OnSeasonTimerTick()
         {
             await BaseScript.Delay(100);
 
@@ -93,7 +97,7 @@ namespace Curiosity.Interface.Client.Managers
             SetClockTime(_hour, _minute, 0);
         }
 
-        private static void OnSyncTime(double serverTime, double serverOffset, bool freezeTime)
+        private void OnSyncTime(double serverTime, double serverOffset, bool freezeTime)
         {
             _clientBaseTime = serverTime;
             _clientTimeOffset = serverOffset;
@@ -102,20 +106,20 @@ namespace Curiosity.Interface.Client.Managers
 
         private void OnSeasonsTimeSync(int season, int weather, int temp)
         {
-            if (_lastSeason == (Seasons)season && _startup) return;
+            if (CurrentSeason == (Seasons)season && _startup) return;
 
             _startup = true;
 
-            _lastSeason = (Seasons)season;
+            CurrentSeason = (Seasons)season;
             _temp = temp;
 
             switch ((Seasons)season)
             {
                 case Seasons.SPRING:
-                    if (_lastWeather.Equals(WeatherTypes.XMAS) || _lastWeather.Equals(WeatherTypes.XMAS_STORM))
+                    if (CurrentWeather.Equals(WeatherTypes.XMAS) || CurrentWeather.Equals(WeatherTypes.XMAS_STORM))
                     {
-                        _lastWeather = _lastWeatherBeforeXmas;
-                        SetWeatherDelay(_lastWeather);
+                        CurrentWeather = _lastWeatherBeforeXmas;
+                        SetWeatherDelay(CurrentWeather);
                     }
                     SetForceVehicleTrails(false);
                     SetForcePedFootstepsTracks(false);
@@ -132,24 +136,24 @@ namespace Curiosity.Interface.Client.Managers
                     _seasonString = "Autumn";
                     break;
                 case Seasons.WINTER: // OVERRIDE ALL THE THINGS!
-                    _lastWeatherBeforeXmas = _lastWeather;
-                    _lastWeather = WeatherTypes.XMAS;
+                    _lastWeatherBeforeXmas = CurrentWeather;
+                    CurrentWeather = WeatherTypes.XMAS;
                     SetForceVehicleTrails(true);
                     SetForcePedFootstepsTracks(true);
                     _seasonString = "Winter";
-                    SetWeatherDelay(_lastWeather);
+                    SetWeatherDelay(CurrentWeather);
                     break;
             }
 
-            WeatherNuiMessage(_lastWeather);
+            WeatherNuiMessage(CurrentWeather);
         }
 
         private async void OnSeasonsWeatherSync(int weather, bool blackout, int temp, float windSpeed, float windDirection, float rainIntensity)
         {
             WeatherTypes newWeather = (WeatherTypes)weather;
-            if (_lastWeather == newWeather) return;
+            if (CurrentWeather == newWeather) return;
 
-            _lastWeather = newWeather;
+            CurrentWeather = newWeather;
 
             SetWeatherTypeOverTime($"{weather}", 15.0f);
 
@@ -159,9 +163,9 @@ namespace Curiosity.Interface.Client.Managers
             ClearWeatherTypePersist();
             SetBlackout(blackout);
 
-            if (_lastSeason == Seasons.WINTER) // override to be sure 
+            if (CurrentSeason == Seasons.WINTER) // override to be sure 
             {
-                _lastWeather = WeatherTypes.XMAS;
+                CurrentWeather = WeatherTypes.XMAS;
                 _lastWeatherBeforeXmas = (WeatherTypes)weather;
             }
 
@@ -179,7 +183,7 @@ namespace Curiosity.Interface.Client.Managers
                 default:
                     SetForceVehicleTrails(false);
                     SetForcePedFootstepsTracks(false);
-                    SetWeather(_lastWeather);
+                    SetWeather(CurrentWeather);
 
                     if (_snowCheckActive)
                     {
@@ -195,7 +199,7 @@ namespace Curiosity.Interface.Client.Managers
 
         private void OnSeasonsSyncClock(int hour, int minute)
         {
-            if (minute % 10 == 0 && _lastWeather != WeatherTypes.HALLOWEEN)
+            if (minute % 10 == 0 && CurrentWeather != WeatherTypes.HALLOWEEN)
             {
                 JsonBuilder jsonBuilder = new JsonBuilder()
                     .Add("operation", "TIME")
@@ -203,7 +207,7 @@ namespace Curiosity.Interface.Client.Managers
                     .Add("minute", $"{minute:00}");
                 API.SendNuiMessage(jsonBuilder.Build());
             }
-            else if (_lastWeather == WeatherTypes.HALLOWEEN && !_singleTimeSent)
+            else if (CurrentWeather == WeatherTypes.HALLOWEEN && !_singleTimeSent)
             {
                 _singleTimeSent = true;
 
@@ -215,7 +219,7 @@ namespace Curiosity.Interface.Client.Managers
             }
         }
 
-        private static void WeatherNuiMessage(WeatherTypes weather)
+        private void WeatherNuiMessage(WeatherTypes weather)
         {
             JsonBuilder jsonBuilder = new JsonBuilder();
             jsonBuilder.Add("operation", "WEATHER");
@@ -258,9 +262,9 @@ namespace Curiosity.Interface.Client.Managers
             SendNuiMessage(jsonBuilder.Build());
         }
 
-        private static async void SetWeatherDelay(WeatherTypes weather)
+        private async void SetWeatherDelay(WeatherTypes weather)
         {
-            SetWeatherTypeOverTime($"{_lastWeather}", 15.0f);
+            SetWeatherTypeOverTime($"{CurrentWeather}", 15.0f);
 
             await BaseScript.Delay(15000);
 
@@ -270,7 +274,7 @@ namespace Curiosity.Interface.Client.Managers
             SetWeather(weather);
         }
 
-        private static void SetWeather(WeatherTypes weather)
+        private void SetWeather(WeatherTypes weather)
         {
             string weatherString = $"{weather}";
             SetOverrideWeather(weatherString);
