@@ -1,9 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Interface.Client.Diagnostics;
 using Curiosity.Interface.Client.Interface;
-using Curiosity.Systems.Library.Models;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Interface.Client

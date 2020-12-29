@@ -1,14 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Interface.Client.Diagnostics;
 using Curiosity.Interface.Client.Events;
-using Curiosity.Interface.Client.Extensions;
 using Curiosity.Interface.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;

@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Interface.Client.Diagnostics;
 using Curiosity.Library.Client;
 using Curiosity.Systems.Library.Enums;
