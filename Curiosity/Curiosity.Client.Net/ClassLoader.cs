@@ -73,7 +73,7 @@ namespace Curiosity.Client.net
             IplLoader.Init();
             // PdaEvents.Init();
             WorldScenarios.Init();
-            SeasonSync.Init();
+            // SeasonSync.Init();
 
             NotificationExport.Init();
         }

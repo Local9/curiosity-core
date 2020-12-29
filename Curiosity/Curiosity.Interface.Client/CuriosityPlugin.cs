@@ -181,5 +181,15 @@ namespace Curiosity.Interface.Client
                 result(new { ok = true });
             });
         }
+
+        public void AttachTickHandler(Func<Task> task)
+        {
+            Tick += task;
+        }
+
+        public void DetachTickHandler(Func<Task> task)
+        {
+            Tick -= task;
+        }
     }
 }

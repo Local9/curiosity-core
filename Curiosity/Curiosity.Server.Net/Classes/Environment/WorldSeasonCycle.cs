@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Server.net.Classes.Environment
 {
-    class WorldSeasonCycle
+    static class WorldSeasonCycle
     {
         static Server server = Server.GetInstance();
         const int ONE_MINUTE = 60000;
-        
+
         // Settings
 
         // TIME
@@ -38,7 +38,7 @@ namespace Curiosity.Server.net.Classes.Environment
         static List<WeatherTypes> _springWeather = SeasonData.WeatherSpringList();
         static List<WeatherTypes> _summerWeather = SeasonData.WeatherSummerList();
         static List<WeatherTypes> _autumnWeather = SeasonData.WeatherAutumnList();
-        static WeatherTypes _serverWeather = _summerWeather[Server.random.Next(_summerWeather.Count)];
+        public static WeatherTypes ServerWeather = _summerWeather[Server.random.Next(_summerWeather.Count)];
         static float _windSpeed;
         static float _windDirection;
         static int _maxWindDirectionMultiplier;
@@ -49,7 +49,7 @@ namespace Curiosity.Server.net.Classes.Environment
         static int _newSeasonTimer = 60;
         static List<Seasons> _seasonsList = SeasonData.SeasonList();
         static int _season = Server.random.Next(_seasonsList.Count);
-        static Seasons _serverSeason = _seasonsList[_season];
+        public static Seasons ServerSeason = _seasonsList[_season];
         static int _serverTemp = Server.random.Next(60, 88);
         static bool _hasChangedSeason = false;
 
@@ -89,7 +89,7 @@ namespace Curiosity.Server.net.Classes.Environment
             _windDirection = (float)(Server.random.NextDouble() * Server.random.Next(_maxWindDirectionMultiplier));
             _windSpeed = (float)(Server.random.NextDouble() * Server.random.Next(_maxWindSpeedMultiplier));
 
-            if (_serverWeather == WeatherTypes.RAIN)
+            if (ServerWeather == WeatherTypes.RAIN)
             {
                 _rainIntensity = (float)Utility.RANDOM.NextDouble();
                 if (_rainIntensity < .5f)
@@ -267,11 +267,11 @@ namespace Curiosity.Server.net.Classes.Environment
                 return;
             }
 
-            _serverWeather = weatherType;
+            ServerWeather = weatherType;
             _newWeatherTimer = _baseWeatherTimer;
             RandomWind();
 
-            session.Player.NotificationCuriosity($"Weather", $"Weather changed: {_serverWeather}");
+            session.Player.NotificationCuriosity($"Weather", $"Weather changed: {ServerWeather}");
 
             SyncAllUsers();
         }
@@ -302,7 +302,7 @@ namespace Curiosity.Server.net.Classes.Environment
             {
                 List<WeatherTypes> weathers = new List<WeatherTypes>(); // create a new list
 
-                switch (_serverSeason) // self explanitory
+                switch (ServerSeason) // self explanitory
                 {
                     case Seasons.SPRING:
                         weathers = SeasonData.WeatherSpringList();
@@ -323,28 +323,28 @@ namespace Curiosity.Server.net.Classes.Environment
                         _maxWindSpeedMultiplier = 8;
                         break;
                     case Seasons.WINTER:
-                        _serverWeather = WeatherTypes.XMAS;
+                        ServerWeather = WeatherTypes.XMAS;
                         _serverTemp = Server.random.Next(29, 43);
                         _maxWindDirectionMultiplier = 10;
                         _maxWindSpeedMultiplier = 8;
                         break;
                 }
 
-                if (_serverSeason == Seasons.WINTER) // if its winter, its always xmas, blizzard and light snow are for north yankton
+                if (ServerSeason == Seasons.WINTER) // if its winter, its always xmas, blizzard and light snow are for north yankton
                 {
-                    _serverWeather = WeatherTypes.XMAS;
+                    ServerWeather = WeatherTypes.XMAS;
                 }
                 else
                 {
                     WeatherTypes newType = weathers[Server.random.Next(weathers.Count - 1)];
 
-                    while (_serverWeather == newType)
+                    while (ServerWeather == newType)
                     {
                         await Server.Delay(10);
                         newType = weathers[Server.random.Next(weathers.Count - 1)];
                     }
 
-                    _serverWeather = newType;
+                    ServerWeather = newType;
                 }
 
                 weathers.Clear(); // clear the list
@@ -384,16 +384,16 @@ namespace Curiosity.Server.net.Classes.Environment
                 if (_season >= 4) // cannot have more seasons than whats in the list, 4 seasons known and arrays start at zero
                     _season = 0; // reset to base season
 
-                if (_serverSeason == Seasons.WINTER)
+                if (ServerSeason == Seasons.WINTER)
                     _season = 0;
 
-                _serverSeason = _seasonsList[_season]; // set new season based on the increase
+                ServerSeason = _seasonsList[_season]; // set new season based on the increase
 
                 SetNextWeather(false);
 
                 SyncAllUsers();
 
-                Log.Success($"[SEASONS] Changed Season {_serverSeason}:{_season}");
+                Log.Success($"[SEASONS] Changed Season {ServerSeason}:{_season}");
             }
             else if (hour != 5 && _hasChangedSeason)
             {
@@ -426,8 +426,8 @@ namespace Curiosity.Server.net.Classes.Environment
 
             if (_isChristmas)
             {
-                _serverSeason = Seasons.WINTER;
-                _serverWeather = WeatherTypes.XMAS;
+                ServerSeason = Seasons.WINTER;
+                ServerWeather = WeatherTypes.XMAS;
                 _serverTemp = Utility.RANDOM.Next(20, 30);
             }
 
@@ -437,22 +437,22 @@ namespace Curiosity.Server.net.Classes.Environment
                 ShiftTimeToMinute(0);
                 _freezeTime = true;
 
-                _serverSeason = Seasons.AUTUMN;
-                _serverWeather = WeatherTypes.HALLOWEEN;
+                ServerSeason = Seasons.AUTUMN;
+                ServerWeather = WeatherTypes.HALLOWEEN;
                 _serverTemp = Utility.RANDOM.Next(40, 60);
             }
         }
 
         private static void SyncAllUsers()
         {
-            Server.TriggerClientEvent("curiosity:client:seasons:sync:weather", (int)_serverWeather, _blackout, _serverTemp, _windSpeed, _windDirection, _rainIntensity); // inform clients
-            Server.TriggerClientEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp); // inform clients
+            Server.TriggerClientEvent("curiosity:client:seasons:sync:weather", (int)ServerWeather, _blackout, _serverTemp, _windSpeed, _windDirection, _rainIntensity); // inform clients
+            Server.TriggerClientEvent("curiosity:client:seasons:sync:season", (int)ServerSeason, (int)ServerWeather, _serverTemp); // inform clients
         }
 
         private static void OnSeasonConnectionSync([FromSource]CitizenFX.Core.Player player)
         {
-            player.TriggerEvent("curiosity:client:seasons:sync:weather", (int)_serverWeather, _blackout, _serverTemp, _windSpeed, _windDirection, _rainIntensity); // inform clients
-            player.TriggerEvent("curiosity:client:seasons:sync:season", (int)_serverSeason, (int)_serverWeather, _serverTemp); // inform clients   
+            player.TriggerEvent("curiosity:client:seasons:sync:weather", (int)ServerWeather, _blackout, _serverTemp, _windSpeed, _windDirection, _rainIntensity); // inform clients
+            player.TriggerEvent("curiosity:client:seasons:sync:season", (int)ServerSeason, (int)ServerWeather, _serverTemp); // inform clients   
         }
     }
 }

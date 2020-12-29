@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Server.net.Business;
 using Curiosity.Server.net.Classes;
+using Curiosity.Server.net.Classes.Environment;
 using Curiosity.Server.net.Entity;
 using Curiosity.Server.net.Helpers;
 using Curiosity.Shared.Server.net.Helpers;
@@ -148,6 +149,20 @@ namespace Curiosity.Server.net.ServerExports
 
                         return false;
                     }
+                }
+                ));
+
+            Instance.ExportDictionary.Add("GetWeather", new Func<int>(
+                () =>
+                {
+                    return (int)WorldSeasonCycle.ServerWeather;
+                }
+                ));
+
+            Instance.ExportDictionary.Add("GetSeason", new Func<int>(
+                () =>
+                {
+                    return (int)WorldSeasonCycle.ServerSeason;
                 }
                 ));
         }

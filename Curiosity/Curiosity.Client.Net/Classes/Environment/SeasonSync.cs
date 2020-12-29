@@ -48,16 +48,16 @@ namespace Curiosity.Client.net.Classes.Environment
 
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnResourceStart));
 
-            //client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
+            client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
             client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
             client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int, float, float, float>(OnSeasonsWeatherSync));
             client.RegisterEventHandler("curiosity:client:seasons:sync:clock", new Action<int, int>(OnSeasonsSyncClock));
 
-            client.RegisterNuiEventHandler("GetWeather", new Action<IDictionary<string, object>, CallbackDelegate>(OnGetWeather));
+            // client.RegisterNuiEventHandler("GetWeather", new Action<IDictionary<string, object>, CallbackDelegate>(OnGetWeather));
 
-            // client.RegisterTickHandler(OnSeasonTimerTick);
+            client.RegisterTickHandler(OnSeasonTimerTick);
             // client.RegisterTickHandler(OnPopulationManagement);
-            client.RegisterTickHandler(OnSnowCheck);
+            // client.RegisterTickHandler(OnSnowCheck);
 
             Log.Verbose($"[WORLD WEATHER] Init");
         }
@@ -100,35 +100,6 @@ namespace Curiosity.Client.net.Classes.Environment
             }
 
             cb(new { ok = true });
-        }
-
-        private static async Task OnSnowCheck()
-        {
-            bool trails = World.Weather == Weather.Christmas;
-            API.SetForceVehicleTrails(trails);
-            API.SetForcePedFootstepsTracks(trails);
-            await Client.Delay(0);
-
-            if (trails
-                && (Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Unarmed || Game.PlayerPed.Weapons.Current.Hash == WeaponHash.Snowball)
-                && Game.IsControlPressed(0, Control.ThrowGrenade)
-                && !Game.PlayerPed.IsInVehicle())
-            {
-                API.RequestAnimDict("anim@mp_snowball");
-
-                if (!Game.PlayerPed.Weapons.HasWeapon(WeaponHash.Snowball))
-                {
-                    Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
-                    Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
-                }
-                else if (Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo < 10)
-                {
-                    Game.PlayerPed.Task.PlayAnimation("anim@mp_snowball", "pickup_snowball");
-                    Game.PlayerPed.Weapons[WeaponHash.Snowball].Ammo++;
-                    Game.PlayerPed.Weapons.Give(WeaponHash.Snowball, 1, true, true);
-                }
-                await Client.Delay(1000);
-            }
         }
 
         private static void OnResourceStart(string resourceName)
@@ -193,7 +164,7 @@ namespace Curiosity.Client.net.Classes.Environment
                     .Add("operation", "TIME")
                     .Add("hour", $"{hour:00}")
                     .Add("minute", $"{minute:00}");
-                API.SendNuiMessage(jsonBuilder.Build());
+                // API.SendNuiMessage(jsonBuilder.Build());
             }
             else if (_lastWeather == WeatherTypes.HALLOWEEN && !_singleTimeSent)
             {
@@ -203,7 +174,7 @@ namespace Curiosity.Client.net.Classes.Environment
                     .Add("operation", "TIME")
                     .Add("hour", $"{0:00}")
                     .Add("minute", $"{0:00}");
-                API.SendNuiMessage(jsonBuilder.Build());
+                // API.SendNuiMessage(jsonBuilder.Build());
             }
         }
 
@@ -424,7 +395,7 @@ namespace Curiosity.Client.net.Classes.Environment
                     jsonBuilder.Add("type", "Thunder Storm");
                     break;
             }
-            API.SendNuiMessage(jsonBuilder.Build());
+            // API.SendNuiMessage(jsonBuilder.Build());
         }
     }
 }

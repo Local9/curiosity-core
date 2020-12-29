@@ -194,7 +194,7 @@ namespace Curiosity.Client.net.Classes.PlayerClasses
                     .Add("role", role.ToUpperInvariant())
                     .Add("wallet", playerInfo.Wallet)
                     .Build();
-            API.SendNuiMessage(jsn);
+            // API.SendNuiMessage(jsn);
         }
 
         public static bool IsStaff()

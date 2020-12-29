@@ -66,6 +66,7 @@
     <Compile Include="Managers\PdaManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\PlayerSpawnedManager.cs" />
+    <Compile Include="Managers\SeasonManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="TickHandler.cs" />
