@@ -42,6 +42,8 @@ namespace Curiosity.MissionManager.Client
         /// <param name="mission">The mission to start</param>
         public static void StartMission(Type mission, string discordStatus = "Responding to a call")
         {
+            Logger.Info($"Started Mission");
+
             // Remove any blips if they are left around
             foreach (Blip blip in PluginManager.Blips)
             {
