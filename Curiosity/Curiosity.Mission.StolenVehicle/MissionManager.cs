@@ -23,7 +23,7 @@ namespace Curiosity.StolenVehicle
 
             Functions.RegisterMission(typeof(StolenVehicleChase));
             Functions.RegisterMission(typeof(StolenVehicleChaseTwo));
-            Functions.RegisterMission(typeof(StolenTank));
+            // Functions.RegisterMission(typeof(StolenTank));
         }
 
         private void OnClientResourceStop(string resourceName)
