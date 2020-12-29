@@ -18,7 +18,7 @@ namespace Curiosity.Client.net.Classes.PlayerClasses
             {
                 while (!API.NetworkIsPlayerActive(API.PlayerId()))
                 {
-                    await Client.Delay(5000);
+                    await Client.Delay(1000);
                 }
                 Client.TriggerServerEvent("curiosity:Server:Queue:PlayerConnected");
                 Client.GetInstance().DeregisterTickHandler(Connected);
