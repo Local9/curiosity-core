@@ -7,6 +7,8 @@ namespace Curiosity.Server.net.Helpers
 {
     class ChatLog
     {
+        private static Server ServerInstance = Server.GetInstance();
+
         public static void SendLogMessage(string message, Player player = null, bool discord = false)
         {
             ChatMessage chatMessage = new ChatMessage();
@@ -21,10 +23,13 @@ namespace Curiosity.Server.net.Helpers
             if (player == null)
             {
                 Server.TriggerClientEvent("curiosity:Client:Chat:Message", json);
+                ServerInstance.ExportDictionary["curiosity-core"].AddToLog(message);
             }
             else
             {
                 player.TriggerEvent("curiosity:Client:Chat:Message", json);
+                int playerId = int.Parse(player.Handle);
+                ServerInstance.ExportDictionary["curiosity-core"].AddToPlayerLog(playerId, message);
             }
 
             if (discord)

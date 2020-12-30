@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Events;
@@ -39,6 +40,44 @@ namespace Curiosity.Core.Server.Managers
 
                 return null;
             }));
+
+            Instance.ExportDictionary.Add("AddToLog", new Func<string, bool>(
+                (message) =>
+                {
+                    ChatMessage chatMessage = new ChatMessage();
+
+                    chatMessage.Name = "[S-LOG]";
+                    chatMessage.Role = $"SERVER";
+                    chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
+                    chatMessage.Channel = "log";
+
+                    string jsonMessage = JsonConvert.SerializeObject(chatMessage);
+
+                    EventSystem.GetModule().Send("chat:receive", -1, jsonMessage);
+
+                    return true;
+                }
+            ));
+
+            Instance.ExportDictionary.Add("AddToPlayerLog", new Func<int, string, bool>(
+                (playerId, message) =>
+                {
+                    Logger.Debug($"Player ID: {playerId}, message: {message}");
+
+                    ChatMessage chatMessage = new ChatMessage();
+
+                    chatMessage.Name = "[P-LOG]";
+                    chatMessage.Role = $"SERVER";
+                    chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
+                    chatMessage.Channel = "log";
+
+                    string jsonMessage = JsonConvert.SerializeObject(chatMessage);
+
+                    EventSystem.GetModule().Send("chat:receive", playerId, jsonMessage);
+
+                    return true;
+                }
+            ));
         }
 
         public static void OnChatMessage([FromSource] Player player, string message, string channel)

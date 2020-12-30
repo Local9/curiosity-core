@@ -64,7 +64,6 @@
     <Compile Include="Extensions\ObjectExtension.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
     <Compile Include="Managers\ServerEventManager.cs" />
-    <Compile Include="ServerExports\StatusExport.cs" />
     <Compile Include="Managers\ChatManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
