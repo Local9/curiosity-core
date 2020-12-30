@@ -1,7 +1,5 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Global.Shared.Entity;
 using Curiosity.Server.net.Classes;
-using System;
 
 namespace Curiosity.Server.net.Helpers
 {
