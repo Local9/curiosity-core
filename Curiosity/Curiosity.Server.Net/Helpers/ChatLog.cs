@@ -18,16 +18,12 @@ namespace Curiosity.Server.net.Helpers
             chatMessage.Channel = "log";
             chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
 
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(chatMessage);
-
             if (player == null)
             {
-                Server.TriggerClientEvent("curiosity:Client:Chat:Message", json);
                 ServerInstance.ExportDictionary["curiosity-core"].AddToLog(message);
             }
             else
             {
-                player.TriggerEvent("curiosity:Client:Chat:Message", json);
                 int playerId = int.Parse(player.Handle);
                 ServerInstance.ExportDictionary["curiosity-core"].AddToPlayerLog(playerId, message);
             }
