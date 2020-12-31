@@ -51,7 +51,7 @@ namespace Curiosity.Server.net.Classes
         public int Ping => GetPlayerPing(NetId);
         public int LastMsg => GetPlayerLastMsg(NetId);
         public string EndPoint => GetPlayerEndpoint(NetId);
-        public bool IsDonator => (Privilege == Privilege.DONATOR || Privilege == Privilege.DONATOR1 || Privilege == Privilege.DONATOR2 || Privilege == Privilege.DONATOR3);
+        public bool IsDonator => (Privilege == Privilege.DONATOR_LIFE || Privilege == Privilege.DONATOR_LEVEL_1 || Privilege == Privilege.DONATOR_LEVEL_2 || Privilege == Privilege.DONATOR_LEVEL_3);
         public bool IsDeveloper => (Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);
         public bool IsManager => (Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER || Privilege == Privilege.COMMUNITYMANAGER);
         public bool IsAdmin => (Privilege == Privilege.COMMUNITYMANAGER || Privilege == Privilege.ADMINISTRATOR || Privilege == Privilege.SENIORADMIN || Privilege == Privilege.HEADADMIN || Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);

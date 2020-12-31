@@ -46,7 +46,7 @@ namespace Curiosity.Global.Shared.Entity
         public int ServerId;
         public PlayerCharacter Skin = new PlayerCharacter();
 
-        public bool IsDonator => ((Privilege)RoleId == Privilege.DONATOR || privilege == Privilege.DONATOR1 || privilege == Privilege.DONATOR2 || privilege == Privilege.DONATOR3);
+        public bool IsDonator => ((Privilege)RoleId == Privilege.DONATOR_LIFE || privilege == Privilege.DONATOR_LEVEL_1 || privilege == Privilege.DONATOR_LEVEL_2 || privilege == Privilege.DONATOR_LEVEL_3);
         public bool IsStaff => (privilege == Privilege.COMMUNITYMANAGER || privilege == Privilege.MODERATOR || privilege == Privilege.ADMINISTRATOR || privilege == Privilege.SENIORADMIN || privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         public bool IsAdmin => (privilege == Privilege.COMMUNITYMANAGER || privilege == Privilege.ADMINISTRATOR || privilege == Privilege.SENIORADMIN || privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);
         public bool IsTrustedAdmin => (privilege == Privilege.COMMUNITYMANAGER || privilege == Privilege.HEADADMIN || privilege == Privilege.DEVELOPER || privilege == Privilege.PROJECTMANAGER);

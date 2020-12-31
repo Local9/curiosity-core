@@ -11,7 +11,7 @@ namespace Curiosity.Global.Shared.Data
         public Privilege Privilege;
         public bool Disconnected;
 
-        public bool IsDonator => (Privilege == Privilege.DONATOR || Privilege == Privilege.DONATOR1 || Privilege == Privilege.DONATOR2 || Privilege == Privilege.DONATOR3);
+        public bool IsDonator => (Privilege == Privilege.DONATOR_LIFE || Privilege == Privilege.DONATOR_LEVEL_1 || Privilege == Privilege.DONATOR_LEVEL_2 || Privilege == Privilege.DONATOR_LEVEL_3);
         public bool IsDeveloper => (Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);
         public bool IsManager => (Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER || Privilege == Privilege.COMMUNITYMANAGER);
         public bool IsAdmin => (Privilege == Privilege.COMMUNITYMANAGER || Privilege == Privilege.ADMINISTRATOR || Privilege == Privilege.SENIORADMIN || Privilege == Privilege.HEADADMIN || Privilege == Privilege.DEVELOPER || Privilege == Privilege.PROJECTMANAGER);

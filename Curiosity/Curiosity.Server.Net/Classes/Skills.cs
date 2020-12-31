@@ -332,11 +332,11 @@ namespace Curiosity.Server.net.Classes
         {
             switch (privilege)
             {
-                case Privilege.DONATOR1:
+                case Privilege.DONATOR_LEVEL_1:
                     return float.Parse(API.GetConvar("experience_modifier_donator1", $"0.1"));
-                case Privilege.DONATOR2:
+                case Privilege.DONATOR_LEVEL_2:
                     return float.Parse(API.GetConvar("experience_modifier_donator2", $"0.25"));
-                case Privilege.DONATOR3:
+                case Privilege.DONATOR_LEVEL_3:
                     return float.Parse(API.GetConvar("experience_modifier_donator3", $"0.5"));
                 default:
                     return float.Parse(API.GetConvar("experience_modifier_lifeTime", $"0.05"));
@@ -585,7 +585,7 @@ namespace Curiosity.Server.net.Classes
                 {
                     float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
 
-                    if (experienceModifier > 1.0f && (session.IsStaff || session.Privilege == GlobalEnum.Privilege.DONATOR))
+                    if (experienceModifier > 1.0f && (session.IsStaff || session.Privilege == GlobalEnum.Privilege.DONATOR_LIFE))
                     {
                         experienceModifier += 0.1f;
                     }

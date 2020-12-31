@@ -27,11 +27,11 @@ namespace Curiosity.Server.net.Entity
         public bool IsTrustedAdmin => (Role == Privilege.COMMUNITYMANAGER || Role == Privilege.DEVELOPER || Role == Privilege.PROJECTMANAGER);
         public bool IsDeveloper => (Role == Privilege.DEVELOPER || Role == Privilege.PROJECTMANAGER);
         public bool IsProjectManager => (Role == Privilege.PROJECTMANAGER);
-        public bool IsDonator => (Role == Privilege.DONATOR3 || Role == Privilege.DONATOR2 || Role == Privilege.DONATOR1 || Role == Privilege.DONATOR);
-        public bool IsLifeSupporter => (Role == Privilege.DONATOR);
-        public bool IsDonatorLevel1 => (Role == Privilege.DONATOR1);
-        public bool IsDonatorLevel2 => (Role == Privilege.DONATOR2);
-        public bool IsDonatorLevel3 => (Role == Privilege.DONATOR3);
+        public bool IsDonator => (Role == Privilege.DONATOR_LEVEL_3 || Role == Privilege.DONATOR_LEVEL_2 || Role == Privilege.DONATOR_LEVEL_1 || Role == Privilege.DONATOR_LIFE);
+        public bool IsLifeSupporter => (Role == Privilege.DONATOR_LIFE);
+        public bool IsDonatorLevel1 => (Role == Privilege.DONATOR_LEVEL_1);
+        public bool IsDonatorLevel2 => (Role == Privilege.DONATOR_LEVEL_2);
+        public bool IsDonatorLevel3 => (Role == Privilege.DONATOR_LEVEL_3);
         public bool IsAllowedSupportXp => (IsStaff || IsDonator);
 
         public int Wallet { get; internal set; }

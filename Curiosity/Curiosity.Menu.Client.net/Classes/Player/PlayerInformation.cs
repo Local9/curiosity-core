@@ -49,7 +49,7 @@ namespace Curiosity.Menus.Client.net.Classes.Player
 
         public static bool IsDonator()
         {
-            return (privilege == Privilege.DONATOR || privilege == Privilege.DONATOR1 || privilege == Privilege.DONATOR2 || privilege == Privilege.DONATOR3);
+            return (privilege == Privilege.DONATOR_LIFE || privilege == Privilege.DONATOR_LEVEL_1 || privilege == Privilege.DONATOR_LEVEL_2 || privilege == Privilege.DONATOR_LEVEL_3);
         }
 
         public static bool IsStaff()

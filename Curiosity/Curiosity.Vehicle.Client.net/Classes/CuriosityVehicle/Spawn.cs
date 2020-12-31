@@ -401,7 +401,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
             long timerToWait = 5000 * numberOfVehiclesSpawned;
 
-            if (PlayerInformation.privilege == Privilege.DONATOR)
+            if (PlayerInformation.privilege == Privilege.DONATOR_LIFE)
             {
                 timerToWait = 2500 * numberOfVehiclesSpawned;
             }

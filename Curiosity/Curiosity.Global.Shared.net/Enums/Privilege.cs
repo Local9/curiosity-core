@@ -12,10 +12,10 @@
         SENIORADMIN = 6,
         HELPER = 7,
         HEADADMIN = 8,
-        DONATOR = 9,
+        DONATOR_LIFE = 9,
         COMMUNITYMANAGER = 10,
-        DONATOR1 = 11,
-        DONATOR2 = 12,
-        DONATOR3 = 13
+        DONATOR_LEVEL_1 = 11,
+        DONATOR_LEVEL_2 = 12,
+        DONATOR_LEVEL_3 = 13
     }
 }
