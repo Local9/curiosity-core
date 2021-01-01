@@ -11,6 +11,7 @@ namespace Curiosity.Core.Server.Managers
     public class MarqueeManager : Manager<MarqueeManager>
     {
         DateTime lastRun = DateTime.Now;
+        int marqueeMessageIndex = 0;
 
         List<string> MarqueeMessages = new List<string>()
         {
@@ -34,9 +35,13 @@ namespace Curiosity.Core.Server.Managers
             if (DateTime.Now.Subtract(lastRun).TotalMinutes >= 5)
             {
                 lastRun = DateTime.Now;
-                string marqueeMessage = MarqueeMessages[Utility.RANDOM.Next(MarqueeMessages.Count - 1)];
+                string marqueeMessage = MarqueeMessages[marqueeMessageIndex];
                 Logger.Debug($"Sending Marquee Message: {marqueeMessage}");
                 EventSystem.GetModule().SendAll("ui:marquee", marqueeMessage);
+
+                marqueeMessageIndex++;
+
+                if (marqueeMessageIndex >= MarqueeMessages.Count) marqueeMessageIndex = 0;
             }
             await BaseScript.Delay(1000);
         }
