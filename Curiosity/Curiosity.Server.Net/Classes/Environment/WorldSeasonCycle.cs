@@ -403,11 +403,11 @@ namespace Curiosity.Server.net.Classes.Environment
 
         private static void IsStaticWeather()
         {
-            _isChristmas = DateTime.Now.Month == 12 || API.GetConvar("christmas_weather", "false") == "true";
-            _isHalloween = DateTime.Now.Month == 10 && DateTime.Now.Day == 31 || API.GetConvar("halloween_weather", "false") == "true";
+            _isChristmas = DateTime.Now.Month == 12;
+            _isHalloween = DateTime.Now.Month == 10 && DateTime.Now.Day == 31;
 
 
-            if (_startedResource && _isChristmas)
+            if (_startedResource && !_isChristmas)
             {
                 Log.Success($"Stopping Resource: nve_iced_alamo");
                 _startedResource = false;
