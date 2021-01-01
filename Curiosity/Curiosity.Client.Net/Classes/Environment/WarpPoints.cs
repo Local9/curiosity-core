@@ -53,7 +53,6 @@ namespace Curiosity.Client.net.Classes.Environment
             new WarpPointPair { A = new WarpPoint("teleport", new Vector3(301.063f, 201.9651f, 104.3742f + MarkerZAdjustment), 340.1969f), B = new WarpPoint("teleport", new Vector3(-1428.576f, -245.4307f, 16.80293f + MarkerZAdjustment), 186.904f), },
             new WarpPointPair { A = new WarpPoint("teleport", new Vector3(1085.552f, 214.8135f, -49.20041f + MarkerZAdjustment), 140.5358f), B = new WarpPoint("teleport", new Vector3(980.9328f, 56.48923f, 116.1641f + MarkerZAdjustment), 60.4653f), },
             new WarpPointPair { A = new WarpPoint("teleport", new Vector3(966.9045f, 63.88168f, 112.553f + MarkerZAdjustment), 250.8514f), B = new WarpPoint("teleport", new Vector3(969.1931f, 63.11254f, 112.5542f + MarkerZAdjustment), 62.60468f), },
-
             new WarpPointPair { A = new WarpPoint("teleport", new Vector3(-114.5704f, -603.6292f, 36.28073f + MarkerZAdjustment), 237.2837f), B = new WarpPoint("teleport", new Vector3(-141.6387f, -617.3163f, 168.8204f + MarkerZAdjustment), 168.9857f), },
 
             new WarpPointPair { A = new WarpPoint("teleport", new Vector3(-1635.858f, 181.2483f, 61.75729f + MarkerZAdjustment), 114.9818f), B = new WarpPoint("teleport", new Vector3(-1636.603f, 180.486f, -98.79057f + MarkerZAdjustment), 298.743f), },
