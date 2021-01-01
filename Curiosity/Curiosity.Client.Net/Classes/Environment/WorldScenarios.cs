@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Client.net.Classes.Environment
@@ -232,6 +233,13 @@ namespace Curiosity.Client.net.Classes.Environment
         {
             client.RegisterEventHandler("playerSpawned", new Action<dynamic>(OnPlayerSpawned));
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnClientResourceStart));
+
+            // client.RegisterTickHandler(OnDensity);
+        }
+
+        private static async Task OnDensity()
+        {
+            API.SetScenarioPedDensityMultiplierThisFrame(1, 1);
         }
 
         static void OnClientResourceStart(string resourceName)
