@@ -407,21 +407,18 @@ namespace Curiosity.Server.net.Classes.Environment
             _isHalloween = DateTime.Now.Month == 10 && DateTime.Now.Day == 31 || API.GetConvar("halloween_weather", "false") == "true";
 
 
-            if (_startedResource != _isChristmas)
+            if (_startedResource && _isChristmas)
             {
-                if (_startedResource)
-                {
-                    Log.Success($"Stopping Resource: nve_iced_alamo");
-                    _startedResource = !_startedResource;
-                    API.StopResource("nve_iced_alamo");
-                }
+                Log.Success($"Stopping Resource: nve_iced_alamo");
+                _startedResource = false;
+                API.StopResource("nve_iced_alamo");
+            }
 
-                if (!_startedResource)
-                {
-                    Log.Success($"Started Resource: nve_iced_alamo");
-                    _startedResource = !_startedResource;
-                    API.StartResource("nve_iced_alamo");
-                }
+            if (!_startedResource && _isChristmas)
+            {
+                Log.Success($"Started Resource: nve_iced_alamo");
+                _startedResource = true;
+                API.StartResource("nve_iced_alamo");
             }
 
             if (_isChristmas)
