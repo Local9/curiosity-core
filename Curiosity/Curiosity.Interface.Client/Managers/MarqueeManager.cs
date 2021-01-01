@@ -14,14 +14,14 @@ namespace Curiosity.Interface.Client.Managers
 
         List<string> MarqueeMessages = new List<string>()
         {
-            "<span color='dodgerblue'>Forums:</span> <Span color='#ff9900'>forums.lifev.net</span>",
-            "<span color='dodgerblue'>Discord:</span> <Span color='#ff9900'>discord.lifev.net</span>",
-            "Find any bugs? Please report them to our forums: <Span color='#ff9900'>forums.lifev.net</span>",
+            "<span style='color:dodgerblue'>Forums:</span> <span style='color:ff9900'>forums.lifev.net</span>",
+            "<span style='color:dodgerblue'>Discord:</span> <span style='color:#ff9900'>discord.lifev.net</span>",
+            "Find any bugs? Please report them to our forums: <span style='color:#ff9900'>forums.lifev.net</span>",
             "Please use reports to notify us of rule breakers",
             "Please remember to be friendly to one another",
-            "To read our rules Press the <span color='dodgerblue'>F11</span> or <span color='dodgerblue'>HOME</span> key",
-            "<span color='dodgerblue'>Support us:</span> <Span color='#ff9900'>patreon.com/lifev</span>",
-            "To read our guides press the <span color='dodgerblue'>F11</span> or <span color='dodgerblue'>HOME</span> key",
+            "To read our rules Press the <span style='color:dodgerblue'>F11</span> or <span style='color:dodgerblue'>HOME</span> key",
+            "<span style='color:dodgerblue'>Support us:</span> <Span color='#ff9900'>patreon.com/lifev</span>",
+            "To read our guides press the <span style='color:dodgerblue'>F11</span> or <span style='color:dodgerblue'>HOME</span> key",
         };
 
         public override void Begin()
