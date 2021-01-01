@@ -14,14 +14,14 @@ namespace Curiosity.Interface.Client.Managers
 
         List<string> MarqueeMessages = new List<string>()
         {
-            "Forums: forums.lifev.net",
-            "Discord: discord.lifev.net",
-            "Find any bugs? Please report them to our forums: forums.lifev.net",
+            "<span color='dodgerblue'>Forums:</span> <Span color='#ff9900'>forums.lifev.net</span>",
+            "<span color='dodgerblue'>Discord:</span> <Span color='#ff9900'>discord.lifev.net</span>",
+            "Find any bugs? Please report them to our forums: <Span color='#ff9900'>forums.lifev.net</span>",
             "Please use reports to notify us of rule breakers",
             "Please remember to be friendly to one another",
-            "To read our rules Press the F11 or HOME key",
-            "Support us: patreon.com/lifev",
-            "To read our guides press the F11 or HOME key",
+            "To read our rules Press the <span color='dodgerblue'>F11</span> or <span color='dodgerblue'>HOME</span> key",
+            "<span color='dodgerblue'>Support us:</span> <Span color='#ff9900'>patreon.com/lifev</span>",
+            "To read our guides press the <span color='dodgerblue'>F11</span> or <span color='dodgerblue'>HOME</span> key",
         };
 
         public override void Begin()
