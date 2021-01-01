@@ -167,6 +167,27 @@ namespace Curiosity.Core.Server
 
         private async void Load()
         {
+            Logger.Info("[CURIOSITY-CORE]: Loading managers, please wait...");
+
+            Assembly.GetExecutingAssembly().GetExportedTypes()
+                .SelectMany(self => self.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
+                .Where(self => self.GetCustomAttribute(typeof(TickHandler), false) != null).ToList()
+                .ForEach(self =>
+                {
+                    var type = self.DeclaringType;
+
+                    if (type == null) return;
+
+                    if (!TickHandlers.ContainsKey(type))
+                    {
+                        TickHandlers.Add(type, new List<MethodInfo>());
+                    }
+
+                    Logger.Debug($"[TickHandlers] {type.Name}::{self.Name}");
+
+                    TickHandlers[type].Add(self);
+                });
+
             var loaded = 0;
 
             foreach (var type in Assembly.GetExecutingAssembly().GetExportedTypes())
@@ -195,11 +216,15 @@ namespace Curiosity.Core.Server
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
 
+            AttachTickHandlers(this);
+
             EventRegistry["rconCommand"] += new Action<string, List<object>>(OnRconCommand);
 
             PlayersList = Players;
 
             ServerReady = true;
+
+            Logger.Info($"[CURIOSITY-CORE] Load method has been completed.");
         }
 
         public static Player GetPlayer(int netID)
@@ -240,6 +265,7 @@ namespace Curiosity.Core.Server
 
             var instance = Activator.CreateInstance(type);
 
+            AttachTickHandlers(instance);
             Managers[type] = instance;
 
             return instance;

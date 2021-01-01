@@ -23,27 +23,34 @@ namespace Curiosity.MissionManager.Client.Managers
         [TickHandler]
         private async Task OnWorldPedList()
         {
-            ConcurrentDictionary<int, Ped> WorldPedsCopy = WorldPeds;
-
-            foreach(KeyValuePair<int, Ped> kvp in WorldPedsCopy)
+            try
             {
-                Ped ped = kvp.Value;
+                ConcurrentDictionary<int, Ped> WorldPedsCopy = WorldPeds;
 
-                if (!ped.Exists())
+                foreach (KeyValuePair<int, Ped> kvp in WorldPedsCopy)
                 {
-                    WorldPeds.TryRemove(kvp.Key, out Ped old);
+                    Ped ped = kvp.Value;
+
+                    if (!ped.Exists())
+                    {
+                        WorldPeds.TryRemove(kvp.Key, out Ped old);
+                    }
+                    else if (ped.DateCreated.Subtract(DateTime.Now).TotalSeconds > 60 && !ped.IsMission)
+                    {
+                        ped.Dismiss();
+                        WorldPeds.TryRemove(kvp.Key, out Ped old);
+                    }
                 }
-                else if (ped.DateCreated.Subtract(DateTime.Now).TotalSeconds > 60 && !ped.IsMission)
+
+                DateTime startPolling = DateTime.Now;
+                while (startPolling.Subtract(DateTime.Now).TotalSeconds < 10)
                 {
-                    ped.Dismiss();
-                    WorldPeds.TryRemove(kvp.Key, out Ped old);
+                    await BaseScript.Delay(1000);
                 }
             }
-
-            DateTime startPolling = DateTime.Now;
-            while (startPolling.Subtract(DateTime.Now).TotalSeconds < 10)
+            catch (Exception ex)
             {
-                await BaseScript.Delay(1000);
+                Logger.Error($"OnWorldPedList -> {ex}");
             }
         }
 

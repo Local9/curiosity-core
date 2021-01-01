@@ -99,6 +99,11 @@ namespace Curiosity.Core.Server.Events
             });
         }
 
+        public void SendAll(string target, params object[] payloads)
+        {
+            Send(Construct(target, -1, payloads), -1);
+        }
+
         public void Send(string target, int handle, params object[] payloads)
         {
             Send(Construct(target, handle, payloads), handle);
@@ -111,8 +116,9 @@ namespace Curiosity.Core.Server.Events
 
         public void Send(Event wrapped, int handle)
         {
+            string client =  handle == -1 ? "All Users" : $"{handle}";
             Logger.Debug(
-                $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the client `{handle}`.");
+                $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the client `{client}`.");
 
             if (handle == -1)
             {

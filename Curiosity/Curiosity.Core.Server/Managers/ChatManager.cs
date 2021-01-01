@@ -31,7 +31,7 @@ namespace Curiosity.Core.Server.Managers
 
                 string jsonMessage = JsonConvert.SerializeObject(chatMessage);
 
-                EventSystem.GetModule().Send("chat:receive", -1, jsonMessage);
+                EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
 
                 string discordMessageStart = $"{DateTime.Now.ToString("HH:mm")} [{player.Handle}] {player.Name}#{curiosityUser.UserId}";
                 string discordMessage = chatMessage.Message.Trim('"');
@@ -53,7 +53,7 @@ namespace Curiosity.Core.Server.Managers
 
                     string jsonMessage = JsonConvert.SerializeObject(chatMessage);
 
-                    EventSystem.GetModule().Send("chat:receive", -1, jsonMessage);
+                    EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
 
                     return true;
                 }

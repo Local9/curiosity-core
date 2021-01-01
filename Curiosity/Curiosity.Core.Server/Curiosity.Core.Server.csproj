@@ -55,6 +55,7 @@
     <Compile Include="Commands\CommandInfo.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\Impl\DeveloperTools.cs" />
+    <Compile Include="Managers\MarqueeManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
