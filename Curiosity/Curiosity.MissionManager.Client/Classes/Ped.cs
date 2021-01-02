@@ -225,16 +225,15 @@ namespace Curiosity.MissionManager.Client.Classes
 
             this.isRandomPed = isRandomPed;
             fx.Health = 200;
-            Fx.Health = 200;
 
             fx.AlwaysDiesOnLowHealth = false;
+            fx.DropsWeaponsOnDeath = false;
 
             DateCreated = DateTime.Now;
 
             if (!this.isRandomPed)
             {
                 Fx.AlwaysKeepTask = true;
-                Fx.DropsWeaponsOnDeath = false;
                 Fx.IsPersistent = true;
 
                 API.SetPedFleeAttributes(Fx.Handle, 0, false);
