@@ -1,7 +1,5 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
-using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
