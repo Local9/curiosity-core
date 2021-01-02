@@ -36,11 +36,9 @@ namespace Curiosity.Core.Server.Managers
             {
                 lastRun = DateTime.Now;
                 string marqueeMessage = MarqueeMessages[marqueeMessageIndex];
-                Logger.Debug($"Sending Marquee Message: {marqueeMessage}");
                 EventSystem.GetModule().SendAll("ui:marquee", marqueeMessage);
 
                 marqueeMessageIndex++;
-
                 if (marqueeMessageIndex >= MarqueeMessages.Count) marqueeMessageIndex = 0;
             }
             await BaseScript.Delay(1000);
