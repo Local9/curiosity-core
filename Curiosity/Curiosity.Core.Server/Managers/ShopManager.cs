@@ -1,10 +1,5 @@
-﻿using Curiosity.Systems.Library.Events;
-using Curiosity.Core.Server.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Curiosity.Core.Server.Events;
+using Curiosity.Systems.Library.Events;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -19,24 +14,24 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("shop:get:categories", new AsyncEventCallback(async metadata =>
+            EventSystem.GetModule().Attach("shop:get:categories", new EventCallback(metadata =>
             {
-                return null;
+                return Instance.ExportDictionary["curiosity-server"].GetShopCategories();
             }));
 
-            EventSystem.GetModule().Attach("shop:get:items", new AsyncEventCallback(async metadata =>
+            EventSystem.GetModule().Attach("shop:get:items", new EventCallback(metadata =>
             {
-                return null;
+                return Instance.ExportDictionary["curiosity-server"].GetShopCategoryItems(metadata.Sender, metadata.Find<int>(0));
             }));
 
-            EventSystem.GetModule().Attach("shop:item:buy", new AsyncEventCallback(async metadata =>
+            EventSystem.GetModule().Attach("shop:item:buy", new EventCallback(metadata =>
             {
-                return null;
+                return Instance.ExportDictionary["curiosity-server"].ItemBuy(metadata.Sender, metadata.Find<int>(0));
             }));
 
-            EventSystem.GetModule().Attach("shop:item:sell", new AsyncEventCallback(async metadata =>
+            EventSystem.GetModule().Attach("shop:item:sell", new EventCallback(metadata =>
             {
-                return null;
+                return Instance.ExportDictionary["curiosity-server"].ItemSell(metadata.Sender, metadata.Find<int>(0));
             }));
         }
     }
