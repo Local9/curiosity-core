@@ -160,7 +160,7 @@ namespace Curiosity.MissionManager.Server
 
             ServerReady = true;
 
-            Logger.Info($"[CURIOSITY-MISSION] Load method has been completed.");
+            Logger.Info($"[CURIOSITY-MISSIONS] Load method has been completed.");
         }
 
         public static Player GetPlayer(int netID)
