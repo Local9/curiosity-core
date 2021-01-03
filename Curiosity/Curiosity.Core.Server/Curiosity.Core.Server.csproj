@@ -36,6 +36,9 @@
       <HintPath>..\packages\CitizenFX.Core.Server.1.0.3141\lib\net45\CitizenFX.Core.Server.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="GHMattiMySQL.net">
+      <HintPath>..\_Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_Dependancies\Newtonsoft.Json.dll</HintPath>
@@ -55,6 +58,11 @@
     <Compile Include="Commands\CommandInfo.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\Impl\DeveloperTools.cs" />
+    <Compile Include="Database\MySqlDatabase.cs" />
+    <Compile Include="Database\Store\BankDatabase.cs" />
+    <Compile Include="Database\Store\CharacterDatabase.cs" />
+    <Compile Include="Database\Store\ServerDatabase.cs" />
+    <Compile Include="Database\Store\UserDatabase.cs" />
     <Compile Include="Managers\MarqueeManager.cs" />
     <Compile Include="Managers\ShopManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
