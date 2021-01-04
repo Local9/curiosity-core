@@ -36,9 +36,6 @@
       <HintPath>..\packages\CitizenFX.Core.Server.1.0.3141\lib\net45\CitizenFX.Core.Server.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="GHMattiMySQL.net">
-      <HintPath>..\_Dependancies\server\GHMattiMySQL\GHMattiMySQL.net.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_Dependancies\Newtonsoft.Json.dll</HintPath>
@@ -61,6 +58,7 @@
     <Compile Include="Database\MySqlDatabase.cs" />
     <Compile Include="Database\Store\BankDatabase.cs" />
     <Compile Include="Database\Store\CharacterDatabase.cs" />
+    <Compile Include="Database\Store\ShopDatabase.cs" />
     <Compile Include="Database\Store\ServerDatabase.cs" />
     <Compile Include="Database\Store\UserDatabase.cs" />
     <Compile Include="Managers\MarqueeManager.cs" />
@@ -90,6 +88,10 @@
     <ProjectReference Include="..\Curiosity.Systems.Library\Curiosity.Systems.Library.csproj">
       <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>
       <Name>Curiosity.Systems.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FiveM-MySQL\FiveM-MySQL\FiveM-MySQL.csproj">
+      <Project>{cf04e9fa-50c4-469a-9619-5acece2be099}</Project>
+      <Name>FiveM-MySQL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

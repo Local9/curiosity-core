@@ -27,6 +27,21 @@ namespace Curiosity.Interface.Client.Managers
                 BaseScript.TriggerServerEvent("curiosity:Server:Vehicle:Shop:Action", metadata.Find<int>(0));
                 return null;
             }));
+
+            // New Shop Methods
+            Instance.AttachNuiHandler("GetShopCategories", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityStore json = await EventSystem.Request<CuriosityStore>("shop:get:categories");
+
+                string jsn = new JsonBuilder()
+                    .Add("operation", "SHOP_CATEGORIES")
+                    .Add("list", json.Categories)
+                    .Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
         }
 
         private void OnGetVehicleShopList()

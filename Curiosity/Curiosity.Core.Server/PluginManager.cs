@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Curiosity.Core.Server.Database;
+using GHMatti.Data.MySQL.Core;
 
 namespace Curiosity.Core.Server
 {
@@ -51,6 +53,44 @@ namespace Curiosity.Core.Server
             SetupConvars();
 
             ServerReady = false;
+
+            async Task DatabaseTest()
+            {
+                try
+                {
+                    Logger.Info("Running DB Connection Test...");
+
+                    await BaseScript.Delay(100);
+
+                    DetachTickHandler(DatabaseTest);
+
+                    using (var result = MySqlDatabase.mySQL.QueryResult("SELECT 'Success' as Success"))
+                    {
+                        ResultSet keyValuePairs = await result;
+
+                        if (keyValuePairs.Count == 0)
+                            Logger.Error("DB Connection Test Failure");
+
+                        if (keyValuePairs[0]["Success"] == "Success")
+                            Logger.Success("DB Connection Test Successful");
+                    }
+
+                    async Task LoadTask()
+                    {
+                        DetachTickHandler(LoadTask);
+                        Load();
+                    }
+
+                    AttachTickHandler(LoadTask);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("!!! Critical Error trying to test Database Connection !!!");
+                    Logger.Error($"Message: {ex.Message}");
+                }
+            }
+
+            AttachTickHandler(DatabaseTest);
 
             Load();
         }
