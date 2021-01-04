@@ -69,6 +69,7 @@ namespace Curiosity.Server.net.ServerExports
                     curUser.LatestName = session.Name;
                     curUser.Role = session.Privilege;
                     curUser.Wallet = session.Wallet;
+                    curUser.CharacterId = session.User.CharacterId;
 
                     return JsonConvert.SerializeObject(curUser);
                 }

@@ -55,6 +55,7 @@
     <Compile Include="Enums\Seasons.cs" />
     <Compile Include="Enums\SkillType.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Models\CuriosityStore.cs" />
     <Compile Include="Models\MissionData.cs" />
     <Compile Include="Enums\PatrolZone.cs" />
     <Compile Include="Date.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Enums\Role.cs" />
     <Compile Include="Models\SessionCollection.cs" />
     <Compile Include="Models\Skill.cs" />
-    <Compile Include="Models\CuriosityStore.cs" />
+    <Compile Include="Models\CuriosityStoreItem.cs" />
     <Compile Include="Models\VehicleInfo.cs" />
     <Compile Include="Models\VehicleShopItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,6 +2,7 @@
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -36,9 +37,22 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("shop:get:items", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("shop:get:items", new AsyncEventCallback(async metadata =>
             {
-                return Instance.ExportDictionary["curiosity-server"].GetShopCategoryItems(metadata.Sender, metadata.Find<int>(0));
+                try
+                {
+                    string result = Instance.ExportDictionary["curiosity-server"].GetUser(metadata.Sender);
+                    CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{result}");
+
+                    int categoryId = metadata.Find<int>(0);
+
+                    return await Database.Store.ShopDatabase.GetCategoryItems(categoryId, curiosityUser.CharacterId);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "shop:get:items");
+                    return null;
+                }
             }));
 
             EventSystem.GetModule().Attach("shop:item:buy", new EventCallback(metadata =>

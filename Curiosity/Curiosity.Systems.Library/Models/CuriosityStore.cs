@@ -5,6 +5,6 @@ namespace Curiosity.Systems.Library.Models
 {
     public class CuriosityStore
     {
-        public List<Tuple<int, string>> Categories = new List<Tuple<int, string>>();
+        public List<Tuple<int, string>> Categories;
     }
 }

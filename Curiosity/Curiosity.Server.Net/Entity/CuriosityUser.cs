@@ -35,5 +35,6 @@ namespace Curiosity.Server.net.Entity
         public bool IsAllowedSupportXp => (IsStaff || IsDonator);
 
         public int Wallet { get; internal set; }
+        public object CharacterId { get; internal set; }
     }
 }

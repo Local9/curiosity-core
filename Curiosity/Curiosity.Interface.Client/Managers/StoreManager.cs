@@ -31,11 +31,25 @@ namespace Curiosity.Interface.Client.Managers
             // New Shop Methods
             Instance.AttachNuiHandler("GetShopCategories", new AsyncEventCallback(async metadata =>
             {
-                CuriosityStore json = await EventSystem.Request<CuriosityStore>("shop:get:categories");
+                CuriosityStore result = await EventSystem.Request<CuriosityStore>("shop:get:categories");
 
                 string jsn = new JsonBuilder()
                     .Add("operation", "SHOP_CATEGORIES")
-                    .Add("list", json.Categories)
+                    .Add("list", result.Categories)
+                    .Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("GetCategoryItems", new AsyncEventCallback(async metadata =>
+            {
+                List<CuriosityStoreItem> result = await EventSystem.Request<List<CuriosityStoreItem>>("shop:get:items", metadata.Find<int>(0));
+
+                string jsn = new JsonBuilder()
+                    .Add("operation", "SHOP_CATEGORY_ITEMS")
+                    .Add("list", result)
                     .Build();
 
                 API.SendNuiMessage(jsn);
