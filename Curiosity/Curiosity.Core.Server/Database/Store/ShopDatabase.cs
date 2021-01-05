@@ -55,11 +55,8 @@ namespace Curiosity.Core.Server.Database.Store
 
         public static async Task<List<CuriosityStoreItem>> GetCategoryItems(int categoryId, int characterId)
         {
-            
-
             try
             {
-
                 Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
                     { "@itemCategoryId", categoryId },
@@ -105,6 +102,43 @@ namespace Curiosity.Core.Server.Database.Store
             {
                 Logger.Error($"{ex}");
                 return null;
+            }
+        }
+
+        public static async Task<Tuple<bool, int>> TradeItem(int characterId, int itemId, int numberOfItems, bool purchase)
+        {
+            Tuple<bool, int> rtValue = new Tuple<bool, int>(false, 0);
+
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@characterId", characterId },
+                    { "@itemId", itemId },
+                    { "@numberOfItems", numberOfItems },
+                    { "@purchase", purchase },
+                };
+
+                string myQuery = "CALL spCharacterItem(@characterId, @itemId, @numberOfItems, @purchase);";
+
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                {
+                    ResultSet kv = await result;
+
+                    if (kv.Count == 0)
+                    {
+                        return rtValue;
+                    }
+                    else
+                    {
+                        return new Tuple<bool, int>($"{kv[0]["Result"]}" == "1", int.Parse($"{kv[0]["ItemValue"]}"));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return rtValue;
             }
         }
     }

@@ -33,7 +33,7 @@ namespace Curiosity.Interface.Client.Managers
             }));
         }
 
-        private void SendNui(Notification notification, string title, string message)
+        public void SendNui(Notification notification, string title, string message)
         {
             JsonBuilder jb = new JsonBuilder()
             .Add("operation", $"{notification}")

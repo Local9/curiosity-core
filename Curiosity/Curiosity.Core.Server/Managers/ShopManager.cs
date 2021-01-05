@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Server.Diagnostics;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -55,14 +56,28 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("shop:item:buy", new EventCallback(metadata =>
+            // REVIEW THESE METHODS WHEN MOVING THE CHARACTER SESSIONS TO THE CORE
+            EventSystem.GetModule().Attach("shop:item:action", new AsyncEventCallback(async metadata =>
             {
-                return Instance.ExportDictionary["curiosity-server"].ItemBuy(metadata.Sender, metadata.Find<int>(0));
-            }));
+                string result = Instance.ExportDictionary["curiosity-server"].GetUser(metadata.Sender);
+                CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{result}");
 
-            EventSystem.GetModule().Attach("shop:item:sell", new EventCallback(metadata =>
-            {
-                return Instance.ExportDictionary["curiosity-server"].ItemSell(metadata.Sender, metadata.Find<int>(0));
+                bool action = metadata.Find<bool>(0);
+                int itemId = metadata.Find<int>(1);
+                // Number of items later when baskets are added
+
+                Logger.Debug($"shop:item:action -> Action: {action} T=B/F=S, ItemId: {itemId}");
+
+                Tuple<bool, int> sqlResult = await Database.Store.ShopDatabase.TradeItem(curiosityUser.CharacterId, itemId, 1, action);
+
+                await BaseScript.Delay(100);
+
+                if (sqlResult.Item1)
+                {
+                    Instance.ExportDictionary["curiosity-server"].AdjustWallet($"{metadata.Sender}", sqlResult.Item2, !action); // review
+                }
+
+                return sqlResult.Item1;
             }));
         }
     }

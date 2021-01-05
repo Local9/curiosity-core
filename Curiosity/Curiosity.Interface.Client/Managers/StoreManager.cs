@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
@@ -53,6 +54,28 @@ namespace Curiosity.Interface.Client.Managers
                     .Build();
 
                 API.SendNuiMessage(jsn);
+
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("ShopActions", new AsyncEventCallback(async metadata =>
+            {
+                bool shopAction = metadata.Find<bool>(0);
+                int itemId = metadata.Find<int>(1);
+
+                bool result = await EventSystem.Request<bool>("shop:item:action", shopAction, itemId);
+
+                string jsn = new JsonBuilder()
+                    .Add("operation", "SHOP_PURCHASE_CONFIRM")
+                    .Build();
+
+                API.SendNuiMessage(jsn);
+
+                Notification notification = result ? Notification.NOTIFICATION_SUCCESS : Notification.NOTIFICATION_INFO;
+
+                string message = result ? "Successful Trade" : "Sorry, your trade was not successful at this time.";
+
+                NotificationManger.NotificationInstance.SendNui(notification, "Shop Trader", message);
 
                 return null;
             }));
