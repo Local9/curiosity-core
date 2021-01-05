@@ -92,6 +92,7 @@
     <Compile Include="Models\SessionCollection.cs" />
     <Compile Include="Models\Skill.cs" />
     <Compile Include="Models\CuriosityStoreItem.cs" />
+    <Compile Include="Models\SqlResult.cs" />
     <Compile Include="Models\VehicleInfo.cs" />
     <Compile Include="Models\VehicleShopItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

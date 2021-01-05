@@ -105,9 +105,9 @@ namespace Curiosity.Core.Server.Database.Store
             }
         }
 
-        public static async Task<Tuple<bool, int>> TradeItem(int characterId, int itemId, int numberOfItems, bool purchase)
+        public static async Task<SqlResult> TradeItem(int characterId, int itemId, int numberOfItems, bool purchase)
         {
-            Tuple<bool, int> rtValue = new Tuple<bool, int>(false, 0);
+            SqlResult rtValue = new SqlResult();
 
             try
             {
@@ -131,7 +131,10 @@ namespace Curiosity.Core.Server.Database.Store
                     }
                     else
                     {
-                        return new Tuple<bool, int>($"{kv[0]["Result"]}" == "1", int.Parse($"{kv[0]["ItemValue"]}"));
+                        rtValue.Success = $"{kv[0]["Result"]}" == "1";
+                        rtValue.ItemValue = int.Parse($"{kv[0]["ItemValue"]}");
+                        rtValue.Message = $"{kv[0]["Message"]}";
+                        return rtValue;
                     }
                 }
             }

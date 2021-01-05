@@ -68,16 +68,16 @@ namespace Curiosity.Core.Server.Managers
 
                 Logger.Debug($"shop:item:action -> Action: {action} T=B/F=S, ItemId: {itemId}");
 
-                Tuple<bool, int> sqlResult = await Database.Store.ShopDatabase.TradeItem(curiosityUser.CharacterId, itemId, 1, action);
+                SqlResult sqlResult = await Database.Store.ShopDatabase.TradeItem(curiosityUser.CharacterId, itemId, 1, action);
 
                 await BaseScript.Delay(100);
 
-                if (sqlResult.Item1)
+                if (sqlResult.Success)
                 {
-                    Instance.ExportDictionary["curiosity-server"].AdjustWallet($"{metadata.Sender}", sqlResult.Item2, !action); // review
+                    Instance.ExportDictionary["curiosity-server"].AdjustWallet($"{metadata.Sender}", sqlResult.ItemValue, !action); // review
                 }
 
-                return sqlResult.Item1;
+                return sqlResult;
             }));
         }
     }

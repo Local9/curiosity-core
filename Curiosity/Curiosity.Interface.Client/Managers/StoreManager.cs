@@ -63,7 +63,7 @@ namespace Curiosity.Interface.Client.Managers
                 bool shopAction = metadata.Find<bool>(0);
                 int itemId = metadata.Find<int>(1);
 
-                bool result = await EventSystem.Request<bool>("shop:item:action", shopAction, itemId);
+                SqlResult result = await EventSystem.Request<SqlResult>("shop:item:action", shopAction, itemId);
 
                 string jsn = new JsonBuilder()
                     .Add("operation", "SHOP_PURCHASE_CONFIRM")
@@ -71,11 +71,9 @@ namespace Curiosity.Interface.Client.Managers
 
                 API.SendNuiMessage(jsn);
 
-                Notification notification = result ? Notification.NOTIFICATION_SUCCESS : Notification.NOTIFICATION_INFO;
+                Notification notification = result.Success ? Notification.NOTIFICATION_SUCCESS : Notification.NOTIFICATION_INFO;
 
-                string message = result ? "Successful Trade" : "Sorry, your trade was not successful at this time.";
-
-                NotificationManger.NotificationInstance.SendNui(notification, "Shop Trader", message);
+                NotificationManger.NotificationInstance.SendNui(notification, "Shop Trader", result.Message);
 
                 return null;
             }));
