@@ -183,13 +183,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.TrafficStops", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeUI", "..\thirdparty\NativeUI\NativeUI\NativeUI.csproj", "{F3E16ED9-DBF7-4E7B-B04B-9B24B11891D3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_interface", "2_interface", "{CD4C2E62-C897-47F2-A14A-CA60F08A42ED}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_ClientResources", "2_ClientResources", "{CD4C2E62-C897-47F2-A14A-CA60F08A42ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Interface.Client", "Curiosity.Interface.Client\Curiosity.Interface.Client.csproj", "{2BEF800D-6F6D-4EC9-AF7F-67DEEAFB2229}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Template.Client", "Curiosity.Template.Client\Curiosity.Template.Client.csproj", "{B2FF3F8A-A0EA-41C7-B7E7-08E381BE7CAA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_Systems", "2_Systems", "{48DAA469-01DC-4A80-A7DA-717F71444A6B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_ServerResources", "2_ServerResources", "{48DAA469-01DC-4A80-A7DA-717F71444A6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Systems.Library", "Curiosity.Systems.Library\Curiosity.Systems.Library.csproj", "{E8A0E780-C0DD-4242-AE9A-3386877BA0E9}"
 EndProject
