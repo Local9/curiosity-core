@@ -1,13 +1,17 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Curiosity.Interface.Client.Managers
 {
     public class PlayerManager : Manager<PlayerManager>
     {
+        DateTime lastTick = DateTime.Now;
+
         public override void Begin()
         {
             Instance.AttachNuiHandler("PlayerProfile", new AsyncEventCallback(async metadata =>
@@ -72,6 +76,23 @@ namespace Curiosity.Interface.Client.Managers
 
                 return null;
             }));
+        }
+
+        [TickHandler(SessionWait = true)]
+        private async void OnPlayerTick()
+        {
+            if (DateTime.Now.Subtract(lastTick).TotalSeconds > 2.5)
+            {
+                lastTick = DateTime.Now;
+
+                WeaponHash weapon = Game.PlayerPed.Weapons.Current;
+                bool result = await EventSystem.Request<bool>("user:license:weapon", weapon);
+                
+                if (!result)
+                {
+                    Game.PlayerPed.Weapons.Remove(weapon);
+                }
+            }
         }
     }
 }
