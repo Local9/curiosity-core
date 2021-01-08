@@ -198,21 +198,8 @@ namespace Curiosity.Client.net
 
             this.userId = userId;
 
-            PedHash myPedModelToLoad = PedHash.FreemodeMale01;
-
-            if (user.Skin.Model == "mp_f_freemode_01")
-            {
-                myPedModelToLoad = PedHash.FreemodeFemale01;
-            }
-
-            Model defaultModel = myPedModelToLoad;
+            Model defaultModel = user.Skin.Model == "mp_f_freemode_01" ? PedHash.FreemodeFemale01 : PedHash.FreemodeMale01;
             await defaultModel.Request(10000);
-
-            while (!defaultModel.IsLoaded)
-            {
-                defaultModel.Request();
-                await Client.Delay(0);
-            }
 
             Client.TriggerServerEvent("curiosity:server:seasons:sync:connection");
 
