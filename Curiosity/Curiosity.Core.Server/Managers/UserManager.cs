@@ -65,6 +65,15 @@ namespace Curiosity.Core.Server.Managers
                 List<Skill> returnVal = JsonConvert.DeserializeObject<List<Skill>>(exportResponse);
                 return returnVal;
             }));
+
+            EventSystem.GetModule().Attach("user:license:weapon", new EventCallback(metadata =>
+            {
+                Player player = PluginManager.PlayersList[metadata.Sender];
+
+
+
+                return null;
+            }));
         }
     }
 }
