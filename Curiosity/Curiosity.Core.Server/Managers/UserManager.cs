@@ -1,9 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Managers
@@ -12,38 +14,36 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
+            EventSystem.GetModule().Attach("user:login", new AsyncEventCallback(async metadata =>
+            {
+                var player = PluginManager.PlayersList[metadata.Sender];
+
+                if (player == null)
+                {
+                    return null;
+                }
+
+                CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
+
+                Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}] Has connected to the server");
+
+                curiosityUser.Handle = metadata.Sender;
+
+                PluginManager.ActiveUsers.Add(metadata.Sender, curiosityUser);
+
+                return curiosityUser;
+            }));
+
             EventSystem.GetModule().Attach("user:getProfile", new AsyncEventCallback(async metadata =>
             {
                 var player = PluginManager.PlayersList[metadata.Sender];
-                var discordIdStr = player.Identifiers["discord"];
-                var license = player.Identifiers["license"];
-                ulong discordId = 0;
 
-                if (!ulong.TryParse(discordIdStr, out discordId))
+                if (player == null)
                 {
-                    player.Drop("Error creating login session, Discord ID not found.");
-                    API.CancelEvent();
                     return null;
                 }
 
-                if (discordId == 0)
-                {
-                    player.Drop("Error creating login session, Discord ID not found.");
-                    API.CancelEvent();
-                    return null;
-                }
-
-                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
-
-                while (string.IsNullOrEmpty(exportResponse))
-                {
-                    await BaseScript.Delay(500);
-                    exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
-                }
-
-                CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{exportResponse}");
-
-                // Logger.Success($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Has successfully connected to the server");
+                CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
 
                 curiosityUser.Handle = metadata.Sender;
 
@@ -74,6 +74,21 @@ namespace Curiosity.Core.Server.Managers
 
                 return null;
             }));
+
+            Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
+        }
+
+        static void OnPlayerDropped([FromSource] Player player, string reason)
+        {
+            int playerHandle = int.Parse(player.Handle);
+            if (PluginManager.ActiveUsers.ContainsKey(playerHandle))
+            {
+                string message = $"Player: {player.Name} disconnected ({reason})";
+                Logger.Debug(message);
+                ChatManager.OnLogMessage(message);
+
+                PluginManager.ActiveUsers.Remove(playerHandle);
+            }
         }
     }
 }

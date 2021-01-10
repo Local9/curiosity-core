@@ -61,7 +61,10 @@
     <Compile Include="Database\Store\ShopDatabase.cs" />
     <Compile Include="Database\Store\ServerDatabase.cs" />
     <Compile Include="Database\Store\UserDatabase.cs" />
+    <Compile Include="Extensions\SaveExtensions.cs" />
+    <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\MarqueeManager.cs" />
+    <Compile Include="Managers\QueueManager.cs" />
     <Compile Include="Managers\ShopManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="PluginManager.cs" />

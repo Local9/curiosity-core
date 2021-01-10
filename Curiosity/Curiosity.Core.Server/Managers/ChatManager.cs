@@ -96,5 +96,19 @@ namespace Curiosity.Core.Server.Managers
 
             user.Send("chat:receive", jsonMessage);
         }
+
+        public static void OnLogMessage(string message)
+        {
+            ChatMessage chatMessage = new ChatMessage();
+
+            chatMessage.Name = "[S-LOG]";
+            chatMessage.Role = $"SERVER";
+            chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
+            chatMessage.Channel = "log";
+
+            string jsonMessage = JsonConvert.SerializeObject(chatMessage);
+
+            EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
+        }
     }
 }
