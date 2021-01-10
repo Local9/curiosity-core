@@ -18,7 +18,6 @@ namespace Curiosity.Core.Server.Database.Store
             try
             {
                 var discordIdStr = player.Identifiers["discord"];
-                var license = player.Identifiers["license"];
                 ulong discordId = 0;
 
                 if (!ulong.TryParse(discordIdStr, out discordId))
@@ -43,7 +42,7 @@ namespace Curiosity.Core.Server.Database.Store
                     { "@DiscordID", discordId }
                 };
 
-                string myQuery = "CALL selUser(@Username, @DiscordID);";
+                string myQuery = "CALL spGetUser(@Username, @DiscordID);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {

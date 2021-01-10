@@ -47,7 +47,7 @@ namespace Curiosity.Core.Server.Managers
 
         // Concurrent Values
         public static ConcurrentDictionary<string, SessionState> session = new ConcurrentDictionary<string, SessionState>();
-        
+
         static ConcurrentDictionary<string, int> priority = new ConcurrentDictionary<string, int>();
 
         static ConcurrentDictionary<string, int> index = new ConcurrentDictionary<string, int>();
@@ -136,22 +136,6 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            ulong discordId = 0;
-            ulong.TryParse(discordIdStr, out discordId);
-
-            CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player, discordId);
-
-            if (curiosityUser == null)
-            {
-                deferrals.done($"Sorry, there was an error when trying to load your account.");
-                RemoveFrom(license, true, true, true, true, true, true);
-                return;
-            }
-
-            Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LatestName} Connecting [{discordId}]");
-
-            await BaseScript.Delay(10);
-
             bool isVerified = await DiscordClient.DiscordInstance.CheckDiscordIdIsInGuild(player);
 
             if (!isVerified)
@@ -161,7 +145,16 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            Logger.Info($"Curiosity Queue Manager : {curiosityUser.Role} {curiosityUser.LatestName} is a member of the Discord");
+            await BaseScript.Delay(10);
+
+            CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
+
+            if (curiosityUser == null)
+            {
+                deferrals.done($"Sorry, there was an error when trying to load your account.");
+                RemoveFrom(license, true, true, true, true, true, true);
+                return;
+            }
 
             if (curiosityUser.IsBanned)
             {
@@ -267,7 +260,7 @@ namespace Curiosity.Core.Server.Managers
                 Logger.Verbose("[MAINTENANCE] Server Queue is ready.");
                 return;
             }
-            
+
             if (DateTime.Now.Subtract(serverStartTime).TotalSeconds > 30)
             {
                 IsServerQueueReady = true;
@@ -813,6 +806,8 @@ namespace Curiosity.Core.Server.Managers
 
         void SetupMessages()
         {
+            if (messages.Count > 0) return;
+
             messages.Add(Messages.Gathering, "Gathering queue information");
             messages.Add(Messages.License, "License is required");
             messages.Add(Messages.Steam, "Steam is required");
