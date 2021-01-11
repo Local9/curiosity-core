@@ -77,9 +77,11 @@ namespace Curiosity.Core.Server.Managers
 
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
 
-            Instance.ExportDictionary.Add("GetUser", new Func<int, string>((playerHandle) =>
+            Instance.ExportDictionary.Add("GetUser", new Func<string, string>((playerHandle) =>
             {
-                return JsonConvert.SerializeObject(PluginManager.ActiveUsers[playerHandle]);
+                int handle = int.Parse(playerHandle);
+
+                return JsonConvert.SerializeObject(PluginManager.ActiveUsers[handle]);
             }));
         }
 
