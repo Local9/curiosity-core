@@ -8,17 +8,16 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class ServerDatabase
     {
-        public static async Task<bool> CheckServerKey(int serverId, string serverKey)
+        public static async Task<bool> CheckServerKey(int serverId)
         {
             try
             {
                 Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
-                    { "@ServerID", serverId },
-                    { "@ServerKey", serverKey }
+                    { "@ServerID", serverId }
                 };
 
-                string myQuery = "CALL selServer(@ServerID, @ServerKey);";
+                string myQuery = "CALL selServer(@ServerID);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {

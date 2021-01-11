@@ -105,7 +105,6 @@ namespace Curiosity.Core.Server.Managers
         private async void PlayerConnecting([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
         {
             string license = player.Identifiers["license"];
-            string discordIdStr = player.Identifiers["discord"];
 
             while (!IsServerQueueReady)
             {
@@ -348,66 +347,69 @@ namespace Curiosity.Core.Server.Managers
             {
                 session.Where(k => k.Value == SessionState.Loading || k.Value == SessionState.Grace).ToList().ForEach(j =>
                 {
-                    string license = j.Key;
-                    SessionState state = j.Value;
-                    PlayerList players = PluginManager.PlayersList;
-                    switch (state)
+                    try
                     {
-                        case SessionState.Loading:
-                            if (!timer.TryGetValue(license, out DateTime oldLoadTime))
-                            {
-                                UpdateTimer(license);
-                                break;
-                            }
-                            if (IsTimeUp(license, loadTime))
-                            {
-                                if (players.FirstOrDefault(i => i.Identifiers["license"] == license)?.EndPoint != null)
+                        string license = j.Key;
+                        SessionState state = j.Value;
+                        PlayerList players = PluginManager.PlayersList;
+                        switch (state)
+                        {
+                            case SessionState.Loading:
+                                if (!timer.TryGetValue(license, out DateTime oldLoadTime))
                                 {
-                                    players.FirstOrDefault(i => i.Identifiers["license"] == license).Drop($"{messages[Messages.Timeout]}");
+                                    UpdateTimer(license);
+                                    break;
                                 }
-                                session.TryGetValue(license, out SessionState oldState);
-                                session.TryUpdate(license, SessionState.Grace, oldState);
-                                UpdateTimer(license);
-                                if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : LOADING -> GRACE -> {license}"); }
-                            }
-                            else
-                            {
-                                if (sentLoading.ContainsKey(license) && players.FirstOrDefault(i => i.Identifiers["license"] == license) != null)
+                                if (IsTimeUp(license, loadTime))
                                 {
-                                    BaseScript.TriggerEvent("curiosity:Server:Queue:NewLoading", sentLoading[license]);
-                                    sentLoading.TryRemove(license, out Player oldPlayer);
-                                }
-                            }
-                            break;
-                        case SessionState.Grace:
-                            if (!timer.TryGetValue(license, out DateTime oldGraceTime))
-                            {
-                                UpdateTimer(license);
-                                break;
-                            }
-                            if (IsTimeUp(license, graceTime))
-                            {
-                                if (players.FirstOrDefault(i => i.Identifiers["license"] == license)?.EndPoint != null)
-                                {
-                                    if (!session.TryAdd(license, SessionState.Active))
+                                    if (players.FirstOrDefault(i => i.Identifiers["license"] == license)?.EndPoint != null)
                                     {
-                                        session.TryGetValue(license, out SessionState oldState);
-                                        session.TryUpdate(license, SessionState.Active, oldState);
+                                        players.FirstOrDefault(i => i.Identifiers["license"] == license).Drop($"{messages[Messages.Timeout]}");
+                                    }
+                                    session.TryGetValue(license, out SessionState oldState);
+                                    session.TryUpdate(license, SessionState.Grace, oldState);
+                                    UpdateTimer(license);
+                                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : LOADING -> GRACE -> {license}"); }
+                                }
+                                break;
+                            case SessionState.Grace:
+                                if (!timer.TryGetValue(license, out DateTime oldGraceTime))
+                                {
+                                    UpdateTimer(license);
+                                    break;
+                                }
+                                if (IsTimeUp(license, graceTime))
+                                {
+                                    if (players.FirstOrDefault(i => i.Identifiers["license"] == license)?.EndPoint != null)
+                                    {
+                                        if (!session.TryAdd(license, SessionState.Active))
+                                        {
+                                            session.TryGetValue(license, out SessionState oldState);
+                                            session.TryUpdate(license, SessionState.Active, oldState);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        RemoveFrom(license, true, true, true, true, true, true);
+                                        if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : GRACE -> REMOVED -> {license}"); }
                                     }
                                 }
-                                else
-                                {
-                                    RemoveFrom(license, true, true, true, true, true, true);
-                                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : GRACE -> REMOVED -> {license}"); }
-                                }
-                            }
-                            break;
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error($"Curiosity Queue Manager : UpdateStates() : FOREACH");
+                        Logger.Error($"{ex.Message}");
+                        Logger.Debug($"{ex}");
                     }
                 });
             }
             catch (Exception ex)
             {
                 Logger.Error($"Curiosity Queue Manager : UpdateStates()");
+                Logger.Error($"{ex.Message}");
+                Logger.Debug($"{ex}");
             }
         }
 

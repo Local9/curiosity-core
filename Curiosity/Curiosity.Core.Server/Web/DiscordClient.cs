@@ -41,15 +41,17 @@ namespace Curiosity.Core.Server.Web
         {
             bool IsMember = false;
 
-            if (!player.Identifiers.Contains("discord"))
+            string discordIdStr = player.Identifiers["discord"];
+
+            ulong discordId = 0;
+            if (!ulong.TryParse(discordIdStr, out discordId))
             {
-                Logger.Info($"DiscordClient : {player.Name} is not running Discord.");
-                player.Drop($"You're not running Discord on the same machine that is running FiveM, this server requires you to be running Discord and that you have authorised FiveM.");
+                Logger.Info($"DiscordClient : {player.Name} Discord Information was invalid.");
+                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. After you have opened Discord, then open FiveM.");
                 return IsMember;
             }
 
-            ulong discordId = 0;
-            if (!ulong.TryParse(player.Identifiers["discord"], out discordId))
+            if (discordId == 0)
             {
                 Logger.Info($"DiscordClient : {player.Name} Discord Information was invalid.");
                 player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. After you have opened Discord, then open FiveM.");

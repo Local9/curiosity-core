@@ -55,14 +55,15 @@ namespace Curiosity.Core.Server.Database.Store
 
                     foreach (Dictionary<string, object> kv in keyValuePairs)
                     {
-                        curiosityUser.UserId = kv["UserID"].ToLong();
-                        curiosityUser.DateCreated = kv["DateCreated"].ToDateTime();
-                        curiosityUser.LatestActivity = kv["LastJoined"].ToDateTime();
-                        curiosityUser.IsBannedPerm = kv["IsPermBanned"].ToBoolean();
-                        curiosityUser.IsBanned = kv["IsBanned"].ToBoolean();
-                        curiosityUser.Role = (Role)kv["RoleID"].ToInt();
-                        curiosityUser.QueuePriority = kv["QueuePriority"].ToInt();
+                        curiosityUser.UserId = kv["userId"].ToLong();
+                        curiosityUser.DateCreated = kv["dateCreated"].ToDateTime();
+                        curiosityUser.LatestActivity = kv["lastSeen"].ToDateTime();
+                        curiosityUser.IsBannedPerm = kv["bannedPerm"].ToBoolean();
+                        curiosityUser.IsBanned = kv["banned"].ToBoolean();
+                        curiosityUser.Role = (Role)kv["roleId"].ToInt();
+                        curiosityUser.QueuePriority = kv["queuePriority"].ToInt();
                         curiosityUser.LatestName = player.Name;
+                        curiosityUser.LifeExperience = kv["lifeExperience"].ToLong();
                         curiosityUser.DiscordId = discordId;
 
                         if (kv.ContainsValue("bannedUntil"))

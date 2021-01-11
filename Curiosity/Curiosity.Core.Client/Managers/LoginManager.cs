@@ -48,7 +48,6 @@ namespace Curiosity.Core.Client.Managers
             var transition = new CharacterManager.LoadTransition();
             var user = await EventSystem.Request<CuriosityUser>("user:login");
 
-
             Logger.Info($"[User] [{user.DiscordId}] Creating local player...");
 
             Instance.Local = new CuriosityPlayer(user.DiscordId, new CuriosityEntity(pedHandle))

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Curiosity.Core.Client</RootNamespace>
-    <AssemblyName>Curiosity.Template.Client.net</AssemblyName>
+    <AssemblyName>Curiosity.Core.Client.net</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Y:\GTA\FXServer\curiosity-2\resources\curiosity\client\</OutputPath>
+    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity-core\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\CitizenFX.Core.Client.1.0.2602\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -125,7 +126,7 @@
     <ProjectReference Include="..\NativeUI\NativeUI\NativeUI.csproj">
       <Project>{f3e16ed9-dbf7-4e7b-b04b-9b24b11891d3}</Project>
       <Name>NativeUI</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

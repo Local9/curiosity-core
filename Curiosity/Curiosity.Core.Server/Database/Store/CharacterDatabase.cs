@@ -21,7 +21,7 @@ namespace Curiosity.Core.Server.Database.Store
                 { "@ServerID", serverId }
             };
 
-            string myQuery = "CALL selCharacter(@DiscordID, @ServerID);";
+            string myQuery = "CALL spGetCharacter(@DiscordID, @ServerID);";
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server.Database.Store
                     if (kv.ContainsKey("CharacterJSON") && kv["CharacterJSON"] != null)
                         curiosityCharacter = JsonConvert.DeserializeObject<CuriosityCharacter>($"{kv["CharacterJSON"]}");
 
-                    curiosityCharacter.CharacterId = kv["CharacterID"].ToLong();
+                    curiosityCharacter.CharacterId = kv["characterId"].ToLong();
                     curiosityCharacter.MarkedAsRegistered = kv["IsRegistered"].ToBoolean();
                     curiosityCharacter.Cash = kv["Cash"].ToLong();
 
