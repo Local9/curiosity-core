@@ -75,8 +75,10 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
+            // Native Events
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
 
+            // Exports
             Instance.ExportDictionary.Add("GetUser", new Func<string, string>((playerHandle) =>
             {
                 int handle = int.Parse(playerHandle);
