@@ -15,7 +15,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
     {
         static EventSystem EventSystem => EventSystem.GetModule();
 
-        public override string[] Aliases { get; set; } = { "dev", "d" };
+        public override string[] Aliases { get; set; } = { "mission", "m" };
         public override string Title { get; set; } = "Developer Commands";
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
         public override bool IsRestricted { get; set; } = true;

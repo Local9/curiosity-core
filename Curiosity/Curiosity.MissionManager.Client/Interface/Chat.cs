@@ -15,7 +15,9 @@ namespace Curiosity.MissionManager.Client.Interface
             chatMessage.Message = message;
 
             string json = JsonConvert.SerializeObject(chatMessage);
-            BaseScript.TriggerEvent("curiosity:Client:Chat:Message", json);
+
+            PluginManager.Instance.ExportRegistry["curiosity-ui"].AddToChat(json);
+
         }
     }
 }

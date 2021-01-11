@@ -14,7 +14,8 @@ namespace Curiosity.Core.Client.Interface
             chatMessage.Name = "SERVER";
             chatMessage.Message = message;
             string json = JsonConvert.SerializeObject(chatMessage);
-            API.SendNuiMessage(json);
+
+            PluginManager.Instance.ExportRegistry["curiosity-ui"].AddToChat(json);
         }
     }
 }

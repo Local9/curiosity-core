@@ -108,6 +108,8 @@ namespace Curiosity.Core.Client.Managers
                         await BaseScript.Delay(10);
                     }
                 }
+
+                PluginManager.Instance.ExportRegistry["curiosity-ui"].SessionActive();
             }
 
             private async Task OnTick()

@@ -4,6 +4,7 @@ using Curiosity.Systems.Client.Environment.Entities;
 using Curiosity.Systems.Client.Events;
 using Curiosity.Systems.Client.Extensions;
 using Curiosity.Systems.Client.Interface;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;

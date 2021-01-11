@@ -59,6 +59,7 @@
     <Compile Include="Commands\Impl\DeveloperTools.cs" />
     <Compile Include="Commands\Impl\PlayerCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
+    <Compile Include="Interface\Chat.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Discord\DiscordRichPresence.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="Extensions\DecoratorExtensions.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
-    <Compile Include="Interface\Chat.cs" />
     <Compile Include="Interface\Menus\Data\CharacterClothing.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterApparel.cs" />
     <Compile Include="Interface\Menus\Creator\CharacterFeatures.cs" />
@@ -96,11 +96,9 @@
     <Compile Include="Interface\Menus\InteractionMenu.cs" />
     <Compile Include="Interface\Modules\HeadupDisplay.cs" />
     <Compile Include="Interface\Notification.cs" />
-    <Compile Include="Interface\PDA\PartyInterfaces.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\ChatManager.cs" />
-    <Compile Include="Interface\PDAInterface.cs" />
     <Compile Include="Managers\CrouchManager.cs" />
     <Compile Include="Managers\DeathManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />

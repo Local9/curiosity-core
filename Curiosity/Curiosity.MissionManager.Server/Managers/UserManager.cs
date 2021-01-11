@@ -35,12 +35,12 @@ namespace Curiosity.MissionManager.Server.Managers
                     return null;
                 }
 
-                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
+                string exportResponse = Instance.ExportDictionary["curiosity-core"].GetUser(player.Handle);
 
                 while (string.IsNullOrEmpty(exportResponse))
                 {
                     await BaseScript.Delay(500);
-                    exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
+                    exportResponse = Instance.ExportDictionary["curiosity-core"].GetUser(player.Handle);
                 }
 
                 // Logger.Success($"{exportResponse}");

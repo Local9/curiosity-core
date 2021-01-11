@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Curiosity.Core.Server.Database;
 using GHMatti.Data.MySQL.Core;
+using Curiosity.Core.Server.Extenstions;
 
 namespace Curiosity.Core.Server
 {
@@ -28,7 +29,6 @@ namespace Curiosity.Core.Server
         public static int MaximumPlayers { get; } = 32;
         public static int ServerId { get; private set; }
         public static int SpawnLocationId { get; private set; }
-        public static int SaveInterval { get; } = 1000 * 60 * 3;
         public static bool IsDebugging { get; private set; }
         public static bool IsMaintenanceActive { get; private set; }
         public static bool ServerReady { get; private set; }
@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server
         public static string DiscordUrl { get; private set; }
         public static string WebsiteUrl { get; private set; }
         public static Dictionary<int, CuriosityUser> ActiveUsers { get; } = new Dictionary<int, CuriosityUser>();
-        public long LastSave { get; set; } = Date.Timestamp;
+        public DateTime LastSave { get; set; } = DateTime.Now;
 
         public EventHandlerDictionary EventRegistry => EventHandlers;
         public ExportDictionary ExportDictionary => Exports;
@@ -91,8 +91,6 @@ namespace Curiosity.Core.Server
             }
 
             AttachTickHandler(DatabaseTest);
-
-            Load();
         }
 
         private async void SetupConvars()
@@ -346,6 +344,51 @@ namespace Curiosity.Core.Server
 
                 RegisteredTickHandlers.Add(instance.GetType());
             });
+        }
+
+        public async Task SaveOperation(CuriosityUser user)
+        {
+            await user.Character.Save();
+        }
+
+        [TickHandler]
+        private async Task SaveTask()
+        {
+            if (DateTime.Now.Subtract(LastSave).TotalMinutes >= 5)
+            {
+                if (ActiveUsers.Count > 0)
+                {
+                    Logger.Info("[Saves] Beginning `Save` operation on `Characters`.");
+
+                    foreach (var users in ActiveUsers)
+                    {
+                        await SaveOperation(users.Value);
+                    }
+
+                    // Added is a playerDropped event is not received
+                    int activeUsers = ActiveUsers.Count;
+                    int activeUsersRemoved = 0;
+
+                    foreach (Player player in Players)
+                    {
+                        int playerHandle = int.Parse(player.Handle);
+                        if (!ActiveUsers.ContainsKey(playerHandle))
+                        {
+                            ActiveUsers.Remove(playerHandle);
+
+                            SessionState sessionState = SessionState.Loading;
+                            QueueManager.session.TryRemove(player.Identifiers["license"], out sessionState);
+
+                            activeUsersRemoved++;
+                        }
+                    }
+
+                    Logger.Info($"[ActiveUsers] Removed {activeUsersRemoved} of {activeUsers}.");
+                    LastSave = DateTime.Now;
+                }
+
+                await Delay(1000);
+            }
         }
     }
 }

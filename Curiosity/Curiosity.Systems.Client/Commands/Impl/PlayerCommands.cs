@@ -1,5 +1,6 @@
 ﻿using Curiosity.Systems.Client.Environment.Entities;
 using Curiosity.Systems.Client.Events;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 using System.Drawing;

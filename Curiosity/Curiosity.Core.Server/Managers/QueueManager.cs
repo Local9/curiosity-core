@@ -41,7 +41,6 @@ namespace Curiosity.Core.Server.Managers
         static int publicTypeSlots = 0;
         static int maxSession = 32;
 
-        static long forceWait = (1000 * 30);
         static bool IsServerQueueReady = false;
         static DateTime serverStartTime = DateTime.Now;
 
@@ -69,11 +68,10 @@ namespace Curiosity.Core.Server.Managers
 
             Logger.Debug($"[QueueManager] Begin");
 
-            Instance.EventRegistry["playerConnecting"] += new Action<Player, string, CallbackDelegate, ExpandoObject>(PlayerConnecting);
+            Instance.EventRegistry["playerConnecting"] += new Action<Player, string, CallbackDelegate, ExpandoObject>(OnConnect);
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
             Instance.EventRegistry["onResourceStop"] += new Action<string>(OnResourceStop);
 
-            Instance.AttachTickHandler(QueueCycle);
             Instance.AttachTickHandler(SetupTimer);
 
             EventSystem.GetModule().Attach("user:queue:active", new EventCallback(metadata =>
@@ -96,19 +94,26 @@ namespace Curiosity.Core.Server.Managers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Curiosity Queue Manager : PlayerActivated() {ex}");
+                    Logger.Error($"Curiosity Queue Manager : user:queue:active -> {ex}");
                     return false;
                 }
             }));
+
+            Logger.Debug($"[QueueManager] End");
         }
 
-        private async void PlayerConnecting([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
+
+        private async void OnConnect([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
         {
             string license = player.Identifiers["license"];
 
             while (!IsServerQueueReady)
             {
-                await BaseScript.Delay(1000);
+                await BaseScript.Delay(500);
+                deferrals.update("Awaiting Server Startup.");
+                await BaseScript.Delay(500);
+                deferrals.update("Awaiting Server Startup..");
+                await BaseScript.Delay(500);
                 deferrals.update("Awaiting Server Startup...");
             }
 
@@ -148,6 +153,8 @@ namespace Curiosity.Core.Server.Managers
 
             CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
 
+            await BaseScript.Delay(10);
+
             if (curiosityUser == null)
             {
                 deferrals.done($"Sorry, there was an error when trying to load your account.");
@@ -163,7 +170,6 @@ namespace Curiosity.Core.Server.Managers
 
                 deferrals.done(string.Format($"{messages[Messages.Banned]}", time));
                 RemoveFrom(license, true, true, true, true, true, true);
-                API.CancelEvent();
                 return;
             }
 
@@ -173,7 +179,6 @@ namespace Curiosity.Core.Server.Managers
                 {
                     deferrals.done($"Curiosity Queue Manager : This server is in a testing state, please make sure you are connecting to the correct server or use the links provided at {PluginManager.WebsiteUrl}.");
                     RemoveFrom(license, true, true, true, true, true, true);
-                    API.CancelEvent();
                     return;
                 }
             }
@@ -219,7 +224,6 @@ namespace Curiosity.Core.Server.Managers
                 session.TryUpdate(license, SessionState.Loading, oldState);
                 deferrals.done();
                 if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
-                API.CancelEvent();
                 return;
             }
 
@@ -269,7 +273,8 @@ namespace Curiosity.Core.Server.Managers
             await Task.FromResult(1000);
         }
 
-        async Task QueueCycle()
+        [TickHandler]
+        private async Task QueueCycle()
         {
             while (true)
             {

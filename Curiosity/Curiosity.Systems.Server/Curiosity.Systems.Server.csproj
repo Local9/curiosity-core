@@ -93,6 +93,11 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Curiosity.Systems.Library\Curiosity.Systems.Library.csproj">
+      <Project>{e8a0e780-c0dd-4242-ae9a-3386877ba0e9}</Project>
+      <Name>Curiosity.Systems.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

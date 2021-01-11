@@ -35,6 +35,13 @@ namespace Curiosity.Interface.Client.Managers
                 {
                     return $"{SeasonManager.SeasonInstance.CurrentSeason}".ToUpper();
                 }));
+
+            Instance.ExportRegistry.Add("AddToChat", new Func<string, bool>(
+                (json) =>
+                {
+                    API.SendNuiMessage(json);
+                    return true;
+                }));
         }
     }
 }

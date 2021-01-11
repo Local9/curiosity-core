@@ -15,7 +15,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 {
     public class DeveloperTools : CommandContext
     {
-        public override string[] Aliases { get; set; } = { "dev", "developer" };
+        public override string[] Aliases { get; set; } = { "dev", "developer", "d" };
         public override string Title { get; set; } = "Developer";
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
         public override bool IsRestricted { get; set; } = true;
