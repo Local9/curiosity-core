@@ -34,11 +34,11 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[senderHandle];
 
-                int rep = Instance.ExportDictionary["curiosity-server"].GetSkillUserValue($"{senderHandle}", "policerep");
+                int rep = Instance.ExportDictionary["curiosity-core"].GetSkillUserValue($"{senderHandle}", "policerep");
 
                 if (rep > 1000)
                 {
-                    bool paymentMade = Instance.ExportDictionary["curiosity-server"].AdjustWallet($"{senderHandle}", 1000, false);
+                    bool paymentMade = Instance.ExportDictionary["curiosity-core"].AdjustWallet($"{senderHandle}", 1000, false);
 
                     if (paymentMade)
                     {
@@ -85,18 +85,12 @@ namespace Curiosity.MissionManager.Server.Managers
                 int senderHandle = metadata.Sender;
                 var player = PluginManager.PlayersList[metadata.Sender];
 
-                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
-
-                while (string.IsNullOrEmpty(exportResponse))
-                {
-                    await BaseScript.Delay(500);
-                    exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
-                }
+                string exportResponse = Instance.ExportDictionary["curiosity-core"].GetUser(player.Handle);
 
                 CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{exportResponse}");
                 PluginManager.ActiveUsers.TryUpdate(senderHandle, curiosityUser, curiosityUser);
 
-                if (curiosityUser.Wallet < VEHICLE_REPAIR_CHARGE)
+                if (curiosityUser.Character.Cash < VEHICLE_REPAIR_CHARGE)
                 {
                     return false;
                 }

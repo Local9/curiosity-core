@@ -2,7 +2,7 @@ using Curiosity.Systems.Library.Models;
 using Curiosity.Core.Server.Database.Store;
 using System.Threading.Tasks;
 
-namespace Curiosity.Core.Server.Extenstions
+namespace Curiosity.Core.Server.Extensions
 {
     public static class SaveExtensions
     {

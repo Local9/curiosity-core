@@ -14,13 +14,8 @@ namespace Curiosity.Core.Server.Managers
         public override void Begin()
         {
             EventSystem.GetModule().Attach("chat:global", new EventCallback(metadata => {
-                var player = PluginManager.PlayersList[metadata.Sender];
 
-                if (player == null) return null;
-
-                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetUser(player.Handle);
-
-                CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{exportResponse}");
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
                 ChatMessage chatMessage = new ChatMessage();
 
@@ -33,7 +28,7 @@ namespace Curiosity.Core.Server.Managers
 
                 EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
 
-                string discordMessageStart = $"{DateTime.Now.ToString("HH:mm")} [{player.Handle}] {player.Name}#{curiosityUser.UserId}";
+                string discordMessageStart = $"{DateTime.Now.ToString("HH:mm")} [{metadata.Sender}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
                 string discordMessage = chatMessage.Message.Trim('"');
 
                 Instance.ExportDictionary["curiosity-server"].DiscordChatLog(discordMessageStart, discordMessage);

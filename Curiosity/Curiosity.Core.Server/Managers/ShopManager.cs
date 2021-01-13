@@ -42,8 +42,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 try
                 {
-                    string result = Instance.ExportDictionary["curiosity-server"].GetUser(metadata.Sender);
-                    CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{result}");
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
                     int categoryId = metadata.Find<int>(0);
 
@@ -59,8 +58,7 @@ namespace Curiosity.Core.Server.Managers
             // REVIEW THESE METHODS WHEN MOVING THE CHARACTER SESSIONS TO THE CORE
             EventSystem.GetModule().Attach("shop:item:action", new AsyncEventCallback(async metadata =>
             {
-                string result = Instance.ExportDictionary["curiosity-server"].GetUser(metadata.Sender);
-                CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{result}");
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
                 bool action = metadata.Find<bool>(0);
                 int itemId = metadata.Find<int>(1);

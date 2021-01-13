@@ -1,20 +1,19 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Systems.Library;
-using Curiosity.Systems.Library.Models;
 using Curiosity.Core.Server.Commands;
 using Curiosity.Core.Server.Commands.Impl;
+using Curiosity.Core.Server.Database;
 using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Managers;
 using Curiosity.Core.Server.Web;
+using Curiosity.Systems.Library.Models;
+using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Curiosity.Core.Server.Database;
-using GHMatti.Data.MySQL.Core;
-using Curiosity.Core.Server.Extenstions;
 
 namespace Curiosity.Core.Server
 {

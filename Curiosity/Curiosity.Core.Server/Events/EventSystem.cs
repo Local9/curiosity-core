@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Curiosity.Systems.Library;
+using CitizenFX.Core.Native;
 
 namespace Curiosity.Core.Server.Events
 {
@@ -117,8 +118,14 @@ namespace Curiosity.Core.Server.Events
         public void Send(Event wrapped, int handle)
         {
             string client =  handle == -1 ? "All Users" : $"{handle}";
-            Logger.Debug(
-                $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the client `{client}`.");
+
+            bool eventDebug = API.GetConvar("diagnostics_event_messages", "false") == "true";
+
+            if (eventDebug)
+            {
+                Logger.Debug(
+                    $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the client `{client}`.");
+            }
 
             if (handle == -1)
             {

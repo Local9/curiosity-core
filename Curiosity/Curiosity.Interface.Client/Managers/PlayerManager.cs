@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Interface.Client.Diagnostics;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -19,6 +20,8 @@ namespace Curiosity.Interface.Client.Managers
                 string role = "USER";
 
                 CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("user:getProfile");
+
+                if (curiosityUser == null) return null;
 
                 switch (curiosityUser.Role)
                 {
@@ -43,7 +46,7 @@ namespace Curiosity.Interface.Client.Managers
                         .Add("name", curiosityUser.LatestName)
                         .Add("userId", curiosityUser.UserId)
                         .Add("role", role)
-                        .Add("wallet", curiosityUser.Wallet)
+                        .Add("wallet", curiosityUser.Character.Cash)
                         .Build();
 
                 API.SendNuiMessage(jsn);
@@ -54,6 +57,8 @@ namespace Curiosity.Interface.Client.Managers
             Instance.AttachNuiHandler("PlayerExperience", new AsyncEventCallback(async metadata =>
             {
                 List<Skill> skills = await EventSystem.Request<List<Skill>>("user:getSkills");
+
+                if (skills == null) return null;
 
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_SKILLS")
                     .Add("skills", skills)
@@ -68,6 +73,8 @@ namespace Curiosity.Interface.Client.Managers
             {
                 List<Skill> stats = await EventSystem.Request<List<Skill>>("user:getStats");
 
+                if (stats == null) return null;
+
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_STATS")
                     .Add("stats", stats)
                     .Build();
@@ -76,23 +83,6 @@ namespace Curiosity.Interface.Client.Managers
 
                 return null;
             }));
-        }
-
-        [TickHandler(SessionWait = true)]
-        private async void OnPlayerTick()
-        {
-            if (DateTime.Now.Subtract(lastTick).TotalSeconds > 2.5)
-            {
-                lastTick = DateTime.Now;
-
-                WeaponHash weapon = Game.PlayerPed.Weapons.Current;
-                bool result = await EventSystem.Request<bool>("user:license:weapon", weapon);
-                
-                if (!result)
-                {
-                    Game.PlayerPed.Weapons.Remove(weapon);
-                }
-            }
         }
     }
 }

@@ -27,13 +27,13 @@ namespace Curiosity.Interface.Client.Managers
             Instance.ExportRegistry.Add("GetClientWeather", new Func<string>(
                 () =>
                 {
-                    return $"{SeasonManager.SeasonInstance.CurrentWeather}".ToUpper();
+                    return $"".ToUpper();
                 }));
 
             Instance.ExportRegistry.Add("GetClientSeason", new Func<string>(
                 () =>
                 {
-                    return $"{SeasonManager.SeasonInstance.CurrentSeason}".ToUpper();
+                    return $"".ToUpper();
                 }));
 
             Instance.ExportRegistry.Add("AddToChat", new Func<string, bool>(

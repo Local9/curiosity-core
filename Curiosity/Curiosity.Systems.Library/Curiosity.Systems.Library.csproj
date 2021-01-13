@@ -48,11 +48,12 @@
   <ItemGroup>
     <Compile Include="Attributes\StringValueAttribute.cs" />
     <Compile Include="DataKeys.cs" />
+    <Compile Include="Data\MapRegions.cs" />
+    <Compile Include="Data\WeatherData.cs" />
     <Compile Include="Enums\EndState.cs" />
     <Compile Include="Enums\ErrorMessages.cs" />
     <Compile Include="Enums\MissionType.cs" />
     <Compile Include="Enums\Notification.cs" />
-    <Compile Include="Enums\Seasons.cs" />
     <Compile Include="Enums\SkillType.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\CuriosityStore.cs" />

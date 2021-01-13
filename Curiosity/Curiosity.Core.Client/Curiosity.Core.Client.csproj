@@ -60,6 +60,7 @@
     <Compile Include="Commands\Impl\PlayerCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Interface\Chat.cs" />
+    <Compile Include="Managers\WorldManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Discord\DiscordRichPresence.cs" />

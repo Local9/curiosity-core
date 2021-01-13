@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
@@ -25,7 +24,7 @@ namespace Curiosity.Core.Server.Managers
 
                 CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
 
-                Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}] Has connected to the server");
+                Logger.Debug($"[User] [{metadata.Sender}] [{curiosityUser.LatestName}#{curiosityUser.UserId}|{curiosityUser.Role}] Has successfully connected to the server");
 
                 curiosityUser.Handle = metadata.Sender;
 
@@ -36,18 +35,10 @@ namespace Curiosity.Core.Server.Managers
 
             EventSystem.GetModule().Attach("user:getProfile", new AsyncEventCallback(async metadata =>
             {
-                var player = PluginManager.PlayersList[metadata.Sender];
-
-                if (player == null)
-                {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
                     return null;
-                }
 
-                CuriosityUser curiosityUser = await Database.Store.UserDatabase.Get(player);
-
-                curiosityUser.Handle = metadata.Sender;
-
-                return curiosityUser;
+                return PluginManager.ActiveUsers[metadata.Sender];
             }));
 
             EventSystem.GetModule().Attach("user:getSkills", new EventCallback(metadata =>
@@ -69,8 +60,6 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("user:license:weapon", new EventCallback(metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
-
-
 
                 return null;
             }));

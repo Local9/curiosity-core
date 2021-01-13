@@ -208,6 +208,8 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
+                await BaseScript.Delay(0);
+
                 bool isVerified = await Discord.CheckDiscordIdIsInGuild(player, discordIdLong);
 
                 if (!isVerified)
@@ -216,7 +218,11 @@ namespace Curiosity.Server.net.Business
                     return;
                 }
 
+                await BaseScript.Delay(0);
+
                 GlobalEntity.User user = await Database.DatabaseUsers.GetUser(license, player, discordIdLong);
+
+                await BaseScript.Delay(0);
 
                 Log.Info($"Queue Player Connecting: {player.Name} ({user.RoleId})");
 
