@@ -26,7 +26,7 @@ namespace Curiosity.Server.net.Classes
         public static void Init()
         {
             server.RegisterTickHandler(UpdateSessions);
-            server.RegisterTickHandler(UpdatePlayerInformation);
+            // server.RegisterTickHandler(UpdatePlayerInformation);
 
             GameTimer = API.GetGameTimer();
 

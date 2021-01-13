@@ -165,7 +165,7 @@ namespace Curiosity.Server.net
             Classes.Environment.Vehicles.Init();
             Classes.Environment.Scoreboard.Init();
             Classes.Environment.ChatService.Init();
-            Classes.Environment.PolmavEvents.Init();
+            // Classes.Environment.PolmavEvents.Init();
             // Classes.Environment.InstanceChecker.Init();
             // Classes.Environment.Trains.Init();
             // weather and time

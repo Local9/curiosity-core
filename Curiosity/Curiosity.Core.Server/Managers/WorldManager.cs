@@ -30,6 +30,12 @@ namespace Curiosity.Core.Server.Managers
             { Region.Zancudo, WeatherType.CLEAR },
         };
 
+        // TIME
+        double _baseTime = 0;
+        double _timeOffset = 0;
+        DateTime lastTimeTick = DateTime.Now;
+        DateTime lastTimeSyncTick = DateTime.Now;
+
         public override void Begin()
         {
             EventSystem.GetModule().Attach("weather:sync", new EventCallback(metadata =>
@@ -38,6 +44,8 @@ namespace Curiosity.Core.Server.Managers
                 Region region = MapRegions.RegionBySubRegion[subRegion];
                 return (int)regionWeatherType[region];
             }));
+
+            // Need to add a time sync
 
             RandomiseWeather();
 
@@ -79,7 +87,38 @@ namespace Curiosity.Core.Server.Managers
             {
                 RandomiseWeather();
             }
+
             await BaseScript.Delay(WEATHER_UPDATE_MS);
+        }
+
+        [TickHandler]
+        private async Task OnWorldTimeTick()
+        {
+            if (DateTime.Now.Subtract(lastTimeTick).TotalMilliseconds >= 500)
+            {
+
+                TimeSpan timeSpan = DateTime.UtcNow - new DateTime(1970, 1, 1);
+                int secondsSinceEpoch = (int)timeSpan.TotalSeconds;
+
+                double newBaseTime = (secondsSinceEpoch / 2) + 360;
+
+                _baseTime = newBaseTime;
+
+                lastTimeTick = DateTime.Now;
+            }
+
+            await BaseScript.Delay(100);
+        }
+
+        [TickHandler]
+        private async Task OnWorldTimeSyncTick()
+        {
+            if (DateTime.Now.Subtract(lastTimeSyncTick).TotalSeconds >= 5) {
+                EventSystem.GetModule().SendAll("world:time", _baseTime, _timeOffset);
+                lastTimeSyncTick = DateTime.Now;
+            }
+
+            await BaseScript.Delay(1000);
         }
     }
 }

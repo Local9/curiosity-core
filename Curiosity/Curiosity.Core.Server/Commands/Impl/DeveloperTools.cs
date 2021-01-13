@@ -16,7 +16,7 @@ namespace Curiosity.Core.Server.Commands.Impl
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.DEVELOPER, Role.PROJECT_MANAGER };
 
-        #region Vehicles
+        #region Vehicles ONESYNC
         //[CommandInfo(new[] { "vehicle", "veh", "car" })]
         //public class VehicleSpawner : ICommand
         //{

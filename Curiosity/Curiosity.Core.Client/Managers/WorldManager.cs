@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Data;
+using Curiosity.Systems.Library.Events;
 using System;
 using System.Threading.Tasks;
 
@@ -12,9 +13,21 @@ namespace Curiosity.Core.Client.Managers
         WeatherType lastWeather;
         DateTime lastRun = DateTime.Now;
 
+        // Time
+        double clientBaseTime = 0;
+        double clientTimeOffset = 0;
+        double clientTimer = 0;
+        int hour;
+        int minute;
+
         public override void Begin()
         {
-            
+            EventSystem.Attach("world:time", new EventCallback(metadata =>
+            {
+                clientBaseTime = metadata.Find<double>(0);
+                clientTimeOffset = metadata.Find<double>(1);
+                return null;
+            }));
         }
 
         [TickHandler]
@@ -48,6 +61,27 @@ namespace Curiosity.Core.Client.Managers
                     lastWeather = weatherType;
                 }
             }
+        }
+
+        [TickHandler]
+        private async Task OnWorldTimeSyncTick()
+        {
+            await BaseScript.Delay(0);
+
+            double newBaseTime = clientBaseTime;
+            if ((API.GetGameTimer() - 500) > clientTimer)
+            {
+                newBaseTime += 0.25;
+                clientTimer = API.GetGameTimer();
+            }
+
+            clientBaseTime = newBaseTime;
+
+            hour = (int)Math.Floor(((clientBaseTime + clientTimeOffset) / 60) % 24);
+            minute = (int)Math.Floor((clientBaseTime + clientTimeOffset) % 60);
+
+            API.NetworkOverrideClockTime(hour, minute, 0);
+            API.SetClockTime(hour, minute, 0);
         }
     }
 }
