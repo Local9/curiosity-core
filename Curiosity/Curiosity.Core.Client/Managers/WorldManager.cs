@@ -20,7 +20,7 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler]
         private async Task OnWeatherSyncTick()
         {
-            if (DateTime.Now.Subtract(lastRun).TotalSeconds >= 5)
+            if (DateTime.Now.Subtract(lastRun).TotalSeconds >= 60)
             {
                 lastRun = DateTime.Now;
 
