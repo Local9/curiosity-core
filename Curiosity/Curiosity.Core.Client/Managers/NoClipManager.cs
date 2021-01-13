@@ -12,6 +12,8 @@ namespace Curiosity.Core.Client.Managers
         private const float MinY = -89f, MaxY = 89f;
         private const float MaxSpeed = 32f;
 
+        public static NoClipManager NoClipInstance;
+
         private static readonly List<Control> DisabledControls = new List<Control> {
             Control.MoveLeftOnly,
             Control.MoveLeftRight,
@@ -34,11 +36,22 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
-            base.Begin();
+            NoClipInstance = this;
         }
 
-        [TickHandler(SessionWait = true)]
-        private async Task OnTick()
+        public void Init()
+        {
+            Instance.AttachTickHandler(OnNoClipControlTick);
+            Instance.AttachTickHandler(OnNoClipCheckRotationTick);
+        }
+
+        public void Dispose()
+        {
+            Instance.DetachTickHandler(OnNoClipControlTick);
+            Instance.DetachTickHandler(OnNoClipCheckRotationTick);
+        }
+
+        private async Task OnNoClipControlTick()
         {
             try
             {
@@ -156,8 +169,7 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
-        [TickHandler(SessionWait = true)]
-        private async Task CheckInputRotation()
+        private async Task OnNoClipCheckRotationTick()
         {
             try
             {

@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Interface.Modules;
+using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
@@ -47,6 +48,15 @@ namespace Curiosity.Core.Client.Environment.Entities
             API.DisplayRadar(true);
 
             HeadupDisplay.GetModule().IsDisabled = false;
+
+            if (User.IsDeveloper)
+            {
+                NoClipManager.NoClipInstance.Init();
+            }
+            else
+            {
+                NoClipManager.NoClipInstance.Dispose();
+            }
         }
 
         public async Task CommitModel(Model model)
