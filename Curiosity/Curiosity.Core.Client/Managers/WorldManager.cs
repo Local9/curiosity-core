@@ -40,7 +40,7 @@ namespace Curiosity.Core.Client.Managers
 
                     API.ClearOverrideWeather();
                     API.ClearWeatherTypePersist();
-                    API.SetWeatherTypeOverTime($"{weatherType}", 15f);
+                    API.SetWeatherTypeOverTime($"{weatherType}", 30f);
                     API.SetWeatherTypePersist($"{weatherType}");
                     API.SetWeatherTypeNow($"{weatherType}");
                     API.SetWeatherTypeNowPersist($"{weatherType}");
