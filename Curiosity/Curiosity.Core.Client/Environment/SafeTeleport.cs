@@ -1,5 +1,6 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Systems.Library.Models;
 using System.Threading.Tasks;
 
@@ -7,6 +8,29 @@ namespace Curiosity.Core.Client.Environment
 {
     public class SafeTeleport
     {
+        public static async Task TeleportFade(int entity, Position position, int interval = 10)
+        {
+            Screen.Fading.FadeOut(500);
+
+            while (Screen.Fading.IsFadingOut)
+            {
+                await BaseScript.Delay(10);
+            }
+
+            API.FreezeEntityPosition(entity, true);
+
+            await Teleport(entity, position, interval);
+
+            Screen.Fading.FadeIn(500);
+
+            while (Screen.Fading.IsFadingIn)
+            {
+                await BaseScript.Delay(10);
+            }
+
+            API.FreezeEntityPosition(entity, false);
+        }
+
         public static async Task Teleport(int entity, Position position, int interval = 10)
         {
             API.RequestCollisionAtCoord(position.X, position.Y, position.Z);

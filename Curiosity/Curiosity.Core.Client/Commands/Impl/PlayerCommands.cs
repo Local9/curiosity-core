@@ -1,5 +1,5 @@
-﻿using Curiosity.Core.Client.Environment.Entities;
-using Curiosity.Core.Client.Events;
+﻿using Curiosity.Core.Client.Environment;
+using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
@@ -9,30 +9,19 @@ namespace Curiosity.Core.Client.Commands.Impl
 {
     public class PlayerCommands : CommandContext
     {
-        [CommandInfo(new[] { "invite", "i" })]
+        [CommandInfo(new[] { "unstuck", })]
         public class InviteToParty : ICommand
-        {
-            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
-            {
-
-            }
-        }
-
-        [CommandInfo(new[] { "accept", "a" })]
-        public class AcceptInvite : ICommand
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                List<string> response = await EventSystem.GetModule().Request<List<string>>("party:get:members");
-                response.ForEach((string member) =>
-                {
+                Position position = new Position(0, 0, 0, 0);
 
-                });
+                await SafeTeleport.TeleportFade(player.Entity.Id, position);
             }
         }
 
-        public override string[] Aliases { get; set; } = { "party", "p" };
-        public override string Title { get; set; } = "Party";
+        public override string[] Aliases { get; set; } = { "player", "p", "me" };
+        public override string Title { get; set; } = "Player Commands";
         public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
         public override bool IsRestricted { get; set; }
         public override List<Role> RequiredRoles { get; set; }
