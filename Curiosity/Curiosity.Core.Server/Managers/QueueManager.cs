@@ -35,9 +35,7 @@ namespace Curiosity.Core.Server.Managers
         static int queueGraceTime = 2;
         static int graceTime = 2;
         static int loadTime = 10;
-        static int reservedTypeOneSlots = 2;
-        static int reservedTypeTwoSlots = 0;
-        static int reservedTypeThreeSlots = 0;
+        static int reservedSlots = 2;
         static int publicTypeSlots = 0;
         static int maxSession = 32;
 
@@ -64,9 +62,9 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            SetupConvars();
-
             Logger.Debug($"[QueueManager] Begin");
+
+            SetupConvars();
 
             Instance.EventRegistry["playerConnecting"] += new Action<Player, string, CallbackDelegate, ExpandoObject>(OnConnect);
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
@@ -430,72 +428,19 @@ namespace Curiosity.Core.Server.Managers
 
                 query.ToList().ForEach(k =>
                 {
-                    int openReservedTypeOneSlots = reservedTypeOneSlots - slotTaken.Count(j => j.Value == Reserved.Reserved1);
-                    int openReservedTypeTwoSlots = reservedTypeTwoSlots - slotTaken.Count(j => j.Value == Reserved.Reserved2);
-                    int openReservedTypeThreeSlots = reservedTypeThreeSlots - slotTaken.Count(j => j.Value == Reserved.Reserved3);
+                    int openReservedTypeOneSlots = reservedSlots - slotTaken.Count(j => j.Value == Reserved.Reserved);
 
                     switch (k.Value)
                     {
-                        case Reserved.Reserved1:
+                        case Reserved.Reserved:
                             if (openReservedTypeOneSlots > 0)
                             {
-                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved1))
+                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved))
                                 {
                                     slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
-                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved1, oldReserved);
+                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved, oldReserved);
                                 }
                                 if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved1"); }
-                            }
-                            else if (openReservedTypeTwoSlots > 0)
-                            {
-                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved2))
-                                {
-                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
-                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved2, oldReserved);
-                                }
-                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved2"); }
-                            }
-                            else if (openReservedTypeThreeSlots > 0)
-                            {
-                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved3))
-                                {
-                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
-                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved3, oldReserved);
-                                }
-                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved3"); }
-                            }
-                            break;
-
-                        case Reserved.Reserved2:
-                            if (openReservedTypeTwoSlots > 0)
-                            {
-                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved2))
-                                {
-                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
-                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved2, oldReserved);
-                                }
-                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved2"); }
-                            }
-                            else if (openReservedTypeThreeSlots > 0)
-                            {
-                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved3))
-                                {
-                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
-                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved3, oldReserved);
-                                }
-                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved3"); }
-                            }
-                            break;
-
-                        case Reserved.Reserved3:
-                            if (openReservedTypeThreeSlots > 0)
-                            {
-                                if (!slotTaken.TryAdd(k.Key, Reserved.Reserved3))
-                                {
-                                    slotTaken.TryGetValue(k.Key, out Reserved oldReserved);
-                                    slotTaken.TryUpdate(k.Key, Reserved.Reserved3, oldReserved);
-                                }
-                                if (stateChangeMessages) { Logger.Verbose($"Assigned {k.Key} to Reserved3"); }
                             }
                             break;
                         default:
@@ -594,12 +539,8 @@ namespace Curiosity.Core.Server.Managers
         {
             try
             {
-                if (reserved.ContainsKey(license) && reserved[license] == Reserved.Reserved1 && slotTaken.Count(j => j.Value == Reserved.Reserved1) < reservedTypeOneSlots)
-                { NewLoading(license, Reserved.Reserved1); return true; }
-                else if (reserved.ContainsKey(license) && (reserved[license] == Reserved.Reserved1 || reserved[license] == Reserved.Reserved2) && slotTaken.Count(j => j.Value == Reserved.Reserved2) < reservedTypeTwoSlots)
-                { NewLoading(license, Reserved.Reserved2); return true; }
-                else if (reserved.ContainsKey(license) && (reserved[license] == Reserved.Reserved1 || reserved[license] == Reserved.Reserved2 || reserved[license] == Reserved.Reserved3) && slotTaken.Count(j => j.Value == Reserved.Reserved3) < reservedTypeThreeSlots)
-                { NewLoading(license, Reserved.Reserved3); return true; }
+                if (reserved.ContainsKey(license) && reserved[license] == Reserved.Reserved && slotTaken.Count(j => j.Value == Reserved.Reserved) < reservedSlots)
+                { NewLoading(license, Reserved.Reserved); return true; }
                 else if (session.Count(j => j.Value != SessionState.Queue) - slotTaken.Count(i => i.Value != Reserved.Public) < publicTypeSlots)
                 { NewLoading(license, Reserved.Public); return true; }
                 else { return false; }
@@ -792,18 +733,14 @@ namespace Curiosity.Core.Server.Managers
             loadTime = API.GetConvarInt("queue_loading_timeout", loadTime);
             graceTime = API.GetConvarInt("queue_reconnect_timeout", graceTime);
             queueGraceTime = API.GetConvarInt("queue_cancel_timeout", queueGraceTime);
-            reservedTypeOneSlots = API.GetConvarInt("queue_type_1_reserved_slots", reservedTypeOneSlots);
-            reservedTypeTwoSlots = API.GetConvarInt("queue_type_2_reserved_slots", reservedTypeTwoSlots);
-            reservedTypeThreeSlots = API.GetConvarInt("queue_type_3_reserved_slots", reservedTypeThreeSlots);
-            publicTypeSlots = maxSession - reservedTypeOneSlots - reservedTypeTwoSlots - reservedTypeThreeSlots;
+            reservedSlots = API.GetConvarInt("queue_type_1_reserved_slots", reservedSlots);
+            publicTypeSlots = maxSession - reservedSlots;
 
             Logger.Info($"Queue Settings -> queue_max_session_slots {maxSession}");
             Logger.Info($"Queue Settings -> queue_loading_timeout {loadTime} mins");
             Logger.Info($"Queue Settings -> queue_reconnect_timeout {graceTime} mins");
             Logger.Info($"Queue Settings -> queue_cancel_timeout {queueGraceTime} mins");
-            Logger.Info($"Queue Settings -> queue_type_1_reserved_slots {reservedTypeOneSlots}");
-            Logger.Info($"Queue Settings -> queue_type_2_reserved_slots {reservedTypeTwoSlots}");
-            Logger.Info($"Queue Settings -> queue_type_3_reserved_slots {reservedTypeThreeSlots}");
+            Logger.Info($"Queue Settings -> queue_reserved_slots {reservedSlots}");
             Logger.Info($"Queue Settings -> Final Public Slots: {publicTypeSlots}");
 
             SetupMessages();
@@ -855,9 +792,7 @@ namespace Curiosity.Core.Server.Managers
     }
     public enum Reserved
     {
-        Reserved1 = 1,
-        Reserved2,
-        Reserved3,
+        Reserved = 1,
         Public
     }
 }
