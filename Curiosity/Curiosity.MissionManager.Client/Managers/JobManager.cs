@@ -12,8 +12,6 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class JobManager : Manager<JobManager>
     {
-        public static JobManager JobManagerInstance;
-
         private const string JOB_POLICE = "police";
         internal static PatrolZone PatrolZone = PatrolZone.City;
         internal static bool IsOnDuty;
@@ -27,10 +25,15 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             Logger.Info($"- [JobManager] Begin -----------------------------");
 
-            JobManagerInstance = this;
+            //EventSystem.Attach("curiosity:job:police:duty", new EventCallback(metadata =>
+            //{
+            //    OnJobDutyEvent(true, false, "police");
+            //    BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, "police"); // for legacy resources
+            //    return null;
+            //}));
 
             // LEGACY
-            Instance.EventRegistry[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnJobDutyEvent);
+            Instance.EventRegistry[LegacyEvents.Client.CuriosityJob] += new Action<bool, bool, string>(OnJobDutyEvent);
         }
 
         public async void OnJobDutyEvent(bool active, bool onDuty, string job)

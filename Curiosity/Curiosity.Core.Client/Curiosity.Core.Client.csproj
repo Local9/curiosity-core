@@ -59,7 +59,11 @@
     <Compile Include="Commands\Impl\DeveloperTools.cs" />
     <Compile Include="Commands\Impl\PlayerCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
+    <Compile Include="Environment\Entities\Models\BlipData.cs" />
+    <Compile Include="Environment\Entities\Models\MarkerData.cs" />
     <Compile Include="Interface\Chat.cs" />
+    <Compile Include="Managers\BlipManager.cs" />
+    <Compile Include="Managers\LocationManager.cs" />
     <Compile Include="Managers\WorldManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
@@ -77,7 +81,6 @@
     <Compile Include="Environment\Entities\Modules\EntityModuleRegistry.cs" />
     <Compile Include="Environment\Entities\Modules\Impl\EntityDecorModule.cs" />
     <Compile Include="Environment\Entities\Modules\Impl\EntityNetworkModule.cs" />
-    <Compile Include="Environment\Marker.cs" />
     <Compile Include="Environment\SafeTeleport.cs" />
     <Compile Include="Environment\Stores\Impl\Convenience.cs" />
     <Compile Include="Environment\Stores\Store.cs" />
@@ -128,6 +131,8 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Interface\Menus\SubMenu\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -30,5 +30,10 @@ namespace Curiosity.Core.Client.Extensions
         {
             return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
         }
+
+        public static float Distance(this Position position, Vector3 target, bool useZ = false)
+        {
+            return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
+        }
     }
 }

@@ -3,6 +3,7 @@ using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
@@ -143,7 +144,9 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 string positionName = arguments[0];
 
-                bool response = await EventSystem.GetModule().Request<bool>("developer:savePos", positionName);
+                Vector3 pos = Game.PlayerPed.Position;
+
+                bool response = await EventSystem.GetModule().Request<bool>("developer:savePos", positionName, pos.X, pos.Y, pos.Z, Game.PlayerPed.Heading);
                 if (response)
                 {
                     Chat.SendLocalMessage($"Position '{positionName}' saved.");
@@ -151,6 +154,29 @@ namespace Curiosity.Core.Client.Commands.Impl
                 else
                 {
                     Chat.SendLocalMessage($"Issue when trying to save position: {positionName}.");
+                }
+            }
+        }
+
+        [CommandInfo(new[] { "rr" })]
+        public class Refresh : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (arguments.Count <= 0) return;
+
+                string argument = arguments[0];
+
+                switch(argument)
+                {
+                    case "locations":
+                    case "loc":
+                        LocationManager.LocationManagerInstance.OnGetLocations();
+                        Chat.SendLocalMessage($"Refreshed locations.");
+                        break;
+                    default:
+                        Chat.SendLocalMessage($"Argument '{argument}' is not implemented.");
+                        break;
                 }
             }
         }

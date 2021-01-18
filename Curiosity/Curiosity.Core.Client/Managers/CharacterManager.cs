@@ -7,9 +7,7 @@ using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.net.Extensions;
 using Curiosity.Systems.Library;
-using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using System;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
@@ -20,11 +18,7 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
-            EventSystem.Attach("onResourceStart", new EventCallback(metadata =>
-            {
-                Logger.Verbose("CharacterManager -> onResourceStart");
-                return null;
-            }));
+            
         }
 
         public class LoadTransition

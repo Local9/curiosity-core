@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Curiosity.Core.Server.Commands.Impl
 {
-    public class DeveloperTools : CommandContext
+    public class ServerCommands : CommandContext
     {
         public override string[] Aliases { get; set; } = { "srv" };
         public override string Title { get; set; } = "Server Commands";

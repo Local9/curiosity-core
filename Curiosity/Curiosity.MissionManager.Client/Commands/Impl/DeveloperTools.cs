@@ -87,7 +87,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
                     dutyActive = arguments[1] == "1";
                 }
 
-                BaseScript.TriggerEvent(LegacyEvents.Client.PoliceDutyEvent, true, dutyActive, job); // for legacy resources
+                BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, dutyActive, job); // for legacy resources
             }
         }
 

@@ -54,7 +54,7 @@
     <Compile Include="Commands\CommandFramework.cs" />
     <Compile Include="Commands\CommandInfo.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\Impl\DeveloperTools.cs" />
+    <Compile Include="Commands\Impl\ServerCommands.cs" />
     <Compile Include="Database\MySqlDatabase.cs" />
     <Compile Include="Database\Store\BankDatabase.cs" />
     <Compile Include="Database\Store\CharacterDatabase.cs" />
@@ -63,6 +63,8 @@
     <Compile Include="Database\Store\UserDatabase.cs" />
     <Compile Include="Extensions\SaveExtensions.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
+    <Compile Include="Managers\ConfigManager.cs" />
+    <Compile Include="Managers\DeveloperManager.cs" />
     <Compile Include="Managers\MarqueeManager.cs" />
     <Compile Include="Managers\QueueManager.cs" />
     <Compile Include="Managers\ShopManager.cs" />
@@ -86,6 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="config\locations.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -99,4 +104,5 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions />
 </Project>

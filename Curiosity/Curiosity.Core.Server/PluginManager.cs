@@ -249,7 +249,7 @@ namespace Curiosity.Core.Server
             }
 
             var commands = new CommandFramework();
-            commands.Bind(typeof(DeveloperTools));
+            commands.Bind(typeof(ServerCommands));
 
             Logger.Info($"[Managers] Successfully loaded in {loaded} manager(s)!");
 

@@ -106,7 +106,6 @@
     <Compile Include="Managers\TrafficStopManager.cs" />
     <Compile Include="Managers\VehicleRepairManager.cs" />
     <Compile Include="Managers\VehicleDeletionManager.cs" />
-    <Compile Include="Managers\JobMarkerPoliceManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\MarkerManager.cs" />

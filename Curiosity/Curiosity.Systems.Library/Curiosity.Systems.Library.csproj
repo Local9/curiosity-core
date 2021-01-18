@@ -57,6 +57,8 @@
     <Compile Include="Enums\SkillType.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\CuriosityStore.cs" />
+    <Compile Include="Models\LocationConfig.cs" />
+    <Compile Include="Models\Marker.cs" />
     <Compile Include="Models\MissionData.cs" />
     <Compile Include="Enums\PatrolZone.cs" />
     <Compile Include="Date.cs" />

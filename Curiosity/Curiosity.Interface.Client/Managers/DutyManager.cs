@@ -10,7 +10,7 @@ namespace Curiosity.Interface.Client.Managers
     {
         public override void Begin()
         {
-            Instance.EventRegistry[LegacyEvents.Client.PoliceDutyEvent] += new Action<bool, bool, string>(OnDutyState);
+            Instance.EventRegistry[LegacyEvents.Client.CuriosityJob] += new Action<bool, bool, string>(OnDutyState);
         }
 
         private static void OnDutyState(bool active, bool onDuty, string job)
