@@ -84,8 +84,6 @@ namespace Curiosity.Core.Server.Managers
                 string message = $"Player: {player.Name} disconnected ({reason})";
                 Logger.Debug(message);
                 ChatManager.OnLogMessage(message);
-
-                PluginManager.ActiveUsers.Remove(playerHandle);
             }
         }
     }
