@@ -146,7 +146,7 @@ namespace Curiosity.Core.Client.Managers
 
                 World.DrawMarker((MarkerType)m.MarkerId, m.Position, m.VDirection, m.VRotation, m.VScale, m.ColorArgb);
 
-                ScreenInterface.Draw3DText(m.Position, m.Message, 50f, 15f, 2f);
+                ScreenInterface.Draw3DText(m.Position, m.Message, 50f, m.DrawThreshold, 2f);
             });
         }
 

@@ -16,48 +16,8 @@ namespace Curiosity.MissionManager.Client.Handler
     {
         static PluginManager PluginInstance => PluginManager.Instance;
 
-        static List<Marker> markers = new List<Marker>();
-        static List<BlipData> blips = new List<BlipData>();
-
-        static System.Drawing.Color markerColor = System.Drawing.Color.FromArgb(255, 0, 128, 0);
-
         internal static void Init()
         {
-            markers.Add(new Marker("~g~Bolingbroke Penitentiary\n~w~Book Suspect(s)", new Vector3(1690.975f, 2592.581f, 44.41336f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
-            markers.Add(new Marker("~g~Paleto Bay PD\n~w~Book Suspect(s)", new Vector3(-449.3008f, 6012.623f, 30.71638f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
-            markers.Add(new Marker("~g~Vespucci PD\n~w~Book Suspect(s)", new Vector3(-1113.08f, -848.6609f, 12.4414f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
-            markers.Add(new Marker("~g~Eastbourn PD\n~w~Book Suspect(s)", new Vector3(-583.1123f, -146.7518f, 37.23016f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
-            markers.Add(new Marker("~g~La Mesa PD\n~w~Book Suspect(s)", new Vector3(830.4728f, -1310.793f, 27.13673f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
-            markers.Add(new Marker("~g~Rancho PD\n~w~Book Suspect(s)", new Vector3(370.3031f, -1608.2098f, 28.2919f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
-            markers.Add(new Marker("~g~Los Santos PD\n~w~Book Suspect(s)", new Vector3(469.428f, -1022.202f, 27.18944f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
-            markers.Add(new Marker("~g~County Sheriff\n~w~Book Suspect(s)", new Vector3(1852.139f, 3691.1f, 33.26702f), markerColor, markerFilter: MarkerFilter.PoliceArrest));
-
-            int blipId = 0;
-
-            foreach (Marker mark in markers)
-            {
-                BlipData blipData = new BlipData($"arrestBlip{blipId}", "Arrest Ped", mark.Position, BlipSprite.Handcuffs, BlipCategory.Unknown, BlipColor.Green, true);
-                blips.Add(blipData);
-                BlipHandler.AddBlip(blipData);
-
-                MarkerManager.MarkersAll.Add(mark);
-                blipId++;
-            }
-
-            PluginInstance.AttachTickHandler(OnArrestPedTick);
-        }
-
-        public static void Dispose()
-        {
-            markers.ForEach(m =>
-            {
-                MarkerManager.RemoveMarker(m);
-            });
-
-            markers.Clear();
-
-            blips.ForEach(m => BlipHandler.RemoveBlip(m.BlipName));
-            PluginInstance.DetachTickHandler(OnArrestPedTick);
         }
 
         private async static Task OnArrestPedTick()

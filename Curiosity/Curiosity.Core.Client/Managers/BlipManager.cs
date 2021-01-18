@@ -1,4 +1,6 @@
-﻿using Curiosity.Core.Client.Environment.Entities.Models;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Environment.Entities.Models;
+using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +16,8 @@ namespace Curiosity.Core.Client.Managers
         {
             ManagerInstance = this;
         }
+
+        public Dictionary<string, List<Position>> Locations = new Dictionary<string, List<Position>>();
 
         public void RemoveAllBlips()
         {
@@ -49,9 +53,18 @@ namespace Curiosity.Core.Client.Managers
         public string AddBlip(BlipData blipData)
         {
             if (AllBlips.ContainsKey(blipData.Name)) return blipData.Name;
-
             blipData.Create();
             AllBlips.Add(blipData.Name, blipData);
+
+            if (Locations.ContainsKey(blipData.Name))
+            {
+                Locations[blipData.Name] = blipData.Positions;
+            }
+            else
+            {
+                Locations.Add(blipData.Name, blipData.Positions);
+            }
+
             return blipData.Name;
         }
     }

@@ -47,6 +47,9 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "control")]
         public int Control = 51;
+
+        [DataMember(Name = "jobRequirement")]
+        public string JobRequirement;
     }
 
     [DataContract]

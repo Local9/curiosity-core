@@ -1,29 +1,34 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus
 {
     public class InteractionMenu : Manager<InteractionMenu>
     {
-        public static MenuPool _MenuPool;
+        public static MenuPool MenuPool;
         private UIMenu menuMain;
 
         // menu items
-        private UIMenuListItem mlGpsLocations;
         private List<dynamic> gpsLocations = new List<dynamic>();
         private int gpsIndex = 0;
+        private UIMenuListItem mlGpsLocations;
 
         public override void Begin()
         {
-            _MenuPool = new MenuPool();
-            _MenuPool.MouseEdgeEnabled = false;
+            MenuPool = new MenuPool();
+            MenuPool.MouseEdgeEnabled = false;
 
             menuMain = new UIMenu("Interaction Menu", "Player Interactions");
-            _MenuPool.Add(menuMain);
+            menuMain.MouseControlsEnabled = false;
+            MenuPool.Add(menuMain);
 
             menuMain.OnMenuClose += MenuMain_OnMenuClose;
             menuMain.OnMenuOpen += MenuMain_OnMenuOpen;
@@ -31,12 +36,31 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.OnListSelect += MenuMain_OnListSelect;
         }
 
+        private Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)
+        {
+            if (points.Count() == 0) return Vector3.Zero;
+
+            return points.OrderBy(x => Vector3.Distance(startingPoint, x)).First();
+        }
+
         private void MenuMain_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
         {
             if (listItem == mlGpsLocations)
             {
                 gpsIndex = newIndex;
-                var position = listItem.Items[newIndex];
+                string key = (string)listItem.Items[newIndex];
+
+                Logger.Debug($"Selected Key: {key}");
+
+                List<Position> positions = BlipManager.ManagerInstance.Locations[key];
+                List<Vector3> posVectors = new List<Vector3>();
+                positions.ForEach(x => posVectors.Add(x.AsVector()));
+
+                Vector3 closestPosition = FindClosestPoint(Game.PlayerPed.Position, posVectors);
+
+                if (closestPosition.Equals(Vector3.Zero)) return;
+
+                API.SetNewWaypoint(closestPosition.X, closestPosition.Y);
             }
         }
 
@@ -50,31 +74,59 @@ namespace Curiosity.Core.Client.Interface.Menus
 
         private void MenuMain_OnMenuOpen(UIMenu sender)
         {
-            mlGpsLocations = new UIMenuListItem("GPS", gpsLocations, gpsIndex);
+            AddGpsMenuItem();
+
+            // Add Sub Menus
         }
 
         private void MenuMain_OnMenuClose(UIMenu sender)
         {
+            DisposeMenu();
+        }
+
+        public void DisposeMenu()
+        {
             Instance.DetachTickHandler(OnMenuDisplay);
+            menuMain.Clear(); // RESET
         }
 
         private async Task OnMenuDisplay()
         {
-            _MenuPool.ProcessMenus();
-            _MenuPool.ProcessMouse();
+            MenuPool.ProcessMenus();
+            // MenuPool.ProcessMouse();
+            MenuPool.MouseEdgeEnabled = false;
         }
 
         [TickHandler(SessionWait = true)]
         private async Task OnMenuControls()
         {
-            if (Cache.Character.MarkedAsRegistered && API.NetworkIsSessionActive() && (Game.PlayerPed.IsAlive || Cache.Player.User.IsStaff))
+            if (!MenuPool.IsAnyMenuOpen() && Cache.Character.MarkedAsRegistered && API.NetworkIsSessionActive() && (Game.PlayerPed.IsAlive || Cache.Player.User.IsStaff))
             {
                 if (Game.IsControlJustPressed(0, Control.InteractionMenu))
                 {
                     Instance.AttachTickHandler(OnMenuDisplay);
-                    menuMain.Visible = true;
+                    menuMain.Visible = !menuMain.Visible;
                 }
             }
+        }
+
+        // Menu Items
+        private void AddGpsMenuItem()
+        {
+            gpsLocations.Clear();
+
+            foreach (KeyValuePair<string, List<Position>> kvp in BlipManager.ManagerInstance.Locations)
+            {
+                if (!gpsLocations.Contains(kvp.Key))
+                    gpsLocations.Add(kvp.Key);
+            }
+
+            if (gpsLocations.Count > 1)
+                gpsLocations.Sort((x, y) => string.Compare(x, y));
+
+            mlGpsLocations = new UIMenuListItem("GPS", gpsLocations, gpsIndex);
+
+            menuMain.AddItem(mlGpsLocations);
         }
     }
 }

@@ -62,10 +62,10 @@
           "scale": {
             "X": 1.5,
             "Y": 1.5,
-            "Z": 1.5
+            "Z": 0.5
           },
           "contextAoe": 1.5,
-          "drawThreshold": 2.5,
+          "drawThreshold": 7.5,
           "color": {
             "alpha": 255,
             "red": 65,
@@ -114,6 +114,88 @@
               "Z": 37.04274
             }
           ]
+        },
+
+        {
+          "control": 51,
+          "jobRequirement":  "police",
+          "message": "Book Suspect",
+          "helpText": "Press ~INPUT_CONTEXT~ to book ~b~Suspect",
+          "event": "curiosity:job:police:arrest",
+          "isServerEvent": false,
+          "isLegacyEvent": false,
+          "markerId": 1,
+          "scale": {
+            "X": 1.5,
+            "Y": 1.5,
+            "Z": 0.5
+          },
+          "contextAoe": 1.5,
+          "drawThreshold": 15,
+          "color": {
+            "alpha": 255,
+            "red": 0,
+            "green": 128,
+            "blue": 0
+          },
+          "positions": [
+            {
+              "X": 1690.787,
+              "Y": 2591.55,
+              "Z": 45.90903
+            },
+            {
+              "X": 469.3234,
+              "Y": -1022.069,
+              "Z": 28.19849
+            },
+            {
+              "X": 826.2773,
+              "Y": -1291.972,
+              "Z": 28.24066
+            },
+            {
+              "X": -1113.296,
+              "Y": -849.0849,
+              "Z": 13.44594
+            },
+            {
+              "X": -449.3008,
+              "Y": 6012.623,
+              "Z": 30.71638
+            },
+            {
+              "X": -566.5678,
+              "Y": -133.2066,
+              "Z": 37.97133
+            },
+            {
+              "X": 370.3031,
+              "Y": -1608.2098,
+              "Z": 28.2919
+            },
+            {
+              "X": 1852.139,
+              "Y": 3691.1,
+              "Z": 33.26702
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jail",
+      "sprite": 253,
+      "color": 3,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 1.0,
+      "positions": [
+        {
+          "X": 1690.799,
+          "Y": 2534.07,
+          "Z": 57.09846
         }
       ]
     }

@@ -46,7 +46,7 @@ namespace Curiosity.Core.Server.Managers
                             float z = metadata.Find<float>(3);
                             float h = metadata.Find<float>(4);
 
-                            Logger.Debug($"Saving Position: {posName} {x} {y} {z} : {h}");
+                            Logger.Debug($"Saving Position: {posName} (\"X\": {x}, \"Y\": {y}, \"Z\": {z}) : {h}");
 
                             tw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm")},{posName},new Vector3({x}f, {y}f, {z}f),({x}, {y}, {z}),(X: {x}, Y: {y}, Z: {z}),{h}");
                         }

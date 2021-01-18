@@ -12,8 +12,13 @@ namespace Curiosity.Core.Server.Managers
 {
     public class ConfigManager : Manager<ConfigManager>
     {
+        public static ConfigManager ConfigInstance;
+        public LocationConfig configCache = new LocationConfig();
+
         public override void Begin()
         {
+            ConfigInstance = this;
+
             EventSystem.GetModule().Attach("config:locations", new EventCallback(metadata =>
             {
                 return GetLocations();
@@ -35,6 +40,7 @@ namespace Curiosity.Core.Server.Managers
                 else
                 {
                     config = JsonConvert.DeserializeObject<LocationConfig>(jsonFile);
+                    configCache = config;
                 }
             }
             catch(Exception ex)

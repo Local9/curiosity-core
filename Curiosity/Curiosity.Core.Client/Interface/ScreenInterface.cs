@@ -48,10 +48,11 @@ namespace Curiosity.Core.Client.Interface
 
         public static void Draw3DText(float x, float y, float z, string message, float scaleMod = 20.0f, float distanceToHide = 20.0f, float zOffset = 1.0f)
         {
-            float distance = (float)Math.Sqrt(GameplayCamera.Position.DistanceToSquared(new Vector3(x, y, z)));
+            Vector3 pos = new Vector3(x, y, z);
+            float distance = (float)Math.Sqrt(GameplayCamera.Position.DistanceToSquared(pos));
             float scale = ((1 / distance) * 2) * GameplayCamera.FieldOfView / scaleMod;
 
-            if (distance > distanceToHide)
+            if (!Game.PlayerPed.IsInRangeOf(pos, distanceToHide))
             {
                 return;
             }
