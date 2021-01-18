@@ -165,6 +165,8 @@ namespace Curiosity.Core.Client.Managers
 
             if (Game.IsControlJustPressed(0, (Control)activeMarker.Control))
             {
+                Logger.Debug($"Control for event '{activeMarker.Event}' pressed");
+
                 if (activeMarker.IsServerEvent)
                 {
                     if (activeMarker.IsLegacyEvent)
