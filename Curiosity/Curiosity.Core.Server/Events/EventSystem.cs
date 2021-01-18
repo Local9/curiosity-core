@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Curiosity.Systems.Library;
 using CitizenFX.Core.Native;
+using System.Text;
 
 namespace Curiosity.Core.Server.Events
 {
@@ -127,14 +128,32 @@ namespace Curiosity.Core.Server.Events
                     $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the client `{client}`.");
             }
 
+            string jsonObject = JsonConvert.SerializeObject(wrapped);
+
+            int fileSize = Encoding.UTF8.GetByteCount(jsonObject);
+            bool latentEvent = fileSize > 4000;
+
             if (handle == -1)
             {
-                BaseScript.TriggerClientEvent(EVENT_KEY, JsonConvert.SerializeObject(wrapped));
+                if (latentEvent)
+                {
+                    BaseScript.TriggerLatentClientEvent(EVENT_KEY, 2000, jsonObject);
+                }
+                else
+                {
+                    BaseScript.TriggerClientEvent(EVENT_KEY, jsonObject);
+                }
             }
             else
             {
-                BaseScript.TriggerClientEvent(PluginManager.PlayersList[handle], EVENT_KEY,
-                    JsonConvert.SerializeObject(wrapped));
+                if (latentEvent)
+                {
+                    BaseScript.TriggerLatentClientEvent(PluginManager.PlayersList[handle], EVENT_KEY, 2000, jsonObject);
+                }
+                else
+                {
+                    BaseScript.TriggerClientEvent(PluginManager.PlayersList[handle], EVENT_KEY, jsonObject);
+                }
             }
         }
 

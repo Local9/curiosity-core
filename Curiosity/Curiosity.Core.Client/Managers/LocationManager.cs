@@ -71,8 +71,6 @@ namespace Curiosity.Core.Client.Managers
                     {
                         m.Positions.ForEach(p =>
                         {
-                            Logger.Debug($"Add Marker: {m.Message}");
-
                             MarkerData markerData = new MarkerData();
                             markerData.ColorArgb = System.Drawing.Color.FromArgb(m.Color.Alpha, m.Color.Red, m.Color.Green, m.Color.Blue);
                             markerData.Message = m.Message;
