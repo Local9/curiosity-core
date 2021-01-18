@@ -115,10 +115,9 @@
             }
           ]
         },
-
         {
           "control": 51,
-          "jobRequirement":  "police",
+          "jobRequirement": "police",
           "message": "Book Suspect",
           "helpText": "Press ~INPUT_CONTEXT~ to book ~b~Suspect",
           "event": "curiosity:job:police:arrest",
@@ -131,7 +130,7 @@
             "Z": 0.5
           },
           "contextAoe": 1.5,
-          "drawThreshold": 15,
+          "drawThreshold": 5,
           "color": {
             "alpha": 255,
             "red": 0,
@@ -187,6 +186,22 @@
       "name": "Jail",
       "sprite": 253,
       "color": 3,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 1.0,
+      "positions": [
+        {
+          "X": 1690.799,
+          "Y": 2534.07,
+          "Z": 57.09846
+        }
+      ]
+    },
+    {
+      "name": "Vehicle Deletion",
+      "sprite": 380,
+      "color": 1,
       "isShortRange": true,
       "category": 1,
       "priority": 1,
