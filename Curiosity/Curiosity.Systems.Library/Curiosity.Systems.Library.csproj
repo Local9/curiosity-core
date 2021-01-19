@@ -55,7 +55,6 @@
     <Compile Include="Enums\MissionType.cs" />
     <Compile Include="Enums\Notification.cs" />
     <Compile Include="Enums\SkillType.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="Models\CuriosityStore.cs" />
     <Compile Include="Models\LocationConfig.cs" />
     <Compile Include="Models\Marker.cs" />
@@ -98,6 +97,7 @@
     <Compile Include="Models\SqlResult.cs" />
     <Compile Include="Models\VehicleInfo.cs" />
     <Compile Include="Models\VehicleShopItem.cs" />
+    <Compile Include="Models\CuriosityWeather.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seed.cs" />
     <Compile Include="Threading\ThreadLock.cs" />

@@ -64,6 +64,19 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
+            EventSystem.GetModule().Attach("user:log:exception", new EventCallback(metadata =>
+            {
+                Player player = PluginManager.PlayersList[metadata.Sender];
+
+                Logger.Debug($"--- CLIENT EXCEPTION ---");
+                Logger.Debug($"Player: {player.Name}");
+                Logger.Debug($"Message: {metadata.Find<string>(0)}");
+                Logger.Debug($"StackTrace:");
+                Logger.Debug($"{metadata.Find<string>(1)}");
+
+                return null;
+            }));
+
             // Native Events
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
 
@@ -72,7 +85,11 @@ namespace Curiosity.Core.Server.Managers
             {
                 int handle = int.Parse(playerHandle);
 
-                return JsonConvert.SerializeObject(PluginManager.ActiveUsers[handle]);
+                if (!PluginManager.ActiveUsers.ContainsKey(handle))
+                    return null;
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[handle];
+                return JsonConvert.SerializeObject(curiosityUser);
             }));
         }
 

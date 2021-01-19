@@ -38,7 +38,7 @@ namespace Curiosity.Core.Client
         public PlayerList PlayerList;
 
         public EventHandlerDictionary EventRegistry => EventHandlers;
-        public ExportDictionary ExportRegistry => Exports;
+        public ExportDictionary ExportDictionary => Exports;
         public CuriosityPlayer Local { get; set; }
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();

@@ -88,7 +88,6 @@ namespace Curiosity.MissionManager.Client.Managers
 
                     MissionDirectorManager.Director.TurnOffMissionDirector();
                     WorldVehicleManager.VehicleManager.Stop();
-                    MarkerArrestHandler.Dispose();
                 }
 
                 await BaseScript.Delay(100);

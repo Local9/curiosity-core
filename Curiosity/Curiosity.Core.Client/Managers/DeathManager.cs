@@ -29,7 +29,7 @@ namespace Curiosity.Core.Client.Managers
             new Vector3(4773.674f, -1935.709f, 17.06867f)
         };
 
-        [TickHandler(SessionWait = true)]
+        [TickHandler(SessionWait = true)] // FUCKING MOVE THIS
         private async Task OnTick()
         {
             var player = Cache.Player;

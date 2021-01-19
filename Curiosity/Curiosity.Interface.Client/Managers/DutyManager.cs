@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core.Native;
-using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Utils;
 using System;
 
 namespace Curiosity.Interface.Client.Managers

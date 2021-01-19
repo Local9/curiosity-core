@@ -20,6 +20,12 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 string exportResponse = Instance.ExportDictionary["curiosity-core"].GetUser(player.Handle);
 
+                while(string.IsNullOrEmpty(exportResponse))
+                {
+                    await BaseScript.Delay(100);
+                    exportResponse = Instance.ExportDictionary["curiosity-core"].GetUser(player.Handle);
+                }
+
                 CuriosityUser curiosityUser = JsonConvert.DeserializeObject<CuriosityUser>($"{exportResponse}");
 
                 curiosityUser.Handle = metadata.Sender;

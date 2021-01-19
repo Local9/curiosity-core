@@ -1,12 +1,17 @@
 ﻿using CitizenFX.Core.Native;
-using Curiosity.Systems.Library;
+using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Utils;
 using System;
 
 namespace Curiosity.Interface.Client.Managers
 {
     public class ExportManager : Manager<ExportManager>
     {
+        WeatherType weatherType;
+        WeatherSeason weatherSeason;
+        string temp;
+
         public override void Begin()
         {
             Instance.ExportRegistry.Add("SetJobActivity", new Func<bool, bool, string, bool>(
@@ -24,16 +29,22 @@ namespace Curiosity.Interface.Client.Managers
                     return true;
                 }));
 
-            Instance.ExportRegistry.Add("GetClientWeather", new Func<string>(
-                () =>
+            Instance.ExportRegistry.Add("SetWeather", new Func<int, int, bool>(
+                (weather, season) =>
                 {
-                    return $"".ToUpper();
-                }));
+                    weatherType = (WeatherType)weather;
+                    weatherSeason = (WeatherSeason)season;
 
-            Instance.ExportRegistry.Add("GetClientSeason", new Func<string>(
-                () =>
-                {
-                    return $"".ToUpper();
+                    string msg = new JsonBuilder()
+                                .Add("operation", "WEATHER")
+                                .Add("type", weatherType.GetStringValue())
+                                .Add("temp", temp)
+                                .Add("season", weatherSeason.GetStringValue())
+                                .Build();
+
+                    API.SendNuiMessage(msg);
+
+                    return true;
                 }));
 
             Instance.ExportRegistry.Add("AddToChat", new Func<string, bool>(

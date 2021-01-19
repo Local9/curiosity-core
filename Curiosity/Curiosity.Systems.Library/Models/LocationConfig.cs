@@ -17,7 +17,7 @@ namespace Curiosity.Systems.Library.Models
         public string JobRequirement;
 
         [DataMember(Name = "markers")]
-        public List<Marker> Markers;
+        public List<Marker> Markers = new List<Marker>();
     }
 
     [DataContract]

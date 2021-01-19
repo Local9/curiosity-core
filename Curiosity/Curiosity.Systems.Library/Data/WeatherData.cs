@@ -73,19 +73,35 @@ namespace Curiosity.Systems.Library.Data
 
     public enum WeatherType
     {
+        [StringValue("Unknown")]
+        UNKNOWN,
+        [StringValue("Sunny")]
         EXTRASUNNY,
+        [StringValue("Clear")]
         CLEAR,
+        [StringValue("Clear")]
         NEUTRAL,
+        [StringValue("Smog")]
         SMOG,
+        [StringValue("Foggy")]
         FOGGY,
+        [StringValue("Overcast")]
         OVERCAST,
+        [StringValue("Cloudy")]
         CLOUDS,
+        [StringValue("Clear")]
         CLEARING,
+        [StringValue("Rain")]
         RAIN,
+        [StringValue("Storm")]
         THUNDER,
+        [StringValue("Blizzard")]
         BLIZZARD,
+        [StringValue("Light Snow")]
         SNOWLIGHT,
+        [StringValue("Snow")]
         XMAS,
+        [StringValue("Halloween")]
         HALLOWEEN
     }
 }

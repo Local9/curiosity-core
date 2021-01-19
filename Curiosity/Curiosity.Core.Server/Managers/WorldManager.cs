@@ -3,6 +3,7 @@ using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,12 @@ namespace Curiosity.Core.Server.Managers
             {
                 SubRegion subRegion = (SubRegion)metadata.Find<int>(0);
                 Region region = MapRegions.RegionBySubRegion[subRegion];
-                return (int)regionWeatherType[region];
+
+                CuriosityWeather weather = new CuriosityWeather();
+                weather.WeatherType = regionWeatherType[region];
+                weather.Season = WeatherData.GetCurrentSeason();
+
+                return weather;
             }));
 
             // Need to add a time sync

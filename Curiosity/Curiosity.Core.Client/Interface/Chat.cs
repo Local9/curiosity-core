@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core.Native;
-using Curiosity.Systems.Library.Models;
+﻿using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 
 namespace Curiosity.Core.Client.Interface
@@ -15,7 +14,7 @@ namespace Curiosity.Core.Client.Interface
             chatMessage.Message = message;
             string json = JsonConvert.SerializeObject(chatMessage);
 
-            PluginManager.Instance.ExportRegistry["curiosity-ui"].AddToChat(json);
+            PluginManager.Instance.ExportDictionary["curiosity-ui"].AddToChat(json);
         }
     }
 }

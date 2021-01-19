@@ -7,7 +7,7 @@ namespace Curiosity.Core.Client.ClientExports
     {
         public override void Begin()
         {
-            Instance.ExportRegistry.Add("DiscordSetStatus", new Func<string, string>(
+            Instance.ExportDictionary.Add("DiscordSetStatus", new Func<string, string>(
                 (status) =>
                 {
                     Instance.DiscordRichPresence.Status = status;

@@ -92,7 +92,9 @@ namespace Curiosity.Core.Client.Managers
             }
             catch (Exception ex)
             {
-                Logger.Error($"OnGetLocations -> {ex.Message}");
+                string msg = $"OnGetLocations -> {ex.Message}";
+                Logger.Error(msg);
+                EventSystem.Send("user:log:exception", msg, ex.StackTrace);
             }
         }
 
