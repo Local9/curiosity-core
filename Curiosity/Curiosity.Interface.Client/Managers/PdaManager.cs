@@ -1,8 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Interface.Client.Diagnostics;
-using Curiosity.Library.Client;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.FiveM;
@@ -15,7 +13,8 @@ namespace Curiosity.Interface.Client.Managers
 {
     public class PdaManager : Manager<PdaManager>
     {
-        private const string COMMAND_OPEN_PDA = "open_pda";
+        private const string COMMAND_OPEN_PDA_LEGACY = "open_pda_legacy";
+        private const string COMMAND_OPEN_PDA_HOME = "open_pda_new";
         public static PdaManager PdaInstance;
 
         public class Panel
@@ -68,15 +67,14 @@ namespace Curiosity.Interface.Client.Managers
                 return null;
             }));
 
-            API.RegisterKeyMapping(COMMAND_OPEN_PDA, "Open Curiosity PDA", "keyboard", "F11");
-            //API.RegisterCommand(COMMAND_OPEN_PDA, new Action(OpenPDA), false);
+            API.RegisterKeyMapping(COMMAND_OPEN_PDA_LEGACY, "Open Curiosity PDA", "keyboard", "F11");
+            API.RegisterKeyMapping(COMMAND_OPEN_PDA_HOME, "Open Curiosity PDA", "keyboard", "HOME");
+            API.RegisterCommand(COMMAND_OPEN_PDA_LEGACY, new Action(OpenPDA), false);
+            API.RegisterCommand(COMMAND_OPEN_PDA_HOME, new Action(OpenPDA), false);
         }
 
-        [Command(COMMAND_OPEN_PDA)]
         public void OpenPDA()
         {
-            Logger.Debug($"Command: {COMMAND_OPEN_PDA}");
-
             if (!IsCoreOpen)
             {
                 IsCoreOpen = !IsCoreOpen;
@@ -88,13 +86,6 @@ namespace Curiosity.Interface.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnCoreControls()
         {
-            //if (!IsCoreOpen && (ControlUtility.IsControlJustPressed(Control.SwitchVisor, true) || ControlUtility.IsControlJustPressed(Control.FrontendSocialClubSecondary, true)))
-            //{
-            //    IsCoreOpen = !IsCoreOpen;
-            //    SendPanelMessage();
-            //    OpenTablet();
-            //}
-
             if (IsCoreOpen && (Game.IsControlJustPressed(0, Control.FrontendCancel)
                 || Game.IsControlJustPressed(0, Control.CursorCancel)))
             {
