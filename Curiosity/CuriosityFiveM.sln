@@ -203,6 +203,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Library.Client", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Core.Client", "Curiosity.Core.Client\Curiosity.Core.Client.csproj", "{017290A2-CE9D-404A-9EB2-B8AF59B3D776}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.TestFX.Client", "Curiosity.TestFX.Client\Curiosity.TestFX.Client.csproj", "{6EA00495-6993-4608-A4B0-FA1A84E5C996}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.TestInit.Server", "Curiosity.TestInit.Server\Curiosity.TestInit.Server.csproj", "{83BD9F1D-B171-4EF7-9C33-2EBB81E8D340}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -481,6 +485,14 @@ Global
 		{017290A2-CE9D-404A-9EB2-B8AF59B3D776}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{017290A2-CE9D-404A-9EB2-B8AF59B3D776}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{017290A2-CE9D-404A-9EB2-B8AF59B3D776}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EA00495-6993-4608-A4B0-FA1A84E5C996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EA00495-6993-4608-A4B0-FA1A84E5C996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EA00495-6993-4608-A4B0-FA1A84E5C996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EA00495-6993-4608-A4B0-FA1A84E5C996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83BD9F1D-B171-4EF7-9C33-2EBB81E8D340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83BD9F1D-B171-4EF7-9C33-2EBB81E8D340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83BD9F1D-B171-4EF7-9C33-2EBB81E8D340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83BD9F1D-B171-4EF7-9C33-2EBB81E8D340}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -560,6 +572,8 @@ Global
 		{15FD70E1-F8BC-4670-A71D-16903BE7295F} = {48DAA469-01DC-4A80-A7DA-717F71444A6B}
 		{B4322E07-21AB-40D4-8ADA-BA3263E35B82} = {094BF0B3-BBB4-4FFB-89C4-51B0C3F7FC58}
 		{017290A2-CE9D-404A-9EB2-B8AF59B3D776} = {CD4C2E62-C897-47F2-A14A-CA60F08A42ED}
+		{6EA00495-6993-4608-A4B0-FA1A84E5C996} = {996E6F14-59F0-40C8-8870-882FAF32A036}
+		{83BD9F1D-B171-4EF7-9C33-2EBB81E8D340} = {996E6F14-59F0-40C8-8870-882FAF32A036}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6BF9D65-8D38-41F5-A66B-FA70A9948BA6}

@@ -69,9 +69,10 @@ namespace Curiosity.Interface.Client.Managers
             }));
 
             API.RegisterKeyMapping(COMMAND_OPEN_PDA, "Open Curiosity PDA", "keyboard", "F11");
-            API.RegisterCommand(COMMAND_OPEN_PDA, new Action(OpenPDA), false);
+            //API.RegisterCommand(COMMAND_OPEN_PDA, new Action(OpenPDA), false);
         }
 
+        [Command(COMMAND_OPEN_PDA)]
         public void OpenPDA()
         {
             Logger.Debug($"Command: {COMMAND_OPEN_PDA}");
