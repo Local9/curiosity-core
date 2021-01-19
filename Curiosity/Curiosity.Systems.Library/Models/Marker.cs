@@ -18,6 +18,9 @@ namespace Curiosity.Systems.Library.Models
         [DataMember(Name = "isLegacyEvent")]
         public bool IsLegacyEvent = false;
 
+        [DataMember(Name = "isLuaEvent")]
+        public bool IsLuaEvent = false;
+
         [DataMember(Name = "event")]
         public string Event;
 

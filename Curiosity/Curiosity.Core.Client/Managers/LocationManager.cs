@@ -171,7 +171,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (activeMarker.IsServerEvent)
                 {
-                    if (activeMarker.IsLegacyEvent)
+                    if (activeMarker.IsLegacyEvent || activeMarker.IsLuaEvent)
                     {
                         BaseScript.TriggerServerEvent(activeMarker.Event, activeMarker.Position.X, activeMarker.Position.Y, activeMarker.Position.Z);
                     }
@@ -182,7 +182,7 @@ namespace Curiosity.Core.Client.Managers
                 }
                 else
                 {
-                    if (activeMarker.IsLegacyEvent)
+                    if (activeMarker.IsLegacyEvent || activeMarker.IsLuaEvent)
                     {
                         BaseScript.TriggerEvent(activeMarker.Event, activeMarker.Position.X, activeMarker.Position.Y, activeMarker.Position.Z);
                     }
