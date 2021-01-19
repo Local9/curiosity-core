@@ -12,6 +12,7 @@ namespace Curiosity.Core.Client.Managers
     public class WorldManager : Manager<WorldManager>
     {
         WeatherType lastWeather = WeatherType.UNKNOWN;
+        CuriosityWeather CuriosityWeather = new CuriosityWeather();
         DateTime lastRun = DateTime.Now;
 
         // Time
@@ -29,6 +30,13 @@ namespace Curiosity.Core.Client.Managers
                 clientTimeOffset = metadata.Find<double>(1);
                 return null;
             }));
+
+            Instance.ExportDictionary.Add("GetWeather", new Func<int>(
+                () =>
+                {
+                    Instance.ExportDictionary["curiosity-ui"].SetWeather((int)CuriosityWeather.WeatherType, (int)CuriosityWeather.Season);
+                    return (int)CuriosityWeather.WeatherType;
+                }));
 
             UpdateWeather();
             LoadIpls();
@@ -107,8 +115,8 @@ namespace Curiosity.Core.Client.Managers
             string zoneStr = API.GetNameOfZone(pos.X, pos.Y, pos.Z);
             Enum.TryParse(zoneStr, out SubRegion subRegion);
 
-            CuriosityWeather srvRegionWeather = await EventSystem.Request<CuriosityWeather>("weather:sync", (int)subRegion);
-            WeatherType weatherType = srvRegionWeather.WeatherType;
+            CuriosityWeather = await EventSystem.Request<CuriosityWeather>("weather:sync", (int)subRegion);
+            WeatherType weatherType = CuriosityWeather.WeatherType;
 
             if (!weatherType.Equals(lastWeather))
             {
@@ -125,7 +133,7 @@ namespace Curiosity.Core.Client.Managers
 
                 lastWeather = weatherType;
 
-                Instance.ExportDictionary["curiosity-ui"].SetWeather((int)srvRegionWeather.WeatherType, (int)srvRegionWeather.Season);
+                Instance.ExportDictionary["curiosity-ui"].SetWeather((int)CuriosityWeather.WeatherType, (int)CuriosityWeather.Season);
             }
         }
 

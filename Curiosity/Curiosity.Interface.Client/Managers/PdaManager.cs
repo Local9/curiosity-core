@@ -30,6 +30,12 @@ namespace Curiosity.Interface.Client.Managers
         {
             PdaInstance = this;
 
+            Instance.AttachNuiHandler("GetWeather", new EventCallback(metadata =>
+            {
+                Instance.ExportRegistry["curiosity-core"].GetWeather();
+                return null;
+            }));
+
             Instance.AttachNuiHandler("ClosePanel", new EventCallback(metadata =>
             {
                 IsCoreOpen = false;
