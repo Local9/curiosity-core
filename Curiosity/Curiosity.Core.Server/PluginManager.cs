@@ -374,10 +374,7 @@ namespace Curiosity.Core.Server
                         if (!ActiveUsers.ContainsKey(playerHandle))
                         {
                             ActiveUsers.Remove(playerHandle);
-
-                            SessionState sessionState = SessionState.Loading;
-                            QueueManager.session.TryRemove(player.Identifiers["license"], out sessionState);
-
+                            QueueManager.session.TryRemove(player.Identifiers["license"], out SessionState sessionState);
                             activeUsersRemoved++;
                         }
                     }
