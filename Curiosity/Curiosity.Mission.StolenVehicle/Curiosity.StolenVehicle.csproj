@@ -32,8 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.3141\lib\net45\CitizenFX.Core.Client.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.3431\lib\net45\CitizenFX.Core.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -67,7 +66,6 @@
       <Name>Curiosity.Systems.Library</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

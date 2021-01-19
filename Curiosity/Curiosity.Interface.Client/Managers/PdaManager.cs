@@ -15,6 +15,7 @@ namespace Curiosity.Interface.Client.Managers
 {
     public class PdaManager : Manager<PdaManager>
     {
+        private const string COMMAND_OPEN_PDA = "open_pda";
         public static PdaManager PdaInstance;
 
         public class Panel
@@ -66,17 +67,32 @@ namespace Curiosity.Interface.Client.Managers
 
                 return null;
             }));
+
+            API.RegisterKeyMapping(COMMAND_OPEN_PDA, "Open Curiosity PDA", "keyboard", "F11");
+            API.RegisterCommand(COMMAND_OPEN_PDA, new Action(OpenPDA), false);
         }
 
-        [TickHandler(SessionWait = true)]
-        private async Task OnCoreControls()
+        public void OpenPDA()
         {
-            if (!IsCoreOpen && (ControlUtility.IsControlJustPressed(Control.SwitchVisor, true) || ControlUtility.IsControlJustPressed(Control.FrontendSocialClubSecondary, true)))
+            Logger.Debug($"Command: {COMMAND_OPEN_PDA}");
+
+            if (!IsCoreOpen)
             {
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
                 OpenTablet();
             }
+        }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnCoreControls()
+        {
+            //if (!IsCoreOpen && (ControlUtility.IsControlJustPressed(Control.SwitchVisor, true) || ControlUtility.IsControlJustPressed(Control.FrontendSocialClubSecondary, true)))
+            //{
+            //    IsCoreOpen = !IsCoreOpen;
+            //    SendPanelMessage();
+            //    OpenTablet();
+            //}
 
             if (IsCoreOpen && (Game.IsControlJustPressed(0, Control.FrontendCancel)
                 || Game.IsControlJustPressed(0, Control.CursorCancel)))
