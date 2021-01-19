@@ -51,7 +51,7 @@ namespace Curiosity.Interface.Client.Managers
                 try
                 {
                     List<FiveMPlayer> playerList = players.Players.Select(p => p)
-                    // .Where(z => z.ServerHandle != $"{Game.Player.ServerId}")
+                    .Where(z => z.ServerHandle != $"{Game.Player.ServerId}")
                     .ToList();
 
                     string jsn = new JsonBuilder().Add("operation", "PLAYER_LIST")
