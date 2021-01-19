@@ -82,9 +82,6 @@
     <Compile Include="Environment\Entities\Modules\Impl\EntityDecorModule.cs" />
     <Compile Include="Environment\Entities\Modules\Impl\EntityNetworkModule.cs" />
     <Compile Include="Environment\SafeTeleport.cs" />
-    <Compile Include="Environment\Stores\Impl\Convenience.cs" />
-    <Compile Include="Environment\Stores\Store.cs" />
-    <Compile Include="Environment\Stores\StoreManager.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Extensions\CharacterExtensions.cs" />
     <Compile Include="Extensions\DecoratorExtensions.cs" />
