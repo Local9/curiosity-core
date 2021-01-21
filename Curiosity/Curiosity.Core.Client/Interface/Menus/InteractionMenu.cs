@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,6 +35,21 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.OnMenuOpen += MenuMain_OnMenuOpen;
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnListSelect += MenuMain_OnListSelect;
+
+            API.RegisterKeyMapping("open_interaction_menu", "Open Interactive Menu", "keyboard", "M");
+            API.RegisterCommand("open_interaction_menu", new Action(OpenMenuCommand), false);
+        }
+
+        private void OpenMenuCommand()
+        {
+            if (!MenuPool.IsAnyMenuOpen() && Cache.Character.MarkedAsRegistered && API.NetworkIsSessionActive() && (Game.PlayerPed.IsAlive || Cache.Player.User.IsStaff))
+            {
+                if (Game.IsControlJustPressed(0, Control.InteractionMenu))
+                {
+                    Instance.AttachTickHandler(OnMenuDisplay);
+                    menuMain.Visible = !menuMain.Visible;
+                }
+            }
         }
 
         private Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)
@@ -95,19 +111,6 @@ namespace Curiosity.Core.Client.Interface.Menus
             MenuPool.ProcessMenus();
             // MenuPool.ProcessMouse();
             MenuPool.MouseEdgeEnabled = false;
-        }
-
-        [TickHandler(SessionWait = true)]
-        private async Task OnMenuControls()
-        {
-            if (!MenuPool.IsAnyMenuOpen() && Cache.Character.MarkedAsRegistered && API.NetworkIsSessionActive() && (Game.PlayerPed.IsAlive || Cache.Player.User.IsStaff))
-            {
-                if (Game.IsControlJustPressed(0, Control.InteractionMenu))
-                {
-                    Instance.AttachTickHandler(OnMenuDisplay);
-                    menuMain.Visible = !menuMain.Visible;
-                }
-            }
         }
 
         // Menu Items
