@@ -10,7 +10,10 @@ namespace Curiosity.Interface.Client.Managers
 {
     public class ChatManager : Manager<ChatManager>
     {
-        static bool PreviousChatboxState = false;
+        static bool IsChatboxOpen = false;
+
+        const string COMMAND_OPEN_CHAT = "open_chat";
+        const string COMMAND_CLOSE_CHAT = "close_chat";
 
         public override void Begin()
         {
@@ -49,21 +52,44 @@ namespace Curiosity.Interface.Client.Managers
                 EnableChatbox(false);
                 return null;
             }));
+
+            API.RegisterKeyMapping(COMMAND_OPEN_CHAT, "Open Chat", "keyboard", "T");
+            API.RegisterKeyMapping(COMMAND_CLOSE_CHAT, "Close Chat", "keyboard", "ESC");
+            API.RegisterCommand(COMMAND_OPEN_CHAT, new Action(OnOpenChatCommand), false);
+            API.RegisterCommand(COMMAND_CLOSE_CHAT, new Action(OnCloseChatCommand), false);
+        }
+
+        private void OnCloseChatCommand()
+        {
+            if (IsChatboxOpen)
+            {
+                EnableChatbox(false);
+                API.SetPedCanSwitchWeapon(Game.PlayerPed.Handle, true);
+            }
+        }
+
+        private void OnOpenChatCommand()
+        {
+            if (!IsChatboxOpen)
+            {
+                EnableChatbox(true);
+                API.SetPedCanSwitchWeapon(Game.PlayerPed.Handle, false);
+            }
         }
 
         static void EnableChatbox(bool state)
         {
             try
             {
-                if (PreviousChatboxState != state)
+                if (IsChatboxOpen != state)
                 {
                     ChatState chatState = new ChatState();
                     chatState.showChat = state;
                     API.SendNuiMessage(JsonConvert.SerializeObject(chatState));
 
-                    PreviousChatboxState = state;
+                    IsChatboxOpen = state;
 
-                    if (PreviousChatboxState)
+                    if (IsChatboxOpen)
                     {
                         API.SetNuiFocus(true, true);
                     }
@@ -86,37 +112,6 @@ namespace Curiosity.Interface.Client.Managers
             API.EnableControlAction(0, (int)Control.CursorScrollDown, true);
             API.SetPedCanSwitchWeapon(Game.PlayerPed.Handle, true);
             API.SetNuiFocus(false, false);
-        }
-
-        [TickHandler(SessionWait = true)]
-        private async Task OnTick()
-        {
-            API.SetTextChatEnabled(false);
-
-            try
-            {
-                if (Game.IsControlPressed(0, Control.FrontendCancel) && PreviousChatboxState)
-                {
-                    EnableChatbox(false);
-                }
-                
-                if (Game.IsControlPressed(0, Control.MpTextChatAll) && !PreviousChatboxState)
-                {
-                    EnableChatbox(true);
-                }
-
-                if (PreviousChatboxState)
-                {
-                    API.DisableControlAction(0, (int)Control.CursorScrollUp, true);
-                    API.DisableControlAction(0, (int)Control.CursorScrollDown, true);
-                    API.SetPedCanSwitchWeapon(Game.PlayerPed.Handle, false);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"OnChatTask ERROR: ${ex.Message}");
-                EnableChatbox(false);
-            }
         }
     }
 }

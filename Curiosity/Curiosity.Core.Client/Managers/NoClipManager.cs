@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -56,7 +58,7 @@ namespace Curiosity.Core.Client.Managers
             try
             {
 
-                if (Game.IsControlJustPressed(0, Control.SaveReplayClip) && Cache.Player.User.IsDeveloper)
+                if (ControlHelper.IsControlJustPressed(Control.SaveReplayClip) && Cache.Player.User.IsDeveloper)
                 {
                     IsEnabled = !IsEnabled;
                 }
