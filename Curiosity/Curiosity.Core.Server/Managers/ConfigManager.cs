@@ -1,14 +1,13 @@
-﻿using CitizenFX.Core.Native;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Curiosity.Core.Server.Extensions;
 using System.Linq;
 
 namespace Curiosity.Core.Server.Managers

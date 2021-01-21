@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -33,7 +32,9 @@ namespace Curiosity.Core.Server.Managers
                 if (result)
                 {
                     user.CurrentJob = "Police Officer";
-                }                   
+                }
+
+                Instance.ExportDictionary["curiosity-missions"].SetJob(metadata.Sender, JOB_POLICE_DUTY);
 
                 return null;
             }));
