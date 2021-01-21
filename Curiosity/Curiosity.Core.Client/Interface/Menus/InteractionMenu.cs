@@ -35,9 +35,6 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.OnMenuOpen += MenuMain_OnMenuOpen;
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnListSelect += MenuMain_OnListSelect;
-
-            //API.RegisterKeyMapping("open_interaction_menu", "Open Interactive Menu", "keyboard", "M");
-            //API.RegisterCommand("open_interaction_menu", new Action(OpenMenuCommand));
         }
 
         private Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)

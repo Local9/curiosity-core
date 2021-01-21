@@ -20,6 +20,7 @@ namespace Curiosity.MissionManager.Client.Menu
 {
     public class MenuManager : Manager<MenuManager>
     {
+        private const string COMMAND_OPEN_MENU = "open_police_interaction_menu";
         public static MenuPool _MenuPool;
         internal static UIMenu menuMain;
         public static bool HasShownWarning = false;
@@ -89,8 +90,8 @@ namespace Curiosity.MissionManager.Client.Menu
 
             _MenuPool.RefreshIndex();
 
-            API.RegisterKeyMapping("open_interaction_menu", "Open Police Interactive Menu", "keyboard", "F1");
-            API.RegisterCommand("open_interaction_menu", new Action(OnMenuCommand), false);
+            API.RegisterKeyMapping(COMMAND_OPEN_MENU, "Open Police Interactive Menu", "keyboard", "F1");
+            API.RegisterCommand(COMMAND_OPEN_MENU, new Action(OnMenuCommand), false);
         }
 
         private void MenuMain_OnMenuChange(UIMenu oldMenu, UIMenu newMenu, bool forward)
