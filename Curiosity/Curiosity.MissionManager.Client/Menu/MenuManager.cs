@@ -8,6 +8,7 @@ using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using NativeUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -87,6 +88,9 @@ namespace Curiosity.MissionManager.Client.Menu
             _menuSettings.CreateMenu(menuSettings);
 
             _MenuPool.RefreshIndex();
+
+            API.RegisterKeyMapping("open_interaction_menu", "Open Police Interactive Menu", "keyboard", "F1");
+            API.RegisterCommand("open_interaction_menu", new Action(OnMenuCommand), false);
         }
 
         private void MenuMain_OnMenuChange(UIMenu oldMenu, UIMenu newMenu, bool forward)
@@ -123,7 +127,7 @@ namespace Curiosity.MissionManager.Client.Menu
         }
 
         [TickHandler]
-        private async Task OnMenuControls()
+        private async Task OnShowHelperMessage()
         {
             if (!JobManager.IsOfficer) return; // no point in showing if their're not an officer
 
@@ -167,21 +171,20 @@ namespace Curiosity.MissionManager.Client.Menu
                 HasShownWarning = false;
                 CanShowMessage = false;
             }
+        }
 
+        public void OnMenuCommand()
+        {
             if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !_MenuPool.IsAnyMenuOpen())
             {
-                if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecording))
-                {
-                    if (menuMain.Visible) return;
+                if (menuMain.Visible) return;
 
-                    if (!menuMain.Visible)
-                    {
-                        menuMain.Visible = true;
-                        Instance.AttachTickHandler(OnMenuDisplay);
-                    }
+                if (!menuMain.Visible)
+                {
+                    menuMain.Visible = !menuMain.Visible;
+                    Instance.AttachTickHandler(OnMenuDisplay);
                 }
             }
-
         }
 
         public static Ped GetClosestInteractivePed()
