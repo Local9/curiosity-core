@@ -4,6 +4,7 @@ using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
 using System.Threading.Tasks;
@@ -25,12 +26,13 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             Logger.Info($"- [JobManager] Begin -----------------------------");
 
-            //EventSystem.Attach("curiosity:job:police:duty", new EventCallback(metadata =>
-            //{
-            //    OnJobDutyEvent(true, false, "police");
-            //    BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, "police"); // for legacy resources
-            //    return null;
-            //}));
+            EventSystem.Attach("job:police:duty", new AsyncEventCallback(async metadata =>
+            {
+                OnJobDutyEvent(true, false, "police");
+                await BaseScript.Delay(100);
+                BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, "police"); // for legacy resources
+                return null;
+            }));
 
             // LEGACY
             Instance.EventRegistry[LegacyEvents.Client.CuriosityJob] += new Action<bool, bool, string>(OnJobDutyEvent);
@@ -50,7 +52,7 @@ namespace Curiosity.MissionManager.Client.Managers
             if (!Cache.Player.User.IsDeveloper)
                 Game.PlayerPed.Weapons.RemoveAll();
 
-            if (IsOfficer)
+            if (IsOfficer && !WasOfficer)
             {
                 if (!HasShownScaleform)
                     ShowScaleformRules();
@@ -74,26 +76,24 @@ namespace Curiosity.MissionManager.Client.Managers
                 MarkerArrestHandler.Init();
                 WorldVehicleManager.VehicleManager.Start();
             }
-            else
+            else if (!IsOfficer && WasOfficer)
             {
                 Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
 
-                if (IsOfficer != WasOfficer)
-                {
-                    WasOfficer = false;
-                    Instance.DiscordRichPresence.Status = "Roaming around";
-                    Instance.DiscordRichPresence.SmallAsset = "fivem";
-                    Instance.DiscordRichPresence.SmallAssetText = "FiveM";
-                    Instance.DiscordRichPresence.Commit();
+                WasOfficer = false;
+                Instance.DiscordRichPresence.Status = "Roaming around";
+                Instance.DiscordRichPresence.SmallAsset = "fivem";
+                Instance.DiscordRichPresence.SmallAssetText = "FiveM";
+                Instance.DiscordRichPresence.Commit();
 
-                    MissionDirectorManager.Director.TurnOffMissionDirector();
-                    WorldVehicleManager.VehicleManager.Stop();
-                }
+                MissionDirectorManager.Director.TurnOffMissionDirector();
+                WorldVehicleManager.VehicleManager.Stop();
 
                 await BaseScript.Delay(100);
             }
 
             Instance.ExportRegistry["curiosity-ui"].SetJobActivity(active, onDuty, job);
+            await BaseScript.Delay(100);
             EventSystem.Request<object>("user:job", job);
         }
 

@@ -681,6 +681,19 @@ namespace Curiosity.MissionManager.Server.Managers
             }));
 
             #endregion
+
+            #region export
+            Instance.ExportDictionary.Add("SetJob", new Func<int, string, bool>(
+                (playerHandle, eventName) =>
+                {
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerHandle];
+
+                    EventSystem.GetModule().Send(eventName, playerHandle);
+
+                    return true;
+                }
+            ));
+            #endregion
         }
 
         MissionData GetMissionData(int senderHandle)
