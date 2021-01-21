@@ -73,7 +73,6 @@ namespace Curiosity.MissionManager.Client.Managers
                 Game.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, false, false);
 
                 await BaseScript.Delay(100);
-                MarkerArrestHandler.Init();
                 WorldVehicleManager.VehicleManager.Start();
             }
             else if (!IsOfficer && WasOfficer)

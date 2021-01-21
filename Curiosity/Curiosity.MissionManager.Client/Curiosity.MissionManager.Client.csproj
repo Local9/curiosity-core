@@ -87,7 +87,7 @@
     <Compile Include="Handler\DamageHandler.cs" />
     <Compile Include="Handler\EntityHandler.cs" />
     <Compile Include="Handler\HowlerHandler.cs" />
-    <Compile Include="Handler\MarkerArrestHandler.cs" />
+    <Compile Include="Managers\ArrestManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\NotificationManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />

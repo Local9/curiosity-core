@@ -167,7 +167,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 Logger.Debug($"{curUser.LatestName} : NumFail: {numberOfFailures}");
 
-                bool res = Instance.ExportDictionary["curiosity-server"].MissionComplete(player.Handle, missionId, passed, numberTransportArrested, numberOfFailures);
+                bool res = Instance.ExportDictionary["curiosity-core"].MissionComplete(player.Handle, missionId, passed, numberTransportArrested, numberOfFailures);
 
                 missionData.PartyMembers.ForEach(async serverHandle =>
                 {
@@ -178,7 +178,7 @@ namespace Curiosity.MissionManager.Server.Managers
                     }
                     else
                     {
-                        Instance.ExportDictionary["curiosity-server"].MissionComplete(serverHandle, missionId, passed, 1, 0);
+                        Instance.ExportDictionary["curiosity-core"].MissionComplete(serverHandle, missionId, passed, 1, 0);
                     }
                     EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
                 });
@@ -407,7 +407,7 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 missionDataPed.IsArrested = true;
 
-                bool res = Instance.ExportDictionary["curiosity-server"].Arrest(metadata.Sender, experienceEarned);
+                bool res = Instance.ExportDictionary["curiosity-core"].Arrest(metadata.Sender, experienceEarned);
 
                 if (res)
                     _numberOfSuspectArrested++;
@@ -683,7 +683,7 @@ namespace Curiosity.MissionManager.Server.Managers
             #endregion
 
             #region export
-            Instance.ExportDictionary.Add("SetJob", new Func<int, string, bool>(
+            Instance.ExportDictionary.Add("JobEvent", new Func<int, string, bool>(
                 (playerHandle, eventName) =>
                 {
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerHandle];
