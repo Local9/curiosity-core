@@ -58,8 +58,11 @@
     <Compile Include="Database\MySqlDatabase.cs" />
     <Compile Include="Database\Store\BankDatabase.cs" />
     <Compile Include="Database\Store\CharacterDatabase.cs" />
+    <Compile Include="Database\Store\MissionDatabase.cs" />
     <Compile Include="Database\Store\ShopDatabase.cs" />
     <Compile Include="Database\Store\ServerDatabase.cs" />
+    <Compile Include="Database\Store\SkillDatabase.cs" />
+    <Compile Include="Database\Store\StatDatabase.cs" />
     <Compile Include="Database\Store\UserDatabase.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\SaveExtensions.cs" />
