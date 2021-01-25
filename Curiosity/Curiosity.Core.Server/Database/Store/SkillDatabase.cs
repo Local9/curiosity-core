@@ -8,7 +8,7 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class SkillDatabase
     {
-        public static async Task<int> AdjustSkill(int characterId, int skillId, int amount)
+        public static async Task<int> Adjust(int characterId, int skillId, int amount)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
@@ -36,6 +36,7 @@ namespace Curiosity.Core.Server.Database.Store
 
             return newSkillValue;
         }
+
         public static async Task<int> Get(int characterId)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
