@@ -332,17 +332,19 @@ namespace Curiosity.Core.Client.Extensions
             await Task.FromResult(0);
         }
 
-        public static void SetupStat(string stat, int value)
-        {
-            API.StatSetInt((uint)API.GetHashKey(stat), value, true);
-        }
+        // TODO: IMPLEMENT
 
-        public static void SetupStats(this CuriosityCharacter character)
-        {
-            foreach (KeyValuePair<string, int> keyValuePair in character.Stats)
-            {
-                API.StatSetInt((uint)API.GetHashKey(keyValuePair.Key), keyValuePair.Value, true);
-            }
-        }
+        //public static void SetupStat(string stat, int value)
+        //{
+        //    API.StatSetInt((uint)API.GetHashKey(stat), value, true);
+        //}
+
+        //public static void SetupStats(this CuriosityCharacter character)
+        //{
+        //    foreach (KeyValuePair<string, int> keyValuePair in character.Stats)
+        //    {
+        //        API.StatSetInt((uint)API.GetHashKey(keyValuePair.Key), keyValuePair.Value, true);
+        //    }
+        //}
     }
 }
