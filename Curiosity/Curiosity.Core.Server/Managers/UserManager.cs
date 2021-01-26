@@ -45,7 +45,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 var player = PluginManager.PlayersList[metadata.Sender];
                 string exportResponse = Instance.ExportDictionary["curiosity-server"].GetSkills(player.Handle);
-                List<Skill> returnVal = JsonConvert.DeserializeObject<List<Skill>>(exportResponse);
+                List<CharacterSkill> returnVal = JsonConvert.DeserializeObject<List<CharacterSkill>>(exportResponse);
                 return returnVal;
             }));
 
@@ -53,7 +53,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 var player = PluginManager.PlayersList[metadata.Sender];
                 string exportResponse = Instance.ExportDictionary["curiosity-server"].GetStats(player.Handle);
-                List<Skill> returnVal = JsonConvert.DeserializeObject<List<Skill>>(exportResponse);
+                List<CharacterSkill> returnVal = JsonConvert.DeserializeObject<List<CharacterSkill>>(exportResponse);
                 return returnVal;
             }));
 

@@ -55,6 +55,7 @@
     <Compile Include="Enums\MissionType.cs" />
     <Compile Include="Enums\Notification.cs" />
     <Compile Include="Enums\SkillType.cs" />
+    <Compile Include="Models\CharacterStat.cs" />
     <Compile Include="Models\CuriosityStore.cs" />
     <Compile Include="Models\LocationConfig.cs" />
     <Compile Include="Models\Marker.cs" />
@@ -93,7 +94,7 @@
     <Compile Include="Models\Position.cs" />
     <Compile Include="Enums\Role.cs" />
     <Compile Include="Models\SessionCollection.cs" />
-    <Compile Include="Models\Skill.cs" />
+    <Compile Include="Models\CharacterSkill.cs" />
     <Compile Include="Models\CuriosityStoreItem.cs" />
     <Compile Include="Models\SqlResult.cs" />
     <Compile Include="Models\VehicleInfo.cs" />

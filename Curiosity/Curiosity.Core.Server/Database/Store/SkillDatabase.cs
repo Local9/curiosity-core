@@ -1,4 +1,5 @@
 ﻿using Curiosity.Core.Server.Extensions;
+using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Curiosity.Core.Server.Database.Store
 
             string myQuery = "call upCharacterSkill(@characterId, @skillId, @amount);";
 
-            int newSkillValue = 0;
+            int newValue = 0;
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
@@ -30,14 +31,14 @@ namespace Curiosity.Core.Server.Database.Store
 
                 foreach(Dictionary<string, object> kv in keyValuePairs)
                 {
-                    newSkillValue = kv["id"].ToInt();
+                    newValue = kv["return"].ToInt();
                 }
             }
 
-            return newSkillValue;
+            return newValue;
         }
 
-        public static async Task<int> Get(int characterId)
+        public static async Task<List<CharacterSkill>> Get(int characterId)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
@@ -46,22 +47,26 @@ namespace Curiosity.Core.Server.Database.Store
 
             string myQuery = "call selCharacterSkills(@characterId);";
 
-            int newSkillValue = 0;
+            List<CharacterSkill> lst = new List<CharacterSkill>();
 
             using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
             {
                 ResultSet keyValuePairs = await result;
 
                 if (keyValuePairs.Count == 0)
-                    throw new Exception("Skill was not changed");
+                    return lst;
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
-                    newSkillValue = kv["id"].ToInt();
+                    CharacterSkill characterSkill = new CharacterSkill();
+                    characterSkill.Label = $"{kv["Label"]}";
+                    characterSkill.Description = $"{kv["Description"]}";
+                    characterSkill.Value = kv["Value"].ToLong();
+                    lst.Add(characterSkill);
                 }
             }
 
-            return newSkillValue;
+            return lst;
         }
     }
 }
