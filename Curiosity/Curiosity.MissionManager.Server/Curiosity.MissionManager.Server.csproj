@@ -61,13 +61,9 @@
     <Compile Include="Events\ParticleEvents.cs" />
     <Compile Include="Extensions\ObjectExtension.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
-    <Compile Include="Managers\ChatManager.cs" />
-    <Compile Include="Managers\EntityManager.cs" />
-    <Compile Include="Managers\GameEventManager.cs" />
     <Compile Include="Managers\LevelingManager.cs" />
     <Compile Include="Managers\Manager.cs" />
     <Compile Include="Managers\LegacyEventManager.cs" />
-    <Compile Include="Managers\MissionManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

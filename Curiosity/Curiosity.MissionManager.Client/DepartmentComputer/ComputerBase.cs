@@ -1,7 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Menu;
-using Curiosity.Systems.Shared.Entity;
+using Curiosity.Systems.Library.Entity;
 using NativeUI;
 using NativeUI.PauseMenu;
 using System;

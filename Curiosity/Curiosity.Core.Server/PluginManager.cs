@@ -4,12 +4,15 @@ using Curiosity.Core.Server.Commands;
 using Curiosity.Core.Server.Commands.Impl;
 using Curiosity.Core.Server.Database;
 using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Managers;
 using Curiosity.Core.Server.Web;
+using Curiosity.Systems.Library.Entity;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -35,7 +38,7 @@ namespace Curiosity.Core.Server
         public static string DiscordBotKey { get; private set; }
         public static string DiscordUrl { get; private set; }
         public static string WebsiteUrl { get; private set; }
-        public static Dictionary<int, CuriosityUser> ActiveUsers { get; } = new Dictionary<int, CuriosityUser>();
+        public static ConcurrentDictionary<int, CuriosityUser> ActiveUsers { get; } = new ConcurrentDictionary<int, CuriosityUser>();
         public DateTime LastSave { get; set; } = DateTime.Now;
 
         public EventHandlerDictionary EventRegistry => EventHandlers;
@@ -373,8 +376,23 @@ namespace Curiosity.Core.Server
                         int playerHandle = int.Parse(player.Handle);
                         if (!ActiveUsers.ContainsKey(playerHandle))
                         {
-                            ActiveUsers.Remove(playerHandle);
+                            ActiveUsers.TryRemove(playerHandle, out CuriosityUser old);
                             QueueManager.session.TryRemove(player.Identifiers["license"], out SessionState sessionState);
+
+                            bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
+
+                            if (userHadMission)
+                            {
+                                MissionData mission = MissionManager.ActiveMissions[playerHandle];
+                                foreach (int partyMember in mission.PartyMembers)
+                                {
+                                    EventSystem.GetModule().Send("mission:backup:completed", partyMember);
+                                }
+                            }
+
+                            MissionManager.FailureTracker.TryRemove(playerHandle, out int numFailed);
+                            MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData oldMission);
+
                             activeUsersRemoved++;
                         }
                     }

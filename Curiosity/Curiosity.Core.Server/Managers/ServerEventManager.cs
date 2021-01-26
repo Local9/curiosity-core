@@ -1,6 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Systems.Shared.Entity;
+using Curiosity.Systems.Library.Entity;
 using System;
 
 namespace Curiosity.Core.Server.Managers

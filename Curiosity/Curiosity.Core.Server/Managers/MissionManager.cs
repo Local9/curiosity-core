@@ -1,17 +1,17 @@
 ﻿using CitizenFX.Core;
-using Curiosity.MissionManager.Server.Diagnostics;
-using Curiosity.MissionManager.Server.Events;
+using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Events;
+using Curiosity.Systems.Library.Entity;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
-using Curiosity.Systems.Shared.Entity;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Curiosity.MissionManager.Server.Managers
+namespace Curiosity.Core.Server.Managers
 {
     public class MissionManager : Manager<MissionManager>
     {
@@ -158,11 +158,11 @@ namespace Curiosity.MissionManager.Server.Managers
 
                 if (!passed)
                 {
-                    numberOfFailures = FailureTracker.AddOrUpdate(curUser.UserId, 1, (key, oldValue) => oldValue + 1);
+                    numberOfFailures = FailureTracker.AddOrUpdate(metadata.Sender, 1, (key, oldValue) => oldValue + 1);
                 }
                 else
                 {
-                    numberOfFailures = FailureTracker.AddOrUpdate(curUser.UserId, 0, (key, oldValue) => oldValue > 0 ? oldValue - 1 : 0);
+                    numberOfFailures = FailureTracker.AddOrUpdate(metadata.Sender, 0, (key, oldValue) => oldValue > 0 ? oldValue - 1 : 0);
                 }
 
                 Logger.Debug($"{curUser.LatestName} : NumFail: {numberOfFailures}");
@@ -181,6 +181,15 @@ namespace Curiosity.MissionManager.Server.Managers
                         Instance.ExportDictionary["curiosity-core"].MissionComplete(serverHandle, missionId, passed, 1, 0);
                     }
                     EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
+
+                    if (!passed)
+                    {
+                        FailureTracker.AddOrUpdate(serverHandle, 1, (key, oldValue) => oldValue + 1);
+                    }
+                    else
+                    {
+                        FailureTracker.AddOrUpdate(serverHandle, 0, (key, oldValue) => oldValue > 0 ? oldValue - 1 : 0);
+                    }
                 });
 
                 return res;

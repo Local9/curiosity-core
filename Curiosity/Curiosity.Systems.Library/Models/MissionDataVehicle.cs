@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Curiosity.Systems.Shared.Entity
+namespace Curiosity.Systems.Library.Entity
 {
     public class MissionDataVehicle : MissionDataEntity
     {

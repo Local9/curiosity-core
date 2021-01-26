@@ -1,8 +1,8 @@
 ﻿using CitizenFX.Core;
-using Curiosity.MissionManager.Server.Events;
+using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 
-namespace Curiosity.MissionManager.Server.Managers
+namespace Curiosity.Core.Server.Managers
 {
     public class EntityManager : Manager<EntityManager>
     {

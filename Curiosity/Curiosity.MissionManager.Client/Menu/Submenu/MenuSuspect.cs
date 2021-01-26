@@ -6,7 +6,7 @@ using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Shared.Entity;
+using Curiosity.Systems.Library.Entity;
 using NativeUI;
 using System;
 using System.Collections.Generic;

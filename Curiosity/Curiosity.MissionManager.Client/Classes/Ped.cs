@@ -11,7 +11,7 @@ using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Utils;
-using Curiosity.Systems.Shared.Entity;
+using Curiosity.Systems.Library.Entity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

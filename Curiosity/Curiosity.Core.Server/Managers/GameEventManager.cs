@@ -1,12 +1,12 @@
 ﻿using CitizenFX.Core;
-using Curiosity.MissionManager.Server.Events;
+using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.MissionManager.Server.Managers
+namespace Curiosity.Core.Server.Managers
 {
     public class GameEventManager : Manager<GameEventManager>
     {

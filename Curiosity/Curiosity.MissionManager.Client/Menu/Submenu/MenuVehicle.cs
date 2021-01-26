@@ -4,7 +4,7 @@ using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Shared.Entity;
+using Curiosity.Systems.Library.Entity;
 using NativeUI;
 using System;
 using System.Collections.Generic;

@@ -22,21 +22,12 @@ namespace Curiosity.Systems.Library.Models
         public int Gender { get; set; } = 0; // Default Gender is Male
         public Position LastPosition { get; set; }
         public CharacterHeritage Heritage { get; set; } = new CharacterHeritage();
-        public Dictionary<string, int> Stats { get; set; } = new Dictionary<string, int>();
         public CharacterAppearance Appearance { get; set; } = new CharacterAppearance();
         public Dictionary<int, float> Features { get; set; } = new Dictionary<int, float>();
 
-        public void ChangeStat(string stat, int value)
-        {
-            if (Stats.ContainsKey(stat))
-            {
-                Stats[stat] = value;
-            }
-            else
-            {
-                Stats.Add(stat, value);
-            }
-        }
+        public List<CharacterSkill> Skills = new List<CharacterSkill>();
+
+        public List<CharacterStat> Stats = new List<CharacterStat>();
 
         public void ChangeFeature(int feature, float value)
         {

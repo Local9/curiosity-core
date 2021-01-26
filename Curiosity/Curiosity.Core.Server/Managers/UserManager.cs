@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
+using Curiosity.Systems.Library.Entity;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
@@ -28,7 +29,7 @@ namespace Curiosity.Core.Server.Managers
 
                 curiosityUser.Handle = metadata.Sender;
 
-                PluginManager.ActiveUsers.Add(metadata.Sender, curiosityUser);
+                PluginManager.ActiveUsers.TryAdd(metadata.Sender, curiosityUser);
 
                 return curiosityUser;
             }));
@@ -76,6 +77,34 @@ namespace Curiosity.Core.Server.Managers
 
                 return null;
             }));
+            
+            EventSystem.GetModule().Attach("user:job", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                PluginManager.ActiveUsers[metadata.Sender].CurrentJob = metadata.Find<string>(0);
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("user:personal:vehicle", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                PluginManager.ActiveUsers[metadata.Sender].PersonalVehicle = metadata.Find<int>(0);
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("user:job:notification:backup", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                curiosityUser.NotificationBackup = metadata.Find<bool>(0);
+
+                return curiosityUser.NotificationBackup;
+            }));
 
             // Native Events
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
@@ -98,14 +127,24 @@ namespace Curiosity.Core.Server.Managers
             int playerHandle = int.Parse(player.Handle);
             if (PluginManager.ActiveUsers.ContainsKey(playerHandle))
             {
-                string message = $"Player: {player.Name} disconnected ({reason})";
-                Logger.Debug(message);
-                ChatManager.OnLogMessage(message);
-                
-                PluginManager.ActiveUsers.Remove(playerHandle);
+                CuriosityUser curUser = PluginManager.ActiveUsers[playerHandle];
 
-                if (QueueManager.session.TryRemove(player.Identifiers["license"], out SessionState session))
-                    Logger.Debug($"Player {player.Name} removed from queue");
+                bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
+                bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
+
+                if (userHadMission)
+                {
+                    MissionData mission = MissionManager.ActiveMissions[playerHandle];
+                    foreach (int partyMember in mission.PartyMembers)
+                    {
+                        EventSystem.GetModule().Send("mission:backup:completed", partyMember);
+                    }
+                }
+
+                bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
+                bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
+
+                Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}, HM: {userHadMission}, MR: {missionRemoved}, FR: {failuresRemoved}");
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Curiosity.MissionManager.Client.Events
 {
     public class EventSystem : Manager<EventSystem>
     {
-        private const string EVENT_KEY = DataKeys.MISSION_EVENT_KEY;
+        private const string EVENT_KEY = DataKeys.SERVER_EVENT_KEY;
 
         public List<EventAttachment> Attachments { get; } = new List<EventAttachment>();
         public List<EventRequest> PendingRequests { get; } = new List<EventRequest>();
