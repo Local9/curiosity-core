@@ -1,8 +1,10 @@
-﻿namespace Curiosity.Systems.Library.Models
+﻿using Newtonsoft.Json;
+
+namespace Curiosity.Systems.Library.Models
 {
     public class CharacterStat
     {
-        public int StatId;
+        [JsonIgnore] public int Id;
         public string Label;
         public long Value;
     }
