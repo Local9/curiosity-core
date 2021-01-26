@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -41,7 +42,7 @@ namespace Curiosity.Core.Server.Managers
                     user.CurrentJob = "Police Officer";
                 }
 
-                Instance.ExportDictionary["curiosity-missions"].JobEvent(metadata.Sender, JOB_POLICE_DUTY);
+                user.Send(JOB_POLICE_DUTY);
 
                 await BaseScript.Delay(5000);
 
@@ -68,7 +69,7 @@ namespace Curiosity.Core.Server.Managers
 
                 bool result = config.IsNearLocation(position, JOB_POLICE_ARREST, 5.0f);
 
-                Instance.ExportDictionary["curiosity-missions"].JobEvent(metadata.Sender, JOB_POLICE_ARREST);
+                user.Send(JOB_POLICE_ARREST);
 
                 await BaseScript.Delay(5000);
 

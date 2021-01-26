@@ -692,16 +692,16 @@ namespace Curiosity.Core.Server.Managers
             #endregion
 
             #region export
-            Instance.ExportDictionary.Add("JobEvent", new Func<int, string, bool>(
-                (playerHandle, eventName) =>
-                {
-                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerHandle];
+            //Instance.ExportDictionary.Add("JobEvent", new Func<int, string, bool>(
+            //    (playerHandle, eventName) =>
+            //    {
+            //        CuriosityUser curiosityUser = PluginManager.ActiveUsers[playerHandle];
 
-                    EventSystem.GetModule().Send(eventName, playerHandle);
+            //        EventSystem.GetModule().Send(eventName, playerHandle);
 
-                    return true;
-                }
-            ));
+            //        return true;
+            //    }
+            //));
             #endregion
         }
 
