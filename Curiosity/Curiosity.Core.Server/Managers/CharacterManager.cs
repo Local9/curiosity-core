@@ -18,6 +18,9 @@ namespace Curiosity.Core.Server.Managers
 
                 curiosityUser.Character = await Database.Store.CharacterDatabase.Get(curiosityUser.DiscordId);
 
+                curiosityUser.Character.Skills = await Database.Store.SkillDatabase.Get(curiosityUser.Character.CharacterId);
+                curiosityUser.Character.Stats = await Database.Store.StatDatabase.Get(curiosityUser.Character.CharacterId);
+
                 return curiosityUser.Character;
             }));
 

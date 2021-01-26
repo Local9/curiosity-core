@@ -46,7 +46,7 @@ namespace Curiosity.Core.Server.Managers
 
                     int categoryId = metadata.Find<int>(0);
 
-                    return await Database.Store.ShopDatabase.GetCategoryItems(categoryId, curiosityUser.CharacterId);
+                    return await Database.Store.ShopDatabase.GetCategoryItems(categoryId, curiosityUser.Character.CharacterId);
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +66,7 @@ namespace Curiosity.Core.Server.Managers
 
                 Logger.Debug($"shop:item:action -> Action: {action} T=B/F=S, ItemId: {itemId}");
 
-                SqlResult sqlResult = await Database.Store.ShopDatabase.TradeItem(curiosityUser.CharacterId, itemId, 1, action);
+                SqlResult sqlResult = await Database.Store.ShopDatabase.TradeItem(curiosityUser.Character.CharacterId, itemId, 1, action);
 
                 await BaseScript.Delay(100);
 
