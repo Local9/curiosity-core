@@ -25,7 +25,6 @@ namespace Curiosity.MissionManager.Client
         public static PluginManager Instance { get; private set; }
         internal static List<Blip> Blips = new List<Blip>();
         private DateTime LastDiscordPresenceUpdate = DateTime.Now;
-        private DateTime LastSpecialDayCheck = DateTime.Now;
 
         public static PlayerList PlayerList;
 
@@ -260,7 +259,7 @@ namespace Curiosity.MissionManager.Client
         }
 
         [TickHandler]
-        private async Task OnSpecialDayTick()
+        private async Task OnDiscordPresenceUpdateTick()
         {
             await Session.Loading();
 
