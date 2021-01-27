@@ -62,6 +62,7 @@
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
     <Compile Include="Environment\Entities\Models\MarkerData.cs" />
     <Compile Include="Interface\Chat.cs" />
+    <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />
     <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Managers\LocationManager.cs" />
     <Compile Include="Managers\WeaponManager.cs" />
@@ -131,8 +132,6 @@
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interface\Menus\SubMenu\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
