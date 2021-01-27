@@ -24,7 +24,7 @@ namespace Curiosity.MissionManager.Client
     {
         public static PluginManager Instance { get; private set; }
         internal static List<Blip> Blips = new List<Blip>();
-        private DateTime LastDiscordPresenseUpdate = DateTime.Now;
+        private DateTime LastDiscordPresenceUpdate = DateTime.Now;
         private DateTime LastSpecialDayCheck = DateTime.Now;
 
         public static PlayerList PlayerList;
@@ -264,11 +264,11 @@ namespace Curiosity.MissionManager.Client
         {
             await Session.Loading();
 
-            if (DateTime.Now.Subtract(LastDiscordPresenseUpdate).TotalSeconds >= 90)
+            if (DateTime.Now.Subtract(LastDiscordPresenceUpdate).TotalSeconds >= 90)
             {
                 DiscordRichPresence.Commit();
 
-                LastDiscordPresenseUpdate = DateTime.Now;
+                LastDiscordPresenceUpdate = DateTime.Now;
             }
 
             await BaseScript.Delay(1500);
