@@ -1,8 +1,6 @@
-﻿using CitizenFX.Core.Native;
-using Curiosity.Systems.Library.Models;
-using Curiosity.Core.Server.Extensions;
+﻿using Curiosity.Core.Server.Extensions;
 using GHMatti.Data.MySQL.Core;
-using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,19 +8,32 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class BankDatabase
     {
-        // process
-        // buy item -> tell server item user wants to buy
-        // server adds item to players inventory/account depending on type
-        // on completion, call back to the client and inform purchase
-
-        public static async Task DecreaseCash(ulong discordId, int amount)
+        public static async Task<int> Adjust(int characterId, int amount)
         {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@characterId", characterId },
+                    { "@amount", amount },
+                };
 
-        }
+            string myQuery = "call upCharacterCash(@characterId, @amount);";
 
-        public static async Task IncreaseCash(ulong discordId, int amount)
-        {
+            int newValue = 0;
 
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                if (keyValuePairs.Count == 0)
+                    throw new Exception("Character cash value not changed");
+
+                foreach (Dictionary<string, object> kv in keyValuePairs)
+                {
+                    newValue = kv["return"].ToInt();
+                }
+            }
+
+            return newValue;
         }
     }
 }
