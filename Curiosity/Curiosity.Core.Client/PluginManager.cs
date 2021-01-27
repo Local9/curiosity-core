@@ -151,6 +151,7 @@ namespace Curiosity.Core.Client
             Screen.Hud.HideComponentThisFrame(HudComponent.Saving);
 
             API.SetTextChatEnabled(false);
+            API.DisablePlayerVehicleRewards(Game.Player.Handle);
 
             // Disable wanted levels
             API.ClearPlayerWantedLevel(Game.Player.Handle);

@@ -26,6 +26,7 @@ namespace Curiosity.Systems.Library.Models
         public bool IsBannedPerm { get; set; }
         public DateTime? BannedUntil { get; set; }
         public bool IsNitroBooster { get; set; }
+        public bool IsPassive { get; set; }
         // Queue
         public int QueuePriority { get; set; }
         public CuriosityCharacter Character { get; set; }

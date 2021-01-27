@@ -115,6 +115,7 @@
     <Compile Include="Session.cs" />
     <Compile Include="TickHandler.cs" />
     <Compile Include="Utils\ControlHelper.cs" />
+    <Compile Include="Utils\PlayerOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

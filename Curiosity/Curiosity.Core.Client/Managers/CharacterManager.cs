@@ -126,7 +126,7 @@ namespace Curiosity.Core.Client.Managers
 
             Screen.LoadingPrompt.Show("Loading Character Data...");
 
-            curiosityCharacter = await EventSystem.Request<CuriosityCharacter>("character:load", null);
+            curiosityCharacter = await EventSystem.Request<CuriosityCharacter>("character:load");
 
             if (curiosityCharacter == null)
             {

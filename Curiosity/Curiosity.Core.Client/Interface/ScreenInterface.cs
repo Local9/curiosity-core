@@ -1,5 +1,6 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using System;
 using System.Drawing;
 
@@ -74,6 +75,11 @@ namespace Curiosity.Core.Client.Interface
 
             API.EndTextCommandDisplayText(0, 0);
             API.ClearDrawOrigin();
+        }
+
+        public static void Text(string text, float scale, PointF position, Color color, CitizenFX.Core.UI.Font font = CitizenFX.Core.UI.Font.Monospace, Alignment alignment = Alignment.Center, bool shadow = false, bool outline = false)
+        {
+
         }
     }
 }

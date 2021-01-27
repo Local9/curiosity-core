@@ -4,6 +4,7 @@ using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Interface.Modules;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
@@ -57,6 +58,8 @@ namespace Curiosity.Core.Client.Environment.Entities
             {
                 NoClipManager.NoClipInstance.Dispose();
             }
+
+            PlayerOptions.SetPlayerPassive(Cache.Player.User.IsPassive);
         }
 
         public async Task CommitModel(Model model)

@@ -1,12 +1,15 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,11 +19,15 @@ namespace Curiosity.Core.Client.Interface.Menus
     {
         public static MenuPool MenuPool;
         private UIMenu menuMain;
+        private int currentIndex;
 
         // menu items
-        private List<dynamic> gpsLocations = new List<dynamic>();
+        private static List<dynamic> gpsLocations = new List<dynamic>() { "Loading..." };
         private int gpsIndex = 0;
-        private UIMenuListItem mlGpsLocations;
+        private UIMenuListItem mlGpsLocations = new UIMenuListItem("GPS", gpsLocations, 0);
+
+        private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you, you will also be unable to use weapons.");
+
 
         public override void Begin()
         {
@@ -29,19 +36,45 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             menuMain = new UIMenu("Interaction Menu", "Player Interactions");
             menuMain.MouseControlsEnabled = false;
+
+            menuMain.AddItem(mlGpsLocations);
+            menuMain.AddItem(miPassive);
+
             MenuPool.Add(menuMain);
 
             menuMain.OnMenuClose += MenuMain_OnMenuClose;
             menuMain.OnMenuOpen += MenuMain_OnMenuOpen;
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnListSelect += MenuMain_OnListSelect;
+            menuMain.OnItemSelect += MenuMain_OnItemSelect;
+            menuMain.OnIndexChange += MenuMain_OnIndexChange;
+
+            menuMain.RefreshIndex();
         }
 
-        private Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)
+        private void MenuMain_OnIndexChange(UIMenu sender, int newIndex)
         {
-            if (points.Count() == 0) return Vector3.Zero;
+            currentIndex = newIndex;
+        }
 
-            return points.OrderBy(x => Vector3.Distance(startingPoint, x)).First();
+        private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
+        {
+            if (selectedItem == miPassive)
+            {
+                if (!PlayerOptions.IsPassiveModeEnabled) return;
+
+                Cache.Player.User.IsPassive = !Cache.Player.User.IsPassive;
+                PlayerOptions.SetPlayerPassive(Cache.Player.User.IsPassive);
+                miPassive.Enabled = false;
+
+                await BaseScript.Delay(1000);
+
+                miPassive.Text = (Cache.Player.User.IsPassive) ? "Disable Passive Mode" : "Enable Passive Mode";
+                miPassive.Enabled = PlayerOptions.IsPassiveModeEnabled;
+
+                string notificationText = (Cache.Player.User.IsPassive) ? "Enabled" : "Disabled";
+                Notify.Info($"Passive Mode: {notificationText}");
+            }
         }
 
         private void MenuMain_OnListSelect(UIMenu sender, UIMenuListItem listItem, int newIndex)
@@ -75,9 +108,13 @@ namespace Curiosity.Core.Client.Interface.Menus
 
         private void MenuMain_OnMenuOpen(UIMenu sender)
         {
-            AddGpsMenuItem();
+            // TOP
+            UpdateGpsMenuItem();
+            // MID
 
-            // Add Sub Menus
+            // BOTTOM
+            miPassive.Text = (Cache.Player.User.IsPassive) ? "Disable Passive Mode" : "Enable Passive Mode";
+            miPassive.Enabled = PlayerOptions.IsPassiveModeEnabled;
         }
 
         private void MenuMain_OnMenuClose(UIMenu sender)
@@ -88,7 +125,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         public void DisposeMenu()
         {
             Instance.DetachTickHandler(OnMenuDisplay);
-            menuMain.Clear(); // RESET
+            // menuMain.Clear(); // RESET
         }
 
         private async Task OnMenuDisplay()
@@ -112,7 +149,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         }
 
         // Menu Items
-        private void AddGpsMenuItem()
+        private void UpdateGpsMenuItem()
         {
             gpsLocations.Clear();
 
@@ -125,9 +162,15 @@ namespace Curiosity.Core.Client.Interface.Menus
             if (gpsLocations.Count > 1)
                 gpsLocations.Sort((x, y) => string.Compare(x, y));
 
-            mlGpsLocations = new UIMenuListItem("GPS", gpsLocations, gpsIndex);
+            mlGpsLocations.Items = gpsLocations;
+            mlGpsLocations.Index = gpsIndex;
+        }
 
-            menuMain.AddItem(mlGpsLocations);
+        private Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)
+        {
+            if (points.Count() == 0) return Vector3.Zero;
+
+            return points.OrderBy(x => Vector3.Distance(startingPoint, x)).First();
         }
     }
 }
