@@ -33,9 +33,11 @@ namespace Curiosity.Core.Server.Managers
                 return curiosityUser;
             }));
 
-            EventSystem.GetModule().Attach("user:license:weapon", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("user:kick:afk", new EventCallback(metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
+
+                player.Drop($"You were kicked from the server for idling too long.");
 
                 return null;
             }));
