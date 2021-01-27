@@ -43,10 +43,10 @@ namespace Curiosity.Interface.Client.Managers
                 }
 
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
-                        .Add("name", curiosityUser.LatestName)
-                        .Add("userId", curiosityUser.UserId)
+                        .Add("name", curiosityUser?.LatestName)
+                        .Add("userId", curiosityUser?.UserId)
                         .Add("role", role)
-                        .Add("wallet", curiosityUser.Character.Cash)
+                        .Add("wallet", curiosityUser?.Character?.Cash)
                         .Build();
 
                 API.SendNuiMessage(jsn);
