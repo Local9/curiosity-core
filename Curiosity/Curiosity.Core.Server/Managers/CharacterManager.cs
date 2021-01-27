@@ -35,6 +35,14 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
+            EventSystem.GetModule().Attach("character:get:profile", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                    return null;
+
+                return PluginManager.ActiveUsers[metadata.Sender];
+            }));
+
             EventSystem.GetModule().Attach("character:get:skills", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];

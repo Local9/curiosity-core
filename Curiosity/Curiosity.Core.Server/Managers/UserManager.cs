@@ -6,7 +6,6 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -32,14 +31,6 @@ namespace Curiosity.Core.Server.Managers
                 PluginManager.ActiveUsers.TryAdd(metadata.Sender, curiosityUser);
 
                 return curiosityUser;
-            }));
-
-            EventSystem.GetModule().Attach("user:getProfile", new AsyncEventCallback(async metadata =>
-            {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
-                    return null;
-
-                return PluginManager.ActiveUsers[metadata.Sender];
             }));
 
             EventSystem.GetModule().Attach("user:license:weapon", new EventCallback(metadata =>

@@ -1,6 +1,4 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Interface.Client.Diagnostics;
+﻿using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -19,7 +17,7 @@ namespace Curiosity.Interface.Client.Managers
             {
                 string role = "USER";
 
-                CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("user:getProfile");
+                CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("character:get:profile");
 
                 if (curiosityUser == null) return null;
 
