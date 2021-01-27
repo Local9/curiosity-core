@@ -5,6 +5,7 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -60,8 +61,8 @@ namespace Curiosity.Core.Server.Managers
             }));
 
 
-            Instance.ExportDictionary.Add("SkillAdjust", new Func<string, int, int, string>(
-                (playerHandle, skillId, amt) => {
+            Instance.ExportDictionary.Add("SkillAdjust", new Func<string, int, int, Task<string>>(
+                async (playerHandle, skillId, amt) => {
 
                     ExportMessage exportMessage = new ExportMessage();
 
@@ -73,13 +74,18 @@ namespace Curiosity.Core.Server.Managers
                         exportMessage.Error = "Player was not found";
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
+
+                    int newSkillValue = await Database.Store.SkillDatabase.Adjust(user.Character.CharacterId, skillId, amt);
+
+                    user.Character.Skills = await Database.Store.SkillDatabase.Get(user.Character.CharacterId);
+
+                    exportMessage.NewNumberValue = newSkillValue;
 
                     return $"{exportMessage}";
                 }));
 
-
-            Instance.ExportDictionary.Add("StatAdjust", new Func<string, int, int, string>(
-                (playerHandle, skillId, amt) => {
+            Instance.ExportDictionary.Add("StatAdjust", new Func<string, int, int, Task<string>>(
+                async (playerHandle, statId, amt) => {
 
                     ExportMessage exportMessage = new ExportMessage();
 
@@ -91,6 +97,35 @@ namespace Curiosity.Core.Server.Managers
                         exportMessage.Error = "Player was not found";
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
+
+                    int newSkillValue = await Database.Store.StatDatabase.Adjust(user.Character.CharacterId, statId, amt);
+
+                    user.Character.Stats = await Database.Store.StatDatabase.Get(user.Character.CharacterId);
+
+                    exportMessage.NewNumberValue = newSkillValue;
+
+                    return $"{exportMessage}";
+                }));
+
+            Instance.ExportDictionary.Add("CashAdjust", new Func<string, int, Task<string>>(
+                async (playerHandle, amt) => {
+
+                    ExportMessage exportMessage = new ExportMessage();
+
+                    int playerId = 0;
+                    if (!int.TryParse(playerHandle, out playerId))
+                        exportMessage.Error = "First parameter is not a number";
+
+                    if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                        exportMessage.Error = "Player was not found";
+
+                    CuriosityUser user = PluginManager.ActiveUsers[playerId];
+
+                    int newCashValue = await Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt);
+                    
+                    user.Character.Cash = newCashValue;
+                    
+                    exportMessage.NewNumberValue = newCashValue;
 
                     return $"{exportMessage}";
                 }));
