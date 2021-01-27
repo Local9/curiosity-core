@@ -8,6 +8,7 @@ using Curiosity.Core.Client.Discord;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Events;
 using System;
@@ -43,6 +44,10 @@ namespace Curiosity.Core.Client
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
+        public bool AfkCheckRunning { get; private set; }
+
+        DateTime lastTimePlayerStayedStill;
+        Vector3 lastPosition;
 
         public PluginManager()
         {
@@ -132,6 +137,38 @@ namespace Curiosity.Core.Client
                     Local.Character.Health = Game.PlayerPed.Health;
                     Local.Character.Armor = Game.PlayerPed.Armor;
                     Local.Character.Save();
+                }
+
+                if (!Cache.Player.User.IsStaff)
+                {
+                    if (lastPosition != (lastPosition = Game.PlayerPed.Position))
+                        lastTimePlayerStayedStill = DateTime.Now;
+
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds >= 900)
+                    {
+                        // KICK
+                        return;
+                    }
+
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 780)
+                    {
+                        Notify.Alert("Time remaining before you're kicked for idling: 13m00s");
+                    }
+
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 600)
+                    {
+                        Notify.Alert("Time remaining before you're kicked for idling: 10m00s");
+                    }
+
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 300)
+                    {
+                        Notify.Alert("Time remaining before you're kicked for idling: 05m00s");
+                    }
+
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 180)
+                    {
+                        Notify.Alert("Time remaining before you're kicked for idling: 02m00s");
+                    }
                 }
             }
 
