@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Systems.Library.Utils;
 using NativeUI;
 using System;
 using System.Drawing;
@@ -10,8 +11,13 @@ namespace Curiosity.Core.Client.Utils
 {
     public class PlayerOptions
     {
-        static DateTime passiveModeEnabledDate;
+        static DateTime passiveModeDisabled;
         public static bool IsPassiveModeEnabled = true;
+
+
+        static DateTime playerKilledSelf;
+        public static bool IsKillSelfEnabled { get; internal set; }
+        public static int CostOfKillSelf = 0;
 
         public static void SetPlayerPassive(bool isPassive)
         {
@@ -26,7 +32,7 @@ namespace Curiosity.Core.Client.Utils
                     API.NetworkSetPlayerIsPassive(false);
                     API.NetworkSetFriendlyFireOption(true);
 
-                    passiveModeEnabledDate = DateTime.Now;
+                    passiveModeDisabled = DateTime.Now;
                     PluginManager.Instance.AttachTickHandler(PassiveCooldownTick);
 
                     Game.PlayerPed.CanSwitchWeapons = true;
@@ -48,7 +54,7 @@ namespace Curiosity.Core.Client.Utils
 
         private static async Task PassiveCooldownTick()
         {
-            if (DateTime.Now.Subtract(passiveModeEnabledDate).TotalMinutes >= 5)
+            if (DateTime.Now.Subtract(passiveModeDisabled).TotalMinutes >= 5)
             {
                 PluginManager.Instance.DetachTickHandler(PassiveCooldownTick);
                 IsPassiveModeEnabled = true;
@@ -62,7 +68,7 @@ namespace Curiosity.Core.Client.Utils
 
                 const int interval = 45;
 
-                DateTime finalDate = passiveModeEnabledDate;
+                DateTime finalDate = passiveModeDisabled;
                 string timeSpanLeft = (finalDate.AddMinutes(5) - DateTime.Now).ToString(@"mm\:ss");
 
                 PointF left = new PointF(Convert.ToInt32(res.Width) - safe.X - 318, Convert.ToInt32(res.Height) - safe.Y - (100 + (1 * interval)));
@@ -77,6 +83,63 @@ namespace Curiosity.Core.Client.Utils
                 Screen.Hud.HideComponentThisFrame(HudComponent.StreetName);
                 Screen.Hud.HideComponentThisFrame(HudComponent.VehicleName);
             }
+        }
+
+        internal async static void KillSelf()
+        {
+            int randomEvent = Utility.RANDOM.Next(3);
+
+            //if (randomEvent == 1)
+            if (randomEvent == 1)
+            {
+                Game.PlayerPed.Task.PlayAnimation("mp_suicide", "pill", 8f, -1, AnimationFlags.None);
+
+                await BaseScript.Delay(2000);
+                Game.PlayerPed.Kill();
+            }
+            else if (randomEvent == 0)
+            {
+                Game.PlayerPed.Weapons.Give((WeaponHash)453432689, 1, true, true);
+                Game.PlayerPed.Task.PlayAnimation("mp_suicide", "pistol", 8f, -1, AnimationFlags.None);
+                await BaseScript.Delay(1000);
+                Function.Call((Hash)7592965275345899078, Game.PlayerPed.Handle, 0, 0, 0, false);
+                Game.PlayerPed.Kill();
+            }
+            else
+            {
+                Function.Call(Hash.GIVE_WEAPON_TO_PED, Game.PlayerPed.Handle, -1569615261, 1, true, true);
+                Model plasticCup = new Model("apa_prop_cs_plastic_cup_01");
+                await plasticCup.Request(10000);
+
+                Prop prop = await World.CreateProp(plasticCup, Game.PlayerPed.Position, false, false);
+
+                int boneIdx = API.GetPedBoneIndex(Game.PlayerPed.Handle, 28422);
+                API.AttachEntityToEntity(prop.Handle, Game.PlayerPed.Handle, API.GetPedBoneIndex(API.GetPlayerPed(-1), 58868), 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 70.0f, true, true, false, false, 2, true);
+
+                Game.PlayerPed.Task.PlayAnimation("mini@sprunk", "plyr_buy_drink_pt2", 8f, -1, AnimationFlags.None);
+
+                await BaseScript.Delay(1500);
+                Game.PlayerPed.Kill();
+                prop.Detach();
+            }
+
+            playerKilledSelf = DateTime.Now;
+            PluginManager.Instance.AttachTickHandler(PlayerKilledSelfCooldownTick);
+        }
+
+        private static async Task PlayerKilledSelfCooldownTick()
+        {
+            if (DateTime.Now.Subtract(playerKilledSelf).TotalMinutes >= 5)
+            {
+                PluginManager.Instance.DetachTickHandler(PlayerKilledSelfCooldownTick);
+                IsKillSelfEnabled = true;
+            }
+            else
+            {
+                IsKillSelfEnabled = false;
+            }
+
+            await BaseScript.Delay(1500);
         }
     }
 }

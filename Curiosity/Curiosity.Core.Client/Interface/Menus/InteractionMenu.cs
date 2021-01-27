@@ -27,6 +27,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenuListItem mlGpsLocations = new UIMenuListItem("GPS", gpsLocations, 0);
 
         private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you, you will also be unable to use weapons.");
+        private UIMenuItem miKillYourself = new UIMenuItem("Kill Yourself", "Kill yourself and respawn.");
 
 
         public override void Begin()
@@ -38,7 +39,10 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.MouseControlsEnabled = false;
 
             menuMain.AddItem(mlGpsLocations);
+            menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);
+
+            miKillYourself.SetRightLabel($"${PlayerOptions.CostOfKillSelf}");
 
             MenuPool.Add(menuMain);
 
@@ -74,6 +78,15 @@ namespace Curiosity.Core.Client.Interface.Menus
 
                 string notificationText = (Cache.Player.User.IsPassive) ? "Enabled" : "Disabled";
                 Notify.Info($"Passive Mode: {notificationText}");
+                return;
+            }
+
+            if (selectedItem == miKillYourself)
+            {
+                if (!PlayerOptions.IsKillSelfEnabled) return;
+
+                PlayerOptions.KillSelf();
+                miKillYourself.Enabled = false;
             }
         }
 
@@ -115,6 +128,9 @@ namespace Curiosity.Core.Client.Interface.Menus
             // BOTTOM
             miPassive.Text = (Cache.Player.User.IsPassive) ? "Disable Passive Mode" : "Enable Passive Mode";
             miPassive.Enabled = PlayerOptions.IsPassiveModeEnabled;
+
+            miKillYourself.Enabled = PlayerOptions.IsKillSelfEnabled;
+            miKillYourself.SetRightLabel($"${PlayerOptions.CostOfKillSelf}");
         }
 
         private void MenuMain_OnMenuClose(UIMenu sender)

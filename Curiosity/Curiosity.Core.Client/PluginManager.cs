@@ -146,28 +146,28 @@ namespace Curiosity.Core.Client
 
                     if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds >= 900)
                     {
-                        // KICK
+                        EventSystem.GetModule().Send("user:kick:afk");
                         return;
                     }
 
                     if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 780)
                     {
-                        Notify.Alert("Time remaining before you're kicked for idling: 13m00s");
+                        Notify.Custom("Time remaining before you're kicked for idling: 13m00s");
                     }
 
                     if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 600)
                     {
-                        Notify.Alert("Time remaining before you're kicked for idling: 10m00s");
+                        Notify.Custom("Time remaining before you're kicked for idling: 10m00s");
                     }
 
                     if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 300)
                     {
-                        Notify.Alert("Time remaining before you're kicked for idling: 05m00s");
+                        Notify.Custom("Time remaining before you're kicked for idling: 05m00s");
                     }
 
                     if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 180)
                     {
-                        Notify.Alert("Time remaining before you're kicked for idling: 02m00s");
+                        Notify.Custom("Time remaining before you're kicked for idling: 02m00s");
                     }
                 }
             }
