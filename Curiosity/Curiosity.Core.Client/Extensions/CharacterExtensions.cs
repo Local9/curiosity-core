@@ -99,6 +99,9 @@ namespace Curiosity.Core.Client.Extensions
             float remBlend = character.Heritage.BlendApperance;
             float skinBlend = character.Heritage.BlendSkin;
 
+            Game.PlayerPed.Health = character.Health;
+            Game.PlayerPed.Armor = character.Armor;
+
             API.SetPedHeadBlendData(Cache.Entity.Id, fatherId, motherId, 0, fatherId, motherId, 0, remBlend, skinBlend, 0f, false);
 
             CharacterClothing.SetPedTop(Game.PlayerPed, character.Appearance.Top);
