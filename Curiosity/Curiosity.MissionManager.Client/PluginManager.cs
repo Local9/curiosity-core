@@ -24,6 +24,8 @@ namespace Curiosity.MissionManager.Client
     {
         public static PluginManager Instance { get; private set; }
         internal static List<Blip> Blips = new List<Blip>();
+        private DateTime LastDiscordPresenseUpdate = DateTime.Now;
+        private DateTime LastSpecialDayCheck = DateTime.Now;
 
         public static PlayerList PlayerList;
 
@@ -34,7 +36,7 @@ namespace Curiosity.MissionManager.Client
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
         public static int MaximumPlayers { get; } = 32;
-        public static bool IsBirthday { get; internal set; } = false;
+        public static bool IsSpecialDay { get; internal set; } = false;
         public static bool IsPlayerSpawned { get; internal set; } = false;
 
         public readonly DiscordRichPresence DiscordRichPresence =
@@ -261,31 +263,16 @@ namespace Curiosity.MissionManager.Client
         [TickHandler]
         private async Task OnSpecialDayTick()
         {
-            if (IsPlayerSpawned)
-            {
-                long gameTimer = API.GetGameTimer();
-                while ((API.GetGameTimer() - gameTimer) < 30000)
-                {
-                    await PluginManager.Delay(100);
-                }
+            await Session.Loading();
 
-                TriggerServerEvent("curiosity:server:special");
-            }
-        }
-
-        private void OnSpecialDay(bool isBirthday)
-        {
-            if (!isBirthday && IsBirthday)
+            if (DateTime.Now.Subtract(LastDiscordPresenseUpdate).TotalSeconds >= 90)
             {
-                Notify.Info("The event has now ended, thank you all!");
+                DiscordRichPresence.Commit();
+
+                LastDiscordPresenseUpdate = DateTime.Now;
             }
 
-            if (!IsBirthday && isBirthday)
-            {
-                Notify.Info("~w~Its ~g~127.0.0.1~w~ Birthday!!!~n~~g~Enjoy increased XP!");
-            }
-
-            IsBirthday = isBirthday;
+            await BaseScript.Delay(1500);
         }
     }
 }

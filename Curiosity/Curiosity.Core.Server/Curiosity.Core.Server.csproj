@@ -78,6 +78,7 @@
     <Compile Include="Managers\MissionManager.cs" />
     <Compile Include="Managers\QueueManager.cs" />
     <Compile Include="Managers\ShopManager.cs" />
+    <Compile Include="Managers\SpecialDayManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Managers\WorldManager.cs" />
     <Compile Include="PluginManager.cs" />
