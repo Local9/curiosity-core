@@ -47,6 +47,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
                 List<CharacterSkill> returnVal = await Database.Store.SkillDatabase.Get(player.Character.CharacterId);
+                player.Character.Skills = returnVal;
                 return returnVal;
             }));
 
@@ -54,6 +55,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
                 List<CharacterStat> returnVal = await Database.Store.StatDatabase.Get(player.Character.CharacterId);
+                player.Character.Stats = returnVal;
                 return returnVal;
             }));
 
