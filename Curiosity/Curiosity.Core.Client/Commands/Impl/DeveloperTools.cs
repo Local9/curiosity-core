@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
@@ -8,6 +9,7 @@ using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Curiosity.Core.Client.Commands.Impl
 {
@@ -36,33 +38,50 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
             }
         }
+
+        [CommandInfo(new[] { "weapons" })]
+        public class Weapons : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
+                {
+                    Game.PlayerPed.Weapons.Give(w, 999, false, true);
+                    Game.PlayerPed.Weapons[w].InfiniteAmmo = true;
+                    Game.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
+                });
+
+                Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
+                Chat.SendLocalMessage("Weapons: All Equiped");
+            }
+        }
         #endregion
 
         #region Vehicles
-        //[CommandInfo(new[] { "vehicle", "veh", "car" })]
-        //public class VehicleSpawner : ICommand
-        //{
-        //    public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
-        //    {
-        //        try
-        //        {
-        //            if (arguments.Count <= 0) return;
+        [CommandInfo(new[] { "vehicle", "veh", "car" })]
+        public class VehicleSpawner : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                try
+                {
+                    if (arguments.Count <= 0) return;
 
-        //            var model = new Model(API.GetHashKey(arguments.ElementAt(0)));
+                    var model = new Model(API.GetHashKey(arguments.ElementAt(0)));
 
-        //            if (!model.IsValid || !model.IsVehicle) return;
+                    if (!model.IsValid || !model.IsVehicle) return;
 
-        //            var position = entity.Position;
-        //            var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
+                    var position = entity.Position;
+                    var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
 
-        //            entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
-        //        }
-        //        catch (Exception)
-        //        {
-        //            // Ignored
-        //        }
-        //    }
-        //}
+                    entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+                }
+                catch (Exception)
+                {
+                    // Ignored
+                }
+            }
+        }
 
         [CommandInfo(new[] { "repair", "fix", "wash" })]
         public class VehicleRepairer : ICommand
