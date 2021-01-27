@@ -37,6 +37,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             Sound = new SoundSystem();
             CameraQueue = new CameraViewmodelQueue();
         }
+
         public void DisableHud()
         {
             API.DisplayRadar(false);

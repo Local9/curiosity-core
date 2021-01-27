@@ -35,7 +35,7 @@ namespace Curiosity.Core.Client.Managers
             var player = Cache.Player;
             var entity = Cache.Entity;
 
-            if (entity.IsDead)
+            if (Game.PlayerPed.IsDead)
             {
                 WasDead = true;
 
@@ -56,31 +56,13 @@ namespace Curiosity.Core.Client.Managers
                     API.ClearPedTasksImmediately(entity.Id);
                 }
 
-                int r = PluginManager.Rand.Next(Hospitals.Count);
-
-                Vector3 playerPos = Game.PlayerPed.Position;
-
-                Vector3 pos = new Vector3();
-
-                foreach (Vector3 hosPos in Hospitals)
-                {
-                    float distance = API.GetDistanceBetweenCoords(playerPos.X, playerPos.Y, playerPos.Z, hosPos.X, hosPos.Y, hosPos.Z, false);
-
-                    if (distance < 3000f)
-                    {
-                        pos = hosPos;
-                        break;
-                    }
-                }
-
-                if (pos.IsZero)
-                {
-                    pos = Hospitals[r];
-                }
+                Vector3 pos = Game.PlayerPed.Position.FindClosestPoint(Hospitals);
 
                 if (Game.IsControlJustPressed(0, Control.Context))
                 {
                     API.DoScreenFadeOut(0);
+
+                    Timestamp = 0;
 
                     // TODO: Charge cash
 
@@ -93,6 +75,8 @@ namespace Curiosity.Core.Client.Managers
                 else if (timeLeft.Ticks < 1)
                 {
                     API.DoScreenFadeOut(0);
+
+                    Timestamp = 0;
 
                     player.Character.Revive(new Position(pos.X, pos.Y, pos.Z, Game.PlayerPed.Heading));
 
@@ -110,6 +94,8 @@ namespace Curiosity.Core.Client.Managers
                     Timestamp = 0;
 
                     player.EnableHud();
+
+                    WasDead = false;
                 }
 
                 await BaseScript.Delay(1000);

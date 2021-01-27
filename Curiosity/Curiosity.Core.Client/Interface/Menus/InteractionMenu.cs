@@ -7,7 +7,6 @@ using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus
@@ -100,7 +99,7 @@ namespace Curiosity.Core.Client.Interface.Menus
                 List<Vector3> posVectors = new List<Vector3>();
                 positions.ForEach(x => posVectors.Add(x.AsVector()));
 
-                Vector3 closestPosition = FindClosestPoint(Game.PlayerPed.Position, posVectors);
+                Vector3 closestPosition = Game.PlayerPed.Position.FindClosestPoint(posVectors);
 
                 if (closestPosition.Equals(Vector3.Zero)) return;
 
@@ -177,13 +176,6 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             mlGpsLocations.Items = gpsLocations;
             mlGpsLocations.Index = gpsIndex;
-        }
-
-        private Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)
-        {
-            if (points.Count() == 0) return Vector3.Zero;
-
-            return points.OrderBy(x => Vector3.Distance(startingPoint, x)).First();
         }
     }
 }

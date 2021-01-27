@@ -1,6 +1,8 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.Core.Client.Extensions
 {
@@ -34,6 +36,13 @@ namespace Curiosity.Core.Client.Extensions
         public static float Distance(this Position position, Vector3 target, bool useZ = false)
         {
             return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
+        }
+
+        public static Vector3 FindClosestPoint(this Vector3 startingPoint, IEnumerable<Vector3> points)
+        {
+            if (points.Count() == 0) return Vector3.Zero;
+
+            return points.OrderBy(x => Vector3.Distance(startingPoint, x)).First();
         }
     }
 }
