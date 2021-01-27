@@ -59,6 +59,7 @@ namespace Curiosity.Core.Server.Database.Store
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
                     CharacterStat characterStat = new CharacterStat();
+                    characterStat.Id = kv["StatId"].ToInt();
                     characterStat.Label = $"{kv["Label"]}";
                     characterStat.Value = kv["Value"].ToLong();
                     lst.Add(characterStat);

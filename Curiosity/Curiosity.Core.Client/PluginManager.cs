@@ -129,8 +129,8 @@ namespace Curiosity.Core.Client
                 if (Local.Character.MarkedAsRegistered)
                 {
                     Local.Character.LastPosition = Local.Entity.Position;
-                    Local.Character.Health = API.GetEntityHealth(Cache.Entity.Id);
-                    Local.Character.Armor = API.GetPedArmour(Cache.Entity.Id);
+                    Local.Character.Health = Game.PlayerPed.Health;
+                    Local.Character.Armor = Game.PlayerPed.Armor;
                     Local.Character.Save();
                 }
             }
@@ -141,7 +141,9 @@ namespace Curiosity.Core.Client
         [TickHandler]
         private async Task OnTick()
         {
-            Screen.Hud.HideComponentThisFrame(HudComponent.WeaponWheel);
+            // Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
+            // Screen.Hud.HideComponentThisFrame(HudComponent.WeaponWheel);
+            
             Screen.Hud.HideComponentThisFrame(HudComponent.Cash);
             Screen.Hud.HideComponentThisFrame(HudComponent.CashChange);
             Screen.Hud.HideComponentThisFrame(HudComponent.MpCash);
@@ -158,10 +160,7 @@ namespace Curiosity.Core.Client
             API.SetPlayerWantedLevelNoDrop(Game.Player.Handle, 0, false);
             Game.Player.WantedLevel = 0;
 
-            Game.Player.SetRunSpeedMultThisFrame(1f); // Speed hack to death
-
-            // Whitelist to make the reticle show. (Snipers, and certain weapons with scopes possibly)
-            Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
+            Game.Player.SetRunSpeedMultThisFrame(1f); // Speed hack to death            
 
             await Task.FromResult(0);
         }

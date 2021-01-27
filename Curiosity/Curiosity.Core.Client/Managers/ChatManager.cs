@@ -86,7 +86,7 @@ namespace Curiosity.Core.Client.Managers
         {
             API.EnableControlAction(0, (int)Control.CursorScrollUp, true);
             API.EnableControlAction(0, (int)Control.CursorScrollDown, true);
-            API.SetPedCanSwitchWeapon(Game.PlayerPed.Handle, true);
+            Game.PlayerPed.CanSwitchWeapons = true;
             API.SetNuiFocus(false, false);
         }
 
@@ -108,7 +108,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     API.DisableControlAction(0, (int)Control.CursorScrollUp, true);
                     API.DisableControlAction(0, (int)Control.CursorScrollDown, true);
-                    API.SetPedCanSwitchWeapon(Game.PlayerPed.Handle, false);
+                    Game.PlayerPed.CanSwitchWeapons = false;
                 }
             }
             catch (Exception ex)

@@ -7,6 +7,7 @@ using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Interface.Menus.Creator;
 using Curiosity.Core.Client.Interface.Menus.Data;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -152,6 +153,8 @@ namespace Curiosity.Core.Client.Extensions
             API.SetPedHeadOverlay(Game.PlayerPed.Handle, 7, character.Appearance.SkinDamage, character.Appearance.SkinDamageOpacity);
             API.SetPedHeadOverlay(Game.PlayerPed.Handle, 9, character.Appearance.SkinMoles, character.Appearance.SkinMolesOpacity);
 
+            character.SetupStats();
+
             var voice = VoiceChat.GetModule();
             voice.Range = VoiceChatRange.Normal;
             voice.Commit();
@@ -159,15 +162,15 @@ namespace Curiosity.Core.Client.Extensions
 
         public static void Revive(this CuriosityCharacter character, Position position)
         {
-            var ped = Cache.Entity.Id;
+            Game.PlayerPed.Weapons.RemoveAll();
+            Game.PlayerPed.Task.ClearAllImmediately();
+            Game.Player.WantedLevel = 0;
+            Game.PlayerPed.IsVisible = true;
+            Game.PlayerPed.Health = Game.PlayerPed.MaxHealth;
+            Game.PlayerPed.ClearBloodDamage();
+            Game.PlayerPed.ClearLastWeaponDamage();
 
-            API.RemoveAllPedWeapons(ped, false);
-            API.ClearPedTasksImmediately(ped);
-            API.ClearPlayerWantedLevel(API.PlayerId());
-            API.SetEntityVisible(ped, true, true);
-            API.SetEntityHealth(ped, API.GetEntityMaxHealth(ped));
             API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.Heading, false, false);
-            API.ClearPedBloodDamage(ped);
         }
 
         public static async Task PostLoad(this CuriosityCharacter character)
@@ -342,12 +345,43 @@ namespace Curiosity.Core.Client.Extensions
         //    API.StatSetInt((uint)API.GetHashKey(stat), value, true);
         //}
 
-        //public static void SetupStats(this CuriosityCharacter character)
-        //{
-        //    foreach (KeyValuePair<string, int> keyValuePair in character.Stats)
-        //    {
-        //        API.StatSetInt((uint)API.GetHashKey(keyValuePair.Key), keyValuePair.Value, true);
-        //    }
-        //}
+        public static void SetupStats(this CuriosityCharacter character)
+        {
+            foreach (CharacterStat stat in character.Stats)
+            {
+                string statStr = "";
+                switch ((Stat)stat.Id)
+                {
+                    case Stat.STAT_FLYING_ABILITY:
+                        statStr = character.MP0_FLYING_ABILITY;
+                        break;
+                    case Stat.STAT_LUNG_CAPACITY:
+                        statStr = character.MP0_LUNG_CAPACITY;
+                        break;
+                    case Stat.STAT_SHOOTING_ABILITY:
+                        statStr = character.MP0_SHOOTING_ABILITY;
+                        break;
+                    case Stat.STAT_STAMINA:
+                        statStr = character.MP0_STAMINA;
+                        break;
+                    case Stat.STAT_STEALTH_ABILITY:
+                        statStr = character.MP0_STEALTH_ABILITY;
+                        break;
+                    case Stat.STAT_STRENGTH:
+                        statStr = character.MP0_STRENGTH;
+                        break;
+                    case Stat.STAT_WHEELIE_ABILITY:
+                        statStr = character.MP0_WHEELIE_ABILITY;
+                        break;
+                }
+
+                if (string.IsNullOrEmpty(statStr)) continue;
+
+                if (stat.Value > 100)
+                    stat.Value = 100;
+
+                API.StatSetInt((uint)API.GetHashKey(statStr), (int)stat.Value, true);
+            }
+        }
     }
 }
