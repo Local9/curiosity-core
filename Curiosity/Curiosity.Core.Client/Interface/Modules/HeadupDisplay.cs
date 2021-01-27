@@ -1,3 +1,4 @@
+using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Managers;
 using System;
@@ -43,8 +44,9 @@ namespace Curiosity.Core.Client.Interface.Modules
                     Color.FromArgb(175, 93, 182, 229));
 
                 // Hide radar since we're not sitting in any vehicle
-                API.HideHudAndRadarThisFrame();
             }
+
+            API.DisplayRadar(Game.PlayerPed.IsInVehicle());
 
             await Task.FromResult(0);
         }
