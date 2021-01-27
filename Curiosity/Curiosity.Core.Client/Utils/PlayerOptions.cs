@@ -17,7 +17,7 @@ namespace Curiosity.Core.Client.Utils
 
 
         static DateTime playerKilledSelf;
-        public static bool IsKillSelfEnabled { get; internal set; }
+        public static bool IsKillSelfEnabled { get; internal set; } = true;
         public static int CostOfKillSelf = 500;
         public static int NumberOfTimesKillSelf = 0;
 
