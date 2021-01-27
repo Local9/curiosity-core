@@ -82,6 +82,30 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
             }
         }
+        [CommandInfo(new[] { "els" })]
+        public class ElsSpawner : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                try
+                {
+                    if (arguments.Count <= 0) return;
+
+                    var model = new Model(API.GetHashKey(arguments.ElementAt(0)));
+
+                    if (!model.IsValid || !model.IsVehicle) return;
+
+                    var position = entity.Position;
+                    var vehicle = PluginManager.Instance.ExportDictionary["elsplus"].SpawnCar(arguments.ElementAt(0));
+
+                    entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
+                }
+                catch (Exception)
+                {
+                    // Ignored
+                }
+            }
+        }
 
         [CommandInfo(new[] { "repair", "fix", "wash" })]
         public class VehicleRepairer : ICommand
