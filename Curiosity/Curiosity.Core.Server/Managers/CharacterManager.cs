@@ -4,6 +4,7 @@ using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -32,6 +33,20 @@ namespace Curiosity.Core.Server.Managers
                 await curiosityCharacter.Save();
 
                 return null;
+            }));
+
+            EventSystem.GetModule().Attach("character:get:skills", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+                List<CharacterSkill> returnVal = await Database.Store.SkillDatabase.Get(player.Character.CharacterId);
+                return returnVal;
+            }));
+
+            EventSystem.GetModule().Attach("character:get:stats", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+                List<CharacterStat> returnVal = await Database.Store.StatDatabase.Get(player.Character.CharacterId);
+                return returnVal;
             }));
 
 

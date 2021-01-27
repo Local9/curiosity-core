@@ -42,22 +42,6 @@ namespace Curiosity.Core.Server.Managers
                 return PluginManager.ActiveUsers[metadata.Sender];
             }));
 
-            EventSystem.GetModule().Attach("user:getSkills", new EventCallback(metadata =>
-            {
-                var player = PluginManager.PlayersList[metadata.Sender];
-                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetSkills(player.Handle);
-                List<CharacterSkill> returnVal = JsonConvert.DeserializeObject<List<CharacterSkill>>(exportResponse);
-                return returnVal;
-            }));
-
-            EventSystem.GetModule().Attach("user:getStats", new EventCallback(metadata =>
-            {
-                var player = PluginManager.PlayersList[metadata.Sender];
-                string exportResponse = Instance.ExportDictionary["curiosity-server"].GetStats(player.Handle);
-                List<CharacterSkill> returnVal = JsonConvert.DeserializeObject<List<CharacterSkill>>(exportResponse);
-                return returnVal;
-            }));
-
             EventSystem.GetModule().Attach("user:license:weapon", new EventCallback(metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];

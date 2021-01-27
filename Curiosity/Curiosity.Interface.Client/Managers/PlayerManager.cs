@@ -56,7 +56,7 @@ namespace Curiosity.Interface.Client.Managers
 
             Instance.AttachNuiHandler("PlayerExperience", new AsyncEventCallback(async metadata =>
             {
-                List<CharacterSkill> skills = await EventSystem.Request<List<CharacterSkill>>("user:getSkills");
+                List<CharacterSkill> skills = await EventSystem.Request<List<CharacterSkill>>("character:get:skills");
 
                 if (skills == null) return null;
 
@@ -71,7 +71,7 @@ namespace Curiosity.Interface.Client.Managers
 
             Instance.AttachNuiHandler("PlayerStats", new AsyncEventCallback(async metadata =>
             {
-                List<CharacterSkill> stats = await EventSystem.Request<List<CharacterSkill>>("user:getStats");
+                List<CharacterStat> stats = await EventSystem.Request<List<CharacterStat>>("character:get:stats");
 
                 if (stats == null) return null;
 
