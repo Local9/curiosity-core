@@ -143,7 +143,7 @@ namespace Curiosity.Core.Client
         {
             // Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
             // Screen.Hud.HideComponentThisFrame(HudComponent.WeaponWheel);
-            
+
             Screen.Hud.HideComponentThisFrame(HudComponent.Cash);
             Screen.Hud.HideComponentThisFrame(HudComponent.CashChange);
             Screen.Hud.HideComponentThisFrame(HudComponent.MpCash);
