@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Events;
 using Curiosity.Systems.Library.Utils;
 using NativeUI;
 using System;
@@ -17,7 +18,8 @@ namespace Curiosity.Core.Client.Utils
 
         static DateTime playerKilledSelf;
         public static bool IsKillSelfEnabled { get; internal set; }
-        public static int CostOfKillSelf = 0;
+        public static int CostOfKillSelf = 500;
+        public static int NumberOfTimesKillSelf = 0;
 
         public static void SetPlayerPassive(bool isPassive)
         {
@@ -125,6 +127,8 @@ namespace Curiosity.Core.Client.Utils
 
             playerKilledSelf = DateTime.Now;
             PluginManager.Instance.AttachTickHandler(PlayerKilledSelfCooldownTick);
+
+            EventSystem.GetModule().Send("character:killed:self");
         }
 
         private static async Task PlayerKilledSelfCooldownTick()
@@ -133,6 +137,8 @@ namespace Curiosity.Core.Client.Utils
             {
                 PluginManager.Instance.DetachTickHandler(PlayerKilledSelfCooldownTick);
                 IsKillSelfEnabled = true;
+
+                NumberOfTimesKillSelf++;
             }
             else
             {

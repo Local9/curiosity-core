@@ -1,15 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,7 +39,7 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);
 
-            miKillYourself.SetRightLabel($"${PlayerOptions.CostOfKillSelf}");
+            miKillYourself.SetRightLabel($"$0");
 
             MenuPool.Add(menuMain);
 
@@ -130,7 +127,7 @@ namespace Curiosity.Core.Client.Interface.Menus
             miPassive.Enabled = PlayerOptions.IsPassiveModeEnabled;
 
             miKillYourself.Enabled = PlayerOptions.IsKillSelfEnabled;
-            miKillYourself.SetRightLabel($"${PlayerOptions.CostOfKillSelf}");
+            miKillYourself.SetRightLabel($"${PlayerOptions.CostOfKillSelf * PlayerOptions.NumberOfTimesKillSelf}");
         }
 
         private void MenuMain_OnMenuClose(UIMenu sender)

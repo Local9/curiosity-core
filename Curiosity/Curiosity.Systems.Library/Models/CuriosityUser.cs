@@ -29,6 +29,7 @@ namespace Curiosity.Systems.Library.Models
         public bool IsPassive { get; set; }
         // Queue
         public int QueuePriority { get; set; }
+        [JsonIgnore] public int TimesKilledSelf { get; set; } = 0;
         public CuriosityCharacter Character { get; set; }
         public Guid PartyId { get; internal set; } = Guid.Empty;
         public string CurrentJob { get; set; } = string.Empty;

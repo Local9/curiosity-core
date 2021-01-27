@@ -60,6 +60,24 @@ namespace Curiosity.Core.Server.Managers
                 return returnVal;
             }));
 
+            EventSystem.GetModule().Attach("character:killed:self", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+
+                long costForDeath = 500 * player.TimesKilledSelf;
+
+                player.TimesKilledSelf++;
+
+                if (costForDeath > 10000)
+                    costForDeath = 10000;
+
+                if (player.Character.Cash - costForDeath < 0)
+                    costForDeath = player.Character.Cash;
+
+                player.Character.Cash = await Database.Store.BankDatabase.Adjust(player.Character.CharacterId, costForDeath * -1);
+                return player.Character.Cash;
+            }));
+
 
             Instance.ExportDictionary.Add("SkillAdjust", new Func<string, int, int, Task<string>>(
                 async (playerHandle, skillId, amt) => {

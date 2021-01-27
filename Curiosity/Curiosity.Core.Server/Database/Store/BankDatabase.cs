@@ -8,7 +8,7 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class BankDatabase
     {
-        public static async Task<int> Adjust(int characterId, int amount)
+        public static async Task<int> Adjust(int characterId, long amount)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
