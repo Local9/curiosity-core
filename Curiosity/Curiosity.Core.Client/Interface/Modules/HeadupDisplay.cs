@@ -1,5 +1,6 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Managers;
 using System;
 using System.Drawing;
@@ -10,7 +11,7 @@ namespace Curiosity.Core.Client.Interface.Modules
 {
     public class HeadupDisplay : Manager<HeadupDisplay>
     {
-        public bool IsDisabled { get; set; }
+        public bool IsDisabled { get; set; } = false;
 
         [TickHandler(SessionWait = true)]
         private async Task OnTick()
@@ -45,9 +46,8 @@ namespace Curiosity.Core.Client.Interface.Modules
                     Color.FromArgb(175, 93, 182, 229));
 
                 // Hide radar since we're not sitting in any vehicle
+                Hud.IsRadarVisible = false;
             }
-
-            Hud.IsRadarVisible = Game.PlayerPed.IsInVehicle();
         }
 
         public MinimapAnchor GetMinimapAnchor()

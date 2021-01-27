@@ -95,8 +95,7 @@ namespace Curiosity.Core.Client.Utils
             if (randomEvent == 1)
             {
                 Game.PlayerPed.Task.PlayAnimation("mp_suicide", "pill", 8f, -1, AnimationFlags.None);
-
-                await BaseScript.Delay(2000);
+                await BaseScript.Delay(2500);
                 Game.PlayerPed.Kill();
             }
             else if (randomEvent == 0)
