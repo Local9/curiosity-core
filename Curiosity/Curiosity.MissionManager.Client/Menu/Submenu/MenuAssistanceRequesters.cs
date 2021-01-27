@@ -112,9 +112,11 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                         blip.Color = BlipColor.Red;
                         blip.Name = $"Back Up Request: {player.Name}";
 
+                        API.FlashMinimapDisplay();
+
                         API.SetNewWaypoint(player.Character.Position.X, player.Character.Position.Y);
 
-                        await BaseScript.Delay(500);
+                        await BaseScript.Delay(5000);
                         blip.Delete();
                     }
                 }
