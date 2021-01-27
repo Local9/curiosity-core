@@ -74,7 +74,9 @@ namespace Curiosity.Core.Server.Managers
                 if (player.Character.Cash - costForDeath < 0)
                     costForDeath = player.Character.Cash;
 
-                player.Character.Cash = await Database.Store.BankDatabase.Adjust(player.Character.CharacterId, costForDeath * -1);
+                if (costForDeath > 0)
+                    player.Character.Cash = await Database.Store.BankDatabase.Adjust(player.Character.CharacterId, costForDeath * -1);
+
                 return player.Character.Cash;
             }));
 
