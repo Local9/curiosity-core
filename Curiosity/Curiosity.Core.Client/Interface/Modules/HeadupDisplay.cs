@@ -4,6 +4,7 @@ using Curiosity.Core.Client.Managers;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
+using static CitizenFX.Core.UI.Screen;
 
 namespace Curiosity.Core.Client.Interface.Modules
 {
@@ -46,9 +47,7 @@ namespace Curiosity.Core.Client.Interface.Modules
                 // Hide radar since we're not sitting in any vehicle
             }
 
-            API.DisplayRadar(Game.PlayerPed.IsInVehicle());
-
-            await Task.FromResult(0);
+            Hud.IsRadarVisible = Game.PlayerPed.IsInVehicle();
         }
 
         public MinimapAnchor GetMinimapAnchor()
