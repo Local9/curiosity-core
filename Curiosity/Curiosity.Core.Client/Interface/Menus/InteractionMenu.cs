@@ -137,13 +137,11 @@ namespace Curiosity.Core.Client.Interface.Menus
         public void DisposeMenu()
         {
             Instance.DetachTickHandler(OnMenuDisplay);
-            // menuMain.Clear(); // RESET
         }
 
         private async Task OnMenuDisplay()
         {
             MenuPool.ProcessMenus();
-            // MenuPool.ProcessMouse();
             MenuPool.MouseEdgeEnabled = false;
         }
 
