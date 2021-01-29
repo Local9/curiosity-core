@@ -1,6 +1,5 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Managers;
 using System;
 using System.Drawing;
