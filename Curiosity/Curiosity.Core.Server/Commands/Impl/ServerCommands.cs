@@ -6,6 +6,9 @@ using Curiosity.Core.Server.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Curiosity.Core.Server.Managers;
+using Curiosity.Systems.Library.Data;
+using Curiosity.Systems.Library.Utils;
 
 namespace Curiosity.Core.Server.Commands.Impl
 {
@@ -39,6 +42,101 @@ namespace Curiosity.Core.Server.Commands.Impl
         //        }
         //    }
         //}
+        #endregion
+
+        #region WORLD
+        [CommandInfo(new[] { "weather" })]
+        public class WorldWeather : ICommand
+        {
+            public async void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    ChatManager.OnChatMessage(player, $"Missing weather type.");
+                    return;
+                }
+
+                string arg = arguments.ElementAt(0);
+                arg = arg.ToUpper();
+
+                if (Enum.TryParse(arg, out WeatherType weather))
+                {
+                    WorldManager.WorldInstance.SetWeatherForAllRegions(weather);
+                    ChatManager.OnChatMessage(player, $"Weather: {weather.GetStringValue()}");
+                    return;
+                }
+
+                switch(arg)
+                {
+                    case "FREEZE":
+                        WorldManager.WorldInstance.IsWeatherFrozen = !WorldManager.WorldInstance.IsWeatherFrozen;
+                        ChatManager.OnChatMessage(player, WorldManager.WorldInstance.IsWeatherFrozen ? "Weather Frozen" : "Weather Unfrozen");
+                        break;
+                    default:
+                        ChatManager.OnChatMessage(player, $"Argument '{arg}' unknown");
+                        break;
+                }
+            }
+        }
+        [CommandInfo(new[] { "time" })]
+        public class WorldTime : ICommand
+        {
+            public async void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    ChatManager.OnChatMessage(player, $"Missing arguments.");
+                    return;
+                }
+
+                string arg1 = arguments.ElementAt(0);
+
+                if (arguments.Count > 1)
+                {
+                    string arg2 = arguments.ElementAt(1);
+
+                    if (int.TryParse(arg1, out int hour))
+                    {
+                        WorldManager.WorldInstance.ShiftTimeToHour(hour);
+                    }
+
+                    if (int.TryParse(arg2, out int minute))
+                    {
+                        WorldManager.WorldInstance.ShiftTimeToMinute(minute);
+                    }
+                    return;
+                }
+
+                int newHour;
+                int newMinute = 0;
+                switch (arg1)
+                {
+                    case "morning":
+                        newHour = 9;
+                        
+                        break;
+                    case "noon":
+                        newHour = 12;
+                        break;
+                    case "evening":
+                        newHour = 18;
+                        break;
+                    case "night":
+                        newHour = 22;
+                        break;
+                    case "freeze":
+                        WorldManager.WorldInstance.IsTimeFrozen = !WorldManager.WorldInstance.IsTimeFrozen;
+                        ChatManager.OnChatMessage(player, WorldManager.WorldInstance.IsTimeFrozen ? "Time Frozen" : "Time Unfrozen");
+                        return;
+                    default:
+                        ChatManager.OnChatMessage(player, $"Argument '{arg1}' unknown.");
+                        return;
+                }
+                ChatManager.OnChatMessage(player, $"Set Time: {arg1}");
+                WorldManager.WorldInstance.ShiftTimeToHour(newHour);
+                WorldManager.WorldInstance.ShiftTimeToMinute(newMinute);
+            }
+        }
         #endregion
     }
 }

@@ -13,8 +13,11 @@ namespace Curiosity.Core.Server.Managers
 {
     public class WorldManager : Manager<WorldManager>
     {
+        public static WorldManager WorldInstance;
         private const int WEATHER_UPDATE_MS = 60000;
         DateTime lastTimeWeatherUpdated = DateTime.Now;
+
+        public bool IsWeatherFrozen = false;
 
         Dictionary<Region, WeatherType> regionWeatherType = new Dictionary<Region, WeatherType>()
         {
@@ -37,8 +40,12 @@ namespace Curiosity.Core.Server.Managers
         DateTime lastTimeTick = DateTime.Now;
         DateTime lastTimeSyncTick = DateTime.Now;
 
+        public bool IsTimeFrozen { get; internal set; }
+
         public override void Begin()
         {
+            WorldInstance = this;
+
             EventSystem.GetModule().Attach("weather:sync", new EventCallback(metadata =>
             {
                 SubRegion subRegion = (SubRegion)metadata.Find<int>(0);
@@ -63,6 +70,15 @@ namespace Curiosity.Core.Server.Managers
             }
 
             Logger.Debug($"Weather Region Init END");
+        }
+
+        public void SetWeatherForAllRegions(WeatherType weatherType)
+        {
+            Dictionary<Region, WeatherType> regionWeatherTypeCopy = new Dictionary<Region, WeatherType>(regionWeatherType);
+            foreach (KeyValuePair<Region, WeatherType> keyValuePair in regionWeatherTypeCopy)
+            {
+                regionWeatherType[keyValuePair.Key] = weatherType;
+            }
         }
 
         void RandomiseWeather()
@@ -91,6 +107,8 @@ namespace Curiosity.Core.Server.Managers
         {
             if (DateTime.Now.Subtract(lastTimeWeatherUpdated).TotalMinutes >= 60)
             {
+                if (IsWeatherFrozen) return;
+
                 RandomiseWeather();
             }
 
@@ -125,6 +143,18 @@ namespace Curiosity.Core.Server.Managers
             }
 
             await BaseScript.Delay(1000);
+        }
+
+        public void ShiftTimeToHour(int inHour)
+        {
+            inHour = inHour >= 24 ? 0 : inHour;
+            _timeOffset = _timeOffset - (((((_baseTime + _timeOffset) / 60) % 24) - inHour) * 60);
+        }
+
+        public void ShiftTimeToMinute(int inMins)
+        {
+            inMins = inMins >= 60 ? 0 : inMins;
+            _timeOffset = _timeOffset - (((_baseTime + _timeOffset) % 60) - (inMins * 1000));
         }
     }
 }

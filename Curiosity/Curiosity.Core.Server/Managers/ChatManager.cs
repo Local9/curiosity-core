@@ -75,7 +75,7 @@ namespace Curiosity.Core.Server.Managers
             ));
         }
 
-        public static void OnChatMessage([FromSource] Player player, string message, string channel)
+        public static void OnChatMessage([FromSource] Player player, string message, string channel = "chat")
         {
             int playerHandle = int.Parse(player.Handle);
             CuriosityUser user = PluginManager.ActiveUsers[playerHandle];
