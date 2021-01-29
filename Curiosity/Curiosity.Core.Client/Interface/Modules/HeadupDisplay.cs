@@ -44,10 +44,8 @@ namespace Curiosity.Core.Client.Interface.Modules
                 DrawObject(anchor.X + 0.001f + anchor.Width / 2, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
                     anchor.Width / 2 / 100 * API.GetPedArmour(ped), anchor.UnitY * 18f / 2,
                     Color.FromArgb(175, 93, 182, 229));
-
-                // Hide radar since we're not sitting in any vehicle
-                Hud.IsRadarVisible = false;
             }
+            Hud.IsRadarVisible = Game.PlayerPed.IsInVehicle();
         }
 
         public MinimapAnchor GetMinimapAnchor()
