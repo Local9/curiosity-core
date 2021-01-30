@@ -734,7 +734,7 @@ namespace Curiosity.MissionManager.Client.Classes
             Fx.IsPersistent = false;
             Fx.MarkAsNoLongerNeeded();
 
-            EventSystem.Send("entity:s:delete", Fx.NetworkId);
+            EventSystem.Send("entity:delete", Fx.NetworkId);
 
             base.Delete();
         }
