@@ -14,7 +14,11 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
-            Instance.EventRegistry["chat:receive"] += new Action<string>(OnChatReceived);
+            EventSystem.Attach("chat:receive", new EventCallback(metadata =>
+            {
+                API.SendNuiMessage(metadata.Find<string>(0));
+                return null;
+            }));
 
             Instance.AttachNuiHandler("SendChatMessage", new EventCallback(metadata =>
             {
@@ -35,8 +39,7 @@ namespace Curiosity.Core.Client.Managers
                 }
                 else
                 {
-                    // EventSystem.Send("chat:global", message, chatChannel);
-                    BaseScript.TriggerServerEvent("chat:global", message, chatChannel);
+                    EventSystem.Send("chat:global", message, chatChannel);
                 }
                 return null;
             }));
@@ -46,11 +49,6 @@ namespace Curiosity.Core.Client.Managers
                 EnableChatbox(false);
                 return null;
             }));
-        }
-
-        private void OnChatReceived(string message)
-        {
-            API.SendNuiMessage(message);
         }
 
         static void EnableChatbox(bool state)

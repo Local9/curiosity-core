@@ -6,20 +6,29 @@ namespace Curiosity.Core.Server.Managers
 {
     public class EntityManager : Manager<EntityManager>
     {
+        public static EntityManager EntityInstance;
+
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("entity:s:delete", new EventCallback(metadata =>
+            EntityInstance = this;
+
+            EventSystem.GetModule().Attach("entity:delete", new EventCallback(metadata =>
             {
                 int networkId = metadata.Find<int>(0);
 
-                foreach(Player player in PluginManager.PlayersList)
-                {
-                    int playerHandle = int.Parse(player.Handle);
-                    EventSystem.GetModule().Send("entity:c:delete", playerHandle, networkId);
-                }
+                NetworkDeleteEntity(networkId);
 
                 return null;
             }));
+        }
+
+        public void NetworkDeleteEntity(int networkId)
+        {
+            foreach (Player player in PluginManager.PlayersList)
+            {
+                int playerHandle = int.Parse(player.Handle);
+                EventSystem.GetModule().Send("entity:deleteFromWorld", playerHandle, networkId);
+            }
         }
     }
 }

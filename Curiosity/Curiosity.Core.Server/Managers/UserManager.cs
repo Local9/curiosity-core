@@ -118,6 +118,7 @@ namespace Curiosity.Core.Server.Managers
                     }
                 }
 
+                EntityManager.EntityInstance.NetworkDeleteEntity(curUser.PersonalVehicle);
                 bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
                 bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
 

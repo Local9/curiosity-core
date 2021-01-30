@@ -376,6 +376,8 @@ namespace Curiosity.Core.Server
                         int playerHandle = int.Parse(player.Handle);
                         if (!ActiveUsers.ContainsKey(playerHandle))
                         {
+                            CuriosityUser curiosityUser = ActiveUsers[playerHandle];
+
                             ActiveUsers.TryRemove(playerHandle, out CuriosityUser old);
                             QueueManager.session.TryRemove(player.Identifiers["license"], out SessionState sessionState);
 
@@ -390,6 +392,7 @@ namespace Curiosity.Core.Server
                                 }
                             }
 
+                            EntityManager.EntityInstance.NetworkDeleteEntity(curiosityUser.PersonalVehicle);
                             MissionManager.FailureTracker.TryRemove(playerHandle, out int numFailed);
                             MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData oldMission);
 

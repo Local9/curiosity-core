@@ -6,6 +6,7 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -71,8 +72,21 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                     if (!model.IsValid || !model.IsVehicle) return;
 
+                    if (Cache.PersonalVehicle != null)
+                    {
+                        EventSystem.GetModule().Send("entity:delete", Cache.PersonalVehicle.NetworkId);
+
+                        while (Cache.PersonalVehicle.Exists())
+                        {
+                            await BaseScript.Delay(100);
+                        }
+                    }
+
                     var position = entity.Position;
                     var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
+
+                    player.User.Send("vehicle:log:player", vehicle.NetworkId);
+                    Cache.PersonalVehicle = vehicle;
 
                     entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
                 }
