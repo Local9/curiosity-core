@@ -21,6 +21,8 @@ namespace Curiosity.Core.Client.Environment
 
             await Teleport(entity, position, interval);
 
+            API.FreezeEntityPosition(entity, false);
+
             await BaseScript.Delay(1000);
 
             Screen.Fading.FadeIn(500);
@@ -29,8 +31,6 @@ namespace Curiosity.Core.Client.Environment
             {
                 await BaseScript.Delay(10);
             }
-
-            API.FreezeEntityPosition(entity, false);
         }
 
         public static async Task Teleport(int entity, Position position, int interval = 10)
