@@ -6,7 +6,6 @@ using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

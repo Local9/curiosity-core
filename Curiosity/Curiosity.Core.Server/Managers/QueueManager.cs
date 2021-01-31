@@ -1,8 +1,10 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Systems.Library.Models;
 using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Web;
+using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,8 +12,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Curiosity.Core.Server.Events;
-using Curiosity.Systems.Library.Events;
 
 namespace Curiosity.Core.Server.Managers
 {

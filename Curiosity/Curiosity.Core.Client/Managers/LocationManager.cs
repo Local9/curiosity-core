@@ -1,17 +1,17 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Curiosity.Core.Client.Extensions;
-using CitizenFX.Core.UI;
-using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Interface;
-using Curiosity.Core.Client.Diagnostics;
 
 namespace Curiosity.Core.Client.Managers
 {

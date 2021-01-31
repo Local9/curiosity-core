@@ -1,5 +1,4 @@
 using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Commands

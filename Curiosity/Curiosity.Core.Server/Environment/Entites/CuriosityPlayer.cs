@@ -1,10 +1,7 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
-using Curiosity.Systems.Library.Enums;
+﻿using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Environment.Entities
 {

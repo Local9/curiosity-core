@@ -1,13 +1,12 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Systems.Library.Models.Discord;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Managers;
+using Curiosity.Systems.Library.Models.Discord;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
-using CitizenFX.Core.Native;
-using Curiosity.Core.Server.Managers;
-using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Web
 {

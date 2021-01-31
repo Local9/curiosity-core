@@ -1,8 +1,8 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Systems.Library.Models;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Managers;
+using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

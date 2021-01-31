@@ -1,16 +1,16 @@
 using CitizenFX.Core;
-using Curiosity.Systems.Library.Events;
-using Curiosity.Systems.Library.Threading;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Managers;
+using Curiosity.Systems.Library;
+using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Threading;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Curiosity.Systems.Library;
-using CitizenFX.Core.Native;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Events
 {

@@ -1,13 +1,13 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Systems.Library.Models;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
+using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Curiosity.Systems.Library.Enums;
-using CitizenFX.Core.Native;
 
 namespace Curiosity.Core.Server.Database.Store
 {
