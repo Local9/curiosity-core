@@ -44,7 +44,7 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("character:respawn", new EventCallback(metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
-                curiosityUser.Send("character:respawnNow");
+                curiosityUser.Send("character:respawn:hospital");
 
                 return null;
             }));
