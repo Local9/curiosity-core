@@ -14,8 +14,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Position position = new Position(0, 0, 0, 0);
-
+                Position position = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
                 await SafeTeleport.TeleportFade(player.Entity.Id, position);
             }
         }
