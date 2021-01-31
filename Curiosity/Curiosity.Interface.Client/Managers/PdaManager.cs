@@ -125,6 +125,8 @@ namespace Curiosity.Interface.Client.Managers
 
         private async void AddProp()
         {
+            if (Game.PlayerPed.IsDead) return;
+
             Model model = "prop_cs_tablet";
 
             Vector3 pos = Game.PlayerPed.Position;
