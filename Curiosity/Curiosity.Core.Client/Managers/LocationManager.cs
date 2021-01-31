@@ -23,6 +23,7 @@ namespace Curiosity.Core.Client.Managers
         internal List<MarkerData> MarkersClose = new List<MarkerData>();
 
         string previousJob = "unemployed";
+        bool markerCooldown = false;
 
         public override void Begin()
         {
@@ -167,6 +168,14 @@ namespace Curiosity.Core.Client.Managers
 
             if (Game.IsControlJustPressed(0, (Control)activeMarker.Control))
             {
+                if (markerCooldown)
+                {
+                    Notify.Alert("Cooldown Active, please wait...");
+                    return;
+                }
+
+                OnMarkerCooldown();
+
                 Logger.Debug($"Control for event '{activeMarker.Event}' pressed");
 
                 if (activeMarker.IsServerEvent)
@@ -192,6 +201,13 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
             }
+        }
+
+        private async void OnMarkerCooldown()
+        {
+            markerCooldown = true;
+            await BaseScript.Delay(5000);
+            markerCooldown = false;
         }
     }
 }
