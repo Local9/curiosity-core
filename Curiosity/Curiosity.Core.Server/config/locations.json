@@ -1,7 +1,7 @@
 {
   "locations": [
     {
-      "name": "Police Station",
+      "name": "Police Depo",
       "sprite": 60,
       "color": 3,
       "isShortRange": true,
@@ -210,9 +210,71 @@
       "scale": 1.0,
       "positions": [
         {
-          "X": 1690.799,
-          "Y": 2534.07,
-          "Z": 57.09846
+          "X": 462.7421,
+          "Y": -1019.469,
+          "Z": 27.1043
+        },
+        {
+          "X": -366.4681,
+          "Y": -109.5964,
+          "Z": 37.89588
+        },
+        {
+          "X": 2366.087,
+          "Y": 3167.133,
+          "Z": 46.84825
+        },
+        {
+          "X": -449.2261,
+          "Y": 6052.743,
+          "Z": 30.34053
+        }
+      ],
+      "markers": [
+        {
+          "control": 51,
+          "message": "Delete Vehicle",
+          "helpText": "Press ~INPUT_CONTEXT~ to ~r~delete ~w~the ~b~vehicle.",
+          "event": "delete:vehicle",
+          "isServerEvent": true,
+          "isLegacyEvent": false,
+          "isLuaEvent": false,
+          "markerId": 1,
+          "scale": {
+            "X": 5.0,
+            "Y": 5.0,
+            "Z": 0.5
+          },
+          "contextAoe": 5.0,
+          "drawThreshold": 7.5,
+          "color": {
+            "alpha": 255,
+            "red": 161,
+            "green": 40,
+            "blue": 48
+          },
+          "positions": [
+            {
+              "X": 462.7421,
+              "Y": -1019.469,
+              "Z": 27.1043
+            },
+            {
+              "X": -366.4681,
+              "Y": -109.5964,
+              "Z": 37.89588
+            },
+            {
+              "X": 2366.087,
+              "Y": 3167.133,
+              "Z": 46.84825
+            },
+            {
+              "X": -449.2261,
+              "Y": 6052.743,
+              "Z": 30.34053
+            }
+          ]
         }
       ]
     }
