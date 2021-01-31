@@ -16,6 +16,6 @@
         STAT_FLYING_ABILITY,
         STAT_WHEELIE_ABILITY,
         STAT_LUNG_CAPACITY,
-        STAT_DEATH = 58
+        STAT_KILLED_SELF = 58
     }
 }

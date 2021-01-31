@@ -68,7 +68,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
-                Database.Store.StatDatabase.Adjust(curiosityUser.Character.CharacterId, Stat.STAT_DEATH, 1);
+                Database.Store.StatDatabase.Adjust(curiosityUser.Character.CharacterId, Stat.STAT_KILLED_SELF, 1);
 
                 return null;
             }));
@@ -112,7 +112,10 @@ namespace Curiosity.Core.Server.Managers
                     costForDeath = player.Character.Cash;
 
                 if (costForDeath > 0)
+                {
                     player.Character.Cash = await Database.Store.BankDatabase.Adjust(player.Character.CharacterId, costForDeath * -1);
+                    Database.Store.StatDatabase.Adjust(player.Character.CharacterId, Stat.STAT_KILLED_SELF, 1);
+                }
 
                 return player.Character.Cash;
             }));
