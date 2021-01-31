@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Systems.Library.Events;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -12,6 +10,22 @@ namespace Curiosity.Core.Client.Managers
         {
             // spawn
             // delete
+
+            EventSystem.Attach("delete:vehicle", new EventCallback(metadata =>
+            {
+                Logger.Debug("delete vehicle");
+
+                Vehicle vehicle = Cache.PersonalVehicle;
+
+                if (Game.PlayerPed.IsInVehicle())
+                    vehicle = Game.PlayerPed.CurrentVehicle;
+
+                if (vehicle != null)
+                    EventSystem.Send("delete:entity", vehicle.NetworkId);
+                    
+                return null;
+            }));
+
             // edit
         }
     }

@@ -64,12 +64,12 @@ namespace Curiosity.Core.Server.Managers
             return GetLocationConfig().Locations;
         }
 
-        public bool IsNearLocation(Vector3 position, string eventName, float distance)
+        public bool IsNearLocation(Vector3 position, string eventName, float distance = 0f)
         {
             foreach(Location location in configCache.Locations)
             {
                 if (location.Markers.Count == 0)
-                    return false;
+                    continue;
 
                 foreach(Marker marker in location.Markers)
                 {
@@ -77,8 +77,12 @@ namespace Curiosity.Core.Server.Managers
                     {
                         foreach(Position pos in marker.Positions)
                         {
-                            float dist = Vector3.Distance(position, pos.AsVector());
-                            bool distanceValid = dist <= distance;
+                            Vector3 posV = pos.AsVector();
+                            float dist = Vector3.Distance(position, posV);
+                            float distanceToCheck = (distance > 0f) ? distance : marker.ContextAoe;
+                            bool distanceValid = dist <= distanceToCheck;
+
+                            Logger.Debug($"Position {posV} Close: {distanceValid}");
 
                             if (distanceValid)
                             {

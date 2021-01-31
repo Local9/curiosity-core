@@ -62,6 +62,7 @@
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
     <Compile Include="Environment\Entities\Models\MarkerData.cs" />
     <Compile Include="Extensions\EntityExtensions.cs" />
+    <Compile Include="Extensions\PedExtensions.cs" />
     <Compile Include="Extensions\VehicleExtensions.cs" />
     <Compile Include="Interface\Chat.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />
