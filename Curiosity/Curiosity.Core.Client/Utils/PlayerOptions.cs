@@ -27,29 +27,29 @@ namespace Curiosity.Core.Client.Utils
             {
                 if (!isPassive)
                 {
-                    Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
-                    Game.PlayerPed.SetConfigFlag(342, false);
-                    Game.PlayerPed.SetConfigFlag(122, false);
-                    API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
-                    API.NetworkSetPlayerIsPassive(false);
+                    //Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
+                    //Game.PlayerPed.SetConfigFlag(342, false);
+                    //Game.PlayerPed.SetConfigFlag(122, false);
+                    //API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
+                    //API.NetworkSetPlayerIsPassive(false);
                     API.NetworkSetFriendlyFireOption(true);
 
                     passiveModeDisabled = DateTime.Now;
                     PluginManager.Instance.AttachTickHandler(PassiveCooldownTick);
 
-                    Game.PlayerPed.CanSwitchWeapons = true;
+                    //Game.PlayerPed.CanSwitchWeapons = true;
                 }
                 else
                 {
-                    Game.PlayerPed.CanBeDraggedOutOfVehicle = false;
-                    Game.PlayerPed.SetConfigFlag(342, true);
-                    Game.PlayerPed.SetConfigFlag(122, true);
-                    API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 0.5f);
-                    API.NetworkSetPlayerIsPassive(true);
+                    //Game.PlayerPed.CanBeDraggedOutOfVehicle = false;
+                    //Game.PlayerPed.SetConfigFlag(342, true);
+                    //Game.PlayerPed.SetConfigFlag(122, true);
+                    //API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 0.5f);
+                    //API.NetworkSetPlayerIsPassive(true);
                     API.NetworkSetFriendlyFireOption(false);
                     Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
 
-                    Game.PlayerPed.CanSwitchWeapons = false;
+                    //Game.PlayerPed.CanSwitchWeapons = false;
                 }
             }
         }
