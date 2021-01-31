@@ -19,7 +19,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 int netId = metadata.Find<int>(0);
                 PluginManager.ActiveUsers[metadata.Sender].PersonalVehicle = netId;
-                Logger.Debug($"{metadata.Sender} - Vehicle: {netId}");
+                Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
 
