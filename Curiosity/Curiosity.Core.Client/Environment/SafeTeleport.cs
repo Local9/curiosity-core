@@ -21,6 +21,8 @@ namespace Curiosity.Core.Client.Environment
 
             await Teleport(entity, position, interval);
 
+            await BaseScript.Delay(1000);
+
             Screen.Fading.FadeIn(500);
 
             while (Screen.Fading.IsFadingIn)
