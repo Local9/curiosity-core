@@ -54,7 +54,7 @@
         {
           "control": 51,
           "message": "Duty Toggle",
-          "helpText": "Press ~INPUT_CONTEXT~ to toggle ~b~Police",
+          "helpText": "Press ~INPUT_CONTEXT~ to toggle ~b~Police Job",
           "event": "job:police:duty",
           "isServerEvent": true,
           "isLegacyEvent": false,
@@ -234,7 +234,7 @@
         {
           "control": 51,
           "message": "Delete Vehicle",
-          "helpText": "Press ~INPUT_CONTEXT~ to ~r~delete ~w~the ~b~vehicle.",
+          "helpText": "Press ~INPUT_CONTEXT~ to ~y~delete ~w~the ~b~vehicle.",
           "event": "delete:vehicle",
           "isServerEvent": true,
           "isLegacyEvent": false,
@@ -273,6 +273,104 @@
               "X": -449.2261,
               "Y": 6052.743,
               "Z": 30.34053
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vehicle Repair",
+      "sprite": 402,
+      "color": 2,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 1.0,
+      "positions": [
+        {
+          "X": 1870.172,
+          "Y": 3693.716,
+          "Z": 33.6004
+        },
+        {
+          "X": 138.3844,
+          "Y": 6634.493,
+          "Z": 31.64594
+        },
+        {
+          "X": 1183.209,
+          "Y": 2648.456,
+          "Z": 36.84267
+        },
+        {
+          "X": -356.0485,
+          "Y": -114.0199,
+          "Z": 37.69672
+        },
+        {
+          "X": 717.1935,
+          "Y": -1078.147,
+          "Z": 21.25965
+        },
+        {
+          "X": -199.5225,
+          "Y": -1380.813,
+          "Z": 30.25824
+        }
+      ],
+      "markers": [
+        {
+          "control": 51,
+          "message": "Repair Vehicle",
+          "helpText": "Press ~INPUT_CONTEXT~ to ~y~repair ~w~the ~b~vehicle ~w~(~g~$100~w~)",
+          "event": "repair:vehicle",
+          "isServerEvent": true,
+          "isLegacyEvent": false,
+          "isLuaEvent": false,
+          "markerId": 1,
+          "scale": {
+            "X": 5.0,
+            "Y": 5.0,
+            "Z": 0.5
+          },
+          "contextAoe": 5.0,
+          "drawThreshold": 7.5,
+          "color": {
+            "alpha": 255,
+            "red": 135,
+            "green": 206,
+            "blue": 235
+          },
+          "positions": [
+            {
+              "X": 1870.172,
+              "Y": 3693.716,
+              "Z": 33.6004
+            },
+            {
+              "X": 138.3844,
+              "Y": 6634.493,
+              "Z": 31.64594
+            },
+            {
+              "X": 1183.209,
+              "Y": 2648.456,
+              "Z": 36.84267
+            },
+            {
+              "X": -356.0485,
+              "Y": -114.0199,
+              "Z": 37.69672
+            },
+            {
+              "X": 717.1935,
+              "Y": -1078.147,
+              "Z": 21.25965
+            },
+            {
+              "X": -199.5225,
+              "Y": -1380.813,
+              "Z": 30.25824
             }
           ]
         }

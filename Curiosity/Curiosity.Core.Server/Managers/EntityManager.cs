@@ -11,6 +11,7 @@ namespace Curiosity.Core.Server.Managers
     {
         public static EntityManager EntityInstance;
         const string ENTITY_VEHICLE_DELETE = "delete:vehicle";
+        const string ENTITY_VEHICLE_REPAIR = "repair:vehicle";
 
         public override void Begin()
         {
@@ -40,6 +41,34 @@ namespace Curiosity.Core.Server.Managers
 
                 if (result)
                     user.Send(ENTITY_VEHICLE_DELETE);
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach(ENTITY_VEHICLE_REPAIR, new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+
+                Vector3 position = Vector3.Zero;
+                position.X = metadata.Find<float>(0);
+                position.Y = metadata.Find<float>(1);
+                position.Z = metadata.Find<float>(2);
+
+                bool result = ConfigManager.ConfigInstance.IsNearLocation(position, ENTITY_VEHICLE_REPAIR);
+
+                Logger.Debug($"{user.LatestName} repair vehicle; {result}");
+
+                if (result)
+                {
+                    if (user.Character.Cash < 100)
+                    {
+                        return null;
+                    }
+
+                    user.Character.Cash = await Database.Store.BankDatabase.Adjust(user.Character.CharacterId, -100);
+
+                    user.Send(ENTITY_VEHICLE_REPAIR);
+                }
 
                 return null;
             }));
