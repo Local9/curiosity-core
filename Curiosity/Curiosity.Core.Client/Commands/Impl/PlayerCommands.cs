@@ -9,6 +9,12 @@ namespace Curiosity.Core.Client.Commands.Impl
 {
     public class PlayerCommands : CommandContext
     {
+        public override string[] Aliases { get; set; } = { "player", "p", "me" };
+        public override string Title { get; set; } = "Player Commands";
+        public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
+        public override bool IsRestricted { get; set; }
+        public override List<Role> RequiredRoles { get; set; }
+
         [CommandInfo(new[] { "unstuck", })]
         public class InviteToParty : ICommand
         {
@@ -18,11 +24,5 @@ namespace Curiosity.Core.Client.Commands.Impl
                 await SafeTeleport.TeleportFade(player.Entity.Id, position);
             }
         }
-
-        public override string[] Aliases { get; set; } = { "player", "p", "me" };
-        public override string Title { get; set; } = "Player Commands";
-        public override Color Color { get; set; } = Color.FromArgb(0, 255, 0);
-        public override bool IsRestricted { get; set; }
-        public override List<Role> RequiredRoles { get; set; }
     }
 }
