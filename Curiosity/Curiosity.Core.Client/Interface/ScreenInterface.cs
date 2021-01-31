@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using System;
 using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface
 {
@@ -80,6 +81,24 @@ namespace Curiosity.Core.Client.Interface
         public static void Text(string text, float scale, PointF position, Color color, CitizenFX.Core.UI.Font font = CitizenFX.Core.UI.Font.Monospace, Alignment alignment = Alignment.Center, bool shadow = false, bool outline = false)
         {
 
+        }
+
+        internal static async Task FadeOut(int ms = 1000)
+        {
+            Screen.Fading.FadeOut(ms);
+            while (Screen.Fading.IsFadingOut)
+            {
+                await BaseScript.Delay(0);
+            }
+        }
+
+        internal static async Task FadeIn(int ms = 1000)
+        {
+            Screen.Fading.FadeIn(ms);
+            while (Screen.Fading.IsFadingIn)
+            {
+                await BaseScript.Delay(0);
+            }
         }
     }
 }

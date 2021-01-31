@@ -160,8 +160,10 @@ namespace Curiosity.Core.Client.Extensions
             voice.Commit();
         }
 
-        public static void Revive(this CuriosityCharacter character, Position position)
+        public static async void Revive(this CuriosityCharacter character, Position position)
         {
+            await Game.PlayerPed.FadeOut();
+
             Game.PlayerPed.Weapons.RemoveAll();
             Game.PlayerPed.Task.ClearAllImmediately();
             Game.Player.WantedLevel = 0;
@@ -171,6 +173,10 @@ namespace Curiosity.Core.Client.Extensions
             Game.PlayerPed.ClearLastWeaponDamage();
 
             API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.Heading, false, false);
+
+            await Game.PlayerPed.FadeIn();
+
+            Game.PlayerPed.IsPositionFrozen = false;
         }
 
         public static async Task PostLoad(this CuriosityCharacter character)

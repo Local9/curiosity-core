@@ -40,5 +40,17 @@ namespace Curiosity.Systems.Library.Models
                 Features.Add(feature, value);
             }
         }
+
+        public int RespawnCharge()
+        {
+            int costOfRespawn = (int)(Cash * 0.1);
+
+            if (costOfRespawn > 5000)
+            {
+                costOfRespawn = 5000;
+            }
+
+            return costOfRespawn;
+        }
     }
 }

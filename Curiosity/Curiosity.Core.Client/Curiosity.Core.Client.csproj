@@ -108,7 +108,6 @@
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\ChatManager.cs" />
     <Compile Include="Managers\CrouchManager.cs" />
-    <Compile Include="Managers\DeathManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
     <Compile Include="Managers\Manager.cs" />

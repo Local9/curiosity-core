@@ -95,12 +95,5 @@ namespace Curiosity.Core.Server.Managers
 
             return false;
         }
-
-        private Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)
-        {
-            if (points.Count() == 0) return Vector3.Zero;
-
-            return points.OrderBy(x => Vector3.Distance(startingPoint, x)).First();
-        }
     }
 }

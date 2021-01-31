@@ -1,9 +1,18 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Environment.Entities;
+using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers.Events;
+using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers.Events
 {
@@ -150,6 +159,114 @@ namespace Curiosity.Core.Client.Managers
 
             }
 
+        }
+    }
+
+    public class GameEventTigger : Manager<GameEventTigger>
+    {
+        private const string DEAD_ANIM_DICT = "dead";
+        DateTime DateOfDeath = DateTime.Now;
+        List<string> DeathAnim = new List<string>() { "dead_a", "dead_b", "dead_c", "dead_d", "dead_e", "dead_f", "dead_g", "dead_h" };
+        string CurrentDeathAnim;
+
+        public override void Begin()
+        {
+            GameEventManager.OnDeath += GameEventManager_OnDeath;
+
+            EventSystem.Attach("character:respawnNow", new EventCallback(metadata =>
+            {
+                Respawn(Cache.Player);
+
+                return null;
+            }));
+
+            EventSystem.Attach("character:respawn:hospital", new EventCallback(metadata =>
+            {
+                RespawnAtHospital(Cache.Player);
+
+                return null;
+            }));
+        }
+            
+        private async void GameEventManager_OnDeath(Entity attacker, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag)
+        {
+            EventSystem.Send("character:death");
+
+            var player = Cache.Player;
+
+            int costOfRespawn = player.Character.RespawnCharge();
+
+            Game.PlayerPed.Health = Game.PlayerPed.MaxHealth;
+
+            API.RequestAnimDict(DEAD_ANIM_DICT);
+
+            while (!API.HasAnimDictLoaded(DEAD_ANIM_DICT))
+            {
+                await BaseScript.Delay(0);
+            }
+            CurrentDeathAnim = DeathAnim[Utility.RANDOM.Next(DeathAnim.Count)];
+
+            Game.PlayerPed.Task.PlayAnimation(DEAD_ANIM_DICT, CurrentDeathAnim, 8f, -1, AnimationFlags.StayInEndFrame);
+            Game.PlayerPed.IsPositionFrozen = true;
+
+            PluginManager.Instance.AttachTickHandler(OnRespawnControlTask);
+        }
+
+        async void RespawnAtHospital(CuriosityPlayer curiosityPlayer)
+        {
+            await ScreenInterface.FadeOut();
+
+            Vector3 spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
+            curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Game.PlayerPed.Heading));
+
+            await BaseScript.Delay(1000);
+
+            await ScreenInterface.FadeIn(3000);
+        }
+
+        async void Respawn(CuriosityPlayer curiosityPlayer)
+        {
+            await ScreenInterface.FadeOut();
+            PluginManager.Instance.DetachTickHandler(OnRespawnControlTask);
+
+            Vector3 spawnLocation = curiosityPlayer.Entity.Position.AsVector();
+            curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Game.PlayerPed.Heading));
+
+            await BaseScript.Delay(1000);
+
+            await ScreenInterface.FadeIn(3000);
+        }
+
+        async Task OnRespawnControlTask()
+        {
+            Cache.Player.DisableHud();
+            TimeSpan timeSpan = (DateOfDeath.AddMinutes(5) - DateTime.Now);
+            string timeSpanLeft = timeSpan.ToString(@"mm\:ss");
+
+            if (!API.IsEntityPlayingAnim(Game.PlayerPed.Handle, DEAD_ANIM_DICT, CurrentDeathAnim, 3))
+            {
+                API.RequestAnimDict(DEAD_ANIM_DICT);
+
+                while (!API.HasAnimDictLoaded(DEAD_ANIM_DICT))
+                {
+                    await BaseScript.Delay(0);
+                }
+
+                Game.PlayerPed.Task.PlayAnimation(DEAD_ANIM_DICT, CurrentDeathAnim, 8f, -1, AnimationFlags.StayInEndFrame);
+            }
+
+            ScreenInterface.DrawText($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to re-emerge at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)",
+                0.3f, new Vector2(0.5f, 0.75f), Color.FromArgb(175, 175, 175), true);
+
+            if (Game.IsControlPressed(0, Control.Context))
+            {
+                EventSystem.Send("character:respawn:charge");
+                PluginManager.Instance.DetachTickHandler(OnRespawnControlTask);
+            }
+            else if (timeSpan.TotalSeconds <= 0)
+            {
+                EventSystem.Send("character:respawn");
+            }
         }
     }
 }

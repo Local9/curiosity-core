@@ -22,6 +22,9 @@ namespace Curiosity.Core.Client.Managers
         internal List<MarkerData> MarkersAll = new List<MarkerData>();
         internal List<MarkerData> MarkersClose = new List<MarkerData>();
 
+        private List<Location> Locations = new List<Location>();
+        private List<Vector3> HospitalSpawns = new List<Vector3>();
+
         string previousJob = "unemployed";
         bool markerCooldown = false;
 
@@ -52,9 +55,9 @@ namespace Curiosity.Core.Client.Managers
                     MarkersClose.Clear();
                 }
 
-                List<Location> locations = await EventSystem.Request<List<Location>>("config:locations");
+                Locations = await EventSystem.Request<List<Location>>("config:locations");
 
-                foreach (Location location in locations)
+                foreach (Location location in Locations)
                 {
                     BlipData blipData = new BlipData();
                     blipData.Positions = location.Positions;
@@ -67,6 +70,14 @@ namespace Curiosity.Core.Client.Managers
                     blipData.Priority = location.Priority;
 
                     BlipManager.ManagerInstance.AddBlip(blipData);
+
+                    if (location.Name == "Hospital")
+                    {
+                        foreach(Position pos in location.Positions)
+                        {
+                            HospitalSpawns.Add(pos.AsVector());
+                        }
+                    }
 
                     location.Markers.ForEach(m =>
                     {
@@ -208,6 +219,50 @@ namespace Curiosity.Core.Client.Managers
             markerCooldown = true;
             await BaseScript.Delay(5000);
             markerCooldown = false;
+        }
+
+        public bool IsNearLocation(Vector3 position, string eventName, float distance = 0f)
+        {
+            foreach (Location location in Locations)
+            {
+                if (location.Markers.Count == 0)
+                    continue;
+
+                foreach (Marker marker in location.Markers)
+                {
+                    if (marker.Event == eventName)
+                    {
+                        foreach (Position pos in marker.Positions)
+                        {
+                            Vector3 posV = pos.AsVector();
+                            float dist = Vector3.Distance(position, posV);
+                            float distanceToCheck = (distance > 0f) ? distance : marker.ContextAoe;
+                            bool distanceValid = dist <= distanceToCheck;
+
+                            Logger.Debug($"Position {posV} Close: {distanceValid}");
+
+                            if (distanceValid)
+                            {
+                                return true;
+                            }
+                        };
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        internal Vector3 NearestHospital()
+        {
+            return FindClosestPoint(Game.PlayerPed.Position, HospitalSpawns);
+        }
+
+        public Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)
+        {
+            if (points.Count() == 0) return Vector3.Zero;
+
+            return points.OrderBy(x => Vector3.Distance(startingPoint, x)).First();
         }
     }
 }

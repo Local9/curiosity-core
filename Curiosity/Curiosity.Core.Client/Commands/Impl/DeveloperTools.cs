@@ -38,6 +38,28 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
             }
         }
+        [CommandInfo(new[] { "anim" })]
+        public class Animation : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                string dict = arguments.ElementAt(0);
+                string anim = arguments.ElementAt(1);
+
+                Game.PlayerPed.Task.ClearAllImmediately();
+                Game.PlayerPed.Task.ClearAll();
+
+                API.RequestAnimDict(dict);
+                while (!API.HasAnimDictLoaded(dict))
+                {
+                    await BaseScript.Delay(0);
+                }
+
+                Enum.TryParse(arguments.ElementAt(2), out AnimationFlags animationFlag);
+
+                Game.PlayerPed.Task.PlayAnimation(dict, anim, 8f, -1, animationFlag);
+            }
+        }
 
         [CommandInfo(new[] { "weapons" })]
         public class Weapons : ICommand

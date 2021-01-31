@@ -76,6 +76,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                 }
             }
         }
+
         [CommandInfo(new[] { "time" })]
         public class WorldTime : ICommand
         {

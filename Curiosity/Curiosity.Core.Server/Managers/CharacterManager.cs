@@ -3,6 +3,7 @@ using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,9 +30,45 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("character:save", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 CuriosityCharacter curiosityCharacter = metadata.Find<CuriosityCharacter>(0);
 
+                if (user.Character.CharacterId != curiosityCharacter.CharacterId) return null;
+
+                curiosityCharacter.Cash = await Database.Store.BankDatabase.Get(curiosityCharacter.CharacterId);
+
                 await curiosityCharacter.Save();
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("character:respawn", new EventCallback(metadata =>
+            {
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                curiosityUser.Send("character:respawnNow");
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("character:respawn:charge", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                int costOfRespawn = curiosityUser.Character.RespawnCharge();
+
+                if (curiosityUser.Character.Cash >= costOfRespawn)
+                {
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, costOfRespawn);
+                    curiosityUser.Send("character:respawn:hospital");
+                }
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("character:death", new EventCallback(metadata =>
+            {
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                Database.Store.StatDatabase.Adjust(curiosityUser.Character.CharacterId, Stat.STAT_DEATH, 1);
 
                 return null;
             }));

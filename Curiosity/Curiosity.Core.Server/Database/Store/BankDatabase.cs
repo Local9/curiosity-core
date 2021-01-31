@@ -35,5 +35,32 @@ namespace Curiosity.Core.Server.Database.Store
 
             return newValue;
         }
+
+        public static async Task<int> Get(int characterId)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@characterId", characterId }
+                };
+
+            string myQuery = "call selCharacterCash(@characterId);";
+
+            int newValue = 0;
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                if (keyValuePairs.Count == 0)
+                    throw new Exception("Character cash value not changed");
+
+                foreach (Dictionary<string, object> kv in keyValuePairs)
+                {
+                    newValue = kv["return"].ToInt();
+                }
+            }
+
+            return newValue;
+        }
     }
 }

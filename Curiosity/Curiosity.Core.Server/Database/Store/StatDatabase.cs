@@ -1,4 +1,5 @@
 ﻿using Curiosity.Core.Server.Extensions;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using System;
@@ -9,12 +10,17 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class StatDatabase
     {
-        public static async Task<int> Adjust(int characterId, int skillId, int amount)
+        public static async Task<int> Adjust(int characterId, Stat statId, int amount)
+        {
+            return await Adjust(characterId, (int)statId, amount);
+        }
+
+        public static async Task<int> Adjust(int characterId, int statId, int amount)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
                     { "@characterId", characterId },
-                    { "@statId", skillId },
+                    { "@statId", statId },
                     { "@amount", amount },
                 };
 
