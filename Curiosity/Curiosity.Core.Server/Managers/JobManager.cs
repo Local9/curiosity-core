@@ -13,18 +13,12 @@ namespace Curiosity.Core.Server.Managers
         private const string JOB_POLICE_ARREST = "job:police:arrest";
         private ConfigManager config;
 
-        private bool pending = false;
-
         public override void Begin()
         {
             config = ConfigManager.ConfigInstance;
 
             EventSystem.GetModule().Attach(JOB_POLICE_DUTY, new AsyncEventCallback(async metadata =>
             {
-                if (pending) return null;
-
-                pending = true;
-
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
                     return null;
 
@@ -35,7 +29,7 @@ namespace Curiosity.Core.Server.Managers
                 position.Y = metadata.Find<float>(1);
                 position.Z = metadata.Find<float>(2);
 
-                bool result = config.IsNearLocation(position, JOB_POLICE_DUTY, 5.0f);
+                bool result = config.IsNearLocation(position, JOB_POLICE_DUTY);
 
                 if (result)
                 {
@@ -46,17 +40,11 @@ namespace Curiosity.Core.Server.Managers
 
                 await BaseScript.Delay(5000);
 
-                pending = false;
-
                 return null;
             }));
             
             EventSystem.GetModule().Attach(JOB_POLICE_ARREST, new AsyncEventCallback(async metadata =>
             {
-                if (pending) return null;
-                
-                pending = true;
-
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
                     return null;
 
@@ -67,13 +55,11 @@ namespace Curiosity.Core.Server.Managers
                 position.Y = metadata.Find<float>(1);
                 position.Z = metadata.Find<float>(2);
 
-                bool result = config.IsNearLocation(position, JOB_POLICE_ARREST, 5.0f);
+                bool result = config.IsNearLocation(position, JOB_POLICE_ARREST);
 
                 user.Send(JOB_POLICE_ARREST);
 
                 await BaseScript.Delay(5000);
-
-                pending = false;
 
                 return null;
             }));
