@@ -331,7 +331,7 @@ namespace Curiosity.Core.Client.Extensions
             API.SetTextDropShadow();
             API.SetTextOutline();
             API.SetTextEntry("STRING");
-            API.AddTextComponentString($"Welcome, {Cache.Player.Name}.");
+            API.AddTextComponentString($"Welcome to ~b~Emergency V~w~, ~y~{Cache.Player.Name}~w~.");
             API.DrawText(0.5f, 0.5f - API.GetTextScaleHeight(0.45f, 0) / 2f);
             API.HideLoadingOnFadeThisFrame();
 
