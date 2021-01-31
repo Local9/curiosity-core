@@ -68,7 +68,17 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     if (arguments.Count <= 0) return;
 
-                    var model = new Model(API.GetHashKey(arguments.ElementAt(0)));
+                    string argument = arguments.ElementAt(0);
+
+                    if (argument == "nitro")
+                    {
+                        if (Cache.PersonalVehicle == null) return;
+
+                        API.SetVehicleNitroEnabled(Cache.PersonalVehicle.Handle, true);
+                        return;
+                    }
+
+                    var model = new Model(API.GetHashKey(argument));
 
                     if (!model.IsValid || !model.IsVehicle) return;
 
@@ -237,6 +247,34 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
             }
         }
+
+        //[CommandInfo(new[] { "notify" })]
+        //public class NotificationTest : ICommand
+        //{
+        //    public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+        //    {
+        //        if (arguments.Count <= 0) return;
+
+        //        string argument = arguments[0];
+
+        //        string notificationKey = "TEST_LABEL";
+        //        API.AddTextEntry(notificationKey, "Example Message: ~a~");
+
+        //        //API.BeginTextCommandDisplayText(notificationKey);
+        //        //API.AddTextComponentSubstringPlayerName("Hello, World!");
+        //        //API.EndTextCommandDisplayText(0.5f, 0.5f);
+
+        //        // string txd = await Game.PlayerPed.GetHeadshot();
+
+        //        string txd = "CHAR_ACTING_UP";
+
+        //        API.BeginTextCommandDisplayText("STRING");
+        //        API.EndTextCommandThefeedPostMessagetextEntry(txd, txd, false, 0, notificationKey, argument);
+        //        API.EndTextCommandThefeedPostTicker(true, false);
+
+        //        API.UnregisterPedheadshot(Game.PlayerPed.Handle);
+        //    }
+        //}
         #endregion
     }
 }
