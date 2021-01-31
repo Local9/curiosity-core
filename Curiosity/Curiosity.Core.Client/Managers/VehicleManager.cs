@@ -48,6 +48,10 @@ namespace Curiosity.Core.Client.Managers
 
                     Notify.Success($"Vehicle Repaired");
                 }
+                else
+                {
+                    Notify.Alert($"Must be in a vehicle");
+                }
 
                 return null;
             }));
