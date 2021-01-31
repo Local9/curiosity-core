@@ -383,7 +383,7 @@
       "isShortRange": true,
       "category": 1,
       "priority": 1,
-      "scale": 1.0,
+      "scale": 0.8,
       "positions": [
         {
           "X": 297.8683,
