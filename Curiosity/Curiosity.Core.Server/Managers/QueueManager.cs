@@ -93,6 +93,8 @@ namespace Curiosity.Core.Server.Managers
                     DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage(msg);
                     ChatManager.OnLogMessage(msg);
 
+                    DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"Queue: {queue.Count}, Sessions: {session.Count}, Active Players: {PluginManager.PlayersList.Count()}, User Cache: {PluginManager.ActiveUsers.Count}");
+
                     return true;
                 }
                 catch (Exception ex)
@@ -120,11 +122,9 @@ namespace Curiosity.Core.Server.Managers
                 deferrals.update("Awaiting Server Startup...");
             }
 
-            string msg = $"Player '{player.Name}#{player.Handle}' is connecting. Ping: {player.Ping}ms";
-            DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}#{player.Handle}' is connecting. Ping: {player.Ping}ms");
+            string msg = $"Player '{player.Name}' is connecting. Ping: {player.Ping}ms";
+            DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}' is connecting. Ping: {player.Ping}ms");
             ChatManager.OnLogMessage(msg);
-
-            DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"Queue: {queue.Count}, Sessions: {session.Count}, Active Players: {PluginManager.PlayersList.Count()}, User Cache: {PluginManager.ActiveUsers.Count}");
 
             deferrals.update($"{messages[Messages.Gathering]}");
 
@@ -184,7 +184,7 @@ namespace Curiosity.Core.Server.Managers
 
                 deferrals.done(string.Format($"{messages[Messages.Banned]}", time));
 
-                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Is Banned - {time}.");
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}#{curiosityUser.UserId}': Is Banned - {time}.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -201,7 +201,7 @@ namespace Curiosity.Core.Server.Managers
 
             if (PluginManager.IsSupporterAccess && !curiosityUser.IsSupporterAccess)
             {
-                Logger.Debug($"Queue Player not allowed access: {player.Name} ({curiosityUser.Role}) [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}]");
+                Logger.Debug($"Queue Player not allowed access: {player.Name}#{curiosityUser.UserId} ({curiosityUser.Role}) [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}]");
                 DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': user is not a supporter, current role '{curiosityUser.Role}' [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}].");
                 deferrals.done($"Server is only allowing connections from supporters.\n\nDiscord URL: discord.lifev.net");
                 return;
