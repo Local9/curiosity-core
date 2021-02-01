@@ -117,6 +117,7 @@ namespace Curiosity.Core.Server.Web
             if (!ulong.TryParse(discordIdStr, out discordId))
             {
                 Logger.Info($"DiscordClient : {player.Name} Discord Information was invalid.");
+                await BaseScript.Delay(0);
                 player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. After you have opened Discord, then open FiveM.\n\nThese must be running on the same machine.");
                 return IsMember;
             }
@@ -124,6 +125,7 @@ namespace Curiosity.Core.Server.Web
             if (discordId == 0)
             {
                 Logger.Info($"DiscordClient : {player.Name} Discord Information was invalid.");
+                await BaseScript.Delay(0);
                 player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. After you have opened Discord, then open FiveM.\n\nThese must be running on the same machine.");
                 return IsMember;
             }
@@ -133,6 +135,7 @@ namespace Curiosity.Core.Server.Web
             if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
             {
                 Logger.Info($"DiscordClient : {player.Name} is NOT a member of the Discord Guild.");
+                await BaseScript.Delay(0);
                 player.Drop($"This server requires you to be a member of their Discord and Verified.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
             }
@@ -140,6 +143,7 @@ namespace Curiosity.Core.Server.Web
             if (!(requestResponse.status == System.Net.HttpStatusCode.OK))
             {
                 Logger.Error($"DiscordClient : Error communicating with Discord");
+                await BaseScript.Delay(0);
                 player.Drop($"Error communicating with Discord, please raise a support ticket or try connecting again later.");
                 return IsMember;
             }
@@ -158,13 +162,14 @@ namespace Curiosity.Core.Server.Web
                 else
                 {
                     Logger.Debug($"DiscordClient : {player.Name} is not a verified member of the Discord Guild.");
+                    await BaseScript.Delay(0);
                     player.Drop($"This server requires you to be a member of their Discord and Verified.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                     return false;
                 }
             }
 
             IsMember = discordMember.JoinedAt.HasValue;
-
+            await BaseScript.Delay(0);
             Logger.Success($"DiscordClient : {player.Name} is a member of the Discord Guild.");
 
             return IsMember;
@@ -199,6 +204,7 @@ namespace Curiosity.Core.Server.Web
                 webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message.Trim('"')}");
                 webhook.Username = StripUnicodeCharactersFromString(PluginManager.Hostname);
 
+                await BaseScript.Delay(0);
                 await webhook.Send();
 
                 await Task.FromResult(0);
@@ -227,6 +233,8 @@ namespace Curiosity.Core.Server.Web
                 webhook.AvatarUrl = discordWebhook.Avatar;
                 webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}");
                 webhook.Username = StripUnicodeCharactersFromString(PluginManager.Hostname);
+
+                await BaseScript.Delay(0);
 
                 await webhook.Send();
 
@@ -375,6 +383,8 @@ namespace Curiosity.Core.Server.Web
                 webhook.AvatarUrl = discordWebhook.Avatar;
                 webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString("HH:mm")}` {name} > {message.Trim('"')}");
                 webhook.Username = StripUnicodeCharactersFromString(username);
+
+                await BaseScript.Delay(0);
 
                 await webhook.Send();
 
