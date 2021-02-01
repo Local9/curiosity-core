@@ -8,7 +8,6 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace Curiosity.Core.Client.Commands.Impl
 {

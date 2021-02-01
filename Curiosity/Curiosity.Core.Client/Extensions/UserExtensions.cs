@@ -9,6 +9,10 @@ namespace Curiosity.Core.Client.Extensions
         {
             EventSystem.GetModule().Send("user:postupdates", user);
         }
+        public static void SendEvent(this CuriosityUser user, string target, params object[] payloads)
+        {
+            EventSystem.GetModule().Send(target, payloads);
+        }
 
         public static void Send(this CuriosityUser user, string target)
         {

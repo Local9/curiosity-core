@@ -116,7 +116,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     var position = entity.Position;
                     var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
 
-                    player.User.Send("vehicle:log:player", vehicle.NetworkId);
+                    player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
                     Cache.PersonalVehicle = vehicle;
 
                     entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
