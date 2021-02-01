@@ -355,6 +355,14 @@ namespace Curiosity.Core.Server
             await user.Character.Save();
         }
 
+        public static async Task ServerLoading()
+        {
+            while (!PluginManager.ServerReady)
+            {
+                await BaseScript.Delay(0);
+            }
+        }
+
         [TickHandler]
         private async Task SaveTask()
         {

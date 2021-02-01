@@ -57,7 +57,7 @@ namespace Curiosity.Core.Server.Web
         }
 
         [TickHandler]
-        private async void OnDiscordWebhookUpdate()
+        private async Task OnDiscordWebhookUpdate()
         {
             if (DateTime.Now.Subtract(lastUpdate).TotalSeconds > 120)
             {
@@ -83,7 +83,9 @@ namespace Curiosity.Core.Server.Web
 
         private static async Task UpdateWebhooks()
         {
-            if (PluginManager.ServerId > 0)
+            await PluginManager.ServerLoading();
+
+            if (PluginManager.ServerId > 0 && PluginManager.ServerReady)
             {
                 webhooks = await Database.Store.ServerDatabase.GetDiscordWebhooks(PluginManager.ServerId);
             }

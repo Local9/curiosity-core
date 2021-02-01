@@ -12,8 +12,6 @@ namespace Curiosity.Core.Server.Managers
 {
     public class ChatManager : Manager<ChatManager>
     {
-        DiscordClient Discord = DiscordClient.DiscordInstance;
-
         public override void Begin()
         {
             EventSystem.GetModule().Attach("chat:global", new AsyncEventCallback(async metadata => {
@@ -34,7 +32,7 @@ namespace Curiosity.Core.Server.Managers
                 string discordMessageStart = $"{DateTime.Now.ToString("HH:mm")} [{metadata.Sender}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
                 string discordMessage = chatMessage.Message.Trim('"');
 
-                Discord.SendChatMessage(discordMessageStart, discordMessage);
+                DiscordClient.DiscordInstance.SendChatMessage(discordMessageStart, discordMessage);
 
                 return null;
             }));
