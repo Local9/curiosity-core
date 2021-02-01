@@ -97,6 +97,11 @@
     <Compile Include="SessionManager.cs" />
     <Compile Include="TickHandler.cs" />
     <Compile Include="Web\DiscordClient.cs" />
+    <Compile Include="Web\Discord\Entity\DiscordWebhook.cs" />
+    <Compile Include="Web\Discord\Entity\Embed.cs" />
+    <Compile Include="Web\Discord\Entity\EmbedAuthor.cs" />
+    <Compile Include="Web\Discord\Entity\EmbedThumbnail.cs" />
+    <Compile Include="Web\Discord\Entity\Webhook.cs" />
     <Compile Include="Web\HttpClient.cs" />
   </ItemGroup>
   <ItemGroup>

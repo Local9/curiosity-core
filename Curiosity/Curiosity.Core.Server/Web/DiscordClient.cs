@@ -2,22 +2,70 @@
 using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Managers;
+using Curiosity.Core.Server.Web.Discord.Entity;
 using Curiosity.Systems.Library.Models.Discord;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Web
 {
+    public enum WebhookChannel
+    {
+        Chat = 1,
+        Report,
+        StaffLog,
+        ServerLog,
+        ServerErrors,
+        PlayerLog,
+        ServerEventLog
+    }
+
     public class DiscordClient : Manager<DiscordClient>
     {
         static Request request = new Request();
         public static DiscordClient DiscordInstance;
+        static Dictionary<WebhookChannel, DiscordWebhook> webhooks = new Dictionary<WebhookChannel, DiscordWebhook>();
+        static DateTime lastUpdate = DateTime.Now;
 
         public override void Begin()
         {
             DiscordInstance = this;
+        }
+
+        [TickHandler]
+        private async void OnDiscordWebhookUpdate()
+        {
+            if (DateTime.Now.Subtract(lastUpdate).TotalSeconds > 120)
+            {
+                // update every 2 minutes
+                lastUpdate = DateTime.Now;
+                UpdateWebhooks();
+            }
+
+            while (webhooks.Count == 0)
+            {
+                // init
+                UpdateWebhooks();
+                await BaseScript.Delay(1000);
+                if (webhooks.Count == 0)
+                {
+                    Logger.Error($"No Discord Webhooks returned, trying again in five seconds.");
+                    await BaseScript.Delay(5000);
+                }
+            }
+
+            await BaseScript.Delay(10000);
+        }
+
+        private static async Task UpdateWebhooks()
+        {
+            if (PluginManager.ServerId > 0)
+            {
+                webhooks = await Database.Store.ServerDatabase.GetDiscordWebhooks(PluginManager.ServerId);
+            }
         }
 
         public async Task<RequestResponse> DiscordWebsocket(string method, string url, string jsonData)

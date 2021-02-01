@@ -31,7 +31,9 @@ namespace Curiosity.Core.Server.Managers
                 string discordMessageStart = $"{DateTime.Now.ToString("HH:mm")} [{metadata.Sender}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
                 string discordMessage = chatMessage.Message.Trim('"');
 
-                Instance.ExportDictionary["curiosity-server"].DiscordChatLog(discordMessageStart, discordMessage);
+
+
+                // Instance.ExportDictionary["curiosity-server"].DiscordChatLog(discordMessageStart, discordMessage);
 
                 return null;
             }));
