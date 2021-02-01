@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Web
@@ -23,16 +24,36 @@ namespace Curiosity.Core.Server.Web
         ServerEventLog
     }
 
+    public enum DiscordColor : int
+    {
+        White = 16777215,
+        Black = 0,
+        Red = 16738657,
+        Green = 7855479,
+        Blue = 11454159,
+        Orange = 16757575
+    }
+
     public class DiscordClient : Manager<DiscordClient>
     {
         static Request request = new Request();
         public static DiscordClient DiscordInstance;
         static Dictionary<WebhookChannel, DiscordWebhook> webhooks = new Dictionary<WebhookChannel, DiscordWebhook>();
         static DateTime lastUpdate = DateTime.Now;
+        static string DATE_FORMAT = "yyyy-MM-dd HH:mm";
+        static bool IsDelayRunnning = false;
+        static long DelayMillis = 0;
+
+        private static Regex _compiledUnicodeRegex = new Regex(@"[^\u0000-\u007F]", RegexOptions.Compiled);
 
         public override void Begin()
         {
             DiscordInstance = this;
+        }
+
+        public static String StripUnicodeCharactersFromString(string inputValue)
+        {
+            return _compiledUnicodeRegex.Replace(inputValue, String.Empty);
         }
 
         [TickHandler]
@@ -145,6 +166,241 @@ namespace Curiosity.Core.Server.Web
             Logger.Success($"DiscordClient : {player.Name} is a member of the Discord Guild.");
 
             return IsMember;
+        }
+
+        public async void SendChatMessage(string name, string message)
+        {
+            if (!webhooks.ContainsKey(WebhookChannel.Chat))
+            {
+                Logger.Warn($"SendDiscordChatMessage() -> Discord Chat Webhook Missing");
+                return;
+            }
+
+            await SendDiscordSimpleMessage(WebhookChannel.Chat, PluginManager.Hostname, name, message);
+        }
+
+        public async void SendDiscordServerEventLogMessage(string message)
+        {
+            if (!webhooks.ContainsKey(WebhookChannel.ServerEventLog))
+            {
+                Logger.Warn($"SendDiscordChatMessage() -> Discord Server Event Webhook Missing");
+                return;
+            }
+
+            try
+            {
+                DiscordWebhook discordWebhook = webhooks[WebhookChannel.ServerEventLog];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}");
+                webhook.Username = StripUnicodeCharactersFromString(PluginManager.Hostname);
+
+                await webhook.Send();
+
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"SendDiscordPlayerLogMessage() -> {ex.Message}");
+            }
+
+        }
+
+        public async void SendDiscordPlayerLogMessage(string message)
+        {
+            if (!webhooks.ContainsKey(WebhookChannel.PlayerLog))
+            {
+                Logger.Warn($"SendDiscordChatMessage() -> Discord Player Log Webhook Missing");
+                return;
+            }
+
+            try
+            {
+                DiscordWebhook discordWebhook = webhooks[WebhookChannel.PlayerLog];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}");
+                webhook.Username = StripUnicodeCharactersFromString(PluginManager.Hostname);
+
+                await webhook.Send();
+
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"SendDiscordPlayerLogMessage() -> {ex.Message}");
+            }
+
+        }
+
+        public async void SendDiscordStaffMessage(string adminName, string player, string action, string reason, string duration)
+        {
+            try
+            {
+                if (!webhooks.ContainsKey(WebhookChannel.StaffLog))
+                {
+                    Logger.Warn($"SendDiscordStaffMessage() -> Discord {WebhookChannel.StaffLog} Webhook Missing");
+                    return;
+                }
+
+                if (IsDelayRunnning) return;
+
+                DiscordWebhook discordWebhook = webhooks[WebhookChannel.StaffLog];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
+                webhook.Username = "Staff";
+
+                Embed embed = new Embed();
+                embed.Author = new EmbedAuthor { Name = adminName, IconUrl = discordWebhook.Avatar };
+                embed.Title = StripUnicodeCharactersFromString($"Player: {player}");
+
+                embed.Description = StripUnicodeCharactersFromString($" **{action}**: {reason}");
+                if (!string.IsNullOrEmpty(duration))
+                    embed.Description = StripUnicodeCharactersFromString($" **{action}**: {reason} \n **Duration**: {duration}");
+
+                embed.Color = (int)DiscordColor.Orange;
+                if (action == "Ban")
+                    embed.Color = (int)DiscordColor.Red;
+
+                embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+
+                webhook.Embeds.Add(embed);
+                await BaseScript.Delay(0);
+                await webhook.Send();
+
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"SendDiscordStaffMessage() -> {ex.Message}");
+            }
+        }
+
+        public async void SendDiscordReportMessage(string reporterName, string playerBeingReported, string reason)
+        {
+            try
+            {
+                if (!webhooks.ContainsKey(WebhookChannel.Report))
+                {
+                    Logger.Warn($"SendDiscordReportMessage() -> Discord {WebhookChannel.Report} Webhook Missing");
+                    return;
+                }
+
+                if (IsDelayRunnning) return;
+
+                DiscordWebhook discordWebhook = webhooks[WebhookChannel.Report];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
+                string cleanName = StripUnicodeCharactersFromString(PluginManager.Hostname);
+                webhook.Username = cleanName;
+
+                Embed embed = new Embed();
+                embed.Author = new EmbedAuthor { Name = $"Report By: {reporterName}", IconUrl = discordWebhook.Avatar };
+                embed.Title = $"Report";
+                embed.Description = $"Player: {playerBeingReported}\nReason: {reason}";
+                embed.Color = (int)DiscordColor.Blue;
+                embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+
+                webhook.Embeds.Add(embed);
+                await BaseScript.Delay(0);
+                await webhook.Send();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"SendDiscordReportMessage() -> {ex.Message}");
+            }
+        }
+
+        public async Task SendDiscordEmbededMessage(WebhookChannel webhookChannel, string name, string title, string description, DiscordColor discordColor)
+        {
+            try
+            {
+                if (!webhooks.ContainsKey(webhookChannel))
+                {
+                    Logger.Warn($"SendDiscordEmbededMessage() -> Discord {webhookChannel} Webhook Missing");
+                    return;
+                }
+
+                if (IsDelayRunnning) return;
+
+                string cleanName = StripUnicodeCharactersFromString(name);
+
+                DiscordWebhook discordWebhook = webhooks[webhookChannel];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = $"`{DateTime.Now.ToString(DATE_FORMAT)}`";
+                webhook.Username = cleanName;
+
+                Embed embed = new Embed();
+                embed.Author = new EmbedAuthor { Name = cleanName, IconUrl = discordWebhook.Avatar };
+                embed.Title = StripUnicodeCharactersFromString(title);
+                embed.Description = StripUnicodeCharactersFromString(description);
+                embed.Color = (int)discordColor;
+                embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+
+                webhook.Embeds.Add(embed);
+                await BaseScript.Delay(0);
+                await webhook.Send();
+
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"SendDiscordEmbededMessage() -> {ex.Message}");
+            }
+        }
+
+        public async Task SendDiscordSimpleMessage(WebhookChannel webhookChannel, string username, string name, string message)
+        {
+            try
+            {
+                DiscordWebhook discordWebhook = webhooks[webhookChannel];
+
+                Webhook webhook = new Webhook(discordWebhook.Url);
+
+                webhook.AvatarUrl = discordWebhook.Avatar;
+                webhook.Content = StripUnicodeCharactersFromString($"{name} > {message}");
+                webhook.Username = StripUnicodeCharactersFromString(username);
+
+                await webhook.Send();
+
+                await Task.FromResult(0);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"SendDiscordSimpleMessage() -> {ex.Message}");
+            }
+        }
+
+        async void DelayTriggered(long delayMillis)
+        {
+            DelayMillis = delayMillis * 1000;
+        }
+
+        async Task OnDelayCooldownTask()
+        {
+            long gameTimer = API.GetGameTimer();
+            IsDelayRunnning = true;
+
+            while ((API.GetGameTimer() - gameTimer) < DelayMillis)
+            {
+                await BaseScript.Delay(1000);
+            }
+
+            PluginManager.Instance.DetachTickHandler(OnDelayCooldownTask);
+            IsDelayRunnning = false;
         }
     }
 }

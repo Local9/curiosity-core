@@ -31,6 +31,7 @@ namespace Curiosity.Core.Server
         public static int MaximumPlayers { get; } = 32;
         public static int ServerId { get; private set; }
         public static int SpawnLocationId { get; private set; }
+        public static string Hostname { get; private set; }
         public static bool IsDebugging { get; private set; }
         public static bool IsMaintenanceActive { get; private set; }
         public static bool ServerReady { get; private set; }
@@ -159,6 +160,7 @@ namespace Curiosity.Core.Server
                 }
 
                 SERVER_KEY = API.GetConvar("sv_licenseKey", CONVAR_MISSING);
+                Hostname = API.GetConvar("sv_hostname", $"sv_hostname missing");
 
                 if (SERVER_KEY == CONVAR_MISSING)
                 {

@@ -2,6 +2,7 @@
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
@@ -11,9 +12,11 @@ namespace Curiosity.Core.Server.Managers
 {
     public class ChatManager : Manager<ChatManager>
     {
+        DiscordClient Discord = DiscordClient.DiscordInstance;
+
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("chat:global", new EventCallback(metadata => {
+            EventSystem.GetModule().Attach("chat:global", new AsyncEventCallback(async metadata => {
 
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
@@ -31,9 +34,7 @@ namespace Curiosity.Core.Server.Managers
                 string discordMessageStart = $"{DateTime.Now.ToString("HH:mm")} [{metadata.Sender}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
                 string discordMessage = chatMessage.Message.Trim('"');
 
-
-
-                // Instance.ExportDictionary["curiosity-server"].DiscordChatLog(discordMessageStart, discordMessage);
+                Discord.SendChatMessage(discordMessageStart, discordMessage);
 
                 return null;
             }));
