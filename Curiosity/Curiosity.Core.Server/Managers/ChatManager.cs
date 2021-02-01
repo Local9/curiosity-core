@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            Instance.ExportDictionary.Add("AddToLog", new Func<string, bool>(
+            Instance.ExportDictionary.Add("AddToServerLog", new Func<string, bool>(
                 (message) =>
                 {
                     OnLogMessage(message);
