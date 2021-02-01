@@ -142,7 +142,7 @@ namespace Curiosity.Core.Server.Managers
 
             if (!isVerified)
             {
-                deferrals.done($"Unabled to verify Discord Authorisation");
+                deferrals.done($"Unabled to verify Discord Authorisation.\n\nJoin {PluginManager.DiscordUrl} and accept the verification process.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }

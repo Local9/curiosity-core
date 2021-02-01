@@ -46,14 +46,14 @@ namespace Curiosity.Core.Server.Web
             if (!ulong.TryParse(discordIdStr, out discordId))
             {
                 Logger.Info($"DiscordClient : {player.Name} Discord Information was invalid.");
-                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. After you have opened Discord, then open FiveM.");
+                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. After you have opened Discord, then open FiveM.\n\nThese must be running on the same machine.");
                 return IsMember;
             }
 
             if (discordId == 0)
             {
                 Logger.Info($"DiscordClient : {player.Name} Discord Information was invalid.");
-                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. After you have opened Discord, then open FiveM.");
+                player.Drop($"Discord Identity failed validation, please restart FiveM and Discord. After you have opened Discord, then open FiveM.\n\nThese must be running on the same machine.");
                 return IsMember;
             }
 
@@ -62,7 +62,7 @@ namespace Curiosity.Core.Server.Web
             if (requestResponse.status == System.Net.HttpStatusCode.NotFound)
             {
                 Logger.Info($"DiscordClient : {player.Name} is NOT a member of the Discord Guild.");
-                player.Drop($"This server requires that your are a member of their Discord.\nDiscord URL: {PluginManager.DiscordUrl}");
+                player.Drop($"This server requires you to be a member of their Discord and Verified.\n\nDiscord URL: {PluginManager.DiscordUrl}");
                 return IsMember;
             }
 
@@ -81,8 +81,14 @@ namespace Curiosity.Core.Server.Web
             {
                 if (discordMember.Roles.Contains($"{verifiedRoleConvar}"))
                 {
-                    Logger.Success($"DiscordClient : {player.Name} is a verified member of the Discord Guild.");
+                    Logger.Debug($"DiscordClient : {player.Name} is a verified member of the Discord Guild.");
                     return true;
+                }
+                else
+                {
+                    Logger.Debug($"DiscordClient : {player.Name} is not a verified member of the Discord Guild.");
+                    player.Drop($"This server requires you to be a member of their Discord and Verified.\n\nDiscord URL: {PluginManager.DiscordUrl}");
+                    return false;
                 }
             }
 
