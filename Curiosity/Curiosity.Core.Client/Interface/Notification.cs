@@ -1,28 +1,11 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Systems.Library.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Interface
 {
-    public enum CommonErrors
-    {
-        NoVehicle,
-        NeedToBeTheDriver,
-        UnknownError,
-        NotAllowed,
-        InvalidModel,
-        InvalidInput,
-        InvalidSaveName,
-        SaveNameAlreadyExists,
-        CouldNotLoadSave,
-        CouldNotLoad,
-        PlayerNotFound,
-        PedNotFound,
-        WalkingStyleNotForMale,
-        WalkingStyleNotForFemale,
-        RightAlignedNotSupported,
-    };
-
     public static class ErrorMessage
     {
         public static string Get(CommonErrors errorType, string placeholderValue = null)
@@ -139,6 +122,43 @@ namespace Curiosity.Core.Client.Interface
             API.SetNotificationMessage(textureName, textureDict, false, iconType, title, subtitle);
             API.SetNotificationBackgroundColor(bgColor);
             API.DrawNotification(false, saveToBrief);
+        }
+
+        public static void Impound(string subtitle, string message, bool blink = true, bool saveToBrief = true, int iconType = 1)
+        {
+            CustomImage("CHAR_PROPERTY_TOWING_IMPOUND", "CHAR_PROPERTY_TOWING_IMPOUND", message, "Los Santos Impound", subtitle, saveToBrief, blink, iconType, 140);
+        }
+
+        public static void CustomImage(string textureDict, string textureName, string message, string title, string subtitle, bool saveToBrief, bool blink = false, int iconType = 0, int bgColor = 2)
+        {
+            ///
+            /// iconTypes:  
+            // 1 : Chat Box
+            // 2 : Email
+            // 3 : Add Friend Request
+            // 4 : Nothing
+            // 5 : Nothing
+            // 6 : Nothing
+            // 7 : Right Jumping Arrow
+            // 8 : RP Icon
+            // 9 : $ Icon
+            ///
+
+            API.SetNotificationBackgroundColor(bgColor);
+            API.SetNotificationTextEntry("STRING");
+            API.AddTextComponentString(message);
+            API.SetNotificationMessage(textureName, textureDict, blink, iconType, title, subtitle);
+            API.DrawNotification(false, saveToBrief);
+
+            //API.BeginTextCommandThefeedPost("CELL_EMAIL_BCON"); // 10x ~a~
+            //foreach (string s in CitizenFX.Core.UI.Screen.StringToArray(message))
+            //{
+            //    API.AddTextComponentSubstringPlayerName(s);
+            //}
+            //API.EndTextCommandThefeedPostMessagetext(textureName, textureDict, blink, iconType, title, subtitle);
+            //API.ThefeedNextPostBackgroundColor(bgColor);
+            //API.SetNotificationBackgroundColor(bgColor);
+            //API.EndTextCommandThefeedPostTicker(false, saveToBrief);
         }
     }
 

@@ -4,6 +4,7 @@ using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Managers
 {

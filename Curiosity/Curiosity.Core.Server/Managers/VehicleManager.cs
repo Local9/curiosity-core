@@ -1,6 +1,9 @@
 ﻿using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Models;
+using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -28,6 +31,60 @@ namespace Curiosity.Core.Server.Managers
             //    int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
             //    return null
             //}));
+
+            EventSystem.GetModule().Attach("vehicle:owner", new EventCallback(metadata =>
+            {
+                int senderHandle = metadata.Sender;
+                int networkId = metadata.Find<int>(0);
+
+                foreach (KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
+                {
+                    CuriosityUser user = kvp.Value;
+
+                    if (user.PersonalVehicle == networkId)
+                        return user.LatestName;
+                }
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:tow", new AsyncEventCallback(async metadata =>
+            {
+                int senderHandle = metadata.Sender;
+                int networkId = metadata.Find<int>(0);
+
+                CommonErrors cannotTow = CommonErrors.UnknownError;
+
+                foreach (KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
+                {
+                    CuriosityUser user = kvp.Value;
+
+                    if (user.PersonalVehicle == networkId)
+                        cannotTow = CommonErrors.VehicleIsOwned;
+                }
+
+                if (cannotTow == CommonErrors.VehicleIsOwned)
+                    return CommonErrors.VehicleIsOwned;
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[senderHandle];
+
+                int rep = await Database.Store.StatDatabase.Get(curiosityUser.Character.CharacterId, Stat.POLICE_REPUATATION);
+
+                if (rep > 1000)
+                {
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Get(curiosityUser.Character.CharacterId);
+
+                    if (curiosityUser.Character.Cash < 1000)
+                        return CommonErrors.PurchaseUnSuccessful;
+
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, -1000);
+
+                    EntityManager.EntityInstance.NetworkDeleteEntity(networkId);
+                    return CommonErrors.PurchaseSuccessful;
+                }
+
+                return CommonErrors.NotEnoughPoliceRep1000;
+            }));
         }
     }
 }

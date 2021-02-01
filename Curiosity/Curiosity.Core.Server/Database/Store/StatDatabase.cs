@@ -74,5 +74,33 @@ namespace Curiosity.Core.Server.Database.Store
 
             return lst;
         }
+
+        internal static async Task<int> Get(int characterId, Stat stat)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@characterId", characterId },
+                    { "@statId", (int)stat }
+                };
+
+            string myQuery = "call selCharacterStat(@characterId, @statId);";
+
+            int newValue = 0;
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                if (keyValuePairs.Count == 0)
+                    return newValue; // nothing found, return zero
+
+                foreach (Dictionary<string, object> kv in keyValuePairs)
+                {
+                    newValue = kv["return"].ToInt();
+                }
+            }
+
+            return newValue;
+        }
     }
 }
