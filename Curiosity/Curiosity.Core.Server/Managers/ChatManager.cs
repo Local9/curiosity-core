@@ -29,7 +29,7 @@ namespace Curiosity.Core.Server.Managers
 
                 EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
 
-                string discordMessageStart = $"{DateTime.Now.ToString("HH:mm")} [{metadata.Sender}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
+                string discordMessageStart = $"[{metadata.Sender}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
                 string discordMessage = chatMessage.Message.Trim('"');
 
                 DiscordClient.DiscordInstance.SendChatMessage(discordMessageStart, discordMessage);

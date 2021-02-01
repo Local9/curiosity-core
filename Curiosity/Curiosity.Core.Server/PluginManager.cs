@@ -47,6 +47,21 @@ namespace Curiosity.Core.Server
         public Dictionary<Type, object> Managers { get; } = new Dictionary<Type, object>();
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
+        public static bool IsSupporterAccess
+        {
+            get
+            {
+                return API.GetConvarInt("supporter_access_only", 0) == 1;
+            }
+        }
+
+        public static bool IsLive
+        {
+            get
+            {
+                return API.GetConvar("server_live", "false") == "true";
+            }
+        }
 
         public PluginManager()
         {
@@ -109,7 +124,7 @@ namespace Curiosity.Core.Server
                     Logger.Warn($"----------------------------------------");
                 }
 
-                IsMaintenanceActive = API.GetConvar("server_live", "false") == "false";
+                IsMaintenanceActive = IsLive;
 
                 if (IsMaintenanceActive)
                 {

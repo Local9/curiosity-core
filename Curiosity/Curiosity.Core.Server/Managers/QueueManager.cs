@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Web;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -88,6 +89,8 @@ namespace Curiosity.Core.Server.Managers
                     session.TryUpdate(license, SessionState.Active, oldState);
                     if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> ACTIVE -> {license}"); }
 
+                    DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}#{metadata.Sender}': Successfully Connected. Ping: {player.Ping}ms");
+
                     return true;
                 }
                 catch (Exception ex)
@@ -115,11 +118,14 @@ namespace Curiosity.Core.Server.Managers
                 deferrals.update("Awaiting Server Startup...");
             }
 
+            DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}#{player.Handle}' is connecting. Ping: {player.Ping}ms");
+
             deferrals.update($"{messages[Messages.Gathering]}");
 
             if (string.IsNullOrEmpty(license)) // No License, No Gameplay
             {
                 deferrals.done($"{messages[Messages.License]}");
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': No License, No Game.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -127,6 +133,7 @@ namespace Curiosity.Core.Server.Managers
             if (!regex.IsMatch(player.Name))
             {
                 deferrals.done($"{string.Format(messages[Messages.Symbols], player.Name)}");
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Name contains symbols.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -134,6 +141,7 @@ namespace Curiosity.Core.Server.Managers
             if (blacklistedNames.IsMatch(player.Name.ToLower()))
             {
                 deferrals.done($"The username of '{player.Name}' is blacklisted, please change your username and try to rejoin.");
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Name is blacklisted.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -143,6 +151,7 @@ namespace Curiosity.Core.Server.Managers
             if (!isVerified)
             {
                 deferrals.done($"Unabled to verify Discord Authorisation.\n\nJoin {PluginManager.DiscordUrl} and accept the verification process.");
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Not verified on Discord.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -156,6 +165,7 @@ namespace Curiosity.Core.Server.Managers
             if (curiosityUser == null)
             {
                 deferrals.done($"Sorry, there was an error when trying to load your account.");
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Error loading Account.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -167,6 +177,8 @@ namespace Curiosity.Core.Server.Managers
                     time = "permanently.";
 
                 deferrals.done(string.Format($"{messages[Messages.Banned]}", time));
+
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Is Banned - {time}.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -181,6 +193,14 @@ namespace Curiosity.Core.Server.Managers
                 }
             }
 
+            if (PluginManager.IsSupporterAccess && !curiosityUser.IsSupporterAccess)
+            {
+                Logger.Debug($"Queue Player not allowed access: {player.Name} ({curiosityUser.Role}) [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}]");
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': user is not a supporter, current role '{curiosityUser.Role}' [U:{curiosityUser.IsSupporterAccess}/S:{PluginManager.IsSupporterAccess}].");
+                deferrals.done($"Server is only allowing connections from supporters.\n\nDiscord URL: discord.lifev.net");
+                return;
+            }
+
             if (sentLoading.ContainsKey(license))
             {
                 sentLoading.TryRemove(license, out Player oldPlayer);
@@ -191,7 +211,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 if (curiosityUser.IsStaff)
                 {
-                    Logger.Success($"Curiosity Queue Manager : Staff Member {curiosityUser.LatestName} added to Priority Queue");
+                    Logger.Debug($"Curiosity Queue Manager : Staff Member {curiosityUser.LatestName} added to Priority Queue");
                 }
 
                 if (!priority.TryAdd(license, curiosityUser.QueuePriority))

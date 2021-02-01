@@ -196,7 +196,7 @@ namespace Curiosity.Core.Server.Web
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message}");
+                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString(DATE_FORMAT)}`: {message.Trim('"')}");
                 webhook.Username = StripUnicodeCharactersFromString(PluginManager.Hostname);
 
                 await webhook.Send();
@@ -373,7 +373,7 @@ namespace Curiosity.Core.Server.Web
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
                 webhook.AvatarUrl = discordWebhook.Avatar;
-                webhook.Content = StripUnicodeCharactersFromString($"{name} > {message}");
+                webhook.Content = StripUnicodeCharactersFromString($"`{DateTime.Now.ToString("HH:mm")}` {name} > {message.Trim('"')}");
                 webhook.Username = StripUnicodeCharactersFromString(username);
 
                 await webhook.Send();
