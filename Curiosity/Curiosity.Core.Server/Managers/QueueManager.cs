@@ -228,12 +228,12 @@ namespace Curiosity.Core.Server.Managers
                 if (!priority.ContainsKey(license))
                 {
                     newQueue.Enqueue(license);
-                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {player.Name} [{license}]"); }
+                    if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Public) {player.Name} [{license}]"); }
                 }
                 else
                 {
                     newPriorityQueue.Enqueue(license);
-                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {player.Name} [{license}]"); }
+                    if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : NEW -> QUEUE -> (Priority) {player.Name} [{license}]"); }
                 }
             }
 
@@ -243,7 +243,7 @@ namespace Curiosity.Core.Server.Managers
                 session.TryGetValue(license, out SessionState oldState);
                 session.TryUpdate(license, SessionState.Loading, oldState);
                 deferrals.done();
-                if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
+                if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> LOADING -> (Grace) {player.Name} [{license}]"); }
                 return;
             }
 
@@ -263,7 +263,7 @@ namespace Curiosity.Core.Server.Managers
                 {
                     UpdateTimer(license);
                     deferrals.done($"{messages[Messages.Canceled]}");
-                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
+                    if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : QUEUE -> CANCELED -> {license}"); }
                     return;
                 }
                 RemoveFrom(license, false, false, true, false, false, false);
@@ -280,7 +280,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 IsServerQueueReady = true;
                 Instance.DetachTickHandler(SetupTimer);
-                Logger.Verbose("[MAINTENANCE] Server Queue is ready.");
+                Logger.Debug("[MAINTENANCE] Server Queue is ready.");
                 return;
             }
 
@@ -288,7 +288,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 IsServerQueueReady = true;
                 Instance.DetachTickHandler(SetupTimer);
-                Logger.Verbose("Server Queue is ready to accept players.");
+                Logger.Debug("Server Queue is ready to accept players.");
             }
             await Task.FromResult(1000);
         }
