@@ -122,6 +122,8 @@ namespace Curiosity.Core.Server.Managers
                 bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
                 bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
 
+                ChatManager.OnLogMessage($"Player '{player.Name}' has Disconneded: '{reason}'");
+
                 Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}, HM: {userHadMission}, MR: {missionRemoved}, FR: {failuresRemoved}");
             }
         }

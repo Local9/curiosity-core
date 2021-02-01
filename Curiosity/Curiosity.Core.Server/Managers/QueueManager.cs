@@ -87,9 +87,11 @@ namespace Curiosity.Core.Server.Managers
                     }
                     session.TryGetValue(license, out SessionState oldState);
                     session.TryUpdate(license, SessionState.Active, oldState);
-                    if (stateChangeMessages) { Logger.Verbose($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> ACTIVE -> {license}"); }
+                    if (stateChangeMessages) { Logger.Debug($"Curiosity Queue Manager : {Enum.GetName(typeof(SessionState), oldState).ToUpper()} -> ACTIVE -> {license}"); }
 
-                    DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}#{metadata.Sender}': Successfully Connected. Ping: {player.Ping}ms");
+                    string msg = $"Player '{player.Name}#{metadata.Sender}': Successfully Connected. Ping: {player.Ping}ms";
+                    DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage(msg);
+                    ChatManager.OnLogMessage(msg);
 
                     return true;
                 }
@@ -118,7 +120,9 @@ namespace Curiosity.Core.Server.Managers
                 deferrals.update("Awaiting Server Startup...");
             }
 
+            string msg = $"Player '{player.Name}#{player.Handle}' is connecting. Ping: {player.Ping}ms";
             DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}#{player.Handle}' is connecting. Ping: {player.Ping}ms");
+            ChatManager.OnLogMessage(msg);
 
             DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"Queue: {queue.Count}, Sessions: {session.Count}, Active Players: {PluginManager.PlayersList.Count()}, User Cache: {PluginManager.ActiveUsers.Count}");
 
