@@ -74,7 +74,7 @@ namespace Curiosity.Core.Server.Commands
 
             if (context.IsRestricted && !context.RequiredRoles.Contains(curiosityUser.Role))
             {
-                ChatManager.OnChatMessage(player, "Restricted Command", "chat");
+                ChatManager.OnServerMessage(player, "Restricted Command", "chat");
                 return;
             }
 
@@ -89,11 +89,11 @@ namespace Curiosity.Core.Server.Commands
 
             if (arguments.Count < 1)
             {
-                ChatManager.OnChatMessage(player, "Avaliable Commands:", "chat");
+                ChatManager.OnServerMessage(player, "Avaliable Commands:", "chat");
 
                 foreach (var entry in registry)
                 {
-                    ChatManager.OnChatMessage(player, $"/{alias} {string.Join(", ", entry.Item1.Aliases)}", "chat");
+                    ChatManager.OnServerMessage(player, $"/{alias} {string.Join(", ", entry.Item1.Aliases)}", "chat");
                 }
 
                 return;
@@ -115,7 +115,7 @@ namespace Curiosity.Core.Server.Commands
             }
 
             if (!matched)
-                ChatManager.OnChatMessage(player, $"Command not found: {subcommand}", "chat");
+                ChatManager.OnServerMessage(player, $"Command not found: {subcommand}", "chat");
         }
     }
 }

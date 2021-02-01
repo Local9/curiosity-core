@@ -73,6 +73,23 @@ namespace Curiosity.Core.Server.Managers
             user.Send("chat:receive", jsonMessage);
         }
 
+        public static void OnServerMessage([FromSource] Player player, string message, string channel = "chat")
+        {
+            int playerHandle = int.Parse(player.Handle);
+            CuriosityUser user = PluginManager.ActiveUsers[playerHandle];
+
+            ChatMessage chatMessage = new ChatMessage();
+
+            chatMessage.Name = "SERVER";
+            chatMessage.Role = "SERVER";
+            chatMessage.Message = message;
+            chatMessage.Channel = channel;
+
+            string jsonMessage = JsonConvert.SerializeObject(chatMessage);
+
+            user.Send("chat:receive", jsonMessage);
+        }
+
         public static void OnPlayerLogMessage(string message)
         {
             ChatMessage chatMessage = new ChatMessage();
