@@ -2,6 +2,7 @@
 using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
@@ -36,7 +37,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Vehicle vehicle = World.GetAllVehicles().Select(x => x).Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f) && (x.Driver == null || x.Driver.IsDead)).FirstOrDefault();
+                Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
 
                 if (vehicle == null)
                 {
@@ -73,7 +74,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Vehicle vehicle = World.GetAllVehicles().Select(x => x).Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f)).FirstOrDefault();
+                Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
 
                 var nameOfOwner = await EventSystem.Request<object>("vehicle:owner", vehicle.NetworkId);
 
