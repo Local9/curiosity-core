@@ -120,6 +120,8 @@ namespace Curiosity.Core.Server.Managers
 
             DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}#{player.Handle}' is connecting. Ping: {player.Ping}ms");
 
+            DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"Queue: {queue.Count}, Sessions: {session}, Active Players: {PluginManager.PlayersList.Count()}, User Cache: {PluginManager.ActiveUsers.Count}");
+
             deferrals.update($"{messages[Messages.Gathering]}");
 
             if (string.IsNullOrEmpty(license)) // No License, No Gameplay

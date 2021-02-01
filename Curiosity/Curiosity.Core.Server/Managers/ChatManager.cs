@@ -40,16 +40,7 @@ namespace Curiosity.Core.Server.Managers
             Instance.ExportDictionary.Add("AddToLog", new Func<string, bool>(
                 (message) =>
                 {
-                    ChatMessage chatMessage = new ChatMessage();
-
-                    chatMessage.Name = "[S-LOG]";
-                    chatMessage.Role = $"SERVER";
-                    chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
-                    chatMessage.Channel = "log";
-
-                    string jsonMessage = JsonConvert.SerializeObject(chatMessage);
-
-                    EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
+                    OnLogMessage(message);
 
                     return true;
                 }
@@ -58,18 +49,7 @@ namespace Curiosity.Core.Server.Managers
             Instance.ExportDictionary.Add("AddToPlayerLog", new Func<int, string, bool>(
                 (playerId, message) =>
                 {
-                    Logger.Debug($"Player ID: {playerId}, message: {message}");
-
-                    ChatMessage chatMessage = new ChatMessage();
-
-                    chatMessage.Name = "[P-LOG]";
-                    chatMessage.Role = $"SERVER";
-                    chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
-                    chatMessage.Channel = "log";
-
-                    string jsonMessage = JsonConvert.SerializeObject(chatMessage);
-
-                    EventSystem.GetModule().Send("chat:receive", playerId, jsonMessage);
+                    OnPlayerLogMessage(message);
 
                     return true;
                 }
@@ -91,6 +71,20 @@ namespace Curiosity.Core.Server.Managers
             string jsonMessage = JsonConvert.SerializeObject(chatMessage);
 
             user.Send("chat:receive", jsonMessage);
+        }
+
+        public static void OnPlayerLogMessage(string message)
+        {
+            ChatMessage chatMessage = new ChatMessage();
+
+            chatMessage.Name = "[P-LOG]";
+            chatMessage.Role = $"SERVER";
+            chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
+            chatMessage.Channel = "log";
+
+            string jsonMessage = JsonConvert.SerializeObject(chatMessage);
+
+            EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
         }
 
         public static void OnLogMessage(string message)
