@@ -22,6 +22,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         private int gpsIndex = 0;
         private UIMenuListItem mlGpsLocations = new UIMenuListItem("GPS", gpsLocations, 0);
 
+        // private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you, you will also be unable to use weapons.");
         private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you, you will also be unable to use weapons.");
         private UIMenuItem miKillYourself = new UIMenuItem("Kill Yourself", "Kill yourself and respawn.");
 
