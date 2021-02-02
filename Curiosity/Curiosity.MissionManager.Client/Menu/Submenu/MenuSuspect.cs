@@ -5,14 +5,12 @@ using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Utils;
-using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Entity;
+using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
-
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 
 namespace Curiosity.MissionManager.Client.Menu.Submenu

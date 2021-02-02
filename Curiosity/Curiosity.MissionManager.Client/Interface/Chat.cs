@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.Systems.Library.Models;
+﻿using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 
 namespace Curiosity.MissionManager.Client.Interface

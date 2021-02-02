@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

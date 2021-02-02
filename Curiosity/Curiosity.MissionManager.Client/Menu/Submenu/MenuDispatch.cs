@@ -6,7 +6,6 @@ using Curiosity.MissionManager.Client.Manager;
 using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System;
-using System.Collections.Generic;
 using Ped = Curiosity.MissionManager.Client.Classes.Ped;
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 

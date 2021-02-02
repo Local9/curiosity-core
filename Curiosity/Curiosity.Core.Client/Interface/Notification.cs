@@ -1,7 +1,6 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Enums;
-using System;
 using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Interface

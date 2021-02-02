@@ -3,8 +3,8 @@ using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Managers;
-using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Entity;
+using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System.Collections.Generic;
 

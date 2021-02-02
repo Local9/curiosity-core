@@ -8,7 +8,6 @@ using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Curiosity.Core.Server.Managers
 {

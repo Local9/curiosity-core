@@ -3,14 +3,12 @@ using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Handler;
 using Curiosity.MissionManager.Client.Interface;
-using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Entity;
+using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
-
 using Vehicle = Curiosity.MissionManager.Client.Classes.Vehicle;
 
 namespace Curiosity.MissionManager.Client.Menu.Submenu
