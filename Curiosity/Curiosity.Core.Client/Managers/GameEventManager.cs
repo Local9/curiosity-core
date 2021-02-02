@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
@@ -7,12 +8,11 @@ using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.Events
 {
@@ -164,10 +164,12 @@ namespace Curiosity.Core.Client.Managers
 
     public class GameEventTigger : Manager<GameEventTigger>
     {
-        private const string DEAD_ANIM_DICT = "dead";
         DateTime DateOfDeath = DateTime.Now;
-        List<string> DeathAnim = new List<string>() { "dead_a", "dead_b", "dead_c", "dead_d", "dead_e", "dead_f", "dead_g", "dead_h" };
-        string CurrentDeathAnim;
+        Camera DeathCamera;
+        float AngleY;
+        float AngleZ;
+
+        Vector3 CameraOffset = new Vector3();
 
         public override void Begin()
         {
@@ -190,24 +192,10 @@ namespace Curiosity.Core.Client.Managers
             
         private async void GameEventManager_OnDeath(Entity attacker, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag)
         {
+            DateOfDeath = DateTime.Now;
             EventSystem.Send("character:death");
 
-            var player = Cache.Player;
-
-            int costOfRespawn = player.Character.RespawnCharge();
-
-            Game.PlayerPed.Health = Game.PlayerPed.MaxHealth;
-
-            API.RequestAnimDict(DEAD_ANIM_DICT);
-
-            while (!API.HasAnimDictLoaded(DEAD_ANIM_DICT))
-            {
-                await BaseScript.Delay(0);
-            }
-            CurrentDeathAnim = DeathAnim[Utility.RANDOM.Next(DeathAnim.Count)];
-
-            Game.PlayerPed.Task.PlayAnimation(DEAD_ANIM_DICT, CurrentDeathAnim, 8f, -1, AnimationFlags.StayInEndFrame);
-            Game.PlayerPed.IsPositionFrozen = true;
+            CreateCamera();
 
             PluginManager.Instance.AttachTickHandler(OnRespawnControlTask);
         }
@@ -218,6 +206,8 @@ namespace Curiosity.Core.Client.Managers
 
             Vector3 spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
             curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Game.PlayerPed.Heading));
+
+            RemoveCamera();
 
             await BaseScript.Delay(1000);
 
@@ -232,28 +222,28 @@ namespace Curiosity.Core.Client.Managers
             Vector3 spawnLocation = curiosityPlayer.Entity.Position.AsVector();
             curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Game.PlayerPed.Heading));
 
+            RemoveCamera();
+
             await BaseScript.Delay(1000);
 
             await ScreenInterface.FadeIn(3000);
         }
 
-        async Task OnRespawnControlTask()
+        async Task OnRespawnControlTask() // Change to a camera
         {
             Cache.Player.DisableHud();
             TimeSpan timeSpan = (DateOfDeath.AddMinutes(5) - DateTime.Now);
             string timeSpanLeft = timeSpan.ToString(@"mm\:ss");
 
-            if (!API.IsEntityPlayingAnim(Game.PlayerPed.Handle, DEAD_ANIM_DICT, CurrentDeathAnim, 3))
-            {
-                API.RequestAnimDict(DEAD_ANIM_DICT);
+            API.DisableFirstPersonCamThisFrame();
 
-                while (!API.HasAnimDictLoaded(DEAD_ANIM_DICT))
-                {
-                    await BaseScript.Delay(0);
-                }
+            Vector3 camPosition = ProcessCameraPosition();
 
-                Game.PlayerPed.Task.PlayAnimation(DEAD_ANIM_DICT, CurrentDeathAnim, 8f, -1, AnimationFlags.StayInEndFrame);
-            }
+            // Screen.ShowSubtitle($"{camPosition}");
+
+            DeathCamera.PointAt(Game.PlayerPed, new Vector3(0f, 0f, 0.5f));
+            DeathCamera.Position = camPosition;
+            API.SetFocusArea(camPosition.X, camPosition.Y, camPosition.Z, 0f, 0f, 0f);
 
             ScreenInterface.DrawText($"~w~You are unconscious. (~y~{timeSpanLeft}~w~)~n~(Press E to re-emerge at the hospital ~g~${Cache.Player.Character.RespawnCharge()}~w~)",
                 0.3f, new Vector2(0.5f, 0.75f), Color.FromArgb(175, 175, 175), true);
@@ -267,6 +257,89 @@ namespace Curiosity.Core.Client.Managers
             {
                 EventSystem.Send("character:respawn");
             }
+        }
+
+        void CreateCamera()
+        {
+            API.ClearFocus();
+
+            DeathCamera = World.CreateCamera(Game.PlayerPed.Position, Vector3.Zero, GameplayCamera.FieldOfView);
+            DeathCamera.IsActive = true;
+            API.RenderScriptCams(true, true, 1000, true, false);
+        }
+
+        void RemoveCamera()
+        {
+            API.ClearFocus();
+            API.RenderScriptCams(false, false, 0, true, false);
+            DeathCamera.Delete();
+            DeathCamera = null;
+        }
+
+        Vector3 ProcessCameraPosition()
+        {
+            float mouseX;
+            float mouseY;
+
+            if (API.IsInputDisabled(0))
+            {
+                mouseX = (API.GetDisabledControlNormal(1, 1) * 8f);
+                mouseY = (API.GetDisabledControlNormal(1, 2) * 8f);
+            }
+            else
+            {
+                mouseX = (API.GetDisabledControlNormal(1, 1) * 2f);
+                mouseY = (API.GetDisabledControlNormal(1, 2) * 2f);
+            }
+
+            AngleZ = AngleZ - mouseX;
+            AngleY = AngleY + mouseY;
+
+            if (AngleY > 89.0)
+            {
+                AngleY = 89.0f;
+            }
+            else if (AngleY < -89.0)
+            {
+                AngleY = -89.0f;
+            }
+
+            Vector3 pPos = Game.PlayerPed.Position;
+
+            float radius = 8.0f;
+
+            Vector3 behindTheCamera = new Vector3();
+            behindTheCamera.X = (pPos.X + ((Cos(AngleZ) * Cos(AngleY)) + (Cos(AngleY) * Cos(AngleZ))) / 2 * radius);
+            behindTheCamera.Y = (pPos.Y + ((Sin(AngleZ) * Cos(AngleY)) + (Cos(AngleY) * Sin(AngleZ))) / 2 * radius);
+            behindTheCamera.Z = (pPos.Z + (Sin(AngleY) * radius));
+
+            Vector3 raycastPosition = pPos;
+            raycastPosition.Z = raycastPosition.Z + 0.5f;
+
+            RaycastResult raycastResult = World.Raycast(raycastPosition, behindTheCamera, IntersectOptions.Everything, Game.PlayerPed);
+
+            float maxRadius = radius;
+
+            if (raycastResult.DitHit && Game.PlayerPed.IsInRangeOf(raycastResult.HitPosition, maxRadius))
+            {
+                Vector3 hitPos = raycastResult.HitPosition;
+                maxRadius = API.Vdist(pPos.X, pPos.Y, pPos.Z, hitPos.X, hitPos.Y, hitPos.Z);
+            }
+
+            CameraOffset.X = ((Cos(AngleZ) * Cos(AngleY)) + (Cos(AngleY) * Cos(AngleZ))) / 2 * maxRadius;
+            CameraOffset.Y = ((Sin(AngleZ) * Cos(AngleY)) + (Cos(AngleY) * Sin(AngleZ))) / 2 * maxRadius;
+            CameraOffset.Z = (Sin(AngleY) * maxRadius);
+
+            Vector3 finalPosition = new Vector3();
+            finalPosition.X = pPos.X + CameraOffset.X;
+            finalPosition.Y = pPos.Y + CameraOffset.Y;
+            finalPosition.Z = pPos.Z + CameraOffset.Z;
+
+            // World.DrawMarker(MarkerType.VerticalCylinder, pPos, Vector3.Zero, Vector3.Zero, new Vector3(.03f, .03f, 5f), Color.FromArgb(255, 255, 0, 0));
+            // World.DrawMarker(MarkerType.VerticalCylinder, pPos, Vector3.Zero, new Vector3(0f, 90f, 0f), new Vector3(.03f, .03f, 5f), Color.FromArgb(255, 0, 255, 0));
+            // World.DrawMarker(MarkerType.VerticalCylinder, pPos, Vector3.Zero, new Vector3(-90f, 0f, 0f), new Vector3(.03f, .03f, 5f), Color.FromArgb(255, 0, 0, 255));
+
+            return finalPosition;
         }
     }
 }

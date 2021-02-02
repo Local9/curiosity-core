@@ -186,8 +186,17 @@ namespace Curiosity.Core.Client.Managers
             if (health > API.GetEntityMaxHealth(ped))
                 health = API.GetEntityMaxHealth(ped);
 
-            Game.PlayerPed.Health = health;
-            Game.PlayerPed.Armor = character.Armor;
+            if (character.IsDead)
+            {
+                Game.PlayerPed.Health = 0;
+                Game.PlayerPed.Armor = 0;
+                Game.PlayerPed.Kill();
+            }
+            else
+            {
+                Game.PlayerPed.Health = health;
+                Game.PlayerPed.Armor = character.Armor;
+            }
 
             SetupDecorators();
 

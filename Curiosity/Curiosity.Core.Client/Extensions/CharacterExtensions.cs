@@ -177,6 +177,7 @@ namespace Curiosity.Core.Client.Extensions
             await Game.PlayerPed.FadeIn();
 
             Game.PlayerPed.IsPositionFrozen = false;
+            Cache.Player.EnableHud();
         }
 
         public static async Task PostLoad(this CuriosityCharacter character)
