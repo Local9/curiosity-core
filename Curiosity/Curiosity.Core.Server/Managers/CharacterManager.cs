@@ -64,11 +64,20 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
-            EventSystem.GetModule().Attach("character:death", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("character:killedSelf", new EventCallback(metadata =>
             {
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
                 Database.Store.StatDatabase.Adjust(curiosityUser.Character.CharacterId, Stat.STAT_KILLED_SELF, 1);
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("character:death", new EventCallback(metadata =>
+            {
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                Database.Store.StatDatabase.Adjust(curiosityUser.Character.CharacterId, Stat.STAT_DEATH, 1);
 
                 return null;
             }));
