@@ -63,7 +63,6 @@ namespace Curiosity.Core.Server.Database.Store
                         curiosityUser.Role = (Role)kv["roleId"].ToInt();
                         curiosityUser.QueuePriority = kv["queuePriority"].ToInt();
                         curiosityUser.LatestName = player.Name;
-                        curiosityUser.LifeExperience = kv["lifeExperience"].ToLong();
                         curiosityUser.DiscordId = discordId;
                         curiosityUser.IsPassive = kv["IsPassive"].ToBoolean();
 

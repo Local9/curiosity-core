@@ -14,7 +14,6 @@ namespace Curiosity.Systems.Library.Models
 
         public int Handle { get; set; }
         public long UserId { get; set; }
-        public long LifeExperience { get; set; }
         public ulong DiscordId { get; set; }
         public List<ulong> DiscordRoles { get; set; }
         public string License { get; set; }
