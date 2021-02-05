@@ -65,14 +65,14 @@ namespace Curiosity.Core.Server.Commands.Impl
                     Vector3 pos = player.Character.Position;
                     int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
 
-                    int netId = API.NetworkGetNetworkIdFromEntity(vehicleId);
+                    // int netId = API.NetworkGetNetworkIdFromEntity(vehicleId);
 
-                    Logger.Debug($"VehId: {vehicleId} NedId: {netId}");
+                    // Logger.Debug($"VehId: {vehicleId} NedId: {netId}");
 
-                    if (netId > 0)
+                    if (vehicleId > 0)
                     {
-                        PluginManager.ActiveUsers[player.Handle.ToInt()].PersonalVehicle = netId;
-                        Logger.Debug($"Veh: {netId} assigned to {player.Handle}");
+                        PluginManager.ActiveUsers[player.Handle.ToInt()].PersonalVehicle = vehicleId;
+                        Logger.Debug($"Veh: {vehicleId} assigned to {player.Handle}");
                     }
                 }
                 catch (Exception)
