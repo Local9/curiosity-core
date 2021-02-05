@@ -9,6 +9,20 @@ namespace Curiosity.Core.Client.Managers
     {
         public override void Begin()
         {
+            EventSystem.Attach("entity:player:vehicle", new EventCallback(metadata =>
+            {
+                int vehId = API.NetworkGetEntityFromNetworkId(metadata.Find<int>(0));
+
+                if (!API.DoesEntityExist(vehId)) return null;
+
+                Vehicle vehicle = new Vehicle(vehId);
+
+                Cache.PersonalVehicle = vehicle;
+                Game.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle, VehicleSeat.Driver);
+
+                return null;
+            }));
+
             EventSystem.Attach("entity:deleteFromWorld", new AsyncEventCallback(async metadata =>
             {
                 int networkId = metadata.Find<int>(0);

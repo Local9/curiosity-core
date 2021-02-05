@@ -65,15 +65,28 @@ namespace Curiosity.Core.Server.Commands.Impl
                     Vector3 pos = player.Character.Position;
                     int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
 
-                    // int netId = API.NetworkGetNetworkIdFromEntity(vehicleId);
-
-                    // Logger.Debug($"VehId: {vehicleId} NedId: {netId}");
-
-                    if (vehicleId > 0)
+                    if (vehicleId == 0)
                     {
-                        PluginManager.ActiveUsers[player.Handle.ToInt()].PersonalVehicle = vehicleId;
-                        Logger.Debug($"Veh: {vehicleId} assigned to {player.Handle}");
+                        Logger.Debug($"Possible OneSync is Disabled");
+                        return;
                     }
+
+                    DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+
+                    while (!API.DoesEntityExist(vehicleId))
+                    {
+                        await BaseScript.Delay(0);
+
+                        if (maxWaitTime < DateTime.UtcNow) break;
+                    }
+
+                    if (!API.DoesEntityExist(vehicleId))
+                    {
+                        Logger.Debug($"Failed to create vehicle in timely manor.");
+                        return;
+                    }
+
+                    user.Send("entity:player:vehicle", API.NetworkGetNetworkIdFromEntity(vehicleId));
                 }
                 catch (Exception)
                 {
