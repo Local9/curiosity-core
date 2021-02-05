@@ -77,6 +77,7 @@
     <Compile Include="Managers\LevelingManager.cs" />
     <Compile Include="Managers\MarqueeManager.cs" />
     <Compile Include="Managers\MissionManager.cs" />
+    <Compile Include="Managers\OneSyncEventManager.cs" />
     <Compile Include="Managers\QueueManager.cs" />
     <Compile Include="Managers\ShopManager.cs" />
     <Compile Include="Managers\SpecialDayManager.cs" />
