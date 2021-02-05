@@ -26,6 +26,25 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
+            EventSystem.GetModule().Attach("entity:damage", new EventCallback(metadata =>
+            {
+
+                //BaseScript.TriggerClientEvent("c:mm:damage", networkId, x, y, z, force, radius, fromEntity, numberOfHits);
+
+                int networkId = metadata.Find<int>(0);
+                float x = metadata.Find<float>(1);
+                float y = metadata.Find<float>(2);
+                float z = metadata.Find<float>(3);
+                float force = metadata.Find<float>(4);
+                float radius = metadata.Find<float>(5);
+                int fromEntity = metadata.Find<int>(6);
+                int numberOfHits = metadata.Find<int>(7);
+
+                
+
+                return null;
+            }));
+
             EventSystem.GetModule().Attach(ENTITY_VEHICLE_DELETE, new EventCallback(metadata =>
             {
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];

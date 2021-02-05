@@ -15,7 +15,7 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("gameEvent:playerKillPlayer", new AsyncEventCallback(async metadata => {
+            EventSystem.GetModule().Attach("gameEvent:playerKillPlayer", new EventCallback(metadata => {
 
                 int attackerHandle = metadata.Find<int>(0);
                 int victimHandle = metadata.Find<int>(1);
