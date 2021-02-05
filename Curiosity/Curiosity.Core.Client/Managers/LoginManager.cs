@@ -57,9 +57,9 @@ namespace Curiosity.Core.Client.Managers
                 User = user
             };
 
-            var voice = VoiceChat.GetModule();
-            voice.Range = 0f;
-            voice.Commit();
+            //var voice = VoiceChat.GetModule();
+            //voice.Range = 0f;
+            //voice.Commit();
 
             Instance.AttachTickHandlers(voice);
             Instance.Local.DisableHud();

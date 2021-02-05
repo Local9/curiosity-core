@@ -79,10 +79,9 @@ namespace Curiosity.Core.Client
                 Modify(ped, session == decors.GetInteger("Session"));
             }
 
-            var voice = VoiceChat.GetModule();
-
-            voice.Channel = session;
-            voice.Commit();
+            //var voice = VoiceChat.GetModule();
+            //voice.Channel = session;
+            //voice.Commit();
         }
 
         private static void Modify(int ped, bool toggle)

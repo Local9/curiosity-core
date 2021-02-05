@@ -155,9 +155,9 @@ namespace Curiosity.Core.Client.Extensions
 
             character.SetupStats();
 
-            var voice = VoiceChat.GetModule();
-            voice.Range = VoiceChatRange.Normal;
-            voice.Commit();
+            //var voice = VoiceChat.GetModule();
+            //voice.Range = VoiceChatRange.Normal;
+            //voice.Commit();
         }
 
         public static async void Revive(this CuriosityCharacter character, Position position)
