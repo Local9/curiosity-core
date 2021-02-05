@@ -110,6 +110,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                         while (Cache.PersonalVehicle.Exists())
                         {
                             await BaseScript.Delay(100);
+                            Cache.PersonalVehicle.Delete();
                         }
                     }
 
