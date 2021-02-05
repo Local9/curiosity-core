@@ -132,24 +132,24 @@ namespace Curiosity.Core.Server.Managers
 
             if (string.IsNullOrEmpty(license)) // No License, No Gameplay
             {
-                deferrals.done($"{messages[Messages.License]}");
                 DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': No License, No Game.");
+                deferrals.done($"{messages[Messages.License]}");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
 
             if (!regex.IsMatch(player.Name))
             {
-                deferrals.done($"{string.Format(messages[Messages.Symbols], player.Name)}");
                 DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Name contains symbols.");
+                deferrals.done($"{string.Format(messages[Messages.Symbols], player.Name)}");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
 
             if (blacklistedNames.IsMatch(player.Name.ToLower()))
             {
-                deferrals.done($"The username of '{player.Name}' is blacklisted, please change your username and try to rejoin.");
                 DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Name is blacklisted.");
+                deferrals.done($"The username of '{player.Name}' is blacklisted, please change your username and try to rejoin.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -158,8 +158,8 @@ namespace Curiosity.Core.Server.Managers
 
             if (!isVerified)
             {
-                deferrals.done($"Unabled to verify Discord Authorisation.\n\nJoin {PluginManager.DiscordUrl} and accept the verification process.");
                 DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Not verified on Discord.");
+                deferrals.done($"Unabled to verify Discord Authorisation.\n\nJoin {PluginManager.DiscordUrl} and accept the verification process.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -172,8 +172,8 @@ namespace Curiosity.Core.Server.Managers
 
             if (curiosityUser == null)
             {
-                deferrals.done($"Sorry, there was an error when trying to load your account.");
                 DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Error loading Account.");
+                deferrals.done($"Sorry, there was an error when trying to load your account.");
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
@@ -184,9 +184,8 @@ namespace Curiosity.Core.Server.Managers
                 if (curiosityUser.IsBannedPerm)
                     time = "permanently.";
 
-                deferrals.done(string.Format($"{messages[Messages.Banned]}", time));
-
                 DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}#{curiosityUser.UserId}': Is Banned - {time}.");
+                deferrals.done(string.Format($"{messages[Messages.Banned]}", time));
                 RemoveFrom(license, true, true, true, true, true, true);
                 return;
             }
