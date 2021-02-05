@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
@@ -14,6 +15,18 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
+            EventSystem.GetModule().Attach("character:routing:base", new EventCallback(metadata =>
+            {
+                Player player = PluginManager.PlayersList[metadata.Sender];
+
+                int currentBucket = API.GetPlayerRoutingBucket(player.Handle);
+
+                if (currentBucket != 1)
+                    API.SetPlayerRoutingBucket(player.Handle, 1);
+
+                return null;
+            }));
+
             EventSystem.GetModule().Attach("character:load", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];

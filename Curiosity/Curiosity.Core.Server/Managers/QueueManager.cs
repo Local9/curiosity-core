@@ -109,6 +109,8 @@ namespace Curiosity.Core.Server.Managers
 
         private async void OnConnect([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
         {
+            API.SetPlayerRoutingBucket(player.Handle, 0);
+
             string license = player.Identifiers["license"];
 
             while (!IsServerQueueReady)

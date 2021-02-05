@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Environment.Entities.Models;
+using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Interface.Modules;
 using Curiosity.Core.Client.Managers;
 using Curiosity.Core.Client.Utils;
@@ -61,6 +62,7 @@ namespace Curiosity.Core.Client.Environment.Entities
             }
 
             PlayerOptions.SetPlayerPassive(Cache.Player.User.IsPassive);
+            EventSystem.GetModule().Send("character:routing:base");
         }
 
         public async Task CommitModel(Model model)
