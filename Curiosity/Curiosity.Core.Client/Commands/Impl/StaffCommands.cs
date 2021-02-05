@@ -2,6 +2,7 @@
 using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
@@ -22,6 +23,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         public override bool IsRestricted { get; set; }
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.ADMINISTRATOR, Role.COMMUNITY_MANAGER, Role.DEVELOPER, Role.HEAD_ADMIN, Role.HELPER, Role.MODERATOR, Role.PROJECT_MANAGER, Role.SENIOR_ADMIN };
 
+        #region Weapons
         [CommandInfo(new[] { "weapons" })]
         public class Weapons : ICommand
         {
@@ -38,5 +40,32 @@ namespace Curiosity.Core.Client.Commands.Impl
                 Chat.SendLocalMessage("Weapons: All Equiped");
             }
         }
+        #endregion
+
+        #region vehicles
+        [CommandInfo(new[] { "dv", "deleteveh" })]
+        public class VehicleDespawner : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (entity.Vehicle != null)
+                {
+                    EventSystem.GetModule().Send("entity:delete", entity.Vehicle.NetworkId);
+
+                    await BaseScript.Delay(2000);
+
+                    while (entity.Vehicle.Exists())
+                    {
+                        await BaseScript.Delay(100);
+                        await entity.Vehicle.FadeOut();
+
+                        entity.Vehicle.Delete();
+                    }
+
+                    entity.Vehicle?.Delete();
+                }
+            }
+        }
+        #endregion
     }
 }

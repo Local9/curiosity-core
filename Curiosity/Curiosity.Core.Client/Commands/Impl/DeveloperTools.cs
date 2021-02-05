@@ -167,19 +167,6 @@ namespace Curiosity.Core.Client.Commands.Impl
                 vehicle.PlaceOnGround();
             }
         }
-
-        [CommandInfo(new[] { "dv", "deleteveh" })]
-        public class VehicleDespawner : ICommand
-        {
-            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
-            {
-                if (entity.Vehicle != null)
-                {
-                    await entity.Vehicle.FadeOut();
-                    entity.Vehicle?.Delete();
-                }
-            }
-        }
         #endregion
 
         #region Positions
