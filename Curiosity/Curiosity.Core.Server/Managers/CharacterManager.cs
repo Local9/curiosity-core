@@ -30,6 +30,9 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("character:save", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
+
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 CuriosityCharacter curiosityCharacter = metadata.Find<CuriosityCharacter>(0);
 
