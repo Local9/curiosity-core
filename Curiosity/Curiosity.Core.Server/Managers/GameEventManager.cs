@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -30,16 +31,9 @@ namespace Curiosity.Core.Server.Managers
                 Player attacker = PluginManager.PlayersList[attackerHandle];
                 Player victim = PluginManager.PlayersList[victimHandle];
 
-                if (curiosityUserKiller.TotalNumberOfPlayerKills >= 3)
-                {
-                    attacker.Drop($"You've been kicked for killing other players.");
-                    EventSystem.GetModule().Send("system:notification:basic", -1, $"{curiosityUserKiller.LatestName} has been kicked");
-                    await BaseScript.Delay(100);
-                }
-
-                victim.TriggerEvent("curiosity:Client:Player:Revive", "Server");
                 string msg = $"{curiosityUserVictim.LatestName} killed by {curiosityUserKiller.LatestName}";
-                Instance.ExportDictionary["curiosity-server"].DiscordPlayerLog($"[Player Kill] {msg}");
+
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"[Player Kill] {msg}");
                 EventSystem.GetModule().Send("system:notification:basic", -1, msg);
                 
                 return null;
