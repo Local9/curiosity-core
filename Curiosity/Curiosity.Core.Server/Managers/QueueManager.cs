@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Web;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -109,7 +110,7 @@ namespace Curiosity.Core.Server.Managers
 
         private async void OnConnect([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
         {
-            API.SetPlayerRoutingBucket(player.Handle, 0);
+            API.SetPlayerRoutingBucket(player.Handle, (int)RoutingBucket.MAIN_WORLD);
 
             string license = player.Identifiers["license"];
 

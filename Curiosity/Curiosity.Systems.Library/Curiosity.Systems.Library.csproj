@@ -54,6 +54,7 @@
     <Compile Include="Enums\ErrorMessages.cs" />
     <Compile Include="Enums\MissionType.cs" />
     <Compile Include="Enums\Notification.cs" />
+    <Compile Include="Enums\RoutingBucket.cs" />
     <Compile Include="Enums\Skill.cs" />
     <Compile Include="Enums\SkillType.cs" />
     <Compile Include="Enums\Stat.cs" />

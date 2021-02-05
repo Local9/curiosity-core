@@ -22,7 +22,7 @@ namespace Curiosity.Core.Server.Managers
                 int currentBucket = API.GetPlayerRoutingBucket(player.Handle);
 
                 if (currentBucket != 1)
-                    API.SetPlayerRoutingBucket(player.Handle, 1);
+                    API.SetPlayerRoutingBucket(player.Handle, (int)RoutingBucket.MAIN_WORLD);
 
                 return null;
             }));
