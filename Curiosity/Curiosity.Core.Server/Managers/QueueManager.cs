@@ -19,7 +19,7 @@ namespace Curiosity.Core.Server.Managers
     {
         static Dictionary<Messages, string> messages = new Dictionary<Messages, string>();
 
-        static Regex regex = new Regex(@"^[ A-Za-z0-9-_.#\[\]]{1,32}$");
+        static Regex regex = new Regex(@"^[ :A-Za-z0-9-_.#\[\]]{1,32}$");
         static Regex blacklistedNames = new Regex(@"\b(admin|nigga|nigger|administrator|moderator|staff|n1gg3|n1g|n1gg3r|user|pc)\b");
 
         static string resourceName = API.GetCurrentResourceName();
