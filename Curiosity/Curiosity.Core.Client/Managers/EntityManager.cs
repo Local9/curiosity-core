@@ -22,7 +22,7 @@ namespace Curiosity.Core.Client.Managers
                 Cache.PersonalVehicle = vehicle;
                 Game.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle, VehicleSeat.Driver);
 
-                return null;
+                return Cache.PersonalVehicle.NetworkId;
             }));
 
             EventSystem.Attach("entity:deleteFromWorld", new AsyncEventCallback(async metadata =>
