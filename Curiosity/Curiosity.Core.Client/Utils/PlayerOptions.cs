@@ -25,6 +25,8 @@ namespace Curiosity.Core.Client.Utils
         {
             if (API.NetworkIsGameInProgress())
             {
+                if (IsPassiveModeEnabled == isPassive) return;
+
                 if (IsPassiveModeEnabled != isPassive)
                     IsPassiveModeEnabled = isPassive;
 
@@ -65,6 +67,7 @@ namespace Curiosity.Core.Client.Utils
             if (DateTime.Now.Subtract(passiveModeDisabled).TotalMinutes >= 5)
             {
                 PluginManager.Instance.DetachTickHandler(PassiveCooldownTick);
+                IsPassiveModeEnabled = false;
             }
             else
             {
