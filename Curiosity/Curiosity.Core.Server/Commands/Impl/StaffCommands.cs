@@ -1,8 +1,10 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Managers;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,6 +46,36 @@ namespace Curiosity.Core.Server.Commands.Impl
                 curiosityUser.Send("character:respawnNow");
 
                 ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' respawned.");
+            }
+        }
+        #endregion
+
+        #region Vehicles ONESYNC
+        [CommandInfo(new[] { "vehicle", "veh", "car" })]
+        public class VehicleSpawner : ICommand
+        {
+            public async void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                try
+                {
+                    if (arguments.Count <= 0) return;
+                    var model = API.GetHashKey(arguments.ElementAt(0));
+
+                    Vector3 pos = player.Character.Position;
+                    int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
+
+                    Vehicle vehicle = new Vehicle(vehicleId);
+
+                    if (vehicle != null)
+                    {
+                        CuriosityUser curiosityUser = PluginManager.ActiveUsers[player.Handle.ToInt()];
+                        curiosityUser.PersonalVehicle = vehicle.NetworkId;
+                    }
+                }
+                catch (Exception)
+                {
+                    // Ignored
+                }
             }
         }
         #endregion
