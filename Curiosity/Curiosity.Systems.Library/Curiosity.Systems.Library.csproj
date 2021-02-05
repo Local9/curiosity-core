@@ -58,6 +58,7 @@
     <Compile Include="Enums\Skill.cs" />
     <Compile Include="Enums\SkillType.cs" />
     <Compile Include="Enums\Stat.cs" />
+    <Compile Include="Enums\StateBagKey.cs" />
     <Compile Include="Models\CharacterStat.cs" />
     <Compile Include="Models\CuriosityStore.cs" />
     <Compile Include="Models\ExportMessage.cs" />

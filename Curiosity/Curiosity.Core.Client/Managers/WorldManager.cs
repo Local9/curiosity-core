@@ -1,10 +1,13 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Data;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
@@ -156,6 +159,27 @@ namespace Curiosity.Core.Client.Managers
 
             API.NetworkOverrideClockTime(hour, minute, 0);
             API.SetClockTime(hour, minute, 0);
+        }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnWorldPlayerSyncTick()
+        {
+            Ped[] peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 50f)).ToArray();
+            foreach(Ped ped in peds)
+            {
+                if (ped.IsPlayer)
+                {
+                    string playerName = ped.State.Get($"{StateBagKey.PLAYER_NAME}");
+                    int.TryParse(ped.State.Get($"{StateBagKey.SERVER_HANDLE}"), out int handle);
+
+                    if (!string.IsNullOrEmpty(playerName))
+                    {
+                        bool isTalking = API.NetworkIsPlayerTalking(handle);
+                        string namePrefix = isTalking ? $"~b~" : $"~w~";
+                        ScreenInterface.Draw3DText(ped.Position, namePrefix, 10, 50, 1.5f);
+                    }
+                }
+            }
         }
     }
 }

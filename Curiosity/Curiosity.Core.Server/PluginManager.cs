@@ -115,6 +115,8 @@ namespace Curiosity.Core.Server
         {
             try
             {
+                GlobalState["mode"] = "open";
+
                 IsDebugging = API.GetConvar("diagnostics_debug", "false") == "true";
 
                 if (IsDebugging)

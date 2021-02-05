@@ -37,6 +37,12 @@ namespace Curiosity.Core.Server.Managers
                 curiosityUser.Character.Skills = await Database.Store.SkillDatabase.Get(curiosityUser.Character.CharacterId);
                 curiosityUser.Character.Stats = await Database.Store.StatDatabase.Get(curiosityUser.Character.CharacterId);
 
+                if (player.Character != null)
+                {
+                    player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
+                    player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
+                }
+
                 return curiosityUser.Character;
             }));
 
@@ -52,6 +58,13 @@ namespace Curiosity.Core.Server.Managers
                 if (user.Character.CharacterId != curiosityCharacter.CharacterId) return null;
 
                 curiosityCharacter.Cash = await Database.Store.BankDatabase.Get(curiosityCharacter.CharacterId);
+
+                if (player.Character != null)
+                {
+                    player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
+                    player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
+                    player.State.Set($"{StateBagKey.PLAYER_CASH}", curiosityCharacter.Cash, true);
+                }
 
                 await curiosityCharacter.Save();
                 return null;
