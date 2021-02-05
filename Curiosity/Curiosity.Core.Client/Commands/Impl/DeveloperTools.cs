@@ -171,10 +171,11 @@ namespace Curiosity.Core.Client.Commands.Impl
         [CommandInfo(new[] { "dv", "deleteveh" })]
         public class VehicleDespawner : ICommand
         {
-            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 if (entity.Vehicle != null)
                 {
+                    await entity.Vehicle.FadeOut();
                     entity.Vehicle?.Delete();
                 }
             }

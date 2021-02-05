@@ -50,11 +50,8 @@ namespace Curiosity.Core.Client.Managers
 
                                 await vehicle.FadeOut();
 
-                                if (vehicle.Opacity == 0)
-                                {
-                                    vehicle.Position = new Vector3(10000, 10000, 0);
-                                    await BaseScript.Delay(1500);
-                                }
+                                vehicle.Position = new Vector3(10000, 10000, 0);
+                                await BaseScript.Delay(1500);
 
                                 vehicle.Delete();
                             }
