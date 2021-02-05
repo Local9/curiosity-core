@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Entity;
 using System;
 
@@ -33,7 +34,7 @@ namespace Curiosity.Core.Server.Managers
                 msg += " Player is a mission owner.";
             }
 
-            Instance.ExportDictionary["curiosity-server"].DiscordServerEventLog(msg);
+            DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage(msg);
         }
 
         private void OnClearPedTasksEvent(int source, bool immediately)
@@ -47,7 +48,7 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            Instance.ExportDictionary["curiosity-server"].DiscordServerEventLog($"[{source}] '{player.Name}' tried to remove someone from their vehicle, or a script is badly written.");
+            DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"[{source}] '{player.Name}' tried to remove someone from their vehicle, or a script is badly written.");
         }
     }
 }
