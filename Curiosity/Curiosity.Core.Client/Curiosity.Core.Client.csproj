@@ -107,7 +107,6 @@
     <Compile Include="Interface\Notification.cs" />
     <Compile Include="Interface\ScreenInterface.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
-    <Compile Include="Managers\ChatManager.cs" />
     <Compile Include="Managers\CrouchManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />
     <Compile Include="Managers\LoginManager.cs" />
