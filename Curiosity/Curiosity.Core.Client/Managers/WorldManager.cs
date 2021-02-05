@@ -175,8 +175,8 @@ namespace Curiosity.Core.Client.Managers
                     if (!string.IsNullOrEmpty(playerName))
                     {
                         bool isTalking = API.NetworkIsPlayerTalking(handle);
-                        string namePrefix = isTalking ? $"~b~" : $"~w~";
-                        ScreenInterface.Draw3DText(ped.Position, namePrefix, 10, 50, 1.5f);
+                        string namePrefix = isTalking ? $"~b~" : $"~g~";
+                        ScreenInterface.Draw3DText(ped.Position, namePrefix, 10, 50, 1.2f);
                     }
                 }
             }
