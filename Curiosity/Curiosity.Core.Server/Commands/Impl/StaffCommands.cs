@@ -86,7 +86,11 @@ namespace Curiosity.Core.Server.Commands.Impl
                         return;
                     }
 
-                    user.Send("entity:player:vehicle", API.NetworkGetNetworkIdFromEntity(vehicleId));
+                    int networkId = API.NetworkGetNetworkIdFromEntity(vehicleId);
+
+                    PluginManager.ActiveUsers[player.Handle.ToInt()].PersonalVehicle = networkId;
+
+                    user.Send("entity:player:vehicle", networkId);
                 }
                 catch (Exception)
                 {
