@@ -58,6 +58,7 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\Impl\DeveloperTools.cs" />
     <Compile Include="Commands\Impl\PlayerCommands.cs" />
+    <Compile Include="Commands\Impl\StaffCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
     <Compile Include="Environment\Entities\Models\MarkerData.cs" />

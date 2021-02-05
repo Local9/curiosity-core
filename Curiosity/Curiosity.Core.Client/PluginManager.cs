@@ -118,6 +118,7 @@ namespace Curiosity.Core.Client
 
             commands.Bind(typeof(DeveloperTools));
             commands.Bind(typeof(PlayerCommands));
+            commands.Bind(typeof(StaffCommands));
 
             AttachTickHandlers(this);
 

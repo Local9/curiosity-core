@@ -10,8 +10,8 @@ namespace Curiosity.Core.Server.Commands.Impl
 {
     public class StaffCommands : CommandContext
     {
-        public override string[] Aliases { get; set; } = { "staff", "st" };
-        public override string Title { get; set; } = "Staff Commands";
+        public override string[] Aliases { get; set; } = { "srvStaff", "sst" };
+        public override string Title { get; set; } = "Staff Server Commands";
         public override bool IsRestricted { get; set; } = true;
         public override List<Role> RequiredRoles { get; set; } = new List<Role>() { Role.ADMINISTRATOR, Role.COMMUNITY_MANAGER, Role.DEVELOPER, Role.HEAD_ADMIN, Role.HELPER, Role.MODERATOR, Role.PROJECT_MANAGER, Role.SENIOR_ADMIN };
 
