@@ -61,7 +61,7 @@ namespace Curiosity.Core.Client.Managers
             //voice.Range = 0f;
             //voice.Commit();
 
-            Instance.AttachTickHandlers(voice);
+            //Instance.AttachTickHandlers(voice);
             Instance.Local.DisableHud();
 
             Logger.Info($"[User] [{user.DiscordId}] Logged in with `{user.Role}`");
