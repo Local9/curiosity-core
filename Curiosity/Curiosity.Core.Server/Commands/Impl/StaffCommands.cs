@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Managers;
 using Curiosity.Systems.Library.Enums;
@@ -68,8 +69,8 @@ namespace Curiosity.Core.Server.Commands.Impl
 
                     if (vehicle != null)
                     {
-                        CuriosityUser curiosityUser = PluginManager.ActiveUsers[player.Handle.ToInt()];
-                        curiosityUser.PersonalVehicle = vehicle.NetworkId;
+                        PluginManager.ActiveUsers[player.Handle.ToInt()].PersonalVehicle = vehicle.NetworkId;
+                        Logger.Debug($"Veh: {vehicle.NetworkId} assigned to {player.Handle}");
                     }
                 }
                 catch (Exception)
