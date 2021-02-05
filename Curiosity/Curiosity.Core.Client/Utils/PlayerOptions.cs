@@ -25,6 +25,9 @@ namespace Curiosity.Core.Client.Utils
         {
             if (API.NetworkIsGameInProgress())
             {
+                if (IsPassiveModeEnabled != isPassive)
+                    IsPassiveModeEnabled = isPassive;
+
                 if (!isPassive)
                 {
                     //Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
@@ -62,11 +65,9 @@ namespace Curiosity.Core.Client.Utils
             if (DateTime.Now.Subtract(passiveModeDisabled).TotalMinutes >= 5)
             {
                 PluginManager.Instance.DetachTickHandler(PassiveCooldownTick);
-                IsPassiveModeEnabled = true;
             }
             else
             {
-                IsPassiveModeEnabled = false;
 
                 SizeF res = ScreenTools.ResolutionMaintainRatio;
                 Point safe = ScreenTools.SafezoneBounds;
