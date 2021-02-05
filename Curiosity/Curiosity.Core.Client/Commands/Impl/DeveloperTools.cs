@@ -80,6 +80,16 @@ namespace Curiosity.Core.Client.Commands.Impl
         #endregion
 
         #region Vehicles
+        [CommandInfo(new[] { "vn", "vehicleNet" })]
+        public class VehicleDespawner : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
+                Notify.Info($"~n~NetId: {vehicle.NetworkId}~n~Hndl: {vehicle.Handle}");
+            }
+        }
+
         [CommandInfo(new[] { "vehicle", "veh", "car" })]
         public class VehicleSpawner : ICommand
         {
