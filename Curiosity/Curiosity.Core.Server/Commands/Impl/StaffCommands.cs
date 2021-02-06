@@ -89,7 +89,7 @@ namespace Curiosity.Core.Server.Commands.Impl
 
                     int networkId = API.NetworkGetNetworkIdFromEntity(vehicleId);
 
-                    PluginManager.ActiveUsers[player.Handle.ToInt()].PersonalVehicle = await EventSystem.GetModule().Request<int>("entity:player:vehicle", networkId);
+                    user.Send("entity:player:vehicle", networkId);
                 }
                 catch (Exception)
                 {

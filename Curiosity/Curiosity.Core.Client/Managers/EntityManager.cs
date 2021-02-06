@@ -36,7 +36,7 @@ namespace Curiosity.Core.Client.Managers
 
                 Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
 
-                return Cache.PersonalVehicle.NetworkId;
+                return null;
             }));
 
             EventSystem.Attach("entity:deleteFromWorld", new AsyncEventCallback(async metadata =>
