@@ -130,6 +130,8 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
 
+                Logger.Debug($"HandleCEventNetworkEntityDamaged : IsVictimThisPlayer {isVictimThisPlayer}");
+
                 if (isAttackerPlayer && isVictimPlayer)
                 {
                     OnPlayerKillPlayer?.Invoke(playerAttacker, playerVictim, isMeleeDamage, weaponInfoHash, damageTypeFlag);
