@@ -138,6 +138,14 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
+            if (string.IsNullOrEmpty(player.Name))
+            {
+                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player name could not be found.");
+                deferrals.done($"{string.Format(messages[Messages.NoName], player.Name)}");
+                RemoveFrom(license, true, true, true, true, true, true);
+                return;
+            }
+
             if (!regex.IsMatch(player.Name))
             {
                 DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"Player '{player.Name}': Name contains symbols.");
@@ -791,6 +799,7 @@ namespace Curiosity.Core.Server.Managers
             messages.Add(Messages.Timeout, "Exceeded server owners maximum loading time threshold");
             messages.Add(Messages.QueueCount, "[Queue: {0}]");
             messages.Add(Messages.Symbols, "Player name of '{0}' contains invalid characters, please change your player name in FiveM or Steam Settings.\nThe following characters are allowed A-Z, a-z, 0-9 and -_[].#");
+            messages.Add(Messages.NoName, "Player name could not be found.");
         }
     }
 
@@ -808,7 +817,8 @@ namespace Curiosity.Core.Server.Managers
         Timeout,
         QueueCount,
         Symbols,
-        BlackListedName
+        BlackListedName,
+        NoName
     }
     public enum SessionState
     {
