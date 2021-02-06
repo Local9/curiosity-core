@@ -34,6 +34,8 @@ namespace Curiosity.Core.Client.Managers
                 Cache.PersonalVehicle = vehicle;
                 Game.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle, VehicleSeat.Driver);
 
+                Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+
                 return Cache.PersonalVehicle.NetworkId;
             }));
 

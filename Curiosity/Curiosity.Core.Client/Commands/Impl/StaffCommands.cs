@@ -1,11 +1,9 @@
 ﻿using CitizenFX.Core;
-using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
