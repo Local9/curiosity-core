@@ -67,9 +67,9 @@ namespace Curiosity.Interface.Client.Managers
                 return null;
             }));
 
-            API.RegisterKeyMapping(COMMAND_OPEN_PDA_LEGACY, "Open Curiosity PDA", "keyboard", "F11");
+            // API.RegisterKeyMapping(COMMAND_OPEN_PDA_LEGACY, "Open Curiosity PDA", "keyboard", "F11");
             API.RegisterKeyMapping(COMMAND_OPEN_PDA_HOME, "Open Curiosity PDA", "keyboard", "HOME");
-            API.RegisterCommand(COMMAND_OPEN_PDA_LEGACY, new Action(OpenPDA), false);
+            // API.RegisterCommand(COMMAND_OPEN_PDA_LEGACY, new Action(OpenPDA), false);
             API.RegisterCommand(COMMAND_OPEN_PDA_HOME, new Action(OpenPDA), false);
         }
 
