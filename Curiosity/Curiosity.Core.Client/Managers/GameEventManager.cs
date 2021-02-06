@@ -130,7 +130,11 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
 
-                Logger.Debug($"HandleCEventNetworkEntityDamaged : IsVictimThisPlayer {isVictimThisPlayer}");
+                Logger.Debug($"\nHandleCEventNetworkEntityDamaged\n" +
+                    $"IsVictimThisPlayer {isVictimThisPlayer}\n" +
+                    $"isVictimPlayer {isVictimPlayer}\n" +
+                    $"isAttackerPlayer {isAttackerPlayer}\n" +
+                    $"isVictimPed {isVictimPed}\n");
 
                 if (isAttackerPlayer && isVictimPlayer)
                 {
