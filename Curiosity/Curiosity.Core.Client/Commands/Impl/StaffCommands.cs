@@ -48,22 +48,32 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
+                Vehicle vehicle = null;
+
                 if (entity.Vehicle != null)
                 {
-                    EventSystem.GetModule().Send("entity:delete", entity.Vehicle.NetworkId);
-
-                    await BaseScript.Delay(2000);
-
-                    while (entity.Vehicle.Exists())
-                    {
-                        await BaseScript.Delay(100);
-                        await entity.Vehicle.FadeOut();
-
-                        entity.Vehicle.Delete();
-                    }
-
-                    entity.Vehicle?.Delete();
+                    vehicle = entity.Vehicle;
                 }
+                else
+                {
+                    vehicle = Game.PlayerPed.GetVehicleInFront();
+                }
+
+                if (vehicle == null) return;
+
+                EventSystem.GetModule().Send("entity:delete", vehicle.NetworkId);
+
+                await BaseScript.Delay(2000);
+
+                while (vehicle.Exists())
+                {
+                    await BaseScript.Delay(100);
+                    await vehicle.FadeOut();
+
+                    vehicle.Delete();
+                }
+
+                vehicle?.Delete();
             }
         }
         #endregion
