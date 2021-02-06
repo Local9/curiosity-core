@@ -84,7 +84,6 @@
     <Compile Include="Environment\Entities\Models\CameraViewmodel.cs" />
     <Compile Include="Environment\Entities\Models\MugshotBoardAttachment.cs" />
     <Compile Include="Environment\Entities\Models\SoundSystem.cs" />
-    <Compile Include="Environment\Entities\Models\VoiceChat.cs" />
     <Compile Include="Environment\Entities\Modules\EntityModule.cs" />
     <Compile Include="Environment\Entities\Modules\EntityModuleRegistry.cs" />
     <Compile Include="Environment\Entities\Modules\Impl\EntityDecorModule.cs" />
