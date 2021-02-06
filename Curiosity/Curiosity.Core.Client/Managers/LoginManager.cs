@@ -16,8 +16,6 @@ namespace Curiosity.Core.Client.Managers
             Logger.Info($"------------ [LoginManager] Begin ----------------");
             Logger.Info($"--------------------------------------------------");
 
-            API.NetworkClearVoiceChannel();
-            API.NetworkSetTalkerProximity(0.1f);
             API.NetworkSetFriendlyFireOption(false);
             API.SetCanAttackFriendly(API.PlayerPedId(), false, false);
             API.StopPlayerSwitch();
