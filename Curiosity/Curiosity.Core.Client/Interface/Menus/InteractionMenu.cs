@@ -124,7 +124,7 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             // BOTTOM
             miPassive.Text = (Cache.Player.User.IsPassive) ? "Disable Passive Mode" : "Enable Passive Mode";
-            miPassive.Enabled = PlayerOptions.IsPassiveModeEnabled;
+            miPassive.Enabled = !PlayerOptions.IsPassiveModeEnabledCooldown;
 
             miKillYourself.Enabled = PlayerOptions.IsKillSelfEnabled;
             miKillYourself.SetRightLabel($"${PlayerOptions.CostOfKillSelf * PlayerOptions.NumberOfTimesKillSelf}");
