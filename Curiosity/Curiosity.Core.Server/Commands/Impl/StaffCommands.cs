@@ -87,9 +87,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                         return;
                     }
 
-                    int networkId = API.NetworkGetNetworkIdFromEntity(vehicleId);
-
-                    user.Send("entity:player:vehicle", networkId);
+                    user.Send("entity:player:vehicle", API.NetworkGetNetworkIdFromEntity(vehicleId));
                 }
                 catch (Exception)
                 {
