@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Events;
 using Curiosity.Systems.Library.Events;
 
 namespace Curiosity.Core.Client.Managers
@@ -14,6 +15,17 @@ namespace Curiosity.Core.Client.Managers
                 int vehId = API.NetworkGetEntityFromNetworkId(metadata.Find<int>(0));
 
                 if (!API.DoesEntityExist(vehId)) return null;
+
+                if (Cache.PersonalVehicle != null)
+                {
+                    if (Cache.PersonalVehicle.Exists())
+                    {
+                        EventSystem.GetModule().Send("entity:delete", Cache.PersonalVehicle.NetworkId);
+
+                        await Cache.PersonalVehicle.FadeOut();
+                        Cache.PersonalVehicle.Delete();
+                    }
+                }
 
                 Vehicle vehicle = new Vehicle(vehId);
 
