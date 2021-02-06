@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Data;
@@ -164,8 +165,10 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnWorldPlayerSyncTick()
         {
+            await BaseScript.Delay(0);
+
             Ped[] peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 50f)).ToArray();
-            foreach(Ped ped in peds)
+            foreach (Ped ped in peds)
             {
                 if (ped.IsPlayer)
                 {
@@ -176,7 +179,7 @@ namespace Curiosity.Core.Client.Managers
                     {
                         bool isTalking = API.NetworkIsPlayerTalking(handle);
                         string namePrefix = isTalking ? $"~b~" : $"~g~";
-                        ScreenInterface.Draw3DText(ped.Position, namePrefix, 10, 50, 1.2f);
+                        ScreenInterface.Draw3DText(ped.Position, $"{namePrefix}{playerName}", 10, 50, 1.2f);
                     }
                 }
             }
