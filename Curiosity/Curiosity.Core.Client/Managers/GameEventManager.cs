@@ -51,10 +51,10 @@ namespace Curiosity.Core.Client.Managers
                 {
                     Entity victim = Entity.FromHandle((int)args[0]);
                     Entity attacker = Entity.FromHandle((int)args[1]);
-                    bool isDamageFatal = Convert.ToBoolean((int)args[4]);
-                    uint weaponInfoHash = (uint)args[5];
-                    bool isMeleeDamage = Convert.ToBoolean((int)args[10]);
-                    int damageTypeFlag = (int)args[11];
+                    bool isDamageFatal = Convert.ToBoolean((int)args[5]);
+                    uint weaponInfoHash = (uint)args[6];
+                    bool isMeleeDamage = Convert.ToBoolean((int)args[11]);
+                    int damageTypeFlag = (int)args[12];
 
                     Logger.Debug($"CEventNetworkEntityDamage\n" +
                         $"victim: {victim.Handle}\n" +
@@ -67,7 +67,7 @@ namespace Curiosity.Core.Client.Managers
 
                     HandleCEventNetworkEntityDamaged(
                         victim, attacker, (int)args[2], isDamageFatal, weaponInfoHash,
-                        (int)args[5], (int)args[7], args[8], args[9], isMeleeDamage,
+                        (int)args[6], (int)args[8], args[9], args[10], isMeleeDamage,
                         damageTypeFlag);
 
                 }
