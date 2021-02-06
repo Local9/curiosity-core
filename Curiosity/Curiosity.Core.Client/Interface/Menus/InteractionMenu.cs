@@ -62,7 +62,7 @@ namespace Curiosity.Core.Client.Interface.Menus
         {
             if (selectedItem == miPassive)
             {
-                if (!PlayerOptions.IsPassiveModeEnabled) return;
+                if (PlayerOptions.IsPassiveModeEnabledCooldown) return;
 
                 Cache.Player.User.IsPassive = !Cache.Player.User.IsPassive;
                 PlayerOptions.SetPlayerPassive(Cache.Player.User.IsPassive);

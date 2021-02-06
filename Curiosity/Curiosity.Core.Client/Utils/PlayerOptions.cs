@@ -14,6 +14,7 @@ namespace Curiosity.Core.Client.Utils
     {
         static DateTime passiveModeDisabled;
         public static bool IsPassiveModeEnabled = true;
+        public static bool IsPassiveModeEnabledCooldown = false;
 
 
         static DateTime playerKilledSelf;
@@ -43,8 +44,7 @@ namespace Curiosity.Core.Client.Utils
 
                     passiveModeDisabled = DateTime.Now;
                     PluginManager.Instance.AttachTickHandler(PassiveCooldownTick);
-
-                    
+                    IsPassiveModeEnabledCooldown = true;
                 }
                 else
                 {
@@ -67,11 +67,10 @@ namespace Curiosity.Core.Client.Utils
             if (DateTime.Now.Subtract(passiveModeDisabled).TotalMinutes >= 5)
             {
                 PluginManager.Instance.DetachTickHandler(PassiveCooldownTick);
-                IsPassiveModeEnabled = false;
+                IsPassiveModeEnabledCooldown = false;
             }
             else
             {
-
                 SizeF res = ScreenTools.ResolutionMaintainRatio;
                 Point safe = ScreenTools.SafezoneBounds;
 
