@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
@@ -95,11 +96,17 @@ namespace Curiosity.Core.Server.Managers
 
         public void NetworkDeleteEntity(int networkId)
         {
-            foreach (Player player in PluginManager.PlayersList)
-            {
-                int playerHandle = int.Parse(player.Handle);
-                EventSystem.GetModule().Send("entity:deleteFromWorld", playerHandle, networkId);
-            }
+
+            int vehId = API.NetworkGetEntityFromNetworkId(networkId);
+
+            if (API.DoesEntityExist(vehId))
+                API.DeleteEntity(vehId);
+
+            //foreach (Player player in PluginManager.PlayersList)
+            //{
+            //    int playerHandle = int.Parse(player.Handle);
+            //    EventSystem.GetModule().Send("entity:deleteFromWorld", playerHandle, networkId);
+            //}
         }
     }
 }
