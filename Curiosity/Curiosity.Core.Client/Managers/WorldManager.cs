@@ -161,5 +161,15 @@ namespace Curiosity.Core.Client.Managers
             API.NetworkOverrideClockTime(hour, minute, 0);
             API.SetClockTime(hour, minute, 0);
         }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnWorldPlayerNamesSync()
+        {
+            foreach (Player player in PluginManager.Instance.PlayerList)
+            {
+                string prefix = API.NetworkIsPlayerTalking(player.Handle) ? "~b~" : "~w~";
+                ScreenInterface.Draw3DText(player.Character.Position, $"{prefix}{player.Name}", 40, 50);
+            }
+        }
     }
 }
