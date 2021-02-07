@@ -170,7 +170,7 @@ namespace Curiosity.Core.Client.Managers
                 if (Game.Player == player) continue;
 
                 string prefix = API.NetworkIsPlayerTalking(player.Handle) ? "~b~" : "~w~";
-                ScreenInterface.Draw3DText(player.Character.Position, $"{prefix}{player.Name}", 40, 50);
+                ScreenInterface.Draw3DText(player.Character.Position, $"[{player.Handle}] {prefix}{player.Name}", 40, 50);
             }
         }
     }
