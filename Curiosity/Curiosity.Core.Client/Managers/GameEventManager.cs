@@ -66,7 +66,7 @@ namespace Curiosity.Core.Client.Managers
                     //    $"");
 
                     HandleCEventNetworkEntityDamaged(
-                        victim, attacker, (int)args[2], isDamageFatal, weaponInfoHash,
+                        victim, attacker, (int)args[2], (int)args[3], (int)args[4], isDamageFatal, weaponInfoHash,
                         (int)args[7], (int)args[8], args[9], args[10], isMeleeDamage,
                         damageTypeFlag);
 
@@ -97,7 +97,7 @@ namespace Curiosity.Core.Client.Managers
         /// <param name="isMeleeDamage">Is melee damage</param>
         /// <param name="damageTypeFlag">0 for peds, 116 for the body of a vehicle, 93 for a tire, 120 for a side window, 121 for a rear window, 122 for a windscreen, etc</param>
         private void HandleCEventNetworkEntityDamaged(
-            Entity victim, Entity attacker, int arg2, bool isDamageFatal, uint weaponInfoHash,
+            Entity victim, Entity attacker, int arg2, int arg3, int arg4, bool isDamageFatal, uint weaponInfoHash,
             int arg5, int arg6, object arg7, object arg8, bool isMeleeDamage,
             int damageTypeFlag)
         {
