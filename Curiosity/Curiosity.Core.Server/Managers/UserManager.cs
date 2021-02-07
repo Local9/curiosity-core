@@ -6,6 +6,7 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -13,6 +14,27 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
+            EventSystem.GetModule().Attach("user:get:playerlist", new EventCallback(metadata =>
+            {
+                List<CuriosityPlayerList> lst = new List<CuriosityPlayerList>();
+
+                foreach(KeyValuePair<int, CuriosityUser> kv in PluginManager.ActiveUsers)
+                {
+                    CuriosityUser curiosityUser = kv.Value;
+                    
+                    CuriosityPlayerList cpl = new CuriosityPlayerList();
+                    cpl.UserId = curiosityUser.UserId;
+                    cpl.ServerHandle = kv.Key;
+                    cpl.Name = curiosityUser.LatestName;
+                    cpl.Ping = PluginManager.PlayersList[kv.Key].Ping;
+                    cpl.Job = curiosityUser.CurrentJob;
+
+                    lst.Add(cpl);
+                }
+
+                return lst;
+            }));
+
             EventSystem.GetModule().Attach("user:login", new AsyncEventCallback(async metadata =>
             {
                 var player = PluginManager.PlayersList[metadata.Sender];

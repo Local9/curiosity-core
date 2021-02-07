@@ -81,6 +81,21 @@ namespace Curiosity.Interface.Client.Managers
 
                 return null;
             }));
+
+            Instance.AttachNuiHandler("PlayerList", new AsyncEventCallback(async metadata =>
+            {
+                List<CuriosityPlayerList> playerList = await EventSystem.Request<List<CuriosityPlayerList>>("user:get:playerlist");
+
+                if (playerList == null) return null;
+
+                string jsn = new JsonBuilder().Add("operation", "PLAYER_LIST")
+                    .Add("list", playerList)
+                    .Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
         }
     }
 }
