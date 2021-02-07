@@ -168,13 +168,16 @@ namespace Curiosity.Core.Client.Managers
                     setup = currentVehicle.State.Get(STATE_VEH_FUEL_SETUP);
             }
 
-            float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (Utility.RANDOM.NextDouble()));
-            currentVehicle.State.Set(STATE_VEH_FUEL, randomFuel, true);
+            if (!setup)
+            {
+                float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (Utility.RANDOM.NextDouble()));
+                currentVehicle.State.Set(STATE_VEH_FUEL, randomFuel, true);
 
-            float classMultiplier = 1 / 1600f;
-            classMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(veh.ClassType) ? FuelConsumptionClassMultiplier[veh.ClassType] : 1.0f);
-            classMultiplier *= 1.0f;
-            currentVehicle.State.Set(STATE_VEH_FUEL_MULTIPLIER, classMultiplier, true);
+                float classMultiplier = 1 / 1600f;
+                classMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(veh.ClassType) ? FuelConsumptionClassMultiplier[veh.ClassType] : 1.0f);
+                classMultiplier *= 1.0f;
+                currentVehicle.State.Set(STATE_VEH_FUEL_MULTIPLIER, classMultiplier, true);
+            }
 
             PluginManager.Instance.AttachTickHandler(OnVehicleFuel);
             PluginManager.Instance.AttachTickHandler(OnVehicleRefuel);
