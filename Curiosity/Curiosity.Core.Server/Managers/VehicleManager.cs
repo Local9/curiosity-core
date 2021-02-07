@@ -1,8 +1,11 @@
-﻿using Curiosity.Core.Server.Diagnostics;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Managers
@@ -84,6 +87,43 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 return CommonErrors.NotEnoughPoliceRep1000;
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:spawn", new AsyncEventCallback(async metadata =>
+            {
+                int senderHandle = metadata.Sender;
+
+                if (!PluginManager.ActiveUsers.ContainsKey(senderHandle)) return null;
+
+                Player player = PluginManager.PlayersList[senderHandle];
+
+                var model = API.GetHashKey(metadata.Find<string>(0));
+
+                Vector3 pos = player.Character.Position;
+                int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
+
+                if (vehicleId == 0)
+                {
+                    Logger.Debug($"Possible OneSync is Disabled");
+                    return null;
+                }
+
+                DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+
+                while (!API.DoesEntityExist(vehicleId))
+                {
+                    await BaseScript.Delay(0);
+
+                    if (maxWaitTime < DateTime.UtcNow) break;
+                }
+
+                if (!API.DoesEntityExist(vehicleId))
+                {
+                    Logger.Debug($"Failed to create vehicle in timely manor.");
+                    return null;
+                }
+
+                return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
         }
     }

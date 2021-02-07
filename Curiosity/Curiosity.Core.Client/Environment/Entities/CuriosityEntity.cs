@@ -1,5 +1,6 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Environment.Entities.Modules;
 using Curiosity.Core.Client.Managers;
@@ -10,7 +11,7 @@ namespace Curiosity.Core.Client.Environment.Entities
 {
     public class CuriosityEntity
     {
-        private Ped CitizenPed => API.DoesEntityExist(Id) && API.IsEntityAPed(Id) ? (Ped)Entity.FromHandle(Id) : null;
+        private Ped CitizenPed => Game.PlayerPed;
         public int Id { get { return Game.PlayerPed.Handle; } }
         public EntityModuleRegistry Modules { get; set; } = new EntityModuleRegistry();
         public int Model => API.GetEntityModel(Id);
@@ -137,6 +138,7 @@ namespace Curiosity.Core.Client.Environment.Entities
         {
             // ha ha
             // suicide? or something else?
+            Logger.Debug($"Entity GameEventManager_OnDeath");
         }
     }
 }

@@ -53,48 +53,48 @@ namespace Curiosity.Core.Server.Commands.Impl
         #endregion
 
         #region Vehicles ONESYNC
-        [CommandInfo(new[] { "vehicle", "veh", "car" })]
-        public class VehicleSpawner : ICommand
-        {
-            public async void On(CuriosityUser user, Player player, List<string> arguments)
-            {
-                try
-                {
-                    if (arguments.Count <= 0) return;
-                    var model = API.GetHashKey(arguments.ElementAt(0));
+        //[CommandInfo(new[] { "vehicle", "veh", "car" })]
+        //public class VehicleSpawner : ICommand
+        //{
+        //    public async void On(CuriosityUser user, Player player, List<string> arguments)
+        //    {
+        //        try
+        //        {
+        //            if (arguments.Count <= 0) return;
+        //            var model = API.GetHashKey(arguments.ElementAt(0));
 
-                    Vector3 pos = player.Character.Position;
-                    int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
+        //            Vector3 pos = player.Character.Position;
+        //            int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
 
-                    if (vehicleId == 0)
-                    {
-                        Logger.Debug($"Possible OneSync is Disabled");
-                        return;
-                    }
+        //            if (vehicleId == 0)
+        //            {
+        //                Logger.Debug($"Possible OneSync is Disabled");
+        //                return;
+        //            }
 
-                    DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+        //            DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
 
-                    while (!API.DoesEntityExist(vehicleId))
-                    {
-                        await BaseScript.Delay(0);
+        //            while (!API.DoesEntityExist(vehicleId))
+        //            {
+        //                await BaseScript.Delay(0);
 
-                        if (maxWaitTime < DateTime.UtcNow) break;
-                    }
+        //                if (maxWaitTime < DateTime.UtcNow) break;
+        //            }
 
-                    if (!API.DoesEntityExist(vehicleId))
-                    {
-                        Logger.Debug($"Failed to create vehicle in timely manor.");
-                        return;
-                    }
+        //            if (!API.DoesEntityExist(vehicleId))
+        //            {
+        //                Logger.Debug($"Failed to create vehicle in timely manor.");
+        //                return;
+        //            }
 
-                    user.Send("entity:player:vehicle", API.NetworkGetNetworkIdFromEntity(vehicleId));
-                }
-                catch (Exception)
-                {
-                    // Ignored
-                }
-            }
-        }
+        //            user.Send("entity:player:vehicle", API.NetworkGetNetworkIdFromEntity(vehicleId));
+        //        }
+        //        catch (Exception)
+        //        {
+        //            // Ignored
+        //        }
+        //    }
+        //}
         #endregion
     }
 }
