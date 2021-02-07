@@ -35,6 +35,26 @@ namespace Curiosity.Core.Server.Managers
             //    return null
             //}));
 
+            EventSystem.GetModule().Attach("vehicle:refuel:charge", new AsyncEventCallback(async metadata =>
+            {
+                int senderHandle = metadata.Sender;
+
+                if (!PluginManager.ActiveUsers.ContainsKey(senderHandle)) return false;
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[senderHandle];
+
+                float vehicleFuel = metadata.Find<float>(0);
+                float cost = (100.0f - vehicleFuel) * 1.35f;
+
+                bool canPay = (curiosityUser.Character.Cash - cost) >= 0;
+
+                if (!canPay) return false;
+
+                await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (int)cost * -1);
+
+                return true;
+            }));
+
             EventSystem.GetModule().Attach("vehicle:owner", new EventCallback(metadata =>
             {
                 int senderHandle = metadata.Sender;
