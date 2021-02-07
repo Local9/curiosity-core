@@ -149,12 +149,49 @@ namespace Curiosity.Core.Client.Interface.Menus
         [TickHandler(SessionWait = true)]
         private async Task OnMenuControls()
         {
-            if (!MenuPool.IsAnyMenuOpen() && Cache.Character.MarkedAsRegistered && API.NetworkIsSessionActive() && (Game.PlayerPed.IsAlive || Cache.Player.User.IsStaff))
+            if (!Game.IsPaused && !API.IsPauseMenuRestarting() && API.IsScreenFadedIn() && !API.IsPlayerSwitchInProgress())
             {
-                if (Game.IsControlJustPressed(0, Control.InteractionMenu))
+                if (MenuPool.IsAnyMenuOpen())
                 {
-                    Instance.AttachTickHandler(OnMenuDisplay);
-                    menuMain.Visible = !menuMain.Visible;
+                    if (Game.CurrentInputMode == InputMode.MouseAndKeyboard)
+                    {
+                        if ((Game.IsControlJustPressed(0, Control.InteractionMenu) || Game.IsDisabledControlJustPressed(0, Control.InteractionMenu)))
+                        {
+                            DisposeMenu();
+                        }
+                    }
+                }
+                else
+                {
+                    if (Game.CurrentInputMode == InputMode.GamePad)
+                    {
+                        int tmpTimer = API.GetGameTimer();
+
+                        while ((Game.IsControlPressed(0, Control.InteractionMenu) || Game.IsDisabledControlPressed(0, Control.InteractionMenu)) && !Game.IsPaused && API.IsScreenFadedIn() && !API.IsPlayerSwitchInProgress())
+                        {
+                            if (API.GetGameTimer() - tmpTimer > 400)
+                            {
+                                if (!MenuPool.IsAnyMenuOpen())
+                                {
+                                    Instance.AttachTickHandler(OnMenuDisplay);
+                                    menuMain.Visible = !menuMain.Visible;
+                                }
+                                break;
+                            }
+                            await BaseScript.Delay(0);
+                        }
+                    }
+                    else
+                    {
+                        if ((Game.IsControlJustPressed(0, Control.InteractionMenu) || Game.IsDisabledControlJustPressed(0, Control.InteractionMenu)) && !Game.IsPaused && API.IsScreenFadedIn() && !API.IsPlayerSwitchInProgress())
+                        {
+                            if (!MenuPool.IsAnyMenuOpen())
+                            {
+                                Instance.AttachTickHandler(OnMenuDisplay);
+                                menuMain.Visible = !menuMain.Visible;
+                            }
+                        }
+                    }
                 }
             }
         }
