@@ -790,7 +790,7 @@ namespace Curiosity.Core.Server.Managers
         {
             if (messages.Count > 0) return;
 
-            messages.Add(Messages.Gathering, "Gathering queue information");
+            messages.Add(Messages.Gathering, "Placing your call with dispatch...");
             messages.Add(Messages.License, "License is required");
             messages.Add(Messages.Steam, "Steam is required");
             messages.Add(Messages.Banned, "You are banned {0}");
