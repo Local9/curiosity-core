@@ -27,7 +27,7 @@ namespace Curiosity.Core.Server.Managers
 
             MissionData mission = Instance.ExportDictionary["curiosity-mission"].PlayerMission(source);
 
-            string msg = $"[{source}] '{player.Name}' tried to give someone a weapon, or a script is badly written.";
+            string msg = $"[{source}] '{player.Name}' tried to give another ped a weapon, or a script is badly written.";
 
             if (mission != null)
             {

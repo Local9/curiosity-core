@@ -77,9 +77,9 @@ namespace Curiosity.CasinoSystems.Client.Scripts
                 // NOTE: Look into awaiting each interior script before allowing player to see.
 
                 VehiclePodium.Init();
-                CasinoBar.Init();
+                // CasinoBar.Init();
                 // Population.Init();
-                LuckyWheel.Init();
+                // LuckyWheel.Init();
             }
             else
             {
