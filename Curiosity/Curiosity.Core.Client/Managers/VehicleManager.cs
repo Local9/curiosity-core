@@ -317,7 +317,7 @@ namespace Curiosity.Core.Client.Managers
 
             lastUpdate = currentUpdate;
 
-            Screen.ShowSubtitle($"F: {fuel:0.00000}, FM: {multi:0.00000}, VC: {currentVehicle.ClassType}");
+            // Screen.ShowSubtitle($"F: {fuel:0.00000}, FM: {multi:0.00000}, VC: {currentVehicle.ClassType}");
 
             await BaseScript.Delay(500);
         }
