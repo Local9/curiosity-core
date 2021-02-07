@@ -161,26 +161,5 @@ namespace Curiosity.Core.Client.Managers
             API.NetworkOverrideClockTime(hour, minute, 0);
             API.SetClockTime(hour, minute, 0);
         }
-
-        [TickHandler(SessionWait = true)]
-        private async Task OnWorldPlayerSyncTick()
-        {
-            Ped[] peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 50f)).ToArray();
-            foreach (Ped ped in peds)
-            {
-                if (ped.IsPlayer)
-                {
-                    string playerName = ped.State.Get($"{StateBagKey.PLAYER_NAME}");
-                    int.TryParse(ped.State.Get($"{StateBagKey.SERVER_HANDLE}"), out int handle);
-
-                    if (!string.IsNullOrEmpty(playerName))
-                    {
-                        bool isTalking = API.NetworkIsPlayerTalking(handle);
-                        string namePrefix = isTalking ? $"~b~" : $"~g~";
-                        ScreenInterface.Draw3DText(ped.Position, $"{namePrefix}{playerName}", 10, 50, 1.2f);
-                    }
-                }
-            }
-        }
     }
 }
