@@ -72,6 +72,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 while (vehicle.Exists())
                 {
                     ScreenInterface.Draw3DText(vehicle.Position, "I'm still here...");
+                    await BaseScript.Delay(0);
                 }
             }
         }
