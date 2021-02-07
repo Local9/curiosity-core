@@ -46,6 +46,16 @@ namespace Curiosity.Core.Client.Managers
 
             try
             {
+                if (name == "CEventNetworkPlayerEnteredVehicle")
+                {
+                    // Arg 0 - 128
+                    // arg 1 - Vehicle Entity Handle
+                    int arg0 = (int)args[1];
+                    Entity ent = Entity.FromHandle((int)args[1]);
+
+                    HandleCEventNetworkPlayerEnteredVehicle(arg0, ent);
+                }
+
 
                 if (name == "CEventNetworkEntityDamage")
                 {
@@ -76,6 +86,14 @@ namespace Curiosity.Core.Client.Managers
             catch (Exception ex)
             {
                 Logger.Debug($"{ex}");
+            }
+        }
+
+        private void HandleCEventNetworkPlayerEnteredVehicle(int arg0, Entity ent)
+        {
+            if (ent is Vehicle)
+            {
+                VehicleManager.GetModule().InitialiseVehicleFuel((Vehicle)ent);
             }
         }
 
