@@ -167,6 +167,8 @@ namespace Curiosity.Core.Client.Managers
         {
             foreach (Player player in PluginManager.Instance.PlayerList)
             {
+                if (Game.Player == player) continue;
+
                 string prefix = API.NetworkIsPlayerTalking(player.Handle) ? "~b~" : "~w~";
                 ScreenInterface.Draw3DText(player.Character.Position, $"{prefix}{player.Name}", 40, 50);
             }
