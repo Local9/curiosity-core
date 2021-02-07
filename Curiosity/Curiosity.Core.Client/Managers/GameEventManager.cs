@@ -56,9 +56,18 @@ namespace Curiosity.Core.Client.Managers
                     bool isMeleeDamage = Convert.ToBoolean((int)args[11]);
                     int damageTypeFlag = (int)args[12];
 
+                    //Logger.Debug($"CEventNetworkEntityDamage;\n" +
+                    //    $"victim: {victim}\n" +
+                    //    $"attacker: {attacker}\n" +
+                    //    $"isDamageFatal: {isDamageFatal}\n" +
+                    //    $"weaponInfoHash: {weaponInfoHash}\n" +
+                    //    $"isMeleeDamage: {isMeleeDamage}\n" +
+                    //    $"damageTypeFlag: {damageTypeFlag}\n" +
+                    //    $"");
+
                     HandleCEventNetworkEntityDamaged(
                         victim, attacker, (int)args[2], isDamageFatal, weaponInfoHash,
-                        (int)args[6], (int)args[8], args[9], args[10], isMeleeDamage,
+                        (int)args[7], (int)args[8], args[9], args[10], isMeleeDamage,
                         damageTypeFlag);
 
                 }
@@ -77,6 +86,8 @@ namespace Curiosity.Core.Client.Managers
         /// <param name="victim">victim</param>
         /// <param name="attacker">attacker</param>
         /// <param name="arg2">Unknown</param>
+        /// <param name="arg3">Unknown</param>
+        /// <param name="arg4">Unknown</param>
         /// <param name="isDamageFatal">Is damage fatal to entity. or victim died/destroyed.</param>
         /// <param name="weaponInfoHash">Probably related to common.rpf/data/ai => Item type = "CWeaponInfo"</param>
         /// <param name="arg5">Unknown</param>
