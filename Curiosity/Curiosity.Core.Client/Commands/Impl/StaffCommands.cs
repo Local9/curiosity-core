@@ -58,20 +58,11 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
 
                 if (vehicle == null) return;
+                await vehicle.FadeOut();
+                vehicle.IsPositionFrozen = true;
+                vehicle.IsCollisionEnabled = false;
 
                 EventSystem.GetModule().Send("entity:delete", vehicle.NetworkId);
-
-                await BaseScript.Delay(2000);
-
-                while (vehicle.Exists())
-                {
-                    await BaseScript.Delay(100);
-                    await vehicle.FadeOut();
-
-                    vehicle.Delete();
-                }
-
-                vehicle?.Delete();
             }
         }
         #endregion
