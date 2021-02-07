@@ -157,6 +157,7 @@ namespace Curiosity.Core.Client.Interface.Menus
                     {
                         if ((Game.IsControlJustPressed(0, Control.InteractionMenu) || Game.IsDisabledControlJustPressed(0, Control.InteractionMenu)))
                         {
+                            menuMain.Visible = !menuMain.Visible;
                             DisposeMenu();
                         }
                     }
