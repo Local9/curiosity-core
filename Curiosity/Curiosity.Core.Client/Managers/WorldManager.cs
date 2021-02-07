@@ -165,8 +165,6 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnWorldPlayerSyncTick()
         {
-            await BaseScript.Delay(0);
-
             Ped[] peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 50f)).ToArray();
             foreach (Ped ped in peds)
             {

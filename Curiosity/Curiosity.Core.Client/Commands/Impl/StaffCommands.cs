@@ -58,11 +58,21 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
 
                 if (vehicle == null) return;
-                await vehicle.FadeOut();
+
+                if (vehicle.Driver == Game.PlayerPed)
+                    Game.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+
+                await vehicle.FadeOut(true);
+
                 vehicle.IsPositionFrozen = true;
                 vehicle.IsCollisionEnabled = false;
 
                 EventSystem.GetModule().Send("entity:delete", vehicle.NetworkId);
+
+                while (vehicle.Exists())
+                {
+                    ScreenInterface.Draw3DText(vehicle.Position, "I'm still here...");
+                }
             }
         }
         #endregion

@@ -37,12 +37,6 @@ namespace Curiosity.Core.Server.Managers
                 curiosityUser.Character.Skills = await Database.Store.SkillDatabase.Get(curiosityUser.Character.CharacterId);
                 curiosityUser.Character.Stats = await Database.Store.StatDatabase.Get(curiosityUser.Character.CharacterId);
 
-                if (player.Character != null)
-                {
-                    player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
-                    player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
-                }
-
                 return curiosityUser.Character;
             }));
 
