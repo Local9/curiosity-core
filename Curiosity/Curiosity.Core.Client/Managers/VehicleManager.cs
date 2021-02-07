@@ -159,6 +159,8 @@ namespace Curiosity.Core.Client.Managers
 
             if (!setup)
             {
+                Logger.Debug($"VFM: {currentVehicle.Handle}:{setup}");
+
                 float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (Utility.RANDOM.NextDouble()));
                 currentVehicle.State.Set(STATE_VEH_FUEL, randomFuel, true);
 
