@@ -80,7 +80,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (curiosityUser.Character.Cash >= costOfRespawn)
                 {
-                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, costOfRespawn);
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, costOfRespawn * -1);
                     curiosityUser.Send("character:respawn:hospital");
                 }
 
