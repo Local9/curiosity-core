@@ -265,6 +265,7 @@ namespace Curiosity.Core.Client.Managers
                 IsNearFuelPump = false;
                 IsRefueling = false;
                 currentVehicle = null;
+                return;
             }
 
             float fuel = (float)currentVehicle.State.Get(STATE_VEH_FUEL);
