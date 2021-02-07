@@ -6,17 +6,17 @@ namespace Curiosity.Core.Client.Extensions
 {
     public static class EntityExtensions
     {
-        public async static Task FadeOut(this Ped ped, bool slow = false)
+        public async static Task FadeOut(this Ped ped, bool slow = true)
         {
             await Fade(ped, false, slow);
         }
 
-        public async static Task FadeIn(this Ped ped, bool slow = false)
+        public async static Task FadeIn(this Ped ped, bool slow = true)
         {
             await Fade(ped, true, slow);
         }
 
-        public async static Task Fade(this Ped ped, bool fadeIn, bool slow = false)
+        public async static Task Fade(this Ped ped, bool fadeIn, bool slow = true)
         {
             if (fadeIn)
             {
@@ -32,17 +32,17 @@ namespace Curiosity.Core.Client.Extensions
                 await BaseScript.Delay(10);
             }
         }
-        public async static Task FadeOut(this Vehicle veh, bool slow = false)
+        public async static Task FadeOut(this Vehicle veh, bool slow = true)
         {
             await Fade(veh, false, slow);
         }
 
-        public async static Task FadeIn(this Vehicle veh, bool slow = false)
+        public async static Task FadeIn(this Vehicle veh, bool slow = true)
         {
             await Fade(veh, true, slow);
         }
 
-        public async static Task Fade(this Vehicle veh, bool fadeIn, bool fadeOutNormal = false, bool slow = false)
+        public async static Task Fade(this Vehicle veh, bool fadeIn, bool fadeOutNormal = false, bool slow = true)
         {
             if (fadeIn)
             {
