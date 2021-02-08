@@ -16,7 +16,7 @@ namespace Curiosity.Systems.Library.Models
         {
             get
             {
-                return Error.Length == 0;
+                return string.IsNullOrEmpty(Error);
             }
         }
 

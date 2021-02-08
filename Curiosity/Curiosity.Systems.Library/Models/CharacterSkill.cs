@@ -16,7 +16,7 @@ namespace Curiosity.Systems.Library.Models
     {
         [DataMember(Name = "skillExperience")]
         public long SkillExperience;
-        [DataMember(Name = "KnowledgeExperience")]
+        [DataMember(Name = "knowledgeExperience")]
         public long KnowledgeExperience;
     }
 }

@@ -90,8 +90,8 @@ namespace Curiosity.Core.Server.Database.Store
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
-                    characterSkill.SkillExperience = kv["skillExperience"].ToLong();
-                    characterSkill.KnowledgeExperience = kv["knowledgeExperience"].ToLong();
+                    characterSkill.SkillExperience = kv["SkillExperience"].ToLong();
+                    characterSkill.KnowledgeExperience = kv["KnowledgeExperience"].ToLong();
                 }
             }
 
