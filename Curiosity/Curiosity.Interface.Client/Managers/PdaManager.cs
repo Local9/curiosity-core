@@ -17,6 +17,8 @@ namespace Curiosity.Interface.Client.Managers
         private const string COMMAND_OPEN_PDA_HOME = "open_pda_new";
         public static PdaManager PdaInstance;
 
+        string CurrentPedHeadshot;
+
         public class Panel
         {
             public bool Main;
@@ -46,12 +48,14 @@ namespace Curiosity.Interface.Client.Managers
 
             Instance.AttachNuiHandler("GetHeadshot", new AsyncEventCallback(async metadata =>
             {
+                Logger.Info($"Generating Headshot");
+
                 await CreatePlayerHeadshot();
 
-                string txd = API.GetPedheadshotTxdString(Game.PlayerPed.Handle);
-
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_HEADSHOT")
-                        .Add("headshot", txd).Build();
+                        .Add("headshot", CurrentPedHeadshot).Build();
+
+                API.SendNuiMessage(jsn);
 
                 return null;
             }));
@@ -92,17 +96,24 @@ namespace Curiosity.Interface.Client.Managers
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
                 OpenTablet();
-                CreatePlayerHeadshot();
             }
         }
 
         private async Task CreatePlayerHeadshot()
         {
-            int handle = API.RegisterPedheadshotTransparent(Game.PlayerPed.Handle);
+            if (!string.IsNullOrEmpty(CurrentPedHeadshot)) return;
+
+            int handle = API.RegisterPedheadshot(Game.PlayerPed.Handle);
+            int failCount = 0;
             while (!API.IsPedheadshotReady(handle) || !API.IsPedheadshotValid(handle))
             {
-                await BaseScript.Delay(0);
+                await BaseScript.Delay(100);
+                failCount++;
+
+                if (failCount >= 10)
+                    break;
             }
+            CurrentPedHeadshot = API.GetPedheadshotTxdString(handle);
         }
 
         [TickHandler(SessionWait = true)]
