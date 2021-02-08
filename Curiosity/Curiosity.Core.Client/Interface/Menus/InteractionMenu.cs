@@ -13,6 +13,8 @@ namespace Curiosity.Core.Client.Interface.Menus
 {
     public class InteractionMenu : Manager<InteractionMenu>
     {
+        public static InteractionMenu MenuInstance;
+
         public static MenuPool MenuPool;
         private UIMenu menuMain;
         private int currentIndex;
@@ -29,9 +31,10 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenu menuVehicle;
         private SubMenu.VehicleMenu _VehicleMenu = new SubMenu.VehicleMenu();
 
-
         public override void Begin()
         {
+            MenuInstance = this;
+
             MenuPool = new MenuPool();
             MenuPool.MouseEdgeEnabled = false;
 
@@ -145,6 +148,8 @@ namespace Curiosity.Core.Client.Interface.Menus
         private async Task OnMenuDisplay()
         {
             MenuPool.ProcessMenus();
+            MenuPool.ProcessMouse();
+
             MenuPool.MouseEdgeEnabled = false;
         }
 
@@ -205,9 +210,14 @@ namespace Curiosity.Core.Client.Interface.Menus
         }
 
         // Menu Items
-        private void UpdateGpsMenuItem()
+        public void UpdateGpsMenuItem(bool reset = false)
         {
-            gpsLocations.Clear();
+            if (reset)
+            {
+                gpsLocations.Clear();
+            }
+
+            if (gpsLocations.Count > 0) return;
 
             foreach (KeyValuePair<string, List<Position>> kvp in BlipManager.ManagerInstance.Locations)
             {

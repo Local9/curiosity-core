@@ -6,6 +6,7 @@ using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Core.Client.Interface.Menus;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -101,6 +102,8 @@ namespace Curiosity.Core.Client.Managers
                         });
                     });
                 }
+
+                InteractionMenu.MenuInstance.UpdateGpsMenuItem(true);
             }
             catch (Exception ex)
             {
