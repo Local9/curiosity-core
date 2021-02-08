@@ -12,7 +12,7 @@ namespace Curiosity.MissionManager.Client.Managers
 {
     public class JobManager : Manager<JobManager>
     {
-        private const string JOB_POLICE = "police";
+        private const string JOB_POLICE = "policeOfficer";
         internal static PatrolZone PatrolZone = PatrolZone.City;
         internal static bool IsOnDuty;
         internal static bool IsOfficer;
@@ -27,7 +27,7 @@ namespace Curiosity.MissionManager.Client.Managers
 
             EventSystem.Attach("job:police:duty", new AsyncEventCallback(async metadata =>
             {
-                string job = IsOfficer ? "unemployed" : "policeOfficer";
+                string job = IsOfficer ? "unemployed" : JOB_POLICE;
                 OnJobDutyEvent(true, false, job);
                 await BaseScript.Delay(100);
                 BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, job); // for legacy resources
