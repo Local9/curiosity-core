@@ -68,5 +68,34 @@ namespace Curiosity.Core.Server.Database.Store
 
             return lst;
         }
+
+        internal async static Task<CharacterSkillExport> GetSkill(int characterId, int skillId)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@characterId", characterId },
+                    { "@skillId", skillId },
+                };
+
+            CharacterSkillExport characterSkill = new CharacterSkillExport();
+
+            string myQuery = "call selCharacterSkill(@characterId, @skillId);";
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                if (keyValuePairs.Count == 0)
+                    return null;
+
+                foreach (Dictionary<string, object> kv in keyValuePairs)
+                {
+                    characterSkill.SkillExperience = kv["skillExperience"].ToLong();
+                    characterSkill.KnowledgeExperience = kv["knowledgeExperience"].ToLong();
+                }
+            }
+
+            return characterSkill;
+        }
     }
 }

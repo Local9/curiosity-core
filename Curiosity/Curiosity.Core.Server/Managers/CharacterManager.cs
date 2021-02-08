@@ -152,6 +152,35 @@ namespace Curiosity.Core.Server.Managers
                 return player.Character.Cash;
             }));
 
+            Instance.ExportDictionary.Add("Skill", new Func<string, int, Task<string>>(
+                async (playerHandle, skillId) => {
+
+                    ExportMessage exportMessage = new ExportMessage();
+
+                    int playerId = 0;
+                    if (!int.TryParse(playerHandle, out playerId))
+                        exportMessage.Error = "First parameter is not a number";
+
+                    if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                        exportMessage.Error = "Player was not found";
+
+                    CuriosityUser user = PluginManager.ActiveUsers[playerId];
+
+                    CharacterSkillExport skill = await Database.Store.SkillDatabase.GetSkill(user.Character.CharacterId, skillId);
+
+                    if (skill == null)
+                    {
+                        exportMessage.Error = "Error; no rows returned.";
+                    }
+                    else
+                    {
+                        user.Character.Skills = await Database.Store.SkillDatabase.Get(user.Character.CharacterId);
+
+                        exportMessage.Skill = skill;
+                    }
+
+                    return $"{exportMessage}";
+                }));
 
             Instance.ExportDictionary.Add("SkillAdjust", new Func<string, int, int, Task<string>>(
                 async (playerHandle, skillId, amt) => {

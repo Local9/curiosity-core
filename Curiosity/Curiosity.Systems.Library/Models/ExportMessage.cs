@@ -23,7 +23,10 @@ namespace Curiosity.Systems.Library.Models
         [DataMember(Name = "error", Order = 1, EmitDefaultValue = false)]
         public string Error;
 
-        [DataMember(Name = "newNumberValue", Order = 1, EmitDefaultValue = false)]
+        [DataMember(Name = "newNumberValue", Order = 2, EmitDefaultValue = false)]
         public int NewNumberValue;
+
+        [DataMember(Name = "skill", Order = 2, EmitDefaultValue = false)]
+        public CharacterSkillExport Skill;
     }
 }

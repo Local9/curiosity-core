@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace Curiosity.Systems.Library.Models
 {
@@ -8,5 +9,14 @@ namespace Curiosity.Systems.Library.Models
         public string Label;
         public string Description;
         public long Value;
+    }
+
+    [DataContract]
+    public class CharacterSkillExport
+    {
+        [DataMember(Name = "skillExperience")]
+        public long SkillExperience;
+        [DataMember(Name = "KnowledgeExperience")]
+        public long KnowledgeExperience;
     }
 }
