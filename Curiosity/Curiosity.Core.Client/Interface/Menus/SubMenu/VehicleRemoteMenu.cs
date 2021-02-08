@@ -5,10 +5,12 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 {
     class VehicleRemoteMenu
     {
-        UIMenuCheckboxItem miEngine;
+        UIMenuCheckboxItem miEngine = new UIMenuCheckboxItem("Engine", false);
 
         public UIMenu CreateMenu(UIMenu menu)
         {
+            menu.AddItem(miEngine);
+
             menu.OnMenuOpen += Menu_OnMenuOpen;
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
 
@@ -32,9 +34,6 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private void Menu_OnMenuOpen(UIMenu menu)
         {
-            menu.Clear();
-            miEngine = new UIMenuCheckboxItem("Engine", false);
-
             if (Cache.PersonalVehicle == null)
             {
                 miEngine.Enabled = false;
