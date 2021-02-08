@@ -222,7 +222,7 @@ namespace Curiosity.Core.Client.Managers
             if (IsNearFuelPump && !IsRefueling && !IsAwaitingServerResponse)
             {
                 Screen.DisplayHelpTextThisFrame("Press ~INPUT_REPLAY_START_STOP_RECORDING_SECONDARY~ to ~y~Refuel ~s~the ~b~Vehicle");
-                ScreenInterface.Draw3DText(currentVehicle.Position, "~w~Press ~b~F2~w~to ~y~Refuel ~s~the ~b~Vehicle~n~~w~~b~X~w~Button on Controller", 40);
+                ScreenInterface.Draw3DText(currentVehicle.Position, "~w~Press ~b~F2 ~w~to ~y~Refuel ~s~the ~b~Vehicle~n~~w~~b~X ~w~Button on Controller", 40);
 
                 if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecordingSecondary, false) && Game.PlayerPed.IsInVehicle())
                 {
