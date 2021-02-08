@@ -492,7 +492,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataVehicle;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:vehicle:towed", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("mission:update:vehicle:towed", new AsyncEventCallback(async metadata =>
             {
                 MissionDataVehicle missionDataVehicle = GetMissionVehicle(metadata.Sender, metadata.Find<int>(0));
 
@@ -519,7 +519,7 @@ namespace Curiosity.Core.Server.Managers
                     experienceEarned += 50;
                 }
 
-                bool res = Instance.ExportDictionary["curiosity-server"].VehicleTowed(metadata.Sender, experienceEarned);
+                bool res = await RecordVehicleTowed(metadata.Sender, experienceEarned);
 
                 return res;
             }));
@@ -653,7 +653,7 @@ namespace Curiosity.Core.Server.Managers
                 }
                 else
                 {
-                    EventSystem.GetModule().Send("mission:notification", curiosityUser.Handle, "Dispatch A.I.", "Back up request", $"Sorry, you cannot request backup currently.");
+                    EventSystem.GetModule().Send("mission:notification", metadata.Sender, "Dispatch A.I.", "Back up request", $"Sorry, you cannot request backup currently.");
                 }
 
                 missionData.AssistanceRequested = true;
@@ -755,6 +755,26 @@ namespace Curiosity.Core.Server.Managers
             return missionDataVehicle;
         }
 
+        async Task<bool> RecordVehicleTowed(int serverHandle, int xpEarned)
+        {
+            if (!PluginManager.ActiveUsers.ContainsKey(serverHandle)) return false;
+
+            CuriosityUser user = PluginManager.ActiveUsers[serverHandle];
+            int characterId = user.Character.CharacterId;
+
+            await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.KNOWLEDGE, 2);
+            await BaseScript.Delay(10);
+            user.Character.Cash = await Database.Store.BankDatabase.Adjust(characterId, 100);
+            await BaseScript.Delay(10);
+            await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.POLICE, xpEarned);
+            await BaseScript.Delay(10);
+            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.POLICE_REPUATATION, 5);
+            await BaseScript.Delay(100);
+            EventSystem.GetModule().Send("mission:notification:impound", serverHandle, "Los Santos Impound", "Vehicle Logged", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${100:c0}");
+
+            return true;
+        }
+
         async Task<bool> RecordBackup(int serverHandle)
         {
             if (!PluginManager.ActiveUsers.ContainsKey(serverHandle)) return false;
@@ -763,8 +783,6 @@ namespace Curiosity.Core.Server.Managers
             int characterId = user.Character.CharacterId;
 
             await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_BACKUP, 1);
-            await BaseScript.Delay(10);
-            // user.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Arrest Booked", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${money:c0}");
 
             return true;
         }
@@ -788,7 +806,7 @@ namespace Curiosity.Core.Server.Managers
             await BaseScript.Delay(10);
             await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_ARRESTS, 1);
             await BaseScript.Delay(100);
-            // user.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Arrest Booked", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${money:c0}");
+            EventSystem.GetModule().Send("mission:notification", serverHandle, "Dispatch A.I.", "Arrest Booked", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${100:c0}");
 
             return true;
         }
@@ -855,14 +873,13 @@ namespace Curiosity.Core.Server.Managers
 
                 if (numberOfFailures >= 3)
                 {
-                    // send success notification
-                    //session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Lowered Rewards", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
-                    //await BaseScript.Delay(500);
-                    //session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Reason", $"~w~You require ~y~{numberOfFailures - 3:d0} ~w~or more successful callout(s) to earn full rewards.");
+                    EventSystem.GetModule().Send("mission:notification", serverHandle, "Dispatch A.I.", "Lowered Rewards", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
+                    await BaseScript.Delay(500);
+                    EventSystem.GetModule().Send("mission:notification", serverHandle, "Dispatch A.I.", "Reason", $"~w~You require ~y~{numberOfFailures - 3:d0} ~w~or more successful callout(s) to earn full rewards.");
                 }
                 else
                 {
-                    //session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Completed", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
+                    EventSystem.GetModule().Send("mission:notification", serverHandle, "Dispatch A.I.", "Completed", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
                 }
             }
             else
@@ -880,12 +897,12 @@ namespace Curiosity.Core.Server.Managers
                 await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_FAILED, 1);
 
                 // send failure notification
-                // session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Failed", $"~b~Rep Lost~w~: {repFailure:d0}");
+                EventSystem.GetModule().Send("mission:notification", serverHandle, "Dispatch A.I.", "Failed", $"~b~Rep Lost~w~: {repFailure:d0}");
 
                 if (numberOfFailures >= 3)
                 {
                     await BaseScript.Delay(500);
-                    // session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Lowered Rewards", $"~w~You have failed too many missions in a row and will now get lower rewards.");
+                    EventSystem.GetModule().Send("mission:notification", serverHandle, "Dispatch A.I.", "Lowered Rewards", $"~w~You have failed too many missions in a row and will now get lower rewards.");
                 }
             }
 

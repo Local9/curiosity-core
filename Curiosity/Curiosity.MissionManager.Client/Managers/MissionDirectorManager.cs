@@ -67,6 +67,14 @@ namespace Curiosity.MissionManager.Client.Managers
                 return null;
             }));
 
+            EventSystem.Attach("mission:notification:impound", new EventCallback(metadata =>
+            {
+                if (!Mission.isOnMission)
+                    Notify.Impound(metadata.Find<string>(0), metadata.Find<string>(1));
+
+                return null;
+            }));
+
             EventSystem.Attach("mission:backup:completed", new EventCallback(metadata =>
             {
                 Mission.isOnMission = false;
