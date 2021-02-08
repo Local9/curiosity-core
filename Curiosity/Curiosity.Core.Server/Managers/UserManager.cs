@@ -4,6 +4,7 @@ using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Entity;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace Curiosity.Core.Server.Managers
                     cpl.Name = curiosityUser.LatestName;
                     cpl.Ping = PluginManager.PlayersList[kv.Key].Ping;
                     cpl.Job = curiosityUser.CurrentJob;
+                    cpl.Role = curiosityUser.Role.GetStringValue();
 
                     lst.Add(cpl);
                 }
