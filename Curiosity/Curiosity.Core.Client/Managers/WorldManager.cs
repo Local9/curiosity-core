@@ -169,6 +169,61 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (Game.Player == player) continue;
 
+                Blip blip;
+
+                if (player.Character.AttachedBlip == null)
+                {
+                    blip = player.Character.AttachBlip();
+                    blip.Sprite = BlipSprite.Player;
+                    blip.Scale = 0.85f;
+
+                    API.SetBlipCategory(blip.Handle, 7);
+                    API.SetBlipPriority(blip.Handle, 11);
+                    API.ShowHeadingIndicatorOnBlip(blip.Handle, true);
+                    API.SetBlipNameToPlayerName(blip.Handle, player.Handle);
+                }
+                else
+                {
+                    blip = player.Character.AttachedBlip;
+
+                    if (player.Character.IsDead)
+                    {
+                        blip.Sprite = BlipSprite.Dead;
+                        API.ShowHeadingIndicatorOnBlip(blip.Handle, false);
+                    }
+
+                    if (Game.IsPaused)
+                    {
+                        blip.Alpha = 255;
+                    }
+                    else
+                    {
+                        Vector3 charPos = player.Character.Position;
+                        Vector3 playerPos = Game.PlayerPed.Position;
+
+                        double distance = (Math.Floor(Math.Abs(Math.Sqrt(
+                            (charPos.X - playerPos.X) *
+                            (charPos.X - playerPos.X) +
+                            (charPos.Y - playerPos.Y) *
+                            (charPos.Y - playerPos.Y))) / -1)) + 900;
+
+                        if (distance < 0)
+                            distance = 0;
+
+                        if (distance > 255)
+                            distance = 255;
+
+                        if (player.Character.IsVisible)
+                        {
+                            blip.Alpha = (int)distance;
+                        }
+                        else
+                        {
+                            blip.Alpha = 0;
+                        }
+                    }
+                }
+
                 string prefix = API.NetworkIsPlayerTalking(player.Handle) ? "~b~" : "~w~";
                 ScreenInterface.Draw3DText(player.Character.Position, $"[{player.Handle}] {prefix}{player.Name}", 40, 50);
             }
