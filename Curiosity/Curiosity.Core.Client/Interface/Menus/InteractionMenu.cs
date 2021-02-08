@@ -139,12 +139,7 @@ namespace Curiosity.Core.Client.Interface.Menus
 
         private void MenuMain_OnMenuClose(UIMenu sender)
         {
-            DisposeMenu();
-        }
-
-        public void DisposeMenu()
-        {
-            Instance.DetachTickHandler(OnMenuDisplay);
+            // Instance.DetachTickHandler(OnMenuDisplay);
         }
 
         private async Task OnMenuDisplay()
@@ -156,7 +151,12 @@ namespace Curiosity.Core.Client.Interface.Menus
         [TickHandler(SessionWait = true)]
         private async Task OnMenuControls()
         {
-            if (!Game.IsPaused && !API.IsPauseMenuRestarting() && API.IsScreenFadedIn() && !API.IsPlayerSwitchInProgress())
+            while (Cache.Character == null)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            if (!Game.IsPaused && !API.IsPauseMenuRestarting() && API.IsScreenFadedIn() && !API.IsPlayerSwitchInProgress() && Cache.Character.MarkedAsRegistered)
             {
                 if (MenuPool.IsAnyMenuOpen())
                 {
@@ -164,8 +164,8 @@ namespace Curiosity.Core.Client.Interface.Menus
                     {
                         if ((Game.IsControlJustPressed(0, Control.InteractionMenu) || Game.IsDisabledControlJustPressed(0, Control.InteractionMenu)))
                         {
-                            menuMain.Visible = !menuMain.Visible;
-                            DisposeMenu();
+                            menuMain.Visible = false;
+                            MenuPool.CloseAllMenus();
                         }
                     }
                 }
@@ -216,10 +216,12 @@ namespace Curiosity.Core.Client.Interface.Menus
             }
 
             if (gpsLocations.Count > 1)
+            {
                 gpsLocations.Sort((x, y) => string.Compare(x, y));
 
-            mlGpsLocations.Items = gpsLocations;
-            mlGpsLocations.Index = gpsIndex;
+                mlGpsLocations.Items = gpsLocations;
+                mlGpsLocations.Index = gpsIndex;
+            }
         }
     }
 }
