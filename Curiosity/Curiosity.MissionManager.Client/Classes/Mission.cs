@@ -519,7 +519,19 @@ namespace Curiosity.MissionManager.Client
             CitizenFX.Core.Ped fxPed;
 
             int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            await BaseScript.Delay(100);
             int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+            await BaseScript.Delay(0);
+
+            API.NetworkRequestControlOfNetworkId(pedNetworkId);
+            await BaseScript.Delay(0);
+
+            while (!API.NetworkHasControlOfEntity(pedId))
+            {
+                await BaseScript.Delay(0);
+                API.NetworkRequestControlOfEntity(pedId);
+            }
+            await BaseScript.Delay(0);
 
             fxPed = new CitizenFX.Core.Ped(pedId);
 
@@ -564,7 +576,19 @@ namespace Curiosity.MissionManager.Client
             CitizenFX.Core.Ped fxPed;
 
             int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            await BaseScript.Delay(100);
             int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+            await BaseScript.Delay(0);
+
+            API.NetworkRequestControlOfNetworkId(pedNetworkId);
+            await BaseScript.Delay(0);
+
+            while (!API.NetworkHasControlOfEntity(pedId))
+            {
+                await BaseScript.Delay(0);
+                API.NetworkRequestControlOfEntity(pedId);
+            }
+            await BaseScript.Delay(0);
 
             fxPed = new CitizenFX.Core.Ped(pedId);
 
@@ -591,7 +615,19 @@ namespace Curiosity.MissionManager.Client
             CitizenFX.Core.Vehicle fxVehicle;
 
             int vehNetworkId = await EventSystem.Request<int>("entity:spawn:vehicle", (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            await BaseScript.Delay(100);
             int vehId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
+            await BaseScript.Delay(0);
+
+            API.NetworkRequestControlOfNetworkId(vehNetworkId);
+            await BaseScript.Delay(0);
+
+            while (!API.NetworkHasControlOfEntity(vehId))
+            {
+                await BaseScript.Delay(0);
+                API.NetworkRequestControlOfEntity(vehId);
+            }
+            await BaseScript.Delay(0);
 
             fxVehicle = new CitizenFX.Core.Vehicle(vehId);
 

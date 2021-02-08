@@ -2,6 +2,7 @@
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
+using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System.Collections.Generic;
@@ -16,6 +17,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         UIMenuCheckboxItem menuCheckboxEnableCallouts;
         UIMenuCheckboxItem menuCheckboxEnableNotificationsBackup;
         UIMenuListItem menuListItemPatrolZone;
+
+        UIMenuCheckboxItem menuChkNpcDebug; // 3
+        UIMenuCheckboxItem menuChkVehDebug; // 4
 
         int patrolZoneIndex = 0;
         List<dynamic> lst = new List<dynamic>() { "City", "County" };
@@ -94,6 +98,12 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 }
             }
 
+            if (checkboxItem == menuChkNpcDebug)
+                Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC, Checked);
+
+            if (checkboxItem == menuChkVehDebug)
+                Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_VEH, Checked);
+
             await BaseScript.Delay(500);
             checkboxItem.Enabled = true;
         }
@@ -105,6 +115,25 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private void Menu_OnMenuOpen(UIMenu sender)
         {
+            if (Cache.Player.User.IsDeveloper)
+            {
+                if (menuChkNpcDebug == null)
+                {
+                    menuChkNpcDebug = new UIMenuCheckboxItem("NPC Debug UI", false);
+                    sender.AddItem(menuChkNpcDebug);
+                    menuChkVehDebug = new UIMenuCheckboxItem("Vehicle Debug UI", false);
+                    sender.AddItem(menuChkVehDebug);
+                }
+            }
+            else
+            {
+                if (menuChkNpcDebug != null)
+                {
+                    sender.RemoveItemAt(3);
+                    sender.RemoveItemAt(4);
+                }
+            }
+
             MenuManager.OnMenuState(true);
 
             menuCheckboxEnableCallouts.Checked = MissionDirectorManager.MissionDirectorState;

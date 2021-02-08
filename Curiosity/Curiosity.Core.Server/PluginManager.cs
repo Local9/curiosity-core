@@ -308,6 +308,46 @@ namespace Curiosity.Core.Server
             try
             {
                 API.CancelEvent();
+
+                if (commandName.ToLower() == "missions")
+                {
+                    Logger.Info($"<- Mission Manager Start ->");
+                    Logger.Info($"Active: {MissionManager.ActiveMissions.Count()}");
+                    Logger.Info($"Assistance Requests: {MissionManager.ActiveMissions.Where(x => x.Value.AssistanceRequested).Count()}");
+                    Logger.Info($"<- Mission Manager End ->");
+                }
+
+                if (commandName.ToLower() == "mission")
+                {
+                    if (MissionManager.ActiveMissions.Count > 0)
+                    {
+                        ConcurrentDictionary<int, MissionData> missions = MissionManager.ActiveMissions;
+
+                        if (missions.Count > 1)
+                        {
+                            if (args.Count == 0)
+                            {
+                                Logger.Info($"Must pass Players Server ID, too many missions to print");
+                            }
+                            else
+                            {
+                                int idx = (int)args[0];
+                                Logger.Info($"\n{missions[idx]}");
+                            }
+                        }
+                        else
+                        {
+                            foreach (KeyValuePair<int, MissionData> data in missions)
+                            {
+                                Logger.Info($"\nPlayer Handle: {data.Key}\n{data.Value}");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Logger.Info($"No active missions");
+                    }
+                }
             }
             catch (Exception ex)
             {

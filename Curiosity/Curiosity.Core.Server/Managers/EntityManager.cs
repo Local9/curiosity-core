@@ -44,6 +44,7 @@ namespace Curiosity.Core.Server.Managers
                 bool isMission = metadata.Find<bool>(6);
 
                 int vehicleId = API.CreateVehicle(model, x, y, z, h, isNetworked, isMission);
+                await BaseScript.Delay(0);
 
                 if (vehicleId == 0)
                 {
@@ -87,6 +88,7 @@ namespace Curiosity.Core.Server.Managers
                 bool isMission = metadata.Find<bool>(7);
 
                 int pedId = API.CreatePed(pedType, model, x, y, z, h, isNetworked, isMission);
+                await BaseScript.Delay(0);
 
                 if (pedId == 0)
                 {

@@ -71,7 +71,11 @@ namespace Curiosity.MissionManager.Client.Managers
                 {
                     if (WorldPeds.ContainsKey(ped.Handle)) return;
 
-                    bool setup = Decorators.GetBoolean(ped.Handle, Decorators.PED_SETUP);
+                    var setup = ped.State.Get(Decorators.PED_SETUP);
+
+                    if (setup == null)
+                        setup = false;
+
                     ped.DropsWeaponsOnDeath = false;
 
                     if (!setup && !ped.IsPlayer)

@@ -68,6 +68,11 @@ namespace Curiosity.Development.Missions
                 Pass();
             }
 
+            if (criminal.IsDead)
+            {
+                missionPassed = false;
+                Fail("Suspect is dead", EndState.Fail);
+            }
         }
     }
 }
