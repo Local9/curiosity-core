@@ -190,7 +190,7 @@ namespace Curiosity.Core.Client.Managers
         }
     }
 
-    public class GameEventTigger : Manager<GameEventTigger>
+    public class GameEventTigger : Manager<GameEventTigger> // THIS Could just be moved
     {
         DateTime DateOfDeath = DateTime.Now;
         Camera DeathCamera;
@@ -218,7 +218,7 @@ namespace Curiosity.Core.Client.Managers
             }));
         }
             
-        private async void GameEventManager_OnDeath(Entity attacker, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag)
+        private void GameEventManager_OnDeath(Entity attacker, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag)
         {
             DateOfDeath = DateTime.Now;
             EventSystem.Send("character:death");

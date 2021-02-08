@@ -138,7 +138,6 @@ namespace Curiosity.Core.Client.Environment.Entities
         {
             // ha ha
             // suicide? or something else?
-            Logger.Debug($"Entity GameEventManager_OnDeath");
         }
     }
 }

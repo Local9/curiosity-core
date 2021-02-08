@@ -35,13 +35,13 @@ namespace Curiosity.Core.Server.Managers
 
                 RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
 
-                var model = metadata.Find<uint>(0);
-                var x = metadata.Find<float>(1);
-                var y = metadata.Find<float>(2);
-                var z = metadata.Find<float>(3);
-                var h = metadata.Find<float>(4);
-                var isNetworked = metadata.Find<bool>(5);
-                var isMission = metadata.Find<bool>(6);
+                uint model = metadata.Find<uint>(0);
+                float x = metadata.Find<float>(1);
+                float y = metadata.Find<float>(2);
+                float z = metadata.Find<float>(3);
+                float h = metadata.Find<float>(4);
+                bool isNetworked = metadata.Find<bool>(5);
+                bool isMission = metadata.Find<bool>(6);
 
                 int vehicleId = API.CreateVehicle(model, x, y, z, h, isNetworked, isMission);
 
@@ -77,14 +77,14 @@ namespace Curiosity.Core.Server.Managers
 
                 RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
 
-                var pedType = metadata.Find<int>(0);
-                var model = metadata.Find<uint>(1);
-                var x = metadata.Find<float>(1);
-                var y = metadata.Find<float>(2);
-                var z = metadata.Find<float>(3);
-                var h = metadata.Find<float>(4);
-                var isNetworked = metadata.Find<bool>(5);
-                var isMission = metadata.Find<bool>(6);
+                int pedType = metadata.Find<int>(0);
+                uint model = metadata.Find<uint>(1);
+                float x = metadata.Find<float>(2);
+                float y = metadata.Find<float>(3);
+                float z = metadata.Find<float>(4);
+                float h = metadata.Find<float>(5);
+                bool isNetworked = metadata.Find<bool>(6);
+                bool isMission = metadata.Find<bool>(7);
 
                 int pedId = API.CreatePed(pedType, model, x, y, z, h, isNetworked, isMission);
 
