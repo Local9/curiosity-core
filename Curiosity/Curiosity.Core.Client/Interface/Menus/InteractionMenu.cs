@@ -26,6 +26,9 @@ namespace Curiosity.Core.Client.Interface.Menus
         private UIMenuItem miPassive = new UIMenuItem("Enable Passive Mode", "Enabling passive mode will mean people cannot attack you, you will also be unable to use weapons.");
         private UIMenuItem miKillYourself = new UIMenuItem("Kill Yourself", "Kill yourself and respawn.");
 
+        private UIMenu menuVehicle;
+        private SubMenu.VehicleMenu _VehicleMenu = new SubMenu.VehicleMenu();
+
 
         public override void Begin()
         {
@@ -36,6 +39,10 @@ namespace Curiosity.Core.Client.Interface.Menus
             menuMain.MouseControlsEnabled = false;
 
             menuMain.AddItem(mlGpsLocations);
+
+            _VehicleMenu.CreateMenu(menuMain);
+            MenuPool.AddSubMenu(menuVehicle, "Vehicles");
+
             menuMain.AddItem(miKillYourself);
             menuMain.AddItem(miPassive);
 

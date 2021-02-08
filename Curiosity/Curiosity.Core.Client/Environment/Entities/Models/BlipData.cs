@@ -16,7 +16,7 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
             {
                 Blip blip = World.CreateBlip(new Vector3(position.X, position.Y, position.Z));
 
-                Logger.Debug(Name);
+                // Logger.Debug(Name);
 
                 blip.Name = Name;
                 blip.Sprite = (BlipSprite)Sprite;

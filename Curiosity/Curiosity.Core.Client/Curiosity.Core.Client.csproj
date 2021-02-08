@@ -67,6 +67,7 @@
     <Compile Include="Extensions\VehicleExtensions.cs" />
     <Compile Include="Interface\Chat.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />
+    <Compile Include="Interface\Menus\SubMenu\VehicleRemoteMenu.cs" />
     <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\LocationManager.cs" />
