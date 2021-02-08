@@ -45,11 +45,21 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_IMPORTANT);
+                var _value = Fx.State.Get(Decorators.VEHICLE_IMPORTANT);
+
+                if (_value == null)
+                {
+                    Fx.State.Set(Decorators.VEHICLE_IMPORTANT, false, true);
+                    return false;
+                }
+                else
+                {
+                    return _value;
+                }
             }
             set
             {
-                Decorators.Set(Fx.Handle, Decorators.VEHICLE_IMPORTANT, value);
+                Fx.State.Set(Decorators.VEHICLE_IMPORTANT, value, true);
             }
         }
 
@@ -57,11 +67,21 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TOW);
+                var _value = Fx.State.Get(Decorators.VEHICLE_TOW);
+
+                if (_value == null)
+                {
+                    Fx.State.Set(Decorators.VEHICLE_TOW, false, true);
+                    return false;
+                }
+                else
+                {
+                    return _value;
+                }
             }
             set
             {
-                Decorators.Set(Fx.Handle, Decorators.VEHICLE_TOW, value);
+                Fx.State.Set(Decorators.VEHICLE_TOW, value, true);
 
                 EventSystem.Send("mission:update:vehicle:towable", Fx.NetworkId, true);
             }
@@ -71,11 +91,21 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_SEARCH);
+                var _value = Fx.State.Get(Decorators.VEHICLE_SEARCH);
+
+                if (_value == null)
+                {
+                    Fx.State.Set(Decorators.VEHICLE_SEARCH, false, true);
+                    return false;
+                }
+                else
+                {
+                    return _value;
+                }
             }
             set
             {
-                Decorators.Set(Fx.Handle, Decorators.VEHICLE_SEARCH, value);
+                Fx.State.Set(Decorators.VEHICLE_SEARCH, value, true);
             }
         }
 
@@ -83,12 +113,22 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_MISSION);
+                var _value = Fx.State.Get(Decorators.VEHICLE_MISSION);
+
+                if (_value == null)
+                {
+                    Fx.State.Set(Decorators.VEHICLE_MISSION, false, true);
+                    return false;
+                }
+                else
+                {
+                    return _value;
+                }
             }
             set
             {
                 Fx.IsPersistent = value;
-                Decorators.Set(Fx.Handle, Decorators.VEHICLE_MISSION, value);
+                Fx.State.Set(Decorators.VEHICLE_MISSION, value, true);
 
                 EventSystem.Send("mission:update:vehicle:mission", Fx.NetworkId, true);
             }
@@ -103,11 +143,21 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_SPIKE_ALLOWED);
+                var _value = Fx.State.Get(Decorators.VEHICLE_SPIKE_ALLOWED);
+
+                if (_value == null)
+                {
+                    Fx.State.Set(Decorators.VEHICLE_SPIKE_ALLOWED, false, true);
+                    return false;
+                }
+                else
+                {
+                    return _value;
+                }
             }
             set
             {
-                Decorators.Set(Fx.Handle, Decorators.VEHICLE_SPIKE_ALLOWED, value);
+                Fx.State.Set(Decorators.VEHICLE_SPIKE_ALLOWED, value, true);
             }
         }
 
@@ -115,11 +165,21 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                return Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_IGNORED);
+                var _value = Fx.State.Get(Decorators.VEHICLE_TRAFFIC_STOP_IGNORED);
+
+                if (_value == null)
+                {
+                    Fx.State.Set(Decorators.VEHICLE_TRAFFIC_STOP_IGNORED, false, true);
+                    return false;
+                }
+                else
+                {
+                    return _value;
+                }
             }
             set
             {
-                Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_IGNORED, value);
+                Fx.State.Set(Decorators.VEHICLE_TRAFFIC_STOP_IGNORED, value, true);
             }
         }
 
@@ -138,6 +198,7 @@ namespace Curiosity.MissionManager.Client.Classes
             this._eventWrapper.Aborted += new EntityEventWrapper.OnWrapperAbortedEvent(this.Abort);
 
             Decorators.Set(fx.Handle, Decorators.VEHICLE_SETUP, true);
+            Fx.State.Set(Decorators.VEHICLE_SETUP, true, true);
 
             if (update)
                 EventSystem.Send("mission:add:vehicle", Fx.NetworkId);
