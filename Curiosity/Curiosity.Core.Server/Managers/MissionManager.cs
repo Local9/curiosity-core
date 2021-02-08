@@ -1,7 +1,9 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Entity;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
@@ -10,6 +12,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -143,8 +146,6 @@ namespace Curiosity.Core.Server.Managers
 
                 if (player == null) return false;
 
-                var curUser = PluginManager.ActiveUsers[metadata.Sender];
-
                 MissionData missionData = ActiveMissions[metadata.Sender];
                 missionData.IsCompleted = true;
 
@@ -165,9 +166,9 @@ namespace Curiosity.Core.Server.Managers
                     numberOfFailures = FailureTracker.AddOrUpdate(metadata.Sender, 0, (key, oldValue) => oldValue > 0 ? oldValue - 1 : 0);
                 }
 
-                Logger.Debug($"{curUser.LatestName} : NumFail: {numberOfFailures}");
+                Logger.Debug($"{player.Name} : NumFail: {numberOfFailures}");
 
-                bool res = Instance.ExportDictionary["curiosity-core"].MissionComplete(player.Handle, missionId, passed, numberTransportArrested, numberOfFailures);
+                Mission res = await MissionCompleted(metadata.Sender, missionId, passed, numberTransportArrested, numberOfFailures);
 
                 missionData.PartyMembers.ForEach(async serverHandle =>
                 {
@@ -178,7 +179,9 @@ namespace Curiosity.Core.Server.Managers
                     }
                     else
                     {
-                        Instance.ExportDictionary["curiosity-core"].MissionComplete(serverHandle, missionId, passed, 1, 0);
+                        await RecordBackup(serverHandle);
+                        await BaseScript.Delay(10);
+                        await MissionCompleted(serverHandle, missionId, passed, 1, 0);
                     }
                     EventSystem.GetModule().Send("mission:backup:completed", serverHandle);
 
@@ -375,7 +378,7 @@ namespace Curiosity.Core.Server.Managers
                 return missionDataPed;
             }));
 
-            EventSystem.GetModule().Attach("mission:update:ped:arrest", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("mission:update:ped:arrest", new AsyncEventCallback(async metadata =>
             {
                 MissionDataPed missionDataPed = GetMissionPed(metadata.Sender, metadata.Find<int>(0));
 
@@ -416,7 +419,7 @@ namespace Curiosity.Core.Server.Managers
 
                 missionDataPed.IsArrested = true;
 
-                bool res = Instance.ExportDictionary["curiosity-core"].Arrest(metadata.Sender, experienceEarned);
+                bool res = await RecordArrest(metadata.Sender, experienceEarned);
 
                 if (res)
                     _numberOfSuspectArrested++;
@@ -750,6 +753,160 @@ namespace Curiosity.Core.Server.Managers
             if (missionDataVehicle == null) return null;
 
             return missionDataVehicle;
+        }
+
+        async Task<bool> RecordBackup(int serverHandle)
+        {
+            if (!PluginManager.ActiveUsers.ContainsKey(serverHandle)) return false;
+
+            CuriosityUser user = PluginManager.ActiveUsers[serverHandle];
+            int characterId = user.Character.CharacterId;
+
+            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_BACKUP, 1);
+            await BaseScript.Delay(10);
+            // user.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Arrest Booked", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${money:c0}");
+
+            return true;
+        }
+
+        async Task<bool> RecordArrest(int serverHandle, int xpEarned)
+        {
+            if (!PluginManager.ActiveUsers.ContainsKey(serverHandle)) return false;
+
+            CuriosityUser user = PluginManager.ActiveUsers[serverHandle];
+            int characterId = user.Character.CharacterId;
+
+            xpEarned = XpEarned(user, xpEarned);
+
+            await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.KNOWLEDGE, 2);
+            await BaseScript.Delay(10);
+            user.Character.Cash = await Database.Store.BankDatabase.Adjust(characterId, 100);
+            await BaseScript.Delay(10);
+            await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.POLICE, xpEarned);
+            await BaseScript.Delay(10);
+            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.POLICE_REPUATATION, 5);
+            await BaseScript.Delay(10);
+            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_ARRESTS, 1);
+            await BaseScript.Delay(100);
+            // user.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Arrest Booked", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${money:c0}");
+
+            return true;
+        }
+
+        async Task<Mission> MissionCompleted(int serverHandle, string missionId, bool passed, int numTransportArrested, int numberOfFailures)
+        {
+            if (!PluginManager.ActiveUsers.ContainsKey(serverHandle)) return null;
+            CuriosityUser curUser = PluginManager.ActiveUsers[serverHandle];
+            int characterId = curUser.Character.CharacterId;
+
+            Mission mission = await Database.Store.MissionDatabase.Get(missionId);
+
+            if (mission == null)
+            {
+                Logger.Error($"No mission returned from the database matching the ID `{missionId}`");
+                return null;
+            }
+
+            bool usedTransport = numTransportArrested > 0;
+
+            int xpReward = mission.XpReward;
+            int repReward = mission.RepReward;
+            int repFailure = mission.RepFailure;
+            int cashMin = mission.CashMin;
+            int cashMax = mission.CashMax;
+
+            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_TAKEN, 1);
+
+            if (passed)
+            {
+                if (usedTransport)
+                {
+                    xpReward = (int)(xpReward * .5f);
+                    repReward = (int)(repReward * .5f);
+                    cashMin = (int)(cashMin * .5f);
+                    cashMax = (int)(cashMax * .5f);
+                }
+
+                if (numberOfFailures >= 3)
+                {
+                    xpReward = (int)(xpReward * .1f);
+                    repReward = 0;
+                    cashMin = (int)(cashMin * .1f);
+                    cashMax = (int)(cashMax * .1f);
+                }
+
+                int money = Utility.RANDOM.Next(cashMin, cashMax);
+
+                await BaseScript.Delay(100);
+
+                await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.KNOWLEDGE, 2);
+                await BaseScript.Delay(10);
+                curUser.Character.Cash = await Database.Store.BankDatabase.Adjust(characterId, money);
+                await BaseScript.Delay(10);
+                await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.POLICE, xpReward);
+                await BaseScript.Delay(10);
+                await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.POLICE_REPUATATION, repReward);
+                await BaseScript.Delay(10);
+                await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_COMPLETED, 1);
+
+                mission.RepFailure = 0;
+
+                xpReward = XpEarned(curUser, xpReward);
+
+                if (numberOfFailures >= 3)
+                {
+                    // send success notification
+                    //session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Lowered Rewards", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
+                    //await BaseScript.Delay(500);
+                    //session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Reason", $"~w~You require ~y~{numberOfFailures - 3:d0} ~w~or more successful callout(s) to earn full rewards.");
+                }
+                else
+                {
+                    //session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Completed", $"~b~XP Gained~w~: {xpReward:d0}~n~~b~Rep Gained~w~: {repReward:d0}~n~~b~Cash~w~: ${money:c0}");
+                }
+            }
+            else
+            {
+                mission.XpReward = 0;
+                mission.RepReward = 0;
+                mission.CashMax = 0;
+                mission.CashMin = 0;
+
+                await BaseScript.Delay(10);
+                await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.KNOWLEDGE, -4);
+                await BaseScript.Delay(10);
+                await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.POLICE_REPUATATION, repFailure * -1);
+                await BaseScript.Delay(10);
+                await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_FAILED, 1);
+
+                // send failure notification
+                // session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Failed", $"~b~Rep Lost~w~: {repFailure:d0}");
+
+                if (numberOfFailures >= 3)
+                {
+                    await BaseScript.Delay(500);
+                    // session.Player.Send(NotificationType.CHAR_CALL911, 2, "Dispatch A.I.", "Lowered Rewards", $"~w~You have failed too many missions in a row and will now get lower rewards.");
+                }
+            }
+
+            return mission;
+        }
+
+        int XpEarned(CuriosityUser user, int xpReward)
+        {
+            float experienceModifier = float.Parse(API.GetConvar("experience_modifier", $"1.0"));
+
+            if (experienceModifier > 1.0f && (user.IsStaff || user.IsDonator))
+            {
+                experienceModifier += 0.1f;
+            }
+
+            if (user.IsStaff || user.IsDonator)
+            {
+                experienceModifier += CharacterManager.GetModule().ExperienceModifier(user.Role);
+            }
+
+            return (int)(xpReward * experienceModifier);
         }
     }
 }

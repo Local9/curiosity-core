@@ -253,5 +253,20 @@ namespace Curiosity.Core.Server.Managers
                     return $"{exportMessage}";
                 }));
         }
+
+        public float ExperienceModifier(Role role)
+        {
+            switch (role)
+            {
+                case Role.DONATOR_LEVEL_1:
+                    return float.Parse(API.GetConvar("experience_modifier_donator1", $"0.1"));
+                case Role.DONATOR_LEVEL_2:
+                    return float.Parse(API.GetConvar("experience_modifier_donator2", $"0.25"));
+                case Role.DONATOR_LEVEL_3:
+                    return float.Parse(API.GetConvar("experience_modifier_donator3", $"0.5"));
+                default:
+                    return float.Parse(API.GetConvar("experience_modifier_lifeTime", $"0.05"));
+            }
+        }
     }
 }
