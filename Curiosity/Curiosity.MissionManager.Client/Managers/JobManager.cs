@@ -27,9 +27,10 @@ namespace Curiosity.MissionManager.Client.Managers
 
             EventSystem.Attach("job:police:duty", new AsyncEventCallback(async metadata =>
             {
-                OnJobDutyEvent(true, false, "police");
+                string job = IsOfficer ? "unemployed" : "policeOfficer";
+                OnJobDutyEvent(true, false, job);
                 await BaseScript.Delay(100);
-                BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, "police"); // for legacy resources
+                BaseScript.TriggerEvent(LegacyEvents.Client.CuriosityJob, true, false, job); // for legacy resources
                 return null;
             }));
 
