@@ -44,6 +44,18 @@ namespace Curiosity.Interface.Client.Managers
                 return null;
             }));
 
+            Instance.AttachNuiHandler("GetHeadshot", new AsyncEventCallback(async metadata =>
+            {
+                await CreatePlayerHeadshot();
+
+                string txd = API.GetPedheadshotTxdString(Game.PlayerPed.Handle);
+
+                string jsn = new JsonBuilder().Add("operation", "PLAYER_HEADSHOT")
+                        .Add("headshot", txd).Build();
+
+                return null;
+            }));
+
             Instance.AttachNuiHandler("GetPlayerList", new AsyncEventCallback(async metadata =>
             {
                 FiveMPlayerList players = await EventSystem.Request<FiveMPlayerList>("server:playerList", null);
@@ -80,6 +92,16 @@ namespace Curiosity.Interface.Client.Managers
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
                 OpenTablet();
+                CreatePlayerHeadshot();
+            }
+        }
+
+        private async Task CreatePlayerHeadshot()
+        {
+            int handle = API.RegisterPedheadshotTransparent(Game.PlayerPed.Handle);
+            while (!API.IsPedheadshotReady(handle) || !API.IsPedheadshotValid(handle))
+            {
+                await BaseScript.Delay(0);
             }
         }
 
