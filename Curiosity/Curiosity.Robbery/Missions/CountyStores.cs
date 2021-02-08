@@ -71,7 +71,7 @@ namespace Curiosity.StolenVehicle.Missions
                     locationBlip.Delete();
 
                 if (storeClerk == null)
-                    storeClerk = await Ped.Spawn(storeClerkHash, storeClerkPosition, storeClerkHeading, false, PedType.PED_TYPE_SPECIAL, false, true);
+                    storeClerk = await PedSpawn(storeClerkHash, storeClerkPosition, storeClerkHeading, false, PedType.PED_TYPE_SPECIAL, false, true);
 
                 if (storeClerk == null)
                 {
@@ -162,9 +162,7 @@ namespace Curiosity.StolenVehicle.Missions
                     if (locationBlip.Exists())
                         locationBlip.Delete();
 
-                    thief = await Ped.SpawnRandom(spawnLocation, isNetworked: false);
-
-                    thief = await Ped.SpawnRandom(spawnLocation, isNetworked: false);
+                    thief = await PedSpawnRandom(spawnLocation, isNetworked: false);
 
                     if (thief == null)
                     {

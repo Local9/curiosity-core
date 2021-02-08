@@ -18,7 +18,7 @@ namespace Curiosity.MissionManager.Client.Classes
 {
     [Serializable]
     public class Ped : Entity, IEquatable<Ped>
-    {
+    { 
         public CitizenFX.Core.Ped Fx { get; set; }
         internal PluginManager Instance => PluginManager.Instance;
         internal EventSystem EventSystem => EventSystem.GetModule();
@@ -593,105 +593,6 @@ namespace Curiosity.MissionManager.Client.Classes
                     Fx.IsCollisionEnabled = true;
                     break;
             }
-        }
-
-        public static async Task<Ped> SpawnRandom(Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE, bool isNetworked = true, bool isMission = true)
-        {
-
-            Vector3 spawnPosition = position;
-
-            if (sidewalk)
-            {
-                spawnPosition = position.Sidewalk();
-            }
-            else
-            {
-                float groundZ = position.Z;
-                Vector3 normal = Vector3.Zero;
-
-                if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
-                {
-                    spawnPosition.Z = groundZ;
-                }
-            }
-
-            Model model = Collections.Peds.ALL.Random();
-
-            await model.Request(10000);
-
-            while (!model.IsLoaded)
-            {
-                await BaseScript.Delay(100);
-            }
-
-            CitizenFX.Core.Ped fxPed;
-
-            if (!isNetworked)
-            {
-                int pedId = API.CreatePed((int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
-                fxPed = new CitizenFX.Core.Ped(pedId);
-            }
-            else
-            {
-                fxPed = await World.CreatePed(model, position, heading);
-            }
-
-            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
-
-            fxPed.FadeIn();
-
-            Logger.Debug(fxPed.ToString());
-            var ped = new Ped(fxPed);
-            return ped;
-        }
-
-        public static async Task<Ped> Spawn(Model model, Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE, bool isNetworked = true, bool isMission = true)
-        {
-            Vector3 spawnPosition = position;
-
-            if (sidewalk)
-            {
-                spawnPosition = position.Sidewalk();
-            }
-            else
-            {
-                float groundZ = position.Z;
-                Vector3 normal = Vector3.Zero;
-
-                if (API.GetNextWeatherType() == (int)WeatherTypeHash.Christmas)
-                    position.Z += 1f;
-
-                if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
-                {
-                    spawnPosition.Z = groundZ;
-                }
-            }
-
-            await model.Request(10000);
-
-            while(!model.IsLoaded)
-            {
-                await BaseScript.Delay(100);
-            }
-
-            CitizenFX.Core.Ped fxPed;
-
-            if (!isNetworked) {
-                int pedId = API.CreatePed((int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
-                fxPed = new CitizenFX.Core.Ped(pedId);
-            }
-            else
-            {
-                fxPed = await World.CreatePed(model, position, heading);
-            }
-
-            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
-
-            fxPed.FadeIn();
-
-            Logger.Debug(fxPed.ToString());
-            var ped = new Ped(fxPed);
-            return ped;
         }
 
         public void PutInVehicle(Vehicle vehicle, VehicleSeat seat = VehicleSeat.Driver) =>

@@ -1,14 +1,15 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Global.Shared.Utils;
 using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
+using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Entity;
 using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Utils;
 using NativeUI;
 using System;
 using System.Collections.Generic;
@@ -484,6 +485,123 @@ namespace Curiosity.MissionManager.Client
         {
             Instance.DiscordRichPresence.Status = status;
             Instance.DiscordRichPresence.Commit();
+        }
+
+        public async Task<Ped> PedSpawnRandom(Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE, bool isNetworked = true, bool isMission = true)
+        {
+
+            Vector3 spawnPosition = position;
+
+            if (sidewalk)
+            {
+                spawnPosition = position.Sidewalk();
+            }
+            else
+            {
+                float groundZ = position.Z;
+                Vector3 normal = Vector3.Zero;
+
+                if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
+                {
+                    spawnPosition.Z = groundZ;
+                }
+            }
+
+            Model model = Collections.Peds.ALL.Random();
+
+            await model.Request(10000);
+
+            while (!model.IsLoaded)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            CitizenFX.Core.Ped fxPed;
+
+            int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+
+            fxPed = new CitizenFX.Core.Ped(pedId);
+
+            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
+
+            fxPed.FadeIn();
+
+            Logger.Debug(fxPed.ToString());
+            var ped = new Ped(fxPed);
+            return ped;
+        }
+
+        public async Task<Ped> PedSpawn(Model model, Vector3 position, float heading = 0f, bool sidewalk = true, PedType pedType = PedType.PED_TYPE_CIVMALE, bool isNetworked = true, bool isMission = true)
+        {
+            Vector3 spawnPosition = position;
+
+            if (sidewalk)
+            {
+                spawnPosition = position.Sidewalk();
+            }
+            else
+            {
+                float groundZ = position.Z;
+                Vector3 normal = Vector3.Zero;
+
+                if (API.GetNextWeatherType() == (int)WeatherTypeHash.Christmas)
+                    position.Z += 1f;
+
+                if (API.GetGroundZAndNormalFor_3dCoord(position.X, position.Y, position.Z, ref groundZ, ref normal))
+                {
+                    spawnPosition.Z = groundZ;
+                }
+            }
+
+            await model.Request(10000);
+
+            while (!model.IsLoaded)
+            {
+                await BaseScript.Delay(100);
+            }
+
+            CitizenFX.Core.Ped fxPed;
+
+            int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+
+            fxPed = new CitizenFX.Core.Ped(pedId);
+
+            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
+
+            fxPed.FadeIn();
+
+            Logger.Debug(fxPed.ToString());
+            var ped = new Ped(fxPed);
+            return ped;
+        }
+
+        public async Task<Vehicle> VehicleSpawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true, bool isNetworked = true, bool isMission = true)
+        {
+            Vector3 spawnPosition = position;
+
+            if (streetSpawn)
+                spawnPosition = position.Street();
+
+            await model.Request(10000);
+
+            while (!model.IsLoaded) await BaseScript.Delay(100);
+
+            CitizenFX.Core.Vehicle fxVehicle;
+
+            int vehNetworkId = await EventSystem.Request<int>("entity:spawn:vehicle", (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
+            int vehId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
+
+            fxVehicle = new CitizenFX.Core.Vehicle(vehId);
+
+            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
+
+            Logger.Debug(fxVehicle.ToString());
+
+            fxVehicle.FadeIn();
+
+            return new Vehicle(fxVehicle);
         }
     }
 }

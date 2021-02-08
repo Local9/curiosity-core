@@ -74,7 +74,7 @@ namespace Curiosity.StolenVehicle.Missions
             if (locationBlip.Exists())
                 locationBlip.Delete();
 
-            stolenVehicle = await Vehicle.Spawn(vehicleHashes.Random(), location, Game.PlayerPed.Heading);
+            stolenVehicle = await VehicleSpawn(vehicleHashes.Random(), location, Game.PlayerPed.Heading);
 
             if (stolenVehicle == null)
             {
@@ -84,7 +84,7 @@ namespace Curiosity.StolenVehicle.Missions
 
             Mission.RegisterVehicle(stolenVehicle);
 
-            criminal = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, sidewalk: true);
+            criminal = await PedSpawn(pedHashes.Random(), stolenVehicle.Position, sidewalk: true);
 
             if (criminal == null)
             {
@@ -121,7 +121,7 @@ namespace Curiosity.StolenVehicle.Missions
 
             await BaseScript.Delay(100);
 
-            criminalPassenger = await Ped.Spawn(pedHashes.Random(), stolenVehicle.Position, sidewalk: true);
+            criminalPassenger = await PedSpawn(pedHashes.Random(), stolenVehicle.Position, sidewalk: true);
 
             if (criminalPassenger != null)
             {

@@ -117,6 +117,8 @@ namespace Curiosity.Core.Server.Managers
 
                 Player player = PluginManager.PlayersList[senderHandle];
 
+                RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
+
                 var model = API.GetHashKey(metadata.Find<string>(0));
 
                 Vector3 pos = player.Character.Position;
@@ -142,6 +144,8 @@ namespace Curiosity.Core.Server.Managers
                     Logger.Debug($"Failed to create vehicle in timely manor.");
                     return null;
                 }
+
+                API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));

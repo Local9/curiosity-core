@@ -47,9 +47,9 @@ namespace Curiosity.Mugging.Missions
                     break;
                 case MissionState.SpawnPeds:
 
-                    criminal = await Ped.SpawnRandom(spawnPoint, pedType: PedType.PED_TYPE_CRIMINAL);
+                    criminal = await this.PedSpawnRandom(spawnPoint, pedType: PedType.PED_TYPE_CRIMINAL);
                     await BaseScript.Delay(100);
-                    victim = await Ped.SpawnRandom(spawnPoint);
+                    victim = await this.PedSpawnRandom(spawnPoint);
 
                     if (!criminal.Exists() || !victim.Exists())
                     {

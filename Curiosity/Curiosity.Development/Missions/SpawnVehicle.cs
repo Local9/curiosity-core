@@ -17,7 +17,7 @@ namespace Curiosity.Development.Missions
 
         public async override void Start()
         {
-            _vehicle = await Vehicle.Spawn(VehicleHash.Adder, Players[0].Character.Position.Around(3f, 4f));
+            _vehicle = await VehicleSpawn(VehicleHash.Adder, Players[0].Character.Position.Around(3f, 4f));
 
             RegisteredVehicles.Add(_vehicle);
 

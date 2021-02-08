@@ -163,37 +163,6 @@ namespace Curiosity.MissionManager.Client.Classes
             return blip;
         }
 
-        public static async Task<Vehicle> Spawn(Model model, Vector3 position, float heading = 0f, bool streetSpawn = true, bool isNetworked = true, bool isMission = true)
-        {
-            Vector3 spawnPosition = position;
-
-            if (streetSpawn)
-                spawnPosition = position.Street();
-
-            await model.Request(10000);
-
-            while (!model.IsLoaded) await BaseScript.Delay(100);
-
-            CitizenFX.Core.Vehicle fxVehicle;
-            if (!isNetworked)
-            {
-                int vehicleId = API.CreateVehicle((uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
-                fxVehicle = new CitizenFX.Core.Vehicle(vehicleId);
-            }
-            else
-            {
-                fxVehicle = await World.CreateVehicle(model, spawnPosition, heading);
-            }
-
-            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
-
-            Logger.Debug(fxVehicle.ToString());
-
-            fxVehicle.FadeIn();
-
-            return new Vehicle(fxVehicle);
-        }
-
         internal async void Dismiss()
         {
             if (Fx.AttachedBlip != null)

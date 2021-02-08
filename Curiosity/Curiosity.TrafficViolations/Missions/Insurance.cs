@@ -70,7 +70,7 @@ namespace Curiosity.TrafficViolations.Missions
             if (locationBlip.Exists())
                 locationBlip.Delete();
 
-            suspectVehicle = await Vehicle.Spawn(vehicleHashes.Random(), location);
+            suspectVehicle = await this.VehicleSpawn(vehicleHashes.Random(), location);
 
             if (suspectVehicle == null)
             {
@@ -80,7 +80,7 @@ namespace Curiosity.TrafficViolations.Missions
 
             Mission.RegisterVehicle(suspectVehicle);
 
-            suspect = await Ped.Spawn(pedHashes.Random(), suspectVehicle.Position, sidewalk: true);
+            suspect = await PedSpawn(pedHashes.Random(), suspectVehicle.Position, sidewalk: true);
 
             if (suspect == null)
             {

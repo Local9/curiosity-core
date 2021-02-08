@@ -67,5 +67,6 @@ namespace Curiosity.Systems.Library.Models
         public bool NotificationBackup { get; set; } = false;
         public DateTime LastNotificationBackup { get; set; }
         public int PersonalVehicle { get; set; }
+        public RoutingBucket RoutingBucket { get; set; }
     }
 }
