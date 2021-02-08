@@ -11,8 +11,8 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         {
             menu.OnMenuOpen += Menu_OnMenuOpen;
 
-            _VehicleRemoteMenu.CreateMenu(menuVehicleRemote);
             menuVehicleRemote = InteractionMenu.MenuPool.AddSubMenu(menu, "Vehicle Remote Functions");
+            _VehicleRemoteMenu.CreateMenu(menuVehicleRemote);
 
             return menu;
         }

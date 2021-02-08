@@ -60,6 +60,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             menuCharacterHeritage = _MenuPool.AddSubMenu(menuMain, "Heritage");
             _CharacterHeritage.CreateMenu(menuCharacterHeritage);
+
             menuCharacterFeatures = _MenuPool.AddSubMenu(menuMain, "Features");
             _CharacterFeatures.CreateMenu(menuCharacterFeatures);
             menuCharacterAppearance = _MenuPool.AddSubMenu(menuMain, "Appearance");
