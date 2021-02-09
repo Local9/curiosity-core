@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity-world\client\</OutputPath>
+    <OutputPath>Y:\GTA\FXServer\legacy\curiosity-world\client\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>

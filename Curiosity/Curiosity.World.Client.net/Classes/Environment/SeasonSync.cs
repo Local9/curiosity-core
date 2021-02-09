@@ -43,12 +43,12 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnResourceStart));
 
             client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
-            //client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
-            //client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int>(OnSeasonsWeatherSync));
+            client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
+            client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int, float, float, float>(OnSeasonsWeatherSync));
 
             client.RegisterTickHandler(OnSeasonTimerTick);
-            // client.RegisterTickHandler(OnPopulationManagement);
-            // client.RegisterTickHandler(OnSnowCheck);
+            client.RegisterTickHandler(OnPopulationManagement);
+            client.RegisterTickHandler(OnSnowCheck);
 
             Log.Verbose($"[WORLD WEATHER] Init");
         }
@@ -113,11 +113,11 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
         private static async Task OnPopulationManagement()
         {
-            API.SetVehicleDensityMultiplierThisFrame(VEH_MULTIPLIER);
-            API.SetPedDensityMultiplierThisFrame(PED_MULTIPLIER);
-            API.SetRandomVehicleDensityMultiplierThisFrame(VEH_MULTIPLIER);
-            API.SetParkedVehicleDensityMultiplierThisFrame(VEH_PARKED_MULTIPLIER);
-            API.SetScenarioPedDensityMultiplierThisFrame(PED_MULTIPLIER, PED_MULTIPLIER);
+            API.SetVehicleDensityMultiplierThisFrame(1.0f);
+            API.SetPedDensityMultiplierThisFrame(1.0f);
+            API.SetRandomVehicleDensityMultiplierThisFrame(1.0f);
+            API.SetParkedVehicleDensityMultiplierThisFrame(1.0f);
+            API.SetScenarioPedDensityMultiplierThisFrame(1.0f, 1.0f);
         }
 
         private static async Task OnSeasonTimerTick()
@@ -148,7 +148,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             //}
         }
 
-        private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp)
+        private static async void OnSeasonsWeatherSync(int weather, bool blackout, int temp, float windSpeed, float windDirection, float rainIntensity)
         {
             if (_lastWeather == (WeatherTypes)weather) return;
 
@@ -160,7 +160,7 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
 
             ClearOverrideWeather();
             ClearWeatherTypePersist();
-            SetBlackout(blackout);
+            // SetBlackout(blackout);
 
             if (_lastSeason == Seasons.WINTER) // override to be sure 
             {
