@@ -26,7 +26,7 @@ namespace Curiosity.Core.Client.Managers
         private List<Location> Locations = new List<Location>();
         private List<Vector3> HospitalSpawns = new List<Vector3>();
 
-        string previousJob = "unemployed";
+        string currentJob = "unemployed";
         bool markerCooldown = false;
 
         public override void Begin()
@@ -40,7 +40,9 @@ namespace Curiosity.Core.Client.Managers
 
         private void OnJobDutyEvent(bool active, bool onDuty, string job)
         {
-            if (job == previousJob) return;
+            if (job == currentJob) return;
+
+            currentJob = job;
         }
 
         internal async Task OnGetLocations()
@@ -97,6 +99,7 @@ namespace Curiosity.Core.Client.Managers
                             markerData.VRotation = m.Rotation.AsVector();
                             markerData.VDirection = m.Direction.AsVector();
                             markerData.ContextAoe = m.ContextAoe;
+                            markerData.JobRequirement = m.JobRequirement;
 
                             MarkersAll.Add(markerData);
                         });
@@ -122,7 +125,10 @@ namespace Curiosity.Core.Client.Managers
 
         void RefreshClose()
         {
-            MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => Game.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)).ToList();
+            MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => 
+                Game.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)
+                && (m.JobRequirement == currentJob || string.IsNullOrEmpty(m.JobRequirement))
+            ).ToList();
         }
 
         public MarkerData GetActiveMarker()
@@ -182,6 +188,8 @@ namespace Curiosity.Core.Client.Managers
 
             if (Game.IsControlJustPressed(0, (Control)activeMarker.Control))
             {
+                Logger.Debug(activeMarker.JobRequirement);
+
                 if (markerCooldown)
                 {
                     Notify.Alert("Cooldown Active, please wait...");

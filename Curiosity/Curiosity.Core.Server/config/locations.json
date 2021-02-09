@@ -118,7 +118,7 @@
         },
         {
           "control": 51,
-          "jobRequirement": "police",
+          "jobRequirement": "policeOfficer",
           "message": "Book Suspect",
           "helpText": "Press ~INPUT_CONTEXT~ to book ~b~Suspect",
           "event": "job:police:arrest",
