@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonFunctions.cs" />
-    <Compile Include="CuriosityPlugin.cs" />
+    <Compile Include="PluginManager.cs" />
     <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Extensions\DecoratorExtensions.cs" />

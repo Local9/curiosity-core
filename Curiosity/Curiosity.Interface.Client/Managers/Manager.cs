@@ -6,17 +6,17 @@ namespace Curiosity.Interface.Client.Managers
     {
         public static T GetModule()
         {
-            return CuriosityPlugin.Instance.GetManager<T>() ?? (!CuriosityPlugin.Instance.IsLoadingManager<T>()
-                       ? (T)CuriosityPlugin.Instance.LoadManager(typeof(T))
+            return PluginManager.Instance.GetManager<T>() ?? (!PluginManager.Instance.IsLoadingManager<T>()
+                       ? (T)PluginManager.Instance.LoadManager(typeof(T))
                        : null);
         }
 
-        public CuriosityPlugin Instance { get; set; }
+        public PluginManager Instance { get; set; }
         public EventSystem EventSystem => EventSystem.GetModule();
 
         protected Manager()
         {
-            Instance = CuriosityPlugin.Instance;
+            Instance = PluginManager.Instance;
         }
 
         public virtual void Begin()

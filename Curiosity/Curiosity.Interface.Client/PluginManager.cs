@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Interface.Client
 {
-    public class CuriosityPlugin : BaseScript
+    public class PluginManager : BaseScript
     {
-        public static CuriosityPlugin Instance { get; private set; }
+        public static PluginManager Instance { get; private set; }
         public static Random Rand = new Random();
         public static int MaximumPlayers { get; } = 32;
 
@@ -26,7 +26,7 @@ namespace Curiosity.Interface.Client
         public Dictionary<Type, List<MethodInfo>> TickHandlers { get; set; } = new Dictionary<Type, List<MethodInfo>>();
         public List<Type> RegisteredTickHandlers { get; set; } = new List<Type>();
 
-        public CuriosityPlugin()
+        public PluginManager()
         {
             Logger.Info("[Curiosity-UI]: Constructor Call from CitizenFX - BaseScript");
 
