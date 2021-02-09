@@ -19,7 +19,7 @@ namespace Curiosity.Interface.Client.Managers
                 .Add("operation", "JOB_ACTIVITY")
                 .Add("jobActive", active)
                 .Add("jobOnDuty", onDuty)
-                .Add("jobTitle", job.ToTitleCase())
+                .Add("jobTitle", job)
                 .Build();
 
             API.SendNuiMessage(msg);
