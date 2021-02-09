@@ -2,6 +2,7 @@ using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
@@ -9,6 +10,41 @@ namespace Curiosity.Core.Client.Interface
 {
     public class ScreenInterface
     {
+        public static Dictionary<VehicleClass, BlipSprite> VehicleClassBlips = new Dictionary<VehicleClass, BlipSprite>()
+        {
+            { VehicleClass.Boats, BlipSprite.Boat },
+            { VehicleClass.Commercial, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Compacts, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Coupes, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Cycles, BlipSprite.PersonalVehicleBike },
+            { VehicleClass.Emergency, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Helicopters, BlipSprite.Helicopter },
+            { VehicleClass.Industrial, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Military, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Motorcycles, BlipSprite.PersonalVehicleBike },
+            { VehicleClass.Muscle, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.OffRoad, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Planes, BlipSprite.Plane },
+            { VehicleClass.Sedans, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Service, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Sports, (BlipSprite)523 },
+            { VehicleClass.SportsClassics, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Super, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.SUVs, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Trains, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Utility, BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Vans, BlipSprite.PersonalVehicleCar },
+            { (VehicleClass)22, (BlipSprite)531 },
+        };
+        
+        public static Dictionary<VehicleHash, BlipSprite> VehicleBlips = new Dictionary<VehicleHash, BlipSprite>()
+        {
+            { VehicleHash.Rhino, BlipSprite.Tank },
+            { VehicleHash.Seashark, (BlipSprite)471 },
+            { VehicleHash.Seashark2, (BlipSprite)471 },
+            { VehicleHash.Seashark3, (BlipSprite)471 },
+        };
+
         public static bool TimeoutStateValue = false;
         public static void DrawText(string text, float scale, Vector2 position, Color color, bool centered = false)
         {

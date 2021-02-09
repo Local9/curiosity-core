@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Events;
 using Curiosity.Systems.Library.Events;
+using Curiosity.Core.Client.Interface;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -38,7 +39,7 @@ namespace Curiosity.Core.Client.Managers
                 if (Cache.PersonalVehicle.AttachedBlip != null)
                 {
                     Blip b = Cache.PersonalVehicle.AttachBlip();
-                    b.Sprite = (IsBike) ? BlipSprite.PersonalVehicleCar : BlipSprite.PersonalVehicleBike;
+                    b.Sprite = (ScreenInterface.VehicleClassBlips.ContainsKey(Cache.PersonalVehicle.ClassType)) ? ScreenInterface.VehicleClassBlips[Cache.PersonalVehicle.ClassType] : BlipSprite.PersonalVehicleCar;
                     b.Scale = 0.85f;
                     b.Color = BlipColor.White;
                     b.Priority = 10;
@@ -48,6 +49,43 @@ namespace Curiosity.Core.Client.Managers
                 Game.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle, VehicleSeat.Driver);
 
                 Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+
+                return null;
+            }));
+            EventSystem.Attach("entity:player:trailer", new AsyncEventCallback(async metadata =>
+            {
+                int vehId = API.NetworkGetEntityFromNetworkId(metadata.Find<int>(0));
+
+                if (!API.DoesEntityExist(vehId)) return null;
+
+                if (Cache.PersonalTrailer != null)
+                {
+                    if (Cache.PersonalTrailer.Exists())
+                    {
+                        EventSystem.GetModule().Send("entity:delete", Cache.PersonalTrailer.NetworkId);
+
+                        await Cache.PersonalTrailer.FadeOut();
+                        Cache.PersonalTrailer.Delete();
+                    }
+                }
+
+                Vehicle vehicle = new Vehicle(vehId);
+
+                await vehicle.FadeIn();
+
+                Cache.PersonalTrailer = vehicle;
+
+                if (Cache.PersonalTrailer.AttachedBlip != null)
+                {
+                    Blip b = Cache.PersonalTrailer.AttachBlip();
+                    b.Sprite = (BlipSprite)479;
+                    b.Scale = 0.85f;
+                    b.Color = BlipColor.White;
+                    b.Priority = 10;
+                    b.Name = "Personal Trailer";
+                }
+
+                Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
 
                 return null;
             }));

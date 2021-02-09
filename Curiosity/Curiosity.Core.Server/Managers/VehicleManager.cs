@@ -21,6 +21,13 @@ namespace Curiosity.Core.Server.Managers
                 Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
+            EventSystem.GetModule().Attach("vehicle:log:player:trailer", new EventCallback(metadata =>
+            {
+                int netId = metadata.Find<int>(0);
+                PluginManager.ActiveUsers[metadata.Sender].PersonalTrailer = netId;
+                Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
+                return false;
+            }));
 
             //EventSystem.GetModule().Attach("vehicle:spawn", new EventCallback(metadata =>
             //{
