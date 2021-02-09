@@ -8,6 +8,8 @@ namespace Curiosity.Core.Client.Managers
 {
     public class EntityManager : Manager<EntityManager>
     {
+        bool IsBike => (Cache.PersonalVehicle == null) ? false : Cache.PersonalVehicle.ClassType == VehicleClass.Motorcycles || Cache.PersonalVehicle.ClassType == VehicleClass.Cycles;
+
         public override void Begin()
         {
             EventSystem.Attach("entity:player:vehicle", new AsyncEventCallback(async metadata =>
@@ -32,6 +34,17 @@ namespace Curiosity.Core.Client.Managers
                 await vehicle.FadeIn();
 
                 Cache.PersonalVehicle = vehicle;
+
+                if (Cache.PersonalVehicle.AttachedBlip != null)
+                {
+                    Blip b = Cache.PersonalVehicle.AttachBlip();
+                    b.Sprite = (IsBike) ? BlipSprite.PersonalVehicleCar : BlipSprite.PersonalVehicleBike;
+                    b.Scale = 0.85f;
+                    b.Color = BlipColor.White;
+                    b.Priority = 10;
+                    b.Name = "Personal Vehicle";
+                }
+
                 Game.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle, VehicleSeat.Driver);
 
                 Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
