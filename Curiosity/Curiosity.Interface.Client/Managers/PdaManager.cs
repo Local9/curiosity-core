@@ -48,8 +48,6 @@ namespace Curiosity.Interface.Client.Managers
 
             Instance.AttachNuiHandler("GetHeadshot", new AsyncEventCallback(async metadata =>
             {
-                Logger.Info($"Generating Headshot");
-
                 await CreatePlayerHeadshot();
 
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_HEADSHOT")
