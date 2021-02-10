@@ -162,6 +162,19 @@ namespace Curiosity.StolenVehicle.Missions
                 }
             }
 
+            if (criminal.IsInVehicle)
+            {
+                float roll = API.GetEntityRoll(stolenVehicle.Handle);
+                if ((roll > 75.0f || roll < -75.0f) && stolenVehicle.Fx.Speed < 2f)
+                {
+                    API.DisableControlAction(2, 59, true);
+                    API.DisableControlAction(2, 60, true);
+                    stolenVehicle.Fx.IsEngineRunning = false;
+                    await BaseScript.Delay(2000);
+                    criminal.Task.LeaveVehicle((LeaveVehicleFlags)4160);
+                }
+            }
+
             if (!criminal.IsKneeling && !criminal.IsInVehicle && !criminal.IsHandcuffed)
             {
                 TaskFleeVehicle(criminal);
