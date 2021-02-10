@@ -22,9 +22,9 @@ namespace Curiosity.Core.Server.Managers
                 int currentBucket = API.GetPlayerRoutingBucket(player.Handle);
 
                 if (currentBucket != 1)
-                    API.SetPlayerRoutingBucket(player.Handle, (int)RoutingBucket.MAIN_WORLD);
+                    API.SetPlayerRoutingBucket(player.Handle, (int)RoutingBucket.WORLD_MAIN);
 
-                PluginManager.ActiveUsers[metadata.Sender].RoutingBucket = RoutingBucket.MAIN_WORLD;
+                PluginManager.ActiveUsers[metadata.Sender].RoutingBucket = RoutingBucket.WORLD_MAIN;
 
                 return null;
             }));

@@ -50,6 +50,33 @@ namespace Curiosity.Core.Server.Commands.Impl
                 ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' respawned.");
             }
         }
+
+        [CommandInfo(new[] { "world" })]
+        public class PlayerWorld : ICommand
+        {
+            public void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    ChatManager.OnChatMessage(player, $"Missing argument.");
+                    return;
+                }
+
+                string arg = arguments.ElementAt(0);
+                if (!int.TryParse(arg, out int worldId))
+                {
+                    ChatManager.OnChatMessage(player, $"Argument is not a valid number.");
+                    return;
+                }
+
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[player.Handle.ToInt()];
+                curiosityUser.RoutingBucket = (RoutingBucket)worldId;
+
+                API.SetPlayerRoutingBucket(player.Handle, worldId);
+
+                ChatManager.OnChatMessage(player, $"Player '{curiosityUser.LatestName}' changed world #{worldId}.");
+            }
+        }
         #endregion
 
         #region Vehicles ONESYNC

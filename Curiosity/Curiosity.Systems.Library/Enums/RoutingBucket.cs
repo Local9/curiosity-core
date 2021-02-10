@@ -2,7 +2,9 @@
 {
     public enum RoutingBucket
     {
-        CHARACTER_LOADING = 0,
-        MAIN_WORLD = 1
+        WORLD_CHARACTER_LOADING,
+        WORLD_MAIN,
+        WORLD_RACING,
+        WORLD_MISSION,
     }
 }
