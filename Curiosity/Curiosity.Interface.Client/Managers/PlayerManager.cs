@@ -2,6 +2,8 @@
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Models.PDA;
+using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
 
@@ -40,11 +42,14 @@ namespace Curiosity.Interface.Client.Managers
                         break;
                 }
 
+                PlayerProfile pp = new PlayerProfile();
+                pp.UserID = curiosityUser.UserId;
+                pp.Name = curiosityUser.LatestName;
+                pp.Role = curiosityUser.Role.GetStringValue();
+                pp.Wallet = curiosityUser.Character.Cash;
+
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
-                        .Add("name", curiosityUser?.LatestName)
-                        .Add("userId", curiosityUser?.UserId)
-                        .Add("role", role)
-                        .Add("wallet", curiosityUser?.Character?.Cash)
+                        .Add("profile", pp)
                         .Build();
 
                 API.SendNuiMessage(jsn);
