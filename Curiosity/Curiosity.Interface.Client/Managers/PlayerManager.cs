@@ -20,6 +20,7 @@ namespace Curiosity.Interface.Client.Managers
                 CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("character:get:profile");
 
                 if (curiosityUser == null) return null;
+                if (curiosityUser.Character == null) return null;
 
                 PlayerProfile pp = new PlayerProfile();
                 pp.UserID = curiosityUser.UserId;
