@@ -17,6 +17,8 @@ namespace Curiosity.Interface.Client.Managers
         {
             Instance.AttachNuiHandler("PlayerProfile", new AsyncEventCallback(async metadata =>
             {
+                await Session.Loading();
+
                 CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("character:get:profile");
 
                 if (curiosityUser == null) return null;
