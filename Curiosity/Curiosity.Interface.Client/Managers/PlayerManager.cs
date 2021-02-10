@@ -17,30 +17,9 @@ namespace Curiosity.Interface.Client.Managers
         {
             Instance.AttachNuiHandler("PlayerProfile", new AsyncEventCallback(async metadata =>
             {
-                string role = "USER";
-
                 CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("character:get:profile");
 
                 if (curiosityUser == null) return null;
-
-                switch (curiosityUser.Role)
-                {
-                    case Role.DONATOR_LIFE:
-                        role = "LifeV Early Supporter";
-                        break;
-                    case Role.DONATOR_LEVEL_1:
-                        role = "LifeV Supporter I";
-                        break;
-                    case Role.DONATOR_LEVEL_2:
-                        role = "LifeV Supporter II";
-                        break;
-                    case Role.DONATOR_LEVEL_3:
-                        role = "LifeV Supporter III";
-                        break;
-                    default:
-                        role = $"{curiosityUser.Role}".ToLowerInvariant();
-                        break;
-                }
 
                 PlayerProfile pp = new PlayerProfile();
                 pp.UserID = curiosityUser.UserId;
