@@ -43,12 +43,12 @@ namespace Curiosity.GameWorld.Client.net.Classes.Environment
             client.RegisterEventHandler("onClientResourceStart", new Action<string>(OnResourceStart));
 
             client.RegisterEventHandler("curiosity:client:seasons:sync:time", new Action<double, double, bool>(OnSyncTime));
-            //client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
-            //client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int, float, float, float>(OnSeasonsWeatherSync));
+            client.RegisterEventHandler("curiosity:client:seasons:sync:season", new Action<int, int, int>(GetOnSeasonsTimeSync));
+            client.RegisterEventHandler("curiosity:client:seasons:sync:weather", new Action<int, bool, int, float, float, float>(OnSeasonsWeatherSync));
 
             client.RegisterTickHandler(OnSeasonTimerTick);
-            //client.RegisterTickHandler(OnPopulationManagement);
-            //client.RegisterTickHandler(OnSnowCheck);
+            client.RegisterTickHandler(OnPopulationManagement);
+            client.RegisterTickHandler(OnSnowCheck);
 
             Log.Verbose($"[WORLD WEATHER] Init");
         }
