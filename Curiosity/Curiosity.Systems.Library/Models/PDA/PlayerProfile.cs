@@ -16,5 +16,11 @@ namespace Curiosity.Systems.Library.Models.PDA
 
         [DataMember(Name = "wallet")]
         public long? Wallet;
+
+        [DataMember(Name = "isAdmin")]
+        public bool IsAdmin;
+
+        [DataMember(Name = "isStaff")]
+        public bool IsStaff;
     }
 }

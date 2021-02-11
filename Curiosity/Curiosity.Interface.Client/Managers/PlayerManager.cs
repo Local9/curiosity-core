@@ -30,6 +30,9 @@ namespace Curiosity.Interface.Client.Managers
                 pp.Role = curiosityUser.Role.GetStringValue();
                 pp.Wallet = curiosityUser.Character.Cash;
 
+                pp.IsAdmin = curiosityUser.IsAdmin;
+                pp.ISStaff = curiosityUser.IsStaff;
+
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
                         .Add("profile", pp)
                         .Build();
