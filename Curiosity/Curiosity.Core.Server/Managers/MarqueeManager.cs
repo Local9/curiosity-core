@@ -18,7 +18,7 @@ namespace Curiosity.Core.Server.Managers
             "Find any bugs? Please report them to our forums: <span style='color:#ff9900; font-weight: bold'>forums.lifev.net</span>",
             "Please use reports to notify us of rule breakers",
             "Please remember to be friendly to one another",
-            "To read our rules Press the <span style='color:dodgerblue; font-weight: bold'>F11</span> or <span style='color:dodgerblue; font-weight: bold'>HOME</span> key",
+            "To read our rules Press the <span style='color:dodgerblue; font-weight: bold'>HOME</span> key",
             "<span style='color:dodgerblue; font-weight: bold'>Support us:</span> <Span color='#ff9900; font-weight: bold'>patreon.com/lifev</span>",
             "To read our guides press the <span style='color:dodgerblue; font-weight: bold'>F11</span> or <span style='color:dodgerblue; font-weight: bold'>HOME</span> key",
         };
