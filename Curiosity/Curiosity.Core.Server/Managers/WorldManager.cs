@@ -126,12 +126,12 @@ namespace Curiosity.Core.Server.Managers
 
                 double newBaseTime = (secondsSinceEpoch / 2) + 360;
 
-                _baseTime = newBaseTime;
+                _baseTime = IsTimeFrozen ? _baseTime : newBaseTime;
 
                 lastTimeTick = DateTime.Now;
             }
 
-            await BaseScript.Delay(100);
+            await BaseScript.Delay(250);
         }
 
         [TickHandler]
