@@ -32,9 +32,11 @@ namespace Curiosity.Core.Server.Commands.Impl
                 string arg = arguments.ElementAt(0);
                 arg = arg.ToUpper();
 
+                WorldManager world = WorldManager.GetModule();
+
                 if (Enum.TryParse(arg, out WeatherType weather))
                 {
-                    WorldManager.WorldInstance.SetWeatherForAllRegions(weather);
+                    world.SetWeatherForAllRegions(weather);
                     ChatManager.OnChatMessage(player, $"Weather: {weather.GetStringValue()}");
                     return;
                 }
@@ -42,7 +44,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                 switch(arg)
                 {
                     case "FREEZE":
-                        WorldManager.WorldInstance.IsWeatherFrozen = !WorldManager.WorldInstance.IsWeatherFrozen;
+                        world.IsWeatherFrozen = !WorldManager.WorldInstance.IsWeatherFrozen;
                         ChatManager.OnChatMessage(player, WorldManager.WorldInstance.IsWeatherFrozen ? "Weather Frozen" : "Weather Unfrozen");
                         break;
                     default:
@@ -65,18 +67,20 @@ namespace Curiosity.Core.Server.Commands.Impl
 
                 string arg1 = arguments.ElementAt(0);
 
+                WorldManager world = WorldManager.GetModule();
+
                 if (arguments.Count > 1)
                 {
                     string arg2 = arguments.ElementAt(1);
 
                     if (int.TryParse(arg1, out int hour))
                     {
-                        WorldManager.WorldInstance.ShiftTimeToHour(hour);
+                        world.ShiftTimeToHour(hour);
                     }
 
                     if (int.TryParse(arg2, out int minute))
                     {
-                        WorldManager.WorldInstance.ShiftTimeToMinute(minute);
+                        world.ShiftTimeToMinute(minute);
                     }
                     return;
                 }
@@ -99,16 +103,16 @@ namespace Curiosity.Core.Server.Commands.Impl
                         newHour = 22;
                         break;
                     case "freeze":
-                        WorldManager.WorldInstance.IsTimeFrozen = !WorldManager.WorldInstance.IsTimeFrozen;
-                        ChatManager.OnChatMessage(player, WorldManager.WorldInstance.IsTimeFrozen ? "Time Frozen" : "Time Unfrozen");
+                        world.IsTimeFrozen = !world.IsTimeFrozen;
+                        ChatManager.OnChatMessage(player, world.IsTimeFrozen ? "Time Frozen" : "Time Unfrozen");
                         return;
                     default:
                         ChatManager.OnChatMessage(player, $"Argument '{arg1}' unknown.");
                         return;
                 }
                 ChatManager.OnChatMessage(player, $"Set Time: {arg1}");
-                WorldManager.WorldInstance.ShiftTimeToHour(newHour);
-                WorldManager.WorldInstance.ShiftTimeToMinute(newMinute);
+                world.ShiftTimeToHour(newHour);
+                world.ShiftTimeToMinute(newMinute);
             }
         }
         #endregion
