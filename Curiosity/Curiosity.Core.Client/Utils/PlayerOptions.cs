@@ -97,6 +97,8 @@ namespace Curiosity.Core.Client.Utils
         {
             int randomEvent = Utility.RANDOM.Next(3);
 
+            Game.PlayerPed.IsInvincible = false; // Well, you gotta die!
+
             //if (randomEvent == 1)
             if (randomEvent == 1)
             {
