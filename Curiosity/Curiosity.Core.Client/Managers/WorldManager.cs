@@ -225,7 +225,7 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 string prefix = API.NetworkIsPlayerTalking(player.Handle) ? "~b~" : "~w~";
-                ScreenInterface.Draw3DText(player.Character.Position, $"[{player.Handle}] {prefix}{player.Name}", 40, 50);
+                ScreenInterface.Draw3DText(player.Character.Position, $"[{player.ServerId}] {prefix}{player.Name}", 40, 50);
             }
         }
     }
