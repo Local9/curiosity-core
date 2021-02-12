@@ -57,7 +57,7 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!canPay) return false;
 
-                await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (int)cost * -1);
+                curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (int)cost * -1);
 
                 return true;
             }));
