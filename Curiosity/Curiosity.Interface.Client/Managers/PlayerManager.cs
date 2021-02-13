@@ -1,5 +1,4 @@
 ﻿using CitizenFX.Core.Native;
-using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.PDA;
@@ -31,7 +30,7 @@ namespace Curiosity.Interface.Client.Managers
                 pp.Wallet = curiosityUser.Character.Cash;
 
                 pp.IsAdmin = curiosityUser.IsAdmin;
-                pp.ISStaff = curiosityUser.IsStaff;
+                pp.IsStaff = curiosityUser.IsStaff;
 
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
                         .Add("profile", pp)
