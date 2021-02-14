@@ -174,7 +174,7 @@ namespace Curiosity.Core.Client.Managers
                 if (player.Character.AttachedBlip == null)
                 {
                     blip = player.Character.AttachBlip();
-                    blip.Sprite = BlipSprite.Player;
+                    blip.Sprite = BlipSprite.Standard;
                     blip.Scale = 0.85f;
 
                     API.SetBlipCategory(blip.Handle, 7);
@@ -224,8 +224,11 @@ namespace Curiosity.Core.Client.Managers
                     }
                 }
 
-                string prefix = API.NetworkIsPlayerTalking(player.Handle) ? "~b~" : "~w~";
-                ScreenInterface.Draw3DText(player.Character.Position, $"[{player.ServerId}] {prefix}{player.Name}", 30, 50);
+                if (player.Character.IsVisible)
+                {
+                    string prefix = API.NetworkIsPlayerTalking(player.Handle) ? "~b~" : "~w~";
+                    ScreenInterface.Draw3DText(player.Character.Position, $"[{player.ServerId}] {prefix}{player.Name}", 30, 50);
+                }
             }
         }
     }
