@@ -78,7 +78,8 @@ namespace Curiosity.Core.Server.Managers
 
                 return null;
             }));
-            
+
+            // TODO: Character
             EventSystem.GetModule().Attach("user:job", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
@@ -88,6 +89,8 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
+
+            // TODO: Character
             EventSystem.GetModule().Attach("user:personal:vehicle", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
@@ -97,6 +100,7 @@ namespace Curiosity.Core.Server.Managers
                 return null;
             }));
 
+            // TODO: Character
             EventSystem.GetModule().Attach("user:job:notification:backup", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
