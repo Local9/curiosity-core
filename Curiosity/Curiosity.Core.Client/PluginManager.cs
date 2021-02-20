@@ -24,6 +24,8 @@ namespace Curiosity.Core.Client
     {
         public const string DECOR_PED_OWNER = "PED_OWNER";
 
+        private bool IsAfkKickEnabled = false;
+
         public static PluginManager Instance { get; private set; }
         public static Random Rand = new Random();
         public static int MaximumPlayers { get; } = 32;
@@ -140,37 +142,37 @@ namespace Curiosity.Core.Client
                     Local.Character.Save();
                 }
 
-                //if (!Cache.Player.User.IsStaff)
-                //{
-                //    if (lastPosition != (lastPosition = Game.PlayerPed.Position))
-                //        lastTimePlayerStayedStill = DateTime.Now;
+                if (!Cache.Player.User.IsStaff && IsAfkKickEnabled)
+                {
+                    if (lastPosition != (lastPosition = Game.PlayerPed.Position))
+                        lastTimePlayerStayedStill = DateTime.Now;
 
-                //    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds >= 900)
-                //    {
-                //        EventSystem.GetModule().Send("user:kick:afk");
-                //        return;
-                //    }
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds >= 900)
+                    {
+                        EventSystem.GetModule().Send("user:kick:afk");
+                        return;
+                    }
 
-                //    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 780)
-                //    {
-                //        Notify.Custom("Time remaining before you're kicked for idling: 13m00s");
-                //    }
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 780)
+                    {
+                        Notify.Custom("Time remaining before you're kicked for idling: 13m00s");
+                    }
 
-                //    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 600)
-                //    {
-                //        Notify.Custom("Time remaining before you're kicked for idling: 10m00s");
-                //    }
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 600)
+                    {
+                        Notify.Custom("Time remaining before you're kicked for idling: 10m00s");
+                    }
 
-                //    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 300)
-                //    {
-                //        Notify.Custom("Time remaining before you're kicked for idling: 05m00s");
-                //    }
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 300)
+                    {
+                        Notify.Custom("Time remaining before you're kicked for idling: 05m00s");
+                    }
 
-                //    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 180)
-                //    {
-                //        Notify.Custom("Time remaining before you're kicked for idling: 02m00s");
-                //    }
-                //}
+                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 180)
+                    {
+                        Notify.Custom("Time remaining before you're kicked for idling: 02m00s");
+                    }
+                }
             }
 
             await Delay(5000);
