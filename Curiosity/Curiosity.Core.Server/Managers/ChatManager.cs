@@ -6,6 +6,8 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -13,23 +15,36 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
-            EventSystem.GetModule().Attach("chat:global", new AsyncEventCallback(async metadata => {
+            EventSystem.GetModule().Attach("chat:message", new AsyncEventCallback(async metadata => {
 
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                List<CuriosityUser> playersInSameWorld = PluginManager.ActiveUsers.Select(x => x.Value).Where(x => x.RoutingBucket == curiosityUser.RoutingBucket).ToList();
 
-                ChatMessage chatMessage = new ChatMessage();
+                string message = metadata.Find<string>(0);
+                string channel = metadata.Find<string>(1);
 
-                chatMessage.Name = curiosityUser.LatestName;
-                chatMessage.Role = $"{curiosityUser.Role}";
-                chatMessage.Message = metadata.Find<string>(0);
-                chatMessage.Channel = metadata.Find<string>(1);
+                switch (channel)
+                {
+                    case "universe":
+                    case "help":
+                        EventSystem.GetModule().SendAll("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
+                        break;
+                    case "global":
+                        playersInSameWorld.ForEach(u =>
+                        {
+                            u.Send("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
+                        });
+                        break;
+                    case "local":
+                        playersInSameWorld.Select(x => x).Where(x => Vector3.Distance(x.Character.LastPosition.AsVector(), curiosityUser.Character.LastPosition.AsVector()) < 100f).ToList().ForEach(p =>
+                        {
+                            p.Send("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
+                        });
+                        break;
+                }
 
-                string jsonMessage = JsonConvert.SerializeObject(chatMessage);
-
-                EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
-
-                string discordMessageStart = $"[{metadata.Sender}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
-                string discordMessage = chatMessage.Message.Trim('"');
+                string discordMessageStart = $"[{DateTime.Now.ToString("HH:mm")}] [W: {curiosityUser.RoutingBucket}, SH: {metadata.Sender}, CH: {channel}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
+                string discordMessage = message.Trim('"');
 
                 DiscordClient.DiscordInstance.SendChatMessage(discordMessageStart, discordMessage);
 

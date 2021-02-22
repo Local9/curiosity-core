@@ -4,7 +4,6 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
-using System.Threading.Tasks;
 
 namespace Curiosity.Interface.Client.Managers
 {
@@ -19,7 +18,23 @@ namespace Curiosity.Interface.Client.Managers
         {
             EventSystem.Attach("chat:receive", new EventCallback(metadata =>
             {
-                API.SendNuiMessage(metadata.Find<string>(0));
+                JsonBuilder jsonBuilder = new JsonBuilder();
+                jsonBuilder.Add("operation", "CHAT");
+                jsonBuilder.Add("subOperation", "NEW_MESSAGE");
+                jsonBuilder.Add("message", new {
+                    role = metadata.Find<string>(1),
+                    channel = metadata.Find<string>(3),
+                    activeJob = metadata.Find<string>(4),
+                    timestamp = DateTime.Now.ToString("HH:mm"),
+                    name = metadata.Find<string>(0),
+                    message = metadata.Find<string>(2)
+                });
+
+                string nuiMessage = jsonBuilder.Build();
+
+
+                API.SendNuiMessage(nuiMessage);
+
                 return null;
             }));
 
@@ -42,7 +57,7 @@ namespace Curiosity.Interface.Client.Managers
                 }
                 else
                 {
-                    EventSystem.Send("chat:global", message, chatChannel);
+                    EventSystem.Send("chat:message", message, chatChannel);
                 }
                 return null;
             }));
@@ -83,9 +98,10 @@ namespace Curiosity.Interface.Client.Managers
             {
                 if (IsChatboxOpen != state)
                 {
-                    ChatState chatState = new ChatState();
-                    chatState.showChat = state;
-                    API.SendNuiMessage(JsonConvert.SerializeObject(chatState));
+                    JsonBuilder jsonBuilder = new JsonBuilder();
+                    jsonBuilder.Add("operations", "CHAT");
+                    jsonBuilder.Add("subOperation", state ? "SHOW_CHAT" : "HIDE_CHAT");
+                    API.SendNuiMessage(jsonBuilder.Build());
 
                     IsChatboxOpen = state;
 
