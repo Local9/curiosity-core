@@ -22,5 +22,8 @@ namespace Curiosity.Systems.Library.Models.PDA
 
         [DataMember(Name = "isStaff")]
         public bool IsStaff;
+
+        [DataMember(Name = "headshot")]
+        public string Headshot;
     }
 }

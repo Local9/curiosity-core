@@ -1,4 +1,5 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using System;
 
 namespace Curiosity.Interface.Client.Managers
@@ -25,6 +26,9 @@ namespace Curiosity.Interface.Client.Managers
         private void OnClientResourceStart(string resourceName)
         {
             if (API.GetCurrentResourceName() != resourceName) return;
+
+            if (Game.PlayerPed.IsAlive)
+                Session.HasSpawned = true;
         }
 
         private void OnPlayerSpawned(dynamic obj)

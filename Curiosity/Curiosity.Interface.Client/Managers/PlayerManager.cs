@@ -1,21 +1,25 @@
-﻿using CitizenFX.Core.Native;
+﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.PDA;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Interface.Client.Managers
 {
     public class PlayerManager : Manager<PlayerManager>
     {
         DateTime lastTick = DateTime.Now;
+        string CurrentPedHeadshot;
 
         public override void Begin()
         {
-            Instance.AttachNuiHandler("PlayerProfile", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("GetProfile", new AsyncEventCallback(async metadata =>
             {
+                await CreatePlayerHeadshot();
                 await Session.Loading();
 
                 CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("character:get:profile");
@@ -31,6 +35,7 @@ namespace Curiosity.Interface.Client.Managers
 
                 pp.IsAdmin = curiosityUser.IsAdmin;
                 pp.IsStaff = curiosityUser.IsStaff;
+                pp.Headshot = $"https://nui-img/{CurrentPedHeadshot}/{CurrentPedHeadshot}";
 
                 string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
                         .Add("profile", pp)
@@ -85,6 +90,23 @@ namespace Curiosity.Interface.Client.Managers
 
                 return null;
             }));
+        }
+
+        private async Task CreatePlayerHeadshot()
+        {
+            if (!string.IsNullOrEmpty(CurrentPedHeadshot)) return;
+
+            int handle = API.RegisterPedheadshot(Game.PlayerPed.Handle);
+            int failCount = 0;
+            while (!API.IsPedheadshotReady(handle) || !API.IsPedheadshotValid(handle))
+            {
+                await BaseScript.Delay(100);
+                failCount++;
+
+                if (failCount >= 10)
+                    break;
+            }
+            CurrentPedHeadshot = API.GetPedheadshotTxdString(handle);
         }
     }
 }
