@@ -152,6 +152,9 @@ namespace Curiosity.Core.Server.Managers
                     return null;
                 }
 
+                Vehicle vehicle = new Vehicle(vehicleId);
+                vehicle.State.Set("VEH_SPAWNED", true, true);
+
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);

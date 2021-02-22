@@ -20,6 +20,7 @@ namespace Curiosity.Core.Client.Managers
         private const string STATE_VEH_FUEL = "VEHICLE_FUEL";
         private const string STATE_VEH_FUEL_MULTIPLIER = "VEHICLE_FUEL_MULTIPLIER";
         private const string STATE_VEH_FUEL_SETUP = "VEHICLE_FUEL_SETUP";
+        private const string STATE_VEH_SPAWNED = "VEH_SPAWNED";
         private const float FUEL_PUMP_RANGE = 6f;
 
         private uint GAS_STATION_TESLA = 2140883938;
@@ -160,6 +161,12 @@ namespace Curiosity.Core.Client.Managers
             if (!setup)
             {
                 Logger.Debug($"VFM: {currentVehicle.Handle}:{setup}");
+
+                if (currentVehicle.State.Get(STATE_VEH_SPAWNED))
+                {
+                    minRandomFuel = 100f;
+                    maxRandomFuel = 100f;
+                }
 
                 float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (Utility.RANDOM.NextDouble()));
                 currentVehicle.State.Set(STATE_VEH_FUEL, randomFuel, true);
