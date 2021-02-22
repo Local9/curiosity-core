@@ -1,5 +1,5 @@
 ﻿using Curiosity.Systems.Library.Models;
-using Newtonsoft.Json;
+using System;
 
 namespace Curiosity.Core.Client.Interface
 {
@@ -7,14 +7,22 @@ namespace Curiosity.Core.Client.Interface
     {
         internal static void SendLocalMessage(string message)
         {
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.Channel = "chat";
-            chatMessage.Role = $"SERVER";
-            chatMessage.Name = "SERVER";
-            chatMessage.Message = message;
-            string json = JsonConvert.SerializeObject(chatMessage);
+            JsonBuilder jsonBuilder = new JsonBuilder();
+            jsonBuilder.Add("operation", "CHAT");
+            jsonBuilder.Add("subOperation", "NEW_MESSAGE");
+            jsonBuilder.Add("message", new
+            {
+                role = $"SERVER",
+                channel = "log",
+                activeJob = string.Empty,
+                timestamp = DateTime.Now.ToString("HH:mm"),
+                name = "SERVER",
+                message = message
+            });
 
-            PluginManager.Instance.ExportDictionary["curiosity-ui"].AddToChat(json);
+            string nuiMessage = jsonBuilder.Build();
+
+            PluginManager.Instance.ExportDictionary["curiosity-ui"].AddToChat(nuiMessage);
         }
     }
 }

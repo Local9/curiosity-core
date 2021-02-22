@@ -2,7 +2,6 @@
 using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Newtonsoft.Json;
 using System;
 
 namespace Curiosity.Interface.Client.Managers
@@ -99,7 +98,7 @@ namespace Curiosity.Interface.Client.Managers
                 if (IsChatboxOpen != state)
                 {
                     JsonBuilder jsonBuilder = new JsonBuilder();
-                    jsonBuilder.Add("operations", "CHAT");
+                    jsonBuilder.Add("operation", "CHAT");
                     jsonBuilder.Add("subOperation", state ? "SHOW_CHAT" : "HIDE_CHAT");
                     API.SendNuiMessage(jsonBuilder.Build());
 

@@ -43,6 +43,8 @@ namespace Curiosity.Core.Server.Managers
                         break;
                 }
 
+                // NOTE: Store messages in database
+
                 string discordMessageStart = $"[{DateTime.Now.ToString("HH:mm")}] [W: {curiosityUser.RoutingBucket}, SH: {metadata.Sender}, CH: {channel}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
                 string discordMessage = message.Trim('"');
 
@@ -92,42 +94,60 @@ namespace Curiosity.Core.Server.Managers
             int playerHandle = int.Parse(player.Handle);
             CuriosityUser user = PluginManager.ActiveUsers[playerHandle];
 
-            ChatMessage chatMessage = new ChatMessage();
+            JsonBuilder jsonBuilder = new JsonBuilder();
+            jsonBuilder.Add("operation", "CHAT");
+            jsonBuilder.Add("subOperation", "NEW_MESSAGE");
+            jsonBuilder.Add("message", new
+            {
+                role = $"SERVER",
+                channel = "log",
+                activeJob = string.Empty,
+                timestamp = DateTime.Now.ToString("HH:mm"),
+                name = "SERVER",
+                message = message
+            });
 
-            chatMessage.Name = "SERVER";
-            chatMessage.Role = "SERVER";
-            chatMessage.Message = message;
-            chatMessage.Channel = channel;
-
-            string jsonMessage = JsonConvert.SerializeObject(chatMessage);
+            string jsonMessage = JsonConvert.SerializeObject(jsonBuilder.Build());
 
             user.Send("chat:receive", jsonMessage);
         }
 
         public static void OnPlayerLogMessage(string message)
         {
-            ChatMessage chatMessage = new ChatMessage();
+            JsonBuilder jsonBuilder = new JsonBuilder();
+            jsonBuilder.Add("operation", "CHAT");
+            jsonBuilder.Add("subOperation", "NEW_MESSAGE");
+            jsonBuilder.Add("message", new
+            {
+                role = $"SERVER",
+                channel = "log",
+                activeJob = string.Empty,
+                timestamp = DateTime.Now.ToString("HH:mm"),
+                name = "[P-LOG]",
+                message = message
+            });
 
-            chatMessage.Name = "[P-LOG]";
-            chatMessage.Role = $"SERVER";
-            chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
-            chatMessage.Channel = "log";
-
-            string jsonMessage = JsonConvert.SerializeObject(chatMessage);
+            string jsonMessage = JsonConvert.SerializeObject(jsonBuilder.Build());
 
             EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
         }
 
         public static void OnLogMessage(string message)
         {
-            ChatMessage chatMessage = new ChatMessage();
+            JsonBuilder jsonBuilder = new JsonBuilder();
+            jsonBuilder.Add("operation", "CHAT");
+            jsonBuilder.Add("subOperation", "NEW_MESSAGE");
+            jsonBuilder.Add("message", new
+            {
+                role = $"SERVER",
+                channel = "log",
+                activeJob = string.Empty,
+                timestamp = DateTime.Now.ToString("HH:mm"),
+                name = "[S-LOG]",
+                message = message
+            });
 
-            chatMessage.Name = "[S-LOG]";
-            chatMessage.Role = $"SERVER";
-            chatMessage.Message = $"[{DateTime.Now.ToString("HH:mm:ss")}] {message}";
-            chatMessage.Channel = "log";
-
-            string jsonMessage = JsonConvert.SerializeObject(chatMessage);
+            string jsonMessage = JsonConvert.SerializeObject(jsonBuilder.Build());
 
             EventSystem.GetModule().SendAll("chat:receive", jsonMessage);
         }

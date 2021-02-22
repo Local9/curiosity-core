@@ -115,7 +115,7 @@ namespace Curiosity.Interface.Client.Managers
         }
 
         [TickHandler(SessionWait = true)]
-        private async Task OnCoreControls()
+        private async Task OnPdaControls()
         {
             if (IsCoreOpen && (Game.IsControlJustPressed(0, Control.FrontendCancel)
                 || Game.IsControlJustPressed(0, Control.CursorCancel)))
@@ -129,8 +129,7 @@ namespace Curiosity.Interface.Client.Managers
         public void SendPanelMessage()
         {
             string jsn = new JsonBuilder().Add("operation", "PANEL")
-            .Add("panel", "PDA")
-            .Add("main", IsCoreOpen)
+            .Add("show", IsCoreOpen)
             .Build();
 
             API.SendNuiMessage(jsn);
@@ -159,6 +158,7 @@ namespace Curiosity.Interface.Client.Managers
             if (Game.PlayerPed.IsDead) return;
 
             Model model = "prop_cs_tablet";
+            await model.Request(10000);
 
             Vector3 pos = Game.PlayerPed.Position;
             pos.Z += .2f;
