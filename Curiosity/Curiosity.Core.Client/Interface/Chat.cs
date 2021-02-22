@@ -5,7 +5,7 @@ namespace Curiosity.Core.Client.Interface
 {
     class Chat
     {
-        internal static void SendLocalMessage(string message)
+        internal static void SendLocalMessage(string message, string channel = "log", string name = "SERVER")
         {
             JsonBuilder jsonBuilder = new JsonBuilder();
             jsonBuilder.Add("operation", "CHAT");
@@ -13,10 +13,10 @@ namespace Curiosity.Core.Client.Interface
             jsonBuilder.Add("message", new
             {
                 role = $"SERVER",
-                channel = "log",
+                channel = channel,
                 activeJob = string.Empty,
                 timestamp = DateTime.Now.ToString("HH:mm"),
-                name = "SERVER",
+                name = name,
                 message = message
             });
 

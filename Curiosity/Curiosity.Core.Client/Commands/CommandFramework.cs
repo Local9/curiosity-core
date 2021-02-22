@@ -69,7 +69,7 @@ namespace Curiosity.Core.Client.Commands
 
             if (context.IsRestricted && !context.RequiredRoles.Contains(player.User.Role))
             {
-                Chat.SendLocalMessage("Restricted Command");
+                Chat.SendLocalMessage("Restricted Command", "help");
                 return;
             }
 
@@ -84,11 +84,11 @@ namespace Curiosity.Core.Client.Commands
 
             if (arguments.Count < 1)
             {
-                Chat.SendLocalMessage("Avaliable Commands:");
+                Chat.SendLocalMessage("Avaliable Commands:", "help");
 
                 foreach (var entry in registry)
                 {
-                    Chat.SendLocalMessage($"/{alias} {string.Join(", ", entry.Item1.Aliases)}");
+                    Chat.SendLocalMessage($"/{alias} {string.Join(", ", entry.Item1.Aliases)}", "help");
                 }
 
                 return;
@@ -110,7 +110,7 @@ namespace Curiosity.Core.Client.Commands
             }
 
             if (!matched) // NEED TO FIRE ON THE SERVER!
-                Chat.SendLocalMessage($"Command not found: {subcommand}");
+                Chat.SendLocalMessage($"Command not found: {subcommand}", "help");
         }
     }
 }
