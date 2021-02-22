@@ -39,9 +39,6 @@ namespace Curiosity.Interface.Client.Managers
 
             Instance.AttachNuiHandler("SendChatMessage", new EventCallback(metadata =>
             {
-                EnableChatbox(false);
-                API.SetNuiFocus(false, false);
-
                 string message = metadata.Find<string>(0);
                 string chatChannel = metadata.Find<string>(1);
 
@@ -64,6 +61,13 @@ namespace Curiosity.Interface.Client.Managers
             Instance.AttachNuiHandler("CloseChatMessage", new EventCallback(metadata =>
             {
                 EnableChatbox(false);
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("ReleaseMouse", new EventCallback(metadata =>
+            {
+                API.SetNuiFocus(false, false);
+                IsChatboxOpen = false;
                 return null;
             }));
 
@@ -100,6 +104,8 @@ namespace Curiosity.Interface.Client.Managers
                     JsonBuilder jsonBuilder = new JsonBuilder();
                     jsonBuilder.Add("operation", "CHAT");
                     jsonBuilder.Add("subOperation", state ? "SHOW_CHAT" : "HIDE_CHAT");
+                    jsonBuilder.Add("focus", state);
+
                     API.SendNuiMessage(jsonBuilder.Build());
 
                     IsChatboxOpen = state;

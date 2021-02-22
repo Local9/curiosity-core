@@ -4,7 +4,6 @@ using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
