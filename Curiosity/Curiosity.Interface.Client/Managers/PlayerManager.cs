@@ -12,7 +12,6 @@ namespace Curiosity.Interface.Client.Managers
 {
     public class PlayerManager : Manager<PlayerManager>
     {
-        DateTime lastTick = DateTime.Now;
         string CurrentPedHeadshot;
 
         public override void Begin()
