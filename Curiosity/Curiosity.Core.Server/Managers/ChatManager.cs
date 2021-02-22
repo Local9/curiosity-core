@@ -72,42 +72,17 @@ namespace Curiosity.Core.Server.Managers
             ));
         }
 
-        public static void OnChatMessage([FromSource] Player player, string message, string channel = "local")
+        public static void OnChatMessage([FromSource] Player player, string message, string channel = "help")
         {
             int playerHandle = int.Parse(player.Handle);
             CuriosityUser user = PluginManager.ActiveUsers[playerHandle];
-
-            ChatMessage chatMessage = new ChatMessage();
-
-            chatMessage.Name = user.LatestName;
-            chatMessage.Role = $"{user.Role}";
-            chatMessage.Message = message;
-            chatMessage.Channel = channel;
-
-            string jsonMessage = JsonConvert.SerializeObject(chatMessage);
-
-            user.Send("chat:receive", jsonMessage);
+            user.Send("chat:receive", "SERVER", "SERVER", message, channel, string.Empty);
         }
 
-        public static void OnServerMessage([FromSource] Player player, string message, string channel = "local")
+        public static void OnServerMessage([FromSource] Player player, string message, string channel = "help")
         {
             int playerHandle = int.Parse(player.Handle);
             CuriosityUser user = PluginManager.ActiveUsers[playerHandle];
-
-            JsonBuilder jsonBuilder = new JsonBuilder();
-            jsonBuilder.Add("operation", "CHAT");
-            jsonBuilder.Add("subOperation", "NEW_MESSAGE");
-            jsonBuilder.Add("message", new
-            {
-                role = $"SERVER",
-                channel = channel,
-                activeJob = string.Empty,
-                timestamp = DateTime.Now.ToString("HH:mm"),
-                name = "SERVER",
-                message = message
-            });
-
-            string jsonMessage = JsonConvert.SerializeObject(jsonBuilder.Build());
 
             user.Send("chat:receive", "SERVER", "SERVER", message, channel, string.Empty);
         }
@@ -117,27 +92,12 @@ namespace Curiosity.Core.Server.Managers
             if (!PluginManager.ActiveUsers.ContainsKey(playerHandle)) return;
 
             CuriosityUser user = PluginManager.ActiveUsers[playerHandle];
-            user.Send("chat:receive", "SERVER", "SERVER", "[P-LOG]", message, "log", string.Empty);
+            user.Send("chat:receive", "[P-LOG]", "SERVER", message, "log", string.Empty);
         }
 
         public static void OnLogMessage(string message)
         {
-            JsonBuilder jsonBuilder = new JsonBuilder();
-            jsonBuilder.Add("operation", "CHAT");
-            jsonBuilder.Add("subOperation", "NEW_MESSAGE");
-            jsonBuilder.Add("message", new
-            {
-                role = $"SERVER",
-                channel = "log",
-                activeJob = string.Empty,
-                timestamp = DateTime.Now.ToString("HH:mm"),
-                name = "[S-LOG]",
-                message = message
-            });
-
-            string jsonMessage = JsonConvert.SerializeObject(jsonBuilder.Build());
-
-            EventSystem.GetModule().SendAll("chat:receive", "SERVER", "SERVER", "[S-LOG]", message, "log", string.Empty);
+            EventSystem.GetModule().SendAll("chat:receive", "[S-LOG]", "SERVER", message, "log", string.Empty);
         }
     }
 }

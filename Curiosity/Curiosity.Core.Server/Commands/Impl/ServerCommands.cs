@@ -25,7 +25,7 @@ namespace Curiosity.Core.Server.Commands.Impl
             {
                 if (arguments.Count == 0)
                 {
-                    ChatManager.OnChatMessage(player, $"Missing weather type.");
+                    ChatManager.OnServerMessage(player, $"Missing weather type.");
                     return;
                 }
 
@@ -37,7 +37,7 @@ namespace Curiosity.Core.Server.Commands.Impl
                 if (Enum.TryParse(arg, out WeatherType weather))
                 {
                     world.SetWeatherForAllRegions(weather);
-                    ChatManager.OnChatMessage(player, $"Weather: {weather.GetStringValue()}");
+                    ChatManager.OnServerMessage(player, $"Weather: {weather.GetStringValue()}");
                     return;
                 }
 
@@ -45,10 +45,10 @@ namespace Curiosity.Core.Server.Commands.Impl
                 {
                     case "FREEZE":
                         world.IsWeatherFrozen = !WorldManager.WorldInstance.IsWeatherFrozen;
-                        ChatManager.OnChatMessage(player, WorldManager.WorldInstance.IsWeatherFrozen ? "Weather Frozen" : "Weather Unfrozen");
+                        ChatManager.OnServerMessage(player, WorldManager.WorldInstance.IsWeatherFrozen ? "Weather Frozen" : "Weather Unfrozen");
                         break;
                     default:
-                        ChatManager.OnChatMessage(player, $"Argument '{arg}' unknown");
+                        ChatManager.OnServerMessage(player, $"Argument '{arg}' unknown");
                         break;
                 }
             }
@@ -61,7 +61,7 @@ namespace Curiosity.Core.Server.Commands.Impl
             {
                 if (arguments.Count == 0)
                 {
-                    ChatManager.OnChatMessage(player, $"Missing arguments.");
+                    ChatManager.OnServerMessage(player, $"Missing arguments.");
                     return;
                 }
 
@@ -104,13 +104,13 @@ namespace Curiosity.Core.Server.Commands.Impl
                         break;
                     case "freeze":
                         world.IsTimeFrozen = !world.IsTimeFrozen;
-                        ChatManager.OnChatMessage(player, world.IsTimeFrozen ? "Time Frozen" : "Time Unfrozen");
+                        ChatManager.OnServerMessage(player, world.IsTimeFrozen ? "Time Frozen" : "Time Unfrozen");
                         return;
                     default:
-                        ChatManager.OnChatMessage(player, $"Argument '{arg1}' unknown.");
+                        ChatManager.OnServerMessage(player, $"Argument '{arg1}' unknown.");
                         return;
                 }
-                ChatManager.OnChatMessage(player, $"Set Time: {arg1}");
+                ChatManager.OnServerMessage(player, $"Set Time: {arg1}");
                 world.ShiftTimeToHour(newHour);
                 world.ShiftTimeToMinute(newMinute);
             }
