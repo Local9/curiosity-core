@@ -48,7 +48,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (name == "CEventNetworkPlayerEnteredVehicle")
                 {
-                    // Arg 0 - 128
+                    // Arg 0 - Player
                     // arg 1 - Vehicle Entity Handle
                     int arg0 = (int)args[1];
                     Entity ent = Entity.FromHandle((int)args[1]);
