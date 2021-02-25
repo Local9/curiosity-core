@@ -20,6 +20,8 @@ namespace Curiosity.Core.Client.Managers
             API.SetCanAttackFriendly(API.PlayerPedId(), false, false);
             API.StopPlayerSwitch();
 
+            Cache.UpdatePedId();
+
             var sound = new SoundSystem();
             var handle = Game.Player.Handle;
             var serverHandle = Game.Player.ServerId;

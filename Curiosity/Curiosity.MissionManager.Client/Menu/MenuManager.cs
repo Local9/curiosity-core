@@ -48,7 +48,7 @@ namespace Curiosity.MissionManager.Client.Menu
                 {
                     if (resourceName != API.GetCurrentResourceName()) return;
 
-                    Decorators.Set(Cache.PlayerPed.Handle, Decorators.PLAYER_MENU, false);
+                    Decorators.Set(API.PlayerPedId(), Decorators.PLAYER_MENU, false);
 
                     Setup();
                 };

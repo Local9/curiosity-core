@@ -50,6 +50,7 @@ namespace Curiosity.MissionManager.Client.Managers
             }
             catch (Exception ex)
             {
+                Cache.UpdatePedId();
                 Logger.Error($"OnWorldPedList -> {ex}");
             }
         }
@@ -99,6 +100,7 @@ namespace Curiosity.MissionManager.Client.Managers
             }
             catch (Exception ex)
             {
+                Cache.UpdatePedId();
                 Logger.Error($"OnPedStunnedProtectionTick -> {ex}");
             }
         }

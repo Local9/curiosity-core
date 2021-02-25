@@ -253,6 +253,8 @@ namespace Curiosity.Core.Client.Managers
 
         async void UpdateWeather()
         {
+            await Session.Loading();
+
             lastRunWeatherUpdate = DateTime.Now;
 
             Vector3 pos = Cache.PlayerPed.Position;

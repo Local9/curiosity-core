@@ -13,6 +13,8 @@ namespace Curiosity.MissionManager.Client.Managers
 
             var handle = Game.Player.Handle;
             var serverHandle = Game.Player.ServerId;
+            Cache.UpdatePedId();
+
             var pedHandle = Cache.PlayerPed.Handle;
 
             var user = await EventSystem.Request<CuriosityUser>("user:login");
