@@ -82,6 +82,8 @@ namespace Curiosity.Core.Client.Managers
 
             UpdateWeather();
             LoadIpls();
+
+            API.SetWeatherOwnedByNetwork(false);
         }
 
         private async void LoadScenarios()
