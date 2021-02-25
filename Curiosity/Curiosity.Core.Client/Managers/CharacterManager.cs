@@ -54,7 +54,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 while (API.GetPlayerSwitchState() < 3)
                 {
-                    await BaseScript.Delay(0);
+                    await BaseScript.Delay(100);
                 }
             }
 
@@ -212,7 +212,7 @@ namespace Curiosity.Core.Client.Managers
 
             Logger.Info("[Character] Session Joined...");
 
-            await SafeTeleport.Teleport(player.Entity.Id, position);
+            await SafeTeleport.Teleport(API.PlayerPedId(), position);
 
             Logger.Info("[Character] Teleported...");
 
