@@ -2,6 +2,7 @@
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Entities;
 using Curiosity.Systems.Library.Models;
+using System;
 
 namespace Curiosity.MissionManager.Client.Managers
 {
@@ -32,6 +33,13 @@ namespace Curiosity.MissionManager.Client.Managers
             Instance.DiscordRichPresence.Commit();
 
             Logger.Info($"[User] [{user.DiscordId}] Logged in with `{user.Role}`");
+
+            Instance.ExportRegistry.Add("RefreshPlayerPed", new Func<bool>(
+                () =>
+                {
+                    Cache.UpdatePedId();
+                    return false;
+                }));
         }
     }
 }

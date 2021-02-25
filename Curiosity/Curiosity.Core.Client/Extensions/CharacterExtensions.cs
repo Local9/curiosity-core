@@ -175,7 +175,7 @@ namespace Curiosity.Core.Client.Extensions
             Cache.PlayerPed.ClearLastWeaponDamage();
 
             API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.Heading, false, false);
-            Cache.UpdatePedId();
+            Cache.UpdatePedId(true);
 
             await Cache.PlayerPed.FadeIn();
 

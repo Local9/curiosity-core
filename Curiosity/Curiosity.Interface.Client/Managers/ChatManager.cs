@@ -66,7 +66,7 @@ namespace Curiosity.Interface.Client.Managers
 
             Instance.AttachNuiHandler("ReleaseMouse", new EventCallback(metadata =>
             {
-                API.SetNuiFocus(false, false);
+                OnCloseChat();
                 IsChatboxOpen = false;
                 return null;
             }));

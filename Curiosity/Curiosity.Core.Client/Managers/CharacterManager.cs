@@ -238,6 +238,8 @@ namespace Curiosity.Core.Client.Managers
 
             Screen.LoadingPrompt.Hide();
             player.EnableHud();
+
+            Cache.UpdatePedId(true);
         }
 
         private void SetupDecorators()

@@ -16,6 +16,7 @@ namespace Curiosity.Interface.Client.Managers
         private const string COMMAND_OPEN_PDA_LEGACY = "open_pda_legacy";
         private const string COMMAND_OPEN_PDA_HOME = "open_pda_new";
         public static PdaManager PdaInstance;
+        WeaponHash currentWeapon;
 
         public class Panel
         {
@@ -105,6 +106,9 @@ namespace Curiosity.Interface.Client.Managers
 
         private void OpenTablet()
         {
+            currentWeapon = Game.PlayerPed.Weapons.Current.Hash;
+            Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
+
             AddProp();
             string animationDict = "amb@world_human_tourist_map@male@base";
             string animationBase = "base";
@@ -118,6 +122,7 @@ namespace Curiosity.Interface.Client.Managers
             RemoveProp();
             Game.PlayerPed.Task.ClearAll();
             API.SetTransitionTimecycleModifier("DEFAULT", 5.0f);
+            Game.PlayerPed.Weapons.Select(currentWeapon);
         }
 
         private async void AddProp()

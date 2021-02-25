@@ -21,12 +21,24 @@ namespace Curiosity.Core.Client
             {
                 if (_ped == null)
                     UpdatePedId();
-
                 return _ped;
             }
             internal set => _ped = value;
         }
 
-        public static void UpdatePedId() => PlayerPed = new Ped(PlayerPedId());
+        static Cache()
+        {
+            _ped = new Ped(PlayerPedId());
+        }
+
+        public static void UpdatePedId(bool export = false)
+        {
+            PlayerPed = new Ped(PlayerPedId());
+
+            if (export)
+            {
+                PluginManager.Instance.ExportDictionary["curiosity-missions"].RefreshPlayerPed();
+            }
+        }
     }
 }

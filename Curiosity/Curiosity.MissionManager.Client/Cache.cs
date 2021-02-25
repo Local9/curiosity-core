@@ -12,16 +12,21 @@ namespace Curiosity.MissionManager.Client
         public static CuriosityCharacter Character => Player?.Character;
         public static Position Position => Entity.Position;
 
-        private static Ped ped;
+        private static Ped _ped;
         public static Ped PlayerPed
         {
             get
             {
-                if (ped == null)
+                if (_ped == null)
                     UpdatePedId();
-                return ped;
+                return _ped;
             }
-            internal set => ped = value;
+            internal set => _ped = value;
+        }
+
+        static Cache()
+        {
+            _ped = new Ped(PlayerPedId());
         }
 
         public static void UpdatePedId() => PlayerPed = new Ped(PlayerPedId());
