@@ -101,14 +101,14 @@ namespace Curiosity.Core.Server.Managers
                 }
             }
 
-            Logger.Debug($"Weather Region Init START");
+            Logger.Debug($"Weather Region START");
 
             foreach (KeyValuePair<Region, WeatherType> kvp in regionWeatherType)
             {
                 Logger.Debug($"Region: {kvp.Key} : {kvp.Value}");
             }
 
-            Logger.Debug($"Weather Region Init END");
+            Logger.Debug($"Weather Region END");
         }
 
         [TickHandler]
