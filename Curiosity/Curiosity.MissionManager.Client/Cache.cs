@@ -15,7 +15,12 @@ namespace Curiosity.MissionManager.Client
         private static Ped ped;
         public static Ped PlayerPed
         {
-            get => ped;
+            get
+            {
+                if (ped == null)
+                    UpdatePedId();
+                return ped;
+            }
             internal set => ped = value;
         }
 

@@ -14,11 +14,17 @@ namespace Curiosity.Core.Client
         public static Vehicle PersonalVehicle;
         public static Vehicle PersonalTrailer;
 
-        private static Ped ped;
+        private static Ped _ped;
         public static Ped PlayerPed
         {
-            get => ped;
-            internal set => ped = value;
+            get
+            {
+                if (_ped == null)
+                    UpdatePedId();
+
+                return _ped;
+            }
+            internal set => _ped = value;
         }
 
         public static void UpdatePedId() => PlayerPed = new Ped(PlayerPedId());
