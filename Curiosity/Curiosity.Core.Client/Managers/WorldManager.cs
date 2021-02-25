@@ -8,6 +8,7 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
@@ -16,9 +17,43 @@ namespace Curiosity.Core.Client.Managers
 {
     public class WorldManager : Manager<WorldManager>
     {
+        List<VehicleHash> vehiclesToSuppress = new List<VehicleHash>()
+        {
+            VehicleHash.Shamal,
+            VehicleHash.Luxor,
+            VehicleHash.Luxor2,
+            VehicleHash.Jet,
+            VehicleHash.Lazer,
+            VehicleHash.Titan,
+            VehicleHash.Barracks,
+            VehicleHash.Barracks2,
+            VehicleHash.Barracks3,
+            VehicleHash.Crusader,
+            VehicleHash.Rhino,
+            VehicleHash.Airtug,
+            VehicleHash.Ripley,
+            VehicleHash.Asea2,
+            VehicleHash.Burrito5,
+            VehicleHash.Emperor3,
+            VehicleHash.Mesa2,
+            VehicleHash.PoliceOld1,
+            VehicleHash.PoliceOld2,
+            VehicleHash.RancherXL2,
+            VehicleHash.Sadler2,
+            VehicleHash.Stockade3,
+            VehicleHash.Tractor3,
+            VehicleHash.Buzzard,
+            VehicleHash.Buzzard2,
+            VehicleHash.Cargobob,
+            VehicleHash.Cargobob2,
+            VehicleHash.Cargobob3,
+            VehicleHash.Cargobob4,
+        };
+
         WeatherType lastWeather = WeatherType.UNKNOWN;
         CuriosityWeather CuriosityWeather = new CuriosityWeather();
-        DateTime lastRun = DateTime.Now;
+        DateTime lastRunWeatherUpdate = DateTime.Now;
+        DateTime lastRunVehicleSuppression = DateTime.Now;
 
         // Time
         double clientBaseTime = 0;
@@ -51,9 +86,10 @@ namespace Curiosity.Core.Client.Managers
         private async void LoadScenarios()
         {
             await Session.Loading();
+            await BaseScript.Delay(10000);
             // Zancudo
             SetScenarioGroupEnabled("fort_zancudo_guards", true);
-            SetScenarioGroupEnabled("army_guard", true);
+            SetScenarioGroupEnabled("army_guard", false);
             SetScenarioGroupEnabled("army_heli", false);
             // Zancudo Types
             SetScenarioTypeEnabled("WORLD_VEHICLE_MILITARY_PLANES_SMALL", false);
@@ -208,7 +244,7 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler]
         private async Task OnWeatherSyncTick()
         {
-            if (DateTime.Now.Subtract(lastRun).TotalSeconds >= 60)
+            if (DateTime.Now.Subtract(lastRunWeatherUpdate).TotalSeconds >= 60)
             {
                 UpdateWeather();
             }
@@ -216,7 +252,7 @@ namespace Curiosity.Core.Client.Managers
 
         async void UpdateWeather()
         {
-            lastRun = DateTime.Now;
+            lastRunWeatherUpdate = DateTime.Now;
 
             Vector3 pos = Game.PlayerPed.Position;
 
@@ -273,6 +309,20 @@ namespace Curiosity.Core.Client.Managers
 
             NetworkOverrideClockTime(hour, minute, 0);
             SetClockTime(hour, minute, 0);
+        }
+
+        [TickHandler(SessionWait = true)]
+        private async Task OnSuppressVehicles()
+        {
+            if (DateTime.Now.Subtract(lastRunVehicleSuppression).TotalSeconds >= 10)
+            {
+                vehiclesToSuppress.ForEach(veh =>
+                {
+                    SetVehicleModelIsSuppressed((uint)veh, true);
+                });
+
+                lastRunVehicleSuppression = DateTime.Now;
+            }
         }
 
         [TickHandler(SessionWait = true)]
