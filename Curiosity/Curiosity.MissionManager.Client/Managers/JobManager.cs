@@ -50,7 +50,7 @@ namespace Curiosity.MissionManager.Client.Managers
             IsOfficer = (job == JOB_POLICE);
 
             if (!Cache.Player.User.IsDeveloper)
-                Game.PlayerPed.Weapons.RemoveAll();
+                Cache.PlayerPed.Weapons.RemoveAll();
 
             if (IsOfficer && !WasOfficer)
             {
@@ -64,20 +64,20 @@ namespace Curiosity.MissionManager.Client.Managers
                 Instance.DiscordRichPresence.SmallAssetText = "Police Officer";
                 Instance.DiscordRichPresence.Commit();
 
-                Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
-                Game.PlayerPed.IsInvincible = false; // trip because of legacy fireman
+                Cache.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Cop;
+                Cache.PlayerPed.IsInvincible = false; // trip because of legacy fireman
 
-                Game.PlayerPed.Armor = 100;
-                Game.PlayerPed.Weapons.Give(WeaponHash.Nightstick, 1, false, false);
-                Game.PlayerPed.Weapons.Give(WeaponHash.StunGun, 1, false, false);
-                Game.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, false, false);
+                Cache.PlayerPed.Armor = 100;
+                Cache.PlayerPed.Weapons.Give(WeaponHash.Nightstick, 1, false, false);
+                Cache.PlayerPed.Weapons.Give(WeaponHash.StunGun, 1, false, false);
+                Cache.PlayerPed.Weapons.Give(WeaponHash.Flashlight, 1, false, false);
 
                 await BaseScript.Delay(100);
                 WorldVehicleManager.VehicleManager.Start();
             }
             else if (!IsOfficer && WasOfficer)
             {
-                Game.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
+                Cache.PlayerPed.RelationshipGroup = (uint)Collections.RelationshipHash.Player;
 
                 WasOfficer = false;
                 Instance.DiscordRichPresence.Status = "Roaming around";

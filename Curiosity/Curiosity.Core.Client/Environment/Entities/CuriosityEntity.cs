@@ -11,8 +11,8 @@ namespace Curiosity.Core.Client.Environment.Entities
 {
     public class CuriosityEntity
     {
-        private Ped CitizenPed => Game.PlayerPed;
-        public int Id { get { return Game.PlayerPed.Handle; } }
+        private Ped CitizenPed => Cache.PlayerPed;
+        public int Id { get { return Cache.PlayerPed.Handle; } }
         public EntityModuleRegistry Modules { get; set; } = new EntityModuleRegistry();
         public int Model => API.GetEntityModel(Id);
         public AnimationQueue AnimationQueue { get; set; }
@@ -87,7 +87,7 @@ namespace Curiosity.Core.Client.Environment.Entities
 
         public void ToggleGodMode()
         {
-            Game.PlayerPed.IsInvincible = !Game.PlayerPed.IsInvincible;
+            Cache.PlayerPed.IsInvincible = !Cache.PlayerPed.IsInvincible;
         }
 
         public WeaponCollection Weapons => CitizenPed.Weapons;
@@ -106,7 +106,7 @@ namespace Curiosity.Core.Client.Environment.Entities
 
         public CuriosityEntity(int id)
         {
-            AnimationQueue = new AnimationQueue(Game.PlayerPed.Handle);
+            AnimationQueue = new AnimationQueue(Cache.PlayerPed.Handle);
 
             GameEventManager.OnPlayerKillPed += GameEventManager_OnPlayerKillPed;
             GameEventManager.OnPedKillPlayer += GameEventManager_OnPedKillPlayer;

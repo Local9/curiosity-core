@@ -13,7 +13,7 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
 {
     public class AnimationQueue
     {
-        private int Entity { get { return Game.PlayerPed.Handle; } }
+        private int Entity { get { return Cache.PlayerPed.Handle; } }
         private List<Animation> Queue { get; } = new List<Animation>();
         private bool PlayingQueue { get; set; }
         private Animation LastPlayed { get; set; }

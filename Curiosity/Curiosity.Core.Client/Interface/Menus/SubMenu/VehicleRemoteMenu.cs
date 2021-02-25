@@ -72,7 +72,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
                 miEngine.Checked = Cache.PersonalVehicle.IsEngineRunning;
                 miEngine.Enabled = true;
 
-                miHeadlights.Checked = Game.PlayerPed.IsInVehicle() ? Cache.PersonalVehicle.AreLightsOn : headlights;
+                miHeadlights.Checked = Cache.PlayerPed.IsInVehicle() ? Cache.PersonalVehicle.AreLightsOn : headlights;
                 miHeadlights.Enabled = true;
 
                 miNeon.Checked = neonLights;

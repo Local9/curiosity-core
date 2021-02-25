@@ -126,7 +126,7 @@ namespace Curiosity.Core.Client.Managers
         void RefreshClose()
         {
             MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => 
-                Game.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)
+                Cache.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)
                 && (m.JobRequirement == currentJob || string.IsNullOrEmpty(m.JobRequirement))
             ).ToList();
         }
@@ -135,7 +135,7 @@ namespace Curiosity.Core.Client.Managers
         {
             try
             {
-                MarkerData closestMarker = closestMarker = MarkersClose.Where(w => Game.PlayerPed.IsInRangeOf(w.Position, w.ContextAoe)).FirstOrDefault();
+                MarkerData closestMarker = closestMarker = MarkersClose.Where(w => Cache.PlayerPed.IsInRangeOf(w.Position, w.ContextAoe)).FirstOrDefault();
 
                 if (closestMarker == null) return null;
 
@@ -266,7 +266,7 @@ namespace Curiosity.Core.Client.Managers
 
         internal Vector3 NearestHospital()
         {
-            return FindClosestPoint(Game.PlayerPed.Position, HospitalSpawns);
+            return FindClosestPoint(Cache.PlayerPed.Position, HospitalSpawns);
         }
 
         public Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)

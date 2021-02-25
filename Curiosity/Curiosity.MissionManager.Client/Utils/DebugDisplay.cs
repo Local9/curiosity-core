@@ -20,14 +20,14 @@ namespace Curiosity.MissionManager.Client.Utils
         {
             var entityPos = entity.Position;
 
-            if (entityPos.Distance(Game.PlayerPed.Position) > 20f) return;
+            if (entityPos.Distance(Cache.PlayerPed.Position) > 20f) return;
 
             var pos = WorldToScreen(entityPos);
             if (pos.X <= 0f || pos.Y <= 0f || pos.X >= 1f || pos.Y >= 1f)
             {
                 pos = DefaultPos;
             }
-            var dist = (float)Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(entityPos));
+            var dist = (float)Math.Sqrt(Cache.PlayerPed.Position.DistanceToSquared(entityPos));
             var offsetX = MathUtil.Clamp((1f - dist / 100f) * 0.1f, 0f, 0.1f);
             pos.X += offsetX;
 
@@ -94,7 +94,7 @@ namespace Curiosity.MissionManager.Client.Utils
                     //if (ped.Fx.IsInGroup)
                     //{
                     //    list["GroupId"] = $"{ped.Fx.PedGroup.Handle}";
-                    //    list["Player GroupID"] = $"{Game.PlayerPed.PedGroup.Handle}";
+                    //    list["Player GroupID"] = $"{Cache.PlayerPed.PedGroup.Handle}";
                     //}
                 }
                 else
@@ -102,7 +102,7 @@ namespace Curiosity.MissionManager.Client.Utils
                     list["Health"] = $"{entity.Health} / {entity.MaxHealth}";
                 }
                 list[" "] = "";
-                list["Distance"] = $"{Math.Sqrt(Game.PlayerPed.Position.DistanceToSquared(entity.Position)):n3} Meters";
+                list["Distance"] = $"{Math.Sqrt(Cache.PlayerPed.Position.DistanceToSquared(entity.Position)):n3} Meters";
                 list["Heading"] = $"{entity.Heading:n3}";
                 list["Position"] = $"{pos.X:n5} {pos.Y:n5} {pos.Z:n5}";
                 list["Rotation"] = $"{rot.X:n5} {rot.Y:n5} {rot.Z:n5}";

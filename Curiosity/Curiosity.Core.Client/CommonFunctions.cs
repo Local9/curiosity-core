@@ -54,13 +54,13 @@ namespace Curiosity.Core.Client
         {
             if (lastVehicle)
             {
-                return Game.PlayerPed.LastVehicle;
+                return Cache.PlayerPed.LastVehicle;
             }
             else
             {
-                if (Game.PlayerPed.IsInVehicle())
+                if (Cache.PlayerPed.IsInVehicle())
                 {
-                    return Game.PlayerPed.CurrentVehicle;
+                    return Cache.PlayerPed.CurrentVehicle;
                 }
             }
             return null;
@@ -137,7 +137,7 @@ namespace Curiosity.Core.Client
         {
             float speed = 0f;
             float rpm = 0f;
-            if (Game.PlayerPed.IsInVehicle())
+            if (Cache.PlayerPed.IsInVehicle())
             {
                 Vehicle tmpOldVehicle = GetVehicle();
                 speed = API.GetEntitySpeedVector(tmpOldVehicle.Handle, true).Y; // get forward/backward speed only
@@ -166,15 +166,15 @@ namespace Curiosity.Core.Client
             Logger.Info("Spawning of vehicle is NOT cancelled, if this model is invalid then there's something wrong.");
 
             // Get the heading & position for where the vehicle should be spawned.
-            Vector3 pos = (spawnInside) ? API.GetEntityCoords(Game.PlayerPed.Handle, true) : API.GetOffsetFromEntityInWorldCoords(Game.PlayerPed.Handle, 0f, 8f, 0f);
-            float heading = API.GetEntityHeading(Game.PlayerPed.Handle) + (spawnInside ? 0f : 90f);
+            Vector3 pos = (spawnInside) ? API.GetEntityCoords(Cache.PlayerPed.Handle, true) : API.GetOffsetFromEntityInWorldCoords(Cache.PlayerPed.Handle, 0f, 8f, 0f);
+            float heading = API.GetEntityHeading(Cache.PlayerPed.Handle) + (spawnInside ? 0f : 90f);
 
             // If the previous vehicle exists...
             if (_previousVehicle != null)
             {
                 // And it's actually a vehicle (rather than another random entity type)
                 if (_previousVehicle.Exists() && _previousVehicle.PreviouslyOwnedByPlayer &&
-                    (_previousVehicle.Occupants.Count() == 0 || _previousVehicle.Driver.Handle == Game.PlayerPed.Handle))
+                    (_previousVehicle.Occupants.Count() == 0 || _previousVehicle.Driver.Handle == Cache.PlayerPed.Handle))
                 {
                     // If the previous vehicle should be deleted:
                     if (replacePrevious)
@@ -200,9 +200,9 @@ namespace Curiosity.Core.Client
                 }
             }
 
-            if (Game.PlayerPed.IsInVehicle() && replacePrevious)
+            if (Cache.PlayerPed.IsInVehicle() && replacePrevious)
             {
-                if (GetVehicle().Driver == Game.PlayerPed)// && IsVehiclePreviouslyOwnedByPlayer(GetVehicle()))
+                if (GetVehicle().Driver == Cache.PlayerPed)// && IsVehiclePreviouslyOwnedByPlayer(GetVehicle()))
                 {
                     var tmpveh = GetVehicle();
                     API.SetVehicleHasBeenOwnedByPlayer(tmpveh.Handle, false);
@@ -223,8 +223,8 @@ namespace Curiosity.Core.Client
             if (_previousVehicle != null)
                 _previousVehicle.PreviouslyOwnedByPlayer = false;
 
-            if (Game.PlayerPed.IsInVehicle())
-                pos = API.GetOffsetFromEntityInWorldCoords(Game.PlayerPed.Handle, 0, 8f, 0.1f);
+            if (Cache.PlayerPed.IsInVehicle())
+                pos = API.GetOffsetFromEntityInWorldCoords(Cache.PlayerPed.Handle, 0, 8f, 0.1f);
 
             // Create the new vehicle and remove the need to hotwire the car.
             Vehicle vehicle = new Vehicle(API.CreateVehicle(vehicleHash, pos.X, pos.Y, pos.Z + 1f, heading, true, false))
@@ -246,10 +246,10 @@ namespace Curiosity.Core.Client
                 vehicle.IsEngineRunning = true;
 
                 // Set the ped into the vehicle.
-                new Ped(Game.PlayerPed.Handle).SetIntoVehicle(vehicle, VehicleSeat.Driver);
+                new Ped(Cache.PlayerPed.Handle).SetIntoVehicle(vehicle, VehicleSeat.Driver);
 
                 // If the vehicle is a helicopter and the player is in the air, set the blades to be full speed.
-                if (vehicle.ClassType == VehicleClass.Helicopters && API.GetEntityHeightAboveGround(Game.PlayerPed.Handle) > 10.0f)
+                if (vehicle.ClassType == VehicleClass.Helicopters && API.GetEntityHeightAboveGround(Cache.PlayerPed.Handle) > 10.0f)
                 {
                     API.SetHeliBladesFullSpeed(vehicle.Handle);
                 }

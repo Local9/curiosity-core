@@ -79,7 +79,7 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             try
             {
-                List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 15f)).ToList();
+                List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Cache.PlayerPed.Position, 15f)).ToList();
 
                 if (vehicles.Count == 0)
                 {

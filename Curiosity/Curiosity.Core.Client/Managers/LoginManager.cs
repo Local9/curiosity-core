@@ -23,7 +23,7 @@ namespace Curiosity.Core.Client.Managers
             var sound = new SoundSystem();
             var handle = Game.Player.Handle;
             var serverHandle = Game.Player.ServerId;
-            var pedHandle = Game.PlayerPed.Handle;
+            var pedHandle = Cache.PlayerPed.Handle;
 
             sound.Disable();
 
@@ -34,13 +34,13 @@ namespace Curiosity.Core.Client.Managers
 
             playerModel.MarkAsNoLongerNeeded();
 
-            Game.PlayerPed.Weapons.RemoveAll();
-            Game.PlayerPed.Task.ClearAllImmediately();
+            Cache.PlayerPed.Weapons.RemoveAll();
+            Cache.PlayerPed.Task.ClearAllImmediately();
             API.ClearPlayerWantedLevel(handle);
-            Game.PlayerPed.IsVisible = true;
-            Game.PlayerPed.Health = API.GetEntityMaxHealth(pedHandle);
+            Cache.PlayerPed.IsVisible = true;
+            Cache.PlayerPed.Health = API.GetEntityMaxHealth(pedHandle);
             API.NetworkResurrectLocalPlayer(0, 0, 70f, 0, true, false);
-            Game.PlayerPed.IsPositionFrozen = false;
+            Cache.PlayerPed.IsPositionFrozen = false;
             Screen.LoadingPrompt.Show("Loading...");
 
             var transition = new CharacterManager.LoadTransition();

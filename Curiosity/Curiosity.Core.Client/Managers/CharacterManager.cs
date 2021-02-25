@@ -186,14 +186,14 @@ namespace Curiosity.Core.Client.Managers
 
             if (character.IsDead)
             {
-                Game.PlayerPed.Health = 0;
-                Game.PlayerPed.Armor = 0;
-                Game.PlayerPed.Kill();
+                Cache.PlayerPed.Health = 0;
+                Cache.PlayerPed.Armor = 0;
+                Cache.PlayerPed.Kill();
             }
             else
             {
-                Game.PlayerPed.Health = health;
-                Game.PlayerPed.Armor = character.Armor;
+                Cache.PlayerPed.Health = health;
+                Cache.PlayerPed.Armor = character.Armor;
             }
 
             SetupDecorators();
@@ -242,7 +242,7 @@ namespace Curiosity.Core.Client.Managers
 
         private void SetupDecorators()
         {
-            int playerHandle = Game.PlayerPed.Handle;
+            int playerHandle = Cache.PlayerPed.Handle;
             DecoratorExtensions.Set(playerHandle, Decors.PLAYER_NAME, Game.Player.Name);
         }
     }

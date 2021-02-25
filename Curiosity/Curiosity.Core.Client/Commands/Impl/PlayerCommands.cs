@@ -36,7 +36,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
+                Vehicle vehicle = Cache.PlayerPed.GetVehicleInFront();
 
                 if (vehicle == null)
                 {
@@ -73,7 +73,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
+                Vehicle vehicle = Cache.PlayerPed.GetVehicleInFront();
 
                 var nameOfOwner = await EventSystem.Request<object>("vehicle:owner", vehicle.NetworkId);
 

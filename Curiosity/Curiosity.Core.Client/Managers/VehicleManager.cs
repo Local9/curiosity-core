@@ -94,8 +94,8 @@ namespace Curiosity.Core.Client.Managers
 
                 Vehicle vehicle = Cache.PersonalVehicle;
 
-                if (Game.PlayerPed.IsInVehicle())
-                    vehicle = Game.PlayerPed.CurrentVehicle;
+                if (Cache.PlayerPed.IsInVehicle())
+                    vehicle = Cache.PlayerPed.CurrentVehicle;
 
                 if (vehicle != null)
                     EventSystem.Send("delete:entity", vehicle.NetworkId);
@@ -109,8 +109,8 @@ namespace Curiosity.Core.Client.Managers
 
                 Vehicle vehicle = Cache.PersonalVehicle;
 
-                if (Game.PlayerPed.IsInVehicle())
-                    vehicle = Game.PlayerPed.CurrentVehicle;
+                if (Cache.PlayerPed.IsInVehicle())
+                    vehicle = Cache.PlayerPed.CurrentVehicle;
 
                 if (vehicle != null)
                 {
@@ -149,7 +149,7 @@ namespace Curiosity.Core.Client.Managers
 
         internal async void InitialiseVehicleFuel(Vehicle veh)
         {
-            if (veh.Driver != Game.PlayerPed) return;
+            if (veh.Driver != Cache.PlayerPed) return;
 
             currentVehicle = veh;
 
@@ -186,7 +186,7 @@ namespace Curiosity.Core.Client.Managers
 
         private bool IsNearNormalFuelPump()
         {
-            return World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FUEL_PUMP_RANGE, 2));
+            return World.GetAllProps().Where(o => FuelPumpModelHashes.Contains((ObjectHash)o.Model.Hash)).Any(o => o.Position.DistanceToSquared(Cache.PlayerPed.Position) < Math.Pow(2 * FUEL_PUMP_RANGE, 2));
         }
 
         private async Task CheckFuelPumpDistance()
@@ -194,13 +194,13 @@ namespace Curiosity.Core.Client.Managers
             try
             {
                 await BaseScript.Delay(500);
-                if (Game.PlayerPed.IsInVehicle())
+                if (Cache.PlayerPed.IsInVehicle())
                 {
                     if (currentVehicle != null)
                     {
                         if (EletricVehicles.Contains((VehicleHash)currentVehicle.Model.Hash))
                         {
-                            IsNearFuelPump = World.GetAllProps().Where(o => (ObjectHash)GAS_STATION_TESLA == (ObjectHash)o.Model.Hash).Any(o => o.Position.DistanceToSquared(Game.PlayerPed.Position) < Math.Pow(2 * FUEL_PUMP_RANGE, 2));
+                            IsNearFuelPump = World.GetAllProps().Where(o => (ObjectHash)GAS_STATION_TESLA == (ObjectHash)o.Model.Hash).Any(o => o.Position.DistanceToSquared(Cache.PlayerPed.Position) < Math.Pow(2 * FUEL_PUMP_RANGE, 2));
                         }
                         else
                         {
@@ -231,7 +231,7 @@ namespace Curiosity.Core.Client.Managers
                 Screen.DisplayHelpTextThisFrame("Press ~INPUT_REPLAY_START_STOP_RECORDING_SECONDARY~ to ~y~Refuel ~s~the ~b~Vehicle");
                 ScreenInterface.Draw3DText(currentVehicle.Position, "~w~Press ~b~F2 ~w~to ~y~Refuel ~s~the ~b~Vehicle~n~~w~~b~X ~w~Button on Controller", 40);
 
-                if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecordingSecondary, false) && Game.PlayerPed.IsInVehicle())
+                if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecordingSecondary, false) && Cache.PlayerPed.IsInVehicle())
                 {
                     IsAwaitingServerResponse = true;
                     IsRefueling = true;
@@ -263,7 +263,7 @@ namespace Curiosity.Core.Client.Managers
 
         private async Task OnVehicleFuel()
         {
-            if (!Game.PlayerPed.IsInVehicle())
+            if (!Cache.PlayerPed.IsInVehicle())
             {
                 lastUpdate = -1;
                 PluginManager.Instance.DetachTickHandler(OnVehicleFuel);

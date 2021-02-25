@@ -318,7 +318,7 @@ namespace Curiosity.MissionManager.Client.Classes
             // if the ped is marked as a mission related ped, do not allow them to be deleted unless they match the other criteria
             // does require manual clean up also
 
-            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f || IsImportant)
+            if (this.Position.VDist(Cache.PlayerPed.Position) <= 120f || IsImportant)
             {
                 flag = false;
             }
@@ -342,7 +342,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
             if (!Mission.isOnMission && PlayerManager.PersonalVehicle != null && !IsIgnored && Fx.Driver.Exists() && IsValidVehicle())
             {
-                if (Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Game.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Game.PlayerPed.IsInVehicle())
+                if (Cache.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Cache.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Cache.PlayerPed.IsInVehicle())
                 {
                     bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
 
@@ -372,10 +372,10 @@ namespace Curiosity.MissionManager.Client.Classes
 
                             for (int i = 0; i < 8; i++)
                             {
-                                Game.PlayerPed.CurrentVehicle.IsSirenActive = i % 2 == 0;
+                                Cache.PlayerPed.CurrentVehicle.IsSirenActive = i % 2 == 0;
                                 await BaseScript.Delay(100);
                             }
-                            Game.PlayerPed.CurrentVehicle.IsSirenActive = false;
+                            Cache.PlayerPed.CurrentVehicle.IsSirenActive = false;
                         }
 
                         if (ControlHelper.IsControlJustPressed(Control.Cover, false))
@@ -384,12 +384,12 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_VEH) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
+            if (Decorators.GetBoolean(Cache.PlayerPed.Handle, Decorators.PLAYER_DEBUG_VEH) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
                 Instance.AttachTickHandler(OnDeveloperOverlay);
                 _DEBUG_ENABLED = true;
             }
-            else if (!Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_VEH) && _DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
+            else if (!Decorators.GetBoolean(Cache.PlayerPed.Handle, Decorators.PLAYER_DEBUG_VEH) && _DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
                 _DEBUG_ENABLED = false;
                 Instance.DetachTickHandler(OnDeveloperOverlay);
@@ -463,7 +463,7 @@ namespace Curiosity.MissionManager.Client.Classes
                         if (entityBoneIndex != -1)
                         {
                             Vector3 worldPositioinOfBone = API.GetWorldPositionOfEntityBone(Handle, entityBoneIndex);
-                            float single = Vector3.Distance(worldPositioinOfBone, Game.PlayerPed.Position);
+                            float single = Vector3.Distance(worldPositioinOfBone, Cache.PlayerPed.Position);
                             if ((double)single < num)
                             {
                                 num = (double)single;
@@ -482,16 +482,16 @@ namespace Curiosity.MissionManager.Client.Classes
                     {
                         if (API.GetVehicleDoorAngleRatio(Handle, 0) < 0.25f)
                         {
-                            Game.PlayerPed.Heading = Fx.Heading - 90f;
-                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading - 90f;
+                            Cache.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
                             Fx.Doors[VehicleDoorIndex.FrontLeftDoor].Open();
                             await BaseScript.Delay(500);
                             AnimationHandler.AnimationSearch();
                         }
                         else
                         {
-                            Game.PlayerPed.Heading = Fx.Heading;
-                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading;
+                            Cache.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
                             Fx.Doors[VehicleDoorIndex.FrontLeftDoor].Close();
                         }
                     }
@@ -499,16 +499,16 @@ namespace Curiosity.MissionManager.Client.Classes
                     {
                         if (API.GetVehicleDoorAngleRatio(Handle, 2) < 0.25f)
                         {
-                            Game.PlayerPed.Heading = Fx.Heading - 90f;
-                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading - 90f;
+                            Cache.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
                             Fx.Doors[VehicleDoorIndex.BackLeftDoor].Open();
                             await BaseScript.Delay(500);
                             AnimationHandler.AnimationSearch();
                         }
                         else
                         {
-                            Game.PlayerPed.Heading = Fx.Heading;
-                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading;
+                            Cache.PlayerPed.Task.PlayAnimation("veh@low@front_ds@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
                             Fx.Doors[VehicleDoorIndex.BackLeftDoor].Close();
                         }
                     }
@@ -516,16 +516,16 @@ namespace Curiosity.MissionManager.Client.Classes
                     {
                         if (API.GetVehicleDoorAngleRatio(Handle, 1) < 0.25f)
                         {
-                            Game.PlayerPed.Heading = Fx.Heading + 90f;
-                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading + 90f;
+                            Cache.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
                             Fx.Doors[VehicleDoorIndex.FrontRightDoor].Open();
                             await BaseScript.Delay(500);
                             AnimationHandler.AnimationSearch();
                         }
                         else
                         {
-                            Game.PlayerPed.Heading = Fx.Heading;
-                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading;
+                            Cache.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
                             Fx.Doors[VehicleDoorIndex.FrontRightDoor].Close();
                         }
                     }
@@ -533,16 +533,16 @@ namespace Curiosity.MissionManager.Client.Classes
                     {
                         if (API.GetVehicleDoorAngleRatio(Handle, 3) < 0.25f)
                         {
-                            Game.PlayerPed.Heading = Fx.Heading + 90f;
-                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading + 90f;
+                            Cache.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_open_out", 4f, -1, AnimationFlags.None);
                             Fx.Doors[VehicleDoorIndex.BackRightDoor].Open();
                             await BaseScript.Delay(500);
                             AnimationHandler.AnimationSearch();
                         }
                         else
                         {
-                            Game.PlayerPed.Heading = Fx.Heading;
-                            Game.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading;
+                            Cache.PlayerPed.Task.PlayAnimation("veh@low@front_ps@enter_exit", "d_close_out", 4f, -1, AnimationFlags.None);
                             Fx.Doors[VehicleDoorIndex.BackRightDoor].Close();
                         }
                     }
@@ -550,8 +550,8 @@ namespace Curiosity.MissionManager.Client.Classes
                     {
                         if (API.GetVehicleDoorAngleRatio(Handle, 4) < 0.25f)
                         {
-                            Game.PlayerPed.Heading = Fx.Heading - 180f;
-                            Game.PlayerPed.Task.PlayAnimation("rcmnigel3_trunk", "out_trunk_trevor", 4f, 2500, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading - 180f;
+                            Cache.PlayerPed.Task.PlayAnimation("rcmnigel3_trunk", "out_trunk_trevor", 4f, 2500, AnimationFlags.None);
                             await BaseScript.Delay(750);
                             Fx.Doors[VehicleDoorIndex.Hood].Open();
                             await BaseScript.Delay(1000);
@@ -559,8 +559,8 @@ namespace Curiosity.MissionManager.Client.Classes
                         }
                         else
                         {
-                            Game.PlayerPed.Heading = Fx.Heading - 180f;
-                            Game.PlayerPed.Task.PlayAnimation("rcmepsilonism8", "bag_handler_close_trunk_walk_left", 4f, 2500, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading - 180f;
+                            Cache.PlayerPed.Task.PlayAnimation("rcmepsilonism8", "bag_handler_close_trunk_walk_left", 4f, 2500, AnimationFlags.None);
                             await BaseScript.Delay(1250);
                             Fx.Doors[VehicleDoorIndex.Hood].Close();
                         }
@@ -569,8 +569,8 @@ namespace Curiosity.MissionManager.Client.Classes
                     {
                         if (API.GetVehicleDoorAngleRatio(Handle, 5) < 0.25f)
                         {
-                            Game.PlayerPed.Heading = Fx.Heading;
-                            Game.PlayerPed.Task.PlayAnimation("rcmnigel3_trunk", "out_trunk_trevor", 4f, 2500, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading;
+                            Cache.PlayerPed.Task.PlayAnimation("rcmnigel3_trunk", "out_trunk_trevor", 4f, 2500, AnimationFlags.None);
                             await BaseScript.Delay(750);
                             Fx.Doors[VehicleDoorIndex.Trunk].Open();
                             await BaseScript.Delay(1000);
@@ -578,8 +578,8 @@ namespace Curiosity.MissionManager.Client.Classes
                         }
                         else
                         {
-                            Game.PlayerPed.Heading = Fx.Heading;
-                            Game.PlayerPed.Task.PlayAnimation("rcmepsilonism8", "bag_handler_close_trunk_walk_left", 4f, 2500, AnimationFlags.None);
+                            Cache.PlayerPed.Heading = Fx.Heading;
+                            Cache.PlayerPed.Task.PlayAnimation("rcmepsilonism8", "bag_handler_close_trunk_walk_left", 4f, 2500, AnimationFlags.None);
                             await BaseScript.Delay(1250);
                             Fx.Doors[VehicleDoorIndex.Trunk].Close();
                         }

@@ -13,20 +13,20 @@ namespace Curiosity.Core.Client.Environment
         {
             Screen.Fading.FadeOut(500);
 
-            await Game.PlayerPed.FadeOut();
+            await Cache.PlayerPed.FadeOut();
 
             while (Screen.Fading.IsFadingOut)
             {
                 await BaseScript.Delay(10);
             }
 
-            API.FreezeEntityPosition(Game.PlayerPed.Handle, true);
+            API.FreezeEntityPosition(Cache.PlayerPed.Handle, true);
 
-            await Teleport(Game.PlayerPed.Handle, position, interval);
+            await Teleport(Cache.PlayerPed.Handle, position, interval);
 
-            API.FreezeEntityPosition(Game.PlayerPed.Handle, false);
+            API.FreezeEntityPosition(Cache.PlayerPed.Handle, false);
 
-            await Game.PlayerPed.FadeIn();
+            await Cache.PlayerPed.FadeIn();
 
             await BaseScript.Delay(1000);
 

@@ -44,7 +44,7 @@ namespace Curiosity.Core.Client.Interface.Modules
                     anchor.Width / 2 / 100 * API.GetPedArmour(ped), anchor.UnitY * 18f / 2,
                     Color.FromArgb(175, 93, 182, 229));
             }
-            Hud.IsRadarVisible = Game.PlayerPed.IsInVehicle();
+            Hud.IsRadarVisible = Cache.PlayerPed.IsInVehicle();
         }
 
         public MinimapAnchor GetMinimapAnchor()

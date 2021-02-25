@@ -417,7 +417,7 @@ namespace Curiosity.MissionManager.Client.Classes
             // if the ped is marked as a mission related ped, do not allow them to be deleted unless they match the other criteria
             // does require manual clean up also
 
-            if (this.Position.VDist(Game.PlayerPed.Position) <= 120f || IsImportant)
+            if (this.Position.VDist(Cache.PlayerPed.Position) <= 120f || IsImportant)
             {
                 flag = false;
             }
@@ -468,13 +468,13 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
+            if (Decorators.GetBoolean(Cache.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC) && !_DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
                 Instance.AttachTickHandler(OnDeveloperOverlay);
                 _DEBUG_ENABLED = true;
                 Logger.Debug($"PED Debug Enabled");
             }
-            else if (!Decorators.GetBoolean(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC) && _DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
+            else if (!Decorators.GetBoolean(Cache.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC) && _DEBUG_ENABLED && Cache.Player.User.IsDeveloper)
             {
                 _DEBUG_ENABLED = false;
                 Instance.DetachTickHandler(OnDeveloperOverlay);
@@ -497,7 +497,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 taskSequence.AddTask.LeaveVehicle(LeaveVehicleFlags.LeaveDoorOpen);
             }
 
-            taskSequence.AddTask.FleeFrom(Game.PlayerPed);
+            taskSequence.AddTask.FleeFrom(Cache.PlayerPed);
             Task.PerformSequence(taskSequence);
             taskSequence.Close();
         }
@@ -559,7 +559,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     Fx.Task.ClearAllImmediately();
                     TaskSequence realeaseAndFleeTaskSequence = new TaskSequence();
                     realeaseAndFleeTaskSequence.AddTask.PlayAnimation("random@arrests", "kneeling_arrest_get_up", 8.0f, -1, AnimationFlags.CancelableWithMovement);
-                    realeaseAndFleeTaskSequence.AddTask.ReactAndFlee(Game.PlayerPed);
+                    realeaseAndFleeTaskSequence.AddTask.ReactAndFlee(Cache.PlayerPed);
                     Fx.Task.PerformSequence(realeaseAndFleeTaskSequence);
                     realeaseAndFleeTaskSequence.Close();
                     Fx.Task.ClearSecondary();
@@ -568,7 +568,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     RunSequence(Sequence.REMOVE_FROM_WORLD);
                     break;
                 case Sequence.REMOVE_FROM_WORLD:
-                    while (Fx.Position.Distance(Game.PlayerPed.Position) < 25f)
+                    while (Fx.Position.Distance(Cache.PlayerPed.Position) < 25f)
                     {
                         await BaseScript.Delay(100);
                     }
@@ -582,7 +582,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
                     break;
                 case Sequence.HANDCUFF_APPLY:
-                    Game.PlayerPed.IsPositionFrozen = true;
+                    Cache.PlayerPed.IsPositionFrozen = true;
 
                     API.SetPedFleeAttributes(Fx.Handle, 0, false);
                     API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
@@ -592,9 +592,9 @@ namespace Curiosity.MissionManager.Client.Classes
                     Vector3 pos = Vector3.Zero;
                     pos.Y = y;
 
-                    Fx.AttachTo(Game.PlayerPed.Bones[11816], pos);
+                    Fx.AttachTo(Cache.PlayerPed.Bones[11816], pos);
 
-                    Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 4f, -1, (AnimationFlags)49);
+                    Cache.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 4f, -1, (AnimationFlags)49);
                     Fx.Task.PlayAnimation("mp_arresting", "arrested_spin_l_0", 4f, -1, AnimationFlags.None);
                     await BaseScript.Delay(3000);
                     Fx.Task.PlayAnimation("mp_arresting", "idle", 8f, -1, (AnimationFlags)49);
@@ -610,20 +610,20 @@ namespace Curiosity.MissionManager.Client.Classes
 
                     await BaseScript.Delay(1000);
 
-                    Game.PlayerPed.Task.ClearAll();
+                    Cache.PlayerPed.Task.ClearAll();
 
                     Fx.Detach();
 
                     API.SetEnableHandcuffs(Fx.Handle, true);
 
-                    Game.PlayerPed.IsPositionFrozen = false;
+                    Cache.PlayerPed.IsPositionFrozen = false;
 
                     Decorators.Set(Fx.Handle, Decorators.PED_ARRESTED, true);
 
                     break;
                 case Sequence.HANDCUFF_REMOVE:
 
-                    Game.PlayerPed.IsPositionFrozen = true;
+                    Cache.PlayerPed.IsPositionFrozen = true;
 
                     IsKneeling = Fx.IsPlayingAnim("random@arrests@busted", "idle_a") || Fx.IsPlayingAnim("random@arrests@busted", "exit");
 
@@ -631,18 +631,18 @@ namespace Curiosity.MissionManager.Client.Classes
                     Vector3 kneelingPos = Vector3.Zero;
                     kneelingPos.Y = kneelingY;
 
-                    Fx.AttachTo(Game.PlayerPed.Bones[11816], kneelingPos);
+                    Fx.AttachTo(Cache.PlayerPed.Bones[11816], kneelingPos);
 
-                    Game.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8f, -1, (AnimationFlags)49);
+                    Cache.PlayerPed.Task.PlayAnimation("mp_arresting", "a_uncuff", 8f, -1, (AnimationFlags)49);
 
                     await BaseScript.Delay(1000);
 
-                    Game.PlayerPed.Task.ClearAll();
+                    Cache.PlayerPed.Task.ClearAll();
 
                     API.SetEnableHandcuffs(Fx.Handle, false);
                     Fx.Detach();
 
-                    Game.PlayerPed.IsPositionFrozen = false;
+                    Cache.PlayerPed.IsPositionFrozen = false;
 
                     Decorators.Set(Fx.Handle, Decorators.PED_ARRESTED, false);
 
@@ -697,7 +697,7 @@ namespace Curiosity.MissionManager.Client.Classes
                     break;
                 case Sequence.GRAB_HOLD:
                     Vector3 attachedPos = new Vector3(-0.3f, 0.4f, 0.0f);
-                    Fx.AttachTo(Game.PlayerPed, attachedPos);
+                    Fx.AttachTo(Cache.PlayerPed, attachedPos);
                     API.SetBlockingOfNonTemporaryEvents(Fx.Handle, true);
                     IsGrabbed = true;
                     Fx.IsInvincible = true;

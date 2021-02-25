@@ -10,7 +10,7 @@ namespace Curiosity.MissionManager.Client.Environment.Entities
     public class CuriosityEntity
     {
         private Ped CitizenPed => API.DoesEntityExist(Id) && API.IsEntityAPed(Id) ? (Ped)Entity.FromHandle(Id) : null;
-        public int Id { get { return Game.PlayerPed.Handle; } }
+        public int Id { get { return Cache.PlayerPed.Handle; } }
         public EntityModuleRegistry Modules { get; set; } = new EntityModuleRegistry();
         public int Model => API.GetEntityModel(Id);
         public AnimationQueue AnimationQueue { get; set; }
@@ -85,7 +85,7 @@ namespace Curiosity.MissionManager.Client.Environment.Entities
 
         public void ToggleGodMode()
         {
-            Game.PlayerPed.IsInvincible = !Game.PlayerPed.IsInvincible;
+            Cache.PlayerPed.IsInvincible = !Cache.PlayerPed.IsInvincible;
         }
 
         public WeaponCollection Weapons => CitizenPed.Weapons;
@@ -104,7 +104,7 @@ namespace Curiosity.MissionManager.Client.Environment.Entities
 
         public CuriosityEntity(int id)
         {
-            AnimationQueue = new AnimationQueue(Game.PlayerPed.Handle);
+            AnimationQueue = new AnimationQueue(Cache.PlayerPed.Handle);
         }
     }
 }

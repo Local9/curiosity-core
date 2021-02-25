@@ -100,58 +100,58 @@ namespace Curiosity.Core.Client.Extensions
             float remBlend = character.Heritage.BlendApperance;
             float skinBlend = character.Heritage.BlendSkin;
 
-            Game.PlayerPed.Health = character.Health;
-            Game.PlayerPed.Armor = character.Armor;
+            Cache.PlayerPed.Health = character.Health;
+            Cache.PlayerPed.Armor = character.Armor;
 
             API.SetPedHeadBlendData(Cache.Entity.Id, fatherId, motherId, 0, fatherId, motherId, 0, remBlend, skinBlend, 0f, false);
 
-            CharacterClothing.SetPedTop(Game.PlayerPed, character.Appearance.Top);
-            CharacterClothing.SetPedPants(Game.PlayerPed, character.Appearance.Pants);
-            CharacterClothing.SetPedShoes(Game.PlayerPed, character.Appearance.Shoes);
-            CharacterClothing.SetPedHat(Game.PlayerPed, character.Appearance.Hat);
-            CharacterClothing.SetPedGlasses(Game.PlayerPed, character.Appearance.Glasses);
+            CharacterClothing.SetPedTop(Cache.PlayerPed, character.Appearance.Top);
+            CharacterClothing.SetPedPants(Cache.PlayerPed, character.Appearance.Pants);
+            CharacterClothing.SetPedShoes(Cache.PlayerPed, character.Appearance.Shoes);
+            CharacterClothing.SetPedHat(Cache.PlayerPed, character.Appearance.Hat);
+            CharacterClothing.SetPedGlasses(Cache.PlayerPed, character.Appearance.Glasses);
 
             foreach (KeyValuePair<int, float> keyValuePair in character.Features)
             {
                 API.SetPedFaceFeature(Cache.Entity.Id, keyValuePair.Key, keyValuePair.Value);
             }
 
-            API.ClearPedFacialDecorations(Game.PlayerPed.Handle);
+            API.ClearPedFacialDecorations(Cache.PlayerPed.Handle);
 
             if (character.Appearance.HairStyle == 0)
             {
-                API.SetPedComponentVariation(Game.PlayerPed.Handle, 2, 0, 0, 0);
+                API.SetPedComponentVariation(Cache.PlayerPed.Handle, 2, 0, 0, 0);
             }
             else
             {
-                API.SetPedComponentVariation(Game.PlayerPed.Handle, 2, character.Appearance.HairStyle, 0, 0);
+                API.SetPedComponentVariation(Cache.PlayerPed.Handle, 2, character.Appearance.HairStyle, 0, 0);
                 if (!character.Appearance.HairOverlay.Equals(new KeyValuePair<string, string>()))
                 {
                     KeyValuePair<string, string> overlay = character.Appearance.HairOverlay;
-                    API.SetPedFacialDecoration(Game.PlayerPed.Handle, (uint)API.GetHashKey(overlay.Key), (uint)API.GetHashKey(overlay.Value));
+                    API.SetPedFacialDecoration(Cache.PlayerPed.Handle, (uint)API.GetHashKey(overlay.Key), (uint)API.GetHashKey(overlay.Value));
                 }
 
-                API.SetPedHairColor(Game.PlayerPed.Handle, character.Appearance.HairPrimaryColor, character.Appearance.HairSecondaryColor);
+                API.SetPedHairColor(Cache.PlayerPed.Handle, character.Appearance.HairPrimaryColor, character.Appearance.HairSecondaryColor);
             }
 
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 1, character.Appearance.FacialHair, character.Appearance.FacialHairOpacity);
-            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 1, 1, character.Appearance.FacialHairColor, character.Appearance.FacialHairColor);
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 2, character.Appearance.Eyebrow, character.Appearance.EyebrowOpacity);
-            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 2, 1, character.Appearance.EyebrowColor, character.Appearance.EyebrowColor);
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 4, character.Appearance.EyeMakeup, character.Appearance.EyeMakeupOpacity);
-            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 4, 2, character.Appearance.EyeMakeupColor, character.Appearance.EyeMakeupColor);
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 5, character.Appearance.Blusher, character.Appearance.BlusherOpacity);
-            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 5, 2, character.Appearance.BlusherColor, character.Appearance.BlusherColor);
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 8, character.Appearance.Lipstick, character.Appearance.LipstickOpacity);
-            API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 8, 2, character.Appearance.LipstickColor, character.Appearance.LipstickColor);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 1, character.Appearance.FacialHair, character.Appearance.FacialHairOpacity);
+            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 1, 1, character.Appearance.FacialHairColor, character.Appearance.FacialHairColor);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 2, character.Appearance.Eyebrow, character.Appearance.EyebrowOpacity);
+            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 2, 1, character.Appearance.EyebrowColor, character.Appearance.EyebrowColor);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 4, character.Appearance.EyeMakeup, character.Appearance.EyeMakeupOpacity);
+            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 4, 2, character.Appearance.EyeMakeupColor, character.Appearance.EyeMakeupColor);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 5, character.Appearance.Blusher, character.Appearance.BlusherOpacity);
+            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 5, 2, character.Appearance.BlusherColor, character.Appearance.BlusherColor);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 8, character.Appearance.Lipstick, character.Appearance.LipstickOpacity);
+            API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 8, 2, character.Appearance.LipstickColor, character.Appearance.LipstickColor);
 
-            API.SetPedEyeColor(Game.PlayerPed.Handle, character.Appearance.EyeColor);
+            API.SetPedEyeColor(Cache.PlayerPed.Handle, character.Appearance.EyeColor);
 
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 0, character.Appearance.SkinBlemish, character.Appearance.SkinBlemishOpacity);
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 3, character.Appearance.SkinAging, character.Appearance.SkinAgingOpacity);
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 6, character.Appearance.SkinComplexion, character.Appearance.SkinComplexionOpacity);
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 7, character.Appearance.SkinDamage, character.Appearance.SkinDamageOpacity);
-            API.SetPedHeadOverlay(Game.PlayerPed.Handle, 9, character.Appearance.SkinMoles, character.Appearance.SkinMolesOpacity);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 0, character.Appearance.SkinBlemish, character.Appearance.SkinBlemishOpacity);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 3, character.Appearance.SkinAging, character.Appearance.SkinAgingOpacity);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 6, character.Appearance.SkinComplexion, character.Appearance.SkinComplexionOpacity);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 7, character.Appearance.SkinDamage, character.Appearance.SkinDamageOpacity);
+            API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 9, character.Appearance.SkinMoles, character.Appearance.SkinMolesOpacity);
 
             character.SetupStats();
 
@@ -162,21 +162,21 @@ namespace Curiosity.Core.Client.Extensions
 
         public static async void Revive(this CuriosityCharacter character, Position position)
         {
-            await Game.PlayerPed.FadeOut();
+            await Cache.PlayerPed.FadeOut();
 
-            Game.PlayerPed.Weapons.RemoveAll();
-            Game.PlayerPed.Task.ClearAllImmediately();
+            Cache.PlayerPed.Weapons.RemoveAll();
+            Cache.PlayerPed.Task.ClearAllImmediately();
             Game.Player.WantedLevel = 0;
-            Game.PlayerPed.IsVisible = true;
-            Game.PlayerPed.Health = Game.PlayerPed.MaxHealth;
-            Game.PlayerPed.ClearBloodDamage();
-            Game.PlayerPed.ClearLastWeaponDamage();
+            Cache.PlayerPed.IsVisible = true;
+            Cache.PlayerPed.Health = Cache.PlayerPed.MaxHealth;
+            Cache.PlayerPed.ClearBloodDamage();
+            Cache.PlayerPed.ClearLastWeaponDamage();
 
             API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.Heading, false, false);
 
-            await Game.PlayerPed.FadeIn();
+            await Cache.PlayerPed.FadeIn();
 
-            Game.PlayerPed.IsPositionFrozen = false;
+            Cache.PlayerPed.IsPositionFrozen = false;
             Cache.Player.EnableHud();
         }
 

@@ -99,10 +99,10 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             }
 
             if (checkboxItem == menuChkNpcDebug)
-                Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC, Checked);
+                Decorators.Set(Cache.PlayerPed.Handle, Decorators.PLAYER_DEBUG_NPC, Checked);
 
             if (checkboxItem == menuChkVehDebug)
-                Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_DEBUG_VEH, Checked);
+                Decorators.Set(Cache.PlayerPed.Handle, Decorators.PLAYER_DEBUG_VEH, Checked);
 
             await BaseScript.Delay(500);
             checkboxItem.Enabled = true;

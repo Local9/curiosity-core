@@ -145,21 +145,21 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         {
             if (listItem == lstHair)
             {
-                API.ClearPedFacialDecorations(Game.PlayerPed.Handle);
+                API.ClearPedFacialDecorations(Cache.PlayerPed.Handle);
                 Cache.Character.Appearance.HairOverlay = new KeyValuePair<string, string>("", "");
-                if (newIndex >= API.GetNumberOfPedDrawableVariations(Game.PlayerPed.Handle, 2))
+                if (newIndex >= API.GetNumberOfPedDrawableVariations(Cache.PlayerPed.Handle, 2))
                 {
-                    API.SetPedComponentVariation(Game.PlayerPed.Handle, 2, 0, 0, 0);
+                    API.SetPedComponentVariation(Cache.PlayerPed.Handle, 2, 0, 0, 0);
                     Cache.Character.Appearance.HairStyle = 0;
                 }
                 else
                 {
-                    API.SetPedComponentVariation(Game.PlayerPed.Handle, 2, newIndex, 0, 0);
+                    API.SetPedComponentVariation(Cache.PlayerPed.Handle, 2, newIndex, 0, 0);
                     Cache.Character.Appearance.HairStyle = newIndex;
                     if (CharacterExtensions.HairOverlays.ContainsKey(newIndex))
                     {
                         KeyValuePair<string, string> overlay = CharacterExtensions.HairOverlays[newIndex];
-                        API.SetPedFacialDecoration(Game.PlayerPed.Handle, (uint)API.GetHashKey(overlay.Key), (uint)API.GetHashKey(overlay.Value));
+                        API.SetPedFacialDecoration(Cache.PlayerPed.Handle, (uint)API.GetHashKey(overlay.Key), (uint)API.GetHashKey(overlay.Value));
                         Cache.Character.Appearance.HairOverlay = overlay;
                     }
                 }
@@ -167,7 +167,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 UIMenuColorPanel primaryColor = (UIMenuColorPanel)listItem.Panels[0];
                 UIMenuColorPanel secondaryColor = (UIMenuColorPanel)listItem.Panels[1];
 
-                API.SetPedHairColor(Game.PlayerPed.Handle, primaryColor.CurrentSelection, secondaryColor.CurrentSelection);
+                API.SetPedHairColor(Cache.PlayerPed.Handle, primaryColor.CurrentSelection, secondaryColor.CurrentSelection);
                 Cache.Character.Appearance.HairPrimaryColor = primaryColor.CurrentSelection;
                 Cache.Character.Appearance.HairSecondaryColor = secondaryColor.CurrentSelection;
 
@@ -179,10 +179,10 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 2, newIndex, opacity);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 2, newIndex, opacity);
 
                 UIMenuColorPanel pnlColor = (UIMenuColorPanel)listItem.Panels[1];
-                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 2, 1, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+                API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 2, 1, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
 
                 Cache.Character.Appearance.Eyebrow = newIndex;
                 Cache.Character.Appearance.EyebrowOpacity = opacity;
@@ -191,15 +191,15 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 return;
             }
 
-            if (listItem == lstFacialHair && Game.PlayerPed.Gender == Gender.Male)
+            if (listItem == lstFacialHair && Cache.PlayerPed.Gender == Gender.Male)
             {
                 UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 1, newIndex, opacity);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 1, newIndex, opacity);
 
                 UIMenuColorPanel pnlColor = (UIMenuColorPanel)listItem.Panels[1];
-                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 1, 1, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+                API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 1, 1, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
 
                 Cache.Character.Appearance.FacialHair = newIndex;
                 Cache.Character.Appearance.FacialHairOpacity = opacity;
@@ -213,7 +213,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 0, newIndex, opacity);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 0, newIndex, opacity);
 
                 Cache.Character.Appearance.SkinBlemish = newIndex;
                 Cache.Character.Appearance.SkinBlemishOpacity = opacity;
@@ -226,7 +226,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 3, newIndex, opacity);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 3, newIndex, opacity);
 
                 Cache.Character.Appearance.SkinAging = newIndex;
                 Cache.Character.Appearance.SkinAgingOpacity = opacity;
@@ -239,7 +239,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 6, newIndex, opacity);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 6, newIndex, opacity);
 
                 Cache.Character.Appearance.SkinComplexion = newIndex;
                 Cache.Character.Appearance.SkinComplexionOpacity = opacity;
@@ -252,7 +252,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 9, newIndex, opacity);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 9, newIndex, opacity);
 
                 Cache.Character.Appearance.SkinMoles = newIndex;
                 Cache.Character.Appearance.SkinMolesOpacity = opacity;
@@ -265,7 +265,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 UIMenuPercentagePanel pnlOpacity = (UIMenuPercentagePanel)listItem.Panels[0];
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 7, newIndex, opacity);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 7, newIndex, opacity);
 
                 Cache.Character.Appearance.SkinDamage = newIndex;
                 Cache.Character.Appearance.SkinDamageOpacity = opacity;
@@ -275,7 +275,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             if (listItem == lstEyeColor)
             {
-                API.SetPedEyeColor(Game.PlayerPed.Handle, newIndex);
+                API.SetPedEyeColor(Cache.PlayerPed.Handle, newIndex);
 
                 Cache.Character.Appearance.EyeColor = newIndex;
 
@@ -289,8 +289,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 4, newIndex, opacity);
-                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 4, 2, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 4, newIndex, opacity);
+                API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 4, 2, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
 
                 Cache.Character.Appearance.EyeMakeup = newIndex;
                 Cache.Character.Appearance.EyeMakeupOpacity = opacity;
@@ -306,8 +306,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 5, newIndex, opacity);
-                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 5, 2, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 5, newIndex, opacity);
+                API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 5, 2, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
 
                 Cache.Character.Appearance.Blusher = newIndex;
                 Cache.Character.Appearance.BlusherOpacity = opacity;
@@ -323,8 +323,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
                 float opacity = pnlOpacity.Percentage;
 
-                API.SetPedHeadOverlay(Game.PlayerPed.Handle, 8, newIndex, opacity);
-                API.SetPedHeadOverlayColor(Game.PlayerPed.Handle, 8, 2, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
+                API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 8, newIndex, opacity);
+                API.SetPedHeadOverlayColor(Cache.PlayerPed.Handle, 8, 2, pnlColor.CurrentSelection, pnlColor.CurrentSelection);
 
                 Cache.Character.Appearance.Lipstick = newIndex;
                 Cache.Character.Appearance.LipstickOpacity = opacity;
@@ -376,7 +376,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             lstEyebrows.AddPanel(pnlEyebrowOpacity);
             lstEyebrows.AddPanel(pnlEyebrowColor);
 
-            if (Game.PlayerPed.Gender == Gender.Male)
+            if (Cache.PlayerPed.Gender == Gender.Male)
             {
                 lstFacialHair = new UIMenuListItem("Facial Hair", facialHairStylesList, 0);
                 pnlFacialHairOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
@@ -421,7 +421,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             lstEyeMakeup.AddPanel(pnlEyeMakeupOpacity);
             lstEyeMakeup.AddPanel(pnlEyeMakeupColor);
 
-            if (Game.PlayerPed.Gender == Gender.Female)
+            if (Cache.PlayerPed.Gender == Gender.Female)
             {
                 lstBlusher = new UIMenuListItem("Blusher", blusherStyleList, 0);
                 pnlBlusherOpacity = new UIMenuPercentagePanel("Opacity", "0%", "100%");
@@ -445,19 +445,19 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             if (Game.IsControlPressed(0, Control.Pickup))
             {
-                Game.PlayerPed.Heading += 10f;
+                Cache.PlayerPed.Heading += 10f;
             }
 
             if (Game.IsControlPressed(0, Control.Cover))
             {
-                Game.PlayerPed.Heading -= 10f;
+                Cache.PlayerPed.Heading -= 10f;
             }
         }
 
         private void CreateMenuItems()
         {
             hairStyleList.Clear();
-            int maxHairStyles = API.GetNumberOfPedDrawableVariations(Game.PlayerPed.Handle, 2);
+            int maxHairStyles = API.GetNumberOfPedDrawableVariations(Cache.PlayerPed.Handle, 2);
             for (int i = 0; i < maxHairStyles; i++)
             {
                 hairStyleList.Add($"Style #{i + 1}");

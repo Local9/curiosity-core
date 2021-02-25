@@ -233,7 +233,7 @@ namespace Curiosity.Core.Client.Managers
             await ScreenInterface.FadeOut();
 
             Vector3 spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
-            curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Game.PlayerPed.Heading));
+            curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Cache.PlayerPed.Heading));
 
             RemoveCamera();
 
@@ -248,7 +248,7 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.DetachTickHandler(OnRespawnControlTask);
 
             Vector3 spawnLocation = curiosityPlayer.Entity.Position.AsVector();
-            curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Game.PlayerPed.Heading));
+            curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Cache.PlayerPed.Heading));
 
             RemoveCamera();
 
@@ -269,7 +269,7 @@ namespace Curiosity.Core.Client.Managers
 
             // Screen.ShowSubtitle($"{camPosition}");
 
-            DeathCamera.PointAt(Game.PlayerPed, new Vector3(0f, 0f, 0.5f));
+            DeathCamera.PointAt(Cache.PlayerPed, new Vector3(0f, 0f, 0.5f));
             DeathCamera.Position = camPosition;
             API.SetFocusArea(camPosition.X, camPosition.Y, camPosition.Z, 0f, 0f, 0f);
 
@@ -291,7 +291,7 @@ namespace Curiosity.Core.Client.Managers
         {
             API.ClearFocus();
 
-            DeathCamera = World.CreateCamera(Game.PlayerPed.Position, Vector3.Zero, GameplayCamera.FieldOfView);
+            DeathCamera = World.CreateCamera(Cache.PlayerPed.Position, Vector3.Zero, GameplayCamera.FieldOfView);
             DeathCamera.IsActive = true;
             API.RenderScriptCams(true, true, 1000, true, false);
         }
@@ -335,7 +335,7 @@ namespace Curiosity.Core.Client.Managers
                 AngleY = -89.0f;
             }
 
-            Vector3 pPos = Game.PlayerPed.Position;
+            Vector3 pPos = Cache.PlayerPed.Position;
 
             float radius = 8.0f;
 
@@ -347,11 +347,11 @@ namespace Curiosity.Core.Client.Managers
             Vector3 raycastPosition = pPos;
             raycastPosition.Z = raycastPosition.Z + 0.5f;
 
-            RaycastResult raycastResult = World.Raycast(raycastPosition, behindTheCamera, IntersectOptions.Everything, Game.PlayerPed);
+            RaycastResult raycastResult = World.Raycast(raycastPosition, behindTheCamera, IntersectOptions.Everything, Cache.PlayerPed);
 
             float maxRadius = radius;
 
-            if (raycastResult.DitHit && Game.PlayerPed.IsInRangeOf(raycastResult.HitPosition, maxRadius))
+            if (raycastResult.DitHit && Cache.PlayerPed.IsInRangeOf(raycastResult.HitPosition, maxRadius))
             {
                 Vector3 hitPos = raycastResult.HitPosition;
                 maxRadius = API.Vdist(pPos.X, pPos.Y, pPos.Z, hitPos.X, hitPos.Y, hitPos.Z);

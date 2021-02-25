@@ -84,7 +84,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
         {
             MenuManager.OnMenuState(true);
 
-            if (Game.PlayerPed.IsInVehicle())
+            if (Cache.PlayerPed.IsInVehicle())
             {
                 MenuManager._MenuPool.CloseAllMenus();
 
@@ -136,7 +136,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
         private async Task OnSuspectDistanceCheck()
         {
-            if (Ped.Position.Distance(Game.PlayerPed.Position) > 3f)
+            if (Ped.Position.Distance(Cache.PlayerPed.Position) > 3f)
                 MenuManager._MenuPool.CloseAllMenus();
         }
 
@@ -207,7 +207,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("Wait, its in my pants");
                     if (selectedItem == menuItemRelease)
                     {
-                        string spose = Game.PlayerPed.Gender == Gender.Male ? "wifes" : "husbands";
+                        string spose = Cache.PlayerPed.Gender == Gender.Male ? "wifes" : "husbands";
                         ShowPersonSubtitle($"Now to get to your {spose} place");
                     }
                     if (selectedItem == menuItemWhatAreYouDoing)
@@ -239,7 +239,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                         ShowPersonSubtitle("What traffic lights? I'm rather blind when pigs are near me");
                     if (selectedItem == menuItemSpeeding)
                     {
-                        string spose = Game.PlayerPed.Gender == Gender.Male ? "wifes" : "husbands";
+                        string spose = Cache.PlayerPed.Gender == Gender.Male ? "wifes" : "husbands";
                         ShowPersonSubtitle($"I was rushing to your {spose} place, they said you were out");
                     }
                     if (selectedItem == menuItemLaneChange)
@@ -272,7 +272,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                 Screen.ShowNotification(Ped.Identity);
                 
                 Decorators.Set(Ped.Handle, Decorators.MENU_IDENTIFICATION, true);
-                Game.PlayerPed.AnimationTicket();
+                Cache.PlayerPed.AnimationTicket();
 
                 menuItemIdentifcation.Description = Ped.Identity;
             }
@@ -313,7 +313,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
                     else
                     {
                         Ped.Fx.Weapons.Give(WeaponHash.Pistol, 12, true, true);
-                        Ped.Task.ShootAt(Game.PlayerPed, 5000, FiringPattern.Default);
+                        Ped.Task.ShootAt(Cache.PlayerPed, 5000, FiringPattern.Default);
                         
                         await BaseScript.Delay(2000);
                         

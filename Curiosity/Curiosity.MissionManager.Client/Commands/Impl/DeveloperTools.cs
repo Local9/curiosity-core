@@ -28,7 +28,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
         //    public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
         //    {
         //        player.Entity.ToggleGodMode();
-        //        if (Game.PlayerPed.IsInvincible)
+        //        if (Cache.PlayerPed.IsInvincible)
         //        {
         //            Chat.SendLocalMessage("God Mode: Enabled");
         //        }
@@ -52,8 +52,8 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
 
         //            if (!model.IsValid || !model.IsVehicle) return;
 
-        //            if (Game.PlayerPed.IsInVehicle())
-        //                Game.PlayerPed.CurrentVehicle.Delete();
+        //            if (Cache.PlayerPed.IsInVehicle())
+        //                Cache.PlayerPed.CurrentVehicle.Delete();
 
         //            var position = entity.Position;
         //            var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
@@ -107,7 +107,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
                 switch(animation)
                 {
                     case "ticket":
-                        await Game.PlayerPed.AnimationTicket();
+                        await Cache.PlayerPed.AnimationTicket();
                         break;
                     case "radio":
                         AnimationHandler.AnimationRadio();
@@ -119,7 +119,7 @@ namespace Curiosity.MissionManager.Client.Commands.Impl
                         await AnimationHandler.AnimationClipboard();
                         break;
                     case "stop":
-                        Game.PlayerPed.Task.ClearAllImmediately();
+                        Cache.PlayerPed.Task.ClearAllImmediately();
                         break;
                 }
             }

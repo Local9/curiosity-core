@@ -55,11 +55,11 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             Cache.Character.Appearance.Hat = PluginManager.Rand.Next(MAX_HAT_VALUE);
             Cache.Character.Appearance.Glasses = PluginManager.Rand.Next(MAX_GLASSES_VALUE);
 
-            CharacterClothing.SetPedTop(Game.PlayerPed, Cache.Character.Appearance.Top);
-            CharacterClothing.SetPedPants(Game.PlayerPed, Cache.Character.Appearance.Pants);
-            CharacterClothing.SetPedShoes(Game.PlayerPed, Cache.Character.Appearance.Shoes);
-            CharacterClothing.SetPedHat(Game.PlayerPed, Cache.Character.Appearance.Hat);
-            CharacterClothing.SetPedGlasses(Game.PlayerPed, Cache.Character.Appearance.Glasses);
+            CharacterClothing.SetPedTop(Cache.PlayerPed, Cache.Character.Appearance.Top);
+            CharacterClothing.SetPedPants(Cache.PlayerPed, Cache.Character.Appearance.Pants);
+            CharacterClothing.SetPedShoes(Cache.PlayerPed, Cache.Character.Appearance.Shoes);
+            CharacterClothing.SetPedHat(Cache.PlayerPed, Cache.Character.Appearance.Hat);
+            CharacterClothing.SetPedGlasses(Cache.PlayerPed, Cache.Character.Appearance.Glasses);
 
             lstTops.Index = Cache.Character.Appearance.Top;
             lstPants.Index = Cache.Character.Appearance.Pants;
@@ -72,31 +72,31 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         {
             if (listItem == lstTops)
             {
-                CharacterClothing.SetPedTop(Game.PlayerPed, newIndex);
+                CharacterClothing.SetPedTop(Cache.PlayerPed, newIndex);
                 Cache.Character.Appearance.Top = newIndex;
             }
 
             if (listItem == lstPants)
             {
-                CharacterClothing.SetPedPants(Game.PlayerPed, newIndex);
+                CharacterClothing.SetPedPants(Cache.PlayerPed, newIndex);
                 Cache.Character.Appearance.Pants = newIndex;
             }
 
             if (listItem == lstShoes)
             {
-                CharacterClothing.SetPedShoes(Game.PlayerPed, newIndex);
+                CharacterClothing.SetPedShoes(Cache.PlayerPed, newIndex);
                 Cache.Character.Appearance.Shoes = newIndex;
             }
 
             if (listItem == lstHats)
             {
-                CharacterClothing.SetPedHat(Game.PlayerPed, newIndex);
+                CharacterClothing.SetPedHat(Cache.PlayerPed, newIndex);
                 Cache.Character.Appearance.Hat = newIndex;
             }
 
             if (listItem == lstGlasses)
             {
-                CharacterClothing.SetPedGlasses(Game.PlayerPed, newIndex);
+                CharacterClothing.SetPedGlasses(Cache.PlayerPed, newIndex);
                 Cache.Character.Appearance.Glasses = newIndex;
             }
         }
@@ -117,12 +117,12 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             if (Game.IsControlPressed(0, Control.Pickup))
             {
-                Game.PlayerPed.Heading += 10f;
+                Cache.PlayerPed.Heading += 10f;
             }
 
             if (Game.IsControlPressed(0, Control.Cover))
             {
-                Game.PlayerPed.Heading -= 10f;
+                Cache.PlayerPed.Heading -= 10f;
             }
 
             if (Game.IsControlJustPressed(0, Control.Jump))

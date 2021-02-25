@@ -69,12 +69,12 @@ namespace Curiosity.Core.Client.Managers
                         CurrentCamera.Delete();
                         CurrentCamera = null;
                         World.RenderingCamera = null;
-                        Game.PlayerPed.IsPositionFrozen = false;
-                        Game.PlayerPed.IsCollisionEnabled = true;
-                        Game.PlayerPed.CanRagdoll = true;
-                        Game.PlayerPed.IsVisible = true;
-                        Game.PlayerPed.Opacity = 255;
-                        Game.PlayerPed.Task.ClearAllImmediately();
+                        Cache.PlayerPed.IsPositionFrozen = false;
+                        Cache.PlayerPed.IsCollisionEnabled = true;
+                        Cache.PlayerPed.CanRagdoll = true;
+                        Cache.PlayerPed.IsVisible = true;
+                        Cache.PlayerPed.Opacity = 255;
+                        Cache.PlayerPed.Task.ClearAllImmediately();
                         await BaseScript.Delay(100);
                     }
                     return;
@@ -83,15 +83,15 @@ namespace Curiosity.Core.Client.Managers
                 // Create camera on toggle
                 if (CurrentCamera == null)
                 {
-                    CurrentCamera = World.CreateCamera(Game.PlayerPed.Position, GameplayCamera.Rotation, 75f);
-                    CurrentCamera.AttachTo(Game.PlayerPed, Vector3.Zero);
+                    CurrentCamera = World.CreateCamera(Cache.PlayerPed.Position, GameplayCamera.Rotation, 75f);
+                    CurrentCamera.AttachTo(Cache.PlayerPed, Vector3.Zero);
                     World.RenderingCamera = CurrentCamera;
-                    Game.PlayerPed.IsPositionFrozen = true;
-                    Game.PlayerPed.IsCollisionEnabled = false;
-                    Game.PlayerPed.Opacity = 0;
-                    Game.PlayerPed.CanRagdoll = false;
-                    Game.PlayerPed.IsVisible = false;
-                    Game.PlayerPed.Task.ClearAllImmediately();
+                    Cache.PlayerPed.IsPositionFrozen = true;
+                    Cache.PlayerPed.IsCollisionEnabled = false;
+                    Cache.PlayerPed.Opacity = 0;
+                    Cache.PlayerPed.CanRagdoll = false;
+                    Cache.PlayerPed.IsVisible = false;
+                    Cache.PlayerPed.Task.ClearAllImmediately();
                 }
 
                 // Speed Control
@@ -121,36 +121,36 @@ namespace Curiosity.Core.Client.Managers
                 // Forward
                 if (Game.IsControlPressed(2, Control.MoveUpOnly))
                 {
-                    Game.PlayerPed.PositionNoOffset = Game.PlayerPed.Position + CurrentCamera.UpVector * (Speed * multiplier);
+                    Cache.PlayerPed.PositionNoOffset = Cache.PlayerPed.Position + CurrentCamera.UpVector * (Speed * multiplier);
                 }
                 // Backward
                 else if (Game.IsControlPressed(2, Control.MoveUpDown))
                 {
-                    Game.PlayerPed.PositionNoOffset = Game.PlayerPed.Position - CurrentCamera.UpVector * (Speed * multiplier);
+                    Cache.PlayerPed.PositionNoOffset = Cache.PlayerPed.Position - CurrentCamera.UpVector * (Speed * multiplier);
                 }
                 // Left
                 if (Game.IsControlPressed(2, Control.MoveLeftOnly))
                 {
-                    var pos = Game.PlayerPed.GetOffsetPosition(new Vector3(-Speed * multiplier, 0f, 0f));
-                    Game.PlayerPed.PositionNoOffset = new Vector3(pos.X, pos.Y, Game.PlayerPed.Position.Z);
+                    var pos = Cache.PlayerPed.GetOffsetPosition(new Vector3(-Speed * multiplier, 0f, 0f));
+                    Cache.PlayerPed.PositionNoOffset = new Vector3(pos.X, pos.Y, Cache.PlayerPed.Position.Z);
                 }
                 // Right
                 else if (Game.IsControlPressed(2, Control.MoveLeftRight))
                 {
-                    var pos = Game.PlayerPed.GetOffsetPosition(new Vector3(Speed * multiplier, 0f, 0f));
-                    Game.PlayerPed.PositionNoOffset = new Vector3(pos.X, pos.Y, Game.PlayerPed.Position.Z);
+                    var pos = Cache.PlayerPed.GetOffsetPosition(new Vector3(Speed * multiplier, 0f, 0f));
+                    Cache.PlayerPed.PositionNoOffset = new Vector3(pos.X, pos.Y, Cache.PlayerPed.Position.Z);
                 }
 
                 // Up (E)
                 if (Game.IsControlPressed(2, Control.Context))
                 {
-                    Game.PlayerPed.PositionNoOffset = Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 0f, multiplier * Speed / 2));
+                    Cache.PlayerPed.PositionNoOffset = Cache.PlayerPed.GetOffsetPosition(new Vector3(0f, 0f, multiplier * Speed / 2));
                 }
 
                 // Down (Q)
                 if (Game.IsControlPressed(2, Control.ContextSecondary))
                 {
-                    Game.PlayerPed.PositionNoOffset = Game.PlayerPed.GetOffsetPosition(new Vector3(0f, 0f, multiplier * -Speed / 2));
+                    Cache.PlayerPed.PositionNoOffset = Cache.PlayerPed.GetOffsetPosition(new Vector3(0f, 0f, multiplier * -Speed / 2));
                 }
 
 
@@ -160,8 +160,8 @@ namespace Curiosity.Core.Client.Managers
                     Game.DisableControlThisFrame(2, ctrl);
                 }
 
-                Game.PlayerPed.Heading = Math.Max(0f, (360 + CurrentCamera.Rotation.Z) % 360f);
-                Game.PlayerPed.Opacity = 0;
+                Cache.PlayerPed.Heading = Math.Max(0f, (360 + CurrentCamera.Rotation.Z) % 360f);
+                Cache.PlayerPed.Opacity = 0;
                 API.DisablePlayerFiring(Game.Player.Handle, false);
             }
             catch (Exception ex)

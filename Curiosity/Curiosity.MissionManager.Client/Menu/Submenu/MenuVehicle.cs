@@ -77,7 +77,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private async Task OnSuspectVehicleDistanceCheck()
         {
-            if (vehicle.Position.Distance(Game.PlayerPed.Position) > 3f)
+            if (vehicle.Position.Distance(Cache.PlayerPed.Position) > 3f)
                 MenuManager._MenuPool.CloseAllMenus();
         }
 
@@ -121,7 +121,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemRecordNumberPlate)
             {
-                Game.PlayerPed.AnimationTicket();
+                Cache.PlayerPed.AnimationTicket();
                 vehicle.RecordLicensePlate();
             }
         }

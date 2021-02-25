@@ -17,7 +17,7 @@ namespace Curiosity.MissionManager.Client.Utils
         {
             try
             {
-                RaycastResult raycast = World.Raycast(Game.PlayerPed.Position, Game.PlayerPed.GetOffsetPosition(new Vector3(0f, distance, 0f)), IntersectOptions.Everything);
+                RaycastResult raycast = World.Raycast(Cache.PlayerPed.Position, Cache.PlayerPed.GetOffsetPosition(new Vector3(0f, distance, 0f)), IntersectOptions.Everything);
                 if (raycast.DitHitEntity)
                     return (Entity)raycast.HitEntity;
             }
@@ -66,9 +66,9 @@ namespace Curiosity.MissionManager.Client.Utils
         {
             try
             {
-                Vector3 playerPos = Game.PlayerPed.Position;
+                Vector3 playerPos = Cache.PlayerPed.Position;
                 Vector3 offset = new Vector3(0f, 3f, 0f);
-                Vector3 worldOffset = Game.PlayerPed.GetOffsetPosition(offset);
+                Vector3 worldOffset = Cache.PlayerPed.GetOffsetPosition(offset);
 
                 if (pedToCheck != null)
                 {

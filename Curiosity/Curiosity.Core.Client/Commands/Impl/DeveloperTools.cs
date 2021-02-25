@@ -28,7 +28,7 @@ namespace Curiosity.Core.Client.Commands.Impl
             public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 player.Entity.ToggleGodMode();
-                if (Game.PlayerPed.IsInvincible)
+                if (Cache.PlayerPed.IsInvincible)
                 {
                     Chat.SendLocalMessage("God Mode: Enabled");
                 }
@@ -46,8 +46,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                 string dict = arguments.ElementAt(0);
                 string anim = arguments.ElementAt(1);
 
-                Game.PlayerPed.Task.ClearAllImmediately();
-                Game.PlayerPed.Task.ClearAll();
+                Cache.PlayerPed.Task.ClearAllImmediately();
+                Cache.PlayerPed.Task.ClearAll();
 
                 API.RequestAnimDict(dict);
                 while (!API.HasAnimDictLoaded(dict))
@@ -57,7 +57,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 Enum.TryParse(arguments.ElementAt(2), out AnimationFlags animationFlag);
 
-                Game.PlayerPed.Task.PlayAnimation(dict, anim, 8f, -1, animationFlag);
+                Cache.PlayerPed.Task.PlayAnimation(dict, anim, 8f, -1, animationFlag);
             }
         }
 
@@ -68,12 +68,12 @@ namespace Curiosity.Core.Client.Commands.Impl
             {
                 Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
                 {
-                    Game.PlayerPed.Weapons.Give(w, 999, false, true);
-                    Game.PlayerPed.Weapons[w].InfiniteAmmo = true;
-                    Game.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
+                    Cache.PlayerPed.Weapons.Give(w, 999, false, true);
+                    Cache.PlayerPed.Weapons[w].InfiniteAmmo = true;
+                    Cache.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
                 });
 
-                Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
+                Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
                 Chat.SendLocalMessage("Weapons: All Equiped");
             }
         }
@@ -85,7 +85,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Vehicle vehicle = Game.PlayerPed.GetVehicleInFront();
+                Vehicle vehicle = Cache.PlayerPed.GetVehicleInFront();
                 Notify.Info($"~n~NetId: {vehicle.NetworkId}~n~Hndl: {vehicle.Handle}");
             }
         }
@@ -231,9 +231,9 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 string positionName = arguments[0];
 
-                Vector3 pos = Game.PlayerPed.Position;
+                Vector3 pos = Cache.PlayerPed.Position;
 
-                bool response = await EventSystem.GetModule().Request<bool>("developer:savePos", positionName, pos.X, pos.Y, pos.Z, Game.PlayerPed.Heading);
+                bool response = await EventSystem.GetModule().Request<bool>("developer:savePos", positionName, pos.X, pos.Y, pos.Z, Cache.PlayerPed.Heading);
                 if (response)
                 {
                     Chat.SendLocalMessage($"Position '{positionName}' saved.");
@@ -284,7 +284,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         //        //API.AddTextComponentSubstringPlayerName("Hello, World!");
         //        //API.EndTextCommandDisplayText(0.5f, 0.5f);
 
-        //        // string txd = await Game.PlayerPed.GetHeadshot();
+        //        // string txd = await Cache.PlayerPed.GetHeadshot();
 
         //        string txd = "CHAR_ACTING_UP";
 
@@ -292,7 +292,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         //        API.EndTextCommandThefeedPostMessagetextEntry(txd, txd, false, 0, notificationKey, argument);
         //        API.EndTextCommandThefeedPostTicker(true, false);
 
-        //        API.UnregisterPedheadshot(Game.PlayerPed.Handle);
+        //        API.UnregisterPedheadshot(Cache.PlayerPed.Handle);
         //    }
         //}
         #endregion

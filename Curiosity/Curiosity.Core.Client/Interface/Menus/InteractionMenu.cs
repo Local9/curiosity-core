@@ -110,7 +110,7 @@ namespace Curiosity.Core.Client.Interface.Menus
                 List<Vector3> posVectors = new List<Vector3>();
                 positions.ForEach(x => posVectors.Add(x.AsVector()));
 
-                Vector3 closestPosition = Game.PlayerPed.Position.FindClosestPoint(posVectors);
+                Vector3 closestPosition = Cache.PlayerPed.Position.FindClosestPoint(posVectors);
 
                 if (closestPosition.Equals(Vector3.Zero)) return;
 

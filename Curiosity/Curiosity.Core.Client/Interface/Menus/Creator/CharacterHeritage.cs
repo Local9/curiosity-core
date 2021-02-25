@@ -102,12 +102,12 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             if (Game.IsControlPressed(0, Control.Pickup))
             {
-                Game.PlayerPed.Heading += 10f;
+                Cache.PlayerPed.Heading += 10f;
             }
 
             if (Game.IsControlPressed(0, Control.Cover))
             {
-                Game.PlayerPed.Heading -= 10f;
+                Cache.PlayerPed.Heading -= 10f;
             }
 
             if (Game.IsControlJustPressed(0, Control.Jump))

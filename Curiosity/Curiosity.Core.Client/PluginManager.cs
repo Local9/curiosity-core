@@ -137,14 +137,14 @@ namespace Curiosity.Core.Client
                 if (Local.Character.MarkedAsRegistered)
                 {
                     Local.Character.LastPosition = Local.Entity.Position;
-                    Local.Character.Health = Game.PlayerPed.Health;
-                    Local.Character.Armor = Game.PlayerPed.Armor;
+                    Local.Character.Health = Cache.PlayerPed.Health;
+                    Local.Character.Armor = Cache.PlayerPed.Armor;
                     Local.Character.Save();
                 }
 
                 if (!Cache.Player.User.IsStaff && IsAfkKickEnabled)
                 {
-                    if (lastPosition != (lastPosition = Game.PlayerPed.Position))
+                    if (lastPosition != (lastPosition = Cache.PlayerPed.Position))
                         lastTimePlayerStayedStill = DateTime.Now;
 
                     if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds >= 900)

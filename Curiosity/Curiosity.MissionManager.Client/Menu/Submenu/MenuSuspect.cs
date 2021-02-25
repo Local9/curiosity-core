@@ -68,7 +68,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         {
             MenuManager.OnMenuState(true);
 
-            if (Game.PlayerPed.IsInVehicle())
+            if (Cache.PlayerPed.IsInVehicle())
             {
                 MenuManager._MenuPool.CloseAllMenus();
 
@@ -115,7 +115,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private async Task OnSuspectDistanceCheck()
         {
-            if (Ped.Position.Distance(Game.PlayerPed.Position) > 3f)
+            if (Ped.Position.Distance(Cache.PlayerPed.Position) > 3f)
                 MenuManager._MenuPool.CloseAllMenus();
         }
 
@@ -192,7 +192,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemSearch)
             {
-                CitizenFX.Core.Ped ped = Game.PlayerPed.GetPedInFront(pedToCheck: Ped.Fx);
+                CitizenFX.Core.Ped ped = Cache.PlayerPed.GetPedInFront(pedToCheck: Ped.Fx);
 
                 if (ped == null)
                 {

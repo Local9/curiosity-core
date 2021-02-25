@@ -59,7 +59,7 @@ namespace Curiosity.MissionManager.Client.Managers
         {
             try
             {
-                List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 30f)).ToList();
+                List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(p => p.IsInRangeOf(Cache.PlayerPed.Position, 30f)).ToList();
 
                 if (peds.Count == 0)
                 {

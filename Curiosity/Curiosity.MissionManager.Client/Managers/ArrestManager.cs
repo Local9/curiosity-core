@@ -15,7 +15,7 @@ namespace Curiosity.MissionManager.Client.Manager
             EventSystem.Attach("job:police:arrest", new EventCallback(metadata =>
             {
                 List<Ped> peds = World.GetAllPeds().Where(x => 
-                    x.IsInRangeOf(Game.PlayerPed.Position, 20f)
+                    x.IsInRangeOf(Cache.PlayerPed.Position, 20f)
                     && Decorators.GetBoolean(x.Handle, Decorators.PED_ARRESTED)
                     && Decorators.GetBoolean(x.Handle, Decorators.PED_HANDCUFFED)
                     ).Select(p => p).ToList();

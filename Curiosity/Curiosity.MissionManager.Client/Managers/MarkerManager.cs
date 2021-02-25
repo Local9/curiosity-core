@@ -51,14 +51,14 @@ namespace Curiosity.MissionManager.Client.Managers
 
         void RefreshClose()
         {
-            MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => m.Position.Distance(Game.PlayerPed.Position) < Math.Pow(m.DrawThreshold, 2)).ToList();
+            MarkersClose = MarkersAll.ToList().Select(m => m).Where(m => m.Position.Distance(Cache.PlayerPed.Position) < Math.Pow(m.DrawThreshold, 2)).ToList();
         }
 
         public static Marker GetActiveMarker(MarkerFilter markerFilter)
         {
             try
             {
-                Marker closestMarker = closestMarker = MarkersClose.Where(w => w.Position.Distance(Game.PlayerPed.Position) < w.ContextAoe).FirstOrDefault();
+                Marker closestMarker = closestMarker = MarkersClose.Where(w => w.Position.Distance(Cache.PlayerPed.Position) < w.ContextAoe).FirstOrDefault();
 
                 if (markerFilter == MarkerFilter.Unknown)
                 {

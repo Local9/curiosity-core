@@ -90,7 +90,7 @@ namespace Curiosity.Core.Client.Interface
             float distance = (float)Math.Sqrt(GameplayCamera.Position.DistanceToSquared(pos));
             float scale = ((1 / distance) * 2) * GameplayCamera.FieldOfView / scaleMod;
 
-            if (!Game.PlayerPed.IsInRangeOf(pos, distanceToHide))
+            if (!Cache.PlayerPed.IsInRangeOf(pos, distanceToHide))
             {
                 return;
             }

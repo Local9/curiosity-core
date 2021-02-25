@@ -33,11 +33,11 @@ namespace Curiosity.Core.Client.Utils
 
                 if (!isPassive)
                 {
-                    //Game.PlayerPed.CanBeDraggedOutOfVehicle = true;
-                    //Game.PlayerPed.SetConfigFlag(342, false);
-                    //Game.PlayerPed.SetConfigFlag(122, false);
+                    //Cache.PlayerPed.CanBeDraggedOutOfVehicle = true;
+                    //Cache.PlayerPed.SetConfigFlag(342, false);
+                    //Cache.PlayerPed.SetConfigFlag(122, false);
                     //API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 1f);
-                    //Game.PlayerPed.CanSwitchWeapons = true;
+                    //Cache.PlayerPed.CanSwitchWeapons = true;
 
                     // API.NetworkSetPlayerIsPassive(false);
                     API.NetworkSetFriendlyFireOption(true);
@@ -48,16 +48,16 @@ namespace Curiosity.Core.Client.Utils
                 }
                 else
                 {
-                    //Game.PlayerPed.CanBeDraggedOutOfVehicle = false;
-                    //Game.PlayerPed.SetConfigFlag(342, true);
-                    //Game.PlayerPed.SetConfigFlag(122, true);
+                    //Cache.PlayerPed.CanBeDraggedOutOfVehicle = false;
+                    //Cache.PlayerPed.SetConfigFlag(342, true);
+                    //Cache.PlayerPed.SetConfigFlag(122, true);
                     //API.SetPlayerVehicleDefenseModifier(Game.Player.Handle, 0.5f);
-                    //Game.PlayerPed.CanSwitchWeapons = false;
+                    //Cache.PlayerPed.CanSwitchWeapons = false;
 
                     // API.NetworkSetPlayerIsPassive(true);
                     API.NetworkSetFriendlyFireOption(false);
 
-                    // Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed);                   
+                    // Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);                   
                 }
             }
         }
@@ -97,38 +97,38 @@ namespace Curiosity.Core.Client.Utils
         {
             int randomEvent = Utility.RANDOM.Next(3);
 
-            Game.PlayerPed.IsInvincible = false; // Well, you gotta die!
+            Cache.PlayerPed.IsInvincible = false; // Well, you gotta die!
 
             //if (randomEvent == 1)
             if (randomEvent == 1)
             {
-                Game.PlayerPed.Task.PlayAnimation("mp_suicide", "pill", 8f, -1, AnimationFlags.None);
+                Cache.PlayerPed.Task.PlayAnimation("mp_suicide", "pill", 8f, -1, AnimationFlags.None);
                 await BaseScript.Delay(2500);
-                Game.PlayerPed.Kill();
+                Cache.PlayerPed.Kill();
             }
             else if (randomEvent == 0)
             {
-                Game.PlayerPed.Weapons.Give((WeaponHash)453432689, 1, true, true);
-                Game.PlayerPed.Task.PlayAnimation("mp_suicide", "pistol", 8f, -1, AnimationFlags.None);
+                Cache.PlayerPed.Weapons.Give((WeaponHash)453432689, 1, true, true);
+                Cache.PlayerPed.Task.PlayAnimation("mp_suicide", "pistol", 8f, -1, AnimationFlags.None);
                 await BaseScript.Delay(1000);
-                Function.Call((Hash)7592965275345899078, Game.PlayerPed.Handle, 0, 0, 0, false);
-                Game.PlayerPed.Kill();
+                Function.Call((Hash)7592965275345899078, Cache.PlayerPed.Handle, 0, 0, 0, false);
+                Cache.PlayerPed.Kill();
             }
             else
             {
-                Function.Call(Hash.GIVE_WEAPON_TO_PED, Game.PlayerPed.Handle, -1569615261, 1, true, true);
+                Function.Call(Hash.GIVE_WEAPON_TO_PED, Cache.PlayerPed.Handle, -1569615261, 1, true, true);
                 Model plasticCup = new Model("apa_prop_cs_plastic_cup_01");
                 await plasticCup.Request(10000);
 
-                Prop prop = await World.CreateProp(plasticCup, Game.PlayerPed.Position, false, false);
+                Prop prop = await World.CreateProp(plasticCup, Cache.PlayerPed.Position, false, false);
 
-                int boneIdx = API.GetPedBoneIndex(Game.PlayerPed.Handle, 28422);
-                API.AttachEntityToEntity(prop.Handle, Game.PlayerPed.Handle, API.GetPedBoneIndex(API.GetPlayerPed(-1), 58868), 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 70.0f, true, true, false, false, 2, true);
+                int boneIdx = API.GetPedBoneIndex(Cache.PlayerPed.Handle, 28422);
+                API.AttachEntityToEntity(prop.Handle, Cache.PlayerPed.Handle, API.GetPedBoneIndex(API.GetPlayerPed(-1), 58868), 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 70.0f, true, true, false, false, 2, true);
 
-                Game.PlayerPed.Task.PlayAnimation("mini@sprunk", "plyr_buy_drink_pt2", 8f, -1, AnimationFlags.None);
+                Cache.PlayerPed.Task.PlayAnimation("mini@sprunk", "plyr_buy_drink_pt2", 8f, -1, AnimationFlags.None);
 
                 await BaseScript.Delay(1500);
-                Game.PlayerPed.Kill();
+                Cache.PlayerPed.Kill();
                 prop.Detach();
             }
 

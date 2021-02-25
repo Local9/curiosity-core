@@ -255,7 +255,7 @@ namespace Curiosity.Core.Client.Managers
         {
             lastRunWeatherUpdate = DateTime.Now;
 
-            Vector3 pos = Game.PlayerPed.Position;
+            Vector3 pos = Cache.PlayerPed.Position;
 
             string zoneStr = GetNameOfZone(pos.X, pos.Y, pos.Z);
             Enum.TryParse(zoneStr, out SubRegion subRegion);
@@ -287,7 +287,7 @@ namespace Curiosity.Core.Client.Managers
         {
             await BaseScript.Delay(0);
 
-            //int interior = GetInteriorFromEntity(Game.PlayerPed.Handle);
+            //int interior = GetInteriorFromEntity(Cache.PlayerPed.Handle);
 
             //if (interior > 0) // If they are indoors, lock the timer
             //{
@@ -322,7 +322,7 @@ namespace Curiosity.Core.Client.Managers
                     SetVehicleModelIsSuppressed((uint)veh, true);
                 });
 
-                List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Game.PlayerPed.IsInRangeOf(x.Position, 50f)).ToList();
+                List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 50f)).ToList();
 
                 vehicles.ForEach(veh =>
                 {
@@ -379,7 +379,7 @@ namespace Curiosity.Core.Client.Managers
                     else
                     {
                         Vector3 charPos = player.Character.Position;
-                        Vector3 playerPos = Game.PlayerPed.Position;
+                        Vector3 playerPos = Cache.PlayerPed.Position;
 
                         double distance = (Math.Floor(Math.Abs(Math.Sqrt(
                             (charPos.X - playerPos.X) *

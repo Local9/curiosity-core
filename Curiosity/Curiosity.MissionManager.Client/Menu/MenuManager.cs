@@ -48,7 +48,7 @@ namespace Curiosity.MissionManager.Client.Menu
                 {
                     if (resourceName != API.GetCurrentResourceName()) return;
 
-                    Decorators.Set(Game.PlayerPed.Handle, Decorators.PLAYER_MENU, false);
+                    Decorators.Set(Cache.PlayerPed.Handle, Decorators.PLAYER_MENU, false);
 
                     Setup();
                 };
@@ -134,12 +134,12 @@ namespace Curiosity.MissionManager.Client.Menu
 
             if (MarkerManager.GetActiveMarker(MarkerFilter.Unknown) != null) return;
 
-            if (!Game.PlayerPed.IsInVehicle())
+            if (!Cache.PlayerPed.IsInVehicle())
             {
                 CanShowMessage = true;
             }
 
-            if (Game.PlayerPed.IsInVehicle() && Game.PlayerPed?.CurrentVehicle?.Speed > 4f)
+            if (Cache.PlayerPed.IsInVehicle() && Cache.PlayerPed?.CurrentVehicle?.Speed > 4f)
             {
                 if (!HasShownWarning)
                     HelpMessage.Custom($"", 1000, false);
@@ -150,9 +150,9 @@ namespace Curiosity.MissionManager.Client.Menu
                 return;
             }
 
-            List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
+            List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Cache.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
 
-            List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Game.PlayerPed.Position, 4f)
+            List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Cache.PlayerPed.Position, 4f)
                 && (Decorators.GetBoolean(x.Handle, Decorators.VEHICLE_MISSION)
                 || (Decorators.GetBoolean(x.Handle, Decorators.PLAYER_VEHICLE) && Decorators.GetInteger(x.Handle, Decorators.PLAYER_OWNER) == Game.Player.ServerId
                     && (PlayerManager.PersonalVehicle.ClassType == VehicleClass.Emergency || PlayerManager.PersonalVehicle.Model.Hash == (int)VehicleHash.Polmav)))
@@ -176,7 +176,7 @@ namespace Curiosity.MissionManager.Client.Menu
 
         public void OnMenuCommand()
         {
-            if (Game.PlayerPed.IsAlive && JobManager.IsOfficer && !_MenuPool.IsAnyMenuOpen())
+            if (Cache.PlayerPed.IsAlive && JobManager.IsOfficer && !_MenuPool.IsAnyMenuOpen())
             {
                 if (menuMain.Visible) return;
 
@@ -192,14 +192,14 @@ namespace Curiosity.MissionManager.Client.Menu
         {
             if (!Mission.isOnMission) return null;
 
-            return Mission.RegisteredPeds.Select(x => x).Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 2f) && p.IsMission).FirstOrDefault();
+            return Mission.RegisteredPeds.Select(x => x).Where(p => p.IsInRangeOf(Cache.PlayerPed.Position, 2f) && p.IsMission).FirstOrDefault();
         }
 
         public static Vehicle GetClosestVehicle()
         {
             if (!Mission.isOnMission) return null;
 
-            return Mission.RegisteredVehicles.Select(x => x).Where(p => p.IsInRangeOf(Game.PlayerPed.Position, 4f) && p.IsMission).FirstOrDefault();
+            return Mission.RegisteredVehicles.Select(x => x).Where(p => p.IsInRangeOf(Cache.PlayerPed.Position, 4f) && p.IsMission).FirstOrDefault();
         }
     }
 }

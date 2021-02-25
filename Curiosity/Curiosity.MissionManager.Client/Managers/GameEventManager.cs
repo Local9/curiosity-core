@@ -161,8 +161,8 @@ namespace Curiosity.MissionManager.Client.Managers
 
             EventSystem.Attach("gameEvent:kill", new EventCallback(metadata =>
             {
-                if (Game.PlayerPed.IsAlive)
-                    Game.PlayerPed.Kill();
+                if (Cache.PlayerPed.IsAlive)
+                    Cache.PlayerPed.Kill();
 
                 return null;
             }));
@@ -198,7 +198,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 //    {
                 //        if (PluginManager.IsBirthday)
                 //        {
-                //            Vector3 coord = Game.PlayerPed.Position;
+                //            Vector3 coord = Cache.PlayerPed.Position;
                 //            Vector3 target = victim.Position;
 
                 //            float distance = API.Vdist(coord.X, coord.Y, coord.Z, target.X, target.Y, target.Z);

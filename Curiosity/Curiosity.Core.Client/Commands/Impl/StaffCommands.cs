@@ -30,12 +30,12 @@ namespace Curiosity.Core.Client.Commands.Impl
             {
                 Enum.GetValues(typeof(WeaponHash)).Cast<WeaponHash>().ToList().ForEach(w =>
                 {
-                    Game.PlayerPed.Weapons.Give(w, 999, false, true);
-                    Game.PlayerPed.Weapons[w].InfiniteAmmo = true;
-                    Game.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
+                    Cache.PlayerPed.Weapons.Give(w, 999, false, true);
+                    Cache.PlayerPed.Weapons[w].InfiniteAmmo = true;
+                    Cache.PlayerPed.Weapons[w].InfiniteAmmoClip = true;
                 });
 
-                Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
+                Cache.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
                 Chat.SendLocalMessage("Weapons: All Equiped");
             }
         }
@@ -55,13 +55,13 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
                 else
                 {
-                    vehicle = Game.PlayerPed.GetVehicleInFront();
+                    vehicle = Cache.PlayerPed.GetVehicleInFront();
                 }
 
                 if (vehicle == null) return;
 
-                if (vehicle.Driver == Game.PlayerPed)
-                    Game.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+                if (vehicle.Driver == Cache.PlayerPed)
+                    Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
 
                 await vehicle.FadeOut(true);
 
@@ -86,8 +86,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                 {
                     if (vehicle.Exists()) // personal vehicle
                     {
-                        if (vehicle.Driver == Game.PlayerPed)
-                            Game.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+                        if (vehicle.Driver == Cache.PlayerPed)
+                            Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
 
                         await vehicle.FadeOut(true);
 
@@ -109,8 +109,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                     {
                         vehicle = Cache.Entity.Vehicle;
 
-                        if (vehicle.Driver == Game.PlayerPed)
-                            Game.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+                        if (vehicle.Driver == Cache.PlayerPed)
+                            Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
 
                         await vehicle.FadeOut(true);
 
@@ -137,7 +137,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 await vehicle.FadeIn();
 
                 Cache.PersonalVehicle = vehicle;
-                Game.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle, VehicleSeat.Driver);
+                Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle, VehicleSeat.Driver);
 
                 Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
             }

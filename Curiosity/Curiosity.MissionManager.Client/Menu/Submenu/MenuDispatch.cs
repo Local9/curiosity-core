@@ -64,7 +64,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemOpenComputer)
             {
-                if (!(Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle))
+                if (!(Cache.PlayerPed.IsInVehicle() && Cache.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle))
                 {
                     Notify.Alert(CommonErrors.InsideVehicle);
                 }
@@ -199,7 +199,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menuItemCode51.Enabled = isCalloutActive && isVehicleTowable;
             menuItemCode78.Enabled = isCalloutActive;
             menuItemCode55d.Enabled = isCalloutActive;
-            menuItemOpenComputer.Enabled = (Game.PlayerPed.IsInVehicle() && Game.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle);
+            menuItemOpenComputer.Enabled = (Cache.PlayerPed.IsInVehicle() && Cache.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle);
         }
     }
 }
