@@ -66,5 +66,13 @@ namespace Curiosity.Core.Client.Extensions
             }
         }
 
+        public static async void RemoveFromWorld(this Vehicle vehicle)
+        {
+            if (!vehicle.Exists()) return;
+
+            await vehicle.FadeOut();
+            vehicle.Delete();
+        }
+
     }
 }

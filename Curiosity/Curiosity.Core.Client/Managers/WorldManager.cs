@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Data;
 using Curiosity.Systems.Library.Enums;
@@ -320,6 +321,19 @@ namespace Curiosity.Core.Client.Managers
                 vehiclesToSuppress.ForEach(veh =>
                 {
                     SetVehicleModelIsSuppressed((uint)veh, true);
+                });
+
+                List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Game.PlayerPed.IsInRangeOf(x.Position, 50f)).ToList();
+
+                vehicles.ForEach(veh =>
+                {
+                    if (vehiclesToSuppress.Contains((VehicleHash)veh.Model.Hash))
+                    {
+                        if (veh.Exists())
+                        {
+                            if (!veh.State.Get(VehicleManager.STATE_VEH_SPAWNED)) veh.RemoveFromWorld();
+                        }
+                    }
                 });
 
                 lastRunVehicleSuppression = DateTime.Now;

@@ -20,7 +20,7 @@ namespace Curiosity.Core.Client.Managers
         private const string STATE_VEH_FUEL = "VEHICLE_FUEL";
         private const string STATE_VEH_FUEL_MULTIPLIER = "VEHICLE_FUEL_MULTIPLIER";
         private const string STATE_VEH_FUEL_SETUP = "VEHICLE_FUEL_SETUP";
-        private const string STATE_VEH_SPAWNED = "VEH_SPAWNED";
+        public const string STATE_VEH_SPAWNED = "VEH_SPAWNED";
         private const float FUEL_PUMP_RANGE = 6f;
 
         private uint GAS_STATION_TESLA = 2140883938;
