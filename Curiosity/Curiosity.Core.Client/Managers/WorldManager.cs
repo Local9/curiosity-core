@@ -48,6 +48,7 @@ namespace Curiosity.Core.Client.Managers
             VehicleHash.Cargobob2,
             VehicleHash.Cargobob3,
             VehicleHash.Cargobob4,
+            VehicleHash.Besra
         };
 
         WeatherType lastWeather = WeatherType.UNKNOWN;
