@@ -165,7 +165,6 @@ namespace Curiosity.Core.Client.Extensions
         public static async void Revive(this CuriosityCharacter character, Position position)
         {
             await Cache.PlayerPed.FadeOut();
-            Cache.UpdatePedId();
 
             Cache.PlayerPed.Weapons.RemoveAll();
             Cache.PlayerPed.Task.ClearAllImmediately();
@@ -176,9 +175,9 @@ namespace Curiosity.Core.Client.Extensions
             Cache.PlayerPed.ClearLastWeaponDamage();
 
             API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.Heading, false, false);
+            Cache.UpdatePedId();
 
             await Cache.PlayerPed.FadeIn();
-            Cache.UpdatePedId();
 
             Cache.PlayerPed.IsPositionFrozen = false;
             Cache.Player.EnableHud();

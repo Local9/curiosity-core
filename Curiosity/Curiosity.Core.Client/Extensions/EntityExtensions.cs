@@ -31,6 +31,8 @@ namespace Curiosity.Core.Client.Extensions
             {
                 await BaseScript.Delay(10);
             }
+
+            Cache.UpdatePedId();
         }
         public async static Task FadeOut(this Vehicle veh, bool slow = true)
         {
@@ -57,6 +59,8 @@ namespace Curiosity.Core.Client.Extensions
             {
                 await BaseScript.Delay(10);
             }
+
+            Cache.UpdatePedId();
         }
     }
 }
