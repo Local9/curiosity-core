@@ -55,6 +55,9 @@ namespace Curiosity.Core.Client.Managers
             SetScenarioGroupEnabled("fort_zancudo_guards", true);
             SetScenarioGroupEnabled("army_guard", true);
             SetScenarioGroupEnabled("army_heli", false);
+            // Zancudo Types
+            SetScenarioTypeEnabled("WORLD_VEHICLE_MILITARY_PLANES_SMALL", false);
+            SetScenarioTypeEnabled("WORLD_VEHICLE_MILITARY_PLANES_BIG", false);
             // Air
             SetScenarioGroupEnabled("blimp", true);
             SetScenarioGroupEnabled("lsa_planes", false);
