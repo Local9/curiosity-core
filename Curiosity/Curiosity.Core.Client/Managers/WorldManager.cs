@@ -10,6 +10,7 @@ using Curiosity.Systems.Library.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -44,61 +45,159 @@ namespace Curiosity.Core.Client.Managers
 
             UpdateWeather();
             LoadIpls();
+            LoadScenarios();
+        }
+
+        private async void LoadScenarios()
+        {
+            await Session.Loading();
+            // Zancudo
+            SetScenarioGroupEnabled("fort_zancudo_guards", true);
+            SetScenarioGroupEnabled("army_guard", true);
+            SetScenarioGroupEnabled("army_heli", false);
+            // Air
+            SetScenarioGroupEnabled("blimp", true);
+            SetScenarioGroupEnabled("lsa_planes", false);
+            SetScenarioGroupEnabled("sandy_planes", false);
+            SetScenarioGroupEnabled("grapeseed_planes", false);
+            SetScenarioGroupEnabled("ng_planes", false);
+            // cinemas
+            SetScenarioGroupEnabled("cinema_downtown", true);
+            SetScenarioGroupEnabled("cinema_morningwood", true);
+            SetScenarioGroupEnabled("cinema_textile", true);
+            // Banks
+            SetScenarioGroupEnabled("city_banks", true);
+            SetScenarioGroupEnabled("countryside_banks", true);
+            SetScenarioGroupEnabled("paleto_bank", true);
+            // police
+            SetScenarioGroupEnabled("guards_at_prison", true);
+            SetScenarioGroupEnabled("paleto_cops", true);
+            SetScenarioGroupEnabled("police_at_court", true);
+            SetScenarioGroupEnabled("police_pound1", true);
+            SetScenarioGroupEnabled("police_pound2", true);
+            SetScenarioGroupEnabled("police_pound3", true);
+            SetScenarioGroupEnabled("police_pound4", true);
+            SetScenarioGroupEnabled("police_pound5", true);
+            SetScenarioGroupEnabled("prison_towers", true);
+            SetScenarioGroupEnabled("prison_transport", true);
+            SetScenarioGroupEnabled("sandy_cops", true);
+            SetScenarioGroupEnabled("mp_police", true);
+            SetScenarioGroupEnabled("mp_police2", true);
+            // FIB
+            SetScenarioGroupEnabled("fib_group_1", true);
+            SetScenarioGroupEnabled("fib_group_2", true);
+            // Extra groups
+            SetScenarioGroupEnabled("scrap_security", true);
+            SetScenarioGroupEnabled("vagos_hangout", true);
+            SetScenarioGroupEnabled("lost_hangout", true);
+            SetScenarioGroupEnabled("lost_bikers", true);
+            SetScenarioGroupEnabled("observatory_bikers", true);
+            SetScenarioGroupEnabled("chinese2_hillbillies", true);
+            SetScenarioGroupEnabled("chinese2_lunch", true);
+            SetScenarioGroupEnabled("movie_studio_security", true);
+            // facilities
+            SetScenarioGroupEnabled("facility_cannon", false);
+            SetScenarioGroupEnabled("facility_main_1", false);
+            SetScenarioGroupEnabled("facility_main_2", false);
+            SetScenarioGroupEnabled("facility_main_3", false);
+            // Others
+            SetScenarioGroupEnabled("dealership", true);
+            SetScenarioGroupEnabled("kortz_security", true);
+            SetScenarioGroupEnabled("ammunation", true);
+            SetScenarioGroupEnabled("rampage1", true);
+            SetScenarioGroupEnabled("sew_machine", true);
+            SetScenarioGroupEnabled("solomon_gate", true);
+            SetScenarioGroupEnabled("attract_pap", true);
+            SetScenarioGroupEnabled("quarry", true);
+            // Night Clubs
+            SetScenarioGroupEnabled("club_cypress_flats_warehouse", true);
+            SetScenarioGroupEnabled("club_del_perro_building", true);
+            SetScenarioGroupEnabled("club_vinewood_dt", true);
+            SetScenarioGroupEnabled("club_elysian_island_warehouse", true);
+            SetScenarioGroupEnabled("club_la_mesa_warehouse", true);
+            SetScenarioGroupEnabled("club_lsia_warehouse", true);
+            SetScenarioGroupEnabled("club_mission_row_building", true);
+            SetScenarioGroupEnabled("club_strawberry_warehouse", true);
+            SetScenarioGroupEnabled("club_vespucci_canals_building", true);
+            SetScenarioGroupEnabled("club_west_vinewood_building", true);
+            // Animals
+            SetScenarioGroupEnabled("armenian_cats", true);
+            // Triathlon
+            SetScenarioGroupEnabled("triathlon_1", false);
+            SetScenarioGroupEnabled("triathlon_1_start", false);
+            SetScenarioGroupEnabled("triathlon_2", false);
+            SetScenarioGroupEnabled("triathlon_2_start", false);
+            SetScenarioGroupEnabled("triathlon_3", false);
+            SetScenarioGroupEnabled("triathlon_3_start", false);
         }
 
         private void LoadIpls()
         {
-            API.LoadMpDlcMaps();
-            API.EnableMpDlcMaps(true);
+            LoadMpDlcMaps();
+            EnableMpDlcMaps(true);
 
             // Ferris Wheel
-            API.RequestIpl("ferris_finale_anim");
-            API.RequestIpl("ferris_finale_anim_lod");
+            RequestIpl("ferris_finale_anim");
+            RequestIpl("ferris_finale_anim_lod");
 
             // Tunnel Roof
-            API.RequestIpl("dt1_03_gr_closed");
+            RequestIpl("dt1_03_gr_closed");
 
             // Missing Elevators
-            API.RequestIpl("dt1_21_prop_lift");
-            // API.RequestIpl("dt1_21_prop_lift_on");
+            RequestIpl("dt1_21_prop_lift");
+            // RequestIpl("dt1_21_prop_lift_on");
 
             // Fountain Fix
-            API.RequestIpl("DT1_05_HC_REMOVE");
+            RequestIpl("DT1_05_HC_REMOVE");
 
-            API.RequestIpl("cs5_4_trains"); // 2773.61 2835.327 35.1903
-            API.RequestIpl("airfield"); // 1743.682 3286.251 40.0875
-            API.RequestIpl("trailerparkA_grp1"); // Lost trailer
-            API.RequestIpl("dockcrane1"); // 889.3 -2910.9 40
-            API.RequestIpl("chophillskennel"); // 19.0568 536.4818 169.6277
+            RequestIpl("cs5_4_trains"); // 2773.61 2835.327 35.1903
+            RequestIpl("airfield"); // 1743.682 3286.251 40.0875
+            RequestIpl("trailerparkA_grp1"); // Lost trailer
+            RequestIpl("dockcrane1"); // 889.3 -2910.9 40
+            RequestIpl("chophillskennel"); // 19.0568 536.4818 169.6277
 
             // FIB WINDOW: 136.1795f, -750.701f, 262.0516f
-            API.RequestIpl("atriumglstatic");
+            RequestIpl("atriumglstatic");
 
             // Hospital: 330.4596 -584.8196 42.3174
-            API.RemoveIpl("RC12B_HospitalInterior"); // Broken interior
-            API.RemoveIpl("RC12B_Destroyed"); // broken windows
-            API.RequestIpl("RC12B_Default"); // default look
-            API.RemoveIpl("RC12B_Fixed"); // boarded up
+            RemoveIpl("RC12B_HospitalInterior"); // Broken interior
+            RemoveIpl("RC12B_Destroyed"); // broken windows
+            RequestIpl("RC12B_Default"); // default look
+            RemoveIpl("RC12B_Fixed"); // boarded up
 
             // Trevor: 1985.48132, 3828.76757, 32.5
             // Trash or Tidy.Only choose one.
-            API.RequestIpl("TrevorsTrailer");
-            API.RequestIpl("TrevorsTrailerTidy");
+            RequestIpl("TrevorsTrailer");
+            RequestIpl("TrevorsTrailerTidy");
 
             // rails: 2626.374 2949.869 39.1409
-            API.RequestIpl("ld_rail_01_track");
-            API.RequestIpl("ld_rail_02_track");
-            API.RequestIpl("FBI_repair");
+            RequestIpl("ld_rail_01_track");
+            RequestIpl("ld_rail_02_track");
+            RequestIpl("FBI_repair");
 
             // golf flags
-            API.RequestIpl("golfflags");
+            RequestIpl("golfflags");
+
+            // Casino Exterior;
+            RequestIpl("hei_dlc_casino_aircon");
+            RequestIpl("hei_dlc_casino_aircon_lod");
+            RequestIpl("hei_dlc_casino_door");
+            RequestIpl("hei_dlc_casino_door_lod");
+            RequestIpl("hei_dlc_vw_roofdoors_locked");
+            RequestIpl("hei_dlc_windows_casino");
+            RequestIpl("hei_dlc_windows_casino_lod");
+            RequestIpl("vw_ch3_additions");
+            RequestIpl("vw_ch3_additions_long_0");
+            RequestIpl("vw_ch3_additions_strm_0");
+            RequestIpl("vw_dlc_casino_door");
+            RequestIpl("vw_dlc_casino_door_lod");
         }
 
         [TickHandler]
         private async static Task OnRemoveCargoShip()
         {
-            API.RemoveIpl("cargoship");
-            API.RemoveIpl("sunkcargoship");
+            RemoveIpl("cargoship");
+            RemoveIpl("sunkcargoship");
         }
 
         [TickHandler]
@@ -116,7 +215,7 @@ namespace Curiosity.Core.Client.Managers
 
             Vector3 pos = Game.PlayerPed.Position;
 
-            string zoneStr = API.GetNameOfZone(pos.X, pos.Y, pos.Z);
+            string zoneStr = GetNameOfZone(pos.X, pos.Y, pos.Z);
             Enum.TryParse(zoneStr, out SubRegion subRegion);
 
             CuriosityWeather = await EventSystem.Request<CuriosityWeather>("weather:sync", (int)subRegion);
@@ -128,12 +227,12 @@ namespace Curiosity.Core.Client.Managers
 
                 await BaseScript.Delay(15000);
 
-                API.ClearOverrideWeather();
-                API.ClearWeatherTypePersist();
-                API.SetWeatherTypeOverTime($"{weatherType}", 30f);
-                API.SetWeatherTypePersist($"{weatherType}");
-                API.SetWeatherTypeNow($"{weatherType}");
-                API.SetWeatherTypeNowPersist($"{weatherType}");
+                ClearOverrideWeather();
+                ClearWeatherTypePersist();
+                SetWeatherTypeOverTime($"{weatherType}", 30f);
+                SetWeatherTypePersist($"{weatherType}");
+                SetWeatherTypeNow($"{weatherType}");
+                SetWeatherTypeNowPersist($"{weatherType}");
 
                 lastWeather = weatherType;
 
@@ -146,20 +245,20 @@ namespace Curiosity.Core.Client.Managers
         {
             await BaseScript.Delay(0);
 
-            //int interior = API.GetInteriorFromEntity(Game.PlayerPed.Handle);
+            //int interior = GetInteriorFromEntity(Game.PlayerPed.Handle);
 
             //if (interior > 0) // If they are indoors, lock the timer
             //{
-            //    API.NetworkOverrideClockTime(0, 0, 0);
-            //    API.SetClockTime(0, 0, 0);
+            //    NetworkOverrideClockTime(0, 0, 0);
+            //    SetClockTime(0, 0, 0);
             //    return;
             //}
 
             double newBaseTime = clientBaseTime;
-            if ((API.GetGameTimer() - 500) > clientTimer)
+            if ((GetGameTimer() - 500) > clientTimer)
             {
                 newBaseTime += 0.25;
-                clientTimer = API.GetGameTimer();
+                clientTimer = GetGameTimer();
             }
 
             clientBaseTime = newBaseTime;
@@ -167,8 +266,8 @@ namespace Curiosity.Core.Client.Managers
             hour = (int)Math.Floor(((clientBaseTime + clientTimeOffset) / 60) % 24);
             minute = (int)Math.Floor((clientBaseTime + clientTimeOffset) % 60);
 
-            API.NetworkOverrideClockTime(hour, minute, 0);
-            API.SetClockTime(hour, minute, 0);
+            NetworkOverrideClockTime(hour, minute, 0);
+            SetClockTime(hour, minute, 0);
         }
 
         [TickHandler(SessionWait = true)]
@@ -186,10 +285,10 @@ namespace Curiosity.Core.Client.Managers
                     blip.Sprite = BlipSprite.Standard;
                     blip.Scale = 0.85f;
 
-                    API.SetBlipCategory(blip.Handle, 7);
-                    API.SetBlipPriority(blip.Handle, 11);
-                    API.ShowHeadingIndicatorOnBlip(blip.Handle, true);
-                    API.SetBlipNameToPlayerName(blip.Handle, player.Handle);
+                    SetBlipCategory(blip.Handle, 7);
+                    SetBlipPriority(blip.Handle, 11);
+                    ShowHeadingIndicatorOnBlip(blip.Handle, true);
+                    SetBlipNameToPlayerName(blip.Handle, player.Handle);
                 }
                 else
                 {
@@ -198,7 +297,7 @@ namespace Curiosity.Core.Client.Managers
                     if (player.Character.IsDead)
                     {
                         blip.Sprite = BlipSprite.Dead;
-                        API.ShowHeadingIndicatorOnBlip(blip.Handle, false);
+                        ShowHeadingIndicatorOnBlip(blip.Handle, false);;
                     }
 
                     if (Game.IsPaused)
@@ -235,7 +334,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (player.Character.IsVisible)
                 {
-                    string prefix = API.NetworkIsPlayerTalking(player.Handle) ? "~b~" : "~w~";
+                    string prefix = NetworkIsPlayerTalking(player.Handle) ? "~b~" : "~w~";
                     ScreenInterface.Draw3DText(player.Character.Position, $"[{player.ServerId}] {prefix}{player.Name}", 30, 50);
                 }
             }
