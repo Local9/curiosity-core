@@ -100,6 +100,15 @@ namespace Curiosity.Core.Server.Managers
                     regionWeatherType[kvp.Key] = weatherTypes[Utility.RANDOM.Next(weatherTypes.Count)];
                 }
             }
+
+            Logger.Debug($"Weather Region Init START");
+
+            foreach (KeyValuePair<Region, WeatherType> kvp in regionWeatherType)
+            {
+                Logger.Debug($"Region: {kvp.Key} : {kvp.Value}");
+            }
+
+            Logger.Debug($"Weather Region Init END");
         }
 
         [TickHandler]
