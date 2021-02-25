@@ -146,6 +146,15 @@ namespace Curiosity.Core.Client.Managers
         {
             await BaseScript.Delay(0);
 
+            //int interior = API.GetInteriorFromEntity(Game.PlayerPed.Handle);
+
+            //if (interior > 0) // If they are indoors, lock the timer
+            //{
+            //    API.NetworkOverrideClockTime(0, 0, 0);
+            //    API.SetClockTime(0, 0, 0);
+            //    return;
+            //}
+
             double newBaseTime = clientBaseTime;
             if ((API.GetGameTimer() - 500) > clientTimer)
             {
