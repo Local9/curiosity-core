@@ -132,6 +132,8 @@ namespace Curiosity.Core.Client.Managers
             SetScenarioGroupEnabled("triathlon_2_start", false);
             SetScenarioGroupEnabled("triathlon_3", false);
             SetScenarioGroupEnabled("triathlon_3_start", false);
+
+            Logger.Verbose($"[SCENARIOS] Initiated");
         }
 
         private void LoadIpls()
