@@ -82,13 +82,11 @@ namespace Curiosity.Core.Client.Managers
 
             UpdateWeather();
             LoadIpls();
-            LoadScenarios();
         }
 
         private async void LoadScenarios()
         {
             await Session.Loading();
-            await BaseScript.Delay(10000);
             // Zancudo
             SetScenarioGroupEnabled("fort_zancudo_guards", true);
             SetScenarioGroupEnabled("army_guard", false);
@@ -170,12 +168,11 @@ namespace Curiosity.Core.Client.Managers
             SetScenarioGroupEnabled("triathlon_2_start", false);
             SetScenarioGroupEnabled("triathlon_3", false);
             SetScenarioGroupEnabled("triathlon_3_start", false);
-
-            Logger.Verbose($"[SCENARIOS] Initiated");
         }
 
-        private void LoadIpls()
+        private async void LoadIpls()
         {
+            await Session.Loading();
             LoadMpDlcMaps();
             EnableMpDlcMaps(true);
 
@@ -236,9 +233,10 @@ namespace Curiosity.Core.Client.Managers
             RequestIpl("vw_dlc_casino_door_lod");
         }
 
-        [TickHandler]
+        [TickHandler(SessionWait = true)]
         private async static Task OnRemoveCargoShip()
         {
+            await BaseScript.Delay(0);
             RemoveIpl("cargoship");
             RemoveIpl("sunkcargoship");
         }
@@ -250,6 +248,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 UpdateWeather();
             }
+            await BaseScript.Delay(1000);
         }
 
         async void UpdateWeather()
@@ -334,6 +333,10 @@ namespace Curiosity.Core.Client.Managers
                             veh.RemoveFromWorld();
                     }
                 });
+
+                vehicles = null;
+
+                LoadScenarios();
 
                 lastRunVehicleSuppression = DateTime.Now;
             }
