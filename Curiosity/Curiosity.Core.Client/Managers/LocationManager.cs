@@ -266,6 +266,7 @@ namespace Curiosity.Core.Client.Managers
 
         internal Vector3 NearestHospital()
         {
+            Cache.UpdatePedId();
             return FindClosestPoint(Cache.PlayerPed.Position, HospitalSpawns);
         }
 
