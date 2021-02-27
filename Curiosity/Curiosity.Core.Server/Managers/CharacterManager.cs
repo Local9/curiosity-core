@@ -22,9 +22,9 @@ namespace Curiosity.Core.Server.Managers
                 int currentBucket = API.GetPlayerRoutingBucket(player.Handle);
 
                 if (currentBucket != 1)
-                    API.SetPlayerRoutingBucket(player.Handle, (int)RoutingBucket.WORLD_MAIN);
+                    API.SetPlayerRoutingBucket(player.Handle, (int)RoutingBucket.LOBBY);
 
-                PluginManager.ActiveUsers[metadata.Sender].RoutingBucket = RoutingBucket.WORLD_MAIN;
+                PluginManager.ActiveUsers[metadata.Sender].RoutingBucket = RoutingBucket.LOBBY;
 
                 return null;
             }));
@@ -113,6 +113,14 @@ namespace Curiosity.Core.Server.Managers
                     return null;
 
                 return PluginManager.ActiveUsers[metadata.Sender];
+            }));
+
+            EventSystem.GetModule().Attach("character:get:profile:enhanced", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Find<int>(0)))
+                    return null;
+
+                return PluginManager.ActiveUsers[metadata.Find<int>(0)];
             }));
 
             EventSystem.GetModule().Attach("character:get:skills", new AsyncEventCallback(async metadata =>

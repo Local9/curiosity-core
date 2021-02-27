@@ -45,6 +45,39 @@ namespace Curiosity.Interface.Client.Managers
                 return null;
             }));
 
+            Instance.AttachNuiHandler("GetEnhancedProfile", new AsyncEventCallback(async metadata =>
+            {
+                int serverHandle = metadata.Find<int>(0);
+
+                if (serverHandle == 0)
+                {
+                    serverHandle = Game.Player.ServerId;
+                }
+
+                CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("character:get:profile:enhanced", serverHandle);
+
+                if (curiosityUser == null) return null;
+
+                PlayerProfile pp = new PlayerProfile();
+                pp.UserID = curiosityUser.UserId;
+                pp.Name = curiosityUser.LatestName;
+                pp.Role = curiosityUser.Role.GetStringValue();
+                pp.Wallet = curiosityUser.Character.Cash;
+
+                pp.IsAdmin = curiosityUser.IsAdmin;
+                pp.IsStaff = curiosityUser.IsStaff;
+
+                pp.WorldName = $"{curiosityUser.RoutingBucket}";
+
+                string jsn = new JsonBuilder().Add("operation", "ENHANCED_PROFILE")
+                        .Add("profile", pp)
+                        .Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
+
             Instance.AttachNuiHandler("PlayerExperience", new AsyncEventCallback(async metadata =>
             {
                 List<CharacterSkill> skills = await EventSystem.Request<List<CharacterSkill>>("character:get:skills");

@@ -284,7 +284,7 @@ namespace Curiosity.Core.Server
 
             ServerReady = true;
 
-            Logger.Info($"[CURIOSITY-CORE] Load method has been completed.");
+            Logger.Success($"[CURIOSITY-CORE] Load method has been completed.");
         }
 
         public static Player GetPlayer(int netID)

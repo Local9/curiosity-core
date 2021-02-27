@@ -25,5 +25,8 @@ namespace Curiosity.Systems.Library.Models.PDA
 
         [DataMember(Name = "headshot")]
         public string Headshot;
+
+        [DataMember(Name = "worldName")]
+        public string WorldName;
     }
 }
