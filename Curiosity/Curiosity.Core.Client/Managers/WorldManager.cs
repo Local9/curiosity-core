@@ -81,7 +81,7 @@ namespace Curiosity.Core.Client.Managers
                 }));
 
             UpdateWeather();
-            LoadIpls();
+            LoadLosSantosIpls();
 
             API.SetWeatherOwnedByNetwork(false);
         }
@@ -172,7 +172,66 @@ namespace Curiosity.Core.Client.Managers
             SetScenarioGroupEnabled("triathlon_3_start", false);
         }
 
-        private async void LoadIpls()
+        private async void UnloadLosSantosIpls()
+        {
+            // Ferris Wheel
+            RemoveIpl("ferris_finale_anim");
+            RemoveIpl("ferris_finale_anim_lod");
+
+            // Tunnel Roof
+            RemoveIpl("dt1_03_gr_closed");
+
+            // Missing Elevators
+            RemoveIpl("dt1_21_prop_lift");
+            // RequestIpl("dt1_21_prop_lift_on");
+
+            // Fountain Fix
+            RemoveIpl("DT1_05_HC_REMOVE");
+
+            RemoveIpl("cs5_4_trains"); // 2773.61 2835.327 35.1903
+            RemoveIpl("airfield"); // 1743.682 3286.251 40.0875
+            RemoveIpl("trailerparkA_grp1"); // Lost trailer
+            RemoveIpl("dockcrane1"); // 889.3 -2910.9 40
+            RemoveIpl("chophillskennel"); // 19.0568 536.4818 169.6277
+
+            // FIB WINDOW: 136.1795f, -750.701f, 262.0516f
+            RemoveIpl("atriumglstatic");
+
+            // Hospital: 330.4596 -584.8196 42.3174
+            RemoveIpl("RC12B_HospitalInterior"); // Broken interior
+            RemoveIpl("RC12B_Destroyed"); // broken windows
+            RemoveIpl("RC12B_Default"); // default look
+            RemoveIpl("RC12B_Fixed"); // boarded up
+
+            // Trevor: 1985.48132, 3828.76757, 32.5
+            // Trash or Tidy.Only choose one.
+            RemoveIpl("TrevorsTrailer");
+            RemoveIpl("TrevorsTrailerTidy");
+
+            // rails: 2626.374 2949.869 39.1409
+            RemoveIpl("ld_rail_01_track");
+            RemoveIpl("ld_rail_02_track");
+            RemoveIpl("FBI_repair");
+
+            // golf flags
+            RemoveIpl("golfflags");
+
+            // Casino Exterior;
+            RemoveIpl("hei_dlc_casino_aircon");
+            RemoveIpl("hei_dlc_casino_aircon_lod");
+            RemoveIpl("hei_dlc_casino_door");
+            RemoveIpl("hei_dlc_casino_door_lod");
+            RemoveIpl("hei_dlc_vw_roofdoors_locked");
+            RemoveIpl("hei_dlc_windows_casino");
+            RemoveIpl("hei_dlc_windows_casino_lod");
+            RemoveIpl("vw_ch3_additions");
+            RemoveIpl("vw_ch3_additions_long_0");
+            RemoveIpl("vw_ch3_additions_strm_0");
+            RemoveIpl("vw_dlc_casino_door");
+            RemoveIpl("vw_dlc_casino_door_lod");
+        }
+
+        private async void LoadLosSantosIpls()
         {
             await Session.Loading();
             LoadMpDlcMaps();
@@ -233,6 +292,13 @@ namespace Curiosity.Core.Client.Managers
             RequestIpl("vw_ch3_additions_strm_0");
             RequestIpl("vw_dlc_casino_door");
             RequestIpl("vw_dlc_casino_door_lod");
+
+            // IPLs for Cayo Island in the Distance
+            RequestIpl("xn_h4_islandx_terrain_01_slod");
+            RequestIpl("xn_h4_islandx_terrain_02_slod");
+            RequestIpl("xn_h4_islandx_terrain_04_slod");
+            RequestIpl("xn_h4_islandx_terrain_05_slod");
+            RequestIpl("xn_h4_islandx_terrain_06_slod");
         }
 
         [TickHandler(SessionWait = true)]
