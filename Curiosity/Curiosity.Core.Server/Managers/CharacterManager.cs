@@ -13,6 +13,8 @@ namespace Curiosity.Core.Server.Managers
 {
     public class CharacterManager : Manager<CharacterManager>
     {
+        DateTime lastSave = DateTime.Now;
+
         public override void Begin()
         {
             EventSystem.GetModule().Attach("character:routing:base", new EventCallback(metadata =>
@@ -42,6 +44,7 @@ namespace Curiosity.Core.Server.Managers
                 return curiosityUser.Character;
             }));
 
+            // Remove this from player event, its not fucking needed
             EventSystem.GetModule().Attach("character:save", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
@@ -54,6 +57,11 @@ namespace Curiosity.Core.Server.Managers
                 if (user.Character.CharacterId != curiosityCharacter.CharacterId) return null;
 
                 curiosityCharacter.Cash = await Database.Store.BankDatabase.Get(curiosityCharacter.CharacterId);
+
+                Vector3 pos = player.Character.Position;
+
+                if (!pos.IsZero)
+                    curiosityCharacter.LastPosition = new Position(pos.X, pos.Y, pos.Z, player.Character.Heading);
 
                 if (player.Character != null)
                 {
@@ -131,9 +139,33 @@ namespace Curiosity.Core.Server.Managers
                 return returnVal;
             }));
 
+            EventSystem.GetModule().Attach("character:get:skills:enhanced", new AsyncEventCallback(async metadata =>
+            {
+                bool isSamePlayer = metadata.Sender == metadata.Find<int>(0);
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Find<int>(0)];
+
+                if (!player.AllowPublicStats && !isSamePlayer) return null;
+
+                List<CharacterSkill> returnVal = await Database.Store.SkillDatabase.Get(player.Character.CharacterId);
+                player.Character.Skills = returnVal;
+                return returnVal;
+            }));
+
             EventSystem.GetModule().Attach("character:get:stats", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
+                List<CharacterStat> returnVal = await Database.Store.StatDatabase.Get(player.Character.CharacterId);
+                player.Character.Stats = returnVal;
+                return returnVal;
+            }));
+
+            EventSystem.GetModule().Attach("character:get:stats:enhanced", new AsyncEventCallback(async metadata =>
+            {
+                bool isSamePlayer = metadata.Sender == metadata.Find<int>(0);
+                CuriosityUser player = PluginManager.ActiveUsers[metadata.Find<int>(0)];
+
+                if (!player.AllowPublicStats && !isSamePlayer) return null;
+
                 List<CharacterStat> returnVal = await Database.Store.StatDatabase.Get(player.Character.CharacterId);
                 player.Character.Stats = returnVal;
                 return returnVal;
@@ -274,6 +306,50 @@ namespace Curiosity.Core.Server.Managers
                     return float.Parse(API.GetConvar("experience_modifier_donator3", $"0.5"));
                 default:
                     return float.Parse(API.GetConvar("experience_modifier_lifeTime", $"0.05"));
+            }
+        }
+
+        [TickHandler]
+        private async void OnSaveCharacters()
+        {
+            if (DateTime.Now.Subtract(lastSave).TotalMinutes >= 5)
+            {
+
+                foreach (KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
+                {
+                    CuriosityUser curiosityUser = kvp.Value;
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Get(curiosityUser.Character.CharacterId);
+                    Player player = PluginManager.PlayersList[kvp.Key];
+
+                    if (player.Character != null)
+                    {
+                        Vector3 pos = player.Character.Position;
+
+                        if (!pos.IsZero)
+                            curiosityUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z, player.Character.Heading);
+
+                        player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
+                        player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
+                        player.State.Set($"{StateBagKey.PLAYER_CASH}", curiosityUser.Character.Cash, true);
+
+                        int pedHandle = player.Character.Handle;
+
+                        curiosityUser.Character.Armor = API.GetPedArmour(pedHandle);
+                        curiosityUser.Character.Health = API.GetEntityHealth(pedHandle);
+                        curiosityUser.Character.IsDead = curiosityUser.Character.Health == 0;
+
+                        if (!curiosityUser.IsStaff)
+                        {
+                            bool godModeEnabled = API.GetPlayerInvincible(player.Handle);
+                            if (godModeEnabled)
+                                Web.DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"Player {player.Name} has God Mode Enabled, Does job '{curiosityUser.CurrentJob}' allow God Mode?");
+                        }
+                    }
+
+                    await curiosityUser.Character.Save();
+                }
+
+                lastSave = DateTime.Now;
             }
         }
     }
