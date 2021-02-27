@@ -69,5 +69,6 @@ namespace Curiosity.Systems.Library.Models
         public int PersonalVehicle { get; set; }
         public int PersonalTrailer { get; set; }
         public RoutingBucket RoutingBucket { get; set; }
+        public bool AllowPublicStats { get; set; }
     }
 }
