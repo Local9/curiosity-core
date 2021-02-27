@@ -55,6 +55,8 @@ namespace Curiosity.Interface.Client.Managers
                 }
 
                 CuriosityUser curiosityUser = await EventSystem.Request<CuriosityUser>("character:get:profile:enhanced", serverHandle);
+                List<CharacterSkill> skills = await EventSystem.Request<List<CharacterSkill>>("character:get:skills:enhanced", serverHandle);
+                List<CharacterStat> stats = await EventSystem.Request<List<CharacterStat>>("character:get:stats:enhanced", serverHandle);
 
                 if (curiosityUser == null) return null;
 
@@ -71,6 +73,8 @@ namespace Curiosity.Interface.Client.Managers
 
                 string jsn = new JsonBuilder().Add("operation", "ENHANCED_PROFILE")
                         .Add("profile", pp)
+                        .Add("skills", skills)
+                        .Add("stats", stats)
                         .Build();
 
                 API.SendNuiMessage(jsn);
