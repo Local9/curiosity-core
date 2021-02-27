@@ -185,17 +185,10 @@ namespace Curiosity.Core.Server.Managers
 
         public void NetworkDeleteEntity(int networkId)
         {
+            int entityId = API.NetworkGetEntityFromNetworkId(networkId);
 
-            int vehId = API.NetworkGetEntityFromNetworkId(networkId);
-
-            if (API.DoesEntityExist(vehId))
-                API.DeleteEntity(vehId);
-
-            //foreach (Player player in PluginManager.PlayersList)
-            //{
-            //    int playerHandle = int.Parse(player.Handle);
-            //    EventSystem.GetModule().Send("entity:deleteFromWorld", playerHandle, networkId);
-            //}
+            if (API.DoesEntityExist(entityId))
+                API.DeleteEntity(entityId);
         }
     }
 }
