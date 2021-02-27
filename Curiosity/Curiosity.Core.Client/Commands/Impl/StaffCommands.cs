@@ -68,7 +68,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 vehicle.IsPositionFrozen = true;
                 vehicle.IsCollisionEnabled = false;
 
-                EventSystem.GetModule().Send("entity:delete", vehicle.NetworkId);
+                EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
 
                 if (vehicle.Exists())
                     vehicle.Delete();
@@ -94,7 +94,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                         vehicle.IsPositionFrozen = true;
                         vehicle.IsCollisionEnabled = false;
 
-                        EventSystem.GetModule().Send("entity:delete", vehicle.NetworkId);
+                        EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
 
                         if (vehicle.Exists())
                             vehicle.Delete();
@@ -117,7 +117,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                         vehicle.IsPositionFrozen = true;
                         vehicle.IsCollisionEnabled = false;
 
-                        EventSystem.GetModule().Send("entity:delete", vehicle.NetworkId);
+                        EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
 
                         if (vehicle.Exists())
                             vehicle.Delete();

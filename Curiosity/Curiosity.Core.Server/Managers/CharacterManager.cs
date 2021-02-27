@@ -44,7 +44,6 @@ namespace Curiosity.Core.Server.Managers
                 return curiosityUser.Character;
             }));
 
-            // Remove this from player event, its not fucking needed
             EventSystem.GetModule().Attach("character:save", new AsyncEventCallback(async metadata =>
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
@@ -58,16 +57,23 @@ namespace Curiosity.Core.Server.Managers
 
                 curiosityCharacter.Cash = await Database.Store.BankDatabase.Get(curiosityCharacter.CharacterId);
 
-                Vector3 pos = player.Character.Position;
-
-                if (!pos.IsZero)
-                    curiosityCharacter.LastPosition = new Position(pos.X, pos.Y, pos.Z, player.Character.Heading);
-
                 if (player.Character != null)
                 {
+                    Vector3 pos = player.Character.Position;
+
+                    if (!pos.IsZero)
+                        curiosityCharacter.LastPosition = new Position(pos.X, pos.Y, pos.Z, player.Character.Heading);
+
                     player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
                     player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
                     player.State.Set($"{StateBagKey.PLAYER_CASH}", curiosityCharacter.Cash, true);
+
+                    if (!user.IsStaff)
+                    {
+                        bool godModeEnabled = API.GetPlayerInvincible(player.Handle);
+                        if (godModeEnabled)
+                            Web.DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"Player [{player.Handle}] '{player.Name}#{user.UserId}' has God Mode Enabled, Does job '{user.CurrentJob}' allow God Mode?");
+                    }
                 }
 
                 await curiosityCharacter.Save();
@@ -309,48 +315,48 @@ namespace Curiosity.Core.Server.Managers
             }
         }
 
-        [TickHandler]
-        private async void OnSaveCharacters()
-        {
-            if (DateTime.Now.Subtract(lastSave).TotalMinutes >= 5)
-            {
+        //[TickHandler]
+        //private async void OnSaveCharacters()
+        //{
+        //    if (DateTime.Now.Subtract(lastSave).TotalMinutes >= 5)
+        //    {
 
-                foreach (KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
-                {
-                    CuriosityUser curiosityUser = kvp.Value;
-                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Get(curiosityUser.Character.CharacterId);
-                    Player player = PluginManager.PlayersList[kvp.Key];
+        //        foreach (KeyValuePair<int, CuriosityUser> kvp in PluginManager.ActiveUsers)
+        //        {
+        //            CuriosityUser curiosityUser = kvp.Value;
+        //            curiosityUser.Character.Cash = await Database.Store.BankDatabase.Get(curiosityUser.Character.CharacterId);
+        //            Player player = PluginManager.PlayersList[kvp.Key];
 
-                    if (player.Character != null)
-                    {
-                        Vector3 pos = player.Character.Position;
+        //            if (player.Character != null)
+        //            {
+        //                Vector3 pos = player.Character.Position;
 
-                        if (!pos.IsZero)
-                            curiosityUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z, player.Character.Heading);
+        //                if (!pos.IsZero)
+        //                    curiosityUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z, player.Character.Heading);
 
-                        player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
-                        player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
-                        player.State.Set($"{StateBagKey.PLAYER_CASH}", curiosityUser.Character.Cash, true);
+        //                player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
+        //                player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
+        //                player.State.Set($"{StateBagKey.PLAYER_CASH}", curiosityUser.Character.Cash, true);
 
-                        int pedHandle = player.Character.Handle;
+        //                int pedHandle = player.Character.Handle;
 
-                        curiosityUser.Character.Armor = API.GetPedArmour(pedHandle);
-                        curiosityUser.Character.Health = API.GetEntityHealth(pedHandle);
-                        curiosityUser.Character.IsDead = curiosityUser.Character.Health == 0;
+        //                curiosityUser.Character.Armor = API.GetPedArmour(pedHandle);
+        //                curiosityUser.Character.Health = API.GetEntityHealth(pedHandle);
+        //                curiosityUser.Character.IsDead = curiosityUser.Character.Health == 0;
 
-                        if (!curiosityUser.IsStaff)
-                        {
-                            bool godModeEnabled = API.GetPlayerInvincible(player.Handle);
-                            if (godModeEnabled)
-                                Web.DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"Player {player.Name} has God Mode Enabled, Does job '{curiosityUser.CurrentJob}' allow God Mode?");
-                        }
-                    }
+        //                if (!curiosityUser.IsStaff)
+        //                {
+        //                    bool godModeEnabled = API.GetPlayerInvincible(player.Handle);
+        //                    if (godModeEnabled)
+        //                        Web.DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"Player {player.Name} has God Mode Enabled, Does job '{curiosityUser.CurrentJob}' allow God Mode?");
+        //                }
+        //            }
 
-                    await curiosityUser.Character.Save();
-                }
+        //            await curiosityUser.Character.Save();
+        //        }
 
-                lastSave = DateTime.Now;
-            }
-        }
+        //        lastSave = DateTime.Now;
+        //    }
+        //}
     }
 }
