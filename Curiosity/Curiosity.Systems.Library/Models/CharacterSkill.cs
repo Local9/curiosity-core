@@ -3,11 +3,18 @@ using System.Runtime.Serialization;
 
 namespace Curiosity.Systems.Library.Models
 {
+    [DataContract]
     public class CharacterSkill
     {
         [JsonIgnore] public int Id;
+
+        [DataMember(Name = "label")]
         public string Label;
+
+        [DataMember(Name = "description")]
         public string Description;
+
+        [DataMember(Name = "value")]
         public long Value;
     }
 
@@ -16,6 +23,7 @@ namespace Curiosity.Systems.Library.Models
     {
         [DataMember(Name = "skillExperience")]
         public long SkillExperience;
+
         [DataMember(Name = "knowledgeExperience")]
         public long KnowledgeExperience;
     }

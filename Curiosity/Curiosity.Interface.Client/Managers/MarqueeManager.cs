@@ -1,10 +1,7 @@
 ﻿using CitizenFX.Core.Native;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Utils;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Interface.Client.Managers
 {

@@ -1,9 +1,17 @@
-﻿namespace Curiosity.Systems.Library.Models
+﻿using Newtonsoft.Json;
+using System.Runtime.Serialization;
+
+namespace Curiosity.Systems.Library.Models
 {
+    [DataContract]
     public class CharacterStat
     {
-        public int Id;
+        [JsonIgnore] public int Id;
+
+        [DataMember(Name = "label")]
         public string Label;
+
+        [DataMember(Name = "value")]
         public long Value;
     }
 }

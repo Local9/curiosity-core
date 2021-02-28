@@ -13,14 +13,14 @@ namespace Curiosity.Core.Server.Managers
 
         List<string> MarqueeMessages = new List<string>()
         {
-            "<span style='color:dodgerblue; font-weight: bold'>Forums:</span> <span style='color:#ff9900; font-weight: bold'>forums.lifev.net</span>",
-            "<span style='color:dodgerblue; font-weight: bold'>Discord:</span> <span style='color:#ff9900; font-weight: bold'>discord.lifev.net</span>",
-            "Find any bugs? Please report them to our forums: <span style='color:#ff9900; font-weight: bold'>forums.lifev.net</span>",
-            "Please use reports to notify us of rule breakers",
+            "Forums: forums.lifev.net",
+            "Discord: discord.lifev.net",
+            "Please use reports to notify us of rule breakers via the player list",
             "Please remember to be friendly to one another",
-            "To read our rules Press the <span style='color:dodgerblue; font-weight: bold'>HOME</span> key",
-            "<span style='color:dodgerblue; font-weight: bold'>Support us:</span> <Span color='#ff9900; font-weight: bold'>patreon.com/lifev</span>",
-            "To read our guides press the <span style='color:dodgerblue; font-weight: bold'>F11</span> or <span style='color:dodgerblue; font-weight: bold'>HOME</span> key",
+            "Find any bugs? Please report them to our forums: forums.lifev.net",
+            "To read our rules Press the HOME key",
+            "Support us via patreon.com/lifev",
+            "To read our guides press the [HOME] key",
         };
 
         public override void Begin()
