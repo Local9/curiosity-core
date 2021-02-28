@@ -73,7 +73,7 @@ namespace Curiosity.Interface.Client.Managers
 
                 Notification notification = result.Success ? Notification.NOTIFICATION_SUCCESS : Notification.NOTIFICATION_INFO;
 
-                NotificationManger.NotificationInstance.SendNui(notification, result.Message, "bottom-right", "default", "shopAction");
+                NotificationManger.NotificationInstance.SendNui(notification, result.Message, "bottom-right", "default");
 
                 return null;
             }));

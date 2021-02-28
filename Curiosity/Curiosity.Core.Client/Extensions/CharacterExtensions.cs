@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Events;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Interface.Menus.Creator;
 using Curiosity.Core.Client.Interface.Menus.Data;
 using Curiosity.Systems.Library.Enums;
@@ -324,6 +325,8 @@ namespace Curiosity.Core.Client.Extensions
             API.TransitionFromBlurred(500f);
 
             await BaseScript.Delay(1000);
+
+            Notify.Info($"~w~Welcome ~y~{Game.Player.Name}~w~, press ~INPUT_FRONTEND_SOCIAL_CLUB~ or ~b~HOME~w~ key to get started.");
 
             Session.CreatingCharacter = false;
         }

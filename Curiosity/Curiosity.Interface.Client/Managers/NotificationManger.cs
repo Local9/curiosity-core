@@ -14,10 +14,10 @@ namespace Curiosity.Interface.Client.Managers
         {
             NotificationInstance = this;
 
-            Instance.ExportRegistry.Add("Notification", new Func<int, string, string, string, string, bool>(
-                (notification, message, position, theme, key) =>
+            Instance.ExportRegistry.Add("Notification", new Func<int, string, string, string, bool>(
+                (notification, message, position, theme) =>
                 {
-                    SendNui((Notification)notification, message, position, theme, key);
+                    SendNui((Notification)notification, message, position, theme);
                     return true;
                 }));
 
@@ -27,23 +27,21 @@ namespace Curiosity.Interface.Client.Managers
                 string message = metadata.Find<string>(1);
                 string position = metadata.Find<string>(2);
                 string theme = metadata.Find<string>(3);
-                string key = metadata.Find<string>(4);
 
-                SendNui(notification, message, position, theme, key);
+                SendNui(notification, message, position, theme);
 
                 return true;
             }));
         }
 
-        public void SendNui(Notification notification, string message, string position, string theme, string key)
+        public void SendNui(Notification notification, string message, string position, string theme)
         {
             JsonBuilder jb = new JsonBuilder()
             .Add("operation", $"NOTIFICATION")
             .Add("type", $"{notification}")
             .Add("message", message)
             .Add("position", position)
-            .Add("theme", theme)
-            .Add("key", key);
+            .Add("theme", theme);
 
             API.SendNuiMessage(jb.Build());
         }

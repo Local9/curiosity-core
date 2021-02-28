@@ -17,15 +17,13 @@ namespace Curiosity.Core.Server.Managers
             "Discord: discord.lifev.net",
             "Please use reports to notify us of rule breakers via the player list",
             "Please remember to be friendly to one another",
-            "Find any bugs? Please report them to our forums: forums.lifev.net",
-            "To read our rules Press the HOME key",
+            "Found a bug or two? want to help get rid of them? Report them to our forums: forums.lifev.net",
+            "Make sure to read our rules and guides",
             "Support us via patreon.com/lifev",
-            "To read our guides press the [HOME] key",
+            "Remember you can change some of our binds in settings",
         };
 
-        public override void Begin()
-        {
-        }
+        public override void Begin() { }
 
         [TickHandler]
         private async Task OnMarqueeTask()

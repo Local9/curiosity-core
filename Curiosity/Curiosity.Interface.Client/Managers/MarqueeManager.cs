@@ -28,7 +28,7 @@ namespace Curiosity.Interface.Client.Managers
         {
             string json = new JsonBuilder()
                 .Add("operation", "MARQUEE")
-                .Add("message", message.ToUpper())
+                .Add("message", message)
                 .Build();
 
             API.SendNuiMessage(json);
