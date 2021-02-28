@@ -2,6 +2,7 @@
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -14,6 +15,11 @@ namespace Curiosity.Core.Server.Managers
     {
         public override void Begin()
         {
+            Instance.EventRegistry.Add("txaLogger:internalChatMessage", new Action<string, string, string>((source, user, msg) =>
+            {
+                EventSystem.GetModule().SendAll("ui:notification", Notification.NOTIFICATION_SHOW, $"Announcement: {msg}", "top-center", "snackbar");
+            }));
+
             EventSystem.GetModule().Attach("chat:message", new AsyncEventCallback(async metadata => {
 
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
