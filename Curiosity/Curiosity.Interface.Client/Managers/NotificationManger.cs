@@ -38,7 +38,7 @@ namespace Curiosity.Interface.Client.Managers
         public void SendNui(Notification notification, string message, string position, string theme, string key)
         {
             JsonBuilder jb = new JsonBuilder()
-            .Add("operation", $"{notification}")
+            .Add("operation", $"NOTIFICATION")
             .Add("type", $"{notification}")
             .Add("message", message)
             .Add("position", position)
