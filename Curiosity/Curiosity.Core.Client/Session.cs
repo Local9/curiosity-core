@@ -1,6 +1,5 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Environment.Entities.Modules.Impl;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
