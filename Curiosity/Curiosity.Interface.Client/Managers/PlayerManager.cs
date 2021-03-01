@@ -140,7 +140,7 @@ namespace Curiosity.Interface.Client.Managers
                 return null;
             }));
 
-            Instance.AttachNuiHandler("PlayerReport", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("ReportPlayer", new AsyncEventCallback(async metadata =>
             {
                 int playerBeingReportedHandle = metadata.Find<int>(0);
                 string playerBeingReported = metadata.Find<string>(1);

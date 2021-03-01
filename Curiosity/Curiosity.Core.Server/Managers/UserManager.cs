@@ -140,9 +140,10 @@ namespace Curiosity.Core.Server.Managers
 
                     webhook.AvatarUrl = discordWebhook.Avatar;
                     webhook.Content = $"`{DateTime.Now.ToString("yyyy-MM-dd HH:mm")}`";
-                    string cleanName = discordClient.StripUnicodeCharactersFromString(PluginManager.Hostname);
-                    webhook.Username = cleanName;
+                    string cleanServerName = discordClient.StripUnicodeCharactersFromString(PluginManager.Hostname);
+                    webhook.Username = cleanServerName;
 
+                    AddTestEmbed(discordWebhook, webhook);
 
                     Embed embed = new Embed();
                     embed.Author = new EmbedAuthor { Name = $"Report By: {reporter.LatestName}", IconUrl = discordWebhook.Avatar };
@@ -188,7 +189,7 @@ namespace Curiosity.Core.Server.Managers
 
                     return true;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return false;
                 }
@@ -248,6 +249,21 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[handle];
                 return JsonConvert.SerializeObject(curiosityUser);
             }));
+        }
+
+        private static void AddTestEmbed(DiscordWebhook discordWebhook, Webhook webhook)
+        {
+            if (!PluginManager.IsLive)
+            {
+                Embed testEmbed = new Embed();
+                testEmbed.Author = new EmbedAuthor { Name = $"TEST", IconUrl = discordWebhook.Avatar };
+                testEmbed.Title = $"This is a test";
+                testEmbed.Description = $"Testing reporting, the server this report has come from is not live";
+                testEmbed.Color = (int)DiscordColor.Green;
+                testEmbed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+
+                webhook.Embeds.Add(testEmbed);
+            }
         }
 
         static void OnPlayerDropped([FromSource] Player player, string reason)

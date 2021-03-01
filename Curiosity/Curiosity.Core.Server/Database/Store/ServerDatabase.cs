@@ -94,7 +94,7 @@ namespace Curiosity.Core.Server.Database.Store
                     { "@logGroupId", (int)logGroup }
                 };
 
-                string myQuery = "CALL selLogReasons(@ServerID);";
+                string myQuery = "CALL selLogReasons(@logGroupId);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
