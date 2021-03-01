@@ -13,13 +13,13 @@ namespace Curiosity.Core.Server.Managers
 
         List<string> MarqueeMessages = new List<string>()
         {
-            "Forums: forums.lifev.net",
-            "Discord: discord.lifev.net",
+            "<span class='text-info font-weight-bold'>Forums</span>: forums.lifev.net",
+            "<span class='text-info font-weight-bold'>Discord</span>: discord.lifev.net",
             "Please use reports to notify us of rule breakers via the player list",
             "Please remember to be friendly to one another",
-            "Found a bug or two? want to help get rid of them? Report them to our forums: forums.lifev.net",
+            "Found a bug or two? want to help get rid of them? Report them to our forums: <span class='text-info font-weight-bold'>forums.lifev.net</span>",
             "Make sure to read our rules and guides",
-            "Support us via patreon.com/lifev",
+            "Support us via <span class='text-info font-weight-bold'>patreon.com/lifev</span>",
             "Remember you can change some of our binds in settings",
         };
 
