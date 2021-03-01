@@ -53,7 +53,7 @@ namespace Curiosity.Core.Server.Managers
                 string discordMessageStart = $"[{DateTime.Now.ToString("HH:mm")}] [W: {curiosityUser.RoutingBucket}, SH: {metadata.Sender}, CH: {channel}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
                 string discordMessage = message.Trim('"');
 
-                DiscordClient.DiscordInstance.SendChatMessage(discordMessageStart, discordMessage);
+                DiscordClient.GetModule().SendChatMessage(discordMessageStart, discordMessage);
 
                 return null;
             }));

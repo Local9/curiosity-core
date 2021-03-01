@@ -33,7 +33,7 @@ namespace Curiosity.Core.Server.Managers
 
                 string msg = $"{curiosityUserVictim.LatestName} killed by {curiosityUserKiller.LatestName}";
 
-                DiscordClient.DiscordInstance.SendDiscordPlayerLogMessage($"[Player Kill] {msg}");
+                DiscordClient.GetModule().SendDiscordPlayerLogMessage($"[Player Kill] {msg}");
                 EventSystem.GetModule().Send("system:notification:basic", -1, msg);
                 
                 return null;

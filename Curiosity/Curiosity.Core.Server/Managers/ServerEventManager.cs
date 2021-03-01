@@ -34,7 +34,7 @@ namespace Curiosity.Core.Server.Managers
                 msg += " Player is a mission owner.";
             }
 
-            DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage(msg);
+            DiscordClient.GetModule().SendDiscordServerEventLogMessage(msg);
         }
 
         private void OnClearPedTasksEvent(int source, bool immediately)
@@ -48,7 +48,7 @@ namespace Curiosity.Core.Server.Managers
                 return;
             }
 
-            DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"[{source}] '{player.Name}' tried to remove someone from their vehicle, or a script is badly written.");
+            DiscordClient.GetModule().SendDiscordServerEventLogMessage($"[{source}] '{player.Name}' tried to remove someone from their vehicle, or a script is badly written.");
         }
     }
 }

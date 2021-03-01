@@ -1,6 +1,6 @@
 ﻿namespace Curiosity.Core.Server.Web.Discord.Entity
 {
-    class DiscordWebhook
+    public class DiscordWebhook
     {
         public string Name;
         public string Avatar;

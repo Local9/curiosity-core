@@ -72,7 +72,7 @@ namespace Curiosity.Core.Server.Managers
                     {
                         bool godModeEnabled = API.GetPlayerInvincible(player.Handle);
                         if (godModeEnabled)
-                            Web.DiscordClient.DiscordInstance.SendDiscordServerEventLogMessage($"Player [{player.Handle}] '{player.Name}#{user.UserId}' has God Mode Enabled, Does job '{user.CurrentJob}' allow God Mode?");
+                            Web.DiscordClient.GetModule().SendDiscordServerEventLogMessage($"Player [{player.Handle}] '{player.Name}#{user.UserId}' has God Mode Enabled, Does job '{user.CurrentJob}' allow God Mode?");
                     }
                 }
 

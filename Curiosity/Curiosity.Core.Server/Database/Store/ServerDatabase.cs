@@ -1,6 +1,9 @@
 ﻿using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
 using Curiosity.Core.Server.Web.Discord.Entity;
+using Curiosity.Systems.Library.Enums;
+using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
@@ -78,6 +81,45 @@ namespace Curiosity.Core.Server.Database.Store
             {
                 Logger.Error($"{ex}");
                 return wh;
+            }
+        }
+
+        internal async static Task<List<LogItem>> GetList(LogGroup logGroup)
+        {
+            List<LogItem> lst = new List<LogItem>();
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@logGroupId", (int)logGroup }
+                };
+
+                string myQuery = "CALL selLogReasons(@ServerID);";
+
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                {
+                    ResultSet keyValuePairs = await result;
+
+                    if (keyValuePairs.Count == 0)
+                        return lst;
+
+                    foreach (Dictionary<string, object> kv in keyValuePairs)
+                    {
+                        LogItem logItem = new LogItem();
+                        logItem.LogTypeId = kv["logTypeId"].ToInt();
+                        logItem.Group = $"{kv["group"]}";
+                        logItem.Description = $"{kv["reason"]}";
+
+                        lst.Add(logItem);
+                    }
+
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return lst;
             }
         }
     }

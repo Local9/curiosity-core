@@ -1,7 +1,10 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Web;
+using Curiosity.Core.Server.Web.Discord.Entity;
 using Curiosity.Systems.Library.Entity;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
@@ -110,6 +113,126 @@ namespace Curiosity.Core.Server.Managers
 
                 return curiosityUser.NotificationBackup;
             }));
+
+            #region PDA Lists and methods
+
+            EventSystem.GetModule().Attach("user:report:list", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                List<LogItem> lst = await Database.Store.ServerDatabase.GetList(LogGroup.Report);
+                return lst;
+            }));
+
+            EventSystem.GetModule().Attach("user:report:submit", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+
+                try
+                {
+                    CuriosityUser reporter = PluginManager.ActiveUsers[metadata.Sender];
+                    int playerBeingReportedHandle = metadata.Find<int>(0);
+                    string playerBeingReported = metadata.Find<string>(1);
+                    string reason = metadata.Find<string>(2);
+
+                    DiscordClient discordClient = DiscordClient.GetModule();
+                    DiscordWebhook discordWebhook = discordClient.Webhooks[WebhookChannel.Report];
+                    Webhook webhook = new Webhook(discordWebhook.Url);
+
+                    webhook.AvatarUrl = discordWebhook.Avatar;
+                    webhook.Content = $"`{DateTime.Now.ToString("yyyy-MM-dd HH:mm")}`";
+                    string cleanName = discordClient.StripUnicodeCharactersFromString(PluginManager.Hostname);
+                    webhook.Username = cleanName;
+
+
+                    Embed embed = new Embed();
+                    embed.Author = new EmbedAuthor { Name = $"Report By: {reporter.LatestName}", IconUrl = discordWebhook.Avatar };
+                    embed.Title = $"Report";
+                    embed.Description = $"Player: {playerBeingReported}\nReason: {reason}";
+                    embed.Color = (int)DiscordColor.Green;
+                    embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+
+                    webhook.Embeds.Add(embed);
+
+                    Embed additionalData = new Embed();
+                    additionalData.Author = new EmbedAuthor { Name = playerBeingReported };
+                    additionalData.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+
+                    if (PluginManager.ActiveUsers.ContainsKey(playerBeingReportedHandle))
+                    {
+                        CuriosityUser user = PluginManager.ActiveUsers[playerBeingReportedHandle];
+                        additionalData.Title = $"Additional Data";
+                        additionalData.Description = $"" +
+                        $"DiscordID: {user.DiscordId}" +
+                        $"\nLifeVID: {user.UserId}" +
+                        $"\nCharacterID: {user.Character.CharacterId}" +
+                        $"\n-----" +
+                        $"\nJoined: {user.DateCreated.ToString("yyyy-MM-dd HH:mm")}" +
+                        $"\n-----" +
+                        $"\nHealth: {user.Character.Health}" +
+                        $"\nArmor: {user.Character.Armor}" +
+                        $"\nCash: {user.Character.Cash: C}" +
+                        $""
+                        ;
+                        additionalData.Color = (int)DiscordColor.Blue;
+                    }
+                    else
+                    {
+                        additionalData.Title = $"Error";
+                        additionalData.Description = "Player has left the server as they were being reported";
+                        additionalData.Color = (int)DiscordColor.Red;
+                    }
+
+                    webhook.Embeds.Add(additionalData);
+                    await BaseScript.Delay(0);
+                    await webhook.Send();
+
+                    return true;
+                }
+                catch(Exception ex)
+                {
+                    return false;
+                }
+            }));
+
+            EventSystem.GetModule().Attach("user:kick:list", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
+
+                List<LogItem> lst = await Database.Store.ServerDatabase.GetList(LogGroup.Kick);
+                return lst;
+            }));
+
+            EventSystem.GetModule().Attach("user:kick:submit", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
+
+                List<LogItem> lst = await Database.Store.ServerDatabase.GetList(LogGroup.Kick);
+                return lst;
+            }));
+
+            EventSystem.GetModule().Attach("user:ban:list", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                
+                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
+
+                return null;
+            }));
+
+            EventSystem.GetModule().Attach("user:ban:submit", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
+
+                return null;
+            }));
+
+            #endregion
 
             // Native Events
             Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);

@@ -34,7 +34,7 @@ namespace Curiosity.Interface.Client.Managers
             }));
         }
 
-        public void SendNui(Notification notification, string message, string position, string theme)
+        public void SendNui(Notification notification, string message, string position = "bottom-right", string theme = "toast")
         {
             JsonBuilder jb = new JsonBuilder()
             .Add("operation", $"NOTIFICATION")

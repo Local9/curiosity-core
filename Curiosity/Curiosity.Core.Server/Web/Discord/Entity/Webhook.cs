@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Web.Discord.Entity
 {
-    class Webhook
+    public class Webhook
     {
         static Request request = new Request();
 

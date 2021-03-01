@@ -52,6 +52,7 @@
     <Compile Include="Data\WeatherData.cs" />
     <Compile Include="Enums\EndState.cs" />
     <Compile Include="Enums\ErrorMessages.cs" />
+    <Compile Include="Enums\LogGroup.cs" />
     <Compile Include="Enums\MissionType.cs" />
     <Compile Include="Enums\Notification.cs" />
     <Compile Include="Enums\ObjectHash.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Models\CuriosityStore.cs" />
     <Compile Include="Models\ExportMessage.cs" />
     <Compile Include="Models\LocationConfig.cs" />
+    <Compile Include="Models\LogItem.cs" />
     <Compile Include="Models\Marker.cs" />
     <Compile Include="Models\Mission.cs" />
     <Compile Include="Models\MissionData.cs" />

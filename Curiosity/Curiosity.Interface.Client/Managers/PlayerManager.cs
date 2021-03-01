@@ -126,6 +126,41 @@ namespace Curiosity.Interface.Client.Managers
 
                 return null;
             }));
+
+            Instance.AttachNuiHandler("ReportList", new AsyncEventCallback(async metadata =>
+            {
+                List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:report:list");
+
+                string jsn = new JsonBuilder().Add("operation", "REPORT_REASONS")
+                .Add("list", lst)
+                .Build();
+
+                API.SendNuiMessage(jsn);
+
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("PlayerReport", new AsyncEventCallback(async metadata =>
+            {
+                int playerBeingReportedHandle = metadata.Find<int>(0);
+                string playerBeingReported = metadata.Find<string>(1);
+                string reason = metadata.Find<string>(2);
+
+                bool reportSuccess = await EventSystem.Request<bool>("user:report:submit", playerBeingReportedHandle, playerBeingReported, reason);
+
+                NotificationManger notification = NotificationManger.GetModule();
+
+                if (reportSuccess)
+                {
+                    notification.SendNui(Systems.Library.Enums.Notification.NOTIFICATION_SUCCESS, "Report received.");
+                }
+                else
+                {
+                    notification.SendNui(Systems.Library.Enums.Notification.NOTIFICATION_ERROR, "Issue when creating report, please inform a member of staff.");
+                }
+
+                return null;
+            }));
         }
 
         private async Task CreatePlayerHeadshot()

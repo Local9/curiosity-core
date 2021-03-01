@@ -37,8 +37,7 @@ namespace Curiosity.Core.Server.Web
     public class DiscordClient : Manager<DiscordClient>
     {
         static Request request = new Request();
-        public static DiscordClient DiscordInstance;
-        static Dictionary<WebhookChannel, DiscordWebhook> webhooks = new Dictionary<WebhookChannel, DiscordWebhook>();
+        public Dictionary<WebhookChannel, DiscordWebhook> Webhooks = new Dictionary<WebhookChannel, DiscordWebhook>();
         static DateTime lastUpdate = DateTime.Now;
         static string DATE_FORMAT = "yyyy-MM-dd HH:mm";
         static bool IsDelayRunnning = false;
@@ -48,10 +47,10 @@ namespace Curiosity.Core.Server.Web
 
         public override void Begin()
         {
-            DiscordInstance = this;
+
         }
 
-        public static String StripUnicodeCharactersFromString(string inputValue)
+        public String StripUnicodeCharactersFromString(string inputValue)
         {
             return _compiledUnicodeRegex.Replace(inputValue, String.Empty);
         }
@@ -66,12 +65,12 @@ namespace Curiosity.Core.Server.Web
                 UpdateWebhooks();
             }
 
-            while (webhooks.Count == 0)
+            while (Webhooks.Count == 0)
             {
                 // init
                 UpdateWebhooks();
                 await BaseScript.Delay(1000);
-                if (webhooks.Count == 0)
+                if (Webhooks.Count == 0)
                 {
                     Logger.Error($"No Discord Webhooks returned, trying again in five seconds.");
                     await BaseScript.Delay(5000);
@@ -81,13 +80,13 @@ namespace Curiosity.Core.Server.Web
             await BaseScript.Delay(10000);
         }
 
-        private static async Task UpdateWebhooks()
+        private async Task UpdateWebhooks()
         {
             await PluginManager.ServerLoading();
 
             if (PluginManager.ServerId > 0 && PluginManager.ServerReady)
             {
-                webhooks = await Database.Store.ServerDatabase.GetDiscordWebhooks(PluginManager.ServerId);
+                Webhooks = await Database.Store.ServerDatabase.GetDiscordWebhooks(PluginManager.ServerId);
             }
         }
 
@@ -177,7 +176,7 @@ namespace Curiosity.Core.Server.Web
 
         public async void SendChatMessage(string name, string message)
         {
-            if (!webhooks.ContainsKey(WebhookChannel.Chat))
+            if (!Webhooks.ContainsKey(WebhookChannel.Chat))
             {
                 Logger.Warn($"SendDiscordChatMessage() -> Discord Chat Webhook Missing");
                 return;
@@ -188,7 +187,7 @@ namespace Curiosity.Core.Server.Web
 
         public async void SendDiscordServerEventLogMessage(string message)
         {
-            if (!webhooks.ContainsKey(WebhookChannel.ServerEventLog))
+            if (!Webhooks.ContainsKey(WebhookChannel.ServerEventLog))
             {
                 Logger.Warn($"SendDiscordChatMessage() -> Discord Server Event Webhook Missing");
                 return;
@@ -196,7 +195,7 @@ namespace Curiosity.Core.Server.Web
 
             try
             {
-                DiscordWebhook discordWebhook = webhooks[WebhookChannel.ServerEventLog];
+                DiscordWebhook discordWebhook = Webhooks[WebhookChannel.ServerEventLog];
 
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
@@ -218,7 +217,7 @@ namespace Curiosity.Core.Server.Web
 
         public async void SendDiscordPlayerLogMessage(string message)
         {
-            if (!webhooks.ContainsKey(WebhookChannel.PlayerLog))
+            if (!Webhooks.ContainsKey(WebhookChannel.PlayerLog))
             {
                 Logger.Warn($"SendDiscordChatMessage() -> Discord Player Log Webhook Missing");
                 return;
@@ -226,7 +225,7 @@ namespace Curiosity.Core.Server.Web
 
             try
             {
-                DiscordWebhook discordWebhook = webhooks[WebhookChannel.PlayerLog];
+                DiscordWebhook discordWebhook = Webhooks[WebhookChannel.PlayerLog];
 
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
@@ -251,7 +250,7 @@ namespace Curiosity.Core.Server.Web
         {
             try
             {
-                if (!webhooks.ContainsKey(WebhookChannel.StaffLog))
+                if (!Webhooks.ContainsKey(WebhookChannel.StaffLog))
                 {
                     Logger.Warn($"SendDiscordStaffMessage() -> Discord {WebhookChannel.StaffLog} Webhook Missing");
                     return;
@@ -259,7 +258,7 @@ namespace Curiosity.Core.Server.Web
 
                 if (IsDelayRunnning) return;
 
-                DiscordWebhook discordWebhook = webhooks[WebhookChannel.StaffLog];
+                DiscordWebhook discordWebhook = Webhooks[WebhookChannel.StaffLog];
 
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
@@ -297,7 +296,7 @@ namespace Curiosity.Core.Server.Web
         {
             try
             {
-                if (!webhooks.ContainsKey(WebhookChannel.Report))
+                if (!Webhooks.ContainsKey(WebhookChannel.Report))
                 {
                     Logger.Warn($"SendDiscordReportMessage() -> Discord {WebhookChannel.Report} Webhook Missing");
                     return;
@@ -305,7 +304,7 @@ namespace Curiosity.Core.Server.Web
 
                 if (IsDelayRunnning) return;
 
-                DiscordWebhook discordWebhook = webhooks[WebhookChannel.Report];
+                DiscordWebhook discordWebhook = Webhooks[WebhookChannel.Report];
 
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
@@ -335,7 +334,7 @@ namespace Curiosity.Core.Server.Web
         {
             try
             {
-                if (!webhooks.ContainsKey(webhookChannel))
+                if (!Webhooks.ContainsKey(webhookChannel))
                 {
                     Logger.Warn($"SendDiscordEmbededMessage() -> Discord {webhookChannel} Webhook Missing");
                     return;
@@ -345,7 +344,7 @@ namespace Curiosity.Core.Server.Web
 
                 string cleanName = StripUnicodeCharactersFromString(name);
 
-                DiscordWebhook discordWebhook = webhooks[webhookChannel];
+                DiscordWebhook discordWebhook = Webhooks[webhookChannel];
 
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
@@ -376,7 +375,7 @@ namespace Curiosity.Core.Server.Web
         {
             try
             {
-                DiscordWebhook discordWebhook = webhooks[webhookChannel];
+                DiscordWebhook discordWebhook = Webhooks[webhookChannel];
 
                 Webhook webhook = new Webhook(discordWebhook.Url);
 
