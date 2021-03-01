@@ -65,7 +65,7 @@ namespace Curiosity.Interface.Client.Managers
                 pp.Name = curiosityUser.LatestName;
                 pp.Role = curiosityUser.Role.GetStringValue();
                 pp.Wallet = curiosityUser.Character.Cash;
-
+                pp.ServerHandle = curiosityUser.Handle;
                 pp.IsAdmin = curiosityUser.IsAdmin;
                 pp.IsStaff = curiosityUser.IsStaff;
 

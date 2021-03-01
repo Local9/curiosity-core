@@ -11,6 +11,7 @@ using Curiosity.Systems.Library.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -148,7 +149,7 @@ namespace Curiosity.Core.Server.Managers
                     Embed embed = new Embed();
                     embed.Author = new EmbedAuthor { Name = $"Report By: {reporter.LatestName}", IconUrl = discordWebhook.Avatar };
                     embed.Title = $"Report";
-                    embed.Description = $"Player: {playerBeingReported}\nReason: {reason}";
+                    embed.Description = $"Player: {playerBeingReported}\n{reason}";
                     embed.Color = (int)DiscordColor.Green;
                     embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
 
@@ -162,18 +163,19 @@ namespace Curiosity.Core.Server.Managers
                     {
                         CuriosityUser user = PluginManager.ActiveUsers[playerBeingReportedHandle];
                         additionalData.Title = $"Additional Data";
-                        additionalData.Description = $"" +
-                        $"DiscordID: {user.DiscordId}" +
-                        $"\nLifeVID: {user.UserId}" +
-                        $"\nCharacterID: {user.Character.CharacterId}" +
-                        $"\n-----" +
-                        $"\nJoined: {user.DateCreated.ToString("yyyy-MM-dd HH:mm")}" +
-                        $"\n-----" +
-                        $"\nHealth: {user.Character.Health}" +
-                        $"\nArmor: {user.Character.Armor}" +
-                        $"\nCash: {user.Character.Cash: C}" +
-                        $""
-                        ;
+                        additionalData.Description = $"This is additional information we have on the player";
+
+                        NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
+                        nfi.CurrencyPositivePattern = 0;
+
+                        additionalData.fields.Add(new Field("Life V ID", $"{user.UserId}", true));
+                        additionalData.fields.Add(new Field("DiscordID", $"{user.DiscordId}", true));
+                        additionalData.fields.Add(new Field("CharacterID", $"{user.Character.CharacterId}", true));
+                        additionalData.fields.Add(new Field("Joined", $"{user.DateCreated.ToString("yyyy-MM-dd HH:mm")}"));
+                        additionalData.fields.Add(new Field("Health", $"{user.Character.Health}", true));
+                        additionalData.fields.Add(new Field("Armor", $"{user.Character.Armor}", true));
+                        additionalData.fields.Add(new Field("Cash", $"{string.Format(nfi, "{0:C}", user.Character.Cash)}", true));
+
                         additionalData.Color = (int)DiscordColor.Blue;
                     }
                     else

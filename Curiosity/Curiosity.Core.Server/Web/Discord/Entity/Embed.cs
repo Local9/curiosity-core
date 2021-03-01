@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Curiosity.Core.Server.Web.Discord.Entity
 {
@@ -18,5 +19,8 @@ namespace Curiosity.Core.Server.Web.Discord.Entity
 
         [JsonProperty(PropertyName = "thumbnail", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public EmbedThumbnail Thumbnail;
+
+        [JsonProperty(PropertyName = "fields", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public List<Field> fields = new List<Field>();
     }
 }

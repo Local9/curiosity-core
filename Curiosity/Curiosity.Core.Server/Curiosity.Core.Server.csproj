@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
@@ -102,6 +103,7 @@
     <Compile Include="Web\Discord\Entity\Embed.cs" />
     <Compile Include="Web\Discord\Entity\EmbedAuthor.cs" />
     <Compile Include="Web\Discord\Entity\EmbedThumbnail.cs" />
+    <Compile Include="Web\Discord\Entity\Field.cs" />
     <Compile Include="Web\Discord\Entity\Webhook.cs" />
     <Compile Include="Web\HttpClient.cs" />
   </ItemGroup>

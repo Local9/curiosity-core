@@ -14,7 +14,7 @@ namespace Curiosity.Systems.Library.Models
         [DataMember(Name = "description")]
         public string Description;
 
-        [DataMember(Name = "playerHandle")]
+        [DataMember(Name = "playerHandle", EmitDefaultValue = true)]
         public int PlayerHandle;
     }
 }

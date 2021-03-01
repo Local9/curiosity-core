@@ -28,5 +28,8 @@ namespace Curiosity.Systems.Library.Models.PDA
 
         [DataMember(Name = "worldName")]
         public string WorldName;
+
+        [DataMember(Name = "handle")]
+        public int ServerHandle;
     }
 }
