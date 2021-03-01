@@ -259,9 +259,7 @@ namespace Curiosity.Core.Server.Managers
                 Embed testEmbed = new Embed();
                 testEmbed.Author = new EmbedAuthor { Name = $"TEST", IconUrl = discordWebhook.Avatar };
                 testEmbed.Title = $"This is a test";
-                testEmbed.Description = $"THIS IT A TEST!";
-                testEmbed.Color = (int)DiscordColor.Green;
-                testEmbed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
+                testEmbed.Color = (int)DiscordColor.Orange;
 
                 webhook.Embeds.Add(testEmbed);
             }
