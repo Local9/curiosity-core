@@ -50,7 +50,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     // Arg 0 - Player
                     // arg 1 - Vehicle Entity Handle
-                    Entity player = Entity.FromHandle((int)args[0]);
+                    Player player = new Player((int)args[0]);
                     Entity vehicle = Entity.FromHandle((int)args[1]);
 
                     HandleCEventNetworkPlayerEnteredVehicle(player, vehicle);
@@ -89,9 +89,11 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
-        private void HandleCEventNetworkPlayerEnteredVehicle(Entity player, Entity ent)
+        private void HandleCEventNetworkPlayerEnteredVehicle(Player player, Entity ent)
         {
-            if (player.Handle != Cache.PlayerPed.Handle) return;
+            Cache.UpdatePedId();
+
+            if (player.Character.Handle != Cache.PlayerPed.Handle) return;
 
             if (ent is Vehicle)
             {
