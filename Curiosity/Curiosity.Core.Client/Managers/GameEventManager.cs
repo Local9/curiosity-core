@@ -204,6 +204,7 @@ namespace Curiosity.Core.Client.Managers
         public override void Begin()
         {
             GameEventManager.OnDeath += GameEventManager_OnDeath;
+            GameEventManager.OnPlayerKillPlayer += GameEventManager_OnPlayerKillPlayer;
 
             EventSystem.Attach("character:respawnNow", new EventCallback(metadata =>
             {
@@ -219,7 +220,22 @@ namespace Curiosity.Core.Client.Managers
                 return null;
             }));
         }
-            
+
+        private void GameEventManager_OnPlayerKillPlayer(Player attacker, Player victim, bool isMeleeDamage, uint weaponInfoHash, int damageTypeFlag)
+        {
+            try
+            {
+                if (victim == attacker) return;
+                if (attacker != Game.Player) return;
+
+                EventSystem.Send("gameEvent:playerKillPlayer", attacker.ServerId, victim.ServerId);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"OnPlayerKillPlayer -> {ex.Message}");
+            }
+        }
+
         private void GameEventManager_OnDeath(Entity attacker, bool isMeleeDamage, uint weaponHashInfo, int damageTypeFlag)
         {
             DateOfDeath = DateTime.Now;
