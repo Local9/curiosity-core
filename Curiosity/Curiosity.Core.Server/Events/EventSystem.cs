@@ -5,9 +5,11 @@ using Curiosity.Core.Server.Managers;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Threading;
+using MsgPack.Serialization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,9 +25,9 @@ namespace Curiosity.Core.Server.Events
 
         public EventSystem()
         {
-            Instance.EventRegistry[EVENT_KEY] += new Action<int, string>((handle, payload) =>
+            Instance.EventRegistry[EVENT_KEY] += new Action<int, byte[]>((handle, payload) =>
             {
-                var wrapped = JsonConvert.DeserializeObject<Event>(payload.ToString());
+                var wrapped = payload;
 
                 wrapped.Sender = handle;
                 wrapped.Metadata.Sender = handle;
@@ -230,6 +232,48 @@ namespace Curiosity.Core.Server.Events
             Logger.Debug($"[Events] Attaching callback to `{target}`");
 
             Attachments.Add(new EventAttachment(target, callback));
+        }
+
+        public static async Task<byte[]> Serialize<T>(this T obj)
+        {
+            try
+            {
+                SerializationContext context = new SerializationContext { SerializationMethod = SerializationMethod.Map };
+                MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>(context);
+                using MemoryStream byteStream = new();
+#if SERVER
+        await serializer.PackAsync(byteStream, obj);
+#elif CLIENT
+        serializer.Pack(byteStream, obj);
+#endif
+                return byteStream.ToArray();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+                return default;
+            }
+        }
+
+        public static async Task<T> Deserialize<T>(byte[] serializedObject)
+        {
+            try
+            {
+                SerializationContext context = new SerializationContext { SerializationMethod = SerializationMethod.Map };
+                MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>(context);
+                using MemoryStream byteStream = new(serializedObject);
+#if SERVER
+        T result = await serializer.UnpackAsync(byteStream);
+#elif CLIENT
+        T result = serializer.Unpack(byteStream);
+#endif
+                return result;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+                return default;
+            }
         }
     }
 }
