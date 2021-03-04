@@ -11,6 +11,7 @@ namespace Curiosity.MissionManager.Client
         public static CuriosityEntity Entity => Player?.Entity;
         public static CuriosityCharacter Character => Player?.Character;
         public static Position Position => Entity.Position;
+        public static Vehicle PersonalVehicle { get; internal set; }
 
         private static Ped _ped;
         public static Ped PlayerPed

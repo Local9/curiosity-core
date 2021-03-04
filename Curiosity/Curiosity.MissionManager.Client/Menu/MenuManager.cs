@@ -155,7 +155,7 @@ namespace Curiosity.MissionManager.Client.Menu
             List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Cache.PlayerPed.Position, 4f)
                 && (Decorators.GetBoolean(x.Handle, Decorators.VEHICLE_MISSION)
                 || (Decorators.GetBoolean(x.Handle, Decorators.PLAYER_VEHICLE) && Decorators.GetInteger(x.Handle, Decorators.PLAYER_OWNER) == Game.Player.ServerId
-                    && (PlayerManager.PersonalVehicle.ClassType == VehicleClass.Emergency || PlayerManager.PersonalVehicle.Model.Hash == (int)VehicleHash.Polmav)))
+                    && (PlayerManager.GetModule().PersonalVehicle.ClassType == VehicleClass.Emergency || PlayerManager.GetModule().PersonalVehicle.Model.Hash == (int)VehicleHash.Polmav)))
                 ).Select(p => p).ToList();
 
             int interactables = peds.Count + vehicles.Count; // near any interactives?

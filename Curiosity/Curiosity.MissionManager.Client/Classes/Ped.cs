@@ -529,6 +529,8 @@ namespace Curiosity.MissionManager.Client.Classes
 
         public async void RunSequence(Sequence sequence)
         {
+            PlayerManager playerManager = PlayerManager.GetModule();
+
             switch (sequence)
             {
                 case Sequence.FLEE_IN_VEHICLE:
@@ -649,23 +651,23 @@ namespace Curiosity.MissionManager.Client.Classes
                     break;
                 case Sequence.DETAIN_IN_CURRENT_VEHICLE:
 
-                    if (PlayerManager.PersonalVehicle == null)
+                    if (playerManager.PersonalVehicle == null)
                     {
                         Notify.Alert("~r~Vehicle not found, you must have a personal vehicle.");
                         return;
                     }
 
-                    if (PlayerManager.PersonalVehicle.IsSeatFree(VehicleSeat.LeftRear))
+                    if (playerManager.PersonalVehicle.IsSeatFree(VehicleSeat.LeftRear))
                     {
-                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.LeftRear, 10000);
+                        Fx.Task.EnterVehicle(playerManager.PersonalVehicle, VehicleSeat.LeftRear, 10000);
                     }
-                    else if (PlayerManager.PersonalVehicle.IsSeatFree(VehicleSeat.RightRear))
+                    else if (playerManager.PersonalVehicle.IsSeatFree(VehicleSeat.RightRear))
                     {
-                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.RightRear, 10000);
+                        Fx.Task.EnterVehicle(playerManager.PersonalVehicle, VehicleSeat.RightRear, 10000);
                     }
-                    else if (PlayerManager.PersonalVehicle.IsSeatFree(VehicleSeat.Passenger))
+                    else if (playerManager.PersonalVehicle.IsSeatFree(VehicleSeat.Passenger))
                     {
-                        Fx.Task.EnterVehicle(PlayerManager.PersonalVehicle, VehicleSeat.Passenger, 10000);
+                        Fx.Task.EnterVehicle(playerManager.PersonalVehicle, VehicleSeat.Passenger, 10000);
                     }
                     else
                     {

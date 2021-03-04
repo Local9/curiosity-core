@@ -3,6 +3,8 @@ using CitizenFX.Core.Native;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Extensions;
 using Curiosity.MissionManager.Client.Interface;
+using Curiosity.MissionManager.Client.Manager;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using System;
 using System.Collections.Generic;
@@ -37,6 +39,16 @@ namespace Curiosity.MissionManager.Client.Managers
             try
             {
 
+                if (name == "CEventNetworkPlayerEnteredVehicle")
+                {
+                    // Arg 0 - Player
+                    // arg 1 - Vehicle Entity Handle
+                    Entity player = Entity.FromHandle((int)args[0]);
+                    Entity vehicle = Entity.FromHandle((int)args[1]);
+
+                    HandleCEventNetworkPlayerEnteredVehicle(player, vehicle);
+                }
+
                 if (name == "CEventNetworkEntityDamage")
                 {
                     Entity victim = Entity.FromHandle((int)args[0]);
@@ -57,6 +69,22 @@ namespace Curiosity.MissionManager.Client.Managers
             catch (Exception ex)
             {
                 Logger.Error($"{ex}");
+            }
+        }
+
+        private void HandleCEventNetworkPlayerEnteredVehicle(Entity player, Entity ent)
+        {
+            if (player.Handle != Cache.PlayerPed.Handle) return;
+
+            if (ent is Vehicle)
+            {
+                int vehicleNetworkId = ent.NetworkId;
+                int playerVehicle = player.State.Get($"{StateBagKey.PLAYER_VEHICLE}") == null ? 0 : player.State.Get($"{StateBagKey.PLAYER_VEHICLE}");
+
+                if (playerVehicle == 0) return;
+                if (playerVehicle != vehicleNetworkId) return;
+
+                PlayerManager.GetModule().SetVehicle(ent.Handle);
             }
         }
 

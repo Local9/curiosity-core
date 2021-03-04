@@ -339,9 +339,9 @@ namespace Curiosity.MissionManager.Client.Classes
                 }
             }
 
-            if (!Mission.isOnMission && PlayerManager.PersonalVehicle != null && !IsIgnored && Fx.Driver.Exists() && IsValidVehicle())
+            if (!Mission.isOnMission && PlayerManager.GetModule().PersonalVehicle != null && !IsIgnored && Fx.Driver.Exists() && IsValidVehicle())
             {
-                if (Cache.PlayerPed.CurrentVehicle == PlayerManager.PersonalVehicle && Cache.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Cache.PlayerPed.IsInVehicle())
+                if (Cache.PlayerPed.CurrentVehicle == PlayerManager.GetModule().PersonalVehicle && Cache.PlayerPed.CurrentVehicle.ClassType == VehicleClass.Emergency && Cache.PlayerPed.IsInVehicle())
                 {
                     bool isMarked = Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED);
 
@@ -353,7 +353,7 @@ namespace Curiosity.MissionManager.Client.Classes
 
                     Decorators.Set(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_MARKED, true);
 
-                    CitizenFX.Core.Vehicle playerVeh = PlayerManager.PersonalVehicle;
+                    CitizenFX.Core.Vehicle playerVeh = PlayerManager.GetModule().PersonalVehicle;
 
                     if (playerVeh.GetVehicleInFront(10f, 1f) == this.Fx && Fx.Driver != null && TrafficStopManager.Manager.tsVehicle == null && Decorators.GetBoolean(Fx.Handle, Decorators.VEHICLE_TRAFFIC_STOP_PULLOVER))
                     {

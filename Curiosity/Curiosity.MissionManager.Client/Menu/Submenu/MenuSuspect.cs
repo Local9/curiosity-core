@@ -121,6 +121,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
+            PlayerManager playerManager = PlayerManager.GetModule();
+
             if (Ped == null)
             {
                 Notify.Alert(CommonErrors.SubjectNotFound);
@@ -140,19 +142,19 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
             if (selectedItem == menuItemDetain)
             {
-                if (PlayerManager.PersonalVehicle == null)
+                if (playerManager.PersonalVehicle == null)
                 {
                     Notify.Alert($"Unable to find vehicle vehicle.");
                     return;
                 }
 
-                if (!PlayerManager.PersonalVehicle.Exists())
+                if (!playerManager.PersonalVehicle.Exists())
                 {
                     Notify.Alert($"Unable to find vehicle vehicle.");
                     return;
                 }
 
-                if (Ped.Position.DistanceTo(PlayerManager.PersonalVehicle.Position) > 10f)
+                if (Ped.Position.DistanceTo(playerManager.PersonalVehicle.Position) > 10f)
                 {
                     Notify.Alert($"You're too far from your vehicle.");
                     return;

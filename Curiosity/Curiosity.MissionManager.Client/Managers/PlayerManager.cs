@@ -3,32 +3,28 @@ using CitizenFX.Core.Native;
 using Curiosity.Global.Shared.Entity;
 using Curiosity.Global.Shared.Enums;
 using Curiosity.MissionManager.Client.Events;
+using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using System;
 
 namespace Curiosity.MissionManager.Client.Manager
 {
-    class PlayerManager : BaseScript
+    public class PlayerManager : Manager<PlayerManager>
     {
         const string PERSONAL_VEHICLE_KEY = "PERSONAL_VEHICLE_ID";
 
-        internal static ExportDictionary exportDictionary;
-
-        internal static PlayerInformationModel playerInfo = new PlayerInformationModel();
-        internal static Privilege privilege;
-        internal static Vehicle PersonalVehicle;
-        internal static Vehicle PersonalTrailer;
+        public PlayerInformationModel playerInfo = new PlayerInformationModel();
+        public Privilege privilege;
+        public Vehicle PersonalVehicle;
 
         public PlayerManager()
         {
-            EventHandlers[LegacyEvents.Client.CurrentVehicle] += new Action<int>(OnVehicleId);
-
-            EventHandlers[LegacyEvents.Native.Client.PlayerSpawned] += new Action<dynamic>(OnPlayerSpawned);
-            EventHandlers[LegacyEvents.Native.Client.OnClientResourceStart.Path] += LegacyEvents.Native.Client.OnClientResourceStart.Action += OnClientResourceStart;
+            Instance.EventRegistry[LegacyEvents.Native.Client.PlayerSpawned] += new Action<dynamic>(OnPlayerSpawned);
+            Instance.EventRegistry[LegacyEvents.Native.Client.OnClientResourceStart.Path] += LegacyEvents.Native.Client.OnClientResourceStart.Action += OnClientResourceStart;
         }
 
-        private static void OnVehicleId(int vehicleId)
+        public void SetVehicle(int vehicleId)
         {
             if (PersonalVehicle == null)
             {
