@@ -17,7 +17,13 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("vehicle:log:player", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
-                PluginManager.ActiveUsers[metadata.Sender].PersonalVehicle = netId;
+                
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+                user.PersonalVehicle = netId;
+
+                Player player = PluginManager.PlayersList[metadata.Sender];
+                player.State.Set($"{StateBagKey.PLAYER_VEHICLE}", user.PersonalVehicle, true);
+                
                 Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
@@ -122,9 +128,10 @@ namespace Curiosity.Core.Server.Managers
 
                 if (!PluginManager.ActiveUsers.ContainsKey(senderHandle)) return null;
 
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 Player player = PluginManager.PlayersList[senderHandle];
 
-                RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
+                RoutingBucket routingBucket = user.RoutingBucket;
 
                 var model = API.GetHashKey(metadata.Find<string>(0));
 

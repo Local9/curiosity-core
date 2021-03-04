@@ -4,6 +4,7 @@
     {
         PLAYER_NAME,
         SERVER_HANDLE,
-        PLAYER_CASH
+        PLAYER_CASH,
+        PLAYER_VEHICLE
     }
 }
