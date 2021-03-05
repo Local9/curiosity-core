@@ -66,8 +66,10 @@ namespace Curiosity.Core.Client.Managers
             API.RegisterCommand(COMMAND_OPEN_PDA_HOME, new Action(OpenPDA), false);
         }
 
-        public void OpenPDA()
+        public async void OpenPDA()
         {
+            await Session.Loading();
+
             if (!IsCoreOpen)
             {
                 IsCoreOpen = !IsCoreOpen;

@@ -15,8 +15,10 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
-            EventSystem.Attach("chat:receive", new EventCallback(metadata =>
+            EventSystem.Attach("chat:receive", new AsyncEventCallback(async metadata =>
             {
+                await Session.Loading();
+
                 JsonBuilder jsonBuilder = new JsonBuilder();
                 jsonBuilder.Add("operation", "CHAT");
                 jsonBuilder.Add("subOperation", "NEW_MESSAGE");
