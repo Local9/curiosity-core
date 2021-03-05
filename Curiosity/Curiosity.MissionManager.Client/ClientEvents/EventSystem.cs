@@ -4,11 +4,9 @@ using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Events;
-using MsgPack.Serialization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,9 +21,9 @@ namespace Curiosity.MissionManager.Client.Events
 
         public EventSystem()
         {
-            Instance.EventRegistry[EVENT_KEY] += new Action<byte[]>(payload =>
+            Instance.EventRegistry[EVENT_KEY] += new Action<string>(payload =>
             {
-                var wrapped = Deserialize<Event>(payload);
+                var wrapped = JsonConvert.DeserializeObject<Event>(payload.ToString());
 
                 if (wrapped.Type == EventType.Request)
                 {
@@ -102,9 +100,8 @@ namespace Curiosity.MissionManager.Client.Events
             //Logger.Debug(
             //    $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the server-side.");
 
-            byte[] package = Serialize<Event>(wrapped);
-
-            BaseScript.TriggerServerEvent(EVENT_KEY, API.GetPlayerServerId(API.PlayerId()), package);
+            BaseScript.TriggerServerEvent(EVENT_KEY, API.GetPlayerServerId(API.PlayerId()),
+                JsonConvert.SerializeObject(wrapped));
         }
 
         public Event Construct(string target, object[] payloads)
@@ -184,40 +181,6 @@ namespace Curiosity.MissionManager.Client.Events
             Logger.Debug($"[Events] Attaching callback to `{target}`");
 
             Attachments.Add(new EventAttachment(target, callback));
-        }
-
-        public byte[] Serialize<T>(T obj)
-        {
-            try
-            {
-                SerializationContext context = new SerializationContext { SerializationMethod = SerializationMethod.Map };
-                MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>(context);
-                using MemoryStream byteStream = new();
-                serializer.Pack(byteStream, obj);
-                return byteStream.ToArray();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-                return default;
-            }
-        }
-
-        public T Deserialize<T>(byte[] serializedObject)
-        {
-            try
-            {
-                SerializationContext context = new SerializationContext { SerializationMethod = SerializationMethod.Map };
-                MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>(context);
-                using MemoryStream byteStream = new(serializedObject);
-                T result = serializer.Unpack(byteStream);
-                return result;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.ToString());
-                return default;
-            }
         }
     }
 }

@@ -5,11 +5,9 @@ using Curiosity.Core.Server.Managers;
 using Curiosity.Systems.Library;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Threading;
-using MsgPack.Serialization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,9 +23,9 @@ namespace Curiosity.Core.Server.Events
 
         public EventSystem()
         {
-            Instance.EventRegistry[EVENT_KEY] += new Action<int, byte[]>(async (handle, payload) =>
+            Instance.EventRegistry[EVENT_KEY] += new Action<int, string>((handle, payload) =>
             {
-                var wrapped = await Deserialize<Event>(payload);
+                var wrapped = JsonConvert.DeserializeObject<Event>(payload.ToString());
 
                 wrapped.Sender = handle;
                 wrapped.Metadata.Sender = handle;
@@ -118,9 +116,9 @@ namespace Curiosity.Core.Server.Events
             Send(Construct(target, handle, null), handle);
         }
 
-        public async void Send(Event wrapped, int handle)
+        public void Send(Event wrapped, int handle)
         {
-            string client =  handle == -1 ? "All Users" : $"{handle}";
+            string client = handle == -1 ? "All Users" : $"{handle}";
 
             bool eventDebug = API.GetConvar("diagnostics_event_messages", "false") == "true";
 
@@ -130,32 +128,32 @@ namespace Curiosity.Core.Server.Events
                     $"[{wrapped.Seed}] [{wrapped.Target}] Dispatching `{wrapped.Type}` operation to the client `{client}`.");
             }
 
-            byte[] payload = await Serialize<Event>(wrapped);
+            string jsonObject = JsonConvert.SerializeObject(wrapped);
 
-            //int fileSize = Encoding.UTF8.GetCharCount(payload);
-            // bool latentEvent = fileSize > 4000;
+            int fileSize = Encoding.UTF8.GetByteCount(jsonObject);
+            bool latentEvent = fileSize > 4000;
 
             if (handle == -1)
             {
-                //if (latentEvent)
-                //{
-                //    BaseScript.TriggerLatentClientEvent(EVENT_KEY, 2000, payload);
-                //}
-                //else
-                //{
-                    BaseScript.TriggerClientEvent(EVENT_KEY, payload);
-                //}
+                if (latentEvent)
+                {
+                    BaseScript.TriggerLatentClientEvent(EVENT_KEY, 2000, jsonObject);
+                }
+                else
+                {
+                    BaseScript.TriggerClientEvent(EVENT_KEY, jsonObject);
+                }
             }
             else
             {
-                //if (latentEvent)
-                //{
-                //    BaseScript.TriggerLatentClientEvent(PluginManager.PlayersList[handle], EVENT_KEY, 2000, payload);
-                //}
-                //else
-                //{
-                    BaseScript.TriggerClientEvent(PluginManager.PlayersList[handle], EVENT_KEY, payload);
-                //}
+                if (latentEvent)
+                {
+                    BaseScript.TriggerLatentClientEvent(PluginManager.PlayersList[handle], EVENT_KEY, 2000, jsonObject);
+                }
+                else
+                {
+                    BaseScript.TriggerClientEvent(PluginManager.PlayersList[handle], EVENT_KEY, jsonObject);
+                }
             }
         }
 
@@ -232,44 +230,6 @@ namespace Curiosity.Core.Server.Events
             Logger.Debug($"[Events] Attaching callback to `{target}`");
 
             Attachments.Add(new EventAttachment(target, callback));
-        }
-
-        public async Task<byte[]> Serialize<T>(T obj)
-        {
-            try
-            {
-                SerializationContext context = new SerializationContext { SerializationMethod = SerializationMethod.Map };
-                MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>(context);
-                using MemoryStream byteStream = new();
-                
-                await serializer.PackAsync(byteStream, obj);
-                
-                return byteStream.ToArray();
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.ToString());
-                return default;
-            }
-        }
-
-        public static async Task<T> Deserialize<T>(byte[] serializedObject)
-        {
-            try
-            {
-                SerializationContext context = new SerializationContext { SerializationMethod = SerializationMethod.Map };
-                MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>(context);
-                using MemoryStream byteStream = new(serializedObject);
-                
-                T result = await serializer.UnpackAsync(byteStream);
-                
-                return result;
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e.ToString());
-                return default;
-            }
         }
     }
 }
