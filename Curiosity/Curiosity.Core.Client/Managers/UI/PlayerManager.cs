@@ -7,7 +7,7 @@ using Curiosity.Systems.Library.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Curiosity.Interface.Client.Managers
+namespace Curiosity.Core.Client.Managers
 {
     public class PlayerManager : Manager<PlayerManager>
     {

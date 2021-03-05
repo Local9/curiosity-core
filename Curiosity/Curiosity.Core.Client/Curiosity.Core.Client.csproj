@@ -71,6 +71,15 @@
     <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\LocationManager.cs" />
+    <Compile Include="Managers\UI\ChatManager.cs" />
+    <Compile Include="Managers\UI\DutyManager.cs" />
+    <Compile Include="Managers\UI\ExportManager.cs" />
+    <Compile Include="Managers\UI\MarqueeManager.cs" />
+    <Compile Include="Managers\UI\NotificationManger.cs" />
+    <Compile Include="Managers\UI\PdaManager.cs" />
+    <Compile Include="Managers\UI\PlayerManager.cs" />
+    <Compile Include="Managers\UI\StaffManager.cs" />
+    <Compile Include="Managers\UI\StoreManager.cs" />
     <Compile Include="Managers\VehicleManager.cs" />
     <Compile Include="Managers\WeaponManager.cs" />
     <Compile Include="Managers\WorldManager.cs" />
