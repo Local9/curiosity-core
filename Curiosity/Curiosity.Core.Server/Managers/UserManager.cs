@@ -58,6 +58,11 @@ namespace Curiosity.Core.Server.Managers
 
                 PluginManager.ActiveUsers.TryAdd(metadata.Sender, curiosityUser);
 
+                if (curiosityUser.IsStaff)
+                {
+                    player.State.Set($"{StateBagKey.STAFF_MEMBER}", curiosityUser.IsStaff, true);
+                }
+
                 return curiosityUser;
             }));
 
