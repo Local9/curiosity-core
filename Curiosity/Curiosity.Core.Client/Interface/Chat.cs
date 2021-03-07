@@ -1,4 +1,5 @@
-﻿using Curiosity.Systems.Library.Models;
+﻿using CitizenFX.Core.Native;
+using Curiosity.Systems.Library.Models;
 using System;
 
 namespace Curiosity.Core.Client.Interface
@@ -22,7 +23,7 @@ namespace Curiosity.Core.Client.Interface
 
             string nuiMessage = jsonBuilder.Build();
 
-            PluginManager.Instance.ExportDictionary["curiosity-ui"].AddToChat(nuiMessage);
+            API.SendNuiMessage(nuiMessage);
         }
     }
 }

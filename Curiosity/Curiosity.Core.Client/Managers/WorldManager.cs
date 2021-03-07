@@ -76,7 +76,6 @@ namespace Curiosity.Core.Client.Managers
             Instance.ExportDictionary.Add("GetWeather", new Func<int>(
                 () =>
                 {
-                    Instance.ExportDictionary["curiosity-ui"].SetWeather((int)CuriosityWeather.WeatherType, (int)CuriosityWeather.Season);
                     return (int)CuriosityWeather.WeatherType;
                 }));
 
@@ -347,8 +346,6 @@ namespace Curiosity.Core.Client.Managers
                 SetWeatherTypeNowPersist($"{weatherType}");
 
                 lastWeather = weatherType;
-
-                Instance.ExportDictionary["curiosity-ui"].SetWeather((int)CuriosityWeather.WeatherType, (int)CuriosityWeather.Season);
             }
         }
 

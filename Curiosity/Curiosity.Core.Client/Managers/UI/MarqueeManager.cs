@@ -3,13 +3,13 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
 
-namespace Curiosity.Interface.Client.Managers
+namespace Curiosity.Core.Client.Managers
 {
     public class MarqueeManager : Manager<MarqueeManager>
     {
         public override void Begin()
         {
-            Instance.ExportRegistry.Add("Marquee", new Func<string, bool>(
+            Instance.ExportDictionary.Add("Marquee", new Func<string, bool>(
                 (message) =>
                 {
                     SendNui(message);

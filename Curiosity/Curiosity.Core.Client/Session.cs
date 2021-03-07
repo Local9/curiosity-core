@@ -23,7 +23,6 @@ namespace Curiosity.Core.Client
             }
 
             await new CharacterManager.LoadTransition().DownWait();
-            PluginManager.Instance.ExportDictionary["curiosity-ui"].SessionActive();
         }
 
         public static bool IsSpawnHost()
