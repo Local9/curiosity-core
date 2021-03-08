@@ -6,6 +6,7 @@
         SERVER_HANDLE,
         PLAYER_CASH,
         PLAYER_VEHICLE,
-        STAFF_MEMBER
+        STAFF_MEMBER,
+        PLAYER_FREEZE
     }
 }

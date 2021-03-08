@@ -201,44 +201,6 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
-            EventSystem.GetModule().Attach("user:kick:list", new AsyncEventCallback(async metadata =>
-            {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
-
-                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
-
-                List<LogItem> lst = await Database.Store.ServerDatabase.GetList(LogGroup.Kick);
-                return lst;
-            }));
-
-            EventSystem.GetModule().Attach("user:kick:submit", new AsyncEventCallback(async metadata =>
-            {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
-
-                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
-
-                List<LogItem> lst = await Database.Store.ServerDatabase.GetList(LogGroup.Kick);
-                return lst;
-            }));
-
-            EventSystem.GetModule().Attach("user:ban:list", new AsyncEventCallback(async metadata =>
-            {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
-                
-                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
-
-                return null;
-            }));
-
-            EventSystem.GetModule().Attach("user:ban:submit", new AsyncEventCallback(async metadata =>
-            {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
-
-                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
-
-                return null;
-            }));
-
             #endregion
 
             // Native Events

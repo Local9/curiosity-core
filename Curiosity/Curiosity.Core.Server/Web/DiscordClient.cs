@@ -246,13 +246,13 @@ namespace Curiosity.Core.Server.Web
 
         }
 
-        public async void SendDiscordStaffMessage(string adminName, string player, string action, string reason, string duration)
+        public async void SendDiscordStaffLogMessage(string adminName, string player, string action, string reason, string duration)
         {
             try
             {
                 if (!Webhooks.ContainsKey(WebhookChannel.StaffLog))
                 {
-                    Logger.Warn($"SendDiscordStaffMessage() -> Discord {WebhookChannel.StaffLog} Webhook Missing");
+                    Logger.Warn($"SendDiscordStaffLogMessage() -> Discord {WebhookChannel.StaffLog} Webhook Missing");
                     return;
                 }
 
@@ -277,8 +277,6 @@ namespace Curiosity.Core.Server.Web
                 embed.Color = (int)DiscordColor.Orange;
                 if (action == "Ban")
                     embed.Color = (int)DiscordColor.Red;
-
-                embed.Thumbnail = new EmbedThumbnail { Url = discordWebhook.Avatar };
 
                 webhook.Embeds.Add(embed);
                 await BaseScript.Delay(0);

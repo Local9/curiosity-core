@@ -45,5 +45,15 @@ namespace Curiosity.Core.Client.Managers
 
             API.SendNuiMessage(jb.Build());
         }
+
+        public void Success(string message)
+        {
+            SendNui(Notification.NOTIFICATION_SUCCESS, message);
+        }
+
+        internal void Warn(string message)
+        {
+            SendNui(Notification.NOTIFICATION_WARNING, message);
+        }
     }
 }

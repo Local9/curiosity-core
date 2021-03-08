@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.PDA;
@@ -18,9 +19,9 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin) return null;
 
-                List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:report:list");
+                List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:ban:list");
 
-                string jsn = new JsonBuilder().Add("operation", "REPORT_REASONS")
+                string jsn = new JsonBuilder().Add("operation", "BAN_REASONS")
                 .Add("list", lst)
                 .Build();
 
@@ -33,13 +34,23 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin) return null;
 
-                List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:report:list");
+                int playerToKick = metadata.Find<int>(0);
+                int reasonId = metadata.Find<int>(1);
+                string reasonText = metadata.Find<string>(2);
+                bool perm = metadata.Find<bool>(3);
+                int duration = metadata.Find<int>(4);
+                int durationType = metadata.Find<int>(5);
 
-                string jsn = new JsonBuilder().Add("operation", "REPORT_REASONS")
-                .Add("list", lst)
-                .Build();
+                bool success = await EventSystem.Request<bool>("user:ban:submit", playerToKick, reasonId, reasonText, perm, duration, durationType);
 
-                API.SendNuiMessage(jsn);
+                if (success)
+                {
+                    NotificationManger.GetModule().Success("Ban Logged.");
+                }
+                else
+                {
+                    NotificationManger.GetModule().Warn("User was not banned.");
+                }
 
                 return null;
             }));
@@ -48,9 +59,9 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin) return null;
 
-                List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:report:list");
+                List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:kick:list");
 
-                string jsn = new JsonBuilder().Add("operation", "REPORT_REASONS")
+                string jsn = new JsonBuilder().Add("operation", "KICK_REASONS")
                 .Add("list", lst)
                 .Build();
 
@@ -63,13 +74,63 @@ namespace Curiosity.Core.Client.Managers
             {
                 if (!Cache.Player.User.IsAdmin) return null;
 
-                List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:report:list");
+                int playerToKick = metadata.Find<int>(0);
+                int reasonId = metadata.Find<int>(1);
+                string reasonText = metadata.Find<string>(2);
 
-                string jsn = new JsonBuilder().Add("operation", "REPORT_REASONS")
-                .Add("list", lst)
-                .Build();
+                Logger.Debug($"Kick: {playerToKick}, {reasonId}, {reasonText}");
 
-                API.SendNuiMessage(jsn);
+                bool success = await EventSystem.Request<bool>("user:kick:submit", playerToKick, reasonId, reasonText);
+
+                if (success)
+                {
+                    NotificationManger.GetModule().Success("Kick Logged.");
+                }
+                else
+                {
+                    NotificationManger.GetModule().Warn("User was not kicked.");
+                }
+
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("FreezePlayer", new AsyncEventCallback(async metadata =>
+            {
+                if (!Cache.Player.User.IsAdmin) return null;
+
+                int playerToFreeze = metadata.Find<int>(0);
+
+                bool success = await EventSystem.Request<bool>("user:freeze:submit", playerToFreeze);
+
+                if (success)
+                {
+                    NotificationManger.GetModule().Success("User frozen.");
+                }
+                else
+                {
+                    NotificationManger.GetModule().Warn("User was not frozen.");
+                }
+
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("WarnPlayer", new AsyncEventCallback(async metadata =>
+            {
+                if (!Cache.Player.User.IsAdmin) return null;
+
+                int playerToWarn = metadata.Find<int>(0);
+                string message = metadata.Find<string>(1);
+
+                bool success = await EventSystem.Request<bool>("user:warn:submit", playerToWarn);
+
+                if (success)
+                {
+                    NotificationManger.GetModule().Success("User warned.");
+                }
+                else
+                {
+                    NotificationManger.GetModule().Warn("User was not warned.");
+                }
 
                 return null;
             }));
