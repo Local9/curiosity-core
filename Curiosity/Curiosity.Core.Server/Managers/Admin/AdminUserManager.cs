@@ -54,7 +54,7 @@ namespace Curiosity.Core.Server.Managers.Admin
                     DiscordClient dc = new DiscordClient();
                     dc.SendDiscordStaffLogMessage(admin.LatestName, user.LatestName, "Kick", reasonText, string.Empty);
 
-                    Notify.Notification(Notification.NOTIFICATION_INFO, $"Player '{user.LatestName}' has been kicked.");
+                    Notify.Send(notification: Notification.NOTIFICATION_INFO, message: $"Player '{user.LatestName}' has been kicked.");
                     
                     return true;
                 }
@@ -132,7 +132,7 @@ namespace Curiosity.Core.Server.Managers.Admin
                     DiscordClient dc = new DiscordClient();
                     dc.SendDiscordStaffLogMessage(admin.LatestName, user.LatestName, "Banned", reasonText, banDurationMessage);
 
-                    Notify.Notification(Notification.NOTIFICATION_INFO, $"Player '{user.LatestName}' has been banned.<br />Duration: {banDurationMessage}");
+                    Notify.Send(notification: Notification.NOTIFICATION_INFO, message: $"Player '{user.LatestName}' has been banned.<br />Duration: {banDurationMessage}");
 
                     return true;
                 }
@@ -140,6 +140,16 @@ namespace Curiosity.Core.Server.Managers.Admin
                 {
                     return false;
                 }
+            }));
+
+            EventSystem.GetModule().Attach("user:warn:submit", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+
+                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return false;
+
+                Notify.Send(metadata.Find<int>(0), notification: Notification.NOTIFICATION_WARNING, message: $"{metadata.Find<string>(1)}");
+                return true;
             }));
 
             EventSystem.GetModule().Attach("user:freeze:submit", new EventCallback(metadata =>
