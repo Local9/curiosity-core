@@ -184,6 +184,54 @@ namespace Curiosity.Core.Client.Managers
 
                 return null;
             }));
+
+            Instance.AttachNuiHandler("BringPlayer", new AsyncEventCallback(async metadata =>
+            {
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
+
+                int playerToRevive = metadata.Find<int>(0);
+
+                bool success = await EventSystem.Request<bool>("user:bring:submit", playerToRevive);
+
+                if (success)
+                {
+                    NotificationManger.GetModule().Success("User teleported.");
+                }
+                else
+                {
+                    NotificationManger.GetModule().Warn("User was not teleported.");
+                }
+
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("GotoPlayer", new AsyncEventCallback(async metadata =>
+            {
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
+
+                int playerToRevive = metadata.Find<int>(0);
+
+                bool success = await EventSystem.Request<bool>("user:bring:submit", playerToRevive);
+
+                if (success)
+                {
+                    NotificationManger.GetModule().Success("Teleported to User.");
+                }
+                else
+                {
+                    NotificationManger.GetModule().Warn("Was not teleported.");
+                }
+
+                return null;
+            }));
         }
     }
 }

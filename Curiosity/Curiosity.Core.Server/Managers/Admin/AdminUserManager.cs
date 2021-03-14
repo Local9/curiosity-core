@@ -226,7 +226,30 @@ namespace Curiosity.Core.Server.Managers.Admin
 
                 if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return false;
 
-                return null;
+                Player staff = PluginManager.PlayersList[metadata.Sender];
+
+                int pid = metadata.Find<int>(0);
+                Player player = PluginManager.PlayersList[pid];
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[pid];
+                Vector3 pos = staff.Character.Position + new Vector3(0f, 2f, 0f);
+                curiosityUser.Send("user:position:move", pos.X, pos.Y, pos.Z);
+
+                return true;
+                
+                //bool fadedOut = await EventSystem.Request<bool>("user:screen:fadeOut", pid, 2000);
+               
+                //if (fadedOut)
+                //{
+                //    player.Character.Position = staff.Character.Position + new Vector3(0f, 2f, 0f);
+                //    await BaseScript.Delay(500);
+                //    await EventSystem.Request<bool>("user:screen:fadeIn", pid, 2000);
+                //    return true;
+                //}
+                //else
+                //{
+                //    await EventSystem.Request<bool>("user:screen:fadeIn", pid, 2000);
+                //    return false;
+                //}
             }));
 
             EventSystem.GetModule().Attach("user:goto:submit", new EventCallback(metadata =>
@@ -235,7 +258,32 @@ namespace Curiosity.Core.Server.Managers.Admin
 
                 if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return false;
 
-                return null;
+                Player staff = PluginManager.PlayersList[metadata.Sender];
+                CuriosityUser staffUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                int pid = metadata.Find<int>(0);
+                Player player = PluginManager.PlayersList[pid];
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[pid];
+
+                Vector3 pos = player.Character.Position + new Vector3(0f, 2f, 0f);
+                staffUser.Send("user:position:move", pos.X, pos.Y, pos.Z);
+
+                return true;
+
+                //bool fadedOut = await EventSystem.Request<bool>("user:screen:fadeOut", metadata.Sender, 2000);
+
+                //if (fadedOut)
+                //{
+                //    staff.Character.Position = player.Character.Position + new Vector3(0f, 2f, 0f);
+                //    await BaseScript.Delay(500);
+                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
+                //    return true;
+                //}
+                //else
+                //{
+                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
+                //    return false;
+                //}
             }));
         }
     }

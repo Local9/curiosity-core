@@ -1,9 +1,11 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.PDA;
 using Curiosity.Systems.Library.Utils;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -159,6 +161,74 @@ namespace Curiosity.Core.Client.Managers
                 }
 
                 return null;
+            }));
+
+            EventSystem.Attach("user:screen:fadeOut", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    Screen.Fading.FadeOut(metadata.Find<int>(0));
+
+                    while (Screen.Fading.IsFadingOut)
+                    {
+                        await BaseScript.Delay(100);
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }));
+
+            EventSystem.Attach("user:screen:fadeIn", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    Screen.Fading.FadeIn(metadata.Find<int>(0));
+
+                    while (Screen.Fading.IsFadingIn)
+                    {
+                        await BaseScript.Delay(100);
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }));
+
+            EventSystem.Attach("user:position:move", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    Screen.Fading.FadeOut(200);
+
+                    while (Screen.Fading.IsFadingOut)
+                    {
+                        await BaseScript.Delay(100);
+                    }
+
+                    float x = metadata.Find<float>(0);
+                    float y = metadata.Find<float>(1);
+                    float z = metadata.Find<float>(2);
+
+                    Screen.Fading.FadeIn(1000);
+
+                    while (Screen.Fading.IsFadingIn)
+                    {
+                        await BaseScript.Delay(100);
+                    }
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
             }));
         }
 
