@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Util;
 using Curiosity.Core.Server.Web;
@@ -144,12 +145,30 @@ namespace Curiosity.Core.Server.Managers.Admin
 
             EventSystem.GetModule().Attach("user:warn:submit", new EventCallback(metadata =>
             {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+                try
+                {
+                    if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
 
-                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return false;
+                    if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return false;
 
-                Notify.Send(metadata.Find<int>(0), notification: Notification.NOTIFICATION_WARNING, message: $"{metadata.Find<string>(1)}");
-                return true;
+                    Player staff = PluginManager.PlayersList[metadata.Sender];
+
+                    int pid = metadata.Find<int>(0);
+                    Player p = PluginManager.PlayersList[pid];
+
+                    string msg = metadata.Find<string>(1);
+
+                    Notify.Send(pid, notification: Notification.NOTIFICATION_WARNING, message: $"{msg}");
+                    BaseScript.TriggerClientEvent(player: p, "txAdminClient:warn", staff.Name, msg, "WARNING", "Warned By:", "Hold [SPACE] for 10 seconds to dismiss this message.");
+
+                    DiscordClient.GetModule().SendDiscordStaffLogMessage(staff.Name, p.Name, "WARNING", msg);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Error [USER:WARNING]: {ex.Message}");
+                    return false;
+                }
             }));
 
             EventSystem.GetModule().Attach("user:freeze:submit", new EventCallback(metadata =>

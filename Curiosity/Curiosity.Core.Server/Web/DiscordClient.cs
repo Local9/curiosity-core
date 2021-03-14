@@ -246,7 +246,7 @@ namespace Curiosity.Core.Server.Web
 
         }
 
-        public async void SendDiscordStaffLogMessage(string adminName, string player, string action, string reason, string duration)
+        public async void SendDiscordStaffLogMessage(string adminName, string player, string action, string reason, string duration = "")
         {
             try
             {

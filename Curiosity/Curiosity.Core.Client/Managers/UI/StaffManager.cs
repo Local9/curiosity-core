@@ -17,7 +17,11 @@ namespace Curiosity.Core.Client.Managers
         {
             Instance.AttachNuiHandler("BanReasons", new AsyncEventCallback(async metadata =>
             {
-                if (!Cache.Player.User.IsAdmin) return null;
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
 
                 List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:ban:list");
 
@@ -32,7 +36,11 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("BanPlayer", new AsyncEventCallback(async metadata =>
             {
-                if (!Cache.Player.User.IsAdmin) return null;
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
 
                 int playerToKick = metadata.Find<int>(0);
                 int reasonId = metadata.Find<int>(1);
@@ -57,7 +65,11 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("KickReasons", new AsyncEventCallback(async metadata =>
             {
-                if (!Cache.Player.User.IsAdmin) return null;
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
 
                 List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:kick:list");
 
@@ -72,7 +84,11 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("KickPlayer", new AsyncEventCallback(async metadata =>
             {
-                if (!Cache.Player.User.IsAdmin) return null;
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
 
                 int playerToKick = metadata.Find<int>(0);
                 int reasonId = metadata.Find<int>(1);
@@ -96,7 +112,11 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("FreezePlayer", new AsyncEventCallback(async metadata =>
             {
-                if (!Cache.Player.User.IsAdmin) return null;
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
 
                 int playerToFreeze = metadata.Find<int>(0);
 
@@ -116,12 +136,18 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("WarnPlayer", new AsyncEventCallback(async metadata =>
             {
-                if (!Cache.Player.User.IsAdmin) return null;
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
 
                 int playerToWarn = metadata.Find<int>(0);
                 string message = metadata.Find<string>(1);
 
-                bool success = await EventSystem.Request<bool>("user:warn:submit", playerToWarn);
+                Logger.Debug($"ptw: {playerToWarn}, msg: {message}");
+
+                bool success = await EventSystem.Request<bool>("user:warn:submit", playerToWarn, message);
 
                 if (success)
                 {
