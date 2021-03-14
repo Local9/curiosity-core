@@ -124,7 +124,7 @@ namespace Curiosity.Core.Client.Managers
 
                 if (success)
                 {
-                    NotificationManger.GetModule().Success("User frozen.");
+                    NotificationManger.GetModule().Success("User frozen state changed.");
                 }
                 else
                 {
@@ -156,6 +156,30 @@ namespace Curiosity.Core.Client.Managers
                 else
                 {
                     NotificationManger.GetModule().Warn("User was not warned.");
+                }
+
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("RevivePlayer", new AsyncEventCallback(async metadata =>
+            {
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
+
+                int playerToRevive = metadata.Find<int>(0);
+
+                bool success = await EventSystem.Request<bool>("user:revive:submit", playerToRevive);
+
+                if (success)
+                {
+                    NotificationManger.GetModule().Success("User revived.");
+                }
+                else
+                {
+                    NotificationManger.GetModule().Warn("User was not revived.");
                 }
 
                 return null;

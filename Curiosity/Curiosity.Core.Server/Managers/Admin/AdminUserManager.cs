@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Util;
 using Curiosity.Core.Server.Web;
 using Curiosity.Systems.Library.Enums;
@@ -195,20 +196,44 @@ namespace Curiosity.Core.Server.Managers.Admin
                 }
             }));
 
+            EventSystem.GetModule().Attach("user:revive:submit", new EventCallback(metadata =>
+            {
+                try
+                {
+                    if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+
+                    CuriosityUser staff = PluginManager.ActiveUsers[metadata.Sender];
+
+                    if (!staff.IsStaff) return false;
+
+                    int pid = metadata.Find<int>(0);
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[pid];
+                    curiosityUser.Send("character:respawnNow");
+
+                    Notify.Send(pid, notification: Notification.NOTIFICATION_SUCCESS, message: $"Revived by '{staff.LatestName}'");
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }));
+
             EventSystem.GetModule().Attach("user:bring:submit", new EventCallback(metadata =>
             {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
 
-                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
+                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return false;
 
                 return null;
             }));
 
             EventSystem.GetModule().Attach("user:goto:submit", new EventCallback(metadata =>
             {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
 
-                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return null;
+                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return false;
 
                 return null;
             }));
