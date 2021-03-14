@@ -10,6 +10,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity-core\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

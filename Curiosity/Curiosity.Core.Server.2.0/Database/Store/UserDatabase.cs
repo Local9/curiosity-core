@@ -79,5 +79,57 @@ namespace Curiosity.Core.Server.Database.Store
                 return null;
             }
         }
+
+        internal static async Task<bool> LogKick(long userId, long staffUserId, int reasonId, int userCharacterId)
+        {
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@userId", userId },
+                    { "@loggedById", staffUserId },
+                    { "@logTypeId", reasonId },
+                    { "@characterId", userCharacterId }
+                };
+
+                string myQuery = "call spLogKickedUser(@userId, @loggedById, @logTypeId, @characterId);";
+
+                await MySqlDatabase.mySQL.Query(myQuery, myParams);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return false;
+            }
+        }
+
+        internal static async Task<bool> LogBan(long userId, long staffUserId, int reasonId, long userCharacterId, bool permBan, DateTime bannedUntil)
+        {
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@userId", userId },
+                    { "@loggedById", staffUserId },
+                    { "@logTypeId", reasonId },
+                    { "@characterId", userCharacterId },
+                    { "@permBan", permBan },
+                    { "@bannedUntil", bannedUntil },
+                };
+
+                string myQuery = "call spLogBannedUser(@userId, @loggedById, @logTypeId, @characterId, @permBan, @bannedUntil);";
+
+                await MySqlDatabase.mySQL.Query(myQuery, myParams);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return false;
+            }
+        }
     }
 }

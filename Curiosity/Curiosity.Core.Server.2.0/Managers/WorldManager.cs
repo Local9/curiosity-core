@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Data;
@@ -18,6 +19,13 @@ namespace Curiosity.Core.Server.Managers
         DateTime lastTimeWeatherUpdated = DateTime.Now;
 
         public bool IsWeatherFrozen = false;
+        bool _debugWeather
+        {
+            get
+            {
+                return API.GetConvarInt("debug_weather", 0) == 1;
+            }
+        }
 
         Dictionary<Region, WeatherType> regionWeatherType = new Dictionary<Region, WeatherType>()
         {
@@ -61,15 +69,22 @@ namespace Curiosity.Core.Server.Managers
             // Need to add a time sync
 
             RandomiseWeather();
+            WeatherDebugOutput();
+        }
 
-            Logger.Debug($"Weather Region Init START");
-
-            foreach(KeyValuePair<Region, WeatherType> kvp in regionWeatherType)
+        private void WeatherDebugOutput()
+        {
+            if (_debugWeather)
             {
-                Logger.Debug($"Region: {kvp.Key} : {kvp.Value}");
-            }
+                Logger.Debug($"Weather Region Init START");
 
-            Logger.Debug($"Weather Region Init END");
+                foreach (KeyValuePair<Region, WeatherType> kvp in regionWeatherType)
+                {
+                    Logger.Debug($"Region: {kvp.Key} : {kvp.Value}");
+                }
+
+                Logger.Debug($"Weather Region Init END");
+            }
         }
 
         public void SetWeatherForAllRegions(WeatherType weatherType)
@@ -100,15 +115,6 @@ namespace Curiosity.Core.Server.Managers
                     regionWeatherType[kvp.Key] = weatherTypes[Utility.RANDOM.Next(weatherTypes.Count)];
                 }
             }
-
-            Logger.Debug($"Weather Region START");
-
-            foreach (KeyValuePair<Region, WeatherType> kvp in regionWeatherType)
-            {
-                Logger.Debug($"Region: {kvp.Key} : {kvp.Value}");
-            }
-
-            Logger.Debug($"Weather Region END");
         }
 
         [TickHandler]
