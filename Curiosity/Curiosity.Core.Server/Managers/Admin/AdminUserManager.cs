@@ -53,8 +53,7 @@ namespace Curiosity.Core.Server.Managers.Admin
                 {
                     player.Drop($"Kicked by {admin.LatestName}\n{reasonText}");
 
-                    DiscordClient dc = new DiscordClient();
-                    dc.SendDiscordStaffLogMessage(admin.LatestName, user.LatestName, "Kick", reasonText, string.Empty);
+                    DiscordClient.GetModule().SendDiscordStaffLogMessage(admin.LatestName, user.LatestName, "Kick", reasonText);
 
                     Notify.Send(notification: Notification.NOTIFICATION_INFO, message: $"Player '{user.LatestName}' has been kicked.");
                     
@@ -131,8 +130,7 @@ namespace Curiosity.Core.Server.Managers.Admin
 
                     player.Drop($"Banned by {admin.LatestName}\n{reasonText}\nDuration: {banDurationMessage}");
 
-                    DiscordClient dc = new DiscordClient();
-                    dc.SendDiscordStaffLogMessage(admin.LatestName, user.LatestName, "Banned", reasonText, banDurationMessage);
+                    DiscordClient.GetModule().SendDiscordStaffLogMessage(admin.LatestName, user.LatestName, "Banned", reasonText, banDurationMessage);
 
                     Notify.Send(notification: Notification.NOTIFICATION_INFO, message: $"Player '{user.LatestName}' has been banned.<br />Duration: {banDurationMessage}");
 
