@@ -85,11 +85,7 @@ namespace Curiosity.Core.Server.Managers.Admin
                 int playerToBan = metadata.Find<int>(0);
                 int reasonId = metadata.Find<int>(1);
                 string reasonText = metadata.Find<string>(2);
-                bool perm = metadata.Find<bool>(3);
-                int duration = metadata.Find<int>(4);
-                int durationType = metadata.Find<int>(5);
-
-                // Type: 0 Hours, 1 Days, 2 Weeks, if Perm not required
+                int duration = metadata.Find<int>(3);
 
                 if (!PluginManager.ActiveUsers.ContainsKey(playerToBan))
                 {
@@ -105,29 +101,48 @@ namespace Curiosity.Core.Server.Managers.Admin
                 //    return false;
                 //}
 
-                DateTime bannedUntilTimestamp = DateTime.Now.AddHours(duration);
-                string banDurationMessage = $"{duration} hours";
+                DateTime banUntil = DateTime.Now.AddYears(999);
+                bool perm = false;
 
-                switch (durationType)
+                string banDurationMessage = "Permanently";
+
+                switch (duration)
                 {
-                    case 1: // Days
-                        bannedUntilTimestamp = DateTime.Now.AddDays(duration);
-                        banDurationMessage = $"{duration} Day(s)";
+                    case 1:
+                        banUntil = DateTime.Now.AddHours(2);
+                        banDurationMessage = "2 Hours";
                         break;
-                    case 2: // Weeks
-                        bannedUntilTimestamp = DateTime.Now.AddDays(7 * duration);
-                        banDurationMessage = $"{duration} Week(s)";
+                    case 2:
+                        banUntil = DateTime.Now.AddHours(8);
+                        banDurationMessage = "8 Hours";
+                        break;
+                    case 3:
+                        banUntil = DateTime.Now.AddDays(1);
+                        banDurationMessage = "1 Day";
+                        break;
+                    case 4:
+                        banUntil = DateTime.Now.AddDays(2);
+                        banDurationMessage = "2 Days";
+                        break;
+                    case 5:
+                        banUntil = DateTime.Now.AddDays(7);
+                        banDurationMessage = "1 Week";
+                        break;
+                    case 6:
+                        banUntil = DateTime.Now.AddDays(14);
+                        banDurationMessage = "2 Weeks";
+                        break;
+                    case 7:
+                        perm = true;
                         break;
                 }
+
+                DateTime bannedUntilTimestamp = banUntil;
 
                 bool success = await Database.Store.UserDatabase.LogBan(user.UserId, admin.UserId, reasonId, user.Character.CharacterId, perm, bannedUntilTimestamp);
 
                 if (success)
                 {
-                    string banDuration = string.Format("{0} Days", duration);
-                    if (perm)
-                        banDuration = "Permanently";
-
                     player.Drop($"Banned by {admin.LatestName}\n{reasonText}\nDuration: {banDurationMessage}");
 
                     DiscordClient.GetModule().SendDiscordStaffLogMessage(admin.LatestName, user.LatestName, "Banned", reasonText, banDurationMessage);

@@ -1,13 +1,8 @@
-﻿using CitizenFX.Core;
-using CitizenFX.Core.Native;
+﻿using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Models.PDA;
-using Curiosity.Systems.Library.Utils;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -42,14 +37,12 @@ namespace Curiosity.Core.Client.Managers
                     return null;
                 }
 
-                int playerToKick = metadata.Find<int>(0);
+                int playerToBan = metadata.Find<int>(0);
                 int reasonId = metadata.Find<int>(1);
                 string reasonText = metadata.Find<string>(2);
-                bool perm = metadata.Find<bool>(3);
-                int duration = metadata.Find<int>(4);
-                int durationType = metadata.Find<int>(5);
+                int duration = metadata.Find<int>(3);
 
-                bool success = await EventSystem.Request<bool>("user:ban:submit", playerToKick, reasonId, reasonText, perm, duration, durationType);
+                bool success = await EventSystem.Request<bool>("user:ban:submit", playerToBan, reasonId, reasonText, duration);
 
                 if (success)
                 {
