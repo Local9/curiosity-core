@@ -1,9 +1,9 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Events;
-using Curiosity.Systems.Library.Events;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Systems.Library.Events;
 
 namespace Curiosity.Core.Client.Managers
 {

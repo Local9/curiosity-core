@@ -1,4 +1,3 @@
-using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Managers;
 using System;

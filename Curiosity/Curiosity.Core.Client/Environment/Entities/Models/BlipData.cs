@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 

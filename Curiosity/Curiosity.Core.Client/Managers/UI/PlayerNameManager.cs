@@ -1,12 +1,10 @@
 ﻿using CitizenFX.Core;
-using static CitizenFX.Core.Native.API;
+using CitizenFX.Core.UI;
+using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Curiosity.Systems.Library.Enums;
-using CitizenFX.Core.UI;
+using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers.UI
 {
