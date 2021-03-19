@@ -101,7 +101,7 @@ namespace Curiosity.Core.Server.Managers.Admin
                 //    return false;
                 //}
 
-                DateTime banUntil = DateTime.Now.AddYears(999);
+                DateTime banUntil = DateTime.Now.AddYears(10);
                 bool perm = false;
 
                 string banDurationMessage = "Permanently";
@@ -148,6 +148,8 @@ namespace Curiosity.Core.Server.Managers.Admin
                     DiscordClient.GetModule().SendDiscordStaffLogMessage(admin.LatestName, user.LatestName, "Banned", reasonText, banDurationMessage);
 
                     Notify.Send(notification: Notification.NOTIFICATION_INFO, message: $"Player '{user.LatestName}' has been banned.<br />Duration: {banDurationMessage}");
+
+                    QueueManager.GetModule().RemoveFrom(user.License, true, true, true, true, true, true); // Nuke them from the queue
 
                     return true;
                 }

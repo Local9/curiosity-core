@@ -67,7 +67,7 @@ namespace Curiosity.Core.Server.Database.Store
                         curiosityUser.IsPassive = kv["IsPassive"].ToBoolean();
 
                         if (kv.ContainsValue("bannedUntil"))
-                            curiosityUser.BannedUntil = kv["bannedUntil"].ToDateTime();
+                            curiosityUser.BannedUntil = DateTime.Parse(kv["bannedUntil"].ToString());
                     }
 
                     return curiosityUser;

@@ -192,13 +192,26 @@ namespace Curiosity.Core.Server.Managers
 
             if (curiosityUser.IsBanned)
             {
-                string time = $"until {curiosityUser.BannedUntil}";
-                if (curiosityUser.IsBannedPerm)
-                    time = "permanently.";
+                string banMessage = "Your user account is currently banned.";
+                try
+                {
+                    DateTime date = (DateTime)curiosityUser.BannedUntil;
+                    string dateStr = date.ToString("yyyy-MM-dd HH:mm");
+                    string time = $"until {dateStr}";
+                    if (curiosityUser.IsBannedPerm)
+                        time = "permanently.";
 
-                discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}#{curiosityUser.UserId}': Is Banned - {time}.");
-                deferrals.done(string.Format($"{messages[Messages.Banned]}", time));
-                RemoveFrom(license, true, true, true, true, true, true);
+                    discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}#{curiosityUser.UserId}': Is Banned - {time}.");
+                    deferrals.done(string.Format($"{0} - {1}", banMessage, time));
+                }
+                catch (Exception ex)
+                {
+                    deferrals.done($"{banMessage}");
+                }
+                finally
+                {
+                    RemoveFrom(license, true, true, true, true, true, true);
+                }
                 return;
             }
 
@@ -735,7 +748,7 @@ namespace Curiosity.Core.Server.Managers
             }
         }
 
-        void RemoveFrom(string license, bool doSession, bool doIndex, bool doTimer, bool doPriority, bool doReserved, bool doSlot)
+        public void RemoveFrom(string license, bool doSession, bool doIndex, bool doTimer, bool doPriority, bool doReserved, bool doSlot)
         {
             try
             {
