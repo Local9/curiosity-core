@@ -13,6 +13,7 @@ namespace Curiosity.Core.Client.Managers.UI
     {
         Dictionary<int, PlayerNameTag> currentPlayerNameTags = new Dictionary<int, PlayerNameTag>();
         int nameTagColor = 0;
+        int debugColor = 0;
 
         public override void Begin()
         {
@@ -24,14 +25,14 @@ namespace Curiosity.Core.Client.Managers.UI
         //{
         //    if (Utils.ControlHelper.IsControlJustPressed(Control.Context))
         //    {
-        //        nameTagColor++;
-                
-        //        if (nameTagColor >= 255)
-        //            nameTagColor = 0;
+        //        debugColor++;
+
+        //        if (debugColor >= 255)
+        //            debugColor = 0;
 
         //        await BaseScript.Delay(100);
         //    }
-        //    Screen.ShowSubtitle($"Debug Color: {nameTagColor}");
+        //    Screen.ShowSubtitle($"Debug Color: {debugColor}");
         //}
 
         [TickHandler(SessionWait = true)]
@@ -65,6 +66,8 @@ namespace Curiosity.Core.Client.Managers.UI
                         //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.GamerName, true);
 
                         SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.AudioIcon, NetworkIsPlayerTalking(playerHandle));
+                        SetMpGamerTagColour(playerNameTag.TagHandle, (int)GamerTagComponent.AudioIcon, 208);
+                        SetMpGamerTagAlpha(playerNameTag.TagHandle, (int)GamerTagComponent.AudioIcon, 255);
 
                         //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.CrewTag, true);
                         //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.HealthArmour, false);
@@ -108,7 +111,7 @@ namespace Curiosity.Core.Client.Managers.UI
                         SetMpGamerTagColour(playerNameTag.TagHandle, (int)GamerTagComponent.WantedStars, nameTagColor);
                         //SetMpGamerTagBigText(playerNameTag.TagHandle, "BIG TEXT");
                         //SetMpGamerTagChatting(playerNameTag.TagHandle, "typing...");
-                        
+
                         playerNameTag.PedHandle = pedHandle;
 
                     }
