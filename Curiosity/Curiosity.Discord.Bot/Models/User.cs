@@ -138,7 +138,7 @@ namespace Curiosity.LifeV.Bot.Models
                     Value = this.UserId
                 });
 
-                await cmd.ExecuteReaderAsync();
+                await cmd.ExecuteNonQueryAsync();
             }
             catch (Exception ex)
             {
@@ -168,7 +168,7 @@ namespace Curiosity.LifeV.Bot.Models
                     Value = donatorRoleId
                 });
 
-                await cmd.ExecuteReaderAsync();
+                await cmd.ExecuteNonQueryAsync();
             }
             catch (Exception ex)
             {

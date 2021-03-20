@@ -17,6 +17,7 @@ namespace Curiosity.LifeV.Bot
     {
         private const long CURIOSITY_BOT_TEXT_CHANNEL = 773248492939247626;
         static Timer donationTimer;
+        static Timer banTimer;
         static Timer statusUpdater;
 
         private static DiscordSocketClient _client;
@@ -38,6 +39,11 @@ namespace Curiosity.LifeV.Bot
             donationTimer.Elapsed += new ElapsedEventHandler(OnDiscordDonationChecker);
             donationTimer.Interval = (1000 * 60) * 60; // EVERY HOUR
             donationTimer.Enabled = true;
+
+            banTimer = new Timer();
+            banTimer.Elapsed += new ElapsedEventHandler(OnBanProcessing);
+            banTimer.Interval = (1000 * 60) * 30; // EVERY 30 minutes
+            banTimer.Enabled = true;
 
             statusUpdater = new Timer();
             statusUpdater.Elapsed += new ElapsedEventHandler(OnStatusUpdater);
@@ -73,7 +79,24 @@ namespace Curiosity.LifeV.Bot
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[CRITICAL] OnStatusUpdater -> {ex}");
+                Console.WriteLine($"[CRITICAL] OnStatusUpdater -> {ex.Message}");
+            }
+        }
+
+        private async void OnBanProcessing(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                using var connection = await Database.DatabaseConfig.GetDatabaseConnection();
+                await connection.OpenAsync();
+                using var cmd = connection.CreateCommand();
+
+                cmd.CommandText = @"call spProcessBans();";
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[CRITICAL] OnStatusUpdater -> {ex.Message}");
             }
         }
 
@@ -190,9 +213,9 @@ namespace Curiosity.LifeV.Bot
                                     }
                                     else
                                     {
-                                        // await user.RemoveDonatorStatus();
                                         Console.WriteLine("[ERROR] Discord Donation Checker: SocketGuildUser is null or no longer apart of the guild");
                                         _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync($"[DONATION] User: {user.Username}#{user.UserId} is null or no longer apart of the guild (Attempted 3 times, D: {discordId})");
+                                        await user.RemoveDonatorStatus(); // just fucking removing it
                                     }
                                 }
                                 else
