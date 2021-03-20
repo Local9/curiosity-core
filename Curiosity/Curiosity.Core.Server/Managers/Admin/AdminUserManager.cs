@@ -45,6 +45,11 @@ namespace Curiosity.Core.Server.Managers.Admin
                 Player player = PluginManager.PlayersList[playerToKick];
                 CuriosityUser user = PluginManager.ActiveUsers[playerToKick];
 
+                if (user.IsStaff)
+                {
+                    return false;
+                }
+
                 CuriosityUser admin = PluginManager.ActiveUsers[metadata.Sender];
 
                 bool success = await Database.Store.UserDatabase.LogKick(user.UserId, admin.UserId, reasonId, user.Character.CharacterId);
@@ -96,10 +101,10 @@ namespace Curiosity.Core.Server.Managers.Admin
                 CuriosityUser user = PluginManager.ActiveUsers[playerToBan];
                 CuriosityUser admin = PluginManager.ActiveUsers[metadata.Sender];
 
-                //if (user.IsStaff)
-                //{
-                //    return false;
-                //}
+                if (user.IsStaff)
+                {
+                    return false;
+                }
 
                 DateTime banUntil = DateTime.Now.AddYears(10);
                 bool perm = false;
