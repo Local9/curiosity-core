@@ -12,6 +12,10 @@ namespace Curiosity.Core.Server.Managers
 {
     public class VehicleManager : Manager<VehicleManager>
     {
+        const int VEHICLE_REPAIR_CHARGE = 100;
+        const int VEHICLE_TOW_REP = 1000;
+        const int VEHICLE_TOW_COST = 1000;
+
         public override void Begin()
         {
             EventSystem.GetModule().Attach("vehicle:log:player", new EventCallback(metadata =>
@@ -106,14 +110,14 @@ namespace Curiosity.Core.Server.Managers
 
                 int rep = await Database.Store.StatDatabase.Get(curiosityUser.Character.CharacterId, Stat.POLICE_REPUATATION);
 
-                if (rep > 1000)
+                if (rep > VEHICLE_TOW_REP)
                 {
                     curiosityUser.Character.Cash = await Database.Store.BankDatabase.Get(curiosityUser.Character.CharacterId);
 
-                    if (curiosityUser.Character.Cash < 1000)
+                    if ((curiosityUser.Character.Cash - VEHICLE_TOW_COST) < VEHICLE_TOW_COST)
                         return CommonErrors.PurchaseUnSuccessful;
 
-                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, -1000);
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, -VEHICLE_TOW_COST);
 
                     EntityManager.EntityInstance.NetworkDeleteEntity(networkId);
                     return CommonErrors.PurchaseSuccessful;
@@ -165,6 +169,29 @@ namespace Curiosity.Core.Server.Managers
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:repair", new AsyncEventCallback(async metadata =>
+            {
+                int senderHandle = metadata.Sender;
+                var player = PluginManager.PlayersList[metadata.Sender];
+
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+
+                if (user.Character.Cash < VEHICLE_REPAIR_CHARGE)
+                {
+                    return false;
+                }
+                else
+                {
+                    user.Character.Cash = await Database.Store.BankDatabase.Get(user.Character.CharacterId);
+
+                    if ((user.Character.Cash - VEHICLE_REPAIR_CHARGE) < VEHICLE_REPAIR_CHARGE)
+                        return false;
+
+                    user.Character.Cash = await Database.Store.BankDatabase.Adjust(user.Character.CharacterId, -VEHICLE_REPAIR_CHARGE);
+                    return true;
+                }
             }));
         }
     }

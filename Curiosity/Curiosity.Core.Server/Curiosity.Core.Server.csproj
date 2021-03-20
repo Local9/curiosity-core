@@ -94,7 +94,6 @@
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
-    <Compile Include="Managers\LegacyEventManager.cs" />
     <Compile Include="Managers\LevelingManager.cs" />
     <Compile Include="Managers\MarqueeManager.cs" />
     <Compile Include="Managers\MissionManager.cs" />

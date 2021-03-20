@@ -103,9 +103,17 @@ namespace Curiosity.Core.Client.Managers
                 return null;
             }));
 
-            EventSystem.Attach("repair:vehicle", new EventCallback(metadata =>
+            EventSystem.Attach("repair:vehicle", new AsyncEventCallback(async metadata =>
             {
                 Logger.Debug("repair vehicle");
+
+                bool canRepair = await EventSystem.Request<bool>("vehicle:repair");
+
+                if (!canRepair)
+                {
+                    Notify.Info($"To not have enough cash to repair the vehicle.");
+                    return null;
+                }
 
                 Vehicle vehicle = Cache.PersonalVehicle;
 
