@@ -117,7 +117,7 @@ namespace Curiosity.Core.Server.Managers
 
             string license = player.Identifiers["license"];
 
-            while (!IsServerQueueReady)
+            while (!PluginManager.ServerReady)
             {
                 await BaseScript.Delay(500);
                 deferrals.update("Awaiting Server Startup.");
@@ -197,12 +197,12 @@ namespace Curiosity.Core.Server.Managers
                 {
                     DateTime date = (DateTime)curiosityUser.BannedUntil;
                     string dateStr = date.ToString("yyyy-MM-dd HH:mm");
-                    string time = $"until {dateStr}";
+                    string time = $"Until {dateStr}";
                     if (curiosityUser.IsBannedPerm)
-                        time = "permanently.";
+                        time = "Permanently";
 
                     discordClient.SendDiscordPlayerLogMessage($"Player '{player.Name}#{curiosityUser.UserId}': Is Banned - {time}.");
-                    deferrals.done(string.Format($"{0} - {1}", banMessage, time));
+                    deferrals.done(string.Format("{0} {1}", banMessage, time));
                 }
                 catch (Exception ex)
                 {
