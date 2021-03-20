@@ -68,7 +68,10 @@ namespace Curiosity.Core.Server.Database.Store
 
                         object bannedUntilObj;
                         if (kv.TryGetValue("bannedUntil", out bannedUntilObj))
-                            curiosityUser.BannedUntil = bannedUntilObj.ToDateTime();
+                        {
+                            if (bannedUntilObj != null)
+                                curiosityUser.BannedUntil = bannedUntilObj.ToDateTime();
+                        }
                     }
 
                     return curiosityUser;
