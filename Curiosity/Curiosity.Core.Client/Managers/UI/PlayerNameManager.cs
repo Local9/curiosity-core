@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Systems.Library.Enums;
 using System;
@@ -11,33 +12,35 @@ namespace Curiosity.Core.Client.Managers.UI
     public class PlayerNameManager : Manager<PlayerNameManager>
     {
         Dictionary<int, PlayerNameTag> currentPlayerNameTags = new Dictionary<int, PlayerNameTag>();
-        int debugColor = 0;
+        int nameTagColor = 0;
 
         public override void Begin()
         {
 
         }
 
-        [TickHandler(SessionWait = true)]
-        private async Task OnDebugColor()
-        {
-            if (Utils.ControlHelper.IsControlJustPressed(Control.Context))
-            {
-                debugColor++;
+        //[TickHandler(SessionWait = true)]
+        //private async Task OnDebugColor()
+        //{
+        //    if (Utils.ControlHelper.IsControlJustPressed(Control.Context))
+        //    {
+        //        nameTagColor++;
                 
-                if (debugColor >= 255)
-                    debugColor = 0;
+        //        if (nameTagColor >= 255)
+        //            nameTagColor = 0;
 
-                await BaseScript.Delay(100);
-            }
-            Screen.ShowSubtitle($"Debug Color: {debugColor}");
-        }
+        //        await BaseScript.Delay(100);
+        //    }
+        //    Screen.ShowSubtitle($"Debug Color: {nameTagColor}");
+        //}
 
         [TickHandler(SessionWait = true)]
         private async Task OnWorldPlayerNames()
         {
             foreach (Player player in Instance.PlayerList)
             {
+                if (player == Game.Player) continue;
+
                 int playerHandle = player.Handle;
                 int pedHandle = player.Character.Handle;
 
@@ -54,46 +57,57 @@ namespace Curiosity.Core.Client.Managers.UI
                         PlayerNameTag playerNameTag = new PlayerNameTag();
 
                         bool isStaff = player.State.Get($"{StateBagKey.STAFF_MEMBER}") == null ? false : player.State.Get($"{StateBagKey.STAFF_MEMBER}");
-                        string staffTag = isStaff ? "STAFF" : string.Empty;
 
-                        playerNameTag.TagHandle = CreateMpGamerTag(pedHandle, playerName, false, false, string.Empty, 0);
+                        if (isStaff)
+                            nameTagColor = 64;
 
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 1, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 2, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 3, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 4, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 5, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 6, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 7, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 8, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 9, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 10, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 11, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 12, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 13, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 14, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 15, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 16, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 17, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 18, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 19, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 20, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 21, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 22, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 23, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 24, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 25, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 26, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 27, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 28, true);
-                        SetMpGamerTagVisibility(playerNameTag.TagHandle, 29, true);
+                        playerNameTag.TagHandle = CreateMpGamerTag(pedHandle, playerName, false, isStaff, string.Empty, 0);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.GamerName, true);
 
+                        SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.AudioIcon, NetworkIsPlayerTalking(playerHandle));
 
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.CrewTag, true);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.HealthArmour, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.BigText, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpUsingMenu, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpPassiveMode, false);
+                        SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.WantedStars, isStaff);
+
+                        bool isDriving = false;
+
+                        if (IsPedSittingInAnyVehicle(pedHandle))
+                        {
+                            isDriving = player.Character.CurrentVehicle.Driver.Handle == pedHandle;
+                        }
+
+                        SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpDriver, isDriving);
+
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpCoDriver, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpTagged, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.GamerNameNearby, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.Arrow, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpPackages, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.InvIfPedFollowing, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.RankText, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpTyping, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpBagLarge, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpTagArrow, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpGangCeo, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpGangBiker, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.BikerArrow, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.McRolePresident, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.McRoleVicePresident, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.McRoleRoadCaptain, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.McRoleSargeant, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.McRoleEnforcer, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.McRoleProspect, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpTransmitter, false);
+                        //SetMpGamerTagVisibility(playerNameTag.TagHandle, (int)GamerTagComponent.MpBomb, false);
 
                         SetMpGamerTagIcons(playerNameTag.TagHandle, false);
-                        SetMpGamerTagColour(playerNameTag.TagHandle, 0, debugColor);
-                        SetMpGamerTagBigText(playerNameTag.TagHandle, "BIG TEXT");
-                        SetMpGamerTagChatting(playerNameTag.TagHandle, "typing...");
+                        SetMpGamerTagColour(playerNameTag.TagHandle, (int)GamerTagComponent.WantedStars, nameTagColor);
+                        //SetMpGamerTagBigText(playerNameTag.TagHandle, "BIG TEXT");
+                        //SetMpGamerTagChatting(playerNameTag.TagHandle, "typing...");
                         
                         playerNameTag.PedHandle = pedHandle;
 
