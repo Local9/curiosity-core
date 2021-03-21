@@ -3,6 +3,8 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Core.Client.Settings;
+using Curiosity.Core.Client.State;
 using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
@@ -25,7 +27,7 @@ namespace Curiosity.Core.Client.Managers
 
         private uint GAS_STATION_TESLA = 2140883938;
 
-        Vehicle currentVehicle;
+        VehicleState currentVehicle;
 
         Dictionary<VehicleClass, float> FuelConsumptionClassMultiplier = new Dictionary<VehicleClass, float>()
         {
@@ -155,11 +157,12 @@ namespace Curiosity.Core.Client.Managers
             return 0;
         }
 
+        #region Vehicle Fuel
         internal async void InitialiseVehicleFuel(Vehicle veh)
         {
             if (veh.Driver != Cache.PlayerPed) return;
 
-            currentVehicle = veh;
+            currentVehicle = new VehicleState(veh);
 
             bool setup = false;
 
@@ -333,5 +336,65 @@ namespace Curiosity.Core.Client.Managers
 
             await BaseScript.Delay(500);
         }
+        #endregion
+
+        #region Skylift
+        internal void InitialiseSkylift(Vehicle veh)
+        {
+            if (veh.Driver != Cache.PlayerPed) return;
+
+            PluginManager.Instance.AttachTickHandler(OnSkyliftTick);
+        }
+
+        private async Task OnSkyliftTick()
+        {
+            if (!Cache.PlayerPed.IsInVehicle())
+            {
+                PluginManager.Instance.DetachTickHandler(OnSkyliftTick);
+            }
+
+            try
+            {
+
+                if (SkyliftSettings.Enabled && ControlHelper.IsControlJustPressed(Control.VehicleGrapplingHook, false))
+                {
+                    if (this.currentVehicle.AttachedVehicle is null)
+                    {
+                        Vector3 rot = currentVehicle.Vehicle.Rotation;
+                        Vehicle closestVehicle;
+                        List<Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(currentVehicle.Position, SkyliftSettings.DetectionRadius)).ToList();
+                        vehicles.Remove(currentVehicle.Vehicle);
+
+                        if (vehicles.Count > 1)
+                        {
+                            Notify.Alert($"Too many vehicles nearby.");
+                        }
+                        else
+                        {
+                            closestVehicle = vehicles[0];
+
+                            // if tank, plane, helo, boat, truck, trailer
+
+                            Vector3 dim1 = Vector3.Zero;
+                            Vector3 dim2 = Vector3.Zero;
+                            closestVehicle.Model.GetDimensions(out dim1, out dim2);
+                            closestVehicle.AttachTo(currentVehicle.Vehicle, new Vector3(0f, -dim2.Y + dim2.Y / 4f, -dim2.Z), rot);
+                            currentVehicle.AttachedVehicle = new VehicleState(closestVehicle);
+                        }
+                    }
+                    else
+                    {
+                        currentVehicle.AttachedVehicle.Vehicle.Detach();
+                        currentVehicle.AttachedVehicle = null;
+                        Notify.Info($"Magnet Off");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex.Message}");
+            }
+        }
+        #endregion
     }
 }

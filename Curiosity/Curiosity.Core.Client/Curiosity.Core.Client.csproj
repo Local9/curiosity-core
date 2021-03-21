@@ -126,6 +126,8 @@
     <Compile Include="Managers\StyleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session.cs" />
+    <Compile Include="Settings\SkyliftSettings.cs" />
+    <Compile Include="State\VehicleState.cs" />
     <Compile Include="TickHandler.cs" />
     <Compile Include="Utils\CameraMath.cs" />
     <Compile Include="Utils\ControlHelper.cs" />

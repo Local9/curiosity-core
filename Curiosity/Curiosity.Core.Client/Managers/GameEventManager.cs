@@ -97,7 +97,16 @@ namespace Curiosity.Core.Client.Managers
 
             if (ent is Vehicle)
             {
-                VehicleManager.GetModule().InitialiseVehicleFuel((Vehicle)ent);
+                VehicleManager vehicleManager = VehicleManager.GetModule();
+                Vehicle vehicle = (Vehicle)ent;
+
+                vehicleManager.InitialiseVehicleFuel(vehicle);
+
+                if (ent.Model.Hash == (int)VehicleHash.Skylift)
+                {
+                    // run skylift tick
+                    vehicleManager.InitialiseSkylift(vehicle);
+                }
             }
         }
 
