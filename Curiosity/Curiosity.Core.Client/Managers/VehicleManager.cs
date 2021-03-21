@@ -166,28 +166,28 @@ namespace Curiosity.Core.Client.Managers
 
             bool setup = false;
 
-            if (currentVehicle.State.Get(STATE_VEH_FUEL_SETUP) != null)
-                setup = currentVehicle.State.Get(STATE_VEH_FUEL_SETUP);
+            if (currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL_SETUP) != null)
+                setup = currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL_SETUP);
 
             if (!setup)
             {
-                Logger.Debug($"VFM: {currentVehicle.Handle}:{setup}");
+                Logger.Debug($"VFM: {currentVehicle.Vehicle.Handle}:{setup}");
 
-                if (currentVehicle.State.Get(STATE_VEH_SPAWNED))
+                if (currentVehicle.Vehicle.State.Get(STATE_VEH_SPAWNED))
                 {
                     minRandomFuel = 100f;
                     maxRandomFuel = 100f;
                 }
 
                 float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (Utility.RANDOM.NextDouble()));
-                currentVehicle.State.Set(STATE_VEH_FUEL, randomFuel, true);
+                currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL, randomFuel, true);
 
                 float classMultiplier = 1 / 1600f;
                 classMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(veh.ClassType) ? FuelConsumptionClassMultiplier[veh.ClassType] : 1.0f);
                 classMultiplier *= 1.0f;
-                currentVehicle.State.Set(STATE_VEH_FUEL_MULTIPLIER, classMultiplier, true);
+                currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL_MULTIPLIER, classMultiplier, true);
 
-                currentVehicle.State.Set(STATE_VEH_FUEL_SETUP, true, true);
+                currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL_SETUP, true, true);
             }
 
             PluginManager.Instance.AttachTickHandler(OnVehicleFuel);
@@ -209,7 +209,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     if (currentVehicle != null)
                     {
-                        if (EletricVehicles.Contains((VehicleHash)currentVehicle.Model.Hash))
+                        if (EletricVehicles.Contains((VehicleHash)currentVehicle.Vehicle.Model.Hash))
                         {
                             IsNearFuelPump = World.GetAllProps().Where(o => (ObjectHash)GAS_STATION_TESLA == (ObjectHash)o.Model.Hash).Any(o => o.Position.DistanceToSquared(Cache.PlayerPed.Position) < Math.Pow(2 * FUEL_PUMP_RANGE, 2));
                         }
@@ -240,28 +240,28 @@ namespace Curiosity.Core.Client.Managers
             if (IsNearFuelPump && !IsRefueling && !IsAwaitingServerResponse)
             {
                 Screen.DisplayHelpTextThisFrame("Press ~INPUT_REPLAY_START_STOP_RECORDING_SECONDARY~ to ~y~Refuel ~s~the ~b~Vehicle");
-                ScreenInterface.Draw3DText(currentVehicle.Position, "~w~Press ~b~F2 ~w~to ~y~Refuel ~s~the ~b~Vehicle~n~~w~~b~X ~w~Button on Controller", 40);
+                ScreenInterface.Draw3DText(currentVehicle.Vehicle.Position, "~w~Press ~b~F2 ~w~to ~y~Refuel ~s~the ~b~Vehicle~n~~w~~b~X ~w~Button on Controller", 40);
 
                 if (ControlHelper.IsControlJustPressed(Control.ReplayStartStopRecordingSecondary, false) && Cache.PlayerPed.IsInVehicle())
                 {
                     IsAwaitingServerResponse = true;
                     IsRefueling = true;
 
-                    currentVehicle.IsEngineRunning = false;
+                    currentVehicle.Vehicle.IsEngineRunning = false;
 
-                    float fuel = (float)currentVehicle.State.Get(STATE_VEH_FUEL);
+                    float fuel = (float)currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL);
 
                     bool success = await EventSystem.Request<bool>("vehicle:refuel:charge", fuel);
 
                     if (success)
                     {
-                        currentVehicle.State.Set(STATE_VEH_FUEL, 100f, true);
+                        currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL, 100f, true);
                         Notify.Success($"Vehicle Refueled");
                     }
 
                     IsAwaitingServerResponse = false;
                     IsRefueling = false;
-                    currentVehicle.IsEngineRunning = true;
+                    currentVehicle.Vehicle.IsEngineRunning = true;
 
                     await BaseScript.Delay(5000);
                 }
@@ -286,20 +286,20 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            float fuel = (float)currentVehicle.State.Get(STATE_VEH_FUEL);
-            float multi = (float)currentVehicle.State.Get(STATE_VEH_FUEL_MULTIPLIER);
+            float fuel = (float)currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL);
+            float multi = (float)currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL_MULTIPLIER);
 
             if (fuel == 0f && !IsRefueling)
             {
-                currentVehicle.IsEngineRunning = false;
-                currentVehicle.FuelLevel = 0f;
+                currentVehicle.Vehicle.IsEngineRunning = false;
+                currentVehicle.Vehicle.FuelLevel = 0f;
 
-                API.DecorSetFloat(currentVehicle.Handle, DECOR_VEH_FUEL, fuel); // LEGACY
+                API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL, fuel); // LEGACY
             }
 
-            if (ControlHelper.IsControlPressed(Control.VehicleAccelerate, false) && !currentVehicle.IsEngineRunning)
+            if (ControlHelper.IsControlPressed(Control.VehicleAccelerate, false) && !currentVehicle.Vehicle.IsEngineRunning)
             {
-                currentVehicle.IsEngineRunning = true;
+                currentVehicle.Vehicle.IsEngineRunning = true;
                 IsRefueling = false;
             }
 
@@ -314,20 +314,20 @@ namespace Curiosity.Core.Client.Managers
 
             currentUpdate = API.GetGameTimer();
             double deltaTime = (currentUpdate - lastUpdate) / 1000f;
-            float vehicleSpeed = Math.Abs(currentVehicle.Speed);
+            float vehicleSpeed = Math.Abs(currentVehicle.Vehicle.Speed);
 
             if (vehicleSpeed < 4f) // drain fuel while parked
                 vehicleSpeed = 30f;
 
-            if (!currentVehicle.IsEngineRunning)
+            if (!currentVehicle.Vehicle.IsEngineRunning)
                 vehicleSpeed = 0f;
 
-            if (currentVehicle.IsEngineRunning)
+            if (currentVehicle.Vehicle.IsEngineRunning)
             {
                 fuel = Math.Max(0f, fuel - (float)(deltaTime * multi * vehicleSpeed));
-                currentVehicle.FuelLevel = fuel;
-                currentVehicle.State.Set(STATE_VEH_FUEL, fuel, true);
-                API.DecorSetFloat(currentVehicle.Handle, DECOR_VEH_FUEL, fuel); // LEGACY
+                currentVehicle.Vehicle.FuelLevel = fuel;
+                currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL, fuel, true);
+                API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL, fuel); // LEGACY
             }
 
             lastUpdate = currentUpdate;
@@ -362,7 +362,7 @@ namespace Curiosity.Core.Client.Managers
                     {
                         Vector3 rot = currentVehicle.Vehicle.Rotation;
                         Vehicle closestVehicle;
-                        List<Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(currentVehicle.Position, SkyliftSettings.DetectionRadius)).ToList();
+                        List<Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(currentVehicle.Vehicle.Position, SkyliftSettings.DetectionRadius)).ToList();
                         vehicles.Remove(currentVehicle.Vehicle);
 
                         if (vehicles.Count > 1)
@@ -378,7 +378,7 @@ namespace Curiosity.Core.Client.Managers
                             Vector3 dim1 = Vector3.Zero;
                             Vector3 dim2 = Vector3.Zero;
                             closestVehicle.Model.GetDimensions(out dim1, out dim2);
-                            closestVehicle.AttachTo(currentVehicle.Vehicle, new Vector3(0f, -dim2.Y + dim2.Y / 4f, -dim2.Z), rot);
+                            closestVehicle.AttachTo(currentVehicle.Vehicle, new Vector3(0f, (-dim2.Y + dim2.Y) / 4f, -dim2.Z), rot);
                             currentVehicle.AttachedVehicle = new VehicleState(closestVehicle);
                         }
                     }
