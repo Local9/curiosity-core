@@ -1,5 +1,6 @@
 using CitizenFX.Core;
 using Curiosity.Core.Client.Environment.Entities;
+using Curiosity.Core.Client.State;
 using Curiosity.Systems.Library.Models;
 using static CitizenFX.Core.Native.API;
 
@@ -11,7 +12,7 @@ namespace Curiosity.Core.Client
         public static CuriosityEntity Entity => Player?.Entity;
         public static CuriosityCharacter Character => Player?.Character;
         public static Position Position => Entity.Position;
-        public static Vehicle PersonalVehicle;
+        public static VehicleState PersonalVehicle;
         public static Vehicle PersonalTrailer;
 
         private static Ped _ped;
@@ -21,6 +22,10 @@ namespace Curiosity.Core.Client
             {
                 if (_ped == null)
                     UpdatePedId();
+
+                if (_ped.Handle != PlayerPedId())
+                    UpdatePedId();
+
                 return _ped;
             }
             internal set => _ped = value;

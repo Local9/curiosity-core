@@ -70,6 +70,17 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
 
+                Entity attached = vehicle.GetEntityAttachedTo();
+
+                if (attached is not null)
+                {
+                    attached.IsCollisionEnabled = false;
+                    EventSystem.GetModule().Send("delete:entity", attached.NetworkId);
+
+                    if (attached.Exists())
+                        attached.Delete();
+                }
+
                 if (vehicle.Exists())
                     vehicle.Delete();
             }
@@ -80,9 +91,13 @@ namespace Curiosity.Core.Client.Commands.Impl
         {
             public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
-                Vehicle vehicle = Cache.PersonalVehicle;
 
-                if (vehicle != null)
+                Vehicle vehicle = null;
+                
+                if (Cache.PersonalVehicle is not null)
+                    vehicle = Cache.PersonalVehicle.Vehicle;
+
+                if (vehicle is not null)
                 {
                     if (vehicle.Exists()) // personal vehicle
                     {
@@ -103,7 +118,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     }
                 }
 
-                if (Cache.Entity != null && Cache.Entity.Vehicle != null)
+                if (Cache.Entity is not null && Cache.Entity.Vehicle is not null)
                 {
                     if (Cache.Entity.Vehicle.Exists()) // get vehicle player is in
                     {
@@ -136,8 +151,8 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 await vehicle.FadeIn();
 
-                Cache.PersonalVehicle = vehicle;
-                Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle, VehicleSeat.Driver);
+                Cache.PersonalVehicle = new State.VehicleState(vehicle);
+                Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
 
                 Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
             }

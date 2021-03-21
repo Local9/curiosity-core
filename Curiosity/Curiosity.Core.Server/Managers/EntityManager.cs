@@ -116,9 +116,54 @@ namespace Curiosity.Core.Server.Managers
                 return API.NetworkGetNetworkIdFromEntity(pedId);
             }));
 
+            EventSystem.GetModule().Attach("entity:spawn:prop", new AsyncEventCallback(async metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+
+                RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
+
+                uint model = metadata.Find<uint>(0);
+                float x = metadata.Find<float>(1);
+                float y = metadata.Find<float>(2);
+                float z = metadata.Find<float>(3);
+                bool isNetworked = metadata.Find<bool>(4);
+                bool isMission = metadata.Find<bool>(5);
+                bool isDynamic = metadata.Find<bool>(6);
+
+                int objectId = API.CreateObjectNoOffset(model, x, y, z, isNetworked, isMission, isDynamic);
+
+                Logger.Debug($"Generated Object with ID {objectId}");
+
+                await BaseScript.Delay(0);
+
+                if (objectId == 0)
+                {
+                    Logger.Debug($"Possible OneSync is Disabled");
+                    return null;
+                }
+
+                DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+
+                while (!API.DoesEntityExist(objectId))
+                {
+                    await BaseScript.Delay(0);
+
+                    if (maxWaitTime < DateTime.UtcNow) break;
+                }
+
+                if (!API.DoesEntityExist(objectId))
+                {
+                    Logger.Debug($"Failed to create object in timely manor.");
+                    return null;
+                }
+
+                API.SetEntityRoutingBucket(objectId, (int)routingBucket);
+
+                return API.NetworkGetNetworkIdFromEntity(objectId);
+            }));
+
             EventSystem.GetModule().Attach("entity:damage", new EventCallback(metadata =>
             {
-
                 //BaseScript.TriggerClientEvent("c:mm:damage", networkId, x, y, z, force, radius, fromEntity, numberOfHits);
 
                 int networkId = metadata.Find<int>(0);
@@ -129,8 +174,6 @@ namespace Curiosity.Core.Server.Managers
                 float radius = metadata.Find<float>(5);
                 int fromEntity = metadata.Find<int>(6);
                 int numberOfHits = metadata.Find<int>(7);
-
-                
 
                 return null;
             }));

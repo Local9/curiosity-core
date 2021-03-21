@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers.Events;
+using Curiosity.Core.Client.State;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -89,6 +90,9 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
+
+        Dictionary<int, VehicleState> previousVehicles = new Dictionary<int, VehicleState>();
+
         private void HandleCEventNetworkPlayerEnteredVehicle(Player player, Entity ent)
         {
             Cache.UpdatePedId();
@@ -100,12 +104,39 @@ namespace Curiosity.Core.Client.Managers
                 VehicleManager vehicleManager = VehicleManager.GetModule();
                 Vehicle vehicle = (Vehicle)ent;
 
-                vehicleManager.InitialiseVehicleFuel(vehicle);
+                VehicleState currentVehicle;
 
-                if (ent.Model.Hash == (int)VehicleHash.Skylift)
+                if (vehicle.Driver == Cache.PlayerPed)
                 {
-                    // run skylift tick
-                    vehicleManager.InitialiseSkylift(vehicle);
+                    if (previousVehicles.ContainsKey(vehicle.NetworkId))
+                    {
+                        currentVehicle = previousVehicles[vehicle.NetworkId];
+                    }
+                    else
+                    {
+                        currentVehicle = new VehicleState(vehicle);
+                        previousVehicles.Add(vehicle.NetworkId, currentVehicle);
+
+                        Dictionary<int, VehicleState> vehCopy = new Dictionary<int, VehicleState>(previousVehicles);
+                        foreach (KeyValuePair<int, VehicleState> keyValuePair in vehCopy)
+                        {
+                            VehicleState vehicleState = keyValuePair.Value;
+                            if (DateTime.Now.Subtract(vehicleState.Created).TotalMinutes > 5)
+                            {
+                                previousVehicles.Remove(keyValuePair.Key);
+                            }
+                        }
+                    }
+
+                    Logger.Debug($"No. Previous Vehicles: {previousVehicles.Count}");
+
+                    vehicleManager.InitialiseVehicleFuel(currentVehicle);
+
+                    if (ent.Model.Hash == (int)VehicleHash.Skylift)
+                    {
+                        // run skylift tick
+                        vehicleManager.InitialiseSkylift(currentVehicle);
+                    }
                 }
             }
         }

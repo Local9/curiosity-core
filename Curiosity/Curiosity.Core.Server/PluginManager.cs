@@ -217,6 +217,7 @@ namespace Curiosity.Core.Server
 
                 // Disable client side entity creation
                 Function.Call((Hash)0x0071321B, "relaxed"); // ONESYNC
+                // CreateObject fails, CreateObjectNoOffset is fine
             }
             catch (Exception ex)
             {

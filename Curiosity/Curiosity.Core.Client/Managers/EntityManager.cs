@@ -9,7 +9,7 @@ namespace Curiosity.Core.Client.Managers
 {
     public class EntityManager : Manager<EntityManager>
     {
-        bool IsBike => (Cache.PersonalVehicle == null) ? false : Cache.PersonalVehicle.ClassType == VehicleClass.Motorcycles || Cache.PersonalVehicle.ClassType == VehicleClass.Cycles;
+        bool IsBike => (Cache.PersonalVehicle == null) ? false : Cache.PersonalVehicle.Vehicle.ClassType == VehicleClass.Motorcycles || Cache.PersonalVehicle.Vehicle.ClassType == VehicleClass.Cycles;
 
         public override void Begin()
         {
@@ -21,12 +21,13 @@ namespace Curiosity.Core.Client.Managers
 
                 if (Cache.PersonalVehicle != null)
                 {
-                    if (Cache.PersonalVehicle.Exists())
+                    if (Cache.PersonalVehicle.Vehicle.Exists())
                     {
-                        EventSystem.GetModule().Send("entity:delete", Cache.PersonalVehicle.NetworkId);
+                        EventSystem.GetModule().Send("entity:delete", Cache.PersonalVehicle.Vehicle.NetworkId);
 
-                        await Cache.PersonalVehicle.FadeOut();
-                        Cache.PersonalVehicle.Delete();
+                        await Cache.PersonalVehicle.Vehicle.FadeOut();
+                        Cache.PersonalVehicle.Vehicle.Delete();
+                        Cache.PersonalVehicle = null;
                     }
                 }
 
@@ -34,19 +35,19 @@ namespace Curiosity.Core.Client.Managers
 
                 await vehicle.FadeIn();
 
-                Cache.PersonalVehicle = vehicle;
+                Cache.PersonalVehicle = new State.VehicleState(vehicle);
 
-                if (Cache.PersonalVehicle.AttachedBlip != null)
+                if (Cache.PersonalVehicle.Vehicle.AttachedBlip != null)
                 {
-                    Blip b = Cache.PersonalVehicle.AttachBlip();
-                    b.Sprite = (ScreenInterface.VehicleClassBlips.ContainsKey(Cache.PersonalVehicle.ClassType)) ? ScreenInterface.VehicleClassBlips[Cache.PersonalVehicle.ClassType] : BlipSprite.PersonalVehicleCar;
+                    Blip b = Cache.PersonalVehicle.Vehicle.AttachBlip();
+                    b.Sprite = (ScreenInterface.VehicleClassBlips.ContainsKey(Cache.PersonalVehicle.Vehicle.ClassType)) ? ScreenInterface.VehicleClassBlips[Cache.PersonalVehicle.Vehicle.ClassType] : BlipSprite.PersonalVehicleCar;
                     b.Scale = 0.85f;
                     b.Color = BlipColor.White;
                     b.Priority = 10;
                     b.Name = "Personal Vehicle";
                 }
 
-                Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle, VehicleSeat.Driver);
+                Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
 
                 Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
 

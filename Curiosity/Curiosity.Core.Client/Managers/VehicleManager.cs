@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Settings;
 using Curiosity.Core.Client.State;
@@ -94,7 +95,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 Logger.Debug("delete vehicle");
 
-                Vehicle vehicle = Cache.PersonalVehicle;
+                Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
 
                 if (Cache.PlayerPed.IsInVehicle())
                     vehicle = Cache.PlayerPed.CurrentVehicle;
@@ -117,7 +118,7 @@ namespace Curiosity.Core.Client.Managers
                     return null;
                 }
 
-                Vehicle vehicle = Cache.PersonalVehicle;
+                Vehicle vehicle = Cache.PersonalVehicle.Vehicle;
 
                 if (Cache.PlayerPed.IsInVehicle())
                     vehicle = Cache.PlayerPed.CurrentVehicle;
@@ -158,11 +159,11 @@ namespace Curiosity.Core.Client.Managers
         }
 
         #region Vehicle Fuel
-        internal async void InitialiseVehicleFuel(Vehicle veh)
+        internal async void InitialiseVehicleFuel(VehicleState veh)
         {
-            if (veh.Driver != Cache.PlayerPed) return;
+            if (veh.Vehicle.Driver != Cache.PlayerPed) return;
 
-            currentVehicle = new VehicleState(veh);
+            currentVehicle = veh;
 
             bool setup = false;
 
@@ -183,7 +184,7 @@ namespace Curiosity.Core.Client.Managers
                 currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL, randomFuel, true);
 
                 float classMultiplier = 1 / 1600f;
-                classMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(veh.ClassType) ? FuelConsumptionClassMultiplier[veh.ClassType] : 1.0f);
+                classMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(currentVehicle.Vehicle.ClassType) ? FuelConsumptionClassMultiplier[currentVehicle.Vehicle.ClassType] : 1.0f);
                 classMultiplier *= 1.0f;
                 currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL_MULTIPLIER, classMultiplier, true);
 
@@ -207,7 +208,7 @@ namespace Curiosity.Core.Client.Managers
                 await BaseScript.Delay(500);
                 if (Cache.PlayerPed.IsInVehicle())
                 {
-                    if (currentVehicle != null)
+                    if (currentVehicle is not null)
                     {
                         if (EletricVehicles.Contains((VehicleHash)currentVehicle.Vehicle.Model.Hash))
                         {
@@ -339,9 +340,26 @@ namespace Curiosity.Core.Client.Managers
         #endregion
 
         #region Skylift
-        internal void InitialiseSkylift(Vehicle veh)
+
+        List<ObjectHash> containers = new List<ObjectHash>()
         {
-            if (veh.Driver != Cache.PlayerPed) return;
+            ObjectHash.prop_container_01a,
+            ObjectHash.prop_container_01b,
+            ObjectHash.prop_container_01c,
+            ObjectHash.prop_container_01d,
+            ObjectHash.prop_container_01e,
+            ObjectHash.prop_container_01f,
+            ObjectHash.prop_container_01g,
+            ObjectHash.prop_container_01h,
+        };
+
+        Model containerModel = (int)ObjectHash.prop_container_01a;
+
+        internal void InitialiseSkylift(VehicleState veh)
+        {
+            if (veh.Vehicle.Driver != Cache.PlayerPed) return;
+
+            Logger.Debug($"InitialiseSkylift");
 
             PluginManager.Instance.AttachTickHandler(OnSkyliftTick);
         }
@@ -363,7 +381,12 @@ namespace Curiosity.Core.Client.Managers
                         Vector3 rot = currentVehicle.Vehicle.Rotation;
                         Vehicle closestVehicle;
                         List<Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(currentVehicle.Vehicle.Position, SkyliftSettings.DetectionRadius)).ToList();
-                        vehicles.Remove(currentVehicle.Vehicle);
+
+                        if (vehicles.Count > 0) // just incase
+                            vehicles.Remove(currentVehicle.Vehicle);
+
+                        if (vehicles.Count == 0)
+                            return;
 
                         if (vehicles.Count > 1)
                         {
@@ -373,20 +396,99 @@ namespace Curiosity.Core.Client.Managers
                         {
                             closestVehicle = vehicles[0];
 
-                            // if tank, plane, helo, boat, truck, trailer
+                            if (closestVehicle.Driver.Exists())
+                            {
+                                Notify.Alert($"Vehicle has a driver.");
+                                return;
+                            }
+
+                            closestVehicle.IsCollisionEnabled = false;
+
+                            EntityBone entityBone = currentVehicle.Vehicle.Bones["bodyshell"];
+                            Vector3 spawnOffset = entityBone.Position + new Vector3(0f, -4.1f, -2.5f);
+
+                            containerModel = (int)containers[Utility.RANDOM.Next(containers.Count)];
+
+                            await containerModel.Request(10000);
+
+                            int propNetworkId = await EventSystem.Request<int>("entity:spawn:prop", (uint)containerModel.Hash, spawnOffset.X, spawnOffset.Y, spawnOffset.Z, true, true, false);
+
+                            await BaseScript.Delay(100);
+
+                            Prop container = null;
+
+                            if (propNetworkId > 0)
+                            {
+                                int entityId = API.NetworkGetEntityFromNetworkId(propNetworkId);
+                                await BaseScript.Delay(0);
+                                API.NetworkRequestControlOfNetworkId(propNetworkId);
+                                await BaseScript.Delay(0);
+
+                                Logger.Debug($"Requested control of Prop: {propNetworkId}:{entityId}:{API.NetworkHasControlOfEntity(entityId)}");
+
+                                while (!API.NetworkHasControlOfEntity(entityId))
+                                {
+                                    await BaseScript.Delay(100);
+                                    API.NetworkRequestControlOfEntity(entityId);
+                                }
+
+                                Logger.Debug($"Have control of Prop: {propNetworkId}:{entityId}:{API.NetworkHasControlOfEntity(entityId)}");
+
+                                await BaseScript.Delay(0);
+                                container = new CitizenFX.Core.Prop(entityId);
+                                await BaseScript.Delay(100);
+                            }
+
+                            containerModel.MarkAsNoLongerNeeded();
 
                             Vector3 dim1 = Vector3.Zero;
                             Vector3 dim2 = Vector3.Zero;
-                            closestVehicle.Model.GetDimensions(out dim1, out dim2);
-                            closestVehicle.AttachTo(currentVehicle.Vehicle, new Vector3(0f, (-dim2.Y + dim2.Y) / 4f, -dim2.Z), rot);
+
+                            if (container is null)
+                            {
+                                closestVehicle.Model.GetDimensions(out dim1, out dim2);
+                                closestVehicle.AttachTo(currentVehicle.Vehicle, new Vector3(0f, (-dim2.Y + dim2.Y) / 4f, -dim2.Z), rot);
+                            }
+                            else
+                            {
+                                closestVehicle.FadeOut();
+
+                                closestVehicle.Model.GetDimensions(out dim1, out dim2);
+
+                                Logger.Debug($"Prop: {container.Handle}");
+
+                                container.Heading = currentVehicle.Vehicle.Heading;
+                                closestVehicle.Heading = currentVehicle.Vehicle.Heading;
+
+                                container.AttachTo(entityBone, new Vector3(0f, -4.1f, -2.5f));
+                                closestVehicle.AttachTo(entityBone, new Vector3(0f, (-dim2.Y + dim2.Y) / 4f, -dim2.Z));
+                            }
+
+                            currentVehicle.AttachedProp = container;
                             currentVehicle.AttachedVehicle = new VehicleState(closestVehicle);
                         }
+
+                        Notify.Info($"Magnet On");
+
+                        await BaseScript.Delay(1000);
                     }
                     else
                     {
+                        if (currentVehicle.AttachedProp is not null)
+                        {
+                            currentVehicle.AttachedProp.IsCollisionEnabled = false;
+                            currentVehicle.AttachedProp.Delete();
+                            currentVehicle.AttachedProp = null;
+                        }
+
+                        currentVehicle.AttachedVehicle.Vehicle.FadeIn();
                         currentVehicle.AttachedVehicle.Vehicle.Detach();
-                        currentVehicle.AttachedVehicle = null;
                         Notify.Info($"Magnet Off");
+
+                        await BaseScript.Delay(1000);
+
+                        currentVehicle.AttachedVehicle.Vehicle.IsCollisionEnabled = true;
+                        currentVehicle.AttachedVehicle = null;
                     }
                 }
             }

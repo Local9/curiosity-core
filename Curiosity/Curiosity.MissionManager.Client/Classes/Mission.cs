@@ -580,6 +580,8 @@ namespace Curiosity.MissionManager.Client
             int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
             await BaseScript.Delay(0);
 
+            model.MarkAsNoLongerNeeded();
+
             API.NetworkRequestControlOfNetworkId(pedNetworkId);
             await BaseScript.Delay(0);
 
@@ -618,6 +620,8 @@ namespace Curiosity.MissionManager.Client
             await BaseScript.Delay(100);
             int vehId = API.NetworkGetEntityFromNetworkId(vehNetworkId);
             await BaseScript.Delay(0);
+
+            model.MarkAsNoLongerNeeded();
 
             API.NetworkRequestControlOfNetworkId(vehNetworkId);
             await BaseScript.Delay(0);

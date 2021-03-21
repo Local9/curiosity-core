@@ -33,7 +33,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             if (checkboxItem == miEngine)
             {
                 miEngine.Enabled = false;
-                Cache.PersonalVehicle.IsEngineRunning = Checked;
+                Cache.PersonalVehicle.Vehicle.IsEngineRunning = Checked;
                 await BaseScript.Delay(1000);
                 miEngine.Enabled = true;
                 return;
@@ -42,7 +42,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             if (checkboxItem == miHeadlights)
             {
                 miHeadlights.Enabled = false;
-                Cache.PersonalVehicle.AreLightsOn = Checked;
+                Cache.PersonalVehicle.Vehicle.AreLightsOn = Checked;
                 await BaseScript.Delay(1000);
                 miHeadlights.Enabled = true;
                 return;
@@ -69,10 +69,10 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             }
             else
             {
-                miEngine.Checked = Cache.PersonalVehicle.IsEngineRunning;
+                miEngine.Checked = Cache.PersonalVehicle.Vehicle.IsEngineRunning;
                 miEngine.Enabled = true;
 
-                miHeadlights.Checked = Cache.PlayerPed.IsInVehicle() ? Cache.PersonalVehicle.AreLightsOn : headlights;
+                miHeadlights.Checked = Cache.PlayerPed.IsInVehicle() ? Cache.PersonalVehicle.Vehicle.AreLightsOn : headlights;
                 miHeadlights.Enabled = true;
 
                 miNeon.Checked = neonLights;
@@ -82,7 +82,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private bool AreNeonsEnabled()
         {
-            int handle = Cache.PersonalVehicle.Handle;
+            int handle = Cache.PersonalVehicle.Vehicle.Handle;
             return API.IsVehicleNeonLightEnabled(handle, 0)
                 || API.IsVehicleNeonLightEnabled(handle, 1)
                 || API.IsVehicleNeonLightEnabled(handle, 2)
@@ -92,7 +92,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
         private void ToggleNeonLights(bool enabled)
         {
             neonLights = enabled;
-            API.DisableVehicleNeonLights(Cache.PersonalVehicle.Handle, enabled);
+            API.DisableVehicleNeonLights(Cache.PersonalVehicle.Vehicle.Handle, enabled);
         }
     }
 }

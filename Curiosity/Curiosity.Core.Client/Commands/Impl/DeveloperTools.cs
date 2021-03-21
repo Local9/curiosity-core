@@ -105,7 +105,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     {
                         if (Cache.PersonalVehicle == null) return;
 
-                        API.SetVehicleNitroEnabled(Cache.PersonalVehicle.Handle, true);
+                        API.SetVehicleNitroEnabled(Cache.PersonalVehicle.Vehicle.Handle, true);
                         return;
                     }
 
@@ -115,12 +115,12 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                     if (Cache.PersonalVehicle != null)
                     {
-                        EventSystem.GetModule().Send("entity:delete", Cache.PersonalVehicle.NetworkId);
+                        EventSystem.GetModule().Send("entity:delete", Cache.PersonalVehicle.Vehicle.NetworkId);
 
-                        while (Cache.PersonalVehicle.Exists())
+                        while (Cache.PersonalVehicle.Vehicle.Exists())
                         {
                             await BaseScript.Delay(100);
-                            Cache.PersonalVehicle.Delete();
+                            Cache.PersonalVehicle.Vehicle.Delete();
                         }
                     }
 
@@ -128,7 +128,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     var vehicle = await World.CreateVehicle(model, position.AsVector(), position.Heading);
 
                     player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
-                    Cache.PersonalVehicle = vehicle;
+                    Cache.PersonalVehicle = new State.VehicleState(vehicle);
 
                     entity.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
                 }
