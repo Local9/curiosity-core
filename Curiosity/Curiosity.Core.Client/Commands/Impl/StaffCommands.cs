@@ -41,6 +41,58 @@ namespace Curiosity.Core.Client.Commands.Impl
         }
         #endregion
 
+        #region Entities
+
+        [CommandInfo(new[] { "del" })]
+        public class EntityDespawner : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                Entity entityToDelete = Cache.PlayerPed.GetEntityInFront();
+
+                if (entityToDelete == null)
+                {
+                    Notify.Alert($"No entity found.");
+                    return;
+                }
+
+                API.NetworkRequestControlOfEntity(entityToDelete.Handle);
+
+                while (!API.NetworkHasControlOfEntity(entityToDelete.Handle))
+                {
+                    await BaseScript.Delay(100);
+                    API.NetworkRequestControlOfEntity(entityToDelete.Handle);
+                }
+
+                if (entityToDelete is Vehicle)
+                {
+                    Vehicle veh = (Vehicle)entityToDelete;
+                    if (veh.Driver == Cache.PlayerPed)
+                        Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+                }
+
+                await entityToDelete.FadeOut(true);
+
+                EventSystem.GetModule().Send("delete:entity", entityToDelete.NetworkId);
+
+                Entity attached = entityToDelete.GetEntityAttachedTo();
+
+                if (attached is not null)
+                {
+                    attached.IsCollisionEnabled = false;
+                    EventSystem.GetModule().Send("delete:entity", attached.NetworkId);
+
+                    if (attached.Exists())
+                        attached.Delete();
+                }
+
+                if (entityToDelete.Exists())
+                    entityToDelete.Delete();
+            }
+        }
+
+        #endregion
+
         #region vehicles
         [CommandInfo(new[] { "dv", "deleteveh" })]
         public class VehicleDespawner : ICommand
