@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\StringValueAttribute.cs" />
+    <Compile Include="Models\Shop\CuriosityStoreItem.cs" />
     <Compile Include="DataKeys.cs" />
     <Compile Include="Data\MapRegions.cs" />
     <Compile Include="Data\WeatherData.cs" />
@@ -65,7 +66,6 @@
     <Compile Include="Enums\StateBagKey.cs" />
     <Compile Include="Models\CharacterStat.cs" />
     <Compile Include="Models\CuriosityPlayerList.cs" />
-    <Compile Include="Models\CuriosityStore.cs" />
     <Compile Include="Models\ExportMessage.cs" />
     <Compile Include="Models\LocationConfig.cs" />
     <Compile Include="Models\LogItem.cs" />
@@ -107,7 +107,8 @@
     <Compile Include="Enums\Role.cs" />
     <Compile Include="Models\SessionCollection.cs" />
     <Compile Include="Models\CharacterSkill.cs" />
-    <Compile Include="Models\CuriosityStoreItem.cs" />
+    <Compile Include="Models\Shop\ShopCategory.cs" />
+    <Compile Include="Models\Shop\ShopCategoryItem.cs" />
     <Compile Include="Models\SqlResult.cs" />
     <Compile Include="Models\VehicleInfo.cs" />
     <Compile Include="Models\VehicleShopItem.cs" />

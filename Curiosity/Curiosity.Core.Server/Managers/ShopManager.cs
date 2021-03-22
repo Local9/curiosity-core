@@ -3,6 +3,7 @@ using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Models.Shop;
 using System;
 using System.Collections.Generic;
 
@@ -23,12 +24,8 @@ namespace Curiosity.Core.Server.Managers
             {
                 try
                 {
-                    List<Tuple<int, string>> categories = await Database.Store.ShopDatabase.GetCategories();
-
-                    CuriosityStore curiosityStore = new CuriosityStore();
-                    curiosityStore.Categories = categories;
-
-                    return curiosityStore;
+                    List<ShopCategory> categories = await Database.Store.ShopDatabase.GetCategories();
+                    return categories;
                 }
                 catch (Exception ex)
                 {

@@ -135,16 +135,17 @@ namespace Curiosity.Core.Client.Events
             var completed = false;
             var wrapped = new EventRequest(new EventCallback(metadata =>
             {
-                //Logger.Debug(
-                //    $"[{metadata.Inherit}] Got request response from server-side with metadata {JsonConvert.SerializeObject(metadata)}");
+                // Logger.Debug($"[{metadata.Inherit}] Got request response from server-side with metadata {JsonConvert.SerializeObject(metadata)}");
 
                 try
                 {
-                    response = JsonConvert.DeserializeObject<T>(metadata.Find<string>("__response"));
+                    string resp = metadata.Find<string>("__response");
+                    response = JsonConvert.DeserializeObject<T>(resp);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     Logger.Info($"[{metadata.Inherit}] Event request response returned an invalid type.");
+                    Logger.Debug($"{ex}");
                 }
 
                 completed = true;

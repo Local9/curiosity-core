@@ -1,45 +1,56 @@
 ﻿using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Models.Shop;
 using GHMatti.Data.MySQL.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Database.Store
 {
     class ShopDatabase
     {
-        public static async Task<List<Tuple<int, string>>> GetCategories(int storeOnly = 1)
+        public static async Task<List<ShopCategory>> GetCategories()
         {
-            List<Tuple<int, string>> lstCategories = new List<Tuple<int, string>>();
+            List<ShopCategory> lstCategories = new List<ShopCategory>();
 
             try
             {
+                string myQuery = "CALL selStoreCategories();";
 
-                Dictionary<string, object> myParams = new Dictionary<string, object>()
-                {
-                    { "@StoreOnly", storeOnly },
-                };
-
-                string myQuery = "CALL selItemCategories(@StoreOnly);";
-
-                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery))
                 {
                     ResultSet keyValuePairs = await result;
 
                     if (keyValuePairs.Count == 0)
                     {
-                        lstCategories.Add(new Tuple<int, string>(0, "No Categories"));
+                        lstCategories.Add(new ShopCategory() { ShopCategoryID = 0, ShopCategoryDescription = "No Categories" });
                     }
                     else
                     {
                         foreach (Dictionary<string, object> kv in keyValuePairs)
                         {
-                            Tuple<int, string> tuple = new Tuple<int, string>(
-                                int.Parse($"{kv["ItemCategoryId"]}"),
-                                $"{kv["Label"]}"
-                                );
-                            lstCategories.Add(tuple);
+                            ShopCategory shopCategory = new ShopCategory();
+                            shopCategory.ShopCategoryID = kv["ShopCategoryId"].ToInt();
+                            shopCategory.ShopCategoryDescription = $"{kv["Description"]}";
+
+                            var shopCat = lstCategories.Select(x => x).Where(x => x.ShopCategoryID == kv["ShopCategoryId"].ToInt()).FirstOrDefault();
+
+                            if (shopCat is null)
+                                lstCategories.Add(shopCategory);
+                        }
+
+                        foreach (Dictionary<string, object> kv in keyValuePairs)
+                        {
+                            ShopCategoryItem categoryItem = new ShopCategoryItem();
+                            categoryItem.ShopCategoryItemID = kv["ItemCategoryId"].ToInt();
+                            categoryItem.ShopCategoryItemDescription = $"{kv["Label"]}";
+
+                            ShopCategory sc = lstCategories.Select(x => x).Where(x => x.ShopCategoryID == kv["ShopCategoryId"].ToInt()).FirstOrDefault();
+                            if (sc is not null)
+                                sc.Categories.Add(categoryItem);
                         }
                     }
                 }
@@ -47,7 +58,7 @@ namespace Curiosity.Core.Server.Database.Store
             catch (Exception ex)
             {
                 Logger.Error($"{ex}");
-                lstCategories.Add(new Tuple<int, string>(0, "No Categories"));
+                lstCategories.Add(new ShopCategory() { ShopCategoryID = 0, ShopCategoryDescription = "No Categories" });
             }
 
             return lstCategories;
