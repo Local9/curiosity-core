@@ -34,6 +34,7 @@ namespace Curiosity.Core.Client.Extensions
 
             Cache.UpdatePedId();
         }
+
         public async static Task FadeOut(this Vehicle veh, bool slow = true)
         {
             await Fade(veh, false, slow);
@@ -59,8 +60,33 @@ namespace Curiosity.Core.Client.Extensions
             {
                 await BaseScript.Delay(10);
             }
+        }
 
-            Cache.UpdatePedId();
+        public async static Task FadeOut(this Prop prop, bool slow = true)
+        {
+            await Fade(prop, false, slow);
+        }
+
+        public async static Task FadeIn(this Prop prop, bool slow = true)
+        {
+            await Fade(prop, true, slow);
+        }
+
+        public async static Task Fade(this Prop prop, bool fadeIn, bool fadeOutNormal = false, bool slow = true)
+        {
+            if (fadeIn)
+            {
+                API.NetworkFadeInEntity(prop.Handle, slow);
+            }
+            else
+            {
+                API.NetworkFadeOutEntity(prop.Handle, fadeOutNormal, slow);
+            }
+
+            while (API.NetworkIsEntityFading(prop.Handle))
+            {
+                await BaseScript.Delay(10);
+            }
         }
     }
 }

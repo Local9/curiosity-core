@@ -343,7 +343,7 @@ namespace Curiosity.Core.Client.Managers
 
         List<ObjectHash> containers = new List<ObjectHash>()
         {
-            ObjectHash.prop_container_01a,
+            //ObjectHash.prop_container_01a, // buggy
             ObjectHash.prop_container_01b,
             ObjectHash.prop_container_01c,
             ObjectHash.prop_container_01d,
@@ -351,6 +351,10 @@ namespace Curiosity.Core.Client.Managers
             ObjectHash.prop_container_01f,
             ObjectHash.prop_container_01g,
             ObjectHash.prop_container_01h,
+            //ObjectHash.prop_container_01mb,
+            //ObjectHash.prop_container_02a,
+            //ObjectHash.prop_container_ld2,
+            //ObjectHash.prop_container_ld_d,
         };
 
         Model containerModel = (int)ObjectHash.prop_container_01a;
@@ -411,7 +415,7 @@ namespace Curiosity.Core.Client.Managers
 
                             await containerModel.Request(10000);
 
-                            int propNetworkId = await EventSystem.Request<int>("entity:spawn:prop", (uint)containerModel.Hash, spawnOffset.X, spawnOffset.Y, spawnOffset.Z, true, true, false);
+                            int propNetworkId = await EventSystem.Request<int>("entity:spawn:prop", (uint)containerModel.Hash, spawnOffset.X, spawnOffset.Y, spawnOffset.Z, true, true, true);
 
                             await BaseScript.Delay(100);
 
@@ -451,6 +455,7 @@ namespace Curiosity.Core.Client.Managers
                             }
                             else
                             {
+
                                 closestVehicle.FadeOut();
 
                                 closestVehicle.Model.GetDimensions(out dim1, out dim2);
@@ -461,8 +466,11 @@ namespace Curiosity.Core.Client.Managers
                                 closestVehicle.Heading = currentVehicle.Vehicle.Heading;
 
                                 container.AttachTo(entityBone, new Vector3(0f, -4.1f, -2.5f));
-                                closestVehicle.AttachTo(entityBone, new Vector3(0f, (-dim2.Y + dim2.Y) / 4f, -dim2.Z));
+                                closestVehicle.AttachTo(entityBone, new Vector3(0f, ((-dim2.Y + dim2.Y) / 4f) - 2f, -dim2.Z));
+
                             }
+
+                            container.IsCollisionEnabled = true;
 
                             currentVehicle.AttachedProp = container;
                             currentVehicle.AttachedVehicle = new VehicleState(closestVehicle);
@@ -476,25 +484,77 @@ namespace Curiosity.Core.Client.Managers
                     {
                         if (currentVehicle.AttachedProp is not null)
                         {
-                            currentVehicle.AttachedProp.IsCollisionEnabled = false;
-                            currentVehicle.AttachedProp.Delete();
-                            currentVehicle.AttachedProp = null;
+                            Vector3 pos = currentVehicle.AttachedProp.Position;
+                            float groundZ = pos.Z;
+
+                            if (API.GetGroundZFor_3dCoord(pos.X, pos.Y, pos.Z, ref groundZ, false))
+                            {
+                                currentVehicle.AttachedProp.Detach();
+                                currentVehicle.AttachedVehicle.Vehicle.Detach();
+                                
+                                while ((currentVehicle.AttachedVehicle.Vehicle.Position.Z - groundZ) > 4f)
+                                {
+                                    await BaseScript.Delay(100);
+                                }
+
+                                currentVehicle.AttachedProp.FadeOut();
+
+                                currentVehicle.AttachedVehicle.Vehicle.IsCollisionEnabled = true;
+                                currentVehicle.AttachedVehicle.Vehicle.Position = currentVehicle.AttachedVehicle.Vehicle.Position + new Vector3(0f, 0f, 1f);
+
+                                currentVehicle.AttachedProp.Delete();
+                                currentVehicle.AttachedProp = null;
+
+                                await BaseScript.Delay(500);
+                            }
+                            else
+                            {
+                                currentVehicle.AttachedVehicle.Vehicle.Detach();
+                                currentVehicle.AttachedVehicle.Vehicle.IsCollisionEnabled = true;
+                            }
+
+                            currentVehicle.AttachedVehicle.Vehicle.Repair();
+
+                            await BaseScript.Delay(500);
+                            currentVehicle.AttachedVehicle.Vehicle.IsCollisionProof = false;
+                            currentVehicle.AttachedVehicle.Vehicle.FadeIn();
+                            
+                        }
+                        else
+                        {
+                            currentVehicle.AttachedVehicle.Vehicle.FadeIn();
+                            currentVehicle.AttachedVehicle.Vehicle.Detach();
+                            currentVehicle.AttachedVehicle.Vehicle.IsCollisionEnabled = true;
                         }
 
-                        currentVehicle.AttachedVehicle.Vehicle.FadeIn();
-                        currentVehicle.AttachedVehicle.Vehicle.Detach();
                         Notify.Info($"Magnet Off");
 
                         await BaseScript.Delay(1000);
 
-                        currentVehicle.AttachedVehicle.Vehicle.IsCollisionEnabled = true;
                         currentVehicle.AttachedVehicle = null;
+                        
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger.Error($"{ex.Message}");
+                Logger.Error($"OnSkyliftTick -> {ex}");
+
+                if (currentVehicle.AttachedVehicle is not null)
+                {
+                    if (currentVehicle.AttachedVehicle.Vehicle.Exists())
+                        currentVehicle.AttachedVehicle.Vehicle.Delete();
+
+                    currentVehicle.AttachedVehicle = null;
+                }
+
+                if (currentVehicle.AttachedProp is not null)
+                {
+                    if (currentVehicle.AttachedProp.Exists())
+                        currentVehicle.AttachedProp.Delete();
+
+                    currentVehicle.AttachedProp = null;
+                }
             }
         }
         #endregion
