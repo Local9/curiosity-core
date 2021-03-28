@@ -324,6 +324,85 @@ namespace Curiosity.Core.Server.Managers.Admin
                 //    return false;
                 //}
             }));
+
+            EventSystem.GetModule().Attach("user:spectate:submit", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+
+                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return false;
+
+                Player staff = PluginManager.PlayersList[metadata.Sender];
+                CuriosityUser staffUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                int pid = metadata.Find<int>(0);
+                Player player = PluginManager.PlayersList[pid];
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[pid];
+
+                int bucket = API.GetPlayerRoutingBucket($"{pid}");
+                int staffBucket = API.GetPlayerRoutingBucket($"{metadata.Sender}");
+
+                if (staffBucket != bucket)
+                {
+                    API.SetPlayerRoutingBucket($"{metadata.Sender}", bucket);
+                    Notify.Send(metadata.Sender, Notification.NOTIFICATION_WARNING, "Changing world");
+                }
+
+                staffUser.Send("spectate", pid);
+
+                return true;
+
+                //bool fadedOut = await EventSystem.Request<bool>("user:screen:fadeOut", metadata.Sender, 2000);
+
+                //if (fadedOut)
+                //{
+                //    staff.Character.Position = player.Character.Position + new Vector3(0f, 2f, 0f);
+                //    await BaseScript.Delay(500);
+                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
+                //    return true;
+                //}
+                //else
+                //{
+                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
+                //    return false;
+                //}
+            }));
+
+            EventSystem.GetModule().Attach("user:spectate:submit", new EventCallback(metadata =>
+            {
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+
+                if (!PluginManager.ActiveUsers[metadata.Sender].IsStaff) return false;
+
+                Player staff = PluginManager.PlayersList[metadata.Sender];
+                CuriosityUser staffUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                int staffBucket = API.GetPlayerRoutingBucket($"{metadata.Sender}");
+
+                if (staffBucket != (int)staffUser.RoutingBucket)
+                {
+                    API.SetPlayerRoutingBucket($"{metadata.Sender}", (int)staffUser.RoutingBucket);
+                    Notify.Send(metadata.Sender, Notification.NOTIFICATION_WARNING, "Changing world");
+                }
+
+                staffUser.Send("spectate:stop");
+
+                return true;
+
+                //bool fadedOut = await EventSystem.Request<bool>("user:screen:fadeOut", metadata.Sender, 2000);
+
+                //if (fadedOut)
+                //{
+                //    staff.Character.Position = player.Character.Position + new Vector3(0f, 2f, 0f);
+                //    await BaseScript.Delay(500);
+                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
+                //    return true;
+                //}
+                //else
+                //{
+                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
+                //    return false;
+                //}
+            }));
         }
     }
 }
