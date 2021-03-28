@@ -8,12 +8,8 @@ namespace Curiosity.Core.Client.Managers
 {
     public class NotificationManger : Manager<NotificationManger>
     {
-        public static NotificationManger NotificationInstance;
-
         public override void Begin()
         {
-            NotificationInstance = this;
-
             Instance.ExportDictionary.Add("Notification", new Func<int, string, string, string, bool>(
                 (notification, message, position, theme) =>
                 {
@@ -46,7 +42,7 @@ namespace Curiosity.Core.Client.Managers
             API.SendNuiMessage(jb.Build());
         }
 
-        public void Success(string message)
+        internal void Success(string message)
         {
             SendNui(Notification.NOTIFICATION_SUCCESS, message);
         }
@@ -54,6 +50,16 @@ namespace Curiosity.Core.Client.Managers
         internal void Warn(string message)
         {
             SendNui(Notification.NOTIFICATION_WARNING, message);
+        }
+
+        internal void Info(string message)
+        {
+            SendNui(Notification.NOTIFICATION_INFO, message);
+        }
+
+        internal void Error(string message)
+        {
+            SendNui(Notification.NOTIFICATION_ERROR, message);
         }
     }
 }
