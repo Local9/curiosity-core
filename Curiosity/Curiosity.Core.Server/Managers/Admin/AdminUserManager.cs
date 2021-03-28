@@ -249,6 +249,16 @@ namespace Curiosity.Core.Server.Managers.Admin
                 Player staff = PluginManager.PlayersList[metadata.Sender];
 
                 int pid = metadata.Find<int>(0);
+
+                int bucket = API.GetPlayerRoutingBucket($"{pid}");
+                int staffBucket = API.GetPlayerRoutingBucket($"{metadata.Sender}");
+
+                if (staffBucket != bucket)
+                {
+                    Notify.Send(metadata.Sender, Notification.NOTIFICATION_WARNING, "Cannot bring player from another world");
+                    return false;
+                }
+
                 Player player = PluginManager.PlayersList[pid];
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[pid];
                 Vector3 pos = staff.Character.Position + new Vector3(0f, 2f, 0f);
@@ -284,6 +294,15 @@ namespace Curiosity.Core.Server.Managers.Admin
                 int pid = metadata.Find<int>(0);
                 Player player = PluginManager.PlayersList[pid];
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[pid];
+
+                int bucket = API.GetPlayerRoutingBucket($"{pid}");
+                int staffBucket = API.GetPlayerRoutingBucket($"{metadata.Sender}");
+
+                if (staffBucket != bucket)
+                {
+                    API.SetPlayerRoutingBucket($"{metadata.Sender}", bucket);
+                    Notify.Send(metadata.Sender, Notification.NOTIFICATION_WARNING, "Changing world");
+                }
 
                 Vector3 pos = player.Character.Position + new Vector3(0f, 2f, 0f);
                 staffUser.Send("user:position:move", pos.X, pos.Y, pos.Z);
