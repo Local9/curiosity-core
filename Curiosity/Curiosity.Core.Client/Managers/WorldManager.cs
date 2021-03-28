@@ -82,90 +82,95 @@ namespace Curiosity.Core.Client.Managers
             API.SetWeatherOwnedByNetwork(false);
         }
 
+        private void EnableScenario(string scenario)
+        {
+            if (IsScenarioGroupEnabled(scenario))
+                SetScenarioGroupEnabled(scenario, true);
+        }
+
+        private void DisableScenario(string scenario)
+        {
+            if (IsScenarioGroupEnabled(scenario))
+                SetScenarioGroupEnabled(scenario, false);
+        }
+
         private async void LoadScenarios()
         {
             await Session.Loading();
             // Zancudo
-            SetScenarioGroupEnabled("fort_zancudo_guards", true);
-            SetScenarioGroupEnabled("army_guard", false);
-            SetScenarioGroupEnabled("army_heli", false);
+            EnableScenario("fort_zancudo_guards");
+            DisableScenario("army_guard");
+            DisableScenario("army_heli");
             // Zancudo Types
-            SetScenarioTypeEnabled("WORLD_VEHICLE_MILITARY_PLANES_SMALL", false);
-            SetScenarioTypeEnabled("WORLD_VEHICLE_MILITARY_PLANES_BIG", false);
+            DisableScenario("WORLD_VEHICLE_MILITARY_PLANES_SMALL");
+            DisableScenario("WORLD_VEHICLE_MILITARY_PLANES_BIG");
             // Air
-            SetScenarioGroupEnabled("blimp", true);
-            SetScenarioGroupEnabled("lsa_planes", false);
-            SetScenarioGroupEnabled("sandy_planes", false);
-            SetScenarioGroupEnabled("grapeseed_planes", false);
-            SetScenarioGroupEnabled("ng_planes", false);
+            EnableScenario("blimp");
+            DisableScenario("lsa_planes");
+            DisableScenario("sandy_planes");
+            DisableScenario("grapeseed_planes");
+            DisableScenario("ng_planes");
             // cinemas
-            SetScenarioGroupEnabled("cinema_downtown", true);
-            SetScenarioGroupEnabled("cinema_morningwood", true);
-            SetScenarioGroupEnabled("cinema_textile", true);
+            EnableScenario("cinema_downtown");
+            EnableScenario("cinema_morningwood");
+            EnableScenario("cinema_textile");
             // Banks
-            SetScenarioGroupEnabled("city_banks", true);
-            SetScenarioGroupEnabled("countryside_banks", true);
-            SetScenarioGroupEnabled("paleto_bank", true);
+            EnableScenario("city_banks");
+            EnableScenario("countryside_banks");
+            EnableScenario("paleto_bank");
             // police
-            SetScenarioGroupEnabled("guards_at_prison", true);
-            SetScenarioGroupEnabled("paleto_cops", true);
-            SetScenarioGroupEnabled("police_at_court", true);
-            SetScenarioGroupEnabled("police_pound1", true);
-            SetScenarioGroupEnabled("police_pound2", true);
-            SetScenarioGroupEnabled("police_pound3", true);
-            SetScenarioGroupEnabled("police_pound4", true);
-            SetScenarioGroupEnabled("police_pound5", true);
-            SetScenarioGroupEnabled("prison_towers", true);
-            SetScenarioGroupEnabled("prison_transport", true);
-            SetScenarioGroupEnabled("sandy_cops", true);
-            SetScenarioGroupEnabled("mp_police", true);
-            SetScenarioGroupEnabled("mp_police2", true);
+            EnableScenario("guards_at_prison");
+            EnableScenario("paleto_cops");
+            EnableScenario("police_at_court");
+            EnableScenario("police_pound1");
+            EnableScenario("police_pound2");
+            EnableScenario("police_pound3");
+            EnableScenario("police_pound4");
+            EnableScenario("police_pound5");
+            EnableScenario("prison_towers");
+            EnableScenario("prison_transport");
+            EnableScenario("sandy_cops");
+            EnableScenario("mp_police");
+            EnableScenario("mp_police2");
             // FIB
-            SetScenarioGroupEnabled("fib_group_1", true);
-            SetScenarioGroupEnabled("fib_group_2", true);
+            EnableScenario("fib_group_1");
+            EnableScenario("fib_group_2");
             // Extra groups
-            SetScenarioGroupEnabled("scrap_security", true);
-            SetScenarioGroupEnabled("vagos_hangout", true);
-            SetScenarioGroupEnabled("lost_hangout", true);
-            SetScenarioGroupEnabled("lost_bikers", true);
-            SetScenarioGroupEnabled("observatory_bikers", true);
-            SetScenarioGroupEnabled("chinese2_hillbillies", true);
-            SetScenarioGroupEnabled("chinese2_lunch", true);
-            SetScenarioGroupEnabled("movie_studio_security", true);
+            EnableScenario("scrap_security");
+            EnableScenario("vagos_hangout");
+            EnableScenario("lost_hangout");
+            EnableScenario("lost_bikers");
+            EnableScenario("observatory_bikers");
+            EnableScenario("chinese2_hillbillies");
+            EnableScenario("chinese2_lunch");
+            EnableScenario("movie_studio_security");
             // facilities
-            SetScenarioGroupEnabled("facility_cannon", false);
-            SetScenarioGroupEnabled("facility_main_1", false);
-            SetScenarioGroupEnabled("facility_main_2", false);
-            SetScenarioGroupEnabled("facility_main_3", false);
+            EnableScenario("facility_cannon");
+            EnableScenario("facility_main_1");
+            EnableScenario("facility_main_2");
+            EnableScenario("facility_main_3");
             // Others
-            SetScenarioGroupEnabled("dealership", true);
-            SetScenarioGroupEnabled("kortz_security", true);
-            SetScenarioGroupEnabled("ammunation", true);
-            SetScenarioGroupEnabled("rampage1", true);
-            SetScenarioGroupEnabled("sew_machine", true);
-            SetScenarioGroupEnabled("solomon_gate", true);
-            SetScenarioGroupEnabled("attract_pap", true);
-            SetScenarioGroupEnabled("quarry", true);
+            EnableScenario("dealership");
+            EnableScenario("kortz_security");
+            EnableScenario("ammunation");
+            EnableScenario("rampage1");
+            EnableScenario("sew_machine");
+            EnableScenario("solomon_gate");
+            EnableScenario("attract_pap");
+            EnableScenario("quarry");
             // Night Clubs
-            SetScenarioGroupEnabled("club_cypress_flats_warehouse", true);
-            SetScenarioGroupEnabled("club_del_perro_building", true);
-            SetScenarioGroupEnabled("club_vinewood_dt", true);
-            SetScenarioGroupEnabled("club_elysian_island_warehouse", true);
-            SetScenarioGroupEnabled("club_la_mesa_warehouse", true);
-            SetScenarioGroupEnabled("club_lsia_warehouse", true);
-            SetScenarioGroupEnabled("club_mission_row_building", true);
-            SetScenarioGroupEnabled("club_strawberry_warehouse", true);
-            SetScenarioGroupEnabled("club_vespucci_canals_building", true);
-            SetScenarioGroupEnabled("club_west_vinewood_building", true);
+            EnableScenario("club_cypress_flats_warehouse");
+            EnableScenario("club_del_perro_building");
+            EnableScenario("club_vinewood_dt");
+            EnableScenario("club_elysian_island_warehouse");
+            EnableScenario("club_la_mesa_warehouse");
+            EnableScenario("club_lsia_warehouse");
+            EnableScenario("club_mission_row_building");
+            EnableScenario("club_strawberry_warehouse");
+            EnableScenario("club_vespucci_canals_building");
+            EnableScenario("club_west_vinewood_building");
             // Animals
-            SetScenarioGroupEnabled("armenian_cats", true);
-            // Triathlon
-            SetScenarioGroupEnabled("triathlon_1", false);
-            SetScenarioGroupEnabled("triathlon_1_start", false);
-            SetScenarioGroupEnabled("triathlon_2", false);
-            SetScenarioGroupEnabled("triathlon_2_start", false);
-            SetScenarioGroupEnabled("triathlon_3", false);
-            SetScenarioGroupEnabled("triathlon_3_start", false);
+            EnableScenario("armenian_cats");
         }
 
         private async void UnloadLosSantosIpls()
