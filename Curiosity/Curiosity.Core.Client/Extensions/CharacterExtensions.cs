@@ -191,8 +191,6 @@ namespace Curiosity.Core.Client.Extensions
 
             Screen.LoadingPrompt.Show("Loading Create Character...");
 
-            PluginManager.Instance.AttachTickHandler(Intro);
-
             PluginManager.Instance.DiscordRichPresence.Status = "Creating Character";
             PluginManager.Instance.DiscordRichPresence.Commit();
 
@@ -207,8 +205,6 @@ namespace Curiosity.Core.Client.Extensions
             }
 
             Session.Reload();
-
-            PluginManager.Instance.DetachTickHandler(Intro);
 
             var board = new MugshotBoardAttachment();
 
@@ -330,33 +326,6 @@ namespace Curiosity.Core.Client.Extensions
 
             Session.CreatingCharacter = false;
         }
-
-        private static async Task Intro()
-        {
-            API.Set_2dLayer(7);
-            API.SetTextCentre(true);
-            API.SetTextFont(0);
-            API.SetTextProportional(true);
-            API.SetTextScale(0.45f, 0.45f);
-            API.SetTextColour(255, 255, 255, 255);
-            API.SetTextDropshadow(0, 0, 0, 0, 255);
-            API.SetTextEdge(1, 0, 0, 0, 255);
-            API.SetTextDropShadow();
-            API.SetTextOutline();
-            API.SetTextEntry("STRING");
-            API.AddTextComponentString($"Welcome to ~b~Emergency V~w~, ~y~{Cache.Player.Name}~w~.");
-            API.DrawText(0.5f, 0.5f - API.GetTextScaleHeight(0.45f, 0) / 2f);
-            API.HideLoadingOnFadeThisFrame();
-
-            await Task.FromResult(0);
-        }
-
-        // TODO: IMPLEMENT
-
-        //public static void SetupStat(string stat, int value)
-        //{
-        //    API.StatSetInt((uint)API.GetHashKey(stat), value, true);
-        //}
 
         public static void SetupStats(this CuriosityCharacter character)
         {

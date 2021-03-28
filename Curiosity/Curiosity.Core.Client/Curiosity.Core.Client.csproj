@@ -71,6 +71,7 @@
     <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\LocationManager.cs" />
+    <Compile Include="Managers\SpectateManager.cs" />
     <Compile Include="Managers\UI\ChatManager.cs" />
     <Compile Include="Managers\UI\DutyManager.cs" />
     <Compile Include="Managers\UI\ExportManager.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Utils\CameraMath.cs" />
     <Compile Include="Utils\ControlHelper.cs" />
     <Compile Include="Utils\PlayerOptions.cs" />
+    <Compile Include="Utils\ScreenOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
