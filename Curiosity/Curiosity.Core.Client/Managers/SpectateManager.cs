@@ -12,15 +12,21 @@ namespace Curiosity.Core.Client.Managers
 {
     public class SpectateManager : Manager<SpectateManager>
     {
-        bool isCurrentlySpectating = false;
         Player currentSpectate;
+        int currentSpectateHandle;
         Vector3 originalPosition = Vector3.Zero;
 
         public override void Begin()
         {
+            EventSystem.Attach("spectate:stop", new EventCallback(metadata =>
+            {
+                Stop();
+                return null;
+            }));
+
             EventSystem.Attach("spectate", new EventCallback(metadata =>
             {
-
+                Spectate(metadata.Find<int>(0));
                 return null;
             }));
         }
@@ -43,10 +49,29 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            if (currentSpectate is not null && currentSpectate?.Handle == playerPedId)
+            ClearPlayerWantedLevel(Cache.Player.Handle);
+            originalPosition = Cache.PlayerPed.Position;
+
+            await Cache.PlayerPed.FadeOut();
+
+            Cache.PlayerPed.IsVisible = false;
+            Cache.PlayerPed.IsPositionFrozen = true;
+            Cache.PlayerPed.IsInvincible = true;
+
+            NetworkSetInSpectatorMode(true, playerPedId);
+            SetMinimapInSpectatorMode(true, playerPedId);
+
+            currentSpectateHandle = playerPedId;
+
+            await Utils.ScreenOptions.ScreenFadeIn(250);
+        }
+
+        private async void Stop()
+        {
+            if (currentSpectate is not null)
             {
-                NetworkSetInSpectatorMode(false, playerPedId);
-                SetMinimapInSpectatorMode(false, playerPedId);
+                NetworkSetInSpectatorMode(false, currentSpectateHandle);
+                SetMinimapInSpectatorMode(false, currentSpectateHandle);
 
                 Cache.PlayerPed.IsVisible = true;
                 Cache.PlayerPed.IsPositionFrozen = false;
@@ -64,6 +89,7 @@ namespace Curiosity.Core.Client.Managers
 
                 originalPosition = Vector3.Zero;
                 currentSpectate = null;
+                currentSpectateHandle = 0;
 
                 await Utils.ScreenOptions.ScreenFadeIn(250);
                 await Cache.PlayerPed.FadeIn();
@@ -72,20 +98,6 @@ namespace Curiosity.Core.Client.Managers
 
                 return;
             }
-
-            ClearPlayerWantedLevel(Cache.Player.Handle);
-            originalPosition = Cache.PlayerPed.Position;
-
-            await Cache.PlayerPed.FadeOut();
-
-            Cache.PlayerPed.IsVisible = false;
-            Cache.PlayerPed.IsPositionFrozen = true;
-            Cache.PlayerPed.IsInvincible = true;
-
-            NetworkSetInSpectatorMode(true, playerPedId);
-            SetMinimapInSpectatorMode(true, playerPedId);
-
-            await Utils.ScreenOptions.ScreenFadeIn(250);
         }
     }
 }

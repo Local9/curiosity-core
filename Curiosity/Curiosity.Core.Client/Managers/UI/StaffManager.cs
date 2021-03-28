@@ -225,6 +225,54 @@ namespace Curiosity.Core.Client.Managers
 
                 return null;
             }));
+
+            Instance.AttachNuiHandler("SpectatePlayer", new AsyncEventCallback(async metadata =>
+            {
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
+
+                int playerHandle = metadata.Find<int>(0);
+
+                bool success = await EventSystem.Request<bool>("user:spectate:submit", playerHandle);
+
+                if (success)
+                {
+                    NotificationManger.GetModule().Success("Spectating Player.");
+                }
+                else
+                {
+                    NotificationManger.GetModule().Warn("Unable to spectate player.");
+                }
+
+                return null;
+            }));
+
+            Instance.AttachNuiHandler("SpectateStop", new AsyncEventCallback(async metadata =>
+            {
+                if (!Cache.Player.User.IsAdmin)
+                {
+                    NotificationManger.GetModule().Warn("You do not have the permission to use this.");
+                    return null;
+                }
+
+                int playerToRevive = metadata.Find<int>(0);
+
+                bool success = await EventSystem.Request<bool>("user:spectate:stop", playerToRevive);
+
+                if (success)
+                {
+                    NotificationManger.GetModule().Success("Stopped Spectating Player.");
+                }
+                else
+                {
+                    NotificationManger.GetModule().Warn("Issue when trying to cancel spectate.");
+                }
+
+                return null;
+            }));
         }
     }
 }
