@@ -350,24 +350,9 @@ namespace Curiosity.Core.Server.Managers.Admin
                 staffUser.Send("spectate", pid);
 
                 return true;
-
-                //bool fadedOut = await EventSystem.Request<bool>("user:screen:fadeOut", metadata.Sender, 2000);
-
-                //if (fadedOut)
-                //{
-                //    staff.Character.Position = player.Character.Position + new Vector3(0f, 2f, 0f);
-                //    await BaseScript.Delay(500);
-                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
-                //    return true;
-                //}
-                //else
-                //{
-                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
-                //    return false;
-                //}
             }));
 
-            EventSystem.GetModule().Attach("user:spectate:submit", new EventCallback(metadata =>
+            EventSystem.GetModule().Attach("user:spectate:stop", new EventCallback(metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
 
@@ -387,21 +372,6 @@ namespace Curiosity.Core.Server.Managers.Admin
                 staffUser.Send("spectate:stop");
 
                 return true;
-
-                //bool fadedOut = await EventSystem.Request<bool>("user:screen:fadeOut", metadata.Sender, 2000);
-
-                //if (fadedOut)
-                //{
-                //    staff.Character.Position = player.Character.Position + new Vector3(0f, 2f, 0f);
-                //    await BaseScript.Delay(500);
-                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
-                //    return true;
-                //}
-                //else
-                //{
-                //    await EventSystem.Request<bool>("user:screen:fadeIn", metadata.Sender, 2000);
-                //    return false;
-                //}
             }));
         }
     }
