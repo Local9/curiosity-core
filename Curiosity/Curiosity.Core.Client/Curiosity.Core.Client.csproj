@@ -72,6 +72,7 @@
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\LocationManager.cs" />
     <Compile Include="Managers\SpectateManager.cs" />
+    <Compile Include="Managers\PlayerStatManager.cs" />
     <Compile Include="Managers\UI\ChatManager.cs" />
     <Compile Include="Managers\UI\DutyManager.cs" />
     <Compile Include="Managers\UI\ExportManager.cs" />
