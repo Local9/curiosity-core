@@ -4,7 +4,7 @@ namespace Curiosity.Core.Server.Managers
 {
     class LevelingManager : Manager<LevelingManager>
     {
-		// get level
+		// MOVE TO CLIENT
 
 		// check required
 		public int ExperienceToNextLevel(int level)

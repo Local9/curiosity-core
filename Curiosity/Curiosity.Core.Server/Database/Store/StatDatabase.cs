@@ -10,12 +10,7 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class StatDatabase
     {
-        public static async Task<int> Adjust(int characterId, Stat statId, int amount)
-        {
-            return await Adjust(characterId, (int)statId, amount);
-        }
-
-        public static async Task<int> Adjust(int characterId, int statId, int amount)
+        public static async Task<int> Adjust(int characterId, Stat statId, object amount)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
