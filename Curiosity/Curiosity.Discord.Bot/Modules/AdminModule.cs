@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using Curiosity.LifeV.Bot.Tools;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Collections.Generic;
@@ -18,9 +19,6 @@ namespace Curiosity.LifeV.Bot.Modules
         [Alias("u", "whois")]
         public async Task GetUser([Summary("Curiosity UserId")] long? userId = null)
         {
-            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-            TextInfo textInfo = cultureInfo.TextInfo;
-
             var user = Context.User;
 
             // Permission Check
@@ -58,7 +56,7 @@ namespace Curiosity.LifeV.Bot.Modules
 
                 builder
                     .AddField("Player", $"{dbUser.Username}", true)
-                    .AddField("Role", $"{textInfo.ToTitleCase(dbUser.UserRole.ToString())}", true)
+                    .AddField("Role", StringValueAttribute.GetStringValue(dbUser.UserRole), true)
                     .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}")
                     .AddField("Server: First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
                     .AddField("Server: Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)

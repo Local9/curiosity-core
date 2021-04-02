@@ -22,7 +22,7 @@ namespace Curiosity.LifeV.Bot.Models
         public ulong? DiscordId;
         public Role? UserRole;
 
-        public bool IsStaff => (UserRole == Role.COMMUNITYMANAGER || UserRole == Role.MODERATOR || UserRole == Role.ADMINISTRATOR || UserRole == Role.SENIOR_ADMIN || UserRole == Role.HEAD_ADMIN || UserRole == Role.DEVELOPER || UserRole == Role.PROJECT_MANAGER);
+        public bool IsStaff => (UserRole == Role.COMMUNITY_MANAGER || UserRole == Role.MODERATOR || UserRole == Role.ADMINISTRATOR || UserRole == Role.SENIOR_ADMIN || UserRole == Role.HEAD_ADMIN || UserRole == Role.DEVELOPER || UserRole == Role.PROJECT_MANAGER);
 
         public User() { }
 

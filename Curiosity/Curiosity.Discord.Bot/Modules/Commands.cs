@@ -1,13 +1,12 @@
 ﻿using Curiosity.LifeV.Bot.Entities.CitizenFX;
+using Curiosity.LifeV.Bot.Tools;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -136,7 +135,7 @@ namespace Curiosity.LifeV.Bot.Modules
             }
             catch (Exception ex)
             {
-                await ReplyAsync("Sorry, something went wrong when trying to communicate with the server.", false);
+                await ReplyAsync("Sorry, something went wrong when trying to communicate with the server.");
                 Console.WriteLine($"Server: {ex}");
                 throw;
             }
@@ -151,7 +150,7 @@ namespace Curiosity.LifeV.Bot.Modules
                 .AddField("Help Commands",
                 "lv!help - What you're looking at right now" +
                 "\nlv!server 1/2 - Will display server information" +
-                "\nlv!account - Show you're Curiosity Server account" +
+                "\nlv!account - Show your Curiosity Server account" +
                 "\nlv!top <param> - pilot, trucking, fire, police, knowledge, train, taxi, fishing, hunting, farming, bus, mechanic, ems, freight" +
                 "\nlv!donate - Update users donation status"
                 ).WithColor(Color.Blue)
@@ -159,40 +158,49 @@ namespace Curiosity.LifeV.Bot.Modules
                     .WithCurrentTimestamp()
                     .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
 
-            await ReplyAsync("", false, builder.Build());
+            await ReplyAsync(embed: builder.Build());
         }
 
         [Command("account")]
         public async Task Account(SocketUser user = null)
         {
-            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-            TextInfo textInfo = cultureInfo.TextInfo;
-
-            if (user == null)
-                user = Context.User;
-
-            Models.User dbUser = await new Models.User().FindUserAsync(user.Id);
-
-            if (dbUser == null)
+            try
             {
-                await ReplyAsync("User was not found or has not connected to the server.");
+                if (user == null)
+                    user = Context.User;
+
+                Models.User dbUser = await new Models.User().FindUserAsync(user.Id);
+
+                if (dbUser == null)
+                {
+                    await ReplyAsync("User was not found or has not connected to the server.");
+                }
+                else
+                {
+                    EmbedBuilder builder = new EmbedBuilder();
+
+                    builder
+                        .AddField("Player", $"{dbUser.Username}", true)
+                        .AddField("Role", StringValueAttribute.GetStringValue(dbUser.UserRole), true)
+                        .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}")
+                        .AddField("Server First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
+                        .AddField("Server Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)
+                        .WithColor(Color.Blue)
+                            .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
+                            .WithCurrentTimestamp()
+                            .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
+
+                    await ReplyAsync(embed: builder.Build());
+                }
             }
-            else
+            catch (Exception ex)
             {
-                EmbedBuilder builder = new EmbedBuilder();
+                Console.WriteLine($"ERROR");
+                Console.WriteLine($"{ex.Message}");
+                Console.WriteLine($"{ex}");
+                Console.WriteLine($"----");
 
-                builder
-                    .AddField("Player", $"{dbUser.Username}", true)
-                    .AddField("Role", $"{textInfo.ToTitleCase(dbUser.UserRole.ToString())}", true)
-                    .AddField("Experience", $"{dbUser.LifeExperience:#,###,###}")
-                    .AddField("Server First Joined", $"{dbUser.DateCreated.ToString("yyyy-MM-dd HH:mm")}", true)
-                    .AddField("Server Last Seen", $"{dbUser.LastSeen.ToString("yyyy-MM-dd HH:mm")}", true)
-                    .WithColor(Color.Blue)
-                        .WithThumbnailUrl(Context.Client.CurrentUser.GetAvatarUrl())
-                        .WithCurrentTimestamp()
-                        .WithFooter("Forums: https://forums.lifev.net", Context.Guild.IconUrl);
-
-                await ReplyAsync("", false, builder.Build());
+                await ReplyAsync("Sorry there was an issue trying to find your account, please inform the developers via a ticket so they can look into it.");
             }
         }
 
@@ -335,7 +343,7 @@ namespace Curiosity.LifeV.Bot.Modules
 
                     topUsers += "```";
 
-                    await ReplyAsync($"{topUsers}", false);
+                    await ReplyAsync($"{topUsers}");
                 }
             }
             catch (Exception ex)
