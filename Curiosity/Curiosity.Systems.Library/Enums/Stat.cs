@@ -17,6 +17,7 @@
         STAT_WHEELIE_ABILITY,
         STAT_LUNG_CAPACITY,
         STAT_DEATH,
-        STAT_KILLED_SELF
+        STAT_KILLED_SELF,
+        STAT_SPRINTING // TODO ADDED TO DB
     }
 }
