@@ -14,35 +14,36 @@ namespace Curiosity.Core.Client.Interface.Modules
         [TickHandler(SessionWait = true)]
         private async Task OnTick()
         {
-            var curiosity = PluginManager.Instance;
-            var player = curiosity.Local;
-            var ped = API.PlayerPedId();
+            //var curiosity = PluginManager.Instance;
+            //var player = curiosity.Local;
+            //var ped = API.PlayerPedId();
 
-            if (player?.Entity != null && !IsDisabled && !API.IsPedSittingInAnyVehicle(ped))
-            {
-                var anchor = GetMinimapAnchor();
+            //if (player?.Entity != null && !IsDisabled && !API.IsPedSittingInAnyVehicle(ped))
+            //{
+            //    var anchor = GetMinimapAnchor();
 
-                // Base
-                DrawObject(anchor.X + 0.0005f, (float)anchor.BottomY, anchor.Width + 0.0005f,
-                    anchor.UnitY * 18f,
-                    Color.FromArgb(126, 0, 0, 0));
+            //    // Base
+            //    DrawObject(anchor.X + 0.0005f, (float)anchor.BottomY, anchor.Width + 0.0005f,
+            //        anchor.UnitY * 18f,
+            //        Color.FromArgb(126, 0, 0, 0));
 
-                // Health
-                DrawObject(anchor.X + 0.0005f, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2, anchor.Width / 2,
-                    anchor.UnitY * 18f / 2, Color.FromArgb(175, 57, 102, 67));
+            //    // Health
+            //    DrawObject(anchor.X + 0.0005f, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2, anchor.Width / 2,
+            //        anchor.UnitY * 18f / 2, Color.FromArgb(175, 57, 102, 67));
 
-                DrawObject(anchor.X + 0.0005f, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
-                    anchor.Width / 2 / API.GetEntityMaxHealth(ped) * API.GetEntityHealth(ped),
-                    anchor.UnitY * 18f / 2, Color.FromArgb(175, 114, 204, 114));
+            //    DrawObject(anchor.X + 0.0005f, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
+            //        anchor.Width / 2 / API.GetEntityMaxHealth(ped) * API.GetEntityHealth(ped),
+            //        anchor.UnitY * 18f / 2, Color.FromArgb(175, 114, 204, 114));
 
-                // Armor
-                DrawObject(anchor.X + 0.001f + anchor.Width / 2, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
-                    anchor.Width / 2, anchor.UnitY * 18f / 2, Color.FromArgb(175, 47, 92, 115));
+            //    // Armor
+            //    DrawObject(anchor.X + 0.001f + anchor.Width / 2, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
+            //        anchor.Width / 2, anchor.UnitY * 18f / 2, Color.FromArgb(175, 47, 92, 115));
 
-                DrawObject(anchor.X + 0.001f + anchor.Width / 2, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
-                    anchor.Width / 2 / 100 * API.GetPedArmour(ped), anchor.UnitY * 18f / 2,
-                    Color.FromArgb(175, 93, 182, 229));
-            }
+            //    DrawObject(anchor.X + 0.001f + anchor.Width / 2, (float)anchor.BottomY - anchor.UnitY * 18f / 2 / 2,
+            //        anchor.Width / 2 / 100 * API.GetPedArmour(ped), anchor.UnitY * 18f / 2,
+            //        Color.FromArgb(175, 93, 182, 229));
+            //}
+
             Hud.IsRadarVisible = Cache.PlayerPed.IsInVehicle();
         }
 
