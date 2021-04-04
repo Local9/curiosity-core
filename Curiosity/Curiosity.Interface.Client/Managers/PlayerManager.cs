@@ -113,7 +113,7 @@ namespace Curiosity.Interface.Client.Managers
 
             Instance.AttachNuiHandler("PlayerList", new AsyncEventCallback(async metadata =>
             {
-                List<CuriosityPlayerList> playerList = await EventSystem.Request<List<CuriosityPlayerList>>("user:get:playerlist");
+                List<CuriosityPlayerListItem> playerList = await EventSystem.Request<List<CuriosityPlayerListItem>>("user:get:playerlist");
 
                 if (playerList == null) return null;
 

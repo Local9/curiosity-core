@@ -21,13 +21,13 @@ namespace Curiosity.Core.Server.Managers
         {
             EventSystem.GetModule().Attach("user:get:playerlist", new EventCallback(metadata =>
             {
-                List<CuriosityPlayerList> lst = new List<CuriosityPlayerList>();
+                List<CuriosityPlayerListItem> lst = new List<CuriosityPlayerListItem>();
 
                 foreach(KeyValuePair<int, CuriosityUser> kv in PluginManager.ActiveUsers)
                 {
                     CuriosityUser curiosityUser = kv.Value;
                     
-                    CuriosityPlayerList cpl = new CuriosityPlayerList();
+                    CuriosityPlayerListItem cpl = new CuriosityPlayerListItem();
                     cpl.UserId = curiosityUser.UserId;
                     cpl.ServerHandle = kv.Key;
                     cpl.Name = curiosityUser.LatestName;

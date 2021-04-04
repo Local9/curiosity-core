@@ -27,23 +27,20 @@ namespace Curiosity.Core.Client.Managers
                 if (curiosityUser == null) return null;
                 if (curiosityUser.Character == null) return null;
 
-                PlayerProfile pp = new PlayerProfile();
-                pp.UserID = curiosityUser.UserId;
-                pp.Name = curiosityUser.LatestName;
-                pp.Role = curiosityUser.Role.GetStringValue();
-                pp.Wallet = curiosityUser.Character.Cash;
+                // TODO: Add world information
+                // TODO: Smaller data sets for the request
 
-                pp.IsAdmin = curiosityUser.IsAdmin;
-                pp.IsStaff = curiosityUser.IsStaff;
-                pp.Headshot = $"https://nui-img/{CurrentPedHeadshot}/{CurrentPedHeadshot}";
+                var profile = new {
+                    userId = curiosityUser.UserId,
+                    name = curiosityUser.LatestName,
+                    role = curiosityUser.Role.GetStringValue(),
+                    wallet = curiosityUser.Character.Cash,
+                    isAdmin = curiosityUser.IsAdmin,
+                    isStaff = curiosityUser.IsStaff,
+                    headshot = $"https://nui-img/{CurrentPedHeadshot}/{CurrentPedHeadshot}",
+                };
 
-                string jsn = new JsonBuilder().Add("operation", "PLAYER_PROFILE")
-                        .Add("profile", pp)
-                        .Build();
-
-                API.SendNuiMessage(jsn);
-
-                return null;
+                return profile;
             }));
 
             Instance.AttachNuiHandler("GetEnhancedProfile", new AsyncEventCallback(async metadata =>
@@ -61,84 +58,89 @@ namespace Curiosity.Core.Client.Managers
 
                 if (curiosityUser == null) return null;
 
-                PlayerProfile pp = new PlayerProfile();
-                pp.UserID = curiosityUser.UserId;
-                pp.Name = curiosityUser.LatestName;
-                pp.Role = curiosityUser.Role.GetStringValue();
-                pp.Wallet = curiosityUser.Character.Cash;
-                pp.ServerHandle = curiosityUser.Handle;
-                pp.IsAdmin = curiosityUser.IsAdmin;
-                pp.IsStaff = curiosityUser.IsStaff;
+                var profile = new
+                {
+                    userId = curiosityUser.UserId,
+                    name = curiosityUser.LatestName,
+                    role = curiosityUser.Role.GetStringValue(),
+                    wallet = curiosityUser.Character.Cash,
+                    isAdmin = curiosityUser.IsAdmin,
+                    isStaff = curiosityUser.IsStaff,
+                    headshot = $"https://nui-img/{CurrentPedHeadshot}/{CurrentPedHeadshot}",
+                    worldName = $"{curiosityUser.RoutingBucket}",
+                    skills = new List<dynamic>(),
+                    stats = new List<dynamic>(),
+                };
 
-                pp.WorldName = $"{curiosityUser.RoutingBucket}";
+                foreach(CharacterSkill skill in skills)
+                {
+                    var s = new
+                    {
+                        label = skill.Label,
+                        description = skill.Description,
+                        value = skill.Value
+                    };
+                    profile.skills.Add(s);
+                }
 
-                string jsn = new JsonBuilder().Add("operation", "ENHANCED_PROFILE")
-                        .Add("profile", pp)
-                        .Add("skills", skills)
-                        .Add("stats", stats)
-                        .Build();
+                foreach (CharacterStat stat in stats)
+                {
+                    var s = new
+                    {
+                        label = stat.Label,
+                        value = stat.Value
+                    };
+                    profile.stats.Add(s);
+                }
 
-                API.SendNuiMessage(jsn);
-
-                return null;
-            }));
-
-            Instance.AttachNuiHandler("PlayerExperience", new AsyncEventCallback(async metadata =>
-            {
-                List<CharacterSkill> skills = await EventSystem.Request<List<CharacterSkill>>("character:get:skills");
-
-                if (skills == null) return null;
-
-                string jsn = new JsonBuilder().Add("operation", "PLAYER_SKILLS")
-                    .Add("skills", skills)
-                    .Build();
-
-                API.SendNuiMessage(jsn);
-
-                return null;
-            }));
-
-            Instance.AttachNuiHandler("PlayerStats", new AsyncEventCallback(async metadata =>
-            {
-                List<CharacterStat> stats = await EventSystem.Request<List<CharacterStat>>("character:get:stats");
-
-                if (stats == null) return null;
-
-                string jsn = new JsonBuilder().Add("operation", "PLAYER_STATS")
-                    .Add("stats", stats)
-                    .Build();
-
-                API.SendNuiMessage(jsn);
-
-                return null;
+                return profile;
             }));
 
             Instance.AttachNuiHandler("PlayerList", new AsyncEventCallback(async metadata =>
             {
-                List<CuriosityPlayerList> playerList = await EventSystem.Request<List<CuriosityPlayerList>>("user:get:playerlist");
+                List<CuriosityPlayerListItem> playerList = await EventSystem.Request<List<CuriosityPlayerListItem>>("user:get:playerlist");
 
                 if (playerList == null) return null;
 
-                string jsn = new JsonBuilder().Add("operation", "PLAYER_LIST")
-                    .Add("list", playerList)
-                    .Build();
+                var pl = new List<dynamic>();
 
-                API.SendNuiMessage(jsn);
+                foreach(CuriosityPlayerListItem p in playerList)
+                {
+                    var player = new
+                    {
+                        id = p.UserId,
+                        name = p.Name,
+                        handle = p.ServerHandle,
+                        job = p.Job,
+                        role = p.Role,
+                        ping = p.Ping
+                    };
 
-                return null;
+                    pl.Add(player);
+                }
+
+                return pl;
             }));
 
             Instance.AttachNuiHandler("ReportList", new AsyncEventCallback(async metadata =>
             {
                 List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:report:list");
 
-                string jsn = new JsonBuilder().Add("operation", "REPORT_REASONS")
-                .Add("list", lst)
-                .Build();
+                var reasons = new List<dynamic>();
 
-                API.SendNuiMessage(jsn);
+                foreach (LogItem item in lst)
+                {
+                    var r = new
+                    {
+                        logTypeId = item.LogTypeId,
+                        group = item.Group,
+                        description = item.Description,
+                        playerHandle = item.PlayerHandle
+                    };
+                    reasons.Add(r);
+                }
 
-                return null;
+                return reasons;
             }));
 
             Instance.AttachNuiHandler("ReportPlayer", new AsyncEventCallback(async metadata =>

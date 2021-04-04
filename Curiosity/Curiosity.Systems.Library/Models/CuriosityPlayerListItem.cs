@@ -3,7 +3,7 @@
 namespace Curiosity.Systems.Library.Models
 {
     [DataContract]
-    public class CuriosityPlayerList
+    public class CuriosityPlayerListItem
     {
         [DataMember(Name = "id", Order = 0)]
         public long UserId;

@@ -221,6 +221,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netStandard2.0", "netStanda
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Curiosity.Core.Server.2.0", "Curiosity.Core.Server.2.0\Curiosity.Core.Server.2.0.csproj", "{D6856A82-CC52-48B7-A7FF-906F2E2DDF1F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wGithub", "wGithub", "{C836ADC9-2C4A-4D1A-AC44-7A641243C054}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

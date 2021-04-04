@@ -20,13 +20,21 @@ namespace Curiosity.Core.Client.Managers
 
                 List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:ban:list");
 
-                string jsn = new JsonBuilder().Add("operation", "BAN_REASONS")
-                .Add("list", lst)
-                .Build();
+                var reasons = new List<dynamic>();
 
-                API.SendNuiMessage(jsn);
+                foreach(LogItem item in lst)
+                {
+                    var r = new
+                    {
+                        logTypeId = item.LogTypeId,
+                        group = item.Group,
+                        description = item.Description,
+                        playerHandle = item.PlayerHandle
+                    };
+                    reasons.Add(r);
+                }
 
-                return null;
+                return reasons;
             }));
 
             Instance.AttachNuiHandler("BanPlayer", new AsyncEventCallback(async metadata =>
@@ -66,13 +74,21 @@ namespace Curiosity.Core.Client.Managers
 
                 List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:kick:list");
 
-                string jsn = new JsonBuilder().Add("operation", "KICK_REASONS")
-                .Add("list", lst)
-                .Build();
+                var reasons = new List<dynamic>();
 
-                API.SendNuiMessage(jsn);
+                foreach (LogItem item in lst)
+                {
+                    var r = new
+                    {
+                        logTypeId = item.LogTypeId,
+                        group = item.Group,
+                        description = item.Description,
+                        playerHandle = item.PlayerHandle
+                    };
+                    reasons.Add(r);
+                }
 
-                return null;
+                return reasons;
             }));
 
             Instance.AttachNuiHandler("KickPlayer", new AsyncEventCallback(async metadata =>

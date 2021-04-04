@@ -269,7 +269,7 @@ namespace Curiosity.Core.Client
         {
             API.RegisterNuiCallbackType(pipe);
 
-            EventHandlers[$"__cfx_nui:{pipe}"] += new Action<IDictionary<string, object>, CallbackDelegate>((body, result) =>
+            EventHandlers[$"__cfx_nui:{pipe}"] += new Action<IDictionary<string, object>, CallbackDelegate>(async (body, result) =>
             {
                 var metadata = new EventMetadata();
 
@@ -291,14 +291,12 @@ namespace Curiosity.Core.Client
 
                 if (callback.GetType() == typeof(AsyncEventCallback))
                 {
-                    ((AsyncEventCallback)callback).AsyncTask(metadata);
+                    result(await((AsyncEventCallback)callback).AsyncTask(metadata));
                 }
                 else
                 {
-                    callback.Task(metadata);
+                    result(callback.Task(metadata));
                 }
-
-                result(new { ok = true });
             });
         }
     }
