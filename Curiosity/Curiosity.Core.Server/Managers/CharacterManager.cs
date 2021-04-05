@@ -277,14 +277,27 @@ namespace Curiosity.Core.Server.Managers
 
                     int playerId = 0;
                     if (!int.TryParse(playerHandle, out playerId))
+                    {
                         exportMessage.Error = "First parameter is not a number";
+                        return $"{exportMessage}";
+                    }
 
                     if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                    {
                         exportMessage.Error = "Player was not found";
+                        return $"{exportMessage}";
+                    }
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
-                    int newSkillValue = await Database.Store.StatDatabase.Adjust(user.Character.CharacterId, statId, amt);
+                    if (!Enum.TryParse($"{statId}", out Stat stat))
+                    {
+                        exportMessage.Error = "StatID failed parse";
+                        return $"{exportMessage}";
+                    }
+
+
+                    int newSkillValue = await Database.Store.StatDatabase.Adjust(user.Character.CharacterId, stat, amt);
 
                     user.Character.Stats = await Database.Store.StatDatabase.Get(user.Character.CharacterId);
 
