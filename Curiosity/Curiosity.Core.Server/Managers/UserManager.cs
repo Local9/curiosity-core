@@ -1,6 +1,8 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
 using Curiosity.Core.Server.Web.Discord.Entity;
 using Curiosity.Systems.Library.Entity;
@@ -172,13 +174,20 @@ namespace Curiosity.Core.Server.Managers
                         NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
                         nfi.CurrencyPositivePattern = 0;
 
+                        int playerPedId = API.GetPlayerPed($"{metadata.Sender}");
+
+                        if (API.DoesEntityExist(playerPedId))
+                        {
+                            user.Character.Health = API.GetEntityHealth(playerPedId);
+                        }
+
                         additionalData.fields.Add(new Field("Life V ID", $"{user.UserId}", true));
                         additionalData.fields.Add(new Field("DiscordID", $"{user.DiscordId}", true));
                         additionalData.fields.Add(new Field("CharacterID", $"{user.Character.CharacterId}", true));
                         additionalData.fields.Add(new Field("Joined", $"{user.DateCreated.ToString("yyyy-MM-dd HH:mm")}"));
                         additionalData.fields.Add(new Field("Health", $"{user.Character.Health}", true));
-                        additionalData.fields.Add(new Field("Armor", $"{user.Character.Armor}", true));
                         additionalData.fields.Add(new Field("Cash", $"{string.Format(nfi, "{0:C0}", user.Character.Cash)}", true));
+                        additionalData.fields.Add(new Field("Ping", $"{API.GetPlayerPing($"{metadata.Sender}")}ms", true));
 
                         additionalData.Color = (int)DiscordColor.Blue;
                     }
@@ -219,7 +228,7 @@ namespace Curiosity.Core.Server.Managers
             }));
         }
 
-        private static void AddTestEmbed(DiscordWebhook discordWebhook, Webhook webhook)
+        private void AddTestEmbed(DiscordWebhook discordWebhook, Webhook webhook)
         {
             if (!PluginManager.IsLive)
             {
@@ -232,12 +241,20 @@ namespace Curiosity.Core.Server.Managers
             }
         }
 
-        static void OnPlayerDropped([FromSource] Player player, string reason)
+        async void OnPlayerDropped([FromSource] Player player, string reason)
         {
             int playerHandle = int.Parse(player.Handle);
             if (PluginManager.ActiveUsers.ContainsKey(playerHandle))
             {
                 CuriosityUser curUser = PluginManager.ActiveUsers[playerHandle];
+
+                int playerPed = API.GetPlayerPed(player.Handle);
+                if (API.DoesEntityExist(playerPed))
+                {
+                    Vector3 pos = API.GetEntityCoords(playerPed);
+                    curUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z);
+                    await curUser.Character.Save();
+                }
 
                 bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);
                 bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
@@ -255,8 +272,9 @@ namespace Curiosity.Core.Server.Managers
                 bool failuresRemoved = MissionManager.FailureTracker.TryRemove(curUser.UserId, out int numFailed);
                 bool missionRemoved = MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData old);
 
-                ChatManager.OnLogMessage($"Player '{player.Name}' has Disconneded: '{reason}'");
+                QueueManager.GetModule().OnPlayerDropped(player, reason);
 
+                ChatManager.OnLogMessage($"Player '{player.Name}' has Disconneded: '{reason}'");
                 Logger.Debug($"Player: {player.Name} disconnected ({reason}), UR: {userRemoved}, HM: {userHadMission}, MR: {missionRemoved}, FR: {failuresRemoved}");
             }
         }

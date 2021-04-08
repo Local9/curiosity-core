@@ -68,7 +68,6 @@ namespace Curiosity.Core.Server.Managers
             SetupConvars();
 
             Instance.EventRegistry["playerConnecting"] += new Action<Player, string, CallbackDelegate, ExpandoObject>(OnConnect);
-            Instance.EventRegistry["playerDropped"] += new Action<Player, string>(OnPlayerDropped);
             Instance.EventRegistry["onResourceStop"] += new Action<string>(OnResourceStop);
 
             Instance.AttachTickHandler(SetupTimer);
@@ -716,7 +715,7 @@ namespace Curiosity.Core.Server.Managers
             }
         }
 
-        void OnPlayerDropped([FromSource] Player source, string message)
+        public void OnPlayerDropped(Player source, string message)
         {
             try
             {

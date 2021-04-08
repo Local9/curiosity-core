@@ -133,14 +133,6 @@ namespace Curiosity.Core.Client
         {
             if (Local?.Character != null)
             {
-                if (Local.Character.MarkedAsRegistered)
-                {
-                    Local.Character.LastPosition = Local.Entity.Position;
-                    Local.Character.Health = Cache.PlayerPed.Health;
-                    Local.Character.Armor = Cache.PlayerPed.Armor;
-                    Local.Character.Save();
-                }
-
                 if (!Cache.Player.User.IsStaff && IsAfkKickEnabled)
                 {
                     if (lastPosition != (lastPosition = Cache.PlayerPed.Position))
