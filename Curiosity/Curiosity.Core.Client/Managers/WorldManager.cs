@@ -82,97 +82,6 @@ namespace Curiosity.Core.Client.Managers
             API.SetWeatherOwnedByNetwork(false);
         }
 
-        private void EnableScenario(string scenario)
-        {
-            if (IsScenarioGroupEnabled(scenario))
-                SetScenarioGroupEnabled(scenario, true);
-        }
-
-        private void DisableScenario(string scenario)
-        {
-            if (IsScenarioGroupEnabled(scenario))
-                SetScenarioGroupEnabled(scenario, false);
-        }
-
-        private async void LoadScenarios()
-        {
-            await Session.Loading();
-            // Zancudo
-            EnableScenario("fort_zancudo_guards");
-            DisableScenario("army_guard");
-            DisableScenario("army_heli");
-            // Zancudo Types
-            DisableScenario("WORLD_VEHICLE_MILITARY_PLANES_SMALL");
-            DisableScenario("WORLD_VEHICLE_MILITARY_PLANES_BIG");
-            // Air
-            EnableScenario("blimp");
-            DisableScenario("lsa_planes");
-            DisableScenario("sandy_planes");
-            DisableScenario("grapeseed_planes");
-            DisableScenario("ng_planes");
-            // cinemas
-            EnableScenario("cinema_downtown");
-            EnableScenario("cinema_morningwood");
-            EnableScenario("cinema_textile");
-            // Banks
-            EnableScenario("city_banks");
-            EnableScenario("countryside_banks");
-            EnableScenario("paleto_bank");
-            // police
-            EnableScenario("guards_at_prison");
-            EnableScenario("paleto_cops");
-            EnableScenario("police_at_court");
-            EnableScenario("police_pound1");
-            EnableScenario("police_pound2");
-            EnableScenario("police_pound3");
-            EnableScenario("police_pound4");
-            EnableScenario("police_pound5");
-            EnableScenario("prison_towers");
-            EnableScenario("prison_transport");
-            EnableScenario("sandy_cops");
-            EnableScenario("mp_police");
-            EnableScenario("mp_police2");
-            // FIB
-            EnableScenario("fib_group_1");
-            EnableScenario("fib_group_2");
-            // Extra groups
-            EnableScenario("scrap_security");
-            EnableScenario("vagos_hangout");
-            EnableScenario("lost_hangout");
-            EnableScenario("lost_bikers");
-            EnableScenario("observatory_bikers");
-            EnableScenario("chinese2_hillbillies");
-            EnableScenario("chinese2_lunch");
-            EnableScenario("movie_studio_security");
-            // facilities
-            EnableScenario("facility_cannon");
-            EnableScenario("facility_main_1");
-            EnableScenario("facility_main_2");
-            EnableScenario("facility_main_3");
-            // Others
-            EnableScenario("dealership");
-            EnableScenario("kortz_security");
-            EnableScenario("ammunation");
-            EnableScenario("rampage1");
-            EnableScenario("sew_machine");
-            EnableScenario("solomon_gate");
-            EnableScenario("attract_pap");
-            EnableScenario("quarry");
-            // Night Clubs
-            EnableScenario("club_cypress_flats_warehouse");
-            EnableScenario("club_del_perro_building");
-            EnableScenario("club_vinewood_dt");
-            EnableScenario("club_elysian_island_warehouse");
-            EnableScenario("club_la_mesa_warehouse");
-            EnableScenario("club_lsia_warehouse");
-            EnableScenario("club_mission_row_building");
-            EnableScenario("club_strawberry_warehouse");
-            EnableScenario("club_vespucci_canals_building");
-            EnableScenario("club_west_vinewood_building");
-            // Animals
-            EnableScenario("armenian_cats");
-        }
-
         private async void UnloadLosSantosIpls()
         {
             // Ferris Wheel
@@ -404,8 +313,6 @@ namespace Curiosity.Core.Client.Managers
                 });
 
                 vehicles = null;
-
-                LoadScenarios();
 
                 lastRunVehicleSuppression = DateTime.Now;
             }
