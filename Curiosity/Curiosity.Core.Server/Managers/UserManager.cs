@@ -254,6 +254,7 @@ namespace Curiosity.Core.Server.Managers
                     Vector3 pos = API.GetEntityCoords(playerPed);
                     curUser.Character.LastPosition = new Position(pos.X, pos.Y, pos.Z);
                     await curUser.Character.Save();
+                    Logger.Debug($"Player: {player.Name} position saved");
                 }
 
                 bool userRemoved = PluginManager.ActiveUsers.TryRemove(playerHandle, out CuriosityUser curiosityUserOld);

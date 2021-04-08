@@ -211,13 +211,17 @@ namespace Curiosity.Core.Client.Managers
             //RequestIpl("xn_h4_islandx_terrain_06_slod");
         }
 
-        [TickHandler(SessionWait = true)]
-        private async static Task OnRemoveCargoShip()
-        {
-            await BaseScript.Delay(0);
-            RemoveIpl("cargoship");
-            RemoveIpl("sunkcargoship");
-        }
+        //[TickHandler(SessionWait = true)]
+        //private async static Task OnRemoveCargoShip()
+        //{
+        //    await BaseScript.Delay(10);
+
+        //    if (IsIplActive("cargoship"))
+        //        RemoveIpl("cargoship");
+
+        //    if (IsIplActive("sunkcargoship"))
+        //        RemoveIpl("sunkcargoship");
+        //}
 
         [TickHandler]
         private async Task OnWeatherSyncTick()
