@@ -25,48 +25,48 @@ namespace Curiosity.LifeV.Bot.EventHandler
             {
                 if (before.Roles.Count != after.Roles.Count)
                 {
-                    List<ulong> roleIdList = new List<ulong>();
-
-                    after.Roles.ToList().ForEach(role =>
-                    {
-                        roleIdList.Add(role.Id);
-                    });
-
-                    bool hasDonatorRole = roleIdList.Contains(541955570601558036) // LIFE
-                        || roleIdList.Contains(588440994543042560) // L2
-                        || roleIdList.Contains(588443443496222720) // L1
-                        || roleIdList.Contains(588444129722105856); // L3
-
                     Models.User dbUser = await new Models.User().FindUserAsync(after.Id);
 
                     if (dbUser == null) return;
 
+                    List<ulong> newUserRoles = new List<ulong>();
+
+                    after.Roles.ToList().ForEach(role =>
+                    {
+                        newUserRoles.Add(role.Id);
+                    });
+
+                    bool hasDonatorRole = newUserRoles.Contains(541955570601558036) // LIFE
+                        || newUserRoles.Contains(588440994543042560) // L2
+                        || newUserRoles.Contains(588443443496222720) // L1
+                        || newUserRoles.Contains(588444129722105856); // L3
+
                     Role donatorRole = Role.USER;
 
-                    if (roleIdList.Contains(541955570601558036))
+                    if (newUserRoles.Contains(541955570601558036))
                     {
                         donatorRole = Role.DONATOR_LIFE;
                     }
 
-                    if (roleIdList.Contains(588443443496222720)) // Lv1
+                    if (newUserRoles.Contains(588443443496222720)) // Lv1
                     {
                         donatorRole = Role.DONATOR_LEVEL_1;
                     }
 
-                    if (roleIdList.Contains(588440994543042560)) // Lv2
+                    if (newUserRoles.Contains(588440994543042560)) // Lv2
                     {
                         donatorRole = Role.DONATOR_LEVEL_2;
                     }
 
-                    if (roleIdList.Contains(588444129722105856)) // Lv3
+                    if (newUserRoles.Contains(588444129722105856)) // Lv3
                     {
                         donatorRole = Role.DONATOR_LEVEL_3;
                     }
 
+                    if (dbUser.UserRole == donatorRole) return; // No change, feck off
+
                     if (hasDonatorRole)
                     {
-                        if (dbUser.UserRole == donatorRole) return;
-
                         await dbUser.AddDonatorStatus((int)donatorRole);
                     }
                     else

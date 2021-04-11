@@ -28,6 +28,8 @@ namespace Curiosity.LifeV.Bot
 
         private ulong guildId;
 
+        DateTime lastSentTrigger = DateTime.Now.AddMinutes(-10);
+
         static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
 
         private async Task RunBotAsync()
@@ -122,7 +124,19 @@ namespace Curiosity.LifeV.Bot
 
                     builder.WithImageUrl("https://cdn.discordapp.com/attachments/138522037181349888/438774275546152960/Ping_Discordapp_GIF-downsized_large.gif");
 
-                    await context.Channel.SendMessageAsync("", false, builder.Build());
+                    await context.Channel.SendMessageAsync(embed: builder.Build());
+                }
+                else if (message.Content.Contains("guns") || message.Content.Contains("weapons") || message.Content.Contains("weapon") || message.Content.Contains("gun"))
+                {
+                    if (message.Channel.Id == 599956067686023176) return;
+
+                    if (DateTime.Now.Subtract(lastSentTrigger).TotalMinutes < 5) return;
+
+                    await Task.Delay(1000);
+                    await context.Channel.SendMessageAsync("Weapons are currently in refactoring with the new framework, this is to allow you to purchase licenses for weapons and earn components. There is no E.T.A. as to when this will be completed as ::1 is also trying to support OneSync and the Casino or latest updates to GTA.");
+
+                    lastSentTrigger = DateTime.Now;
+                    return;
                 }
                 else if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
                 {
