@@ -1,10 +1,12 @@
 ﻿using Curiosity.LifeV.Bot.Entities;
+using Curiosity.LifeV.Bot.EventHandler;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,6 +21,8 @@ namespace Curiosity.LifeV.Bot
         private CommandService _commands;
         private IServiceProvider _services;
         private TimedEvents _timedEvents;
+
+        private GuildMemberUpdated _guildMemberUpdated;
 
         private DiscordConfiguration discordConfiguration;
 
@@ -61,8 +65,6 @@ namespace Curiosity.LifeV.Bot
 
             _client.Log += Client_Log;
 
-            // _client.GuildMemberUpdated += _client_GuildMemberUpdated;
-
             await RegisterCommandsAsync();
 
             bool testing = Convert.ToBoolean(discordConfiguration.BotSettings["Testing"]);
@@ -80,15 +82,15 @@ namespace Curiosity.LifeV.Bot
             if (ulong.TryParse(guildIdStr, out guildId))
             {
                 _timedEvents = new TimedEvents(_client, guildId);
+
+                GuildMemberUpdated._client = _client;
+                GuildMemberUpdated._guildId = guildId;
             }
+
+            _client.GuildMemberUpdated += GuildMemberUpdated.Handle;
 
             await Task.Delay(-1);
         }
-
-        //private Task _client_GuildMemberUpdated(SocketGuildUser before, SocketGuildUser after)
-        //{
-            
-        //}
 
         private Task Client_Log(LogMessage arg)
         {
