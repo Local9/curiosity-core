@@ -92,13 +92,9 @@ namespace Curiosity.LifeV.Bot.EventHandler
                         .WithCurrentTimestamp()
                         .WithFooter("Forums: https://forums.lifev.net");
 
-                    if (dbUser.DiscordId > 0)
-                    {
-                        ulong id = (ulong)dbUser.DiscordId;
-                        SocketGuildUser user = _client.GetGuild(_guildId).GetUser(id);
-                        if (user != null)
-                            user.SendMessageAsync(embed: builder.Build());
-                    }
+                    SocketGuildUser user = _client.GetGuild(_guildId).GetUser(after.Id);
+                    if (user != null)
+                        user.SendMessageAsync(embed: builder.Build());
                 }
                 
             }
