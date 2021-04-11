@@ -1,4 +1,5 @@
 ﻿using Curiosity.LifeV.Bot.Entities.Curiosity;
+using Curiosity.LifeV.Bot.Tools;
 using Discord;
 using Discord.WebSocket;
 using System;
@@ -15,6 +16,8 @@ namespace Curiosity.LifeV.Bot.EventHandler
         public static ulong _guildId;
 
         private static int _errorCount = 0;
+
+        public static object StringValue { get; private set; }
 
         public static async Task Handle(SocketGuildUser before, SocketGuildUser after)
         {
@@ -73,16 +76,29 @@ namespace Curiosity.LifeV.Bot.EventHandler
 
                     EmbedBuilder builder = new EmbedBuilder();
 
-                    builder
-                        .AddField("Player", $"{dbUser.Username}#{dbUser.UserId}", true)
-                        .AddField("DiscordID", $"{dbUser.DiscordId}", true)
-                        .AddField("Original Role", $"{dbUser.UserRole}", true)
-                        .AddField("New Role", $"{donatorRole}", true)
-                        .WithColor(hasDonatorRole ? Color.Green : Color.Blue)
+                    builder.AddField("Player", $"{dbUser.Username}#{dbUser.UserId}");
+
+                    if (hasDonatorRole)
+                    {
+                        builder.AddField("Supporter Level", $"{StringValueAttribute.GetStringValue(donatorRole)}");
+                    }
+                    else
+                    {
+                        builder.AddField("Supporter Level", $"We're sorry to see you go, if there is anything you'd like use to improve please let us know on our forums. We hope to see you return.");
+                        builder.AddField("Temp Message", $"::1 knows about the current issues with delays and has been working on a new framework, please keep your eye out for more information in the future.");
+                    }
+
+                    builder.WithColor(hasDonatorRole ? Color.Green : Color.Blue)
                         .WithCurrentTimestamp()
                         .WithFooter("Forums: https://forums.lifev.net");
 
-                    _client.GetGuild(_guildId).GetTextChannel(CURIOSITY_BOT_TEXT_CHANNEL).SendMessageAsync(embed: builder.Build());
+                    if (dbUser.DiscordId > 0)
+                    {
+                        ulong id = (ulong)dbUser.DiscordId;
+                        SocketGuildUser user = _client.GetGuild(_guildId).GetUser(id);
+                        if (user != null)
+                            user.SendMessageAsync(embed: builder.Build());
+                    }
                 }
                 
             }
