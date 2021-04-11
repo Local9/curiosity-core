@@ -62,9 +62,13 @@ namespace Curiosity.LifeV.Bot
 
                 KeyValuePair<string, string> server = servers.ElementAt(currentServer);
 
-                string serverInformation = await Tools.HttpTools.GetUrlResultAsync($"http://{server.Value}/info.json");
+                string serverInformation = string.Empty;
 
-                if (string.IsNullOrEmpty(serverInformation))
+                try
+                {
+                    serverInformation = await Tools.HttpTools.GetUrlResultAsync($"http://{server.Value}/info.json");
+                }
+                catch (Exception ex)
                 {
                     _client.SetGameAsync($"{server.Key} : Server Offline");
                     return;
