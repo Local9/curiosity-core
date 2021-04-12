@@ -54,6 +54,8 @@ namespace Curiosity.Core.Client
         {
             Logger.Info("[Curiosity]: Constructor Call from CitizenFX - BaseScript");
 
+            EventHandlers["onResourceStop"] += new Action<string>(OnResourceStop);
+
             PlayerList = Players;
 
             Instance = this;
@@ -61,6 +63,13 @@ namespace Curiosity.Core.Client
             API.DoScreenFadeOut(0);
 
             Load();
+        }
+
+        private async void OnResourceStop(string resourceName)
+        {
+            if (API.GetCurrentResourceName() != resourceName) return;
+
+            await Local.Character.Save();
         }
 
         private async Task Load()
@@ -128,49 +137,49 @@ namespace Curiosity.Core.Client
             Logger.Info("Load method has been completed.");
         }
 
+        //[TickHandler]
+        //private async Task OnAfkKick()
+        //{
+        //    if (Local?.Character != null)
+        //    {
+        //        if (!Cache.Player.User.IsStaff && IsAfkKickEnabled)
+        //        {
+        //            if (lastPosition != (lastPosition = Cache.PlayerPed.Position))
+        //                lastTimePlayerStayedStill = DateTime.Now;
+
+        //            if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds >= 900)
+        //            {
+        //                EventSystem.GetModule().Send("user:kick:afk");
+        //                return;
+        //            }
+
+        //            if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 780)
+        //            {
+        //                Notify.Custom("Time remaining before you're kicked for idling: 13m00s");
+        //            }
+
+        //            if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 600)
+        //            {
+        //                Notify.Custom("Time remaining before you're kicked for idling: 10m00s");
+        //            }
+
+        //            if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 300)
+        //            {
+        //                Notify.Custom("Time remaining before you're kicked for idling: 05m00s");
+        //            }
+
+        //            if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 180)
+        //            {
+        //                Notify.Custom("Time remaining before you're kicked for idling: 02m00s");
+        //            }
+        //        }
+        //    }
+
+        //    await Delay(5000);
+        //}
+
         [TickHandler]
-        private async Task SaveTask()
-        {
-            if (Local?.Character != null)
-            {
-                if (!Cache.Player.User.IsStaff && IsAfkKickEnabled)
-                {
-                    if (lastPosition != (lastPosition = Cache.PlayerPed.Position))
-                        lastTimePlayerStayedStill = DateTime.Now;
-
-                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds >= 900)
-                    {
-                        EventSystem.GetModule().Send("user:kick:afk");
-                        return;
-                    }
-
-                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 780)
-                    {
-                        Notify.Custom("Time remaining before you're kicked for idling: 13m00s");
-                    }
-
-                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 600)
-                    {
-                        Notify.Custom("Time remaining before you're kicked for idling: 10m00s");
-                    }
-
-                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 300)
-                    {
-                        Notify.Custom("Time remaining before you're kicked for idling: 05m00s");
-                    }
-
-                    if (DateTime.Now.Subtract(lastTimePlayerStayedStill).TotalSeconds == 180)
-                    {
-                        Notify.Custom("Time remaining before you're kicked for idling: 02m00s");
-                    }
-                }
-            }
-
-            await Delay(5000);
-        }
-
-        [TickHandler]
-        private async Task OnTick()
+        private async Task OnGeneralTick()
         {
             // Screen.Hud.HideComponentThisFrame(HudComponent.Reticle);
             // Screen.Hud.HideComponentThisFrame(HudComponent.WeaponWheel);
