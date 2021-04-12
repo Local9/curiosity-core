@@ -21,6 +21,9 @@ namespace Curiosity.Core.Client.Discord
             AppId = appId;
             Asset = asset;
             AssetText = assetText;
+
+            API.SetDiscordRichPresenceAction(0, "Join Server", "fivem://connect/5.9.0.85:30120");
+            API.SetDiscordRichPresenceAction(1, "Visit Forums", "https://forums.lifev.net");
         }
 
         public void Commit()
