@@ -10,8 +10,8 @@ namespace Curiosity.Core.Client.Managers
 {
     public class PlayerStatManager : Manager<PlayerStatManager>
     {
-        const int MAX_LEVEL = 100;
-        const int MAX_EXP = 14391160;
+        public const int MAX_LEVEL = 100;
+        public const int MAX_EXP = 14391160;
 
         bool isSetup = false;
 
@@ -101,55 +101,61 @@ namespace Curiosity.Core.Client.Managers
                 swimStart = DEFAULT;
                 swimEnd = DEFAULT;
             }
+        }
 
-            static void UpdateStat(string stat, string message, int newLevel)
+        void UpdateStat(string stat, string message, int newLevel)
+        {
+            uint hash = (uint)API.GetHashKey(stat);
+
+            int currentStatValue = 0;
+            API.StatGetInt(hash, ref currentStatValue, -1);
+            
+            SetStatValue(newLevel, hash);
+
+            int newStatValue = 0;
+            API.StatGetInt(hash, ref newStatValue, -1);
+
+            if (currentStatValue != newStatValue)
             {
-                int currentStatValue = 0;
-                uint hash = (uint)API.GetHashKey(stat);
-                API.StatGetInt(hash, ref currentStatValue, -1);
+                NotificationManger.GetModule().Success(message);
+            }
+        }
 
-                if (newLevel < 10)
-                {
-                    API.StatSetInt(hash, 0, true);
-                }
+        public void SetStatValue(int newLevel, uint hash)
+        {
+            if (newLevel < 10)
+            {
+                API.StatSetInt(hash, 0, true);
+            }
 
-                if (newLevel >= 10 && newLevel < 20)
-                {
-                    API.StatSetInt(hash, 20, true);
-                }
+            if (newLevel >= 10 && newLevel < 20)
+            {
+                API.StatSetInt(hash, 20, true);
+            }
 
-                if (newLevel >= 20 && newLevel < 30)
-                {
-                    API.StatSetInt(hash, 40, true);
-                }
+            if (newLevel >= 20 && newLevel < 30)
+            {
+                API.StatSetInt(hash, 40, true);
+            }
 
-                if (newLevel >= 30 && newLevel < 40)
-                {
-                    API.StatSetInt(hash, 60, true);
-                }
+            if (newLevel >= 30 && newLevel < 40)
+            {
+                API.StatSetInt(hash, 60, true);
+            }
 
-                if (newLevel >= 40 && newLevel < 50)
-                {
-                    API.StatSetInt(hash, 80, true);
-                }
+            if (newLevel >= 40 && newLevel < 50)
+            {
+                API.StatSetInt(hash, 80, true);
+            }
 
-                if (newLevel >= 50 && newLevel < 60)
-                {
-                    API.StatSetInt(hash, 100, true);
-                }
+            if (newLevel >= 50 && newLevel < 60)
+            {
+                API.StatSetInt(hash, 100, true);
+            }
 
-                if (newLevel >= 60)
-                {
-                    API.StatSetInt(hash, 100, true);
-                }
-
-                int newStatValue = 0;
-                API.StatGetInt(hash, ref newStatValue, -1);
-
-                if (currentStatValue != newStatValue)
-                {
-                    NotificationManger.GetModule().Success(message);
-                }
+            if (newLevel >= 60)
+            {
+                API.StatSetInt(hash, 100, true);
             }
         }
     }
