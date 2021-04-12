@@ -60,6 +60,7 @@ namespace Curiosity.Core.Client.Managers
 
                 var profile = new
                 {
+                    handle = curiosityUser.Handle,
                     userId = curiosityUser.UserId,
                     name = curiosityUser.LatestName,
                     role = curiosityUser.Role.GetStringValue(),

@@ -268,6 +268,7 @@ namespace Curiosity.Core.Client
 
         public void AttachNuiHandler(string pipe, EventCallback callback)
         {
+            // Logger.Info($"[NUI]: {pipe}");
             API.RegisterNuiCallbackType(pipe);
 
             EventHandlers[$"__cfx_nui:{pipe}"] += new Action<IDictionary<string, object>, CallbackDelegate>(async (body, result) =>
@@ -284,6 +285,13 @@ namespace Curiosity.Core.Client
                                 $"[Nui] [{pipe}] Payload `{entry.Key}` is not a number and therefore not written to.");
 
                             continue;
+                        }
+
+                        if (entry.Value is null)
+                        {
+                            Logger.Error($"[Nui] [{pipe}]  Payload `{entry.Key}` value is null. Ending message.");
+                            result(new { success = false });
+                            return;
                         }
 
                         metadata.Write(index, entry.Value);

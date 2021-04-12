@@ -15,7 +15,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:ban:list");
@@ -42,7 +42,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 int playerToBan = metadata.Find<int>(0);
@@ -61,7 +61,7 @@ namespace Curiosity.Core.Client.Managers
                     NotificationManger.GetModule().Warn("User was not banned.");
                 }
 
-                return null;
+                return new { success = success };
             }));
 
             Instance.AttachNuiHandler("KickReasons", new AsyncEventCallback(async metadata =>
@@ -69,7 +69,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 List<LogItem> lst = await EventSystem.Request<List<LogItem>>("user:kick:list");
@@ -96,7 +96,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 int playerToKick = metadata.Find<int>(0);
@@ -116,7 +116,7 @@ namespace Curiosity.Core.Client.Managers
                     NotificationManger.GetModule().Warn("User was not kicked.");
                 }
 
-                return null;
+                return new { success = success };
             }));
 
             Instance.AttachNuiHandler("FreezePlayer", new AsyncEventCallback(async metadata =>
@@ -124,7 +124,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 int playerToFreeze = metadata.Find<int>(0);
@@ -140,7 +140,7 @@ namespace Curiosity.Core.Client.Managers
                     NotificationManger.GetModule().Warn("User was not frozen.");
                 }
 
-                return null;
+                return new { success = success };
             }));
 
             Instance.AttachNuiHandler("WarnPlayer", new AsyncEventCallback(async metadata =>
@@ -148,7 +148,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 int playerToWarn = metadata.Find<int>(0);
@@ -167,7 +167,7 @@ namespace Curiosity.Core.Client.Managers
                     NotificationManger.GetModule().Warn("User was not warned.");
                 }
 
-                return null;
+                return new { success = success };
             }));
 
             Instance.AttachNuiHandler("RevivePlayer", new AsyncEventCallback(async metadata =>
@@ -175,7 +175,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 int playerToRevive = metadata.Find<int>(0);
@@ -191,7 +191,7 @@ namespace Curiosity.Core.Client.Managers
                     NotificationManger.GetModule().Warn("User was not revived.");
                 }
 
-                return null;
+                return new { success = success };
             }));
 
             Instance.AttachNuiHandler("BringPlayer", new AsyncEventCallback(async metadata =>
@@ -199,7 +199,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 int playerToRevive = metadata.Find<int>(0);
@@ -215,7 +215,7 @@ namespace Curiosity.Core.Client.Managers
                     NotificationManger.GetModule().Warn("User was not teleported.");
                 }
 
-                return null;
+                return new { success = success };
             }));
 
             Instance.AttachNuiHandler("GotoPlayer", new AsyncEventCallback(async metadata =>
@@ -223,7 +223,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 int playerToRevive = metadata.Find<int>(0);
@@ -239,7 +239,7 @@ namespace Curiosity.Core.Client.Managers
                     NotificationManger.GetModule().Warn("Was not teleported.");
                 }
 
-                return null;
+                return new { success = success };
             }));
 
             Instance.AttachNuiHandler("SpectatePlayer", new AsyncEventCallback(async metadata =>
@@ -247,7 +247,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 int playerHandle = metadata.Find<int>(0);
@@ -263,7 +263,7 @@ namespace Curiosity.Core.Client.Managers
                     NotificationManger.GetModule().Warn("Unable to spectate player.");
                 }
 
-                return null;
+                return new { success = success };
             }));
 
             Instance.AttachNuiHandler("SpectateStop", new AsyncEventCallback(async metadata =>
@@ -271,7 +271,7 @@ namespace Curiosity.Core.Client.Managers
                 if (!Cache.Player.User.IsAdmin)
                 {
                     NotificationManger.GetModule().Warn("You do not have the permission to use this.");
-                    return null;
+                    return new { success = false };
                 }
 
                 int playerToRevive = metadata.Find<int>(0);
@@ -287,7 +287,7 @@ namespace Curiosity.Core.Client.Managers
                     NotificationManger.GetModule().Warn("Issue when trying to cancel spectate.");
                 }
 
-                return null;
+                return new { success = success };
             }));
         }
     }
