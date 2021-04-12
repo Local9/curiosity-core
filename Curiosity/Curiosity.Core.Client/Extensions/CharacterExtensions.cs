@@ -76,7 +76,10 @@ namespace Curiosity.Core.Client.Extensions
         {
             character.LastPosition = Cache.Entity.Position;
 
-            await EventSystem.GetModule().Request<object>("character:save", character);
+            bool success = await EventSystem.GetModule().Request<bool>("character:save", character);
+
+            if (success)
+                Logger.Debug($"Character Saved");
 
             // Logger.Info($"[Characters] Saved `{character.CharacterId}` and it's changes.");
         }
@@ -237,6 +240,11 @@ namespace Curiosity.Core.Client.Extensions
             {
                 try
                 {
+                    if (Screen.LoadingPrompt.IsActive)
+                    {
+                        Screen.LoadingPrompt.Hide();
+                    }
+
                     if (!menuDisplayed)
                     {
                         menuDisplayed = true;
@@ -272,6 +280,7 @@ namespace Curiosity.Core.Client.Extensions
             ).PlayQueue();
 
             API.DoScreenFadeOut(3000);
+            Screen.LoadingPrompt.Show("Loading...");
 
             await BaseScript.Delay(5500);
 
