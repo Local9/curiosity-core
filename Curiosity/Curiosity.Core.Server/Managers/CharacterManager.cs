@@ -48,12 +48,12 @@ namespace Curiosity.Core.Server.Managers
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
 
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 CuriosityCharacter curiosityCharacter = metadata.Find<CuriosityCharacter>(0);
 
-                if (user.Character.CharacterId != curiosityCharacter.CharacterId) return null;
+                if (user.Character.CharacterId != curiosityCharacter.CharacterId) return false;
 
                 curiosityCharacter.Cash = await Database.Store.BankDatabase.Get(curiosityCharacter.CharacterId);
 
@@ -77,7 +77,7 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 await curiosityCharacter.Save();
-                return null;
+                return true;
             }));
 
             EventSystem.GetModule().Attach("character:respawn", new EventCallback(metadata =>
