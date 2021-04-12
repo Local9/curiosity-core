@@ -70,7 +70,7 @@ namespace Curiosity.Core.Client.Managers
         {
             await Session.Loading();
 
-            if (!IsCoreOpen)
+            if (!IsCoreOpen && Cache.Character.MarkedAsRegistered)
             {
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();

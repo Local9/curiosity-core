@@ -8,6 +8,7 @@ using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Interface.Menus.Creator;
 using Curiosity.Core.Client.Interface.Menus.Data;
+using Curiosity.Core.Client.Managers;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -280,6 +281,12 @@ namespace Curiosity.Core.Client.Extensions
             ).PlayQueue();
 
             API.DoScreenFadeOut(3000);
+
+            /// STUPID HACK for character creation
+            var transition = new CharacterManager.LoadTransition();
+            await transition.Up(player);
+            await transition.Down(player);
+
             Screen.LoadingPrompt.Show("Loading...");
 
             await BaseScript.Delay(5500);
@@ -331,7 +338,7 @@ namespace Curiosity.Core.Client.Extensions
 
             await BaseScript.Delay(1000);
 
-            Notify.Info($"~w~Welcome ~y~{Game.Player.Name}~w~, press ~INPUT_FRONTEND_SOCIAL_CLUB~ or ~b~HOME~w~ key to get started.");
+            Notify.Info($"~w~Welcome ~y~{Game.Player.Name}~w~, press ~b~HOME~w~ key to get started.");
 
             Session.CreatingCharacter = false;
         }

@@ -1,5 +1,6 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Modules.Impl;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Managers;
@@ -17,9 +18,9 @@ namespace Curiosity.Core.Client
         {
             while (true)
             {
-                if (Cache.Player?.Character != null && Cache.Entity != null) break;
+                if (Cache.Player?.Character is not null && Cache.Entity is not null) break;
 
-                await BaseScript.Delay(100);
+                await BaseScript.Delay(1000);
             }
 
             await new CharacterManager.LoadTransition().DownWait();

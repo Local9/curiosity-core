@@ -106,7 +106,7 @@ namespace Curiosity.Core.Client.Environment.Entities
 
         public CuriosityEntity(int id)
         {
-            AnimationQueue = new AnimationQueue(Cache.PlayerPed.Handle);
+            AnimationQueue = new AnimationQueue(id);
 
             GameEventManager.OnPlayerKillPed += GameEventManager_OnPlayerKillPed;
             GameEventManager.OnPedKillPlayer += GameEventManager_OnPedKillPlayer;

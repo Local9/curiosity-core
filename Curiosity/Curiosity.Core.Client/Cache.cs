@@ -40,6 +40,7 @@ namespace Curiosity.Core.Client
         {
             PlayerPed = new Ped(PlayerPedId());
 
+
             if (export)
             {
                 PluginManager.Instance.ExportDictionary["curiosity-missions"].RefreshPlayerPed();
