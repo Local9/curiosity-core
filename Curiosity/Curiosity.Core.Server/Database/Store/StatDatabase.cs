@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Server.Extensions;
+﻿using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
@@ -28,7 +29,10 @@ namespace Curiosity.Core.Server.Database.Store
                 ResultSet keyValuePairs = await result;
 
                 if (keyValuePairs.Count == 0)
-                    throw new Exception("Stat was not changed");
+                {
+                    Logger.Error($"{statId} not changed");
+                    return 0;
+                }
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {

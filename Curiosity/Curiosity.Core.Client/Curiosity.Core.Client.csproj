@@ -70,6 +70,7 @@
     <Compile Include="Interface\Menus\SubMenu\VehicleRemoteMenu.cs" />
     <Compile Include="Managers\BlipManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
+    <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Managers\LocationManager.cs" />
     <Compile Include="Managers\ScenarioManager.cs" />
     <Compile Include="Managers\SpectateManager.cs" />

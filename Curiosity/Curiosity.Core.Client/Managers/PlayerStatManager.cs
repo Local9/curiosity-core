@@ -1,5 +1,8 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Interface;
+using Curiosity.Systems.Library.Enums;
 using System;
 using System.Threading.Tasks;
 
@@ -7,8 +10,18 @@ namespace Curiosity.Core.Client.Managers
 {
     public class PlayerStatManager : Manager<PlayerStatManager>
     {
+        const int MAX_LEVEL = 100;
+        const int MAX_EXP = 14391160;
+
+        bool isSetup = false;
+
         bool wasSprinting = false;
         bool wasSwimming = false;
+
+        protected int TotalSprinting = 0;
+        protected int TotalSwiming = 0;
+
+        LevelManager levelManager;
 
         DateTime DEFAULT = new DateTime(1970, 01, 01);
 
@@ -20,7 +33,7 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
-            
+            levelManager = LevelManager.GetModule();
         }
 
         [TickHandler(SessionWait = true)]
@@ -36,31 +49,107 @@ namespace Curiosity.Core.Client.Managers
                 wasSprinting = false;
                 sprintEnd = DateTime.Now;
                 // Log Duration
-                double sec = sprintEnd.Subtract(sprintStart).TotalSeconds;
-                Logger.Debug($"Duration Sprinted: {sec:0.00}");
+                double secondsSprinting = sprintEnd.Subtract(sprintStart).TotalSeconds;
                 // Send data back, update server, get total and find level with total, this then = Stamina Stat
+                int currentLevel = levelManager.GetLevelForXP(TotalSprinting, MAX_EXP, MAX_LEVEL);
+                int currentTotal = TotalSprinting;
+                int storedTotalSprinting = await EventSystem.Request<int>("character:update:stat:timed", Stat.STAT_SPRINTING, secondsSprinting);
+                TotalSprinting = storedTotalSprinting;
+
+                if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsSprinting), MAX_EXP, MAX_LEVEL))
+                {
+                    NotificationManger nm = NotificationManger.GetModule();
+                    int newLevel = levelManager.GetLevelForXP(TotalSprinting, MAX_EXP, MAX_LEVEL);
+                    UpdateStat(Cache.Character.MP0_STAMINA, "Sprinting Level Increased", newLevel);
+
+                } // TODO SETUP ON LOAD
+
+                Logger.Debug($"Duration Sprinted: {secondsSprinting:0.00}, currentLvl: {currentLevel}/{TotalSprinting}/{storedTotalSprinting}");
 
                 // Reset
                 sprintStart = DEFAULT;
                 sprintEnd = DEFAULT;
             }
 
-            if (Cache.PlayerPed.IsSwimming && !wasSwimming)
+            if (Cache.PlayerPed.IsSwimmingUnderWater && !wasSwimming)
             {
                 wasSwimming = true;
                 swimStart = DateTime.Now;
             }
-            else if (!Cache.PlayerPed.IsSwimming && wasSwimming)
+            else if (!Cache.PlayerPed.IsSwimmingUnderWater && wasSwimming)
             {
                 wasSwimming = false;
                 swimEnd = DateTime.Now;
 
-                double sec = swimEnd.Subtract(swimStart).TotalSeconds;
-                Logger.Debug($"Duration Swam: {sec:0.00}");
+                double secondsTotalSwiming = swimEnd.Subtract(swimStart).TotalSeconds;
+                Logger.Debug($"Duration Swam: {secondsTotalSwiming:0.00}");
+
+                int currentLevel = levelManager.GetLevelForXP(TotalSwiming, MAX_EXP, MAX_LEVEL);
+                int currentTotal = TotalSwiming;
                 // Send data back, update server, get total and find level with total, this then = Breathing Stat
+                int storedTotalSwiming = await EventSystem.Request<int>("character:update:stat:timed", Stat.STAT_SWIMMING, secondsTotalSwiming);
+                TotalSwiming = storedTotalSwiming;
+
+                if (levelManager.AddExp(currentLevel, currentTotal, (int)(secondsTotalSwiming), MAX_EXP, MAX_LEVEL))
+                {
+                    NotificationManger nm = NotificationManger.GetModule();
+                    int newLevel = levelManager.GetLevelForXP(TotalSprinting, MAX_EXP, MAX_LEVEL);
+                    UpdateStat(Cache.Character.MP0_LUNG_CAPACITY, "Breathing Level Increased", newLevel);
+
+                } // TODO SETUP ON LOAD
 
                 swimStart = DEFAULT;
                 swimEnd = DEFAULT;
+            }
+
+            static void UpdateStat(string stat, string message, int newLevel)
+            {
+                int currentStatValue = 0;
+                uint hash = (uint)API.GetHashKey(stat);
+                API.StatGetInt(hash, ref currentStatValue, -1);
+
+                if (newLevel < 10)
+                {
+                    API.StatSetInt(hash, 0, true);
+                }
+
+                if (newLevel >= 10 && newLevel < 20)
+                {
+                    API.StatSetInt(hash, 20, true);
+                }
+
+                if (newLevel >= 20 && newLevel < 30)
+                {
+                    API.StatSetInt(hash, 40, true);
+                }
+
+                if (newLevel >= 30 && newLevel < 40)
+                {
+                    API.StatSetInt(hash, 60, true);
+                }
+
+                if (newLevel >= 40 && newLevel < 50)
+                {
+                    API.StatSetInt(hash, 80, true);
+                }
+
+                if (newLevel >= 50 && newLevel < 60)
+                {
+                    API.StatSetInt(hash, 100, true);
+                }
+
+                if (newLevel >= 60)
+                {
+                    API.StatSetInt(hash, 100, true);
+                }
+
+                int newStatValue = 0;
+                API.StatGetInt(hash, ref newStatValue, -1);
+
+                if (currentStatValue != newStatValue)
+                {
+                    NotificationManger.GetModule().Success(message);
+                }
             }
         }
     }

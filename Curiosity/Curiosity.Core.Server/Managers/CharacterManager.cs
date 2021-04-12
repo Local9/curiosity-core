@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
@@ -177,20 +178,21 @@ namespace Curiosity.Core.Server.Managers
                 return returnVal;
             }));
 
-            EventSystem.GetModule().Attach("character:update:stat:sprinting", new AsyncEventCallback(async metadata =>
+            EventSystem.GetModule().Attach("character:update:stat:timed", new AsyncEventCallback(async metadata =>
             {
                 try
                 {
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
-                    double time = metadata.Find<double>(0);
+                    Stat stat = (Stat)metadata.Find<int>(0);
+                    double time = metadata.Find<double>(1);
 
-                    await Database.Store.StatDatabase.Adjust(curiosityUser.Character.CharacterId, Stat.STAT_SPRINTING, time);
-
-                    return true;
+                    int val = await Database.Store.StatDatabase.Adjust(curiosityUser.Character.CharacterId, stat, time);
+                    return val;
                 }
                 catch (Exception ex)
                 {
-                    return false;
+                    Logger.Error($"{ex}");
+                    return 0;
                 }
             }));
 
