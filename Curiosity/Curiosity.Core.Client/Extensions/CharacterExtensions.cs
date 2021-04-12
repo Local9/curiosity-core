@@ -346,10 +346,12 @@ namespace Curiosity.Core.Client.Extensions
         public static void SetupStats(this CuriosityCharacter character)
         {
             LevelManager levelManager = LevelManager.GetModule();
+            PlayerStatManager playerStatManager = PlayerStatManager.GetModule();
 
             foreach (CharacterStat stat in character.Stats)
             {
                 string statStr = "";
+                int lvl = 0;
                 switch ((Stat)stat.Id)
                 {
                     case Stat.STAT_FLYING_ABILITY:
@@ -357,12 +359,14 @@ namespace Curiosity.Core.Client.Extensions
                         break;
                     case Stat.STAT_SWIMMING: // DONE
                         statStr = character.MP0_LUNG_CAPACITY;
+                        playerStatManager.TotalSwiming = (int)stat.Value;
                         break;
                     case Stat.STAT_SHOOTING_ABILITY:
                         statStr = character.MP0_SHOOTING_ABILITY;
                         break;
                     case Stat.STAT_SPRINTING: // DONE
                         statStr = character.MP0_STAMINA;
+                        playerStatManager.TotalSprinting = (int)stat.Value;
                         break;
                     case Stat.STAT_STEALTH_ABILITY:
                         statStr = character.MP0_STEALTH_ABILITY;

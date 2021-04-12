@@ -18,8 +18,8 @@ namespace Curiosity.Core.Client.Managers
         bool wasSprinting = false;
         bool wasSwimming = false;
 
-        protected int TotalSprinting = 0;
-        protected int TotalSwiming = 0;
+        public int TotalSprinting = 0;
+        public int TotalSwiming = 0;
 
         LevelManager levelManager;
 
@@ -82,7 +82,6 @@ namespace Curiosity.Core.Client.Managers
                 swimEnd = DateTime.Now;
 
                 double secondsTotalSwiming = swimEnd.Subtract(swimStart).TotalSeconds;
-                Logger.Debug($"Duration Swam: {secondsTotalSwiming:0.00}");
 
                 int currentLevel = levelManager.GetLevelForXP(TotalSwiming, MAX_EXP, MAX_LEVEL);
                 int currentTotal = TotalSwiming;
@@ -97,6 +96,8 @@ namespace Curiosity.Core.Client.Managers
                     UpdateStat(Cache.Character.MP0_LUNG_CAPACITY, "Breathing Level Increased", newLevel);
 
                 } // TODO SETUP ON LOAD
+
+                Logger.Debug($"Duration Swam: {secondsTotalSwiming:0.00}. currentLvl: {currentLevel}/{TotalSwiming}/{storedTotalSwiming}");
 
                 swimStart = DEFAULT;
                 swimEnd = DEFAULT;
