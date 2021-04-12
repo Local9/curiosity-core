@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.Native;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
@@ -41,7 +42,7 @@ namespace Curiosity.Core.Server.Database.Store
                     curiosityCharacter.MarkedAsRegistered = kv["IsRegistered"].ToBoolean();
                     curiosityCharacter.Cash = kv["Cash"].ToLong();
 
-                    if (!curiosityCharacter.MarkedAsRegistered)
+                    if (!curiosityCharacter.MarkedAsRegistered && curiosityCharacter.Cash == 0)
                         curiosityCharacter.Cash = starterCash;
                 }
 
@@ -51,7 +52,11 @@ namespace Curiosity.Core.Server.Database.Store
 
         public static async Task Save(CuriosityCharacter curiosityCharacter)
         {
-            if (!curiosityCharacter.MarkedAsRegistered) return;
+            if (!curiosityCharacter.MarkedAsRegistered)
+            {
+                Logger.Error($"Trying to save a character thats not registered");
+                return;
+            }
 
             string characterJson = JsonConvert.SerializeObject(curiosityCharacter);
 
