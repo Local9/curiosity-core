@@ -160,7 +160,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 await Plugin.Delay(0);
 
-                API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
+                API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle, 1);
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
                 await Plugin.Delay(0);
@@ -345,7 +345,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
 
                 await Plugin.Delay(0);
 
-                API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle);
+                API.SetVehicleExclusiveDriver(veh.Handle, Game.PlayerPed.Handle, 1);
                 API.SetVehicleExclusiveDriver_2(veh.Handle, Game.PlayerPed.Handle, 1);
 
                 veh.LockStatus = VehicleLockStatus.Unlocked;
