@@ -477,7 +477,7 @@ namespace Curiosity.Vehicles.Client.net.Classes.CuriosityVehicle
                         // Client.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Tank is filling", 20);
                         CitizenFX.Core.UI.Screen.ShowSubtitle("~s~Vehicle is ~g~refuelling.");
                         vehicleFuel = Function.Call<float>(Hash._DECOR_GET_FLOAT, vehicle.Handle, "Vehicle.Fuel");
-                        if (startingPosition != vehicle.Position)
+                        if (!vehicle.IsInRangeOf(startingPosition, 2f))
                         {
                             refueling = false;
                             Plugin.TriggerEvent("curiosity:Client:Notification:LifeV", 1, "Vehicle", "Refuel", "Your vehicle moved while refuelling. You can try refuelling again.", 8);
