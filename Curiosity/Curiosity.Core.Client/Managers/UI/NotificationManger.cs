@@ -42,24 +42,24 @@ namespace Curiosity.Core.Client.Managers
             API.SendNuiMessage(jb.Build());
         }
 
-        internal void Success(string message)
+        internal void Success(string message, string position = "bottom-right")
         {
-            SendNui(Notification.NOTIFICATION_SUCCESS, message);
+            SendNui(Notification.NOTIFICATION_SUCCESS, message, position);
         }
 
-        internal void Warn(string message)
+        internal void Warn(string message, string position = "bottom-right")
         {
-            SendNui(Notification.NOTIFICATION_WARNING, message);
+            SendNui(Notification.NOTIFICATION_WARNING, message, position);
         }
 
-        internal void Info(string message)
+        internal void Info(string message, string position = "bottom-right")
         {
-            SendNui(Notification.NOTIFICATION_INFO, message);
+            SendNui(Notification.NOTIFICATION_INFO, message, position);
         }
 
-        internal void Error(string message)
+        internal void Error(string message, string position = "bottom-right")
         {
-            SendNui(Notification.NOTIFICATION_ERROR, message);
+            SendNui(Notification.NOTIFICATION_ERROR, message, position);
         }
     }
 }
