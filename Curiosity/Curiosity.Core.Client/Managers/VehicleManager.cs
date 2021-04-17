@@ -257,7 +257,12 @@ namespace Curiosity.Core.Client.Managers
                     if (success)
                     {
                         currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL, 100f, true);
-                        Notify.Success($"Vehicle Refueled");
+                        NotificationManger.GetModule().Success("Vehicle refueled", "bottom-middle");
+                    }
+
+                    if (!success)
+                    {
+                        NotificationManger.GetModule().Warn("Vehicle <b>not</b> refueled", "bottom-middle");
                     }
 
                     IsAwaitingServerResponse = false;
