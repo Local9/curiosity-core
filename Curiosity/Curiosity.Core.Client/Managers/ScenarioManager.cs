@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Client.Diagnostics;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -76,29 +77,26 @@ namespace Curiosity.Core.Client.Managers
             DisableScenario("army_heli");
             DisableScenario("WORLD_VEHICLE_MILITARY_PLANES_SMALL");
             DisableScenario("WORLD_VEHICLE_MILITARY_PLANES_BIG");
-            DisableScenario("lsa_planes");
-            DisableScenario("sandy_planes");
-            DisableScenario("grapeseed_planes");
+            // DisableScenario("lsa_planes");
+            // DisableScenario("sandy_planes");
+            // DisableScenario("grapeseed_planes");
             DisableScenario("ng_planes");
-
-            DisableScenario("Triathlon_1");
-            DisableScenario("Triathlon_1_Start");
-            DisableScenario("Triathlon_2");
-            DisableScenario("Triathlon_2_Start");
-            DisableScenario("Triathlon_3");
-            DisableScenario("Triathlon_3_Start");
 
             await BaseScript.Delay(10000);
         }
 
         private void EnableScenario(string scenario)
         {
+            // Logger.Debug($"EnableScenario: {scenario}");
+
             if (IsScenarioGroupEnabled(scenario))
                 SetScenarioGroupEnabled(scenario, true);
         }
 
         private void DisableScenario(string scenario)
         {
+            // Logger.Debug($"DisableScenario: {scenario}");
+
             if (IsScenarioGroupEnabled(scenario))
                 SetScenarioGroupEnabled(scenario, false);
         }
@@ -145,11 +143,11 @@ namespace Curiosity.Core.Client.Managers
             EnableScenario("chinese2_hillbillies");
             EnableScenario("chinese2_lunch");
             EnableScenario("movie_studio_security");
-            // facilities
-            EnableScenario("facility_cannon");
-            EnableScenario("facility_main_1");
-            EnableScenario("facility_main_2");
-            EnableScenario("facility_main_3");
+            // facilities - Only needed on load
+            //EnableScenario("facility_cannon");
+            //EnableScenario("facility_main_1");
+            //EnableScenario("facility_main_2");
+            //EnableScenario("facility_main_3");
             // Others
             EnableScenario("dealership");
             EnableScenario("kortz_security");
