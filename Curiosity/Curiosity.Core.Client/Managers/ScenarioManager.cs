@@ -81,6 +81,13 @@ namespace Curiosity.Core.Client.Managers
             DisableScenario("grapeseed_planes");
             DisableScenario("ng_planes");
 
+            DisableScenario("Triathlon_1");
+            DisableScenario("Triathlon_1_Start");
+            DisableScenario("Triathlon_2");
+            DisableScenario("Triathlon_2_Start");
+            DisableScenario("Triathlon_3");
+            DisableScenario("Triathlon_3_Start");
+
             await BaseScript.Delay(10000);
         }
 
@@ -99,6 +106,7 @@ namespace Curiosity.Core.Client.Managers
         private async void LoadScenarios()
         {
             await Session.Loading();
+
             // Zancudo
             EnableScenario("fort_zancudo_guards");
             // Air
