@@ -23,28 +23,14 @@ namespace Curiosity.Core.Client.Managers
             {
                 List<ShopCategory> result = await EventSystem.Request<List<ShopCategory>>("shop:get:categories");
 
-                string jsn = new JsonBuilder()
-                    .Add("operation", "SHOP_CATEGORIES")
-                    .Add("list", result)
-                    .Build();
-
-                API.SendNuiMessage(jsn);
-
-                return null;
+                return result;
             }));
 
             Instance.AttachNuiHandler("GetCategoryItems", new AsyncEventCallback(async metadata =>
             {
                 List<CuriosityStoreItem> result = await EventSystem.Request<List<CuriosityStoreItem>>("shop:get:items", metadata.Find<int>(0));
 
-                string jsn = new JsonBuilder()
-                    .Add("operation", "SHOP_CATEGORY_ITEMS")
-                    .Add("list", result)
-                    .Build();
-
-                API.SendNuiMessage(jsn);
-
-                return null;
+                return result;
             }));
 
             Instance.AttachNuiHandler("ShopActions", new AsyncEventCallback(async metadata =>
@@ -54,17 +40,11 @@ namespace Curiosity.Core.Client.Managers
 
                 SqlResult result = await EventSystem.Request<SqlResult>("shop:item:action", shopAction, itemId);
 
-                string jsn = new JsonBuilder()
-                    .Add("operation", "SHOP_PURCHASE_CONFIRM")
-                    .Build();
-
-                API.SendNuiMessage(jsn);
-
                 Notification notification = result.Success ? Notification.NOTIFICATION_SUCCESS : Notification.NOTIFICATION_INFO;
 
                 NotificationManger.GetModule().SendNui(notification, result.Message, "bottom-right", "default");
 
-                return null;
+                return result.Success;
             }));
         }
     }
