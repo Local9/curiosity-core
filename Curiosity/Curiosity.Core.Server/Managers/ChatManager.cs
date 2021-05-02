@@ -20,6 +20,7 @@ namespace Curiosity.Core.Server.Managers
                 EventSystem.GetModule().SendAll("ui:notification", Notification.NOTIFICATION_SHOW, $"Announcement: {msg}", "top-center", "snackbar");
             }));
 
+            // may need to make this so its :local, :world, :universe, :help, and yes, it would make it easier!
             EventSystem.GetModule().Attach("chat:message", new AsyncEventCallback(async metadata => {
 
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
