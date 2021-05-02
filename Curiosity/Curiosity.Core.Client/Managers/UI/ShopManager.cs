@@ -44,7 +44,7 @@ namespace Curiosity.Core.Client.Managers
 
                 NotificationManger.GetModule().SendNui(notification, result.Message, "bottom-right", "default");
 
-                return result.Success;
+                return new { success = result.Success };
             }));
         }
     }
