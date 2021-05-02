@@ -74,7 +74,7 @@ namespace Curiosity.Core.Server.Database.Store
                     { "@characterId", characterId },
                 };
 
-                string myQuery = "CALL selStoreItemsByCategoryId(@itemCategoryId, @characterId);";
+                string myQuery = "CALL selShopItemsByCategoryId(@itemCategoryId, @characterId);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
@@ -91,6 +91,7 @@ namespace Curiosity.Core.Server.Database.Store
                         foreach (Dictionary<string, object> kv in keyValuePairs)
                         {
                             CuriosityStoreItem curiosityStoreItem = new CuriosityStoreItem();
+                            curiosityStoreItem.ShopItemId = int.Parse($"{kv["ShopItemId"]}");
                             curiosityStoreItem.ItemId = int.Parse($"{kv["ItemId"]}");
                             curiosityStoreItem.Label = $"{kv["Label"]}";
                             curiosityStoreItem.Description = $"{kv["Description"]}";
@@ -99,8 +100,12 @@ namespace Curiosity.Core.Server.Database.Store
                             curiosityStoreItem.NumberInStock = int.Parse($"{kv["NumberInStock"]}");
                             curiosityStoreItem.ItemPurchased = int.Parse($"{kv["ItemPurchased"]}") == 1;
                             curiosityStoreItem.NumberOwned = int.Parse($"{kv["NumberOwned"]}");
-                            curiosityStoreItem.IsStockControlled = int.Parse($"{kv["IsStockControlled"]}") == 1;
+                            curiosityStoreItem.IsStockManaged = int.Parse($"{kv["IsStockManaged"]}") == 1;
                             curiosityStoreItem.MaximumAllowed = int.Parse($"{kv["MaximumAllowed"]}");
+                            curiosityStoreItem.HasRoleRequirement = int.Parse($"{kv["HasRoleRequirement"]}") == 1;
+                            curiosityStoreItem.NumberOfSkillRequirements = int.Parse($"{kv["NumberSkillRequirements"]}");
+                            curiosityStoreItem.NumberOfItemRequirements = int.Parse($"{kv["NumberItemRequirements"]}");
+                            curiosityStoreItem.ImageUri = $"{kv["ImageUri"]}";
 
                             lstItems.Add(curiosityStoreItem);
                         }

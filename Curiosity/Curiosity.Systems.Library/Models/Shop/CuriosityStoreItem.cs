@@ -39,7 +39,7 @@ namespace Curiosity.Systems.Library.Models.Shop
         public int MaximumAllowed;
 
         [DataMember(Name = "hasRoleRequirement")]
-        public bool hasRoleRequirement;
+        public bool HasRoleRequirement;
 
         [DataMember(Name = "numberOfSkillRequirements")]
         public int NumberOfSkillRequirements;
