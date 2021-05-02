@@ -23,14 +23,65 @@ namespace Curiosity.Core.Client.Managers
             {
                 List<ShopCategory> result = await EventSystem.Request<List<ShopCategory>>("shop:get:categories");
 
-                return result;
+                var categories = new List<dynamic>();
+
+                foreach(ShopCategory shopCategory in result)
+                {
+                    var c = new
+                    {
+                        shopCategoryId = shopCategory.ShopCategoryID,
+                        shopCategoryDescription = shopCategory.ShopCategoryDescription,
+                        categories = new List<dynamic>()
+                    };
+
+                    foreach(ShopCategoryItem shopCategoryItem in shopCategory.Categories)
+                    {
+                        var i = new
+                        {
+                            shopCategoryItemId = shopCategoryItem.ShopCategoryItemID,
+                            shopCategoryItemDescription = shopCategoryItem.ShopCategoryItemDescription
+                        };
+
+                        c.categories.Add(i);
+                    }
+
+                    categories.Add(c);
+                }
+
+                return categories;
             }));
 
             Instance.AttachNuiHandler("GetCategoryItems", new AsyncEventCallback(async metadata =>
             {
                 List<CuriosityStoreItem> result = await EventSystem.Request<List<CuriosityStoreItem>>("shop:get:items", metadata.Find<int>(0));
 
-                return result;
+                var items = new List<dynamic>();
+
+                foreach(CuriosityStoreItem storeItem in result)
+                {
+                    var i = new
+                    {
+                        shopItemId = storeItem.ShopItemId,
+                        itemId = storeItem.ItemId,
+                        label = storeItem.Label,
+                        description = storeItem.Description,
+                        buyValue = storeItem.BuyValue,
+                        buyBackValue = storeItem.BuyBackValue,
+                        numberInStock = storeItem.NumberInStock,
+                        itemPurchased = storeItem.ItemPurchased,
+                        numberOwned = storeItem.NumberOwned,
+                        isStockManaged = storeItem.IsStockManaged,
+                        maximumAllowed = storeItem.MaximumAllowed,
+                        hasRoleRequirement = storeItem.HasRoleRequirement,
+                        numberOfSkillRequirements = storeItem.NumberOfSkillRequirements,
+                        numberOfItemRequirements = storeItem.NumberOfItemRequirements,
+                        imageUri = storeItem.ImageUri
+                    };
+
+                    items.Add(i);
+                }
+
+                return items;
             }));
 
             Instance.AttachNuiHandler("ShopActions", new AsyncEventCallback(async metadata =>
