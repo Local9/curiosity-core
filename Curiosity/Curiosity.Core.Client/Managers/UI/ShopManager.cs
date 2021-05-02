@@ -57,28 +57,31 @@ namespace Curiosity.Core.Client.Managers
 
                 var items = new List<dynamic>();
 
-                foreach(CuriosityStoreItem storeItem in result)
+                if (result is not null)
                 {
-                    var i = new
+                    foreach (CuriosityStoreItem storeItem in result)
                     {
-                        shopItemId = storeItem.ShopItemId,
-                        itemId = storeItem.ItemId,
-                        label = storeItem.Label,
-                        description = storeItem.Description,
-                        buyValue = storeItem.BuyValue,
-                        buyBackValue = storeItem.BuyBackValue,
-                        numberInStock = storeItem.NumberInStock,
-                        itemPurchased = storeItem.ItemPurchased,
-                        numberOwned = storeItem.NumberOwned,
-                        isStockManaged = storeItem.IsStockManaged,
-                        maximumAllowed = storeItem.MaximumAllowed,
-                        hasRoleRequirement = storeItem.HasRoleRequirement,
-                        numberOfSkillRequirements = storeItem.NumberOfSkillRequirements,
-                        numberOfItemRequirements = storeItem.NumberOfItemRequirements,
-                        imageUri = storeItem.ImageUri
-                    };
+                        var i = new
+                        {
+                            shopItemId = storeItem?.ShopItemId,
+                            itemId = storeItem?.ItemId,
+                            label = storeItem?.Label,
+                            description = storeItem?.Description,
+                            buyValue = storeItem?.BuyValue,
+                            buyBackValue = storeItem?.BuyBackValue,
+                            numberInStock = storeItem?.NumberInStock,
+                            itemPurchased = storeItem?.ItemPurchased,
+                            numberOwned = storeItem?.NumberOwned,
+                            isStockManaged = storeItem?.IsStockManaged,
+                            maximumAllowed = storeItem?.MaximumAllowed,
+                            hasRoleRequirement = storeItem?.HasRoleRequirement,
+                            numberOfSkillRequirements = storeItem?.NumberOfSkillRequirements,
+                            numberOfItemRequirements = storeItem?.NumberOfItemRequirements,
+                            imageUri = storeItem?.ImageUri
+                        };
 
-                    items.Add(i);
+                        items.Add(i);
+                    }
                 }
 
                 return items;
