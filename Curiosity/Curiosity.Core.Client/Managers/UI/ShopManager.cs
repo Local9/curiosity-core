@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Managers
 {
-    public class StoreManager : Manager<StoreManager>
+    public class ShopManager : Manager<ShopManager>
     {
         public override void Begin()
         {

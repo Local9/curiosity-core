@@ -84,7 +84,7 @@
     <Compile Include="Managers\UI\PlayerManager.cs" />
     <Compile Include="Managers\UI\PlayerNameManager.cs" />
     <Compile Include="Managers\UI\StaffManager.cs" />
-    <Compile Include="Managers\UI\StoreManager.cs" />
+    <Compile Include="Managers\UI\ShopManager.cs" />
     <Compile Include="Managers\VehicleManager.cs" />
     <Compile Include="Managers\WeaponManager.cs" />
     <Compile Include="Managers\WorldManager.cs" />
