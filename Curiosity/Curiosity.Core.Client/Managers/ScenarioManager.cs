@@ -1,5 +1,8 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Systems.Library.Models;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
@@ -89,7 +92,7 @@ namespace Curiosity.Core.Client.Managers
         {
             // Logger.Debug($"EnableScenario: {scenario}");
 
-            if (IsScenarioGroupEnabled(scenario))
+            if (!IsScenarioGroupEnabled(scenario))
                 SetScenarioGroupEnabled(scenario, true);
         }
 
@@ -105,60 +108,36 @@ namespace Curiosity.Core.Client.Managers
         {
             await Session.Loading();
 
-            // Zancudo
-            EnableScenario("fort_zancudo_guards");
-            // Air
-            EnableScenario("blimp");
-            // cinemas
-            EnableScenario("cinema_downtown");
-            EnableScenario("cinema_morningwood");
-            EnableScenario("cinema_textile");
-            // Banks
-            EnableScenario("city_banks");
-            EnableScenario("countryside_banks");
-            EnableScenario("paleto_bank");
-            // police
-            EnableScenario("guards_at_prison");
-            EnableScenario("paleto_cops");
-            EnableScenario("police_at_court");
-            EnableScenario("police_pound1");
-            EnableScenario("police_pound2");
-            EnableScenario("police_pound3");
-            EnableScenario("police_pound4");
-            EnableScenario("police_pound5");
-            EnableScenario("prison_towers");
-            EnableScenario("prison_transport");
-            EnableScenario("sandy_cops");
-            EnableScenario("mp_police");
-            EnableScenario("mp_police2");
-            // FIB
-            EnableScenario("fib_group_1");
-            EnableScenario("fib_group_2");
-            // Extra groups
-            EnableScenario("scrap_security");
-            EnableScenario("vagos_hangout");
-            EnableScenario("lost_hangout");
-            EnableScenario("lost_bikers");
-            EnableScenario("observatory_bikers");
-            EnableScenario("chinese2_hillbillies");
-            EnableScenario("chinese2_lunch");
-            EnableScenario("movie_studio_security");
-            // facilities - Only needed on load
-            //EnableScenario("facility_cannon");
-            //EnableScenario("facility_main_1");
-            //EnableScenario("facility_main_2");
-            //EnableScenario("facility_main_3");
-            // Others
-            EnableScenario("dealership");
-            EnableScenario("kortz_security");
-            EnableScenario("ammunation");
-            EnableScenario("rampage1");
-            EnableScenario("sew_machine");
-            EnableScenario("solomon_gate");
-            EnableScenario("attract_pap");
-            EnableScenario("quarry");
-            // Animals
-            EnableScenario("armenian_cats");
+            string fileData = LoadResourceFile(GetCurrentResourceName(), "config/scenarios.json");
+
+            if (string.IsNullOrEmpty(fileData))
+            {
+                Logger.Error($"Error loading scenario file, playing with default settings.");
+                return;
+            }
+
+            try
+            {
+                List<ScenarioItem> scenarios = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ScenarioItem>>(fileData);
+                foreach(ScenarioItem scenario in scenarios)
+                {
+                    if (scenario.Enabled)
+                    {
+                        EnableScenario(scenario.Scenario);
+                    }
+                    else
+                    {
+                        DisableScenario(scenario.Scenario);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error converting scenario file");
+                Logger.Debug($"STACK TRACE");
+                Logger.Debug($"{ex}");
+            }
+
         }
     }
 }

@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\StringValueAttribute.cs" />
+    <Compile Include="Models\ScenarioItem.cs" />
     <Compile Include="Models\Shop\CuriosityStoreItem.cs" />
     <Compile Include="DataKeys.cs" />
     <Compile Include="Data\MapRegions.cs" />
