@@ -53,6 +53,7 @@ namespace Curiosity.Core.Client.Managers
 
                 return null;
             }));
+
             EventSystem.Attach("entity:player:trailer", new AsyncEventCallback(async metadata =>
             {
                 int vehId = API.NetworkGetEntityFromNetworkId(metadata.Find<int>(0));
