@@ -87,7 +87,7 @@ namespace Curiosity.Core.Client.Managers
                 return items;
             }));
 
-            Instance.AttachNuiHandler("GetItemInformation", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("GetItem", new AsyncEventCallback(async metadata =>
             {
                 CuriosityStoreItem storeItem = await EventSystem.Request<CuriosityStoreItem>("shop:get:item", metadata.Find<int>(0));
 
