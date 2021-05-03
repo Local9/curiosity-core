@@ -75,7 +75,7 @@ namespace Curiosity.Core.Server.Database.Store
                     { "@characterId", characterId },
                 };
 
-                string myQuery = "CALL selItemRequiredSkills(@itemId, @characterId);";
+                string myQuery = "CALL selItemRequiredRoles(@itemId, @characterId);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
@@ -117,7 +117,7 @@ namespace Curiosity.Core.Server.Database.Store
                     { "@characterId", characterId },
                 };
 
-                string myQuery = "CALL selItemRequiredSkills(@itemId, @characterId);";
+                string myQuery = "CALL selItemRequiredItems(@itemId, @characterId);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
