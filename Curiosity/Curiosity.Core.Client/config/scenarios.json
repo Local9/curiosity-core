@@ -1,0 +1,890 @@
+[
+  {
+    "scenario": "Agency_Heist_Peds",
+    "enabled": false
+  },
+  {
+    "scenario": "ALAMO_PLANES",
+    "enabled": false
+  },
+  {
+    "scenario": "AMMUNATION",
+    "enabled": true
+  },
+  {
+    "scenario": "ARMENIAN_CATS",
+    "enabled": true
+  },
+  {
+    "scenario": "ARMY_GUARD",
+    "enabled": true
+  },
+  {
+    "scenario": "ATTRACT_PAP",
+    "enabled": true
+  },
+  {
+    "scenario": "BLIMP",
+    "enabled": true
+  },
+  {
+    "scenario": "CanyonCliffs",
+    "enabled": false
+  },
+  {
+    "scenario": "CanyonCliffs_Start",
+    "enabled": false
+  },
+  {
+    "scenario": "CAR_WASH",
+    "enabled": true
+  },
+  {
+    "scenario": "CHINESE2_HILLBILLIES",
+    "enabled": true
+  },
+  {
+    "scenario": "Chinese2_Lunch",
+    "enabled": true
+  },
+  {
+    "scenario": "Chumash_14_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Chumash_14_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Chumash_14_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Chumash_14_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "Cinema_Downtown",
+    "enabled": true
+  },
+  {
+    "scenario": "Cinema_Morningwood",
+    "enabled": true
+  },
+  {
+    "scenario": "Cinema_Textile",
+    "enabled": true
+  },
+  {
+    "scenario": "City_Banks",
+    "enabled": true
+  },
+  {
+    "scenario": "clothes_shop",
+    "enabled": true
+  },
+  {
+    "scenario": "Countryside_Banks",
+    "enabled": true
+  },
+  {
+    "scenario": "DEALERSHIP",
+    "enabled": true
+  },
+  {
+    "scenario": "Del_Perro_16_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Del_Perro_16_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Del_Perro_16_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Del_Perro_16_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "DowntownAlley_33_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "DowntownAlley_33_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "DowntownAlley_33_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "DowntownAlley_33_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Canals_22_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Canals_22_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Canals_22_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Canals_22_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Cypress_05_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Cypress_05_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Cypress_05_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Cypress_05_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Hollywood_39_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Hollywood_39_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Hollywood_39_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Hollywood_39_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "E_PaletoBay_10_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_PaletoBay_10_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "E_PaletoBay_10_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_PaletoBay_10_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Puerto_26_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Puerto_26_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Puerto_26_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Puerto_26_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "E_SandyShores_12_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_SandyShores_12_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "E_SandyShores_12_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_SandyShores_12_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Silverlake_40_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Silverlake_40_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Silverlake_40_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "E_Silverlake_40_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "EastLS_BMX",
+    "enabled": true
+  },
+  {
+    "scenario": "EastLS_Chopshop_35_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "EastLS_Chopshop_35_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "EastLS_Chopshop_35_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "EastLS_Skatepark_36_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "EastLS_Skatepark_36_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "EastLS_Skatepark_36_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "EastLS_Skatepark_36_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "Eclipse_32_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Eclipse_32_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Eclipse_32_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Eclipse_32_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "EcoFriendly",
+    "enabled": false
+  },
+  {
+    "scenario": "EcoFriendly_Start",
+    "enabled": false
+  },
+  {
+    "scenario": "ElBurro_Shed_38_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "ElBurro_Shed_38_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "ElBurro_Shed_38_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "ElBurro_Shed_38_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "ElBurro_Wreck_37_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "ElBurro_Wreck_37_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "ElBurro_Wreck_37_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "ElBurro_Wreck_37_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "FIB_AIRPORT",
+    "enabled": false
+  },
+  {
+    "scenario": "FIB_GROUP_1",
+    "enabled": true
+  },
+  {
+    "scenario": "FIB_GROUP_2",
+    "enabled": true
+  },
+  {
+    "scenario": "Fort_Zancudo_Guards",
+    "enabled": true
+  },
+  {
+    "scenario": "GENTRY_MANNOR",
+    "enabled": true
+  },
+  {
+    "scenario": "Grapeseed_Planes",
+    "enabled": false
+  },
+  {
+    "scenario": "GrapeseedAirstrip_07_Security",
+    "enabled": false
+  },
+  {
+    "scenario": "Guards_At_Prison",
+    "enabled": true
+  },
+  {
+    "scenario": "Harmony_ChopShop_13_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Harmony_ChopShop_13_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Harmony_ChopShop_13_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Harmony_ChopShop_13_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "KORTZ_SECURITY",
+    "enabled": true
+  },
+  {
+    "scenario": "LakesideSplash",
+    "enabled": false
+  },
+  {
+    "scenario": "LakesideSplash_Start",
+    "enabled": false
+  },
+  {
+    "scenario": "LOST_BIKERS",
+    "enabled": true
+  },
+  {
+    "scenario": "LOST_HANGOUT",
+    "enabled": true
+  },
+  {
+    "scenario": "LSA_Planes",
+    "enabled": false
+  },
+  {
+    "scenario": "Mid_Seoul_24_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Mid_Seoul_24_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Mid_Seoul_24_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Mid_Seoul_24_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "MinewardSpiral",
+    "enabled": false
+  },
+  {
+    "scenario": "MinewardSpiral_Start",
+    "enabled": true
+  },
+  {
+    "scenario": "MirrorPark_41_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "MirrorPark_41_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "MirrorPark_41_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "MirrorPark_41_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "Morningwood_17_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Morningwood_17_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Morningwood_17_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Morningwood_17_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "Movie_Studio_Security",
+    "enabled": true
+  },
+  {
+    "scenario": "MP_Police",
+    "enabled": true
+  },
+  {
+    "scenario": "MP_POLICE2",
+    "enabled": true
+  },
+  {
+    "scenario": "N_W_Hollywood_31_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "N_W_Hollywood_31_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "N_W_Hollywood_31_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "N_W_Hollywood_31_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "New",
+    "enabled": false
+  },
+  {
+    "scenario": "Observatory_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "OceanHighway_15_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "OceanHighway_15_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "OceanHighway_15_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "OceanHighway_15_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "Paleto_Bank",
+    "enabled": true
+  },
+  {
+    "scenario": "Paleto_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Pershing_04_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Pershing_04_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Pershing_04_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Pershing_04_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "Pier_18_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Pier_18_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Pier_18_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Pier_18_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "PLANE_WRECK",
+    "enabled": false
+  },
+  {
+    "scenario": "PLANE_WRECK_DOG",
+    "enabled": false
+  },
+  {
+    "scenario": "Police_At_Court",
+    "enabled": true
+  },
+  {
+    "scenario": "POLICE_PEDS_CITY",
+    "enabled": true
+  },
+  {
+    "scenario": "POLICE_POUND1",
+    "enabled": true
+  },
+  {
+    "scenario": "POLICE_POUND2",
+    "enabled": true
+  },
+  {
+    "scenario": "POLICE_POUND3",
+    "enabled": true
+  },
+  {
+    "scenario": "POLICE_POUND4",
+    "enabled": true
+  },
+  {
+    "scenario": "POLICE_POUND5",
+    "enabled": true
+  },
+  {
+    "scenario": "Polo_Goon",
+    "enabled": true
+  },
+  {
+    "scenario": "PRISON_TOWERS",
+    "enabled": true
+  },
+  {
+    "scenario": "Prison_Transport",
+    "enabled": true
+  },
+  {
+    "scenario": "QUARRY",
+    "enabled": true
+  },
+  {
+    "scenario": "Racecourse_06_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Racecourse_06_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "RaceCourse_06_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "RaceCourse_06_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "Rampage1",
+    "enabled": true
+  },
+  {
+    "scenario": "RidgeRun",
+    "enabled": false
+  },
+  {
+    "scenario": "RidgeRun_Start",
+    "enabled": false
+  },
+  {
+    "scenario": "S_SanPedro_28_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "S_SanPedro_28_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "S_SanPedro_28_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "S_SanPedro_28_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "S_Seoul_27_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "S_Seoul_27_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "S_Seoul_27_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "S_Seoul_27_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "Sandy_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Sandy_Planes",
+    "enabled": false
+  },
+  {
+    "scenario": "SanPedroGarage_30_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "SanPedroGarage_30_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "SanPedroGarage_30_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "SanPedroGarage_30_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "SCRAP_SECURITY",
+    "enabled": false
+  },
+  {
+    "scenario": "Scrapyard_29_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Scrapyard_29_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Scrapyard_29_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Scrapyard_29_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "SenoraAirstrip_08_Security",
+    "enabled": false
+  },
+  {
+    "scenario": "SeoulPark_23_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "SeoulPark_23_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "SeoulPark_23_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "SeoulPark_23_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "SEW_MACHINE",
+    "enabled": true
+  },
+  {
+    "scenario": "SOLOMON_GATE",
+    "enabled": true
+  },
+  {
+    "scenario": "StrawberryClub_34_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "StrawberryClub_34_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "StrawberryClub_34_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "StrawberryClub_34_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "Triathlon_1",
+    "enabled": false
+  },
+  {
+    "scenario": "Triathlon_1_Start",
+    "enabled": false
+  },
+  {
+    "scenario": "Triathlon_2",
+    "enabled": false
+  },
+  {
+    "scenario": "Triathlon_2_Start",
+    "enabled": false
+  },
+  {
+    "scenario": "Triathlon_3",
+    "enabled": false
+  },
+  {
+    "scenario": "Triathlon_3_Start",
+    "enabled": false
+  },
+  {
+    "scenario": "VAGOS_HANGOUT",
+    "enabled": true
+  },
+  {
+    "scenario": "ValleyTrail",
+    "enabled": false
+  },
+  {
+    "scenario": "ValleyTrail_Start",
+    "enabled": false
+  },
+  {
+    "scenario": "VANGELICO",
+    "enabled": true
+  },
+  {
+    "scenario": "Vespucci_20_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "Vespucci_20_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "Vespucci_20_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "Vespucci_20_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "VespucciBeach_19_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "VespucciBeach_19_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "VespucciBeach_19_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "VespucciBeach_19_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "W_Canals_21_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "W_Canals_21_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "W_Canals_21_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "W_Canals_21_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "W_PaletoBay_09_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "W_PaletoBay_09_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "W_PaletoBay_09_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "W_PaletoBay_09_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "W_Puerto_25_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "W_Puerto_25_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "W_Puerto_25_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "W_Puerto_25_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "W_SandyShores_11_Bikers",
+    "enabled": true
+  },
+  {
+    "scenario": "W_SandyShores_11_Cops",
+    "enabled": true
+  },
+  {
+    "scenario": "W_SandyShores_11_Hookers",
+    "enabled": true
+  },
+  {
+    "scenario": "W_SandyShores_11_Vagos",
+    "enabled": true
+  },
+  {
+    "scenario": "WATERSPORTS",
+    "enabled": true
+  },
+  {
+    "scenario": "YellowJackInn",
+    "enabled": true
+  }
+]

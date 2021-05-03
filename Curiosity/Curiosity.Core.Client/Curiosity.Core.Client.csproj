@@ -139,6 +139,9 @@
     <Compile Include="Utils\ScreenOptions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config\scenarios.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
