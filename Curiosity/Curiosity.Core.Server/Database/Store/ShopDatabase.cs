@@ -202,7 +202,7 @@ namespace Curiosity.Core.Server.Database.Store
                     { "@characterId", characterId },
                 };
 
-                string myQuery = "CALL selShopItemsByCategoryId(@itemCategoryId, @characterId);";
+                string myQuery = "CALL selShopItem(@itemId, @characterId);";
 
                 using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
                 {
