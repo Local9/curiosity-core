@@ -64,6 +64,182 @@ namespace Curiosity.Core.Server.Database.Store
             return lstCategories;
         }
 
+        internal async static Task<List<RoleRequirement>> GetRoleRequirements(int itemId, int characterId)
+        {
+            List<RoleRequirement> lst = new List<RoleRequirement>();
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@itemId", itemId },
+                    { "@characterId", characterId },
+                };
+
+                string myQuery = "CALL selItemRequiredSkills(@itemCategoryId, @characterId);";
+
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                {
+                    ResultSet keyValuePairs = await result;
+
+                    if (keyValuePairs.Count == 0)
+                    {
+                        return lst;
+                    }
+
+                    foreach (Dictionary<string, object> kv in keyValuePairs)
+                    {
+                        RoleRequirement role = new RoleRequirement();
+                        role.RoleId = int.Parse($"{kv["roleId"]}");
+                        role.Description = $"{kv["Description"]}";
+                        role.HasRole = int.Parse($"{kv["HasRole"]}") == 1;
+
+                        lst.Add(role);
+                    }
+
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return lst;
+            }
+        }
+
+        internal async static Task<List<ItemRequirement>> GetItemRequirements(int itemId, int characterId)
+        {
+            List<ItemRequirement> lst = new List<ItemRequirement>();
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@itemId", itemId },
+                    { "@characterId", characterId },
+                };
+
+                string myQuery = "CALL selItemRequiredSkills(@itemCategoryId, @characterId);";
+
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                {
+                    ResultSet keyValuePairs = await result;
+
+                    if (keyValuePairs.Count == 0)
+                    {
+                        return lst;
+                    }
+
+                    foreach (Dictionary<string, object> kv in keyValuePairs)
+                    {
+                        ItemRequirement item = new ItemRequirement();
+                        item.ItemLabel = $"{kv["Label"]}";
+                        item.AmountRequired = int.Parse($"{kv["RequiredValue"]}");
+                        item.AmountCurrent = int.Parse($"{kv["AmountOwned"]}");
+                        item.RequirementMet = int.Parse($"{kv["RequirementMet"]}") == 1;
+
+                        lst.Add(item);
+                    }
+
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return lst;
+            }
+        }
+
+        internal async static Task<List<SkillRequirement>> GetSkillRequirements(int itemId, int characterId)
+        {
+            List<SkillRequirement> lst = new List<SkillRequirement>();
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@itemId", itemId },
+                    { "@characterId", characterId },
+                };
+
+                string myQuery = "CALL selItemRequiredSkills(@itemCategoryId, @characterId);";
+
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                {
+                    ResultSet keyValuePairs = await result;
+
+                    if (keyValuePairs.Count == 0)
+                    {
+                        return lst;
+                    }
+
+                    foreach (Dictionary<string, object> kv in keyValuePairs)
+                    {
+                        SkillRequirement skill = new SkillRequirement();
+                        skill.SkillLabel = $"{kv["Label"]}";
+                        skill.ExperienceRequired = int.Parse($"{kv["RequiredValue"]}");
+                        skill.ExperienceCurrent = int.Parse($"{kv["Experience"]}");
+                        skill.RequirementMet = int.Parse($"{kv["RequirementMet"]}") == 1;
+                        
+                        lst.Add(skill);
+                    }
+
+                    return lst;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return lst;
+            }
+        }
+
+        internal static async Task<CuriosityStoreItem> GetItem(int itemId, int characterId)
+        {
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@itemId", itemId },
+                    { "@characterId", characterId },
+                };
+
+                string myQuery = "CALL selShopItemsByCategoryId(@itemCategoryId, @characterId);";
+
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                {
+                    ResultSet kv = await result;
+
+                    if (kv.Count == 0)
+                    {
+                        return null;
+                    }
+
+                    CuriosityStoreItem curiosityStoreItem = new CuriosityStoreItem();
+                    curiosityStoreItem.ShopItemId = int.Parse($"{kv[0]["ShopItemId"]}");
+                    curiosityStoreItem.ItemId = int.Parse($"{kv[0]["ItemId"]}");
+                    curiosityStoreItem.Label = $"{kv[0]["Label"]}";
+                    curiosityStoreItem.Description = $"{kv[0]["Description"]}";
+                    curiosityStoreItem.BuyValue = int.Parse($"{kv[0]["BuyValue"]}");
+                    curiosityStoreItem.BuyBackValue = int.Parse($"{kv[0]["BuyBackValue"]}");
+                    curiosityStoreItem.NumberInStock = int.Parse($"{kv[0]["NumberInStock"]}");
+                    curiosityStoreItem.ItemPurchased = int.Parse($"{kv[0]["ItemPurchased"]}") == 1;
+                    curiosityStoreItem.NumberOwned = int.Parse($"{kv[0]["NumberOwned"]}");
+                    curiosityStoreItem.IsStockManaged = int.Parse($"{kv[0]["IsStockManaged"]}") == 1;
+                    curiosityStoreItem.MaximumAllowed = int.Parse($"{kv[0]["MaximumAllowed"]}");
+                    curiosityStoreItem.HasRoleRequirement = int.Parse($"{kv[0]["HasRoleRequirement"]}") == 1;
+                    curiosityStoreItem.NumberOfSkillRequirements = int.Parse($"{kv[0]["NumberSkillRequirements"]}");
+                    curiosityStoreItem.NumberOfItemRequirements = int.Parse($"{kv[0]["NumberItemRequirements"]}");
+                    curiosityStoreItem.ImageUri = $"{kv[0]["ImageUri"]}";
+
+                    return curiosityStoreItem;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return null;
+            }
+        }
+
         public static async Task<List<CuriosityStoreItem>> GetCategoryItems(int categoryId, int characterId)
         {
             try

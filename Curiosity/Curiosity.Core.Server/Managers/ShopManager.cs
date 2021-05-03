@@ -51,6 +51,28 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
+            EventSystem.GetModule().Attach("shop:get:item", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                    int itemId = metadata.Find<int>(0);
+
+                    CuriosityStoreItem item = await Database.Store.ShopDatabase.GetItem(itemId, curiosityUser.Character.CharacterId);
+                    item.SkillRequirements = await Database.Store.ShopDatabase.GetSkillRequirements(itemId, curiosityUser.Character.CharacterId);
+                    item.ItemRequirements = await Database.Store.ShopDatabase.GetItemRequirements(itemId, curiosityUser.Character.CharacterId);
+                    item.RoleRequirements = await Database.Store.ShopDatabase.GetRoleRequirements(itemId, curiosityUser.Character.CharacterId);
+
+                    return item;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "shop:get:items");
+                    return null;
+                }
+            }));
+
             // REVIEW THESE METHODS WHEN MOVING THE CHARACTER SESSIONS TO THE CORE
             EventSystem.GetModule().Attach("shop:item:action", new AsyncEventCallback(async metadata =>
             {

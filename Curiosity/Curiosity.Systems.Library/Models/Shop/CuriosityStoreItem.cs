@@ -82,7 +82,6 @@ namespace Curiosity.Systems.Library.Models.Shop
     [DataContract]
     public class RoleRequirement
     {
-        public string ItemLabel;
         public int RoleId;
         public string Description;
         public bool HasRole;

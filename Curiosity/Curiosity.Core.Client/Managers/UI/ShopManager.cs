@@ -87,6 +87,83 @@ namespace Curiosity.Core.Client.Managers
                 return items;
             }));
 
+            Instance.AttachNuiHandler("GetItemInformation", new AsyncEventCallback(async metadata =>
+            {
+                CuriosityStoreItem storeItem = await EventSystem.Request<CuriosityStoreItem>("shop:get:item", metadata.Find<int>(0));
+
+                if (storeItem is not null)
+                {
+                    var item = new
+                    {
+                        shopItemId = storeItem?.ShopItemId,
+                        itemId = storeItem?.ItemId,
+                        label = storeItem?.Label,
+                        description = storeItem?.Description,
+                        buyValue = storeItem?.BuyValue,
+                        buyBackValue = storeItem?.BuyBackValue,
+                        numberInStock = storeItem?.NumberInStock,
+                        itemPurchased = storeItem?.ItemPurchased,
+                        numberOwned = storeItem?.NumberOwned,
+                        isStockManaged = storeItem?.IsStockManaged,
+                        maximumAllowed = storeItem?.MaximumAllowed,
+                        hasRoleRequirement = storeItem?.HasRoleRequirement,
+                        numberOfSkillRequirements = storeItem?.NumberOfSkillRequirements,
+                        numberOfItemRequirements = storeItem?.NumberOfItemRequirements,
+                        imageUri = storeItem?.ImageUri,
+                        skillsRequired = new List<dynamic>(),
+                        itemsRequired = new List<dynamic>(),
+                        rolesRequired = new List<dynamic>()
+                    };
+
+                    if (storeItem.SkillRequirements.Count > 0)
+                    {
+                        foreach (SkillRequirement skill in storeItem.SkillRequirements)
+                        {
+                            var s = new
+                            {
+                                label = skill.SkillLabel,
+                                xpRequired = skill.ExperienceRequired,
+                                xpCurrent = skill.ExperienceCurrent,
+                                metRequirement = skill.RequirementMet
+                            };
+                            item.skillsRequired.Add(s);
+                        }
+                    }
+
+                    if (storeItem.ItemRequirements.Count > 0)
+                    {
+                        foreach (ItemRequirement itemRequirement in storeItem.ItemRequirements)
+                        {
+                            var ir = new
+                            {
+                                label = itemRequirement.ItemLabel,
+                                amountRequired = itemRequirement.AmountRequired,
+                                amountCurrent = itemRequirement.AmountCurrent,
+                                metRequirement = itemRequirement.RequirementMet
+                            };
+                            item.itemsRequired.Add(ir);
+                        }
+                    }
+
+                    if (storeItem.RoleRequirements.Count > 0)
+                    {
+                        foreach (RoleRequirement role in storeItem.RoleRequirements)
+                        {
+                            var r = new
+                            {
+                                roleId = role.RoleId,
+                                description = role.Description,
+                                hasRole = role.HasRole
+                            };
+                            item.rolesRequired.Add(r);
+                        }
+                    }
+
+                    return new { success = true, data = item };
+                }
+                return new { success = false };
+            }));
+
             Instance.AttachNuiHandler("ShopActions", new AsyncEventCallback(async metadata =>
             {
                 bool shopAction = metadata.Find<bool>(0);
