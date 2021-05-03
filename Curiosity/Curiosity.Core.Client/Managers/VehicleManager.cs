@@ -133,7 +133,7 @@ namespace Curiosity.Core.Client.Managers
                     vehicle.Health = vehicle.MaxHealth;
                     vehicle.ClearLastWeaponDamage();
 
-                    NotificationManger.GetModule().Success("Vehicle refueled", "bottom-middle");
+                    NotificationManger.GetModule().Success("Vehicle Repaired", "bottom-middle");
                 }
                 else
                 {
