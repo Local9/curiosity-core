@@ -64,26 +64,45 @@ namespace Curiosity.Systems.Library.Models.Shop
     [DataContract]
     public class SkillRequirement
     {
+        [DataMember(Name = "label")]
         public string SkillLabel;
+
+        [DataMember(Name = "xpRequired")]
         public int ExperienceRequired;
+
+        [DataMember(Name = "xpCurrent")]
         public int ExperienceCurrent;
+
+        [DataMember(Name = "metRequirement")]
         public bool RequirementMet;
     }
 
     [DataContract]
     public class ItemRequirement
     {
+        [DataMember(Name = "label")]
         public string ItemLabel;
+
+        [DataMember(Name = "amtRequired")]
         public int AmountRequired;
+
+        [DataMember(Name = "amtCurrent")]
         public int AmountCurrent;
+
+        [DataMember(Name = "metRequirement")]
         public bool RequirementMet;
     }
 
     [DataContract]
     public class RoleRequirement
     {
+        [DataMember(Name = "id")]
         public int RoleId;
+
+        [DataMember(Name = "label")]
         public string Description;
+
+        [DataMember(Name = "hasRole")]
         public bool HasRole;
     }
 }
