@@ -160,6 +160,8 @@ namespace Curiosity.Core.Client.Extensions
             API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 7, character.Appearance.SkinDamage, character.Appearance.SkinDamageOpacity);
             API.SetPedHeadOverlay(Cache.PlayerPed.Handle, 9, character.Appearance.SkinMoles, character.Appearance.SkinMolesOpacity);
 
+            Logger.Debug($"[LOAD] Character Style Complete");
+
             character.SetupStats();
 
             //var voice = VoiceChat.GetModule();
@@ -348,10 +350,15 @@ namespace Curiosity.Core.Client.Extensions
             LevelManager levelManager = LevelManager.GetModule();
             PlayerStatManager playerStatManager = PlayerStatManager.GetModule();
 
+            Logger.Debug($"[LOAD] Setting up stats");
+
             foreach (CharacterStat stat in character.Stats)
             {
                 string statStr = "";
                 int lvl = 0;
+
+                Logger.Debug($"{stat.Id}:{stat.Label}");
+
                 switch ((Stat)stat.Id)
                 {
                     case Stat.STAT_FLYING_ABILITY:
@@ -383,7 +390,10 @@ namespace Curiosity.Core.Client.Extensions
 
                 int statLevel = levelManager.GetLevelForXP((int)stat.Value, PlayerStatManager.MAX_EXP, PlayerStatManager.MAX_LEVEL);
                 uint hash = (uint)API.GetHashKey(statStr);
-                PlayerStatManager.GetModule().SetStatValue(statLevel, hash);
+
+                Logger.Debug($"{statStr}:{statLevel}");
+
+                playerStatManager.SetStatValue(statLevel, hash);
             }
         }
     }

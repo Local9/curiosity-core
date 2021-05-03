@@ -6,7 +6,8 @@ namespace Curiosity.Systems.Library.Models
     [DataContract]
     public class CharacterStat
     {
-        [JsonIgnore] public int Id;
+        [DataMember(Name = "id")]
+        public int Id;
 
         [DataMember(Name = "label")]
         public string Label;
