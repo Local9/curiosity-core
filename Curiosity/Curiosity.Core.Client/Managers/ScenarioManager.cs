@@ -77,9 +77,9 @@ namespace Curiosity.Core.Client.Managers
             DisableScenario("army_heli");
             DisableScenario("WORLD_VEHICLE_MILITARY_PLANES_SMALL");
             DisableScenario("WORLD_VEHICLE_MILITARY_PLANES_BIG");
-            // DisableScenario("lsa_planes");
-            // DisableScenario("sandy_planes");
-            // DisableScenario("grapeseed_planes");
+            DisableScenario("lsa_planes");
+            DisableScenario("sandy_planes");
+            DisableScenario("grapeseed_planes");
             DisableScenario("ng_planes");
 
             await BaseScript.Delay(10000);
