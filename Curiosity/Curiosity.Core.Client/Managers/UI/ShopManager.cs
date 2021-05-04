@@ -164,18 +164,25 @@ namespace Curiosity.Core.Client.Managers
                 return new { success = false };
             }));
 
-            Instance.AttachNuiHandler("ShopActions", new AsyncEventCallback(async metadata =>
+            Instance.AttachNuiHandler("PurchaseItem", new AsyncEventCallback(async metadata =>
             {
-                bool shopAction = metadata.Find<bool>(0);
-                int itemId = metadata.Find<int>(1);
+                int itemId = metadata.Find<int>(0);
 
-                SqlResult result = await EventSystem.Request<SqlResult>("shop:item:action", shopAction, itemId);
+                SqlResult result = await EventSystem.Request<SqlResult>("shop:purchase:item", itemId);
 
-                Notification notification = result.Success ? Notification.NOTIFICATION_SUCCESS : Notification.NOTIFICATION_INFO;
+                NotificationManger notificationManger = NotificationManger.GetModule();
 
-                NotificationManger.GetModule().SendNui(notification, result.Message, "bottom-right", "default");
+                if (result.Success)
+                {
+                    notificationManger.Success(result.Message);
+                }
 
-                return new { success = result.Success };
+                if (!result.Success)
+                {
+                    notificationManger.Warn(result.Message);
+                }
+
+                return new { success = result.Success, message = result.Message };
             }));
         }
     }

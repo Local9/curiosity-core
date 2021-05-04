@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
@@ -38,6 +39,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                 }
             }
         }
+
         [CommandInfo(new[] { "anim" })]
         public class Animation : ICommand
         {
@@ -80,6 +82,25 @@ namespace Curiosity.Core.Client.Commands.Impl
         #endregion
 
         #region Vehicles
+        [CommandInfo(new[] { "train" })]
+        public class Train : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                try
+                {
+                    if (arguments.Count <= 0) return;
+                    int trainId = int.Parse(arguments.ElementAt(0));
+                    bool state = int.Parse(arguments.ElementAt(1)) == 1;
+                    API.SwitchTrainTrack(trainId, state);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Train -> {ex.Message}");
+                }
+            }
+        }
+
         [CommandInfo(new[] { "vn", "vehicleNet" })]
         public class VehicleDespawner : ICommand
         {

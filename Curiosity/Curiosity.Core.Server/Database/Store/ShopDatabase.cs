@@ -192,6 +192,42 @@ namespace Curiosity.Core.Server.Database.Store
             }
         }
 
+        internal static async Task<SqlResult> PurchaseItem(int itemId, int characterId)
+        {
+            SqlResult rtValue = new SqlResult();
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@itemId", itemId },
+                    { "@characterId", characterId },
+                };
+
+                string myQuery = "CALL spShopPurchaseItem(@characterId, @itemId);";
+
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                {
+                    ResultSet kv = await result;
+
+                    if (kv.Count == 0)
+                    {
+                        return rtValue;
+                    }
+
+                    rtValue.Success = $"{kv[0]["Result"]}" == "1";
+                    rtValue.ItemValue = int.Parse($"{kv[0]["CurrentlyOwned"]}");
+                    rtValue.Message = $"{kv[0]["Message"]}";
+
+                    return rtValue;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return rtValue;
+            }
+        }
+
         internal static async Task<CuriosityStoreItem> GetItem(int itemId, int characterId)
         {
             try
@@ -297,44 +333,44 @@ namespace Curiosity.Core.Server.Database.Store
             }
         }
 
-        public static async Task<SqlResult> TradeItem(int characterId, int itemId, int numberOfItems, bool purchase)
-        {
-            SqlResult rtValue = new SqlResult();
+        //public static async Task<SqlResult> TradeItem(int characterId, int itemId, int numberOfItems, bool purchase)
+        //{
+        //    SqlResult rtValue = new SqlResult();
 
-            try
-            {
-                Dictionary<string, object> myParams = new Dictionary<string, object>()
-                {
-                    { "@characterId", characterId },
-                    { "@itemId", itemId },
-                    { "@numberOfItems", numberOfItems },
-                    { "@purchase", purchase },
-                };
+        //    try
+        //    {
+        //        Dictionary<string, object> myParams = new Dictionary<string, object>()
+        //        {
+        //            { "@characterId", characterId },
+        //            { "@itemId", itemId },
+        //            { "@numberOfItems", numberOfItems },
+        //            { "@purchase", purchase },
+        //        };
 
-                string myQuery = "CALL spCharacterItem(@characterId, @itemId, @numberOfItems, @purchase);";
+        //        string myQuery = "CALL spCharacterItem(@characterId, @itemId, @numberOfItems, @purchase);";
 
-                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
-                {
-                    ResultSet kv = await result;
+        //        using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+        //        {
+        //            ResultSet kv = await result;
 
-                    if (kv.Count == 0)
-                    {
-                        return rtValue;
-                    }
-                    else
-                    {
-                        rtValue.Success = $"{kv[0]["Result"]}" == "1";
-                        rtValue.ItemValue = int.Parse($"{kv[0]["ItemValue"]}");
-                        rtValue.Message = $"{kv[0]["Message"]}";
-                        return rtValue;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"{ex}");
-                return rtValue;
-            }
-        }
+        //            if (kv.Count == 0)
+        //            {
+        //                return rtValue;
+        //            }
+        //            else
+        //            {
+        //                rtValue.Success = $"{kv[0]["Result"]}" == "1";
+        //                rtValue.ItemValue = int.Parse($"{kv[0]["ItemValue"]}");
+        //                rtValue.Message = $"{kv[0]["Message"]}";
+        //                return rtValue;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Error($"{ex}");
+        //        return rtValue;
+        //    }
+        //}
     }
 }

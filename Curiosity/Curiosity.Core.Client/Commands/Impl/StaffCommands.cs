@@ -209,6 +209,86 @@ namespace Curiosity.Core.Client.Commands.Impl
                 Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
             }
         }
+
+        [CommandInfo(new[] { "c" })]
+        public class VehicleSpawnerSafe : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+
+                Vehicle vehicle = null;
+
+                if (Cache.PersonalVehicle is not null)
+                    vehicle = Cache.PersonalVehicle.Vehicle;
+
+                if (vehicle is not null)
+                {
+                    if (vehicle.Exists()) // personal vehicle
+                    {
+                        if (vehicle.Driver == Cache.PlayerPed)
+                            Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+
+                        await vehicle.FadeOut(true);
+
+                        vehicle.IsPositionFrozen = true;
+                        vehicle.IsCollisionEnabled = false;
+
+                        EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
+
+                        if (vehicle.Exists())
+                            vehicle.Delete();
+
+                        await BaseScript.Delay(500);
+                    }
+                }
+
+                if (Cache.Entity is not null && Cache.Entity.Vehicle is not null)
+                {
+                    if (Cache.Entity.Vehicle.Exists()) // get vehicle player is in
+                    {
+                        vehicle = Cache.Entity.Vehicle;
+
+                        if (vehicle.Driver == Cache.PlayerPed)
+                            Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+
+                        await vehicle.FadeOut(true);
+
+                        vehicle.IsPositionFrozen = true;
+                        vehicle.IsCollisionEnabled = false;
+
+                        EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
+
+                        if (vehicle.Exists())
+                            vehicle.Delete();
+
+                        await BaseScript.Delay(500);
+                    }
+                }
+
+                Vector3 charPos = Cache.PlayerPed.Position;
+                Vector3 spawnPos = Vector3.Zero;
+                float spawnHeading = 0f;
+
+                Vector3 spawnRoad = Vector3.Zero;
+
+                API.GetClosestVehicleNodeWithHeading(charPos.X, charPos.Y, charPos.Z, ref spawnPos, ref spawnHeading, 1, 3f, 0);
+                API.GetRoadSidePointWithHeading(spawnPos.X, spawnPos.Y, spawnPos.Z, spawnHeading, ref spawnRoad);
+
+                int networkId = await EventSystem.Request<int>("vehicle:spawn:position", arguments.ElementAt(0), spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading);
+
+                int vehId = API.NetworkGetEntityFromNetworkId(networkId);
+
+                if (!API.DoesEntityExist(vehId)) return;
+
+                vehicle = new Vehicle(vehId);
+
+                await vehicle.FadeIn();
+
+                Cache.PersonalVehicle = new State.VehicleState(vehicle);
+
+                Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+            }
+        }
         #endregion
     }
 }
