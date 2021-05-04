@@ -147,6 +147,8 @@ namespace Curiosity.Core.Client.Managers
             LoadMpDlcMaps();
             EnableMpDlcMaps(true);
 
+            SwitchTrainTrack(3, true); // Enable Metro
+
             // Ferris Wheel
             RequestIpl("ferris_finale_anim");
             RequestIpl("ferris_finale_anim_lod");
@@ -255,10 +257,10 @@ namespace Curiosity.Core.Client.Managers
 
                 ClearOverrideWeather();
                 ClearWeatherTypePersist();
-                SetWeatherTypeOverTime($"{weatherType}", 30f);
-                SetWeatherTypePersist($"{weatherType}");
-                SetWeatherTypeNow($"{weatherType}");
-                SetWeatherTypeNowPersist($"{weatherType}");
+                SetWeatherTypeOvertimePersist($"{weatherType}", 30f);
+                // SetWeatherTypePersist($"{weatherType}");
+                // SetWeatherTypeNow($"{weatherType}");
+                // SetWeatherTypeNowPersist($"{weatherType}");
 
                 lastWeather = weatherType;
             }
