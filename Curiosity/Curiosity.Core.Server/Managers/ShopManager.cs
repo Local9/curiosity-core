@@ -190,6 +190,10 @@ namespace Curiosity.Core.Server.Managers
                     curiosityUser.Purchasing = false;
                     sqlResult.Success = true;
                     sqlResult.Message = res.Message;
+
+                    Web.DiscordClient discordClient = Web.DiscordClient.GetModule();
+                    discordClient.SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' purchased '{item.Label}' for ${item.BuyValue}"); // MOVE TO DB LOG
+
                     return sqlResult;
 
                 FailedPurchase:
