@@ -229,6 +229,47 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
+            EventSystem.GetModule().Attach("shop:sell:item", new AsyncEventCallback(async metadata =>
+            {
+                SqlResult sqlResult = new SqlResult();
+                try
+                {
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
+                    if (curiosityUser.Purchasing)
+                    {
+                        sqlResult.Message = "Pending Purchase";
+                        return sqlResult;
+                    }
+
+                    int itemId = metadata.Find<int>(0);
+                    int characterId = curiosityUser.Character.CharacterId;
+
+                    curiosityUser.Purchasing = true;
+
+                    CuriosityStoreItem item = new CuriosityStoreItem();
+
+                    goto GetItem;
+
+                GetItem:
+                    item = await Database.Store.ShopDatabase.GetItem(itemId, characterId);
+
+                CheckUserOwnsItem:
+
+                // Check user has item
+                // remove item from user
+                // adjust users wallet
+
+                    curiosityUser.Purchasing = false;
+                    return sqlResult;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "shop:sell:item");
+                    return sqlResult;
+                }
+        }));
+
 
         }
     }
