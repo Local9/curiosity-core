@@ -2,6 +2,7 @@
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Models.Shop;
 using GHMatti.Data.MySQL.Core;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -70,6 +71,90 @@ namespace Curiosity.Core.Server.Database.Store
             string myQuery = "CALL upCharacter(@CharacterId, @IsRegistered, @CharacterJSON);";
 
             await MySqlDatabase.mySQL.Query(myQuery, myParams);
+        }
+
+        // Should write an extension
+        public static async Task<List<CuriosityStoreItem>> GetItems(int characterId)
+        {
+            ResultSet kvp = await GetCharacterItems(characterId);
+            List<CuriosityStoreItem> lst = new List<CuriosityStoreItem>();
+
+            if (kvp.Count == 0)
+                return lst;
+
+            foreach (Dictionary<string, object> kv in kvp)
+            {
+                CuriosityStoreItem i = new CuriosityStoreItem();
+
+                i.ItemId = kv["ItemId"].ToInt();
+                i.Label = $"{kv["Label"]}";
+                i.Description = $"{kv["Description"]}";
+                i.IsDroppable = kv["IsDroppable"].ToBoolean();
+                i.IsUsable = kv["IsUsable"].ToBoolean();
+                i.MaximumAllowed = kv["MaximumAllowed"].ToInt();
+                i.HashKey = $"{kv["HashKey"]}";
+                i.ImageUri = $"{kv["ImageUri"]}";
+
+                if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
+                {
+                    i.ShopItemId = kv["ShopItemId"].ToInt();
+                    i.BuyValue = kv["BuyValue"].ToInt();
+                    i.BuyBackValue = kv["BuyBackValue"].ToInt();
+                    i.IsStockManaged = kv["IsStockManaged"].ToBoolean();
+                }
+
+                lst.Add(i);
+            }
+
+            return lst;
+        }
+
+        // Should write an extension
+        public static async Task<CuriosityStoreItem> GetItem(int characterId, int itemId)
+        {
+            ResultSet kvp = await GetCharacterItems(characterId, itemId);
+
+            if (kvp.Count == 0)
+                return null;
+
+            Dictionary<string, object> kv = kvp[0];
+
+            CuriosityStoreItem i = new CuriosityStoreItem();
+
+            i.ItemId = kv["ItemId"].ToInt();
+            i.Label = $"{kv["Label"]}";
+            i.Description = $"{kv["Description"]}";
+            i.IsDroppable = kv["IsDroppable"].ToBoolean();
+            i.IsUsable = kv["IsUsable"].ToBoolean();
+            i.MaximumAllowed = kv["MaximumAllowed"].ToInt();
+            i.HashKey = $"{kv["HashKey"]}";
+            i.ImageUri = $"{kv["ImageUri"]}";
+
+            if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
+            {
+                i.ShopItemId = kv["ShopItemId"].ToInt();
+                i.BuyValue = kv["BuyValue"].ToInt();
+                i.BuyBackValue = kv["BuyBackValue"].ToInt();
+                i.IsStockManaged = kv["IsStockManaged"].ToBoolean();
+            }
+
+            return i;
+        }
+
+        private static async Task<ResultSet> GetCharacterItems(int characterId, int? itemId = null)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterID", characterId },
+                { "@ItemID", itemId }
+            };
+
+            string myQuery = "CALL selCharacterItems(@CharacterID, @ItemID);";
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                return await result;
+            }
         }
     }
 }
