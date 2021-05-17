@@ -4,11 +4,8 @@ using System.Runtime.Serialization;
 namespace Curiosity.Systems.Library.Models.Shop
 {
     [DataContract]
-    public class CuriosityStoreItem
+    public class CuriosityItem
     {
-        [DataMember(Name = "shopItemId")]
-        public int ShopItemId;
-
         [DataMember(Name = "itemId")]
         public int ItemId;
 
@@ -17,6 +14,28 @@ namespace Curiosity.Systems.Library.Models.Shop
 
         [DataMember(Name = "description")]
         public string Description;
+
+        [DataMember(Name = "isDroppable")]
+        public bool IsDroppable;
+
+        [DataMember(Name = "isUsable")]
+        public bool IsUsable;
+
+        [DataMember(Name = "maximumAllowed")]
+        public int MaximumAllowed;
+
+        [DataMember(Name = "hashKey")]
+        public string HashKey;
+
+        [DataMember(Name = "imageUri")]
+        public string ImageUri;
+    }
+
+    [DataContract]
+    public class CuriosityStoreItem : CuriosityItem
+    {
+        [DataMember(Name = "shopItemId")]
+        public int ShopItemId;
 
         [DataMember(Name = "buyValue")]
         public int BuyValue;
@@ -36,9 +55,6 @@ namespace Curiosity.Systems.Library.Models.Shop
         [DataMember(Name = "isStockManaged")]
         public bool IsStockManaged;
 
-        [DataMember(Name = "maximumAllowed")]
-        public int MaximumAllowed;
-
         [DataMember(Name = "hasRoleRequirement")]
         public bool HasRoleRequirement;
 
@@ -47,9 +63,6 @@ namespace Curiosity.Systems.Library.Models.Shop
 
         [DataMember(Name = "numberOfItemRequirements")]
         public int NumberOfItemRequirements;
-
-        [DataMember(Name = "imageUri")]
-        public string ImageUri;
 
         [DataMember(Name = "skillRequirements")]
         public List<SkillRequirement> SkillRequirements = new List<SkillRequirement>();
