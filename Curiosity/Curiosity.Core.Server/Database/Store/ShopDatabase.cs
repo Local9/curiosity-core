@@ -228,7 +228,7 @@ namespace Curiosity.Core.Server.Database.Store
             }
         }
 
-        internal static async Task<CuriosityStoreItem> GetItem(int itemId, int characterId)
+        internal static async Task<CuriosityShopItem> GetItem(int itemId, int characterId)
         {
             try
             {
@@ -249,7 +249,7 @@ namespace Curiosity.Core.Server.Database.Store
                         return null;
                     }
 
-                    CuriosityStoreItem curiosityStoreItem = new CuriosityStoreItem();
+                    CuriosityShopItem curiosityStoreItem = new CuriosityShopItem();
                     curiosityStoreItem.ShopItemId = int.Parse($"{kv[0]["ShopItemId"]}");
                     curiosityStoreItem.ItemId = int.Parse($"{kv[0]["ItemId"]}");
                     curiosityStoreItem.Label = $"{kv[0]["Label"]}";
@@ -276,7 +276,7 @@ namespace Curiosity.Core.Server.Database.Store
             }
         }
 
-        public static async Task<List<CuriosityStoreItem>> GetCategoryItems(int categoryId, int characterId)
+        public static async Task<List<CuriosityShopItem>> GetCategoryItems(int categoryId, int characterId)
         {
             try
             {
@@ -298,11 +298,11 @@ namespace Curiosity.Core.Server.Database.Store
                     }
                     else
                     {
-                        List<CuriosityStoreItem> lstItems = new List<CuriosityStoreItem>();
+                        List<CuriosityShopItem> lstItems = new List<CuriosityShopItem>();
 
                         foreach (Dictionary<string, object> kv in keyValuePairs)
                         {
-                            CuriosityStoreItem curiosityStoreItem = new CuriosityStoreItem();
+                            CuriosityShopItem curiosityStoreItem = new CuriosityShopItem();
                             curiosityStoreItem.ShopItemId = int.Parse($"{kv["ShopItemId"]}");
                             curiosityStoreItem.ItemId = int.Parse($"{kv["ItemId"]}");
                             curiosityStoreItem.Label = $"{kv["Label"]}";

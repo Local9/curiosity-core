@@ -60,7 +60,7 @@ namespace Curiosity.Core.Server.Managers
 
                     int itemId = metadata.Find<int>(0);
 
-                    CuriosityStoreItem item = await Database.Store.ShopDatabase.GetItem(itemId, curiosityUser.Character.CharacterId);
+                    CuriosityShopItem item = await Database.Store.ShopDatabase.GetItem(itemId, curiosityUser.Character.CharacterId);
                     item.SkillRequirements = await Database.Store.ShopDatabase.GetSkillRequirements(itemId, curiosityUser.Character.CharacterId);
                     item.ItemRequirements = await Database.Store.ShopDatabase.GetItemRequirements(itemId, curiosityUser.Character.CharacterId);
                     item.RoleRequirements = await Database.Store.ShopDatabase.GetRoleRequirements(itemId, curiosityUser.Character.CharacterId);
@@ -91,7 +91,7 @@ namespace Curiosity.Core.Server.Managers
 
                     curiosityUser.Purchasing = true;
 
-                    CuriosityStoreItem item = new CuriosityStoreItem();
+                    CuriosityShopItem item = new CuriosityShopItem();
 
                     goto GetItem;
 
@@ -263,7 +263,7 @@ namespace Curiosity.Core.Server.Managers
 
                     curiosityUser.Purchasing = true;
 
-                    CuriosityStoreItem item = new CuriosityStoreItem();
+                    CuriosityShopItem item = new CuriosityShopItem();
 
                     goto GetItem;
 
@@ -276,7 +276,7 @@ namespace Curiosity.Core.Server.Managers
                     goto CheckUserOwnsItem;
 
                 CheckUserOwnsItem:
-                    CuriosityStoreItem ownedItem = await Database.Store.CharacterDatabase.GetItem(characterId, itemId);
+                    CuriosityShopItem ownedItem = await Database.Store.CharacterDatabase.GetItem(characterId, itemId);
 
                     if (ownedItem is null)
                         goto FailItemNotOwned;

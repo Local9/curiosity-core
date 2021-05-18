@@ -53,13 +53,13 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("GetCategoryItems", new AsyncEventCallback(async metadata =>
             {
-                List<CuriosityStoreItem> result = await EventSystem.Request<List<CuriosityStoreItem>>("shop:get:items", metadata.Find<int>(0));
+                List<CuriosityShopItem> result = await EventSystem.Request<List<CuriosityShopItem>>("shop:get:items", metadata.Find<int>(0));
 
                 var items = new List<dynamic>();
 
                 if (result is not null)
                 {
-                    foreach (CuriosityStoreItem storeItem in result)
+                    foreach (CuriosityShopItem storeItem in result)
                     {
                         var i = new
                         {
@@ -89,7 +89,7 @@ namespace Curiosity.Core.Client.Managers
 
             Instance.AttachNuiHandler("GetItem", new AsyncEventCallback(async metadata =>
             {
-                CuriosityStoreItem storeItem = await EventSystem.Request<CuriosityStoreItem>("shop:get:item", metadata.Find<int>(0));
+                CuriosityShopItem storeItem = await EventSystem.Request<CuriosityShopItem>("shop:get:item", metadata.Find<int>(0));
 
                 if (storeItem is not null)
                 {

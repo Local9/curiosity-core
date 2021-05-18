@@ -32,7 +32,7 @@ namespace Curiosity.Systems.Library.Models.Shop
     }
 
     [DataContract]
-    public class CuriosityStoreItem : CuriosityItem
+    public class CuriosityShopItem : CuriosityItem
     {
         [DataMember(Name = "shopItemId")]
         public int? ShopItemId;

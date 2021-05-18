@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Curiosity.Systems.Library.Models.Shop;
+using Newtonsoft.Json;
 using System.Runtime.Serialization;
 
 namespace Curiosity.Systems.Library.Models
@@ -28,5 +29,11 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "skill", Order = 2, EmitDefaultValue = false)]
         public CharacterSkillExport Skill;
+
+        [DataMember(Name = "value", Order = 2, EmitDefaultValue = false)]
+        public int Value { get; set; }
+
+        [DataMember(Name = "item", Order = 2, EmitDefaultValue = false)]
+        public CuriosityShopItem Item { get; set; }
     }
 }

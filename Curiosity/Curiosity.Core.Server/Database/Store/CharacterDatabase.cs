@@ -75,17 +75,17 @@ namespace Curiosity.Core.Server.Database.Store
         }
 
         // Should write an extension
-        public static async Task<List<CuriosityStoreItem>> GetItems(int characterId)
+        public static async Task<List<CuriosityShopItem>> GetItems(int characterId)
         {
             ResultSet kvp = await GetCharacterItems(characterId);
-            List<CuriosityStoreItem> lst = new List<CuriosityStoreItem>();
+            List<CuriosityShopItem> lst = new List<CuriosityShopItem>();
 
             if (kvp.Count == 0)
                 return lst;
 
             foreach (Dictionary<string, object> kv in kvp)
             {
-                CuriosityStoreItem i = new CuriosityStoreItem();
+                CuriosityShopItem i = new CuriosityShopItem();
 
                 i.ItemId = kv["ItemId"].ToInt();
                 i.Label = $"{kv["Label"]}";
@@ -112,7 +112,7 @@ namespace Curiosity.Core.Server.Database.Store
         }
 
         // Should write an extension
-        public static async Task<CuriosityStoreItem> GetItem(int characterId, int itemId)
+        public static async Task<CuriosityShopItem> GetItem(int characterId, int itemId)
         {
             ResultSet kvp = await GetCharacterItems(characterId, itemId);
 
@@ -121,7 +121,7 @@ namespace Curiosity.Core.Server.Database.Store
 
             Dictionary<string, object> kv = kvp[0];
 
-            CuriosityStoreItem i = new CuriosityStoreItem();
+            CuriosityShopItem i = new CuriosityShopItem();
 
             i.ItemId = kv["ItemId"].ToInt();
             i.Label = $"{kv["Label"]}";

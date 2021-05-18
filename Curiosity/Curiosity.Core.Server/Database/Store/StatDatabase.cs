@@ -74,7 +74,7 @@ namespace Curiosity.Core.Server.Database.Store
             return lst;
         }
 
-        internal static async Task<int> Get(int characterId, Stat stat)
+        public static async Task<int> Get(int characterId, Stat stat)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
