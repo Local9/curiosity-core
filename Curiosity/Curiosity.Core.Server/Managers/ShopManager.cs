@@ -185,7 +185,7 @@ namespace Curiosity.Core.Server.Managers
 
                 AdjustWallet:
                     // if all pass, allow purchase, else fail
-                    int minusValue = item.BuyValue * -1;
+                    int minusValue = (int)item.BuyValue * -1;
                     int newWalletValue = await Database.Store.BankDatabase.Adjust(characterId, minusValue);
                     curiosityUser.Character.Cash = newWalletValue;
 
@@ -195,7 +195,7 @@ namespace Curiosity.Core.Server.Managers
                     goto SuccessfulPurchase;
 
                 LowerStockAmount:
-                    await Database.Store.ShopDatabase.Adjust(item.ShopItemId, -1);
+                    await Database.Store.ShopDatabase.Adjust((int)item.ShopItemId, -1);
 
                     goto SuccessfulPurchase;
 
@@ -281,6 +281,9 @@ namespace Curiosity.Core.Server.Managers
                     if (ownedItem is null)
                         goto FailItemNotOwned;
 
+                    if (ownedItem.ShopItemId is null)
+                        goto UnableToSellItem;
+
                     goto RemoveItem;
 
                 RemoveItem:
@@ -293,7 +296,7 @@ namespace Curiosity.Core.Server.Managers
                         goto Fail;
 
                 PayBackUser:
-                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(characterId, ownedItem.BuyBackValue);
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(characterId, (int)ownedItem.BuyBackValue);
 
                     if (item.IsStockManaged)
                         goto AdjustStock;
@@ -301,23 +304,27 @@ namespace Curiosity.Core.Server.Managers
                     goto Success;
 
                 AdjustStock:
-                    await Database.Store.ShopDatabase.Adjust(item.ShopItemId, 1);
+                    await Database.Store.ShopDatabase.Adjust((int)item.ShopItemId, 1);
 
                     goto Success;
 
                 Success:
                     sqlResult.Success = true;
                     sqlResult.Message = "Item sold";
-                    goto Result;
+                    goto ReturnResult;
+
+                UnableToSellItem:
+                    sqlResult.Message = "Item unable to be sold";
+                    goto ReturnResult;
 
                 FailItemNotOwned:
                     sqlResult.Message = "Item not owned.";
-                    goto Result;
+                    goto ReturnResult;
 
                 Fail:
-                    goto Result;
+                    goto ReturnResult;
 
-                Result:
+                ReturnResult:
                     curiosityUser.Purchasing = false;
                     return sqlResult;
                 }

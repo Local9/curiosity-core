@@ -35,13 +35,13 @@ namespace Curiosity.Systems.Library.Models.Shop
     public class CuriosityStoreItem : CuriosityItem
     {
         [DataMember(Name = "shopItemId")]
-        public int ShopItemId;
+        public int? ShopItemId;
 
         [DataMember(Name = "buyValue")]
-        public int BuyValue;
+        public int? BuyValue;
 
         [DataMember(Name = "buyBackValue")]
-        public int BuyBackValue;
+        public int? BuyBackValue;
 
         [DataMember(Name = "numberInStock")]
         public int NumberInStock;
