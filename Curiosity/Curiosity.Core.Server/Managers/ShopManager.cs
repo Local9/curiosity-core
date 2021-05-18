@@ -83,7 +83,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (curiosityUser.Purchasing)
                     {
-                        sqlResult.Message = "Pending Purchase";
+                        sqlResult.Message = "Process Pending";
                         return sqlResult;
                     }
 
@@ -238,7 +238,7 @@ namespace Curiosity.Core.Server.Managers
 
                     if (curiosityUser.Purchasing)
                     {
-                        sqlResult.Message = "Pending Purchase";
+                        sqlResult.Message = "Process Pending";
                         return sqlResult;
                     }
 
@@ -253,13 +253,20 @@ namespace Curiosity.Core.Server.Managers
 
                 GetItem:
                     item = await Database.Store.ShopDatabase.GetItem(itemId, characterId);
+                    goto CheckUserOwnsItem;
 
                 CheckUserOwnsItem:
 
-                // Check user has item
-                // remove item from user
-                // adjust users wallet
 
+                RemoveItem:
+
+                PayBackUser:
+
+                Success:
+                    sqlResult.Success = true;
+                    return sqlResult;
+
+                Fail:
                     curiosityUser.Purchasing = false;
                     return sqlResult;
                 }
