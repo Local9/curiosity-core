@@ -210,12 +210,12 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 vehicle = new Vehicle(vehId);
 
-                await vehicle.FadeIn();
-
                 Cache.PersonalVehicle = new State.VehicleState(vehicle);
                 Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
 
                 Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+
+                await vehicle.FadeIn();
             }
         }
 
@@ -265,11 +265,10 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 vehicle = new Vehicle(vehId);
 
-                await vehicle.FadeIn();
-
                 Cache.PersonalTrailer = new State.VehicleState(vehicle);
-
                 Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
+
+                await vehicle.FadeIn();
             }
         }
 

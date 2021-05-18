@@ -112,6 +112,9 @@ namespace Curiosity.Core.Server.Managers
 
                     if (user.PersonalVehicle == networkId)
                         return user.LatestName;
+
+                    if (user.PersonalTrailer == networkId)
+                        return user.LatestName;
                 }
 
                 return null;
@@ -194,6 +197,7 @@ namespace Curiosity.Core.Server.Managers
 
                 Vehicle vehicle = new Vehicle(vehicleId);
                 vehicle.State.Set("VEH_SPAWNED", true, true);
+                vehicle.State.Set("VEH_PERSONAL", true, true);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
@@ -244,6 +248,7 @@ namespace Curiosity.Core.Server.Managers
 
                 Vehicle vehicle = new Vehicle(vehicleId);
                 vehicle.State.Set("VEH_SPAWNED", true, true);
+                vehicle.State.Set("VEH_PERSONAL", true, true);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
@@ -299,7 +304,7 @@ namespace Curiosity.Core.Server.Managers
 
                 Vehicle vehicle = new Vehicle(vehicleId);
                 vehicle.State.Set("VEH_SPAWNED", true, true);
-                vehicle.State.Set("VEH_TRAILER", true, true);
+                vehicle.State.Set("VEH_PERSONAL_TRAILER", true, true);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 

@@ -138,6 +138,21 @@ namespace Curiosity.Core.Client.Managers
                         vehicleManager.InitialiseSkylift(currentVehicle);
                     }
                 }
+
+                if (vehicle.AttachedBlip is not null)
+                {
+                    vehicle.AttachedBlip.Alpha = 0;
+
+                    Vehicle veh = (Vehicle)vehicle.GetEntityAttachedTo();
+
+                    if (veh is not null)
+                    {
+                        if (veh.AttachedBlip is not null)
+                        {
+                            veh.AttachedBlip.Alpha = 0;
+                        }
+                    }
+                }
             }
         }
 

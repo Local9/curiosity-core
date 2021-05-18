@@ -10,39 +10,47 @@ namespace Curiosity.Core.Client.Interface
 {
     public class ScreenInterface
     {
-        public static Dictionary<VehicleClass, BlipSprite> VehicleClassBlips = new Dictionary<VehicleClass, BlipSprite>()
+        public static Dictionary<VehicleClass, int> VehicleClassBlips = new Dictionary<VehicleClass, int>()
         {
-            { VehicleClass.Boats, BlipSprite.Boat },
-            { VehicleClass.Commercial, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Compacts, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Coupes, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Cycles, BlipSprite.PersonalVehicleBike },
-            { VehicleClass.Emergency, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Helicopters, BlipSprite.Helicopter },
-            { VehicleClass.Industrial, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Military, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Motorcycles, BlipSprite.PersonalVehicleBike },
-            { VehicleClass.Muscle, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.OffRoad, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Planes, BlipSprite.Plane },
-            { VehicleClass.Sedans, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Service, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Sports, (BlipSprite)523 },
-            { VehicleClass.SportsClassics, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Super, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.SUVs, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Trains, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Utility, BlipSprite.PersonalVehicleCar },
-            { VehicleClass.Vans, BlipSprite.PersonalVehicleCar },
-            { (VehicleClass)22, (BlipSprite)531 },
+            { VehicleClass.Boats, (int)BlipSprite.Boat },
+            { VehicleClass.Commercial, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Compacts, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Coupes, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Cycles, (int)BlipSprite.PersonalVehicleBike },
+            { VehicleClass.Emergency, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Helicopters, (int)BlipSprite.Helicopter },
+            { VehicleClass.Industrial, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Military, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Motorcycles, (int)BlipSprite.PersonalVehicleBike },
+            { VehicleClass.Muscle, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.OffRoad, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Planes, (int)BlipSprite.Plane },
+            { VehicleClass.Sedans, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Service, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Sports, 523 },
+            { VehicleClass.SportsClassics, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Super, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.SUVs, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Trains, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Utility, (int)BlipSprite.PersonalVehicleCar },
+            { VehicleClass.Vans, (int)BlipSprite.PersonalVehicleCar },
+            { (VehicleClass)22, 531 },
         };
         
-        public static Dictionary<VehicleHash, BlipSprite> VehicleBlips = new Dictionary<VehicleHash, BlipSprite>()
+        public static Dictionary<VehicleHash, int> VehicleBlips = new Dictionary<VehicleHash, int>()
         {
-            { VehicleHash.Rhino, BlipSprite.Tank },
-            { VehicleHash.Seashark, (BlipSprite)471 },
-            { VehicleHash.Seashark2, (BlipSprite)471 },
-            { VehicleHash.Seashark3, (BlipSprite)471 },
+            { VehicleHash.Rhino, (int)BlipSprite.Tank },
+            { VehicleHash.Seashark, 471 },
+            { VehicleHash.Seashark2, 471 },
+            { VehicleHash.Seashark3, 471 },
+            { VehicleHash.Phantom, 477 },
+            { VehicleHash.Phantom2, 528 },
+            { VehicleHash.Phantom3, 477 },
+            { VehicleHash.Hauler, 477 },
+            { VehicleHash.Hauler2, 477 },
+            { VehicleHash.Bus, 513 },
+            { VehicleHash.PBus, 513 },
+            { VehicleHash.RentalBus, 513 },
         };
 
         public static bool TimeoutStateValue = false;

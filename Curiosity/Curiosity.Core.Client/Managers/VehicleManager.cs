@@ -289,6 +289,15 @@ namespace Curiosity.Core.Client.Managers
                 IsNearFuelPump = false;
                 IsRefueling = false;
                 currentVehicle = null;
+
+                List<Vehicle> vehicles = World.GetAllVehicles().Select(x => x).Where(x => Cache.PlayerPed.IsInRangeOf(x.Position, 20f)).ToList();
+
+                foreach(Vehicle veh in vehicles)
+                {
+                    if (veh.AttachedBlip is not null)
+                        veh.AttachedBlip.Alpha = 255;
+                }
+
                 return;
             }
 
