@@ -13,7 +13,7 @@ namespace Curiosity.Core.Client
         public static CuriosityCharacter Character => Player?.Character;
         public static Position Position => Entity.Position;
         public static VehicleState PersonalVehicle;
-        public static Vehicle PersonalTrailer;
+        public static VehicleState PersonalTrailer;
 
         private static Ped _ped;
         public static Ped PlayerPed

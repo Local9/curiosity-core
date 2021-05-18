@@ -239,7 +239,6 @@ namespace Curiosity.Core.Server.Managers
                 float z = metadata.Find<float>(3);
                 float h = metadata.Find<float>(4);
 
-                Vector3 pos = new Vector3();
                 int vehicleId = API.CreateVehicle((uint)model, x, y, z, h, true, true);
 
                 if (vehicleId == 0)

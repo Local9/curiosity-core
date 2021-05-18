@@ -210,6 +210,60 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "trailer" })]
+        public class TrailerSpawner : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+
+                Vehicle vehicle = null;
+
+                if (Cache.PersonalTrailer is not null)
+                    vehicle = Cache.PersonalTrailer.Vehicle;
+
+                if (vehicle is not null)
+                {
+                    if (vehicle.Exists()) // personal vehicle
+                    {
+                        await vehicle.FadeOut(true);
+
+                        vehicle.IsPositionFrozen = true;
+                        vehicle.IsCollisionEnabled = false;
+
+                        EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
+
+                        if (vehicle.Exists())
+                            vehicle.Delete();
+
+                        await BaseScript.Delay(500);
+                    }
+                }
+
+                Vector3 charPos = Cache.PlayerPed.Position;
+                Vector3 spawnPos = Vector3.Zero;
+                float spawnHeading = 0f;
+
+                Vector3 spawnRoad = Vector3.Zero;
+
+                API.GetClosestVehicleNodeWithHeading(charPos.X, charPos.Y, charPos.Z, ref spawnPos, ref spawnHeading, 1, 3f, 0);
+                API.GetRoadSidePointWithHeading(spawnPos.X, spawnPos.Y, spawnPos.Z, spawnHeading, ref spawnRoad);
+
+                int networkId = await EventSystem.Request<int>("vehicle:trailer:spawn:position", arguments.ElementAt(0), spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading);
+
+                int vehId = API.NetworkGetEntityFromNetworkId(networkId);
+
+                if (!API.DoesEntityExist(vehId)) return;
+
+                vehicle = new Vehicle(vehId);
+
+                await vehicle.FadeIn();
+
+                Cache.PersonalTrailer = new State.VehicleState(vehicle);
+
+                Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+            }
+        }
+
         [CommandInfo(new[] { "c" })]
         public class VehicleSpawnerSafe : ICommand
         {
