@@ -98,6 +98,10 @@ namespace Curiosity.Core.Server.Managers
 
                 GetItem:
                     item = await Database.Store.ShopDatabase.GetItem(itemId, characterId);
+
+                    if (item.IsStockManaged && item.NumberInStock == 0)
+                        goto FailedPurchaseNotEnoughStock;
+
                     goto CheckWallet;
 
                 CheckWallet:
@@ -111,12 +115,12 @@ namespace Curiosity.Core.Server.Managers
                 CheckRoles:
                     // Check if item has roles
                     List<RoleRequirement> roleRequirements = await Database.Store.ShopDatabase.GetRoleRequirements(itemId, characterId);
-                    
+
                     if (roleRequirements.Count > 0)
                     {
                         Role role = curiosityUser.Role;
 
-                        foreach(RoleRequirement roleRequirement in roleRequirements)
+                        foreach (RoleRequirement roleRequirement in roleRequirements)
                         {
                             if (role == (Role)roleRequirement.RoleId)
                             {
@@ -184,6 +188,15 @@ namespace Curiosity.Core.Server.Managers
                     int minusValue = item.BuyValue * -1;
                     int newWalletValue = await Database.Store.BankDatabase.Adjust(characterId, minusValue);
                     curiosityUser.Character.Cash = newWalletValue;
+
+                    if (item.IsStockManaged)
+                        goto LowerStockAmount;
+
+                    goto SuccessfulPurchase;
+
+                LowerStockAmount:
+                    await Database.Store.ShopDatabase.Adjust(item.ShopItemId, -1);
+
                     goto SuccessfulPurchase;
 
                 SuccessfulPurchase:
@@ -194,31 +207,34 @@ namespace Curiosity.Core.Server.Managers
                     Web.DiscordClient discordClient = Web.DiscordClient.GetModule();
                     discordClient.SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' purchased '{item.Label}' for ${item.BuyValue}"); // MOVE TO DB LOG
 
-                    return sqlResult;
+                    goto ReturnResult;
 
                 FailedPurchase:
-                    curiosityUser.Purchasing = false;
                     sqlResult.Message = res.Message;
-                    return sqlResult; // Need to write an error logger
+                    goto ReturnResult; // Need to write an error logger
+
+                FailedPurchaseNotEnoughStock:
+                    sqlResult.Message = "Not enough items in stock";
+                    goto ReturnResult;
 
                 FailedPurchaseCash:
-                    curiosityUser.Purchasing = false;
                     sqlResult.Message = "Not enough cash to buy item";
-                    return sqlResult;
+                    goto ReturnResult;
 
                 FailedPurchaseRole:
-                    curiosityUser.Purchasing = false;
                     sqlResult.Message = "Role Requirement not met";
-                    return sqlResult;
+                    goto ReturnResult;
 
                 FailedPurchaseItem:
-                    curiosityUser.Purchasing = false;
                     sqlResult.Message = "Item Requirement not met";
-                    return sqlResult;
+                    goto ReturnResult;
 
                 FailedPurchaseSkill:
-                    curiosityUser.Purchasing = false;
                     sqlResult.Message = "Skill Requirement not met";
+                    goto ReturnResult;
+
+                ReturnResult:
+                    curiosityUser.Purchasing = false;
                     return sqlResult;
 
                 }
@@ -253,20 +269,55 @@ namespace Curiosity.Core.Server.Managers
 
                 GetItem:
                     item = await Database.Store.ShopDatabase.GetItem(itemId, characterId);
+
+                    if (item is null)
+                        goto Fail;
+
                     goto CheckUserOwnsItem;
 
                 CheckUserOwnsItem:
+                    CuriosityStoreItem ownedItem = await Database.Store.CharacterDatabase.GetItem(characterId, itemId);
 
+                    if (ownedItem is null)
+                        goto FailItemNotOwned;
+
+                    goto RemoveItem;
 
                 RemoveItem:
+                    bool itemRemoved = await Database.Store.CharacterDatabase.RemoveItem(characterId, itemId);
+
+                    if (itemRemoved)
+                        goto PayBackUser;
+
+                    if (!itemRemoved)
+                        goto Fail;
 
                 PayBackUser:
+                    curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(characterId, ownedItem.BuyBackValue);
+
+                    if (item.IsStockManaged)
+                        goto AdjustStock;
+
+                    goto Success;
+
+                AdjustStock:
+                    await Database.Store.ShopDatabase.Adjust(item.ShopItemId, 1);
+
+                    goto Success;
 
                 Success:
                     sqlResult.Success = true;
-                    return sqlResult;
+                    sqlResult.Message = "Item sold";
+                    goto Result;
+
+                FailItemNotOwned:
+                    sqlResult.Message = "Item not owned.";
+                    goto Result;
 
                 Fail:
+                    goto Result;
+
+                Result:
                     curiosityUser.Purchasing = false;
                     return sqlResult;
                 }
@@ -275,7 +326,7 @@ namespace Curiosity.Core.Server.Managers
                     Logger.Error(ex, "shop:sell:item");
                     return sqlResult;
                 }
-        }));
+            }));
 
 
         }

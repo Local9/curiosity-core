@@ -5,6 +5,7 @@ using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using GHMatti.Data.MySQL.Core;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -155,6 +156,19 @@ namespace Curiosity.Core.Server.Database.Store
             {
                 return await result;
             }
+        }
+
+        internal static async Task<bool> RemoveItem(int characterId, int itemId)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@CharacterID", characterId },
+                { "@ItemID", itemId }
+            };
+
+            string myQuery = "CALL spCharacterRemoveItem(@CharacterID, @ItemID);";
+
+            return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
         }
     }
 }

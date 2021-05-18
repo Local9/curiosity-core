@@ -333,6 +333,19 @@ namespace Curiosity.Core.Server.Database.Store
             }
         }
 
+        internal static async Task<bool> Adjust(int shopItemId, int amount)
+        {
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+            {
+                { "@ShopItemId", shopItemId },
+                { "@Amount", amount }
+            };
+
+            string myQuery = "CALL spShopAdjustStock(@ShopItemId, @Amount);";
+
+            return await MySqlDatabase.mySQL.Query(myQuery, myParams) > 0;
+        }
+
         //public static async Task<SqlResult> TradeItem(int characterId, int itemId, int numberOfItems, bool purchase)
         //{
         //    SqlResult rtValue = new SqlResult();
