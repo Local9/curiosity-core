@@ -95,6 +95,7 @@ namespace Curiosity.Core.Server.Database.Store
                 i.MaximumAllowed = kv["MaximumAllowed"].ToInt();
                 i.HashKey = $"{kv["HashKey"]}";
                 i.ImageUri = $"{kv["ImageUri"]}";
+                i.NumberOwned = kv["NumberOwned"].ToInt();
 
                 if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
                 {
@@ -130,6 +131,7 @@ namespace Curiosity.Core.Server.Database.Store
             i.MaximumAllowed = kv["MaximumAllowed"].ToInt();
             i.HashKey = $"{kv["HashKey"]}";
             i.ImageUri = $"{kv["ImageUri"]}";
+            i.NumberOwned = kv["NumberOwned"].ToInt();
 
             if (kv.ContainsKey("ShopItemId") && kv["ShopItemId"] is not null)
             {
