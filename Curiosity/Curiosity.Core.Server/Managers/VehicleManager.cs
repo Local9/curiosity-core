@@ -84,8 +84,13 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("vehicle:refuel:charge", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
+                GenericMessage genericMessage = new GenericMessage();
 
-                if (!PluginManager.ActiveUsers.ContainsKey(senderHandle)) return false;
+                if (!PluginManager.ActiveUsers.ContainsKey(senderHandle))
+                {
+                    genericMessage.Message = "Player not found.";
+                    return genericMessage;
+                }
 
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[senderHandle];
 
@@ -94,11 +99,18 @@ namespace Curiosity.Core.Server.Managers
 
                 bool canPay = (curiosityUser.Character.Cash - cost) >= 0;
 
-                if (!canPay) return false;
+                if (!canPay)
+                {
+                    genericMessage.Message = "Cannot afford to refuel";
+                    return genericMessage;
+                }
 
                 curiosityUser.Character.Cash = await Database.Store.BankDatabase.Adjust(curiosityUser.Character.CharacterId, (int)cost * -1);
 
-                return true;
+                genericMessage.Success = true;
+                genericMessage.Cost = (int)cost;
+
+                return genericMessage;
             }));
 
             EventSystem.GetModule().Attach("vehicle:owner", new EventCallback(metadata =>

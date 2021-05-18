@@ -9,6 +9,7 @@ using Curiosity.Core.Client.State;
 using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
+using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;
@@ -252,17 +253,17 @@ namespace Curiosity.Core.Client.Managers
 
                     float fuel = (float)currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL);
 
-                    bool success = await EventSystem.Request<bool>("vehicle:refuel:charge", fuel);
+                    GenericMessage result = await EventSystem.Request<GenericMessage>("vehicle:refuel:charge", fuel);
 
-                    if (success)
+                    if (result.Success)
                     {
                         currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL, 100f, true);
-                        NotificationManger.GetModule().Success("Vehicle refueled", "bottom-middle");
+                        NotificationManger.GetModule().Success($"Vehicle refueled (${result.Cost})", "bottom-middle");
                     }
 
-                    if (!success)
+                    if (!result.Success)
                     {
-                        NotificationManger.GetModule().Warn("Vehicle <b>not</b> refueled", "bottom-middle");
+                        NotificationManger.GetModule().Warn($"Vehicle <b>not</b> refueled<br />{result.Message}", "bottom-middle");
                     }
 
                     IsAwaitingServerResponse = false;
