@@ -290,33 +290,7 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
-        //[CommandInfo(new[] { "notify" })]
-        //public class NotificationTest : ICommand
-        //{
-        //    public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
-        //    {
-        //        if (arguments.Count <= 0) return;
 
-        //        string argument = arguments[0];
-
-        //        string notificationKey = "TEST_LABEL";
-        //        API.AddTextEntry(notificationKey, "Example Message: ~a~");
-
-        //        //API.BeginTextCommandDisplayText(notificationKey);
-        //        //API.AddTextComponentSubstringPlayerName("Hello, World!");
-        //        //API.EndTextCommandDisplayText(0.5f, 0.5f);
-
-        //        // string txd = await Cache.PlayerPed.GetHeadshot();
-
-        //        string txd = "CHAR_ACTING_UP";
-
-        //        API.BeginTextCommandDisplayText("STRING");
-        //        API.EndTextCommandThefeedPostMessagetextEntry(txd, txd, false, 0, notificationKey, argument);
-        //        API.EndTextCommandThefeedPostTicker(true, false);
-
-        //        API.UnregisterPedheadshot(Cache.PlayerPed.Handle);
-        //    }
-        //}
         #endregion
     }
 }
