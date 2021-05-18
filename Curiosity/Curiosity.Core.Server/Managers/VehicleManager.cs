@@ -16,8 +16,36 @@ namespace Curiosity.Core.Server.Managers
         const int VEHICLE_TOW_REP = 1000;
         const int VEHICLE_TOW_COST = 1000;
 
+        List<string> ALLOWED_TRAILERS = new List<string>()
+        {
+            "trailersmall2",
+            "trailers",
+            "docktrailer",
+            "raketrailer",
+            "baletrailer",
+            "trailerlogs",
+            "trailersmall",
+            "boattrailer",
+            "graintrailer",
+            "tvtrailer",
+            "armytrailer2",
+            "trailers3",
+            "trailers2",
+            "armytrailer",
+            "freighttrailer",
+            "trailerlarge",
+            "trailers4",
+        };
+
+        List<int> trailerHashes = new List<int>();
+
         public override void Begin()
         {
+            foreach(string trailer in ALLOWED_TRAILERS)
+            {
+                trailerHashes.Add(API.GetHashKey(trailer));
+            }
+
             EventSystem.GetModule().Attach("vehicle:log:player", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
@@ -31,6 +59,7 @@ namespace Curiosity.Core.Server.Managers
                 Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
+
             EventSystem.GetModule().Attach("vehicle:log:player:trailer", new EventCallback(metadata =>
             {
                 int netId = metadata.Find<int>(0);
@@ -233,6 +262,12 @@ namespace Curiosity.Core.Server.Managers
                 RoutingBucket routingBucket = user.RoutingBucket;
 
                 var model = API.GetHashKey(metadata.Find<string>(0));
+
+                if (!trailerHashes.Contains(model))
+                {
+                    
+                    return null;
+                }
 
                 float x = metadata.Find<float>(1);
                 float y = metadata.Find<float>(2);

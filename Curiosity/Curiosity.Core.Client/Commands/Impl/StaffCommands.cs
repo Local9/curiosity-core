@@ -269,7 +269,7 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 Cache.PersonalTrailer = new State.VehicleState(vehicle);
 
-                Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+                Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
             }
         }
 
