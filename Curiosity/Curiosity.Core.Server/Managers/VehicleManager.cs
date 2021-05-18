@@ -221,12 +221,64 @@ namespace Curiosity.Core.Server.Managers
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
 
+            EventSystem.GetModule().Attach("vehicle:trailer:spawn:position", new AsyncEventCallback(async metadata =>
+            {
+                int senderHandle = metadata.Sender;
+
+                if (!PluginManager.ActiveUsers.ContainsKey(senderHandle)) return null;
+
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+                Player player = PluginManager.PlayersList[senderHandle];
+
+                RoutingBucket routingBucket = user.RoutingBucket;
+
+                var model = API.GetHashKey(metadata.Find<string>(0));
+
+                float x = metadata.Find<float>(1);
+                float y = metadata.Find<float>(2);
+                float z = metadata.Find<float>(3);
+                float h = metadata.Find<float>(4);
+
+                Vector3 pos = new Vector3();
+                int vehicleId = API.CreateVehicle((uint)model, x, y, z, h, true, true);
+
+                if (vehicleId == 0)
+                {
+                    Logger.Debug($"Possible OneSync is Disabled");
+                    return null;
+                }
+
+                DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+
+                while (!API.DoesEntityExist(vehicleId))
+                {
+                    await BaseScript.Delay(0);
+
+                    if (maxWaitTime < DateTime.UtcNow) break;
+                }
+
+                if (!API.DoesEntityExist(vehicleId))
+                {
+                    Logger.Debug($"Failed to create trailer in timely manor.");
+                    return null;
+                }
+
+                Vehicle vehicle = new Vehicle(vehicleId);
+                vehicle.State.Set("VEH_SPAWNED", true, true);
+                vehicle.State.Set("VEH_TRAILER", true, true);
+
+                API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
+
+                return API.NetworkGetNetworkIdFromEntity(vehicleId);
+            }));
+
             EventSystem.GetModule().Attach("vehicle:repair", new AsyncEventCallback(async metadata =>
             {
                 int senderHandle = metadata.Sender;
                 var player = PluginManager.PlayersList[metadata.Sender];
 
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+                user.Character.Cash = await Database.Store.BankDatabase.Get(user.Character.CharacterId);
 
                 if (user.Character.Cash < VEHICLE_REPAIR_CHARGE)
                 {
@@ -234,8 +286,6 @@ namespace Curiosity.Core.Server.Managers
                 }
                 else
                 {
-                    user.Character.Cash = await Database.Store.BankDatabase.Get(user.Character.CharacterId);
-
                     if ((user.Character.Cash - VEHICLE_REPAIR_CHARGE) < VEHICLE_REPAIR_CHARGE)
                         return false;
 
