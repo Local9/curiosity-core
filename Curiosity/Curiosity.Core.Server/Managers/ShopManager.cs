@@ -77,10 +77,9 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("shop:purchase:item", new AsyncEventCallback(async metadata =>
             {
                 SqlResult sqlResult = new SqlResult();
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                 try
                 {
-                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
-
                     if (curiosityUser.Purchasing)
                     {
                         sqlResult.Message = "Process Pending";
@@ -249,9 +248,9 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("shop:sell:item", new AsyncEventCallback(async metadata =>
             {
                 SqlResult sqlResult = new SqlResult();
+                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                 try
                 {
-                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
 
                     if (curiosityUser.Purchasing)
                     {
@@ -284,6 +283,9 @@ namespace Curiosity.Core.Server.Managers
 
                     if (ownedItem.ShopItemId is null)
                         goto UnableToSellItem;
+
+                    if (ownedItem.NumberOwned == 0)
+                        goto FailItemNotOwned;
 
                     goto RemoveItem;
 
