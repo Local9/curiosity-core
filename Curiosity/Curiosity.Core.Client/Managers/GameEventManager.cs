@@ -318,7 +318,7 @@ namespace Curiosity.Core.Client.Managers
 
             RemoveCamera();
 
-            await BaseScript.Delay(1000);
+            await BaseScript.Delay(3000);
 
             await ScreenInterface.FadeIn(3000);
         }
