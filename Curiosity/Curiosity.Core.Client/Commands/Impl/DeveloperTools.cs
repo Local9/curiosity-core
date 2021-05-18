@@ -281,6 +281,7 @@ namespace Curiosity.Core.Client.Commands.Impl
                     case "loc":
                         LocationManager.LocationManagerInstance.OnGetLocations();
                         Chat.SendLocalMessage($"Refreshed locations.");
+                        EventSystem.GetModule().Send("config:locations");
                         break;
                     default:
                         Chat.SendLocalMessage($"Argument '{argument}' is not implemented.");

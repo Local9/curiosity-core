@@ -92,6 +92,8 @@ namespace Curiosity.Core.Server.Managers
                 }
             }
 
+            Logger.Debug($"Possible server config does not match the client config");
+
             return false;
         }
     }
