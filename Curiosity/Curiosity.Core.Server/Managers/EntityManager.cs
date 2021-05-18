@@ -20,6 +20,12 @@ namespace Curiosity.Core.Server.Managers
         {
             EntityInstance = this;
 
+            EventSystem.GetModule().Attach("entity:nuke", new EventCallback(metadata =>
+            {
+                EventSystem.SendAll("entity:nuke");
+                return null;
+            }));
+
             EventSystem.GetModule().Attach("delete:entity", new EventCallback(metadata =>
             {
                 int networkId = metadata.Find<int>(0);

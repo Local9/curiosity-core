@@ -12,6 +12,13 @@ namespace Curiosity.Core.Client.Managers
 
         public override void Begin()
         {
+            EventSystem.Attach("entity:nuke", new EventCallback(metadata =>
+            {
+                Vector3 pos = Cache.PlayerPed.Position;
+                API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 500f, false, false, false, false);
+                return null;
+            }));
+
             EventSystem.Attach("entity:deleteFromWorld", new AsyncEventCallback(async metadata =>
             {
                 int networkId = metadata.Find<int>(0);

@@ -91,6 +91,15 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "nuke" })]
+        public class EntityNukeDespawner : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                EventSystem.GetModule().Send("entity:nuke");
+            }
+        }
+
         #endregion
 
         #region vehicles
