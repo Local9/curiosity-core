@@ -143,6 +143,7 @@
     <Content Include="config\scenarios.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="config\interiors.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
