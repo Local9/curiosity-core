@@ -241,6 +241,7 @@ namespace Curiosity.Core.Server.Managers
                 catch (Exception ex)
                 {
                     Logger.Error(ex, "shop:purchase:item");
+                    curiosityUser.Purchasing = false;
                     return sqlResult;
                 }
             }));
@@ -331,6 +332,7 @@ namespace Curiosity.Core.Server.Managers
                 catch (Exception ex)
                 {
                     Logger.Error(ex, "shop:sell:item");
+                    curiosityUser.Purchasing = false;
                     return sqlResult;
                 }
             }));
