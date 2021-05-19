@@ -635,6 +635,22 @@
           "H": 279.8329
         }
       ]
+    },
+    {
+      "name": "Yaught Club",
+      "sprite": 410,
+      "color": 2,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": -712.8171,
+          "Y": -1298.227,
+          "Z": 5.101922
+        }
+      ]
     }
   ]
 }
