@@ -558,6 +558,46 @@
           "Z": 41.253
         }
       ]
+    },
+    {
+      "name": "Plane Hangers",
+      "sprite": 307,
+      "color": 2,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": 297.8683,
+          "Y": -584.3318,
+          "Z": 43.25863
+        }
+      ]
+    },
+    {
+      "name": "Helicopter Pad",
+      "sprite": 43,
+      "color": 2,
+      "isShortRange": true,
+      "category": 1,
+      "priority": 1,
+      "scale": 0.8,
+      "positions": [
+        {
+          "X": -718.5682,
+          "Y": -1393.92,
+          "Z": 5.000525
+        }
+      ],
+      "spawns": [
+        {
+          "X": -699.6396,
+          "Y": -1448.356,
+          "Z": 5.00052,
+          "H": 46.90
+        }
+      ]
     }
   ]
 }

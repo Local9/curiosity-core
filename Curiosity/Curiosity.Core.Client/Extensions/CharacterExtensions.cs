@@ -181,7 +181,7 @@ namespace Curiosity.Core.Client.Extensions
             Cache.PlayerPed.ClearBloodDamage();
             Cache.PlayerPed.ClearLastWeaponDamage();
 
-            API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.Heading, false, false);
+            API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.H, false, false);
             Cache.UpdatePedId(true);
 
             await Cache.PlayerPed.FadeIn();
@@ -314,10 +314,10 @@ namespace Curiosity.Core.Client.Extensions
             API.TaskGoStraightToCoord(player.Entity.Id, DefaultPosition.X, DefaultPosition.Y, DefaultPosition.Z,
                 1f,
                 -1,
-                DefaultPosition.Heading, 0f);
+                DefaultPosition.H, 0f);
 
             while (DefaultPosition.Distance(player.Entity.Position) > 0.1 ||
-                   Math.Abs(DefaultPosition.Heading - player.Entity.Position.Heading) > 1)
+                   Math.Abs(DefaultPosition.H - player.Entity.Position.H) > 1)
             {
                 await BaseScript.Delay(10);
             }

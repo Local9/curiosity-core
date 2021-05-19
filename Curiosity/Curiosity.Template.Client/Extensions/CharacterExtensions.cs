@@ -163,7 +163,7 @@ namespace Curiosity.Template.Client.Extensions
             API.ClearPlayerWantedLevel(API.PlayerId());
             API.SetEntityVisible(ped, true, true);
             API.SetEntityHealth(ped, API.GetEntityMaxHealth(ped));
-            API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.Heading, false, false);
+            API.NetworkResurrectLocalPlayer(position.X, position.Y, position.Z, position.H, false, false);
             API.ClearPedBloodDamage(ped);
         }
 
@@ -283,10 +283,10 @@ namespace Curiosity.Template.Client.Extensions
             API.TaskGoStraightToCoord(player.Entity.Id, DefaultPosition.X, DefaultPosition.Y, DefaultPosition.Z,
                 1f,
                 -1,
-                DefaultPosition.Heading, 0f);
+                DefaultPosition.H, 0f);
 
             while (DefaultPosition.Distance(player.Entity.Position) > 0.1 ||
-                   Math.Abs(DefaultPosition.Heading - player.Entity.Position.Heading) > 1)
+                   Math.Abs(DefaultPosition.H - player.Entity.Position.H) > 1)
             {
                 await BaseScript.Delay(10);
             }

@@ -12,7 +12,7 @@ namespace Curiosity.MissionManager.Client.Environment
             API.RequestCollisionAtCoord(position.X, position.Y, position.Z);
             API.RequestAdditionalCollisionAtCoord(position.X, position.Y, position.Z);
             API.SetEntityCoordsNoOffset(entity, position.X, position.Y, position.Z, false, false, false);
-            API.SetEntityHeading(entity, position.Heading);
+            API.SetEntityHeading(entity, position.H);
 
             while (!API.HasCollisionLoadedAroundEntity(entity))
             {
@@ -23,7 +23,7 @@ namespace Curiosity.MissionManager.Client.Environment
             }
 
             API.SetEntityCoordsNoOffset(entity, position.X, position.Y, position.Z, false, false, false);
-            API.SetEntityHeading(entity, position.Heading);
+            API.SetEntityHeading(entity, position.H);
         }
     }
 }

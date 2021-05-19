@@ -84,12 +84,12 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
                         API.TaskGoStraightToCoord(Entity, next.Position.X, next.Position.Y, next.Position.Z,
                             1f,
                             -1,
-                            next.Position.Heading, 0f);
+                            next.Position.H, 0f);
 
                         var time = Date.Timestamp;
 
                         while ((next.Position.Distance(ped.Position.ToPosition()) > 0.3 ||
-                                Math.Abs(next.Position.Heading - ped.Heading) > 5) && next.PositionTimeout == -1 ||
+                                Math.Abs(next.Position.H - ped.Heading) > 5) && next.PositionTimeout == -1 ||
                                time + next.PositionTimeout > Date.Timestamp)
                         {
                             await BaseScript.Delay(10);
@@ -103,7 +103,7 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
 
                     ped.Task.ClearAllImmediately();
 
-                    API.SetEntityHeading(Entity, next.Position.Heading);
+                    API.SetEntityHeading(Entity, next.Position.H);
                 }
 
                 next.OnAnimStart?.Invoke();
@@ -125,7 +125,7 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
                         {
                             var position = next.Position ?? ped.Position.ToPosition();
 
-                            position.Heading = ped.Heading;
+                            position.H = ped.Heading;
 
                             offset = position.Add(next.Offset);
                         }
@@ -138,7 +138,7 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
                         }
 
                         API.TaskPlayAnimAdvanced(ped.Handle, next.Group, next.AnimationId, offset.X, offset.Y, offset.Z,
-                            0f, 0f, offset.Heading, 8f, -8f, -1, (int)next.Flags, next.StartTime, 0, 0);
+                            0f, 0f, offset.H, 8f, -8f, -1, (int)next.Flags, next.StartTime, 0, 0);
                         API.RemoveAnimDict(next.Group);
                     }
 

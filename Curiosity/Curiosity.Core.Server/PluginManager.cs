@@ -429,7 +429,7 @@ namespace Curiosity.Core.Server
             {
                 if (ActiveUsers.Count > 0)
                 {
-                    Logger.Debug("[Saves] Beginning `Save` operation on `Characters`.");
+                    // Logger.Debug("[Saves] Beginning `Save` operation on `Characters`.");
 
                     foreach (var users in ActiveUsers)
                     {
@@ -469,7 +469,7 @@ namespace Curiosity.Core.Server
                         }
                     }
 
-                    Logger.Debug($"[ActiveUsers] Removed {activeUsersRemoved} of {activeUsers}.");
+                    // Logger.Debug($"[ActiveUsers] Removed {activeUsersRemoved} of {activeUsers}.");
                     LastSave = DateTime.Now;
                 }
 

@@ -40,7 +40,7 @@ namespace Curiosity.Template.Client.Environment.Entities
             set
             {
                 API.SetEntityCoords(Id, value.X, value.Y, value.Z, false, false, false, false);
-                API.SetEntityHeading(Id, value.Heading);
+                API.SetEntityHeading(Id, value.H);
             }
         }
 

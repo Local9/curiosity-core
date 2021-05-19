@@ -29,6 +29,9 @@ namespace Curiosity.Systems.Library.Models
         [DataMember(Name = "positions")]
         public List<Position> Positions;
 
+        [DataMember(Name = "spawns")]
+        public List<Position> Spawners;
+
         [DataMember(Name = "name")]
         public string Name;
 
