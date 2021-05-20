@@ -33,7 +33,7 @@ namespace Curiosity.Core.Client.Managers.UI
         private async Task DeveloperOverlay()
         {
             Tuple<float, float> minimap = ScreenInterface.MinimapAnchor();
-            Vector2 pos = new Vector2(minimap.Item1, minimap.Item2 + 0.18f);
+            Vector2 pos = new Vector2(minimap.Item1, minimap.Item2 + 0.185f);
             Color color = Color.FromArgb(255, 255, 255, 255);
 
             Vector3 playerPos = Cache.PlayerPed.Position;
