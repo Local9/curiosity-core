@@ -6,6 +6,7 @@ using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Core.Client.Managers.UI;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
@@ -291,6 +292,38 @@ namespace Curiosity.Core.Client.Commands.Impl
         }
 
 
+        #endregion
+
+        #region Screen
+        [CommandInfo(new[] { "ui" })]
+        public class UserInterface : ICommand
+        {
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                DeveloperUxManager developerUxManager = DeveloperUxManager.GetModule();
+
+                if (arguments.Count > 0)
+                {
+                    // Logger.Debug($"Args: {string.Join(",", arguments)}");
+
+                    if (arguments[0] == "scale" || arguments[0] == "s")
+                        developerUxManager.Scale = float.Parse(arguments[1]);
+                }
+
+                if (arguments.Count == 0)
+                {
+                    if (developerUxManager.Enabled)
+                    {
+                        developerUxManager.DisableDeveloperOverlay();
+                    }
+
+                    if (!developerUxManager.Enabled)
+                    {
+                        developerUxManager.EnableDeveloperOverlay();
+                    }
+                }
+            }
+        }
         #endregion
     }
 }

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
+using Font = CitizenFX.Core.UI.Font;
 
 namespace Curiosity.Core.Client.Interface
 {
@@ -54,20 +56,18 @@ namespace Curiosity.Core.Client.Interface
         };
 
         public static bool TimeoutStateValue = false;
-        public static void DrawText(string text, float scale, Vector2 position, Color color, bool centered = false)
+        public static void DrawText(string text, float scale, Vector2 position, Color color, bool centered = false, Font font = Font.ChaletLondon, Alignment alignment = Alignment.Left)
         {
-            API.SetTextFont(0);
-            API.SetTextProportional(true);
-            API.SetTextScale(scale, scale);
-            API.SetTextColour(color.R, color.G, color.B, color.A);
-            API.SetTextDropshadow(0, 0, 0, 0, 255);
-            API.SetTextEdge(1, 0, 0, 0, 150);
-            API.SetTextDropShadow();
-            API.SetTextOutline();
-            API.SetTextCentre(centered);
-            API.BeginTextCommandDisplayText("STRING");
-            API.AddTextComponentSubstringPlayerName(text);
-            API.EndTextCommandDisplayText(position.X, position.Y);
+            SetTextFont(0);
+            SetTextScale(scale, scale);
+            SetTextColour(color.R, color.G, color.B, color.A);
+            SetTextDropshadow(0, 0, 0, 0, 255);
+            SetTextOutline();
+            SetTextCentre(centered);
+
+            BeginTextCommandDisplayText("STRING");
+            AddTextComponentSubstringPlayerName(text);
+            EndTextCommandDisplayText(position.X, position.Y);
         }
 
         public static async void Draw3DTextTimeout(float x, float y, float z, string message, int timeout = 2500, float scaleMod = 20.0f, float distanceToHide = 20f)
@@ -125,6 +125,33 @@ namespace Curiosity.Core.Client.Interface
         public static void Text(string text, float scale, PointF position, Color color, CitizenFX.Core.UI.Font font = CitizenFX.Core.UI.Font.Monospace, Alignment alignment = Alignment.Center, bool shadow = false, bool outline = false)
         {
 
+        }
+
+        public static Tuple<float, float> MinimapAnchor()
+        {
+            SetScriptGfxAlign(76, 66); // https://runtime.fivem.net/doc/natives/?_0xB8A850F20A067EB6
+            float minimapTopX = 0f;
+            float minimapTopY = 0f;
+            GetScriptGfxPosition(-0.0045f, 0.002f + (-0.188888f), ref minimapTopX, ref minimapTopY);
+            ResetScriptGfxAlign();
+
+            return new Tuple<float, float>(minimapTopX, minimapTopY);
+        }
+
+        public static Tuple<float, float> MinimapAnchorNui()
+        {
+            SetScriptGfxAlign(76, 66); // https://runtime.fivem.net/doc/natives/?_0xB8A850F20A067EB6
+            float minimapTopX = 0f;
+            float minimapTopY = 0f;
+            GetScriptGfxPosition(-0.0045f, 0.002f + (-0.188888f), ref minimapTopX, ref minimapTopY);
+            ResetScriptGfxAlign();
+            int scrnW = 0;
+            int scrnH = 0;
+            GetActiveScreenResolution(ref scrnW, ref scrnH);
+            float finX = scrnW * minimapTopX;
+            float finY = scrnH * minimapTopY;
+
+            return new Tuple<float, float>(finX, finY);
         }
 
         internal static async Task FadeOut(int ms = 1000)
