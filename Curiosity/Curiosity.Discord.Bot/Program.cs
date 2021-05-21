@@ -11,12 +11,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Curiosity.LifeV.Bot
 {
     class Program
     {
+        Regex urlRE = new Regex("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?([^ ])+");
+
         private DiscordSocketClient _client;
         private CommandService _commands;
         private IServiceProvider _services;
@@ -29,6 +32,8 @@ namespace Curiosity.LifeV.Bot
         private ulong guildId;
 
         DateTime lastSentTrigger = DateTime.Now.AddMinutes(-10);
+
+        Dictionary<ulong, DateTime> discordChannel = new Dictionary<ulong, DateTime>();
 
         static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
 
@@ -118,27 +123,67 @@ namespace Curiosity.LifeV.Bot
 
                 int argPos = 0;
 
-                if (message.MentionedUsers.Select(u => u).Where(x => x.IsBot && x.Id == _client.CurrentUser.Id).ToList().Count > 0)
-                {
-                    EmbedBuilder builder = new EmbedBuilder();
-
-                    builder.WithImageUrl("https://cdn.discordapp.com/attachments/138522037181349888/438774275546152960/Ping_Discordapp_GIF-downsized_large.gif");
-
-                    await context.Channel.SendMessageAsync(embed: builder.Build());
-                }
-                else if (message.Content.Contains("guns") || message.Content.Contains("weapons") || message.Content.Contains("weapon") || message.Content.Contains("gun"))
+                if (message.Content.Contains("guns") || message.Content.Contains("weapons") || message.Content.Contains("weapon") || message.Content.Contains("gun"))
                 {
                     if (message.Channel.Id == 599956067686023176) return;
 
-                    if (DateTime.Now.Subtract(lastSentTrigger).TotalMinutes < 5) return;
+                    if (discordChannel.ContainsKey(message.Channel.Id))
+                    {
+                        DateTime dateTime = discordChannel[message.Channel.Id];
+
+                        if (DateTime.Now.Subtract(dateTime).TotalMinutes < 5) return;
+                    }
 
                     await Task.Delay(1000);
-                    await context.Channel.SendMessageAsync("Weapons are currently in refactoring with the new framework, this is to allow you to purchase licenses for weapons and earn components. There is no E.T.A. as to when this will be completed as ::1 is also trying to support OneSync and the Casino or latest updates to GTA.");
+
+                    var msg = await context.Channel.SendMessageAsync("Weapons are currently in refactoring with the new framework, this is to allow you to purchase licenses for weapons and earn components. There is no E.T.A. as to when this will be completed as ::1 is also trying to support OneSync and the Casino or latest updates to GTA.");
+
+                    await Task.Delay(10000);
+
+                    await msg.DeleteAsync();
 
                     lastSentTrigger = DateTime.Now;
+
+                    if (discordChannel.ContainsKey(message.Channel.Id))
+                    {
+                        discordChannel[message.Channel.Id] = lastSentTrigger;
+                    }
+                    else
+                    {
+                        discordChannel.Add(message.Channel.Id, lastSentTrigger);
+                    }
+                    
                     return;
                 }
-                else if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
+
+                if (urlRE.IsMatch(message.Content))
+                {
+                    if (message.Content.Contains("cfx.re"))
+                        return;
+
+                    if (message.Content.Contains("fivem.net"))
+                        return;
+
+                    if (message.Content.Contains("lifev.net"))
+                        return;
+
+                    if (message.Content.Contains("giphy.com"))
+                        return;
+
+                    if (message.Content.Contains("tenor.com"))
+                        return;
+
+                    await message.DeleteAsync();
+                    var msg = await context.Channel.SendMessageAsync("Message deleted, URL is not whitelisted");
+
+                    await Task.Delay(5000);
+
+                    await msg.DeleteAsync();
+
+                    return;
+                }
+                
+                if (message.HasStringPrefix(discordConfiguration.BotSettings["Prefix"], ref argPos))
                 {
                     // will delay for 1 second
                     await Task.Delay(1000);
@@ -148,7 +193,12 @@ namespace Curiosity.LifeV.Bot
                     {
                         if (result.Error == CommandError.UnknownCommand)
                         {
-                            await context.Channel.SendMessageAsync("Unknown Command");
+                            var msg = await context.Channel.SendMessageAsync("Unknown Command");
+
+                            await Task.Delay(5000);
+
+                            await msg.DeleteAsync();
+
                             return;
                         }
                         Console.WriteLine(result.Error);
