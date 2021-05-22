@@ -14,31 +14,34 @@ namespace Curiosity.LifeV.Bot.Methods
 
         public async static Task HandleUrl(SocketUserMessage message, SocketCommandContext context)
         {
-            if (message.Content.Contains("cfx.re"))
-                return;
+            //if (message.Content.Contains("cfx.re"))
+            //    return;
 
-            if (message.Content.Contains("fivem.net"))
-                return;
+            //if (message.Content.Contains("fivem.net"))
+            //    return;
 
-            if (message.Content.Contains("lifev.net"))
-                return;
+            //if (message.Content.Contains("lifev.net"))
+            //    return;
 
-            if (message.Content.Contains("giphy.com"))
-                return;
+            //if (message.Content.Contains("giphy.com"))
+            //    return;
 
-            if (message.Content.Contains("tenor.com"))
-                return;
+            //if (message.Content.Contains("tenor.com"))
+            //    return;
 
-            if (message.Content.Contains("twitch.tv"))
-                return;
+            //if (message.Content.Contains("twitch.tv"))
+            //    return;
 
-            await message.DeleteAsync();
+            if (message.Content.Contains("bit.ly"))
+            {
+                await message.DeleteAsync();
 
-            var msg = await context.Channel.SendMessageAsync("Message deleted, URL is not whitelisted");
+                var msg = await context.Channel.SendMessageAsync("Message deleted, possible scam link");
 
-            await Task.Delay(5000);
+                await Task.Delay(5000);
 
-            await msg.DeleteAsync();
+                await msg.DeleteAsync();
+            }
         }
 
         public async static Task HandleGunMessage(SocketUserMessage message, SocketCommandContext context)
