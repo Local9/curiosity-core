@@ -29,7 +29,11 @@ namespace Curiosity.LifeV.Bot.Methods
             if (message.Content.Contains("tenor.com"))
                 return;
 
+            if (message.Content.Contains("twitch.tv"))
+                return;
+
             await message.DeleteAsync();
+
             var msg = await context.Channel.SendMessageAsync("Message deleted, URL is not whitelisted");
 
             await Task.Delay(5000);
