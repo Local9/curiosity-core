@@ -1,0 +1,12 @@
+﻿[
+    {
+        "name": "Police Officer",
+        "events": [
+            {
+                "label": "Toggle Job",
+                "event": "job:police:duty",
+                "legacy": false
+            }
+        ]
+    }
+]

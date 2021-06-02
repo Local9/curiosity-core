@@ -61,12 +61,14 @@
     <Compile Include="Commands\Impl\PlayerCommands.cs" />
     <Compile Include="Commands\Impl\StaffCommands.cs" />
     <Compile Include="CommonFunctions.cs" />
+    <None Include="config\jobMenu.json" />
     <Compile Include="Environment\Entities\Models\BlipData.cs" />
     <Compile Include="Environment\Entities\Models\MarkerData.cs" />
     <Compile Include="Extensions\EntityExtensions.cs" />
     <Compile Include="Extensions\PedExtensions.cs" />
     <Compile Include="Extensions\VehicleExtensions.cs" />
     <Compile Include="Interface\Chat.cs" />
+    <Compile Include="Interface\Menus\SubMenu\JobMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleMenu.cs" />
     <Compile Include="Interface\Menus\SubMenu\VehicleRemoteMenu.cs" />
     <Compile Include="Managers\BlipManager.cs" />
