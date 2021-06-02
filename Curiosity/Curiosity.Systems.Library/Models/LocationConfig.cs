@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Curiosity.Systems.Library.Enums;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Curiosity.Systems.Library.Models
@@ -95,5 +96,8 @@ namespace Curiosity.Systems.Library.Models
                 }
             }
         }
+
+        [DataMember(Name = "spawnType")]
+        public SpawnType SpawnType;
     }
 }

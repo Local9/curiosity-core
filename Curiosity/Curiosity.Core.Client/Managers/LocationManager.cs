@@ -7,6 +7,7 @@ using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Interface.Menus;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.EventWrapperLegacy;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
@@ -27,7 +28,8 @@ namespace Curiosity.Core.Client.Managers
         internal List<MarkerData> MarkersClose = new List<MarkerData>();
 
         private List<Location> Locations = new List<Location>();
-        private List<Vector3> HospitalSpawns = new List<Vector3>();
+        private List<Position> HospitalSpawns = new List<Position>();
+        private List<Vector3> HospitalSpawnsVectors = new List<Vector3>();
 
         string currentJob = "unemployed";
         bool markerCooldown = false;
@@ -108,11 +110,12 @@ namespace Curiosity.Core.Client.Managers
 
                     BlipManager.ManagerInstance.AddBlip(blipData);
 
-                    if (location.Name == "Hospital")
+                    if (location.SpawnType == SpawnType.Hospital)
                     {
                         foreach(Position pos in location.Positions)
                         {
-                            HospitalSpawns.Add(pos.AsVector());
+                            HospitalSpawns.Add(pos);
+                            HospitalSpawnsVectors.Add(pos.AsVector());
                         }
                     }
 
@@ -298,17 +301,17 @@ namespace Curiosity.Core.Client.Managers
             return false;
         }
 
-        internal Vector3 NearestHospital()
+        internal Position NearestHospital()
         {
             Cache.UpdatePedId();
             return FindClosestPoint(Cache.PlayerPed.Position, HospitalSpawns);
         }
 
-        public Vector3 FindClosestPoint(Vector3 startingPoint, IEnumerable<Vector3> points)
+        public Position FindClosestPoint(Vector3 startingPoint, IEnumerable<Position> points)
         {
-            if (points.Count() == 0) return Vector3.Zero;
+            if (points.Count() == 0) return new Position(0f, 0f, 0f, 0f);
 
-            return points.OrderBy(x => Vector3.Distance(startingPoint, x)).First();
+            return points.OrderBy(x => Vector3.Distance(startingPoint, x.AsVector())).First();
         }
     }
 }

@@ -307,14 +307,14 @@ namespace Curiosity.Core.Client.Managers
         {
             await ScreenInterface.FadeOut();
 
-            Vector3 spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
+            Position spawnLocation = LocationManager.LocationManagerInstance.NearestHospital();
 
-            if (spawnLocation.IsZero)
+            if (spawnLocation.X == 0f)
             {
-                spawnLocation = new Vector3(297.8683f, -584.3318f, 43.25863f);
+                spawnLocation = new Position(297.8683f, -584.3318f, 43.25863f, Game.PlayerPed.Heading);
             }
 
-            curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, Cache.PlayerPed.Heading));
+            curiosityPlayer.Character.Revive(new Position(spawnLocation.X, spawnLocation.Y, spawnLocation.Z, spawnLocation.H));
 
             RemoveCamera();
 
