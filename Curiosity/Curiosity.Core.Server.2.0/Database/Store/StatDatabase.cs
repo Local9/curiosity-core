@@ -1,4 +1,5 @@
-﻿using Curiosity.Core.Server.Extensions;
+﻿using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
@@ -10,12 +11,7 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class StatDatabase
     {
-        public static async Task<int> Adjust(int characterId, Stat statId, int amount)
-        {
-            return await Adjust(characterId, (int)statId, amount);
-        }
-
-        public static async Task<int> Adjust(int characterId, int statId, int amount)
+        public static async Task<int> Adjust(int characterId, Stat statId, object amount)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {
@@ -33,7 +29,10 @@ namespace Curiosity.Core.Server.Database.Store
                 ResultSet keyValuePairs = await result;
 
                 if (keyValuePairs.Count == 0)
-                    throw new Exception("Stat was not changed");
+                {
+                    Logger.Error($"{statId} not changed");
+                    return 0;
+                }
 
                 foreach (Dictionary<string, object> kv in keyValuePairs)
                 {
@@ -75,7 +74,7 @@ namespace Curiosity.Core.Server.Database.Store
             return lst;
         }
 
-        internal static async Task<int> Get(int characterId, Stat stat)
+        public static async Task<int> Get(int characterId, Stat stat)
         {
             Dictionary<string, object> myParams = new Dictionary<string, object>()
                 {

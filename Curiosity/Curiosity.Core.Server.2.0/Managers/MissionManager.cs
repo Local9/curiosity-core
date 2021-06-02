@@ -768,7 +768,7 @@ namespace Curiosity.Core.Server.Managers
             await BaseScript.Delay(10);
             await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.POLICE, xpEarned);
             await BaseScript.Delay(10);
-            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.POLICE_REPUATATION, 5);
+            await Database.Store.StatDatabase.Adjust(characterId, Stat.POLICE_REPUATATION, 5);
             await BaseScript.Delay(100);
             EventSystem.GetModule().Send("mission:notification:impound", serverHandle, "Los Santos Impound", "Vehicle Logged", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${100:c0}");
 
@@ -782,7 +782,7 @@ namespace Curiosity.Core.Server.Managers
             CuriosityUser user = PluginManager.ActiveUsers[serverHandle];
             int characterId = user.Character.CharacterId;
 
-            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_BACKUP, 1);
+            await Database.Store.StatDatabase.Adjust(characterId, Stat.MISSION_BACKUP, 1);
 
             return true;
         }
@@ -802,9 +802,9 @@ namespace Curiosity.Core.Server.Managers
             await BaseScript.Delay(10);
             await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.POLICE, xpEarned);
             await BaseScript.Delay(10);
-            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.POLICE_REPUATATION, 5);
+            await Database.Store.StatDatabase.Adjust(characterId, Stat.POLICE_REPUATATION, 5);
             await BaseScript.Delay(10);
-            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_ARRESTS, 1);
+            await Database.Store.StatDatabase.Adjust(characterId, Stat.MISSION_ARRESTS, 1);
             await BaseScript.Delay(100);
             EventSystem.GetModule().Send("mission:notification", serverHandle, "Dispatch A.I.", "Arrest Booked", $"~b~XP Gained~w~: {xpEarned:d0}~n~~b~Cash~w~: ${100:c0}");
 
@@ -833,7 +833,7 @@ namespace Curiosity.Core.Server.Managers
             int cashMin = mission.CashMin;
             int cashMax = mission.CashMax;
 
-            await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_TAKEN, 1);
+            await Database.Store.StatDatabase.Adjust(characterId, Stat.MISSION_TAKEN, 1);
 
             if (passed)
             {
@@ -863,9 +863,9 @@ namespace Curiosity.Core.Server.Managers
                 await BaseScript.Delay(10);
                 await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.POLICE, xpReward);
                 await BaseScript.Delay(10);
-                await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.POLICE_REPUATATION, repReward);
+                await Database.Store.StatDatabase.Adjust(characterId, Stat.POLICE_REPUATATION, repReward);
                 await BaseScript.Delay(10);
-                await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_COMPLETED, 1);
+                await Database.Store.StatDatabase.Adjust(characterId, Stat.MISSION_COMPLETED, 1);
 
                 mission.RepFailure = 0;
 
@@ -892,9 +892,9 @@ namespace Curiosity.Core.Server.Managers
                 await BaseScript.Delay(10);
                 await Database.Store.SkillDatabase.Adjust(characterId, (int)Skill.KNOWLEDGE, -4);
                 await BaseScript.Delay(10);
-                await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.POLICE_REPUATATION, repFailure * -1);
+                await Database.Store.StatDatabase.Adjust(characterId, Stat.POLICE_REPUATATION, repFailure * -1);
                 await BaseScript.Delay(10);
-                await Database.Store.StatDatabase.Adjust(characterId, (int)Stat.MISSION_FAILED, 1);
+                await Database.Store.StatDatabase.Adjust(characterId, Stat.MISSION_FAILED, 1);
 
                 // send failure notification
                 EventSystem.GetModule().Send("mission:notification", serverHandle, "Dispatch A.I.", "Failed", $"~b~Rep Lost~w~: {repFailure:d0}");

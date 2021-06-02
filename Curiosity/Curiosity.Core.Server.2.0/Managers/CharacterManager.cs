@@ -1,10 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using Curiosity.Systems.Library.Models.Shop;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -48,12 +50,12 @@ namespace Curiosity.Core.Server.Managers
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
 
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 CuriosityCharacter curiosityCharacter = metadata.Find<CuriosityCharacter>(0);
 
-                if (user.Character.CharacterId != curiosityCharacter.CharacterId) return null;
+                if (user.Character.CharacterId != curiosityCharacter.CharacterId) return false;
 
                 curiosityCharacter.Cash = await Database.Store.BankDatabase.Get(curiosityCharacter.CharacterId);
 
@@ -77,7 +79,7 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 await curiosityCharacter.Save();
-                return null;
+                return true;
             }));
 
             EventSystem.GetModule().Attach("character:respawn", new EventCallback(metadata =>
@@ -177,6 +179,24 @@ namespace Curiosity.Core.Server.Managers
                 return returnVal;
             }));
 
+            EventSystem.GetModule().Attach("character:update:stat:timed", new AsyncEventCallback(async metadata =>
+            {
+                try
+                {
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                    Stat stat = (Stat)metadata.Find<int>(0);
+                    double time = metadata.Find<double>(1);
+
+                    int val = await Database.Store.StatDatabase.Adjust(curiosityUser.Character.CharacterId, stat, time);
+                    return val;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"{ex}");
+                    return 0;
+                }
+            }));
+
             EventSystem.GetModule().Attach("character:killed:self", new AsyncEventCallback(async metadata =>
             {
                 CuriosityUser player = PluginManager.ActiveUsers[metadata.Sender];
@@ -201,7 +221,8 @@ namespace Curiosity.Core.Server.Managers
             }));
 
             Instance.ExportDictionary.Add("Skill", new Func<string, int, Task<string>>(
-                async (playerHandle, skillId) => {
+                async (playerHandle, skillId) =>
+                {
 
                     ExportMessage exportMessage = new ExportMessage();
 
@@ -231,7 +252,8 @@ namespace Curiosity.Core.Server.Managers
                 }));
 
             Instance.ExportDictionary.Add("SkillAdjust", new Func<string, int, int, Task<string>>(
-                async (playerHandle, skillId, amt) => {
+                async (playerHandle, skillId, amt) =>
+                {
 
                     ExportMessage exportMessage = new ExportMessage();
 
@@ -253,8 +275,9 @@ namespace Curiosity.Core.Server.Managers
                     return $"{exportMessage}";
                 }));
 
-            Instance.ExportDictionary.Add("StatAdjust", new Func<string, int, int, Task<string>>(
-                async (playerHandle, statId, amt) => {
+            Instance.ExportDictionary.Add("Stat", new Func<string, int, Task<string>>(
+                async (playerHandle, statId) =>
+                {
 
                     ExportMessage exportMessage = new ExportMessage();
 
@@ -267,7 +290,41 @@ namespace Curiosity.Core.Server.Managers
 
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
-                    int newSkillValue = await Database.Store.StatDatabase.Adjust(user.Character.CharacterId, statId, amt);
+                    int statValue = await Database.Store.StatDatabase.Get(user.Character.CharacterId, (Stat)statId);
+
+                    exportMessage.Value = statValue;
+
+                    return $"{exportMessage}";
+                }));
+
+            Instance.ExportDictionary.Add("StatAdjust", new Func<string, int, int, Task<string>>(
+                async (playerHandle, statId, amt) =>
+                {
+                    ExportMessage exportMessage = new ExportMessage();
+
+                    int playerId = 0;
+                    if (!int.TryParse(playerHandle, out playerId))
+                    {
+                        exportMessage.Error = "First parameter is not a number";
+                        return $"{exportMessage}";
+                    }
+
+                    if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                    {
+                        exportMessage.Error = "Player was not found";
+                        return $"{exportMessage}";
+                    }
+
+                    CuriosityUser user = PluginManager.ActiveUsers[playerId];
+
+                    if (!Enum.TryParse($"{statId}", out Stat stat))
+                    {
+                        exportMessage.Error = "StatID failed parse";
+                        return $"{exportMessage}";
+                    }
+
+
+                    int newSkillValue = await Database.Store.StatDatabase.Adjust(user.Character.CharacterId, stat, amt);
 
                     user.Character.Stats = await Database.Store.StatDatabase.Get(user.Character.CharacterId);
 
@@ -276,9 +333,32 @@ namespace Curiosity.Core.Server.Managers
                     return $"{exportMessage}";
                 }));
 
-            Instance.ExportDictionary.Add("CashAdjust", new Func<string, int, Task<string>>(
-                async (playerHandle, amt) => {
+            Instance.ExportDictionary.Add("Cash", new Func<string, Task<string>>(
+                async (playerHandle) =>
+                {
+                    ExportMessage exportMessage = new ExportMessage();
 
+                    int playerId = 0;
+                    if (!int.TryParse(playerHandle, out playerId))
+                        exportMessage.Error = "First parameter is not a number";
+
+                    if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                        exportMessage.Error = "Player was not found";
+
+                    CuriosityUser user = PluginManager.ActiveUsers[playerId];
+
+                    int cashValue = await Database.Store.BankDatabase.Get(user.Character.CharacterId);
+
+                    user.Character.Cash = cashValue;
+
+                    exportMessage.Value = cashValue;
+
+                    return $"{exportMessage}";
+                }));
+
+            Instance.ExportDictionary.Add("CashAdjust", new Func<string, int, Task<string>>(
+                async (playerHandle, amt) =>
+                {
                     ExportMessage exportMessage = new ExportMessage();
 
                     int playerId = 0;
@@ -291,10 +371,31 @@ namespace Curiosity.Core.Server.Managers
                     CuriosityUser user = PluginManager.ActiveUsers[playerId];
 
                     int newCashValue = await Database.Store.BankDatabase.Adjust(user.Character.CharacterId, amt);
-                    
+
                     user.Character.Cash = newCashValue;
-                    
+
                     exportMessage.NewNumberValue = newCashValue;
+
+                    return $"{exportMessage}";
+                }));
+
+            Instance.ExportDictionary.Add("Item", new Func<string, int, Task<string>>(
+                async (playerHandle, itemId) =>
+                {
+                    ExportMessage exportMessage = new ExportMessage();
+
+                    int playerId = 0;
+                    if (!int.TryParse(playerHandle, out playerId))
+                        exportMessage.Error = "First parameter is not a number";
+
+                    if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                        exportMessage.Error = "Player was not found";
+
+                    CuriosityUser user = PluginManager.ActiveUsers[playerId];
+
+                    CuriosityShopItem item = await Database.Store.CharacterDatabase.GetItem(user.Character.CharacterId, itemId);
+
+                    exportMessage.Item = item;
 
                     return $"{exportMessage}";
                 }));

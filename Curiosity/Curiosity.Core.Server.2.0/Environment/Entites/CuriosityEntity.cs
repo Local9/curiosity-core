@@ -22,7 +22,7 @@ namespace Curiosity.Core.Server.Environment.Entities
             set
             {
                 API.SetEntityCoords(NetId, value.X, value.Y, value.Z, false, false, false, false);
-                API.SetEntityHeading(NetId, value.Heading);
+                API.SetEntityHeading(NetId, value.H);
             }
         }
 
