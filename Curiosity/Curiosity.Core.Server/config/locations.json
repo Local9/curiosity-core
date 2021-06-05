@@ -204,7 +204,7 @@
     {
       "name": "Vehicle Deletion",
       "sprite": 380,
-      "color": 1,
+      "color": 6,
       "isShortRange": true,
       "category": 1,
       "priority": 1,
@@ -282,7 +282,7 @@
     {
       "name": "Vehicle Repair",
       "sprite": 402,
-      "color": 2,
+      "color": 39,
       "isShortRange": true,
       "category": 1,
       "priority": 1,
@@ -595,7 +595,7 @@
     {
       "name": "Airport",
       "sprite": 307,
-      "color": 2,
+      "color": 46,
       "isShortRange": true,
       "category": 1,
       "priority": 1,
@@ -627,7 +627,7 @@
     {
       "name": "Helicopter Pad",
       "sprite": 43,
-      "color": 2,
+      "color": 32,
       "isShortRange": true,
       "category": 1,
       "priority": 1,
@@ -674,7 +674,7 @@
     {
       "name": "Yaught Club",
       "sprite": 410,
-      "color": 2,
+      "color": 11,
       "isShortRange": true,
       "category": 1,
       "priority": 1,
