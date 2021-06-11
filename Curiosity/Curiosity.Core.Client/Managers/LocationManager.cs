@@ -34,11 +34,13 @@ namespace Curiosity.Core.Client.Managers
         string currentJob = "unemployed";
         bool markerCooldown = false;
 
-        public override void Begin()
+        public override async void Begin()
         {
             LocationManagerInstance = this;
 
             Instance.EventRegistry[LegacyEvents.Client.CuriosityJob] += new Action<bool, bool, string>(OnJobDutyEvent);
+
+            await Session.Loading();
 
             OnGetLocations();
         }
@@ -85,8 +87,6 @@ namespace Curiosity.Core.Client.Managers
         {
             try
             {
-                await Session.Loading();
-
                 if (MarkersAll.Count > 0)
                 {
                     BlipManager.ManagerInstance.RemoveAllBlips();
@@ -137,6 +137,11 @@ namespace Curiosity.Core.Client.Managers
                             markerData.VDirection = m.Direction.AsVector();
                             markerData.ContextAoe = m.ContextAoe;
                             markerData.JobRequirement = m.JobRequirement;
+                            markerData.Bob = m.Bob;
+                            markerData.Rotate = m.Rotate;
+                            markerData.WrappingMarker = m.WrappingMarker;
+                            markerData.SetOnGround = m.SetOnGround;
+                            markerData.SpawnType = location.SpawnType;
 
                             MarkersAll.Add(markerData);
                         });
@@ -200,13 +205,18 @@ namespace Curiosity.Core.Client.Managers
             MarkersClose.ForEach(m =>
             {
                 float ground = 0f;
+                Vector3 position = m.Position;
 
                 if (API.GetGroundZFor_3dCoord_2(m.Position.X, m.Position.Y, m.Position.Z, ref ground, false))
+                    position.Z = ground;
+
+                if (m.SetOnGround)
                     m.Position.Z = ground;
 
-                World.DrawMarker((MarkerType)m.MarkerId, m.Position, m.VDirection, m.VRotation, m.VScale, m.ColorArgb);
+                World.DrawMarker((MarkerType)m.MarkerId, m.Position, m.VDirection, m.VRotation, m.VScale, m.ColorArgb, bobUpAndDown: m.Bob, faceCamera: m.FaceCamera, rotateY: m.Rotate);
+                
 
-                ScreenInterface.Draw3DText(m.Position, m.Message, 50f, m.DrawThreshold, 2f);
+                ScreenInterface.Draw3DText(position, m.Message, 50f, m.DrawThreshold, 2f);
             });
         }
 
@@ -219,6 +229,22 @@ namespace Curiosity.Core.Client.Managers
             {
                 await BaseScript.Delay(1500);
                 return;
+            }
+
+            if (activeMarker.WrappingMarker)
+            {
+                float ground = 0f;
+                Vector3 position = activeMarker.Position;
+                
+                Vector3 scale = activeMarker.VScale;
+                scale.Z = .5f;
+                scale.X = activeMarker.ContextAoe;
+                scale.Y = activeMarker.ContextAoe;
+
+                if (API.GetGroundZFor_3dCoord_2(activeMarker.Position.X, activeMarker.Position.Y, activeMarker.Position.Z, ref ground, false))
+                    position.Z = ground;
+
+                World.DrawMarker(MarkerType.VerticalCylinder, position, activeMarker.VDirection, activeMarker.VRotation, scale, activeMarker.ColorArgb);
             }
 
             Screen.DisplayHelpTextThisFrame(activeMarker.HelpText);

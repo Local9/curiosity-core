@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Curiosity.Systems.Library.Enums;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Curiosity.Systems.Library.Models
@@ -33,6 +34,9 @@ namespace Curiosity.Systems.Library.Models
         [DataMember(Name = "markerId")]
         public int MarkerId = 1;
 
+        [DataMember(Name = "wrappingMarker")]
+        public bool WrappingMarker = false;
+
         [DataMember(Name = "scale")]
         public Position Scale = new Position(1f, 1f, 1f);
         
@@ -53,6 +57,20 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "control")]
         public int Control = 51;
+
+        [DataMember(Name = "bob")]
+        public bool Bob = false;
+
+        [DataMember(Name = "rotate")]
+        public bool Rotate = false;
+
+        [DataMember(Name = "faceCamera")]
+        public bool FaceCamera = false;
+
+        [DataMember(Name = "setOnGround")]
+        public bool SetOnGround = true;
+
+        public SpawnType SpawnType;
     }
 
     [DataContract]
