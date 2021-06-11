@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Curiosity.Core.Client.Interface.Menus.Spawner
 {
-    class VehicleSpawnMenu : Manager<VehicleSpawnMenu>
+    public class VehicleSpawnMenu : Manager<VehicleSpawnMenu>
     {
         private UIMenu jobMenu;
 
@@ -17,8 +17,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Spawner
         {
             EventSystem.Attach("vehicle:spawn:menu", new EventCallback(metadata =>
             {
-
-               return null;
+                NotificationManger.GetModule().Success("MENU EVENT WORKING");
+                return null;
             }));
         }
 

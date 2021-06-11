@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -361,7 +362,9 @@ namespace Curiosity.Core.Server.Managers
 
                 Location location = config.NearestLocation(position, "vehicle:spawn:menu", 3f);
 
-                Logger.Debug($"EVENT: vehicle:spawn:menu:{location.SpawnType}");
+                Logger.Debug($"EVENT: vehicle:spawn:menu|{location.SpawnType}");
+
+                user.Send("vehicle:spawn:menu");
 
                 return null;
 
