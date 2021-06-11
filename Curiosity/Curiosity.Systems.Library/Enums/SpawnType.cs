@@ -6,6 +6,6 @@
         Hospital = 1,
         Helicopter = 2,
         Plane = 3,
-        Yaught = 4
+        Boat = 4
     }
 }
