@@ -15,6 +15,7 @@ namespace Curiosity.Core.Server.Managers
         const int VEHICLE_REPAIR_CHARGE = 100;
         const int VEHICLE_TOW_REP = 1000;
         const int VEHICLE_TOW_COST = 1000;
+        private ConfigManager config;
 
         List<string> ALLOWED_TRAILERS = new List<string>()
         {
@@ -41,7 +42,9 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            foreach(string trailer in ALLOWED_TRAILERS)
+            config = ConfigManager.GetModule();
+
+            foreach (string trailer in ALLOWED_TRAILERS)
             {
                 trailerHashes.Add(API.GetHashKey(trailer));
             }
@@ -343,6 +346,27 @@ namespace Curiosity.Core.Server.Managers
                     user.Character.Cash = await Database.Store.BankDatabase.Adjust(user.Character.CharacterId, -VEHICLE_REPAIR_CHARGE);
                     return true;
                 }
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:spawn:menu", new AsyncEventCallback(async metadata =>
+            {
+                int senderHandle = metadata.Sender;
+                var player = PluginManager.PlayersList[metadata.Sender];
+                CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
+
+                Vector3 position = Vector3.Zero;
+                position.X = metadata.Find<float>(0);
+                position.Y = metadata.Find<float>(1);
+                position.Z = metadata.Find<float>(2);
+
+                Location location = config.NearestLocation(position, "vehicle:spawn:menu", 3f);
+
+                Logger.Debug($"EVENT: vehicle:spawn:menu:{location.SpawnType}");
+
+                return null;
+
+                // Select a list of vehicle IDs and Names that the user owns
+
             }));
         }
     }

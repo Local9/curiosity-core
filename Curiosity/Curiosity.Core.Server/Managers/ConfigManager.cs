@@ -13,13 +13,10 @@ namespace Curiosity.Core.Server.Managers
 {
     public class ConfigManager : Manager<ConfigManager>
     {
-        public static ConfigManager ConfigInstance;
-        public LocationConfig configCache = new LocationConfig();
+        public LocationConfig configCache = new();
 
         public override void Begin()
         {
-            ConfigInstance = this;
-
             EventSystem.GetModule().Attach("config:locations", new EventCallback(metadata =>
             {
                 return GetLocations();
@@ -30,11 +27,13 @@ namespace Curiosity.Core.Server.Managers
                     Vector3 vector = new Vector3(posX, posY, posZ);
                     return IsNearLocation(vector, eventName, dist);
                 }));
+
+            GetLocations();
         }
 
         private LocationConfig GetLocationConfig()
         {
-            LocationConfig config = new LocationConfig();
+            LocationConfig config = new();
 
             string jsonFile = API.LoadResourceFile(API.GetCurrentResourceName(), "config/locations.json"); // Fuck you VS2019 UTF8 BOM
 
@@ -95,6 +94,41 @@ namespace Curiosity.Core.Server.Managers
             Logger.Debug($"Possible server config does not match the client config");
 
             return false;
+        }
+        public Location NearestLocation(Vector3 position, string eventName, float distance = 0f)
+        {
+            foreach (Location location in configCache.Locations)
+            {
+                if (location.Markers.Count == 0)
+                    continue;
+
+                foreach (Marker marker in location.Markers)
+                {
+                    if (marker.Event == eventName)
+                    {
+                        Logger.Debug($"Event found");
+
+                        foreach (Position pos in marker.Positions)
+                        {
+                            Vector3 posV = pos.AsVector();
+                            float dist = Vector3.Distance(position, posV);
+                            float distanceToCheck = (distance > 0f) ? distance : marker.ContextAoe;
+                            bool distanceValid = dist <= distanceToCheck;
+
+                            Logger.Debug($"Position {posV}, Close: {distanceValid}");
+
+                            if (distanceValid)
+                            {
+                                return location;
+                            }
+                        };
+                    }
+                }
+            }
+
+            Logger.Debug($"Possible server config does not match the client config");
+
+            return null;
         }
     }
 }

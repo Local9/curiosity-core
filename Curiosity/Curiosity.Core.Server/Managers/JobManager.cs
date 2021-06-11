@@ -15,7 +15,7 @@ namespace Curiosity.Core.Server.Managers
 
         public override void Begin()
         {
-            config = ConfigManager.ConfigInstance;
+            config = ConfigManager.GetModule();
 
             EventSystem.GetModule().Attach(JOB_POLICE_DUTY, new AsyncEventCallback(async metadata =>
             {
