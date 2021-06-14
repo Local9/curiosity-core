@@ -77,7 +77,9 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("shop:purchase:item", new AsyncEventCallback(async metadata =>
             {
                 SqlResult sqlResult = new SqlResult();
+                SqlResult purchaseResult = new SqlResult();
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+
                 try
                 {
                     if (curiosityUser.Purchasing)
@@ -174,12 +176,21 @@ namespace Curiosity.Core.Server.Managers
                         goto FailedPurchaseSkill;
                     }
 
-                    goto AddItemToCharacter; // Let them buy it then!
+                    if (item.SpawnType == 0)
+                        goto AddItemToCharacter; // Let them buy it then!
+
+                    if (item.SpawnType > 0)
+                        goto AddVehicleToCharacter;
+
+                AddVehicleToCharacter:
+                    purchaseResult = await Database.Store.ShopDatabase.PurchaseVehicle(itemId, characterId);
+                    if (purchaseResult.Success) goto AdjustWallet;
+                    goto FailedPurchase;
 
                 AddItemToCharacter:
                     // at this point the item type will be important
-                    SqlResult res = await Database.Store.ShopDatabase.PurchaseItem(itemId, characterId);
-                    if (res.Success) goto AdjustWallet;
+                    purchaseResult = await Database.Store.ShopDatabase.PurchaseItem(itemId, characterId);
+                    if (purchaseResult.Success) goto AdjustWallet;
                     goto FailedPurchase;
 
                 AdjustWallet:
@@ -201,7 +212,7 @@ namespace Curiosity.Core.Server.Managers
                 SuccessfulPurchase:
                     curiosityUser.Purchasing = false;
                     sqlResult.Success = true;
-                    sqlResult.Message = res.Message;
+                    sqlResult.Message = purchaseResult.Message;
 
                     Web.DiscordClient discordClient = Web.DiscordClient.GetModule();
                     discordClient.SendDiscordPlayerLogMessage($"Player '{curiosityUser.LatestName}' purchased '{item.Label}' for ${item.BuyValue}"); // MOVE TO DB LOG
@@ -209,7 +220,7 @@ namespace Curiosity.Core.Server.Managers
                     goto ReturnResult;
 
                 FailedPurchase:
-                    sqlResult.Message = res.Message;
+                    sqlResult.Message = purchaseResult.Message;
                     goto ReturnResult; // Need to write an error logger
 
                 FailedPurchaseNotEnoughStock:

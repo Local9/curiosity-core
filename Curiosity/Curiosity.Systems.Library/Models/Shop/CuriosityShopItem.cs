@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Curiosity.Systems.Library.Enums;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Curiosity.Systems.Library.Models.Shop
@@ -63,6 +64,8 @@ namespace Curiosity.Systems.Library.Models.Shop
 
         [DataMember(Name = "numberOfItemRequirements")]
         public int NumberOfItemRequirements;
+
+        public SpawnType SpawnType;
 
         [DataMember(Name = "skillRequirements")]
         public List<SkillRequirement> SkillRequirements = new List<SkillRequirement>();

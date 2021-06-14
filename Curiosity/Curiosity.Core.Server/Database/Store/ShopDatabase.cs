@@ -192,6 +192,42 @@ namespace Curiosity.Core.Server.Database.Store
             }
         }
 
+        internal static async Task<SqlResult> PurchaseVehicle(int itemId, int characterId)
+        {
+            SqlResult rtValue = new SqlResult();
+            try
+            {
+                Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@itemId", itemId },
+                    { "@characterId", characterId },
+                };
+
+                string myQuery = "CALL spShopPurchaseVehicle(@characterId, @itemId);";
+
+                using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+                {
+                    ResultSet kv = await result;
+
+                    if (kv.Count == 0)
+                    {
+                        return rtValue;
+                    }
+
+                    rtValue.Success = $"{kv[0]["Result"]}" == "1";
+                    rtValue.ItemValue = int.Parse($"{kv[0]["CurrentlyOwned"]}");
+                    rtValue.Message = $"{kv[0]["Message"]}";
+
+                    return rtValue;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"{ex}");
+                return rtValue;
+            }
+        }
+
         internal static async Task<SqlResult> PurchaseItem(int itemId, int characterId)
         {
             SqlResult rtValue = new SqlResult();
