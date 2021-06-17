@@ -694,42 +694,6 @@
           "Z": -0.4745871,
           "H": 46.88968
         }
-      ],
-      "markers": [
-        {
-          "control": 51,
-          "message": "Spawn Boat",
-          "helpText": "Press ~INPUT_CONTEXT~ to spawn a ~b~Boat",
-          "event": "vehicle:spawn:menu",
-          "isServerEvent": true,
-          "isLegacyEvent": false,
-          "isLuaEvent": false,
-          "markerId": 35,
-          "wrappingMarker": true,
-          "bob": false,
-          "rotate": true,
-          "setOnGround": false,
-          "scale": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0
-          },
-          "contextAoe": 1.5,
-          "drawThreshold": 7.5,
-          "color": {
-            "alpha": 255,
-            "red": 65,
-            "green": 105,
-            "blue": 255
-          },
-          "positions": [
-            {
-              "X": -712.4224,
-              "Y": -1298.567,
-              "Z": 5.10192
-            }
-          ]
-        }
       ]
     }
   ]
