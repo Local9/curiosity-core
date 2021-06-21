@@ -171,16 +171,6 @@ namespace Curiosity.Core.Client.Managers
                 Cache.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)
                 && (m.JobRequirement == currentJob || string.IsNullOrEmpty(m.JobRequirement))
             ).ToList();
-
-            if (MarkersClose.Count > 0)
-            {
-                MarkersClose.ForEach(m =>
-                {
-                    Logger.Debug($"{m.Message}: {m.Position} / {Cache.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)}");
-                });
-            }
-
-            Screen.ShowSubtitle($"{MarkersClose.Count}, {MarkersAll.Count} | {Cache.PlayerPed.Position}");
         }
 
         public MarkerData GetActiveMarker()
