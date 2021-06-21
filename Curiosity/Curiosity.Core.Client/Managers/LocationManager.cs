@@ -202,8 +202,6 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnMarkerCreateTick()
         {
-            // Something is breaking the position of the marker
-
             MarkersClose.ForEach(m =>
             {
                 float ground = 0f;
