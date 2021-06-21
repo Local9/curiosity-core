@@ -14,16 +14,21 @@ namespace Curiosity.Core.Client
         public static bool CreatingCharacter { get; set; }
         public static int LastSession { get; set; }
 
+        public static bool ForceLoaded = false;
+
         public static async Task Loading()
         {
             while (true)
             {
-                if (Cache.Player?.Character is not null && Cache.Entity is not null) break;
+                if (ForceLoaded) goto DownWait;
+
+                if (Cache.Player?.Character is not null && Cache.Entity is not null) goto DownWait;
 
                 await BaseScript.Delay(1000);
             }
 
-            await new CharacterManager.LoadTransition().DownWait();
+            DownWait:
+                await new CharacterManager.LoadTransition().DownWait();
         }
 
         public static bool IsSpawnHost()
