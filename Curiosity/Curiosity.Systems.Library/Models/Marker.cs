@@ -44,7 +44,7 @@ namespace Curiosity.Systems.Library.Models
         public CuriosityColor Color;
 
         [DataMember(Name = "drawThreshold")]
-        public float DrawThreshold = 2f;
+        public float DrawThreshold = 2.5f;
 
         [DataMember(Name = "rotation")]
         public Position Rotation = new Position(0f, 0f, 0f);

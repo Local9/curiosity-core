@@ -171,6 +171,16 @@ namespace Curiosity.Core.Client.Managers
                 Cache.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)
                 && (m.JobRequirement == currentJob || string.IsNullOrEmpty(m.JobRequirement))
             ).ToList();
+
+            if (MarkersClose.Count > 0)
+            {
+                MarkersClose.ForEach(m =>
+                {
+                    Logger.Debug($"{m.Message}: {m.Position} / {Cache.PlayerPed.IsInRangeOf(m.Position, m.DrawThreshold)}");
+                });
+            }
+
+            Screen.ShowSubtitle($"{MarkersClose.Count}, {MarkersAll.Count} | {Cache.PlayerPed.Position}");
         }
 
         public MarkerData GetActiveMarker()
@@ -202,20 +212,18 @@ namespace Curiosity.Core.Client.Managers
         [TickHandler(SessionWait = true)]
         private async Task OnMarkerCreateTick()
         {
+            // Something is breaking the position of the marker
+
             MarkersClose.ForEach(m =>
             {
                 float ground = 0f;
                 Vector3 position = m.Position;
 
-                if (API.GetGroundZFor_3dCoord_2(m.Position.X, m.Position.Y, m.Position.Z, ref ground, false))
+                if (API.GetGroundZFor_3dCoord_2(m.Position.X, m.Position.Y, m.Position.Z, ref ground, false) && m.SetOnGround)
                     position.Z = ground;
 
-                if (m.SetOnGround)
-                    m.Position.Z = ground;
-
-                World.DrawMarker((MarkerType)m.MarkerId, m.Position, m.VDirection, m.VRotation, m.VScale, m.ColorArgb, bobUpAndDown: m.Bob, faceCamera: m.FaceCamera, rotateY: m.Rotate);
+                World.DrawMarker((MarkerType)m.MarkerId, position, m.VDirection, m.VRotation, m.VScale, m.ColorArgb, bobUpAndDown: m.Bob, faceCamera: m.FaceCamera, rotateY: m.Rotate);
                 
-
                 ScreenInterface.Draw3DText(position, m.Message, 50f, m.DrawThreshold, 2f);
             });
         }
@@ -235,7 +243,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 float ground = 0f;
                 Vector3 position = activeMarker.Position;
-                
+
                 Vector3 scale = activeMarker.VScale;
                 scale.Z = .5f;
                 scale.X = activeMarker.ContextAoe;
