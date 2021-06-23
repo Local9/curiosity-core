@@ -179,7 +179,7 @@ namespace Curiosity.Core.Server.Managers
                     if (item.SpawnType == 0)
                         goto AddItemToCharacter; // Let them buy it then!
 
-                    if (item.SpawnType > 0)
+                    if (item.IsVehicle)
                         goto AddVehicleToCharacter;
 
                 AddVehicleToCharacter:

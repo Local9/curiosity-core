@@ -6,6 +6,7 @@
         Hospital = 1,
         Helicopter = 2,
         Plane = 3,
-        Boat = 4
+        Boat = 4,
+        Vehicle = 5
     }
 }

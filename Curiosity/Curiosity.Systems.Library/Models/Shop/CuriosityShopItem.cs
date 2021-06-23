@@ -67,6 +67,11 @@ namespace Curiosity.Systems.Library.Models.Shop
 
         public SpawnType SpawnType;
 
+        public bool IsVehicle => SpawnType == SpawnType.Helicopter
+            || SpawnType == SpawnType.Plane
+            || SpawnType == SpawnType.Boat
+            || SpawnType == SpawnType.Vehicle;
+
         [DataMember(Name = "skillRequirements")]
         public List<SkillRequirement> SkillRequirements = new List<SkillRequirement>();
 
