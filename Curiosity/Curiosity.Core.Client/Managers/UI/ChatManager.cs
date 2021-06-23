@@ -115,10 +115,12 @@ namespace Curiosity.Core.Client.Managers
                     if (IsChatboxOpen)
                     {
                         API.SetNuiFocus(true, true);
+                        API.SetNuiFocusKeepInput(true);
                     }
                     else
                     {
                         API.SetNuiFocus(false, false);
+                        API.SetNuiFocusKeepInput(false);
                         OnCloseChat();
                     }
                 }
@@ -135,6 +137,7 @@ namespace Curiosity.Core.Client.Managers
             API.EnableControlAction(0, (int)Control.CursorScrollDown, true);
             API.SetPedCanSwitchWeapon(Game.PlayerPed.Handle, true);
             API.SetNuiFocus(false, false);
+            API.SetNuiFocusKeepInput(false);
         }
     }
 }
