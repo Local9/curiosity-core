@@ -114,8 +114,8 @@ namespace Curiosity.Core.Client.Managers
 
                     if (IsChatboxOpen)
                     {
-                        API.SetNuiFocus(true, true);
-                        API.SetNuiFocusKeepInput(true);
+                        API.SetNuiFocus(true, IsChatboxOpen);
+                        API.SetNuiFocusKeepInput(!IsChatboxOpen);
                     }
                     else
                     {
