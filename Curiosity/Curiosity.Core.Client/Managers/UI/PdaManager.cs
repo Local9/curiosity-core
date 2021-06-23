@@ -39,6 +39,7 @@ namespace Curiosity.Core.Client.Managers
 
                 SendPanelMessage();
                 CloseTablet();
+                ClosedMenu();
                 return null;
             }));
 
@@ -77,10 +78,9 @@ namespace Curiosity.Core.Client.Managers
             {
                 IsCoreOpen = !IsCoreOpen;
 
-                API.SetNuiFocusKeepInput(true);
-
                 SendPanelMessage();
                 OpenTablet();
+                FocusInputs();
             }
         }
 
@@ -96,6 +96,18 @@ namespace Curiosity.Core.Client.Managers
             }
         }
 
+        private void FocusInputs()
+        {
+            API.SetNuiFocus(true, IsCoreOpen);
+            API.SetNuiFocusKeepInput(!IsCoreOpen);
+        }
+
+        private void ClosedMenu()
+        {
+            API.SetNuiFocus(false, false);
+            API.SetNuiFocusKeepInput(false);
+        }
+
         public void SendPanelMessage()
         {
             string jsn = new JsonBuilder().Add("operation", "PANEL")
@@ -103,7 +115,6 @@ namespace Curiosity.Core.Client.Managers
             .Build();
 
             API.SendNuiMessage(jsn);
-            API.SetNuiFocus(IsCoreOpen, IsCoreOpen);
         }
 
         private void OpenTablet()
