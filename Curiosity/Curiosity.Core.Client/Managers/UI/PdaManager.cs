@@ -34,6 +34,9 @@ namespace Curiosity.Core.Client.Managers
             Instance.AttachNuiHandler("ClosePanel", new EventCallback(metadata =>
             {
                 IsCoreOpen = false;
+
+                API.SetNuiFocusKeepInput(false);
+
                 SendPanelMessage();
                 CloseTablet();
                 return null;
@@ -73,6 +76,9 @@ namespace Curiosity.Core.Client.Managers
             if (!IsCoreOpen && Cache.Character.MarkedAsRegistered)
             {
                 IsCoreOpen = !IsCoreOpen;
+
+                API.SetNuiFocusKeepInput(true);
+
                 SendPanelMessage();
                 OpenTablet();
             }
