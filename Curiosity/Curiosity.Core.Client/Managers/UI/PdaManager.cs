@@ -92,6 +92,7 @@ namespace Curiosity.Core.Client.Managers
             {
                 IsCoreOpen = !IsCoreOpen;
                 SendPanelMessage();
+                ClosedMenu();
                 CloseTablet();
             }
         }
