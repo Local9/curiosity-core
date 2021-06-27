@@ -114,6 +114,7 @@
     <Compile Include="Models\Shop\ShopCategoryItem.cs" />
     <Compile Include="Models\SqlResult.cs" />
     <Compile Include="Models\VehicleInfo.cs" />
+    <Compile Include="Models\VehicleItem.cs" />
     <Compile Include="Models\VehicleShopItem.cs" />
     <Compile Include="Models\CuriosityWeather.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

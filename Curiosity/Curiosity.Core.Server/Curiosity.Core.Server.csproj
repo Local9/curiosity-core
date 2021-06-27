@@ -76,6 +76,7 @@
     <Compile Include="Database\MySqlDatabase.cs" />
     <Compile Include="Database\Store\BankDatabase.cs" />
     <Compile Include="Database\Store\CharacterDatabase.cs" />
+    <Compile Include="Database\Store\VehicleDatabase.cs" />
     <Compile Include="Database\Store\MissionDatabase.cs" />
     <Compile Include="Database\Store\ShopDatabase.cs" />
     <Compile Include="Database\Store\ServerDatabase.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Managers\DeveloperManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Managers\GameEventManager.cs" />
+    <Compile Include="Managers\GarageManager.cs" />
     <Compile Include="Managers\JobManager.cs" />
     <Compile Include="Managers\LevelingManager.cs" />
     <Compile Include="Managers\MarqueeManager.cs" />
