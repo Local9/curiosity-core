@@ -10,7 +10,7 @@ namespace Curiosity.Core.Server.Database.Store
 {
     class VehicleDatabase
     {
-        public static async Task<List<VehicleItem>> Get(int characterId)
+        public static async Task<List<VehicleItem>> GetAllVehicles(int characterId)
         {
             List<VehicleItem> lst = new List<VehicleItem>();
             
@@ -46,6 +46,39 @@ namespace Curiosity.Core.Server.Database.Store
             }
 
             return lst;
+        }
+        public static async Task<VehicleItem> GetVehicle(int characterVehicleId)
+        {
+            VehicleItem item = new();
+
+            Dictionary<string, object> myParams = new Dictionary<string, object>()
+                {
+                    { "@characterVehicleId", characterVehicleId }
+                };
+
+            string myQuery = "call selCharacterVehicle(@characterVehicleId);";
+
+            using (var result = MySqlDatabase.mySQL.QueryResult(myQuery, myParams))
+            {
+                ResultSet keyValuePairs = await result;
+
+                if (keyValuePairs.Count == 0)
+                    return null;
+
+                item.CharacterVehicleId = keyValuePairs[0]["CharacterVehicleId"];
+                item.Label = $"{keyValuePairs[0]["Label"]}";
+                item.Hash = $"{keyValuePairs[0]["HashKey"]}";
+                item.DatePurchased = keyValuePairs[0]["DatePurchased"];
+
+                string vehicleData = $"{keyValuePairs[0]["VehicleData"]}";
+                
+                if (!string.IsNullOrEmpty(vehicleData))
+                {
+                    item.VehicleInfo = JsonConvert.DeserializeObject<VehicleInfo>(vehicleData);
+                }
+            }
+
+            return item;
         }
     }
 }

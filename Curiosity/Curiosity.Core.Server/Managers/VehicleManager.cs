@@ -13,11 +13,14 @@ namespace Curiosity.Core.Server.Managers
 {
     public class VehicleManager : Manager<VehicleManager>
     {
+        // Move these to a config file
         const int VEHICLE_REPAIR_CHARGE = 100;
         const int VEHICLE_TOW_REP = 1000;
         const int VEHICLE_TOW_COST = 1000;
+
         private ConfigManager config;
 
+        // Move these to a config file
         List<string> ALLOWED_TRAILERS = new List<string>()
         {
             "trailersmall2",

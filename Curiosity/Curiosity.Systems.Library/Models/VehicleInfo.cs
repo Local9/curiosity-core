@@ -2,14 +2,14 @@
 
 namespace Curiosity.Systems.Library.Models
 {
-    public struct VehicleInfo
+    public class VehicleInfo
     {
-        public Dictionary<string, int> colors;
+        public Dictionary<string, int> colors = new Dictionary<string, int>();
         public bool customWheels;
-        public Dictionary<int, bool> extras;
+        public Dictionary<int, bool> extras = new Dictionary<int, bool>();
         public int livery;
         public uint model;
-        public Dictionary<int, int> mods;
+        public Dictionary<int, int> mods = new Dictionary<int, int>();
         public string name;
         public bool neonBack;
         public bool neonFront;
