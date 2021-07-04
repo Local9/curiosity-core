@@ -85,7 +85,6 @@
     <Compile Include="Database\Store\UserDatabase.cs" />
     <Compile Include="Extensions\PositionExtensions.cs" />
     <Compile Include="Extensions\SaveExtensions.cs" />
-    <Compile Include="Managers\Admin\AdminUserManager.cs" />
     <Compile Include="Managers\CharacterManager.cs" />
     <Compile Include="Managers\ConfigManager.cs" />
     <Compile Include="Managers\DeveloperManager.cs" />
