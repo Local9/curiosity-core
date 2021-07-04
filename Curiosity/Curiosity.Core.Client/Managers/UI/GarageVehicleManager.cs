@@ -117,12 +117,25 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle = new Vehicle(vehId);
 
+                    vehicle.IsPositionFrozen = true;
+                    vehicle.IsCollisionEnabled = false;
+
+                    Vector3 pos = vehicle.Position;
+                    API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 10f, false, false, false, false);
+
                     vehicle.Mods.LicensePlate = vehicleItem.VehicleInfo.plateText;
 
                     Cache.PersonalVehicle = new State.VehicleState(vehicle);
                     Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
 
-                    Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+                    if (!vehicleItem.IsTrailer)
+                        Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+
+                    if (vehicleItem.IsTrailer)
+                        Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
+
+                    vehicle.IsPositionFrozen = false;
+                    vehicle.IsCollisionEnabled = true;
 
                     await vehicle.FadeIn();
                     return new { success = true };
