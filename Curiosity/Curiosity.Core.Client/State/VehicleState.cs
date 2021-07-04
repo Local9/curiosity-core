@@ -47,6 +47,7 @@ namespace Curiosity.Core.Client.State
                 b.Color = BlipColor.White;
                 b.Priority = 10;
                 b.Name = "Personal Vehicle";
+                b.IsShortRange = false;
             }
 
             if (vehicle.State.Get("VEH_PERSONAL_TRAILER") == true)
@@ -57,6 +58,7 @@ namespace Curiosity.Core.Client.State
                 b.Color = BlipColor.White;
                 b.Priority = 10;
                 b.Name = "Personal Trailer";
+                b.IsShortRange = false;
             }
         }
 

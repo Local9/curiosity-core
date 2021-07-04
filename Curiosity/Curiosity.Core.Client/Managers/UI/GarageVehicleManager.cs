@@ -130,7 +130,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
                     {
                         Cache.PersonalVehicle = new State.VehicleState(vehicle);
-                        Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver); // will be removed
+                        API.SetNewWaypoint(vehicle.Position.X, vehicle.Position.Y);
                         Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
                     }
 
