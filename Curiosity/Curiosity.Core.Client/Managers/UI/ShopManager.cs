@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -78,7 +79,7 @@ namespace Curiosity.Core.Client.Managers
                             numberOfSkillRequirements = storeItem?.NumberOfSkillRequirements,
                             numberOfItemRequirements = storeItem?.NumberOfItemRequirements,
                             imageUri = storeItem?.ImageUri,
-                            spawnTypeId = (int)storeItem.SpawnType
+                            spawnTypeId = (int)storeItem.SpawnTypeId
                         };
 
                         items.Add(i);
@@ -111,7 +112,7 @@ namespace Curiosity.Core.Client.Managers
                         numberOfSkillRequirements = storeItem?.NumberOfSkillRequirements,
                         numberOfItemRequirements = storeItem?.NumberOfItemRequirements,
                         imageUri = storeItem?.ImageUri,
-                        spawnTypeId = (int)storeItem.SpawnType,
+                        spawnTypeId = storeItem.SpawnTypeId,
                         skillsRequired = new List<dynamic>(),
                         itemsRequired = new List<dynamic>(),
                         rolesRequired = new List<dynamic>()

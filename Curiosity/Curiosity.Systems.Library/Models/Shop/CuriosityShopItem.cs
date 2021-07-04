@@ -65,12 +65,13 @@ namespace Curiosity.Systems.Library.Models.Shop
         [DataMember(Name = "numberOfItemRequirements")]
         public int NumberOfItemRequirements;
 
-        public SpawnType SpawnType;
+        [DataMember(Name = "spawnTypeId")]
+        public SpawnType SpawnTypeId;
 
-        public bool IsVehicle => SpawnType == SpawnType.Helicopter
-            || SpawnType == SpawnType.Plane
-            || SpawnType == SpawnType.Boat
-            || SpawnType == SpawnType.Vehicle;
+        public bool IsVehicle => SpawnTypeId == SpawnType.Helicopter
+            || SpawnTypeId == SpawnType.Plane
+            || SpawnTypeId == SpawnType.Boat
+            || SpawnTypeId == SpawnType.Vehicle;
 
         [DataMember(Name = "skillRequirements")]
         public List<SkillRequirement> SkillRequirements = new List<SkillRequirement>();

@@ -302,7 +302,7 @@ namespace Curiosity.Core.Server.Database.Store
                     curiosityStoreItem.NumberOfSkillRequirements = int.Parse($"{kv[0]["NumberSkillRequirements"]}");
                     curiosityStoreItem.NumberOfItemRequirements = int.Parse($"{kv[0]["NumberItemRequirements"]}");
                     curiosityStoreItem.ImageUri = $"{kv[0]["ImageUri"]}";
-                    curiosityStoreItem.SpawnType = (SpawnType)int.Parse($"{kv[0]["SpawnTypeId"]}");
+                    curiosityStoreItem.SpawnTypeId = (SpawnType)kv[0]["SpawnTypeId"];
 
                     return curiosityStoreItem;
                 }
@@ -356,7 +356,7 @@ namespace Curiosity.Core.Server.Database.Store
                             curiosityStoreItem.NumberOfSkillRequirements = int.Parse($"{kv["NumberSkillRequirements"]}");
                             curiosityStoreItem.NumberOfItemRequirements = int.Parse($"{kv["NumberItemRequirements"]}");
                             curiosityStoreItem.ImageUri = $"{kv["ImageUri"]}";
-                            curiosityStoreItem.SpawnType = (SpawnType)int.Parse($"{kv["SpawnTypeId"]}");
+                            curiosityStoreItem.SpawnTypeId = (SpawnType)kv["SpawnTypeId"];
 
                             lstItems.Add(curiosityStoreItem);
                         }

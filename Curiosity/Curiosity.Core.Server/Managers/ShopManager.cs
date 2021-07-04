@@ -176,7 +176,7 @@ namespace Curiosity.Core.Server.Managers
                         goto FailedPurchaseSkill;
                     }
 
-                    if (item.SpawnType == 0)
+                    if (item.SpawnTypeId == 0)
                         goto AddItemToCharacter; // Let them buy it then!
 
                     if (item.IsVehicle)
@@ -205,7 +205,8 @@ namespace Curiosity.Core.Server.Managers
                     goto SuccessfulPurchase;
 
                 LowerStockAmount:
-                    await Database.Store.ShopDatabase.Adjust((int)item.ShopItemId, -1);
+                    if (item.IsStockManaged)
+                        await Database.Store.ShopDatabase.Adjust((int)item.ShopItemId, -1);
 
                     goto SuccessfulPurchase;
 
