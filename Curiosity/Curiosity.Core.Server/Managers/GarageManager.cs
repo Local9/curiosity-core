@@ -101,10 +101,19 @@ namespace Curiosity.Core.Server.Managers
 
                     Vehicle vehicle = new Vehicle(vehicleId);
                     vehicle.State.Set("VEH_SPAWNED", true, true);
-                    vehicle.State.Set("VEH_PERSONAL", true, true);
                     vehicle.State.Set("VEH_OWNER", player.Name, true);
                     vehicle.State.Set("VEH_OWNER_ID", player.Handle, true);
                     vehicle.State.Set("VEH_TYPE", vehicleItem.SpawnTypeId, true);
+
+                    if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
+                    {
+                        vehicle.State.Set("VEH_PERSONAL", true, true);
+                    }
+
+                    if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
+                    {
+                        vehicle.State.Set("VEH_PERSONAL_TRAILER", true, true);
+                    }
 
                     API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 

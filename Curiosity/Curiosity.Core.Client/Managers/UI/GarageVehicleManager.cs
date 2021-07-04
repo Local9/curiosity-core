@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Enums;
@@ -42,32 +43,33 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (vehicleItem is null)
                 {
-                    NotificationManger.GetModule().Error("Vehicle failed to be created successfully.");
-                    return new { success = true };
+                    NotificationManger.GetModule().Error("Vehicle failed to be created successfully. Please try again.");
+                    return new { success = false };
                 }
 
                 if (vehicleItem.NetworkId == 0)
                 {
-                    NotificationManger.GetModule().Error("Vehicle failed to be created successfully.");
-                    return new { success = true };
+                    NotificationManger.GetModule().Error("Vehicle failed to be created successfully. Please try again.");
+                    return new { success = false };
                 }
+
+                Logger.Debug($"SpawnTypeId: {vehicleItem.SpawnTypeId}");
 
                 if (vehicleItem.NetworkId > 0)
                 {
-
                     Vehicle vehicle = null;
 
-                    if (Cache.PersonalVehicle is not null && !vehicleItem.IsTrailer)
+                    if (Cache.PersonalVehicle is not null && vehicleItem.SpawnTypeId != SpawnType.Trailer)
                         vehicle = Cache.PersonalVehicle.Vehicle;
 
-                    if (Cache.PersonalTrailer is not null && vehicleItem.IsTrailer)
+                    if (Cache.PersonalTrailer is not null && vehicleItem.SpawnTypeId == SpawnType.Trailer)
                         vehicle = Cache.PersonalTrailer.Vehicle;
 
                     if (vehicle is not null)
                     {
                         if (vehicle.Exists()) // personal vehicle
                         {
-                            if (vehicle.Driver == Cache.PlayerPed && !vehicleItem.IsTrailer)
+                            if (vehicle.Driver == Cache.PlayerPed && vehicleItem.SpawnTypeId != SpawnType.Trailer)
                                 Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
 
                             await vehicle.FadeOut(true);
@@ -84,13 +86,13 @@ namespace Curiosity.Core.Client.Managers.UI
                         }
                     }
 
-                    if (Cache.Entity is not null && Cache.Entity.Vehicle is not null)
+                    if (Cache.Entity is not null && Cache.Entity.Vehicle is not null && vehicleItem.SpawnTypeId != SpawnType.Trailer)
                     {
                         if (Cache.Entity.Vehicle.Exists()) // get vehicle player is in
                         {
                             vehicle = Cache.Entity.Vehicle;
 
-                            if (vehicle.Driver == Cache.PlayerPed && !vehicleItem.IsTrailer)
+                            if (vehicle.Driver == Cache.PlayerPed)
                                 Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
 
                             await vehicle.FadeOut(true);
@@ -111,8 +113,8 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     if (!API.DoesEntityExist(vehId))
                     {
-                        NotificationManger.GetModule().Error("Vehicle failed to be created successfully.");
-                        return new { success = true };
+                        NotificationManger.GetModule().Error("Vehicle failed to be created successfully. Please try again.");
+                        return new { success = false };
                     }
 
                     vehicle = new Vehicle(vehId);
@@ -121,18 +123,22 @@ namespace Curiosity.Core.Client.Managers.UI
                     vehicle.IsCollisionEnabled = false;
 
                     Vector3 pos = vehicle.Position;
-                    API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 10f, false, false, false, false);
+                    API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 4f, false, false, false, false);
 
                     vehicle.Mods.LicensePlate = vehicleItem.VehicleInfo.plateText;
 
-                    Cache.PersonalVehicle = new State.VehicleState(vehicle);
-                    Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);
-
-                    if (!vehicleItem.IsTrailer)
+                    if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
+                    {
+                        Cache.PersonalVehicle = new State.VehicleState(vehicle);
+                        Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver); // will be removed
                         Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
+                    }
 
-                    if (vehicleItem.IsTrailer)
+                    if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
+                    {
                         Cache.Player.User.SendEvent("vehicle:log:player:trailer", vehicle.NetworkId);
+                        Cache.PersonalTrailer = new State.VehicleState(vehicle);
+                    }
 
                     vehicle.IsPositionFrozen = false;
                     vehicle.IsCollisionEnabled = true;
