@@ -304,8 +304,6 @@ namespace Curiosity.Core.Client.Commands.Impl
 
                 if (arguments.Count > 0)
                 {
-                    // Logger.Debug($"Args: {string.Join(",", arguments)}");
-
                     if (arguments[0] == "scale" || arguments[0] == "s")
                         developerUxManager.Scale = float.Parse(arguments[1]);
                 }
@@ -315,11 +313,13 @@ namespace Curiosity.Core.Client.Commands.Impl
                     if (developerUxManager.Enabled)
                     {
                         developerUxManager.DisableDeveloperOverlay();
+                        return;
                     }
 
                     if (!developerUxManager.Enabled)
                     {
                         developerUxManager.EnableDeveloperOverlay();
+                        return;
                     }
                 }
             }
