@@ -12,5 +12,7 @@ namespace Curiosity.Systems.Library.Models
         public DateTime DatePurchased;
         public SpawnType SpawnTypeId;
         public VehicleInfo VehicleInfo = new VehicleInfo();
+
+        public bool IsTrailer => SpawnTypeId == SpawnType.Trailer;
     }
 }

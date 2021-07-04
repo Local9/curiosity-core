@@ -38,6 +38,7 @@ namespace Curiosity.Core.Client.Managers
                             if (ped.Exists())
                             {
                                 await ped.FadeOut();
+                                ped.MarkAsNoLongerNeeded();
                                 ped.Delete();
                             }
                             break;
@@ -63,10 +64,12 @@ namespace Curiosity.Core.Client.Managers
                                 vehicle.Position = new Vector3(10000, 10000, 0);
                                 await BaseScript.Delay(1500);
 
+                                vehicle.MarkAsNoLongerNeeded();
                                 vehicle.Delete();
                             }
                             break;
                         default:
+                            API.SetEntityAsMissionEntity(entityHandle, false, false);
                             API.DeleteEntity(ref entityHandle);
                             break;
                     }
