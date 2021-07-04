@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
+using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -55,13 +56,22 @@ namespace Curiosity.Core.Server.Managers
                     var model = API.GetHashKey(vehicleItem.Hash);
 
                     Vector3 pos = player.Character.Position;
+                    float heading = player.Character.Heading;
 
-                    // need type
+                    if (vehicleItem.SpawnTypeId == SpawnType.Unknown)
+                    {
+                        return null;
+                    }
 
                     // get spawn loacation if not a car
+                    if (vehicleItem.SpawnTypeId != SpawnType.Vehicle)
+                    {
+                        Position spawnPos = ConfigManager.GetModule().NearestSpawnPosition(pos, vehicleItem.SpawnTypeId);
+                        pos = spawnPos.AsVector();
+                    }
 
                     // spawn vehicle in location | need to test distant spawning
-                    int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
+                    int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, heading, true, true);
 
                     if (vehicleId == 0)
                     {

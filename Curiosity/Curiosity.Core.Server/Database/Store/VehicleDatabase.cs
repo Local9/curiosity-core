@@ -1,4 +1,5 @@
 ﻿using Curiosity.Core.Server.Extensions;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
 using Newtonsoft.Json;
@@ -69,6 +70,7 @@ namespace Curiosity.Core.Server.Database.Store
                 item.Label = $"{keyValuePairs[0]["Label"]}";
                 item.Hash = $"{keyValuePairs[0]["HashKey"]}";
                 item.DatePurchased = keyValuePairs[0]["DatePurchased"];
+                item.SpawnTypeId = (SpawnType)keyValuePairs[0]["SpawnTypeId"];
 
                 string vehicleData = $"{keyValuePairs[0]["VehicleData"]}";
                 

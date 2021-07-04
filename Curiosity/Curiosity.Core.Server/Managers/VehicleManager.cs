@@ -363,7 +363,7 @@ namespace Curiosity.Core.Server.Managers
                 position.Y = metadata.Find<float>(1);
                 position.Z = metadata.Find<float>(2);
 
-                Location location = config.NearestLocation(position, "vehicle:spawn:menu", 3f);
+                Location location = config.NearestEventLocation(position, "vehicle:spawn:menu", 3f);
 
                 Logger.Debug($"EVENT: vehicle:spawn:menu|{location.SpawnType}");
 

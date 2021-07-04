@@ -3,17 +3,21 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Curiosity.Core.Server.Managers
 {
     public class ConfigManager : Manager<ConfigManager>
     {
         public LocationConfig configCache = new();
+        // public Dictionary<string, List<Position>> eventCache = new();
+        public Dictionary<SpawnType, List<Position>> spawnCache = new();
 
         public override void Begin()
         {
@@ -25,7 +29,7 @@ namespace Curiosity.Core.Server.Managers
             Instance.ExportDictionary.Add("IsCloseToLocation", new Func<string, float, float, float, float, bool>(
                 (eventName, posX, posY, posZ, dist) => {
                     Vector3 vector = new Vector3(posX, posY, posZ);
-                    return IsNearLocation(vector, eventName, dist);
+                    return IsNearEventLocation(vector, eventName, dist);
                 }));
 
             GetLocations();
@@ -47,6 +51,30 @@ namespace Curiosity.Core.Server.Managers
                 {
                     config = JsonConvert.DeserializeObject<LocationConfig>(jsonFile);
                     configCache = config;
+
+                    if (config.Locations.Count > 0)
+                    {
+                        foreach(Location location in config.Locations)
+                        {
+                            if (location.SpawnType != SpawnType.Unknown)
+                            {
+                                if (!spawnCache.ContainsKey(location.SpawnType))
+                                {
+                                    if (location.Spawners.Count == 0)
+                                        continue;
+
+                                    spawnCache.Add(location.SpawnType, location.Spawners);
+                                }
+                                else
+                                {
+                                    foreach(Position position in location.Spawners)
+                                    {
+                                        spawnCache[location.SpawnType].Add(position);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             catch(Exception ex)
@@ -62,7 +90,7 @@ namespace Curiosity.Core.Server.Managers
             return GetLocationConfig().Locations;
         }
 
-        public bool IsNearLocation(Vector3 position, string eventName, float distance = 0f)
+        public bool IsNearEventLocation(Vector3 position, string eventName, float distance = 0f)
         {
             foreach(Location location in configCache.Locations)
             {
@@ -95,7 +123,8 @@ namespace Curiosity.Core.Server.Managers
 
             return false;
         }
-        public Location NearestLocation(Vector3 position, string eventName, float distance = 0f)
+
+        public Location NearestEventLocation(Vector3 position, string eventName, float distance = 0f)
         {
             foreach (Location location in configCache.Locations)
             {
@@ -129,6 +158,24 @@ namespace Curiosity.Core.Server.Managers
             Logger.Debug($"Possible server config does not match the client config");
 
             return null;
+        }
+
+        public Position NearestSpawnPosition(Vector3 position, SpawnType spawnType)
+        {
+            try
+            {
+                List<Position> positions = spawnCache[spawnType];
+
+                if (positions.Count == 0)
+                    return null;
+
+                return positions.OrderBy(x => Vector3.Distance(position, x.AsVector())).First();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"NearestSpawnPosition: {ex.Message}");
+                return null;
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Curiosity.Core.Server.Managers
                 position.Y = metadata.Find<float>(1);
                 position.Z = metadata.Find<float>(2);
 
-                bool result = config.IsNearLocation(position, JOB_POLICE_DUTY);
+                bool result = config.IsNearEventLocation(position, JOB_POLICE_DUTY);
 
                 if (result)
                 {
@@ -55,7 +55,7 @@ namespace Curiosity.Core.Server.Managers
                 position.Y = metadata.Find<float>(1);
                 position.Z = metadata.Find<float>(2);
 
-                bool result = config.IsNearLocation(position, JOB_POLICE_ARREST);
+                bool result = config.IsNearEventLocation(position, JOB_POLICE_ARREST);
 
                 user.Send(JOB_POLICE_ARREST);
 

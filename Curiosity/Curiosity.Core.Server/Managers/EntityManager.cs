@@ -193,7 +193,7 @@ namespace Curiosity.Core.Server.Managers
                 position.Y = metadata.Find<float>(1);
                 position.Z = metadata.Find<float>(2);
 
-                bool result = ConfigManager.GetModule().IsNearLocation(position, ENTITY_VEHICLE_DELETE);
+                bool result = ConfigManager.GetModule().IsNearEventLocation(position, ENTITY_VEHICLE_DELETE);
 
                 Logger.Debug($"{user.LatestName} delete vehicle; {result}");
 
@@ -212,7 +212,7 @@ namespace Curiosity.Core.Server.Managers
                 position.Y = metadata.Find<float>(1);
                 position.Z = metadata.Find<float>(2);
 
-                bool result = ConfigManager.GetModule().IsNearLocation(position, ENTITY_VEHICLE_REPAIR);
+                bool result = ConfigManager.GetModule().IsNearEventLocation(position, ENTITY_VEHICLE_REPAIR);
 
                 Logger.Debug($"{user.LatestName} repair vehicle; {result}");
 
