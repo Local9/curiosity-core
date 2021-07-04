@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Y:\GTA\FXServer\curiosity\resources\curiosity-core\</OutputPath>
+    <OutputPath>Y:\GTA\FXServer\curiosity\resources\[curiosity]\curiosity-core\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
