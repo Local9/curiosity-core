@@ -68,6 +68,9 @@ namespace Curiosity.Systems.Library.Models
         public DateTime LastNotificationBackup { get; set; }
         public int PersonalVehicle { get; set; }
         public int PersonalTrailer { get; set; }
+        public int PersonalPlane { get; set; }
+        public int PersonalBoat { get; set; }
+        public int PersonalHelicopter { get; set; }
         public RoutingBucket RoutingBucket { get; set; }
         public bool AllowPublicStats { get; set; }
         public bool Purchasing { get; set; }

@@ -68,7 +68,7 @@ namespace Curiosity.Core.Client.Utils
                     {
                         list["Server Spawned"] = $"{veh.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false}";
                         list["Owner"] = $"[{veh.State.Get($"{StateBagKey.VEH_OWNER_ID}")}] {veh.State.Get($"{StateBagKey.VEH_OWNER}")}";
-                        list["Spawn Type"] = $"{veh.State.Get($"{StateBagKey.VEH_TYPE}") ?? "Unknown"}";
+                        list["Spawn Type"] = $"{veh.State.Get($"{StateBagKey.VEH_SPAWN_TYPE}") ?? "Unknown"}";
                         list["Personal"] = $"{veh.State.Get($"{StateBagKey.VEH_PERSONAL}") ?? false}";
                         list["Personal Trailer"] = $"{veh.State.Get($"{StateBagKey.VEH_PERSONAL_TRAILER}") ?? false}";
                     }

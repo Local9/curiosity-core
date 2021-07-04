@@ -24,45 +24,52 @@ namespace Curiosity.Core.Client.State
             this.Vehicle = vehicle;
             this.Created = DateTime.Now;
 
-            bool personalVehicle = vehicle.State.Get($"{StateBagKey.VEH_PERSONAL}") ?? false;
-            if (personalVehicle == true)
+            Blip blip = vehicle.AttachBlip();
+
+            int spawnType = vehicle.State.Get($"{StateBagKey.VEH_SPAWN_TYPE}") ?? (int)SpawnType.Vehicle;
+
+            if (spawnType == (int)SpawnType.Vehicle)
             {
-                Blip b = Cache.PersonalVehicle.Vehicle.AttachBlip();
-
-                b.Sprite = BlipSprite.PersonalVehicleCar;
-
-                VehicleHash vehicleHash = (VehicleHash)Cache.PersonalVehicle.Vehicle.Model.Hash;
-
-                if (ScreenInterface.VehicleBlips.ContainsKey(vehicleHash))
-                {
-                    API.SetBlipSprite(b.Handle, ScreenInterface.VehicleBlips[vehicleHash]);
-                }
-                else
-                {
-                    if (ScreenInterface.VehicleClassBlips.ContainsKey(Cache.PersonalVehicle.Vehicle.ClassType))
-                    {
-                        API.SetBlipSprite(b.Handle, ScreenInterface.VehicleClassBlips[Cache.PersonalVehicle.Vehicle.ClassType]);
-                    }
-                }
-
-                b.Scale = 0.85f;
-                b.Color = BlipColor.White;
-                b.Priority = 10;
-                b.Name = "Personal Vehicle";
-                b.IsShortRange = true;
+                blip.Name = "Personal Vehicle";
             }
 
-            bool trailer = vehicle.State.Get($"{StateBagKey.VEH_PERSONAL_TRAILER}") ?? false;
-            if (trailer == true)
+            if (spawnType == (int)SpawnType.Trailer)
             {
-                Blip b = Cache.PersonalTrailer.Vehicle.AttachBlip();
-                API.SetBlipSprite(b.Handle, 479);
-                b.Scale = 0.85f;
-                b.Color = BlipColor.White;
-                b.Priority = 10;
-                b.Name = "Personal Trailer";
-                b.IsShortRange = true;
+                blip.Name = "Personal Trailer";
             }
+
+            if (spawnType == (int)SpawnType.Boat)
+            {
+                blip.Name = "Personal Boat";
+            }
+
+            if (spawnType == (int)SpawnType.Plane)
+            {
+                blip.Name = "Personal Plane";
+            }
+
+            if (spawnType == (int)SpawnType.Helicopter)
+            {
+                blip.Name = "Personal Helicopter";
+            }
+
+            VehicleHash vehicleHash = (VehicleHash)vehicle.Model.Hash;
+
+            if (ScreenInterface.VehicleBlips.ContainsKey(vehicleHash))
+            {
+                API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleBlips[vehicleHash]);
+            }
+            else
+            {
+                if (ScreenInterface.VehicleClassBlips.ContainsKey(vehicle.ClassType))
+                {
+                    API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleClassBlips[vehicle.ClassType]);
+                }
+            }
+
+            blip.Scale = 0.85f;
+            blip.Color = BlipColor.White;
+            blip.Priority = 10;
         }
 
         public Prop AttachedProp { get; internal set; }

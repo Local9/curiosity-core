@@ -103,7 +103,7 @@ namespace Curiosity.Core.Server.Managers
                     vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
                     vehicle.State.Set($"{StateBagKey.VEH_OWNER_ID}", player.Handle, true);
                     vehicle.State.Set($"{StateBagKey.VEH_OWNER}", player.Name, true);
-                    vehicle.State.Set($"{StateBagKey.VEH_TYPE}", $"{(int)vehicleItem.SpawnTypeId}", true);
+                    vehicle.State.Set($"{StateBagKey.VEH_SPAWN_TYPE}", $"{(int)vehicleItem.SpawnTypeId}", true);
 
                     if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
                     {

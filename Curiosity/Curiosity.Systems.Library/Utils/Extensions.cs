@@ -100,5 +100,7 @@ namespace Curiosity.Systems.Library.Utils
             // Return the first if there was a match.
             return attribs.Length > 0 ? attribs[0].StringValue : null;
         }
+
+        public static int EnumToInt<TValue>(this TValue value) where TValue : Enum => (int)(object)value;
     }
 }

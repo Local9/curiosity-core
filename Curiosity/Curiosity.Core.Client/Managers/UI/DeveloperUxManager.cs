@@ -22,7 +22,7 @@ namespace Curiosity.Core.Client.Managers.UI
         public void EnableDeveloperOverlay()
         {
             Enabled = true;
-            Instance.DetachTickHandler(DeveloperOverlay);
+            Instance.AttachTickHandler(DeveloperOverlay);
             Instance.AttachTickHandler(DeveloperEntityOverlay);
             NotificationManger.GetModule().Success($"Enabled Developer UI");
         }

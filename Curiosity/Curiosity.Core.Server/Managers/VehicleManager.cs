@@ -71,7 +71,31 @@ namespace Curiosity.Core.Server.Managers
             {
                 int netId = metadata.Find<int>(0);
                 PluginManager.ActiveUsers[metadata.Sender].PersonalTrailer = netId;
-                Logger.Debug($"vehicle:log:player -> {metadata.Sender} - Vehicle: {netId}");
+                Logger.Debug($"vehicle:log:player:trailer -> {metadata.Sender} - Vehicle: {netId}");
+                return false;
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:log:player:plane", new EventCallback(metadata =>
+            {
+                int netId = metadata.Find<int>(0);
+                PluginManager.ActiveUsers[metadata.Sender].PersonalPlane = netId;
+                Logger.Debug($"vehicle:log:player:plane -> {metadata.Sender} - Vehicle: {netId}");
+                return false;
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:log:player:boat", new EventCallback(metadata =>
+            {
+                int netId = metadata.Find<int>(0);
+                PluginManager.ActiveUsers[metadata.Sender].PersonalBoat = netId;
+                Logger.Debug($"vehicle:log:player:boat -> {metadata.Sender} - Vehicle: {netId}");
+                return false;
+            }));
+
+            EventSystem.GetModule().Attach("vehicle:log:player:helicopter", new EventCallback(metadata =>
+            {
+                int netId = metadata.Find<int>(0);
+                PluginManager.ActiveUsers[metadata.Sender].PersonalHelicopter = netId;
+                Logger.Debug($"vehicle:log:player:helicopter -> {metadata.Sender} - Vehicle: {netId}");
                 return false;
             }));
 

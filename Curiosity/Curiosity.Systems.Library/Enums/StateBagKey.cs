@@ -11,7 +11,7 @@
         VEH_SPAWNED,
         VEH_OWNER_ID,
         VEH_OWNER,
-        VEH_TYPE,
+        VEH_SPAWN_TYPE,
         VEH_PERSONAL,
         VEH_PERSONAL_TRAILER
     }
