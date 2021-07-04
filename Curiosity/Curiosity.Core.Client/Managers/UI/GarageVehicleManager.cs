@@ -6,7 +6,7 @@ using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System.Collections.Generic;
 
-namespace Curiosity.Core.Client.Managers
+namespace Curiosity.Core.Client.Managers.UI
 {
     public class GarageVehicleManager : Manager<GarageVehicleManager>
     {
