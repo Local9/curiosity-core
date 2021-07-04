@@ -7,6 +7,7 @@
         Helicopter = 2,
         Plane = 3,
         Boat = 4,
-        Vehicle = 5
+        Vehicle = 5,
+        Trailer = 6
     }
 }

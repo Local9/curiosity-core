@@ -28,10 +28,10 @@ namespace Curiosity.Systems.Library.Models
         private int _category = 1;
 
         [DataMember(Name = "positions")]
-        public List<Position> Positions;
+        public List<Position> Positions = new List<Position>();
 
         [DataMember(Name = "spawns")]
-        public List<Position> Spawners;
+        public List<Position> Spawns = new List<Position>();
 
         [DataMember(Name = "name")]
         public string Name;

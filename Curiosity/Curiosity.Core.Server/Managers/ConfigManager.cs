@@ -56,21 +56,20 @@ namespace Curiosity.Core.Server.Managers
                     {
                         foreach(Location location in config.Locations)
                         {
-                            if (location.SpawnType != SpawnType.Unknown)
-                            {
-                                if (!spawnCache.ContainsKey(location.SpawnType))
-                                {
-                                    if (location.Spawners.Count == 0)
-                                        continue;
+                            if (location.SpawnType == SpawnType.Unknown
+                                || location.SpawnType == SpawnType.Hospital)
+                                continue;
 
-                                    spawnCache.Add(location.SpawnType, location.Spawners);
-                                }
-                                else
+                            if (!spawnCache.ContainsKey(location.SpawnType))
+                            {
+                                if (location.Spawns.Count > 0)
+                                    spawnCache.Add(location.SpawnType, location.Spawns);
+                            }
+                            else
+                            {
+                                foreach(Position position in location.Spawns)
                                 {
-                                    foreach(Position position in location.Spawners)
-                                    {
-                                        spawnCache[location.SpawnType].Add(position);
-                                    }
+                                    spawnCache[location.SpawnType].Add(position);
                                 }
                             }
                         }
@@ -164,10 +163,24 @@ namespace Curiosity.Core.Server.Managers
         {
             try
             {
+                if (!spawnCache.ContainsKey(spawnType))
+                {
+                    Logger.Error($"Key '{spawnType}' not found");
+
+                    string keys = string.Empty;
+                    spawnCache.Keys.ToList().ForEach(t => { keys += $"{t},"; });
+                    Logger.Error($"Keys: {keys}");
+
+                    return null;
+                }
+
+
                 List<Position> positions = spawnCache[spawnType];
 
                 if (positions.Count == 0)
+                {
                     return null;
+                }
 
                 return positions.OrderBy(x => Vector3.Distance(position, x.AsVector())).First();
             }

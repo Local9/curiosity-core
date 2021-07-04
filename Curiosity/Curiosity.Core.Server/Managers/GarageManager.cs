@@ -67,7 +67,12 @@ namespace Curiosity.Core.Server.Managers
                     if (vehicleItem.SpawnTypeId != SpawnType.Vehicle)
                     {
                         Position spawnPos = ConfigManager.GetModule().NearestSpawnPosition(pos, vehicleItem.SpawnTypeId);
-                        pos = spawnPos.AsVector();
+
+                        if (spawnPos is not null)
+                        {
+                            pos = spawnPos.AsVector();
+                            heading = spawnPos.H;
+                        }
                     }
 
                     // spawn vehicle in location | need to test distant spawning
