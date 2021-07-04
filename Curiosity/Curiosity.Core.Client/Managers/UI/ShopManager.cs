@@ -77,7 +77,8 @@ namespace Curiosity.Core.Client.Managers
                             hasRoleRequirement = storeItem?.HasRoleRequirement,
                             numberOfSkillRequirements = storeItem?.NumberOfSkillRequirements,
                             numberOfItemRequirements = storeItem?.NumberOfItemRequirements,
-                            imageUri = storeItem?.ImageUri
+                            imageUri = storeItem?.ImageUri,
+                            spawnTypeId = (int)storeItem.SpawnType
                         };
 
                         items.Add(i);
@@ -110,6 +111,7 @@ namespace Curiosity.Core.Client.Managers
                         numberOfSkillRequirements = storeItem?.NumberOfSkillRequirements,
                         numberOfItemRequirements = storeItem?.NumberOfItemRequirements,
                         imageUri = storeItem?.ImageUri,
+                        spawnTypeId = (int)storeItem.SpawnType,
                         skillsRequired = new List<dynamic>(),
                         itemsRequired = new List<dynamic>(),
                         rolesRequired = new List<dynamic>()
