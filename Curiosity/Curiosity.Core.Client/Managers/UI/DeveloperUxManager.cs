@@ -1,6 +1,9 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Core.Client.Utils;
+using Curiosity.Systems.Library.Enums;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
@@ -19,7 +22,8 @@ namespace Curiosity.Core.Client.Managers.UI
         public void EnableDeveloperOverlay()
         {
             Enabled = true;
-            Instance.AttachTickHandler(DeveloperOverlay);
+            Instance.DetachTickHandler(DeveloperOverlay);
+            Instance.AttachTickHandler(DeveloperEntityOverlay);
             NotificationManger.GetModule().Success($"Enabled Developer UI");
         }
 
@@ -27,6 +31,7 @@ namespace Curiosity.Core.Client.Managers.UI
         {
             Enabled = false;
             Instance.DetachTickHandler(DeveloperOverlay);
+            Instance.DetachTickHandler(DeveloperEntityOverlay);
             NotificationManger.GetModule().Success($"Disabled Developer UI");
         }
 
@@ -39,6 +44,22 @@ namespace Curiosity.Core.Client.Managers.UI
             Vector3 playerPos = Cache.PlayerPed.Position;
 
             ScreenInterface.DrawText($"X: {playerPos.X}, Y: {playerPos.Y}, Z: {playerPos.Z}, H: {Cache.PlayerPed.Heading}", Scale, pos, color);
+        }
+
+        private async Task DeveloperEntityOverlay()
+        {
+            Vehicle[] vehicles = World.GetAllVehicles();
+
+            foreach(Vehicle vehicle in vehicles)
+            {
+                if (!vehicle.IsInRangeOf(Cache.PlayerPed.Position, 3f)) continue;
+
+                bool spawned = vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
+                if (spawned)
+                {
+                    DebugDisplay.DrawData(vehicle);
+                }
+            }
         }
     }
 }

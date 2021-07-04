@@ -44,5 +44,10 @@ namespace Curiosity.Core.Client.Extensions
 
             return points.OrderBy(x => Vector3.Distance(startingPoint, x)).First();
         }
+
+        public static float Distance(this Vector3 position, Vector3 target, bool useZ = false)
+        {
+            return API.GetDistanceBetweenCoords(position.X, position.Y, position.Z, target.X, target.Y, target.Z, useZ);
+        }
     }
 }

@@ -141,6 +141,7 @@
     <Compile Include="TickHandler.cs" />
     <Compile Include="Utils\CameraMath.cs" />
     <Compile Include="Utils\ControlHelper.cs" />
+    <Compile Include="Utils\DebugDisplay.cs" />
     <Compile Include="Utils\PlayerOptions.cs" />
     <Compile Include="Utils\ScreenOptions.cs" />
   </ItemGroup>

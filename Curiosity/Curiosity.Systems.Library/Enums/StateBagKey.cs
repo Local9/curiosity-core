@@ -2,11 +2,17 @@
 {
     public enum StateBagKey
     {
-        PLAYER_NAME,
+        PLAYER_NAME ,
         SERVER_HANDLE,
         PLAYER_CASH,
         PLAYER_VEHICLE,
         STAFF_MEMBER,
-        PLAYER_FREEZE
+        PLAYER_FREEZE,
+        VEH_SPAWNED,
+        VEH_OWNER_ID,
+        VEH_OWNER,
+        VEH_TYPE,
+        VEH_PERSONAL,
+        VEH_PERSONAL_TRAILER
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Interface;
+using Curiosity.Systems.Library.Enums;
 using System;
 
 namespace Curiosity.Core.Client.State
@@ -23,7 +24,8 @@ namespace Curiosity.Core.Client.State
             this.Vehicle = vehicle;
             this.Created = DateTime.Now;
 
-            if (vehicle.State.Get("VEH_PERSONAL") == true)
+            bool personalVehicle = vehicle.State.Get($"{StateBagKey.VEH_PERSONAL}") ?? false;
+            if (personalVehicle == true)
             {
                 Blip b = Cache.PersonalVehicle.Vehicle.AttachBlip();
 
@@ -47,10 +49,11 @@ namespace Curiosity.Core.Client.State
                 b.Color = BlipColor.White;
                 b.Priority = 10;
                 b.Name = "Personal Vehicle";
-                b.IsShortRange = false;
+                b.IsShortRange = true;
             }
 
-            if (vehicle.State.Get("VEH_PERSONAL_TRAILER") == true)
+            bool trailer = vehicle.State.Get($"{StateBagKey.VEH_PERSONAL_TRAILER}") ?? false;
+            if (trailer == true)
             {
                 Blip b = Cache.PersonalTrailer.Vehicle.AttachBlip();
                 API.SetBlipSprite(b.Handle, 479);
@@ -58,7 +61,7 @@ namespace Curiosity.Core.Client.State
                 b.Color = BlipColor.White;
                 b.Priority = 10;
                 b.Name = "Personal Trailer";
-                b.IsShortRange = false;
+                b.IsShortRange = true;
             }
         }
 
