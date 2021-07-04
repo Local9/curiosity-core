@@ -48,8 +48,6 @@ namespace Curiosity.Core.Server.Managers
                         return null;
                     }
 
-                    if (string.IsNullOrEmpty(vehicleItem.VehicleInfo.plateText)) vehicleItem.VehicleInfo.plateText = $"#{curiosityUser.Character.CharacterId}";
-
                     Player player = PluginManager.PlayersList[metadata.Sender];
 
                     RoutingBucket routingBucket = curiosityUser.RoutingBucket;
@@ -58,6 +56,11 @@ namespace Curiosity.Core.Server.Managers
 
                     Vector3 pos = player.Character.Position;
 
+                    // need type
+
+                    // get spawn loacation if not a car
+
+                    // spawn vehicle in location | need to test distant spawning
                     int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, player.Character.Heading, true, true);
 
                     if (vehicleId == 0)
@@ -84,6 +87,9 @@ namespace Curiosity.Core.Server.Managers
                     Vehicle vehicle = new Vehicle(vehicleId);
                     vehicle.State.Set("VEH_SPAWNED", true, true);
                     vehicle.State.Set("VEH_PERSONAL", true, true);
+                    vehicle.State.Set("VEH_OWNER", player.Name, true);
+                    vehicle.State.Set("VEH_OWNER_ID", player.Handle, true);
+                    vehicle.State.Set("VEH_TYPE", vehicleItem.SpawnTypeId, true);
 
                     API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 

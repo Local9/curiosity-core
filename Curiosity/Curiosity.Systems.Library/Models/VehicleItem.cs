@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Curiosity.Systems.Library.Enums;
+using System;
 
 namespace Curiosity.Systems.Library.Models
 {
@@ -9,6 +10,7 @@ namespace Curiosity.Systems.Library.Models
         public string Label;
         public string Hash;
         public DateTime DatePurchased;
+        public SpawnType SpawnTypeId;
         public VehicleInfo VehicleInfo = new VehicleInfo();
     }
 }
