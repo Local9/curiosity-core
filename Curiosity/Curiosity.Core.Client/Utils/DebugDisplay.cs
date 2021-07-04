@@ -73,7 +73,7 @@ namespace Curiosity.Core.Client.Utils
                         list["Personal Trailer"] = $"{veh.State.Get($"{StateBagKey.VEH_PERSONAL_TRAILER}") ?? false}";
                     }
 
-                    if (veh.Driver != null)
+                    if (veh.Driver.Exists())
                     {
                         list["Driver"] = $"{veh.Driver.Handle}";
                         list["Driver Visible"] = $"{veh.Driver.IsVisible}";

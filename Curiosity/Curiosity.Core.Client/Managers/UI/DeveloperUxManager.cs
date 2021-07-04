@@ -52,7 +52,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
             foreach(Vehicle vehicle in vehicles)
             {
-                if (!vehicle.IsInRangeOf(Cache.PlayerPed.Position, 3f)) continue;
+                if (!vehicle.IsInRangeOf(Cache.PlayerPed.Position, 10f)) continue;
 
                 bool spawned = vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}") ?? false;
                 if (spawned)
