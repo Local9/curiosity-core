@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 
 namespace Curiosity.Core.Client.Managers
@@ -43,6 +44,8 @@ namespace Curiosity.Core.Client.Managers
                                 int pedBlip = API.GetBlipFromEntity(ped.Handle);
                                 API.RemoveBlip(ref pedBlip);
 
+                                RemoveEntityBlip(ped);
+
                                 await ped.FadeOut();
                                 ped.MarkAsNoLongerNeeded();
                                 ped.Delete();
@@ -71,6 +74,8 @@ namespace Curiosity.Core.Client.Managers
                                 int vehicleBlip = API.GetBlipFromEntity(vehicle.Handle);
                                 API.RemoveBlip(ref vehicleBlip);
 
+                                RemoveEntityBlip(vehicle);
+
                                 await vehicle.FadeOut();
 
                                 vehicle.Position = new Vector3(10000, 10000, 0);
@@ -89,6 +94,16 @@ namespace Curiosity.Core.Client.Managers
 
                 return null;
             }));
+        }
+
+        public void RemoveEntityBlip(Entity ent)
+        {
+            int pedBlipHandle = ent.State.Get($"{StateBagKey.BLIP_ID}") ?? 0;
+            if (pedBlipHandle > 0)
+            {
+                if (API.DoesBlipExist(pedBlipHandle))
+                    API.RemoveBlip(ref pedBlipHandle);
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Managers;
+using Curiosity.Core.Client.Managers.UI;
 using Curiosity.Systems.Library.Enums;
 using System;
 using System.Collections.Generic;
@@ -231,6 +232,8 @@ namespace Curiosity.Core.Client.Commands.Impl
                     if (!API.DoesEntityExist(vehId)) return;
 
                     vehicle = new Vehicle(vehId);
+
+                    GarageVehicleManager.GetModule().CreateBlip(vehicle);
 
                     Cache.PersonalVehicle = new State.VehicleState(vehicle);
                     Cache.PlayerPed.Task.WarpIntoVehicle(Cache.PersonalVehicle.Vehicle, VehicleSeat.Driver);

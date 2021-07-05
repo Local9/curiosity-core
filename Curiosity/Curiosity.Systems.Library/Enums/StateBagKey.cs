@@ -13,6 +13,7 @@
         VEH_OWNER,
         VEH_SPAWN_TYPE,
         VEH_PERSONAL,
-        VEH_PERSONAL_TRAILER
+        VEH_PERSONAL_TRAILER,
+        BLIP_ID
     }
 }

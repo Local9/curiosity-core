@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
+using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
@@ -87,6 +88,7 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle.IsPositionFrozen = true;
                     vehicle.IsCollisionEnabled = false;
+                    await vehicle.FadeOut();
 
                     await BaseScript.Delay(100);
 
@@ -118,9 +120,13 @@ namespace Curiosity.Core.Client.Managers.UI
                             previousVehicle.IsCollisionEnabled = false;
 
                             EventSystem.GetModule().Send("delete:entity", previousVehicle.NetworkId);
+                            await BaseScript.Delay(5);
 
                             if (previousVehicle.Exists())
                             {
+                                EntityManager.GetModule().RemoveEntityBlip(previousVehicle);
+                                await BaseScript.Delay(5);
+
                                 previousVehicle.Delete();
                                 previousVehicle = null;
                             }
@@ -164,6 +170,10 @@ namespace Curiosity.Core.Client.Managers.UI
                         Cache.PersonalTrailer = new State.VehicleState(vehicle);
                     }
 
+                    Blip blip = CreateBlip(vehicle);
+
+                    vehicle.State.Set($"{StateBagKey.BLIP_ID}", blip.Handle, false);
+
                     API.SetNewWaypoint(vehicle.Position.X, vehicle.Position.Y);
 
                     vehicle.IsPositionFrozen = false;
@@ -184,6 +194,57 @@ namespace Curiosity.Core.Client.Managers.UI
 
 
             }));
+        }
+
+        public Blip CreateBlip(Vehicle vehicle)
+        {
+            Blip blip = vehicle.AttachBlip();
+
+            int spawnType = vehicle.State.Get($"{StateBagKey.VEH_SPAWN_TYPE}") ?? (int)SpawnType.Vehicle;
+
+            if (spawnType == (int)SpawnType.Vehicle)
+            {
+                blip.Name = "Personal Vehicle";
+            }
+
+            if (spawnType == (int)SpawnType.Trailer)
+            {
+                blip.Name = "Personal Trailer";
+            }
+
+            if (spawnType == (int)SpawnType.Boat)
+            {
+                blip.Name = "Personal Boat";
+            }
+
+            if (spawnType == (int)SpawnType.Plane)
+            {
+                blip.Name = "Personal Plane";
+            }
+
+            if (spawnType == (int)SpawnType.Helicopter)
+            {
+                blip.Name = "Personal Helicopter";
+            }
+
+            VehicleHash vehicleHash = (VehicleHash)vehicle.Model.Hash;
+
+            if (ScreenInterface.VehicleBlips.ContainsKey(vehicleHash))
+            {
+                API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleBlips[vehicleHash]);
+            }
+            else
+            {
+                if (ScreenInterface.VehicleClassBlips.ContainsKey(vehicle.ClassType))
+                {
+                    API.SetBlipSprite(blip.Handle, ScreenInterface.VehicleClassBlips[vehicle.ClassType]);
+                }
+            }
+
+            blip.Scale = 0.85f;
+            blip.Color = BlipColor.White;
+            blip.Priority = 10;
+            return blip;
         }
     }
 }

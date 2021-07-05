@@ -109,6 +109,8 @@ namespace Curiosity.Core.Client.Managers
                     int vehicleBlip = API.GetBlipFromEntity(vehicle.Handle);
                     API.RemoveBlip(ref vehicleBlip);
 
+                    EntityManager.GetModule().RemoveEntityBlip(vehicle);
+
                     EventSystem.Send("delete:entity", vehicle.NetworkId);
                 }
                     
@@ -203,6 +205,22 @@ namespace Curiosity.Core.Client.Managers
             PluginManager.Instance.AttachTickHandler(OnVehicleFuel);
             PluginManager.Instance.AttachTickHandler(OnVehicleRefuel);
             PluginManager.Instance.AttachTickHandler(CheckFuelPumpDistance);
+            PluginManager.Instance.AttachTickHandler(OnManageVehicleBlip);
+        }
+
+        private async Task OnManageVehicleBlip()
+        {
+            if (Cache.PlayerPed.IsInVehicle())
+            {
+                Vehicle currentVehicle = Cache.PlayerPed.CurrentVehicle;
+
+                if (currentVehicle.AttachedBlip is not null)
+                {
+                    if (currentVehicle.AttachedBlip.Exists())
+                        currentVehicle.AttachedBlip.Alpha = 0;
+                }
+
+            }
         }
 
         private bool IsNearNormalFuelPump()
