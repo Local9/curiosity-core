@@ -45,10 +45,8 @@ namespace Curiosity.Core.Server.Diagnostics
         {
             try
             {
-                var m = $"[CURIOSITY-CORE][{title}] {msg}";
-                Console.ForegroundColor = color;
-                Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {m}");
-                Console.ResetColor();
+                var m = $"[{title}] {msg}";
+                CitizenFX.Core.Debug.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {m}");
             }
             catch (Exception ex)
             {

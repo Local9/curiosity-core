@@ -143,12 +143,15 @@ namespace Curiosity.Core.Client.Managers
                 {
                     vehicle.AttachedBlip.Alpha = 0;
 
+                    Logger.Debug($"Vehicle Blip Hidden");
+
                     Vehicle veh = (Vehicle)vehicle.GetEntityAttachedTo();
 
                     if (veh is not null)
                     {
                         if (veh.AttachedBlip is not null)
                         {
+                            Logger.Debug($"Attached Vehicle Blip Hidden");
                             veh.AttachedBlip.Alpha = 0;
                         }
                     }
