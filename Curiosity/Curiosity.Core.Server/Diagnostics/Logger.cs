@@ -7,41 +7,41 @@ namespace Curiosity.Core.Server.Diagnostics
     {
         public static void Info(string msg)
         {
-            WriteLine("INFO", msg, ConsoleColor.White);
+            WriteLine("INFO", msg);
         }
 
         public static void Success(string msg)
         {
-            WriteLine("SUCCESS", msg, ConsoleColor.Green);
+            WriteLine("SUCCESS", msg);
         }
 
         public static void Warn(string msg)
         {
-            WriteLine("WARN", msg, ConsoleColor.Yellow);
+            WriteLine("WARN", msg);
         }
 
         public static void Error(string msg)
         {
-            WriteLine("ERROR", msg, ConsoleColor.Red);
+            WriteLine("ERROR", msg);
         }
 
         public static void Error(Exception ex, string msg = "")
         {
-            WriteLine("ERROR", $"{msg}\r\n{ex}", ConsoleColor.Red);
+            WriteLine("ERROR", $"{msg}\r\n{ex}",);
         }
 
         public static void Verbose(string msg)
         {
-            WriteLine("VERBOSE", msg, ConsoleColor.DarkGray);
+            WriteLine("VERBOSE", msg);
         }
 
         public static void Debug(string msg)
         {
             if (!PluginManager.IsDebugging) return;
-            WriteLine("DEBUG", msg, ConsoleColor.DarkGray);
+            WriteLine("DEBUG", msg);
         }
 
-        private static void WriteLine(string title, string msg, ConsoleColor color)
+        private static void WriteLine(string title, string msg)
         {
             try
             {
