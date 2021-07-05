@@ -68,6 +68,21 @@ namespace Curiosity.Core.Client.Managers
                                     }
                                 }
 
+                                if (networkId == Cache.PersonalBoat.Vehicle.NetworkId)
+                                    Cache.PersonalBoat = null;
+
+                                if (networkId == Cache.PersonalTrailer.Vehicle.NetworkId)
+                                    Cache.PersonalTrailer = null;
+
+                                if (networkId == Cache.PersonalVehicle.Vehicle.NetworkId)
+                                    Cache.PersonalVehicle = null;
+
+                                if (networkId == Cache.PersonalPlane.Vehicle.NetworkId)
+                                    Cache.PersonalPlane = null;
+
+                                if (networkId == Cache.PersonalHelicopter.Vehicle.NetworkId)
+                                    Cache.PersonalHelicopter = null;
+
                                 if (vehicle.AttachedBlip is not null)
                                     vehicle.AttachedBlip.Delete();
 
