@@ -5,6 +5,7 @@ namespace Curiosity.Systems.Library.Models
 {
     public class VehicleItem
     {
+        public string Message = string.Empty;
         public int CharacterVehicleId;
         public int NetworkId;
         public string Label;

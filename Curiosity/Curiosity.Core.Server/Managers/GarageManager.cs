@@ -46,7 +46,8 @@ namespace Curiosity.Core.Server.Managers
                     if (vehicleItem is null)
                     {
                         Logger.Error($"Vehicle {characterVehicleId} returned null");
-                        return null;
+                        vehicleItem.Message = "No Vehicle Found";
+                        return vehicleItem;
                     }
 
                     Player player = PluginManager.PlayersList[metadata.Sender];
@@ -55,18 +56,21 @@ namespace Curiosity.Core.Server.Managers
 
                     var model = API.GetHashKey(vehicleItem.Hash);
 
-                    Vector3 pos = player.Character.Position;
+                    Vector3 charPos = player.Character.Position;
+                    Vector3 pos = new Vector3(charPos.X, charPos.Y, charPos.Z);
                     float heading = player.Character.Heading;
 
                     if (vehicleItem.SpawnTypeId == SpawnType.Unknown)
                     {
-                        return null;
+                        vehicleItem.Message = "Vehicle incorrectly configured, contact support.";
+                        return vehicleItem;
                     }
 
                     // get spawn loacation if not a car
                     if (vehicleItem.SpawnTypeId != SpawnType.Vehicle)
                     {
                         Position spawnPos = ConfigManager.GetModule().NearestSpawnPosition(pos, vehicleItem.SpawnTypeId);
+                        await BaseScript.Delay(0);
 
                         if (spawnPos is not null)
                         {
@@ -75,13 +79,21 @@ namespace Curiosity.Core.Server.Managers
                         }
                     }
 
+                    if (Vector3.Distance(charPos, pos) >= 300)
+                    {
+                        vehicleItem.Message = "Too far away from a suitable location.";
+                        return vehicleItem;
+                    }
+
                     // spawn vehicle in location | need to test distant spawning
                     int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, heading, true, true);
+                    await BaseScript.Delay(0);
 
                     if (vehicleId == 0)
                     {
                         Logger.Debug($"Possible OneSync is Disabled");
-                        return null;
+                        vehicleItem.Message = "Vehicle not created.";
+                        return vehicleItem;
                     }
 
                     DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
@@ -96,14 +108,15 @@ namespace Curiosity.Core.Server.Managers
                     if (!API.DoesEntityExist(vehicleId))
                     {
                         Logger.Debug($"Failed to create vehicle in timely manor.");
-                        return null;
+                        vehicleItem.Message = "Vehicle not created within a timely manor.";
+                        return vehicleItem;
                     }
 
                     Vehicle vehicle = new Vehicle(vehicleId);
                     vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
                     vehicle.State.Set($"{StateBagKey.VEH_OWNER_ID}", player.Handle, true);
                     vehicle.State.Set($"{StateBagKey.VEH_OWNER}", player.Name, true);
-                    vehicle.State.Set($"{StateBagKey.VEH_SPAWN_TYPE}", $"{(int)vehicleItem.SpawnTypeId}", true);
+                    vehicle.State.Set($"{StateBagKey.VEH_SPAWN_TYPE}", (int)vehicleItem.SpawnTypeId, true);
 
                     if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
                     {

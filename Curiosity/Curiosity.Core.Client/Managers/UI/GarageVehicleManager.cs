@@ -41,59 +41,34 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId);
 
+                await BaseScript.Delay(0);
+
                 if (vehicleItem is null)
                 {
-                    NotificationManger.GetModule().Error("Vehicle failed to be created successfully. Please try again.");
+                    NotificationManger.GetModule().Error("Vehicle failed to be created. Please try again.");
+                    return new { success = false };
+                }
+
+                if (!string.IsNullOrEmpty(vehicleItem.Message))
+                {
+                    NotificationManger.GetModule().Error(vehicleItem.Message);
                     return new { success = false };
                 }
 
                 if (vehicleItem.NetworkId == 0)
                 {
-                    NotificationManger.GetModule().Error("Vehicle failed to be created successfully. Please try again.");
+                    NotificationManger.GetModule().Error("Vehicle failed to be created on the server. Please try again.");
                     return new { success = false };
                 }
+
+                await BaseScript.Delay(0);
 
                 Logger.Debug($"SpawnTypeId: {vehicleItem.SpawnTypeId}");
 
                 if (vehicleItem.NetworkId > 0)
                 {
                     Vehicle vehicle = null;
-
-                    if (Cache.PersonalVehicle is not null && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
-                        vehicle = Cache.PersonalVehicle.Vehicle;
-
-                    if (Cache.PersonalBoat is not null && vehicleItem.SpawnTypeId == SpawnType.Boat)
-                        vehicle = Cache.PersonalBoat.Vehicle;
-
-                    if (Cache.PersonalHelicopter is not null && vehicleItem.SpawnTypeId == SpawnType.Helicopter)
-                        vehicle = Cache.PersonalHelicopter.Vehicle;
-
-                    if (Cache.PersonalPlane is not null && vehicleItem.SpawnTypeId == SpawnType.Boat)
-                        vehicle = Cache.PersonalBoat.Vehicle;
-
-                    if (Cache.PersonalTrailer is not null && vehicleItem.SpawnTypeId == SpawnType.Trailer)
-                        vehicle = Cache.PersonalTrailer.Vehicle;
-
-                    if (vehicle is not null)
-                    {
-                        if (vehicle.Exists()) // personal vehicle
-                        {
-                            if (vehicle.Driver == Cache.PlayerPed && vehicleItem.SpawnTypeId != SpawnType.Trailer)
-                                Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
-
-                            await vehicle.FadeOut(true);
-
-                            vehicle.IsPositionFrozen = true;
-                            vehicle.IsCollisionEnabled = false;
-
-                            EventSystem.GetModule().Send("delete:entity", vehicle.NetworkId);
-
-                            if (vehicle.Exists())
-                                vehicle.Delete();
-
-                            await BaseScript.Delay(500);
-                        }
-                    }
+                    Vehicle previousVehicle = null;
 
                     int vehId = API.NetworkGetEntityFromNetworkId(vehicleItem.NetworkId);
 
@@ -104,7 +79,7 @@ namespace Curiosity.Core.Client.Managers.UI
                         if (failRate >= 10)
                             goto FAILED;
 
-                        await BaseScript.Delay(10);
+                        await BaseScript.Delay(5);
                         failRate++;
                     }
 
@@ -112,6 +87,47 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle.IsPositionFrozen = true;
                     vehicle.IsCollisionEnabled = false;
+
+                    await BaseScript.Delay(100);
+
+                    if (Cache.PersonalVehicle is not null && vehicleItem.SpawnTypeId == SpawnType.Vehicle)
+                        previousVehicle = Cache.PersonalVehicle.Vehicle;
+
+                    if (Cache.PersonalBoat is not null && vehicleItem.SpawnTypeId == SpawnType.Boat)
+                        previousVehicle = Cache.PersonalBoat.Vehicle;
+
+                    if (Cache.PersonalHelicopter is not null && vehicleItem.SpawnTypeId == SpawnType.Helicopter)
+                        previousVehicle = Cache.PersonalHelicopter.Vehicle;
+
+                    if (Cache.PersonalPlane is not null && vehicleItem.SpawnTypeId == SpawnType.Boat)
+                        previousVehicle = Cache.PersonalBoat.Vehicle;
+
+                    if (Cache.PersonalTrailer is not null && vehicleItem.SpawnTypeId == SpawnType.Trailer)
+                        previousVehicle = Cache.PersonalTrailer.Vehicle;
+
+                    if (previousVehicle is not null)
+                    {
+                        if (previousVehicle.Exists()) // personal vehicle
+                        {
+                            if (previousVehicle.Driver == Cache.PlayerPed && vehicleItem.SpawnTypeId != SpawnType.Trailer)
+                                Cache.PlayerPed.Task.LeaveVehicle(LeaveVehicleFlags.WarpOut);
+
+                            await previousVehicle.FadeOut(true);
+
+                            previousVehicle.IsPositionFrozen = true;
+                            previousVehicle.IsCollisionEnabled = false;
+
+                            EventSystem.GetModule().Send("delete:entity", previousVehicle.NetworkId);
+
+                            if (previousVehicle.Exists())
+                            {
+                                previousVehicle.Delete();
+                                previousVehicle = null;
+                            }
+
+                            await BaseScript.Delay(100);
+                        }
+                    }
 
                     Vector3 pos = vehicle.Position;
                     API.ClearAreaOfEverything(pos.X, pos.Y, pos.Z, 4f, false, false, false, false);
