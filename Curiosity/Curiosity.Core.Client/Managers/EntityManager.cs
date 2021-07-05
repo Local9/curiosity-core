@@ -37,6 +37,12 @@ namespace Curiosity.Core.Client.Managers
                             Ped ped = new Ped(entityHandle);
                             if (ped.Exists())
                             {
+                                if (ped.AttachedBlip is not null)
+                                    ped.AttachedBlip.Delete();
+
+                                int pedBlip = API.GetBlipFromEntity(ped.Handle);
+                                API.RemoveBlip(ref pedBlip);
+
                                 await ped.FadeOut();
                                 ped.MarkAsNoLongerNeeded();
                                 ped.Delete();
@@ -58,6 +64,12 @@ namespace Curiosity.Core.Client.Managers
                                         await BaseScript.Delay(100);
                                     }
                                 }
+
+                                if (vehicle.AttachedBlip is not null)
+                                    vehicle.AttachedBlip.Delete();
+
+                                int vehicleBlip = API.GetBlipFromEntity(vehicle.Handle);
+                                API.RemoveBlip(ref vehicleBlip);
 
                                 await vehicle.FadeOut();
 

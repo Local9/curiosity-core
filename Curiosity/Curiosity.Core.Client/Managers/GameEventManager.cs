@@ -141,9 +141,8 @@ namespace Curiosity.Core.Client.Managers
 
                 if (vehicle.AttachedBlip is not null)
                 {
-                    vehicle.AttachedBlip.Alpha = 0;
-
-                    Logger.Debug($"Vehicle Blip Hidden");
+                    int blipHandle = API.GetBlipFromEntity(vehicle.Handle);
+                    API.SetBlipAlpha(blipHandle, 0);
 
                     Vehicle veh = (Vehicle)vehicle.GetEntityAttachedTo();
 
@@ -151,8 +150,8 @@ namespace Curiosity.Core.Client.Managers
                     {
                         if (veh.AttachedBlip is not null)
                         {
-                            Logger.Debug($"Attached Vehicle Blip Hidden");
-                            veh.AttachedBlip.Alpha = 0;
+                            int blipHandleAttached = API.GetBlipFromEntity(veh.Handle);
+                            API.SetBlipAlpha(blipHandleAttached, 0);
                         }
                     }
                 }

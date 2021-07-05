@@ -102,7 +102,15 @@ namespace Curiosity.Core.Client.Managers
                     vehicle = Cache.PlayerPed.CurrentVehicle;
 
                 if (vehicle != null)
+                {
+                    if (vehicle.AttachedBlip is not null)
+                        vehicle.AttachedBlip.Delete();
+
+                    int vehicleBlip = API.GetBlipFromEntity(vehicle.Handle);
+                    API.RemoveBlip(ref vehicleBlip);
+
                     EventSystem.Send("delete:entity", vehicle.NetworkId);
+                }
                     
                 return null;
             }));
@@ -296,7 +304,21 @@ namespace Curiosity.Core.Client.Managers
                 foreach(Vehicle veh in vehicles)
                 {
                     if (veh.AttachedBlip is not null)
-                        veh.AttachedBlip.Alpha = 255;
+                    {
+                        int blipHandle = API.GetBlipFromEntity(veh.Handle);
+                        API.SetBlipAlpha(blipHandle, 255);
+                    }
+
+                    Vehicle attachedVeh = (Vehicle)veh.GetEntityAttachedTo();
+
+                    if (attachedVeh is not null)
+                    {
+                        if (attachedVeh.AttachedBlip is not null)
+                        {
+                            int blipHandleAttached = API.GetBlipFromEntity(attachedVeh.Handle);
+                            API.SetBlipAlpha(blipHandleAttached, 255);
+                        }
+                    }
                 }
 
                 return;
