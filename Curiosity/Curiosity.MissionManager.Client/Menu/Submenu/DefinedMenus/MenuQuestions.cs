@@ -67,20 +67,28 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
             menu.AddItem(menuItemRelease);
 
             menu.OnItemSelect += Menu_OnItemSelect;
-            menu.OnMenuOpen += Menu_OnMenuOpen;
-            menu.OnMenuClose += Menu_OnMenuClose;
+
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
             Menu = menu;
             return menu;
         }
 
-        private void Menu_OnMenuClose(UIMenu sender)
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            MenuManager.OnMenuState();
-            PluginInstance.DetachTickHandler(OnSuspectDistanceCheck);
+            if (state == MenuState.Closed)
+            {
+                MenuManager.OnMenuState();
+                PluginInstance.DetachTickHandler(OnSuspectDistanceCheck);
+            }
+
+            if (state == MenuState.Opened)
+            {
+                OnMenuOpen();
+            }
         }
 
-        private void Menu_OnMenuOpen(UIMenu sender)
+        private void OnMenuOpen()
         {
             MenuManager.OnMenuState(true);
 

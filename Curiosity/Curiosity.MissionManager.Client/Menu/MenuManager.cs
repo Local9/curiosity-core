@@ -63,10 +63,7 @@ namespace Curiosity.MissionManager.Client.Menu
             menuMain.MouseControlsEnabled = false;
             _MenuPool.Add(menuMain);
 
-            menuMain.OnItemSelect += MenuMain_OnItemSelect;
-            menuMain.OnMenuOpen += MenuMain_OnMenuOpen;
-            menuMain.OnMenuClose += MenuMain_OnMenuClose;
-            menuMain.OnMenuChange += MenuMain_OnMenuChange;
+            menuMain.OnMenuStateChanged += MenuMain_OnMenuStateChanged;
 
             menuDispatch = _MenuPool.AddSubMenu(menuMain, "Dispatch", "Dispatch Options~n~~o~Options are available when a callout is active.");
             menuDispatch.MouseControlsEnabled = false;
@@ -94,24 +91,13 @@ namespace Curiosity.MissionManager.Client.Menu
             API.RegisterCommand(COMMAND_OPEN_MENU, new Action(OnMenuCommand), false);
         }
 
-        private void MenuMain_OnMenuChange(UIMenu oldMenu, UIMenu newMenu, bool forward)
+        private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            
-        }
+            if (state == MenuState.Opened)
+                OnMenuState(true);
 
-        private void MenuMain_OnMenuOpen(UIMenu sender)
-        {
-            OnMenuState(true);
-        }
-
-        private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
-        {
-
-        }
-
-        private void MenuMain_OnMenuClose(UIMenu sender)
-        {
-            OnMenuState();
+            if (state == MenuState.Closed)
+                OnMenuState();
         }
 
         private async Task OnMenuDisplay()

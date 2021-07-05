@@ -50,11 +50,19 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menu.AddItem(menuItemCode51); //
             menu.AddItem(menuItemCode55d); // 
 
-            menu.OnMenuOpen += Menu_OnMenuOpen;
-            menu.OnMenuClose += Menu_OnMenuClose;
             menu.OnItemSelect += Menu_OnItemSelect;
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
             return menu;
+        }
+
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            if (state == MenuState.Closed)
+                MenuManager.OnMenuState();
+
+            if (state == MenuState.Opened)
+                OnMenuOpen();
         }
 
         private void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
@@ -182,12 +190,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             }
         }
 
-        private void Menu_OnMenuClose(UIMenu sender)
-        {
-            MenuManager.OnMenuState();
-        }
-
-        private void Menu_OnMenuOpen(UIMenu sender)
+        private void OnMenuOpen()
         {
             MenuManager.OnMenuState(true);
 

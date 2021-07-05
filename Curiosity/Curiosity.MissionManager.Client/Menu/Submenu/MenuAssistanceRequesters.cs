@@ -22,19 +22,22 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         public UIMenu CreateMenu(UIMenu menu)
         {
             menu.OnItemSelect += Menu_OnItemSelect;
-            menu.OnMenuOpen += Menu_OnMenuOpen;
-            menu.OnMenuClose += Menu_OnMenuClose;
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
             Menu = menu;
             return menu;
         }
 
-        private void Menu_OnMenuClose(UIMenu sender)
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            MenuManager.OnMenuState();
+            if (state == MenuState.Closed)
+                MenuManager.OnMenuState();
+
+            if (state == MenuState.Opened)
+                OnMenuOpen();
         }
 
-        private async void Menu_OnMenuOpen(UIMenu sender)
+        private async void OnMenuOpen()
         {
             MenuManager.OnMenuState(true);
 

@@ -40,11 +40,20 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             menu.OnItemSelect += Menu_OnItemSelect;
             menu.OnListChange += Menu_OnListChange;
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
-            menu.OnMenuOpen += Menu_OnMenuOpen;
-            menu.OnMenuClose += Menu_OnMenuClose;
+
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
             Menu = menu;
             return menu;
+        }
+
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            if (state == MenuState.Closed)
+                MenuManager.OnMenuState();
+
+            if (state == MenuState.Opened)
+                OnMenuOpen(newMenu);
         }
 
         private async void Menu_OnListChange(UIMenu sender, UIMenuListItem listItem, int newIndex)
@@ -108,12 +117,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
             checkboxItem.Enabled = true;
         }
 
-        private void Menu_OnMenuClose(UIMenu sender)
-        {
-            MenuManager.OnMenuState();
-        }
-
-        private void Menu_OnMenuOpen(UIMenu sender)
+        private void OnMenuOpen(UIMenu sender)
         {
             if (Cache.Player.User.IsDeveloper)
             {
