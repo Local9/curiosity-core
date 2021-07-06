@@ -27,7 +27,7 @@ namespace Curiosity.Core.Server.Diagnostics
 
         public static void Error(Exception ex, string msg = "")
         {
-            WriteLine("ERROR", $"{msg}\r\n{ex}",);
+            WriteLine("ERROR", $"{msg}\r\n{ex}");
         }
 
         public static void Verbose(string msg)

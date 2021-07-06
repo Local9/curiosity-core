@@ -3,6 +3,7 @@ using CitizenFX.Core.Native;
 using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Data;
+using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
@@ -312,7 +313,7 @@ namespace Curiosity.Core.Client.Managers
                 {
                     if (vehiclesToSuppress.Contains((VehicleHash)veh.Model.Hash))
                     {
-                        bool serverSpawned = veh.State.Get(VehicleManager.STATE_VEH_SPAWNED) is null ? false : veh.State.Get(VehicleManager.STATE_VEH_SPAWNED);
+                        bool serverSpawned = veh.State.Get($"{StateBagKey.VEH_SPAWNED}") is null ? false : veh.State.Get($"{StateBagKey.VEH_SPAWNED}");
                         if (!serverSpawned)
                             veh.RemoveFromWorld();
                     }

@@ -1,6 +1,5 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Core.Client.Interface;
@@ -28,7 +27,8 @@ namespace Curiosity.Core.Client.Managers.UI
                         characterVehicleId = v.CharacterVehicleId,
                         label = v.Label,
                         licensePlate = v.VehicleInfo.plateText,
-                        datePurchased = v.DatePurchased
+                        datePurchased = v.DatePurchased,
+                        hash = v.Hash
                     };
                     vehicles.Add(m);
                 }
@@ -39,6 +39,16 @@ namespace Curiosity.Core.Client.Managers.UI
             Instance.AttachNuiHandler("GarageVehicleRequest", new AsyncEventCallback(async metadata =>
             {
                 int characterVehicleId = metadata.Find<int>(0);
+                string hash = metadata.Find<string>(1);
+
+                Model vehModel = new Model(hash);
+                if (!vehModel.IsLoaded) await vehModel.Request(3000);
+
+                if (!vehModel.IsLoaded)
+                {
+                    NotificationManger.GetModule().Error("Vehicle was unable to load, possible it is downloading if its a custom model.");
+                    return new { success = false };
+                }
 
                 VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId);
 
