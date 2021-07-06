@@ -31,8 +31,8 @@ namespace Curiosity.Core.Client.Managers
         {
             [VehicleClass.Planes] = 3.5f,
             [VehicleClass.Helicopters] = 1.4f,
-            [VehicleClass.Super] = 2.5f,
-            [VehicleClass.Sports] = 1.8f,
+            [VehicleClass.Super] = 3.2f,
+            [VehicleClass.Sports] = 2.8f,
             [VehicleClass.Emergency] = 2.0f,
             [VehicleClass.Industrial] = 1.8f,
             [VehicleClass.Commercial] = 1.8f,

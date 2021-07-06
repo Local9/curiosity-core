@@ -41,6 +41,11 @@ namespace Curiosity.Core.Server.Managers
                     CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
                     int characterVehicleId = metadata.Find<int>(0);
 
+                    float x = metadata.Find<float>(1);
+                    float y = metadata.Find<float>(2);
+                    float z = metadata.Find<float>(3);
+                    float h = metadata.Find<float>(4);
+
                     VehicleItem vehicleItem = await Database.Store.VehicleDatabase.GetVehicle(characterVehicleId);
 
                     if (vehicleItem is null)
@@ -78,14 +83,19 @@ namespace Curiosity.Core.Server.Managers
                             heading = spawnPos.H;
                         }
                     }
+                    else
+                    {
+                        pos = new Vector3(x, y, z);
+                        heading = h;
+                    }
 
-                    if (Vector3.Distance(charPos, pos) >= 5000)
+                    if (Vector3.Distance(charPos, pos) >= 5000.0f)
                     {
                         vehicleItem.Message = "Too far away from a suitable location.";
                         return vehicleItem;
                     }
 
-                    // spawn vehicle in location | need to test distant spawning
+                    
                     int vehicleId = API.CreateVehicle((uint)model, pos.X, pos.Y, pos.Z, heading, true, true);
                     await BaseScript.Delay(0);
 

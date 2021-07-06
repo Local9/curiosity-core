@@ -42,7 +42,7 @@ namespace Curiosity.Core.Client.Managers.UI
                 string hash = metadata.Find<string>(1);
 
                 Model vehModel = new Model(hash);
-                if (!vehModel.IsLoaded) await vehModel.Request(3000);
+                if (!vehModel.IsLoaded) await vehModel.Request(10000);
 
                 if (!vehModel.IsLoaded)
                 {
@@ -50,7 +50,16 @@ namespace Curiosity.Core.Client.Managers.UI
                     return new { success = false };
                 }
 
-                VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId);
+                Vector3 charPos = Cache.PlayerPed.Position;
+                Vector3 spawnPos = Vector3.Zero;
+                float spawnHeading = 0f;
+
+                Vector3 spawnRoad = Vector3.Zero;
+
+                API.GetClosestVehicleNodeWithHeading(charPos.X, charPos.Y, charPos.Z, ref spawnPos, ref spawnHeading, 1, 3f, 0);
+                API.GetRoadSidePointWithHeading(spawnPos.X, spawnPos.Y, spawnPos.Z, spawnHeading, ref spawnRoad);
+
+                VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId, spawnRoad.X, spawnRoad.Y, spawnRoad.Z, spawnHeading);
 
                 vehModel.MarkAsNoLongerNeeded();
 
@@ -188,6 +197,8 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     vehicle.IsPositionFrozen = false;
                     vehicle.IsCollisionEnabled = true;
+
+                    NotificationManger.GetModule().Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
 
                     await vehicle.FadeIn();
                     return new { success = true };
