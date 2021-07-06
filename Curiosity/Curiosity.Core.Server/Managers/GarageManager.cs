@@ -118,6 +118,8 @@ namespace Curiosity.Core.Server.Managers
                     vehicle.State.Set($"{StateBagKey.VEH_OWNER}", player.Name, true);
                     vehicle.State.Set($"{StateBagKey.VEH_SPAWN_TYPE}", (int)vehicleItem.SpawnTypeId, true);
 
+                    vehicle.State.Set($"{StateBagKey.BLIP_INFORMATION}", new { }, true);
+
                     if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
                     {
                         vehicle.State.Set($"{StateBagKey.VEH_PERSONAL}", true, true);
@@ -125,13 +127,13 @@ namespace Curiosity.Core.Server.Managers
                         vehicle.State.Set($"{StateBagKey.VEH_FUEL}", 0f, true);
                         vehicle.State.Set($"{StateBagKey.VEH_FUEL_MULTIPLIER}", 0f, true);
                         vehicle.State.Set($"{StateBagKey.VEH_FUEL_SETUP}", false, true);
-                        vehicle.State.Set($"{StateBagKey.VEH_CONTENT}", "{}", true);
+                        vehicle.State.Set($"{StateBagKey.VEH_CONTENT}", new { }, true);
                     }
 
                     if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
                     {
                         vehicle.State.Set($"{StateBagKey.VEH_PERSONAL_TRAILER}", true, true);
-                        vehicle.State.Set($"{StateBagKey.VEH_TRAILER_CONTENT}", "{}", true);
+                        vehicle.State.Set($"{StateBagKey.VEH_TRAILER_CONTENT}", new { }, true);
                     }
 
                     API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);

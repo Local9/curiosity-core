@@ -64,8 +64,6 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 await BaseScript.Delay(0);
 
-                Logger.Debug($"SpawnTypeId: {vehicleItem.SpawnTypeId}");
-
                 if (vehicleItem.NetworkId > 0)
                 {
                     Vehicle vehicle = null;
