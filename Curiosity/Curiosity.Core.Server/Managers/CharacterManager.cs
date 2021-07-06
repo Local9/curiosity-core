@@ -34,6 +34,7 @@ namespace Curiosity.Core.Server.Managers
                 player.State.Set($"{StateBagKey.VEH_TRAILER_NETWORK_ID}", -1, true);
                 player.State.Set($"{StateBagKey.VEH_NETWORK_ID}", -1, true);
                 player.State.Set($"{StateBagKey.PLAYER_ROUTING}", (int)RoutingBucket.LOBBY, true);
+                player.State.Set($"{StateBagKey.PLAYER_HANDLE}", player.Handle, true);
 
                 PluginManager.ActiveUsers[metadata.Sender].RoutingBucket = RoutingBucket.LOBBY;
 

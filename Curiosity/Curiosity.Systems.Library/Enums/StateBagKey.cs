@@ -27,5 +27,6 @@
         public const string VEH_PLANE_NETWORK_ID = "VEH_PLANE_NETWORK_ID";
         public const string VEH_BOAT_NETWORK_ID = "VEH_BOAT_NETWORK_ID";
         public const string PLAYER_ROUTING = "PLAYER_ROUTING";
+        public const string PLAYER_HANDLE = "PLAYER_HANDLE";
     }
 }
