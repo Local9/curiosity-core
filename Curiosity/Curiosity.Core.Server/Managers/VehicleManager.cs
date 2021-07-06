@@ -239,8 +239,8 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 Vehicle vehicle = new Vehicle(vehicleId);
-                vehicle.State.Set("VEH_SPAWNED", true, true);
-                vehicle.State.Set("VEH_PERSONAL", true, true);
+                vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
+                vehicle.State.Set($"{StateBagKey.VEH_PERSONAL}", true, true);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
@@ -290,8 +290,8 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 Vehicle vehicle = new Vehicle(vehicleId);
-                vehicle.State.Set("VEH_SPAWNED", true, true);
-                vehicle.State.Set("VEH_PERSONAL", true, true);
+                vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
+                vehicle.State.Set($"{StateBagKey.VEH_PERSONAL}", true, true);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
@@ -346,8 +346,8 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 Vehicle vehicle = new Vehicle(vehicleId);
-                vehicle.State.Set("VEH_SPAWNED", true, true);
-                vehicle.State.Set("VEH_PERSONAL_TRAILER", true, true);
+                vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
+                vehicle.State.Set($"{StateBagKey.VEH_PERSONAL_TRAILER}", true, true);
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 

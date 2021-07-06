@@ -21,10 +21,6 @@ namespace Curiosity.Core.Client.Managers
     public class VehicleManager : Manager<VehicleManager>
     {
         private const string DECOR_VEH_FUEL = "Vehicle.Fuel";
-        private const string STATE_VEH_FUEL = "VEHICLE_FUEL";
-        private const string STATE_VEH_FUEL_MULTIPLIER = "VEHICLE_FUEL_MULTIPLIER";
-        private const string STATE_VEH_FUEL_SETUP = "VEHICLE_FUEL_SETUP";
-        public const string STATE_VEH_SPAWNED = "VEH_SPAWNED";
         private const float FUEL_PUMP_RANGE = 6f;
 
         private uint GAS_STATION_TESLA = 2140883938;
@@ -178,28 +174,28 @@ namespace Curiosity.Core.Client.Managers
 
             bool setup = false;
 
-            if (currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL_SETUP) != null)
-                setup = currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL_SETUP);
+            if (currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL_SETUP}") != null)
+                setup = currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL_SETUP}");
 
             if (!setup)
             {
                 Logger.Debug($"VFM: {currentVehicle.Vehicle.Handle}:{setup}");
 
-                if (currentVehicle.Vehicle.State.Get(STATE_VEH_SPAWNED))
+                if (currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_SPAWNED}"))
                 {
                     minRandomFuel = 100f;
                     maxRandomFuel = 100f;
                 }
 
                 float randomFuel = (float)(minRandomFuel + (maxRandomFuel - minRandomFuel) * (Utility.RANDOM.NextDouble()));
-                currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL, randomFuel, true);
+                currentVehicle.Vehicle.State.Set($"{StateBagKey.VEH_FUEL}", randomFuel, true);
 
                 float classMultiplier = 1 / 1600f;
                 classMultiplier *= (FuelConsumptionClassMultiplier.ContainsKey(currentVehicle.Vehicle.ClassType) ? FuelConsumptionClassMultiplier[currentVehicle.Vehicle.ClassType] : 1.0f);
                 classMultiplier *= 1.0f;
-                currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL_MULTIPLIER, classMultiplier, true);
+                currentVehicle.Vehicle.State.Set($"{StateBagKey.VEH_FUEL_MULTIPLIER}", classMultiplier, true);
 
-                currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL_SETUP, true, true);
+                currentVehicle.Vehicle.State.Set($"{StateBagKey.VEH_FUEL_SETUP}", true, true);
             }
 
             PluginManager.Instance.AttachTickHandler(OnVehicleFuel);
@@ -277,13 +273,13 @@ namespace Curiosity.Core.Client.Managers
 
                     currentVehicle.Vehicle.IsEngineRunning = false;
 
-                    float fuel = (float)currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL);
+                    float fuel = (float)currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL}");
 
                     GenericMessage result = await EventSystem.Request<GenericMessage>("vehicle:refuel:charge", fuel);
 
                     if (result.Success)
                     {
-                        currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL, 100f, true);
+                        currentVehicle.Vehicle.State.Set($"{StateBagKey.VEH_FUEL}", 100f, true);
                         NotificationManger.GetModule().Success($"Vehicle refueled (${result.Cost})", "bottom-middle");
                     }
 
@@ -342,8 +338,8 @@ namespace Curiosity.Core.Client.Managers
                 return;
             }
 
-            float fuel = (float)currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL);
-            float multi = (float)currentVehicle.Vehicle.State.Get(STATE_VEH_FUEL_MULTIPLIER);
+            float fuel = (float)currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL}");
+            float multi = (float)currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL_MULTIPLIER}");
 
             if (fuel == 0f && !IsRefueling)
             {
@@ -382,7 +378,8 @@ namespace Curiosity.Core.Client.Managers
             {
                 fuel = Math.Max(0f, fuel - (float)(deltaTime * multi * vehicleSpeed));
                 currentVehicle.Vehicle.FuelLevel = fuel;
-                currentVehicle.Vehicle.State.Set(STATE_VEH_FUEL, fuel, true);
+                currentVehicle.Vehicle.State.Set($"{StateBagKey.VEH_FUEL}", fuel, true);
+
                 API.DecorSetFloat(currentVehicle.Vehicle.Handle, DECOR_VEH_FUEL, fuel); // LEGACY
             }
 

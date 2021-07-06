@@ -121,11 +121,17 @@ namespace Curiosity.Core.Server.Managers
                     if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
                     {
                         vehicle.State.Set($"{StateBagKey.VEH_PERSONAL}", true, true);
+
+                        vehicle.State.Set($"{StateBagKey.VEH_FUEL}", 0f, true);
+                        vehicle.State.Set($"{StateBagKey.VEH_FUEL_MULTIPLIER}", 0f, true);
+                        vehicle.State.Set($"{StateBagKey.VEH_FUEL_SETUP}", false, true);
+                        vehicle.State.Set($"{StateBagKey.VEH_CONTENT}", "{}", true);
                     }
 
                     if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
                     {
                         vehicle.State.Set($"{StateBagKey.VEH_PERSONAL_TRAILER}", true, true);
+                        vehicle.State.Set($"{StateBagKey.VEH_TRAILER_CONTENT}", "{}", true);
                     }
 
                     API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
