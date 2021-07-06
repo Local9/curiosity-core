@@ -46,11 +46,13 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 if (!vehModel.IsLoaded)
                 {
-                    NotificationManger.GetModule().Error("Vehicle was unable to load, possible it is downloading if its a custom model.");
+                    NotificationManger.GetModule().Error("Vehicle was unable to load.<br>If the vehicle is a custom model, please try again after it has finished downloading.");
                     return new { success = false };
                 }
 
                 VehicleItem vehicleItem = await EventSystem.Request<VehicleItem>("garage:get:vehicle", characterVehicleId);
+
+                vehModel.MarkAsNoLongerNeeded();
 
                 await BaseScript.Delay(0);
 

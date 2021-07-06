@@ -79,7 +79,7 @@ namespace Curiosity.Core.Server.Managers
                         }
                     }
 
-                    if (Vector3.Distance(charPos, pos) >= 300)
+                    if (Vector3.Distance(charPos, pos) >= 5000)
                     {
                         vehicleItem.Message = "Too far away from a suitable location.";
                         return vehicleItem;
@@ -113,6 +113,9 @@ namespace Curiosity.Core.Server.Managers
                     }
 
                     Vehicle vehicle = new Vehicle(vehicleId);
+
+                    API.SetEntityDistanceCullingRadius(vehicle.Handle, 5000f);
+
                     vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
                     vehicle.State.Set($"{StateBagKey.VEH_OWNER_ID}", player.Handle, true);
                     vehicle.State.Set($"{StateBagKey.VEH_OWNER}", player.Name, true);
