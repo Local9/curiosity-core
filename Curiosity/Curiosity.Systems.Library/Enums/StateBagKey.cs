@@ -20,6 +20,7 @@
         VEH_FUEL_SETUP,
         VEH_CONTENT,
         VEH_TRAILER_CONTENT,
-        BLIP_INFORMATION
+        BLIP_INFORMATION,
+        VEH_NETWORK_ID
     }
 }

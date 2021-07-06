@@ -162,6 +162,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     if (vehicleItem.SpawnTypeId == SpawnType.Vehicle)
                     {
                         Cache.PersonalVehicle = new State.VehicleState(vehicle);
+                        Cache.PlayerPed.Task.WarpIntoVehicle(vehicle, VehicleSeat.Driver);
                         Cache.Player.User.SendEvent("vehicle:log:player", vehicle.NetworkId);
                     }
 
@@ -200,7 +201,10 @@ namespace Curiosity.Core.Client.Managers.UI
 
                     NotificationManger.GetModule().Success("Vehicle has been requested successfully, please follow the waypoint on your map.");
 
+                    VehicleSpawnSafetyManager.GetModule().EnableSafeSpawnCheck();
+
                     await vehicle.FadeIn();
+
                     return new { success = true };
 
                 FAILED:
