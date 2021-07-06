@@ -207,11 +207,11 @@ namespace Curiosity.Core.Client.Managers
             RequestIpl("vw_dlc_casino_door_lod");
 
             // IPLs for Cayo Island in the Distance
-            //RequestIpl("xn_h4_islandx_terrain_01_slod");
-            //RequestIpl("xn_h4_islandx_terrain_02_slod");
-            //RequestIpl("xn_h4_islandx_terrain_04_slod");
-            //RequestIpl("xn_h4_islandx_terrain_05_slod");
-            //RequestIpl("xn_h4_islandx_terrain_06_slod");
+            RequestIpl("xn_h4_islandx_terrain_01_slod");
+            RequestIpl("xn_h4_islandx_terrain_02_slod");
+            RequestIpl("xn_h4_islandx_terrain_04_slod");
+            RequestIpl("xn_h4_islandx_terrain_05_slod");
+            RequestIpl("xn_h4_islandx_terrain_06_slod");
         }
 
         //[TickHandler(SessionWait = true)]
