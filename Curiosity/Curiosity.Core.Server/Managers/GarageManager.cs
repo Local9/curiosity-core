@@ -127,7 +127,25 @@ namespace Curiosity.Core.Server.Managers
                     API.SetEntityDistanceCullingRadius(vehicle.Handle, 5000f);
 
                     Player p = PluginManager.PlayersList[metadata.Sender];
-                    p.State.Set($"{StateBagKey.VEH_NETWORK_ID}", vehicle.NetworkId, true);
+
+                    switch(vehicleItem.SpawnTypeId)
+                    {
+                        case SpawnType.Boat:
+                            p.State.Set($"{StateBagKey.VEH_BOAT_NETWORK_ID}", vehicle.NetworkId, true);
+                            break;
+                        case SpawnType.Plane:
+                            p.State.Set($"{StateBagKey.VEH_PLANE_NETWORK_ID}", vehicle.NetworkId, true);
+                            break;
+                        case SpawnType.Helicopter:
+                            p.State.Set($"{StateBagKey.VEH_HELI_NETWORK_ID}", vehicle.NetworkId, true);
+                            break;
+                        case SpawnType.Trailer:
+                            p.State.Set($"{StateBagKey.VEH_TRAILER_NETWORK_ID}", vehicle.NetworkId, true);
+                            break;
+                        default:
+                            p.State.Set($"{StateBagKey.VEH_NETWORK_ID}", vehicle.NetworkId, true);
+                            break;
+                    }
 
                     vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
                     vehicle.State.Set($"{StateBagKey.VEH_OWNER_ID}", player.Handle, true);
