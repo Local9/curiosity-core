@@ -19,13 +19,19 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             menu.AddItem(miHeadlights);
             menu.AddItem(miNeon);
 
-            menu.OnMenuOpen += Menu_OnMenuOpen;
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
             menu.OnCheckboxChange += Menu_OnCheckboxChange;
 
             menu.MouseControlsEnabled = false;
             menu.MouseEdgeEnabled = false;
 
             return menu;
+        }
+
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            if (state == MenuState.Opened)
+                OnMenuOpen();
         }
 
         private async void Menu_OnCheckboxChange(UIMenu sender, UIMenuCheckboxItem checkboxItem, bool Checked)
@@ -59,7 +65,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
             }
         }
 
-        private void Menu_OnMenuOpen(UIMenu menu)
+        private void OnMenuOpen()
         {
             if (Cache.PersonalVehicle == null)
             {

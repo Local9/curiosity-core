@@ -37,12 +37,11 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
             menu.OnListChange += Menu_OnListChange;
             menu.OnSliderChange += Menu_OnSliderChange;
-            menu.OnMenuOpen += Menu_OnMenuOpen;
-            menu.OnMenuClose += Menu_OnMenuClose;
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
-            menu.AddInstructionalButton(CreatorMenus.btnRandom);
-            menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
-            menu.AddInstructionalButton(CreatorMenus.btnRotateRight);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRandom);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
 
             MenuMotherIndex = PluginManager.Rand.Next(MotherFaces.Count);
             MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
@@ -74,7 +73,16 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             return menu;
         }
 
-        private async void Menu_OnMenuClose(UIMenu sender)
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            if (state == MenuState.Closed)
+                OnMenuClose();
+
+            if (state == MenuState.Opened)
+                OnMenuOpen();
+        }
+
+        private async void OnMenuClose()
         {
             Cache.Player.CameraQueue.Reset();
             await Cache.Player.CameraQueue.View(new CameraBuilder()
@@ -85,7 +93,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
         }
 
-        private async void Menu_OnMenuOpen(UIMenu sender)
+        private async void OnMenuOpen()
         {
             Cache.Player.CameraQueue.Reset();
             await Cache.Player.CameraQueue.View(new CameraBuilder()

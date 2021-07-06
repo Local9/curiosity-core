@@ -51,8 +51,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menuMain = new UIMenu(Game.Player.Name, "Player Creator");
             _MenuPool.Add(menuMain);
 
-            menuMain.OnMenuOpen += MainMenu_OnMenuOpen;
-            menuMain.OnMenuClose += MainMenu_OnMenuClose;
+            menuMain.OnMenuStateChanged += MenuMain_OnMenuStateChanged;
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnItemSelect += MenuMain_OnItemSelect;
 
@@ -74,10 +73,19 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menuMain.AddItem(itemSave);
 
             // buttons
-            menuMain.AddInstructionalButton(btnRotateLeft);
-            menuMain.AddInstructionalButton(btnRotateRight);
+            menuMain.InstructionalButtons.Add(btnRotateLeft);
+            menuMain.InstructionalButtons.Add(btnRotateRight);
 
             _MenuPool.RefreshIndex();
+        }
+
+        private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            if (state == MenuState.Closed)
+                OnMenuClose();
+
+            if (state == MenuState.Opened)
+                OnMenuOpen();
         }
 
         private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
@@ -135,12 +143,12 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
         }
 
-        private void MainMenu_OnMenuClose(UIMenu UIMenu)
+        private void OnMenuClose()
         {
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
         }
 
-        private void MainMenu_OnMenuOpen(UIMenu UIMenu)
+        private void OnMenuOpen()
         {
             PluginManager.Instance.DiscordRichPresence.Status = "Character Creator";
             PluginManager.Instance.DiscordRichPresence.Commit();

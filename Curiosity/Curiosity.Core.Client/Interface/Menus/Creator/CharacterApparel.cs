@@ -22,9 +22,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         public UIMenu CreateMenu(UIMenu menu)
         {
-            menu.OnMenuOpen += Menu_OnMenuOpen;
-            menu.OnMenuClose += Menu_OnMenuClose;
             menu.OnListChange += Menu_OnListChange;
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
             lstTops = new UIMenuListItem("Tops", GenerateNumberList(MAX_TOP_VALUE), Cache.Character.Appearance.Top);
             lstPants = new UIMenuListItem("Pants", GenerateNumberList(MAX_PANTS_VALUE), Cache.Character.Appearance.Pants);
@@ -40,11 +39,20 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menu.AddItem(lstHats);
             menu.AddItem(lstGlasses);
 
-            menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
-            menu.AddInstructionalButton(CreatorMenus.btnRotateRight);
-            menu.AddInstructionalButton(CreatorMenus.btnRandom);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRandom);
 
             return menu;
+        }
+
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            if (state == MenuState.Closed)
+                OnMenuClose();
+
+            if (state == MenuState.Opened)
+                OnMenuOpen();
         }
 
         private void Randomise()
@@ -101,12 +109,12 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             }
         }
 
-        private void Menu_OnMenuClose(UIMenu sender)
+        private void OnMenuClose()
         {
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
         }
 
-        private void Menu_OnMenuOpen(UIMenu sender)
+        private void OnMenuOpen()
         {
             PluginManager.Instance.AttachTickHandler(OnPlayerControls);
         }

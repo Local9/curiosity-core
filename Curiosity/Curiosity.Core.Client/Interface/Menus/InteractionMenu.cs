@@ -53,14 +53,20 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             MenuPool.Add(menuMain);
 
-            menuMain.OnMenuClose += MenuMain_OnMenuClose;
-            menuMain.OnMenuOpen += MenuMain_OnMenuOpen;
             menuMain.OnListChange += MenuMain_OnListChange;
             menuMain.OnListSelect += MenuMain_OnListSelect;
             menuMain.OnItemSelect += MenuMain_OnItemSelect;
             menuMain.OnIndexChange += MenuMain_OnIndexChange;
 
+            menuMain.OnMenuStateChanged += MenuMain_OnMenuStateChanged;
+
             menuMain.RefreshIndex();
+        }
+
+        private void MenuMain_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            if (state == MenuState.Opened)
+                OnMenuOpen();
         }
 
         private void MenuMain_OnIndexChange(UIMenu sender, int newIndex)
@@ -126,7 +132,7 @@ namespace Curiosity.Core.Client.Interface.Menus
             }
         }
 
-        private void MenuMain_OnMenuOpen(UIMenu sender)
+        private void OnMenuOpen()
         {
             // TOP
             UpdateGpsMenuItem();
@@ -138,11 +144,6 @@ namespace Curiosity.Core.Client.Interface.Menus
 
             miKillYourself.Enabled = PlayerOptions.IsKillSelfEnabled;
             miKillYourself.SetRightLabel($"${PlayerOptions.CostOfKillSelf * PlayerOptions.NumberOfTimesKillSelf}");
-        }
-
-        private void MenuMain_OnMenuClose(UIMenu sender)
-        {
-            // Instance.DetachTickHandler(OnMenuDisplay);
         }
 
         private async Task OnMenuDisplay()

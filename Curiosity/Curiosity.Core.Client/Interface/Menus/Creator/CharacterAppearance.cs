@@ -89,15 +89,23 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         public UIMenu CreateMenu(UIMenu menu)
         {
-            menu.OnMenuOpen += Menu_OnMenuOpen;
-            menu.OnMenuClose += Menu_OnMenuClose;
+            menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
             menu.OnListChange += Menu_OnListChange;
             menu.OnIndexChange += Menu_OnIndexChange;
 
-            menu.AddInstructionalButton(CreatorMenus.btnRotateLeft);
-            menu.AddInstructionalButton(CreatorMenus.btnRotateRight);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
 
             return menu;
+        }
+
+        private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
+        {
+            if (state == MenuState.Closed)
+                OnMenuClose();
+
+            if (state == MenuState.Opened)
+                OnMenuOpen(newMenu);
         }
 
         private async void Menu_OnIndexChange(UIMenu menu, int newIndex)
@@ -334,7 +342,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             }
         }
 
-        private async void Menu_OnMenuClose(UIMenu menu)
+        private async void OnMenuClose()
         {
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
 
@@ -346,7 +354,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             );
         }
 
-        private async void Menu_OnMenuOpen(UIMenu menu)
+        private async void OnMenuOpen(UIMenu menu)
         {
             PluginManager.Instance.AttachTickHandler(OnPlayerControls);
 
