@@ -38,6 +38,9 @@ namespace Curiosity.Core.Server.Managers
 
                 PluginManager.ActiveUsers[metadata.Sender].RoutingBucket = RoutingBucket.LOBBY;
 
+                CuriosityUser u = PluginManager.ActiveUsers[metadata.Sender];
+                u.Character.LastPosition = new Position(-542.1675f, -216.1688f, -216.1688f, 276.3713f);
+
                 return null;
             }));
 
