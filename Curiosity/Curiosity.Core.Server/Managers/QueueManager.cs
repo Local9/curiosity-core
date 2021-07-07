@@ -95,7 +95,8 @@ namespace Curiosity.Core.Server.Managers
                     player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
                     player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
 
-                    DiscordClient.GetModule().SendDiscordServerEventLogMessage($"Queue: {queue.Count}, Sessions: {session.Count}, Active Players: {PluginManager.PlayersList.Count()}, User Cache: {PluginManager.ActiveUsers.Count}");
+                    if (PluginManager.IsDebugging)
+                        DiscordClient.GetModule().SendDiscordServerEventLogMessage($"Queue: {queue.Count}, Sessions: {session.Count}, Active Players: {PluginManager.PlayersList.Count()}, User Cache: {PluginManager.ActiveUsers.Count}");
 
                     return true;
                 }
