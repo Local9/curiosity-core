@@ -366,6 +366,34 @@ namespace Curiosity.Core.Server.Managers
 
                     return $"{exportMessage}";
                 }));
+
+            Instance.ExportDictionary.Add("Stock", new Func<string, int, Task<string>>(
+                async (playerHandle, itemId) =>
+                {
+                    ExportMessage exportMessage = new ExportMessage();
+
+                    int playerId = 0;
+                    if (!int.TryParse(playerHandle, out playerId))
+                        exportMessage.Error = "First parameter is not a number";
+
+                    if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                        exportMessage.Error = "Player was not found";
+
+                    CuriosityUser user = PluginManager.ActiveUsers[playerId];
+
+                    CuriosityShopItem item = await Database.Store.ShopDatabase.GetItem(itemId, user.Character.CharacterId);
+
+                    if (item is null)
+                    {
+                        exportMessage.Error = "No item found";
+                    }
+                    else
+                    {
+                        exportMessage.NewNumberValue = item.NumberInStock;
+                    }
+
+                    return $"{exportMessage}";
+                }));
         }
     }
 }
