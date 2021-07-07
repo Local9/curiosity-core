@@ -6,6 +6,7 @@ using Curiosity.Core.Client.Interface;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Curiosity.Core.Client.Managers.UI
@@ -43,9 +44,13 @@ namespace Curiosity.Core.Client.Managers.UI
 
                 Model vehModel = new Model(hash);
 
+                DateTime maxTime = DateTime.UtcNow.AddSeconds(10);
+
                 while (!vehModel.IsLoaded)
                 {
                     await vehModel.Request(3000);
+
+                    if (DateTime.UtcNow > maxTime) break;
                 }
 
                 if (!vehModel.IsLoaded)

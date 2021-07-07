@@ -5,6 +5,7 @@ using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Systems.Library.Models;
+using System;
 
 namespace Curiosity.Core.Client.Managers
 {
@@ -31,9 +32,13 @@ namespace Curiosity.Core.Client.Managers
 
             Model playerModel = PedHash.FreemodeMale01;
 
-            while(!playerModel.IsLoaded)
+            DateTime maxTime = DateTime.UtcNow.AddSeconds(10);
+
+            while (!playerModel.IsLoaded)
             {
                 await playerModel.Request(3000);
+
+                if (DateTime.UtcNow > maxTime) break;
             }
 
             await Game.Player.ChangeModel(playerModel);
