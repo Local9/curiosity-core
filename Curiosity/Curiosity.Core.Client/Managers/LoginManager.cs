@@ -30,7 +30,11 @@ namespace Curiosity.Core.Client.Managers
             sound.Disable();
 
             Model playerModel = PedHash.FreemodeMale01;
-            await playerModel.Request(10000);
+
+            while(!playerModel.IsLoaded)
+            {
+                await playerModel.Request(3000);
+            }
 
             await Game.Player.ChangeModel(playerModel);
 

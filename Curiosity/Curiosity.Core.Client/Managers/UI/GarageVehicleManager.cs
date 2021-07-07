@@ -42,7 +42,11 @@ namespace Curiosity.Core.Client.Managers.UI
                 string hash = metadata.Find<string>(1);
 
                 Model vehModel = new Model(hash);
-                if (!vehModel.IsLoaded) await vehModel.Request(10000);
+
+                while (!vehModel.IsLoaded)
+                {
+                    await vehModel.Request(3000);
+                }
 
                 if (!vehModel.IsLoaded)
                 {
