@@ -7,6 +7,7 @@ using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -351,7 +352,20 @@ namespace Curiosity.Core.Server.Managers
                 }
             }));
 
+            Instance.ExportDictionary.Add("StockAdjust", new Func<int, int, Task<string>>(
+                async (itemId, amount) =>
+                {
+                    ExportMessage exportMessage = new ExportMessage();
 
+                    bool success = await Database.Store.ShopDatabase.Adjust(itemId, amount);
+
+                    if (!success)
+                    {
+                        exportMessage.Error = "No rows affected";
+                    }
+
+                    return $"{exportMessage}";
+                }));
         }
     }
 }
