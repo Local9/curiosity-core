@@ -100,6 +100,7 @@ namespace Curiosity.Core.Client.Managers.UI
                     Vehicle previousVehicle = null;
 
                     int vehId = API.NetworkGetEntityFromNetworkId(vehicleItem.NetworkId);
+                    API.NetworkRequestControlOfEntity(vehId);
 
                     int failRate = 0;
 
