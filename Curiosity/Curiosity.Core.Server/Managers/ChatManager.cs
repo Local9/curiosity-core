@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using Curiosity.Core.Server.Diagnostics;
 using Curiosity.Core.Server.Events;
 using Curiosity.Core.Server.Extensions;
 using Curiosity.Core.Server.Web;
@@ -22,41 +23,70 @@ namespace Curiosity.Core.Server.Managers
 
             // may need to make this so its :local, :world, :universe, :help, and yes, it would make it easier!
             EventSystem.GetModule().Attach("chat:message", new AsyncEventCallback(async metadata => {
-
-                CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
-                List<CuriosityUser> playersInSameWorld = PluginManager.ActiveUsers.Select(x => x.Value).Where(x => x.RoutingBucket == curiosityUser.RoutingBucket).ToList();
-
-                string message = metadata.Find<string>(0);
-                string channel = metadata.Find<string>(1);
-
-                switch (channel)
+                try
                 {
-                    case "universe":
-                    case "help":
-                        EventSystem.GetModule().SendAll("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
-                        break;
-                    case "global":
-                        playersInSameWorld.ForEach(u =>
-                        {
-                            u.Send("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
-                        });
-                        break;
-                    case "local":
-                        playersInSameWorld.Select(x => x).Where(x => Vector3.Distance(x.Character.LastPosition.AsVector(), curiosityUser.Character.LastPosition.AsVector()) < 100f).ToList().ForEach(p =>
-                        {
-                            p.Send("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
-                        });
-                        break;
+                    CuriosityUser curiosityUser = PluginManager.ActiveUsers[metadata.Sender];
+                    List<CuriosityUser> playersInSameWorld = PluginManager.ActiveUsers.Select(x => x.Value).Where(x => x.RoutingBucket == curiosityUser.RoutingBucket).ToList();
+
+                    string message = metadata.Find<string>(0);
+                    string channel = metadata.Find<string>(1);
+
+                    switch (channel)
+                    {
+                        case "universe":
+                        case "help":
+                            EventSystem.GetModule().SendAll("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
+                            break;
+                        case "global":
+                            playersInSameWorld.ForEach(u =>
+                            {
+                                u.Send("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
+                            });
+                            break;
+                        case "local":
+                            Dictionary<int, Player> players = new();
+                            Player currentPlayer = PluginManager.PlayersList[metadata.Sender];
+
+                            foreach (CuriosityUser user in playersInSameWorld)
+                            {
+                                Player player = PluginManager.PlayersList[user.Handle];
+                                if (player is not null)
+                                    players.Add(user.Handle, player);
+                            }
+
+                            playersInSameWorld.Select(x => x).Where(x => Vector3.Distance(players[x.Handle].Character.Position, currentPlayer.Character.Position) < 100f).ToList().ForEach(p =>
+                            {
+                                p.Send("chat:receive", curiosityUser.LatestName, $"{curiosityUser.Role}", message, channel, curiosityUser.CurrentJob, curiosityUser.RoutingBucket);
+                            });
+
+                            players.Clear();
+                            break;
+                    }
+
+                    // NOTE: Store messages in database
+
+                    string discordMessageStart = $"[{DateTime.Now.ToString("HH:mm")}] [W: {curiosityUser.RoutingBucket}, SH: {metadata.Sender}, CH: {channel}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
+                    string discordMessage = message.Trim('"');
+
+                    DiscordClient.GetModule().SendChatMessage(discordMessageStart, discordMessage);
+
+                    playersInSameWorld.Clear();
+
+                    return null;
                 }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "chat:message");
 
-                // NOTE: Store messages in database
+                    string message = $"[{DateTime.Now.ToString("HH: mm")}]\n";
+                    message += "ERROR: chat:message\n";
+                    message += "Stack Trace:\n";
+                    message += $"{ex}";
 
-                string discordMessageStart = $"[{DateTime.Now.ToString("HH:mm")}] [W: {curiosityUser.RoutingBucket}, SH: {metadata.Sender}, CH: {channel}] {curiosityUser.LatestName}#{curiosityUser.UserId}";
-                string discordMessage = message.Trim('"');
+                    DiscordClient.GetModule().SendDiscordServerEventLogMessage(message);
 
-                DiscordClient.GetModule().SendChatMessage(discordMessageStart, discordMessage);
-
-                return null;
+                    return null;
+                }
             }));
 
             Instance.ExportDictionary.Add("AddToServerLog", new Func<string, bool>(
