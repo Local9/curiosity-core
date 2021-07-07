@@ -341,7 +341,7 @@ namespace Curiosity.Core.Client.Managers
             float fuel = (float)currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL}");
             float multi = (float)currentVehicle.Vehicle.State.Get($"{StateBagKey.VEH_FUEL_MULTIPLIER}");
 
-            if (fuel == 0f && !IsRefueling)
+            if (fuel < 2f && !IsRefueling)
             {
                 currentVehicle.Vehicle.IsEngineRunning = false;
                 currentVehicle.Vehicle.FuelLevel = 0f;
