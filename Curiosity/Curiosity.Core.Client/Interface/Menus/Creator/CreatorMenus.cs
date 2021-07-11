@@ -174,7 +174,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             _MenuPool.ProcessMenus();
             _MenuPool.ProcessMouse();
 
-            if (!_MenuPool.IsAnyMenuOpen()) // KEEP IT FUCKING OPEN
+            if (!_MenuPool.IsAnyMenuOpen() && menuMain is not null) // KEEP IT FUCKING OPEN
                 menuMain.Visible = true;
         }
 
