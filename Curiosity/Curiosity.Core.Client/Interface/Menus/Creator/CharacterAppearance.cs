@@ -93,9 +93,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menu.OnListChange += Menu_OnListChange;
             menu.OnIndexChange += Menu_OnIndexChange;
 
-            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
-            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
-
             Menu = menu;
             return menu;
         }
@@ -368,6 +365,11 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             FaceCameraActive = true;
 
             menu.Clear(); // clear the menu on load as the gender may of changed
+
+            menu.InstructionalButtons.Clear();
+
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
 
             CreateMenuItems();
 

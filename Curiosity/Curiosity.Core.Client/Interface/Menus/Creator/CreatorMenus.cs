@@ -140,6 +140,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private void DestroyMenus()
         {
+            menuMain.InstructionalButtons.Clear();
+
             PluginManager.Instance.DetachTickHandler(OnMenuCreate);
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
         }
@@ -187,14 +189,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             {
                 Logger.Debug(ex, $"OnMenuCreate");
             }
-        }
-
-        internal void DestroyMenu()
-        {
-            // Remove the UIMenu as its no longer required
-            PluginManager.Instance.DetachTickHandler(OnPlayerControls);
-
-            menuCharacterHeritage = null;
         }
 
         internal void AddSubMenu(UIMenu menu, string title)

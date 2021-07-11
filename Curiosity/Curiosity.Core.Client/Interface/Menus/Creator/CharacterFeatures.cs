@@ -80,9 +80,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
             menu.OnListChange += Menu_OnListChange;
 
-            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
-            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
-
             lstBrow = new UIMenuListItem("Brow", new List<dynamic>() { "Standard" }, 0);
             lstBrow.Description = lstBrow.Text;
             menu.AddItem(lstBrow);
@@ -150,7 +147,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 OnMenuClose();
 
             if (state == MenuState.ChangeForward)
-                OnMenuOpen();
+                OnMenuOpen(newMenu);
         }
 
         private void Menu_OnListChange(UIMenu menu, UIMenuListItem listItem, int newIndex)
@@ -338,7 +335,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
         }
 
-        private async void OnMenuOpen()
+        private async void OnMenuOpen(UIMenu menu)
         {
             Cache.Player.CameraQueue.Reset();
             await Cache.Player.CameraQueue.View(new CameraBuilder()
@@ -347,6 +344,11 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 .WithInterpolation(CreatorMenus.CameraViews[1], CreatorMenus.CameraViews[2], 500)
             );
             PluginManager.Instance.AttachTickHandler(OnPlayerControls);
+
+            menu.InstructionalButtons.Clear();
+
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
         }
 
         private async Task OnPlayerControls()

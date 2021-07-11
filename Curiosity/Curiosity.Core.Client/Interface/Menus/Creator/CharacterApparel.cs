@@ -39,10 +39,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menu.AddItem(lstHats);
             menu.AddItem(lstGlasses);
 
-            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
-            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
-            menu.InstructionalButtons.Add(CreatorMenus.btnRandom);
-
             return menu;
         }
 
@@ -52,7 +48,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 OnMenuClose();
 
             if (state == MenuState.ChangeForward)
-                OnMenuOpen();
+                OnMenuOpen(newMenu);
         }
 
         private void Randomise()
@@ -114,9 +110,15 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
         }
 
-        private void OnMenuOpen()
+        private void OnMenuOpen(UIMenu menu)
         {
             PluginManager.Instance.AttachTickHandler(OnPlayerControls);
+
+            menu.InstructionalButtons.Clear();
+
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRandom);
         }
 
         private async Task OnPlayerControls()
