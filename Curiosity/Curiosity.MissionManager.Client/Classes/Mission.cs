@@ -521,6 +521,7 @@ namespace Curiosity.MissionManager.Client
             int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
             await BaseScript.Delay(100);
             int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+            API.NetworkRequestControlOfNetworkId(pedNetworkId);
             await BaseScript.Delay(0);
 
             API.NetworkRequestControlOfNetworkId(pedNetworkId);
@@ -578,11 +579,11 @@ namespace Curiosity.MissionManager.Client
             int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
             await BaseScript.Delay(100);
             int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
+            API.NetworkRequestControlOfNetworkId(pedNetworkId);
             await BaseScript.Delay(0);
 
             model.MarkAsNoLongerNeeded();
 
-            API.NetworkRequestControlOfNetworkId(pedNetworkId);
             await BaseScript.Delay(0);
 
             while (!API.NetworkHasControlOfEntity(pedId))

@@ -188,6 +188,7 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             Fx = fx;
             API.NetworkRegisterEntityAsNetworked(fx.Handle);
+            API.NetworkRequestControlOfNetworkId(fx.NetworkId);
 
             DateCreated = DateTime.Now;
 

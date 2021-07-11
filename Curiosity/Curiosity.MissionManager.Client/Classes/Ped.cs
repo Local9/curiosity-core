@@ -325,9 +325,7 @@ namespace Curiosity.MissionManager.Client.Classes
             Fx = fx;
 
             API.NetworkRegisterEntityAsNetworked(fx.Handle);
-
-            if (!isRandomPed)
-                API.NetworkRequestControlOfEntity(fx.Handle);
+            API.NetworkRequestControlOfEntity(fx.Handle);
 
             this._eventWrapper = new EntityEventWrapper(this.Fx);
             this._eventWrapper.Updated += new EntityEventWrapper.OnWrapperUpdateEvent(this.Update);
