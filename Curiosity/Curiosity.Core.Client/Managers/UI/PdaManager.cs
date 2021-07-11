@@ -155,6 +155,7 @@ namespace Curiosity.Core.Client.Managers
             if (propNetworkId == 0) return;
 
             int entityId = API.NetworkGetEntityFromNetworkId(propNetworkId);
+            API.NetworkRequestControlOfEntity(propNetworkId);
 
             if (entityId == 0) return;
 
