@@ -48,10 +48,10 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.Closed)
+            if (state == MenuState.ChangeBackward)
                 OnMenuClose();
 
-            if (state == MenuState.Opened)
+            if (state == MenuState.ChangeForward)
                 OnMenuOpen();
         }
 

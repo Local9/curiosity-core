@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities.Models;
 using Curiosity.Core.Client.Extensions;
 using NativeUI;
@@ -11,7 +12,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
     class CharacterAppearance
     {
         private bool FaceCameraActive = false;
-
+        private UIMenu Menu;
 
         private UIMenuListItem lstHair; // Color Panel
         private UIMenuColorPanel pnlHairColorPrimary;
@@ -96,15 +97,16 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
             menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
 
+            Menu = menu;
             return menu;
         }
 
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.Closed)
+            if (state == MenuState.ChangeBackward)
                 OnMenuClose();
 
-            if (state == MenuState.Opened)
+            if (state == MenuState.ChangeForward)
                 OnMenuOpen(newMenu);
         }
 

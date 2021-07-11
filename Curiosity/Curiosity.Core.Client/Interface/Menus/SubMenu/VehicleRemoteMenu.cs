@@ -30,7 +30,7 @@ namespace Curiosity.Core.Client.Interface.Menus.SubMenu
 
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.Opened)
+            if (state == MenuState.ChangeForward)
                 OnMenuOpen();
         }
 

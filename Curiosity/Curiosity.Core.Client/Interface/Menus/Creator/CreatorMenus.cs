@@ -1,10 +1,12 @@
 ﻿using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
+using Curiosity.Core.Client.Diagnostics;
 using Curiosity.Core.Client.Environment.Entities;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -171,11 +173,18 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private async Task OnMenuCreate()
         {
-            _MenuPool.ProcessMenus();
-            _MenuPool.ProcessMouse();
+            try
+            {
+                _MenuPool.ProcessMenus();
+                _MenuPool.ProcessMouse();
 
-            if (!_MenuPool.IsAnyMenuOpen() && menuMain is not null) // KEEP IT FUCKING OPEN
-                menuMain.Visible = true;
+                if (!_MenuPool.IsAnyMenuOpen() && menuMain is not null) // KEEP IT FUCKING OPEN
+                    menuMain.Visible = true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex, $"OnMenuCreate");
+            }
         }
 
         internal void DestroyMenu()

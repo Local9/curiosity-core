@@ -76,13 +76,13 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu.DefinedMenus
 
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
-            if (state == MenuState.Closed)
+            if (state == MenuState.ChangeBackward)
             {
                 MenuManager.OnMenuState();
                 PluginInstance.DetachTickHandler(OnSuspectDistanceCheck);
             }
 
-            if (state == MenuState.Opened)
+            if (state == MenuState.ChangeForward)
             {
                 OnMenuOpen();
             }
