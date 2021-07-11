@@ -226,6 +226,25 @@ namespace Curiosity.Core.Server.Managers
                 CuriosityUser curiosityUser = PluginManager.ActiveUsers[handle];
                 return JsonConvert.SerializeObject(curiosityUser);
             }));
+
+            // Exports
+            Instance.ExportDictionary.Add("UserRole", new Func<string, string>((playerHandle) =>
+            {
+                ExportMessage exportMessage = new ExportMessage();
+
+                int handle = int.Parse(playerHandle);
+
+                if (!PluginManager.ActiveUsers.ContainsKey(handle))
+                {
+                    exportMessage.Error = "Player not found";
+                }
+                else
+                {
+                    exportMessage.RoleId = (int)PluginManager.ActiveUsers[handle].Role;
+                }
+
+                return $"{exportMessage}";
+            }));
         }
 
         private void AddTestEmbed(DiscordWebhook discordWebhook, Webhook webhook)
