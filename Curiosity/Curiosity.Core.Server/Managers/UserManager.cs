@@ -63,7 +63,16 @@ namespace Curiosity.Core.Server.Managers
                 if (curiosityUser.IsStaff)
                 {
                     player.State.Set($"{StateBagKey.STAFF_MEMBER}", curiosityUser.IsStaff, true);
+                    if (curiosityUser.IsDeveloper)
+                    {
+                        player.State.Set($"{StateBagKey.PLAYER_DEBUG_NPC}", false, true);
+                        player.State.Set($"{StateBagKey.PLAYER_DEBUG_VEH}", false, true);
+                        player.State.Set($"{StateBagKey.PLAYER_DEBUG_UI}", false, true);
+                    }
                 }
+
+                player.State.Set($"{StateBagKey.PLAYER_MENU}", false, true);
+                player.State.Set($"{StateBagKey.PLAYER_ASSISTING}", false, true);
 
                 return curiosityUser;
             }));

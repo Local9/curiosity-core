@@ -79,13 +79,10 @@ namespace Curiosity.MissionManager.Client.Managers
 
             if (ent is Vehicle)
             {
-                int vehicleNetworkId = ent.NetworkId;
-                int playerVehicle = player.State.Get($"{StateBagKey.PLAYER_VEHICLE}") == null ? 0 : player.State.Get($"{StateBagKey.PLAYER_VEHICLE}");
+                int ownerId = ent.State.Get($"{StateBagKey.VEH_OWNER_ID}") ?? -1;
 
-                if (playerVehicle == 0) return;
-                if (playerVehicle != vehicleNetworkId) return;
-
-                PlayerManager.GetModule().SetVehicle(ent.Handle);
+                if (ownerId == Game.Player.ServerId)
+                    PlayerManager.GetModule().SetVehicle(ent.Handle);
             }
         }
 
