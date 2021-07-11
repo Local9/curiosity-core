@@ -91,7 +91,7 @@ namespace Curiosity.MissionManager.Client.Managers
                 await BaseScript.Delay(100);
             }
 
-            Instance.ExportRegistry["curiosity-ui"].SetJobActivity(active, onDuty, job);
+            Instance.ExportRegistry["curiosity-client"].SetJobActivity(active, onDuty, job);
             await BaseScript.Delay(100);
             EventSystem.Request<object>("user:job", job);
         }

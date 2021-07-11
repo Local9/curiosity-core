@@ -164,6 +164,8 @@ namespace Curiosity.MissionManager.Client.Menu
         {
             if (Cache.PlayerPed.IsAlive && JobManager.IsOfficer && !_MenuPool.IsAnyMenuOpen())
             {
+                Logger.Debug($"Open Police Menu");
+
                 if (menuMain.Visible) return;
 
                 if (!menuMain.Visible)
