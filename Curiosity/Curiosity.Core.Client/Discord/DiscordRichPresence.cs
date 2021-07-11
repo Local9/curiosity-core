@@ -5,8 +5,6 @@ namespace Curiosity.Core.Client.Discord
 {
     public class DiscordRichPresence
     {
-        public int MaximumPlayers { get; set; }
-
         public string AppId { get; set; }
         public string Asset { get; set; }
         public string AssetText { get; set; }
@@ -15,9 +13,8 @@ namespace Curiosity.Core.Client.Discord
         public string SmallAssetText { get; set; }
         public string Status { get; set; }
 
-        public DiscordRichPresence(int maximumPlayers, string appId, string asset, string assetText)
+        public DiscordRichPresence(string appId, string asset, string assetText)
         {
-            MaximumPlayers = maximumPlayers;
             AppId = appId;
             Asset = asset;
             AssetText = assetText;
@@ -43,7 +40,7 @@ namespace Curiosity.Core.Client.Discord
                 API.SetDiscordRichPresenceAssetSmallText(SmallAssetText);
             }
 
-            if (Status != null) API.SetRichPresence($"({API.GetNumberOfPlayers()}/{MaximumPlayers}): {Status}");
+            if (Status != null) API.SetRichPresence($"{Status}");
         }
     }
 }

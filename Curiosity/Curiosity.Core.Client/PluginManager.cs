@@ -27,10 +27,9 @@ namespace Curiosity.Core.Client
 
         public static PluginManager Instance { get; private set; }
         public static Random Rand = new Random();
-        public static int MaximumPlayers { get; } = 64;
 
         public readonly DiscordRichPresence DiscordRichPresence =
-            new DiscordRichPresence(MaximumPlayers, "590126930066407424", "Live V Universe", "forums.lifev.net")
+            new DiscordRichPresence("590126930066407424", "Live V Universe", "forums.lifev.net")
             {
                 SmallAsset = "fivem",
                 SmallAssetText = "fivem.net",

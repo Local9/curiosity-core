@@ -70,20 +70,6 @@ namespace Curiosity.Core.Client
                 session = decors.GetInteger("Session");
             }
 
-            for (var i = 0; i < PluginManager.MaximumPlayers; i++)
-            {
-                var ped = API.GetPlayerPed(i);
-
-                if (!API.DoesEntityExist(ped) || ped == API.GetPlayerPed(-1)) continue;
-
-                var decors = new EntityDecorModule
-                {
-                    Id = ped
-                };
-
-                Modify(ped, session == decors.GetInteger("Session"));
-            }
-
             //var voice = VoiceChat.GetModule();
             //voice.Channel = session;
             //voice.Commit();
