@@ -7,6 +7,7 @@ using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
+using Curiosity.Systems.Library.Enums;
 using NativeUI;
 using System;
 using System.Collections.Generic;
@@ -87,7 +88,7 @@ namespace Curiosity.MissionManager.Client.Menu
 
             _MenuPool.RefreshIndex();
 
-            API.RegisterKeyMapping(COMMAND_OPEN_MENU, "Open Police Interactive Menu", "keyboard", "F1");
+            API.RegisterKeyMapping(COMMAND_OPEN_MENU, "Open Police Interactive Menu", "keyboard", "f1");
             API.RegisterCommand(COMMAND_OPEN_MENU, new Action(OnMenuCommand), false);
         }
 
@@ -136,32 +137,56 @@ namespace Curiosity.MissionManager.Client.Menu
                 return;
             }
 
-            List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Cache.PlayerPed.Position, 2f) && Decorators.GetBoolean(x.Handle, Decorators.PED_MISSION)).Select(p => p).ToList();
+            List<CitizenFX.Core.Ped> peds = World.GetAllPeds().Where(x => x.IsInRangeOf(Cache.PlayerPed.Position, 2f)).Select(p => p).ToList();
 
             List<CitizenFX.Core.Vehicle> vehicles = World.GetAllVehicles().Where(x => x.IsInRangeOf(Cache.PlayerPed.Position, 4f)
-                && (Decorators.GetBoolean(x.Handle, Decorators.VEHICLE_MISSION)
-                || (Decorators.GetBoolean(x.Handle, Decorators.PLAYER_VEHICLE) && Decorators.GetInteger(x.Handle, Decorators.PLAYER_OWNER) == Game.Player.ServerId
-                    && (PlayerManager.GetModule().PersonalVehicle.ClassType == VehicleClass.Emergency || PlayerManager.GetModule().PersonalVehicle.Model.Hash == (int)VehicleHash.Polmav)))
+                //&& (x.State.Get($"{StateBagKey.MISSION_VEH}") ?? false
+                //|| (x.State.Get($"{StateBagKey.VEH_PERSONAL}") ?? false && x.State.Get($"{StateBagKey.VEH_OWNER_ID}") == Game.Player.ServerId
+                //    && (PlayerManager.GetModule().PersonalVehicle.ClassType == VehicleClass.Emergency || PlayerManager.GetModule().PersonalVehicle.Model.Hash == (int)VehicleHash.Polmav)))
                 ).Select(p => p).ToList();
 
-            int interactables = peds.Count + vehicles.Count; // near any interactives?
+            Entity currentEntity = null;
 
-            if (interactables == 0)
+            foreach(CitizenFX.Core.Ped ped in peds)
             {
-                await BaseScript.Delay(1000);
-                return;
+                bool missionPed = ped.State.Get($"{StateBagKey.MISSION_PED}") ?? false;
+                if (missionPed)
+                {
+                    currentEntity = ped;
+                    goto ShowPrompt;
+                }
             }
 
-            if (!API.IsHelpMessageBeingDisplayed() && !_MenuPool.IsAnyMenuOpen() && CanShowMessage)
+            foreach (CitizenFX.Core.Vehicle vehicle in vehicles)
             {
-                HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
-                HasShownWarning = false;
-                CanShowMessage = false;
+                bool missionVehicle = vehicle.State.Get($"{StateBagKey.MISSION_VEH}") ?? false;
+                if (missionVehicle)
+                {
+                    currentEntity = vehicle;
+                    goto ShowPrompt;
+                }
+            }
+
+
+        ShowPrompt:
+            if (currentEntity is null) return;
+
+            while (currentEntity.IsInRangeOf(Cache.PlayerPed.Position, 4f))
+            {
+                if (!API.IsHelpMessageBeingDisplayed() && !_MenuPool.IsAnyMenuOpen() && CanShowMessage)
+                {
+                    HelpMessage.CustomLooped(HelpMessage.Label.MENU_OPEN);
+                    HasShownWarning = false;
+                    CanShowMessage = false;
+                }
+                await BaseScript.Delay(0);
             }
         }
 
         public void OnMenuCommand()
         {
+            Logger.Debug($"Open Police Menu: {Cache.PlayerPed.IsAlive}, {JobManager.IsOfficer}, {!_MenuPool.IsAnyMenuOpen()}");
+
             if (Cache.PlayerPed.IsAlive && JobManager.IsOfficer && !_MenuPool.IsAnyMenuOpen())
             {
                 Logger.Debug($"Open Police Menu");

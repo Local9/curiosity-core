@@ -134,11 +134,11 @@ namespace Curiosity.MissionManager.Client.Classes
         {
             get
             {
-                var _value = Fx.State.Get(Decorators.PED_MISSION);
+                var _value = Fx.State.Get($"{StateBagKey.MISSION_PED}");
 
                 if (_value == null)
                 {
-                    Fx.State.Set(Decorators.PED_MISSION, false, true);
+                    Fx.State.Set($"{StateBagKey.MISSION_PED}", false, true);
                     return false;
                 }
                 else
@@ -151,7 +151,7 @@ namespace Curiosity.MissionManager.Client.Classes
                 Logger.Debug($"IsMission: {value}");
 
                 Fx.IsPersistent = value;
-                Fx.State.Set(Decorators.PED_MISSION, value, true);
+                Fx.State.Set($"{StateBagKey.MISSION_PED}", value, true);
                 EventSystem.Send("mission:update:ped:mission", Fx.NetworkId, value);
 
                 Logger.Debug($"IsMission: {value}");

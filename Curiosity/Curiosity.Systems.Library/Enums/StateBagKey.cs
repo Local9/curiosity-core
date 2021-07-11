@@ -28,5 +28,7 @@
         public const string VEH_BOAT_NETWORK_ID = "VEH_BOAT_NETWORK_ID";
         public const string PLAYER_ROUTING = "PLAYER_ROUTING";
         public const string PLAYER_HANDLE = "PLAYER_HANDLE";
+        public const string MISSION_PED = "MISSION_PED";
+        public const string MISSION_VEH = "MISSION_VEH";
     }
 }

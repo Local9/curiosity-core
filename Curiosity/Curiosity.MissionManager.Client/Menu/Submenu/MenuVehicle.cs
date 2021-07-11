@@ -91,6 +91,8 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
+            vehicle = MenuManager.GetClosestVehicle();
+
             if (selectedItem == menuItemSearchVehicle)
             {
                 vehicle.Sequence(Vehicle.VehicleSequence.SEARCH);

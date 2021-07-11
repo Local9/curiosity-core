@@ -98,7 +98,7 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
                 Ped = MenuManager.GetClosestInteractivePed();
                 bool isControlable = PedCanBeControled();
 
-                if (Ped == null)
+                if (Ped is null)
                 {
                     Notify.Alert(CommonErrors.MustBeCloserToSubject);
                     MenuManager._MenuPool.CloseAllMenus();
@@ -130,8 +130,9 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
         private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
             PlayerManager playerManager = PlayerManager.GetModule();
+            Ped = MenuManager.GetClosestInteractivePed();
 
-            if (Ped == null)
+            if (Ped is null)
             {
                 Notify.Alert(CommonErrors.SubjectNotFound);
                 return;

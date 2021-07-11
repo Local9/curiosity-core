@@ -76,6 +76,9 @@ namespace Curiosity.Core.Server.Managers
 
                 API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
 
+                Vehicle veh = new Vehicle(vehicleId);
+                veh.State.Set($"{StateBagKey.MISSION_VEH}", isMission, true);
+
                 return API.NetworkGetNetworkIdFromEntity(vehicleId);
             }));
 
@@ -119,6 +122,9 @@ namespace Curiosity.Core.Server.Managers
                 }
 
                 API.SetEntityRoutingBucket(pedId, (int)routingBucket);
+
+                Ped ped = new Ped(pedId);
+                ped.State.Set($"{StateBagKey.MISSION_PED}", isMission, true);
 
                 return API.NetworkGetNetworkIdFromEntity(pedId);
             }));
