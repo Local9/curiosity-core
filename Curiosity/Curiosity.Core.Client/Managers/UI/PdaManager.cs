@@ -150,7 +150,7 @@ namespace Curiosity.Core.Client.Managers
             Vector3 pos = Game.PlayerPed.Position;
             pos.Z += .2f;
 
-            int propNetworkId = await EventSystem.Request<int>("entity:spawn:prop", modelString, pos.X, pos.Y, pos.Z, true, true, true);
+            int propNetworkId = await EventSystem.Request<int>("entity:spawn:prop", (uint)model.Hash, pos.X, pos.Y, pos.Z, true, true, true);
 
             if (propNetworkId == 0) return;
 
