@@ -431,27 +431,28 @@ namespace Curiosity.Core.Server
                 {
                     if (ActiveUsers.Count > 0)
                     {
-                        // Logger.Debug("[Saves] Beginning `Save` operation on `Characters`.");
-
                         foreach (var users in ActiveUsers)
                         {
                             await SaveOperation(users.Value);
                         }
 
-                        // Added is a playerDropped event is not received
+                        // Added if a playerDropped event is not received
                         int activeUsers = ActiveUsers.Count;
-                        int activeUsersRemoved = 0;
 
-                        foreach (Player player in Players)
+                        Dictionary<int, CuriosityUser> auCopy = new Dictionary<int, CuriosityUser>(ActiveUsers);
+
+                        foreach (KeyValuePair<int, CuriosityUser> kvp in auCopy)
                         {
-                            int playerHandle = int.Parse(player.Handle);
-                            if (!ActiveUsers.ContainsKey(playerHandle))
+                            if (Players[kvp.Key] is null)
                             {
-                                CuriosityUser curiosityUser = ActiveUsers[playerHandle];
+                                int playerHandle = kvp.Key;
+                                int playerVehicle = kvp.Value.PersonalVehicle;
+                                int playerBoat = kvp.Value.PersonalBoat;
+                                int playerTrailer = kvp.Value.PersonalTrailer;
+                                int playerPlane = kvp.Value.PersonalPlane;
+                                int playerHelicopter = kvp.Value.PersonalHelicopter;
 
-                                ActiveUsers.TryRemove(playerHandle, out CuriosityUser old);
-                                QueueManager.session.TryRemove(player.Identifiers["license"], out SessionState sessionState);
-
+                                ActiveUsers.TryRemove(kvp.Key, out CuriosityUser cu);
                                 bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
 
                                 if (userHadMission)
@@ -463,15 +464,16 @@ namespace Curiosity.Core.Server
                                     }
                                 }
 
-                                EntityManager.EntityInstance.NetworkDeleteEntity(curiosityUser.PersonalVehicle);
+                                EntityManager.EntityInstance.NetworkDeleteEntity(playerVehicle);
+                                EntityManager.EntityInstance.NetworkDeleteEntity(playerBoat);
+                                EntityManager.EntityInstance.NetworkDeleteEntity(playerTrailer);
+                                EntityManager.EntityInstance.NetworkDeleteEntity(playerPlane);
+                                EntityManager.EntityInstance.NetworkDeleteEntity(playerHelicopter);
                                 MissionManager.FailureTracker.TryRemove(playerHandle, out int numFailed);
                                 MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData oldMission);
-
-                                activeUsersRemoved++;
                             }
                         }
 
-                        // Logger.Debug($"[ActiveUsers] Removed {activeUsersRemoved} of {activeUsers}.");
                         LastSave = DateTime.Now;
                     }
 
