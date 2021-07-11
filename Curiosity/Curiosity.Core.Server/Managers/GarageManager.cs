@@ -124,7 +124,7 @@ namespace Curiosity.Core.Server.Managers
 
                     Vehicle vehicle = new Vehicle(vehicleId);
 
-                    API.SetEntityDistanceCullingRadius(vehicle.Handle, 5000f);
+                    API.SetEntityDistanceCullingRadius(vehicle.Handle, 15000f);
 
                     Player p = PluginManager.PlayersList[metadata.Sender];
 
