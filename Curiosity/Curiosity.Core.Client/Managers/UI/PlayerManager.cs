@@ -3,7 +3,6 @@ using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
-using Curiosity.Systems.Library.Models.PDA;
 using Curiosity.Systems.Library.Utils;
 using System;
 using System.Collections.Generic;

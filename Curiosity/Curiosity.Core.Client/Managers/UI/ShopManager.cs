@@ -1,7 +1,4 @@
-﻿using CitizenFX.Core.Native;
-using Curiosity.Core.Client.Diagnostics;
-using Curiosity.Systems.Library.Enums;
-using Curiosity.Systems.Library.Events;
+﻿using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using System.Collections.Generic;

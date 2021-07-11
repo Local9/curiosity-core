@@ -1,5 +1,3 @@
-using CitizenFX.Core;
-using CitizenFX.Core.Native;
 using Curiosity.Core.Server.Database.Store;
 using Curiosity.Systems.Library.Models;
 using System.Threading.Tasks;

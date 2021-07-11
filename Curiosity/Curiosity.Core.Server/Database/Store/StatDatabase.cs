@@ -3,7 +3,6 @@ using Curiosity.Core.Server.Extensions;
 using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Models;
 using GHMatti.Data.MySQL.Core;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

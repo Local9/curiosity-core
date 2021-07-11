@@ -4,7 +4,6 @@ using Curiosity.MissionManager.Client.Attributes;
 using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Environment.Enums;
 using Curiosity.MissionManager.Client.Interface;
-using Curiosity.MissionManager.Client.Manager;
 using Curiosity.MissionManager.Client.Managers;
 using Curiosity.MissionManager.Client.Utils;
 using Curiosity.Systems.Library.Enums;

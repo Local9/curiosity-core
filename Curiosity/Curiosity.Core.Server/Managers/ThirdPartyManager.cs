@@ -1,8 +1,8 @@
-﻿using Curiosity.Systems.Library.Enums;
-using System;
-using Curiosity.Core.Server.Extensions;
-using CitizenFX.Core;
+﻿using CitizenFX.Core;
 using Curiosity.Core.Server.Diagnostics;
+using Curiosity.Core.Server.Extensions;
+using Curiosity.Systems.Library.Enums;
+using System;
 
 namespace Curiosity.Core.Server.Managers
 {

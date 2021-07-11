@@ -1,5 +1,4 @@
-﻿using CitizenFX.Core;
-using Curiosity.MissionManager.Client.Diagnostics;
+﻿using Curiosity.MissionManager.Client.Diagnostics;
 using Curiosity.MissionManager.Client.Events;
 using Curiosity.MissionManager.Client.Interface;
 using Curiosity.MissionManager.Client.Manager;

@@ -3,7 +3,6 @@ using Curiosity.Core.Client.Interface;
 using Curiosity.Core.Client.Utils;
 using Curiosity.Systems.Library.Enums;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 

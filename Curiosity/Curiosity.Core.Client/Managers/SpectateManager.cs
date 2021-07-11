@@ -1,11 +1,6 @@
 ﻿using CitizenFX.Core;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 
 namespace Curiosity.Core.Client.Managers

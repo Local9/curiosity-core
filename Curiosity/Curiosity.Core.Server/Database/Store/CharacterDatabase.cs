@@ -5,7 +5,6 @@ using Curiosity.Systems.Library.Models;
 using Curiosity.Systems.Library.Models.Shop;
 using GHMatti.Data.MySQL.Core;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
