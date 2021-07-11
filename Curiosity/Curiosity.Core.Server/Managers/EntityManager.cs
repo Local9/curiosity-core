@@ -7,6 +7,7 @@ using Curiosity.Systems.Library.Enums;
 using Curiosity.Systems.Library.Events;
 using Curiosity.Systems.Library.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Curiosity.Core.Server.Managers
 {
@@ -126,46 +127,7 @@ namespace Curiosity.Core.Server.Managers
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
 
-                RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
-
-                uint model = metadata.Find<uint>(0);
-                float x = metadata.Find<float>(1);
-                float y = metadata.Find<float>(2);
-                float z = metadata.Find<float>(3);
-                bool isNetworked = metadata.Find<bool>(4);
-                bool isMission = metadata.Find<bool>(5);
-                bool isDynamic = metadata.Find<bool>(6);
-
-                int objectId = API.CreateObjectNoOffset(model, x, y, z, isNetworked, isMission, isDynamic);
-
-                Logger.Debug($"Generated Object with ID {objectId}");
-
-                await BaseScript.Delay(0);
-
-                if (objectId == 0)
-                {
-                    Logger.Debug($"Possible OneSync is Disabled");
-                    return null;
-                }
-
-                DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
-
-                while (!API.DoesEntityExist(objectId))
-                {
-                    await BaseScript.Delay(0);
-
-                    if (maxWaitTime < DateTime.UtcNow) break;
-                }
-
-                if (!API.DoesEntityExist(objectId))
-                {
-                    Logger.Debug($"Failed to create object in timely manor.");
-                    return null;
-                }
-
-                API.SetEntityRoutingBucket(objectId, (int)routingBucket);
-
-                return API.NetworkGetNetworkIdFromEntity(objectId);
+                return await CreateEntity(metadata);
             }));
 
             EventSystem.GetModule().Attach("entity:damage", new EventCallback(metadata =>
@@ -230,6 +192,74 @@ namespace Curiosity.Core.Server.Managers
 
                 return null;
             }));
+
+            Instance.ExportDictionary.Add("CreateProp", new Func<string, uint, float, float, float, bool, bool, bool, Task<string>>(
+                async (playerHandle, model, x, y, z, isNetworked, isMission, isDynamic) =>
+                {
+                    ExportMessage exportMessage = new ExportMessage();
+
+                    int playerId = 0;
+                    if (!int.TryParse(playerHandle, out playerId))
+                        exportMessage.Error = "First parameter is not a number";
+
+                    if (!PluginManager.ActiveUsers.ContainsKey(playerId))
+                        exportMessage.Error = "Player was not found";
+
+                    int propNetworkId = await CreateEntity(playerId, model, x, y, z, isNetworked, isMission, isDynamic);
+
+                    exportMessage.NetworkId = propNetworkId;
+
+                    return $"{exportMessage}";
+                }));
+        }
+
+        private async Task<object> CreateEntity(EventMetadata metadata)
+        {
+            uint model = metadata.Find<uint>(0);
+            float x = metadata.Find<float>(1);
+            float y = metadata.Find<float>(2);
+            float z = metadata.Find<float>(3);
+            bool isNetworked = metadata.Find<bool>(4);
+            bool isMission = metadata.Find<bool>(5);
+            bool isDynamic = metadata.Find<bool>(6);
+
+            return await CreateEntity(metadata.Sender, model, x, y, z, isNetworked, isMission, isDynamic);
+        }
+
+        private async Task<int> CreateEntity(int source, uint model, float x, float y, float z, bool isNetworked, bool isMission, bool isDynamic)
+        {
+            RoutingBucket routingBucket = PluginManager.ActiveUsers[source].RoutingBucket;
+
+            int objectId = API.CreateObjectNoOffset(model, x, y, z, isNetworked, isMission, isDynamic);
+
+            Logger.Debug($"Generated Object with ID {objectId}");
+
+            await BaseScript.Delay(0);
+
+            if (objectId == 0)
+            {
+                Logger.Debug($"Possible OneSync is Disabled");
+                return -1;
+            }
+
+            DateTime maxWaitTime = DateTime.UtcNow.AddSeconds(5);
+
+            while (!API.DoesEntityExist(objectId))
+            {
+                await BaseScript.Delay(0);
+
+                if (maxWaitTime < DateTime.UtcNow) break;
+            }
+
+            if (!API.DoesEntityExist(objectId))
+            {
+                Logger.Debug($"Failed to create object in timely manor.");
+                return -1;
+            }
+
+            API.SetEntityRoutingBucket(objectId, (int)routingBucket);
+
+            return API.NetworkGetNetworkIdFromEntity(objectId);
         }
 
         public void NetworkDeleteEntity(int networkId)

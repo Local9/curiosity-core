@@ -35,5 +35,8 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "item", Order = 2, EmitDefaultValue = false)]
         public CuriosityShopItem Item { get; set; }
+
+        [DataMember(Name = "networkId", Order = 2, EmitDefaultValue = false)]
+        public int NetworkId { get; set; }
     }
 }
