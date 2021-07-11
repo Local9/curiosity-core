@@ -303,6 +303,7 @@ namespace Curiosity.Core.Server.Database.Store
                     curiosityStoreItem.NumberOfItemRequirements = int.Parse($"{kv[0]["NumberItemRequirements"]}");
                     curiosityStoreItem.ImageUri = $"{kv[0]["ImageUri"]}";
                     curiosityStoreItem.SpawnTypeId = (SpawnType)kv[0]["SpawnTypeId"];
+                    curiosityStoreItem.OriginalValue = int.Parse($"{kv[0]["OriginalValue"]}");
 
                     return curiosityStoreItem;
                 }

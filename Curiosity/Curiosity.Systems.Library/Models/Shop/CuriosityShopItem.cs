@@ -73,6 +73,9 @@ namespace Curiosity.Systems.Library.Models.Shop
             || SpawnTypeId == SpawnType.Boat
             || SpawnTypeId == SpawnType.Vehicle;
 
+        [DataMember(Name = "originalValue")]
+        public int OriginalValue { get; set; }
+
         [DataMember(Name = "skillRequirements")]
         public List<SkillRequirement> SkillRequirements = new List<SkillRequirement>();
 
