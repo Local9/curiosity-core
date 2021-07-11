@@ -102,7 +102,7 @@ namespace Curiosity.Core.Server.Database.Store
             }
             catch (Exception ex)
             {
-                Logger.Error($"{ex}");
+                Logger.Error(ex, $"GetRoleRequirements; Item: {itemId}, Character: {characterId}");
                 return lst;
             }
         }
@@ -145,7 +145,7 @@ namespace Curiosity.Core.Server.Database.Store
             }
             catch (Exception ex)
             {
-                Logger.Error($"{ex}");
+                Logger.Error(ex, $"GetItemRequirements; Item: {itemId}, Character: {characterId}");
                 return lst;
             }
         }
@@ -188,7 +188,7 @@ namespace Curiosity.Core.Server.Database.Store
             }
             catch (Exception ex)
             {
-                Logger.Error($"{ex}");
+                Logger.Error(ex, $"GetSkillRequirements; Item: {itemId}, Character: {characterId}");
                 return lst;
             }
         }
@@ -224,7 +224,7 @@ namespace Curiosity.Core.Server.Database.Store
             }
             catch (Exception ex)
             {
-                Logger.Error($"{ex}");
+                Logger.Error(ex, $"PurchaseVehicle; Item: {itemId}, Character: {characterId}");
                 return rtValue;
             }
         }
