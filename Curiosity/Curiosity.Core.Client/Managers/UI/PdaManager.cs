@@ -143,15 +143,26 @@ namespace Curiosity.Core.Client.Managers
         {
             if (Game.PlayerPed.IsDead) return;
 
-            Model model = "prop_cs_tablet";
+            string modelString = "prop_cs_tablet";
+            Model model = modelString;
             await model.Request(10000);
 
             Vector3 pos = Game.PlayerPed.Position;
             pos.Z += .2f;
 
-            TabletProp = await World.CreateProp(model, pos, true, false);
+            int propNetworkId = await EventSystem.Request<int>("entity:spawn:prop", modelString, pos.X, pos.Y, pos.Z, true, true, true);
+
+            if (propNetworkId == 0) return;
+
+            int entityId = API.NetworkGetEntityFromNetworkId(propNetworkId);
+
+            if (entityId == 0) return;
+
+            Prop TabletProp = new Prop(entityId);
 
             if (TabletProp == null) return;
+
+            if (!TabletProp.Exists()) return;
 
             Vector3 offset = new Vector3(0.0f, -0.03f, 0.0f);
             Vector3 rotation = new Vector3(20.0f, -90.0f, 0.0f);
