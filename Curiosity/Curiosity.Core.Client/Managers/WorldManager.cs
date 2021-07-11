@@ -311,6 +311,11 @@ namespace Curiosity.Core.Client.Managers
 
                 vehicles.ForEach(veh =>
                 {
+                    bool isServerSpawned = veh.State.Get(StateBagKey.VEH_SPAWNED) ?? false;
+
+                    if (!isServerSpawned)
+                        veh.LockStatus = VehicleLockStatus.LockedForPlayer;
+
                     if (vehiclesToSuppress.Contains((VehicleHash)veh.Model.Hash))
                     {
                         bool serverSpawned = veh.State.Get($"{StateBagKey.VEH_SPAWNED}") is null ? false : veh.State.Get($"{StateBagKey.VEH_SPAWNED}");
