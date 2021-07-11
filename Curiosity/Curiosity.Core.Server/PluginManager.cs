@@ -425,55 +425,62 @@ namespace Curiosity.Core.Server
         [TickHandler]
         private async Task SaveTask()
         {
-            if (DateTime.Now.Subtract(LastSave).TotalMinutes >= 5)
+            try
             {
-                if (ActiveUsers.Count > 0)
+                if (DateTime.Now.Subtract(LastSave).TotalMinutes >= 5)
                 {
-                    // Logger.Debug("[Saves] Beginning `Save` operation on `Characters`.");
-
-                    foreach (var users in ActiveUsers)
+                    if (ActiveUsers.Count > 0)
                     {
-                        await SaveOperation(users.Value);
-                    }
+                        // Logger.Debug("[Saves] Beginning `Save` operation on `Characters`.");
 
-                    // Added is a playerDropped event is not received
-                    int activeUsers = ActiveUsers.Count;
-                    int activeUsersRemoved = 0;
-
-                    foreach (Player player in Players)
-                    {
-                        int playerHandle = int.Parse(player.Handle);
-                        if (!ActiveUsers.ContainsKey(playerHandle))
+                        foreach (var users in ActiveUsers)
                         {
-                            CuriosityUser curiosityUser = ActiveUsers[playerHandle];
-
-                            ActiveUsers.TryRemove(playerHandle, out CuriosityUser old);
-                            QueueManager.session.TryRemove(player.Identifiers["license"], out SessionState sessionState);
-
-                            bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
-
-                            if (userHadMission)
-                            {
-                                MissionData mission = MissionManager.ActiveMissions[playerHandle];
-                                foreach (int partyMember in mission.PartyMembers)
-                                {
-                                    EventSystem.GetModule().Send("mission:backup:completed", partyMember);
-                                }
-                            }
-
-                            EntityManager.EntityInstance.NetworkDeleteEntity(curiosityUser.PersonalVehicle);
-                            MissionManager.FailureTracker.TryRemove(playerHandle, out int numFailed);
-                            MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData oldMission);
-
-                            activeUsersRemoved++;
+                            await SaveOperation(users.Value);
                         }
+
+                        // Added is a playerDropped event is not received
+                        int activeUsers = ActiveUsers.Count;
+                        int activeUsersRemoved = 0;
+
+                        foreach (Player player in Players)
+                        {
+                            int playerHandle = int.Parse(player.Handle);
+                            if (!ActiveUsers.ContainsKey(playerHandle))
+                            {
+                                CuriosityUser curiosityUser = ActiveUsers[playerHandle];
+
+                                ActiveUsers.TryRemove(playerHandle, out CuriosityUser old);
+                                QueueManager.session.TryRemove(player.Identifiers["license"], out SessionState sessionState);
+
+                                bool userHadMission = MissionManager.ActiveMissions.ContainsKey(playerHandle);
+
+                                if (userHadMission)
+                                {
+                                    MissionData mission = MissionManager.ActiveMissions[playerHandle];
+                                    foreach (int partyMember in mission.PartyMembers)
+                                    {
+                                        EventSystem.GetModule().Send("mission:backup:completed", partyMember);
+                                    }
+                                }
+
+                                EntityManager.EntityInstance.NetworkDeleteEntity(curiosityUser.PersonalVehicle);
+                                MissionManager.FailureTracker.TryRemove(playerHandle, out int numFailed);
+                                MissionManager.ActiveMissions.TryRemove(playerHandle, out MissionData oldMission);
+
+                                activeUsersRemoved++;
+                            }
+                        }
+
+                        // Logger.Debug($"[ActiveUsers] Removed {activeUsersRemoved} of {activeUsers}.");
+                        LastSave = DateTime.Now;
                     }
 
-                    // Logger.Debug($"[ActiveUsers] Removed {activeUsersRemoved} of {activeUsers}.");
-                    LastSave = DateTime.Now;
+                    await Delay(1000);
                 }
-
-                await Delay(1000);
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug($"Possible user left while running");
             }
         }
     }
