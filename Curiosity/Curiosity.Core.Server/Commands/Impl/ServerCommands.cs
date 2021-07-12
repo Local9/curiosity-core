@@ -54,6 +54,27 @@ namespace Curiosity.Core.Server.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "song" })]
+        public class WorldSong : ICommand
+        {
+            public async void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    ChatManager.OnServerMessage(player, $"Missing url.");
+                    return;
+                }
+
+                string url = arguments.ElementAt(0);
+
+                PluginManager pluginManager = PluginManager.Instance;
+
+                Vector3 pos = player.Character.Position;
+
+                pluginManager.ExportDictionary["xsound"].PlayUrlPos(-1, "devSong", url, 0.25f, pos, false);
+            }
+        }
+
         [CommandInfo(new[] { "time" })]
         public class WorldTime : ICommand
         {

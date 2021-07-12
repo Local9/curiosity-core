@@ -325,5 +325,29 @@ namespace Curiosity.Core.Client.Commands.Impl
             }
         }
         #endregion
+
+        #region thirdParty
+        [CommandInfo(new[] { "song" })]
+        public class WorldSong : ICommand
+        {
+            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    Chat.SendLocalMessage($"Missing url.");
+                    return;
+                }
+
+                string url = arguments[0];
+                float volume = arguments.Count == 2 ? float.Parse(arguments[1]) : 0.5f;
+
+                PluginManager pluginManager = PluginManager.Instance;
+
+                Vector3 pos = Game.PlayerPed.Position;
+
+                pluginManager.ExportDictionary["xsound"].PlayUrlPos("devSong", url, volume, pos, false);
+            }
+        }
+        #endregion
     }
 }
