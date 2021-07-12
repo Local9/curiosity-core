@@ -174,8 +174,14 @@ namespace Curiosity.Core.Server.Managers
                 {
                     CuriosityUser user = kvp.Value;
 
-                    if (user.PersonalVehicle == networkId)
+                    if (user.PersonalVehicle == networkId
+                        || user.PersonalBoat == networkId
+                        || user.PersonalTrailer == networkId
+                        || user.PersonalPlane == networkId
+                        || user.PersonalHelicopter == networkId)
+                    {
                         cannotTow = CommonErrors.VehicleIsOwned;
+                    }
                 }
 
                 if (cannotTow == CommonErrors.VehicleIsOwned)

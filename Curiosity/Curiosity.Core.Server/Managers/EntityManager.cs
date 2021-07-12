@@ -39,6 +39,7 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("entity:spawn:vehicle", new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                Player player = PluginManager.PlayersList[metadata.Sender];
 
                 RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
 
@@ -79,6 +80,7 @@ namespace Curiosity.Core.Server.Managers
                 Vehicle veh = new Vehicle(vehicleId);
                 veh.State.Set(StateBagKey.VEH_SPAWNED, true, true);
                 veh.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
+                veh.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
                 veh.State.Set(StateBagKey.VEHICLE_MISSION, isMission, true);
                 veh.State.Set(StateBagKey.VEHICLE_STOLEN, false, true);
                 veh.State.Set(StateBagKey.VEHICLE_FLEE, false, true);
@@ -98,6 +100,7 @@ namespace Curiosity.Core.Server.Managers
             EventSystem.GetModule().Attach("entity:spawn:ped", new AsyncEventCallback(async metadata =>
             {
                 if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
+                Player player = PluginManager.PlayersList[metadata.Sender];
 
                 RoutingBucket routingBucket = PluginManager.ActiveUsers[metadata.Sender].RoutingBucket;
 
@@ -138,6 +141,7 @@ namespace Curiosity.Core.Server.Managers
 
                 Ped ped = new Ped(pedId);
                 ped.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
+                ped.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
                 ped.State.Set(StateBagKey.PED_SPAWNED, true, true);
                 ped.State.Set(StateBagKey.PED_FLEE, false, true);
                 ped.State.Set(StateBagKey.PED_SHOOT, false, true);

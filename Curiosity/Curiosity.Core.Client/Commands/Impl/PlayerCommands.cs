@@ -75,24 +75,16 @@ namespace Curiosity.Core.Client.Commands.Impl
             {
                 Vehicle vehicle = Cache.PlayerPed.GetVehicleInFront();
 
-                var nameOfOwner = await EventSystem.Request<object>("vehicle:owner", vehicle.NetworkId);
+                string nameOfOwner = vehicle.State.Get(StateBagKey.PLAYER_NAME) ?? string.Empty;
+                bool isMissionVehicle = vehicle.State.Get(StateBagKey.VEHICLE_MISSION) ?? false;
 
-                if (nameOfOwner == null)
+                if (string.IsNullOrEmpty(nameOfOwner))
                 {
                     Notify.Impound($"Vehicle Owner", "Sorry, we cannot find that information right now.");
                     return;
                 }
 
-                string nameValue = nameOfOwner.ToString();
-
-                if (string.IsNullOrEmpty(nameValue) || nameValue.Length == 0)
-                {
-                    Notify.Impound($"Vehicle Owner", "Sorry, we cannot find that information right now.");
-                }
-                else
-                {
-                    Notify.Impound($"Registration", $"~b~Owner~s~: {nameValue}");
-                }
+                Notify.Impound($"Registration", $"~b~Owner~s~: {nameOfOwner}~n~~b~Mission Item~s~: {isMissionVehicle}");
             }
         }
     }
