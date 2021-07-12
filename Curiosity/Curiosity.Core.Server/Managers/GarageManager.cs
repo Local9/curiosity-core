@@ -131,43 +131,45 @@ namespace Curiosity.Core.Server.Managers
                     switch(vehicleItem.SpawnTypeId)
                     {
                         case SpawnType.Boat:
-                            p.State.Set($"{StateBagKey.VEH_BOAT_NETWORK_ID}", vehicle.NetworkId, true);
+                            p.State.Set(StateBagKey.VEH_BOAT_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Plane:
-                            p.State.Set($"{StateBagKey.VEH_PLANE_NETWORK_ID}", vehicle.NetworkId, true);
+                            p.State.Set(StateBagKey.VEH_PLANE_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Helicopter:
-                            p.State.Set($"{StateBagKey.VEH_HELI_NETWORK_ID}", vehicle.NetworkId, true);
+                            p.State.Set(StateBagKey.VEH_HELI_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         case SpawnType.Trailer:
-                            p.State.Set($"{StateBagKey.VEH_TRAILER_NETWORK_ID}", vehicle.NetworkId, true);
+                            p.State.Set(StateBagKey.VEH_TRAILER_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                         default:
-                            p.State.Set($"{StateBagKey.VEH_NETWORK_ID}", vehicle.NetworkId, true);
+                            p.State.Set(StateBagKey.VEH_NETWORK_ID, vehicle.NetworkId, true);
                             break;
                     }
 
-                    vehicle.State.Set($"{StateBagKey.VEH_SPAWNED}", true, true);
-                    vehicle.State.Set($"{StateBagKey.VEH_OWNER_ID}", player.Handle, true);
-                    vehicle.State.Set($"{StateBagKey.VEH_OWNER}", player.Name, true);
-                    vehicle.State.Set($"{StateBagKey.VEH_SPAWN_TYPE}", (int)vehicleItem.SpawnTypeId, true);
+                    vehicle.State.Set(StateBagKey.VEH_SPAWNED, true, true);
+                    vehicle.State.Set(StateBagKey.VEH_OWNER_ID, player.Handle, true);
+                    vehicle.State.Set(StateBagKey.VEH_OWNER, player.Name, true);
+                    vehicle.State.Set(StateBagKey.PLAYER_NAME, player.Name, true);
+                    vehicle.State.Set(StateBagKey.VEHICLE_MISSION, false, true);
+                    vehicle.State.Set(StateBagKey.VEH_SPAWN_TYPE, (int)vehicleItem.SpawnTypeId, true);
 
-                    vehicle.State.Set($"{StateBagKey.BLIP_INFORMATION}", new { }, true);
+                    vehicle.State.Set(StateBagKey.BLIP_INFORMATION, new { }, true);
 
                     if (vehicleItem.SpawnTypeId != SpawnType.Trailer)
                     {
-                        vehicle.State.Set($"{StateBagKey.VEH_PERSONAL}", true, true);
+                        vehicle.State.Set(StateBagKey.VEH_PERSONAL, true, true);
 
-                        vehicle.State.Set($"{StateBagKey.VEH_FUEL}", 0f, true);
-                        vehicle.State.Set($"{StateBagKey.VEH_FUEL_MULTIPLIER}", 0f, true);
-                        vehicle.State.Set($"{StateBagKey.VEH_FUEL_SETUP}", false, true);
-                        vehicle.State.Set($"{StateBagKey.VEH_CONTENT}", new { }, true);
+                        vehicle.State.Set(StateBagKey.VEH_FUEL, 0f, true);
+                        vehicle.State.Set(StateBagKey.VEH_FUEL_MULTIPLIER, 0f, true);
+                        vehicle.State.Set(StateBagKey.VEH_FUEL_SETUP, false, true);
+                        vehicle.State.Set(StateBagKey.VEH_CONTENT, new { }, true);
                     }
 
                     if (vehicleItem.SpawnTypeId == SpawnType.Trailer)
                     {
-                        vehicle.State.Set($"{StateBagKey.VEH_PERSONAL_TRAILER}", true, true);
-                        vehicle.State.Set($"{StateBagKey.VEH_TRAILER_CONTENT}", new { }, true);
+                        vehicle.State.Set(StateBagKey.VEH_PERSONAL_TRAILER, true, true);
+                        vehicle.State.Set(StateBagKey.VEH_TRAILER_CONTENT, new { }, true);
                     }
 
                     API.SetEntityRoutingBucket(vehicleId, (int)routingBucket);
