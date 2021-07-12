@@ -107,6 +107,14 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                     EventSystem.GetModule().Send("character:routing:base");
                 }
             }
+            catch (KeyNotFoundException ex)
+            {
+
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+
+            }
             catch (Exception ex)
             {
                 Logger.Debug(ex, $"MenuMain_OnItemSelect");
@@ -195,6 +203,14 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
                 if (!_MenuPool.IsAnyMenuOpen() && menuMain is not null) // KEEP IT FUCKING OPEN
                     menuMain.Visible = true;
+            }
+            catch (KeyNotFoundException ex)
+            {
+
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+
             }
             catch (Exception ex)
             {

@@ -63,12 +63,20 @@ namespace Curiosity.Core.Server.Managers
             {
                 Player player = PluginManager.PlayersList[metadata.Sender];
 
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return false;
+                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender))
+                {
+                    Logger.Debug($"Player doesn't exist, cannot save.");
+                    return false;
+                }
 
                 CuriosityUser user = PluginManager.ActiveUsers[metadata.Sender];
                 CuriosityCharacter curiosityCharacter = metadata.Find<CuriosityCharacter>(0);
 
-                if (user.Character.CharacterId != curiosityCharacter.CharacterId) return false;
+                if (user.Character.CharacterId != curiosityCharacter.CharacterId)
+                {
+                    Logger.Debug($"Player CharacterId incorrect match.");
+                    return false;
+                }
 
                 curiosityCharacter.Cash = await Database.Store.BankDatabase.Get(curiosityCharacter.CharacterId);
 

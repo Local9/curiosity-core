@@ -40,7 +40,7 @@ namespace Curiosity.Core.Server.Database.Store
                         curiosityCharacter = JsonConvert.DeserializeObject<CuriosityCharacter>($"{kv["CharacterJSON"]}");
 
                     curiosityCharacter.CharacterId = kv["characterId"].ToInt();
-                    curiosityCharacter.MarkedAsRegistered = kv["IsRegistered"].ToBoolean();
+                    curiosityCharacter.MarkedAsRegistered = kv["IsRegistered"].ToInt() == 1;
                     curiosityCharacter.Cash = kv["Cash"].ToLong();
 
                     if (!curiosityCharacter.MarkedAsRegistered && curiosityCharacter.Cash == 0)

@@ -147,6 +147,9 @@ namespace Curiosity.Core.Client.Managers
 
         public async Task Load(CuriosityPlayer player)
         {
+            API.SetClockTime(0, 1, 0);
+            API.SetWeatherTypeNow("EXTRASUNNY");
+
             EventSystem.Send("user:queue:active");
 
             API.ShutdownLoadingScreen();
@@ -206,17 +209,17 @@ namespace Curiosity.Core.Client.Managers
             await player.Character.Load();
 
             Logger.Info("[Character] Joining Session...");
-            Session.Join(player.Character.MarkedAsRegistered ? 1 : 100 + Game.Player.ServerId);
-
-            Logger.Info("[Character] Session Joined...");
 
             await SafeTeleport.Teleport(API.PlayerPedId(), position);
 
             Logger.Info("[Character] Teleported...");
 
+            Logger.Debug($"Character Registered: {player.Character.MarkedAsRegistered}");
+
             if (player.Character.MarkedAsRegistered)
             {
                 EventSystem.Send("character:routing:base");
+
                 await transition.Wait();
                 Screen.Fading.FadeIn(5000);
                 await transition.Down(player);
