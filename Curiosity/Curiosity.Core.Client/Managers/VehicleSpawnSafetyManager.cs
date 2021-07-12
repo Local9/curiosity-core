@@ -47,12 +47,19 @@ namespace Curiosity.Core.Client.Managers
 
         public async Task SafeSpawnCheck()
         {
-            List<Vehicle> vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.Distance(Game.PlayerPed.Position) < 30f && m.Handle != Cache.PlayerPed.CurrentVehicle.Handle).ToList();
-
-            foreach (Vehicle vehicle in vehicles)
+            try
             {
-                if (safeZoneVehicles.ContainsKey(vehicle.Handle)) continue;
-                safeZoneVehicles.Add(vehicle.Handle, new SafeZoneVehicle(vehicle));
+                List<Vehicle> vehicles = World.GetAllVehicles().ToList().Select(m => m).Where(m => m.Position.Distance(Game.PlayerPed.Position) < 30f && m.Handle != Cache.PlayerPed.CurrentVehicle.Handle).ToList();
+
+                foreach (Vehicle vehicle in vehicles)
+                {
+                    if (safeZoneVehicles.ContainsKey(vehicle.Handle)) continue;
+                    safeZoneVehicles.Add(vehicle.Handle, new SafeZoneVehicle(vehicle));
+                }
+            }
+            catch(Exception ex)
+            {
+
             }
         }
     }
