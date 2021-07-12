@@ -113,7 +113,8 @@ namespace Curiosity.Core.Client.Managers
                         handle = p.ServerHandle,
                         job = p.Job,
                         role = p.Role,
-                        ping = p.Ping
+                        ping = p.Ping,
+                        routingBucket = p.RoutingBucket
                     };
 
                     pl.Add(player);
