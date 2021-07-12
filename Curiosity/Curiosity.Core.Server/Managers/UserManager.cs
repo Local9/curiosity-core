@@ -102,11 +102,7 @@ namespace Curiosity.Core.Server.Managers
             // TODO: Character
             EventSystem.GetModule().Attach("user:job", new EventCallback(metadata =>
             {
-                if (!PluginManager.ActiveUsers.ContainsKey(metadata.Sender)) return null;
-
-                PluginManager.ActiveUsers[metadata.Sender].CurrentJob = metadata.Find<string>(0);
-
-                return null;
+                return SetUserJobText(metadata.Sender, metadata.Find<string>(0));
             }));
 
 
@@ -236,7 +232,13 @@ namespace Curiosity.Core.Server.Managers
                 return JsonConvert.SerializeObject(curiosityUser);
             }));
 
-            // Exports
+            Instance.ExportDictionary.Add("SetJob", new Func<string, string, bool>((playerHandle, jobText) =>
+            {
+                int handle = int.Parse(playerHandle);
+
+                return SetUserJobText(handle, jobText);
+            }));
+
             Instance.ExportDictionary.Add("UserRole", new Func<string, string>((playerHandle) =>
             {
                 ExportMessage exportMessage = new ExportMessage();
@@ -254,6 +256,15 @@ namespace Curiosity.Core.Server.Managers
 
                 return $"{exportMessage}";
             }));
+        }
+
+        private static bool SetUserJobText(int playerServerId, string jobText)
+        {
+            if (!PluginManager.ActiveUsers.ContainsKey(playerServerId)) return false;
+
+            PluginManager.ActiveUsers[playerServerId].CurrentJob = jobText;
+
+            return true;
         }
 
         private void AddTestEmbed(DiscordWebhook discordWebhook, Webhook webhook)
