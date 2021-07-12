@@ -71,7 +71,7 @@ namespace Curiosity.Core.Client.Commands.Impl
         [CommandInfo(new[] { "owner", "reg", "registration" })]
         public class PlayerVehicleOwner : ICommand
         {
-            public async void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
+            public void On(CuriosityPlayer player, CuriosityEntity entity, List<string> arguments)
             {
                 Vehicle vehicle = Cache.PlayerPed.GetVehicleInFront();
 
