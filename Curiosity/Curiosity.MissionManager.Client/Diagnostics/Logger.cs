@@ -47,9 +47,7 @@ namespace Curiosity.MissionManager.Client.Diagnostics
         {
             try
             {
-                MethodBase method = new StackTrace().GetFrame(1).GetMethod();
-                string caller = $"{method.ReflectedType?.FullName}.{method.Name}";
-                CitizenFX.Core.Debug.WriteLine($"{caller}: [{title}] {msg}");
+                CitizenFX.Core.Debug.WriteLine($"[{title}] {msg}");
             }
             catch (Exception ex)
             {

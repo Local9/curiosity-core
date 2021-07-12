@@ -79,7 +79,9 @@ namespace Curiosity.MissionManager.Client.Managers
 
             if (ent is Vehicle)
             {
-                int ownerId = ent.State.Get($"{StateBagKey.VEH_OWNER_ID}") ?? -1;
+                int ownerId = -1;
+
+                int.TryParse(ent.State.Get(StateBagKey.VEH_OWNER_ID), out ownerId);
 
                 if (ownerId == Game.Player.ServerId)
                     PlayerManager.GetModule().SetVehicle(ent.Handle);
