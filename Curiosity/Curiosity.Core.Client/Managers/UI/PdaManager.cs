@@ -123,7 +123,7 @@ namespace Curiosity.Core.Client.Managers
             currentWeapon = Game.PlayerPed.Weapons.Current.Hash;
             Game.PlayerPed.Weapons.Select(WeaponHash.Unarmed);
 
-            AddProp();
+            // AddProp();
             string animationDict = "amb@world_human_tourist_map@male@base";
             string animationBase = "base";
 
