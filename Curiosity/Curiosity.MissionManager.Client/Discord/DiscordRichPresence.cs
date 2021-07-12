@@ -40,7 +40,7 @@ namespace Curiosity.MissionManager.Client.Discord
                 API.SetDiscordRichPresenceAssetSmallText(SmallAssetText);
             }
 
-            if (Status != null) API.SetRichPresence($"({API.GetNumberOfPlayers()}/{MaximumPlayers}): {Status}");
+            if (Status != null) API.SetRichPresence(Status);
         }
     }
 }
