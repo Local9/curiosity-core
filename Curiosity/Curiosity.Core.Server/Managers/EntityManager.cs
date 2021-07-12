@@ -311,6 +311,8 @@ namespace Curiosity.Core.Server.Managers
 
             API.SetEntityRoutingBucket(objectId, (int)routingBucket);
 
+            API.SetEntityDistanceCullingRadius(objectId, 15000f);
+
             return API.NetworkGetNetworkIdFromEntity(objectId);
         }
 
