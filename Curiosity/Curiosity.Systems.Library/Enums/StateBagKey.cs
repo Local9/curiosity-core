@@ -67,6 +67,7 @@
         public const string PED_DIALOGUE = "c::ped::dialogue";
         public const string PED_SETUP = "c::ped::setup";
         public const string PED_IS_DRIVER = "c::ped::driver";
+        public const string PED_SPAWNED = "c::ped::spawned";
 
         public const string MENU_RANDOM_RESPONSE = "c::menu::random";
         public const string MENU_WELCOME = "c::menu::welcome";
