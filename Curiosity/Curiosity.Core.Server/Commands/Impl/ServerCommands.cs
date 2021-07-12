@@ -76,6 +76,26 @@ namespace Curiosity.Core.Server.Commands.Impl
             }
         }
 
+        [CommandInfo(new[] { "tts" })]
+        public class WorldTextToSpeech : ICommand
+        {
+            public async void On(CuriosityUser user, Player player, List<string> arguments)
+            {
+                if (arguments.Count == 0)
+                {
+                    ChatManager.OnServerMessage(player, $"Missing argument.");
+                    return;
+                }
+
+                string text = arguments.ElementAt(0);
+                float volume = arguments.Count == 2 ? float.Parse(arguments.ElementAt(1)) : 0.5f;
+
+                PluginManager pluginManager = PluginManager.Instance;
+
+                pluginManager.ExportDictionary["xsound"].TextToSpeech("tts", "en-US", text, volume, false);
+            }
+        }
+
         [CommandInfo(new[] { "time" })]
         public class WorldTime : ICommand
         {
