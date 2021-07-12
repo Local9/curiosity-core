@@ -53,12 +53,6 @@ namespace Curiosity.Core.Server.Database.Store
 
         public static async Task Save(CuriosityCharacter curiosityCharacter)
         {
-            if (!curiosityCharacter.MarkedAsRegistered)
-            {
-                Logger.Error($"Trying to save a character thats not registered");
-                return;
-            }
-
             string characterJson = JsonConvert.SerializeObject(curiosityCharacter);
 
             Dictionary<string, object> myParams = new Dictionary<string, object>()
