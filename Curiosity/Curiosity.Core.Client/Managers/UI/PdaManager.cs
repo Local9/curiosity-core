@@ -175,10 +175,11 @@ namespace Curiosity.Core.Client.Managers
 
         private void RemoveProp()
         {
-            if (TabletProp == null) return;
+            if (TabletProp is null) return;
 
             if (TabletProp.Exists())
             {
+                EventSystem.Send("delete:entity", TabletProp.NetworkId);
                 TabletProp.Delete();
                 TabletProp = null;
             }
