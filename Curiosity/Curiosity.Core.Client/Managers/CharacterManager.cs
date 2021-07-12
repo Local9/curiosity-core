@@ -196,8 +196,6 @@ namespace Curiosity.Core.Client.Managers
                 Cache.PlayerPed.Armor = character.Armor;
             }
 
-            SetupDecorators();
-
             Logger.Info("[Character] Base Settings Loaded...");
 
             // INVENTORIES
@@ -241,12 +239,6 @@ namespace Curiosity.Core.Client.Managers
             player.EnableHud();
 
             Cache.UpdatePedId(true);
-        }
-
-        private void SetupDecorators()
-        {
-            int playerHandle = Cache.PlayerPed.Handle;
-            DecoratorExtensions.Set(playerHandle, Decors.PLAYER_NAME, Game.Player.Name);
         }
     }
 }
