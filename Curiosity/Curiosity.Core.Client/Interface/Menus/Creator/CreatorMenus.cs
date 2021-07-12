@@ -92,17 +92,24 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
 
         private async void MenuMain_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
         {
-            if (selectedItem == itemSave)
+            try
             {
-                Cache.Character.MarkedAsRegistered = true;
-                await Cache.Character.Save();
+                if (selectedItem == itemSave)
+                {
+                    Cache.Character.MarkedAsRegistered = true;
+                    await Cache.Character.Save();
 
-                DestroyMenus();
-                menuMain.Clear();
-                _MenuPool.CloseAllMenus();
-                menuMain = null;
+                    DestroyMenus();
+                    menuMain.Clear();
+                    _MenuPool.CloseAllMenus();
+                    menuMain = null;
 
-                EventSystem.GetModule().Send("character:routing:base");
+                    EventSystem.GetModule().Send("character:routing:base");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug(ex, $"MenuMain_OnItemSelect");
             }
         }
 
