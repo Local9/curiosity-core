@@ -23,8 +23,14 @@ namespace Curiosity.MissionManager.Client.Manager
                 {
                     bool pedArrested = ped.State.Get(StateBagKey.PED_ARRESTED) ?? false;
                     bool pedHandcuffed = ped.State.Get(StateBagKey.PED_HANDCUFFED) ?? false;
+                    int ownerId = ped.State.Get(StateBagKey.PLAYER_OWNER) ?? -1;
 
-                    if (pedArrested && pedHandcuffed)
+                    if (ownerId == -1)
+                        continue;
+
+                    bool isOwnedByPlayer = ownerId == Game.Player.ServerId;
+
+                    if (pedArrested && pedHandcuffed && isOwnedByPlayer)
                         numberOfPedsToArrest++;
                 }
 
@@ -42,7 +48,11 @@ namespace Curiosity.MissionManager.Client.Manager
                             bool pedArrested = ped.State.Get(StateBagKey.PED_ARRESTED) ?? false;
                             bool pedHandcuffed = ped.State.Get(StateBagKey.PED_HANDCUFFED) ?? false;
 
-                            if (pedArrested && pedHandcuffed)
+                            int ownerId = ped.State.Get(StateBagKey.PLAYER_OWNER) ?? -1;
+
+                            bool isOwnedByPlayer = ownerId == Game.Player.ServerId;
+
+                            if (pedArrested && pedHandcuffed && isOwnedByPlayer)
                             {
                                 ped.ArrestPed();
                                 await BaseScript.Delay(100);

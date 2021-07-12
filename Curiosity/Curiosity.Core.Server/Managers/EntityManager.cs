@@ -78,6 +78,7 @@ namespace Curiosity.Core.Server.Managers
 
                 Vehicle veh = new Vehicle(vehicleId);
                 veh.State.Set(StateBagKey.VEH_SPAWNED, true, true);
+                veh.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
                 veh.State.Set(StateBagKey.VEHICLE_MISSION, isMission, true);
                 veh.State.Set(StateBagKey.VEHICLE_STOLEN, false, true);
                 veh.State.Set(StateBagKey.VEHICLE_FLEE, false, true);
@@ -136,6 +137,7 @@ namespace Curiosity.Core.Server.Managers
                 API.SetEntityRoutingBucket(pedId, (int)routingBucket);
 
                 Ped ped = new Ped(pedId);
+                ped.State.Set(StateBagKey.PLAYER_OWNER, metadata.Sender, true);
                 ped.State.Set(StateBagKey.PED_SPAWNED, true, true);
                 ped.State.Set(StateBagKey.PED_FLEE, false, true);
                 ped.State.Set(StateBagKey.PED_SHOOT, false, true);
