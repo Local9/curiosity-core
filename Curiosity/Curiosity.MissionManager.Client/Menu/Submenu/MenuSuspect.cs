@@ -123,8 +123,16 @@ namespace Curiosity.MissionManager.Client.Menu.Submenu
 
         private async Task OnSuspectDistanceCheck()
         {
-            if (Ped.Position.Distance(Cache.PlayerPed.Position) > 3f)
-                MenuManager._MenuPool.CloseAllMenus();
+            try
+            {
+                Ped = MenuManager.GetClosestInteractivePed();
+                if (Ped.Position.Distance(Cache.PlayerPed.Position) > 3f)
+                    MenuManager._MenuPool.CloseAllMenus();
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         private async void Menu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
