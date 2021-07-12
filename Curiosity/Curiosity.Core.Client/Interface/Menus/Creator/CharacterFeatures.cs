@@ -144,7 +144,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
             if (state == MenuState.ChangeBackward)
-                OnMenuClose();
+                OnMenuClose(oldMenu);
 
             if (state == MenuState.ChangeForward)
                 OnMenuOpen(newMenu);
@@ -324,7 +324,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             }
         }
 
-        private async void OnMenuClose()
+        private async void OnMenuClose(UIMenu menu)
         {
             Cache.Player.CameraQueue.Reset();
             await Cache.Player.CameraQueue.View(new CameraBuilder()
@@ -333,6 +333,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 .WithInterpolation(CreatorMenus.CameraViews[2], CreatorMenus.CameraViews[1], 500)
             );
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
+
+            menu.InstructionalButtons.Clear();
         }
 
         private async void OnMenuOpen(UIMenu menu)

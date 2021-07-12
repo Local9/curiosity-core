@@ -45,7 +45,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
             if (state == MenuState.ChangeBackward)
-                OnMenuClose();
+                OnMenuClose(oldMenu);
 
             if (state == MenuState.ChangeForward)
                 OnMenuOpen(newMenu);
@@ -105,9 +105,11 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             }
         }
 
-        private void OnMenuClose()
+        private void OnMenuClose(UIMenu menu)
         {
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
+
+            menu.InstructionalButtons.Clear();
         }
 
         private void OnMenuOpen(UIMenu menu)

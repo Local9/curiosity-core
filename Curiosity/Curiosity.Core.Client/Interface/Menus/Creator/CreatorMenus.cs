@@ -149,6 +149,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private void OnMenuClose()
         {
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
+            menuMain.InstructionalButtons.Clear();
         }
 
         private void OnMenuOpen()

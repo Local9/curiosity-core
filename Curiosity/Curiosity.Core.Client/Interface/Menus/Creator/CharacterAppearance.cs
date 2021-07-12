@@ -100,7 +100,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
             if (state == MenuState.ChangeBackward)
-                OnMenuClose();
+                OnMenuClose(oldMenu);
 
             if (state == MenuState.ChangeForward)
                 OnMenuOpen(newMenu);
@@ -340,7 +340,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             }
         }
 
-        private async void OnMenuClose()
+        private async void OnMenuClose(UIMenu menu)
         {
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
 
@@ -350,6 +350,7 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 .WithMotionBlur(0.5f)
                 .WithInterpolation(CreatorMenus.CameraViews[2], CreatorMenus.CameraViews[1], 500)
             );
+            menu.InstructionalButtons.Clear();
         }
 
         private async void OnMenuOpen(UIMenu menu)

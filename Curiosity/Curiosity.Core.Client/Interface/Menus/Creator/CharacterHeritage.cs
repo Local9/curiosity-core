@@ -39,10 +39,6 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             menu.OnSliderChange += Menu_OnSliderChange;
             menu.OnMenuStateChanged += Menu_OnMenuStateChanged;
 
-            menu.InstructionalButtons.Add(CreatorMenus.btnRandom);
-            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
-            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
-
             MenuMotherIndex = PluginManager.Rand.Next(MotherFaces.Count);
             MenuFatherIndex = PluginManager.Rand.Next(FatherFaces.Count);
 
@@ -76,13 +72,13 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
         private void Menu_OnMenuStateChanged(UIMenu oldMenu, UIMenu newMenu, MenuState state)
         {
             if (state == MenuState.ChangeBackward)
-                OnMenuClose();
+                OnMenuClose(oldMenu);
 
             if (state == MenuState.ChangeForward)
                 OnMenuOpen(newMenu);
         }
 
-        private async void OnMenuClose()
+        private async void OnMenuClose(UIMenu menu)
         {
             Cache.Player.CameraQueue.Reset();
             await Cache.Player.CameraQueue.View(new CameraBuilder()
@@ -91,6 +87,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 .WithInterpolation(CreatorMenus.CameraViews[2], CreatorMenus.CameraViews[1], 500)
             );
             PluginManager.Instance.DetachTickHandler(OnPlayerControls);
+
+            menu.InstructionalButtons.Clear();
         }
 
         private async void OnMenuOpen(UIMenu menu)
@@ -104,6 +102,10 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
             PluginManager.Instance.AttachTickHandler(OnPlayerControls);
 
             menu.InstructionalButtons.Clear();
+
+            menu.InstructionalButtons.Add(CreatorMenus.btnRandom);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateLeft);
+            menu.InstructionalButtons.Add(CreatorMenus.btnRotateRight);
         }
 
         private async Task OnPlayerControls()
