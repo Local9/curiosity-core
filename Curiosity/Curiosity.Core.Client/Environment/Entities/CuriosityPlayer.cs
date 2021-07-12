@@ -62,7 +62,6 @@ namespace Curiosity.Core.Client.Environment.Entities
             }
 
             PlayerOptions.SetPlayerPassive(Cache.Player.User.IsPassive);
-            EventSystem.GetModule().Send("character:routing:base");
 
             Session.ForceLoaded = true;
         }

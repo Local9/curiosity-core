@@ -2,6 +2,7 @@
 using CitizenFX.Core.Native;
 using CitizenFX.Core.UI;
 using Curiosity.Core.Client.Diagnostics;
+using Curiosity.Core.Client.Events;
 using Curiosity.Core.Client.Extensions;
 using Curiosity.Systems.Library.Models;
 using NativeUI;
@@ -100,6 +101,8 @@ namespace Curiosity.Core.Client.Interface.Menus.Creator
                 menuMain.Clear();
                 _MenuPool.CloseAllMenus();
                 menuMain = null;
+
+                EventSystem.GetModule().Send("character:routing:base");
             }
         }
 

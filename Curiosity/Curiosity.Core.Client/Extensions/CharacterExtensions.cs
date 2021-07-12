@@ -322,6 +322,7 @@ namespace Curiosity.Core.Client.Extensions
                 await BaseScript.Delay(10);
             }
 
+            Cache.Character.MarkedAsRegistered = true;
             character.MarkedAsRegistered = true;
 
             // await character.Save();

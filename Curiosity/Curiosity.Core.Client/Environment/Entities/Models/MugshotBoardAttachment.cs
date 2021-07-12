@@ -1,5 +1,6 @@
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
+using Curiosity.Systems.Library.Enums;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,7 +49,7 @@ namespace Curiosity.Core.Client.Environment.Entities.Models
                 API.PushScaleformMovieFunctionParameterString($"Emergency V"); // Top Line
                 API.PushScaleformMovieFunctionParameterString(player.User.LatestName); // Main Line
                 API.PushScaleformMovieFunctionParameterString($"LOS SANTOS POLICE DEPT"); // Bottom
-                API.PushScaleformMovieFunctionParameterString($"#{player.User.UserId}:{player.Character.CharacterId}"); // Sub top line
+                API.PushScaleformMovieFunctionParameterString($"#{player.User.UserId}:{player.Character.CharacterId}:{Game.Player.State.Get($"{StateBagKey.PLAYER_ROUTING}")}"); // Sub top line
                 API.PopScaleformMovieFunctionVoid();
                 API.SetTextRenderId(handle);
 

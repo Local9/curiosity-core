@@ -92,6 +92,13 @@ namespace Curiosity.Core.Server.Managers
                     DiscordClient.GetModule().SendDiscordPlayerLogMessage(msg);
                     ChatManager.OnLogMessage(msg);
 
+                    int initRouting = 5000;
+                    int playerHandle = int.Parse(player.Handle);
+                    int routingId = initRouting + playerHandle;
+
+                    API.SetPlayerRoutingBucket(player.Handle, routingId);
+
+                    player.State.Set($"{StateBagKey.PLAYER_ROUTING}", routingId, true);
                     player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
                     player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
 
@@ -113,9 +120,15 @@ namespace Curiosity.Core.Server.Managers
 
         private async void OnConnect([FromSource] Player player, string name, CallbackDelegate denyWithReason, dynamic deferrals)
         {
-            int initRouting = (int)RoutingBucket.CHARACTER_LOADING;
+            int initRouting = 5000;
             int playerHandle = int.Parse(player.Handle);
-            API.SetPlayerRoutingBucket(player.Handle, initRouting + playerHandle);
+            int routingId = initRouting + playerHandle;
+
+            API.SetPlayerRoutingBucket(player.Handle, routingId);
+
+            player.State.Set($"{StateBagKey.PLAYER_ROUTING}", routingId, true);
+            player.State.Set($"{StateBagKey.PLAYER_NAME}", player.Name, true);
+            player.State.Set($"{StateBagKey.SERVER_HANDLE}", player.Handle, true);
 
             string license = player.Identifiers["license"];
 
