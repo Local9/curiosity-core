@@ -92,7 +92,7 @@ namespace Curiosity.Core.Server.Commands.Impl
 
                 PluginManager pluginManager = PluginManager.Instance;
 
-                pluginManager.ExportDictionary["xsound"].TextToSpeech("tts", "en-US", text, volume, false);
+                pluginManager.ExportDictionary["xsound"].TextToSpeech(-1, "tts", "en-US", text, volume, false);
             }
         }
 
