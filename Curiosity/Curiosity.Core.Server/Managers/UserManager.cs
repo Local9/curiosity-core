@@ -36,6 +36,7 @@ namespace Curiosity.Core.Server.Managers
                     cpl.Ping = PluginManager.PlayersList[kv.Key].Ping;
                     cpl.Job = curiosityUser.CurrentJob;
                     cpl.Role = curiosityUser.Role.GetStringValue();
+                    cpl.RoutingBucket = curiosityUser.RoutingBucket;
 
                     lst.Add(cpl);
                 }

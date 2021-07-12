@@ -22,5 +22,8 @@ namespace Curiosity.Systems.Library.Models
 
         [DataMember(Name = "job", Order = 5)]
         public string Job;
+
+        [DataMember(Name = "routingBucket", Order = 5)]
+        public int RoutingBucket;
     }
 }
