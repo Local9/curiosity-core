@@ -567,6 +567,8 @@ namespace Curiosity.MissionManager.Client
 
             CitizenFX.Core.Ped fxPed;
 
+            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
+
             int pedNetworkId = await EventSystem.Request<int>("entity:spawn:ped", (int)pedType, (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
             await BaseScript.Delay(100);
             int pedId = API.NetworkGetEntityFromNetworkId(pedNetworkId);
@@ -586,8 +588,6 @@ namespace Curiosity.MissionManager.Client
 
             fxPed = new CitizenFX.Core.Ped(pedId);
 
-            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
-
             fxPed.FadeIn();
 
             Logger.Debug(fxPed.ToString());
@@ -606,6 +606,8 @@ namespace Curiosity.MissionManager.Client
 
             while (!model.IsLoaded) await BaseScript.Delay(100);
 
+            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
+
             CitizenFX.Core.Vehicle fxVehicle;
 
             int vehNetworkId = await EventSystem.Request<int>("entity:spawn:vehicle", (uint)model.Hash, spawnPosition.X, spawnPosition.Y, spawnPosition.Z, heading, isNetworked, isMission);
@@ -623,11 +625,10 @@ namespace Curiosity.MissionManager.Client
                 await BaseScript.Delay(0);
                 API.NetworkRequestControlOfEntity(vehId);
             }
+
             await BaseScript.Delay(0);
 
             fxVehicle = new CitizenFX.Core.Vehicle(vehId);
-
-            API.ClearAreaOfEverything(spawnPosition.X, spawnPosition.Y, spawnPosition.Z, 5f, false, false, false, false);
 
             Logger.Debug(fxVehicle.ToString());
 
